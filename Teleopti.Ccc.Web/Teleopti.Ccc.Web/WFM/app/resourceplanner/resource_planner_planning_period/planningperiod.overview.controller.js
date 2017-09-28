@@ -60,7 +60,7 @@
         tabLinks[i].classList.remove("active");
       }
 
-      var tabContents = document.getElementsByClassName('tabContent');
+      var tabContents = document.getElementsByClassName('pp-tabContent');
       for (var i = 0; i < tabContents.length; i++) {
         tabContents[i].classList.remove("active");
       }

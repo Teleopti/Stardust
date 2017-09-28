@@ -26,14 +26,12 @@
 							<md-autocomplete md-no-cache="true" md-selected-item="selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForPlanningGroup'|translate}}"
 							 md-items="item in vm.inputFilterData()" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">
 								<md-item-template>
-									<div class="wfm-filter-selected">
-										<div class="wfm-chip-wrap pp-filter-chip-wrap">
+										<div class="wfm-chip-wrap">
 											<span class="wfm-chip">
 												<span class="chip-handle">{{item.FilterType}}</span>
 											<span class="chip-text">{{item.Name}}</span>
 											</span>
 										</div>
-									</div>
 								</md-item-template>
 								<md-not-found>
 									<p translate>noSearchResults</p>
@@ -46,14 +44,12 @@
 					</p>
 					<div ng-show="vm.selectedResults.length > 0">
 						<p translate>SelectedFiltersColon</p>
-						<div class="wfm-filter-selected">
 							<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults ">
 								<span class="wfm-chip">
 									<span class="chip-handle">{{selected.FilterType | translate}}</span>
 								<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i></span>
 								</span>
 							</div>
-						</div>
 					</div>
 				</div>
 			</div>

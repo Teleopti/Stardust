@@ -21,7 +21,6 @@
 				$scope.gridOptions = {};
 				$scope.optimizeDayOffIsEnabled = optimizeDayOffIsEnabled;
 				$scope.intraOptimize = intraOptimize;
-				$scope.publishSchedule = publishSchedule;
 
 				var keepAliveRef = $interval(function () {
 					planningPeriodService.keepAlive();
@@ -86,20 +85,6 @@
 						initResult($stateParams.interResult, $stateParams.result, $stateParams.planningperiod);
 					}
 				}
-
-				function publishSchedule() {
-					//Translate me better
-					if ($scope.publishedClicked === true) {
-						NoticeService.warning($translate.instant('Error'), null, true);
-						return;
-					}
-					$scope.publishedClicked = true;
-					planningPeriodService.publishPeriod({
-						id: planningPeriodId
-					}).$promise.then(function () {
-						NoticeService.success($translate.instant('Done'), null, true);
-					});
-				};
 
 				function optimizeDayOffIsEnabled() {
 					return (toggledOptimization && planningPeriodId !== "");

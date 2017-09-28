@@ -9029,6 +9029,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete scheduling setting.
+        /// </summary>
+        public static string DeleteSchedulingSetting {
+            get {
+                return ResourceManager.GetString("DeleteSchedulingSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete selected rows?.
         /// </summary>
         public static string DeleteSelectedRowsQuestionmark {

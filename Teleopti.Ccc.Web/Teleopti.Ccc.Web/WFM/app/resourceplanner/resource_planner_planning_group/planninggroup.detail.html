@@ -1,7 +1,7 @@
 <div class="con-row">
 	<div class="con-flex">
 		<div class="wfm-chip-wrap" ng-repeat="filter in vm.planningGroup.Filters | orderBy: '+FilterType' ">
-			<span class="wfm-chip pg-chip">
+			<span class="wfm-chip wfm-chip-none">
 			<span class="chip-handle">{{filter.FilterType | translate}}</span>
 			<span class="chip-text">{{filter.Name}}</span>
 			</span>

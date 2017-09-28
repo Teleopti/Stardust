@@ -1,36 +1,18 @@
-
-.resourceplanner-icon:before{
-	vertical-align: text-top;
-}
-.resourceplanner-report{
-	height: 75%;
-	.ui-grid-viewport{
-		overflow: auto!important;
-	}
-	.grid.ui-grid{
-		height: 100%!important;
-	}
-}
-.wfm-tiles	{
-	justify-content:space-around;
-	list-style: none;
-	padding-left: 0!important;
-
-	li{
-	margin:5px;
-	padding: 10px;
-	height:10em;
-	background-color:steelblue!important;
-		display: inline-block;
-		min-width:150px;
-		&:hover{
-		//background-color:tomato!important;
-	}
-	}
-
+.hierarchy-tree-container {
+	min-height: 700px;
 }
 
-.filter-boxes{
+.hierarchy-teams {
+    margin-left: 35px;
+}
+
+.non-selectable-list-item:hover{
+	background-color: inherit !important;
+	cursor: not-allowed !important;
+}
+
+/*refactor me: heat map*/
+.filter-boxes{ 
 	display:block;
 	width:auto;
 	float:left;
@@ -40,51 +22,13 @@
 	.head-actions{
 		margin-top:0;
 		float: none;
+		padding: 5px 10px;
+		background-color: rgba(0,0,0,0.04);
+		height: auto;
 	}
 }
 
-.card-dot{
-	background: $green-100;
-}
-
-.card-dot-undone{
-	background:$gray012;
-}
-
-.filter-entry{
-    max-width: 30%!important;
-    margin-right: initial!important;
-}
-
-	.wfm-search-li {
-		 margin-left: -10px
-	}
-
-	@media only screen and (max-width: 841px) {
-		.wfm-card {
-			margin:5px;
-			width: 100%!important;
-		}
-	}
-
-  @media (max-width: 600px) {
-    .legends{
-      display:block;
-    }
-  }
-
-.grid-row{
-  padding: 0;
-  margin: 0;
-  list-style: none;
-
-  display: inline-flex;
-
-  -webkit-flex-flow: row wrap;
-  justify-content: space-around;
-}
-
-.resourceplanner-box {
+.resourceplanner-box { 
 	background: 0 0;
     /* outline: gray solid 1px; */
     text-align: center;
@@ -98,26 +42,26 @@
 }
 
 .floater-box{
-  visibility: hidden;
-  background:rgba(0,0,0,0.6);
-  display: inline-block;
-  background-color: $white;
+	visibility: hidden;
+	background:rgba(0,0,0,0.6);
+	display: inline-block;
+	background-color: $white;
 	top: -1px;
 	width: 195px;
 	right: 0px;
-  position: absolute;
+	position: absolute;
 	padding: 5px;
-  margin-top: 17px;
-  opacity:0;
-  transition-delay: 0.3s;
-  transition: 0.2s all ease-in-out;
-  z-index:9000;
+	margin-top: 17px;
+	opacity:0;
+	transition-delay: 0.3s;
+	transition: 0.2s all ease-in-out;	
+	z-index:9000;
 }
 
 .resourceplanner-box:hover > .floater-box{
-  visibility: visible;
-  color: $text-color-standard;
-  opacity: 1;
+	visibility: visible;
+	color: $text-color-standard;
+	opacity: 1;
 }
 
 .resourceplanner-box:hover{
@@ -125,57 +69,65 @@
 }
 
 .dayNode{
-  display: inline-flex;
+	display: inline-flex;
 
 }
 
 .understaffed{
-  background: #FC0!important;
+	background: #FC0!important;
 }
-.critUnderstaffed{
-  background: $red-600!important;
 
+.critUnderstaffed{
+	background: $red-600!important;
 }
+
 .wfm-options{
 	padding-left: 5px;
 	.wfm-option{
 		padding-right: 5px;
 	}
 }
+
 .closed{
 background-color: #cacaca;
 }
+
 .overstaffed{
   background: $blue-100!important;
 
 }
+
 .weekend{
 	background-color: rgba(255, 165, 0, 0.37);
 
 }
+
 .weekstart{
   background: black!important;
 }
 
 .legends{
-  padding-bottom: 10px;
+padding-bottom: 10px;
 
 	ul{
 		padding-left: 0;
 	}
-
 	li{
 		list-style: none;
 		padding-left: 0;
 	}
+	.legend{
+	width: 10px;
+	height: 7px;
+	margin-left:10px;
+	display: inline-block;
+	}
+}
 
-  .legend{
-    width: 10px;
-    height: 7px;
-    margin-left:10px;
-    display: inline-block;
-
-  }
+@media (max-width: 600px) {
+	.legends{
+		display:block;
+	}
 }
 
 .grid-scroll-wrap{
@@ -183,16 +135,23 @@ background-color: #cacaca;
 	overflow:auto;
 	min-height: 370px;
 }
+
 .result-container{
 	width: 100%;
 }
 
+table.overview {
+	table-layout: fixed;
+	width: auto;
+	margin-top: 25px;
+}
+
 .overview{
-  border-collapse: separate;
-  padding: 5px;
+  	border-collapse: separate;
+  	padding: 5px;
 	margin-bottom:35px;
-  width: 100%;
-  empty-cells: show;
+  	width: 100%;
+  	empty-cells: show;
 
 	td{
 	width:10px;
@@ -206,115 +165,11 @@ background-color: #cacaca;
 	 }
 }
 
-.wfm-filter-dropdown{
-	position: absolute;
-	background: $white;
-	padding:$full-padding;
-	min-width:30vw;
-	z-index:200;
-	box-shadow: 0 8px 17px 0 rgba(0,0,0,.2)!important;
-}
-
-.wfm-filter-selected{
-	width:100%;
-	display:inline;
-	margin:0 2px;
-}
-
-.filter-chip{
-	padding:$full-padding;
-	background:$gray012;
-	margin-right: 5px;
-}
-
-.filter-handle{
-	padding:$full-padding;
-	background:$blue-100;
-}
-
 .skillname{
 	max-width: 20em!important;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-}
-.wfm-filter-results{
-	background-color:white;
-	z-index:100;
-		cursor:pointer;
-}
-
-.wfm-filter-result:hover{
-	background-color:rgba(0,0,0,.06);
-}
-.wfm-filter-node{
-	margin-top: 10px;
-}
-.filter-header{
-	float:right;
-}
-
-.wfm-filter-options{
-	margin:0 auto;
-}
-.unrelated-filters{
-	display:inline-block;
-	padding:10px 0;
-}
-.related-filters{
-	display:inline-block;
-}
-.planningPeriod-container{
-	text-align: center;
-}
-.schedule-warning{
-	padding-left:10px
-}
-.resultSelection{
-	background-color:steelblue;
-}
-.grayoutContainer{
-	opacity: 0.5;
-}
-// .autosearch-input{
-// 	padding-top:25px;
-// }
-
-.hierarchy-tree-container {
-	min-height: 700px;
-}
-.hierarchy-teams {
-    margin-left: 35px;
-}
-
-.non-selectable-list-item:hover{
-	background-color: inherit !important;
-	cursor: not-allowed !important;
-}
-
-//for new rescource planning
-
-md-tooltip .md-content {
-	height: auto;
-}
-
-//for planning periods overview
-.pg-chip {
-	pointer-events: none;
-}
-
-.pp-fix {
-	margin-top: 10px;
-}
-
-.pp-agentnumber {
-	font-weight: bold;
-}
-
-table.overview {
-	table-layout: fixed;
-	width: auto;
-	margin-top: 25px;
 }
 
 .tabledate {
@@ -364,33 +219,10 @@ table.overview {
 	padding: 10px;
 	border-bottom: 1px solid $gray026 ;
 }
+/*refactor me: heat map*/
 
-.pp-validation-loading {
-	position: absolute;
-    top: 0;
-}
-
-.pp-validation-loading-text {
-	color: $gray026;
-}
-
-.pp-validation {
-	position: absolute;
-	top: 6px;
-	z-index: 3;
-	background-color: $orange-400 ;
-	color: #FFF;
-	right: 0px;
-	padding: 4px 0;
-	border-radius: 50%;
-	width: auto;
-	min-width: 14px;
-	max-width: 24px;
-	height: 14px;
-	line-height: 0.5;
-	font-size: 12px;
-	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.27);
-	font-weight: bold;
+.wfm-chip-none {
+	pointer-events: none;
 }
 
 .pp-scheduled {
@@ -408,12 +240,6 @@ table.overview {
 .pp-scheduled-failed-label {
 	color: $orange-400  !important;
 }
-
-// .pp-color-label {
-// 	display: inline-block;
-// 	margin: 10px 10px 0 0;
-// 	padding: 5px 10px;
-// }
 
 .pp-status {
 	padding: 6px;
@@ -461,33 +287,10 @@ table.overview {
 	margin: 0 0 10px;
 }
 
-.pp-filter-chip-wrap {
-	margin:0 !important;
-}
-
-.mini-schedule {
-	color: rgba(0,0,0,.26)!important;
-	background-color: rgba(0,0,0,.06);
-	box-shadow: none !important;
-	cursor: not-allowed;
-}
-
-.pp-clear-parent {
-	position:relative;
-}
-
-.pp-clear-spinner {
-	position: absolute;
-	top: -8px;
-	left: -8px;
-	z-index: 3;
-}
-
 .pp-label {
 	color: $gray087;
 }
 
-//demo design
 .wfm-grid .list-content {
 	padding: 0;
 	position: relative;
@@ -500,51 +303,8 @@ table.overview {
 	position: relative;
 }
 
-.list-header h1 {
-	color: $gray087 ;
-}
-
-.list-header-content-flow {
-	position: absolute;
-	bottom: 10px;
-	left: 10px;
-}
-
-.outline-botton {
-	border: 1px $blue-500  solid;
-	background-color: transparent;
-	color: $blue-500;
-}
-
 .wfm-toolbar {
 	background-color: $white;
-}
-
-.wfm-filter-container {
-	padding:10px 0px;
-	margin:5px;
-}
-
-.icon-botton-primary {
-	color:$blue-500; 
-}
-
-// .icon-botton-second {
-// 	color:$gray054;
-// 	transition: all 0s linear!important;
-// }
-
-// .plan-group-pp-days{
-// 	position: absolute;
-//     bottom: 0;
-//     left: 10px;
-// }
-
-//shcedule view
-.outline-botton {
-	border: 1px $blue-500  solid;
-	background-color: transparent;
-	color: $blue-500;
 }
 
 .wfm-toolbar-group-container {
@@ -554,44 +314,43 @@ table.overview {
 	display: inline-block;
 }
 
-.tabContent {
-    display:none;
-}
-
-.tabContent.active {
-	display:block;
+.plan-filter-container {
+	padding:10px 0px;
+	margin:5px;
 }
 
 .wfm-btn{
 	transition: none !important;
 }
+
 .wfm-btn-invis-default.active {
     background-color: $gray-300 !important;
 }
 
-.pp-validation-progress {
-    margin-bottom: -5px;
-    margin-left: -15px;
-    margin-right: -15px;
+.icon-botton-primary {
+	color:$blue-500; 
+}
+
+.pp-tabContent {
+    display:none;
+}
+
+.pp-tabContent.active {
+	display:block;
+}
+
+.pp-overview-dashborad-header {
+	margin: 0 5px;
+	padding:5px;
+	border-bottom: 1px solid $gray026;
 }
 
 wfm-card.pp-validation-card > md-card {
 	border-left: 5px solid $red-600 ;
 }
 
-//try
-.dashborad-container {
-	margin: 0 5px;
-	padding:5px;
-	border-bottom: 1px solid $gray026;
-}
-
-.pg-wfm-list > md-content {
+.pp-validation-wfm-list > md-content {
 	margin: -10px 0px -30px -2px;
-}
-
-.pg-from-wfm-list > md-content {
-	margin: -22px 0px -30px -2px;
 }
 
 .pp-validation-number {
@@ -599,6 +358,12 @@ wfm-card.pp-validation-card > md-card {
     margin-left: 10px;
     background-color: $red-600;
     border-radius: 15px;
+}
+
+.pp-validation-progress {
+    margin-bottom: -5px;
+    margin-left: -15px;
+    margin-right: -15px;
 }
 
 .pg-setting-info {
@@ -626,5 +391,11 @@ wfm-card.pp-validation-card > md-card {
 	border: 5px solid $white ;
 	border-radius: 5px;
 }
+
+.pg-setting-wfm-list > md-content {
+	margin: -22px 0px -30px -2px;
+}
+
+
 
 

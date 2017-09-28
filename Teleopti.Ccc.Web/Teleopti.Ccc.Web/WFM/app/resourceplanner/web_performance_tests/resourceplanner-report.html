@@ -1,18 +1,11 @@
 <!-- this class is used for asserts in tests -->
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1> <i class="mdi mdi-calendar"></i> {{'SchedulingResult'|translate}}: {{planningPeriod.StartDate | amDateFormat:"L"}} - {{planningPeriod.EndDate | amDateFormat:"L"}}</h1>
+		<h1> <i class="mdi mdi-calendar"></i> {{'SchedulingResult'|translate}}: {{planningPeriod.StartDate | amDateFormat:"L"}} - {{planningPeriod.EndDate
+			| amDateFormat:"L"}}</h1>
 		<p>{{scheduledAgents}}/{{totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}</p>
-
-	</div>
-	<div class="fab-wrapper">
-		<button class="wfm-fab material-depth-1 grow-out" ng-class="{'shrink-in': publishedClicked}" ng-click="publishSchedule()">
-			<i class="mdi mdi-arrow-right"></i>
-			<md-tooltip>{{'PublishSchedule'|translate}}</md-tooltip>
-		</button>
 	</div>
 </div>
-
 <div class="panel material-depth-1 test-scheduling-result">
 	<div class="sub-header">
 		<h2>{{'Schedule'|translate}}</h2>
@@ -21,7 +14,8 @@
 		<div class="con-flex result-container" ng-class="{grayoutContainer: optimizationHasBeenRun}">
 			<div class="legends" ng-show="!optimizeRunning && isDataAvailable" layout="column">
 				<ul>
-					<li><div class="legend critUnderstaffed"></div>
+					<li>
+						<div class="legend critUnderstaffed"></div>
 						{{'CriticalUnderstaffingColon' | translate}}
 					</li>
 					<li>
@@ -40,7 +34,7 @@
 			</div>
 			<div class="grid-scroll-wrap">
 				<md-progress-linear ng-show="optimizeRunning" md-mode="indeterminate"></md-progress-linear>
-					<div ng-show="optimizeRunning" class="wfm-block material-depth-1">{{'OptimizingIntraday'|translate}}</div>
+				<div ng-show="optimizeRunning" class="wfm-block material-depth-1">{{'OptimizingIntraday'|translate}}</div>
 				<table ng-hide="dates.length > 0" class="overview" ng-show="!optimizeRunning">
 					<tr ng-repeat="(index, subnode) in dayNodes | limitTo:1 ">
 						<th></th>
@@ -66,21 +60,10 @@
 	</div>
 	<div class="con-footer">
 		<button class="wfm-btn wfm-btn-invis-default" ng-show="hasIssues" ng-click="accordionToggle2 = !accordionToggle2;">{{'IssuesText' | translate}}</button>
-		<button class="wfm-btn wfm-btn-invis-default" ng-click="intraOptimize()"ng-class="{'wfm-btn-invis-disabled': optimizeRunning}" ng-show="optimizeDayOffIsEnabled()" ng-disabled="optimizeRunning">{{'IntraOptimize'|translate}}</button>
+		<button class="wfm-btn wfm-btn-invis-default" ng-click="intraOptimize()" ng-class="{'wfm-btn-invis-disabled': optimizeRunning}"
+		 ng-show="optimizeDayOffIsEnabled()" ng-disabled="optimizeRunning">{{'IntraOptimize'|translate}}</button>
 	</div>
 </div>
-<div class="con-row">
-	<div class="con-flex">
-		<div class="panel material-depth-1" ng-if="accordionToggle2">
-			<div class="con-row demo-outline">
-				<div class="con-flex">
-					<div class="wfm-accordion-content">
-						<div class="resourceplanner-report">
-						<div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-disable-animation class="grid"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="panel material-depth-1" ng-if="accordionToggle2">
+	<div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-disable-animation class="grid"></div>
 </div>

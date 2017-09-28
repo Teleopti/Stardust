@@ -9,7 +9,7 @@
 		<div class="wfm-toolbar material-depth-1">
 			<div class="con-row">
 				<div class="con-flex">
-					<div class="wfm-filter-container">
+					<div class="plan-filter-container">
 						<label for="filter" class="input-icon">
 							<i class="mdi mdi-filter-outline">
 								<input type="text" id="filter" ng-model="vm.filterName.Name" placeholder="{{'FilterPlanGroupSchedulingSetting' | translate}}">
@@ -26,186 +26,62 @@
 		</div>
 	</div>
 </div>
-<!-- <div class="card-group">
-	<div class="panel material-depth-1 wfm-card filter-boxes" ng-repeat="dayOffRule in vm.dayOffRules | filter:vm.filterName">
-		<div class="sub-header">
+<div class="card-group">
+	<div class="panel material-depth-1 filter-boxes" ng-repeat="dayOffRule in vm.dayOffRules | filter:vm.filterName">
+		<div class="head-actions">
 			<h2>{{dayOffRule.Name}}</h2>
-			<div class="head-actions panel-menu " ng-hide="vm.isDisable">
+			<div class="con-row">
+				<div class="con-flex">
+					<div class="pg-setting-card-wrapper">
+						<span class="pg-setting-card">{{'SelectedFilters' | translate}}: {{dayOffRule.Filters.length}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex">
+					<div class="pg-setting-card-wrapper">
+						<span class="pg-setting-card">{{dayOffRule.BlockSchedulingSetting}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex">
+					<table class="wfm-table">
+						<thead>
+							<tr>
+								<th>{{'Settings'|translate}}</th>
+								<th>{{'Min'|translate}}</th>
+								<th>{{'Max'|translate}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td translate>DaysOffPerWeek</td>
+								<td>{{dayOffRule.MinDayOffsPerWeek}}</td>
+								<td>{{dayOffRule.MaxDayOffsPerWeek}}</td>
+							</tr>
+							<tr>
+								<td translate>ConsecutiveWorkDays</td>
+								<td>{{dayOffRule.MinConsecutiveWorkdays}}</td>
+								<td>{{dayOffRule.MaxConsecutiveWorkdays}}</td>
+							</tr>
+							<tr>
+								<td translate>ConsecutiveDaysOff</td>
+								<td>{{dayOffRule.MinConsecutiveDayOffs}}</td>
+								<td>{{dayOffRule.MaxConsecutiveDayOffs}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="con-row" ng-hide="vm.isDisable">
+			<div class="con-flex">
 				<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditDoRule(dayOffRule)">
-					<i class="filter-header mdi mdi-pencil pointer"><md-tooltip>{{'EditPlanGroupSchedulingSetting' | translate }}</md-tooltip></i>
+					<i class=" mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
 				</div>
 				<div tabindex=0 class="context-menu card-context" ng-click="vm.getDoRuleInfo(dayOffRule);" ng-show="!dayOffRule.Default">
-					<i class="filter-header mdi mdi-delete pointer"><md-tooltip>{{'DeletePlanGroupSchedullingSetting' | translate }}</md-tooltip></i>
-				</div>
-			</div>
-		</div>
-		<div class="con-row">
-			<div class="con-flex">
-				<table class="wfm-table wfm-filter-options">
-					<thead>
-						<tr>
-							<th>{{'Settings'|translate}}</th>
-							<th>{{'Min'|translate}}</th>
-							<th>{{'Max'|translate}}</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td translate>DaysOffPerWeek</td>
-							<td>{{dayOffRule.MinDayOffsPerWeek}}</td>
-							<td>{{dayOffRule.MaxDayOffsPerWeek}}</td>
-						</tr>
-						<tr>
-							<td translate>ConsecutiveWorkDays</td>
-							<td>{{dayOffRule.MinConsecutiveWorkdays}}</td>
-							<td>{{dayOffRule.MaxConsecutiveWorkdays}}</td>
-						</tr>
-						<tr>
-							<td translate>ConsecutiveDaysOff</td>
-							<td>{{dayOffRule.MinConsecutiveDayOffs}}</td>
-							<td>{{dayOffRule.MaxConsecutiveDayOffs}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="con-row">
-			<div class="con-flex" ng-show="!dayOffRule.Default">
-				<div class="con-row" ng-repeat="filter in dayOffRule.Filters | limitTo:2">
-					<div class="con-flex">
-						<div class="wfm-filter-selected">
-							<div class="wfm-chip-wrap pp-filter-chip-wrap">
-								<span class="wfm-chip">
-									<span class="chip-handle">{{filter.FilterType | translate}}</span>
-								<span class="chip-text">{{filter.Name}}</span>
-								</span>
-								<span class="moreExists" ng-show="$index == 1">{{'ThreeDots' | translate}}</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="con-footer" ng-show="dayOffRule.Filters.length>2">
-			<div class="modal-container">
-				<div ng-cloak class="modal-box">
-					<button ng-click="showFilterRules = !showFilterRules;" class="wfm-btn wfm-btn-invis-default">
-						<span>{{'ShowAll' | translate}}</span>
-					</button>
-					<div ng-cloak ng-show="showFilterRules">
-						<div class="modalbg">
-							<div class="dialog">
-								<div class="modal-inner-content">
-									<h1>{{'DayOffRule' | translate}} - {{dayOffRule.Name}}</h1>
-									<span><i class="mdi mdi-information-outline"></i> {{vm.textDoRuleAppliedFilter}} </span>
-									<div class="con-row" ng-repeat="filter in dayOffRule.Filters">
-										<div class="con-flex">
-											<div class="wfm-filter-selected">
-												<div class="wfm-chip-wrap pp-filter-chip-wrap">
-													<span class="wfm-chip">
-																<span class="chip-handle">{{filter.FilterType | translate}}</span>
-													<span class="chip-text">{{filter.Name}}</span>
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="modal-actions">
-									<aside>
-										<button ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default">{{'Close'|translate}}</button>
-									</aside>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div ng-cloak class="modal-box">
-		<div ng-cloak ng-show="vm.confirmDeleteModal">
-			<div class="modalbg">
-				<div class="dialog-mini material-depth-1">
-					<div class="modal-inner-content">
-						<h3>{{'DeletePlanGroupSchedullingSetting' | translate }}</h3>
-						{{vm.textDeleteDoRule}}
-					</div>
-					<div class="modal-actions">
-						<aside>
-							<button ng-click="vm.confirmDeleteModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel' | translate }}</button>
-							<button ng-disabled="vm.requestSent" ng-click="vm.deleteDoRule()" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
-						</aside>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div> -->
-<div class="wfm-grid">
-	<div class="grid-card-mini" ng-repeat="dayOffRule in vm.dayOffRules | filter:vm.filterName">
-		<div class="list-content plan-group">
-			<div class="list-header" style="height:auto ">
-				<h1>{{dayOffRule.Name}}</h1>
-				<div class="con-row">
-					<div class="con-flex">
-						<div class="pg-setting-card-wrapper">
-							<span class="pg-setting-card">{{'SelectedFilters' | translate}}: {{dayOffRule.Filters.length}}</span>
-						</div>
-					</div>
-				</div>
-				<div class="con-row">
-					<div class="con-flex">
-						<div class="pg-setting-card-wrapper">
-							<span class="pg-setting-card">{{dayOffRule.BlockSchedulingSetting}}</span>
-						</div>
-					</div>
-				</div>
-				<div class="con-row">
-					<div class="con-flex">
-						<div>
-							<table class="wfm-table wfm-filter-options">
-								<thead>
-									<tr>
-										<th>{{'Settings'|translate}}</th>
-										<th>{{'Min'|translate}}</th>
-										<th>{{'Max'|translate}}</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td translate>DaysOffPerWeek</td>
-										<td>{{dayOffRule.MinDayOffsPerWeek}}</td>
-										<td>{{dayOffRule.MaxDayOffsPerWeek}}</td>
-									</tr>
-									<tr>
-										<td translate>ConsecutiveWorkDays</td>
-										<td>{{dayOffRule.MinConsecutiveWorkdays}}</td>
-										<td>{{dayOffRule.MaxConsecutiveWorkdays}}</td>
-									</tr>
-									<tr>
-										<td translate>ConsecutiveDaysOff</td>
-										<td>{{dayOffRule.MinConsecutiveDayOffs}}</td>
-										<td>{{dayOffRule.MaxConsecutiveDayOffs}}</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="list-header-content" ng-hide="vm.isDisable">
-				<div class="con-row">
-					<div class="con-flex">
-						<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditDoRule(dayOffRule)">
-							<i class="mdi mdi-pencil"></i>
-							<md-tooltip>{{'EditPlanGroupSchedulingSetting' | translate }}</md-tooltip>
-						</div>
-						<div tabindex=0 class="context-menu card-context" ng-click="vm.getDoRuleInfo(dayOffRule);">
-							<i class="mdi mdi-delete"></i>
-							<md-tooltip>{{'DeletePlanGroupSchedullingSetting' | translate }}</md-tooltip>
-						</div>
-					</div>
+					<i class=" mdi mdi-delete pointer"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
 				</div>
 			</div>
 		</div>
@@ -216,7 +92,7 @@
 		<div class="modalbg">
 			<div class="dialog-mini material-depth-1">
 				<div class="modal-inner-content">
-					<h3>{{'DeleteDayOffRule' | translate }}</h3>
+					<h3>{{'DeleteSchedulingSetting' | translate }}</h3>
 					{{vm.textDeleteDoRule}}
 				</div>
 				<div class="modal-actions">

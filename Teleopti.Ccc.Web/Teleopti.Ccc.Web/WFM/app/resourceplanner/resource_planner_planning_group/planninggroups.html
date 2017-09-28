@@ -9,7 +9,7 @@
 		<div class="wfm-toolbar material-depth-1">
 			<div class="con-row">
 				<div class="con-flex">
-					<div class="wfm-filter-container">
+					<div class="plan-filter-container">
 						<label for="filter" class="input-icon">
 							<i class="mdi mdi-filter-outline">
 								<input type="text" id="filter" ng-model="vm.filterName.Name" placeholder="{{'FilterPlanningGroups' | translate}}">
@@ -49,7 +49,7 @@
 				</div>
 				<div tabindex=0 class="context-menu card-context" ng-click="vm.goDayOffRule(planningGroup.Id);$event.stopPropagation();">
 					<i class="mdi mdi-settings"></i>
-					<md-tooltip>{{'DayOffRuleSetting' | translate}}</md-tooltip>
+					<md-tooltip>{{'PlanGroupScheduling' | translate}}</md-tooltip>
 				</div>
 				<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="vm.goPlanningGroup(planningGroup.Id)">{{'PlanningPeriods' | translate}}</button>
 			</div>
