@@ -100,25 +100,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			}
 		}
 
-		[Test]
-		public void ShouldFindModifiedAssignmentWithoutMaximumResultCriteria()
-		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				PersonAssignment.AddActivity(PersonAssignment.MainActivities().First().Payload, new DateTimePeriod(Today, Today.AddDays(1)));
-				uow.Merge(PersonAssignment);
-				uow.PersistAll();
-			}
-
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var res = target.Report(personProvider.CurrentUser(),
-					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(2)),
-					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 0);
-
-				res.Count.Should().Be.GreaterThan(1);
-			}
-		}
 
 		[Test]
 		public void ShouldFindDeletedPersonAbsenceWithCorrectParameters()

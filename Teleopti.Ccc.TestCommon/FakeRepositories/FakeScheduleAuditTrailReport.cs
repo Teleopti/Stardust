@@ -32,8 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, int maximumResults)
 		{
 			IList<ScheduleAuditingReportData> hits;
-			if (maximumResults == 0)
-				maximumResults = 50000;
+			
 			if (changedByPerson == null)
 			{
 				hits = auditingReportList

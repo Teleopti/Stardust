@@ -41,9 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			var scheduledPeriodAgentTimeZone = scheduledPeriod.ToDateTimePeriod(_timeZone.TimeZone());
 
 			var retTemp = new List<ScheduleAuditingReportData>();
-			if (maximumResults == 0)
-				maximumResults = 50000;
-
+			
 			auditSession.CreateQuery().ForHistoryOf<PersonAssignment, Revision>()
 				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
 				.AddModifiedByIfNotNull(changedByPerson)

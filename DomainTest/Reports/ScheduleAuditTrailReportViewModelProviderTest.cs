@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Reports
 				ChangesOccurredStartDate = new DateTime(2016, 8, 1),
 				ChangesOccurredEndDate = new DateTime(2016, 8, 1),
 				AffectedPeriodStartDate = new DateTime(2016,8,23),
-				AffectedPeriodEndDate = new DateTime(2016,8,23)
+				AffectedPeriodEndDate = new DateTime(2016,8,23),
+				MaximumResults = 1
 			};
 			var vm = Target.Provide(searchParam);
 
@@ -78,7 +79,8 @@ namespace Teleopti.Ccc.DomainTest.Reports
 				ChangesOccurredStartDate = new DateTime(2016, 7, 31),
 				ChangesOccurredEndDate = new DateTime(2016, 7, 31),
 				AffectedPeriodStartDate = new DateTime(2016, 8, 22),
-				AffectedPeriodEndDate = new DateTime(2016, 8, 22)
+				AffectedPeriodEndDate = new DateTime(2016, 8, 22),
+				MaximumResults = 1
 			};
 			var vm = Target.Provide(searchParamLocalTime);
 
@@ -104,7 +106,8 @@ namespace Teleopti.Ccc.DomainTest.Reports
 				ChangesOccurredStartDate = new DateTime(2016, 8, 1),
 				ChangesOccurredEndDate = new DateTime(2016, 8, 1),
 				AffectedPeriodStartDate = new DateTime(2016, 8, 23),
-				AffectedPeriodEndDate = new DateTime(2016, 8, 23)
+				AffectedPeriodEndDate = new DateTime(2016, 8, 23),
+				MaximumResults = 1
 			};
 			var vm = Target.Provide(searchParam);
 
