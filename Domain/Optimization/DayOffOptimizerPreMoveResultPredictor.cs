@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffOptimizerPreMoveResultPredictor
 	{
 		private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
-		private readonly IDeviationStatisticData _deviationStatisticData;
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
 		public DayOffOptimizerPreMoveResultPredictor(IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator, 
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		{
 			_dailySkillForecastAndScheduledValueCalculator = dailySkillForecastAndScheduledValueCalculator;
-			_deviationStatisticData = new DeviationStatisticData();
 			_personalSkillsProvider = personalSkillsProvider;
 		}
 
@@ -52,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var values =
 				rawDataDic.Values.Where(x => x.ForecastValue > 0)
-				          .Select(x => _deviationStatisticData.CalculateRelativeDeviation(x.ForecastValue, x.ScheduleValue));
+				          .Select(x => DeviationStatisticData.CalculateRelativeDeviation(x.ForecastValue, x.ScheduleValue));
 			return Calculation.Variances.StandardDeviation(values);
 		}
 

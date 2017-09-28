@@ -656,7 +656,6 @@
     <Compile Include="InterfaceLegacy\Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDayOffsInPeriodCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDayOffTemplate.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IDeviationStatisticData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDeviationStatisticsCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDialogueMessage.cs" />
     <Compile Include="InterfaceLegacy\Domain\IDifferenceCollection.cs" />
