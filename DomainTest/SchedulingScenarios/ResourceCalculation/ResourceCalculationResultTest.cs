@@ -194,24 +194,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Payload.CalculatedUsedSeats
 				.Should().Be.EqualTo(1);
 		}
-
-		[Ignore("#42060")]
-		[Test]
-		public void ShouldCalculateResourcesOnSkillWithTimeZoneKathmandu([Values(15, 30)] int intervalLength)
-		{
-			var scenario = new Scenario("_");
-			var date = DateOnly.Today;
-			var activity = new Activity("_");
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(9, 17);
-			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.Kathmandu()).WithPersonPeriod(skill);
-			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
-			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
-
-			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
-
-			skillDay.SkillStaffPeriodCollection.First().CalculatedResource
-				.Should().Be.EqualTo(1);
-		}
 	}
 }

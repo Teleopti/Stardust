@@ -423,38 +423,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				.Should().Be.Empty();
 		}
 
-		[Test, Ignore("Not implemented during PBI 38025")]
-		public void ShouldNotConsiderNightlyRestWhenAllowBreakNightlyRestIsSet()
-		{
-			/*
-			 * To fix, we need to, based on schedulingoptions, be able to
-			 * - remove NightlyRestRule used in LongestPeriodForAssignmentCalculator
-			 * - remove NightlyRestRestricition used in TeamBlockResctrictionAggregator
-			 * 
-			 * Why checked in two places? Don't know... Maybe first refactor to one place when implemented.
-			 */
-			var scenario = new Scenario("_");
-			var activity = new Activity("_") { InWorkTime = true };
-			var dateOnly = DateOnly.Today;
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(15, 0, 15, 0, 60), new TimePeriodWithSegment(23, 0, 23, 0, 60), new ShiftCategory("_").WithId()));
-			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(83), TimeSpan.FromHours(11), TimeSpan.FromHours(16)) };
-			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneDay(dateOnly);
-			var personAssignment = new PersonAssignment(agent, scenario, dateOnly.AddDays(1));
-			personAssignment.AddActivity(activity, new DateOnlyAsDateTimePeriod(dateOnly.AddDays(1), agent.PermissionInformation.DefaultTimeZone()).Period());
-			personAssignment.SetShiftCategory(new ShiftCategory("_"));
-			var overtimePreference = new OvertimePreferences { AllowBreakNightlyRest = true, OvertimeType = definitionSet, ShiftBagToUse = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag() };
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { personAssignment }, skillDay);
-
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
-
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities()
-				.Should().Not.Be.Empty();
-		}
-
 		[Test]
 		public void ShouldConsiderWeeklyRest()
 		{

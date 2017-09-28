@@ -456,39 +456,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()
 				.Should().Be.True();//saturday
 		}
-
-		[Test]
-		[Ignore("44723: Day off optimization does not schedule shifts on weekends - to be fixed")]
-		public void ShouldGetBackToLegalWorktimeWhenMovingDayOffs()
-		{
-			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
-			var activity = new Activity("_");
-			var skill = new Skill().For(activity).IsOpen();
-			var scenario = new Scenario("_");
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var team = new Team { Site = new Site("_") };
-			var contract = new Contract("_"){WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.FromHours(48), TimeSpan.FromHours(1), TimeSpan.FromHours(8))};
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet,contract, team, skill).WithSchedulePeriodOneWeek(firstDay);
-			agent.SchedulePeriod(firstDay).SetDaysOff(1);
-			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 5, 1, 5, 5, 5, 25, 5);
-			var assMon = new PersonAssignment(agent, scenario, firstDay).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));				//8 hours
-			var assTue = new PersonAssignment(agent, scenario, firstDay.AddDays(1)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 16));	//7 hours
-			var assWen = new PersonAssignment(agent, scenario, firstDay.AddDays(2)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));	//8 hours
-			var assThu = new PersonAssignment(agent, scenario, firstDay.AddDays(3)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));	//8 hours
-			var assFri = new PersonAssignment(agent, scenario, firstDay.AddDays(4)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));	//8 hours
-			var assSat = new PersonAssignment(agent, scenario, firstDay.AddDays(5)).ShiftCategory(shiftCategory).WithDayOff();									//doff
-			var assSun = new PersonAssignment(agent, scenario, firstDay.AddDays(6)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(7, 16));	//9 hours
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, new[] { assMon, assTue, assWen, assThu, assFri, assSat, assSun }, skillDays);
-			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
-
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
-
-			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()
-				.Should().Be.False();//saturday
-			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()
-				.Should().Be.True();//tuesday
-		}
 	}
 }
