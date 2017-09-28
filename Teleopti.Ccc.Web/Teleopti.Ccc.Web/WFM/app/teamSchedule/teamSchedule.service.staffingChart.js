@@ -39,7 +39,7 @@
 			var scaffold = generateScaffold(staffingData);
 			var groups = [[scaffold.over[0], staffing.over[0], scaffold.under[0], staffing.under[0]]];
 			var hide = [scaffold.under[0], scaffold.over[0]];
-			var hideSuggestionLegend = [];
+			
 			var columns = [
 				staffingData.time,
 				staffingData.scheduledStaffing,
@@ -61,7 +61,6 @@
 					hide: hide
 				},
 				data: {
-					hide: hideSuggestionLegend,
 					colors: chartColors,
 					order: 'null',
 					type: 'bar',
@@ -91,8 +90,8 @@
 					}
 				},
 				zoom: {
-					enabled: false,
-				},
+					enabled: false
+				}
 			};
 
 			return config;
@@ -100,7 +99,6 @@
 
 		function tooltip_contents(d, defaultTitleFormat, defaultValueFormat, color) {
 			var root = this, config = root.config, CLASS = root.CLASS,
-				titleFormat = config.tooltip_format_title || defaultTitleFormat,
 				nameFormat = config.tooltip_format_name || function (name) { return name; },
 				valueFormat = config.tooltip_format_value || defaultValueFormat,
 				text, i, title, value, name, bgcolor;
@@ -130,18 +128,6 @@
 
 			return text + "</table>";
 		};
-
-		function compareAndFilterArr(arr1, arr2) {
-			Object.getOwnPropertyNames(arr1).forEach(function (prop) {
-				for (var index = 0; index < arr1[prop].length; index++) {
-					if (arr1[prop][index] === arr2[prop][index]) {
-						arr1[prop][index] = 0;
-					}
-				}
-
-			});
-			return arr1;
-		}
 
 		function generateOverUnderStaffing(absoluteDifference) {
 			var staffing = {};

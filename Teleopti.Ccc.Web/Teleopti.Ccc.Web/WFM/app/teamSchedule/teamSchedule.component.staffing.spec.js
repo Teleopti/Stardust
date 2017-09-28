@@ -1,6 +1,6 @@
 ﻿describe('teamSchedule staffing info component tests', function () {
 
-	var $componentController, $q, $compile, $rootScope, $document, scope;
+	var $componentController, $q, $compile, $rootScope, $document;
 	beforeEach(module('wfm.templates', 'wfm.teamSchedule', 'ngMaterial', 'ngMaterial-mock'));
 	beforeEach(function () {
 		module(function ($provide) {
@@ -15,9 +15,6 @@
 		$rootScope = $injector.get('$rootScope');
 		$document = $injector.get('$document');
 	}));
-
-
-
 
 	it('should view no available data by default', function () {
 		var panel = setupComponent();
@@ -39,10 +36,6 @@
 		expect(chart.length).toEqual(1);
 		expect(noDataPanel.length).toEqual(0);
 	})
-
-
-
-
 
 	function setupComponent(attrs, scope) {
 		var el;

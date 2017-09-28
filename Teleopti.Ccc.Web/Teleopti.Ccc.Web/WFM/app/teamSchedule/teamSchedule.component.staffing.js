@@ -10,9 +10,9 @@
 		}
 	});
 
-	StaffingInfoController.$inject = ['$scope','TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService'];
+	StaffingInfoController.$inject = ['$scope','$timeout','TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService'];
 
-	function StaffingInfoController($scope, SkillService, StaffingInfoService, ChartService) {
+	function StaffingInfoController($scope,$timeout, SkillService, StaffingInfoService, ChartService) {
 		var vm = this;
 		vm.preselectedSkills = {};
 		vm.skills = [];
@@ -44,7 +44,6 @@
 				selectedSkillGroup = null;
 			}
 			generateChart();
-			
 		}
 
 		SkillService.getAllSkills().then(function(data) {
@@ -85,7 +84,9 @@
 		}
 
 		function generateChartForView(data) {
-			c3.generate(ChartService.staffingChartConfig(data));
+			$timeout(function() {
+				var chart = c3.generate(ChartService.staffingChartConfig(data));
+			});
 		}
 	}
 })();
