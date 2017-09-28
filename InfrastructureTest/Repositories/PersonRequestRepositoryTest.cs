@@ -2184,9 +2184,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new List<Guid>() { request1.Id.GetValueOrDefault(), request2.Id.GetValueOrDefault(), request3.Id.GetValueOrDefault(), request6.Id.GetValueOrDefault() });
 		}
 
-		// Expired work as intended?
-		[Test, Ignore("WIP")]
-		public void ShouldCheckIfHasWaitlistedOnPeriodAndSkill()
+		[Test]
+		public void ShouldFindWaitlistedWithOverlappingPeriodAndSkill()
 		{
 			var absence = AbsenceFactory.CreateAbsence("Football");
 			PersistAndRemoveFromUnitOfWork(absence);
@@ -2281,9 +2280,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			hasWaitlistRequests.Should().Be.True();
 		}
 
-		// Expired work as intended?
-		[Test, Ignore("WIP")]
-		public void ShouldCheckIfHasWaitlistedOnPeriodAndSkillNumberTwo()
+		[Test]
+		public void ShouldNotFindWaitlistedWithOverlappingPeriodAndSkill()
 		{
 			var absence = AbsenceFactory.CreateAbsence("Football");
 			PersistAndRemoveFromUnitOfWork(absence);
