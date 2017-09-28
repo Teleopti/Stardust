@@ -5,108 +5,88 @@
 	.module('wfm.reports')
 	.controller('AuditTrailController', AuditTrailController);
 
-	AuditTrailController.$inject = ['$state', '$filter', 'Toggle', 'uiGridConstants', 'ReportsService'];
+	AuditTrailController.$inject = ['$state', '$filter', 'Toggle', 'uiGridConstants', 'ReportsService', '$translate'];
 
-	function AuditTrailController($state, $filter, ToggleSvc, uiGridConstants, ReportsService) {
+	function AuditTrailController($state, $filter, ToggleSvc, uiGridConstants, ReportsService, $translate) {
 		var vm = this;
 
 		vm.changedBy = [];
 		vm.searchData = null;
-		var changesData = [];
+		vm.loading = false;
+		vm.chartLoaded = false;
+		vm.gridOptions = {};
+		vm.dateRangeCustomValidators = [];
+		vm.dateChangeRange = {
+			startDate: moment().utc().subtract(1, 'days'),
+			endDate: moment().utc()
+		};
+		vm.dateModifyRange = {
+			startDate: moment().utc().subtract(1, 'year'),
+			endDate: moment().utc()
+		};
+		vm.changesData = [];
 
 		vm.sendForm = sendForm;
 		vm.refreshData = refreshData;
 
 		init();
-
 		function init() {
 			if(!ToggleSvc.WFM_AuditTrail_44006){
 				$state.go('main')
 			}
-
 			getChangedBy();
 		}
 
 		function getChangedBy() {
-			var data = ReportsService.getAuditTrailChangedByPerson.query();
-			data.$promise.then(function (result) {
+			ReportsService.getAuditTrailChangedByPerson.query().$promise.then(function (result) {
+				result.push({
+					Id:'',
+					Name: $translate.instant('Everyone'),
+					Default: true
+				})
 				vm.changedBy = result;
 			});
 		}
 
 		function sendForm(form) {
-			console.log(form);
+			var postObj =	{
+				ChangedByPersonId: form.drop.Id,
+				ChangesOccurredStartDate: moment(vm.dateChangeRange.startDate).format("YYYY-MM-DD"),
+				ChangesOccurredEndDate: moment(vm.dateChangeRange.endDate).format("YYYY-MM-DD"),
+				AffectedPeriodStartDate: moment(vm.dateModifyRange.startDate).format("YYYY-MM-DD"),
+				AffectedPeriodEndDate: moment(vm.dateModifyRange.endDate).format("YYYY-MM-DD")
+			};
+			vm.loading = true;
+			ReportsService.getAuditTrailResult.searching(postObj).$promise.then(function (response) {
+				vm.loading = false;
+				if (response.length < 1) {
+					// NoticeService.error($translate.instant('noSearchResults'), 5000, true);
+					return;
+				}
+				else {
+					vm.changesData = response;
+					generateTable();
+				}
+			});
+		}
+
+		function generateTable() {
+			vm.gridOptions = {
+				exporterCsvFilename: 'audit-trail.csv',
+				exporterMenuPdf: false,
+				enableSelectAll: false,
+				enableFullRowSelection: true,
+				enableRowHeaderSelection: false,
+				enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+				selectionRowHeaderWidth: 35,
+				data: vm.changesData,
+				enableGridMenu: true
+			};
+			vm.chartLoaded = true;
 		}
 
 		function refreshData(keyword) {
-			vm.gridOptions.data = $filter('filter')(changesData, keyword);
-		}
-
-// mock ---------------------
-
-
-		vm.lastChangeRange = {
-			startDate: moment().utc(),
-			endDate: moment().utc()
+			vm.gridOptions.data = $filter('filter')(vm.changesData, keyword);
 		};
-
-		vm.dateChangeRange = {
-			startDate: moment().utc(),
-			endDate: moment().utc()
-		};
-
-		vm.gridOptions = {
-			exporterCsvFilename: 'audit-trail.csv',
-			exporterMenuPdf: false,
-			enableSelectAll: false,
-			enableFullRowSelection: false,
-			enableRowHeaderSelection: false,
-			enablePaginationControls: false,
-			selectionRowHeaderWidth: 35,
-			enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-			data: changesData,
-			enableGridMenu: true,
-			columnDefs: [
-				{
-					field: 'lastChange',
-					sort: {
-						direction: uiGridConstants.ASC,
-						ignoreSort: false,
-						priority: 0
-					}
-				},
-				{
-					field: 'oldDate',
-					visible: true
-				},
-				{
-					field: 'newDate',
-					visible: true
-				},
-				{
-					field: 'forAgent',
-					visible: true
-				},
-				{
-					field: 'changedBy',
-					visible: true
-				},
-				{
-					field: 'action',
-					visible: false
-				},
-				{
-					field: 'details',
-					visible: false
-				},
-				{
-					field: 'type',
-					visible: false
-				}
-			]
-		};
-
-
-
 	}
 })();

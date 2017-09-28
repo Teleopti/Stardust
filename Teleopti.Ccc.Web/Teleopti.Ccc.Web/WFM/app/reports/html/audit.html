@@ -15,9 +15,9 @@
   </div>
 </div>
 
-<div ng-cloak class="con-row animate-show" ng-show="showForm">
+<div ng-cloak class="con-row" ng-show="showForm && !vm.chartLoaded">
   <div class="con-flex">
-    <div class="panel form-panel material-depth-1">
+    <div class="panel material-depth-1">
       <div class="sub-header">
         <h2>Panel title</h2>
       </div>
@@ -25,16 +25,9 @@
         <div class="con-row">
           <div class="con-flex">
             <div class="form-input-wrap">
-              <label for="nameId">Name:</label>
-              <input type="text" ng-model="form.input0" placeholder="Name" autocomplete="off" id="nameId" autofocus="true"/>
-              <div ng-cloak class="animate-show" ng-show ="form.$submitted || form.Name.$touched">
-                <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">Name is required</div>
-              </div>
-            </div>
-            <div class="form-input-wrap">
               <label for="drop">{{'ChangedBy'|translate}}:</label>
-              <md-select ng-model="form.drop" id="drop" required="" aria-label="changed by">
-                <md-option ng-repeat="item in vm.changedBy" ng-value="item">
+              <md-select ng-model="form.drop" id="drop" aria-label="changed by">
+                <md-option ng-repeat="item in vm.changedBy | orderBy:'Name'" ng-value="item" ng-selected="item.Default">
                   {{item.Name}}
                 </md-option>
               </md-select>
@@ -45,7 +38,12 @@
           </div>
           <div class="con-flex x3">
             <div class="form-input-wrap">
-              <!-- <label>label for time-pickers:</label> -->
+              <label>Changed between:</label></br>
+              <date-range-picker ng-model="vm.dateChangeRange" template-type="'popup'" custom-validators=""></date-range-picker>
+            </div>
+            <div class="form-input-wrap">
+              <label>Modified between:</label></br>
+              <date-range-picker ng-model="vm.dateModifyRange" template-type="'popup'" custom-validators=""></date-range-picker>
             </div>
           </div>
         </div>
@@ -56,40 +54,32 @@
           </button>
         </div>
       </form>
+      <md-progress-linear ng-if="vm.loading" md-mode="indeterminate"></md-progress-linear>
     </div>
   </div>
 </div>
-<!-- {{'noSearchResults'|translate}} -->
 
-<!-- <div class="con-row">
-<div class="con-flex">
-<div class="panel material-depth-1">
-<div class="con-row" style="align-items:baseline;">
-<div class="con-flex">
-<label for="filter" class="input-icon">
-<i class="mdi mdi-magnify">
-<input type="text" id="filter" ng-model="searchText" ng-change="vm.refreshData(searchText)" placeholder="Filter grid">
-<md-tooltip>Find person who made a change</md-tooltip>
-</i>
-</label>
+<div class="con-row" ng-if="vm.chartLoaded">
+  <div class="con-flex">
+    <div class="panel material-depth-1">
+      <div class="con-row">
+        <div class="con-flex full-padding">
+          <label for="filter" class="input-icon">
+            <i class="mdi mdi-magnify">
+              <input type="text" id="filter" ng-model="searchText" ng-change="vm.refreshData(searchText)" autofocus="true" placeholder="{{'Filter'|translate}}">
+              <md-tooltip>{{'Filter'|translate}}</md-tooltip>
+            </i>
+          </label>
+        </div>
+        <div class="con-flex x3"></div>
+      </div>
+      <div class="con-row">
+        <div class="con-flex ">
+          <div ui-i18n="{{lang}}" class="big-table-wrapper" style="max-width:100%;">
+            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-disable-animation style="height: 70vh;" class="myGrid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="con-flex">
-<date-range-picker ng-model="vm.lastChangeRange" template-type="'popup'"></date-range-picker>
-<md-tooltip>Pick a range from last change</md-tooltip>
-</div>
-<div class="con-flex">
-<date-range-picker ng-model="vm.dateChangeRange" template-type="'popup'"></date-range-picker>
-<md-tooltip>Pick a range from changed dates</md-tooltip>
-</div>
-<div class="con-flex x2"></div>
-</div>
-<div class="con-row">
-<div class="con-flex ">
-<div ui-i18n="{{lang}}" class="big-table-wrapper" style="max-width:100%;">
-<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-disable-animation ui-grid-auto-resize ui-grid-resize-columns style="height: 70vh;"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div> -->

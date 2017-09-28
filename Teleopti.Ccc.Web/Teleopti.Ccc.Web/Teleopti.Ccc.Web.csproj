@@ -1410,6 +1410,7 @@
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.min.js" />
+    <Content Include="WFM\app\reports\audit.controller.spec.js" />
     <Content Include="WFM\app\rtaTracer\rtaTracer.controller.js" />
     <Content Include="WFM\app\rtaTracer\rtaTracer.html" />
     <Content Include="WFM\app\rtaTracer\rtaTracer.state.provider.js" />

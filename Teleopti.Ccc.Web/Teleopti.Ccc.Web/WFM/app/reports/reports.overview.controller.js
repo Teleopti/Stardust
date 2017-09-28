@@ -18,9 +18,9 @@
 					if( result[i].Url == "reports/leaderboard"){
 						result.splice(i,1);
 						result.push({
-							Category:"Agent Performance",
+							Category: $translate.instant('AgentPerformance'),
 							IsWebReport:true,
-							Name:"Gamification Leaderboard",
+							Name:$translate.instant('BadgeLeaderBoardReport'),
 							Url:"leaderboardreport"
 						})
 					}
@@ -29,9 +29,9 @@
 				// push in web reports
 				if (ToggleSvc.WFM_AuditTrail_44006) {
 					result.push({
-						Category: "Schedule Analysis",
+						Category: $translate.instant('ScheduleAnalysis'),
 						IsWebReport: true,
-						Name:"Schedule audit trail",
+						Name:$translate.instant('ScheduleAuditTrailReport'),
 						Url:"auditTrail"
 					})
 				}
