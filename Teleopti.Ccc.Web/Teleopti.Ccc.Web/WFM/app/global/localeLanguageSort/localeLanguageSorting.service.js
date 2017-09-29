@@ -56,11 +56,11 @@
 					if (angular.isUndefined(ax) || angular.isUndefined(bx))
 						return;
 
-					ax = typeof ax === "string" ? ax.toLowerCase() : ax / 1;
-					bx = typeof bx === "string" ? bx.toLowerCase() : bx / 1;
+					ax = (typeof ax == "string" || false) ? ax.toLowerCase() : ax / 1;
+					bx = (typeof ax == "string" || false) ? bx.toLowerCase() : bx / 1;
 
 					if (_args[x].substring(0, 1) === "-") { cx = ax; ax = bx; bx = cx; }
-					if (ax !== bx && typeof ax === "string") {
+					if (ax !== bx && (typeof ax == "string" || false)) {
 						return ax.localeCompare(bx, CurrentUserInfo.CurrentUserInfo().Language);
 					} else if (ax !== bx){
 						return ax < bx ? -1 : 1;
