@@ -125,7 +125,9 @@
 		var dataValid = false;
 		if (!self.Subject() || !/\S/.test(self.Subject())) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_SUBJECT);
-		} else if (_buildPostData().Period.StartTime.length != 5 || self.StartTime() == '') {
+		} else if (_isOvertimeTypeEmpty()) {
+			self.ErrorMessage(requestsMessagesUserTexts.MISSING_OVERTIME_TYPE);
+		}  else if (_buildPostData().Period.StartTime.length != 5 || self.StartTime() == '') {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_STARTTIME);
 		} else if (!self.RequestDuration() || self.RequestDuration().length != 5) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_DURATION);
@@ -143,6 +145,11 @@
 		return dataValid;
 	}
 
+	function _isOvertimeTypeEmpty() {
+		var overtimeType = self.MultiplicatorDefinitionSetId();
+		return overtimeType == undefined || overtimeType =='';
+	}
+	
 	function _isDateFromPast() {
 		var dateFromMoment = self.DateFrom();
 		if (!moment.isMoment(dateFromMoment))

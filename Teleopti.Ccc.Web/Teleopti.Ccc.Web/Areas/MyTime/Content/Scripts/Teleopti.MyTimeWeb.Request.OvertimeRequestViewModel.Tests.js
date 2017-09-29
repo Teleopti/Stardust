@@ -1,10 +1,12 @@
-﻿var requestsMessagesUserTexts = {
+var requestsMessagesUserTexts = {
 	MISSING_SUBJECT: "Missing subject",
+	MISSING_OVERTIME_TYPE: "Missing overtime type",
 	MISSING_STARTTIME: "Missing start time",
 	MISSING_DURATION: "Missing duration",
 	OVERTIME_REQUEST_DATE_EXCEEDS_14DAYS: "Request date exceeds 14 days",
 	OVERTIME_REQUEST_DATE_IS_PAST: "Can not add overtime request on past date"
 };
+
 $(document).ready(function() {
 	var vm,
 		ajax,
@@ -73,7 +75,6 @@ $(document).ready(function() {
 		equal(period.StartTime, '19:00');
 		equal(period.EndTime, '22:00');
 	});
-
 
 	test('should input subject', function() {
 		vm.Subject('');
@@ -210,6 +211,20 @@ $(document).ready(function() {
 
 		equal(addedOvertimeRequest, undefined);
 		equal(vm.ErrorMessage(), 'Can not add overtime request on past date');
+	});
+
+	test('should not pass validation when post data has no overtime type', function () {
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.DateFrom(moment().add(1, 'days').format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly));
+		vm.StartTime("19:00");
+		vm.RequestDuration('01:00');
+		vm.MultiplicatorDefinitionSetId('');
+
+		vm.AddRequest();
+
+		equal(addedOvertimeRequest, undefined);
+		equal(vm.ErrorMessage(), 'Missing overtime type');
 	});
 
 	test('should close overtime request form panel after posting data', function() {
