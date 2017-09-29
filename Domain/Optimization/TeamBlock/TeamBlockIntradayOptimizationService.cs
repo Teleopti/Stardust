@@ -14,9 +14,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-			ICurrentIntradayOptimizationCallback currentIntradayOptimizationCallback,
-			BlockPreferencesMapper blockPreferencesMapper) : base(teamBlockScheduler,
-			optimizerHelperHelper, currentIntradayOptimizationCallback, blockPreferencesMapper)
 	public class TeamBlockIntradayOptimizationService
 	{
 		private readonly TeamBlockScheduler _teamBlockScheduler;

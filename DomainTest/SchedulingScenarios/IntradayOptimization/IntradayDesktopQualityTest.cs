@@ -34,12 +34,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var stateHolder = setupStandardState(date, agentList);
 			
 			ResourceCalculation.ResourceCalculate(date, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
+			var schedulingOptions = new SchedulingOptions();
 			var p = ScheduleResultDataExtractorProvider
-				.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(new[] {date}, new SchedulingOptions(),
+				.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(new[] {date}, schedulingOptions,
 					stateHolder.SchedulingResultState);
 			var valueBefore = p.Values().First();
 
-			Target.Execute(date.ToDateOnlyPeriod(), agentList, false);
+			Target.Execute(date.ToDateOnlyPeriod(), agentList, false, new FixedBlockPreferenceProvider(schedulingOptions));
 
 			var valueAfter = p.Values().First();
 			var valueImprovement = (valueBefore - valueAfter);

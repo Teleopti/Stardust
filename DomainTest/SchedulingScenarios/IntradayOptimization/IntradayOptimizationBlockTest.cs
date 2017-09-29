@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -24,9 +25,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class IntradayOptimizationBlockTest : IntradayOptimizationScenarioTest
+	[Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
+	public class IntradayOptimizationBlockTest
 	{
 		public IntradayOptimizationFromWeb Target;
 		public FakeSkillRepository SkillRepository;
@@ -36,11 +36,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesDefaultValueProvider;
-
-		public IntradayOptimizationBlockTest(bool resourcePlannerSpeedUpShiftsWithinDay45694)
-			: base(OptimizationCodeBranch.TeamBlock, resourcePlannerSpeedUpShiftsWithinDay45694)
-		{
-		}
 
 		[Test]
 		public void ShouldIndividualFlexableWhenNotBlock()
