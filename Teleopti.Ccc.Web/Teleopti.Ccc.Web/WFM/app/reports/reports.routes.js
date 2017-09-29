@@ -18,6 +18,7 @@
 					return Toggle;
 				}
 			},
+			controllerAs: 'vm',
 			controller: function ($state, toggles) {
 				if (toggles.WFM_AuditTrail_44006) {
 					$state.go('auditTrail');
