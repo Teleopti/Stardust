@@ -516,6 +516,15 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 				{
 					userSettings.removeClass("open");
 				}
+
+				var collapsingMenu = $("#bs-example-navbar-collapse-1");
+				var mainNavbarToggler = $('#mainNavbarToggler');
+				if(collapsingMenu[0] && !collapsingMenu[0].contains(e.target) && mainNavbarToggler[0] && !mainNavbarToggler[0].contains(e.target))
+				{
+					if(collapsingMenu.hasClass('in')){
+						mainNavbarToggler.trigger('click');
+					}
+				}
 			});
 
 			$(document).on('ready', autocollapse);

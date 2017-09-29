@@ -324,4 +324,29 @@ $(document).ready(function () {
 
 		$('#testUserSettingsHTML').remove();
 	});
+
+	test('Should close collapsing menu when taping outside', function(){
+		var collaspingMenuHTML = '<div class="navbar bdd-mytime-top-menu" id="testCollaspingMenuHTML">' +
+									'<button id="mainNavbarToggler" type="button" class="navbar-toggle" ' +
+										'data-toggle="offcanvas" data-target=".navbar-offcanvas">' +
+									'</button>' + 
+									'<div class="navbar-offcanvas navmenu-fixed-left offcanvas menu-top-adjust in" id="bs-example-navbar-collapse-1">' +
+									'</div>' +
+								  '</div>';
+
+		$('body').append(collaspingMenuHTML);
+		Teleopti.MyTimeWeb.Common.Layout.Init();
+
+		equal($('#bs-example-navbar-collapse-1').hasClass('in'), true);
+
+		var mainNavbarTogglerClickTriggered = false;
+		$('#mainNavbarToggler').click(function(){
+			mainNavbarTogglerClickTriggered = true;
+		});
+
+		equal(mainNavbarTogglerClickTriggered, true);
+
+		$('#mainNavbarToggler').unbind('click');
+		$('#testCollaspingMenuHTML').remove();
+	});
 });
