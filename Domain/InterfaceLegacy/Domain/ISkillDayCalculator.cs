@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: robink
         /// Created date: 2008-09-18
         /// </remarks>
-        IEnumerable<ISkillStaffPeriod> SkillStaffPeriods { get; }
+        int SkillStaffPeriodCount { get; }
 
         /// <summary>
         /// Calculates the task periods.

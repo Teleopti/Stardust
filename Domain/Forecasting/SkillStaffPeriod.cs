@@ -66,8 +66,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 lock (Locker)
                 {
 	                return _bookedResource65;
-
-					//return _segmentInThisCollection.Sum(t => t.BookedResource65);
                 }
             }
         }
@@ -186,7 +184,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public IList<ISkillStaffSegmentPeriod> SortedSegmentCollection => new ReadOnlyCollection<ISkillStaffSegmentPeriod>(_sortedSegmentCollection.Values);
 
-		public ILookup<ISkillStaffPeriod,ISkillStaffSegmentPeriod> SegmentInThisCollection => _segmentInThisCollection.ToLookup(l => l.BelongsTo);
+		public IList<ISkillStaffSegmentPeriod> SegmentInThisCollection => _segmentInThisCollection;
 
 		public double RelativeDifference => new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviation;
 
@@ -396,12 +394,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             else
             {
-                var sortedSegmentInThisCollection =
-                 SegmentInThisCollection.OrderBy(s => s.Key.Period.StartDateTime).ToArray();
-
+                var sortedSegmentInThisCollection = SegmentInThisCollection.OrderBy(s => s.BelongsTo.Period.StartDateTime).ToArray();
                 foreach (var ySegment in sortedSegmentInThisCollection)
                 {
-                    ySegment.Key.PickResources65();
+                    ySegment.BelongsTo.PickResources65();
                 } 
             }
         }
@@ -507,10 +503,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             for (int i = currentIndex; i < skillStaffPeriods.Count; i++)
             {
                 SkillStaffPeriod period = skillStaffPeriods[i] as SkillStaffPeriod;
-
-
+				
                 if (period == null) continue;
-                var belongsToThis = period.SegmentInThisCollection[this].ToArray();
+                var belongsToThis = period.SegmentInThisCollection.Where(x => x.BelongsTo.Equals(this)).ToArray();
                 if (belongsToThis.Length==0 && i>currentIndex) break; //Because we do this sequential, we can stop when no more distributed segments are found
 
                 foreach (ISkillStaffSegmentPeriod segmentPeriod in belongsToThis)
@@ -727,7 +722,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             Payload.Reset();
             _sortedSegmentCollection.Clear();
-            _segmentInThisCollection = SegmentInThisCollection.Where(s => !s.Key.Equals(this)).SelectMany(a => a).ToList();
+            _segmentInThisCollection = SegmentInThisCollection.Where(s => !s.BelongsTo.Equals(this)).ToList();
 	        _bookedResource65 = _segmentInThisCollection.Sum(x => x.BookedResource65);
 			IsAvailable = false;
         }

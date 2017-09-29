@@ -108,12 +108,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	                var multisiteCalculator = new MultisiteSkillDayCalculator(multisiteSkill, skillDays,
 	                                                                                                  multisiteDays, period);
 
-	                foreach (var childSkill in multisiteSkill.ChildSkills)
+					var childSkillDays =
+						_skillDayRepository.FindReadOnlyRange(periodToLoad, multisiteSkill.ChildSkills, scenario).ToLookup(g => (IChildSkill)g.Skill);
+
+					foreach (var childSkill in multisiteSkill.ChildSkills)
 	                {
-	                    multisiteCalculator.SetChildSkillDays(childSkill,
-	                                                          _skillDayRepository.FindRange(periodToLoad, childSkill,
-	                                                                                        scenario).OrderBy(
-	                                                                                            s => s.CurrentDate).ToList());
+	                    multisiteCalculator.SetChildSkillDays(childSkill, childSkillDays[childSkill].OrderBy(s => s.CurrentDate).ToList());
 	                }
 
 	                multisiteCalculator.InitializeChildSkills();

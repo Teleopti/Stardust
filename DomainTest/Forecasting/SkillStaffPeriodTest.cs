@@ -468,9 +468,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(10, stPeriod1.Payload.ForecastedIncomingDemand);
             Assert.AreEqual(2, stPeriod1.SortedSegmentCollection.Count);
             Assert.AreEqual(1, stPeriod1.SegmentInThisCollection.Count);
-            Assert.AreSame(stPeriod1.SortedSegmentCollection[0], stPeriod1.SegmentInThisCollection.First().First());
+            Assert.AreSame(stPeriod1.SortedSegmentCollection[0], stPeriod1.SegmentInThisCollection.First());
             Assert.AreEqual(1, stPeriod2.SegmentInThisCollection.Count);
-            Assert.AreSame(stPeriod1.SortedSegmentCollection[1], stPeriod2.SegmentInThisCollection.First().First());
+            Assert.AreSame(stPeriod1.SortedSegmentCollection[1], stPeriod2.SegmentInThisCollection.First());
         }
 
 		[Test]
@@ -521,9 +521,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             }
             Assert.AreEqual(2, stPeriod1.SortedSegmentCollection.Count);
             Assert.AreEqual(1, stPeriod1.SegmentInThisCollection.Count);
-            Assert.AreSame(stPeriod1.SortedSegmentCollection[0], stPeriod1.SegmentInThisCollection.First().First());
+            Assert.AreSame(stPeriod1.SortedSegmentCollection[0], stPeriod1.SegmentInThisCollection.First());
             Assert.AreEqual(1, stPeriod2.SegmentInThisCollection.Count);
-            Assert.AreSame(stPeriod1.SortedSegmentCollection[1], stPeriod2.SegmentInThisCollection.First().First());
+            Assert.AreSame(stPeriod1.SortedSegmentCollection[1], stPeriod2.SegmentInThisCollection.First());
 
         }
 
@@ -558,11 +558,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(5, stPeriod1.Payload.ForecastedIncomingDemand);
             Assert.AreEqual(3, stPeriod1.SortedSegmentCollection.Count);
             Assert.AreEqual(1, stPeriod1.SegmentInThisCollection.Count);
-            Assert.AreSame(stPeriod1.SortedSegmentCollection[0], stPeriod1.SegmentInThisCollection.First().First());
+            Assert.AreSame(stPeriod1.SortedSegmentCollection[0], stPeriod1.SegmentInThisCollection.First());
             Assert.AreEqual(1, stPeriod2.SegmentInThisCollection.Count);
-            Assert.AreSame(stPeriod1.SortedSegmentCollection[1], stPeriod2.SegmentInThisCollection.First().First());
+            Assert.AreSame(stPeriod1.SortedSegmentCollection[1], stPeriod2.SegmentInThisCollection.First());
             Assert.AreEqual(1, stPeriod3.SegmentInThisCollection.Count);
-            Assert.AreSame(stPeriod1.SortedSegmentCollection[2], stPeriod3.SegmentInThisCollection.First().First());
+            Assert.AreSame(stPeriod1.SortedSegmentCollection[2], stPeriod3.SegmentInThisCollection.First());
         }
 
         [Test]

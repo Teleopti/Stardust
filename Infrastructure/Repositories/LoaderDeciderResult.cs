@@ -87,13 +87,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			int removed = 0;
 			IEnumerable<ISkill> skillsToRemove = (from skill in skills
 				where !skill.Id.HasValue || !SkillGuidDependencies.Contains(skill.Id.Value)
-				select skill).ToList();
+				select skill).ToArray();
 			foreach (ISkill skillToRemove in skillsToRemove)
 			{
 				removeSkill(skillToRemove);
 				removed++;
 			}
-			foreach (var multisiteSkill in skills.OfType<IChildSkill>().Select(c => c.ParentSkill).Distinct().ToList())
+			foreach (var multisiteSkill in skills.OfType<IChildSkill>().Select(c => c.ParentSkill).Distinct().ToArray())
 			{
 				addSkill(multisiteSkill);
 				removed--;

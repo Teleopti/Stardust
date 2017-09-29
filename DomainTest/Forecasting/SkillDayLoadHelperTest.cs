@@ -88,6 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                          };
 
             Expect.Call(_skillDayRep.FindReadOnlyRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)), _skills, _scenario)).Return(allSkillDays).Repeat.Once();
+            Expect.Call(_skillDayRep.FindReadOnlyRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-7), _dtp.EndDate.AddDays(1)), multisiteSkill.ChildSkills, _scenario)).Return(new ISkillDay[]{}).Repeat.Once();
             
             Expect.Call(_multisiteDayRep.FindRange(SkillDayCalculator.GetPeriodToLoad(_dtp),multisiteSkill, _scenario)).Return(multisiteDays).Repeat.Once();
 
@@ -170,8 +171,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                skillToBeLoad, _scenario)).Return(skillDays).Repeat.Any();
             Expect.Call(_multisiteDayRep.FindRange(SkillDayCalculator.GetPeriodToLoad(_dtp), multisiteSkill, _scenario)).Return(multisiteDays).Repeat.Once();
 
-            Expect.Call(_skillDayRep.FindRange(SkillDayCalculator.GetPeriodToLoad(_dtp),
-                                               childSkill, _scenario)).Return(new List<ISkillDay> { skillDays[2] }).Repeat.Once();
+            Expect.Call(_skillDayRep.FindReadOnlyRange(SkillDayCalculator.GetPeriodToLoad(_dtp),
+                                               multisiteSkill.ChildSkills, _scenario)).Return(new List<ISkillDay> { skillDays[2] }).Repeat.Once();
             _mocks.ReplayAll();
 
             var result = _target.LoadBudgetSkillDays(_dtp, _skills, _scenario);

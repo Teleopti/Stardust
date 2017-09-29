@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// forecastedDistributedDemand
         public static SkillStaffPeriod InjectForecastedDistributedDemand(SkillStaffPeriod skillStaffPeriod, double value)
         {
-            ISkillStaffSegmentPeriod skillStaffSegmentPeriod = skillStaffPeriod.SegmentInThisCollection.First().First();
+            ISkillStaffSegmentPeriod skillStaffSegmentPeriod = skillStaffPeriod.SegmentInThisCollection.First();
             ISkillStaffSegment skillStaffSegment = skillStaffSegmentPeriod.Payload;
             typeof(SkillStaffSegment).GetField("_forecastedDistributedDemand", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(skillStaffSegment, value);

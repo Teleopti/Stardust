@@ -1015,7 +1015,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void RecalculateDailyCampaignTasks()
         {
-            //_isDirty = true;
         }
 
         /// <summary>
@@ -1027,7 +1026,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void RecalculateDailyAverageCampaignTimes()
         {
-            //_isDirty = true;
         }
 
         /// <summary>
@@ -1074,12 +1072,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         private void triggerRecalculateEvent()
-        {
-            if (StaffRecalculated != null)
-            {
-                StaffRecalculated.Invoke(this, EventArgs.Empty);
-            }
-        }
+		{
+			StaffRecalculated?.Invoke(this, EventArgs.Empty);
+		}
 
         /// <summary>
         /// Sets the entity as dirty.
@@ -1110,24 +1105,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public virtual bool IsLocked
-        {
-            get { return _turnOffInternalRecalc; }
-        }
+        public virtual bool IsLocked => _turnOffInternalRecalc;
 
-        /// <summary>
+		/// <summary>
         /// Gets the name of the template.
         /// </summary>
         /// <remarks>
         /// Created by: peterwe
         /// Created date: 2008-02-14
         /// </remarks>
-        public virtual ITemplateReference TemplateReference
-        {
-            get { return _templateReference; }
-        }
+        public virtual ITemplateReference TemplateReference => _templateReference;
 
-        /// <summary>
+		/// <summary>
         /// Updates the name of the template.
         /// </summary>
         /// <remarks>
@@ -1548,18 +1537,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		public virtual DateTimePeriod Period
-        {
-            get
-            {
-                return
-                    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                        _currentDate.Date.Add(_skill.MidnightBreakOffset),
-                        _currentDate.AddDays(1).Date.Add(_skill.MidnightBreakOffset), _skill.TimeZone);
-            }
-        }
+		public virtual DateTimePeriod Period => TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+			_currentDate.Date.Add(_skill.MidnightBreakOffset),
+			_currentDate.AddDays(1).Date.Add(_skill.MidnightBreakOffset), _skill.TimeZone);
 
-	    public override void NotifyTransactionComplete(DomainUpdateType operation)
+		public override void NotifyTransactionComplete(DomainUpdateType operation)
 	    {
 		    base.NotifyTransactionComplete(operation);
 

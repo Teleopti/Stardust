@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created by: micke
 		/// Created date: 2008-04-18
 		/// </remarks>
-		ILookup<ISkillStaffPeriod, ISkillStaffSegmentPeriod> SegmentInThisCollection { get; }
+		IList<ISkillStaffSegmentPeriod> SegmentInThisCollection { get; }
 
         /// <summary>
         /// Gets the relative difference for display only.

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	    public void SetChildSkillDays(IChildSkill childSkill, IList<ISkillDay> childSkillDays)
         {
-            if (!_multisiteSkill.ChildSkills.Contains(childSkill)) throw new ArgumentException("The supplied child skill is not contained in this multisite skill.","childSkill");
+            if (!_multisiteSkill.ChildSkills.Contains(childSkill)) throw new ArgumentException("The supplied child skill is not contained in this multisite skill.",nameof(childSkill));
             if (_childSkillDays.ContainsKey(childSkill)) _childSkillDays.Remove(childSkill);
             foreach (var childSkillDay in childSkillDays)
             {
@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public IList<ISkillDay> GetVisibleChildSkillDays(IChildSkill childSkill)
         {
-            IList<ISkillDay> skillDaysForChildSkill;
-            if (_childSkillDays.TryGetValue(childSkill, out skillDaysForChildSkill))
+			if (_childSkillDays.TryGetValue(childSkill, out var skillDaysForChildSkill))
                 return skillDaysForChildSkill.Where(s => VisiblePeriod.Contains(s.CurrentDate)).ToList();
 
             throw new ArgumentException("The supplied child skill has not been setup properly. Run SetChildSkillDays first.");
@@ -59,17 +58,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
                 throw new InvalidOperationException("All child skill days must be initialized before this call.");
             }
-            foreach (var multisiteDay in _multisiteDays)
+			var days = SkillDays.ToDictionary(ms => ms.CurrentDate);
+			var childDays = _childSkillDays.Values.SelectMany(s => s).ToLookup(s => s.CurrentDate);
+			foreach (var multisiteDay in _multisiteDays)
             {
                 var multisiteDayDate = multisiteDay.MultisiteDayDate;
-                var parentSkillDay = SkillDays.FirstOrDefault(ms => ms.CurrentDate == multisiteDayDate);
-
-                if (parentSkillDay == null) continue;
+                if (!days.TryGetValue(multisiteDayDate,out ISkillDay parentSkillDay)) continue;
+				
                 multisiteDay.MultisiteSkillDay = parentSkillDay;
-                multisiteDay.SetChildSkillDays(from c in _childSkillDays.Values
-                                               from s in c
-                                               where multisiteDayDate == s.CurrentDate
-                                               select s);
+                multisiteDay.SetChildSkillDays(childDays[multisiteDayDate]);
                 multisiteDay.RedistributeChilds();
             }
         }
@@ -78,11 +75,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             base.CheckRestrictions();
             _multisiteDays.ForEach(m => m.CheckRestrictions());
-
-            foreach (var skillDayList in _childSkillDays.Values)
-            {
-                skillDayList.ForEach(m => m.CheckRestrictions());
-            }
+            _childSkillDays.Values.SelectMany(s => s).ForEach(m => m.CheckRestrictions());
         }
 
         public override IEnumerable<ISkillStaffPeriod> GetSkillStaffPeriodsForDayCalculation(ISkillDay skillDay)

@@ -363,20 +363,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCanGetUpcomingSkillStaffPeriods()
         {
-            Assert.AreEqual(0,target.SkillStaffPeriods.Count());
+            Assert.AreEqual(0,target.SkillStaffPeriodCount);
             skillDays[0].RecalculateDailyTasks();
             skillDays[1].RecalculateDailyTasks();
             skillDays[2].RecalculateDailyTasks();
 			skillDays[1].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData = skillDays[1].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData.WithServiceLevel(new ServiceLevel(new Percent(0.8), 16*60));
             var result = target.GetSkillStaffPeriodsForDayCalculation(skillDays[1]);
-            Assert.AreEqual(3*96,target.SkillStaffPeriods.Count());
+            Assert.AreEqual(3*96,target.SkillStaffPeriodCount);
             Assert.AreEqual(120,result.Count()); //Skill staff periods for two days
         }
 
         [Test]
         public void VerifyCanResetSkillStaffPeriods()
         {
-            Assert.AreEqual(0, target.SkillStaffPeriods.Count());
+            Assert.AreEqual(0, target.SkillStaffPeriodCount);
             skillDays[0].RecalculateDailyTasks();
             skillDays[1].RecalculateDailyTasks();
             skillDays[2].RecalculateDailyTasks();
@@ -384,13 +384,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			skillDays[2].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData = skillDays[2].SkillStaffPeriodCollection[0].Payload.ServiceAgreementData.WithServiceLevel(new ServiceLevel(new Percent(0.8), 16 * 60));
 			
             var result = target.GetSkillStaffPeriodsForDayCalculation(skillDays[1]);
-            Assert.AreEqual(3 * 96, target.SkillStaffPeriods.Count());
+            Assert.AreEqual(3 * 96, target.SkillStaffPeriodCount);
             Assert.AreEqual(120, result.Count()); 
             target.ClearSkillStaffPeriods();
-            Assert.AreEqual(0,target.SkillStaffPeriods.Count());
+            Assert.AreEqual(0,target.SkillStaffPeriodCount);
             result = target.GetSkillStaffPeriodsForDayCalculation(skillDays[2]);
             Assert.AreEqual(60, result.Count()); 
-            Assert.AreEqual(3 * 96, target.SkillStaffPeriods.Count());
+            Assert.AreEqual(3 * 96, target.SkillStaffPeriodCount);
         }
 
         [Test]
@@ -456,11 +456,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             workloadDay3.TaskPeriodList[8].Tasks = 13;
             workloadDay3.TaskPeriodList[8].AverageTaskTime = TimeSpan.FromSeconds(13);
 
-            Assert.AreEqual(2, newSkillDay3.SkillStaffPeriodCollection[0].SegmentInThisCollection.SelectMany(a => a).Count());
+            Assert.AreEqual(2, newSkillDay3.SkillStaffPeriodCollection[0].SegmentInThisCollection.Count);
             
             target.DistributeStaff();
             
-            Assert.AreEqual(2,newSkillDay3.SkillStaffPeriodCollection[0].SegmentInThisCollection.SelectMany(a => a).Count());
+            Assert.AreEqual(2,newSkillDay3.SkillStaffPeriodCollection[0].SegmentInThisCollection.Count);
             Assert.AreEqual(2, newSkillDay3.SkillStaffPeriodCollection[0].SortedSegmentCollection.Count);
         }
 
