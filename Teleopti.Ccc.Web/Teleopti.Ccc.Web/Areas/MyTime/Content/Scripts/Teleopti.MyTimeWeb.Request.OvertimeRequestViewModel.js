@@ -147,7 +147,7 @@
 
 	function _isOvertimeTypeEmpty() {
 		var overtimeType = self.MultiplicatorDefinitionSetId();
-		return overtimeType == undefined || overtimeType =='';
+		return !overtimeType;
 	}
 	
 	function _isDateFromPast() {
