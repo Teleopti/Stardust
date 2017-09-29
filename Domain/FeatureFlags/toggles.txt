@@ -49,7 +49,7 @@ RTA_RtaTracer_45597 = false
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true
 WfmTeamSchedule_DisplayAndEditPublicNote_44783 = true
-WfmTeamSchedule_ShowStaffingInfo_45206 = DEV
+WfmTeamSchedule_ShowStaffingInfo_45206 = RC
 
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
