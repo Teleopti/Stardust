@@ -18,6 +18,7 @@
 			'$location',
 			'$timeout',
 			'rtaService',
+			'rtaPollingService',
 			'rtaGridService',
 			'rtaFormatService',
 			'rtaAgentsBuildService',
@@ -40,6 +41,7 @@
 								 $location,
 								 $timeout,
 								 rtaService,
+								 rtaPollingService,
 								 rtaGridService,
 								 rtaFormatService,
 								 rtaAgentsBuildService,
@@ -60,11 +62,7 @@
 		vm.inAlarmGrid = rtaGridService.makeInAlarmGrid();
 		vm.allGrid.data = 'vm.agentStates';
 		vm.inAlarmGrid.data = 'vm.agentStates';
-
-		var polling = null;
-		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
-		var pollingLock = true;
-
+		
 		var selectedPersonId, lastUpdate, notice, selectedSiteId;
 		var siteIds = $stateParams.siteIds || [];
 		var teamIds = $stateParams.teamIds || [];
@@ -142,50 +140,38 @@
 			showResizer: true,
 			showPopupButton: true
 		};
-
-		(function initialize() {
-			pollingLock = false;
-			agentState();
-		})();
+		
+		var poller;
+		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
 
 		$scope.$watch(
 			function () { return vm.pause; },
 			function () {
 				if (vm.pause) {
 					vm.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
-					var template = $translate.instant('RtaPauseEnabledNotice')
-					var noticeText = template.replace('{0}', vm.pausedAt)
+					var template = $translate.instant('RtaPauseEnabledNotice');
+					var noticeText = template.replace('{0}', vm.pausedAt);
 					notice = NoticeService.info(noticeText, null, true);
-					cancelPolling();
+					poller.destroy();
+					poller = null;
 				} else {
 					vm.pausedAt = null;
 					if (notice != null) {
 						notice.destroy();
 					}
 					NoticeService.info($translate.instant('RtaPauseDisableNotice'), 5000, true);
-					setupPolling();
+					poller = rtaPollingService.create(agentState);
+					poller.start();
 				}
 			});
 
-		function setupPolling() {
-			polling = $interval(function () {
-				if (pollingLock) {
-					pollingLock = false;
-					agentState();
-				}
-
-			}, pollingInterval);
-		}
-
-		function cancelPolling() {
-			if (polling != null) {
-				$interval.cancel(polling);
-				pollingLock = true;
-			}
-		}
-
+		$scope.$on('$destroy', function () {
+			if (poller)
+				poller.destroy();
+		});
+		
 		function agentState() {
-			getAgentStates()
+			return getAgentStates()
 				.then(getAgentStatesByParams)
 				.then(updateStuff)
 				.then(updateAgentStates)
@@ -228,7 +214,6 @@
 			$scope.$watchCollection(
 				function () { return allAgentStates; },
 				filterData);
-			pollingLock = true;
 			return data;
 		}
 
@@ -257,7 +242,6 @@
 			fillAgentState(states);
 			vm.timeline = rtaFormatService.buildTimeline(states.Time);
 			vm.isLoading = false;
-			pollingLock = true;
 		}
 
 		function fillAgentState(states) {
@@ -303,8 +287,10 @@
 		$scope.$watch(
 			function () { return vm.showInAlarm; },
 			function (newValue, oldValue) {
+				if (!poller)
+					return;
 				if (newValue !== oldValue) {
-					agentState();
+					poller.force();
 					filterData();
 					if (newValue && vm.pause) {
 						vm.agentStates.sort(function (a, b) {
