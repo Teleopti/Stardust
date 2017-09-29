@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -123,10 +121,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Extra = new ExtraPreferences { UseTeamBlockOption = true, UseBlockSameShift = true, BlockTypeValue = BlockFinderType.SchedulePeriod }
 			};
 			OptimizationPreferencesDefaultValueProvider.SetFromTestsOnly(optimizationPreferences);
-			var person = PersonFactory.CreatePerson();
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
-			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
 
 			Target.Execute(planningPeriod.Id.Value, false);
 
