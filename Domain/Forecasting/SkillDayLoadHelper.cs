@@ -123,11 +123,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	            else
 	            {
 	                calculators.Add(new SkillDayCalculator(skill, skillDays, period));
-	            }
-	            foreach (ISkillDay skillDay in skillDays)
-	            {
-	                skillDay.RecalculateDailyTasks();
-	            }
+					foreach (ISkillDay skillDay in skillDays)
+					{
+						skillDay.RecalculateDailyTasks();
+					}
+				}
 	        }
 
 	        var skillSkillDayDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
