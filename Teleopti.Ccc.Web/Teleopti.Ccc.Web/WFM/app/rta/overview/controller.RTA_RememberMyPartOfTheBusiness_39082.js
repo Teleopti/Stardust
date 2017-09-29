@@ -5,18 +5,16 @@
 		.module('wfm.rta')
 		.controller('RtaOverviewController39082', RtaOverviewController);
 
-	RtaOverviewController.$inject = ['rtaService', 'rtaStateService', 'skills', 'skillAreas', '$state', '$stateParams', '$scope', '$timeout'];
+	RtaOverviewController.$inject = ['rtaService', 'rtaStateService', 'rtaPollingService', 'skills', 'skillAreas', '$state', '$stateParams', '$scope', '$timeout'];
 
-	function RtaOverviewController(rtaService, rtaStateService, skills, skillAreas, $state, $stateParams, $scope, $timeout) {
+	function RtaOverviewController(rtaService, rtaStateService, rtaPollingService, skills, skillAreas, $state, $stateParams, $scope, $timeout) {
 		var vm = this;
+
 		vm.skills = skills || [];
 		vm.skillAreas = skillAreas || [];
 		vm.siteCards = [];
 		vm.totalAgentsInAlarm = 0;
-
-		rtaStateService.setCurrentState($stateParams)
-			.then(pollInitiate);
-
+		
 		vm.skillPickerPreselectedItem = rtaStateService.skillPickerPreselectedItem();
 
 		vm.displayNoSitesMessage = function () { return vm.siteCards.length == 0; };
@@ -24,44 +22,21 @@
 		vm.highlightAgentsButton = rtaStateService.hasSelection;
 		vm.goToAgents = rtaStateService.goToAgents;
 
-		var pollPromise;
-		var destroyed = false;
 		var classSuffixOnSelection = "-selected";
 		var classSuffixNoSelection = "-border";
 		var noBorderClass = 'rta-card-no-border';
 
+		var poller = rtaPollingService.create(getSites);
+		rtaStateService.setCurrentState($stateParams)
+			.then(function () {
+				vm.siteCards = [];
+				poller.start();
+			});
+		$scope.$on('$destroy', poller.destroy);
+
 		vm.selectTeamOrSite = function (selectable) {
 			selectable.isSelected = !selectable.isSelected;
 		};
-
-		function pollInitiate() {
-			vm.siteCards = [];
-			pollNow();
-		}
-
-		function pollNow() {
-			pollStop();
-			getSites().finally(pollNext);
-		}
-
-		function pollNext() {
-			if (destroyed)
-				return;
-			pollPromise = $timeout(function () {
-				getSites().finally(pollNext)
-			}, 5000);
-		}
-
-		function pollStop() {
-			if (pollPromise)
-				$timeout.cancel(pollPromise);
-		}
-
-		$scope.$on('$destroy',
-			function () {
-				destroyed = true;
-				pollStop()
-			});
 
 		function getSites() {
 			return rtaService.getOverviewModelFor(rtaStateService.pollParams())
@@ -79,7 +54,7 @@
 								get isOpen() { return rtaStateService.isSiteOpen(site.Id); },
 								set isOpen(newValue) {
 									rtaStateService.openSite(site.Id, newValue);
-									if (newValue) pollNow();
+									if (newValue) poller.force();
 								},
 								get isSelected() { return rtaStateService.isSiteSelected(site.Id); },
 								set isSelected(newValue) { rtaStateService.selectSite(site.Id, newValue); },
