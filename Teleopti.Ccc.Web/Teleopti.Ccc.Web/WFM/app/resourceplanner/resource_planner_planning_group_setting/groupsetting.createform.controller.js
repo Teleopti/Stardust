@@ -29,6 +29,7 @@
         vm.isValidConsecWorkDays = isValidConsecWorkDays;
         vm.isValidFilters = isValidFilters;
         vm.isValidName = isValidName;
+        vm.isValidBlockScheduling = isValidBlockScheduling;
         vm.selectResultItem = selectResultItem;
         vm.moreResultsExists = moreResultsExists;
         vm.noResultsExists = noResultsExists;
@@ -219,6 +220,10 @@
             return check;
         }
 
+        function isValidBlockScheduling() {
+            return vm.selectedType !== null;
+        }
+
         function selectResultItem(item) {
             if (item === null)
                 return;
@@ -247,7 +252,11 @@
         function selectSchedulingSetting(index) {
             var item = vm.schedulingSettings[index];
             item.Selected = true;
-            vm.blockSchedulingName = item.Name;
+            if(item.Id == "BlockScheduling") {
+                vm.blockSchedulingName = $translate.instant("BlockScheduling");
+            } else {
+                vm.blockSchedulingName = $translate.instant("IndividualFlexible") + " (" + $translate.instant("Default") + ")";
+            }
             vm.schedulingSettings.forEach(function (item, id) {
                 if (id != index)
                     item.Selected = false;
