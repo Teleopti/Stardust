@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (!periodstartDate.HasValue)
 				return false;
 
-			return !contractSchedule.IsWorkday(periodstartDate.Value, dateOnly);
+			return !contractSchedule.IsWorkday(periodstartDate.Value, dateOnly, person.FirstDayOfWeek);
 		}
 	}
 }

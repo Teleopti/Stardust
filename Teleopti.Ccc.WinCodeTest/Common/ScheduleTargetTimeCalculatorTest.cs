@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				Expect.Call(_contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 				Expect.Call(_contract.WorkTime).Return(WorkTime.DefaultWorkTime).Repeat.AtLeastOnce();
 				Expect.Call(_contract.WorkTimeSource).Return(WorkTimeSource.FromContract).Repeat.AtLeastOnce();
-				Expect.Call(_contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_contractSchedule.IsWorkday(dateOnly, dateOnly, DayOfWeek.Monday)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mockRepository.Playback())
 			{

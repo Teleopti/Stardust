@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			if (!schedulePeriodStartDate.HasValue) return;
 
 			preferenceCellData.HasAbsenceOnContractDayOff = 
-				!virtualSchedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, preferenceCellData.TheDate);
+				!virtualSchedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, preferenceCellData.TheDate, scheduleDay.Person.FirstDayOfWeek);
 
 			var time = TimeSpan.Zero;
 			if (!preferenceCellData.HasAbsenceOnContractDayOff && preferenceCellData.EffectiveRestriction.Absence.InContractTime) 

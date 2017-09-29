@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 			    if (!schedulePeriodStartDay.HasValue)
 				    continue;
 
-			    dto.IsWorkday = personPeriod.PersonContract.ContractSchedule.IsWorkday(schedulePeriodStartDay.Value, dateOnly);
+			    dto.IsWorkday = personPeriod.PersonContract.ContractSchedule.IsWorkday(schedulePeriodStartDay.Value, dateOnly, person.FirstDayOfWeek);
 
 			    dto.TargetTimeNegativeToleranceInMinutes = periodNegativeTolerance;
 			    dto.TargetTimePositiveToleranceInMinutes = periodPositiveTolerance;

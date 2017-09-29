@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#45997 to be fixed")]
+		//[Ignore("#45997 to be fixed")]
 		public void ShouldPlaceContractDayOffsCorrect()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 27), new DateOnly(2017, 9, 9));
@@ -133,6 +133,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			contractSchedule.AddContractScheduleWeek(contractScheduleWeek2);	
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodTwoWeeks(period.StartDate);
+			agent.FirstDayOfWeek = DayOfWeek.Sunday;
 			agent.Period(period.StartDate).PersonContract.ContractSchedule = contractSchedule;
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(new Scenario("_"), period, new[] {agent }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
 			

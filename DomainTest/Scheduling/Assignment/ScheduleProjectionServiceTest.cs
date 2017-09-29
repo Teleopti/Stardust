@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//verify setup
 			Assert.IsFalse(
 				scheduleDay.Person.Period(new DateOnly(2000, 1, 1))
-					.PersonContract.ContractSchedule.IsWorkday(new DateOnly(2000, 1, 1), new DateOnly(2000, 1, 1)));
+					.PersonContract.ContractSchedule.IsWorkday(new DateOnly(2000, 1, 1), new DateOnly(2000, 1, 1), DayOfWeek.Monday));
 			Assert.IsTrue(avgWorkTimePerDay.Ticks > 0);
 
 			var resWrapper = new List<IVisualLayer>(target.CreateProjection());

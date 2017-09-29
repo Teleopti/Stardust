@@ -771,7 +771,7 @@ namespace Teleopti.Ccc.Domain.Common
 	    private bool isWorkDay(IContractSchedule contractSchedule, DateOnly day)
 	    {
 			var schedulePeriodStartDate = SchedulePeriodStartDate(day);
-		    return contractSchedule != null && schedulePeriodStartDate.HasValue && contractSchedule.IsWorkday(schedulePeriodStartDate.Value, day);
+		    return contractSchedule != null && schedulePeriodStartDate.HasValue && contractSchedule.IsWorkday(schedulePeriodStartDate.Value, day, FirstDayOfWeek);
 	    }
 
 	    private TimeSpan calculateAverageWorkTime(IPersonPeriod personPeriod, ISchedulePeriod schedulePeriod, DateOnly day)

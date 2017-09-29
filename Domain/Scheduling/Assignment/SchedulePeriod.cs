@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			while (tempDate <= periodEnd)
 			{
-					if (period.PersonContract.ContractSchedule.IsWorkday(periodStart, tempDate))
+					if (period.PersonContract.ContractSchedule.IsWorkday(periodStart, tempDate, CurrentPerson.FirstDayOfWeek))
 						workDays++;
 				tempDate = tempDate.AddDays(1);
 			}
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				if (personPeriod?.PersonContract?.ContractSchedule != null)
 				{
 
-					if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(period.Value.StartDate, startDate))
+					if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(period.Value.StartDate, startDate,CurrentPerson.FirstDayOfWeek))
 						daysOff++;
 				}
 				startDate = startDate.AddDays(1);

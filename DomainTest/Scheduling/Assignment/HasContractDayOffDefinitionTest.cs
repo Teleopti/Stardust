@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -119,8 +120,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(_personContract.ContractSchedule).Return(_contractSchedule);
 			Expect.Call(_person.SchedulePeriodStartDate(_dateOnly))
 				.Return(_dateOnly);
-            Expect.Call(_contractSchedule.IsWorkday(_dateOnly, _dateOnly))
+            Expect.Call(_contractSchedule.IsWorkday(_dateOnly, _dateOnly, DayOfWeek.Monday))
 				.Return(false);
+			Expect.Call(_person.FirstDayOfWeek).Return(DayOfWeek.Monday);
             _mocks.ReplayAll();
 			Assert.That(_target.IsDayOff(_scheduleDay), Is.True);
             _mocks.VerifyAll();

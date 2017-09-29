@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 					if (!periodStart.HasValue)
 						return 0;
 
-                    if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(periodStart.Value, scheduleDate))
+                    if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(periodStart.Value, scheduleDate,person.FirstDayOfWeek))
                         return 1;
                 }
             }

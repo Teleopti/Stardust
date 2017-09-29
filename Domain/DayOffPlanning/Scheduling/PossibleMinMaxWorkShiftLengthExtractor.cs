@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 	                var schedulePeriodStartDate = person.SchedulePeriodStartDate(dateOnly);
 	                if (schedulePeriodStartDate.HasValue)
 	                {
-		                if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, dateOnly) || !restriction.Absence.InContractTime)
+		                if (!personPeriod.PersonContract.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, dateOnly, person.FirstDayOfWeek) || !restriction.Absence.InContractTime)
 			                return new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero);
 
 		                return new MinMax<TimeSpan>(personPeriod.PersonContract.AverageWorkTimePerDay, personPeriod.PersonContract.AverageWorkTimePerDay);

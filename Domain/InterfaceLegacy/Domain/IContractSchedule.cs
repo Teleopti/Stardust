@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -62,18 +63,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         bool IsChoosable { get; }
 
-        /// <summary>
-        /// Determines whether the requested date would be a workdate relative to the owner start date.
-        /// </summary>
-        /// <param name="personPeriodStartDate">The owning period start date.</param>
-        /// <param name="requestedDate">The requested date.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is work day] [the specified owning period start date]; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-11-03
-        /// </remarks>
-        bool IsWorkday(DateOnly personPeriodStartDate, DateOnly requestedDate);
-    }
+
+		bool IsWorkday(DateOnly personPeriodStartDate, DateOnly requestedDate, DayOfWeek dayOfWeek);
+	}
 }
