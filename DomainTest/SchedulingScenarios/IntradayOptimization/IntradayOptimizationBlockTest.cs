@@ -22,11 +22,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
-	[TestWithStaticDependenciesAvoidUse]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	public class IntradayOptimizationBlockTest
 	{
 		public IntradayOptimizationFromWeb Target;
