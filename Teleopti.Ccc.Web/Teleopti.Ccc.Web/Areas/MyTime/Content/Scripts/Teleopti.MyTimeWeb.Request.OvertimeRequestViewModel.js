@@ -130,13 +130,13 @@
 
 	function _validateRequiredFields() {
 		var dataValid = false;
-		if (!self.Subject() || !/\S/.test(self.Subject())) {
+		if (_isSubjectEmpty()) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_SUBJECT);
 		} else if (_isOvertimeTypeEmpty()) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_OVERTIME_TYPE);
-		}  else if (_buildPostData().Period.StartTime.length != 5 || self.StartTime() == '') {
+		}  else if (_isStarttimeEmpty()) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_STARTTIME);
-		} else if (!self.RequestDuration() || self.RequestDuration().length != 5) {
+		} else if (_isDurationEmpty()) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_DURATION);
 		} else if (_isDateFromPast()) {
 			self.ErrorMessage(requestsMessagesUserTexts.OVERTIME_REQUEST_DATE_IS_PAST);
@@ -152,9 +152,22 @@
 		return dataValid;
 	}
 
+	function _isSubjectEmpty() {
+		var subject = self.Subject();
+		return !subject || !/\S/.test(subject);
+	}
+
 	function _isOvertimeTypeEmpty() {
 		var overtimeType = self.MultiplicatorDefinitionSetId();
 		return !overtimeType;
+	}
+
+	function _isStarttimeEmpty() {
+		return !self.StartTime() || _buildPostData().Period.StartTime.length != 5;
+	}
+
+	function _isDurationEmpty() {
+		return !self.RequestDuration() || self.RequestDuration().length != 5;
 	}
 	
 	function _isDateFromPast() {
