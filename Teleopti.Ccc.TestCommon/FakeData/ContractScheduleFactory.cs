@@ -43,5 +43,22 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             ret.AddContractScheduleWeek(week1);
             return ret;
         }
-    }
+
+		public static IContractSchedule Create7DaysWorkingContractSchedule()
+		{
+			IContractSchedule ret = CreateContractSchedule("7 days Working Week");
+			IContractScheduleWeek week1 = new ContractScheduleWeek();
+
+			week1.Add(DayOfWeek.Monday, true);
+			week1.Add(DayOfWeek.Tuesday, true);
+			week1.Add(DayOfWeek.Wednesday, true);
+			week1.Add(DayOfWeek.Thursday, true);
+			week1.Add(DayOfWeek.Friday, true);
+			week1.Add(DayOfWeek.Saturday, true);
+			week1.Add(DayOfWeek.Sunday, true);
+
+			ret.AddContractScheduleWeek(week1);
+			return ret;
+		}
+	}
 }

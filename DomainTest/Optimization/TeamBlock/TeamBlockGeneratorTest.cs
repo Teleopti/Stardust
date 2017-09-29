@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_mocks = new MockRepository();
 			_teamInfoFactory = _mocks.StrictMock<ITeamInfoFactory>();
 			_teamBlockInfoFactory = _mocks.StrictMock<ITeamBlockInfoFactory>();
-			_target = new TeamBlockGenerator(_teamInfoFactory, _teamBlockInfoFactory);
+			_target = new TeamBlockGenerator(_teamInfoFactory, _teamBlockInfoFactory, new BlockPreferencesMapper());
 		}
 
 		[Test]

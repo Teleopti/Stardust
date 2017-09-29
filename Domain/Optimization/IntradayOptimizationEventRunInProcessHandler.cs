@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			HandleEvent(@event);
 		}
 
-		public override IBlockPreferenceProvider GetBlockPreferenceProvider(Guid? planningPeriodId)
+		protected override IBlockPreferenceProvider GetBlockPreferenceProvider(Guid? planningPeriodId)
 		{
 			return new FixedBlockPreferenceProvider(_optimizationPreferencesProvider.Fetch().Extra);
 		}

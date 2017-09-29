@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[TestLog]
-		protected virtual void HandleEvent(IntradayOptimizationWasOrdered @event, Guid planningPeriodId)
+		protected virtual void HandleEvent(IntradayOptimizationWasOrdered @event, Guid? planningPeriodId)
 		{
 			using (CommandScope.Create(@event))
 			{
@@ -42,14 +42,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
+		[TestLog]
 		protected virtual void HandleEvent(IntradayOptimizationWasOrdered @event)
 		{
-			using (CommandScope.Create(@event))
-			{
-				var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
-				DoOptimization(period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, null);
-				_synchronizeSchedulesAfterIsland.Synchronize(_schedulerStateHolder().Schedules, period);
-			}
+			HandleEvent(@event, null);
 		}
 
 		[UnitOfWork]
@@ -68,6 +64,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimization.Execute(period, schedulerStateHolder.AllPermittedPersons.Filter(agentsToOptimize), runResolveWeeklyRestRule, GetBlockPreferenceProvider(planningPeriodId));
 		}
 
-		public abstract IBlockPreferenceProvider GetBlockPreferenceProvider(Guid? planningPeriodId);
+		protected abstract IBlockPreferenceProvider GetBlockPreferenceProvider(Guid? planningPeriodId);
 	}
 }
