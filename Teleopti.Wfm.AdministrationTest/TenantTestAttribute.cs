@@ -12,6 +12,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Hangfire;
+using Teleopti.Wfm.Administration.Core.Modules;
 
 namespace Teleopti.Wfm.AdministrationTest
 {

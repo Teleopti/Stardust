@@ -9,6 +9,7 @@ using Microsoft.Owin.Security.Cookies;
 using Owin;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Wfm.Administration.Core;
+using Teleopti.Wfm.Administration.Core.Modules;
 using GlobalConfiguration = System.Web.Http.GlobalConfiguration;
 
 namespace Teleopti.Wfm.Administration

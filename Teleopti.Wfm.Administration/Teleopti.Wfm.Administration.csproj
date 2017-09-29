@@ -336,6 +336,7 @@
     <Compile Include="Core\Stardust\IPingNode.cs" />
     <Compile Include="Core\Stardust\PingNode.cs" />
     <Compile Include="Core\Stardust\IStardustRepository.cs" />
+    <Compile Include="Core\Modules\StardustModule.cs" />
     <Compile Include="Models\ConfigurationModel.cs" />
     <Compile Include="Controllers\HangfireController.cs" />
     <Compile Include="Models\UpdateConfigurationModel.cs" />
@@ -378,7 +379,7 @@
     <Compile Include="Models\VersionResultModel.cs" />
     <Compile Include="Core\AdminTenantAuthentication.cs" />
     <Compile Include="Core\CheckDatabaseVersions.cs" />
-    <Compile Include="Core\WfmAdminModule.cs" />
+    <Compile Include="Core\Modules\WfmAdminModule.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Core\DatabaseHelperWrapper.cs" />
     <Compile Include="Models\VersionCheckModel.cs" />
