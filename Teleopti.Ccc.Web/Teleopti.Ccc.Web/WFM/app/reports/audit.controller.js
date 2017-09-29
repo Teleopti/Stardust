@@ -5,9 +5,9 @@
 	.module('wfm.reports')
 	.controller('AuditTrailController', AuditTrailController);
 
-	AuditTrailController.$inject = ['$state', '$filter', 'Toggle', 'uiGridConstants', 'ReportsService', 'NoticeService', '$translate'];
+	AuditTrailController.$inject = ['$filter', 'Toggle', 'uiGridConstants', 'ReportsService', 'NoticeService', '$translate'];
 
-	function AuditTrailController($state, $filter, ToggleSvc, uiGridConstants, ReportsService, NoticeService, $translate) {
+	function AuditTrailController($filter, ToggleSvc, uiGridConstants, ReportsService, NoticeService, $translate) {
 		var vm = this;
 
 		vm.changedBy = [];
@@ -32,9 +32,6 @@
 
 		init();
 		function init() {
-			if(!ToggleSvc.WFM_AuditTrail_44006){
-				$state.go('main')
-			}
 			getChangedBy();
 		}
 

@@ -37,7 +37,7 @@
               <a href="{{rep.Url}}" ng-if="!rep.IsWeb" style="text-decoration:none;"  target="_blank">
                 <li>{{rep.Name}}</li>
               </a>
-              <a ui-sref="{{rep.Url}}" ng-if="rep.IsWeb" style="text-decoration:none;"  target="_blank">
+              <a ui-sref="{{rep.Url}}" ng-if="rep.IsWeb" style="text-decoration:none;">
                 <li>{{rep.Name}}</li>
               </a>
             </div>
@@ -63,8 +63,8 @@
               <a href="{{rep.Url}}" ng-if="!rep.IsWeb" style="text-decoration:none;"  target="_blank">
                 <li>{{rep.Name}}</li>
               </a>
-              <a ui-sref="{{rep.Url}}" ng-if="rep.IsWeb" style="text-decoration:none;"  target="_blank">
-                  <li>{{rep.Name}}</li>
+              <a ui-sref="{{rep.Url}}" ng-if="rep.IsWeb" style="text-decoration:none;">
+                <li>{{rep.Name}}</li>
             </div>
           </ul>
         </div>
