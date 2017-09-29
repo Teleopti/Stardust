@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				removeSkill(skillToRemove);
 				removed++;
 			}
-			foreach (var multisiteSkill in skills.OfType<IChildSkill>().Select(c => c.ParentSkill).Distinct().ToArray())
+			foreach (var multisiteSkill in skills.Except(skillsToRemove).OfType<IChildSkill>().Select(c => c.ParentSkill).Distinct().ToArray())
 			{
 				addSkill(multisiteSkill);
 				removed--;

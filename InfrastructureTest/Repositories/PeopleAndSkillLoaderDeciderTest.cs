@@ -60,18 +60,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	        ISite site = SiteFactory.CreateSiteWithOneTeam();
 	        site.MaxSeats = 1;
 	        ITeam team = site.TeamCollection[0];
-	        IPerson validPerson = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> {skill});
+	        IPerson validPerson = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> {skill}).WithId(valid);
 	        validPerson.PersonPeriodCollection[0].Team = team;
 	        validPerson.PersonPeriodCollection[0].StartDate = DateOnly.MinValue;
-            validPerson.SetId(valid);
-            IPerson nonValidPerson = new Person();
-            nonValidPerson.SetId(Guid.NewGuid());
-            IPerson personToAdd = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> {skill});
+            IPerson nonValidPerson = new Person().WithId();
+			Guid guidToAdd = Guid.NewGuid();
+            IPerson personToAdd = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> {skill}).WithId(guidToAdd);
 			personToAdd.PersonPeriodCollection[0].Team = team;
 			personToAdd.PersonPeriodCollection[0].StartDate = DateOnly.MinValue;
-            Guid guidToAdd = Guid.NewGuid();
-            personToAdd.SetId(guidToAdd);
-
+            
 			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new[] { valid }, new Guid[0], new[] { guidToAdd });
             IList<IPerson> listToFilter = new List<IPerson> { nonValidPerson, validPerson, new Person(), personToAdd };
 
@@ -89,10 +86,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var valid = Guid.NewGuid();
 			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new[] { valid }, new Guid[0]);
 
-            ISkill validSkill = new Skill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
-            validSkill.SetId(valid);
-            ISkill nonValidSkill = new Skill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
-            nonValidSkill.SetId(Guid.NewGuid());
+            ISkill validSkill = new Skill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time)).WithId(valid);
+            ISkill nonValidSkill = new Skill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time)).WithId();
             IList<ISkill> listToFilter = new List<ISkill> 
                                         {   
                                             validSkill, 
@@ -135,6 +130,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			int removed = target.FilterSkills(list2Filter.ToArray(), s => list2Filter.Remove(s), list2Filter.Add);
             Assert.AreEqual(-1, removed);
             Assert.AreEqual(2, list2Filter.Count);
+        }
+
+        [Test]
+        public void ShouldNotReturnParentForIrrelevantChildSkill()
+        {
+            Guid valid = Guid.NewGuid();
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new Guid[0], new Guid[0]);
+			
+	        var parent = new MultisiteSkill("multi", "multi", Color.DimGray, 13, new SkillTypeEmail(new Description("d"), ForecastSource.Time));
+			var validSkill = new ChildSkill("sdf", "sdf", Color.Empty, parent).WithId(valid);
+            
+            IList<ISkill> list2Filter = new List<ISkill> { validSkill };
+			int removed = target.FilterSkills(list2Filter.ToArray(), s => list2Filter.Remove(s), list2Filter.Add);
+            Assert.AreEqual(1, removed);
+            Assert.AreEqual(0, list2Filter.Count);
         }
 
 		[Test]
