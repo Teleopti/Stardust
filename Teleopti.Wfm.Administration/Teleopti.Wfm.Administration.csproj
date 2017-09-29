@@ -333,6 +333,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Core\Stardust\IPingNode.cs" />
+    <Compile Include="Core\Stardust\PingNode.cs" />
     <Compile Include="Core\Stardust\IStardustRepository.cs" />
     <Compile Include="Models\ConfigurationModel.cs" />
     <Compile Include="Controllers\HangfireController.cs" />

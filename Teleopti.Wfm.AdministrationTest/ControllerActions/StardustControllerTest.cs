@@ -18,8 +18,9 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[OneTimeSetUp]
 		public void TestFixtureSetUp()
 		{
+			//TODO refactor to ioc
 			StardustRepository = new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			Target = new StardustController(StardustRepository, new LegacyFakeEventPublisher(), new FakeTenants(), new StaffingSettingsReader());
+			Target = new StardustController(StardustRepository, new LegacyFakeEventPublisher(), new FakeTenants(), new StaffingSettingsReader(), new FakePigNode());
 		}
 
 		[Test]

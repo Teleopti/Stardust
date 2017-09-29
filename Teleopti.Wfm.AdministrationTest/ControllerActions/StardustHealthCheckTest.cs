@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Web.Http.Results;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Wfm.Administration.Controllers;
+using Teleopti.Wfm.Administration.Core.Stardust;
 using Teleopti.Wfm.Administration.Models.Stardust;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
@@ -21,8 +20,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void TestFixtureSetUp()
 		{
 			StardustRepository = new FakeStardustRepository();
-			var fakeThisIsAnnoying = new FakeJobStartTimeRepository(new MutableNow());
-			Target = new StardustController(StardustRepository, new LegacyFakeEventPublisher(), new FakeTenants(), new StaffingSettingsReader());
+			Target = new StardustController(StardustRepository, new LegacyFakeEventPublisher(), new FakeTenants(), new StaffingSettingsReader(), new FakePigNode());
 		}
 
 		[SetUp]
@@ -30,8 +28,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			StardustRepository.Clear();
 		}
-
-		[Test, Ignore("Ignoring, Amanda J can sort this out...")]
+		
+		[Test]
 		public void ShouldRespond200IfEverythingIsOk()
 		{
 			StardustRepository.Has(new WorkerNode());
@@ -47,9 +45,9 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		}
 
 		[Test]
-		public void ShouldRespond500IfHeartbeatsAreOld()
+		public void ShouldRespond500IfNoNodeAlive()
 		{
-			var node = new WorkerNode {Heartbeat = DateTime.UtcNow.AddHours(-1)};
+			var node = new WorkerNode {Alive = false};
 			StardustRepository.Has(node);
 			var result = Target.HealthCheck();
 			Assert.IsInstanceOf<ExceptionResult>(result);

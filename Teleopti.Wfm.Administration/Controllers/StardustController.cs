@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -13,7 +9,6 @@ using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Stardust;
-using Teleopti.Wfm.Administration.Models.Stardust;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
@@ -24,15 +19,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IEventPublisher _eventPublisher;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IStaffingSettingsReader _staffingSettingsReader;
+		private readonly IPingNode _pingNode;
 
 
 		public StardustController(IStardustRepository stardustRepository, IEventPublisher eventPublisher,
-			ILoadAllTenants loadAllTenants, IStaffingSettingsReader staffingSettingsReader)
+			ILoadAllTenants loadAllTenants, IStaffingSettingsReader staffingSettingsReader, IPingNode pingNode)
 		{
 			_stardustRepository = stardustRepository;
 			_eventPublisher = eventPublisher;
 			_loadAllTenants = loadAllTenants;
 			_staffingSettingsReader = staffingSettingsReader;
+			_pingNode = pingNode;
 		}
 
 		[HttpGet, Route("Stardust/Jobs/{from}/{to}")]
@@ -148,7 +145,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				bool result;
 				try
 				{
-					result = pingNode(node).Result;
+					result = _pingNode.Ping(node);
 				}
 				catch (Exception)
 				{
@@ -163,21 +160,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok();
 		}
 
-		private static async Task<bool> pingNode(WorkerNode node)
-		{
-			using (var client = new HttpClient())
-			{
-				client.DefaultRequestHeaders.Accept.Clear();
-				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-				var response = await client.PostAsync(node.Url + "ping/", null).ConfigureAwait(false);
-				if (response.StatusCode != HttpStatusCode.OK)
-				{
-					return false;
-				}
-			}
-			return true;
-		}
+	
 
 	}
 
