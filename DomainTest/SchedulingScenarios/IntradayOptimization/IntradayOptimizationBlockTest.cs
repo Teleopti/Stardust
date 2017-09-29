@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
+	[TestWithStaticDependenciesAvoidUse]
 	public class IntradayOptimizationBlockTest
 	{
 		public IntradayOptimizationFromWeb Target;
