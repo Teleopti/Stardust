@@ -58,6 +58,10 @@
 			function() {
 				generateChart();
 			});
+		$scope.$on('teamSchedule.command.scheduleChangedApplied',
+			function() {
+				generateChart();
+			});
 
 		function generateChart() {
 			if (!selectedSkill && !selectedSkillGroup) return;
