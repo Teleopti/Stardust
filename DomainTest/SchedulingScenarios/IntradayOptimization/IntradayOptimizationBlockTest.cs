@@ -22,9 +22,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	[Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 	[DomainTestWithStaticDependenciesAvoidUse]
-	public class IntradayOptimizationBlockTest
+	public class IntradayOptimizationBlockTest : IntradayOptimizationScenarioTest
 	{
 		public IntradayOptimizationFromWeb Target;
 		public FakeSkillRepository SkillRepository;
@@ -131,6 +130,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				PersonAssignmentRepository.GetSingle(date, agent1).Period
 					.Should().Be.EqualTo(new DateTimePeriod(dateTime1.AddHours(10), dateTime1.AddHours(18)));
 			}
+		}
+
+		public IntradayOptimizationBlockTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
+			if (resourcePlannerMergeTeamblockClassicIntraday45508 == OptimizationCodeBranch.Classic)
+				Assert.Ignore("Not supported");
 		}
 	}
 }
