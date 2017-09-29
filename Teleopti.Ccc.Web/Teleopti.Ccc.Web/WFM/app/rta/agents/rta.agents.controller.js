@@ -29,28 +29,26 @@
 			'NoticeService'
 		];
 
-	function RtaAgentsController(
-		$scope,
-		$filter,
-		$state,
-		$stateParams,
-		$interval,
-		$sessionStorage,
-		$q,
-		$translate,
-		$location,
-		$timeout,
-		rtaService,
-		rtaGridService,
-		rtaFormatService,
-		rtaAgentsBuildService,
-		rtaRouteService,
-		rtaStateService,
-		fakeTimeService,
-		localeLanguageSortingService,
-		Toggle,
-		NoticeService
-	) {
+	function RtaAgentsController($scope,
+								 $filter,
+								 $state,
+								 $stateParams,
+								 $interval,
+								 $sessionStorage,
+								 $q,
+								 $translate,
+								 $location,
+								 $timeout,
+								 rtaService,
+								 rtaGridService,
+								 rtaFormatService,
+								 rtaAgentsBuildService,
+								 rtaRouteService,
+								 rtaStateService,
+								 fakeTimeService,
+								 localeLanguageSortingService,
+								 Toggle,
+								 NoticeService) {
 
 		var vm = this;
 
@@ -106,7 +104,7 @@
 			toggles = Toggle;
 		});
 
-		vm.getTableHeight = function() {
+		vm.getTableHeight = function () {
 			var rowHeight = 30;
 			var headerHeight = 30;
 			var agentMenuHeight = 45;
@@ -115,10 +113,10 @@
 			};
 		};
 
-		vm.getAdherenceForAgent = function(personId) {
+		vm.getAdherenceForAgent = function (personId) {
 			if (!vm.isSelected(personId)) {
 				rtaService
-					.forToday({ personId: personId })
+					.forToday({personId: personId})
 					.then(function (data) {
 						vm.adherence = data;
 						vm.adherencePercent = data.AdherencePercent;
@@ -127,14 +125,14 @@
 			}
 		};
 
-		vm.selectAgent = function(personId) { selectedPersonId = vm.isSelected(personId) ? '' : personId; };
-		vm.isSelected = function(personId) { return selectedPersonId === personId; };
-		vm.showAdherenceUpdates = function() { return vm.adherencePercent !== null; };
-		vm.changeScheduleUrl = function(personId) { return rtaRouteService.urlForChangingSchedule(personId); };
-		vm.historicalAdherenceUrl = function(personId) { return rtaRouteService.urlForHistoricalAdherence(personId); };
+		vm.selectAgent = function (personId) { selectedPersonId = vm.isSelected(personId) ? '' : personId; };
+		vm.isSelected = function (personId) { return selectedPersonId === personId; };
+		vm.showAdherenceUpdates = function () { return vm.adherencePercent !== null; };
+		vm.changeScheduleUrl = function (personId) { return rtaRouteService.urlForChangingSchedule(personId); };
+		vm.historicalAdherenceUrl = function (personId) { return rtaRouteService.urlForHistoricalAdherence(personId); };
 		vm.goToOverview = rtaRouteService.goToOverview;
 		vm.goToSelectItem = function () { rtaRouteService.goToSelectSkill(); }
-		
+
 		vm.rightPanelOptions = {
 			panelState: false,
 			panelTitle: " ",
@@ -147,9 +145,7 @@
 
 		(function initialize() {
 			pollingLock = false;
-			//if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
-				agentState();
-			//}
+			agentState();
 		})();
 
 		$scope.$watch(
@@ -242,13 +238,13 @@
 			else
 				vm.agentStates = $filter('agentFilter')(allAgentStates, vm.filterText, propertiesForFiltering);
 			if (vm.showInAlarm) {
-				vm.agentStates = $filter('filter')(vm.agentStates, { TimeInAlarm: '' });
+				vm.agentStates = $filter('filter')(vm.agentStates, {TimeInAlarm: ''});
 				vm.openedMaxNumberOfAgents = (vm.agentStates.length === vm.maxNumberOfAgents);
 			}
 		}
 
 		function updateAgentStates(agentStates) {
-			if(!vm.pause) {
+			if (!vm.pause) {
 				var excludedStates = excludedStateIds();
 				setStatesAndStuff(agentStates);
 				updateUrlWithExcludedStateIds(excludedStates);
@@ -304,8 +300,6 @@
 		}
 
 
-
-
 		$scope.$watch(
 			function () { return vm.showInAlarm; },
 			function (newValue, oldValue) {
@@ -332,9 +326,6 @@
 				}
 			}
 		);
-
-
-
 
 
 		function excludedStateIds() {
@@ -369,8 +360,8 @@
 
 		function updateUrlWithExcludedStateIds(excludedStates) {
 			$state.go($state.current.name,
-				{ es: excludedStates },
-				{ notify: false });
+				{es: excludedStates},
+				{notify: false});
 		};
 
 		function sortPhoneStatesByName() {

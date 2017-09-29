@@ -41,15 +41,14 @@
 
 		function pollNow() {
 			pollStop();
-			getSites()
-				.then(pollNext);
+			getSites().finally(pollNext);
 		}
 
 		function pollNext() {
 			if (destroyed)
 				return;
 			pollPromise = $timeout(function () {
-				getSites().then(pollNext)
+				getSites().finally(pollNext)
 			}, 5000);
 		}
 
@@ -58,11 +57,11 @@
 				$timeout.cancel(pollPromise);
 		}
 
-		$scope.$on('$destroy', 
-		function(){
-			destroyed = true;
-			pollStop()
-		});
+		$scope.$on('$destroy',
+			function () {
+				destroyed = true;
+				pollStop()
+			});
 
 		function getSites() {
 			return rtaService.getOverviewModelFor(rtaStateService.pollParams())
@@ -90,7 +89,7 @@
 							};
 
 							vm.siteCards.push(siteCard);
-						};
+						}
 
 						updateTeams(siteCard, site.Teams);
 						siteCard.ClassesOnSelection = siteCard.isSelected ? (site.Color + classSuffixOnSelection + ' ' + noBorderClass) : (site.Color + classSuffixNoSelection);
@@ -119,7 +118,7 @@
 						href: rtaStateService.agentsHrefForTeam(team.SiteId, team.Id)
 					};
 					siteCard.teams.push(teamCard);
-				};
+				}
 				teamCard.Color = team.Color;
 				teamCard.InAlarmCount = team.InAlarmCount;
 				teamCard.ClassOnSelection = teamCard.isSelected ? teamCard.Color + classSuffixOnSelection : team.Color;
