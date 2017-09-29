@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				personRequest = new PersonRequest(_loggedOnUser.CurrentUser());
 			}
 
-			var definitionSet = _multiplicatorDefinitionSetRepository.Get(source.MultiplicatorDefinitionSet);
+			var definitionSet = _multiplicatorDefinitionSetRepository.Get(source.MultiplicatorDefinitionSet.Value);
 			var period = new DateTimePeriodFormMapper(_userTimeZone).Map(source.Period);
 			var overtimeRequest = new OvertimeRequest(definitionSet, period);
 

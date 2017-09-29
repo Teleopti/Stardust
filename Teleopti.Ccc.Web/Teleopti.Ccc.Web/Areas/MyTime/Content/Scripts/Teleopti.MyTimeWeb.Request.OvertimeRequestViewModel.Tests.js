@@ -11,6 +11,7 @@ $(document).ready(function() {
 	var vm,
 		ajax,
 		sentData,
+		actualRequestData,
 		addedOvertimeRequest,
 		requestFormClosed = false,
 		fakeOvertimeRequestResponse = {
@@ -30,6 +31,7 @@ $(document).ready(function() {
 	});
 
 	function setup() {
+		actualRequestData = undefined;
 		setupAjax();
 		requestFormClosed = false;
 		addedOvertimeRequest = undefined;
@@ -44,8 +46,15 @@ $(document).ready(function() {
 		ajax = {
 			Ajax: function(options) {
 				if (options.url === 'Requests/PersistOvertimeRequest') {
-					sentData = options.data;
-					options.success(fakeOvertimeRequestResponse);
+					sentData = actualRequestData || options.data;
+					if (sentData.Subject === '') {
+						options.error({ responseJSON: { Errors: [requestsMessagesUserTexts.MISSING_SUBJECT] } });
+					}
+					else if (sentData.MultiplicatorDefinitionSet === '') {
+						options.error({ responseJSON: { Errors: [requestsMessagesUserTexts.MISSING_OVERTIME_TYPE] } });
+					} else {
+						options.success(fakeOvertimeRequestResponse);
+					}
 				}
 			}
 		};
@@ -379,5 +388,20 @@ $(document).ready(function() {
 		fakeRequestDetailViewModel.baseUtcOffsetInMinutes = -600;
 		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
 		equal(requestVm.StartTime(), moment().add(20, 'minutes').zone(-fakeRequestDetailViewModel.baseUtcOffsetInMinutes).format("HH:mm"));
+	});
+
+	test('should display error message from server response when missing overtime time', function() {
+		actualRequestData = { Subject: 'overtime request', MultiplicatorDefinitionSet: '' };
+
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.DateFrom(requestDate);
+		vm.StartTime("19:00");
+		vm.RequestDuration('01:00');
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+
+		vm.AddRequest();
+
+		equal(vm.ErrorMessage(), requestsMessagesUserTexts.MISSING_OVERTIME_TYPE);
 	});
 });
