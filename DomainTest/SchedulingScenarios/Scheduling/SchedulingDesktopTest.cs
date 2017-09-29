@@ -105,7 +105,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		//[Ignore("#45997 to be fixed")]
 		public void ShouldPlaceContractDayOffsCorrect()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 27), new DateOnly(2017, 9, 9));
