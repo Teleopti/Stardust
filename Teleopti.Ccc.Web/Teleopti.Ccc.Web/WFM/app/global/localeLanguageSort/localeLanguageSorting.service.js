@@ -49,6 +49,7 @@
 			var _args = Array.prototype.slice.call(arguments);
 			return function (a, b) {
 				for (var x in _args) {
+
 					var ax = a[_args[x].substring(1)];
 					var bx = b[_args[x].substring(1)];
 					var cx;
@@ -64,6 +65,8 @@
 						return ax.localeCompare(bx, CurrentUserInfo.CurrentUserInfo().Language);
 					} else if (ax !== bx){
 						return ax < bx ? -1 : 1;
+					} else {
+						return;
 					}
 				}
 			}
