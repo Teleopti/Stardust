@@ -609,6 +609,51 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Any(personAssignment => personAssignment.MainActivities().Any())
 				.Should().Be.False();
 		}
+		
+		[Test]
+		public void ShouldGetCorrectLengthOnMasterActivityLayersAsNonBaseActivity()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = ActivityRepository.Has("_");
+			var otherActivity = ActivityRepository.Has("_");
+			var masterActivity = new MasterActivity().WithId();
+			masterActivity.ActivityCollection.Add(otherActivity);
+			var skillMainActivity = SkillRepository.Has("_", activity);
+			var skillExtendedActivity = SkillRepository.Has("_", otherActivity);
+			var scenario = ScenarioRepository.Has("_");
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
+			ruleSet.AddExtender(new ActivityRelativeStartExtender(masterActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(0, 0, 0, 0, 15)));
+			var agent = PersonRepository.Has(new Contract("_"), contractSchedule, new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skillMainActivity, skillExtendedActivity);
+			SkillDayRepository.Has(skillMainActivity.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			SkillDayRepository.Has(skillExtendedActivity.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				DayOffTemplate = dayOffTemplate,
+				TagToUseOnScheduling = NullScheduleTag.Instance,
+				UseBlock = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
+			});
+			var planningPeriod = PlanningPeriodRepository.Has(period);
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
+			
+			foreach (var personAssignment in AssignmentRepository.Find(new[] {agent}, period, scenario))
+			{
+				if (personAssignment.DayOff() != null) continue;
+				foreach (var shiftLayer in personAssignment.ShiftLayers)
+				{
+					if (shiftLayer.Payload.Equals(otherActivity))
+					{
+						shiftLayer.Period.ElapsedTime().Hours.Should().Be.EqualTo(1);
+					}
+				}
+			}
+		}
 
 		[Test]
 		public void ShouldBePossibleToHaveSkillAgentDoesntKnowIfNotRequiresSkillAndNotMasterSkill()

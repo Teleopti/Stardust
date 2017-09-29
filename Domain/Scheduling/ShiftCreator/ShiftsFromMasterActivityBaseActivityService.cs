@@ -54,7 +54,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 			{
 				var masterActivity = layer.Payload as MasterActivity;
 				if (masterActivity == null)
+				{
+					firstRun = false;
 					continue;
+				}
 
 				var resultForOneLayer = new List<IWorkShift>();
 				foreach (var replaceActivity in masterActivity.ActivityCollection)
