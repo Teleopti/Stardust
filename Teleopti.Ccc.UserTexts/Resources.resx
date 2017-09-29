@@ -16615,4 +16615,8 @@ Do you want to participate?</value>
     <value>Missing Overtime Type</value>
     <comment>Error message in mytime/ovetime request for missing Overtime Type</comment>
   </data>
+  <data name="PlanningGroup" xml:space="preserve">
+    <value>Planning Group</value>
+    <comment>Planning Group for web scheduling</comment>
+  </data>
 </root>
