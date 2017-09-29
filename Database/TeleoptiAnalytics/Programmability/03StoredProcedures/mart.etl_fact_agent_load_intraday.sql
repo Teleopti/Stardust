@@ -8,7 +8,7 @@ GO
 -- Create date: 2014-10-09
 -- Description:	Loads fact_agent from agent_logg in the intraday job.
 -- =============================================
---EXEC [mart].[etl_fact_agent_load_intraday] @datasource_id=-2
+--EXEC [mart].[etl_fact_agent_load_intraday] @datasource_id=6
 CREATE PROCEDURE [mart].[etl_fact_agent_load_intraday] 
 @datasource_id int,
 @is_delayed_job bit = 0
@@ -67,7 +67,6 @@ BEGIN  --Single datasource_id
 	--declare
 	CREATE TABLE #bridge_time_zone(date_id int,interval_id int,time_zone_id int,local_date_id int,local_interval_id int)
 	CREATE TABLE #agg_acdlogin_ids (acd_login_agg_id int, mart_acd_login_id int)
-	CREATE TABLE #agent_default_queues(queue_id int)
 
 	DECLARE @UtcNow as smalldatetime
 	DECLARE @time_zone_id smallint
@@ -118,24 +117,6 @@ BEGIN  --Single datasource_id
 		acd_login_id
 	FROM mart.dim_acd_login
 	WHERE datasource_id = @datasource_id
-
-	SET @sqlstring = 'INSERT INTO #agent_default_queues 
-	SELECT 
-		queue
-	FROM '
-		+ 
-		CASE @internal
-			WHEN 0 THEN '	mart.v_queues aq'
-			WHEN 1 THEN '	dbo.queues aq'
-			ELSE NULL --Fail fast
-		END
-		+ 
-	' INNER JOIN
-		mart.dim_queue_excluded qe
-	ON
-		aq.orig_queue_id = qe.queue_original_id'
-
-	EXEC sp_executesql @sqlstring
 
 
 	if (select @internal) = 0
@@ -377,18 +358,16 @@ SELECT
 					ELSE NULL --Fail fast
 				END
 				+ 
-			' INNER JOIN 
-				#agent_default_queues q
-			ON
-				agg.queue = q.queue_id
-			WHERE 
+			' WHERE 
 				(date_from = '''+ CAST(@target_date_local as nvarchar(20))+'''
 					AND interval >= '''+ CAST(@target_interval_local as nvarchar(20))+'''
 				) 
 				OR 
 				(date_from BETWEEN '''+ CAST(DATEADD(D,1,@target_date_local) as nvarchar(20))+'''
 					AND '''+ CAST(@source_date_local as nvarchar(20))+'''
-				)	
+				)
+				AND avail_dur IS NOT NULL
+				AND tot_work_dur IS NOT NULL
 		) stg	
 	INNER JOIN
 		mart.dim_date		d
@@ -403,12 +382,15 @@ SELECT
 	ON
 		d.date_id		= bridge.local_date_id		AND
 		stg.interval	= bridge.local_interval_id
-	GROUP BY a.mart_acd_login_id,d.date_id,stg.interval'
+	GROUP BY 
+		a.mart_acd_login_id,
+		d.date_id,
+		stg.interval'
 
-	--Exec
-	--select @sqlstring
 	EXEC sp_executesql @sqlstring
+
 	SET NOCOUNT ON
+
 	--finally
 	--update with last logged interval
 	UPDATE [mart].[etl_job_intraday_settings]
