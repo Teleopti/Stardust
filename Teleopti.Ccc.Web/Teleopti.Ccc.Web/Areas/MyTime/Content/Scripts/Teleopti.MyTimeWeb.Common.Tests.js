@@ -344,6 +344,7 @@ $(document).ready(function () {
 			mainNavbarTogglerClickTriggered = true;
 		});
 
+		$('body').trigger('touchend');
 		equal(mainNavbarTogglerClickTriggered, true);
 
 		$('#mainNavbarToggler').unbind('click');
