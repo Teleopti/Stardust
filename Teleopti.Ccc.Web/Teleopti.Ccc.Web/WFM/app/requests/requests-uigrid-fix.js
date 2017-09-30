@@ -54,3 +54,17 @@
 		return $delegate;
   }]);
 })();
+
+(function(){
+		angular.module('wfm.requests').service('uiGridFixService', function(){
+			var svc = this;
+
+			svc.fixColumneMenuToggling = function(){
+				//Add another 'click' event hanlder for '.ui-grid-column-menu-button' 
+				//and manually trigger 'click' which is binded to document to close popup ColumnVisibility menu list.
+				angular.element(document.querySelectorAll('.ui-grid-column-menu-button')).on('click', function(event){ 
+					angular.element(document).triggerHandler('click');
+				});
+			}
+		})
+})();

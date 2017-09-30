@@ -21,7 +21,8 @@
 		'ShiftTradeGridConfiguration',
 		'UIGridUtilitiesService',
 		'REQUESTS_TAB_NAMES',
-		'requestCommandParamsHolder'
+		'requestCommandParamsHolder',
+		'uiGridFixService'
 	];
 
 	function requestsShiftTradeController(
@@ -40,7 +41,8 @@
 		shiftTradeGridConfiguration,
 		uiGridUtilitiesService,
 		requestsTabNames,
-		requestCommandParamsHolder) {
+		requestCommandParamsHolder,
+		uiGridFixService) {
 		var vm = this;
 
 		vm.requests = [];
@@ -296,6 +298,9 @@
 							},
 							500);
 					});
+					$timeout(function () {
+						uiGridFixService.fixColumneMenuToggling();
+					}, 500);
 				}
 			};
 
