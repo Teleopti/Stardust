@@ -71,12 +71,14 @@
 				doneCallback && doneCallback(data);
 				self.CancelAddRequest();
 			},
-			error: function (response) {
+			error: function (response, textStatus) {
 				if (response.responseJSON) {
 					var errors = response.responseJSON.Errors;
 					if (errors && errors.length > 0) {
 						self.ErrorMessage(errors[0]);
 						self.ShowError(true);
+					} else {
+						Teleopti.MyTimeWeb.Common.AjaxFailed(response, null, textStatus);
 					}
 				}
 				self.IsPostingData(false);
