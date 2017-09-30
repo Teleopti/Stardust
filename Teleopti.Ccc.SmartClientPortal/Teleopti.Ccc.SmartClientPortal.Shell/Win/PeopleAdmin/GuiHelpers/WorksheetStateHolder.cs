@@ -447,7 +447,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			_contractScheduleBindingCollection.Clear();
 
 			var repository = new ContractScheduleRepository(filterPeopleHolder.GetUnitOfWork);
-			var list = repository.FindAllContractScheduleByDescription().Where(ptp => ptp.IsChoosable);
+			var list = repository.FindAllContractScheduleByDescription().Where(ptp => !((IDeleteTag)ptp).IsDeleted);
 
 			foreach (IContractSchedule item in list)
 			{

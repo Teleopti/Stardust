@@ -11,6 +11,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
@@ -165,7 +166,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private static void handleContractSchedule(IPersonPeriod personPeriod, ICollection<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
 		{
 			var contractSchedule = personPeriod.PersonContract.ContractSchedule.Id.GetValueOrDefault();
-			if (contractSchedule == Guid.Empty || !personPeriod.PersonContract.ContractSchedule.IsChoosable) return;
+			if (contractSchedule == Guid.Empty || ((IDeleteTag)personPeriod.PersonContract.ContractSchedule).IsDeleted) return;
 
 			var contractScheduleGroupPage = getGroupPage(groupPages, "ContractSchedule", Resources.ContractSchedule);
 			groupIds.Add(new analyticsGroupForPerson(contractSchedule, personPeriod.PersonContract.ContractSchedule.Description.Name, contractScheduleGroupPage));

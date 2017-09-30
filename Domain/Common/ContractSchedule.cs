@@ -97,18 +97,6 @@ namespace Teleopti.Ccc.Domain.Common
              _contractScheduleWeeks.Clear();
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is choosable.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is choosable; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-09
-        /// </remarks>
-        public virtual bool IsChoosable => !IsDeleted;
-
 	    public virtual bool IsDeleted => _isDeleted;
 
 	    public virtual void SetDeleted()

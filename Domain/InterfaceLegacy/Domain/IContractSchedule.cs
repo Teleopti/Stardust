@@ -50,20 +50,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         void ClearContractScheduleWeeks();
 
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is choosable.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is choosable; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-09
-        /// </remarks>
-        bool IsChoosable { get; }
-
-
 		bool IsWorkday(DateOnly personPeriodStartDate, DateOnly requestedDate, DayOfWeek dayOfWeek);
 	}
 }

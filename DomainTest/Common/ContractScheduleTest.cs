@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyProperties()
         {
-            Assert.IsTrue(testContractSchedule.IsChoosable);
+            Assert.IsFalse(testContractSchedule.IsDeleted);
         }
 
 
