@@ -101,7 +101,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded[0].ContractScheduleWeeks));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded[0].ContractScheduleWeeks.First()[DayOfWeek.Wednesday]));
             Assert.AreEqual(2, loaded[0].ContractScheduleWeeks.Count());
-            Assert.AreEqual(7, loaded[0].ContractScheduleWeeks.First().Count);
         }
 
         private static IContractScheduleWeek createContractScheduleWeek()

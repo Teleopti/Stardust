@@ -59,23 +59,5 @@ namespace Teleopti.Ccc.Domain.Common
             else
                 workDays.Add(dayOfWeek, isWorkday);
         }
-
-        /// <summary>
-        /// Removes an item from collection
-        /// </summary>
-        /// <param name="dayOfWeek"></param>
-        public virtual void Remove(DayOfWeek dayOfWeek)
-        {
-            if (workDays.ContainsKey(dayOfWeek))
-                workDays.Remove(dayOfWeek);
-        }
-
-        /// <summary>
-        /// Get the number of explicit defined days
-        /// </summary>
-        public virtual int Count
-        {
-            get { return workDays.Count; }
-        }
     }
 }

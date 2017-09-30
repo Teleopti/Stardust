@@ -13,11 +13,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         int WeekOrder { get; set; }
 
         /// <summary>
-        /// Get the number of explicit defined days
-        /// </summary>
-        int Count { get; }
-
-        /// <summary>
         /// Check if given day is a work day for the week
         /// </summary>
         /// <param name="dayOfWeek">Week day</param>
@@ -37,11 +32,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="dayOfWeek">Week day</param>
         /// <param name="isWorkday">True if day is work day</param>
         void Add(DayOfWeek dayOfWeek, bool isWorkday);
-
-        /// <summary>
-        /// Removes an item from collection
-        /// </summary>
-        /// <param name="dayOfWeek"></param>
-        void Remove(DayOfWeek dayOfWeek);
     }
 }

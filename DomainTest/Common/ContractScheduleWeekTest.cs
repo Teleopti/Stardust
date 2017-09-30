@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void VerifyDefaultPropertiesAreSet()
         {
             Assert.AreEqual(0, testContractScheduleWeek.WeekOrder);
-            Assert.AreEqual(0, testContractScheduleWeek.Count);
         }
 
         /// <summary>
@@ -51,25 +50,10 @@ namespace Teleopti.Ccc.DomainTest.Common
             testContractScheduleWeek.Add(DayOfWeek.Thursday, true);
             testContractScheduleWeek.Add(DayOfWeek.Thursday, true);
 
-            Assert.AreEqual(2, testContractScheduleWeek.Count);
-        }
+            Assert.AreEqual(true, testContractScheduleWeek[DayOfWeek.Saturday]);
+			Assert.AreEqual(true, testContractScheduleWeek[DayOfWeek.Thursday]);
+		}
 
-        /// <summary>
-        /// Verifies workdays can be removed from collection
-        /// </summary>
-        [Test]
-        public void VerifyWorkdaysCanBeRemoved()
-        {
-            testContractScheduleWeek.Add(DayOfWeek.Saturday, true);
-            testContractScheduleWeek.Add(DayOfWeek.Thursday, true);
-
-            Assert.AreEqual(2, testContractScheduleWeek.Count);
-
-            testContractScheduleWeek.Remove(DayOfWeek.Thursday);
-            testContractScheduleWeek.Remove(DayOfWeek.Friday);
-
-            Assert.AreEqual(1, testContractScheduleWeek.Count);
-        }
 
         /// <summary>
         /// Verifies IsWorkday method gives expected result
@@ -80,7 +64,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             testContractScheduleWeek.Add(DayOfWeek.Monday, true);
             testContractScheduleWeek.Add(DayOfWeek.Friday, true);
 
-            Assert.AreEqual(2, testContractScheduleWeek.Count);
             Assert.IsFalse(testContractScheduleWeek.IsWorkday(DayOfWeek.Saturday));
             Assert.IsFalse(testContractScheduleWeek.IsWorkday(DayOfWeek.Thursday));
             Assert.IsTrue(testContractScheduleWeek.IsWorkday(DayOfWeek.Friday));
