@@ -197,5 +197,16 @@ namespace Teleopti.Ccc.TestCommon
 			
 			return skillDays;
 		}
+
+		public static IList<ISkillDay> CreateSkillDaysWithDemandOnConsecutiveDays(this ISkill skill, IScenario scenario, DateOnlyPeriod period, int numberOfAgentsPerIntervalDemand)
+		{
+			var skillDays = Enumerable.Range(0, period.DayCount()).Select(day =>
+			{
+				var date = period.StartDate.AddDays(day);
+				return skill.CreateSkillDayWithDemand(scenario, date, numberOfAgentsPerIntervalDemand);
+			}).ToList();
+
+			return skillDays;
+		}
 	}
 }
