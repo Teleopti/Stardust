@@ -52,7 +52,7 @@
 		<skill-group-button on-click="vm.configMode()" />
 	</div>
 	<span class="con-flex rta-multiple-selection-panel">
-		<div  class="relative" outside-click="vm.goToAgents()">
+		<div  class="relative" outside-qclick="vm.goToAgents()">
 			<input type="text" placeholder="{{'DataFilterThreeDots'|translate}}" ng-style="vm.openPicker && {'visibility': 'hidden'}" ng-class="vm.defaultInputText ? 'rta-light-text' : ''" ng-click="vm.openPicker = !vm.openPicker" ng-value="vm.selectFieldText" ng-model="vm.searchTerm"/>
 			<form ng-cloak name="form" class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" novalidate ng-show="vm.openPicker">
 				<div class="sub-header">
