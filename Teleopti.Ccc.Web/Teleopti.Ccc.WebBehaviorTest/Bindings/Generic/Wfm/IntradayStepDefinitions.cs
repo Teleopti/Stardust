@@ -144,16 +144,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I am done creating Skill Area")]
 		public void WhenIAmDoneCreatingSkillArea()
 		{
-			Browser.Interactions.Click(".skill-area-save");
+			Browser.Interactions.Click("#save-skill-group");
+		}
+
+		[Then(@"I cancel creating Skill Area")]
+		[When(@"I cancel creating Skill Area")]
+		public void WhenICancelCreatingSkillArea()
+		{
+			Browser.Interactions.Click("#exit-skill-group");
 		}
 
 		[Then(@"I select to monitor skill area '(.*)'")]
+		[When(@"I select to monitor skill area '(.*)'")]
 		public void ThenISelectToMonitorSkillArea(string skillArea)
 		{
 			Thread.Sleep(1000);
 			Browser.Interactions.Javascript("document.querySelector(\"#skill-area-input\").focus();");
-			var listId = "#" + Browser.Interactions.Javascript("return $('#skill-area-id input').attr(\"aria-owns\")");
-			Browser.Interactions.Javascript($"$('{listId} li:contains(\"{skillArea}\")').click()");
+			//var listId = Browser.Interactions.Javascript("return $('#skill-area-id input')");
+			Browser.Interactions.Javascript($"$('#skill-area-id input li:contains(\"{skillArea}\")').click()");
 		}
 
 		[Then(@"I should no longer be able to monitor '(.*)'")]

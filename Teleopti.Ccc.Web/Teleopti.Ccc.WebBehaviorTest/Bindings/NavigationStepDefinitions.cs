@@ -403,6 +403,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToWfmLandingPage();
 		}
 
+		[Given(@"I view Real time adherence sites")]
 		[When(@"I view Real time adherence sites")]
 		public void WhenIViewRealTimeAdherenceSites()
 		{
