@@ -17,9 +17,7 @@
 			'rtaNamesFormatService',
 			'localeLanguageSortingService',
 			'$q',
-			'rtaStateService',
-			'SkillGroupSvc',
-			'Toggle'
+			'rtaStateService'
 		];
 
 	function RtaFilterController(
@@ -33,9 +31,7 @@
 		rtaNamesFormatService,
 		localeLanguageSortingService,
 		$q,
-		rtaStateService,
-		SkillGroupSvc,
-		toggleSvc
+		rtaStateService
 	) {
 		var vm = this;
 
@@ -65,19 +61,7 @@
 		vm.clearSelection = clearSelection;
 		vm.sortByLocaleLanguage = localeLanguageSortingService.sort;
 		vm.openPicker = false;
-		vm.toggles = {
-			unifiedSkillGroupManagement: []
-		};
-		vm.configMode = function() {
-			$state.go('rta-filter-skill-group-config', {
-				isNewSkillArea: false
-			});
-		};
-		
-        toggleSvc.togglesLoaded.then(function() {
-            vm.toggles.unifiedSkillGroupManagement = toggleSvc.WFM_Unified_Skill_Group_Management_45417;
-		});
-		
+
 		(function initialize() {
 			rtaService.getSkills()
 				.then(function (skills) {
@@ -262,6 +246,5 @@
 		};
 
 		function clearSearchTerm() { vm.searchTerm = ''; }
-
 	};
 })();
