@@ -49,7 +49,12 @@
 	</span>
 	<!-- <div ng-if="vm.toggles.unifiedSkillGroupManagement && vm.HasPermissionToModifySkillArea"> -->
 	<div ng-if="vm.toggles.unifiedSkillGroupManagement">
-		<skill-group-button on-click="vm.configMode()" />
+		<button class="wfm-fab mini mini-active"
+				id="manage_skill_group_button"
+				ng-click="vm.configMode()">
+			<i class="mdi mdi-plus" style="top: 2px; position: relative;"></i>
+			<md-tooltip>{{'CreateSkillGroup'|translate}}</md-tooltip>
+		</button>
 	</div>
 	<span class="con-flex rta-multiple-selection-panel">
 		<div  class="relative" outside-click="vm.goToAgents()">
