@@ -190,6 +190,26 @@ describe('RtaTracerController', function () {
 		
 		expect(vm.userCodes[0].traces[0].lines[0]).toBe('ActivityCheck');
 	});
-
 	
+	it('should stop', function () {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		c.apply(function () {
+			vm.stop();
+		});
+
+		expect($fakeBackend.stopCalled).toBe(true);
+	});
+
+	it('should clear', function () {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		c.apply(function () {
+			vm.clear();
+		});
+
+		expect($fakeBackend.clearCalled).toBe(true);
+	});
 });

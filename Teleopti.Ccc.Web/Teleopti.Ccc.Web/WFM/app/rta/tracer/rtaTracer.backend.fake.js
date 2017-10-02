@@ -12,12 +12,16 @@
 		var service = {
 			clear: clear,
 			traceCalledForUserCode: null,
+			stopCalled: false,
+			clearCalled: false,
 			withTracer: withTracer,
 			withUserCodeTrace: withUserCodeTrace
 		};
 
 		function clear() {
 			service.traceCalledForUserCode = null;
+			service.stopCalled = false;
+			service.clearCalled = false;
 			userCodeTraces = [];
 			tracers = [];
 		}
@@ -36,7 +40,7 @@
 			return this;
 		}
 
-		faker.fake(/\.\.\/api\/Tracer\/Qwerty(.*)/,
+		faker.fake(/\.\.\/api\/Tracer\/Traces(.*)/,
 			function () {
 				return [200, {
 					Tracers: tracers,
@@ -50,6 +54,18 @@
 				return [200];
 			});
 
+		faker.fake(/\.\.\/api\/Tracer\/Stop(.*)/,
+			function () {
+				service.stopCalled = true;
+				return [200];
+			});
+
+		faker.fake(/\.\.\/api\/Tracer\/Clear(.*)/,
+			function () {
+				service.clearCalled = true;
+				return [200];
+			});
+		
 		return service;
 	}
 
