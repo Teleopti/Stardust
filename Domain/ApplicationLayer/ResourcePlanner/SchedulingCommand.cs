@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			CommandId = Guid.NewGuid();
 		}
 		public Guid CommandId { get; set; }
-		public IEnumerable<Guid> AgentsToSchedule { get; set; }
+		public IEnumerable<IPerson> AgentsToSchedule { get; set; }
 		public DateOnlyPeriod Period { get; set; }
 		public bool RunWeeklyRestSolver { get; set; }
 		public bool FromWeb { get; set; }

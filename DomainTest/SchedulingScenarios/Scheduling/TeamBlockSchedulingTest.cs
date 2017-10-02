@@ -752,7 +752,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 		[Test]
-		[Ignore("#46076 to be fixed")]
 		public void ShouldConsiderCrossSkillAgents()
 		{
 			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());

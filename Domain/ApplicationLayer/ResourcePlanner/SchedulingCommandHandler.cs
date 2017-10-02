@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly CreateIslands _createIslands;
 		private readonly ReduceSkillSets _reduceSkillSets;
 		private readonly IPeopleInOrganization _peopleInOrganization;
+		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		//
@@ -27,7 +28,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				CreateIslands createIslands, 
 				ReduceSkillSets reduceSkillSets, 
 				IPeopleInOrganization peopleInOrganization,
-				ISchedulingOptionsProvider schedulingOptionsProvider)
+				ISchedulingOptionsProvider schedulingOptionsProvider,
+				CrossAgentsAndSkills crossAgentsAndSkills)
 		{
 			_eventPublisher = eventPublisher;
 			_gridLockManager = gridLockManager;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_reduceSkillSets = reduceSkillSets;
 			_peopleInOrganization = peopleInOrganization;
 			_schedulingOptionsProvider = schedulingOptionsProvider;
+			_crossAgentsAndSkills = crossAgentsAndSkills;
 		}
 
 		[TestLog]
@@ -42,36 +45,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			var userLocks = _gridLockManager.LockInfos();
 			var events = new List<SchedulingWasOrdered>();
+			var islands = CreateIslands(command.Period, command);
 			if (teamScheduling(command))
 			{
-				var agentIds = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command).Select(x=>x.Id.Value);
+				var agentsToSchedule = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command);
+				var crossAgentsAndSkillsResult = _crossAgentsAndSkills.Execute(islands, agentsToSchedule);
 				events.Add(new SchedulingWasOrdered
 				{
-					AgentsToSchedule = agentIds,
-					AgentsInIsland = agentIds,
+					AgentsToSchedule = agentsToSchedule.Select(x => x.Id.Value),
+					AgentsInIsland = crossAgentsAndSkillsResult.Agents,
 					StartDate = command.Period.StartDate,
 					EndDate = command.Period.EndDate,
 					RunWeeklyRestSolver = command.RunWeeklyRestSolver,
 					CommandId = command.CommandId,
 					UserLocks = userLocks,
 					FromWeb= command.FromWeb,
-					PlanningPeriodId = command.PlanningPeriodId
+					PlanningPeriodId = command.PlanningPeriodId,
+					Skills = crossAgentsAndSkillsResult.Skills
 				});
 			}
 			else
 			{
-				var islands = CreateIslands(command.Period, command);
 				foreach (var island in islands)
 				{
-					var agentsInIsland = island.AgentsInIsland().Select(x => x.Id.Value).ToArray();
+					var agentsInIsland = island.AgentsInIsland();
 					var agentsToSchedule = command.AgentsToSchedule?.Where(x => agentsInIsland.Contains(x)).ToArray() ?? agentsInIsland;
 
 					if (agentsToSchedule.Any())
 					{
 						var @event = new SchedulingWasOrdered
 						{
-							AgentsToSchedule = agentsToSchedule,
-							AgentsInIsland = agentsInIsland,
+							AgentsToSchedule = agentsToSchedule.Select(x => x.Id.Value),
+							AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
 							StartDate = command.Period.StartDate,
 							EndDate = command.Period.EndDate,
 							RunWeeklyRestSolver = command.RunWeeklyRestSolver,

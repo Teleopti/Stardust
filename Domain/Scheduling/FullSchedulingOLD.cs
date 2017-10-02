@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -30,8 +31,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly FullSchedulingResult _fullSchedulingResult;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
 		private readonly SchedulingInformationProvider _schedulingInformationProvider;
+		private readonly ISkillRepository _skillRepository;
+		private readonly IPersonRepository _personRepository;
 
-		public FullSchedulingOLD(IScheduleExecutor scheduleExecutor, IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult, ISchedulingSourceScope schedulingSourceScope, SchedulingInformationProvider schedulingInformationProvider) 
+		public FullSchedulingOLD(IScheduleExecutor scheduleExecutor, IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult, ISchedulingSourceScope schedulingSourceScope, SchedulingInformationProvider schedulingInformationProvider, ISkillRepository skillRepository, IPersonRepository personRepository) 
 		{
 			_scheduleExecutor = scheduleExecutor;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -42,6 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_fullSchedulingResult = fullSchedulingResult;
 			_schedulingSourceScope = schedulingSourceScope;
 			_schedulingInformationProvider = schedulingInformationProvider;
+			_skillRepository = skillRepository;
+			_personRepository = personRepository;
 		}
 
 		public SchedulingResultModel DoScheduling(Guid planningPeriodId)
@@ -68,12 +73,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		protected virtual void SetupAndSchedule(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
 			var stateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(stateHolder, people, null, period);
+			//hack for now
+			_fillSchedulerStateHolder.Fill(stateHolder, _personRepository.LoadAll().Select(x => x.Id.Value), null, period, _skillRepository.LoadAll().Select(x => x.Id.Value)); 
 
-			if (period.StartDate.Day == 1 && period.EndDate.AddDays(1).Day == 1 && stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period).Any())
+			var agents = stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period).Where(x=> people.Contains(x.Id.Value));
+			if (period.StartDate.Day == 1 && period.EndDate.AddDays(1).Day == 1 && agents.Any())
 			{
 				var firstDaysOfWeek = new List<DayOfWeek>();
-				foreach (var person in stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period))
+				foreach (var person in agents)
 				{
 					if (!firstDaysOfWeek.Contains(person.FirstDayOfWeek))
 					{
@@ -99,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var schedulinOptions = _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate);
 			_scheduleExecutor.Execute(new NoSchedulingCallback(), schedulinOptions, _schedulingProgress,
-				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false,new FixedBlockPreferenceProvider(schedulinOptions));
+				agents, period, false,new FixedBlockPreferenceProvider(schedulinOptions));
 		}
 	}
 }
