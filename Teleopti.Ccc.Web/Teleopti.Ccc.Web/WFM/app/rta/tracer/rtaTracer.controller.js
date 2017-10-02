@@ -4,9 +4,9 @@
 		.module('wfm.rtaTracer')
 		.controller('RtaTracerController', constructor);
 
-	constructor.$inject = ['$resource', '$http', '$interval'];
+	constructor.$inject = ['$http', '$scope', 'rtaPollingService'];
 
-	function constructor($resource, $http, $interval) {
+	function constructor($http, $scope, rtaPollingService) {
 		var vm = this;
 		vm.userCode = '';
 		vm.tracers = [];
@@ -15,10 +15,8 @@
 			$http.get('../api/Tracer/Trace', {params: {userCode: vm.userCode}});
 		};
 
-		foo();
-		
-		function foo (){
-			$http.get('../api/Tracer/Qwerty').then(function (response) {
+		var poller = rtaPollingService.create(function () {
+			return $http.get('../api/Tracer/Qwerty').then(function (response) {
 				vm.tracers = response.data.Tracers
 					.map(function (tracer) {
 						return {
@@ -41,9 +39,8 @@
 						};
 					});
 			});
-		}
-		
-		$interval(foo, 1000);
+		}, 1000).start();
+		$scope.$on('$destroy', poller.destroy);
 
 		vm.process1 = "box1:487";
 		vm.process2 = "box1:1476";

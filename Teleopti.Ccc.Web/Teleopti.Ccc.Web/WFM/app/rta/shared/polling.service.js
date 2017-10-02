@@ -11,21 +11,23 @@
 
 		return {
 
-			create: function (call) {
-
+			create: function (call, interval) {
 				var _destroyed = false;
 				var _scheduledCall;
 
-				return {
+				var poller = {
 					start: start,
 					force: force,
 					destroy: destroy
 				};
 
+				return poller;
+
 				function start() {
 					if (_destroyed)
 						return;
 					callAndScheduleCall();
+					return poller;
 				}
 
 				function force() {
@@ -51,13 +53,10 @@
 
 				function scheduleCall() {
 					if (!_destroyed)
-						_scheduledCall = $timeout(callAndScheduleCall, 5000);
+						_scheduledCall = $timeout(callAndScheduleCall, interval || 5000);
 				}
 			}
-
 		};
-
 	}
-
 })();
 

@@ -1,3 +1,3 @@
 (function() {
-	angular.module('wfm.rtaTracer', ['ui.router']);
+	angular.module('wfm.rtaTracer', ['wfm.rtaShared', 'ui.router']);
 })();
