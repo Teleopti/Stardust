@@ -72,13 +72,7 @@
 								teams: []
 							};
 							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) poller.force(); });
-								return siteCard.isOpen
-							}, function (newValue) {
-								if (newValue) pollNow();
-							});
-							$scope.$watch(function () {
-								return siteCard.isSelected
-							}, function (newValue, oldValue) {
+							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
 								if (newValue != oldValue) {
 									toggleOpenButton();
 									if (newValue) {
