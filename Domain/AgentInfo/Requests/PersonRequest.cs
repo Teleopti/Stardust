@@ -180,6 +180,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual void Deny(string denyReasonTextResourceKey,
 			IPersonRequestCheckAuthorization authorization, IPerson denyPerson = null, PersonRequestDenyOption personRequestDenyOption = PersonRequestDenyOption.None)
 		{
+			var wasWaitlisted = IsWaitlisted;
 			_personRequestDenyOption = personRequestDenyOption;
 			authorization.VerifyEditRequestPermission(this);
 			if (canDeny(personRequestDenyOption))
@@ -191,6 +192,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			request?.Deny(denyPerson);
 
 			_denyReason = denyReasonTextResourceKey ?? string.Empty;
+			if (wasWaitlisted && IsWaitlisted)
+				return;
 			notifyOnStatusChange();
 		}
 
@@ -411,6 +414,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			MessageType type = MessageType.Information;
 			if (IsNew) return null;
+			if (IsWaitlisted && !_changed) return null;
+
 			string message = Request.TextForNotification;
 			var shiftTradeRequest = Request as IShiftTradeRequest;
 			if (shiftTradeRequest != null && shiftTradeRequest.Offer != null)

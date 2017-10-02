@@ -2376,6 +2376,50 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			hasWaitlistRequests.Should().Be.False();
 		}
 
+		[Test]
+		public void ShouldNotSendPushMessageIfAlreadyWaitlisted()
+		{
+			var absence = AbsenceFactory.CreateAbsence("Football");
+			PersistAndRemoveFromUnitOfWork(absence);
+
+			var waitlistedWCS = new WorkflowControlSet()
+			{
+				Name = "dd",
+				AbsenceRequestWaitlistEnabled = true,
+				AbsenceRequestWaitlistProcessOrder = WaitlistProcessOrder.BySeniority
+			};
+			waitlistedWCS.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
+				Period = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+
+			});
+			
+			PersistAndRemoveFromUnitOfWork(new[] { waitlistedWCS });
+
+			var waitlistedPerson = PersonFactory.CreatePerson("Asad");
+			waitlistedPerson.WorkflowControlSet = waitlistedWCS;
+			
+			PersistAndRemoveFromUnitOfWork(new[] { waitlistedPerson });
+
+
+			IAbsenceRequest absenceRequest1 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 02, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 05, 12, 0, 0, DateTimeKind.Utc)));
+			
+			IPersonRequest request1 = new PersonRequest(waitlistedPerson, absenceRequest1);
+			request1.Pending();
+			request1.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			PersistAndRemoveFromUnitOfWork(request1);
+
+			var request = new PersonRequestRepository(UnitOfWork).LoadAll();
+			var req = request.First();
+			req.IsWaitlisted.Should().Be.True();
+			req.Deny("Another deny reason", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			((IPushMessageWhenRootAltered)req).PushMessageWhenAlteredInformation().Should().Be.Null();
+		}
 
 		[Test]
 		public void ShouldFilteredByMoreThan1000People()
