@@ -11,6 +11,10 @@ properties {
 	$TCParams = ConvertFrom-StringData (Get-Content $env:TEAMCITY_BUILD_PROPERTIES_FILE -Raw)
 	#$CSPackEXE = $TCParams['AzureSDK_2.9_Path'] + "\bin\cspack.exe"
 	
+	#Size on Azure cloud VM size
+	$Medium = "Standard_D1_v2"
+	$Large = "Standard_D2_v2"
+	
 	$WorkingDir = $TCParams['teamcity.build.workingDir']
 	
 	$TeleoptiBin = "$WorkingDir\TeleoptiCCC\bin"
@@ -93,8 +97,8 @@ task PostReq -depends Init, PreReq, CreateAzurePkg -description "PostReq steps" 
 	Write-Output "##teamcity[blockOpened name='<PostReq>']"
 	
 	Copy-Item -Path "$WorkingDir\teamcity\Azure\Customer\" -Destination "$ToBeArtifacted" -Recurse -Force -ErrorAction Stop
-	Copy-Item -Path "$AzurePackagePath_Medium" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-Medium.cspkg" -Force -ErrorAction Stop
-	Copy-Item -Path "$AzurePackagePath_Large" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-Large.cspkg" -Force -ErrorAction Stop
+	Copy-Item -Path "$AzurePackagePath_Medium" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-$Medium.cspkg" -Force -ErrorAction Stop
+	Copy-Item -Path "$AzurePackagePath_Large" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-$Large.cspkg" -Force -ErrorAction Stop
 	
 	Write-Output "##teamcity[blockClosed name='<PostReq>']"
 }
