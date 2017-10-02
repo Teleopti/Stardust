@@ -11,6 +11,10 @@
 	cursor: not-allowed !important;
 }
 
+md-autocomplete-parent-scope > .wfm-chip-wrap {
+	margin:0;
+}
+
 /*refactor me: heat map*/
 .filter-boxes{ 
 	display:block;

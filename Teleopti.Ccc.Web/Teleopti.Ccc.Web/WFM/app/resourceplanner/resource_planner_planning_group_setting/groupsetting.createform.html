@@ -39,12 +39,12 @@
 							<md-autocomplete md-no-cache="true" md-selected-item="vm.selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForDayOff'|translate}}"
 							 md-items="item in vm.inputFilterData()" md-item-text="vm.searchString" md-selected-item-change="vm.selectResultItem(vm.selectedItem)">
 								<md-item-template>
-										<div class="wfm-chip-wrap">
-											<span class="wfm-chip">
+									<div class="wfm-chip-wrap">
+										<span class="wfm-chip">
 												<span class="chip-handle">{{item.FilterType | translate}}</span>
-											<span class="chip-text">{{item.Name}}</span>
-											</span>
-										</div>
+										<span class="chip-text">{{item.Name}}</span>
+										</span>
+									</div>
 								</md-item-template>
 								<md-not-found>
 									<p translate>noSearchResults</p>
@@ -57,13 +57,13 @@
 			</div>
 			<div class="con-row demo-outline" ng-show="vm.selectedResults.length > 0">
 				<div class="con-flex">
-						<p translate>SelectedFiltersColon</p>
-						<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults" ng-if="selected.FilterType !== 'contract'">
-							<span class="wfm-chip">
-								<span class="chip-handle">{{selected.FilterType | translate}}</span>
-								<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i></span>
-							</span>
-						</div>
+					<p translate>SelectedFiltersColon</p>
+					<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults">
+						<span class="wfm-chip">
+							<span class="chip-handle">{{selected.FilterType}}</span>
+							<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i></span>
+						</span>
+					</div>
 				</div>
 			</div>
 		</card-body>
@@ -72,8 +72,6 @@
 		<card-header tabindex="-1">
 			<div tabindex="0">
 				<span><i class="mdi"></i><b>Day Off Rule Setting</b></span>
-				<!-- <span class="pg-setting-info ng-binding pull-ight">Default</span> -->
-				<!-- <span class="pg-setting-info ng-binding pull-ight">Custom</span> -->
 				<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
 			</div>
 		</card-header>
@@ -187,7 +185,7 @@
 												<div ng-repeat="option in vm.blockSchedulingOptions">
 													<div class="wfm-checkbox">
 														<label>
-															<input type="checkbox" name="checkbox" value="value" ng-checked= "option.Selected" ng-disabled="vm.selectedType == null" ng-click="vm.setBlockSchedulingOption(option)">
+															<input type="checkbox" name="checkbox" value="value" ng-checked= "option.Selected" ng-click="vm.setBlockSchedulingOption(option)">
 															<span class="wfm-checkbox-toggle"></span>
 															<span class="wfm-checkbox-label">{{ option.Id | translate}}</span>
 														</label>

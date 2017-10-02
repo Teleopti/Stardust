@@ -1,5 +1,5 @@
 'use strict';
-describe('planningGroupSettingEditController', function () {
+fdescribe('planningGroupSettingEditController', function () {
     var $httpBackend,
         $controller,
         $state,
@@ -76,7 +76,7 @@ describe('planningGroupSettingEditController', function () {
                 BlockSameStartTime: false,
                 Id: '8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb',
                 PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-                Name: "Day off rule 101",
+                Name: "Scheduling setting 101",
                 Default: false,
                 MinDayOffsPerWeek: 1,
                 MaxDayOffsPerWeek: 3,
@@ -142,21 +142,21 @@ describe('planningGroupSettingEditController', function () {
         expect(vm.selectedResults.length).toEqual(0);
     });
 
-    it('should not create day off rule when submit data is invalid', function () {
+    it('should not create scheduling setting when submit data is invalid', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
         vm.persist();
 
         expect($state.go).not.toHaveBeenCalledWith('resourceplanner.settingoverview');
     });
 
-    it('should create new day off rule when submit data is valid', function () {
+    it('should create new scheduling setting when submit data is valid', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
         vm.searchString = "skill";
         vm.inputFilterData();
         $httpBackend.flush();
 
         vm.selectResultItem(vm.filterResults[0]);
-        vm.name = 'New day off rule';
+        vm.name = 'New scheduling setting';
         vm.persist();
         $httpBackend.flush();
 
@@ -165,21 +165,21 @@ describe('planningGroupSettingEditController', function () {
         });
     });
 
-    it('should load selected undefault day off rule', function () {
+    it('should load selected undefault scheduling setting', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
 
         expect(vm.filterId).toEqual('8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb');
-        expect(vm.name).toEqual('Day off rule 101');
+        expect(vm.name).toEqual('Scheduling setting 101');
         expect(vm.default).toEqual(false);
     });
 
-    it('should save new name for selected undefault day off rule', function () {
+    it('should save new name for selected undefault scheduling setting', function () {
         spyOn(PlanGroupSettingService, 'saveSetting').and.callThrough();
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
 
-        vm.name = 'Day off rule 911';
+        vm.name = 'Scheduling setting 911';
         vm.persist();
         $httpBackend.flush();
 
@@ -189,7 +189,7 @@ describe('planningGroupSettingEditController', function () {
             BlockSameShiftCategory: false,
             BlockSameStartTime: false,
             Id: vm.filterId,
-            Name: 'Day off rule 911',
+            Name: 'Scheduling setting 911',
             Default: vm.default,
             PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Filters: vm.selectedResults,
@@ -206,7 +206,7 @@ describe('planningGroupSettingEditController', function () {
         });
     });
 
-    it('should save new setting for selected undefault day off rule', function () {
+    it('should save new setting for selected undefault scheduling setting', function () {
         spyOn(PlanGroupSettingService, 'saveSetting').and.callThrough();
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
@@ -223,14 +223,20 @@ describe('planningGroupSettingEditController', function () {
             MinConsecWorkDays: 1,
             MaxConsecWorkDays: 5
         };
+        vm.blockSchedulingSetting = {
+            BlockFinderType: 1,
+            BlockSameShift: false,
+            BlockSameShiftCategory: true,
+            BlockSameStartTime: false
+        };
 
         vm.persist();
         $httpBackend.flush();
 
         expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith({
-            BlockFinderType: 0,
+            BlockFinderType: 1,
             BlockSameShift: false,
-            BlockSameShiftCategory: false,
+            BlockSameShiftCategory: true,
             BlockSameStartTime: false,
             Id: vm.filterId,
             Name: vm.name,
@@ -251,7 +257,7 @@ describe('planningGroupSettingEditController', function () {
     });
 
 
-    it('should load default day off rule', function () {
+    it('should load default scheduling setting', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
         $httpBackend.flush();
 
@@ -260,7 +266,7 @@ describe('planningGroupSettingEditController', function () {
         expect(vm.default).toEqual(true);
     });
 
-    it('should save new setting for default day off rule', function () {
+    it('should save new setting for default scheduling setting', function () {
         spyOn(PlanGroupSettingService, 'saveSetting').and.callThrough();
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
         $httpBackend.flush();
@@ -278,14 +284,21 @@ describe('planningGroupSettingEditController', function () {
             MaxConsecWorkDays: 5
         };
 
+        vm.blockSchedulingSetting = {
+            BlockFinderType: 1,
+            BlockSameShift: false,
+            BlockSameShiftCategory: true,
+            BlockSameStartTime: false
+        };
+
         vm.persist();
         $httpBackend.flush();
 
         expect(vm.default).toEqual(true);
         expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith({
-            BlockFinderType: 0,
+            BlockFinderType: 1,
             BlockSameShift: false,
-            BlockSameShiftCategory: false,
+            BlockSameShiftCategory: true,
             BlockSameStartTime: false,
             Id: vm.filterId,
             Name: vm.name,

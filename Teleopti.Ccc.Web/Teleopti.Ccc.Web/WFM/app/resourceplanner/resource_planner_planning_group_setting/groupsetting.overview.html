@@ -1,7 +1,7 @@
 <div class="view-header with-fab with-desc" ng-hide="vm.isDisable">
 	<div class="view-title">
 		<h1><i class="mdi mdi-calendar"></i> {{'PlanGroupScheduling' | translate}}</h1>
-		<p>{{vm.textManageDoRule}}</p>
+		<p>{{vm.textManageSchedulingSetting}}</p>
 	</div>
 </div>
 <div class="con-row" ng-hide="vm.isDisable">
@@ -19,7 +19,7 @@
 					</div>
 				</div>
 				<div class="con-flex x3">
-					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goCreateDoRule()"><i class="mdi mdi-plus"></i>{{'NewPlanGroupSchedulingSetting' | translate}}</button>
+					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goCreateSchedulingSetting()"><i class="mdi mdi-plus"></i>{{'NewPlanGroupSchedulingSetting' | translate}}</button>
 					<button class="wfm-btn wfm-btn-invis-disabled" ng-click=""><i class="mdi mdi-information-outline"></i>{{'HelpLabel' | translate}}</button>
 				</div>
 			</div>
@@ -27,7 +27,7 @@
 	</div>
 </div>
 <div class="card-group">
-	<div class="panel material-depth-1 filter-boxes" ng-repeat="dayOffRule in vm.dayOffRules | filter:vm.filterName">
+	<div class="panel material-depth-1 filter-boxes" ng-repeat="dayOffRule in vm.schedulingSetting | filter:vm.filterName">
 		<div class="head-actions">
 			<h2>{{dayOffRule.Name}}</h2>
 			<div class="con-row">
@@ -77,10 +77,10 @@
 		</div>
 		<div class="con-row" ng-hide="vm.isDisable">
 			<div class="con-flex">
-				<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditDoRule(dayOffRule)">
+				<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditSchedulingSetting(dayOffRule)">
 					<i class=" mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
 				</div>
-				<div tabindex=0 class="context-menu card-context" ng-click="vm.getDoRuleInfo(dayOffRule);" ng-show="!dayOffRule.Default">
+				<div tabindex=0 class="context-menu card-context" ng-click="vm.getSchedulingSettingInfo(dayOffRule);" ng-show="!dayOffRule.Default">
 					<i class=" mdi mdi-delete pointer"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
 				</div>
 			</div>
@@ -93,12 +93,12 @@
 			<div class="dialog-mini material-depth-1">
 				<div class="modal-inner-content">
 					<h3>{{'DeleteSchedulingSetting' | translate }}</h3>
-					{{vm.textDeleteDoRule}}
+					{{vm.textDeleteSchedulingSetting}}
 				</div>
 				<div class="modal-actions">
 					<aside>
 						<button ng-click="vm.confirmDeleteModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel' | translate }}</button>
-						<button ng-click="vm.confirmDeleteModal = false; vm.deleteDoRule(dayOffRule)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
+						<button ng-click="vm.confirmDeleteModal = false; vm.deleteSchedulingSetting(dayOffRule)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
 					</aside>
 				</div>
 			</div>

@@ -11,7 +11,7 @@ describe('planningGroupSettingOverviewController', function () {
             Name: "Plan Group Test",
             Filters: []
         },
-        dayOffRulesInfo = [{
+        schedulingSettingInfo = [{
             Id: '00e9d2f9-e35e-408a-9cef-a76cfc9f6d6c',
             PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Name: "Default",
@@ -75,11 +75,11 @@ describe('planningGroupSettingOverviewController', function () {
         var vm = $controller('planningGroupSettingOverviewController', {
             $stateParams: stateparams,
             planningGroupInfo: planningGroupInfo,
-            dayOffRulesInfo: dayOffRulesInfo
+            schedulingSettingInfo: schedulingSettingInfo
         });
         $httpBackend.flush();
 
-        expect(vm.dayOffRules.length).toEqual(2);
+        expect(vm.schedulingSetting.length).toEqual(2);
     });
 
     it('should delete selected day off rule', function () {
@@ -87,15 +87,15 @@ describe('planningGroupSettingOverviewController', function () {
          var vm = $controller('planningGroupSettingOverviewController', {
             $stateParams: stateparams,
             planningGroupInfo: planningGroupInfo,
-            dayOffRulesInfo: dayOffRulesInfo
+            schedulingSettingInfo: schedulingSettingInfo
         });
 
-        vm.selectedDayOffRule = vm.dayOffRules[1];
-        vm.deleteDoRule();
+        vm.selectedSchedulingSetting = vm.schedulingSetting[1];
+        vm.deleteSchedulingSetting();
         $httpBackend.flush();
 
         expect(PlanGroupSettingService.removeSetting).toHaveBeenCalledWith({ id: 'ec4356ba-8278-48e4-b4f8-c3102b7af684' });
-        expect(vm.dayOffRules.length).toEqual(1);
+        expect(vm.schedulingSetting.length).toEqual(1);
     });
 
 });

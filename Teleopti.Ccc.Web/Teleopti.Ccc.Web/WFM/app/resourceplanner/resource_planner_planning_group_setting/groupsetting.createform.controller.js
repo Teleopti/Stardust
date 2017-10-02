@@ -11,31 +11,6 @@
         var vm = this;
 
         var maxHits = 100;
-        vm.requestSent = false;
-        vm.name = "";
-        vm.isEnabled = true;
-        vm.selectedItem = undefined;
-        vm.searchString = '';
-        vm.results = [];
-        vm.default = false;
-        vm.isEdit = false;
-        vm.selectedResults = [];
-        vm.filterId = "";
-        vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
-        vm.isValid = isValid;
-        vm.isValidDayOffsPerWeek = isValidDayOffsPerWeek;
-        vm.isValidConsecDaysOff = isValidConsecDaysOff;
-        vm.clearInput = clearInput;
-        vm.isValidConsecWorkDays = isValidConsecWorkDays;
-        vm.isValidFilters = isValidFilters;
-        vm.isValidName = isValidName;
-        vm.isValidBlockScheduling = isValidBlockScheduling;
-        vm.selectResultItem = selectResultItem;
-        vm.moreResultsExists = moreResultsExists;
-        vm.noResultsExists = noResultsExists;
-        vm.removeSelectedFilter = removeSelectedFilter;
-        vm.persist = persist;
-        vm.cancelCreate = returnFromCreate;
         vm.dayOffsPerWeek = {
             MinDayOffsPerWeek: 1,
             MaxDayOffsPerWeek: 3
@@ -48,7 +23,7 @@
             MinConsecWorkDays: 2,
             MaxConsecWorkDays: 6
         };
-        var blockSchedulingSetting = {
+        vm.blockSchedulingSetting = {
             BlockFinderType: 0,
             BlockSameShift: false,
             BlockSameShiftCategory: false,
@@ -68,79 +43,66 @@
             { Id: "BlockSameStartTime", Selected: false },
             { Id: "BlockSameShift", Selected: false },
         ];
-
+        vm.requestSent = false;
+        vm.name = $stateParams.isDefault ? $translate.instant("Default") : "";
+        vm.selectedItem = undefined;
+        vm.searchString = '';
+        vm.results = [];
+        vm.filterId = $stateParams.filterId ? $stateParams.filterId : "";
+        vm.default = $stateParams.isDefault ? $stateParams.isDefault : false;
+        vm.isEdit = $stateParams.filterId ? true : false;
+        vm.selectedResults = [];
         vm.blockSchedulingName = $translate.instant("IndividualFlexible") + " (" + $translate.instant("Default") + ")";
+
+        vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
+        vm.clearInput = clearInput;
+        vm.isValid = isValid;
+        vm.isValidDayOffsPerWeek = isValidDayOffsPerWeek;
+        vm.isValidConsecDaysOff = isValidConsecDaysOff;
+        vm.isValidConsecWorkDays = isValidConsecWorkDays;
+        vm.isValidFilters = isValidFilters;
+        vm.isValidName = isValidName;
+        vm.isValidBlockScheduling = isValidBlockScheduling;
+        vm.selectResultItem = selectResultItem;
+        vm.removeSelectedFilter = removeSelectedFilter;
+        vm.cancelCreate = returnFromCreate;
         vm.selectSchedulingSetting = selectSchedulingSetting;
         vm.setBlockSchedulingType = setBlockSchedulingType;
         vm.setBlockSchedulingOption = setBlockSchedulingOption;
         vm.getItemName = getItemName;
+        vm.persist = persist;
 
         checkIfEditDefaultRule();
 
         function checkIfEditDefaultRule() {
-            if ($stateParams.filterId) {
-                vm.isEdit = true;
-                if ($stateParams.isDefault) {
-                    vm.default = $stateParams.isDefault;
-                    vm.name = "Default";
-                    vm.filterId = $stateParams.filterId;
-                    if (vm.filterId !== '') {
-                        PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
-                            .$promise.then(function (result) {
-                                vm.dayOffsPerWeek = {
-                                    MinDayOffsPerWeek: result.MinDayOffsPerWeek,
-                                    MaxDayOffsPerWeek: result.MaxDayOffsPerWeek
-                                };
-                                vm.consecDaysOff = {
-                                    MinConsecDaysOff: result.MinConsecutiveDayOffs,
-                                    MaxConsecDaysOff: result.MaxConsecutiveDayOffs
-                                };
-                                vm.consecWorkDays = {
-                                    MinConsecWorkDays: result.MinConsecutiveWorkdays,
-                                    MaxConsecWorkDays: result.MaxConsecutiveWorkdays
-                                }
-                                if (result.BlockFinderType !== 0) {
-                                    blockSchedulingSetting = {
-                                        BlockFinderType: result.BlockFinderType,
-                                        BlockSameShift: result.BlockSameShift,
-                                        BlockSameShiftCategory: result.BlockSameShiftCategory,
-                                        BlockSameStartTime: result.BlockSameStartTime
-                                    }
-                                    setBlockSchedulingSetting(result.BlockFinderType);
-                                }
-                            });
+            if (vm.filterId == '')
+                return;
+            return PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
+                .$promise.then(function (result) {
+                    vm.name = result.Name;
+                    vm.selectedResults = result.Filters;
+                    vm.dayOffsPerWeek = {
+                        MinDayOffsPerWeek: result.MinDayOffsPerWeek,
+                        MaxDayOffsPerWeek: result.MaxDayOffsPerWeek
+                    };
+                    vm.consecDaysOff = {
+                        MinConsecDaysOff: result.MinConsecutiveDayOffs,
+                        MaxConsecDaysOff: result.MaxConsecutiveDayOffs
+                    };
+                    vm.consecWorkDays = {
+                        MinConsecWorkDays: result.MinConsecutiveWorkdays,
+                        MaxConsecWorkDays: result.MaxConsecutiveWorkdays
                     }
-                } else {
-                    PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
-                        .$promise.then(function (result) {
-                            vm.name = result.Name;
-                            vm.filterId = $stateParams.filterId;
-                            vm.default = result.Default;
-                            vm.selectedResults = result.Filters ? result.Filters : [];
-                            vm.dayOffsPerWeek = {
-                                MinDayOffsPerWeek: result.MinDayOffsPerWeek,
-                                MaxDayOffsPerWeek: result.MaxDayOffsPerWeek
-                            };
-                            vm.consecDaysOff = {
-                                MinConsecDaysOff: result.MinConsecutiveDayOffs,
-                                MaxConsecDaysOff: result.MaxConsecutiveDayOffs
-                            };
-                            vm.consecWorkDays = {
-                                MinConsecWorkDays: result.MinConsecutiveWorkdays,
-                                MaxConsecWorkDays: result.MaxConsecutiveWorkdays
-                            }
-                            if (result.BlockFinderType !== 0) {
-                                blockSchedulingSetting = {
-                                    BlockFinderType: result.BlockFinderType,
-                                    BlockSameShift: result.BlockSameShift,
-                                    BlockSameShiftCategory: result.BlockSameShiftCategory,
-                                    BlockSameStartTime: result.BlockSameStartTime
-                                }
-                                setBlockSchedulingSetting(result.BlockFinderType);
-                            }
-                        });
-                }
-            };
+                    if (result.BlockFinderType !== 0) {
+                        vm.blockSchedulingSetting = {
+                            BlockFinderType: result.BlockFinderType,
+                            BlockSameShift: result.BlockSameShift,
+                            BlockSameShiftCategory: result.BlockSameShiftCategory,
+                            BlockSameStartTime: result.BlockSameStartTime
+                        }
+                        setBlockSchedulingSetting(result.BlockFinderType);
+                    }
+                });
         }
 
         function inputFilterData() {
@@ -165,11 +127,17 @@
             }
         }
 
+        function clearInput() {
+            vm.searchString = '';
+            vm.results = [];
+        }
+
         function isValid() {
             return vm.isValidDayOffsPerWeek() &&
                 vm.isValidConsecDaysOff() &&
                 vm.isValidFilters() &&
-                vm.isValidName();
+                vm.isValidName() &&
+                vm.isValidBlockScheduling();
         }
 
         function isValidDayOffsPerWeek() {
@@ -183,11 +151,6 @@
             return isInteger(vm.consecDaysOff.MinConsecDaysOff) &&
                 isInteger(vm.consecDaysOff.MaxConsecDaysOff) &&
                 vm.consecDaysOff.MinConsecDaysOff <= vm.consecDaysOff.MaxConsecDaysOff;
-        }
-
-        function clearInput() {
-            vm.searchString = '';
-            vm.results = [];
         }
 
         function isValidConsecWorkDays() {
@@ -236,14 +199,6 @@
             }
         }
 
-        function moreResultsExists() {
-            return vm.results.length >= maxHits;
-        }
-
-        function noResultsExists() {
-            return vm.results.length === 0 && vm.searchString !== '';
-        }
-
         function removeSelectedFilter(node) {
             var p = vm.selectedResults.indexOf(node);
             vm.selectedResults.splice(p, 1);
@@ -252,7 +207,7 @@
         function selectSchedulingSetting(index) {
             var item = vm.schedulingSettings[index];
             item.Selected = true;
-            if(item.Id == "BlockScheduling") {
+            if (item.Id == "BlockScheduling") {
                 vm.blockSchedulingName = $translate.instant("BlockScheduling");
             } else {
                 vm.blockSchedulingName = $translate.instant("IndividualFlexible") + " (" + $translate.instant("Default") + ")";
@@ -271,7 +226,7 @@
                         vm.selectedType = item;
                 });
                 vm.blockSchedulingOptions.forEach(function (item) {
-                    item.Selected = blockSchedulingSetting[item.Id];
+                    item.Selected = vm.blockSchedulingSetting[item.Id];
                 });
                 return setBlockSchedulingIsSelected();
             }
@@ -281,21 +236,21 @@
         function setBlockSchedulingIsSelected() {
             vm.blockSchedulingName = $translate.instant("BlockScheduling");
             vm.schedulingSettings.forEach(function (item, id) {
-                if (id != 1)
+                if (id !== 1)
                     item.Selected = false;
             });
         }
 
         function setBlockSchedulingType(type) {
             if (type == null) {
-                return blockSchedulingSetting.BlockFinderType = 0;
+                return vm.blockSchedulingSetting.BlockFinderType = 0;
             }
-            return blockSchedulingSetting.BlockFinderType = type.Code;
+            return vm.blockSchedulingSetting.BlockFinderType = type.Code;
         }
 
         function setBlockSchedulingOption(option) {
             option.Selected = !option.Selected;
-            blockSchedulingSetting[option.Id] = option.Selected;
+            vm.blockSchedulingSetting[option.Id] = option.Selected;
         }
 
         function getItemName(id) {
@@ -306,13 +261,12 @@
             if (!vm.isValid())
                 return;
             if (!vm.requestSent) {
-                vm.isEnabled = false;
                 vm.requestSent = true;
                 PlanGroupSettingService.saveSetting({
-                    BlockFinderType: blockSchedulingSetting.BlockFinderType,
-                    BlockSameShift: blockSchedulingSetting.BlockSameShift,
-                    BlockSameShiftCategory: blockSchedulingSetting.BlockSameShiftCategory,
-                    BlockSameStartTime: blockSchedulingSetting.BlockSameStartTime,
+                    BlockFinderType: vm.blockSchedulingSetting.BlockFinderType,
+                    BlockSameShift: vm.blockSchedulingSetting.BlockSameShift,
+                    BlockSameShiftCategory: vm.blockSchedulingSetting.BlockSameShiftCategory,
+                    BlockSameStartTime: vm.blockSchedulingSetting.BlockSameStartTime,
                     MinDayOffsPerWeek: vm.dayOffsPerWeek.MinDayOffsPerWeek,
                     MaxDayOffsPerWeek: vm.dayOffsPerWeek.MaxDayOffsPerWeek,
                     MinConsecutiveWorkdays: vm.consecWorkDays.MinConsecWorkDays,

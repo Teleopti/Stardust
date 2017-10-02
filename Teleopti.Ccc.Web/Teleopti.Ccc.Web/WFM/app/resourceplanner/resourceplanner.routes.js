@@ -93,7 +93,7 @@
 						return data;
 					});
 				}],
-				dayOffRulesInfo: ['PlanGroupSettingService', '$stateParams', function (PlanGroupSettingService, $stateParams) {
+				schedulingSettingInfo: ['PlanGroupSettingService', '$stateParams', function (PlanGroupSettingService, $stateParams) {
 					return PlanGroupSettingService.getSettingsByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
