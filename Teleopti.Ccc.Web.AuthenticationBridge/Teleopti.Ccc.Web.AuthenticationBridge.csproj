@@ -51,14 +51,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AuthBridge, Version=1.0.4.106, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AuthBridge.1.0.4.106\lib\net461\AuthBridge.dll</HintPath>
+    <Reference Include="AuthBridge, Version=1.0.4.111, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AuthBridge.1.0.4.111\lib\net461\AuthBridge.dll</HintPath>
     </Reference>
-    <Reference Include="AuthBridge.Web, Version=1.0.4.105, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AuthBridge.Web.1.0.4.105\lib\net461\AuthBridge.Web.dll</HintPath>
+    <Reference Include="AuthBridge.Web, Version=1.0.4.111, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AuthBridge.Web.1.0.4.111\lib\net461\AuthBridge.Web.dll</HintPath>
     </Reference>
-    <Reference Include="ClaimsPolicyEngine, Version=1.0.4.106, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClaimsPolicyEngine.1.0.4.106\lib\net461\ClaimsPolicyEngine.dll</HintPath>
+    <Reference Include="ClaimsPolicyEngine, Version=1.0.4.111, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClaimsPolicyEngine.1.0.4.111\lib\net461\ClaimsPolicyEngine.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -363,12 +363,14 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\BuildArtifacts\Web.AuthenticationBridge.Web.config" "$(ProjectDir)web.config"
 if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\BuildArtifacts\WebApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"
 </PreBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
