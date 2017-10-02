@@ -20,13 +20,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly ReduceSkillSets _reduceSkillSets;
 		private readonly IPeopleInOrganization _peopleInOrganization;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
+		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 
 		protected IntradayOptimizationCommandHandler(IEventPublisher eventPublisher,
 												CreateIslands createIslands,
 												IGridlockManager gridLockManager,
 												ReduceSkillSets reduceSkillSets,
 												IPeopleInOrganization peopleInOrganization,
-												IOptimizationPreferencesProvider optimizationPreferencesProvider)
+												IOptimizationPreferencesProvider optimizationPreferencesProvider,
+												CrossAgentsAndSkills crossAgentsAndSkills)
 		{
 			_eventPublisher = eventPublisher;
 			_createIslands = createIslands;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_reduceSkillSets = reduceSkillSets;
 			_peopleInOrganization = peopleInOrganization;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
+			_crossAgentsAndSkills = crossAgentsAndSkills;
 		}
 
 		public void Execute(IntradayOptimizationCommand command)
@@ -53,15 +56,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				var agentsToSchedule = command.AgentsToOptimize ?? AllAgents_DeleteThisLater(command);
 				var agentIds = agentsToSchedule.Select(x => x.Id.Value);
+				var crossAgentsAndSkillsResult = _crossAgentsAndSkills.Execute(islands, agentsToSchedule);
 				events.Add(new IntradayOptimizationWasOrdered
 				{
 					StartDate = command.Period.StartDate,
 					EndDate = command.Period.EndDate,
 					RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
-					AgentsInIsland = agentIds,
+					AgentsInIsland = crossAgentsAndSkillsResult.Agents,
 					AgentsToOptimize = agentIds,
 					CommandId = command.CommandId,
-					UserLocks = lockInfos
+					UserLocks = lockInfos,
+					Skills = crossAgentsAndSkillsResult.Skills
 				});
 			}
 			else
