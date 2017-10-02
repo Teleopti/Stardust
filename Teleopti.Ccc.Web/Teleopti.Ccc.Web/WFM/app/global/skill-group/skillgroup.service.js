@@ -7,18 +7,6 @@
 
 	function SkillGroupSvc($resource) {
 		return {
-			getSkills: $resource(
-				'../api/intraday/skills',
-				{},
-				{
-					query: {
-						method: 'GET',
-						params: {},
-						isArray: true,
-                        cancellable: true
-					}
-				}
-			),
 			createSkillGroup: $resource(
 				'../api/skillgroup/create',
 				{},

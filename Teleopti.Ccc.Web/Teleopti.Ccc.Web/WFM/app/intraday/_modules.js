@@ -10,8 +10,7 @@
         'angularMoment',
         'wfm.dateOffset',
         'wfm.utilities',
-		'skillGroupService',
-		'wfm.skillGroup'
+		'skillGroupService'
     ]).run([
         '$rootScope',
         '$state',
