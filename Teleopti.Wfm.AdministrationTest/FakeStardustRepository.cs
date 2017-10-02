@@ -9,10 +9,12 @@ namespace Teleopti.Wfm.AdministrationTest
 	public class FakeStardustRepository : IStardustRepository
 	{
 		private readonly List<WorkerNode> _nodes;
+		private readonly List<Job> _jobs;
 
 		public FakeStardustRepository()
 		{
 			_nodes = new List<WorkerNode>();
+			_jobs = new List<Job>();
 		}
 
 		public void Has(WorkerNode node)
@@ -20,9 +22,18 @@ namespace Teleopti.Wfm.AdministrationTest
 			_nodes.Add(node);
 		}
 
+		public void Has(Job job)
+		{
+			job.Started = DateTime.UtcNow;
+			job.Ended = DateTime.UtcNow.AddSeconds(1); //Cheating
+			job.Result = "Success";
+			_jobs.Add(job);
+		}
+
 		public void Clear()
 		{
 			_nodes.Clear();
+			_jobs.Clear();
 		}
 
 		public void DeleteQueuedJobs(Guid[] jobIds)
@@ -42,7 +53,7 @@ namespace Teleopti.Wfm.AdministrationTest
 
 		public List<Job> GetAllQueuedJobs(int @from, int to)
 		{
-			throw new NotImplementedException();
+			return new List<Job>();
 		}
 
 		public IList<Job> GetAllRunningJobs()
@@ -57,7 +68,7 @@ namespace Teleopti.Wfm.AdministrationTest
 
 		public Job GetJobByJobId(Guid jobId)
 		{
-			throw new NotImplementedException();
+			return !_jobs.Any() ? null : _jobs.FirstOrDefault(x => x.JobId == jobId);
 		}
 
 		public IList<JobDetail> GetJobDetailsByJobId(Guid jobId)

@@ -108,6 +108,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AnotherTemporaryFakeStardustSender.cs" />
     <Compile Include="ControllerActions\AddFirstUserTest.cs" />
     <Compile Include="ControllerActions\AddSuperUserTests.cs" />
     <Compile Include="ControllerActions\AddUserTest.cs" />

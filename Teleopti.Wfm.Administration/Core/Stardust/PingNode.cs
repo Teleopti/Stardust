@@ -20,7 +20,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 				client.DefaultRequestHeaders.Accept.Clear();
 				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-				var response = await client.PostAsync(node.Url + "ping/", null).ConfigureAwait(false);
+				var response = await client.GetAsync(node.Url + "ping/").ConfigureAwait(false);
 				if (response.StatusCode != HttpStatusCode.OK)
 				{
 					return false;

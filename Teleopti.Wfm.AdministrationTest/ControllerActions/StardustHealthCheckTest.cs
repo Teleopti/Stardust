@@ -20,7 +20,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void TestFixtureSetUp()
 		{
 			StardustRepository = new FakeStardustRepository();
-			Target = new StardustController(StardustRepository, new LegacyFakeEventPublisher(), new FakeTenants(), new StaffingSettingsReader(), new FakePigNode());
+			Target = new StardustController(StardustRepository, new AnotherTemporaryFakeStardustSender(StardustRepository), new FakeTenants(), new StaffingSettingsReader(), new FakePigNode());
 		}
 
 		[SetUp]

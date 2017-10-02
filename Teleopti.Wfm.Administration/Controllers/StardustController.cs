@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Stardust;
+using Teleopti.Wfm.Administration.Models.Stardust;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
@@ -16,17 +21,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class StardustController : ApiController
 	{
 		private readonly IStardustRepository _stardustRepository;
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IStardustSender _stardustSender;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IStaffingSettingsReader _staffingSettingsReader;
 		private readonly IPingNode _pingNode;
 
 
-		public StardustController(IStardustRepository stardustRepository, IEventPublisher eventPublisher,
+		public StardustController(IStardustRepository stardustRepository, IStardustSender stardustSender,
 			ILoadAllTenants loadAllTenants, IStaffingSettingsReader staffingSettingsReader, IPingNode pingNode)
 		{
 			_stardustRepository = stardustRepository;
-			_eventPublisher = eventPublisher;
+			_stardustSender = stardustSender;
 			_loadAllTenants = loadAllTenants;
 			_staffingSettingsReader = staffingSettingsReader;
 			_pingNode = pingNode;
@@ -117,7 +122,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			foreach (var bu in bus)
 			{
-				_eventPublisher.Publish(
+				_stardustSender.Send(
 					new UpdateStaffingLevelReadModelEvent
 					{
 						Days = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14),
@@ -157,6 +162,25 @@ namespace Teleopti.Wfm.Administration.Controllers
 						$"Node {node.Url} does not respond. Is the firewall configured so the worker server allows incoming traffic on ports 14100-14199?"));
 			}
 
+			var id = _stardustSender.Send(new StardustHealthCheckEvent { JobName = "Stardust HealthCheck", UserName = "Health Check" });
+			var waiting = true;
+			var healthCheckJob = new Job();
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+			while (waiting)
+			{
+				 healthCheckJob = _stardustRepository.GetJobByJobId(id);
+				if (healthCheckJob.Ended != null || stopwatch.Elapsed > TimeSpan.FromSeconds(15))
+					waiting = false;
+				Thread.Sleep(TimeSpan.FromMilliseconds(500));
+			}
+			if(healthCheckJob.Ended != null && healthCheckJob.Result != "Success")
+				return InternalServerError(new Exception(
+					"The healthCheck job failed during execution. Check the Failed Jobs tab for more information."));
+			var queuedJobs = _stardustRepository.GetAllQueuedJobs(0, 5);
+			if(healthCheckJob.Ended == null || queuedJobs.Any())
+				return InternalServerError(new Exception(
+					"Something is wrong with Stardust and it smells like a bug!"));
 			return Ok();
 		}
 
