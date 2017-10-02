@@ -3,6 +3,8 @@ describe('rtaNamesFormatService', function () {
 	var target;
 	var sites = buildSites();
 	beforeEach(module('wfm.rta'));
+	beforeEach(module('wfm.rtaTestShared'));
+
 	beforeEach(inject(function (rtaNamesFormatService) {
 		target = rtaNamesFormatService;
 	}));

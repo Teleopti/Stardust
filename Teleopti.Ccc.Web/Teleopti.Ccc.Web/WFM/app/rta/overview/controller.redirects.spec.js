@@ -38,6 +38,7 @@ describe('RtaOverviewController redirects', function () {
 	var lastGoParams = {};
 
 	beforeEach(module('wfm.rta'));
+	beforeEach(module('wfm.rtaTestShared'));
 
 	beforeEach(function () {
 		module(function ($provide) {
@@ -398,7 +399,7 @@ describe('RtaOverviewController redirects', function () {
 				SkillId: 'phoneId',
 				Id: 'greenId'
 			})
-			;
+		;
 		var c = $controllerBuilder.createController(undefined, skillAreas);
 		vm = c.vm;
 
@@ -443,7 +444,7 @@ describe('RtaOverviewController redirects', function () {
 				SkillId: 'phoneId',
 				Id: 'greenId'
 			})
-			;
+		;
 		var c = $controllerBuilder.createController(undefined, skillAreas);
 		vm = c.vm;
 		c.apply(function () {

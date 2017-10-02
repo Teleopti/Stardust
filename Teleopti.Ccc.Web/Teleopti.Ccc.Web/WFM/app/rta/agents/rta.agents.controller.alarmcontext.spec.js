@@ -11,7 +11,8 @@ describe('RtaAgentsController', function() {
 	var stateParams = {};
 
 	beforeEach(module('wfm.rta'));
-
+	beforeEach(module('wfm.rtaTestShared'));
+	
 	beforeEach(function() {
 		module(function($provide) {
 			$provide.factory('$stateParams', function() {

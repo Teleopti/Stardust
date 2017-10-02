@@ -19,10 +19,10 @@ module.exports = function (config) {
 			'node_modules/angular-material/angular-material-mocks.js',
 			'node_modules/angular-mocks/angular-mocks.js',
 			'dist/templates.*',
-			'app/app.js',
+			'app/*.js',
 			'app/global/**/*.js',
-			'app/rta/**/*.js',
 			'app/teamSchedule/**/*.js',
+			'app/rta*/**/*.js',
 
 			//served seat image file at browser because addSeat function need to create seat object from image in seatManagement test.
 			{ pattern: 'app/seatManagement/images/*.svg', watched: false, included: false, served: true }
@@ -35,8 +35,8 @@ module.exports = function (config) {
 		// list of files to exclude
 		exclude: [
 			'**/Gruntfile.js',
-			'app/teamSchedule/**/*.spec.js',
 			'app/global/**/*.spec.js',
+			'app/teamSchedule/**/*.spec.js',
 		],
 		browserNoActivityTimeout: 100000,
 

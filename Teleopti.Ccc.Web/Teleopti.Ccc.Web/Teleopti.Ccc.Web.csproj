@@ -1415,6 +1415,11 @@
     <Content Include="Content\signalr\jquery.signalR-2.2.2.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.min.js" />
     <Content Include="WFM\app\reports\audit.controller.spec.js" />
+    <Content Include="WFM\app\rtaTestShared\backend.faker.fortest.js" />
+    <Content Include="WFM\app\rtaTestShared\controller.fortest.js" />
+    <Content Include="WFM\app\rtaTestShared\_modules.js" />
+    <Content Include="WFM\app\rtaTracer\rtaTracer.controller.spec.js" />
+    <Content Include="WFM\app\rtaTracer\rtaTracer.backend.fake.js" />
     <Content Include="WFM\app\rtaTracer\rtaTracer.controller.js" />
     <Content Include="WFM\app\rtaTracer\rtaTracer.html" />
     <Content Include="WFM\app\rtaTracer\rtaTracer.state.provider.js" />
@@ -1660,7 +1665,6 @@
     <Content Include="WFM\app\rta\overview\controller.js" />
     <Content Include="WFM\app\rta\rta.adherence.service.js" />
     <Content Include="WFM\app\rta\rta.backend.fake.js" />
-    <Content Include="WFM\app\rta\rta.controller.fortest.js" />
     <Content Include="WFM\app\rta\rta.faketime.service.js" />
     <Content Include="WFM\app\rta\rta.format.service.js" />
     <Content Include="WFM\app\rta\rta.format.service.spec.js" />

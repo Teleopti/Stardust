@@ -3,6 +3,7 @@ describe('rtaRouteService', function () {
 	var target, $state;
 
 	beforeEach(module('wfm.rta'));
+	beforeEach(module('wfm.rtaTestShared'));
 	beforeEach(module('wfm.teamSchedule'));
 
 	beforeEach(inject(function (_$state_, rtaRouteService) {

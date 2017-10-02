@@ -2,6 +2,7 @@
 describe('RtaAgentsFilters', function() {
 
 	beforeEach(module('wfm.rta'));
+	beforeEach(module('wfm.rtaTestShared'));
 
 	it('should filter with the whole input string without space', inject(function($filter) {
 		var data = [{

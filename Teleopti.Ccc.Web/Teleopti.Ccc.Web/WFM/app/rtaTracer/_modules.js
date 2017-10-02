@@ -1,3 +1,3 @@
 (function() {
-	angular.module('wfm.rtaTracer', []);
+	angular.module('wfm.rtaTracer', ['ui.router']);
 })();

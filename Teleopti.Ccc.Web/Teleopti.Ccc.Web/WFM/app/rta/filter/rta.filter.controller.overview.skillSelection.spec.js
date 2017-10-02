@@ -26,6 +26,7 @@ describe('RtaFilterController', function () {
 	}];
 
 	beforeEach(module('wfm.rta'));
+	beforeEach(module('wfm.rtaTestShared'));
 
 	beforeEach(function () {
 		module(function ($provide) {

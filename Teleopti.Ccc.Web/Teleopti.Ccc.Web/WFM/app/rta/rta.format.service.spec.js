@@ -3,6 +3,8 @@ describe('rtaFormatService', function () {
 	var target;
 
 	beforeEach(module('wfm.rta'));
+	beforeEach(module('wfm.rtaTestShared'));
+	
 	beforeEach(inject(function (rtaFormatService) {
 		target = rtaFormatService;
 	}));

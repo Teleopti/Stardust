@@ -31,6 +31,7 @@ describe('RtaOverviewController', function () {
 	var skillAreas;
 
 	beforeEach(module('wfm.rta'));
+	beforeEach(module('wfm.rtaTestShared'));
 
 	beforeEach(function () {
 		module(function ($provide) {
@@ -91,7 +92,7 @@ describe('RtaOverviewController', function () {
 			Skills: skills2
 		};
 		skillAreas = [skillArea1, skillArea2];
-		
+
 		$fakeBackend.clear();
 		allSkills.forEach(function (skill) { $fakeBackend.withSkill(skill); });
 		$fakeBackend.withSkillAreas(skillAreas);
@@ -164,7 +165,7 @@ describe('RtaOverviewController', function () {
 			expect(vm.siteCards[0].Name).toEqual('London');
 			expect(vm.siteCards[0].AgentsCount).toEqual(11);
 			expect(vm.siteCards[0].InAlarmCount).toEqual(5);
-			expect(vm.siteCards[0].ClassesOnSelection).toEqual('warning-border');			
+			expect(vm.siteCards[0].ClassesOnSelection).toEqual('warning-border');
 			expect(vm.siteCards[0].isOpen).toEqual(false);
 		});
 
@@ -560,25 +561,25 @@ describe('RtaOverviewController', function () {
 			spyOn($state, 'href').and.callFake(function (_, params) {
 				lastHrefParams = params;
 			});
-			
+
 			$fakeBackend
-			  .withSiteAdherence({
-				Id: 'londonId'
-			  })
-			  .withTeamAdherence({
-				SiteId: 'londonId',
-				Id: 'greenId'
-			  });
-		
+				.withSiteAdherence({
+					Id: 'londonId'
+				})
+				.withTeamAdherence({
+					SiteId: 'londonId',
+					Id: 'greenId'
+				});
+
 			var c = $controllerBuilder.createController();
 			var vm = c.vm;
-		
+
 			c.apply(function () {
-			  vm.siteCards[0].isOpen = true;
+				vm.siteCards[0].isOpen = true;
 			});
-		
+
 			expect(lastHrefParams.siteIds).toEqual('londonId');
-		  });
+		});
 
 	});
 

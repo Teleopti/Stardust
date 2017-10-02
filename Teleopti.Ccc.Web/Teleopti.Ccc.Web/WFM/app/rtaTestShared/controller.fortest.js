@@ -1,7 +1,7 @@
 'use strict';
 (function () {
 	angular
-		.module('wfm.rta')
+		.module('wfm.rtaTestShared')
 		.factory('ControllerBuilder', controllerBuilder);
 
 	controllerBuilder.$inject = ['$controller', '$interval', '$timeout', '$httpBackend', '$rootScope', '$log'];

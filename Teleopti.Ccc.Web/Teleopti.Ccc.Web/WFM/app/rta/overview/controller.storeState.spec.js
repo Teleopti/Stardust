@@ -3,6 +3,7 @@
 describe('RtaOverviewController open/close site', function () {
 
 	beforeEach(module('wfm.rta'));
+	beforeEach(module('wfm.rtaTestShared'));
 
 	var $stateParams;
 	var $fakeBackend;
