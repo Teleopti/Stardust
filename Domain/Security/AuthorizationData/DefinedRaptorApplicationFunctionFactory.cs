@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, "xxOpenPersonAdminPage", DefinedRaptorApplicationFunctionForeignIds.OpenPersonAdminPage, 20);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AccessToReports, "xxReports", DefinedRaptorApplicationFunctionForeignIds.AccessToReports, 60);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AccessToOnlineReports, "xxOnlineReports", DefinedRaptorApplicationFunctionForeignIds.AccessToOnlineReports);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage, "xxOpenPermissionPage", DefinedRaptorApplicationFunctionForeignIds.OpenPermissionPage);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Shifts, "xxShifts", DefinedRaptorApplicationFunctionForeignIds.Shifts, 40);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage, "xxOptions", DefinedRaptorApplicationFunctionForeignIds.OpenOptionsPage);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OpenIntradayPage, "xxIntraday", DefinedRaptorApplicationFunctionForeignIds.OpenIntradayPage, 55);

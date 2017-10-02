@@ -16,7 +16,6 @@
 		public const string OpenPersonAdminPage = "Raptor/PersonAdmin";
 		public const string AccessToReports = "Raptor/Reports";
 		public const string AccessToOnlineReports = "Raptor/OnlineReports";
-		public const string OpenPermissionPage = "Raptor/Permission";
 		public const string Shifts = "Raptor/Shifts";
 		public const string OpenOptionsPage = "Raptor/Options";
 		public const string OpenIntradayPage = "Raptor/Intraday";

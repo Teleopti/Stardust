@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				var allowed =	_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb) ||
 								_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere) ||
 								_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AccessToReports) ||
-								_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage);
+								_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions);
 
 				if (!allowed)
 					throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");

@@ -447,7 +447,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			var agentRole = new ApplicationRole {Name = "Agent"};
 			agentRole.SetId(Guid.NewGuid());
-			agentRole.AddApplicationFunction(new ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage));
+			agentRole.AddApplicationFunction(new ApplicationFunction(DefinedRaptorApplicationFunctionPaths.WebPermissions));
 			agentRole.AvailableData = new AvailableData();
 			agentRole.AvailableData.AvailableDataRange = AvailableDataRangeOption.MyOwn;
 			var simpleTeam = TeamFactory.CreateTeam("Team 1", "Paris");

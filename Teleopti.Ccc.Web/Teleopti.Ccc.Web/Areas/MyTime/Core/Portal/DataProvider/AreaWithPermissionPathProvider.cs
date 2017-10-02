@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			tryToAddArea("MyTime", DefinedRaptorApplicationFunctionPaths.MyTimeWeb, areas);
 			tryToAddArea("Anywhere", DefinedRaptorApplicationFunctionPaths.Anywhere, areas);
 			tryToAddWfmArea(areas);
-			tryToAddArea("HealthCheck", DefinedRaptorApplicationFunctionPaths.OpenPermissionPage, areas);
+			tryToAddArea("HealthCheck", DefinedRaptorApplicationFunctionPaths.WebPermissions, areas);
 			tryToAddAreaWithLicense("Messages", DefinedLicenseOptionPaths.TeleoptiCccSmsLink, areas);
 			tryToAddArea("Reporting", DefinedRaptorApplicationFunctionPaths.AccessToReports, areas);
 			return areas;

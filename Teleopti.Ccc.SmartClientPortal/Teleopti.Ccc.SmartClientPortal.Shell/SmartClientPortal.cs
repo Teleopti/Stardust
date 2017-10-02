@@ -463,7 +463,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void toolStripButtonPermissonsClick(object sender, EventArgs e)
 		{
-			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage))
+			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions))
 			{
 				if (_toggleManager.IsEnabled(Toggles.WFM_RedirectPermissionToWeb_44562))
 				{
@@ -510,8 +510,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void setPermissionOnToolStripButtonControls()
 		{
 			var authorization = PrincipalAuthorization.Current();
-			backStageButtonPermissions.Enabled =
-				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage);
+			backStageButtonPermissions.Enabled = false;
 			backStageButtonOptions.Enabled =
 				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 			var type = LogonPresenter.AuthenticationTypeOption;
@@ -572,9 +571,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewIntradayTool;
 							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/intraday");
 						}
-						break;
-					case DefinedRaptorApplicationFunctionPaths.OpenPermissionPage:
-						outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.Shifts:
 						outlookBarSmartPartInfo.Icon = Resources.Shifts_filled_space_32x32;

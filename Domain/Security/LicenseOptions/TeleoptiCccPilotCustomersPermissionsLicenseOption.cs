@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 	    /// <value>The enabled application functions.</value>
 	    public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
         {
-            EnableFunctions(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenPermissionPage));
         }
 
         #endregion

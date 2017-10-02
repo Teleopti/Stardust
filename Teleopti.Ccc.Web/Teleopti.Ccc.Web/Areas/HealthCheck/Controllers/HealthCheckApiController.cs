@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPermissions)]
 	public class HealthCheckApiController : ApiController
 	{
 		private readonly IEtlJobStatusRepository _etlJobStatusRepository;

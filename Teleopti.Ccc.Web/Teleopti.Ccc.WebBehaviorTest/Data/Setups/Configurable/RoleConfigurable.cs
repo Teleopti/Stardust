@@ -361,8 +361,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!AccessToPermissions)
 				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenPermissionPage
-													 & f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebPermissions
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebPermissions
 											  select f;
 			if (!AccessToWfmLeaderboard)
 				applicationFunctions = from f in applicationFunctions

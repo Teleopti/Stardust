@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.AccessToReports,
 				DefinedRaptorApplicationFunctionPaths.Shifts,
 				DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
-				DefinedRaptorApplicationFunctionPaths.OpenPermissionPage,
 				DefinedRaptorApplicationFunctionPaths.OpenOptionsPage,
 				DefinedRaptorApplicationFunctionPaths.AutomaticScheduling,
 				DefinedRaptorApplicationFunctionPaths.OpenIntradayPage,

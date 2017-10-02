@@ -21,7 +21,6 @@
 		public const string OpenPersonAdminPage = "0004";
 		public const string AccessToReports = "0006";
 		public const string AccessToOnlineReports = "0054";
-		public const string OpenPermissionPage = "0008";
 		public const string Shifts = "0016";
 		public const string OpenOptionsPage = "0017";
 		public const string OpenIntradayPage = "0018";

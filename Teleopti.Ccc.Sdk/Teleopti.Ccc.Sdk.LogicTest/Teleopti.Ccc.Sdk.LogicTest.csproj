@@ -140,7 +140,6 @@
     <Compile Include="AssemblersTest\PersonDayOffAssemblerTest.cs" />
     <Compile Include="AssemblersTest\SchedulePartAssemblerTest.cs" />
     <Compile Include="AssemblersTest\WorkflowControlSetAssemblerTest.cs" />
-    <Compile Include="AvailableDataSourcesProviderTest.cs" />
     <Compile Include="CommandHandler\AddAbsenceCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\AddActivityCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\AddDayOffCommandHandlerTest.cs" />
