@@ -1,12 +1,13 @@
 ﻿Param (
 
-    $CloudServiceName = 'teleoptirnd'           #In Parameter ex: teleoptirnd
+    $CloudServiceName = 'teleoptirnd',          #In Parameter ex: teleoptirnd
+	$AzurePkgSize = "Standard_D1_v2"			# Pkg size to use: Standard_D1_v2 or Standard_D2_v2
     
 )
 
 #$Here = $PSScriptRoot
 
-$VersionedName = Get-childitem "$PSScriptRoot\AzureRelease\*.cspkg" -Exclude *Large*
+$VersionedName = Get-childitem "$PSScriptRoot\AzureRelease\*$AzurePkgSize.cspkg"
 $VersionedName = $VersionedName.Name.ToString()
 $AzurePackagePath = "$PSScriptRoot\AzureRelease"
 
