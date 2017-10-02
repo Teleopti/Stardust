@@ -1546,6 +1546,8 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\resourceplanner\web_performance_tests\temp.html" />
+    <Content Include="WFM\app\rta\shared\polling.service.js" />
+    <Content Include="WFM\app\rta\shared\_modules.js" />
     <Content Include="WFM\app\rta\testShared\backend.faker.fortest.js" />
     <Content Include="WFM\app\rta\testShared\controller.fortest.js" />
     <Content Include="WFM\app\rta\testShared\_modules.js" />
@@ -1617,7 +1619,6 @@
     <Content Include="WFM\app\rta\rta\rta.html" />
     <Content Include="WFM\app\rta\rta\rta.names.format.service.js" />
     <Content Include="WFM\app\rta\rta\rta.names.format.service.spec.js" />
-    <Content Include="WFM\app\rta\rta\rta.polling.service.js" />
     <Content Include="WFM\app\rta\rta\rta.resource.factory.js" />
     <Content Include="WFM\app\rta\rta\rta.route.service.js" />
     <Content Include="WFM\app\rta\rta\rta.route.service.spec.js" />

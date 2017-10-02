@@ -36,7 +36,7 @@ var wfm = angular.module('wfm', [
 	'wfm.notice',
 	'wfm.areas',
 	'wfm.help',
-	'wfm.rtaTestShared',
+	'wfm.rtaShared',
 	'wfm.rta',
 	'wfm.rtaTool',
 	'wfm.rtaTracer',

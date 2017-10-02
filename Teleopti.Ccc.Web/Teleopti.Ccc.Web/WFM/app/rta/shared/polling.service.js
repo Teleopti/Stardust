@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('wfm.rta')
+		.module('wfm.rtaShared')
 		.service('rtaPollingService', rtaPollingService);
 
 	rtaPollingService.$inject = ['$timeout'];

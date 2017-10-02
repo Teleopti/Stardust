@@ -1,6 +1,7 @@
 ﻿(function () {
 	angular
 		.module('wfm.rta', [
+			'wfm.rtaShared',
 			'ui.grid',
 			'ui.grid.autoResize',
 			'ui.grid.resizeColumns',
