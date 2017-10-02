@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var command = new SchedulingCommand
 			{
-				AgentsToSchedule = selectedAgents.FixedStaffPeople(selectedPeriod),
+				AgentsToSchedule = selectedAgents.FixedStaffPeople(selectedPeriod).Select(x=>x.Id.Value),
 				Period = selectedPeriod,
 				RunWeeklyRestSolver = true
 			};
