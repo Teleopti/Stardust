@@ -1,7 +1,7 @@
 ﻿(function() {
     'use strict';
 
-    angular.module('wfm.skillPicker', []).component('skillPicker', {
+    angular.module('wfm.skillPicker', ['toggleService']).component('skillPicker', {
         templateUrl: 'app/global/skill-picker/skill-picker.html',
         controller: SkillPickerComponentController,
         bindings: {
