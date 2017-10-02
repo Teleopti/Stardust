@@ -335,6 +335,42 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			});
 		}
 
+		[Test]
+		[Ignore("#46076 to be fixed")]
+		public void ShouldConsiderCrossSkillAgents()
+		{
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var scenario = new Scenario();
+			var activity = new Activity();
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(16, 0, 17, 0, 15), shiftCategory));
+			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(8, 8), TimeSpan.FromHours(1)));
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen(new TimePeriod(8, 16));
+			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen(new TimePeriod(9, 17));
+			var agentAB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneWeek(dateOnly);
+			var agentBC = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillB, skillC).WithSchedulePeriodOneWeek(dateOnly);
+			var assAB = new PersonAssignment(agentAB, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16)); //0.5 resources on skillB
+			var assBC = new PersonAssignment(agentBC, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(7, 15)); //should be moved to 9-17 
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] {agentAB, agentBC}, new[] {assAB, assBC}, new[]
+				{
+					skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1),
+					skillB.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 1.1)), //make test red if skillA/agentAB isn't counted
+					skillC.CreateSkillDayWithDemand(scenario, dateOnly, 1)
+				});
+			var optPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true },
+				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy) },
+				Shifts = { KeepShiftCategories = true}
+			};
+
+			Target.Execute(new NoSchedulingProgress(), schedulerStateHolderFrom, new[] { agentBC }, dateOnly.ToDateOnlyPeriod(), optPreferences, null);
+
+			schedulerStateHolderFrom.Schedules[agentBC].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(9);
+		}
+
 		public IntradayOptimizationTeamBlockDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
 		{
 		}
