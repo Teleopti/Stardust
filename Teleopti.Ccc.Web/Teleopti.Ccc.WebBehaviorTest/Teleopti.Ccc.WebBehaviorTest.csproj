@@ -704,11 +704,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\SkillGroup_45417.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SkillGroup_45417.feature</DependentUpon>
-    </Compile>
     <Compile Include="Wfm\Requests\OvertimeRequests.feature.cs">
       <DependentUpon>OvertimeRequests.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1195,10 +1190,6 @@
     <None Include="Wfm\RealTimeAdherence\RtaTool.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RtaTool.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\SkillGroup_45417.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SkillGroup_45417.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Requests\OvertimeRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
