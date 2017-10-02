@@ -75,6 +75,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, schedulePeriod, ruleSet, skills);
 		}
 
+		public Person Has(ITeam team, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
+		{
+			return Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), team, schedulePeriod, new RuleSetBag(ruleSet), skills);
+		}
+
 		public Person Has(ISchedulePeriod schedulePeriod, IRuleSetBag ruleSetBag, params ISkill[] skills)
 		{
 			return Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, schedulePeriod, ruleSetBag, skills);

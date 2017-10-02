@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -747,6 +749,46 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agentOnlyKnowingClosedSkill }, period, scenario).Any(x => x.ShiftLayers.Any()).Should().Be.False();
+		}
+		
+		[Test]
+		[Ignore("#46076 to be fixed")]
+		public void ShouldConsiderCrossSkillAgents()
+		{
+			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());
+			var team = new Team().WithDescription(new Description("team")).WithId();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
+			var scenario = ScenarioRepository.Has("_");
+			var activity = ActivityRepository.Has("_");
+			var date = new DateOnly(2010, 1, 1);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(16, 0, 17, 0, 15), shiftCategory));
+			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(8, 8), TimeSpan.FromHours(1)));
+			var skillA = SkillRepository.Has("A", activity);
+			var skillB = SkillRepository.Has("B", activity, new TimePeriod(8, 16));
+			var skillC = SkillRepository.Has("C", activity, new TimePeriod(9, 17));
+			var agentAB = PersonRepository.Has(new Team(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skillA, skillB);
+			var agentBC = PersonRepository.Has(team, new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skillC, skillB);
+			AssignmentRepository.Has(agentAB, scenario, activity, shiftCategory, date, new TimePeriod(8, 17));//0.5 resources on skillB
+			SkillDayRepository.Has(
+				skillA.CreateSkillDayWithDemand(scenario, date, 1),
+				skillB.CreateSkillDayWithDemand(scenario, date, 1.1), //make test red if skillA/agentAB isn't counted
+				skillC.CreateSkillDayWithDemand(scenario, date, 1));
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+				UseTeam = true,
+				TeamSameShiftCategory = true
+			});
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddFilter(new TeamFilter(team));
+			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(), planningGroup);
+			PlanningPeriodRepository.Add(planningPeriod);
+
+			Target.DoScheduling(planningPeriod.Id.Value);
+
+			AssignmentRepository.GetSingle(date, agentBC).ShiftLayers.Single().Period.StartDateTime.Hour
+				.Should().Be.EqualTo(9);
 		}
 
 		public TeamBlockSchedulingTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
