@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public class CrossAgentsAndSkills
 	{
-		public CrossAgentAndSkillResult Execute(IEnumerable<Island> allIslands, IEnumerable<IPerson> selectedAgents)
+		public CrossAgeCrossAgentsAndSkillsResult(IEnumerable<Island> allIslands, IEnumerable<IPerson> selectedAgents)
 		{
 			var retAgents = new List<Guid>();
 			var retSkills = new List<Guid>();
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					}
 				}
 			}
-			return new CrossAgentAndSkillResult(retAgents, retSkills);
+			return new CrossAgeCrossAgentsAndSkillsResultts, retSkills);
 		}
 	}
 }

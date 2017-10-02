@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	//Use c#7 tuple when upgrading to net47 instead.
-	public class CrossAgentAndSkillResult
+	public class CrossAgentsAndSkillsResult
 	{
-		public CrossAgentAndSkillResult(IEnumerable<Guid> agents, IEnumerable<Guid> skills)
+		public CrossAgentsAndSkillsResult(IEnumerable<Guid> agents, IEnumerable<Guid> skills)
 		{
 			Agents = agents;
 			Skills = skills;
