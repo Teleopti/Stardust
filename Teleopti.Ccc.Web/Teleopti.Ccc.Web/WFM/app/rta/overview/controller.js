@@ -66,7 +66,7 @@
 								isSelected: false,
 								teams: []
 							};
-							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) pollNow(); });
+							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) poller.force(); });
 							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
 								if (newValue != oldValue) {
 									toggleOpenButton();

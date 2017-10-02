@@ -354,8 +354,5 @@
 			vm.states = $filter('orderBy')(vm.states, function (state) { return state.Name; });
 		};
 
-		$scope.$on('$destroy', function () {
-			cancelPolling();
-		});
 	};
 })();
