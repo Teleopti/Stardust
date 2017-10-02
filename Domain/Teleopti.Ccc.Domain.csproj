@@ -1605,7 +1605,7 @@
     <Compile Include="Optimization\IntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
-    <Compile Include="Optimization\ScheduleOptimizationTeamBlock.cs" />
+    <Compile Include="Optimization\DayOffOptimization.cs" />
     <Compile Include="Repositories\IAnalyticsDayOffRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPreferenceRepository.cs" />
     <Compile Include="Repositories\IAnalyticsDateRepository.cs" />

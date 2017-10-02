@@ -16,7 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class ScheduleOptimizationTeamBlock
+	public class DayOffOptimization
 	{
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 
-		public ScheduleOptimizationTeamBlock(
+		public DayOffOptimization(
 			IFillSchedulerStateHolder fillSchedulerStateHolder, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IScheduleDictionaryPersister persister, 
