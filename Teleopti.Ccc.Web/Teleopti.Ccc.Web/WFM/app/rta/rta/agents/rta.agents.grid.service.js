@@ -26,7 +26,7 @@
 		};
 
 		function makeGridOptions(alarmOnly) {
-			var rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AllOutOfAdherences_39146.html';
+			var rowTemplate = 'app/rta/rta/agents/rta-agents-rowtemplate-AllOutOfAdherences_39146.html';
 			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 			var alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.vm.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
 
@@ -111,7 +111,7 @@
 				enableColumnMenu: false,
 				headerCellTemplate: shiftHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellClass: 'shift-class',
-				cellTemplate: 'app/rta/agents/rta-agents-shiftcelltemplate.html',
+				cellTemplate: 'app/rta/rta/agents/rta-agents-shiftcelltemplate.html',
 				width: "42%",
 				headerCellClass: 'shift-cell-header rta-default-cursor',
 				enableHiding: false

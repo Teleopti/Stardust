@@ -395,7 +395,7 @@ module.exports = function (grunt) {
             rta: {
                 src: [
                     'app/rta/**/*.js',
-                    '!app/rta/rta.faketime.service.js'
+                    '!app/rta/rta/rta.faketime.service.js'
                 ]
             },
             schedule: {
