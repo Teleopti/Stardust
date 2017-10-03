@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.All)]
 	public class RtaTracerController : ApiController
 	{
-		[UnitOfWork, HttpGet, Route("RtaTracer/Tracer/Traces")]
+		[UnitOfWork, HttpGet, Route("api/RtaTracer/Traces")]
 		public virtual IHttpActionResult Traces()
 		{
 			return Ok(new RtaTracerViewModel
@@ -76,19 +76,19 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			});
 		}
 
-		[UnitOfWork, HttpGet, Route("RtaTracer/Tracer/Trace")]
+		[UnitOfWork, HttpGet, Route("api/RtaTracer/Trace")]
 		public virtual IHttpActionResult Trace()
 		{
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("RtaTracer/Tracer/Stop")]
+		[UnitOfWork, HttpGet, Route("api/RtaTracer/Stop")]
 		public virtual IHttpActionResult Stop()
 		{
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("RtaTracer/Tracer/Clear")]
+		[UnitOfWork, HttpGet, Route("api/RtaTracer/Clear")]
 		public virtual IHttpActionResult Clear()
 		{
 			return Ok();

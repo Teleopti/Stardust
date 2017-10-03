@@ -12,19 +12,19 @@
 		vm.tracers = [];
 
 		vm.trace = function () {
-			$http.get('../api/Tracer/Trace', {params: {userCode: vm.userCode}});
+			$http.get('../api/RtaTracer/Trace', {params: {userCode: vm.userCode}});
 		};
 		
 		vm.stop = function () {
-			$http.get('../api/Tracer/Stop');
+			$http.get('../api/RtaTracer/Stop');
 		};
 		
 		vm.clear = function () {
-			$http.get('../api/Tracer/Clear');
+			$http.get('../api/RtaTracer/Clear');
 		};
 
 		var poller = rtaPollingService.create(function () {
-			return $http.get('../api/Tracer/Traces').then(function (response) {
+			return $http.get('../api/RtaTracer/Traces').then(function (response) {
 				vm.tracers = response.data.Tracers
 					.map(function (tracer) {
 						return {

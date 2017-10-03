@@ -40,7 +40,7 @@
 			return this;
 		}
 
-		faker.fake(/\.\.\/api\/Tracer\/Traces(.*)/,
+		faker.fake(/\.\.\/api\/RtaTracer\/Traces(.*)/,
 			function () {
 				return [200, {
 					Tracers: tracers,
@@ -48,19 +48,19 @@
 				}];
 			});
 
-		faker.fake(/\.\.\/api\/Tracer\/Trace(.*)/,
+		faker.fake(/\.\.\/api\/RtaTracer\/Trace(.*)/,
 			function (params) {
 				service.traceCalledForUserCode = params.userCode;
 				return [200];
 			});
 
-		faker.fake(/\.\.\/api\/Tracer\/Stop(.*)/,
+		faker.fake(/\.\.\/api\/RtaTracer\/Stop(.*)/,
 			function () {
 				service.stopCalled = true;
 				return [200];
 			});
 
-		faker.fake(/\.\.\/api\/Tracer\/Clear(.*)/,
+		faker.fake(/\.\.\/api\/RtaTracer\/Clear(.*)/,
 			function () {
 				service.clearCalled = true;
 				return [200];
