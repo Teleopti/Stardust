@@ -9,7 +9,7 @@
 					<md-tooltip>{{'FilterSites' | translate}}</md-tooltip>
 				</label>
 				<div class="m-h-400 auto">
-					<div ng-repeat="site in requestsSiteOpenHours.sites | filter:siteFilter">
+					<div ng-repeat="site in requestsSiteOpenHours.sites | filter:siteFilter" ng-if="requestsSiteOpenHours.sites[$index-1].Name !== site.Name">
 						<div class="wfm-radio">
 							<label class="relative">
 								<input type="radio" name="radio" ng-value="site.Id" ng-model="requestsSiteOpenHours.selectedSite">
