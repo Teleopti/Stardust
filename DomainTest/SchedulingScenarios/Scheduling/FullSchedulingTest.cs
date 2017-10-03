@@ -145,6 +145,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(multisiteSkill);
 			SkillRepository.Has(multisiteSkill);
 			var childSkill = new ChildSkill("_", "_", Color.Empty, multisiteSkill).WithId();
+			SkillRepository.Has(childSkill);
 			multisiteSkill.AddChildSkill(childSkill);
 			var scenario = ScenarioRepository.Has("some name");
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));

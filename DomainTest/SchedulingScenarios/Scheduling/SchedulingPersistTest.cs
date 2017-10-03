@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public FakeSkillRepository SkillRepository;
 
 		public SchedulingPersistTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
 		{
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var firstDay = new DateOnly(2017, 9, 1);
 			var period = new DateOnlyPeriod(firstDay, new DateOnly(2017, 9, 30));
 			var activity = new Activity("_").WithId();
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skill = SkillRepository.Has("_", activity);
 			var scenario = ScenarioRepository.Has("_");
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new ContractWithMaximumTolerance();

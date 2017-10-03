@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 
-			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1.Id.Value } });
+			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1 } });
 
 			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().AgentsToSchedule.Should().Have.SameValuesAs(agent1.Id.Value);
 		}
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 
-			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1.Id.Value, agent2.Id.Value } });
+			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1, agent2 } });
 
 			var events = EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().ToArray();
 			var event1 = events[0];
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 
-			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1.Id.Value } });
+			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1 } });
 
 			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().AgentsToSchedule.Count().Should().Be.EqualTo(1);
 		}
