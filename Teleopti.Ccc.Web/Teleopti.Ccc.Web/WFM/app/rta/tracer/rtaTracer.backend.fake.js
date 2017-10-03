@@ -15,14 +15,14 @@
 			stopCalled: false,
 			clearCalled: false,
 			withTracer: withTracer,
-			withUserCodeTrace: withUserCodeTrace
+			withTracedUser: withTracedUser
 		};
 
 		function clear() {
 			service.traceCalledForUserCode = null;
 			service.stopCalled = false;
 			service.clearCalled = false;
-			userCodeTraces = [];
+			tracedUsers = [];
 			tracers = [];
 		}
 
@@ -33,10 +33,10 @@
 			return this;
 		}
 
-		var userCodeTraces = [];
+		var tracedUsers = [];
 
-		function withUserCodeTrace(userCodeTrace) {
-			userCodeTraces.push(userCodeTrace);
+		function withTracedUser(tracedUser) {
+			tracedUsers.push(tracedUser);
 			return this;
 		}
 
@@ -44,7 +44,7 @@
 			function () {
 				return [200, {
 					Tracers: tracers,
-					UserCodeTraces: userCodeTraces
+					TracedUsers: tracedUsers
 				}];
 			});
 

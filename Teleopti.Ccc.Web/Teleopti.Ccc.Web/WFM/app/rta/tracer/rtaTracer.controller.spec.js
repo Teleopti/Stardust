@@ -101,30 +101,30 @@ describe('RtaTracerController', function () {
 	});
 
 	it('should display user codes', function () {
-		$fakeBackend.withUserCodeTrace({
-			Header: 'usercode34, Ashley Andeen'
+		$fakeBackend.withTracedUser({
+			User: 'usercode34, Ashley Andeen'
 		});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.userCodes[0].header).toBe('usercode34, Ashley Andeen');
+		expect(vm.tracedUsers[0].user).toBe('usercode34, Ashley Andeen');
 	});
 
 	it('should display trace state code', function () {
-		$fakeBackend.withUserCodeTrace({
-			Traces: [{StateCode: 'AUX12'}]
+		$fakeBackend.withTracedUser({
+			States: [{StateCode: 'AUX12'}]
 		});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.userCodes[0].traces[0].stateCode).toBe('AUX12');
+		expect(vm.tracedUsers[0].states[0].stateCode).toBe('AUX12');
 	});
 
 	it('should display 2 traces', function () {
-		$fakeBackend.withUserCodeTrace({
-			Traces: [
+		$fakeBackend.withTracedUser({
+			States: [
 				{StateCode: 'AUX12'},
 				{StateCode: 'AUX13'}
 			]
@@ -133,62 +133,62 @@ describe('RtaTracerController', function () {
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.userCodes[0].traces[0].stateCode).toBe('AUX12');
-		expect(vm.userCodes[0].traces[1].stateCode).toBe('AUX13');
+		expect(vm.tracedUsers[0].states[0].stateCode).toBe('AUX12');
+		expect(vm.tracedUsers[0].states[1].stateCode).toBe('AUX13');
 	});
 
 	it('should display trace line', function () {
-		$fakeBackend.withUserCodeTrace({
-			Traces: [
-				{Lines: ["Processing"]}
+		$fakeBackend.withTracedUser({
+			States: [
+				{Traces: ["Processing"]}
 			]
 		});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.userCodes[0].traces[0].lines[0]).toBe('Processing');
+		expect(vm.tracedUsers[0].states[0].traces[0]).toBe('Processing');
 	});
 
 	it('should display trace line', function () {
-		$fakeBackend.withUserCodeTrace({
-			Traces: [
-				{Lines: ["ActivityCheck"]}
+		$fakeBackend.withTracedUser({
+			States: [
+				{Traces: ["ActivityCheck"]}
 			]
 		});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.userCodes[0].traces[0].lines[0]).toBe('ActivityCheck');
+		expect(vm.tracedUsers[0].states[0].traces[0]).toBe('ActivityCheck');
 	});
 	
 	it('should display 2 trace lines', function () {
-		$fakeBackend.withUserCodeTrace({
-			Traces: [
-				{Lines: ["Processing", "Processed"]}
+		$fakeBackend.withTracedUser({
+			States: [
+				{Traces: ["Processing", "Processed"]}
 			]
 		});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.userCodes[0].traces[0].lines[0]).toBe('Processing');
-		expect(vm.userCodes[0].traces[0].lines[1]).toBe('Processed');
+		expect(vm.tracedUsers[0].states[0].traces[0]).toBe('Processing');
+		expect(vm.tracedUsers[0].states[0].traces[1]).toBe('Processed');
 	});
 
 	it('should poll', function () {
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 		
-		$fakeBackend.withUserCodeTrace({
-			Traces: [
-				{Lines: ["ActivityCheck"]}
+		$fakeBackend.withTracedUser({
+			States: [
+				{Traces: ["ActivityCheck"]}
 			]
 		});
 		c.wait(1000);
 		
-		expect(vm.userCodes[0].traces[0].lines[0]).toBe('ActivityCheck');
+		expect(vm.tracedUsers[0].states[0].traces[0]).toBe('ActivityCheck');
 	});
 	
 	it('should stop', function () {

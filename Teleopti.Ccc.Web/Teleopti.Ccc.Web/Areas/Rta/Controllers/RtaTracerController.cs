@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			{
 				Tracers = new[]
 				{
-					new RtaTracerTracerViewModel
+					new Tracer
 					{
 						Process = "box1:487",
 						DataReceivedAt = "",
 						ActivityCheckAt = "10:05:01",
 						Tracing = "usercode34, Ashley Andeen"
 					},
-					new RtaTracerTracerViewModel
+					new Tracer
 					{
 						Process = "box1:1476",
 						DataReceivedAt = "10:05:56",
@@ -31,17 +31,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						Tracing = "usercode34, Ashley Andeen"
 					}
 				},
-				UserCodeTraces = new[]
+				TracedUsers = new[]
 				{
-					new RtaTracerUserCodeTracesViewModel
+					new TracedUser
 					{
-						Header = "usercode34, Ashley Andeen",
-						Traces = new[]
+						User = "usercode34, Ashley Andeen",
+						States = new[]
 						{
-							new Trace
+							new TracedState
 							{
 								StateCode = "AUX34",
-								Lines = new[]
+								Traces = new[]
 								{
 									"Received",
 									"Processing",
@@ -49,20 +49,20 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 									"PersonStateChangeEvent"
 								}
 							},
-							new Trace
+							new TracedState
 							{
 								StateCode = "AUX34",
-								Lines = new[]
+								Traces = new[]
 								{
 									"Received",
 									"Processing",
 									"No change"
 								}
 							},
-							new Trace
+							new TracedState
 							{
 								StateCode = "AUX50",
-								Lines = new[]
+								Traces = new[]
 								{
 									"Received",
 									"Processing",
@@ -97,27 +97,27 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 	public class RtaTracerViewModel
 	{
-		public IEnumerable<RtaTracerTracerViewModel> Tracers;
-		public IEnumerable<RtaTracerUserCodeTracesViewModel> UserCodeTraces;
+		public IEnumerable<Tracer> Tracers;
+		public IEnumerable<TracedUser> TracedUsers;
 	}
 
-	public class RtaTracerUserCodeTracesViewModel
-	{
-		public string Header;
-		public IEnumerable<Trace> Traces;
-	}
-
-	public class RtaTracerTracerViewModel
+	public class Tracer
 	{
 		public string Process;
 		public string DataReceivedAt;
 		public string ActivityCheckAt;
 		public string Tracing;
 	}
-
-	public class Trace
+	
+	public class TracedUser
+	{
+		public string User;
+		public IEnumerable<TracedState> States;
+	}
+	
+	public class TracedState
 	{
 		public string StateCode;
-		public IEnumerable<string> Lines;
+		public IEnumerable<string> Traces;
 	}
 }

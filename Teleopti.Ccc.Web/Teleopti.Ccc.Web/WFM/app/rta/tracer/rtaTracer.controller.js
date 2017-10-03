@@ -34,14 +34,14 @@
 							tracing: tracer.Tracing
 						};
 					});
-				vm.userCodes = response.data.UserCodeTraces
-					.map(function (userCodeTrace) {
+				vm.tracedUsers = response.data.TracedUsers
+					.map(function (tracedUser) {
 						return {
-							header: userCodeTrace.Header,
-							traces: (userCodeTrace.Traces || []).map(function (trace) {
+							user: tracedUser.User,
+							states: (tracedUser.States || []).map(function (state) {
 								return {
-									stateCode: trace.StateCode,
-									lines: trace.Lines
+									stateCode: state.StateCode,
+									traces: state.Traces
 								}
 							})
 						};
