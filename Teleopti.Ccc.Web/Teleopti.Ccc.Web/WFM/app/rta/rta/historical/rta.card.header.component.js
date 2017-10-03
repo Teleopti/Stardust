@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict'
 
 	var mainClass = [
@@ -18,10 +18,10 @@
 
 	function cleanStrArr(arr) {
 		return arr
-			.map(function(str) {
+			.map(function (str) {
 				return str.trim()
 			})
-			.filter(function(str) {
+			.filter(function (str) {
 				return str != ""
 			});
 	}
@@ -29,7 +29,7 @@
 	angular
 		.module('wfm.rta')
 		.component('rtaCardHeader', {
-			templateUrl: 'app/rta/historical/rta-card-header-component.html',
+			templateUrl: 'app/rta/rta/historical/rta-card-header-component.html',
 			controller: RtaCardHeaderController,
 			transclude: true,
 			require: {

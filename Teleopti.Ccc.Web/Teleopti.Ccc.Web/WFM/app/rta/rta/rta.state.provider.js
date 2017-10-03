@@ -71,7 +71,7 @@ angular
 				})
 				.state('rta-historical', {
 					url: '/rta/agent-historical/:personId?open',
-					templateUrl: 'app/rta/historical/rta-historical.html',
+					templateUrl: 'app/rta/rta/historical/rta-historical.html',
 					controller: 'RtaHistoricalController as vm',
 				})
 
