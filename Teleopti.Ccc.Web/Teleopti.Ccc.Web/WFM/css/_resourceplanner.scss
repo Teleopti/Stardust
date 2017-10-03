@@ -16,7 +16,7 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 }
 
 /*refactor me: heat map*/
-.filter-boxes{ 
+.filter-boxes{
 	display:block;
 	width:auto;
 	float:left;
@@ -32,7 +32,7 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	}
 }
 
-.resourceplanner-box { 
+.resourceplanner-box {
 	background: 0 0;
     /* outline: gray solid 1px; */
     text-align: center;
@@ -58,7 +58,7 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	margin-top: 17px;
 	opacity:0;
 	transition-delay: 0.3s;
-	transition: 0.2s all ease-in-out;	
+	transition: 0.2s all ease-in-out;
 	z-index:9000;
 }
 
@@ -332,7 +332,7 @@ table.overview {
 }
 
 .icon-botton-primary {
-	color:$blue-500; 
+	color:$blue-500;
 }
 
 .pp-tabContent {
@@ -400,6 +400,8 @@ wfm-card.pp-validation-card > md-card {
 	margin: -22px 0px -30px -2px;
 }
 
-
-
-
+.pg-prio-buttoms-wrapper {
+	border: $gray012  2px solid;
+    display: inline-block;
+    border-radius: 25px;
+}

@@ -19,28 +19,28 @@
 					</div>
 				</div>
 				<div class="con-flex x3">
-					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goCreateSchedulingSetting()"><i class="mdi mdi-plus"></i>{{'NewPlanGroupSchedulingSetting' | translate}}</button>
-					<button class="wfm-btn wfm-btn-invis-disabled" ng-click=""><i class="mdi mdi-information-outline"></i>{{'HelpLabel' | translate}}</button>
+					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goCreateSchedulingSetting()"><i class="mdi mdi-plus"></i> {{'NewPlanGroupSchedulingSetting' | translate}}</button>
+					<button class="wfm-btn wfm-btn-invis-disabled" ng-click=""><i class="mdi mdi-information-outline"></i> {{'HelpLabel' | translate}}</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="card-group">
-	<div class="panel material-depth-1 filter-boxes" ng-repeat="dayOffRule in vm.schedulingSetting | filter:vm.filterName">
+	<div class="panel material-depth-1 filter-boxes" node-id="{{$index}}" ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName">
 		<div class="head-actions">
-			<h2>{{dayOffRule.Name}}</h2>
+			<h2>{{setting.Name}}</h2>
 			<div class="con-row">
 				<div class="con-flex">
 					<div class="pg-setting-card-wrapper">
-						<span class="pg-setting-card">{{'SelectedFilters' | translate}}: {{dayOffRule.Filters.length}}</span>
+						<span class="pg-setting-card">{{'SelectedFilters' | translate}}: {{setting.Filters.length}}</span>
 					</div>
 				</div>
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
 					<div class="pg-setting-card-wrapper">
-						<span class="pg-setting-card">{{dayOffRule.BlockSchedulingSetting}}</span>
+						<span class="pg-setting-card">{{setting.BlockSchedulingSetting}}</span>
 					</div>
 				</div>
 			</div>
@@ -57,18 +57,18 @@
 						<tbody>
 							<tr>
 								<td translate>DaysOffPerWeek</td>
-								<td>{{dayOffRule.MinDayOffsPerWeek}}</td>
-								<td>{{dayOffRule.MaxDayOffsPerWeek}}</td>
+								<td>{{setting.MinDayOffsPerWeek}}</td>
+								<td>{{setting.MaxDayOffsPerWeek}}</td>
 							</tr>
 							<tr>
 								<td translate>ConsecutiveWorkDays</td>
-								<td>{{dayOffRule.MinConsecutiveWorkdays}}</td>
-								<td>{{dayOffRule.MaxConsecutiveWorkdays}}</td>
+								<td>{{setting.MinConsecutiveWorkdays}}</td>
+								<td>{{setting.MaxConsecutiveWorkdays}}</td>
 							</tr>
 							<tr>
 								<td translate>ConsecutiveDaysOff</td>
-								<td>{{dayOffRule.MinConsecutiveDayOffs}}</td>
-								<td>{{dayOffRule.MaxConsecutiveDayOffs}}</td>
+								<td>{{setting.MinConsecutiveDayOffs}}</td>
+								<td>{{setting.MaxConsecutiveDayOffs}}</td>
 							</tr>
 							<tr>
 								<td translate>FullWeekEndsOff</td>
@@ -85,15 +85,22 @@
 				</div>
 			</div>
 		</div>
-		<div class="con-row" ng-hide="vm.isDisable">
+		<div class="con-row" ng-hide="vm.isDisable || vm.schedulingSetting.length == 1">
 			<div class="con-flex">
-				<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditSchedulingSetting(dayOffRule)">
+				<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditSchedulingSetting(setting)">
 					<i class=" mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
 				</div>
-				<div tabindex=0 class="context-menu card-context" ng-click="vm.getSchedulingSettingInfo(dayOffRule);" ng-show="!dayOffRule.Default">
+				<div tabindex=0 class="context-menu card-context" ng-click="vm.getSchedulingSettingInfo(setting)" ng-show="!setting.Default">
 					<i class=" mdi mdi-delete pointer"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
 				</div>
-				{{setting.Priority}}
+				<div class="pg-prio-buttoms-wrapper">
+					<div tabindex=0 class="context-menu card-context" ng-click="vm.setHigherPriority(setting, $index)" ng-hide="$last || $first">
+						<i class=" mdi mdi-chevron-left pointer"><md-tooltip>{{'Set priority higher' | translate }}</md-tooltip></i>
+					</div>
+					<div tabindex=0 class="context-menu card-context" ng-click="vm.setLowerPriority(setting, $index)" ng-hide="vm.disableButton($index)">
+						<i class=" mdi mdi-chevron-right pointer"><md-tooltip>{{'Set priority lower' | translate }}</md-tooltip></i>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -109,7 +116,7 @@
 				<div class="modal-actions">
 					<aside>
 						<button ng-click="vm.confirmDeleteModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel' | translate }}</button>
-						<button ng-click="vm.confirmDeleteModal = false; vm.deleteSchedulingSetting(dayOffRule)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
+						<button ng-click="vm.confirmDeleteModal = false; vm.deleteSchedulingSetting(setting)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
 					</aside>
 				</div>
 			</div>

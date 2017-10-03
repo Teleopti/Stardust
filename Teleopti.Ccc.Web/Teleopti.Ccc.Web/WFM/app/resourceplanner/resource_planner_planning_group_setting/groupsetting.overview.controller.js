@@ -14,7 +14,7 @@
 
 		vm.requestSent = false;
 		vm.selectedSchedulingSetting = {};
-		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
+		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Priority', '-Default', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
 		vm.textManageSchedulingSetting = $translate.instant("ManagePlanningGroupSchedulingSetting").replace("{0}", planningGroupInfo.Name);
 		vm.textOfAppliedFilter = $translate.instant("PlanGroupSchedulingSettingAppliedFilters").replace("{0}", planningGroupInfo.Name);
@@ -22,6 +22,9 @@
 		vm.deleteSchedulingSetting = deleteSchedulingSetting;
 		vm.goEditSchedulingSetting = goEditSchedulingSetting;
 		vm.goCreateSchedulingSetting = goCreateSchedulingSetting;
+		vm.setHigherPriority = setHigherPriority;
+		vm.setLowerPriority = setLowerPriority;
+		vm.disableButton = disableButton;
 
 		getBlockSchedulingSetting();
 
@@ -71,6 +74,59 @@
 		function goCreateSchedulingSetting() {
 			$state.go('resourceplanner.editsetting', {
 				groupId: $stateParams.groupId,
+			});
+		}
+
+		function setHigherPriority(setting, index) {
+			var tempPrio = setting.Priority;
+			if (setting.Priority == vm.schedulingSetting[0].Priority)
+				return;
+			setting.Priority = vm.schedulingSetting[index - 1].Priority;
+			vm.schedulingSetting[index - 1].Priority = tempPrio;
+			persist(setting);
+			persist(vm.schedulingSetting[index - 1]);
+			return resortDisplayOrder(vm.schedulingSetting);
+		}
+
+		function setLowerPriority(setting, index) {
+			var tempPrio = setting.Priority;
+			if (setting.Priority < 2)
+				return;
+			setting.Priority = vm.schedulingSetting[index + 1].Priority;
+			vm.schedulingSetting[index + 1].Priority = tempPrio;
+			persist(setting);
+			persist(vm.schedulingSetting[index + 1]);
+			return resortDisplayOrder(vm.schedulingSetting);
+		}
+
+		function resortDisplayOrder(array) {
+			return array.sort(localeLanguageSortingService.localeSort('-Priority', '-Default', '+Name'));
+		}
+
+		function disableButton(index) {
+			if (index < vm.schedulingSetting.length - 2 )
+				return false;
+			return true;
+		}
+
+		function persist(setting) {
+			PlanGroupSettingService.saveSetting({
+				BlockFinderType: setting.BlockFinderType,
+				BlockSameShift: setting.BlockSameShift,
+				BlockSameShiftCategory: setting.BlockSameShiftCategory,
+				BlockSameStartTime: setting.BlockSameStartTime,
+				MinDayOffsPerWeek: setting.MinDayOffsPerWeek,
+				MaxDayOffsPerWeek: setting.MaxDayOffsPerWeek,
+				MinConsecutiveWorkdays: setting.MinConsecWorkDays,
+				MaxConsecutiveWorkdays: setting.MaxConsecWorkDays,
+				MinConsecutiveDayOffs: setting.MinConsecDaysOff,
+				MaxConsecutiveDayOffs: setting.MaxConsecDaysOff,
+				Id: setting.Id,
+				Name: setting.Name,
+				Default: setting.Default,
+				Filters: setting.Filters,
+				PlanningGroupId: $stateParams.groupId,
+				Priority: setting.Priority
 			});
 		}
 			if (setting.Priority < 2)
