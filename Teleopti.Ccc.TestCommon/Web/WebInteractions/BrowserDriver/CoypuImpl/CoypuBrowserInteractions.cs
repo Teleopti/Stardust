@@ -276,6 +276,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		private string retryJavascript(string javascript)
 		{
 			object result = null;
+			specialTimeout = new TimeSpan(0,0,10);
 			_browser.RetryUntilTimeout(() => { result = _browser.ExecuteScript(javascript); }, options());
 			return result?.ToString();
 		}
