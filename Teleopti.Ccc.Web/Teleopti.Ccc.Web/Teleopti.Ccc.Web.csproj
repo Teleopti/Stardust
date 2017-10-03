@@ -1552,7 +1552,6 @@
     <Content Include="WFM\app\rta\testShared\controller.fortest.js" />
     <Content Include="WFM\app\rta\testShared\_modules.js" />
     <Content Include="WFM\app\rta\tool\rtaTool.backend.fake.js" />
-    <Content Include="WFM\app\rta\tool\rtaTool.controller.fortest.js" />
     <Content Include="WFM\app\rta\tool\rtaTool.controller.js" />
     <Content Include="WFM\app\rta\tool\rtaTool.controller.spec.js" />
     <Content Include="WFM\app\rta\tool\rtaTool.html" />
