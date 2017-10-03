@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeSkillRepository SkillRepository;
 
 		[TestCase("UTC")]
 		[TestCase("W. Europe Standard Time")]
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var firstDay = new DateOnly(2017, 9, 1);
 			var period = new DateOnlyPeriod(firstDay, new DateOnly(2017, 9, 30));
 			var activity = new Activity("_").WithId();
-			var skill = SkillRepository.Has("_", activity);
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var scenario = ScenarioRepository.Has("_");
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new ContractWithMaximumTolerance();
