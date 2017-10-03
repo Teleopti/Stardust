@@ -1,13 +1,12 @@
 'use strict';
 
 angular.module('wfm.rtaTracer')
-  .config(rtaTracer);
+	.config(rtaTracer);
 
 function rtaTracer($stateProvider) {
-  $stateProvider.state('rtaTracer', {
-    url: '/rtaTracer',
-    controller: 'RtaTracerController as vm',
-    templateUrl: 'app/rtaTracer/rtaTracer.html'
-    
-  })
+	$stateProvider.state('rtaTracer', {
+		url: '/rtaTracer',
+		controller: 'RtaTracerController as vm',
+		templateUrl: 'app/rta/tracer/rtaTracer.html'
+	})
 }
