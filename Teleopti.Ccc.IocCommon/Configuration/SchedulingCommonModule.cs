@@ -381,6 +381,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExtendReduceDaysOffHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<ExtendReduceTimeHelper>().InstancePerLifetimeScope();
 
+			if (_configuration.Toggle(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002))
+			{
+				builder.RegisterType<EffectiveRestrictionStartTimeDecider>().As<IEffectiveRestrictionStartTimeDecider>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<EffectiveRestrictionStartTimeDeciderOff>().As<IEffectiveRestrictionStartTimeDecider>().SingleInstance();	
+			}
+
 			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().SingleInstance();
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>().SingleInstance();
 

@@ -3,8 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 		private IEnumerable<ISkillDay> _skillDays;
 		private readonly GroupPersonSkillAggregator groupPersonSkillAggregator = new GroupPersonSkillAggregator(new PersonalSkillsProvider());
+		private IScheduleDay _scheduleDay;
 
 		[SetUp]
 		public void Setup()
@@ -53,7 +56,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_schedulingOptions = new SchedulingOptions();
 			_firstShiftInTeamBlockFinder = _mocks.StrictMock<IFirstShiftInTeamBlockFinder>();
-			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlock, _firstShiftInTeamBlockFinder);
+			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlock, _firstShiftInTeamBlockFinder, new EffectiveRestrictionStartTimeDeciderOff());
+			
 		}
 
 		[Test]
@@ -87,7 +92,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_sameOpenHoursInTeamBlock.Check(_skillDays, _teamBlockInfo, groupPersonSkillAggregator)).Return(true);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, _schedules, _dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																		new WorkShiftFinderResult(_person, _dateOnly), true, false, _skillDays))
+				
 					  .Return(new List<ShiftProjectionCache>());
+				Expect.Call(_schedules[_person].ScheduledDay(_dateOnly)).Return(_scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -119,6 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(shifts);
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(null, _dateOnly, shifts, _skillDays, _teamBlockInfo, _schedulingOptions,TimeZoneGuard.Instance.TimeZone, false, null)).IgnoreArguments()
 					  .Return(shiftProjectionCache);
+				Expect.Call(_schedules[_person].ScheduledDay(_dateOnly)).Return(_scheduleDay);
 			}
 			using (_mocks.Playback())
 			{

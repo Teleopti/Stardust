@@ -164,7 +164,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 		
 		[Test]
-		[Ignore("46002 to be fixed")]
 		public void ShouldRespectStartTimeTolerance_TakeShiftWithinToleranceStartTimePreference()
 		{
 			var scenario = new Scenario("_");
@@ -189,7 +188,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
 
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(9);
+			if(_resourcePlanner_BreakPreferenceStartTimeByMax_46002 == BreakPreferenceStartTimeByMax.ConsiderBreakPreferenceStartTimeByMax)
+				stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(9);
+			else
+				stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(10);
+		}
+		
+		[Test]
+		public void ShouldRespectStartTimeTolerance_TakeAnyShiftWhenNotUsingPreferences()
+		{
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var ruleSetInsideTolerance = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), new ShiftCategory("_").WithId()));
+			var ruleSetOutsideTolerance = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(19, 0, 19, 0, 15), new ShiftCategory("_").WithId()));
+			var ruleSetBag = new RuleSetBag(ruleSetInsideTolerance, ruleSetOutsideTolerance);	
+			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var intervalDemands = new List<Tuple<int, TimeSpan>>{new Tuple<int, TimeSpan>(17,TimeSpan.FromMinutes(360)), new Tuple<int, TimeSpan>(18, TimeSpan.FromMinutes(360))};	
+			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), intervalDemands);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneWeek(dateOnly);
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17));
+			var preferenceRestriction = new PreferenceRestriction {StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))};
+			var preferenceDay = new PreferenceDay(agent, dateOnly, preferenceRestriction);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
+			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
+			optimizationPreferences.General.UsePreferences = false;
+			optimizationPreferences.General.PreferencesValue = 0d;
+			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60);
+
+			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
+
+			if(_resourcePlanner_BreakPreferenceStartTimeByMax_46002 == BreakPreferenceStartTimeByMax.ConsiderBreakPreferenceStartTimeByMax)
+				stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(10);
+			else
+				stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(10);
 		}
 		
 		[Test]

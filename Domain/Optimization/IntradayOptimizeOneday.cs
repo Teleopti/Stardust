@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IResourceCalculateAfterDeleteDecider _resourceCalculateAfterDeleteDecider;
+		private readonly IEffectiveRestrictionStartTimeDecider _effectiveRestrictionStartTimeDecider;
 
 		public IntradayOptimizeOneday(IScheduleService scheduleService,
 			IOptimizationPreferences optimizerPreferences,
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IUserTimeZone userTimeZone,
-			IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider)
+			IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider,
+			IEffectiveRestrictionStartTimeDecider effectiveRestrictionStartTimeDecider)
 		{
 			_scheduleService = scheduleService;
 			_optimizerPreferences = optimizerPreferences;
@@ -60,6 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_userTimeZone = userTimeZone;
 			_resourceCalculateAfterDeleteDecider = resourceCalculateAfterDeleteDecider;
+			_effectiveRestrictionStartTimeDecider = effectiveRestrictionStartTimeDecider;
 		}
 
 		public bool Execute(DateOnly dateOnly)
@@ -88,7 +91,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
 
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
-
+			var adjustedStartTimeRestriction = _effectiveRestrictionStartTimeDecider.Decide(schedulingOptions, effectiveRestriction, scheduleDay);
+			effectiveRestriction = effectiveRestriction.Combine(adjustedStartTimeRestriction);
 			//delete schedule
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(scheduleDay, _rollbackService, schedulingOptions.ConsiderShortBreaks, false, _resourceCalculateAfterDeleteDecider);
 

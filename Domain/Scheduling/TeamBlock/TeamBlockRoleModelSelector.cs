@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
@@ -16,16 +17,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly ISameOpenHoursInTeamBlock _sameOpenHoursInTeamBlock;
 		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
+		private readonly IEffectiveRestrictionStartTimeDecider _effectiveRestrictionStartTimeDecider;
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
 			ISameOpenHoursInTeamBlock sameOpenHoursInTeamBlock,
-			IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder)
+			IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder,
+			IEffectiveRestrictionStartTimeDecider effectiveRestrictionStartTimeDecider)
 		{
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
 			_sameOpenHoursInTeamBlock = sameOpenHoursInTeamBlock;
 			_firstShiftInTeamBlockFinder = firstShiftInTeamBlockFinder;
+			_effectiveRestrictionStartTimeDecider = effectiveRestrictionStartTimeDecider;
 		}
 
 		public ShiftProjectionCache Select(IScheduleDictionary schedules,
@@ -48,6 +52,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return foundShiftProjectionCache;
 			
 			effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
+			var adjustedStartTimeRestriction = _effectiveRestrictionStartTimeDecider.Decide(schedulingOptions, effectiveRestriction, schedules[person].ScheduledDay(datePointer));
+			effectiveRestriction = effectiveRestriction.Combine(adjustedStartTimeRestriction);
 
 			//TODO: This check could probably be moved "higher up" for perf reasons/fewer calls
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlock.Check(allSkillDays, teamBlockInfo, groupPersonSkillAggregator);

@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private readonly IResourceCalculateAfterDeleteDecider _resourceCalculateAfterDeleteDecider;
+		private readonly IEffectiveRestrictionStartTimeDecider _effectiveRestrictionStartTimeDecider;
 
 		public IntradayOptimizerCreator(
 			IntradayDecisionMaker decisionMaker,
@@ -54,7 +55,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			PersonalSkillsProvider personalSkillsProvider,
 			IUserTimeZone userTimeZone,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
-			IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider)
+			IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider,
+			IEffectiveRestrictionStartTimeDecider effectiveRestrictionStartTimeDecider)
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
@@ -74,6 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_userTimeZone = userTimeZone;
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 			_resourceCalculateAfterDeleteDecider = resourceCalculateAfterDeleteDecider;
+			_effectiveRestrictionStartTimeDecider = effectiveRestrictionStartTimeDecider;
 		}
 
 		public IEnumerable<IIntradayOptimizer2> Create(DateOnlyPeriod period, IEnumerable<IPerson> agents, IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
@@ -118,7 +121,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 						_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
 						_mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService,
 						scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState, _userTimeZone,
-						_resourceCalculateAfterDeleteDecider));
+						_resourceCalculateAfterDeleteDecider,
+						_effectiveRestrictionStartTimeDecider));
 				result.Add(optimizer);
 			}
 
