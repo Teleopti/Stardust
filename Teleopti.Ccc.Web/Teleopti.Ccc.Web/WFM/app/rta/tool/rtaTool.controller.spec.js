@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('RtaToolController', function () {
+describe('RtaToolController', function () {
 	var
 		$httpBackend,
 		$controllerbuilder,
