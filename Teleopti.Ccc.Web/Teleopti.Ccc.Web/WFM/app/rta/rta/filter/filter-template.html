@@ -14,10 +14,10 @@
 										 placeholder="{{vm.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
 							<md-item-template>
 								<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-			</md-item-template>
-			<md-not-found>
-				{{'RepViewerNoMoreMatches'|translate}}
-			</md-not-found>
+					</md-item-template>
+					<md-not-found>
+						{{'RepViewerNoMoreMatches'|translate}}
+					</md-not-found>
 			</md-autocomplete>
 			<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.clearSelection()">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
@@ -38,16 +38,16 @@
 										placeholder="{{vm.skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
 							<md-item-template>
 								<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
-			</md-item-template>
-			<md-not-found>
-				{{'RepViewerNoMoreMatches'|translate}}
-			</md-not-found>
+					</md-item-template>
+					<md-not-found>
+						{{'RepViewerNoMoreMatches'|translate}}
+					</md-not-found>
 			</md-autocomplete>
 			<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkillArea" ng-click="vm.clearSelection()">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
 			</span>
-				<pre>APA!</pre>
+			
 			<span class="con-flex rta-multiple-selection-panel">
 				<div  class="relative" outside-click="vm.goToAgents()">
 							<input type="text" placeholder="{{'DataFilterThreeDots'|translate}}" ng-style="vm.openPicker && {'visibility': 'hidden'}" ng-class="vm.defaultInputText ? 'rta-light-text' : ''" ng-click="vm.openPicker = !vm.openPicker" ng-value="vm.selectFieldText" ng-model="vm.searchTerm"/>

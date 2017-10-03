@@ -1,3 +1,4 @@
+// @ts-check
 'use strict';
 
 angular
@@ -84,11 +85,5 @@ angular
                 })
 						controller: 'SkillGroupController as vm'
 					})
-
-				.state('rta-filter-skill-group-config',
-					{
-						url: '/rta/agents/skill-group-config',
-						templateUrl: 'app/global/skill-group/skillgroup.html',
-						params: {returnState: 'rta-agents'},
 		};
 	});

@@ -52,5 +52,7 @@
         ctrl.itemToReturn(undefined);
       }
     }
+			
+            $state.go('rta-skill-area-config', {
   }
 })();
