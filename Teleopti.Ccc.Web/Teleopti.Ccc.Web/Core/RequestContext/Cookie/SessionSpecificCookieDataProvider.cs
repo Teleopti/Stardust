@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 	public class SessionSpecificCookieDataProvider : AbstractCookieDataProvider, ISessionSpecificDataProvider
 	{
 		public SessionSpecificCookieDataProvider(ICurrentHttpContext httpContext,
-			ISessionSpecificCookieDataProviderSettings sessionSpecificCookieDataProviderSettings, INow now,
+			SessionSpecificCookieSettingsProvider sessionSpecificCookieSettingsProvider, INow now,
 			ISessionSpecificDataStringSerializer dataStringSerializer)
-			: base(httpContext, sessionSpecificCookieDataProviderSettings, now, dataStringSerializer
+			: base(httpContext, sessionSpecificCookieSettingsProvider.ForWfm(), now, dataStringSerializer
 				)
 		{
 		}

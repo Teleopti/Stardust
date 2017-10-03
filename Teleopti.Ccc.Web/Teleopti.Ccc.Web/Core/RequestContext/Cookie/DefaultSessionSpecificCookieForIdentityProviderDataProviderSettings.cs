@@ -3,7 +3,7 @@ using System.Web.Security;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 {
-	public class DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings : ISessionSpecificCookieForIdentityProviderDataProviderSettings
+	public class DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings : ISessionSpecificCookieSettings
 	{
 		public DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings()
 		{
@@ -17,17 +17,12 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			AuthenticationRequireSsl = FormsAuthentication.RequireSSL;
 		}
 
-		public string AuthenticationCookieDomain { get; private set; }
-
-		public TimeSpan AuthenticationCookieExpirationTimeSpan { get; private set; }
-		public TimeSpan AuthenticationCookieExpirationTimeSpanLong { get; private set; }
-
-		public bool AuthenticationCookieSlidingExpiration { get; private set; }
-
-		public string AuthenticationCookiePath { get; private set; }
-
-		public string AuthenticationCookieName { get; private set; }
-
-		public bool AuthenticationRequireSsl { get; private set; }
+		public string AuthenticationCookieDomain { get; }
+		public TimeSpan AuthenticationCookieExpirationTimeSpan { get; }
+		public TimeSpan AuthenticationCookieExpirationTimeSpanLong { get; }
+		public bool AuthenticationCookieSlidingExpiration { get; }
+		public string AuthenticationCookiePath { get; }
+		public string AuthenticationCookieName { get; }
+		public bool AuthenticationRequireSsl { get; }
 	}
 }

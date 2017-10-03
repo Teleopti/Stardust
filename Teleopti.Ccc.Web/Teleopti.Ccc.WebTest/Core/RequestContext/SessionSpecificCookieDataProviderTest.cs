@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		private HttpContextBase httpContext;
 		private INow now;
 		private SessionSpecificCookieDataProvider target;
-		private ISessionSpecificCookieDataProviderSettings _sessionSpecificCookieDataProviderSettings;
+		private ISessionSpecificCookieSettings _sessionSpecificCookieSettingsForWfm;
 		private HttpCookieCollection _cookieCollection;
 
 		private static SessionSpecificData generateSessionSpecificData()
@@ -44,9 +44,10 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 
 			now = new ThisIsNow(new DateTime(2013, 9, 23, 12, 0, 0));
-			
-			_sessionSpecificCookieDataProviderSettings = new DefaultSessionSpecificCookieDataProviderSettings();
-			target = new SessionSpecificCookieDataProvider(new FakeCurrentHttpContext(httpContext), _sessionSpecificCookieDataProviderSettings, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
+
+			var sessionSpecificCookieSettingsProvider = new SessionSpecificCookieSettingsProvider();
+			_sessionSpecificCookieSettingsForWfm = sessionSpecificCookieSettingsProvider.ForWfm();
+			target = new SessionSpecificCookieDataProvider(new FakeCurrentHttpContext(httpContext), sessionSpecificCookieSettingsProvider, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
 		}
 
 		[Test]
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			target.StoreInCookie(sessionSpecificData, false, false);
 
-			var httpCookie = _cookieCollection[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName];
+			var httpCookie = _cookieCollection[_sessionSpecificCookieSettingsForWfm.AuthenticationCookieName];
 			httpCookie.Should().Not.Be.Null();
 		}
 
@@ -67,10 +68,10 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			target.StoreInCookie(sessionSpecificData, false, false);
 			FormsAuthentication.Decrypt(
-				_cookieCollection[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName].Value).Expiration.Subtract(
+				_cookieCollection[_sessionSpecificCookieSettingsForWfm.AuthenticationCookieName].Value).Expiration.Subtract(
 					now.ServerDateTime_DontUse())
 				.Should()
-				.Be.EqualTo(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan);
+				.Be.EqualTo(_sessionSpecificCookieSettingsForWfm.AuthenticationCookieExpirationTimeSpan);
 		}
 
 		[Test]
@@ -80,10 +81,10 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			target.StoreInCookie(sessionSpecificData, true, false);
 			FormsAuthentication.Decrypt(
-				_cookieCollection[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName].Value).Expiration.Subtract(
+				_cookieCollection[_sessionSpecificCookieSettingsForWfm.AuthenticationCookieName].Value).Expiration.Subtract(
 					now.ServerDateTime_DontUse())
 				.Should()
-				.Be.EqualTo(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpanLong);
+				.Be.EqualTo(_sessionSpecificCookieSettingsForWfm.AuthenticationCookieExpirationTimeSpanLong);
 		}
 
 		[Test]

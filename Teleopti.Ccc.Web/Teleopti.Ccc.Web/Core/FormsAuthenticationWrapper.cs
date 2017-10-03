@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Web.Core
 		private readonly ILog _logger = LogManager.GetLogger<FormsAuthenticationWrapper>();
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly ISessionSpecificForIdentityProviderDataProvider _sessionSpecificForIdentityProviderDataProvider;
-		private readonly ISessionSpecificCookieForIdentityProviderDataProviderSettings _sessionSpecificCookieForIdentityProviderDataProviderSettings;
+		private readonly ISessionSpecificCookieSettings _sessionSpecificCookieSettingsForTeleoptiIdentityProvider;
 		private readonly INow _now;
 
-		public FormsAuthenticationWrapper(ICurrentHttpContext httpContext, ISessionSpecificForIdentityProviderDataProvider sessionSpecificForIdentityProviderDataProvider, ISessionSpecificCookieForIdentityProviderDataProviderSettings sessionSpecificCookieForIdentityProviderDataProviderSettings, INow now)
+		public FormsAuthenticationWrapper(ICurrentHttpContext httpContext, ISessionSpecificForIdentityProviderDataProvider sessionSpecificForIdentityProviderDataProvider, INow now,  SessionSpecificCookieSettingsProvider sessionSpecificCookieSettingsProvider)
 		{
 			_httpContext = httpContext;
 			_sessionSpecificForIdentityProviderDataProvider = sessionSpecificForIdentityProviderDataProvider;
-			_sessionSpecificCookieForIdentityProviderDataProviderSettings = sessionSpecificCookieForIdentityProviderDataProviderSettings;
+			_sessionSpecificCookieSettingsForTeleoptiIdentityProvider = sessionSpecificCookieSettingsProvider.ForTeleoptiIdentityProvider();
 			_now = now;
 		}
 
@@ -33,15 +33,15 @@ namespace Teleopti.Ccc.Web.Core
 		public void SignOut()
 		{
 			FormsAuthentication.SignOut();
-			var fedAuthCookie = new HttpCookie(_sessionSpecificCookieForIdentityProviderDataProviderSettings.AuthenticationCookieName) { Expires = _now.ServerDateTime_DontUse().AddYears(-2), HttpOnly = true};
+			var fedAuthCookie = new HttpCookie(_sessionSpecificCookieSettingsForTeleoptiIdentityProvider.AuthenticationCookieName) { Expires = _now.ServerDateTime_DontUse().AddYears(-2), HttpOnly = true};
 			var httpCookieCollection = _httpContext.Current().Response.Cookies;
-			httpCookieCollection.Remove(_sessionSpecificCookieForIdentityProviderDataProviderSettings.AuthenticationCookieName);
+			httpCookieCollection.Remove(_sessionSpecificCookieSettingsForTeleoptiIdentityProvider.AuthenticationCookieName);
 			httpCookieCollection.Add(fedAuthCookie);
 		}
 
 		public bool TryGetCurrentUser(out string userName)
 		{
-			HttpCookie authCookie = _httpContext.Current().Request.Cookies[_sessionSpecificCookieForIdentityProviderDataProviderSettings.AuthenticationCookieName];
+			HttpCookie authCookie = _httpContext.Current().Request.Cookies[_sessionSpecificCookieSettingsForTeleoptiIdentityProvider.AuthenticationCookieName];
 			if (authCookie != null)
 			{
 				try

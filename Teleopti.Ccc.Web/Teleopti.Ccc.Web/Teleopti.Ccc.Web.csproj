@@ -728,6 +728,7 @@
     <Compile Include="Core\Data\MultiplicatorDefinitionSetProvider.cs" />
     <Compile Include="Core\Data\ShiftCategoryProvider.cs" />
     <Compile Include="Core\Extensions\DateTimeFormatExtensions.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificCookieSettingsProvider.cs" />
     <Compile Include="Core\Startup\CsrfFilter.cs" />
     <Compile Include="Core\Startup\InitializeApplication\PublishStartupJobsTask.cs" />
     <Compile Include="Core\Startup\InitializeApplication\RequeueHangfireEventsTask.cs" />
@@ -992,8 +993,7 @@
     <Compile Include="Core\RelativeWSFederationAuthenticationModule.cs" />
     <Compile Include="Core\RequestContext\Cookie\AbstractCookieDataProvider.cs" />
     <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings.cs" />
-    <Compile Include="Core\RequestContext\Cookie\IBaseSessionSpecificCookieDataProviderSettings.cs" />
-    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificCookieForIdentityProviderDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificCookieSettings.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificForIdentityProviderDataProvider.cs" />
     <Compile Include="Core\ResourceVersion.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
@@ -1297,7 +1297,6 @@
     <Compile Include="Areas\MyTime\Core\Portal\ViewModelFactory\PortalViewModelFactory.cs" />
     <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieDataProviderSettings.cs" />
     <Compile Include="Core\RequestContext\ISetThreadCulture.cs" />
-    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificCookieDataProviderSettings.cs" />
     <Compile Include="Core\RequestContext\Initialize\IRequestContextInitializer.cs" />
     <Compile Include="Core\RequestContext\Initialize\ISessionPrincipalFactory.cs" />
     <Compile Include="Core\RequestContext\Initialize\SessionPrincipalFactory.cs" />

@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 	public abstract class AbstractCookieDataProvider : IBaseSessionSpecificDataProvider
 	{
 		private readonly ICurrentHttpContext _httpContext;
-		private readonly IBaseSessionSpecificCookieDataProviderSettings _sessionSpecificCookieDataProviderSettings;
+		private readonly ISessionSpecificCookieSettings _sessionSpecificCookieDataProviderSettings;
 		private readonly INow _now;
 		private readonly ISessionSpecificDataStringSerializer _dataStringSerializer;
 
-		protected AbstractCookieDataProvider(ICurrentHttpContext httpContext, IBaseSessionSpecificCookieDataProviderSettings sessionSpecificCookieDataProviderSettings, INow now, ISessionSpecificDataStringSerializer dataStringSerializer)
+		protected AbstractCookieDataProvider(ICurrentHttpContext httpContext, ISessionSpecificCookieSettings sessionSpecificCookieDataProviderSettings, INow now, ISessionSpecificDataStringSerializer dataStringSerializer)
 		{
 			_httpContext = httpContext;
 			_sessionSpecificCookieDataProviderSettings = sessionSpecificCookieDataProviderSettings;
