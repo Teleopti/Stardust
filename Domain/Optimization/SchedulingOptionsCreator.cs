@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			double preferencesValue = optimizationPreferences.General.PreferencesValue;
 			bool usePreferencesAndValueIs1 = usePreferences && preferencesValue == 1d;
 			schedulingOptions.UsePreferences = usePreferencesAndValueIs1;
+			schedulingOptions.BreakPreferenceStartTimeByMax = optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax;
 		}
 
 		private static void setRotationsInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
