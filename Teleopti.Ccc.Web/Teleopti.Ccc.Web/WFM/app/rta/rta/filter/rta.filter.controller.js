@@ -13,8 +13,7 @@
         'rtaRouteService',
         'rtaNamesFormatService',
         'localeLanguageSortingService',
-        '$q',
-        'Toggle',
+			'$q'
         'SkillGroupSvc'
     ];
 
@@ -28,8 +27,7 @@
         rtaRouteService,
         rtaNamesFormatService,
         localeLanguageSortingService,
-        $q,
-        toggleSvc,
+		$q
         SkillGroupSvc
     ) {
         var vm = this;
@@ -290,10 +288,6 @@
                     team.isChecked = false;
                 });
             });
-        }
-
-        function clearSearchTerm() {
-            vm.searchTerm = '';
         }
     }
 })();
