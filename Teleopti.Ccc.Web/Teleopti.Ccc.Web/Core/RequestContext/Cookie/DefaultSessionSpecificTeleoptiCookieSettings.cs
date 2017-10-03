@@ -3,15 +3,15 @@ using System.Web.Security;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 {
-	public class DefaultSessionSpecificCookieDataProviderSettings : ISessionSpecificCookieSettings
+	public class DefaultSessionSpecificTeleoptiCookieSettings : ISessionSpecificCookieSettings
 	{
-		public DefaultSessionSpecificCookieDataProviderSettings()
+		public DefaultSessionSpecificTeleoptiCookieSettings()
 		{
 			// Move these to appSettings or create own configsection
 			AuthenticationCookieDomain = FormsAuthentication.CookieDomain;
 			AuthenticationCookieExpirationTimeSpan = new TimeSpan(0, 30, 0);
 			AuthenticationCookieExpirationTimeSpanLong = new TimeSpan(30, 0, 0, 0);
-			AuthenticationCookieName = "WfmAuth";
+			AuthenticationCookieName = "TeleoptiIpAuth";
 			AuthenticationCookiePath = FormsAuthentication.FormsCookiePath;
 			AuthenticationCookieSlidingExpiration = FormsAuthentication.SlidingExpiration;
 			AuthenticationRequireSsl = FormsAuthentication.RequireSSL;

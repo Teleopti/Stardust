@@ -19,19 +19,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		private AuthenticationController _target;
 		private MockRepository mocks;
 		private IFormsAuthentication _formsAuthentication;
-		private ISessionSpecificDataProvider _sessionSpecificDataProvider;
+		private ISessionSpecificWfmCookieProvider _sessionSpecificWfmCookieProvider;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			_formsAuthentication = mocks.DynamicMock<IFormsAuthentication>();
-			_sessionSpecificDataProvider = mocks.DynamicMock<ISessionSpecificDataProvider>();
+			_sessionSpecificWfmCookieProvider = mocks.DynamicMock<ISessionSpecificWfmCookieProvider>();
 			var authenticationModule = MockRepository.GenerateMock<IAuthenticationModule>();
 			authenticationModule.Stub(x => x.Issuer(null)).IgnoreArguments().Return(new Uri("http://issuer"));
 			authenticationModule.Stub(x => x.Realm).Return("testrealm");
 
-			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificDataProvider, authenticationModule,  new FakeCurrentHttpContext(new FakeHttpContext()), null);
+			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificWfmCookieProvider, authenticationModule,  new FakeCurrentHttpContext(new FakeHttpContext()), null);
 			new TestControllerBuilder().InitializeController(_target);
 		}
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			using (mocks.Record())
 			{
 				Expect.Call(_formsAuthentication.SignOut);
-				Expect.Call(_sessionSpecificDataProvider.RemoveCookie);
+				Expect.Call(_sessionSpecificWfmCookieProvider.RemoveCookie);
 			}
 			using (mocks.Playback())
 			{

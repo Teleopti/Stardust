@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterSessionSpecificDataProvider()
 		{
-			requestContainer.Resolve<ISessionSpecificDataProvider>()
+			requestContainer.Resolve<ISessionSpecificWfmCookieProvider>()
 				.Should().Not.Be.Null();
 		}
 

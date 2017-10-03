@@ -13,21 +13,21 @@ namespace Teleopti.Ccc.Web.Core
 	{
 		private readonly ILog _logger = LogManager.GetLogger<FormsAuthenticationWrapper>();
 		private readonly ICurrentHttpContext _httpContext;
-		private readonly ISessionSpecificForIdentityProviderDataProvider _sessionSpecificForIdentityProviderDataProvider;
+		private readonly ISessionSpecificTeleoptiCookieProvider _sessionSpecificTeleoptiCookieProvider;
 		private readonly ISessionSpecificCookieSettings _sessionSpecificCookieSettingsForTeleoptiIdentityProvider;
 		private readonly INow _now;
 
-		public FormsAuthenticationWrapper(ICurrentHttpContext httpContext, ISessionSpecificForIdentityProviderDataProvider sessionSpecificForIdentityProviderDataProvider, INow now,  SessionSpecificCookieSettingsProvider sessionSpecificCookieSettingsProvider)
+		public FormsAuthenticationWrapper(ICurrentHttpContext httpContext, ISessionSpecificTeleoptiCookieProvider sessionSpecificTeleoptiCookieProvider, INow now,  SessionSpecificCookieSettingsProvider sessionSpecificCookieSettingsProvider)
 		{
 			_httpContext = httpContext;
-			_sessionSpecificForIdentityProviderDataProvider = sessionSpecificForIdentityProviderDataProvider;
-			_sessionSpecificCookieSettingsForTeleoptiIdentityProvider = sessionSpecificCookieSettingsProvider.ForTeleoptiIdentityProvider();
+			_sessionSpecificTeleoptiCookieProvider = sessionSpecificTeleoptiCookieProvider;
+			_sessionSpecificCookieSettingsForTeleoptiIdentityProvider = sessionSpecificCookieSettingsProvider.ForTeleopti();
 			_now = now;
 		}
 
 		public void SetAuthCookie(string userName, bool isPersistent, bool isLogonFromBrowser)
 		{
-			_sessionSpecificForIdentityProviderDataProvider.MakeCookie(userName, userName, isPersistent, isLogonFromBrowser);
+			_sessionSpecificTeleoptiCookieProvider.MakeCookie(userName, userName, isPersistent, isLogonFromBrowser);
 		}
 
 		public void SignOut()

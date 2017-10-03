@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		[Test]
 		public void ShouldReturnNullIfNotExist()
 		{
-			var sessionDataProvider = MockRepository.GenerateStub<ISessionSpecificDataProvider>();
+			var sessionDataProvider = MockRepository.GenerateStub<ISessionSpecificWfmCookieProvider>();
 			sessionDataProvider.Expect(x => x.GrabFromCookie()).Return(null);
 			new CurrentTenantUser(new FakeCurrentHttpContext(new FakeHttpContext())).CurrentUser()
 				.Should().Be.Null();

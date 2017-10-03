@@ -123,9 +123,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			builder.RegisterType<SessionPrincipalFactory>().As<ISessionPrincipalFactory>();
 			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();
-			builder.RegisterType<SessionSpecificCookieDataProvider>().As<ISessionSpecificDataProvider>();
-			builder.RegisterType<SessionSpecificForIdentityProviderDataProvider>()
-				.As<ISessionSpecificForIdentityProviderDataProvider>();
+			builder.RegisterType<SessionSpecificWfmCookieProvider>().As<ISessionSpecificWfmCookieProvider>();
+			builder.RegisterType<SessionSpecificTeleoptiCookieProvider>().As<ISessionSpecificTeleoptiCookieProvider>();
 			builder.RegisterType<SessionAuthenticationModule>().As<ISessionAuthenticationModule>();
 			builder.RegisterType<SessionSpecificCookieSettingsProvider>().SingleInstance();
 			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>();

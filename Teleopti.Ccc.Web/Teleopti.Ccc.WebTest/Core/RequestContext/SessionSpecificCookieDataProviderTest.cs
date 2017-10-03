@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		private HttpRequestBase httpRequest;
 		private HttpContextBase httpContext;
 		private INow now;
-		private SessionSpecificCookieDataProvider target;
+		private SessionSpecificWfmCookieProvider target;
 		private ISessionSpecificCookieSettings _sessionSpecificCookieSettingsForWfm;
 		private HttpCookieCollection _cookieCollection;
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			var sessionSpecificCookieSettingsProvider = new SessionSpecificCookieSettingsProvider();
 			_sessionSpecificCookieSettingsForWfm = sessionSpecificCookieSettingsProvider.ForWfm();
-			target = new SessionSpecificCookieDataProvider(new FakeCurrentHttpContext(httpContext), sessionSpecificCookieSettingsProvider, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
+			target = new SessionSpecificWfmCookieProvider(new FakeCurrentHttpContext(httpContext), sessionSpecificCookieSettingsProvider, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
 		}
 
 		[Test]

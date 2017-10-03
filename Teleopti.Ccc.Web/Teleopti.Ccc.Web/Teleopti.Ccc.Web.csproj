@@ -992,9 +992,9 @@
     <Compile Include="Core\PersonNameProvider.cs" />
     <Compile Include="Core\RelativeWSFederationAuthenticationModule.cs" />
     <Compile Include="Core\RequestContext\Cookie\AbstractCookieDataProvider.cs" />
-    <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificTeleoptiCookieSettings.cs" />
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificCookieSettings.cs" />
-    <Compile Include="Core\RequestContext\Cookie\SessionSpecificForIdentityProviderDataProvider.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificTeleoptiCookieProvider.cs" />
     <Compile Include="Core\ResourceVersion.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkId.cs" />
@@ -1219,7 +1219,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Startup\BootstrapperModule.cs" />
-    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataProvider.cs" />
+    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificWfmCookieProvider.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificData.cs" />
     <Compile Include="Areas\Start\Models\Authentication\BusinessUnitViewModel.cs" />
     <Compile Include="Areas\MyTime\MyTimeAreaRegistration.cs" />
@@ -1295,13 +1295,13 @@
     <Compile Include="Areas\MyTime\Core\LayoutBase\DatePickerGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\IDatePickerGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\ViewModelFactory\PortalViewModelFactory.cs" />
-    <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificWfmCookieSettings.cs" />
     <Compile Include="Core\RequestContext\ISetThreadCulture.cs" />
     <Compile Include="Core\RequestContext\Initialize\IRequestContextInitializer.cs" />
     <Compile Include="Core\RequestContext\Initialize\ISessionPrincipalFactory.cs" />
     <Compile Include="Core\RequestContext\Initialize\SessionPrincipalFactory.cs" />
     <Compile Include="Core\RequestContext\Initialize\RequestContextInitializer.cs" />
-    <Compile Include="Core\RequestContext\Cookie\SessionSpecificCookieDataProvider.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificWfmCookieProvider.cs" />
     <Compile Include="Areas\MyTime\Core\DateOnlyModelBinder.cs" />
     <Compile Include="Areas\MyTime\Core\IoC\MyTimeAreaModule.cs" />
     <Compile Include="Core\RequestContext\SetThreadCulture.cs" />

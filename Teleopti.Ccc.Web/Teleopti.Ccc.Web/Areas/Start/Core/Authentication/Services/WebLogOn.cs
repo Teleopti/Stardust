@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ILogOnOff _logOnOff;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
-		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
+		private readonly ISessionSpecificWfmCookieProvider _sessionSpecificWfmCookieProvider;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IAuthorization _authorization;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			ILogOnOff logOnOff,
 			IDataSourceForTenant dataSourceForTenant,
 			IRepositoryFactory repositoryFactory,
-			ISessionSpecificDataProvider sessionSpecificDataProvider,
+			ISessionSpecificWfmCookieProvider sessionSpecificWfmCookieProvider,
 			IRoleToPrincipalCommand roleToPrincipalCommand,
 			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
 			IAuthorization authorization
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_logOnOff = logOnOff;
 			_dataSourceForTenant = dataSourceForTenant;
 			_repositoryFactory = repositoryFactory;
-			_sessionSpecificDataProvider = sessionSpecificDataProvider;
+			_sessionSpecificWfmCookieProvider = sessionSpecificWfmCookieProvider;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_authorization = authorization;
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			}
 
 			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, tenantPassword);
-			_sessionSpecificDataProvider.StoreInCookie(sessionSpecificData, isPersistent, isLogonFromBrowser);
-			_sessionSpecificDataProvider.RemoveAuthBridgeCookie();
+			_sessionSpecificWfmCookieProvider.StoreInCookie(sessionSpecificData, isPersistent, isLogonFromBrowser);
+			_sessionSpecificWfmCookieProvider.RemoveAuthBridgeCookie();
 		}
 	}
 }

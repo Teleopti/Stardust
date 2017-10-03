@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	{
 		private readonly IMutateNow _mutateNow;
 		private readonly INow _now;
-		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
+		private readonly ISessionSpecificWfmCookieProvider _sessionSpecificWfmCookieProvider;
 		private readonly ISsoAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public TestController(
 			IMutateNow mutateNow,
 			INow now,
-			ISessionSpecificDataProvider sessionSpecificDataProvider,
+			ISessionSpecificWfmCookieProvider sessionSpecificWfmCookieProvider,
 			ISsoAuthenticator authenticator,
 			IWebLogOn logon,
 			IBusinessUnitProvider businessUnitProvider,
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			_mutateNow = mutateNow;
 			_now = now;
-			_sessionSpecificDataProvider = sessionSpecificDataProvider;
+			_sessionSpecificWfmCookieProvider = sessionSpecificWfmCookieProvider;
 			_authenticator = authenticator;
 			_logon = logon;
 			_businessUnitProvider = businessUnitProvider;
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[TestLog]
 		public virtual ViewResult BeforeScenario(string name, bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
 		{
-			_sessionSpecificDataProvider.RemoveCookie();
+			_sessionSpecificWfmCookieProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 			_mutateNow.Reset();
 
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[TestLog]
 		public virtual EmptyResult ExpireMyCookie()
 		{
-			_sessionSpecificDataProvider.ExpireTicket();
+			_sessionSpecificWfmCookieProvider.ExpireTicket();
 			_formsAuthentication.SignOut();
 			return new EmptyResult();
 		}
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public virtual ViewResult CorruptMyCookie()
 		{
 			var wrong = Convert.ToBase64String(Convert.FromBase64String("Totally wrong"));
-			_sessionSpecificDataProvider.MakeCookie("UserName", wrong, false, true);
+			_sessionSpecificWfmCookieProvider.MakeCookie("UserName", wrong, false, true);
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public virtual ViewResult NonExistingDatasourceCookie()
 		{
 			var data = new SessionSpecificData(Guid.NewGuid(), "datasource", Guid.NewGuid(), "tenantpassword");
-			_sessionSpecificDataProvider.StoreInCookie(data, false, true);
+			_sessionSpecificWfmCookieProvider.StoreInCookie(data, false, true);
 
 			return View("Message", new TestMessageViewModel
 			{

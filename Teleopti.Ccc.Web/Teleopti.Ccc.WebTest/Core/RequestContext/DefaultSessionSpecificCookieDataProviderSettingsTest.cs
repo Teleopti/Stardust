@@ -7,21 +7,21 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 	[TestFixture]
 	public class DefaultSessionSpecificCookieDataProviderSettingsTest
 	{
-		private DefaultSessionSpecificCookieDataProviderSettings _sessionSpecificCookieDataProviderSettings;
+		private DefaultSessionSpecificWfmCookieSettings _sessionSpecificWfmCookieSettings;
 		
 		[SetUp]
 		public void SetUp()
 		{
-			_sessionSpecificCookieDataProviderSettings = new DefaultSessionSpecificCookieDataProviderSettings();
+			_sessionSpecificWfmCookieSettings = new DefaultSessionSpecificWfmCookieSettings();
 		}
 
 		[Test] 
 		public void ShouldHaveDefaultValues()
 		{
 			// Not so fun tests
-			_sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan.Ticks.Should().Be.GreaterThan(0);
-			_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName.Should().Not.Be.Empty();
-			_sessionSpecificCookieDataProviderSettings.AuthenticationCookiePath.Should().Not.Be.Empty();
+			_sessionSpecificWfmCookieSettings.AuthenticationCookieExpirationTimeSpan.Ticks.Should().Be.GreaterThan(0);
+			_sessionSpecificWfmCookieSettings.AuthenticationCookieName.Should().Not.Be.Empty();
+			_sessionSpecificWfmCookieSettings.AuthenticationCookiePath.Should().Not.Be.Empty();
 			
 		}
 	}

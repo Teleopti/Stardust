@@ -10,21 +10,21 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 	{
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IFindPersonInfoByCredentials _findPersonByCredentials;
-		private readonly ISessionSpecificDataProvider _sessionDataProvider;
+		private readonly ISessionSpecificWfmCookieProvider _sessionWfmCookieProvider;
 		public static string PersonInfoKey = "personinfo";
 
-		public WebTenantAuthentication(ICurrentHttpContext currentHttpContext, IFindPersonInfoByCredentials findPersonByCredentials, ISessionSpecificDataProvider sessionDataProvider)
+		public WebTenantAuthentication(ICurrentHttpContext currentHttpContext, IFindPersonInfoByCredentials findPersonByCredentials, ISessionSpecificWfmCookieProvider sessionWfmCookieProvider)
 		{
 			_currentHttpContext = currentHttpContext;
 			_findPersonByCredentials = findPersonByCredentials;
-			_sessionDataProvider = sessionDataProvider;
+			_sessionWfmCookieProvider = sessionWfmCookieProvider;
 		}
 
 		public bool Logon()
 		{
 			var httpContext = _currentHttpContext.Current();
 			PersonInfo tenantUser;
-			var sessionData = _sessionDataProvider.GrabFromCookie();
+			var sessionData = _sessionWfmCookieProvider.GrabFromCookie();
 			if (sessionData != null)
 			{
 				//web user

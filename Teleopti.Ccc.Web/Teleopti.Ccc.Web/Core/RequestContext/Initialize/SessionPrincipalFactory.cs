@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 	public class SessionPrincipalFactory : ISessionPrincipalFactory
 	{
 		private readonly IDataSourceForTenant _dataSourceForTenant;
-		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
+		private readonly ISessionSpecificWfmCookieProvider _sessionSpecificWfmCookieProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly IPrincipalFactory _principalFactory;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 		private readonly IDataSourceScope _dataSource;
 
 		public SessionPrincipalFactory(IDataSourceForTenant dataSourceForTenant,
-			ISessionSpecificDataProvider sessionSpecificDataProvider,
+			ISessionSpecificWfmCookieProvider sessionSpecificWfmCookieProvider,
 			IRepositoryFactory repositoryFactory,
 			IRoleToPrincipalCommand roleToPrincipalCommand,
 			IPrincipalFactory principalFactory,
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 			IDataSourceScope dataSource)
 		{
 			_dataSourceForTenant = dataSourceForTenant;
-			_sessionSpecificDataProvider = sessionSpecificDataProvider;
+			_sessionSpecificWfmCookieProvider = sessionSpecificWfmCookieProvider;
 			_repositoryFactory = repositoryFactory;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
 			_principalFactory = principalFactory;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 
 		public ITeleoptiPrincipal Generate()
 		{
-			var sessionData = _sessionSpecificDataProvider.GrabFromCookie();
+			var sessionData = _sessionSpecificWfmCookieProvider.GrabFromCookie();
 			return sessionData == null ? null : createPrincipal(sessionData);
 		}
 

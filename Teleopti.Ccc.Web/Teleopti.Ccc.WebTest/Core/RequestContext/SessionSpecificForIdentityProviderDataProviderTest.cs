@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		private HttpRequestBase httpRequest;
 		private HttpContextBase httpContext;
 		private INow now;
-		private SessionSpecificForIdentityProviderDataProvider target;
+		private SessionSpecificTeleoptiCookieProvider target;
 		private ISessionSpecificCookieSettings _sessionSpecificCookieSettingsForTeleoptiIdentityProvider;
 		private HttpCookieCollection _cookieCollection;
 
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			now = new ThisIsNow(new DateTime(2013, 9, 23, 12, 0, 0));
 
 			var sessionSpecificCookieSettingsProvider = new SessionSpecificCookieSettingsProvider();
-			_sessionSpecificCookieSettingsForTeleoptiIdentityProvider = sessionSpecificCookieSettingsProvider.ForTeleoptiIdentityProvider();
-			target = new SessionSpecificForIdentityProviderDataProvider(new FakeCurrentHttpContext(httpContext), sessionSpecificCookieSettingsProvider, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
+			_sessionSpecificCookieSettingsForTeleoptiIdentityProvider = sessionSpecificCookieSettingsProvider.ForTeleopti();
+			target = new SessionSpecificTeleoptiCookieProvider(new FakeCurrentHttpContext(httpContext), sessionSpecificCookieSettingsProvider, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
 		}
 
 		[Test]

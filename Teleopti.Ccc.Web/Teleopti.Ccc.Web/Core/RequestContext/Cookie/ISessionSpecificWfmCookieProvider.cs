@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		void RemoveAuthBridgeCookie();
 	}
 
-	public interface ISessionSpecificDataProvider : IBaseSessionSpecificDataProvider
+	public interface ISessionSpecificWfmCookieProvider : IBaseSessionSpecificDataProvider
 	{
 	}
 
-	public interface ISessionSpecificForIdentityProviderDataProvider : IBaseSessionSpecificDataProvider
+	public interface ISessionSpecificTeleoptiCookieProvider : IBaseSessionSpecificDataProvider
 	{
 	}
 }

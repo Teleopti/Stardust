@@ -2,22 +2,22 @@
 {
 	public class SessionSpecificCookieSettingsProvider
 	{
-		private readonly DefaultSessionSpecificCookieDataProviderSettings _defaultSessionSpecificCookieDataProviderSettings;
-		private readonly DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings _defaultSessionSpecificCookieForIdentityProviderDataProviderSettings;
+		private readonly DefaultSessionSpecificWfmCookieSettings _defaultSessionSpecificWfmCookieSettings;
+		private readonly DefaultSessionSpecificTeleoptiCookieSettings _defaultSessionSpecificTeleoptiCookieSettings;
 
 		public SessionSpecificCookieSettingsProvider()
 		{
-			_defaultSessionSpecificCookieDataProviderSettings = new DefaultSessionSpecificCookieDataProviderSettings();
-			_defaultSessionSpecificCookieForIdentityProviderDataProviderSettings = new DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings();
+			_defaultSessionSpecificWfmCookieSettings = new DefaultSessionSpecificWfmCookieSettings();
+			_defaultSessionSpecificTeleoptiCookieSettings = new DefaultSessionSpecificTeleoptiCookieSettings();
 		}
 		public ISessionSpecificCookieSettings ForWfm()
 		{
-			return _defaultSessionSpecificCookieDataProviderSettings;
+			return _defaultSessionSpecificWfmCookieSettings;
 		}
 
-		public ISessionSpecificCookieSettings ForTeleoptiIdentityProvider()
+		public ISessionSpecificCookieSettings ForTeleopti()
 		{
-			return _defaultSessionSpecificCookieForIdentityProviderDataProviderSettings;
+			return _defaultSessionSpecificTeleoptiCookieSettings;
 		}
 	}
 }

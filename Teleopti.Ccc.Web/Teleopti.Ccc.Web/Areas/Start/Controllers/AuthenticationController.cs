@@ -15,19 +15,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	{
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
 		private readonly IFormsAuthentication _formsAuthentication;
-		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
+		private readonly ISessionSpecificWfmCookieProvider _sessionSpecificWfmCookieProvider;
 		private readonly IAuthenticationModule _authenticationModule;
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly ICheckTenantUserExists _checkTenantUserExists;
 
 		public AuthenticationController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
-			IFormsAuthentication formsAuthentication, ISessionSpecificDataProvider sessionSpecificDataProvider,
+			IFormsAuthentication formsAuthentication, ISessionSpecificWfmCookieProvider sessionSpecificWfmCookieProvider,
 			IAuthenticationModule authenticationModule, ICurrentHttpContext currentHttpContext,
 			ICheckTenantUserExists checkTenantUserExists)
 		{
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_formsAuthentication = formsAuthentication;
-			_sessionSpecificDataProvider = sessionSpecificDataProvider;
+			_sessionSpecificWfmCookieProvider = sessionSpecificWfmCookieProvider;
 			_authenticationModule = authenticationModule;
 			_currentHttpContext = currentHttpContext;
 			_checkTenantUserExists = checkTenantUserExists;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ActionResult SignOut()
 		{
-			_sessionSpecificDataProvider.RemoveCookie();
+			_sessionSpecificWfmCookieProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 
 			var url = Request.Url;
