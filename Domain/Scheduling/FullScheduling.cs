@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				Period = schedulingInformation.Period,
 				RunWeeklyRestSolver = false,
 				FromWeb = true,
-				AgentsToSchedule = schedulingInformation.PersonIds,
+				AgentsToSchedule = stateHolder.AllPermittedPersons,
 				PlanningPeriodId = planningPeriodId
 			});
 			_persister.Persist(stateHolder.Schedules);
