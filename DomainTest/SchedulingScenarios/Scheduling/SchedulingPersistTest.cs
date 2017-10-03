@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class SchedulingPersistTest
+	public class SchedulingPersistTest : SchedulingScenario
 	{
 		public IFullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -24,6 +24,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+
+		public SchedulingPersistTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
+		}
 
 		[TestCase("UTC")]
 		[TestCase("W. Europe Standard Time")]
