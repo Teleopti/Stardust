@@ -4,7 +4,7 @@
 	angular
 		.module('wfm.rta')
 		.component('rtaCard', {
-			templateUrl: 'app/rta/historical/rta-card-component.html',
+			templateUrl: 'app/rta/rta/historical/rta-card-component.html',
 			controller: function() {
 				var ctrl = this
 
