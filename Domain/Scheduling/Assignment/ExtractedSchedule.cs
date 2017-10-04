@@ -780,5 +780,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var ass = PersonAssignment();
 			ass.RemoveActivity(shiftLayer,b,commandTrackedCommandInfo);
 		}
+
+		public IPreferenceDay PreferenceDay()
+		{
+			return PersistableScheduleDataCollection().OfType<IPreferenceDay>().SingleOrDefault();
+		}
 	}
 }

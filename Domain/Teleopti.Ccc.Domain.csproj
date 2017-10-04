@@ -276,6 +276,7 @@
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHourViewModels.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteWithOpenHourProvider.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
+    <Compile Include="Common\TimeSpanExtensions.cs" />
     <Compile Include="Common\Time\IUserNow.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
     <Compile Include="Common\Time\UserNow.cs" />

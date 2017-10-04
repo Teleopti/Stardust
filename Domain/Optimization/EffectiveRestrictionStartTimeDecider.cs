@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -10,34 +11,25 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class EffectiveRestrictionStartTimeDecider : IEffectiveRestrictionStartTimeDecider
 	{
+		//agent's missing personperiod
+		//Agent missing rulesetbag
+		//kolla effectiveRestriction.IsPreferenceDay?
+		
 		public IEffectiveRestriction Decide(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IScheduleDay scheduleDay)
 		{
-			if (schedulingOptions.BreakPreferenceStartTimeByMax == TimeSpan.Zero) return effectiveRestriction;
-			if (effectiveRestriction.IsPreferenceDay || !schedulingOptions.IsClassic()) return effectiveRestriction;
-			TimeSpan? start = null;
-			TimeSpan? end = null;
-			var dataRestrictions = scheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>();
-			var preference = (from r in dataRestrictions where r.Restriction != null select r.Restriction).FirstOrDefault();
-			if (preference == null || !preference.StartTimeLimitation.HasValue() && preference.ShiftCategory == null) return effectiveRestriction;
-			if (preference.StartTimeLimitation.StartTime.HasValue) start = preference.StartTimeLimitation.StartTime.Value.Add(-schedulingOptions.BreakPreferenceStartTimeByMax);					
-			if (preference.StartTimeLimitation.EndTime.HasValue) end = preference.StartTimeLimitation.EndTime.Value.Add(schedulingOptions.BreakPreferenceStartTimeByMax);		
-			if (preference.ShiftCategory != null)
+			var restriction = scheduleDay.PreferenceDay()?.Restriction;
+			if (jumpOutEarly(schedulingOptions, restriction)) 
+				return effectiveRestriction;
+
+			var start = restriction.StartTimeLimitation.StartTime?.Add(-schedulingOptions.BreakPreferenceStartTimeByMax);
+			var end = restriction.StartTimeLimitation.EndTime?.Add(schedulingOptions.BreakPreferenceStartTimeByMax);
+			foreach (var ruleSet in scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly).RuleSetBag
+				.RuleSetCollection.Where(x => x.TemplateGenerator.Category.Equals(restriction.ShiftCategory)))
 			{
-				var ruleSetBag = scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly)?.RuleSetBag;
-				if (ruleSetBag != null)
-				{	
-					foreach (var ruleSet in ruleSetBag.RuleSetCollection)
-					{
-						if(!ruleSet.TemplateGenerator.Category.Equals(preference.ShiftCategory)) continue;
-						var rulesetStartPeriod = ruleSet.TemplateGenerator.StartPeriod.Period;
-						var adjustedRuleSetStart = rulesetStartPeriod.StartTime.Add(-schedulingOptions.BreakPreferenceStartTimeByMax);
-						var adjustedRuleSetEnd = rulesetStartPeriod.EndTime.Add(schedulingOptions.BreakPreferenceStartTimeByMax);
-						if (!start.HasValue || adjustedRuleSetStart < start) start = adjustedRuleSetStart;
-						if (!end.HasValue || adjustedRuleSetEnd > end) end = adjustedRuleSetEnd;
-					}
-				}
+				start = TimeSpanExtensions.TakeMin(start, ruleSet.TemplateGenerator.StartPeriod.Period.StartTime.Add(-schedulingOptions.BreakPreferenceStartTimeByMax));
+				end = TimeSpanExtensions.TakeMax(end, ruleSet.TemplateGenerator.StartPeriod.Period.EndTime.Add(schedulingOptions.BreakPreferenceStartTimeByMax));
 			}
-			var adjustedStartTimeRestriction = new EffectiveRestriction(
+			return new EffectiveRestriction(
 				new StartTimeLimitation(start, end), 
 				new EndTimeLimitation(), 
 				new WorkTimeLimitation(), 
@@ -45,8 +37,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 				null,
 				null,
 				new List<IActivityRestriction>());
+		}
 
-			return adjustedStartTimeRestriction;
+		private static bool jumpOutEarly(SchedulingOptions schedulingOptions, IPreferenceRestriction restriction)
+		{
+			return schedulingOptions.BreakPreferenceStartTimeByMax == TimeSpan.Zero || !schedulingOptions.IsClassic() ||
+				   restriction == null || !restriction.StartTimeLimitation.HasValue();
 		}
 	}
 	
