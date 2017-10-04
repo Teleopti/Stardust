@@ -11,15 +11,13 @@
     'NoticeService',
     '$interval',
     '$timeout',
-    '$compile',
     '$translate',
     'intradayTrafficService',
     'intradayPerformanceService',
     'intradayMonitorStaffingService',
     'intradayLatestTimeService',
     'Toggle',
-    'skillIconService',
-    '$log'
+    'skillIconService'
   ];
 
   function intradayController(
@@ -31,15 +29,13 @@
     NoticeService,
     $interval,
     $timeout,
-    $compile,
     $translate,
     intradayTrafficService,
     intradayPerformanceService,
     intradayMonitorStaffingService,
     intradayLatestTimeService,
     toggleSvc,
-    skillIconService,
-    $log
+    skillIconService
   ) {
     var vm = this;
     var autocompleteSkill;
@@ -47,11 +43,7 @@
     var timeoutPromise;
     var polling;
     var pollingTimeout = 60000;
-    vm.selectedSkillArea;
-    vm.selectedSkill;
     vm.DeleteSkillAreaModal = false;
-    vm.prevArea;
-    vm.drillable;
     vm.activeTab = 0;
     vm.getSkillIcon = skillIconService.get;
     vm.toggles = {
