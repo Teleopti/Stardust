@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private MaxSeatsFeatureOptions _userOptionMaxSeatsFeature;
 		private bool _useAverageShiftLengths;
 		private int _refreshScreenInterval;
+		private int _breakPreferenceStartTimeByMaxHours;
 
 		public AdvancedPreferencesPersonalSettings()
 		{
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			target.UseAverageShiftLengths = _useAverageShiftLengths;
 
 			target.RefreshScreenInterval = _refreshScreenInterval;
+			target.BreakPreferenceStartTimeByMax = TimeSpan.FromHours(_breakPreferenceStartTimeByMaxHours);
 		}
 
 		public void MapFrom(IAdvancedPreferences source)
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_useAverageShiftLengths = source.UseAverageShiftLengths;
 
 			_refreshScreenInterval = source.RefreshScreenInterval;
+			_breakPreferenceStartTimeByMaxHours = source.BreakPreferenceStartTimeByMax.Hours;
 		}
 
 		private void SetDefaultValues()
@@ -56,6 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_userOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
 			_useAverageShiftLengths = true;
 			_refreshScreenInterval = 10;
+			_breakPreferenceStartTimeByMaxHours = 0;
 		}
 	}
 }

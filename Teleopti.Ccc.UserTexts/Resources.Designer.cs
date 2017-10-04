@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -3538,6 +3538,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audit type.
+        /// </summary>
+        public static string AuditType {
+            get {
+                return ResourceManager.GetString("AuditType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authentication error..
         /// </summary>
         public static string AuthenticationError {
@@ -4355,6 +4364,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BpoLineHasIncorrectParameterCount {
             get {
                 return ResourceManager.GetString("BpoLineHasIncorrectParameterCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Break Preferences Start Time By Max:.
+        /// </summary>
+        public static string BreakPreferenceStartTimeByMaxColon {
+            get {
+                return ResourceManager.GetString("BreakPreferenceStartTimeByMaxColon", resourceCulture);
             }
         }
         

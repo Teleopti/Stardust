@@ -1131,7 +1131,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						_schedulerState.CommonStateHolder.ActiveActivities,
 						SchedulerState.DefaultSegmentLength, _schedulerState.Schedules,
 						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences,
-						_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)))
+						_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688),
+						_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002)))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{

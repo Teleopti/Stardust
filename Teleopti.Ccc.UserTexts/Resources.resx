@@ -16607,4 +16607,8 @@ Do you want to participate?</value>
     <value>Planning Group</value>
     <comment>Planning Group for web scheduling</comment>
   </data>
+  <data name="BreakPreferenceStartTimeByMaxColon" xml:space="preserve">
+    <value>Break Preferences Start Time By Max:</value>
+    <comment>Only allow shifts to move startime by x when optimizing</comment>
+  </data>
 </root>

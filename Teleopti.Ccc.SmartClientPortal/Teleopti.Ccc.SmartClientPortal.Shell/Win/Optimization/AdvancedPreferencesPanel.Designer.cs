@@ -35,6 +35,9 @@
 			this.numericUpDownRefreshRate = new System.Windows.Forms.NumericUpDown();
 			this.labelRefreshScreenEveryColon = new System.Windows.Forms.Label();
 			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+			this.labelBreakByMaxHours = new System.Windows.Forms.Label();
+			this.numericUpDownBreakByHours = new System.Windows.Forms.NumericUpDown();
+			this.checkBoxAdvBreakPreferenceStartTimeByMax = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxMaximumSeats = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxMaximumStaffing = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxMinimumStaffing = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
@@ -51,6 +54,8 @@
 			this.tableLayoutPanelRefreshScreen.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).BeginInit();
 			this.tableLayoutPanel8.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownBreakByHours)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvBreakPreferenceStartTimeByMax)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxMaximumSeats)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxMaximumStaffing)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxMinimumStaffing)).BeginInit();
@@ -77,8 +82,8 @@
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 3;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 198F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 177F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 169F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 210F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(420, 451);
@@ -95,18 +100,18 @@
 			this.tableLayoutPanelRefreshScreen.Controls.Add(this.numericUpDownRefreshRate, 0, 0);
 			this.tableLayoutPanelRefreshScreen.Controls.Add(this.labelRefreshScreenEveryColon, 0, 0);
 			this.tableLayoutPanelRefreshScreen.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.tableLayoutPanelRefreshScreen.Location = new System.Drawing.Point(0, 428);
+			this.tableLayoutPanelRefreshScreen.Location = new System.Drawing.Point(0, 422);
 			this.tableLayoutPanelRefreshScreen.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelRefreshScreen.Name = "tableLayoutPanelRefreshScreen";
 			this.tableLayoutPanelRefreshScreen.RowCount = 1;
 			this.tableLayoutPanelRefreshScreen.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelRefreshScreen.Size = new System.Drawing.Size(420, 23);
+			this.tableLayoutPanelRefreshScreen.Size = new System.Drawing.Size(420, 29);
 			this.tableLayoutPanelRefreshScreen.TabIndex = 24;
 			// 
 			// labelShift
 			// 
-			this.labelShift.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.labelShift.Location = new System.Drawing.Point(313, 3);
+			this.labelShift.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelShift.Location = new System.Drawing.Point(313, 4);
 			this.labelShift.Name = "labelShift";
 			this.labelShift.Size = new System.Drawing.Size(98, 20);
 			this.labelShift.TabIndex = 19;
@@ -142,16 +147,21 @@
 			this.labelRefreshScreenEveryColon.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelRefreshScreenEveryColon.Location = new System.Drawing.Point(3, 0);
 			this.labelRefreshScreenEveryColon.Name = "labelRefreshScreenEveryColon";
-			this.labelRefreshScreenEveryColon.Size = new System.Drawing.Size(254, 23);
+			this.labelRefreshScreenEveryColon.Size = new System.Drawing.Size(254, 29);
 			this.labelRefreshScreenEveryColon.TabIndex = 17;
 			this.labelRefreshScreenEveryColon.Text = "xxRefreshScreenEveryColon";
 			this.labelRefreshScreenEveryColon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// tableLayoutPanel8
 			// 
-			this.tableLayoutPanel8.ColumnCount = 2;
-			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel8.ColumnCount = 4;
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 228F));
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
 			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel8.Controls.Add(this.labelBreakByMaxHours, 3, 6);
+			this.tableLayoutPanel8.Controls.Add(this.numericUpDownBreakByHours, 2, 6);
+			this.tableLayoutPanel8.Controls.Add(this.checkBoxAdvBreakPreferenceStartTimeByMax, 0, 6);
 			this.tableLayoutPanel8.Controls.Add(this.checkBoxMaximumSeats, 0, 3);
 			this.tableLayoutPanel8.Controls.Add(this.checkBoxMaximumStaffing, 0, 2);
 			this.tableLayoutPanel8.Controls.Add(this.checkBoxMinimumStaffing, 0, 1);
@@ -159,22 +169,74 @@
 			this.tableLayoutPanel8.Controls.Add(this.checkBoxDoNotBreakMaximumSeats, 1, 4);
 			this.tableLayoutPanel8.Controls.Add(this.checkBoxUseAverageShiftLengths, 0, 5);
 			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 198);
+			this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 169);
 			this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
-			this.tableLayoutPanel8.RowCount = 6;
+			this.tableLayoutPanel8.RowCount = 7;
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel8.Size = new System.Drawing.Size(420, 177);
+			this.tableLayoutPanel8.Size = new System.Drawing.Size(420, 210);
 			this.tableLayoutPanel8.TabIndex = 23;
+			// 
+			// labelBreakByMaxHours
+			// 
+			this.labelBreakByMaxHours.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelBreakByMaxHours.Location = new System.Drawing.Point(313, 185);
+			this.labelBreakByMaxHours.Name = "labelBreakByMaxHours";
+			this.labelBreakByMaxHours.Size = new System.Drawing.Size(98, 20);
+			this.labelBreakByMaxHours.TabIndex = 21;
+			this.labelBreakByMaxHours.Text = "xxHours";
+			this.labelBreakByMaxHours.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// numericUpDownBreakByHours
+			// 
+			this.numericUpDownBreakByHours.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.numericUpDownBreakByHours.Location = new System.Drawing.Point(263, 183);
+			this.numericUpDownBreakByHours.Maximum = new decimal(new int[] {
+            23,
+            0,
+            0,
+            0});
+			this.numericUpDownBreakByHours.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDownBreakByHours.Name = "numericUpDownBreakByHours";
+			this.numericUpDownBreakByHours.Size = new System.Drawing.Size(44, 23);
+			this.numericUpDownBreakByHours.TabIndex = 20;
+			this.numericUpDownBreakByHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownBreakByHours.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
+			// checkBoxAdvBreakPreferenceStartTimeByMax
+			// 
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.BeforeTouchSize = new System.Drawing.Size(247, 24);
+			this.tableLayoutPanel8.SetColumnSpan(this.checkBoxAdvBreakPreferenceStartTimeByMax, 2);
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.DrawFocusRectangle = false;
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.Location = new System.Drawing.Point(10, 183);
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.Name = "checkBoxAdvBreakPreferenceStartTimeByMax";
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.Size = new System.Drawing.Size(247, 24);
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.TabIndex = 12;
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.Text = "xxBreakPreferenceStartTimeByMaxColon";
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.ThemesEnabled = false;
+			this.checkBoxAdvBreakPreferenceStartTimeByMax.CheckStateChanged += new System.EventHandler(this.checkBoxAdvBreakPreferenceStartTimeByMax_CheckStateChanged);
 			// 
 			// checkBoxMaximumSeats
 			// 
-			this.checkBoxMaximumSeats.BeforeTouchSize = new System.Drawing.Size(407, 24);
+			this.checkBoxMaximumSeats.BeforeTouchSize = new System.Drawing.Size(247, 24);
 			this.tableLayoutPanel8.SetColumnSpan(this.checkBoxMaximumSeats, 2);
 			this.checkBoxMaximumSeats.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxMaximumSeats.DrawFocusRectangle = false;
@@ -182,7 +244,7 @@
 			this.checkBoxMaximumSeats.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxMaximumSeats.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMaximumSeats.Name = "checkBoxMaximumSeats";
-			this.checkBoxMaximumSeats.Size = new System.Drawing.Size(407, 24);
+			this.checkBoxMaximumSeats.Size = new System.Drawing.Size(247, 24);
 			this.checkBoxMaximumSeats.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMaximumSeats.TabIndex = 9;
 			this.checkBoxMaximumSeats.Text = "xxMaximumSeats";
@@ -191,7 +253,7 @@
 			// 
 			// checkBoxMaximumStaffing
 			// 
-			this.checkBoxMaximumStaffing.BeforeTouchSize = new System.Drawing.Size(407, 24);
+			this.checkBoxMaximumStaffing.BeforeTouchSize = new System.Drawing.Size(247, 24);
 			this.tableLayoutPanel8.SetColumnSpan(this.checkBoxMaximumStaffing, 2);
 			this.checkBoxMaximumStaffing.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxMaximumStaffing.DrawFocusRectangle = false;
@@ -199,7 +261,7 @@
 			this.checkBoxMaximumStaffing.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxMaximumStaffing.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMaximumStaffing.Name = "checkBoxMaximumStaffing";
-			this.checkBoxMaximumStaffing.Size = new System.Drawing.Size(407, 24);
+			this.checkBoxMaximumStaffing.Size = new System.Drawing.Size(247, 24);
 			this.checkBoxMaximumStaffing.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMaximumStaffing.TabIndex = 7;
 			this.checkBoxMaximumStaffing.Text = "xxMaximumStaffing";
@@ -207,7 +269,7 @@
 			// 
 			// checkBoxMinimumStaffing
 			// 
-			this.checkBoxMinimumStaffing.BeforeTouchSize = new System.Drawing.Size(407, 24);
+			this.checkBoxMinimumStaffing.BeforeTouchSize = new System.Drawing.Size(247, 24);
 			this.tableLayoutPanel8.SetColumnSpan(this.checkBoxMinimumStaffing, 2);
 			this.checkBoxMinimumStaffing.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxMinimumStaffing.DrawFocusRectangle = false;
@@ -215,7 +277,7 @@
 			this.checkBoxMinimumStaffing.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxMinimumStaffing.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMinimumStaffing.Name = "checkBoxMinimumStaffing";
-			this.checkBoxMinimumStaffing.Size = new System.Drawing.Size(407, 24);
+			this.checkBoxMinimumStaffing.Size = new System.Drawing.Size(247, 24);
 			this.checkBoxMinimumStaffing.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMinimumStaffing.TabIndex = 5;
 			this.checkBoxMinimumStaffing.Text = "xxMinimumStaffing";
@@ -230,21 +292,21 @@
 			this.labelShiftSelection.Location = new System.Drawing.Point(3, 3);
 			this.labelShiftSelection.Margin = new System.Windows.Forms.Padding(3);
 			this.labelShiftSelection.Name = "labelShiftSelection";
-			this.labelShiftSelection.Size = new System.Drawing.Size(414, 24);
+			this.labelShiftSelection.Size = new System.Drawing.Size(254, 24);
 			this.labelShiftSelection.TabIndex = 8;
 			this.labelShiftSelection.Text = "xxShiftSelection";
 			this.labelShiftSelection.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// checkBoxDoNotBreakMaximumSeats
 			// 
-			this.checkBoxDoNotBreakMaximumSeats.BeforeTouchSize = new System.Drawing.Size(387, 24);
+			this.checkBoxDoNotBreakMaximumSeats.BeforeTouchSize = new System.Drawing.Size(215, 24);
 			this.checkBoxDoNotBreakMaximumSeats.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxDoNotBreakMaximumSeats.DrawFocusRectangle = false;
-			this.checkBoxDoNotBreakMaximumSeats.Location = new System.Drawing.Point(30, 123);
+			this.checkBoxDoNotBreakMaximumSeats.Location = new System.Drawing.Point(42, 123);
 			this.checkBoxDoNotBreakMaximumSeats.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxDoNotBreakMaximumSeats.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDoNotBreakMaximumSeats.Name = "checkBoxDoNotBreakMaximumSeats";
-			this.checkBoxDoNotBreakMaximumSeats.Size = new System.Drawing.Size(387, 24);
+			this.checkBoxDoNotBreakMaximumSeats.Size = new System.Drawing.Size(215, 24);
 			this.checkBoxDoNotBreakMaximumSeats.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDoNotBreakMaximumSeats.TabIndex = 10;
 			this.checkBoxDoNotBreakMaximumSeats.Text = "xxDoNotBreakMaximumSeats";
@@ -252,7 +314,7 @@
 			// 
 			// checkBoxUseAverageShiftLengths
 			// 
-			this.checkBoxUseAverageShiftLengths.BeforeTouchSize = new System.Drawing.Size(407, 21);
+			this.checkBoxUseAverageShiftLengths.BeforeTouchSize = new System.Drawing.Size(247, 24);
 			this.tableLayoutPanel8.SetColumnSpan(this.checkBoxUseAverageShiftLengths, 2);
 			this.checkBoxUseAverageShiftLengths.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseAverageShiftLengths.DrawFocusRectangle = false;
@@ -260,7 +322,7 @@
 			this.checkBoxUseAverageShiftLengths.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxUseAverageShiftLengths.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseAverageShiftLengths.Name = "checkBoxUseAverageShiftLengths";
-			this.checkBoxUseAverageShiftLengths.Size = new System.Drawing.Size(407, 21);
+			this.checkBoxUseAverageShiftLengths.Size = new System.Drawing.Size(247, 24);
 			this.checkBoxUseAverageShiftLengths.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseAverageShiftLengths.TabIndex = 11;
 			this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengths";
@@ -287,7 +349,7 @@
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(420, 198);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(420, 169);
 			this.tableLayoutPanel6.TabIndex = 22;
 			// 
 			// radioButtonStandardDeviation
@@ -378,6 +440,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).EndInit();
 			this.tableLayoutPanel8.ResumeLayout(false);
 			this.tableLayoutPanel8.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownBreakByHours)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvBreakPreferenceStartTimeByMax)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxMaximumSeats)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxMaximumStaffing)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxMinimumStaffing)).EndInit();
@@ -413,5 +477,8 @@
 		private System.Windows.Forms.NumericUpDown numericUpDownRefreshRate;
 		private System.Windows.Forms.Label labelRefreshScreenEveryColon;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxUseAverageShiftLengths;
+		private System.Windows.Forms.NumericUpDown numericUpDownBreakByHours;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvBreakPreferenceStartTimeByMax;
+		private System.Windows.Forms.Label labelBreakByMaxHours;
 	}
 }

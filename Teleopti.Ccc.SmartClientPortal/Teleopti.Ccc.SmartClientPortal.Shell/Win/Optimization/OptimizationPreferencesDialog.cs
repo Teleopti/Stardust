@@ -42,6 +42,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		private readonly IEnumerable<IPerson> _selectedPersons;
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
 		private readonly bool _hideKeepShifts45688;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002)]
+		private readonly bool _showBreakPreferenceStartTimeByMax46002;
 		private readonly IList<GroupPageLight> _groupPagesForTeamBlockPer;
 
 		public OptimizationPreferencesDialog(
@@ -53,7 +55,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			IScheduleDictionary scheduleDictionary,
 			IEnumerable<IPerson> selectedPersons, 
 			IDaysOffPreferences daysOffPreferences,
-			bool hideKeepShifts45688)
+			bool hideKeepShifts45688,
+			bool showBreakPreferenceStartTimeByMax46002)
 			: this()
 		{
 			Preferences = preferences;
@@ -69,6 +72,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			_scheduleDictionary = scheduleDictionary;
 			_selectedPersons = selectedPersons;
 			_hideKeepShifts45688 = hideKeepShifts45688;
+			_showBreakPreferenceStartTimeByMax46002 = showBreakPreferenceStartTimeByMax46002;
 			_eventAggregator = new EventAggregator();
 		}
 
@@ -84,7 +88,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
 			dayOffPreferencesPanel1.Initialize(DaysOffPreferences);
 			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
-			advancedPreferencesPanel1.Initialize(Preferences.Advanced);
+			advancedPreferencesPanel1.Initialize(Preferences.Advanced, _showBreakPreferenceStartTimeByMax46002);
 			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution, _hideKeepShifts45688);
 			Panels = new List<IDataExchange> { generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1 };
 
