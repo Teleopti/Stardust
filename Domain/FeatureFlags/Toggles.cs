@@ -108,7 +108,6 @@
 		ResourcePlanner_MergeTeamblockClassicIntraday_45508,
 		ResourcePlanner_RetireKeepPercentageOfShifts_45688,
 		ResourcePlanner_BreakPreferenceStartTimeByMax_46002,
-		ResourcePlanner_EasierBlockScheduling_46155,
 
 		Wfm_DisplayOnlineHelp_39402,
 

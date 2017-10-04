@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 
@@ -11,8 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		bool MainShiftEquals(IEditableShift original, IEditableShift current);
         bool DayOffEquals(IScheduleDay original, IScheduleDay current);
 		bool MainShiftBasicEquals(IEditableShift original, IEditableShift current);
-		bool MainShiftBasicEquals(IEditableShift sampleShift, IEditableShift destShift, TimeZoneInfo timeZone);
-	}
+    }
 
     public class ScheduleDayEquator : IScheduleDayEquator
     {
@@ -90,16 +88,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool MainShiftBasicEquals(IEditableShift original, IEditableShift current)
 		{
-			return MainShiftBasicEquals(original, current, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-		}
-
-		public bool MainShiftBasicEquals(IEditableShift original, IEditableShift current, TimeZoneInfo timeZone)
-		{
 			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
 				return false;
 			if (original.LayerCollection.Count != current.LayerCollection.Count)
 				return false;
-
+			var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			for (int layerIndex = 0; layerIndex < original.LayerCollection.Count; layerIndex++)
 			{
 				ILayer<IActivity> originalLayer = original.LayerCollection[layerIndex];
@@ -114,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return true;
 		}
 
-		private static bool activityEquals(ILayer<IActivity> original, ILayer<IActivity> current)
+        private static bool activityEquals(ILayer<IActivity> original, ILayer<IActivity> current)
         {
             return original.Period.Equals(current.Period) && original.Payload.Equals(current.Payload);
         }
