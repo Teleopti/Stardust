@@ -284,44 +284,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			
 			return stateHolder.Schedules.SchedulesForPeriod(period, agent).Count(x => x.PersonAssignment().Period.StartDateTime.Hour == 7);
 		}
-		
-		[TestCase(0, ExpectedResult = false)]
-		[TestCase(30, ExpectedResult = false)]
-		[TestCase(60, ExpectedResult = true)]
-		[TestCase(120, ExpectedResult = true)]
-		[TestCase(200, ExpectedResult = true)]
-		[TestCase(-30, ExpectedResult = false)]
-		[TestCase(-60, ExpectedResult = true)]
-		[TestCase(-120, ExpectedResult = true)]
-		[TestCase(-200, ExpectedResult = true)]
-		[Ignore("To be fixed for PBI #46002")]
-		public bool ShouldRespectStartTimeTolerance_BreakPreferenceStartTimeByMax(int breakPreferenceStartTimeByMaxMinutes)
-		{
-			//this is wrong
-			var scenario = new Scenario();
-			var activity = new Activity();
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var date = new DateOnly(2017, 9, 25);
-			var ruleSetEarly = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 7, 0, 60), new TimePeriodWithSegment(14, 0, 15, 0, 60), shiftCategory));
-			var ruleSetLate = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 10, 0, 60), new TimePeriodWithSegment(17, 0, 18, 0, 60), shiftCategory));
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new RuleSetBag(ruleSetEarly, ruleSetLate), skill).WithSchedulePeriodOneWeek(date);
-			var prefDay = new PreferenceDay(agent, date, new PreferenceRestriction
-			{
-				StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))
-			});
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, date, new[] { agent }, 
-				new IScheduleData[]{new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16)), prefDay}, 
-				skill.CreateSkillDayWithDemandPerHour(scenario, date, TimeSpan.FromMinutes(1), new Tuple<int, TimeSpan>(12, TimeSpan.FromMinutes(360))));
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UsePreferences = true;
-			optimizationPreferences.General.PreferencesValue = 0;
-			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(breakPreferenceStartTimeByMaxMinutes);
-
-			Target.Optimize(new[] { agent }, date.ToDateOnlyPeriod(), optimizationPreferences, new NoIntradayOptimizationCallback());
-			
-			return stateHolder.Schedules.SchedulesForDay(date).Any(x => x.PersonAssignment().Period.StartDateTime.Hour != 8);
-		}
 
 		public IntradayOptimizationRestrictionsDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerBreakPreferenceStartTimeByMax46002)
 		{
