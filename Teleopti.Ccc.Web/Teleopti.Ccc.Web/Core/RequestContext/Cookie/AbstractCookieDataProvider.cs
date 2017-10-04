@@ -125,18 +125,23 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			return makeTicket(userName, userData, isPersistent, maximumSessionTimeInMinutes);
 		}
 
-		private FormsAuthenticationTicket makeTicket(string userName, string userData, bool isPersistent, double maximumSessionTimeInMinutes)
+		private FormsAuthenticationTicket makeTicket(string userName, string userData, bool isPersistent,
+			double maximumSessionTimeInMinutes)
 		{
 			var longTimeSpan = maximumSessionTimeInMinutes > 0
 				? TimeSpan.FromMinutes(maximumSessionTimeInMinutes)
 				: _sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpanLong;
+			var shortTimeSpan = maximumSessionTimeInMinutes > 0 && maximumSessionTimeInMinutes <
+								_sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan.TotalMinutes
+				? TimeSpan.FromMinutes(maximumSessionTimeInMinutes)
+				: _sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan;
 			return makeTicket(
 				userName,
 				userData,
 				_now.UtcDateTime()
 					.Add(isPersistent
 						? longTimeSpan
-						: _sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan).ToLocalTime()
+						: shortTimeSpan).ToLocalTime()
 			);
 		}
 

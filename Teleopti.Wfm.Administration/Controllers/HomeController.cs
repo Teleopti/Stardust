@@ -60,6 +60,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var builderAnal = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString);
 			var builderAgg = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
 
+			var maximumSessionTimeInMinutes = tenant.GetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes);
 			return Json(new TenantModel
 			{
 				Name = tenant.Name,
@@ -72,7 +73,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Version = _checkDatabaseVersions.GetVersions(tenant.DataSourceConfiguration.ApplicationConnectionString),
 				CommandTimeout = int.Parse(tenant.ApplicationConfig[Environment.CommandTimeout]),
 				MobileQRCodeUrl = tenant.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl),
-				MaximumSessionTime = int.Parse(tenant.GetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes)),
+				MaximumSessionTime =
+					string.IsNullOrEmpty(maximumSessionTimeInMinutes)
+						? 0
+						: int.Parse(maximumSessionTimeInMinutes),
 				Active = tenant.Active
 			});
 		}

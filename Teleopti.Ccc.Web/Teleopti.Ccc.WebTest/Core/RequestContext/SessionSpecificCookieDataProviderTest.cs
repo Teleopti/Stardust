@@ -112,6 +112,34 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		}
 
 		[Test]
+		public void UseMaximumSessionTimeInConfigurationAsShortTimeIfMaximumSessionTimeInConfigurationLessThanDefault()
+		{
+			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), "29");
+			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
+
+			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
+			FormsAuthentication.Decrypt(
+				_cookieCollection[_sessionSpecificCookieSettingsForWfm.AuthenticationCookieName].Value).Expiration.Subtract(
+					now.ServerDateTime_DontUse())
+				.Should()
+				.Be.EqualTo(TimeSpan.FromMinutes(29));
+		}
+
+		[Test]
+		public void UseDefaultAsShortTimeIfMaximumSessionTimeInConfigurationLargerThanDefault()
+		{
+			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), "31");
+			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
+
+			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
+			FormsAuthentication.Decrypt(
+				_cookieCollection[_sessionSpecificCookieSettingsForWfm.AuthenticationCookieName].Value).Expiration.Subtract(
+					now.ServerDateTime_DontUse())
+				.Should()
+				.Be.EqualTo(_sessionSpecificCookieSettingsForWfm.AuthenticationCookieExpirationTimeSpan);
+		}
+
+		[Test]
 		public void GrabShouldReturnNullWhenCookieIsMissing()
 		{
 			var result = target.GrabFromCookie();
