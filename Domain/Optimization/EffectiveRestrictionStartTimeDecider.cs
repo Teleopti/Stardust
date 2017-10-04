@@ -11,8 +11,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class EffectiveRestrictionStartTimeDecider : IEffectiveRestrictionStartTimeDecider
 	{
-		//agent's missing personperiod
-		//Agent missing rulesetbag
 		//kolla effectiveRestriction.IsPreferenceDay?
 		
 		public IEffectiveRestriction Decide(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IScheduleDay scheduleDay)
