@@ -23,10 +23,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_period = period;
 		}
 
-		public virtual DateTimePeriod Period
-		{
-			get { return _period; }
-		}
+		public virtual DateTimePeriod Period => _period;
 
 		public abstract void Deny(IPerson denyPerson);
 
@@ -40,15 +37,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			set { _textForNotification = value; }
 		}
 
-		public virtual bool ShouldNotifyWithMessage
-		{
-			get { return !string.IsNullOrEmpty(TextForNotification); }
-		}
+		public virtual bool ShouldNotifyWithMessage => !string.IsNullOrEmpty(TextForNotification);
 
-		public virtual IList<IPerson> ReceiversForNotification
-		{
-			get { return new List<IPerson> { Person }; }
-		}
+		public virtual IList<IPerson> ReceiversForNotification => new List<IPerson> { Person };
 
 		protected internal abstract IEnumerable<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService);
 
@@ -57,7 +48,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			get
 			{
 				IPersonRequest personRequest = Parent as IPersonRequest;
-				return personRequest == null ? null : personRequest.Person;
+				return personRequest?.Person;
 			}
 		}
 
@@ -104,22 +95,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		}
 
 		#region PersonfromTo
-		public virtual IPerson PersonFrom
-		{
-			get
-			{
-				return null;
+		public virtual IPerson PersonFrom => null;
 
-			}
-		}
+		public virtual IPerson PersonTo => null;
 
-		public virtual IPerson PersonTo
-		{
-			get
-			{
-				return null;
-			}
-		}
 		#endregion //PersonfromTo
 
 		

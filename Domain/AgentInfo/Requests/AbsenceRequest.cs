@@ -47,14 +47,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             _absence = absence;
             _typeDescription = Resources.RequestTypeAbsence;
         }
+		
+        public virtual IAbsence Absence => _absence;
 
-     
-        public virtual IAbsence Absence
-        {
-            get { return _absence; }
-        }
-
-	    public override void Deny(IPerson denyPerson)
+		public override void Deny(IPerson denyPerson)
 		{
 			var hasBeenWaitlisted = ((PersonRequest)Parent).IsWaitlisted;
 
@@ -67,8 +63,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	    {
 			setupTextForNotification(Resources.AbsenceRequestForOneDayWasCancelled, Resources.AbsenceRequestWasCancelled);
 		}
-
-
+		
 		public virtual bool IsRequestForOneLocalDay(TimeZoneInfo timeZone)
     	{
     		return Period.StartDateTimeLocal(timeZone).Date == Period.EndDateTimeLocal(timeZone).Date;
@@ -124,18 +119,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             set{_typeDescription = value;}
         }
 
-    	public override RequestType RequestType
-    	{
-			get { return RequestType.AbsenceRequest; }
-    	}
+    	public override RequestType RequestType => RequestType.AbsenceRequest;
 
-    	/// <summary>
+		/// <summary>
         /// Description for the absence
         /// </summary>
-        public override Description RequestPayloadDescription
-        {
-            get{return _absence.Description;}
-        }
+        public override Description RequestPayloadDescription => _absence.Description;
 
 		private void setupTextForNotification(string oneDayRequestMessage, string requestMessage)
 		{
@@ -158,7 +147,5 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 							culture.DateTimeFormat.ShortDatePattern, culture));
 			}
 		}
-
-
 	}
 }

@@ -42,16 +42,9 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
                 if(altered.ShouldSendPushMessageWhenAltered())
                 {
                     ISendPushMessageService sendPushMessageService =altered.PushMessageWhenAlteredInformation();
-                    if(sendPushMessageService!=null)
-                    {
-                       ISendPushMessageReceipt receipt= sendPushMessageService.SendConversationWithReceipt(repository);
-                        if(receipt!=null)
-                        {
-                            receipt.AddedRoots().ForEach(addedRoots.Add);
-                        }
-
-                    }
-                }
+					ISendPushMessageReceipt receipt= sendPushMessageService?.SendConversationWithReceipt(repository);
+					receipt?.AddedRoots().ForEach(addedRoots.Add);
+				}
             }
 
             return addedRoots;
