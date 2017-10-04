@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 
 			builder.RegisterType<BusinessUnitsViewModelFactory>().As<IBusinessUnitsViewModelFactory>();
 			builder.RegisterType<SharedSettingsFactory>().As<ISharedSettingsFactory>().SingleInstance();
+			builder.RegisterType<MaximumSessionTimeProvider>().SingleInstance();
 		}
 	}
 }

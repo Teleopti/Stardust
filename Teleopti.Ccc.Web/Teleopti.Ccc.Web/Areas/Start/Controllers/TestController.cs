@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			if (result.Successful)
 			{
-				_formsAuthentication.SetAuthCookie(userName + TokenIdentityProvider.ApplicationIdentifier, isPersistent, isLogonFromBrowser);
+				_formsAuthentication.SetAuthCookie(userName + TokenIdentityProvider.ApplicationIdentifier, isPersistent, isLogonFromBrowser, result.DataSource.DataSourceName);
 				tenantPassword = _findPersonInfo.GetById(result.Person.Id.Value).TenantPassword;
 			}
 
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public virtual ViewResult CorruptMyCookie()
 		{
 			var wrong = Convert.ToBase64String(Convert.FromBase64String("Totally wrong"));
-			_sessionSpecificWfmCookieProvider.MakeCookie("UserName", wrong, false, true);
+			_sessionSpecificWfmCookieProvider.MakeCookie("UserName", wrong, false, true, "");
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -199,8 +199,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[TestLog]
 		public virtual ViewResult NonExistingDatasourceCookie()
 		{
-			var data = new SessionSpecificData(Guid.NewGuid(), "datasource", Guid.NewGuid(), "tenantpassword");
-			_sessionSpecificWfmCookieProvider.StoreInCookie(data, false, true);
+			var dataSourceName = "datasource";
+			var data = new SessionSpecificData(Guid.NewGuid(), dataSourceName, Guid.NewGuid(), "tenantpassword");
+			_sessionSpecificWfmCookieProvider.StoreInCookie(data, false, true, dataSourceName);
 
 			return View("Message", new TestMessageViewModel
 			{

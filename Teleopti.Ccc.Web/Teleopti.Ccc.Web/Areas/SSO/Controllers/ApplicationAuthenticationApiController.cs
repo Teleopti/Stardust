@@ -20,18 +20,21 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		private readonly IApplicationUserQuery _applicationUserQuery;
 		private readonly ISsoAuthenticator _authenticator;
 		private readonly ILogLogonAttempt _logLogonAttempt;
+		private readonly MaximumSessionTimeProvider _maximumSessionTimeProvider;
 
 		public ApplicationAuthenticationApiController(IFormsAuthentication formsAuthentication,
-																							IChangePersonPassword changePersonPassword,
-																							IApplicationUserQuery applicationUserQuery,
-																							ISsoAuthenticator authenticator,
-																							ILogLogonAttempt logLogonAttempt)
+			IChangePersonPassword changePersonPassword,
+			IApplicationUserQuery applicationUserQuery,
+			ISsoAuthenticator authenticator,
+			ILogLogonAttempt logLogonAttempt, 
+			MaximumSessionTimeProvider maximumSessionTimeProvider)
 		{
 			_formsAuthentication = formsAuthentication;
 			_changePersonPassword = changePersonPassword;
 			_applicationUserQuery = applicationUserQuery;
 			_authenticator = authenticator;
 			_logLogonAttempt = logLogonAttempt;
+			_maximumSessionTimeProvider = maximumSessionTimeProvider;
 		}
 
 		[HttpPost, Route("SSO/ApplicationAuthenticationApi/Password")]
@@ -50,8 +53,8 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				
 				return Ok(new PasswordWarningViewModel {Failed = true, Message = result.Message});
 			}
-
-			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier, model.RememberMe, model.IsLogonFromBrowser);
+			
+			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier, model.RememberMe, model.IsLogonFromBrowser, result.DataSource.DataSourceName);
 			_logLogonAttempt.SaveAuthenticateResult(model.UserName, result.PersonId(), true);
 			return Ok(new PasswordWarningViewModel { WillExpireSoon = result.HasMessage});
 		}
@@ -61,10 +64,13 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		[NoTenantAuthentication]
 		public virtual IHttpActionResult ChangePassword([FromBody]ChangePasswordInput model)
 		{
+			string tenantName;
 			try
 			{
 				//should not have dep to tenancy here - need to rewrite client model to have the id
-				var hackToGetPersonId = _applicationUserQuery.Find(model.UserName).Id;
+				var personInfo = _applicationUserQuery.Find(model.UserName);
+				tenantName = personInfo.Tenant.Name;
+				var hackToGetPersonId = personInfo.Id;
 				//
 				_changePersonPassword.Modify(hackToGetPersonId, model.OldPassword, model.NewPassword);
 			}
@@ -75,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				ModelState.AddModelError("Error", errString);
 				return BadRequest(ModelState);
 			}
-			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier, false, true);
+			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier, false, true, tenantName);
 			return Ok(true);
 		}
 	}

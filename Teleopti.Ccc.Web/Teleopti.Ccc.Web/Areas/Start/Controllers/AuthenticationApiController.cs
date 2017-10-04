@@ -2,7 +2,6 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -17,21 +16,18 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ILogLogonAttempt _logLogonAttempt;
 		private readonly IWebLogOn _webLogon;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
-		private readonly IToggleManager _toggleManager;
 
 		public AuthenticationApiController(IBusinessUnitsViewModelFactory businessUnitViewModelFactory,
 			IIdentityLogon identityLogon,
 			ILogLogonAttempt logLogonAttempt,
 			IWebLogOn webLogon,
-			IDataSourceForTenant dataSourceForTenant,
-			IToggleManager toggleManager)
+			IDataSourceForTenant dataSourceForTenant)
 		{
 			_businessUnitViewModelFactory = businessUnitViewModelFactory;
 			_identityLogon = identityLogon;
 			_logLogonAttempt = logLogonAttempt;
 			_webLogon = webLogon;
 			_dataSourceForTenant = dataSourceForTenant;
-			_toggleManager = toggleManager;
 		}
 
 		[HttpGet, Route("start/authenticationapi/businessunits")]
@@ -55,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_logLogonAttempt.SaveAuthenticateResult(string.Empty, result.PersonId(), result.Successful);
 			if (!result.Successful)
 				return errorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
+
 			try
 			{
 				_webLogon.LogOn(result.DataSource.DataSourceName, model.BusinessUnitId, result.Person.Id.Value,

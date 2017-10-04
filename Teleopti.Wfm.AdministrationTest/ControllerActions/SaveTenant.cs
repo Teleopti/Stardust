@@ -132,6 +132,37 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			}
 		}
 
+		[Test]
+		public void ShouldSaveMaximumSessionTimeToApplicationConfig()
+		{
+			var maximumSessionTimeInMinutes = 480;
+			SetupTenant();
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var model = new UpdateTenantModel
+				{
+					NewName = "Old One",
+					OriginalName = "Old One",
+					Server = "(local)",
+					UserName = "ola",
+					Password = "password",
+					AnalyticsDatabase = "Southwind",
+					AppDatabase = "Southwind",
+					CommandTimeout = 180,
+					Active = false,
+					MobileQRCodeUrl = string.Empty,
+					MaximumSessionTimeInMinutes = maximumSessionTimeInMinutes
+				};
+				Target.Save(model);
+			}
+
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var loadedTenant = Tenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
+				loadedTenant.GetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes).Should().Be.EqualTo(maximumSessionTimeInMinutes.ToString());
+			}
+		}
+
 		protected void SetupTenant()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");

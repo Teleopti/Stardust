@@ -6,8 +6,10 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.Web;
+using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.WebTest.Core.RequestContext
@@ -22,10 +24,13 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		private SessionSpecificTeleoptiCookieProvider target;
 		private ISessionSpecificCookieSettings _sessionSpecificCookieSettingsForTeleoptiIdentityProvider;
 		private HttpCookieCollection _cookieCollection;
+		private FindTenantByNameWithEnsuredTransactionFake _findTenantByNameWithEnsuredTransactionFake;
+		private static string _datasourcename = "DataSourceName";
+
 
 		private static SessionSpecificData generateSessionSpecificData()
 		{
-			return new SessionSpecificData(Guid.NewGuid(), "DataSourceName", Guid.NewGuid(), RandomName.Make());
+			return new SessionSpecificData(Guid.NewGuid(), _datasourcename, Guid.NewGuid(), RandomName.Make());
 		}
 
 		[SetUp]
@@ -45,8 +50,10 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			now = new ThisIsNow(new DateTime(2013, 9, 23, 12, 0, 0));
 
 			var sessionSpecificCookieSettingsProvider = new SessionSpecificCookieSettingsProvider();
+			_findTenantByNameWithEnsuredTransactionFake = new FindTenantByNameWithEnsuredTransactionFake();
+			_findTenantByNameWithEnsuredTransactionFake.Has(new Tenant(_datasourcename));
 			_sessionSpecificCookieSettingsForTeleoptiIdentityProvider = sessionSpecificCookieSettingsProvider.ForTeleopti();
-			target = new SessionSpecificTeleoptiCookieProvider(new FakeCurrentHttpContext(httpContext), sessionSpecificCookieSettingsProvider, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
+			target = new SessionSpecificTeleoptiCookieProvider(new FakeCurrentHttpContext(httpContext), sessionSpecificCookieSettingsProvider, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()), new MaximumSessionTimeProvider(_findTenantByNameWithEnsuredTransactionFake));
 		}
 
 		[Test]
@@ -54,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
 
-			target.StoreInCookie(sessionSpecificData, false, false);
+			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
 
 			_cookieCollection[_sessionSpecificCookieSettingsForTeleoptiIdentityProvider.AuthenticationCookieName].Should().Not.Be.Null();
 		}
@@ -72,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			// Good enought?
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
-			target.StoreInCookie(sessionSpecificData, false, false);
+			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
 
 			var result = target.GrabFromCookie();
 
@@ -87,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldExpireCookie()
 		{
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
-			target.StoreInCookie(sessionSpecificData, false, false);
+			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
 
 			target.GrabFromCookie().Should().Not.Be.Null();
 

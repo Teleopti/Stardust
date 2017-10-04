@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly ILogOnOff _logOnOff;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
 		private readonly ISessionSpecificWfmCookieProvider _sessionSpecificWfmCookieProvider;
-		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
-		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IAuthorization _authorization;
 
 		public WebLogOn(
@@ -24,17 +22,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			IDataSourceForTenant dataSourceForTenant,
 			IRepositoryFactory repositoryFactory,
 			ISessionSpecificWfmCookieProvider sessionSpecificWfmCookieProvider,
-			IRoleToPrincipalCommand roleToPrincipalCommand,
-			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
-			IAuthorization authorization
-			)
+			IAuthorization authorization)
 		{
 			_logOnOff = logOnOff;
 			_dataSourceForTenant = dataSourceForTenant;
 			_repositoryFactory = repositoryFactory;
 			_sessionSpecificWfmCookieProvider = sessionSpecificWfmCookieProvider;
-			_roleToPrincipalCommand = roleToPrincipalCommand;
-			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_authorization = authorization;
 		}
 
@@ -59,9 +52,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				if (!allowed)
 					throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");
 			}
-
+			
 			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, tenantPassword);
-			_sessionSpecificWfmCookieProvider.StoreInCookie(sessionSpecificData, isPersistent, isLogonFromBrowser);
+			_sessionSpecificWfmCookieProvider.StoreInCookie(sessionSpecificData, isPersistent, isLogonFromBrowser, dataSourceName);
 			_sessionSpecificWfmCookieProvider.RemoveAuthBridgeCookie();
 		}
 	}

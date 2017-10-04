@@ -6,6 +6,7 @@ using System.Web.Security;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 {
@@ -15,21 +16,23 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		private readonly ISessionSpecificCookieSettings _sessionSpecificCookieDataProviderSettings;
 		private readonly INow _now;
 		private readonly ISessionSpecificDataStringSerializer _dataStringSerializer;
+		private readonly MaximumSessionTimeProvider _maximumSessionTimeProvider;
 
-		protected AbstractCookieDataProvider(ICurrentHttpContext httpContext, ISessionSpecificCookieSettings sessionSpecificCookieDataProviderSettings, INow now, ISessionSpecificDataStringSerializer dataStringSerializer)
+		protected AbstractCookieDataProvider(ICurrentHttpContext httpContext, ISessionSpecificCookieSettings sessionSpecificCookieDataProviderSettings, INow now, ISessionSpecificDataStringSerializer dataStringSerializer, MaximumSessionTimeProvider maximumSessionTimeProvider)
 		{
 			_httpContext = httpContext;
 			_sessionSpecificCookieDataProviderSettings = sessionSpecificCookieDataProviderSettings;
 			_now = now;
 			_dataStringSerializer = dataStringSerializer;
+			_maximumSessionTimeProvider = maximumSessionTimeProvider;
 		}
 
-		public void StoreInCookie(SessionSpecificData data, bool isPersistent, bool isLogonFromBrowser)
+		public void StoreInCookie(SessionSpecificData data, bool isPersistent, bool isLogonFromBrowser, string tenantName)
 		{
 			var userData = _dataStringSerializer.Serialize(data);
 			var userName = data.PersonId.ToString();
 
-			MakeCookie(userName, userData, isPersistent, isLogonFromBrowser);
+			MakeCookie(userName, userData, isPersistent, isLogonFromBrowser, tenantName);
 		}
 
 		public SessionSpecificData GrabFromCookie()
@@ -94,9 +97,9 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			httpCookieCollection.Add(cookie);
 		}
 
-		public void MakeCookie(string userName, string userData, bool isPersistent, bool isLogonFromBrowser)
+		public void MakeCookie(string userName, string userData, bool isPersistent, bool isLogonFromBrowser, string tenantName)
 		{
-			var ticket = makeTicket(userName, userData, isPersistent);
+			var ticket = makeTicket(userName, userData, isPersistent, tenantName);
 
 			var encryptedTicket = encryptTicket(ticket);
 
@@ -116,16 +119,25 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			setCookie(cookie);
 		}
 
-		private FormsAuthenticationTicket makeTicket(string userName, string userData, bool isPersistent)
+		private FormsAuthenticationTicket makeTicket(string userName, string userData, bool isPersistent, string tenantName)
 		{
+			var maximumSessionTimeInMinutes = _maximumSessionTimeProvider.ForTenant(tenantName);
+			return makeTicket(userName, userData, isPersistent, maximumSessionTimeInMinutes);
+		}
+
+		private FormsAuthenticationTicket makeTicket(string userName, string userData, bool isPersistent, double maximumSessionTimeInMinutes)
+		{
+			var longTimeSpan = maximumSessionTimeInMinutes > 0
+				? TimeSpan.FromMinutes(maximumSessionTimeInMinutes)
+				: _sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpanLong;
 			return makeTicket(
 				userName,
 				userData,
 				_now.UtcDateTime()
 					.Add(isPersistent
-						? _sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpanLong
+						? longTimeSpan
 						: _sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan).ToLocalTime()
-				);
+			);
 		}
 
 		private FormsAuthenticationTicket makeTicket(string userName, string userData, DateTime expiration)
@@ -147,12 +159,14 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			if (!_sessionSpecificCookieDataProviderSettings.AuthenticationCookieSlidingExpiration) return;
 
 			if (!timeToRenewTicket(ticket)) return;
-
-			var newTicket = makeTicket(ticket.Name, ticket.UserData, false);
+			
+			var newTicket = makeTicket(ticket.Name, ticket.UserData, false, (ticket.Expiration - ticket.IssueDate).TotalMinutes);
 			cookie.Value = encryptTicket(newTicket);
 			cookie.HttpOnly = true;
 			setCookie(cookie);
 		}
+
+		
 
 		private bool timeToRenewTicket(FormsAuthenticationTicket ticket)
 		{

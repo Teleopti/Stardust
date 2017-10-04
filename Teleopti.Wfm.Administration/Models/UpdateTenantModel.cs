@@ -13,5 +13,6 @@ namespace Teleopti.Wfm.Administration.Models
 	    public bool Active { get; set; }
 		public bool UseIntegratedSecurity { get; set; }
 		public string MobileQRCodeUrl { get; set; }
+		public int MaximumSessionTimeInMinutes { get; set; }
 	}
 }

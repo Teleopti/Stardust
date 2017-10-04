@@ -701,6 +701,7 @@
     <Compile Include="Areas\SkillGroup\SkillGroupInput.cs" />
     <Compile Include="Areas\Staffing\Controllers\StaffingController.cs" />
     <Compile Include="Areas\Start\Controllers\UserTokenController.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\MaximumSessionTimeProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\EditScheduleNoteFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\FavoriteSearchProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Models\FavoriteSearchViewModel.cs" />
