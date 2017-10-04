@@ -47,52 +47,43 @@
 
 		faker.fake(/\.\.\/api\/AgentStates\/For(.*)/,
 			function (params) {
-				var ret = (function () {
-					if (params.siteIds != null && params.skillIds != null)
-						return agentStates.filter(function (a) {
-							return params.skillIds.indexOf(a.SkillId) >= 0
-						}).filter(function (a) {
-							return params.siteIds.indexOf(a.SiteId) >= 0
-						});
-					if (params.siteIds != null)
-						return agentStates.filter(function (a) {
-							return params.siteIds.indexOf(a.SiteId) >= 0
-						});
-					if (params.teamIds != null && params.skillIds != null)
-						return agentStates.filter(function (a) {
-							return params.skillIds.indexOf(a.SkillId) >= 0
-						}).filter(function (a) {
-							return params.teamIds.indexOf(a.TeamId) >= 0
-						});
-					if (params.teamIds != null)
-						return agentStates.filter(function (a) {
-							return params.teamIds.indexOf(a.TeamId) >= 0
-						});
-					return agentStates.filter(function (a) {
+				var result = agentStates;
+				
+				// shouldnt it include both sites and teams if both are given?
+				// keeping the possibly wrong behavior for now...
+				if (params.siteIds)
+					result = result.filter(function (a) {
+						return params.siteIds.indexOf(a.SiteId) >= 0
+					});
+				else if (params.teamIds)
+					result = result.filter(function (a) {
+						return params.teamIds.indexOf(a.TeamId) >= 0
+					});
+				
+				if (params.skillIds)
+					result = result.filter(function (a) {
 						return params.skillIds.indexOf(a.SkillId) >= 0
 					});
-				})();
-				if (params.inAlarm == 'true')
-					ret = agentStatesInAlarm(ret);
+				
+				if (params.inAlarm == 'true'){
+					result = result.filter(function (s) {
+						return s.TimeInAlarm > 0;
+					}).sort(function (s1, s2) {
+						return s2.TimeInAlarm - s1.TimeInAlarm;
+					});
+				}
+				
 				if (params.excludedStateIds)
-					ret = ret.filter(function (s) {
+					result = result.filter(function (s) {
 						return params.excludedStateIds.indexOf(s.StateId) === -1;
 					});
 
 				return [200, {
 					Time: serverTime,
-					States: ret
+					States: result
 				}];
 			});
-
-		function agentStatesInAlarm(collection) {
-			return collection.filter(function (s) {
-				return s.TimeInAlarm > 0;
-			}).sort(function (s1, s2) {
-				return s2.TimeInAlarm - s1.TimeInAlarm;
-			});
-		}
-
+		
 		faker.fake(/\.\.\/api\/SkillArea\/For(.*)/,
 			function (params) {
 				var result = skillAreas
@@ -118,8 +109,13 @@
 			function (params) {
 				var uniqueSiteIds = [];
 				var returnOrg = [];
-				var skillIdsArray = angular.isArray(params.skillIds) ? params.skillIds : params.skillIds.split(",");
-				skillIdsArray.forEach(function (key) {
+				var skillIds = angular.isArray(params.skillIds) ? params.skillIds : params.skillIds.split(",");
+				skillIds.forEach(function (key) {
+					// keeping behavior, although this doesnt seem correct either
+					if (!sitesWithTeamsOnSkills[key])
+						return;
+					if (sitesWithTeamsOnSkills[key].length === 0)
+						return;
 					if (uniqueSiteIds.indexOf(sitesWithTeamsOnSkills[key][0].Id) < 0) {
 						uniqueSiteIds = uniqueSiteIds.concat(sitesWithTeamsOnSkills[key][0].Id);
 						returnOrg = returnOrg.concat(sitesWithTeamsOnSkills[key]);
@@ -288,12 +284,12 @@
 		}
 
 		function withSkillAreas(newSkillAreas) {
-			newSkillAreas.forEach(function (e) { skillAreas.push(e) })
+			newSkillAreas.forEach(function (e) { skillAreas.push(e) });
 			return this;
 		}
 
 		function withPhoneState(phoneState) {
-			phoneStates.push(phoneState)
+			phoneStates.push(phoneState);
 			return this;
 		}
 
@@ -319,7 +315,6 @@
 		function withOrganizationOnSkills(siteWithTeams, skillIds) {
 			skillIds.split(",").forEach(function (key) {
 				var skillIdAsAKey = key.trim();
-				//organizationsOnSkills[skillIdAsAKey] = organization;
 				if (angular.isDefined(sitesWithTeamsOnSkills[skillIdAsAKey]))
 					sitesWithTeamsOnSkills[skillIdAsAKey] = sitesWithTeamsOnSkills[skillIdAsAKey].concat(siteWithTeams);
 				else
