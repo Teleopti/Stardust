@@ -369,7 +369,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			ResourceCalculation.NumberOfCalls.Should().Be(6);
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldProcessNonOverlappingPeriodsAtTheSameTime()
 		{
 			SetUp();
@@ -441,6 +441,79 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			waitListedRequest2.IsApproved.Should().Be(true);
 			waitListedRequest3.IsApproved.Should().Be(true);
 			ResourceCalculation.NumberOfCalls.Should().Be(3);
+		}
+
+		[Test]
+		public void ShouldProcess3OverlappingPeriodsSeparately()
+		{
+			SetUp();
+			Now.Is(new DateTime(2016, 12, 1, 6, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("phone");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
+
+			var waitListedAgent1 = PersonRepository.Has(skill);
+			var waitListedAgent2 = PersonRepository.Has(skill);
+			var waitListedAgent3 = PersonRepository.Has(skill);
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+
+			});
+			wfcs.AbsenceRequestWaitlistEnabled = true;
+			wfcs.AbsenceRequestWaitlistProcessOrder = WaitlistProcessOrder.BySeniority;
+			waitListedAgent1.WorkflowControlSet = wfcs;
+			waitListedAgent2.WorkflowControlSet = wfcs;
+			waitListedAgent3.WorkflowControlSet = wfcs;
+
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 10);
+			var period2 = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 11);
+			var period3 = new DateTimePeriod(2016, 12, 1, 10, 2016, 12, 1, 12);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent1, scenario, activity, period, new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent2, scenario, activity, period2, new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent3, scenario, activity, period3, new ShiftCategory("category")));
+
+			IPersonRequest waitListedRequest1 = new PersonRequest(waitListedAgent1, new AbsenceRequest(absence, period)).WithId();
+			IPersonRequest waitListedRequest2 = new PersonRequest(waitListedAgent2, new AbsenceRequest(absence, period2)).WithId();
+			IPersonRequest waitListedRequest3 = new PersonRequest(waitListedAgent3, new AbsenceRequest(absence, period3)).WithId();
+			waitListedRequest1.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			waitListedRequest2.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			waitListedRequest3.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			PersonRequestRepository.Add(waitListedRequest1);
+			PersonRequestRepository.Add(waitListedRequest2);
+			PersonRequestRepository.Add(waitListedRequest3);
+
+			var period0 = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(0)), new[] {skill.Id.GetValueOrDefault()}, 13),
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(1)), new[] {skill.Id.GetValueOrDefault()}, 13),
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(2)), new[] {skill.Id.GetValueOrDefault()}, 13),
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(3)), new[] {skill.Id.GetValueOrDefault()}, 13)
+			});
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 10));
+
+			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
+
+			waitListedRequest1.IsApproved.Should().Be(true);
+			waitListedRequest2.IsApproved.Should().Be(true);
+			waitListedRequest3.IsApproved.Should().Be(true);
+			ResourceCalculation.NumberOfCalls.Should().Be(4);
 		}
 
 		[Test]

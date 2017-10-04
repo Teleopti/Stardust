@@ -2,7 +2,9 @@
 declare @start datetime = '2016-04-03 00:00:00' 
 declare @end datetime = '2016-04-20 00:00:00' 
 declare @startRequest datetime = '2016-04-06 8:00:00' 
-declare @endRequest datetime = '2016-04-06 17:00:00'
+declare @endRequest datetime = '2016-04-06 13:00:00'
+declare @startRequest2 datetime = '2016-04-06 14:00:00' 
+declare @endRequest2 datetime = '2016-04-06 17:00:00'
 --select * 
 delete 
 from PersonAbsence
@@ -22,7 +24,7 @@ truncate table [PerfA].[dbo].[JobStartTime]
 -- ska ha person period och helst schema under perioden
 -- skapa person request på dom
 
-select distinct top 100 p.* into #tempPerson 
+select distinct top 50 p.* into #tempPerson 
 from person p
 inner join personperiod pp on pp.Parent = p.id
 inner join Team t on t.id = pp.team
@@ -60,6 +62,14 @@ BEGIN
 
 	select @RequestId = newid()
 	INSERT INTO Request SELECT @RequestId, @PersonRequestId, DATEADD(d, @cnt, @startRequest), DATEADD(d, @cnt, @endRequest)
+	INSERT INTO AbsenceRequest SELECT @RequestId, '3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F' -- SEMESTER
+
+	select @PersonRequestId = newid()
+	insert into PersonRequest select @PersonRequestId, 1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67', '3F0886AB-7B25-4E95-856A-0D726EDC2A67', 
+	'2016-12-25', '2016-12-25',@person_id, 5, 'Performance test waitlist', 'of absence request', 0,  '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B', '', GETUTCDATE(),null
+
+	select @RequestId = newid()
+	INSERT INTO Request SELECT @RequestId, @PersonRequestId, DATEADD(d, @cnt, @startRequest2), DATEADD(d, @cnt, @endRequest2)
 	INSERT INTO AbsenceRequest SELECT @RequestId, '3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F' -- SEMESTER
 
 		FETCH NEXT FROM request_cursor   
