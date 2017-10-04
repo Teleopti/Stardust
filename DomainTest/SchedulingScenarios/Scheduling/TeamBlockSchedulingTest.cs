@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePreferenceDayRepository PreferenceDayRepository;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -790,6 +791,52 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(9);
 		}
 
+		[Test]
+		[Ignore("#45968 To be fixed")]
+		public void ShouldHandlePartlyOpenedSkillCorrectlyForAgentsInStrangeTimezones()
+		{
+			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());
+			var date = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("_");
+			//opens UTC 10:00
+			var skill = SkillRepository.Has("Open", activity, new TimePeriod(11, 19)).InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			var scenario = ScenarioRepository.Has("_");
+			//starts UTC 10:00
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(3, 0, 3, 0, 15), new TimePeriodWithSegment(11, 0, 11, 0, 15), new ShiftCategory("_").WithId()));
+			var agent = PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skill).InTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date.AddDays(-1), 1, 1, 1));
+			if (ResourcePlannerMergeTeamblockClassicScheduling44289)
+			{
+				SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+				{
+					UseTeam = true,
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
+					UseBlock = true,
+					TeamSameShiftCategory = true,
+				});
+				PlanningGroupSettingsRepository.HasDefault(x =>
+				{
+					x.BlockSameShift = true;
+					x.BlockFinderType = BlockFinderType.SchedulePeriod;
+				});
+			}
+			else
+			{
+				SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+				{
+					UseBlock = true,
+					BlockSameShift = true,
+					BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod
+				});				
+			}
+			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
+
+			AssignmentRepository.Find(new[] { agent}, date.ToDateOnlyPeriod(), scenario).Any(x => x.ShiftLayers.Any()).Should().Be.True();
+		}
+		
+		
 		public TeamBlockSchedulingTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
 		{
 		}
