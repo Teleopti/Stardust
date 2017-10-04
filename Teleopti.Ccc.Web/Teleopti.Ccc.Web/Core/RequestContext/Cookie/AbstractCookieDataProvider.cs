@@ -37,25 +37,25 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public SessionSpecificData GrabFromCookie()
 		{
-			var cookie = getCookie();
+			var cookie = GetCookie();
 			if (string.IsNullOrEmpty(cookie?.Value))
 			{
 				return null;
 			}
 
-			var ticket = decryptCookie(cookie);
-			var userData = string.Empty;
+			var ticket = DecryptCookie(cookie);
+			SessionSpecificData sessionSpecificData = null;
 
 			if (ticket != null)
 			{
 				if (!ticketExpired(ticket))
 				{
-					userData = ticket.UserData;
-					handleSlidingExpiration(cookie, ticket);
+					sessionSpecificData = _dataStringSerializer.Deserialize(ticket.UserData);
+					handleSlidingExpiration(cookie, ticket, sessionSpecificData.DataSourceName);
 				}
 			}
 
-			return _dataStringSerializer.Deserialize(userData);
+			return sessionSpecificData;
 		}
 
 		private bool ticketExpired(FormsAuthenticationTicket ticket)
@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public void ExpireTicket()
 		{
-			var cookie = getCookie();
-			var ticket = decryptCookie(cookie);
+			var cookie = GetCookie();
+			var ticket = DecryptCookie(cookie);
 			ticket = makeTicket(ticket.Name, ticket.UserData, _now.ServerDateTime_DontUse().AddHours(-1));
 			cookie.HttpOnly = true;
 			cookie.Value = encryptTicket(ticket);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			RemoveAuthBridgeCookie();
 		}
 
-		private HttpCookie getCookie()
+		protected HttpCookie GetCookie()
 		{
 			return _httpContext.Current().Request.Cookies[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName];
 		}
@@ -154,9 +154,11 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		}
 
 
-		private void handleSlidingExpiration(HttpCookie cookie, FormsAuthenticationTicket ticket)
+		private void handleSlidingExpiration(HttpCookie cookie, FormsAuthenticationTicket ticket, string tenantName)
 		{
 			if (!_sessionSpecificCookieDataProviderSettings.AuthenticationCookieSlidingExpiration) return;
+			var maximumSessionTimeInMinutes = _maximumSessionTimeProvider.ForTenant(tenantName);
+			if (maximumSessionTimeInMinutes != 0) return;
 
 			if (!timeToRenewTicket(ticket)) return;
 			
@@ -176,7 +178,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			return renew;
 		}
 
-		private static FormsAuthenticationTicket decryptCookie(HttpCookie cookie)
+		protected static FormsAuthenticationTicket DecryptCookie(HttpCookie cookie)
 		{
 			FormsAuthenticationTicket ticket;
 			try

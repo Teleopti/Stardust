@@ -11,6 +11,7 @@ using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 
@@ -22,12 +23,13 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		private HttpResponseBase httpResponse;
 		private HttpRequestBase httpRequest;
 		private HttpContextBase httpContext;
-		private INow now;
-		private SessionSpecificWfmCookieProvider target;
+		private MutableNow now;
+		private SessionSpecificWfmCookieProviderForTest target;
 		private ISessionSpecificCookieSettings _sessionSpecificCookieSettingsForWfm;
 		private HttpCookieCollection _cookieCollection;
 		private static string _datasourcename = "DataSourceName";
 		private Tenant _tenant;
+		private readonly DateTime _utcTheTime = new DateTime(2013, 9, 23, 12, 0, 0);
 
 		private static SessionSpecificData generateSessionSpecificData()
 		{
@@ -48,14 +50,14 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			httpContext.Stub(x => x.Response).Return(httpResponse);
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 
-			now = new ThisIsNow(new DateTime(2013, 9, 23, 12, 0, 0));
+			now = new MutableNow(_utcTheTime);
 
 			var sessionSpecificCookieSettingsProvider = new SessionSpecificCookieSettingsProvider();
 			_sessionSpecificCookieSettingsForWfm = sessionSpecificCookieSettingsProvider.ForWfm();
 			var tenantByNameWithEnsuredTransaction = new FindTenantByNameWithEnsuredTransactionFake();
 			_tenant = new Tenant(_datasourcename);
 			tenantByNameWithEnsuredTransaction.Has(_tenant);
-			target = new SessionSpecificWfmCookieProvider(new FakeCurrentHttpContext(httpContext), sessionSpecificCookieSettingsProvider, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()), new MaximumSessionTimeProvider(tenantByNameWithEnsuredTransaction));
+			target = new SessionSpecificWfmCookieProviderForTest(new FakeCurrentHttpContext(httpContext), sessionSpecificCookieSettingsProvider, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()), new MaximumSessionTimeProvider(tenantByNameWithEnsuredTransaction));
 		}
 
 		[Test]
@@ -134,6 +136,47 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		}
 
 		[Test]
+		public void ShouldSlideExpiration()
+		{
+			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
+			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
+
+			var newDateTime = _utcTheTime.AddMinutes(16);
+			now.Is(newDateTime);
+
+			var result = target.GrabFromCookie();
+
+			target.GetTicket().IssueDate.Should().Be.EqualTo(newDateTime.ToLocalTime());
+
+			result.Should().Not.Be.Null();
+			result.PersonId.Should().Be.EqualTo(sessionSpecificData.PersonId);
+			result.BusinessUnitId.Should().Be.EqualTo(sessionSpecificData.BusinessUnitId);
+			result.DataSourceName.Should().Be.EqualTo(sessionSpecificData.DataSourceName);
+			result.TenantPassword.Should().Be.EqualTo(sessionSpecificData.TenantPassword);
+		}
+
+		[Test]
+		public void ShouldNotSlideExpirationWhenHaveMaximumSessionTimeFromConfiguration()
+		{
+			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), "480");
+			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
+			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
+
+			var newDateTime = _utcTheTime.AddMinutes(16);
+			now.Is(newDateTime);
+
+			var result = target.GrabFromCookie();
+
+			target.GetTicket().IssueDate.Should().Be.EqualTo(_utcTheTime.ToLocalTime());
+
+			result.Should().Not.Be.Null();
+			result.PersonId.Should().Be.EqualTo(sessionSpecificData.PersonId);
+			result.BusinessUnitId.Should().Be.EqualTo(sessionSpecificData.BusinessUnitId);
+			result.DataSourceName.Should().Be.EqualTo(sessionSpecificData.DataSourceName);
+			result.TenantPassword.Should().Be.EqualTo(sessionSpecificData.TenantPassword);
+		}
+
+		[Test]
 		public void ShouldExpireCookie()
 		{
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
@@ -144,6 +187,19 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			target.ExpireTicket();
 
 			target.GrabFromCookie().Should().Be.Null();
+		}
+	}
+
+	internal class SessionSpecificWfmCookieProviderForTest : SessionSpecificWfmCookieProvider
+	{
+		public SessionSpecificWfmCookieProviderForTest(ICurrentHttpContext httpContext, SessionSpecificCookieSettingsProvider sessionSpecificCookieSettingsProvider, INow now, ISessionSpecificDataStringSerializer dataStringSerializer, MaximumSessionTimeProvider maximumSessionTimeProvider) : base(httpContext, sessionSpecificCookieSettingsProvider, now, dataStringSerializer, maximumSessionTimeProvider)
+		{
+		}
+
+		public FormsAuthenticationTicket GetTicket()
+		{
+			var cookie = GetCookie();
+			return DecryptCookie(cookie);
 		}
 	}
 }
