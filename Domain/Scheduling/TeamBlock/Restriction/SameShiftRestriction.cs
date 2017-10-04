@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
                         }
                         else
                         {
-                            if (!_scheduleDayEquator.MainShiftBasicEquals(mainShift, restriction.CommonMainShift))
+                            if (!_scheduleDayEquator.MainShiftBasicEquals(mainShift, restriction.CommonMainShift, schedulePart.TimeZone))
 								return null;
                         }
                     }

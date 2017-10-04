@@ -25,12 +25,43 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		[TestCase(true), Ignore("Bug46079")]
+		[TestCase(true)]
 		[TestCase(false)]
 		public void ShuldHandleBlockBetweenDaysOffWithSameShiftCatWhenMonthEndsOnTuesday(bool useBlock)
+		{			
+			var period = new DateOnlyPeriod(2017, 10, 1, 2017, 11, 4);
+			var stateHolder = setupStandardStateholder(out var agent, period);
+
+			var blockFinderType = useBlock ? BlockFinderType.BetweenDayOff : BlockFinderType.SingleDay;
+			var schedulingOptions = new	SchedulingOptions{BlockFinderTypeForAdvanceScheduling = blockFinderType, BlockSameShiftCategory = true, BlockSameShift = false, UseBlock = true};
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] {agent},
+				period);
+
+			stateHolder.Schedules[agent].CalculatedCurrentScheduleSummary(new DateOnlyPeriod(2017, 10, 1, 2017, 10, 31))
+				.ContractTime.Should().Be.EqualTo(TimeSpan.FromHours(176));
+		}
+
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShuldHandleBlockBetweenDaysOffWithSameShiftWhenMonthEndsOnTuesday(bool useBlock)
+		{
+			var period = new DateOnlyPeriod(2017, 10, 1, 2017, 11, 4);
+			var stateHolder = setupStandardStateholder(out var agent, period);
+
+			var blockFinderType = useBlock ? BlockFinderType.BetweenDayOff : BlockFinderType.SingleDay;
+			var schedulingOptions = new SchedulingOptions { BlockFinderTypeForAdvanceScheduling = blockFinderType, BlockSameShift = true, BlockSameShiftCategory = false, UseBlock = true };
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent },
+				period);
+
+			stateHolder.Schedules[agent].CalculatedCurrentScheduleSummary(new DateOnlyPeriod(2017, 10, 1, 2017, 10, 31))
+				.ContractTime.Should().Be.EqualTo(TimeSpan.FromHours(176));
+		}
+
+		private ISchedulerStateHolder setupStandardStateholder(out IPerson agent, DateOnlyPeriod period)
 		{
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var period = new DateOnlyPeriod(2017, 10, 1, 2017, 11, 4);
 			var activity = new Activity().WithId();
 			var skill = new Skill().For(activity).WithId().InTimeZone(TimeZoneInfo.Utc)
 				.IsOpen(new TimePeriod(8, 20));
@@ -50,22 +81,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			contractScheduleWeek.Add(DayOfWeek.Saturday, false);
 			contractScheduleWeek.Add(DayOfWeek.Sunday, false);
 			contractSchedule.AddContractScheduleWeek(contractScheduleWeek);
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc)
+			agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc)
 				.WithPersonPeriod(ruleSet, new Contract("realistic"), new Team(), skill)
 				.WithSchedulePeriodOneMonth(period.StartDate);
 			agent.Period(period.StartDate).PersonContract.ContractSchedule = contractSchedule;
 
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new []{agent}, Enumerable.Empty<IPersonAssignment>(), skillDays);
-
-			var blockFinderType = useBlock ? BlockFinderType.BetweenDayOff : BlockFinderType.SingleDay;
-			var schedulingOptions = new	SchedulingOptions{BlockFinderTypeForAdvanceScheduling = blockFinderType, BlockSameShiftCategory = true, UseBlock = true};
-
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] {agent},
-				period);
-
-			stateHolder.Schedules[agent].CalculatedCurrentScheduleSummary(new DateOnlyPeriod(2017, 10, 1, 2017, 10, 31))
-				.ContractTime.Should().Be.EqualTo(TimeSpan.FromHours(176));
+			var stateHolder =
+				SchedulerStateHolder.Fill(scenario, period, new[] {agent}, Enumerable.Empty<IPersonAssignment>(), skillDays);
+			return stateHolder;
 		}
 
 		public SchedulingDesktopBlockTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)

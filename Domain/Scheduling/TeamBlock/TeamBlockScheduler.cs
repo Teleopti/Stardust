@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NPOI.HSSF.Record;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -17,18 +18,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+		private readonly IDayOffsInPeriodCalculator _daysOffsInPeriodCalculator;
 
 		public TeamBlockScheduler(ITeamBlockSingleDayScheduler singleDayScheduler,
 									TeamBlockRoleModelSelector roleModelSelector,
 									TeamBlockClearer teamBlockClearer, 
 									ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
-									IGroupPersonSkillAggregator groupPersonSkillAggregator)
+									IGroupPersonSkillAggregator groupPersonSkillAggregator,
+									IDayOffsInPeriodCalculator daysOffsInPeriodCalculator)
 		{
 			_singleDayScheduler = singleDayScheduler;
 			_roleModelSelector = roleModelSelector;
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+			_daysOffsInPeriodCalculator = daysOffsInPeriodCalculator;
 		}
 
 		public bool ScheduleTeamBlockDay(IEnumerable<IPersonAssignment> orginalPersonAssignments,
@@ -71,6 +75,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if(schedulingCallback.IsCancelled)
 						break;
 
+					if (isBlockSchedulePeriodsUnschedableDueToMissingDaysOff(teamBlockInfo, schedules, teamInfo))
+					{
+						success = true;
+						break;
+					}
+
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
@@ -94,6 +104,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions))
 			{
+				if (isBlockSchedulePeriodsUnschedableDueToMissingDaysOff(teamBlockInfo, schedules, teamInfo))
+				{
+					return true;
+				}
+
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 				roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _groupPersonSkillAggregator);		
 				success = tryScheduleBlock(orginalPersonAssignments, schedulingCallback, workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays, roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules);
@@ -110,6 +125,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 
 			return success;
+		}
+
+		private bool isBlockSchedulePeriodsUnschedableDueToMissingDaysOff(ITeamBlockInfo teamBlockInfo, IScheduleDictionary schedules,
+			ITeamInfo teamInfo)
+		{
+			var involvedMatrixes = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(teamInfo.GroupMembers.First(),
+				teamBlockInfo.BlockInfo.BlockPeriod);
+			if (involvedMatrixes.Count() > 1)
+			{
+				foreach (var matrix in involvedMatrixes)
+				{
+					if (!_daysOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedules, matrix.SchedulePeriod, out int _,
+						out IList<IScheduleDay> _))
+						return true;
+				}
+			}
+
+			return false;
 		}
 
 		private bool tryScheduleBlock(IEnumerable<IPersonAssignment> orginalPersonAssignments, ISchedulingCallback schedulingCallback, IWorkShiftSelector workShiftSelector, 

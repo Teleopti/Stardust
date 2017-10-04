@@ -156,7 +156,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                 Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
                 Expect.Call(_scheduleDay1.GetEditorShift()).Return(mainShift1);
                 Expect.Call(scheduleDay2.GetEditorShift()).Return(mainShift2);
-                Expect.Call(_mainShiftEquator.MainShiftBasicEquals(mainShift2, mainShift1)).Return(false);
+				Expect.Call(scheduleDay2.TimeZone).Return(TimeZoneInfo.Utc);
+                Expect.Call(_mainShiftEquator.MainShiftBasicEquals(mainShift2, mainShift1, TimeZoneInfo.Utc)).Return(false);
             }
             using (_mocks.Playback())
             {

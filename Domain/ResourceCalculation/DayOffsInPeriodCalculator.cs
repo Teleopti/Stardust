@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return dayOffDays;
 		}
 
-		public bool HasCorrectNumberOfDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod, out int targetDaysOff, out IList<IScheduleDay> dayOffsNow)
+		public virtual bool HasCorrectNumberOfDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod, out int targetDaysOff, out IList<IScheduleDay> dayOffsNow)
 		{
 			var contract = virtualSchedulePeriod.Contract;
 			var employmentType = contract.EmploymentType;
@@ -119,6 +120,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var dayOffOnPeriod = new DayOffOnPeriod(period, scheduleDays, count);
 
 			return dayOffOnPeriod;
+		}
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_EasierBlockScheduling_46155)] // And remove virtual in base class
+	public class DaysOffInPeriodValidatorForBlock : DayOffsInPeriodCalculator
+	{
+		public override bool HasCorrectNumberOfDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod,
+			out int targetDaysOff, out IList<IScheduleDay> dayOffsNow)
+		{
+			targetDaysOff = 0;
+			dayOffsNow = new List<IScheduleDay>();
+			return true;
 		}
 	}
 }
