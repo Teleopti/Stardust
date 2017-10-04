@@ -11,24 +11,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class EffectiveRestrictionStartTimeDecider : IEffectiveRestrictionStartTimeDecider
 	{
-		//kolla effectiveRestriction.IsPreferenceDay?
-		
 		public IEffectiveRestriction Decide(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IScheduleDay scheduleDay)
 		{
 			var restriction = scheduleDay.PreferenceDay()?.Restriction;
 			if (jumpOutEarly(schedulingOptions, restriction)) 
 				return effectiveRestriction;
 
-			var start = restriction.StartTimeLimitation.StartTime?.Add(-schedulingOptions.BreakPreferenceStartTimeByMax);
-			var end = restriction.StartTimeLimitation.EndTime?.Add(schedulingOptions.BreakPreferenceStartTimeByMax);
-			foreach (var ruleSet in scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly).RuleSetBag
-				.RuleSetCollection.Where(x => x.TemplateGenerator.Category.Equals(restriction.ShiftCategory)))
+			var earliestStart = restriction.StartTimeLimitation.StartTime?.Add(-schedulingOptions.BreakPreferenceStartTimeByMax);
+			var latestEnd = restriction.StartTimeLimitation.EndTime?.Add(schedulingOptions.BreakPreferenceStartTimeByMax);
+			foreach (var ruleSet in scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly)
+				.RuleSetBag.RuleSetCollection.Where(x => x.TemplateGenerator.Category.Equals(restriction.ShiftCategory)))
 			{
-				start = TimeSpanExtensions.TakeMin(start, ruleSet.TemplateGenerator.StartPeriod.Period.StartTime.Add(-schedulingOptions.BreakPreferenceStartTimeByMax));
-				end = TimeSpanExtensions.TakeMax(end, ruleSet.TemplateGenerator.StartPeriod.Period.EndTime.Add(schedulingOptions.BreakPreferenceStartTimeByMax));
+				earliestStart = TimeSpanExtensions.TakeMin(earliestStart, ruleSet.TemplateGenerator.StartPeriod.Period.StartTime.Add(-schedulingOptions.BreakPreferenceStartTimeByMax));
+				latestEnd = TimeSpanExtensions.TakeMax(latestEnd, ruleSet.TemplateGenerator.StartPeriod.Period.EndTime.Add(schedulingOptions.BreakPreferenceStartTimeByMax));
 			}
 			return new EffectiveRestriction(
-				new StartTimeLimitation(start, end), 
+				new StartTimeLimitation(earliestStart, latestEnd), 
 				new EndTimeLimitation(), 
 				new WorkTimeLimitation(), 
 				null,
@@ -43,6 +41,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				   restriction == null || !restriction.StartTimeLimitation.HasValue();
 		}
 	}
+	
+	
 	
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002)]
 	public interface IEffectiveRestrictionStartTimeDecider
