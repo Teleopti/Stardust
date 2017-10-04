@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				BlockFinderType = planningGroupSettings.BlockFinderType,
 				BlockSameShiftCategory = planningGroupSettings.BlockSameShiftCategory,
 				BlockSameShift = planningGroupSettings.BlockSameShift,
-				BlockSameStartTime = planningGroupSettings.BlockSameStartTime
+				BlockSameStartTime = planningGroupSettings.BlockSameStartTime,
+				Priority = planningGroupSettings.Priority
 			};
 		}
 	}

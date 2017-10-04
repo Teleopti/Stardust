@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockFinderType = BlockFinderType.BetweenDayOff,
 				BlockSameStartTime = true,
 				BlockSameShift = true,
-				BlockSameShiftCategory = true
+				BlockSameShiftCategory = true,
+				Priority = 1
 			};
 
 			Target.Persist(model);
@@ -58,6 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameStartTime.Should().Be.True();
 			inDb.BlockSameShift.Should().Be.True();
 			inDb.BlockSameShiftCategory.Should().Be.True();
+			inDb.Priority.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -79,7 +81,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockFinderType = BlockFinderType.BetweenDayOff,
 				BlockSameStartTime = true,
 				BlockSameShift = true,
-				BlockSameShiftCategory = true
+				BlockSameShiftCategory = true,
+				Priority = 1
 			};
 
 			Target.Persist(model);
@@ -93,6 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameStartTime.Should().Be.True();
 			inDb.BlockSameShift.Should().Be.True();
 			inDb.BlockSameShiftCategory.Should().Be.True();
+			inDb.Priority.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -109,7 +113,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockFinderType = BlockFinderType.BetweenDayOff,
 				BlockSameStartTime = true,
 				BlockSameShift = true,
-				BlockSameShiftCategory = true
+				BlockSameShiftCategory = true,
+				Priority = 1
 			};
 
 			Target.Persist(model);
@@ -123,6 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameStartTime.Should().Be.True();
 			inDb.BlockSameShift.Should().Be.True();
 			inDb.BlockSameShiftCategory.Should().Be.True();
+			inDb.Priority.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -143,7 +149,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockFinderType = BlockFinderType.BetweenDayOff,
 				BlockSameStartTime = true,
 				BlockSameShift = true,
-				BlockSameShiftCategory = true
+				BlockSameShiftCategory = true,
+				Priority = 1
 			};
 
 			Target.Persist(model);
@@ -157,6 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameStartTime.Should().Be.True();
 			inDb.BlockSameShift.Should().Be.True();
 			inDb.BlockSameShiftCategory.Should().Be.True();
+			inDb.Priority.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -174,7 +182,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockFinderType = BlockFinderType.SingleDay,
 				BlockSameStartTime = false,
 				BlockSameShift = false,
-				BlockSameShiftCategory = false
+				BlockSameShiftCategory = false,
+				Priority = 1
 			};
 
 			Target.Persist(model);
@@ -188,6 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameStartTime.Should().Be.False();
 			inDb.BlockSameShift.Should().Be.False();
 			inDb.BlockSameShiftCategory.Should().Be.False();
+			inDb.Priority.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -209,7 +219,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockFinderType = BlockFinderType.SingleDay,
 				BlockSameStartTime = false,
 				BlockSameShift = false,
-				BlockSameShiftCategory = false
+				BlockSameShiftCategory = false,
+				Priority = 1
 			};
 
 			Target.Persist(model);
@@ -223,6 +234,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameStartTime.Should().Be.False();
 			inDb.BlockSameShift.Should().Be.False();
 			inDb.BlockSameShiftCategory.Should().Be.False();
+			inDb.Priority.Should().Be.EqualTo(1);
 		}
 
 		[Test]

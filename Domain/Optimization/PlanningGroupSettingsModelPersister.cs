@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			planningGroupSettings.BlockSameStartTime = planningGroupSettingsModel.BlockSameStartTime;
 			planningGroupSettings.BlockSameShiftCategory = planningGroupSettingsModel.BlockSameShiftCategory;
 			planningGroupSettings.BlockSameShift = planningGroupSettingsModel.BlockSameShift;
+			planningGroupSettings.Priority = planningGroupSettingsModel.Priority;
 
 			planningGroupSettings.ClearFilters();
 			foreach (var filter in planningGroupSettingsModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))

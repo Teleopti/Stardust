@@ -26,5 +26,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool BlockSameStartTime { get; set; }
 		public bool BlockSameShiftCategory { get; set; }
 		public bool BlockSameShift { get; set; }
+		public int Priority { get; set; }
 	}
 }
