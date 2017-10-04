@@ -4,25 +4,22 @@
 		.module('wfm.rtaTestShared')
 		.factory('ControllerBuilder', controllerBuilder);
 
-	controllerBuilder.$inject = ['$controller', '$interval', '$timeout', '$httpBackend', '$rootScope', '$log'];
+	controllerBuilder.$inject = ['$controller', '$interval', '$timeout', '$httpBackend', '$rootScope'];
 
-	function controllerBuilder($controller, $interval, $timeout, $httpBackend, $rootScope, $log) {
+	function controllerBuilder($controller, $interval, $timeout, $httpBackend, $rootScope) {
 		var controllerName = "hejsan";
 		var scope;
 
-		var service = {
+		return {
 			setup: setup,
 			createController: createController
 		};
-
-		return service;
-		/////////////////////
 
 		function setup(name) {
 			controllerName = name;
 			scope = $rootScope.$new();
 			return scope;
-		};
+		}
 
 		function createController() {
 
@@ -49,6 +46,7 @@
 					safeBackendFlush();
 					return callbacks;
 				},
+				
 				vm: vm
 			};
 
@@ -62,8 +60,8 @@
 						return;
 					throw e;
 				}
-			};
+			}
 		}
 
-	};
+	}
 })();

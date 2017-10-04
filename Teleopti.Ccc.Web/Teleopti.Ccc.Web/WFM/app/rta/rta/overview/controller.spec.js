@@ -97,7 +97,6 @@ describe('RtaOverviewController', function () {
 		allSkills.forEach(function (skill) { $fakeBackend.withSkill(skill); });
 		$fakeBackend.withSkillAreas(skillAreas);
 		spyOn($state, 'go');
-		$state.current.name = 'rta-refact';
 	}));
 
 	it('should create controller with empty state', function () {

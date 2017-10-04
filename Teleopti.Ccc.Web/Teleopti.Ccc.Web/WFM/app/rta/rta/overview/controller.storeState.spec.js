@@ -25,17 +25,13 @@ describe('RtaOverviewController open/close site', function () {
 
 	var
 		$controllerBuilder,
-		$scope,
-		$state,
 		$sessionStorage;
 	beforeEach(inject(function (_FakeRtaBackend_, _ControllerBuilder_, _$state_, _$sessionStorage_) {
 		$controllerBuilder = _ControllerBuilder_;
 		$fakeBackend = _FakeRtaBackend_;
-		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
-		spyOn($state, 'go');
-		$state.current.name = 'rta-refact';
-		$scope = $controllerBuilder.setup('RtaOverviewController39082');
+		spyOn(_$state_, 'go');
+		$controllerBuilder.setup('RtaOverviewController39082');
 	}));
 
 	afterEach(function () {

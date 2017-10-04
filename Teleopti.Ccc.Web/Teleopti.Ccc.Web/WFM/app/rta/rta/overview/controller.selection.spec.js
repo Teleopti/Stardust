@@ -23,16 +23,12 @@ describe('RtaOverviewController selection', function () {
 
 	var
 		$controllerBuilder,
-		$fakeBackend,
-		$scope,
-		$state;
+		$fakeBackend;
 	beforeEach(inject(function (_FakeRtaBackend_, _ControllerBuilder_, _$state_) {
 		$controllerBuilder = _ControllerBuilder_;
 		$fakeBackend = _FakeRtaBackend_;
-		$state = _$state_;
-		$scope = $controllerBuilder.setup('RtaOverviewController39082');
-		spyOn($state, 'go');
-		$state.current.name = 'rta-refact';
+		$controllerBuilder.setup('RtaOverviewController39082');
+		spyOn(_$state_, 'go');
 	}));
 
 	it('should select site', function () {

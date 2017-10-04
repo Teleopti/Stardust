@@ -23,17 +23,12 @@ describe('RtaOverviewController open/close site', function () {
 		});
 	});
 
-	var
-		$controllerBuilder,
-		$scope,
-		$state;
-	beforeEach(inject(function (_FakeRtaBackend_, _ControllerBuilder_, _$state_) {
+	var	$controllerBuilder;
+	beforeEach(inject(function (_FakeRtaBackend_, _ControllerBuilder_) {
 		$controllerBuilder = _ControllerBuilder_;
 		$fakeBackend = _FakeRtaBackend_;
 		$fakeBackend.clear();
-		$state = _$state_;
-		$state.current.name = 'rta-refact';
-		$scope = $controllerBuilder.setup('RtaOverviewController39082');
+		$controllerBuilder.setup('RtaOverviewController39082');
 	}));
 
 	it('should open site', function () {
