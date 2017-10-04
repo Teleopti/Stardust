@@ -223,15 +223,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 		
 		[Test]
-		[Ignore("46002 to be fixed")]
 		public void ShouldRespectStartTimeTolerance_TakeShiftWithinToleranceShiftCategoryPreference()
 		{
+			if(_resourcePlanner_BreakPreferenceStartTimeByMax_46002 == BreakPreferenceStartTimeByMax.DoNotConsiderBreakPreferenceStartTimeByMax) Assert.Ignore();
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var dateOnly = new DateOnly(2010, 1, 1);
-			var ruleSetInsideTolerance = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
-			var ruleSetOutsideTolerance = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(19, 0, 19, 0, 15), new ShiftCategory("_").WithId()));
+			var ruleSetInsideTolerance = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(17, 0, 18, 0, 15), shiftCategory));
+			var ruleSetOutsideTolerance = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(11, 0, 11, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), new ShiftCategory("_").WithId()));
 			var ruleSetBag = new RuleSetBag(ruleSetInsideTolerance, ruleSetOutsideTolerance);	
 			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var intervalDemands = new List<Tuple<int, TimeSpan>>{new Tuple<int, TimeSpan>(17,TimeSpan.FromMinutes(360)), new Tuple<int, TimeSpan>(18, TimeSpan.FromMinutes(360))};	
