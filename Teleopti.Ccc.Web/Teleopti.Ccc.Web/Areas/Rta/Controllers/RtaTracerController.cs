@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
@@ -93,31 +94,5 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			return Ok();
 		}
-	}
-
-	public class RtaTracerViewModel
-	{
-		public IEnumerable<Tracer> Tracers;
-		public IEnumerable<TracedUser> TracedUsers;
-	}
-
-	public class Tracer
-	{
-		public string Process;
-		public string DataReceivedAt;
-		public string ActivityCheckAt;
-		public string Tracing;
-	}
-	
-	public class TracedUser
-	{
-		public string User;
-		public IEnumerable<TracedState> States;
-	}
-	
-	public class TracedState
-	{
-		public string StateCode;
-		public IEnumerable<string> Traces;
 	}
 }

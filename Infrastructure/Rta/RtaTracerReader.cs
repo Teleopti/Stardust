@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -15,14 +13,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public IEnumerable<RtaTraceLog> Read()
+		public IEnumerable<RtaTracerLog<T>> ReadOfType<T>()
 		{
-			return _unitOfWork.Get(uow =>
-				uow.Current().Session()
-					.CreateSQLQuery($@"SELECT Time, Message FROM RtaTracer")
-					.SetResultTransformer(Transformers.AliasToBean<RtaTraceLog>())
-					.List<RtaTraceLog>()
-			);
+			throw new System.NotImplementedException();
 		}
 	}
 }

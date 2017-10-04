@@ -70,16 +70,45 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void NoChange(StateTraceInfo trace);
 		void StateProcessed(StateTraceInfo trace, IEnumerable<IEvent> events);
 	}
-	
-	public class RtaTraceLog
+
+	public class RtaTracerLog<T>
 	{
-		public string Message { get; set; }
-		public DateTime Time { get;  set; }
+		public DateTime Time;
+		public string Process;
+		public T Thing;
+	}
+	
+	public class DataRecievedAtLog
+	{
+		public DateTime? DataRecievedAt;
 	}
 
+	public class ActivityCheckAtLog
+	{
+		public DateTime? ActivityCheckAt;	
+	}
+
+	public class TracingLog
+	{
+		public string Tracing;
+	}
+	
+	public class RecievedLog
+	{
+		public Guid TraceId;
+		public string UserCode;
+		public string StateCode;
+	}
+	
+	public class MessageLog
+	{
+		public Guid TraceId;
+		public string Message;
+	}
+	
 	public interface IRtaTracerReader
 	{
-		IEnumerable<RtaTraceLog> Read();
+		IEnumerable<RtaTracerLog<T>> ReadOfType<T>();
 	}
 
 	public interface IRtaTracerWriter

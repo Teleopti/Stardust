@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillViewModelBuilder>().SingleInstance();
 			builder.RegisterType<SiteCardViewModelBuilder>().SingleInstance();
 			builder.RegisterType<TeamCardViewModelBuilder>().SingleInstance();
+			builder.RegisterType<RtaTracerViewModelBuilder>().SingleInstance();
 
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
