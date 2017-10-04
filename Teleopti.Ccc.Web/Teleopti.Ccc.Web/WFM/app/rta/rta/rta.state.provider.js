@@ -72,18 +72,6 @@ angular.module('wfm.rta').provider('RtaState', function() {
                 controller: function($state, $stateParams) {
                     $state.go('rta', $stateParams);
                 }
-            })
-            .state('rta-skill-group-config', {
-                url: '/rta/skill-group-config',
-                templateUrl: 'app/global/skill-group/skillgroup.html',
-                params: {returnState: 'rta'},
-                controller: 'SkillGroupController as vm'
-            })
-            .state('rta-filter-skill-group-config', {
-                url: '/rta/agents/skill-group-config',
-                templateUrl: 'app/global/skill-group/skillgroup.html',
-                params: {returnState: 'rta-agents'},
-                controller: 'SkillGroupController as vm'
             });
     };
 });
