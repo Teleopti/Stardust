@@ -23,10 +23,7 @@ namespace Teleopti.Ccc.Payroll
 
 		public IPayrollExportFeedback PayrollExportFeedback { get; set; }
 
-		public PayrollFormatDto PayrollFormat
-		{
-			get { return Format; }
-		}
+		public PayrollFormatDto PayrollFormat => Format;
 
 		public IXPathNavigable ProcessPayrollData(ITeleoptiSchedulingService schedulingService,
 		                                          ITeleoptiOrganizationService organizationService,
@@ -51,12 +48,12 @@ namespace Teleopti.Ccc.Payroll
 
 				var step = getIncreasePercentagePerBatch(count);
 				var progress = 10;
+				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
 
 				for (var i = 0; i < count; i += batchSize)
 				{
-					var currentAgents = payrollExport.PersonCollection.Skip(i).Take(batchSize).ToArray();
-					var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(payrollExport.TimeZoneId);
-
+					var currentAgents = payrollExport.PersonCollection.Skip(i).Take(batchSize).Select(p => new PersonDto{Id = p.Id}).ToArray();
+					
 					PayrollExportFeedback.ReportProgress(progress, "Loading data...");
 					var activityExportDtos = schedulingService.GetTeleoptiActivitiesExportData(currentAgents, startDateOnlyDto,
 					                                                                           endDateOnlyDto, timeZoneInfo.Id);
