@@ -1,8 +1,15 @@
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\bin\Debug\Teleopti.Analytics.Etl.IntegrationTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\bin\Release\Teleopti.Analytics.Etl.IntegrationTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web.IntegrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web.IntegrationTest\bin\Debug\Teleopti.Ccc.Web.IntegrationTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web.IntegrationTest\bin\Release\Teleopti.Ccc.Web.IntegrationTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\InfrastructureTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
-..\..\..\Teleopti.Ccc.ApplicationConfigTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\InfrastructureTest\bin\Debug\Teleopti.Ccc.InfrastructureTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\InfrastructureTest\bin\Release\Teleopti.Ccc.InfrastructureTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Wfm.AdministrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Wfm.AdministrationTest\bin\Debug\Teleopti.Wfm.AdministrationTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Wfm.AdministrationTest\bin\Release\Teleopti.Wfm.AdministrationTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config,BuildArtifacts\Teleopti.Ccc.WebBehaviorTest.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\Debug\Teleopti.Ccc.WebBehaviorTest.dll.config,BuildArtifacts\Teleopti.Ccc.WebBehaviorTest.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\Release\Teleopti.Ccc.WebBehaviorTest.dll.config,BuildArtifacts\Teleopti.Ccc.WebBehaviorTest.config
@@ -20,6 +27,10 @@
 ..\..\..\Teleopti.Ccc.Requests.PerformanceTuningTest\bin\Release\Teleopti.Ccc.Requests.PerformanceTuningTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Staffing.PerformanceTest\bin\Release\Teleopti.Ccc.Staffing.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\App.config,BuildArtifacts\ServiceBusHost.config
+..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug\Teleopti.Ccc.Sdk.ServiceBusTest.dll.config,BuildArtifacts\ServiceBusHost.config
+..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Release\Teleopti.Ccc.Sdk.ServiceBusTest.dll.config,BuildArtifacts\ServiceBusHost.config
 ..\..\..\Teleopti.Ccc.ViewSchedule.PerformanceTest\bin\Debug\Teleopti.Ccc.ViewSchedule.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.ViewSchedule.PerformanceTest\bin\Release\Teleopti.Ccc.ViewSchedule.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Wfm.Test\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Wfm.Test\bin\Debug\Teleopti.Wfm.Test.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Wfm.Test\bin\Release\Teleopti.Wfm.Test.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
