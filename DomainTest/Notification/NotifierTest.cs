@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Xml.XPath;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
