@@ -8,11 +8,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IEffectiveRestrictionStartTimeDecider
-	{
-		IEffectiveRestriction Decide(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IScheduleDay scheduleDay);
-	}
-	
 	public class EffectiveRestrictionStartTimeDecider : IEffectiveRestrictionStartTimeDecider
 	{
 		public IEffectiveRestriction Decide(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IScheduleDay scheduleDay)
@@ -38,6 +33,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return adjustedStartTimeRestriction;
 		}
 	}
+	
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002)]
+	public interface IEffectiveRestrictionStartTimeDecider
+	{
+		IEffectiveRestriction Decide(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IScheduleDay scheduleDay);
+	}
+	
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002)]
 	public class EffectiveRestrictionStartTimeDeciderOff : IEffectiveRestrictionStartTimeDecider
