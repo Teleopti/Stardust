@@ -3538,15 +3538,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Audit type.
-        /// </summary>
-        public static string AuditType {
-            get {
-                return ResourceManager.GetString("AuditType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Authentication error..
         /// </summary>
         public static string AuthenticationError {
@@ -28011,15 +28002,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Schedule end.
-        /// </summary>
-        public static string ScheduleEnd {
-            get {
-                return ResourceManager.GetString("ScheduleEnd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Schedule has been changed by others, please reload schedule..
         /// </summary>
         public static string ScheduleHasBeenChanged {
@@ -28278,15 +28260,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ScheduleSelected {
             get {
                 return ResourceManager.GetString("ScheduleSelected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Schedule start.
-        /// </summary>
-        public static string ScheduleStart {
-            get {
-                return ResourceManager.GetString("ScheduleStart", resourceCulture);
             }
         }
         
@@ -30718,15 +30691,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftTradeTargetTimePendingReason {
             get {
                 return ResourceManager.GetString("ShiftTradeTargetTimePendingReason", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Shift type.
-        /// </summary>
-        public static string ShiftType {
-            get {
-                return ResourceManager.GetString("ShiftType", resourceCulture);
             }
         }
         

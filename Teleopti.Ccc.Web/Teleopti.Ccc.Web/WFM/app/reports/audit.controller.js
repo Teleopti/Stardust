@@ -84,11 +84,11 @@
 					{field: 'ModifiedAt', displayName: $translate.instant('ModifiedAt'), type: 'date', cellFilter: 'date:"dd-MM-yyyy HH:mm"', sort: { direction: 'desc', priority: 0 } },
 					{field: 'ModifiedBy', displayName: $translate.instant('ModifiedBy')},
 					{field: 'ScheduledAgent', displayName: $translate.instant('ScheduledAgent')},
-					{field: 'ShiftType', displayName: $translate.instant('ShiftType')},
-					{field: 'AuditType', displayName: $translate.instant('AuditType')},
+					{field: 'ShiftType', displayName: $translate.instant('Type')},
+					{field: 'AuditType', displayName: $translate.instant('Action')},
 					{field: 'Detail', displayName: $translate.instant('Details')},
-					{field: 'ScheduleStart', displayName: $translate.instant('ScheduleStart'), type: 'date', cellFilter: 'date:"dd-MM-yyyy HH:mm"' },
-					{field: 'ScheduleEnd', displayName: $translate.instant('ScheduleEnd'), type: 'date', cellFilter: 'date:"dd-MM-yyyy HH:mm"' }
+					{field: 'ScheduleStart', displayName: $translate.instant('StartTime'), type: 'date', cellFilter: 'date:"dd-MM-yyyy HH:mm"' },
+					{field: 'ScheduleEnd', displayName: $translate.instant('FullDayAbsenceReqEndTime'), type: 'date', cellFilter: 'date:"dd-MM-yyyy HH:mm"' }
 				]
 			};
 			vm.chartLoaded = true;

@@ -16595,18 +16595,6 @@ Do you want to participate?</value>
     <value>Scheduled agent</value>
     <comment>table header in audit trail report</comment>
   </data>
-  <data name="ScheduleEnd" xml:space="preserve">
-    <value>Schedule end</value>
-    <comment>table header in audit trail report</comment>
-  </data>
-  <data name="ScheduleStart" xml:space="preserve">
-    <value>Schedule start</value>
-    <comment>table header in audit trail report</comment>
-  </data>
-  <data name="ShiftType" xml:space="preserve">
-    <value>Shift type</value>
-    <comment>table header in audit trail report</comment>
-  </data>
   <data name="DeleteSchedulingSetting" xml:space="preserve">
     <value>Delete scheduling setting</value>
     <comment>Delete scheduling setting for web scheduling</comment>
