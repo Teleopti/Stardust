@@ -39,9 +39,4 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		public IEnumerable<SkillGroupViewModel> SkillAreas { get; set; }
 	}
 
-	public class SkillAreaInput
-	{
-		public string Name { get; set; }
-		public IEnumerable<Guid> Skills { get; set; }
-	}
 }
