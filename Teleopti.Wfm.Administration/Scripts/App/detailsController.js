@@ -27,6 +27,7 @@
 		vm.AnalDbOk = false;
 		vm.AnalDbCheckMessage = "Input Analytics database";
 		vm.CommandTimeout = 0;
+		vm.MaximumSessionTime = 0;
 		vm.Message = "";
 		vm.AllowDelete = false;
 		
@@ -72,6 +73,7 @@
 					vm.CommandTimeout = data.CommandTimeout;
 					vm.Active = data.Active;
 					vm.MobileQRCodeUrl = data.MobileQRCodeUrl;
+					vm.MaximumSessionTime = data.MaximumSessionTime;
 					//vm.CheckAppDb();
 					//vm.CheckAnalDb();
 					vm.CheckDelete();
@@ -260,7 +262,8 @@
 						UseIntegratedSecurity: vm.UseIntegratedSecurity,
 						CommandTimeout: vm.CommandTimeout,
 						Active: vm.Active,
-						MobileQRCodeUrl: vm.MobileQRCodeUrl
+						MobileQRCodeUrl: vm.MobileQRCodeUrl,
+						MaximumSessionTime: vm.MaximumSessionTime
 					},
 					tokenHeaderService.getHeaders())
 				.success(function(data) {

@@ -29,6 +29,11 @@
 						<span ng-if="!form.qrcodeurl.$valid" class="help-block text-danger">Enter a valid URL or leave blank</span>
 					</div>
 					
+					<div class="form-group">
+						<label class="importCaption" for="maximumSessionTime">Maximum session timeout for web</label>
+						<input class="form-control" id="maximumSessionTime" type="number" min="0" required ng-model="detailsVm.MaximumSessionTime" placeholder="In minutes">
+					</div>
+					
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" ng-model="detailsVm.Active">

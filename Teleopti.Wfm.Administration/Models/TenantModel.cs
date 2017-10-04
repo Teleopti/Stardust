@@ -13,5 +13,6 @@
 		public bool Active { get; set; }
 		public bool UseIntegratedSecurity { get; set; }
 		public string MobileQRCodeUrl { get; set; }
+		public int MaximumSessionTime { get; set; }
 	}
 }

@@ -151,7 +151,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 					CommandTimeout = 180,
 					Active = false,
 					MobileQRCodeUrl = string.Empty,
-					MaximumSessionTimeInMinutes = maximumSessionTimeInMinutes
+					MaximumSessionTime = maximumSessionTimeInMinutes
 				};
 				Target.Save(model);
 			}

@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.Administration.Core
 					//oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analBuilder.ConnectionString);
 					oldTenant.SetApplicationConfig(Environment.CommandTimeout, model.CommandTimeout.ToString());
 					oldTenant.SetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString(), model.MobileQRCodeUrl);
-					oldTenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), model.MaximumSessionTimeInMinutes.ToString());
+					oldTenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), model.MaximumSessionTime.ToString());
 					oldTenant.Active = model.Active;
 					_currentTenantSession.CurrentSession().Save(oldTenant);
 				}

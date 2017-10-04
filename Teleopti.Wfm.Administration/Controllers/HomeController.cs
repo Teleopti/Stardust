@@ -72,6 +72,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Version = _checkDatabaseVersions.GetVersions(tenant.DataSourceConfiguration.ApplicationConnectionString),
 				CommandTimeout = int.Parse(tenant.ApplicationConfig[Environment.CommandTimeout]),
 				MobileQRCodeUrl = tenant.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl),
+				MaximumSessionTime = int.Parse(tenant.GetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes)),
 				Active = tenant.Active
 			});
 		}
