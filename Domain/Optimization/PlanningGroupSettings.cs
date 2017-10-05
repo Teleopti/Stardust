@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -84,6 +85,14 @@ namespace Teleopti.Ccc.Domain.Optimization
       }
 
 			return validFilterTypes.Keys.All(key => validFilterTypes[key]);
+		}
+
+		public virtual void UpdateWith(SchedulingOptions schedulingOptions)
+		{
+			BlockFinderType = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
+			BlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory;
+			BlockSameStartTime = schedulingOptions.BlockSameStartTime;
+			BlockSameShift = schedulingOptions.BlockSameShift;
 		}
 	}
 }

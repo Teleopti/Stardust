@@ -805,30 +805,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(3, 0, 3, 0, 15), new TimePeriodWithSegment(11, 0, 11, 0, 15), new ShiftCategory("_").WithId()));
 			var agent = PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skill).InTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date.AddDays(-1), 1, 1, 1));
-			if (ResourcePlannerMergeTeamblockClassicScheduling44289)
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 			{
-				SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
-				{
-					UseTeam = true,
-					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
-					UseBlock = true,
-					TeamSameShiftCategory = true,
-				});
-				PlanningGroupSettingsRepository.HasDefault(x =>
-				{
-					x.BlockSameShift = true;
-					x.BlockFinderType = BlockFinderType.SchedulePeriod;
-				});
-			}
-			else
-			{
-				SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
-				{
-					UseBlock = true,
-					BlockSameShift = true,
-					BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod
-				});				
-			}
+				UseBlock = true,
+				BlockSameShift = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod
+			});				
 			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
