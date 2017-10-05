@@ -15,19 +15,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	public abstract class SchedulingScenario : IConfigureToggleManager
 	{
 		protected readonly bool ResourcePlannerMergeTeamblockClassicScheduling44289;
-		private readonly bool _resourcePlannerEasierBlockScheduling46155;
+		protected readonly bool ResourcePlannerEasierBlockScheduling46155;
 
 		protected SchedulingScenario(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerEasierBlockScheduling46155)
 		{
 			ResourcePlannerMergeTeamblockClassicScheduling44289 = resourcePlannerMergeTeamblockClassicScheduling44289;
-			_resourcePlannerEasierBlockScheduling46155 = resourcePlannerEasierBlockScheduling46155;
+			ResourcePlannerEasierBlockScheduling46155 = resourcePlannerEasierBlockScheduling46155;
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if(ResourcePlannerMergeTeamblockClassicScheduling44289)
 				toggleManager.Enable(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289);
-			if(_resourcePlannerEasierBlockScheduling46155)
+			if(ResourcePlannerEasierBlockScheduling46155)
 				toggleManager.Enable(Toggles.ResourcePlanner_EasierBlockScheduling_46155);
 		}
 	}
