@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public PlanningGroupSettingsModel Fetch(Guid id)
 		{
-			var dayOffRules = _planningGroupSettingsRepository.Get(id);
-			if (dayOffRules == null)
+			var planningGroupSettings = _planningGroupSettingsRepository.Get(id);
+			if (planningGroupSettings == null)
 				throw new ArgumentException($"Cannot find PlanningGroupSettings with Id {id}");
 
-			return _planningGroupSettingsMapper.ToModel(dayOffRules);
+			return _planningGroupSettingsMapper.ToModel(planningGroupSettings);
 		}
 
 		public IEnumerable<PlanningGroupSettingsModel> FetchAllForPlanningGroup(Guid planningGroupId)

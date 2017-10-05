@@ -179,5 +179,34 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(1, 3));
 		}
+
+		[Test]
+		public void ShouldMapPropertiesForDayOffRules()
+		{
+			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
+			var dayOffRules = new PlanningGroupSettings
+			{
+				ConsecutiveWorkdays = new MinMax<int>(1, 2),
+				DayOffsPerWeek = new MinMax<int>(3, 4),
+				ConsecutiveDayOffs = new MinMax<int>(5, 6),
+				FullWeekendsOff = new MinMax<int>(7, 8),
+				WeekendDaysOff = new MinMax<int>(9, 10)
+			};
+			PlanningGroupSettingsRepository.Add(dayOffRules);
+
+			var daysOffPreferences = Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1));
+			daysOffPreferences.ConsecutiveWorkdaysValue.Should().Be.EqualTo(new MinMax<int>(1, 2));
+			daysOffPreferences.DaysOffPerWeekValue.Should().Be.EqualTo(new MinMax<int>(3, 4));
+			daysOffPreferences.ConsecutiveDaysOffValue.Should().Be.EqualTo(new MinMax<int>(5, 6));
+			daysOffPreferences.FullWeekendsOffValue.Should().Be.EqualTo(new MinMax<int>(7, 8));
+			daysOffPreferences.WeekEndDaysOffValue.Should().Be.EqualTo(new MinMax<int>(9, 10));
+			daysOffPreferences.UseConsecutiveDaysOff.Should().Be.True();
+			daysOffPreferences.UseConsecutiveWorkdays.Should().Be.True();
+			daysOffPreferences.ConsiderWeekAfter.Should().Be.True();
+			daysOffPreferences.ConsiderWeekBefore.Should().Be.True();
+			daysOffPreferences.UseDaysOffPerWeek.Should().Be.True();
+			daysOffPreferences.UseFullWeekendsOff.Should().Be.True();
+			daysOffPreferences.UseWeekEndDaysOff.Should().Be.True();
+		}
 	}
 }
