@@ -510,7 +510,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void setPermissionOnToolStripButtonControls()
 		{
 			var authorization = PrincipalAuthorization.Current();
-			backStageButtonPermissions.Enabled = false;
+			backStageButtonPermissions.Enabled =
+				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions);
 			backStageButtonOptions.Enabled =
 				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 			var type = LogonPresenter.AuthenticationTypeOption;
