@@ -8,7 +8,7 @@
 #$Here = $PSScriptRoot
 
 $Configuration = "$PSScriptRoot\AzureRelease\$CloudServiceName"	+ '.cscfg' 		#Azure config file
-Log "Using configuration file: $Configuration"
+Write-Host "Using configuration file: $Configuration"
 
 [xml]$CSCFGfile = Get-Content -Path $Configuration
 Write-Host "Reading VmSize from: $Configuration..."
