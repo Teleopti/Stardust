@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual bool BlockSameStartTime { get; set; }
 		public virtual bool BlockSameShift { get; set; }
 		public virtual int Priority { get; set; }
+		public virtual MinMax<int> FullWeekendsOff { get; set; }
+		public virtual MinMax<int> WeekendDaysOff { get; set; }
 
 		public PlanningGroupSettings()
 		{
@@ -45,9 +47,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 				BlockSameShiftCategory = false,
 				BlockSameStartTime = false,
 				BlockSameShift = false,
-				Priority = 0
+				Priority = 0,
+				FullWeekendsOff = new MinMax<int>(0, 8),
+				WeekendDaysOff = new MinMax<int>(0, 16)
 			};
 		}
+
+
 
 		public virtual IPlanningGroup PlanningGroup
 		{

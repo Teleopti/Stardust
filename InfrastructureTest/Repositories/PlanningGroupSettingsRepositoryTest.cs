@@ -21,9 +21,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			return new PlanningGroupSettings
 			{
-				ConsecutiveDayOffs = new MinMax<int>(2,6),
-				DayOffsPerWeek = new MinMax<int>(4,6),
-				ConsecutiveWorkdays = new MinMax<int>(5,7)
+				ConsecutiveDayOffs = new MinMax<int>(2, 6),
+				DayOffsPerWeek = new MinMax<int>(4, 6),
+				ConsecutiveWorkdays = new MinMax<int>(5, 7),
+				FullWeekendsOff = new MinMax<int>(2, 7),
+				WeekendDaysOff = new MinMax<int>(3, 15),
+				Priority = 5
 			};
 		}
 
@@ -33,6 +36,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedAggregateFromDatabase.DayOffsPerWeek.Should().Be.EqualTo(expected.DayOffsPerWeek);
 			loadedAggregateFromDatabase.ConsecutiveDayOffs.Should().Be.EqualTo(expected.ConsecutiveDayOffs);
 			loadedAggregateFromDatabase.ConsecutiveWorkdays.Should().Be.EqualTo(expected.ConsecutiveWorkdays);
+			loadedAggregateFromDatabase.Priority.Should().Be.EqualTo(expected.Priority);
+			loadedAggregateFromDatabase.FullWeekendsOff.Should().Be.EqualTo(expected.FullWeekendsOff);
+			loadedAggregateFromDatabase.WeekendDaysOff.Should().Be.EqualTo(expected.WeekendDaysOff);
 		}
 
 		protected override Repository<PlanningGroupSettings> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
@@ -91,6 +97,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			defaultInDb.DayOffsPerWeek.Should().Be.EqualTo(defaultSetting.DayOffsPerWeek);
 			defaultInDb.ConsecutiveDayOffs.Should().Be.EqualTo(defaultSetting.ConsecutiveDayOffs);
 			defaultInDb.ConsecutiveWorkdays.Should().Be.EqualTo(defaultSetting.ConsecutiveWorkdays);
+			defaultInDb.FullWeekendsOff.Should().Be.EqualTo(defaultSetting.FullWeekendsOff);
+			defaultInDb.WeekendDaysOff.Should().Be.EqualTo(defaultSetting.WeekendDaysOff);
+			defaultInDb.Priority.Should().Be.EqualTo(defaultSetting.Priority);
 		}
 
 		[Test]

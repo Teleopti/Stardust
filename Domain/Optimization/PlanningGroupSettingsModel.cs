@@ -27,5 +27,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool BlockSameShiftCategory { get; set; }
 		public bool BlockSameShift { get; set; }
 		public int Priority { get; set; }
+		public int MinFullWeekendsOff { get; set; }
+		public int MaxFullWeekendsOff { get; set; }
+		public int MinWeekendDaysOff { get; set; }
+		public int MaxWeekendDaysOff { get; set; }
 	}
 }

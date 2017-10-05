@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldNotAddExtraDefaultRuleIfPresentInDb()
 		{
 			var presentDefaultRule = PlanningGroupSettings.CreateDefault().WithId();
-      PlanningGroupSettingsRepository.Add(presentDefaultRule);
+			PlanningGroupSettingsRepository.Add(presentDefaultRule);
 
 			var loaded = Target.FetchAllWithoutPlanningGroup().Single();
 

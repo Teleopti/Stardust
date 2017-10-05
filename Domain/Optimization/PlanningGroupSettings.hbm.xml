@@ -39,6 +39,15 @@
 		<property name="BlockSameShiftCategory" column="BlockSameShiftCategory" access="property"/>
 		<property name="BlockSameShift" column="BlockSameShift" access="property"/>
 		<property name="Priority" column="Priority" access="property"/>
+		<component name="FullWeekendsOff" access="property">
+			<property name="Minimum" column="MinFullWeekendsOff" />
+			<property name="Maximum" column="MaxFullWeekendsOff" />
+		</component>
+		<component name="WeekendDaysOff" access="property">
+			<property name="Minimum" column="MinWeekendDaysOff" />
+			<property name="Maximum" column="MaxWeekendDaysOff" />
+		</component>
+		
 
 		<many-to-one name="PlanningGroup"
 					 class="Teleopti.Ccc.Domain.Optimization.PlanningGroup"

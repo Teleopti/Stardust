@@ -33,7 +33,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 				BlockSameShiftCategory = planningGroupSettings.BlockSameShiftCategory,
 				BlockSameShift = planningGroupSettings.BlockSameShift,
 				BlockSameStartTime = planningGroupSettings.BlockSameStartTime,
-				Priority = planningGroupSettings.Priority
+				Priority = planningGroupSettings.Priority,
+				MinFullWeekendsOff = planningGroupSettings.FullWeekendsOff.Minimum,
+				MaxFullWeekendsOff = planningGroupSettings.FullWeekendsOff.Maximum,
+				MinWeekendDaysOff = planningGroupSettings.WeekendDaysOff.Minimum,
+				MaxWeekendDaysOff = planningGroupSettings.WeekendDaysOff.Maximum,
 			};
 		}
 	}

@@ -45,7 +45,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockSameStartTime = true,
 				BlockSameShift = true,
 				BlockSameShiftCategory = true,
-				Priority = 1
+				Priority = 1,
+				MinFullWeekendsOff = 2,
+				MaxFullWeekendsOff = 6,
+				MinWeekendDaysOff = 2,
+				MaxWeekendDaysOff = 15
 			};
 
 			Target.Persist(model);
@@ -60,6 +64,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameShift.Should().Be.True();
 			inDb.BlockSameShiftCategory.Should().Be.True();
 			inDb.Priority.Should().Be.EqualTo(1);
+			inDb.FullWeekendsOff.Should().Be.EqualTo(new MinMax<int>(model.MinFullWeekendsOff, model.MaxFullWeekendsOff));
+			inDb.WeekendDaysOff.Should().Be.EqualTo(new MinMax<int>(model.MinWeekendDaysOff, model.MaxWeekendDaysOff));
 		}
 
 		[Test]
@@ -82,7 +88,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockSameStartTime = true,
 				BlockSameShift = true,
 				BlockSameShiftCategory = true,
-				Priority = 1
+				Priority = 1,
+				MinFullWeekendsOff = 2,
+				MaxFullWeekendsOff = 6,
+				MinWeekendDaysOff = 2,
+				MaxWeekendDaysOff = 15
 			};
 
 			Target.Persist(model);
@@ -97,6 +107,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameShift.Should().Be.True();
 			inDb.BlockSameShiftCategory.Should().Be.True();
 			inDb.Priority.Should().Be.EqualTo(1);
+			inDb.FullWeekendsOff.Should().Be.EqualTo(new MinMax<int>(model.MinFullWeekendsOff, model.MaxFullWeekendsOff));
+			inDb.WeekendDaysOff.Should().Be.EqualTo(new MinMax<int>(model.MinWeekendDaysOff, model.MaxWeekendDaysOff));
 		}
 
 		[Test]
@@ -114,7 +126,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockSameStartTime = true,
 				BlockSameShift = true,
 				BlockSameShiftCategory = true,
-				Priority = 1
+				Priority = 1,
+				MinFullWeekendsOff = 2,
+				MaxFullWeekendsOff = 6,
+				MinWeekendDaysOff = 2,
+				MaxWeekendDaysOff = 15
 			};
 
 			Target.Persist(model);
@@ -129,6 +145,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameShift.Should().Be.True();
 			inDb.BlockSameShiftCategory.Should().Be.True();
 			inDb.Priority.Should().Be.EqualTo(1);
+			inDb.FullWeekendsOff.Should().Be.EqualTo(new MinMax<int>(model.MinFullWeekendsOff, model.MaxFullWeekendsOff));
+			inDb.WeekendDaysOff.Should().Be.EqualTo(new MinMax<int>(model.MinWeekendDaysOff, model.MaxWeekendDaysOff));
 		}
 
 		[Test]
@@ -150,7 +168,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockSameStartTime = true,
 				BlockSameShift = true,
 				BlockSameShiftCategory = true,
-				Priority = 1
+				Priority = 1,
+				MinFullWeekendsOff = 2,
+				MaxFullWeekendsOff = 6,
+				MinWeekendDaysOff = 2,
+				MaxWeekendDaysOff = 15
 			};
 
 			Target.Persist(model);
@@ -165,6 +187,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameShift.Should().Be.True();
 			inDb.BlockSameShiftCategory.Should().Be.True();
 			inDb.Priority.Should().Be.EqualTo(1);
+			inDb.FullWeekendsOff.Should().Be.EqualTo(new MinMax<int>(model.MinFullWeekendsOff, model.MaxFullWeekendsOff));
+			inDb.WeekendDaysOff.Should().Be.EqualTo(new MinMax<int>(model.MinWeekendDaysOff, model.MaxWeekendDaysOff));
 		}
 
 		[Test]
@@ -183,7 +207,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockSameStartTime = false,
 				BlockSameShift = false,
 				BlockSameShiftCategory = false,
-				Priority = 1
+				Priority = 1,
+				MinFullWeekendsOff = 2,
+				MaxFullWeekendsOff = 6,
+				MinWeekendDaysOff = 2,
+				MaxWeekendDaysOff = 15
 			};
 
 			Target.Persist(model);
@@ -198,6 +226,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameShift.Should().Be.False();
 			inDb.BlockSameShiftCategory.Should().Be.False();
 			inDb.Priority.Should().Be.EqualTo(1);
+			inDb.FullWeekendsOff.Should().Be.EqualTo(new MinMax<int>(model.MinFullWeekendsOff, model.MaxFullWeekendsOff));
+			inDb.WeekendDaysOff.Should().Be.EqualTo(new MinMax<int>(model.MinWeekendDaysOff, model.MaxWeekendDaysOff));
 		}
 
 		[Test]
@@ -220,7 +250,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockSameStartTime = false,
 				BlockSameShift = false,
 				BlockSameShiftCategory = false,
-				Priority = 1
+				Priority = 1,
+				MinFullWeekendsOff = 2,
+				MaxFullWeekendsOff = 6,
+				MinWeekendDaysOff = 2,
+				MaxWeekendDaysOff = 15
 			};
 
 			Target.Persist(model);
@@ -235,6 +269,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameShift.Should().Be.False();
 			inDb.BlockSameShiftCategory.Should().Be.False();
 			inDb.Priority.Should().Be.EqualTo(1);
+			inDb.FullWeekendsOff.Should().Be.EqualTo(new MinMax<int>(model.MinFullWeekendsOff, model.MaxFullWeekendsOff));
+			inDb.WeekendDaysOff.Should().Be.EqualTo(new MinMax<int>(model.MinWeekendDaysOff, model.MaxWeekendDaysOff));
 		}
 
 		[Test]

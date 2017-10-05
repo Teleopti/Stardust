@@ -57,6 +57,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			planningGroupSettings.BlockSameShiftCategory = planningGroupSettingsModel.BlockSameShiftCategory;
 			planningGroupSettings.BlockSameShift = planningGroupSettingsModel.BlockSameShift;
 			planningGroupSettings.Priority = planningGroupSettingsModel.Priority;
+			planningGroupSettings.FullWeekendsOff = new MinMax<int>(planningGroupSettingsModel.MinFullWeekendsOff, planningGroupSettingsModel.MaxFullWeekendsOff);
+			planningGroupSettings.WeekendDaysOff = new MinMax<int>(planningGroupSettingsModel.MinWeekendDaysOff, planningGroupSettingsModel.MaxWeekendDaysOff);
 
 			planningGroupSettings.ClearFilters();
 			foreach (var filter in planningGroupSettingsModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))
