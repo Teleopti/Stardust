@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			system.UseTestDouble<CountCallsToNightRestWhiteSpotSolverServiceFactory>().For<INightRestWhiteSpotSolverServiceFactory>();
 		}
 
-		public DoNotRunNightRestWhiteSpotDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
+		public DoNotRunNightRestWhiteSpotDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerEasierBlockScheduling46155)
 		{
 		}
 	}

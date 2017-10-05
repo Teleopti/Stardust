@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.False();
 		}
 
-		public SchedulingRestrictionsDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
+		public SchedulingRestrictionsDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerEasierBlockScheduling46155)
 		{
 		}
 	}

@@ -245,7 +245,6 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenarioForTeamBlock.cs" />
     <Compile Include="SkillGroups\ModifySkillGroupTest.cs" />
     <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
     <Compile Include="Common\PublishPersoEmploymentNumberChangedEventTest.cs" />

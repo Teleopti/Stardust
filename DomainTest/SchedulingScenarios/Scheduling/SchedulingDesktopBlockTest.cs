@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	public class SchedulingDesktopBlockTest : SchedulingScenarioForTeamBlock
+	public class SchedulingDesktopBlockTest : SchedulingScenario
 	{
 		private readonly bool _resourcePlannerEasierBlockScheduling46155;
 
