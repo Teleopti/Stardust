@@ -792,7 +792,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#45968 To be fixed")]
 		public void ShouldHandlePartlyOpenedSkillCorrectlyForAgentsInStrangeTimezones()
 		{
 			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());

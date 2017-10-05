@@ -13,15 +13,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			var layerActivity = (IActivity) layer.Payload;
 			if (!layerActivity.RequiresSkill)
 				return true;
-			var layerStartTime = layer.Period.ToDateOnlyPeriod(agentTimeZoneInfo).StartDate;
-			var layerTimePeriod = layer.Period.TimePeriod(agentTimeZoneInfo);
+			var layerStartDate = layer.Period.ToDateOnlyPeriod(agentTimeZoneInfo).StartDate;
 			foreach (var skillDay in skillDays)
 			{
 				if (!(skillDay.Skill is MaxSeatSkill) &&
 					skillDay.Skill.Activity.Equals(layerActivity) &&
-					skillDay.CurrentDate.Equals(layerStartTime))
+					skillDay.CurrentDate.Equals(layerStartDate))
 				{
-					if (skillDay.OpenHours().Any(timePeriod => timePeriod.Contains(layerTimePeriod)))
+					var skillTimeZone = skillDay.Skill.TimeZone;
+					if (skillDay.OpenHours().Any(timePeriod => timePeriod.Contains(layer.Period.TimePeriod(skillTimeZone))))
 					{
 						return true;
 					}
