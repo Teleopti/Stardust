@@ -186,6 +186,7 @@
 		WFM_WebScheduling_LowPriority_44320,
 		WFM_Intraday_SupportOtherSkillsLikeEmail_44026,
 		WFM_Unified_Skill_Group_Management_45417,
+		WFM_Modify_Skill_Groups_45727,
 		WFM_AuditTrail_44006,
 		Report_Show_Utc_In_Report_Selection_When_In_Use_45079
 		// ReSharper restore InconsistentNaming
