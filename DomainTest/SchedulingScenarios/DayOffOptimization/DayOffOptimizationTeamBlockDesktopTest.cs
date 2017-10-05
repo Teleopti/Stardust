@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var dayOffTemplate = new DayOffTemplate();
 			for (var i = 0; i < 7; i++)
 			{
-				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity2, new TimePeriod(8, 16));
+				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity1, new TimePeriod(8, 16));
 				asses.Add(ass);
 				if (i == 5 || i == 6)
 				{
