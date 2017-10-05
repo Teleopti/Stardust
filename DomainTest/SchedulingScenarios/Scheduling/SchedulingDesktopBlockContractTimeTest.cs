@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.WithPersonPeriod(ruleSet, new ContractScheduleWorkingMondayToFriday(), skill)
 				.WithSchedulePeriodOneMonth(period.StartDate);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
-			var stateHolder =  SchedulerStateHolder.Fill(scenario, period, new[] {agent}, Enumerable.Empty<IPersonAssignment>(), skillDays);
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] {agent}, Enumerable.Empty<IScheduleData>(), skillDays);
 			var schedulingOptions = new SchedulingOptions
 			{
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
