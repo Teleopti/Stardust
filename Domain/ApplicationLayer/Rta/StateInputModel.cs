@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public string UserCode { get; set; }
 		public string StateCode { get; set; }
 		public string StateDescription { get; set; }
-		public StateTraceInfo TraceInfo { get; set; }
+		public StateTraceLog TraceLog { get; set; }
 
 		// for logging
 		public override string ToString()

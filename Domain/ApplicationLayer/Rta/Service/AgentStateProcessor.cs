@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool Processed;
 		public AgentState State;
 		public IEnumerable<IEvent> Events;
-		public StateTraceInfo TraceInfo;
+		public StateTraceLog TraceLog;
 	}
 
 	public class ProcessInput
@@ -88,13 +88,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var processed = resultState != null;
 
 				if (!processed)
-					_tracer.NoChange(input.Input?.TraceInfo);
+					_tracer.NoChange(input.Input?.TraceLog);
 
 				return new ProcessResult
 				{
 					Processed = processed,
 					Events = eventCollector.Pop(),
-					TraceInfo = input.Input?.TraceInfo,
+					TraceLog = input.Input?.TraceLog,
 					State = resultState
 				};
 			}

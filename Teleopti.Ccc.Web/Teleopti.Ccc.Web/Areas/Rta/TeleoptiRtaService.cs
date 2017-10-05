@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 							UserCode = fixUserCode(s.UserCode),
 							StateCode = fixStateCode(s.TraceInfo, s.StateCode, platformTypeId, s.IsLoggedOn),
 							StateDescription = s.StateDescription,
-							TraceInfo = s.TraceInfo
+							TraceLog = s.TraceInfo
 						})
 					.ToArray();
 
@@ -142,14 +142,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			return userCode.Trim();
 		}
 
-		private string fixStateCode(StateTraceInfo traceInfo, string stateCode, string platformTypeId, bool isLoggedOn)
+		private string fixStateCode(StateTraceLog traceLog, string stateCode, string platformTypeId, bool isLoggedOn)
 		{
 			if (!isLoggedOn)
 				stateCode = "LOGGED-OFF";
 
 			if (stateCode == null)
 			{
-				_rtaTracer.InvalidStateCode(traceInfo);
+				_rtaTracer.InvalidStateCode(traceLog);
 				throw new InvalidStateCodeException("State code is required");
 			}
 
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 			if (stateCode.Length > 300)
 			{
-				_rtaTracer.InvalidStateCode(traceInfo);
+				_rtaTracer.InvalidStateCode(traceLog);
 				throw new InvalidStateCodeException("State code can not exceed 300 characters (including platform type id)");
 			}
 

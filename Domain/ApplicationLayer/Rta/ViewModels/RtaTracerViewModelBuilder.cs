@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.FSharp.Reflection;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
@@ -16,73 +17,59 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public RtaTracerViewModel Build()
 		{
-			// Yeeeeeeeeeah, lets not care about db performance or GC with creating millions of classes (and not structs)
-			var tracers = _reader.ReadOfType<DataRecievedAtLog>()
-				.Select(x => new Tracer
+			var tracings = _reader.ReadOfType<TracingLog>().ToLookup(x => x.Process);
+			var dataReceivedAts = _reader.ReadOfType<DataRecievedAtLog>().ToLookup(x => x.Process);
+			var activityCheckerAts = _reader.ReadOfType<ActivityCheckAtLog>().ToLookup(x => x.Process);
+			var processes = tracings.Select(x => x.Key).Concat(
+					dataReceivedAts.Select(x => x.Key)).Concat(
+					activityCheckerAts.Select(x => x.Key))
+				.Distinct();
+			var tracers = from process in processes
+				let tracing = tracings[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Tracing
+				let dataReceivedAt = dataReceivedAts[process].Max(r => r.Log?.DataRecievedAt)?.ToString("T")
+				let activityCheckAt = activityCheckerAts[process].Max(r => r.Log?.ActivityCheckAt)?.ToString("T")
+				select new Tracer
 				{
-					Process = x.Process,
-					DataReceivedAt = x.Thing?.DataRecievedAt?.ToString("T")
-				})
-				.Concat(_reader.ReadOfType<ActivityCheckAtLog>()
-					.Select(x => new Tracer
+					Process = process,
+					Tracing = tracing,
+					DataReceivedAt = dataReceivedAt,
+					ActivityCheckAt = activityCheckAt
+				};
+
+			/*
+			all unique users
+			all state codes (traceid) per user
+			all messages per state code
+			*/
+
+			var receiveds = _reader.ReadOfType<StateTraceLog>();
+			var messages = _reader.ReadOfType<StateTraceLog>().ToLookup(x => x.Log.User);
+			var users = receiveds.Select(x => x.Log.User)
+					.Concat(messages.Select(x => x.Key))
+					.Distinct()
+				;
+			
+			var tracedUsers = from user in users
+					let receivedForUser = receiveds.Where(x => x.Log.User == user)
+					let traceIds = receivedForUser.Select(x => x.Log.Id).Concat(messages[user].Select(x => x.Log.Id)).Distinct()
+					let states = from t in traceIds
+						select new TracedState
+						{
+							StateCode = receivedForUser.Where(x => x.Log.Id == t).Select(x => x.Log.StateCode).FirstOrDefault(),
+							Traces = messages[user].Where(x => x.Message != null).Where(x => x.Log.Id == t).Select(x => x.Message).ToArray()
+						}
+					select new TracedUser
 					{
-						Process = x.Process,
-						ActivityCheckAt = x.Thing?.ActivityCheckAt?.ToString("T")
-					}))
-				.Concat(_reader.ReadOfType<TracingLog>()
-					.Select(x => new Tracer
-					{
-						Process = x.Process,
-						Tracing = x.Thing?.Tracing
-					}))
-				.GroupBy(x => x.Process)
-				.Select(g => new Tracer
-				{
-					Process = g.Key,
-					ActivityCheckAt = g.Max(a => a?.ActivityCheckAt),
-					DataReceivedAt = g.Max(d => d?.DataReceivedAt),
-					Tracing = g.Last(x => x != null).Tracing
-				}).ToArray();
+						User = user,
+						States = states.ToArray()
+					}
+				;
 
 			return new RtaTracerViewModel
 			{
-				Tracers = tracers
+				Tracers = tracers.ToArray(),
+				TracedUsers = tracedUsers.ToArray()
 			};
-
-//			var recievedLogs =
-//				from p in _reader.ReadOfType<DataRecievedAtLog>()
-//				group p by p.Process
-//				into g
-//				select new Tracer
-//				{
-//					Process = g.Key,
-//					DataReceivedAt = g.Max(d => d.Thing?.DataRecievedAt?.ToString("T"))
-//				};
-//
-//			var recievedLogs2 =
-//				from p in _reader.ReadOfType<ActivityCheckAtLog>()
-//				group p by p.Process
-//				into g
-//				select new Tracer
-//				{
-//					Process = g.Key,
-//					ActivityCheckAt = g.Max(d => d.Thing?.ActivityCheckAt?.ToString("T"))
-//				};
-//
-//			var recievedLogs3 =
-//				from p in _reader.ReadOfType<TracingLog>()
-//				group p by p.Process
-//				into g
-//				select new Tracer
-//				{
-//					Process = g.Key,
-//					Tracing = g.LastOrDefault()?.Thing?.Tracing
-//				};
-//
-//			return new RtaTracerViewModel()
-//			{
-//				Tracers = recievedLogs.Concat(recievedLogs2).Concat(recievedLogs3).ToArray()
-//			};
 		}
 	}
 

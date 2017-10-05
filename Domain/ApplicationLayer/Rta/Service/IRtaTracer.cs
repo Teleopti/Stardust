@@ -14,40 +14,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 		}
 
-		public void For(IEnumerable<StateTraceInfo> traces, Action<StateTraceInfo> trace)
+		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace)
 		{
 		}
 
-		public StateTraceInfo StateReceived(string userCode, string stateCode)
+		public StateTraceLog StateReceived(string userCode, string stateCode)
 		{
 			return null;
 		}
 
-		public void InvalidStateCode(StateTraceInfo trace)
+		public void InvalidStateCode(StateTraceLog trace)
 		{
 		}
 
-		public void StateProcessing(StateTraceInfo trace)
+		public void StateProcessing(StateTraceLog trace)
 		{
 		}
 
-		public void InvalidAuthenticationKey(StateTraceInfo trace)
+		public void InvalidAuthenticationKey(StateTraceLog trace)
 		{
 		}
 
-		public void InvalidSourceId(StateTraceInfo trace)
+		public void InvalidSourceId(StateTraceLog trace)
 		{
 		}
 
-		public void InvalidUserCode(StateTraceInfo trace)
+		public void InvalidUserCode(StateTraceLog trace)
 		{
 		}
 
-		public void NoChange(StateTraceInfo trace)
+		public void NoChange(StateTraceLog trace)
 		{
 		}
 
-		public void StateProcessed(StateTraceInfo trace, IEnumerable<IEvent> events)
+		public void StateProcessed(StateTraceLog trace, IEnumerable<IEvent> events)
 		{
 		}
 	}
@@ -57,27 +57,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void ProcessReceived();
 		void ProcessProcessing();
 
-		void For(IEnumerable<StateTraceInfo> traces, Action<StateTraceInfo> trace);
+		void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace);
 
-		StateTraceInfo StateReceived(string userCode, string stateCode);
-		void InvalidStateCode(StateTraceInfo trace);
+		StateTraceLog StateReceived(string userCode, string stateCode);
+		void InvalidStateCode(StateTraceLog trace);
 
-		void StateProcessing(StateTraceInfo trace);
-		void InvalidAuthenticationKey(StateTraceInfo trace);
-		void InvalidSourceId(StateTraceInfo trace);
+		void StateProcessing(StateTraceLog trace);
+		void InvalidAuthenticationKey(StateTraceLog trace);
+		void InvalidSourceId(StateTraceLog trace);
 
-		void InvalidUserCode(StateTraceInfo trace);
-		void NoChange(StateTraceInfo trace);
-		void StateProcessed(StateTraceInfo trace, IEnumerable<IEvent> events);
+		void InvalidUserCode(StateTraceLog trace);
+		void NoChange(StateTraceLog trace);
+		void StateProcessed(StateTraceLog trace, IEnumerable<IEvent> events);
 	}
 
 	public class RtaTracerLog<T>
 	{
 		public DateTime Time;
 		public string Process;
-		public T Thing;
+		public string Message;
+		public T Log;
 	}
-	
+
 	public class DataRecievedAtLog
 	{
 		public DateTime? DataRecievedAt;
@@ -85,25 +86,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ActivityCheckAtLog
 	{
-		public DateTime? ActivityCheckAt;	
+		public DateTime? ActivityCheckAt;
 	}
 
 	public class TracingLog
 	{
 		public string Tracing;
 	}
-	
-	public class RecievedLog
+
+	public class StateTraceLog
 	{
-		public Guid TraceId;
-		public string UserCode;
+		public Guid Id;
+		public string User;
 		public string StateCode;
-	}
-	
-	public class MessageLog
-	{
-		public Guid TraceId;
-		public string Message;
 	}
 	
 	public interface IRtaTracerReader
@@ -124,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_writer = writer;
 		}
-		
+
 		public void ProcessReceived()
 		{
 			_writer.Write("ProcessReceived");
@@ -135,55 +130,50 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			throw new NotImplementedException();
 		}
 
-		public void For(IEnumerable<StateTraceInfo> traces, Action<StateTraceInfo> trace)
+		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace)
 		{
 			throw new NotImplementedException();
 		}
 
-		public StateTraceInfo StateReceived(string userCode, string stateCode)
+		public StateTraceLog StateReceived(string userCode, string stateCode)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void InvalidStateCode(StateTraceInfo trace)
+		public void InvalidStateCode(StateTraceLog trace)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void StateProcessing(StateTraceInfo trace)
+		public void StateProcessing(StateTraceLog trace)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void InvalidAuthenticationKey(StateTraceInfo trace)
+		public void InvalidAuthenticationKey(StateTraceLog trace)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void InvalidSourceId(StateTraceInfo trace)
+		public void InvalidSourceId(StateTraceLog trace)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void InvalidUserCode(StateTraceInfo trace)
+		public void InvalidUserCode(StateTraceLog trace)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void NoChange(StateTraceInfo trace)
+		public void NoChange(StateTraceLog trace)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void StateProcessed(StateTraceInfo trace, IEnumerable<IEvent> events)
+		public void StateProcessed(StateTraceLog trace, IEnumerable<IEvent> events)
 		{
 			throw new NotImplementedException();
 		}
-
 	}
 
-	public class StateTraceInfo
-	{
-		public Guid Id;
-	}
 }

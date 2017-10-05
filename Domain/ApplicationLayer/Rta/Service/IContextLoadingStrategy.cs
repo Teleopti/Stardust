@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_externalLogonMapper = externalLogonMapper;
 			_tracer = tracer;
 			_batch = batch;
-			_dataSourceId = dataSourceMapper.ValidateSourceId(_batch.SourceId, batch.States.EmptyIfNull().Select(x => x.TraceInfo));
+			_dataSourceId = dataSourceMapper.ValidateSourceId(_batch.SourceId, batch.States.EmptyIfNull().Select(x => x.TraceLog));
 			ParallelTransactions = Config.ReadValue("RtaBatchParallelTransactions", 7);
 			MaxTransactionSize = Config.ReadValue("RtaBatchMaxTransactionSize", 100);
 		}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					var personIds = _externalLogonMapper.PersonIdsFor(_dataSourceId, state.UserCode);
 					if (personIds.IsEmpty())
 					{
-						_tracer.InvalidUserCode(state.TraceInfo);
+						_tracer.InvalidUserCode(state.TraceLog);
 						context.AddException(new InvalidUserCodeException(
 							$"No person found for UserCode {state.UserCode}, DataSourceId {_dataSourceId}, SourceId {_batch.SourceId}"));
 					}
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StateDescription = input.StateDescription,
 				SnapshotId = _batch.SnapshotId,
 				SnapshotDataSourceId = _dataSourceId,
-				TraceInfo = input.TraceInfo
+				TraceLog = input.TraceLog
 			};
 		}
 	}
