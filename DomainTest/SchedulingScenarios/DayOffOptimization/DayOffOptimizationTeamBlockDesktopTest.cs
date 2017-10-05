@@ -151,8 +151,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(activity2, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(10, 0, 10, 0, 15)));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill1, skill2).WithSchedulePeriodOneWeek(firstDay);
 			agent.SchedulePeriod(firstDay).SetDaysOff(2);
-			var skillDays1 = skill1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 10, 10, 10, 10, 100, 100);
-			var skillDays2 = skill2.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 0, 0, 10);
+			var skillDays1 = skill1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 10, 10, 10, 10, 100, 100, 0);
+			var skillDays2 = skill2.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 0, 0, 0, 0, 0, 10, 10, 0);
 			var asses = new List<IPersonAssignment>();
 			var dayOffTemplate = new DayOffTemplate();
 			for (var i = 0; i < 7; i++)
@@ -163,8 +163,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				{
 					ass.SetDayOff(dayOffTemplate); //saturday/sunday
 				}
-			}		
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new [] {agent}, asses, skillDays1.Union(skillDays2));
+			}
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] {agent}, asses, skillDays1.Union(skillDays2));
 			var optPrefs = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag(), OptimizationStepDaysOff = true },
