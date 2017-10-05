@@ -57,13 +57,16 @@
 										 md-items="skillArea in vm.querySearch(vm.searchSkillAreaText, vm.skillAreas)"
 										 md-item-text="skillArea.Name"
 										 md-min-length="0"
-										 placeholder="{{'SelectSkillArea'|translate}}">
+										 placeholder={{vm.getSkillGroupText()}}>
 							<md-item-template>
 								<span md-highlight-text="vm.searchSkillAreaText"
 									  md-highlight-flags="^i">{{skillArea.Name}}</span>
 							</md-item-template>
-							<md-not-found>
+							<md-not-found ng-show="!vm.toggles.unifiedSkillGroupManagement">
 								{{'NoSkillAreasFound'|translate}}
+							</md-not-found>
+							<md-not-found ng-show="vm.toggles.unifiedSkillGroupManagement">
+								{{'NoSkillGroupsFound'|translate}}
 							</md-not-found>
 						</md-autocomplete>
 						<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkillArea"

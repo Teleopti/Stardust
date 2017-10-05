@@ -128,6 +128,12 @@
       vm.toggleModal();
     };
 
+    vm.getSkillGroupText = function() {
+      return vm.toggles.unifiedSkillGroupManagement
+        ? $translate.instant('SelectSkillGroup')
+        : $translate.instant('SelectSkillArea');
+    };
+
     var clearPrev = function() {
       vm.drillable = false;
       vm.prevArea = false;
