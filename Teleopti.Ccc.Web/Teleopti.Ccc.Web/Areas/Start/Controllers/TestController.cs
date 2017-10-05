@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
@@ -47,7 +48,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HangfireUtilities _hangfire;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
-		private readonly ScheduleCache _schedule;
 
 		public TestController(
 			IMutateNow mutateNow,
@@ -64,8 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
 			HangfireUtilities hangfire,
-			TenantTickEventPublisher tenantTickEventPublisher, 
-			ScheduleCache schedule)
+			TenantTickEventPublisher tenantTickEventPublisher)
 		{
 			_mutateNow = mutateNow;
 			_now = now;
@@ -82,7 +81,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_findPersonInfo = findPersonInfo;
 			_hangfire = hangfire;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
-			_schedule = schedule;
 		}
 
 		[TestLog]

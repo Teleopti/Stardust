@@ -14,7 +14,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 		public int ForTenant(string tenantName)
 		{
-			var maximumSessionTimeInMinutesFromConfig = _findTenantByNameWithEnsuredTransaction.Find(tenantName).GetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes);
+			var tenant = _findTenantByNameWithEnsuredTransaction.Find(tenantName);
+			if (tenant == null)
+				return 0;
+			var maximumSessionTimeInMinutesFromConfig = tenant.GetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes);
 			return int.TryParse(maximumSessionTimeInMinutesFromConfig, out int maximumSessionTimeInMinutes) ? maximumSessionTimeInMinutes : 0;
 		}
 	}
