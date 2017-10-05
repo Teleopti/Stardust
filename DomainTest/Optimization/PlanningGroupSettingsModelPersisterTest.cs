@@ -444,14 +444,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldDeleteDayOffRules()
+		public void ShouldDeletePlanningGroupSettings()
 		{
-			var dayOffRules = new PlanningGroupSettings().WithId();
-			PlanningGroupSettingsRepository.Add(dayOffRules);
+			var planningGroupSettings = new PlanningGroupSettings().WithId();
+			PlanningGroupSettingsRepository.Add(planningGroupSettings);
 
-			Target.Delete(dayOffRules.Id.Value);
+			Target.Delete(planningGroupSettings.Id.Value);
 
-			PlanningGroupSettingsRepository.Get(dayOffRules.Id.Value)
+			PlanningGroupSettingsRepository.Get(planningGroupSettings.Id.Value)
 				.Should().Be.Null();
 		}
 	}

@@ -26,24 +26,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (model.Id == Guid.Empty)
 			{
-				var dayOffRules = model.Default ?
+				var planningGroupSettings = model.Default ?
 					PlanningGroupSettings.CreateDefault(planningGroup) :
 					new PlanningGroupSettings(planningGroup);
-				setProperies(dayOffRules, model);
-				_planningGroupSettingsRepository.Add(dayOffRules);
+				setProperies(planningGroupSettings, model);
+				_planningGroupSettingsRepository.Add(planningGroupSettings);
 			}
 			else
 			{
-				var dayOffRules = _planningGroupSettingsRepository.Get(model.Id);
-				setProperies(dayOffRules, model);
+				var planningGroupSettings = _planningGroupSettingsRepository.Get(model.Id);
+				setProperies(planningGroupSettings, model);
 			}
 		}
 
 		public void Delete(Guid id)
 		{
-			var dayOffRule = _planningGroupSettingsRepository.Get(id);
-			if (dayOffRule != null)
-				_planningGroupSettingsRepository.Remove(dayOffRule);
+			var planningGroupSettings = _planningGroupSettingsRepository.Get(id);
+			if (planningGroupSettings != null)
+				_planningGroupSettingsRepository.Remove(planningGroupSettings);
 		}
 
 		private void setProperies(PlanningGroupSettings planningGroupSettings, PlanningGroupSettingsModel planningGroupSettingsModel)
