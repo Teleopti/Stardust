@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using MvcContrib.TestHelper.Ui;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Interfaces.Domain;
 
@@ -26,9 +27,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (model.Id == Guid.Empty)
 			{
-				var planningGroupSettings = model.Default ?
-					PlanningGroupSettings.CreateDefault(planningGroup) :
-					new PlanningGroupSettings(planningGroup);
+				PlanningGroupSettings planningGroupSettings;
+				if (model.Default)
+				{
+					planningGroupSettings = PlanningGroupSettings.CreateDefault(planningGroup);
+				}
+				else
+				{
+					var allSettingses = _planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup);
+					model.Priority = allSettingses.IsEmpty() ? 0 : allSettingses.Max(x => x.Priority) + 1;
+					planningGroupSettings = new PlanningGroupSettings(planningGroup);
+				}
 				setProperies(planningGroupSettings, model);
 				_planningGroupSettingsRepository.Add(planningGroupSettings);
 			}
