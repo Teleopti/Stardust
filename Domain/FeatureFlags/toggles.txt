@@ -131,6 +131,8 @@ ResourcePlanner_MergeTeamblockClassicScheduling_44289 = true
 ResourcePlanner_MergeTeamblockClassicIntraday_45508 = true
 ResourcePlanner_RetireKeepPercentageOfShifts_45688 = true
 ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
+ResourcePlanner_EasierBlockScheduling_46155 = false
+ResourcePlanner_HideSkillPrioSliders_41312 = RC
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
 Wfm_DisplayOnlineHelp_39402 = true

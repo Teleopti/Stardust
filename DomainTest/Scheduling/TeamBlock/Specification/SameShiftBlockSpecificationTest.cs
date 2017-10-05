@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -101,7 +102,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_scheduleRange1.ScheduledDay(_today)).Return(_scheduleDay2);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay2.GetEditorShift()).Return(_editableShift);
-				Expect.Call(_scheduleDayEquator.MainShiftBasicEquals(_editableShift, _editableShift)).Return(true);
+				Expect.Call(_scheduleDay1.TimeZone).Return(TimeZoneInfo.Utc);
+				Expect.Call(_scheduleDayEquator.MainShiftBasicEquals(_editableShift, _editableShift, TimeZoneInfo.Utc)).Return(true);
             }
             using (_mock.Playback())
             {
@@ -125,7 +127,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_scheduleRange1.ScheduledDay(_today)).Return(_scheduleDay2);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay2.GetEditorShift()).Return(_editableShift);
-				Expect.Call(_scheduleDayEquator.MainShiftBasicEquals(_editableShift, _editableShift)).Return(false);
+				Expect.Call(_scheduleDay1.TimeZone).Return(TimeZoneInfo.Utc);
+				Expect.Call(_scheduleDayEquator.MainShiftBasicEquals(_editableShift, _editableShift, TimeZoneInfo.Utc)).Return(false);
             }
             using (_mock.Playback())
             {
