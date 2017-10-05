@@ -89,10 +89,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public virtual void UpdateWith(SchedulingOptions schedulingOptions)
 		{
-			BlockFinderType = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
-			BlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory;
-			BlockSameStartTime = schedulingOptions.BlockSameStartTime;
-			BlockSameShift = schedulingOptions.BlockSameShift;
+			if (schedulingOptions.UseBlock)
+			{
+				BlockFinderType = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
+				BlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory;
+				BlockSameStartTime = schedulingOptions.BlockSameStartTime;
+				BlockSameShift = schedulingOptions.BlockSameShift;				
+			}
 		}
 	}
 }
