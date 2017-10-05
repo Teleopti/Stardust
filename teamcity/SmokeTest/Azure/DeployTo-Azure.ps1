@@ -1,22 +1,30 @@
 ﻿Param (
 
-    $CloudServiceName = 'teleoptirnd',          #In Parameter ex: teleoptirnd
-	$AzurePkgSize = "Standard_D1_v2"			# Pkg size to use: Standard_D1_v2 or Standard_D2_v2
+    $CloudServiceName = 'teleoptirnd'          #In Parameter ex: teleoptirnd
+	#$AzurePkgSize = "Standard_D1_v2"	       # Pkg size to use: Standard_D1_v2 or Standard_D2_v2
     
 )
 
 #$Here = $PSScriptRoot
 
-$VersionedName = Get-childitem "$PSScriptRoot\AzureRelease\*$AzurePkgSize.cspkg"
+$Configuration = "$PSScriptRoot\AzureRelease\$CloudServiceName"	+ '.cscfg' 		#Azure config file
+Log "Using configuration file: $Configuration"
+
+[xml]$CSCFGfile = Get-Content -Path $Configuration
+Write-Host "Reading VmSize from: $Configuration..."
+$VmSize = ($CSCFGfile.ServiceConfiguration.Role.ConfigurationSettings.Setting | Where-Object {$_.Name -eq "TeleoptiSetting.VmSize"}).value
+Write-Host "VmSize: '$VmSize' will be used"
+
+$VersionedName = Get-childitem "$PSScriptRoot\AzureRelease\*$VmSize.cspkg"
 $VersionedName = $VersionedName.Name.ToString()
 $AzurePackagePath = "$PSScriptRoot\AzureRelease"
 
 #Fixed Variables
-$subscription = 'Teleopti CCC Azure'			                #this the name from your .publishsettings file
+$subscription = 'Teleopti CCC Azure'			                				#this the name from your .publishsettings file
 $subscriptionID = "9020de4a-13f8-465b-a3ae-995caf390fb8"                        #this is the subscription id of the cloud service
 $service	  = "$CloudServiceName"			                                    #this is the name of the cloud service
 $package	  = "$AzurePackagePath\$VersionedName"			                	#Azure package file
-$configuration	= "$AzurePackagePath\$CloudServiceName"	+ '.cscfg'              #Azure config file
+#$configuration	= "$AzurePackagePath\$CloudServiceName"	+ '.cscfg'              #Azure config file
 $slot		   = 'production'		                                            #production or staging
 $publishSettingsFile  = "$PSScriptRoot\AzureDemo.publishsettings"	        	#publishsettings file
 
@@ -24,6 +32,7 @@ Write-Host '***************************************************************'
 Write-Host "CloudServiceName =	$CloudServiceName"
 Write-Host "AzurePackagePath =	$AzurePackagePath"
 Write-Host "VersionedName	 =	$VersionedName"
+Write-Host "VmSize			 =  $VmSize"
 Write-Host "PathToHere		 =	$PSScriptRoot"
 Write-Host '***************************************************************'
 
