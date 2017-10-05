@@ -25,6 +25,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				earliestStart = TimeSpanExtensions.TakeMin(earliestStart, ruleSet.TemplateGenerator.StartPeriod.Period.StartTime.Add(-schedulingOptions.BreakPreferenceStartTimeByMax));
 				latestEnd = TimeSpanExtensions.TakeMax(latestEnd, ruleSet.TemplateGenerator.StartPeriod.Period.EndTime.Add(schedulingOptions.BreakPreferenceStartTimeByMax));
 			}
+
+			if (latestEnd.HasValue)
+				latestEnd = TimeSpanExtensions.TakeMin(latestEnd, new TimeSpan(23, 59, 59));
+			
 			return new EffectiveRestriction(
 				new StartTimeLimitation(earliestStart, latestEnd), 
 				new EndTimeLimitation(), 
