@@ -36,7 +36,6 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 	});
 
 	function generateForecastChart(chartId, days) {
-		console.log('Start generate');
 		if ((!chartId || days.length < 1) && chart ) {
 			chart.unload();
 			return;

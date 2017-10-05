@@ -173,7 +173,6 @@
             forecastingService.result(
               wl,
               function(data, status, headers, config) {
-                console.log(data);
                 manageLocalStorage();
                 vm.selectedWorkload.Days = data.Days;
                 vm.isForecastRunning = false;

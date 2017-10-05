@@ -147,7 +147,6 @@
           BlockToken: blockToken,
           IsLastWorkload: true
         }), function(data, status, headers, config) {
-          // console.log(data);
           vm.skillMaster.IsForecastRunning = false;
           blockToken = data.BlockToken;
           getWorkloadForecastData(vm.forecastModalObj);
