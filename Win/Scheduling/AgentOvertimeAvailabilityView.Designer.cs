@@ -84,7 +84,7 @@
 			this.checkBoxAdvNextDay.TabIndex = 3;
 			this.checkBoxAdvNextDay.Text = "xxNextDay";
 			this.checkBoxAdvNextDay.ThemesEnabled = true;
-			this.checkBoxAdvNextDay.CheckedChanged += new Syncfusion.Windows.Forms.Tools.CheckedChangedEventHandler(this.checkBoxAdvNextDayCheckedChanged);
+			this.checkBoxAdvNextDay.CheckedChanged += new System.EventHandler(this.checkBoxAdvNextDayCheckedChanged);
 			// 
 			// outlookTimePickerTo
 			// 

@@ -1,7 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Drawing;
-using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -51,10 +51,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void loadAuditSetting()
 		{
+			checkBoxAdvIsRunning.CheckedChanged -= checkBoxAdvIsRunningCheckedChanged;
 			_auditSetting = Repository.Read();
 			checkedWhenLoaded = _auditSetting.IsScheduleEnabled;
 			checkBoxAdvIsRunning.Checked = checkedWhenLoaded;
 			setAuditTrailingStatus(checkBoxAdvIsRunning.Checked);
+
+			checkBoxAdvIsRunning.CheckedChanged += checkBoxAdvIsRunningCheckedChanged;
 		}
 
 		public void SaveChanges()
@@ -117,39 +120,31 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gradientPanelExtStatusText.BackgroundColor = brushInfo;
 		}
 
-		private void checkBoxAdvIsRunningCheckedChanged(object sender, CheckedChangedEventArgs e)
+		private void checkBoxAdvIsRunningCheckedChanged(object sender, EventArgs e)
 		{
-			if (e.Source == CheckedChangedEventArgs.SourceType.Programmatic)
+			var areYouSureDialogResult = DialogResult.OK;
+			var oldState = !checkBoxAdvIsRunning.Checked;
+			if (checkBoxAdvIsRunning.Checked)
 			{
-				setAuditTrailingStatus(checkBoxAdvIsRunning.Checked);
+				areYouSureDialogResult = MessageDialogs.ShowQuestion(this, Resources.AuditingTurnOnLong,
+					Resources.AuditingTurnOnShort);
 			}
 			else
 			{
+				if (_auditSetting.IsScheduleEnabled)
+				{
+					areYouSureDialogResult = MessageDialogs.ShowQuestion(this, Resources.AuditTrailSettingOffQuestion,
+						Resources.AuditTrailSetting);
+				}
+			}
 
-				var areYouSureDialogResult = DialogResult.OK;
-				var oldState = !checkBoxAdvIsRunning.Checked;
-				if (checkBoxAdvIsRunning.Checked)
-				{
-					areYouSureDialogResult = MessageDialogs.ShowQuestion(this, Resources.AuditingTurnOnLong,
-					                                                     Resources.AuditingTurnOnShort);
-				}
-				else
-				{
-					if (_auditSetting.IsScheduleEnabled)
-					{
-						areYouSureDialogResult = MessageDialogs.ShowQuestion(this, Resources.AuditTrailSettingOffQuestion,
-																	  Resources.AuditTrailSetting);
-					}
-				}
-
-				if (areYouSureDialogResult == DialogResult.No)
-				{
-					checkBoxAdvIsRunning.Checked = oldState;
-				}
-				else
-				{
-					setStatusPanelBackColor(Color.FromArgb(255, 224, 128));
-				}
+			if (areYouSureDialogResult == DialogResult.No)
+			{
+				checkBoxAdvIsRunning.Checked = oldState;
+			}
+			else
+			{
+				setStatusPanelBackColor(Color.FromArgb(255, 224, 128));
 			}
 		}
 	}

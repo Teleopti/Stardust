@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             Presenter.Copy();
         }
 
-        private void checkBoxAdvIncludeTemplates_CheckedChanged(object sender, Syncfusion.Windows.Forms.Tools.CheckedChangedEventArgs e)
+        private void checkBoxAdvIncludeTemplates_CheckedChanged(object sender, EventArgs e)
         {
             Presenter.ToggleIncludeTemplates(checkBoxAdvIncludeTemplates.Checked);
         }

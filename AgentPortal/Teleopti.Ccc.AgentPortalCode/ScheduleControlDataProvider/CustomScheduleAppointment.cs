@@ -199,7 +199,13 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider
             }
         }
 
-        public int MarkerValue
+	    public bool RecurringOnOverride
+	    {
+		    get { return _scheduleAppointment.RecurringOnOverride; }
+		    set { _scheduleAppointment.RecurringOnOverride = value; }
+	    }
+
+	    public int MarkerValue
         {
             get
             {
