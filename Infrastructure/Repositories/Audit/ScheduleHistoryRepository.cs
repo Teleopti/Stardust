@@ -5,6 +5,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Envers;
 using NHibernate.Envers.Query;
+using NHibernate.Envers.Query.Criteria;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -32,9 +33,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			var revisionIds = new HashSet<long>();
 			findRevisionsForAssignment(agent, dateOnly, maxResult).ForEach(revId => revisionIds.Add(revId));
 			var absencePeriod = convertFromDateOnly(agent, dateOnly);
-			//this is actually wrong but good enough to solve http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?id=46100
-			//until absence is part of assignment in domain
-			absencePeriod = absencePeriod.ChangeEndTime(TimeSpan.FromHours(8)); 
 			findRevisionsForAbsence(agent, absencePeriod, maxResult).ForEach(revId => revisionIds.Add(revId));
 			return loadRevisions(revisionIds, maxResult);
 		}
@@ -104,12 +102,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		private IEnumerable<long> findRevisionsForAbsence(IPerson agent, DateTimePeriod dateTimePeriod, int maxSize)
 		{
+			var period1 = AuditEntity.Conjunction() //touching 00-24
+				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(dateTimePeriod.StartDateTime));
+			//this is actually wrong but good enough to solve http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?id=46100
+			//until absence is part of assignment in domain
+			var period2 = AuditEntity.Conjunction() //fully within 24-08
+				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Ge(dateTimePeriod.EndDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Le(dateTimePeriod.EndDateTime.AddHours(8)));
+			
 			return session().Auditer().CreateQuery()
 				.ForRevisionsOfEntity(typeof (PersonAbsence), false, true)
 				.AddProjection(AuditEntity.RevisionNumber().Distinct())
 				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
-				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(dateTimePeriod.StartDateTime))
+				.Add(AuditEntity.Disjunction()
+					.Add(period1)
+					.Add(period2)
+				)
 				.AddOrder(AuditEntity.RevisionNumber().Desc())
 				.SetMaxResults(maxSize)
 				.GetResultList<long>();
