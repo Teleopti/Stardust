@@ -41,7 +41,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 				foreach (var dayOffTemplate in dayOffs)
 				{
-					if (analyticsDayOffs.Any(a => a.DayOffCode == dayOffTemplate.Id.GetValueOrDefault() &&
+					if (analyticsCurrentBusinessUnit == null || analyticsDayOffs.Any(a => a.DayOffCode == dayOffTemplate.Id.GetValueOrDefault() &&
 												  a.DatasourceUpdateDate == DateHelper.GetSmallDateTime(dayOffTemplate.UpdatedOn.GetValueOrDefault()) &&
 												  a.BusinessUnitId == analyticsCurrentBusinessUnit.BusinessUnitId))
 						continue;
