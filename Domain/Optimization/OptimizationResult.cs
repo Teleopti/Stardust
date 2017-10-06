@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -44,6 +46,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			//
 
 			var resultStateHolder = _schedulerStateHolder().SchedulingResultState;
+			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(period, fixedStaffPeople, resultStateHolder);
+
 			var personsProvider = new PersonsInOrganizationProvider(fixedStaffPeople) { DoLoadByPerson = true };
 			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(
 				new ScheduleDateTimePeriod(period.ToDateTimePeriod(_userTimeZone.TimeZone()), fixedStaffPeople), _currentScenario.Current(), personsProvider, 
@@ -64,10 +68,35 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			if (resultStateHolder.SkillDays != null)
 			{
-				result.Map(resultStateHolder.SkillDays, period);
+				result.Map(allSkillsForAgentGroup, period);
 			}
 
 			return result;
+		}
+
+		private static Dictionary<ISkill, IEnumerable<ISkillDay>> getAllSkillsForPlanningGroup(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople,
+			ISchedulingResultStateHolder resultStateHolder)
+		{
+			var planningGroupSkills = new List<ISkill>();
+			foreach (var person in fixedStaffPeople)
+			{
+				for (var i = person.PersonPeriodCollection.Count - 1; i == 0; i--)
+				{
+					if (person.PersonPeriodCollection[i].StartDate > period.EndDate) continue;
+					foreach (var skill in person.PersonPeriodCollection[i].PersonSkillCollection)
+					{
+						if (!planningGroupSkills.Contains(skill.Skill))
+							planningGroupSkills.Add(skill.Skill);
+					}
+					if (person.PersonPeriodCollection[i].StartDate <= period.StartDate)
+						break;
+				}
+			}
+
+			var planningGroupSkillsDictionary =
+				resultStateHolder.SkillDays.Where(skill => planningGroupSkills.Contains(skill.Key))
+					.ToDictionary(skill => skill.Key, skill => skill.Value);
+			return planningGroupSkillsDictionary;
 		}
 
 		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(

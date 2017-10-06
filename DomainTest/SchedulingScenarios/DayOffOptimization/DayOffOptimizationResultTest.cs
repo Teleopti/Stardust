@@ -96,5 +96,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			result.BusinessRulesValidationResults.Count().Should().Be.EqualTo(1);
 			result.BusinessRulesValidationResults.FirstOrDefault().BusinessRuleCategory.Should().Be(BusinessRuleCategory.DayOff);
 		}
+
+		[Test]
+		public void ShouldNotShowSkillsThatNoneOfTheScheduledAgentsHas()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has("_");
+			var relevantSkill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
+			var irrellevantSkill = SkillRepository.Has("irrelevant skill", activity, new TimePeriod(8, 16));
+
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var filterContract1 = new ContractWithMaximumTolerance();
+			var filterContract2 = new ContractWithMaximumTolerance();
+			var agentToBeOptimized = PersonRepository.Has(filterContract1, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, relevantSkill);
+			var agentNotToBeOptimized = PersonRepository.Has(filterContract2, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, irrellevantSkill, relevantSkill);
+
+			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract1));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, SchedulePeriodType.Day, planningGroup);
+
+			SkillDayRepository.Has(relevantSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
+			SkillDayRepository.Has(irrellevantSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
+
+			PersonAssignmentRepository.Has(agentToBeOptimized, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(1)), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(agentNotToBeOptimized, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(1)), new TimePeriod(8, 0, 16, 0));
+
+			var result = Target.Execute(planningPeriod.Id.Value);
+			result.SkillResultList.Count().Should().Be.EqualTo(1);
+			result.SkillResultList.First().SkillName.Should().Be.EqualTo("relevant skill");
+		}
 	}
 }
