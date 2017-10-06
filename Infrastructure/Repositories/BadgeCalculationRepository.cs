@@ -13,10 +13,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	// Should be removed when toggle ETL_MoveBadgeCalculationToETL_38421 removed
 	public class BadgeCalculationRepository : IBadgeCalculationRepository
 	{
-		private const int timeoutInSecond = 1200;
+		private const int timeoutInSecond = 2400;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(BadgeCalculationRepository));
 
 		public Dictionary<Guid, int> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold,

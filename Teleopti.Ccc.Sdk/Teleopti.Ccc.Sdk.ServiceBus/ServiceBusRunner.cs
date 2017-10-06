@@ -161,8 +161,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterModule(new TenantServerModule(configuration));
 			builder.RegisterModule<NodeHandlersModule>();
 
-			// Implementation for IBadgeCalculationRepository is different in ServiceBus and ETL
-			// So it's not placed in CommonModule
 			builder.RegisterType<BadgeCalculationRepository>().As<IBadgeCalculationRepository>();
 
 			var container = builder.Build();

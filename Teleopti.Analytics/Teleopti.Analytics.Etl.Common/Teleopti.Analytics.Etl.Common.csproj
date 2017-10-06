@@ -109,7 +109,6 @@
     <Compile Include="Entity\BusinessUnitItem.cs" />
     <Compile Include="EtlAppModule.cs" />
     <Compile Include="Infrastructure\BaseConfigurationRepository.cs" />
-    <Compile Include="Infrastructure\EtlBadgeCalculationRepository.cs" />
     <Compile Include="Tenants.cs" />
     <Compile Include="Service\EtlJobStarter.cs" />
     <Compile Include="Service\EtlService.cs" />
