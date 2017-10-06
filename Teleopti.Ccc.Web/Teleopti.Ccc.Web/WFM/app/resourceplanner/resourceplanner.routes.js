@@ -137,6 +137,10 @@
 			url: '/optimize/:id',
 			templateUrl: 'app/resourceplanner/web_performance_tests/temp.html',
 			controller: 'ResourceplannerTempCtrl'
+		}).state('resourceplanner.tree', { // fortree
+			url: '/tree',
+			templateUrl: 'app/resourceplanner/tree_data/main.html',
+			controller: 'TreeMainController as vm'
 		});
 	}
 })();
