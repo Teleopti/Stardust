@@ -251,7 +251,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    public bool AllowBreakContractTime { get; set; }
 
 	    public bool SkipNegativeShiftValues { get; set; }
-	    public bool IsOptimization { get; set; }
 
 	    public bool IsClassic()
 	    {

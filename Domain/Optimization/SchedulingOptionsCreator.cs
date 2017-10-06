@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				TeamSameStartTime = optimizationPreferences.Extra.UseTeamSameStartTime,
 				TeamSameEndTime = optimizationPreferences.Extra.UseTeamSameEndTime,
 				UseSameDayOffs = optimizationPreferences.Extra.UseTeamSameDaysOff,
-				TeamSameActivity = optimizationPreferences.Extra.UseTeamSameActivity,
-				IsOptimization = true
+				TeamSameActivity = optimizationPreferences.Extra.UseTeamSameActivity
 			};
 
 			if (schedulingOptions.TeamSameActivity)
