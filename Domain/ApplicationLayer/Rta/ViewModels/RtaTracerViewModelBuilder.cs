@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.FSharp.Reflection;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
@@ -36,27 +35,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					ActivityCheckAt = activityCheckAt
 				};
 
-			/*
-			all unique users
-			all state codes (traceid) per user
-			all messages per state code
-			*/
-
-			var receiveds = _reader.ReadOfType<StateTraceLog>();
-			var messages = _reader.ReadOfType<StateTraceLog>().ToLookup(x => x.Log.User);
-			var users = receiveds.Select(x => x.Log.User)
-					.Concat(messages.Select(x => x.Key))
-					.Distinct()
-				;
-			
-			var tracedUsers = from user in users
-					let receivedForUser = receiveds.Where(x => x.Log.User == user)
-					let traceIds = receivedForUser.Select(x => x.Log.Id).Concat(messages[user].Select(x => x.Log.Id)).Distinct()
-					let states = from t in traceIds
+			var logs = _reader.ReadOfType<StateTraceLog>();
+			var users = logs.Select(x => x.Log.User).Distinct();
+			var tracedUsers =
+					from user in users
+					let traceIds = logs.Where(x => x.Log.User == user).Select(x => x.Log.Id).Distinct()
+					let states =
+						from s in traceIds
+						let logsForTraceId = logs.Where(x => x.Log.Id == s)
+						let traces = from t in logsForTraceId
+							where !t.Message.IsNullOrEmpty()
+							select $"{(t.Process.IsNullOrEmpty() ? "" : $"{t.Process} :")}{t.Message}"
 						select new TracedState
 						{
-							StateCode = receivedForUser.Where(x => x.Log.Id == t).Select(x => x.Log.StateCode).FirstOrDefault(),
-							Traces = messages[user].Where(x => x.Message != null).Where(x => x.Log.Id == t).Select(x => x.Message).ToArray()
+							StateCode = logsForTraceId.Select(x => x.Log.StateCode).FirstOrDefault(),
+							Traces = traces.ToArray()
 						}
 					select new TracedUser
 					{

@@ -376,6 +376,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
+		public void ShouldHaveMessageWithProcess()
+		{
+			Traces
+				.Has(
+					new RtaTracerLog<StateTraceLog>
+					{
+						Process = "process",
+						Log = new StateTraceLog
+						{
+							Id = Guid.NewGuid()
+						},
+						Message = "message"
+					})
+				;
+
+			Target.Build().TracedUsers.Single().States.Single().Traces.Single()
+				.Should().Contain("process");
+		}
+
+		[Test]
 		public void ShouldHave2Messages()
 		{
 			var traceId = Guid.NewGuid();
@@ -465,14 +485,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.Should().Be("statecode");
 			result.TracedUsers.Single().States.Single().Traces.Single()
 				.Should().Be("message");
-
-//			var process = new RtaTracerLog<DataRecievedAtLog> {Process = "process"};
-//			Traces.Has(process);
-//
-//			var result = Target.Build();
-//			process.Process = "mutated";
-//
-//			result.Tracers.Single().Process.Should().Be("process");
 		}
+		
 	}
 }
