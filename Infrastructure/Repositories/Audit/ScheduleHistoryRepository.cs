@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Envers;
 using NHibernate.Envers.Query;
-using NHibernate.Envers.Query.Criteria;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -32,8 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 			var revisionIds = new HashSet<long>();
 			findRevisionsForAssignment(agent, dateOnly, maxResult).ForEach(revId => revisionIds.Add(revId));
-			var absencePeriod = convertFromDateOnly(agent, dateOnly);
-			findRevisionsForAbsence(agent, absencePeriod, maxResult).ForEach(revId => revisionIds.Add(revId));
+			findRevisionsForAbsence(agent, dateOnly, maxResult).ForEach(revId => revisionIds.Add(revId));
 			return loadRevisions(revisionIds, maxResult);
 		}
 
@@ -66,10 +63,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(periodWithExtraAtEnd.EndDateTime))
 				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(periodWithExtraAtEnd.StartDateTime))
 				.Results();
-
 	
 			return absences;
-
 		}
 
 		private IEnumerable<PersonAssignment> findAssignment(IPerson agent, DateOnly dateOnly, IRevision revision)
@@ -82,8 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		    foreach (var assignment in assignments)
 		    {
-                if (!LazyLoadingManager.IsInitialized(assignment.ShiftCategory))
-                    LazyLoadingManager.Initialize(assignment.ShiftCategory);
+	            LazyLoadingManager.Initialize(assignment.ShiftCategory);
 		    }
             return assignments;
 		}
@@ -100,16 +94,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.GetResultList<long>();
 		}
 
-		private IEnumerable<long> findRevisionsForAbsence(IPerson agent, DateTimePeriod dateTimePeriod, int maxSize)
+		private IEnumerable<long> findRevisionsForAbsence(IPerson agent, DateOnly dateOnly, int maxSize)
 		{
+			var absencePeriod = convertFromDateOnly(agent, dateOnly);
 			var period1 = AuditEntity.Conjunction() //touching 00-24
-				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
-				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(dateTimePeriod.StartDateTime));
+				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(absencePeriod.EndDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(absencePeriod.StartDateTime));
 			//this is actually wrong but good enough to solve http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?id=46100
 			//until absence is part of assignment in domain
 			var period2 = AuditEntity.Conjunction() //fully within 24-08
-				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Ge(dateTimePeriod.EndDateTime))
-				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Le(dateTimePeriod.EndDateTime.AddHours(8)));
+				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Ge(absencePeriod.EndDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Le(absencePeriod.EndDateTime.AddHours(8)));
 			
 			return session().Auditer().CreateQuery()
 				.ForRevisionsOfEntity(typeof (PersonAbsence), false, true)
