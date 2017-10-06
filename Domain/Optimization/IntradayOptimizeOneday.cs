@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
+			schedulingOptions.BreakPreferenceStartTimeByMaxIsActive = true;
 
 			var originalShift = _workShiftOriginalStateContainer.OldPeriodDaysState[dateOnly].GetEditorShift();
 			if (originalShift == null) return false;

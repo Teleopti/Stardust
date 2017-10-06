@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			schedulingOptions.BreakPreferenceStartTimeByMaxIsActive = true;
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(allPersonMatrixList, selectedPeriod);
 			var teamBlocks = teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions, blockPreferenceProvider);
 			
