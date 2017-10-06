@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
@@ -29,9 +30,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			InParameter.ValueMustBeLargerThanZero(nameof(maxResult), maxResult);
 
 			var revisionIds = new HashSet<long>();
-			var dateTime = convertFromDateOnly(agent, dateOnly);
 			findRevisionsForAssignment(agent, dateOnly, maxResult).ForEach(revId => revisionIds.Add(revId));
-			findRevisionsForAbsence(agent, dateTime, maxResult).ForEach(revId => revisionIds.Add(revId));
+			var absencePeriod = convertFromDateOnly(agent, dateOnly);
+			//this is actually wrong but good enough to solve http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?id=46100
+			//until absence is part of assignment in domain
+			absencePeriod = absencePeriod.ChangeEndTime(TimeSpan.FromHours(8)); 
+			findRevisionsForAbsence(agent, absencePeriod, maxResult).ForEach(revId => revisionIds.Add(revId));
 			return loadRevisions(revisionIds, maxResult);
 		}
 

@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 					.Should().Contain(PersonAbsence);
 			}
 		}
+		
 
 		[Test]
 		public void ShouldFindRevisionForModifiedAssignment()
@@ -78,6 +79,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 					.Should().Have.SameSequenceAs(expected);
 			}
 		}
+		
+		
+		[Test]
+		public void ShouldFindRevisionWithAbsenceOnNextDayIfUnderlyingAssignmentExtendsDay()
+		{
+			var expected = new[]
+			{
+				new Revision {Id = revisionNumberAfterOneUnitTestModification +1}, 
+				new Revision {Id = revisionNumberAfterOneUnitTestModification}, 
+				new Revision {Id = revisionNumberAtSetupStart},
+			};
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				PersonAssignment.AddActivity(PersonAssignment.MainActivities().First().Payload, new DateTimePeriod(Today.AddHours(23), Today.AddHours(30)));
+				new PersonAssignmentRepository(new ThisUnitOfWork(uow)).Add(PersonAssignment);
+				uow.PersistAll();
+			}
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var newAbsence = new PersonAbsence(Agent, Scenario,
+					new AbsenceLayer(PersonAbsence.Layer.Payload, new DateTimePeriod(Today.AddHours(27), Today.AddHours(28))));
+
+				new PersonAbsenceRepository(new ThisUnitOfWork(uow)).Add(newAbsence);				
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				target.FindRevisions(Agent, new DateOnly(Today), 3)
+					.Should().Have.SameSequenceAs(expected);
+			}
+		}
+		
 
 		[Test]
 		public void ShouldFindDistinctRevision()
