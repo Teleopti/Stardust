@@ -19,6 +19,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 																		int maximumRows);
 
 		IEnumerable<IPerson> RevisionPeople();
-		bool LimitReached { get; }
 	}
 }

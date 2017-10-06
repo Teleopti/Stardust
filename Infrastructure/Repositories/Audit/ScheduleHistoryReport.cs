@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IRegional _regional;
-		private bool _limitReached;
 
 		public ScheduleHistoryReport(IUnitOfWorkFactory unitOfWorkFactory, IRegional regional)
 		{
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			var ret = new List<ScheduleAuditingReportData>();
 			var changedPeriodAgentTimeZone = changedPeriod.ToDateTimePeriod(_regional.TimeZone);
 			var scheduledPeriodAgentTimeZone = scheduledPeriod.ToDateTimePeriod(_regional.TimeZone);
-			_limitReached = false;
 
 			foreach (var agentsBatch in agents.Batch(100))
 			{
@@ -59,10 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 					.ForEach(absRev => retTemp.Add(createAbsenceAuditingData(absRev)));
 				ret.AddRange(retTemp);
 				if (ret.Count > maximumRows)
-				{
-					_limitReached = true;
 					break;
-				}
 			}
 			return ret;
 		}
@@ -76,8 +71,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		{
 			return session().GetNamedQuery("RevisionPeople").List<IPerson>();
 		}
-
-		public bool LimitReached { get { return _limitReached; } }
 
 		private ScheduleAuditingReportData createAssignmentAuditingData(IRevisionEntityInfo<PersonAssignment, Revision> auditedAssignment)
 		{

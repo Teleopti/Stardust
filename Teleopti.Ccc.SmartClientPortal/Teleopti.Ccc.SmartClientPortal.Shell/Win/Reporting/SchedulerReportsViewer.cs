@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			var data = new Dictionary<string, IList<ScheduleAuditingReportData>> { { "DataSet2", reportData } };
 			var parameters = ReportHandler.CreateScheduleAuditingParameters(model, _currentCulture);
 
-			return new ReportDataPackage<ScheduleAuditingReportData>(data, parameters, rep.LimitReached);
+			return new ReportDataPackage<ScheduleAuditingReportData>(data, parameters, reportData.Count > maximumRows);
 		}
 
 		//from tree
