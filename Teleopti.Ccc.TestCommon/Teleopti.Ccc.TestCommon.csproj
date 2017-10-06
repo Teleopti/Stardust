@@ -261,7 +261,6 @@
     <Compile Include="FakeRepositories\FakeSiteOpenHourRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillTypeRepository.cs" />
-    <Compile Include="FakeRepositories\FakeSmartPersonPropertyQuerier.cs" />
     <Compile Include="FakeRepositories\FakeStorage.cs" />
     <Compile Include="FakeRepositories\FakeUserDeviceRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkShiftRuleSetRepository.cs" />

@@ -432,7 +432,6 @@
     <Compile Include="Repositories\IQueryExtensions.cs" />
     <Compile Include="Repositories\IOutboundCampaignRepository.cs" />
     <Compile Include="Repositories\IScheduleStorageFactory.cs" />
-    <Compile Include="Repositories\ISmartPersonPropertyQuerier.cs" />
     <Compile Include="Repositories\LoaderDeciderResult.cs" />
     <Compile Include="Repositories\OutboundCampaignRepository.cs" />
     <Compile Include="Repositories\PayrollFormatRepository.cs" />
@@ -449,7 +448,6 @@
     <Compile Include="Repositories\SkillGroupRepository.cs" />
     <Compile Include="Analytics\AnalyticsUnitOfWorkAspect.cs" />
     <Compile Include="Analytics\CurrentAnalyticsUnitOfWork.cs" />
-    <Compile Include="Repositories\SmartPersonPropertyQuerier.cs" />
     <Compile Include="Rta\AgentStatePersister.cs" />
     <Compile Include="Rta\AgentStateReadModelQueryBuilder.cs" />
     <Compile Include="Rta\AgentStateReadModelReader.cs" />
