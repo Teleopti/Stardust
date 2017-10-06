@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			Tracer.ProcessReceived();
 
-			Target.Read().Should().Not.Be.Null();
+			Target.ReadOfType<StateTraceLog>().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			Tracer.ProcessReceived();
 
-			Target.Read().Single().Message.Should().Contain("ProcessReceived");
+			Target.ReadOfType<StateTraceLog>().Single().Message.Should().Contain("ProcessReceived");
 		}
 
 		[Test]
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			Tracer.ProcessReceived();
 
-			Target.Read().Single().Time.Utc().Ticks.Should().Be.GreaterThan(now.Ticks);
+			Target.ReadOfType<StateTraceLog>().Single().Time.Utc().Ticks.Should().Be.GreaterThan(now.Ticks);
 		}
 	}
 }
