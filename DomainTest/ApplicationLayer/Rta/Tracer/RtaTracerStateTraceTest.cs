@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 {
 	[DomainTest]
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
-	public class RtaTracerTest
+	public class RtaTracerStateTraceTest
 	{
 		public IRtaTracer Target;
 		public FakeKeyValueStorePersister KeyValueStore;
