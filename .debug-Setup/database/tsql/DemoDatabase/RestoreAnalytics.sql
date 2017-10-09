@@ -8,6 +8,9 @@ GO
 BEGIN
 	declare @path varchar(1000)
 	declare @restoreCommand nvarchar(4000)
+	declare @Version numeric(18,10)
+	
+	SET @Version = CAST(LEFT(CAST(SERVERPROPERTY('ProductVersion') AS nvarchar(max)),CHARINDEX('.',CAST(SERVERPROPERTY('ProductVersion') AS nvarchar(max))) - 1) + '.' + REPLACE(RIGHT(CAST(SERVERPROPERTY('ProductVersion') AS nvarchar(max)), LEN(CAST(SERVERPROPERTY('ProductVersion') AS nvarchar(max))) - CHARINDEX('.',CAST(SERVERPROPERTY('ProductVersion') AS nvarchar(max)))),'.','') AS numeric(18,10))
 
 	IF OBJECT_ID('tempdb..#tmp') IS NOT NULL DROP TABLE #tmp
 	create table #tmp
@@ -34,6 +37,11 @@ BEGIN
 	IsPresent bit,
 	TDEThumbprint varbinary(32)
 	)
+	
+	IF @Version > 13
+	BEGIN
+		ALTER TABLE #tmp ADD SnapshotURL nvarchar(360);
+	END
 	
 	declare @TeleoptiAnalytics_Primary nvarchar(128)
 	declare @TeleoptiAnalytics_Stage nvarchar(128)
