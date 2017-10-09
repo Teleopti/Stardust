@@ -6,6 +6,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 {
 	public class NoRtaTracer : IRtaTracer
 	{
+		public void Trace(string usercode)
+		{
+		}
+		
+		public void Stop()
+		{
+		}
+
 		public void ProcessReceived()
 		{
 		}

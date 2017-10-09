@@ -5,11 +5,11 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
-	public class FakeTraceReader : IRtaTracerReader
+	public class FakeRtaTracerPersister : IRtaTracerReader, IRtaTracerWriter
 	{
 		private readonly List<object> _data = new List<object>();
 
-		public FakeTraceReader Has<T>(params RtaTracerLog<T>[] datas)
+		public FakeRtaTracerPersister Has<T>(params RtaTracerLog<T>[] datas)
 		{
 			_data.AddRange(datas);
 			return this;
@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public IEnumerable<RtaTracerLog<T>> ReadOfType<T>()
 		{
 			return _data.OfType<RtaTracerLog<T>>().ToArray();
+		}
+
+		public void Write<T>(RtaTracerLog<T> log)
+		{
+			_data.Add(log);
 		}
 	}
 }

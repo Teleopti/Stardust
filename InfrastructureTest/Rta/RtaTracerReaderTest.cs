@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
 	[AnalyticsDatabaseTest]
 	[Setting("RtaTracerBufferSize", 0)]
+	[Ignore("Implementation was experimental")]
 	public class RtaTracerReaderTest
 	{
 		public IRtaTracer Tracer;

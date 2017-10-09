@@ -2,20 +2,19 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 {
 	[DomainTest]
 	public class RtaTracerViewModelBuilderTest
 	{
 		public RtaTracerViewModelBuilder Target;
-		public FakeTraceReader Traces;
+		public FakeRtaTracerPersister RtaTracers;
 
 		[Test]
 		public void ShouldBuildSomething()
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldContainTracer()
 		{
-			Traces.Has(new RtaTracerLog<DataRecievedAtLog> {Process = "process"});
+			RtaTracers.Has(new RtaTracerLog<DataRecievedAtLog> {Process = "process"});
 
 			Target.Build().Tracers.Single().Process.Should().Be("process");
 		}
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldContainTracers()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<DataRecievedAtLog> {Process = "process1"})
 				.Has(new RtaTracerLog<DataRecievedAtLog> {Process = "process2"});
 
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public void ShouldMapTracersSyncronously()
 		{
 			var process = new RtaTracerLog<DataRecievedAtLog> {Process = "process"};
-			Traces.Has(process);
+			RtaTracers.Has(process);
 
 			var result = Target.Build();
 			process.Process = "mutated";
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldContainTracing()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<TracingLog>
 				{
 					Log = new TracingLog
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldOnlyContainLatestTracing()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<TracingLog>
 				{
 					Process = "process",
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldContainTracingForTheProcess()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<TracingLog>
 				{
 					Process = "process1",
@@ -123,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldContainDataRecievedAt()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<DataRecievedAtLog>
 				{
 					Log = new DataRecievedAtLog {DataRecievedAt = "2017-10-04 08:00:01".Utc()}
@@ -135,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldOnlyContainLatestDataRecievedAt()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<DataRecievedAtLog>
 				{
 					Process = "process",
@@ -159,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldContainDataReceivedAtForTheProcess()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<DataRecievedAtLog>
 				{
 					Process = "p1",
@@ -184,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldContainAcitivtyCheckAt()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<ActivityCheckAtLog>
 				{
 					Log = new ActivityCheckAtLog
@@ -199,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldContainActivityCheckAtForTheProcess()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<ActivityCheckAtLog>
 				{
 					Process = "p1",
@@ -224,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldContainLatestActivityCheckedAt()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<ActivityCheckAtLog>
 				{
 					Process = "process",
@@ -249,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldHaveTracedUser()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -266,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldHave2TracedUsers()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -289,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldHaveStateCode()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -306,7 +305,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldHave2StateCodes()
 		{
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<StateTraceLog>
 					{
 						Log = new StateTraceLog
@@ -333,7 +332,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public void ShouldHaveMessage()
 		{
 			var traceId = Guid.NewGuid();
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -360,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldHaveMessageToo()
 		{
-			Traces
+			RtaTracers
 				.Has(
 					new RtaTracerLog<StateTraceLog>
 					{
@@ -379,7 +378,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldHaveMessageWithProcess()
 		{
-			Traces
+			RtaTracers
 				.Has(
 					new RtaTracerLog<StateTraceLog>
 					{
@@ -400,7 +399,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public void ShouldHave2Messages()
 		{
 			var traceId = Guid.NewGuid();
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -436,7 +435,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			var trace1 = Guid.NewGuid();
 			var trace2 = Guid.NewGuid();
-			Traces
+			RtaTracers
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -473,7 +472,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public void ShouldMapTracedUsersSyncronously()
 		{
 			var recevied = new RtaTracerLog<StateTraceLog> {Log = new StateTraceLog {User = "usercode", StateCode = "statecode"}, Message = "message"};
-			Traces.Has(recevied);
+			RtaTracers.Has(recevied);
 
 			var result = Target.Build();
 			recevied.Log.User = "mutated";

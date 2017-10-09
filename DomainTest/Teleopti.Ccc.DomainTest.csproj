@@ -220,10 +220,11 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelBatchTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftMeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\StateQueue\QueueTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ForEntireBuTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\PermittedViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilderPermissionTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\RtaTracerViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\AgentStateNameTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ExcludePhoneStateTest.cs" />

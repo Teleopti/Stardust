@@ -44,11 +44,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			logger().Hierarchy.Configured = true;
 		}
 
-		public void Write(string message)
-		{
-			log.Debug(message);
-		}
-
 		public void Dispose()
 		{
 			logger().RemoveAllAppenders();
@@ -57,6 +52,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private static Logger logger()
 		{
 			return (LogManager.GetLogger("Teleopti.RtaTracer").Logger as Logger);
+		}
+
+		public void Write<T>(RtaTracerLog<T> log2)
+		{
+			log.Debug(log2.Message);
 		}
 	}
 }

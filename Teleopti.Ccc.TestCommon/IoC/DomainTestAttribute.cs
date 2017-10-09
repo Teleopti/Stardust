@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			system.UseTestDouble<FakeTeamCardReader>().For<ITeamCardReader>();
 			system.UseTestDouble<FakeOrganizationReader>().For<IOrganizationReader>();
-			system.UseTestDouble<FakeTraceReader>().For<IRtaTracerReader>();
+			system.UseTestDouble<FakeRtaTracerPersister>().For<IRtaTracerReader, IRtaTracerWriter>();
 			//
 
 			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();
