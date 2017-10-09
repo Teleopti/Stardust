@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		[Test]
 		public void ShouldLogStateReceived()
 		{
-			KeyValueStore.Update("RtaTracerUserCode", "usercode");
+			Target.Trace("usercode");
 
 			Target.StateReceived("usercode", "statecode");
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		[Test]
 		public void ShouldLogStateReceivedWithId()
 		{
-			KeyValueStore.Update("RtaTracerUserCode", "usercode");
+			Target.Trace("usercode");
 
 			Target.StateReceived("usercode", "statecode");
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		[Test]
 		public void ShouldReturnStateTraceLog()
 		{
-			KeyValueStore.Update("RtaTracerUserCode", "usercode");
+			Target.Trace("usercode");
 
 			var result = Target.StateReceived("usercode", "statecode");
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		[Test]
 		public void ShouldNotLogWhenStopped()
 		{
-			KeyValueStore.Update("RtaTracerUserCode", "usercode");
+			Target.Trace("usercode");
 			Target.Stop();
 
 			Target.StateReceived("usercode", "statecode");
