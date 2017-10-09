@@ -1,5 +1,4 @@
 Analytics;Forms
-Broker;Windows
 PMService;Windows
 RTA;Windows
 SDK;Windows

@@ -1,5 +1,4 @@
 Analytics;True
-Broker;False
 PMService;True
 RTA;True
 SDK;True
