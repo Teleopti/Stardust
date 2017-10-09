@@ -83,7 +83,7 @@
 			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.filteredAgents;
 			var randomAgent = selectedAgents[Math.floor(Math.random() * selectedAgents.length)];
 			var state = vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)];
-			randomAgent.sendState(state);
+			randomAgent.sendState(state.Code);
 		}
 
 		function buildAgents(_agents) {

@@ -537,7 +537,7 @@ describe('RtaToolController', function () {
 		expect(vm.filteredAgents[1].isSelected).toEqual(true);
 	});
 
-	it('should only send batch with selected agents', function () {
+	it('should send random state', function () {
 		var requestBody = {};
 		$httpBackend.whenPOST('../Rta/State/Batch').respond(function (method, url, data, headers) {
 			requestBody = JSON.parse(data);
@@ -550,20 +550,18 @@ describe('RtaToolController', function () {
 				DataSource: '1'
 			})
 			.withPhoneState({
-				Code: 'Ready',
-				Name: 'Ready'
+				Name: 'Ready',
+				Code: 'ReadyCode'
 			});
 		var scope = $controllerbuilder.createController();
 		var vm = scope.vm;
 
 		scope
 			.apply(vm.togglePause())
-			.wait(5000)
+			.wait(5000);
 
 		expect(requestBody.States.length).toEqual(1);
 		expect(requestBody.States[0].UserCode).toEqual('0019');
-		expect(requestBody.States[0].StateCode.Code).toEqual('Ready');
-		expect(requestBody.States[0].StateCode.Name).toEqual('Ready');
+		expect(requestBody.States[0].StateCode).toEqual('ReadyCode');
 	});
-
 });
