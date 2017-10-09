@@ -196,7 +196,7 @@
     <value>gradientPanelScheduleHasChanged</value>
   </data>
   <data name="&gt;&gt;gradientPanelScheduleHasChanged.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;gradientPanelScheduleHasChanged.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -226,7 +226,7 @@
     <value>textBoxExtMessage</value>
   </data>
   <data name="&gt;&gt;textBoxExtMessage.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;textBoxExtMessage.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -262,7 +262,7 @@
     <value>autoLabelSubject</value>
   </data>
   <data name="&gt;&gt;autoLabelSubject.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelSubject.Parent" xml:space="preserve">
     <value>tableLayoutPanelTop</value>
@@ -289,7 +289,7 @@
     <value>textBoxExtSubject</value>
   </data>
   <data name="&gt;&gt;textBoxExtSubject.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;textBoxExtSubject.Parent" xml:space="preserve">
     <value>tableLayoutPanelTop</value>
@@ -322,7 +322,7 @@
     <value>autoLabelAbsence</value>
   </data>
   <data name="&gt;&gt;autoLabelAbsence.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelAbsence.Parent" xml:space="preserve">
     <value>tableLayoutPanelTop</value>
@@ -346,7 +346,7 @@
     <value>comboBoxAdvAbsence</value>
   </data>
   <data name="&gt;&gt;comboBoxAdvAbsence.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;comboBoxAdvAbsence.Parent" xml:space="preserve">
     <value>tableLayoutPanelTop</value>
@@ -379,7 +379,7 @@
     <value>autoLabelRequestDate</value>
   </data>
   <data name="&gt;&gt;autoLabelRequestDate.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelRequestDate.Parent" xml:space="preserve">
     <value>tableLayoutPanelTop</value>
@@ -409,7 +409,7 @@
     <value>autoLabelRequestDateValue</value>
   </data>
   <data name="&gt;&gt;autoLabelRequestDateValue.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelRequestDateValue.Parent" xml:space="preserve">
     <value>tableLayoutPanelTop</value>
@@ -436,7 +436,7 @@
     <value>autoLabelRequestStatusValue</value>
   </data>
   <data name="&gt;&gt;autoLabelRequestStatusValue.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelRequestStatusValue.Parent" xml:space="preserve">
     <value>tableLayoutPanelTop</value>
@@ -469,7 +469,7 @@
     <value>autoLabelRequestStatus</value>
   </data>
   <data name="&gt;&gt;autoLabelRequestStatus.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelRequestStatus.Parent" xml:space="preserve">
     <value>tableLayoutPanelTop</value>
@@ -535,7 +535,7 @@
     <value>autoLabelEndDate</value>
   </data>
   <data name="&gt;&gt;autoLabelEndDate.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelEndDate.Parent" xml:space="preserve">
     <value>tableLayoutPanelDates</value>
@@ -568,7 +568,7 @@
     <value>autoLabelStartDate</value>
   </data>
   <data name="&gt;&gt;autoLabelStartDate.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelStartDate.Parent" xml:space="preserve">
     <value>tableLayoutPanelDates</value>
@@ -622,7 +622,7 @@
     <value>dateTimePickerAdvEnd</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvEnd.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvEnd.Parent" xml:space="preserve">
     <value>tableLayoutPanelDates</value>
@@ -676,7 +676,7 @@
     <value>dateTimePickerAdvStart</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvStart.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvStart.Parent" xml:space="preserve">
     <value>tableLayoutPanelDates</value>
@@ -727,7 +727,7 @@
     <value>checkBoxAdvAllDay</value>
   </data>
   <data name="&gt;&gt;checkBoxAdvAllDay.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;checkBoxAdvAllDay.Parent" xml:space="preserve">
     <value>tableLayoutPanelDates</value>
@@ -962,7 +962,7 @@
     <value>toolStripTabItemRequest</value>
   </data>
   <data name="&gt;&gt;toolStripTabItemRequest.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripButtonSaveAndClose.Name" xml:space="preserve">
     <value>toolStripButtonSaveAndClose</value>
@@ -1001,7 +1001,7 @@
     <value>ribbonControlAdv1.OfficeMenu</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.OfficeMenu.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <metadata name="toolStripTabItemRequest.TabGroup" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value />
@@ -1055,7 +1055,7 @@
     <value>toolStripExButtons</value>
   </data>
   <data name="&gt;&gt;toolStripExButtons.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripExButtons.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -1073,7 +1073,7 @@
     <value>ribbonControlAdv1.ribbonPanel1</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Parent" xml:space="preserve">
     <value>ribbonControlAdv1</value>
@@ -1097,7 +1097,7 @@
     <value>ribbonControlAdv1</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.Parent" xml:space="preserve">
     <value>$this</value>

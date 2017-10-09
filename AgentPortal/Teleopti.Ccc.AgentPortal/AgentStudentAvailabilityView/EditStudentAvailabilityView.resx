@@ -391,7 +391,7 @@
     <value>buttonAdvSave</value>
   </data>
   <data name="&gt;&gt;buttonAdvSave.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=8.202.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;buttonAdvSave.Parent" xml:space="preserve">
     <value>tableLayoutPanelStudentAvailability</value>
@@ -415,7 +415,7 @@
     <value>checkBoxAdvNextDay1</value>
   </data>
   <data name="&gt;&gt;checkBoxAdvNextDay1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;checkBoxAdvNextDay1.Parent" xml:space="preserve">
     <value>tableLayoutPanelStudentAvailability</value>
@@ -472,7 +472,7 @@
     <value>checkBoxAdvNextDay2</value>
   </data>
   <data name="&gt;&gt;checkBoxAdvNextDay2.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=8.202.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;checkBoxAdvNextDay2.Parent" xml:space="preserve">
     <value>tableLayoutPanelStudentAvailability</value>

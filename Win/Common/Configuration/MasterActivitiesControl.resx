@@ -232,7 +232,7 @@
     <value>autoLabelInfoAboutChanges</value>
   </data>
   <data name="&gt;&gt;autoLabelInfoAboutChanges.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelInfoAboutChanges.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -268,7 +268,7 @@
     <value>autoLabelChangeInfo</value>
   </data>
   <data name="&gt;&gt;autoLabelChangeInfo.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelChangeInfo.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -304,7 +304,7 @@
     <value>autoLabelColor</value>
   </data>
   <data name="&gt;&gt;autoLabelColor.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelColor.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -340,7 +340,7 @@
     <value>autoLabelScenario</value>
   </data>
   <data name="&gt;&gt;autoLabelScenario.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelScenario.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -367,7 +367,7 @@
     <value>comboBoxMasterActivities</value>
   </data>
   <data name="&gt;&gt;comboBoxMasterActivities.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;comboBoxMasterActivities.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -394,7 +394,7 @@
     <value>textBoxName</value>
   </data>
   <data name="&gt;&gt;textBoxName.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;textBoxName.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -430,7 +430,7 @@
     <value>autoLabelDescription</value>
   </data>
   <data name="&gt;&gt;autoLabelDescription.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelDescription.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -454,7 +454,7 @@
     <value>ColorButton</value>
   </data>
   <data name="&gt;&gt;ColorButton.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.ColorPickerButton, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.ColorPickerButton, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;ColorButton.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -541,7 +541,7 @@
     <value>buttonDelete</value>
   </data>
   <data name="&gt;&gt;buttonDelete.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;buttonDelete.Parent" xml:space="preserve">
     <value>tableLayoutPanelSubHeader1</value>
@@ -802,7 +802,7 @@
     <value>gradientPanelHeader</value>
   </data>
   <data name="&gt;&gt;gradientPanelHeader.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;gradientPanelHeader.Parent" xml:space="preserve">
     <value>$this</value>

@@ -148,7 +148,7 @@
     <value>gridControlProgress</value>
   </data>
   <data name="&gt;&gt;gridControlProgress.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Grid.GridControl, Syncfusion.Grid.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Grid.GridControl, Syncfusion.Grid.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;gridControlProgress.Parent" xml:space="preserve">
     <value>tableLayoutPanelBase</value>
@@ -181,7 +181,7 @@
     <value>gridControlTimeline</value>
   </data>
   <data name="&gt;&gt;gridControlTimeline.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Grid.GridControl, Syncfusion.Grid.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Grid.GridControl, Syncfusion.Grid.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;gridControlTimeline.Parent" xml:space="preserve">
     <value>tableLayoutPanelBase</value>

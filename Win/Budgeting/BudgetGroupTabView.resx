@@ -138,7 +138,7 @@
     <value>tabPageAdvDay</value>
   </data>
   <data name="&gt;&gt;tabPageAdvDay.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TabPageAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TabPageAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;tabPageAdvDay.Parent" xml:space="preserve">
     <value>tabControlAdv</value>
@@ -162,7 +162,7 @@
     <value>tabPageAdvWeek</value>
   </data>
   <data name="&gt;&gt;tabPageAdvWeek.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TabPageAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TabPageAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;tabPageAdvWeek.Parent" xml:space="preserve">
     <value>tabControlAdv</value>
@@ -186,7 +186,7 @@
     <value>tabPageAdvMonth</value>
   </data>
   <data name="&gt;&gt;tabPageAdvMonth.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TabPageAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TabPageAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;tabPageAdvMonth.Parent" xml:space="preserve">
     <value>tabControlAdv</value>
@@ -211,7 +211,7 @@
     <value>tabControlAdv</value>
   </data>
   <data name="&gt;&gt;tabControlAdv.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TabControlAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TabControlAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;tabControlAdv.Parent" xml:space="preserve">
     <value>$this</value>

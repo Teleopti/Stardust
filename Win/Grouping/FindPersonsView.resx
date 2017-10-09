@@ -235,7 +235,7 @@
     <value>dateTimePickerAdvTo</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvTo.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvTo.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -292,7 +292,7 @@
     <value>dateTimePickerAdvFrom</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvFrom.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvFrom.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -373,7 +373,7 @@
     <value>textBoxExtFind</value>
   </data>
   <data name="&gt;&gt;textBoxExtFind.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;textBoxExtFind.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -518,7 +518,7 @@
     <value>treeViewAdvResult</value>
   </data>
   <data name="&gt;&gt;treeViewAdvResult.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TreeViewAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TreeViewAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;treeViewAdvResult.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>

@@ -229,7 +229,7 @@
     <value>autoLabelDefaultScenario</value>
   </data>
   <data name="&gt;&gt;autoLabelDefaultScenario.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelDefaultScenario.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -265,7 +265,7 @@
     <value>autoLabelChangeInfo</value>
   </data>
   <data name="&gt;&gt;autoLabelChangeInfo.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelChangeInfo.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -301,7 +301,7 @@
     <value>autoLabelScenario</value>
   </data>
   <data name="&gt;&gt;autoLabelScenario.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelScenario.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -328,7 +328,7 @@
     <value>comboBoxAdvScenarioCollection</value>
   </data>
   <data name="&gt;&gt;comboBoxAdvScenarioCollection.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;comboBoxAdvScenarioCollection.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -355,7 +355,7 @@
     <value>textBoxExtDescription</value>
   </data>
   <data name="&gt;&gt;textBoxExtDescription.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;textBoxExtDescription.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -391,7 +391,7 @@
     <value>autoLabelDescription</value>
   </data>
   <data name="&gt;&gt;autoLabelDescription.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelDescription.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -430,7 +430,7 @@
     <value>autoLabelInfoAboutChanges</value>
   </data>
   <data name="&gt;&gt;autoLabelInfoAboutChanges.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelInfoAboutChanges.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -493,7 +493,7 @@
     <value>buttonDelete</value>
   </data>
   <data name="&gt;&gt;buttonDelete.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;buttonDelete.Parent" xml:space="preserve">
     <value>tableLayoutPanelSubHeader1</value>
@@ -631,7 +631,7 @@
     <value>autoLabelEnableReporting</value>
   </data>
   <data name="&gt;&gt;autoLabelEnableReporting.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelEnableReporting.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -652,7 +652,7 @@
     <value>checkBoxAdvEnableReporting</value>
   </data>
   <data name="&gt;&gt;checkBoxAdvEnableReporting.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;checkBoxAdvEnableReporting.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -688,7 +688,7 @@
     <value>autoLabelMax5Scenarios</value>
   </data>
   <data name="&gt;&gt;autoLabelMax5Scenarios.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelMax5Scenarios.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -724,7 +724,7 @@
     <value>autoLabelRestricted</value>
   </data>
   <data name="&gt;&gt;autoLabelRestricted.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;autoLabelRestricted.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -745,7 +745,7 @@
     <value>checkBoxAdvRestricted</value>
   </data>
   <data name="&gt;&gt;checkBoxAdvRestricted.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;checkBoxAdvRestricted.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -907,7 +907,7 @@
     <value>gradientPanelHeader</value>
   </data>
   <data name="&gt;&gt;gradientPanelHeader.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;gradientPanelHeader.Parent" xml:space="preserve">
     <value>$this</value>

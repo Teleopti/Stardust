@@ -141,7 +141,7 @@
     <value>ribbonControlAdvMain.OfficeMenu</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdvMain.OfficeMenu.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="ribbonControlAdvMain.Size" type="System.Drawing.Size, System.Drawing">
     <value>840, 158</value>
@@ -157,7 +157,7 @@
     <value>ribbonControlAdvMain</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdvMain.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdvMain.Parent" xml:space="preserve">
     <value>$this</value>
@@ -301,7 +301,7 @@
     <value>toolStripExMain</value>
   </data>
   <data name="&gt;&gt;toolStripExMain.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripExMain.Parent" xml:space="preserve">
     <value>ribbonControlAdvMain.ribbonPanel1</value>
@@ -319,7 +319,7 @@
     <value>ribbonControlAdvMain.ribbonPanel1</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdvMain.ribbonPanel1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdvMain.ribbonPanel1.Parent" xml:space="preserve">
     <value>ribbonControlAdvMain</value>
@@ -400,7 +400,7 @@
     <value>textBoxExtMessage</value>
   </data>
   <data name="&gt;&gt;textBoxExtMessage.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;textBoxExtMessage.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -466,7 +466,7 @@
     <value>textBoxExtSubject</value>
   </data>
   <data name="&gt;&gt;textBoxExtSubject.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;textBoxExtSubject.Parent" xml:space="preserve">
     <value>tableLayoutPanelMain</value>
@@ -4271,7 +4271,7 @@
     <value>toolStripTabItemResponse</value>
   </data>
   <data name="&gt;&gt;toolStripTabItemResponse.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripButtonApprove.Name" xml:space="preserve">
     <value>toolStripButtonApprove</value>
