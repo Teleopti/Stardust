@@ -263,5 +263,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain(eventz.GetType().Name);
 		}
+		
+		[Test]
+		public void ShouldLogStateReceivedForMultiple()
+		{
+			Target.Trace("usercode");
+
+			var trace1 = Target.StateReceived("usercode", "statecode1");
+			var trace2 = Target.StateReceived("usercode", "statecode2");
+			Target.For(new[] {trace1, trace2}, x => Target.NoChange(x));
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Log).Should().Contain(trace1);
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Log).Should().Contain(trace2);
+		}
+		
+		[Test]
+		public void ShouldLogStateReceivedForMultiple2()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode1");
+			Target.For(new[] {trace, null}, x => Target.NoChange(x));
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Log).Should().Contain(trace);
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Log).Should().Not.Contain(null);
+		}
 	}
 }

@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		
 		void ProcessReceived();
 		void ProcessProcessing();
+		void ProcessActivityCheck();
+		
 
 		void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace);
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using NPOI.SS.Formula.Functions;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -12,11 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		private readonly IRtaTracerWriter _writer;
 		private readonly IKeyValueStorePersister _keyValues;
 		private readonly string _process;
+		private readonly INow _now;
 
-		public RtaTracer(IRtaTracerWriter writer, IKeyValueStorePersister keyValues)
+		public RtaTracer(IRtaTracerWriter writer, IKeyValueStorePersister keyValues, INow now)
 		{
 			_writer = writer;
 			_keyValues = keyValues;
+			_now = now;
 			_process = ProcessName();
 		}
 
@@ -40,16 +43,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public void ProcessReceived()
 		{
+			log(new ProcessReceivedLog {RecievedAt = _now.UtcDateTime()}, "Data received at");
 		}
 
 		public void ProcessProcessing()
 		{
-			throw new NotImplementedException();
+			log(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
+		}
+
+		public void ProcessActivityCheck()
+		{
+			log(new ActivityCheckLog {ActivityCheckAt = _now.UtcDateTime()}, "Activity check at");
 		}
 
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace)
 		{
-			throw new NotImplementedException();
+			traces.ForEach(trace);
 		}
 
 		public StateTraceLog StateReceived(string userCode, string stateCode)
@@ -63,52 +72,53 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 				User = userCode,
 				StateCode = stateCode
 			};
-			traceState(trace, "Received");
+			log(trace, "Received");
 			return trace;
 		}
 
 		public void InvalidStateCode(StateTraceLog trace)
 		{
-			traceState(trace, "Invalid state code");
+			log(trace, "Invalid state code");
 		}
 
 		public void StateProcessing(StateTraceLog trace)
 		{
-			traceState(trace, "Processing");
+			log(trace, "Processing");
 		}
 
 		public void InvalidAuthenticationKey(StateTraceLog trace)
 		{
-			traceState(trace, "Invalid authentication key");
+			log(trace, "Invalid authentication key");
 		}
 
 		public void InvalidSourceId(StateTraceLog trace)
 		{
-			traceState(trace, "Invalid source Id");
+			log(trace, "Invalid source Id");
 		}
 
 		public void InvalidUserCode(StateTraceLog trace)
 		{
-			traceState(trace, "Invalid user code");
+			log(trace, "Invalid user code");
 		}
 
 		public void NoChange(StateTraceLog trace)
 		{
-			traceState(trace, "No change");
+			log(trace, "No change");
 		}
 
 		public void StateProcessed(StateTraceLog trace, IEnumerable<IEvent> events)
 		{
-			traceState(trace, "Processed");
-			events.EmptyIfNull().ForEach(e => traceState(trace, e.GetType().Name));
+			log(trace, "Processed");
+			events.EmptyIfNull().ForEach(e => log(trace, e.GetType().Name));
 		}
 
-		private void traceState(StateTraceLog trace, string message)
+		private void log<T>(T log, string message)
 		{
-			if (trace == null) return;
-			_writer.Write(new RtaTracerLog<StateTraceLog>
+			if (log == null)
+				return;
+			_writer.Write(new RtaTracerLog<T>
 			{
-				Log = trace,
+				Log = log,
 				Message = message,
 				Process = _process
 			});

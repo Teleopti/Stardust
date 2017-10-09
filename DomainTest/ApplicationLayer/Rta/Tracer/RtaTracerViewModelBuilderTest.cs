@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		[Test]
 		public void ShouldContainTracer()
 		{
-			RtaTracers.Has(new RtaTracerLog<DataRecievedAtLog> {Process = "process"});
+			RtaTracers.Has(new RtaTracerLog<ProcessReceivedLog> {Process = "process"});
 
 			Target.Build().Tracers.Single().Process.Should().Be("process");
 		}
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public void ShouldContainTracers()
 		{
 			RtaTracers
-				.Has(new RtaTracerLog<DataRecievedAtLog> {Process = "process1"})
-				.Has(new RtaTracerLog<DataRecievedAtLog> {Process = "process2"});
+				.Has(new RtaTracerLog<ProcessReceivedLog> {Process = "process1"})
+				.Has(new RtaTracerLog<ProcessReceivedLog> {Process = "process2"});
 
 			Target.Build()
 				.Tracers.Select(x => x.Process)
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		[Test]
 		public void ShouldMapTracersSyncronously()
 		{
-			var process = new RtaTracerLog<DataRecievedAtLog> {Process = "process"};
+			var process = new RtaTracerLog<ProcessReceivedLog> {Process = "process"};
 			RtaTracers.Has(process);
 
 			var result = Target.Build();
@@ -123,9 +123,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public void ShouldContainDataRecievedAt()
 		{
 			RtaTracers
-				.Has(new RtaTracerLog<DataRecievedAtLog>
+				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
-					Log = new DataRecievedAtLog {DataRecievedAt = "2017-10-04 08:00:01".Utc()}
+					Log = new ProcessReceivedLog {RecievedAt = "2017-10-04 08:00:01".Utc()}
 				});
 
 			Target.Build().Tracers.Single().DataReceivedAt.Should().Be("08:00:01");
@@ -135,20 +135,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public void ShouldOnlyContainLatestDataRecievedAt()
 		{
 			RtaTracers
-				.Has(new RtaTracerLog<DataRecievedAtLog>
+				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
 					Process = "process",
-					Log = new DataRecievedAtLog
+					Log = new ProcessReceivedLog
 					{
-						DataRecievedAt = "2017-10-04 08:00:01".Utc()
+						RecievedAt = "2017-10-04 08:00:01".Utc()
 					}
 				})
-				.Has(new RtaTracerLog<DataRecievedAtLog>
+				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
 					Process = "process",
-					Log = new DataRecievedAtLog
+					Log = new ProcessReceivedLog
 					{
-						DataRecievedAt = "2017-10-04 08:00:11".Utc()
+						RecievedAt = "2017-10-04 08:00:11".Utc()
 					}
 				});
 
@@ -159,20 +159,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public void ShouldContainDataReceivedAtForTheProcess()
 		{
 			RtaTracers
-				.Has(new RtaTracerLog<DataRecievedAtLog>
+				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
 					Process = "p1",
-					Log = new DataRecievedAtLog
+					Log = new ProcessReceivedLog
 					{
-						DataRecievedAt = "2017-10-05 08:00:00".Utc()
+						RecievedAt = "2017-10-05 08:00:00".Utc()
 					}
 				})
-				.Has(new RtaTracerLog<DataRecievedAtLog>
+				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
 					Process = "p2",
-					Log = new DataRecievedAtLog
+					Log = new ProcessReceivedLog
 					{
-						DataRecievedAt = "2017-10-05 08:00:10".Utc()
+						RecievedAt = "2017-10-05 08:00:10".Utc()
 					}
 				});
 
@@ -184,9 +184,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public void ShouldContainAcitivtyCheckAt()
 		{
 			RtaTracers
-				.Has(new RtaTracerLog<ActivityCheckAtLog>
+				.Has(new RtaTracerLog<ActivityCheckLog>
 				{
-					Log = new ActivityCheckAtLog
+					Log = new ActivityCheckLog
 					{
 						ActivityCheckAt = "2017-10-04 08:00:01".Utc()
 					}
@@ -199,18 +199,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public void ShouldContainActivityCheckAtForTheProcess()
 		{
 			RtaTracers
-				.Has(new RtaTracerLog<ActivityCheckAtLog>
+				.Has(new RtaTracerLog<ActivityCheckLog>
 				{
 					Process = "p1",
-					Log = new ActivityCheckAtLog
+					Log = new ActivityCheckLog
 					{
 						ActivityCheckAt = "2017-10-05 08:00:00".Utc()
 					}
 				})
-				.Has(new RtaTracerLog<ActivityCheckAtLog>
+				.Has(new RtaTracerLog<ActivityCheckLog>
 				{
 					Process = "p2",
-					Log = new ActivityCheckAtLog
+					Log = new ActivityCheckLog
 					{
 						ActivityCheckAt = "2017-10-05 08:00:10".Utc()
 					}
@@ -224,18 +224,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public void ShouldContainLatestActivityCheckedAt()
 		{
 			RtaTracers
-				.Has(new RtaTracerLog<ActivityCheckAtLog>
+				.Has(new RtaTracerLog<ActivityCheckLog>
 				{
 					Process = "process",
-					Log = new ActivityCheckAtLog
+					Log = new ActivityCheckLog
 					{
 						ActivityCheckAt = "2017-10-05 08:00:00".Utc()
 					}
 				})
-				.Has(new RtaTracerLog<ActivityCheckAtLog>
+				.Has(new RtaTracerLog<ActivityCheckLog>
 				{
 					Process = "process",
-					Log = new ActivityCheckAtLog
+					Log = new ActivityCheckLog
 					{
 						ActivityCheckAt = "2017-10-05 08:00:10".Utc()
 					}

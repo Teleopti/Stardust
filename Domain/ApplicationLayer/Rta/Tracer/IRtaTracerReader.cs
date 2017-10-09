@@ -16,12 +16,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		public T Log;
 	}
 
-	public class DataRecievedAtLog
+	public class ProcessReceivedLog
 	{
-		public DateTime? DataRecievedAt;
+		public DateTime? RecievedAt;
 	}
 
-	public class ActivityCheckAtLog
+	public class ProcessProcessingLog
+	{
+		public DateTime? ProcessingAt;
+	}
+
+	public class ActivityCheckLog
 	{
 		public DateTime? ActivityCheckAt;
 	}

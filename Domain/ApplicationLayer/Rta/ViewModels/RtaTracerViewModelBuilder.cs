@@ -18,15 +18,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public RtaTracerViewModel Build()
 		{
 			var tracings = _reader.ReadOfType<TracingLog>().ToLookup(x => x.Process);
-			var dataReceivedAts = _reader.ReadOfType<DataRecievedAtLog>().ToLookup(x => x.Process);
-			var activityCheckerAts = _reader.ReadOfType<ActivityCheckAtLog>().ToLookup(x => x.Process);
+			var dataReceivedAts = _reader.ReadOfType<ProcessReceivedLog>().ToLookup(x => x.Process);
+			var activityCheckerAts = _reader.ReadOfType<ActivityCheckLog>().ToLookup(x => x.Process);
 			var processes = tracings.Select(x => x.Key).Concat(
 					dataReceivedAts.Select(x => x.Key)).Concat(
 					activityCheckerAts.Select(x => x.Key))
 				.Distinct();
 			var tracers = from process in processes
 				let tracing = tracings[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Tracing
-				let dataReceivedAt = dataReceivedAts[process].Max(r => r.Log?.DataRecievedAt)?.ToString("T")
+				let dataReceivedAt = dataReceivedAts[process].Max(r => r.Log?.RecievedAt)?.ToString("T")
 				let activityCheckAt = activityCheckerAts[process].Max(r => r.Log?.ActivityCheckAt)?.ToString("T")
 				select new Tracer
 				{

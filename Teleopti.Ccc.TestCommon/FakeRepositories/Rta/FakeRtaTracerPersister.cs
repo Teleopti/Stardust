@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.AddRange(datas);
 			return this;
 		}
-		
+
 		public IEnumerable<RtaTracerLog<T>> ReadOfType<T>()
 		{
 			return _data.OfType<RtaTracerLog<T>>().ToArray();
