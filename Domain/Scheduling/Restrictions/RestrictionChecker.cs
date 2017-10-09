@@ -261,18 +261,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	        return permissionState;
         }
 
-		private IPreferenceRestriction RestrictionPreference(IScheduleDay schedulePart)
+		private static IPreferenceRestriction RestrictionPreference(IScheduleDay schedulePart)
         {
-			var dataRestrictions = schedulePart
-				.PersistableScheduleDataCollection()
-				.OfType<IPreferenceDay>();
-
-            var preference = (from r in dataRestrictions
-                              where r.Restriction != null
-                              select r.Restriction).FirstOrDefault();
-
-            return preference;
-        }
+			var preferenceDay = schedulePart.PreferenceDay();
+			return preferenceDay?.Restriction;
+		}
 
 		public PermissionState CheckPreferenceShift(IScheduleDay schedulePart)
         {

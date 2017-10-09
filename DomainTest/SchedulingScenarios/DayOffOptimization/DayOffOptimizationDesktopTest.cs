@@ -469,27 +469,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var dayOffTemplate = new DayOffTemplate();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var team = new Team { Site = new Site("_") };
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(firstDay);
 			agent.SchedulePeriod(firstDay).SetDaysOff(2);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 5, 5, 5, 1, 25, 5, 5);
-			var scheduleDatas = new List<IScheduleData>();
+			var scheduleDatas = new List<IPersistableScheduleData>();
 			for (var i = 0; i < 7; i++)
 			{
 				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
-				var preferenceRestriction = new PreferenceRestriction();
 				if (i == 4 || i == 6)
 				{
+					var preferenceRestriction = new PreferenceRestriction();
 					ass.SetDayOff(dayOffTemplate); 
 					preferenceRestriction.DayOffTemplate = dayOffTemplate;
-					scheduleDatas.Add(new ScheduleDataRestriction(agent, preferenceRestriction, firstDay.AddDays(i)));
+					scheduleDatas.Add(new PreferenceDay(agent, firstDay.AddDays(i), preferenceRestriction));
 				}
 	
-				scheduleDatas.Add(ass);		
+				scheduleDatas.Add(ass);
 			}
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, scheduleDatas, skillDays);
 			var optPrefs = new OptimizationPreferences { General = {ScheduleTag = new ScheduleTag(), UsePreferences= true, PreferencesValue = 1.0d}};
-			var dayOffPreferences = new DaysOffPreferences() {UseConsecutiveWorkdays = true, ConsecutiveWorkdaysValue = new MinMax<int>(1, 3)};
+			var dayOffPreferences = new DaysOffPreferences {UseConsecutiveWorkdays = true, ConsecutiveWorkdaysValue = new MinMax<int>(1, 3)};
 
 			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
