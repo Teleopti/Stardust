@@ -267,7 +267,7 @@ describe('RtaToolController', function () {
 		expect(vm.filteredAgents[0].StateCodes[0].Name).toEqual('Ready');
 	});
 
-	fit('should send single state', function () {
+	it('should send single state', function () {
 		var requestBody = {};
 		$httpBackend.whenPOST('../Rta/State/Batch').respond(function (method, url, data, headers) {
 			requestBody = JSON.parse(data);
