@@ -46,6 +46,7 @@
         vm.requestSent = false;
         vm.name = $stateParams.isDefault ? $translate.instant("Default") : "";
         vm.selectedItem = undefined;
+        vm.selectedType = undefined;
         vm.searchString = '';
         vm.results = [];
         vm.filterId = $stateParams.filterId ? $stateParams.filterId : "";
@@ -208,9 +209,10 @@
             var item = vm.schedulingSettings[index];
             item.Selected = true;
             if (item.Id == "BlockScheduling") {
-                vm.blockSchedulingName = $translate.instant("BlockScheduling");
-            } else {
-                vm.blockSchedulingName = $translate.instant("IndividualFlexible") + " (" + $translate.instant("Default") + ")";
+                vm.blockSchedulingName = $translate.instant(item.Id);
+            }
+            if (item.Id == "IndividualFlexible") {
+                vm.blockSchedulingName = $translate.instant(item.Id) + " (" + $translate.instant("Default") + ")";
             }
             vm.schedulingSettings.forEach(function (item, id) {
                 if (id != index)
@@ -242,13 +244,14 @@
         }
 
         function setBlockSchedulingType(type) {
-            if (type == null) {
-                return vm.blockSchedulingSetting.BlockFinderType = 0;
-            }
+            if (type == null)
+                return;
             return vm.blockSchedulingSetting.BlockFinderType = type.Code;
         }
 
         function setBlockSchedulingOption(option) {
+            if (option == null)
+                return;
             option.Selected = !option.Selected;
             vm.blockSchedulingSetting[option.Id] = option.Selected;
         }
@@ -257,11 +260,22 @@
             return $translate.instant(id);
         }
 
+        function clearBlockSchedulingSettingData() {
+            vm.blockSchedulingSetting = {
+                BlockFinderType: 0,
+                BlockSameShift: false,
+                BlockSameShiftCategory: false,
+                BlockSameStartTime: false
+            };
+        }
+
         function persist() {
             if (!vm.isValid())
                 return;
             if (!vm.requestSent) {
                 vm.requestSent = true;
+                if (vm.schedulingSettings[0].Selected == true)
+                    clearBlockSchedulingSettingData();
                 PlanGroupSettingService.saveSetting({
                     BlockFinderType: vm.blockSchedulingSetting.BlockFinderType,
                     BlockSameShift: vm.blockSchedulingSetting.BlockSameShift,
