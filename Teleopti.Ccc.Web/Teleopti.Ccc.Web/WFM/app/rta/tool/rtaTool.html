@@ -9,7 +9,7 @@
 				<span>Random states</span>
 			</div>
 			<md-slider flex md-discrete min="5" max="60" step="5" ng-model="vm.sendInterval.time" ng-hide="!vm.pause" ng-disabled="!vm.pause"
-			 aria-label="slider" style="width:200px"></md-slider>
+			 aria-label="slider" style="width:200px; padding-top: 20px"></md-slider>
 			<div class="fab-wrapper">
 				<button class="wfm-fab material-depth-1" ng-click="vm.togglePause()">
 							<i ng-class="{'mdi mdi-play': vm.pause, 'mdi mdi-pause': !vm.pause}"></i>
