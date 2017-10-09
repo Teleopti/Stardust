@@ -23,6 +23,14 @@
             MinConsecWorkDays: 2,
             MaxConsecWorkDays: 6
         };
+        vm.fullWeekEndsOff = { //FullWeekEndsOff
+            MinFullWeekEndsOff: 0,
+            MaxFullWeekEndsOff: 8
+        };
+        vm.fullWeekEndDaysOff = { //FullWeekEndDaysOff
+            MinFullWeekEndDaysOff: 0,
+            MaxFullWeekEndDaysOff: 16
+        };
         vm.blockSchedulingSetting = {
             BlockFinderType: 0,
             BlockSameShift: false,
@@ -61,6 +69,8 @@
         vm.isValidDayOffsPerWeek = isValidDayOffsPerWeek;
         vm.isValidConsecDaysOff = isValidConsecDaysOff;
         vm.isValidConsecWorkDays = isValidConsecWorkDays;
+        vm.isValidFullWeekEndsOff = isValidFullWeekEndsOff;
+        vm.isValidFullWeekEndDaysOff = isValidFullWeekEndDaysOff;
         vm.isValidFilters = isValidFilters;
         vm.isValidName = isValidName;
         vm.isValidBlockScheduling = isValidBlockScheduling;
@@ -158,6 +168,18 @@
             return isInteger(vm.consecWorkDays.MinConsecWorkDays) &&
                 isInteger(vm.consecWorkDays.MaxConsecWorkDays) &&
                 vm.consecWorkDays.MinConsecWorkDays <= vm.consecWorkDays.MaxConsecWorkDays;
+        }
+
+        function isValidFullWeekEndsOff() {
+            return isInteger(vm.fullWeekEndsOff.MinFullWeekEndsOff) &&
+                isInteger(vm.fullWeekEndsOff.MaxFullWeekEndsOff) &&
+                vm.fullWeekEndsOff.MinFullWeekEndsOff <= vm.fullWeekEndsOff.MaxFullWeekEndsOff;
+        }
+
+        function isValidFullWeekEndDaysOff() {
+            return isInteger(vm.fullWeekEndDaysOff.MinFullWeekEndDaysOff) &&
+                isInteger(vm.fullWeekEndDaysOff.MaxFullWeekEndDaysOff) &&
+                vm.fullWeekEndDaysOff.MinFullWeekEndDaysOff <= vm.fullWeekEndDaysOff.MaxFullWeekEndDaysOff;
         }
 
         function isInteger(value) {
@@ -287,6 +309,10 @@
                     MaxConsecutiveWorkdays: vm.consecWorkDays.MaxConsecWorkDays,
                     MinConsecutiveDayOffs: vm.consecDaysOff.MinConsecDaysOff,
                     MaxConsecutiveDayOffs: vm.consecDaysOff.MaxConsecDaysOff,
+                    MinFullWeekendsOff: vm.fullWeekEndsOff.MinFullWeekEndsOff,
+                    MaxFullWeekendsOff: vm.fullWeekEndsOff.MaxFullWeekEndsOff,
+                    MinWeekendDaysOff: vm.fullWeekEndDaysOff.MinFullWeekEndDaysOff,
+                    MaxWeekendDaysOff: vm.fullWeekEndDaysOff.MaxFullWeekEndDaysOff,
                     Id: vm.filterId,
                     Name: vm.name,
                     Default: vm.default,

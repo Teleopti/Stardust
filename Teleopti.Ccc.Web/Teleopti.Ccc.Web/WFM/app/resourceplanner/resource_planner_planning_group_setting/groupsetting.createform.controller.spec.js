@@ -1,5 +1,5 @@
 'use strict';
-describe('planningGroupSettingEditController', function () {
+fdescribe('planningGroupSettingEditController', function () {
     var $httpBackend,
         $controller,
         $state,
@@ -64,6 +64,10 @@ describe('planningGroupSettingEditController', function () {
                 MaxConsecutiveWorkdays: 6,
                 MinConsecutiveDayOffs: 1,
                 MaxConsecutiveDayOffs: 3,
+                MinFullWeekendsOff: 0,
+                MaxFullWeekendsOff: 8,
+                MinWeekendDaysOff: 0,
+                MaxWeekendDaysOff: 16,
                 Filters: []
             }, {}];
         });
@@ -84,6 +88,10 @@ describe('planningGroupSettingEditController', function () {
                 MaxConsecutiveWorkdays: 6,
                 MinConsecutiveDayOffs: 1,
                 MaxConsecutiveDayOffs: 3,
+                MinFullWeekendsOff: 0,
+                MaxFullWeekendsOff: 8,
+                MinWeekendDaysOff: 0,
+                MaxWeekendDaysOff: 16,
                 Filters: [{
                     Id: "79c466f0-cbe8-4209-b949-9b5e015b23f7",
                     FilterType: "contract",
@@ -198,7 +206,11 @@ describe('planningGroupSettingEditController', function () {
             MinConsecutiveWorkdays: 2,
             MaxConsecutiveWorkdays: 6,
             MinConsecutiveDayOffs: 1,
-            MaxConsecutiveDayOffs: 3
+            MaxConsecutiveDayOffs: 3,
+            MinFullWeekendsOff: 0,
+            MaxFullWeekendsOff: 8,
+            MinWeekendDaysOff: 0,
+            MaxWeekendDaysOff: 16
         });
 
         expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
@@ -229,6 +241,11 @@ describe('planningGroupSettingEditController', function () {
             BlockSameShiftCategory: true,
             BlockSameStartTime: false
         };
+        vm.schedulingSettings = [
+            { Id: "IndividualFlexible", Selected: false },
+            { Id: "BlockScheduling", Selected: true }
+            // {Name:"Team Scheduling", Selected: false}
+        ];
 
         vm.persist();
         $httpBackend.flush();
@@ -248,7 +265,11 @@ describe('planningGroupSettingEditController', function () {
             MinConsecutiveWorkdays: 1,
             MaxConsecutiveWorkdays: 5,
             MinConsecutiveDayOffs: 3,
-            MaxConsecutiveDayOffs: 3
+            MaxConsecutiveDayOffs: 3,
+            MinFullWeekendsOff: 0,
+            MaxFullWeekendsOff: 8,
+            MinWeekendDaysOff: 0,
+            MaxWeekendDaysOff: 16
         });
 
         expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
@@ -283,13 +304,17 @@ describe('planningGroupSettingEditController', function () {
             MinConsecWorkDays: 1,
             MaxConsecWorkDays: 5
         };
-
         vm.blockSchedulingSetting = {
             BlockFinderType: 1,
             BlockSameShift: false,
             BlockSameShiftCategory: true,
             BlockSameStartTime: false
         };
+        vm.schedulingSettings = [
+            { Id: "IndividualFlexible", Selected: false },
+            { Id: "BlockScheduling", Selected: true }
+            // {Name:"Team Scheduling", Selected: false}
+        ];
 
         vm.persist();
         $httpBackend.flush();
@@ -310,7 +335,11 @@ describe('planningGroupSettingEditController', function () {
             MinConsecutiveWorkdays: 1,
             MaxConsecutiveWorkdays: 5,
             MinConsecutiveDayOffs: 3,
-            MaxConsecutiveDayOffs: 3
+            MaxConsecutiveDayOffs: 3,
+            MinFullWeekendsOff: 0,
+            MaxFullWeekendsOff: 8,
+            MinWeekendDaysOff: 0,
+            MaxWeekendDaysOff: 16
         });
 
         expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
