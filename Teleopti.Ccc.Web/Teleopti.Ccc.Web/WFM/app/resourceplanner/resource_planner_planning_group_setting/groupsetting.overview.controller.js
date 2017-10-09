@@ -73,6 +73,7 @@
 				groupId: $stateParams.groupId,
 			});
 		}
+			if (setting.Priority < 2)
 	}
 
 	function directiveController($state, $stateParams, $translate, PlanGroupSettingService, localeLanguageSortingService) {
