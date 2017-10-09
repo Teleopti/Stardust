@@ -461,7 +461,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[Ignore("#46151 to be fixed")]
 		public void ShouldNotMoveDayOffWhenUsingConsecutiveWorkDaysAndHavingDayOffPreference100Percent()
 		{
-			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var firstDay = new DateOnly(2015, 10, 12); 
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var skill = new Skill().For(activity).IsOpen();
@@ -480,7 +480,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				var preferenceRestriction = new PreferenceRestriction();
 				if (i == 4 || i == 6)
 				{
-					ass.SetDayOff(dayOffTemplate); //friday
+					ass.SetDayOff(dayOffTemplate); 
 					preferenceRestriction.DayOffTemplate = dayOffTemplate;
 					scheduleDatas.Add(new ScheduleDataRestriction(agent, preferenceRestriction, firstDay.AddDays(i)));
 				}
@@ -493,8 +493,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
-			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(4)).HasDayOff().Should().Be.True();//friday
-			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();//sunday
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(4)).HasDayOff().Should().Be.True();
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();
 		}
 	}
 }
