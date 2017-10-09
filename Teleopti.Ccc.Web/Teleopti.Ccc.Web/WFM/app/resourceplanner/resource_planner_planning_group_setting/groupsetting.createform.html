@@ -114,6 +114,23 @@
 							</div>
 						</div>
 						<div class="wfm-option-label">
+							<p translate>ConsecutiveWorkDays</p>
+						</div>
+						<div class="con-row">
+							<div class="wfm-option form-input-wrap con-flex">
+								<label for="workMin" translate>MinColon</label>
+								<input type="number" ng-model="vm.consecWorkDays.MinConsecWorkDays" name="MinConsecutiveWorkdays" placeholder="0" min="0"
+								 id="workMin" />
+								<p class="text-danger" ng-show="!vm.isValidConsecWorkDays()" translate>InvalidInput</p>
+							</div>
+							<div class="wfm-option form-input-wrap con-flex">
+								<label for="workMax" translate>MaxColon</label>
+								<input type="number" ng-model="vm.consecWorkDays.MaxConsecWorkDays" name="MaxConsecutiveWorkdays" placeholder="0" min="0"
+								 id="workMax" />
+								<p class="text-danger" ng-show="!vm.isValidConsecWorkDays()" translate>InvalidInput</p>
+							</div>
+						</div>
+						<div class="wfm-option-label">
 							<p translate>FullWeekEndsOff</p>
 						</div>
 						<div class="con-row">

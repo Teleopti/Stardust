@@ -23,11 +23,11 @@
             MinConsecWorkDays: 2,
             MaxConsecWorkDays: 6
         };
-        vm.fullWeekEndsOff = { //FullWeekEndsOff
+        vm.fullWeekEndsOff = {
             MinFullWeekEndsOff: 0,
             MaxFullWeekEndsOff: 8
         };
-        vm.fullWeekEndDaysOff = { //FullWeekEndDaysOff
+        vm.fullWeekEndDaysOff = {
             MinFullWeekEndDaysOff: 0,
             MaxFullWeekEndDaysOff: 16
         };
@@ -104,6 +104,14 @@
                         MinConsecWorkDays: result.MinConsecutiveWorkdays,
                         MaxConsecWorkDays: result.MaxConsecutiveWorkdays
                     }
+                    vm.fullWeekEndsOff = {
+                        MinFullWeekEndsOff: result.MinFullWeekendsOff,
+                        MaxFullWeekEndsOff: result.MaxFullWeekendsOff
+                    };
+                    vm.fullWeekEndDaysOff = {
+                        MinFullWeekEndDaysOff: result.MinWeekendDaysOff,
+                        MaxFullWeekEndDaysOff: result.MaxWeekendDaysOff
+                    };
                     if (result.BlockFinderType !== 0) {
                         vm.blockSchedulingSetting = {
                             BlockFinderType: result.BlockFinderType,
@@ -144,11 +152,13 @@
         }
 
         function isValid() {
-            return vm.isValidDayOffsPerWeek() &&
-                vm.isValidConsecDaysOff() &&
-                vm.isValidFilters() &&
-                vm.isValidName() &&
-                vm.isValidBlockScheduling();
+            return isValidDayOffsPerWeek() &&
+                isValidConsecDaysOff() &&
+                isValidFilters() &&
+                isValidName() &&
+                isValidFullWeekEndsOff() &&
+                isValidFullWeekEndDaysOff() &&
+                isValidBlockScheduling();
         }
 
         function isValidDayOffsPerWeek() {
@@ -159,27 +169,23 @@
         }
 
         function isValidConsecDaysOff() {
-            return isInteger(vm.consecDaysOff.MinConsecDaysOff) &&
-                isInteger(vm.consecDaysOff.MaxConsecDaysOff) &&
-                vm.consecDaysOff.MinConsecDaysOff <= vm.consecDaysOff.MaxConsecDaysOff;
+            return isValidDaysNumber(vm.consecDaysOff.MinConsecDaysOff, vm.consecDaysOff.MaxConsecDaysOff);
         }
 
         function isValidConsecWorkDays() {
-            return isInteger(vm.consecWorkDays.MinConsecWorkDays) &&
-                isInteger(vm.consecWorkDays.MaxConsecWorkDays) &&
-                vm.consecWorkDays.MinConsecWorkDays <= vm.consecWorkDays.MaxConsecWorkDays;
+            return isValidDaysNumber(vm.consecWorkDays.MinConsecWorkDays, vm.consecWorkDays.MaxConsecWorkDays);
         }
 
         function isValidFullWeekEndsOff() {
-            return isInteger(vm.fullWeekEndsOff.MinFullWeekEndsOff) &&
-                isInteger(vm.fullWeekEndsOff.MaxFullWeekEndsOff) &&
-                vm.fullWeekEndsOff.MinFullWeekEndsOff <= vm.fullWeekEndsOff.MaxFullWeekEndsOff;
+            return isValidDaysNumber(vm.fullWeekEndsOff.MinFullWeekEndsOff, vm.fullWeekEndsOff.MaxFullWeekEndsOff);
         }
 
         function isValidFullWeekEndDaysOff() {
-            return isInteger(vm.fullWeekEndDaysOff.MinFullWeekEndDaysOff) &&
-                isInteger(vm.fullWeekEndDaysOff.MaxFullWeekEndDaysOff) &&
-                vm.fullWeekEndDaysOff.MinFullWeekEndDaysOff <= vm.fullWeekEndDaysOff.MaxFullWeekEndDaysOff;
+            return isValidDaysNumber(vm.fullWeekEndDaysOff.MinFullWeekEndDaysOff, vm.fullWeekEndDaysOff.MaxFullWeekEndDaysOff);
+        }
+
+        function isValidDaysNumber(min, max) {
+            return isInteger(min) && isInteger(max) && min <= max;
         }
 
         function isInteger(value) {
