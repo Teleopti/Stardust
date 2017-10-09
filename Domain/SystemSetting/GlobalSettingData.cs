@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.SystemSetting
 #pragma warning restore 0649
         private IBusinessUnit _businessUnit;
 
-
         protected GlobalSettingData(){}
 
         public GlobalSettingData(string name) : base(name){}
