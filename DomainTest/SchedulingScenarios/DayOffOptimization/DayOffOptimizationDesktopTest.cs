@@ -478,16 +478,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			{
 				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
 				var preferenceRestriction = new PreferenceRestriction();
-				if (i == 4)
+				if (i == 4 || i == 6)
 				{
 					ass.SetDayOff(dayOffTemplate); //friday
 					preferenceRestriction.DayOffTemplate = dayOffTemplate;
 					scheduleDatas.Add(new ScheduleDataRestriction(agent, preferenceRestriction, firstDay.AddDays(i)));
-				}
-
-				if (i == 6)
-				{
-					ass.SetDayOff(dayOffTemplate); //sunday	
 				}
 	
 				scheduleDatas.Add(ass);		
@@ -499,6 +494,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(4)).HasDayOff().Should().Be.True();//friday
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();//sunday
 		}
 	}
 }
