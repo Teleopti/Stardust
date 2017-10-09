@@ -13640,7 +13640,7 @@ Dessa val är aktiverade:
     <value>Den här aktiviteten kommer att överlappa befintliga aktiviteter som inte tillåter överlappning. </value>
   </data>
   <data name="BySeniority" xml:space="preserve">
-    <value>Baserat på senioritet</value>
+    <value>Senioritet</value>
   </data>
   <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
     <value>Den icke överskrivningsbara aktiviteten {0} i intervall {1} är överskriven av {2} i intervall {3}.</value>
@@ -15114,5 +15114,11 @@ Vill du registrera dig?</value>
   </data>
   <data name="DeleteSchedulingSetting" xml:space="preserve">
     <value>Ta bort schemaläggningsinställning</value>
+  </data>
+  <data name="MissingOvertimeType" xml:space="preserve">
+    <value>Övertidstyp saknas</value>
+  </data>
+  <data name="PlanningGroup" xml:space="preserve">
+    <value>Planeringsgrupp</value>
   </data>
 </root>

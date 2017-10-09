@@ -14883,7 +14883,7 @@ These options are activated:
     <comment>Site open hours</comment>
   </data>
   <data name="BySeniority" xml:space="preserve">
-    <value>By seniority</value>
+    <value>Seniority</value>
     <comment>Radio button in workflow controlset</comment>
   </data>
   <data name="FirstComeFirstServed" xml:space="preserve">
