@@ -1275,7 +1275,6 @@
     <Compile Include="Scheduling\Restrictions\ScheduleDayPreferenceRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\PeriodScheduledAndRestrictionDaysOffTest.cs" />
-    <Compile Include="Scheduling\Restrictions\RestrictionCheckerTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\RotationSpecificationTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayRotationRestrictionExtractorTest.cs" />
