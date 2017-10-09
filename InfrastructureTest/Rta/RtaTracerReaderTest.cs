@@ -11,9 +11,8 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
-	[AnalyticsDatabaseTest]
+	[MultiUnitOfWorkTest]
 	[Setting("RtaTracerBufferSize", 0)]
-	[Ignore("Implementation was experimental")]
 	public class RtaTracerReaderTest
 	{
 		public IRtaTracer Tracer;
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			Tracer.ProcessReceived();
 
-			Target.ReadOfType<StateTraceLog>().Should().Not.Be.Null();
+			Target.ReadOfType<ProcessReceivedLog>().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			Tracer.ProcessReceived();
 
-			Target.ReadOfType<StateTraceLog>().Single().Message.Should().Contain("ProcessReceived");
+			Target.ReadOfType<ProcessReceivedLog>().Single().Message.Should().Contain("Data received at");
 		}
 
 		[Test]
@@ -42,7 +41,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			Tracer.ProcessReceived();
 
-			Target.ReadOfType<StateTraceLog>().Single().Time.Utc().Ticks.Should().Be.GreaterThan(now.Ticks);
+			Target.ReadOfType<ProcessReceivedLog>().Single().Time.Utc().Ticks.Should().Be.GreaterThan(now.Ticks);
 		}
+		
+		
+		[Test]
+		public void ShouldReadRecievedAt()
+		{
+			var now = DateTime.UtcNow.Utc();
+
+			Tracer.ProcessReceived();
+
+			Target.ReadOfType<ProcessReceivedLog>().Single().Log.RecievedAt.Should().Be.GreaterThan(now);
+		}
+		
 	}
 }
