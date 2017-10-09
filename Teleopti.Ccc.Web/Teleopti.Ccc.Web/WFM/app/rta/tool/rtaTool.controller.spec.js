@@ -267,7 +267,7 @@ describe('RtaToolController', function () {
 		expect(vm.filteredAgents[0].StateCodes[0].Name).toEqual('Ready');
 	});
 
-	it('should send single state', function () {
+	fit('should send single state', function () {
 		var requestBody = {};
 		$httpBackend.whenPOST('../Rta/State/Batch').respond(function (method, url, data, headers) {
 			requestBody = JSON.parse(data);
@@ -284,8 +284,8 @@ describe('RtaToolController', function () {
 				Name: 'Ready'
 			});
 		vm = $controllerbuilder.createController().vm;
-
-		vm.filteredAgents[0].sendState(vm.filteredAgents[0].StateCodes[0]);
+	
+		vm.filteredAgents[0].sendState(vm.filteredAgents[0].StateCodes[0].Code);
 		$httpBackend.flush();
 
 		expect(requestBody.AuthenticationKey).toEqual('!#¤atAbgT%');
@@ -293,8 +293,7 @@ describe('RtaToolController', function () {
 		expect(requestBody.SourceId).toEqual('1');
 		expect(requestBody.States.length).toEqual(1);
 		expect(requestBody.States[0].UserCode).toEqual('0019');
-		expect(requestBody.States[0].StateCode.Code).toEqual('Ready');
-		expect(requestBody.States[0].StateCode.Name).toEqual('Ready');
+		expect(requestBody.States[0].StateCode).toEqual('Ready');
 	});
 
 	it('should send batch for all agents when no agent is selcted', function () {
