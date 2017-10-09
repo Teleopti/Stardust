@@ -1706,7 +1706,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxEnableAbsenceProbability.Location = new System.Drawing.Point(3, 3);
 			this.checkBoxEnableAbsenceProbability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxEnableAbsenceProbability.Name = "checkBoxEnableAbsenceProbability";
-			this.checkBoxEnableAbsenceProbability.Size = new System.Drawing.Size(181, 23);
+			this.checkBoxEnableAbsenceProbability.Size = new System.Drawing.Size(251, 23);
 			this.checkBoxEnableAbsenceProbability.TabIndex = 31;
 			this.checkBoxEnableAbsenceProbability.Text = "xxEnableAbsenceProbability";
 			this.checkBoxEnableAbsenceProbability.ThemesEnabled = false;
