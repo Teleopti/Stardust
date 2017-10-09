@@ -245,7 +245,6 @@
     <Compile Include="Hangfire\HangfireStarter.cs" />
     <Compile Include="Hangfire\HangfireUtilities.cs" />
     <Compile Include="Hangfire\IgnoreNHibernateErrorsInHangfireWorkers.cs" />
-    <Compile Include="Hangfire\AutomaticRetryAttribute.cs" />
     <Compile Include="Hangfire\AttemptsFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\IgnoreRetryWarningsFromSpecifiedPrimaryKeys.cs" />
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />

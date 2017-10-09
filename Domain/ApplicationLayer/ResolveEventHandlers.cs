@@ -131,6 +131,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				)
 				?.Invoke(_resolve.Resolve(handler), new[] { @event }) as string;
 		}
+		
 		private AttemptsAttribute getAttemptsAttribute(MethodInfo handlerMethod)
 		{
 			return handlerMethod?

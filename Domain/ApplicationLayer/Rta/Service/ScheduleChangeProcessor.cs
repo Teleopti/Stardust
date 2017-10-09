@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IActivityChangeCheckerFromScheduleChangeProcessor _checker;
 
 		public ScheduleChangeProcessor(
-			IDistributedLockAcquirer distributedLock, 
+			IDistributedLockAcquirer distributedLock,
 			CurrentScheduleReadModelUpdater updater,
 			IActivityChangeCheckerFromScheduleChangeProcessor checker)
 		{
@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_checker = checker;
 		}
 
+		[Attempts(7)]
 		public void Handle(ScheduleChangedEvent @event)
 		{
 			_updater.Invalidate(@event.PersonId, @event.StartDateTime, @event.EndDateTime);
@@ -32,22 +33,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public string QueueTo(ScheduleChangedEvent @event)
 		{
-			return _updater.ShouldInvalidate(@event.StartDateTime, @event.EndDateTime) ? 
-				Queues.ScheduleChangesToday : 
-				null;
+			return _updater.ShouldInvalidate(@event.StartDateTime, @event.EndDateTime) ? Queues.ScheduleChangesToday : null;
 		}
 
 		public void Handle(TenantMinuteTickEvent @event)
 		{
-			_distributedLock.TryLockForTypeOf(_updater, () =>
-			{
-				_updater.UpdateInvalids();
-			});
-
-			_distributedLock.TryLockForTypeOf(_checker, () =>
-			{
-				_checker.CheckForActivityChanges();
-			});
+			_distributedLock.TryLockForTypeOf(_updater, () => { _updater.UpdateInvalids(); });
+			_distributedLock.TryLockForTypeOf(_checker, () => { _checker.CheckForActivityChanges(); });
 		}
 
 		[Attempts(10)]
@@ -56,5 +48,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_updater.InvalidateAll();
 		}
 	}
-
 }
