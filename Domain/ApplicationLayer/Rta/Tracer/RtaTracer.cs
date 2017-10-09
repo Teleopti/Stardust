@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using NPOI.SS.Formula.Functions;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
@@ -16,10 +17,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		{
 			_writer = writer;
 			_keyValues = keyValues;
-			_process = buildProcess();
+			_process = ProcessName();
 		}
 
-		private static string buildProcess()
+		public static string ProcessName()
 		{
 			var boxName = Environment.GetEnvironmentVariable("COMPUTERNAME")
 						  ?? Environment.GetEnvironmentVariable("HOSTNAME");
@@ -56,54 +57,61 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 			var tracedUserCode = _keyValues.Get("RtaTracerUserCode");
 			if (tracedUserCode == null || !tracedUserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase))
 				return null;
-			var log = new StateTraceLog
+			var trace = new StateTraceLog
 			{
 				Id = Guid.NewGuid(),
 				User = userCode,
 				StateCode = stateCode
 			};
-			_writer.Write(new RtaTracerLog<StateTraceLog>
-			{
-				Log = log,
-				Message = "Received",
-				Process = _process
-			});
-			return log;
+			traceState(trace, "Received");
+			return trace;
 		}
 
 		public void InvalidStateCode(StateTraceLog trace)
 		{
-			throw new NotImplementedException();
+			traceState(trace, "Invalid state code");
 		}
 
 		public void StateProcessing(StateTraceLog trace)
 		{
-			throw new NotImplementedException();
+			traceState(trace, "Processing");
 		}
 
 		public void InvalidAuthenticationKey(StateTraceLog trace)
 		{
-			throw new NotImplementedException();
+			traceState(trace, "Invalid authentication key");
 		}
 
 		public void InvalidSourceId(StateTraceLog trace)
 		{
-			throw new NotImplementedException();
+			traceState(trace, "Invalid source Id");
 		}
 
 		public void InvalidUserCode(StateTraceLog trace)
 		{
-			throw new NotImplementedException();
+			traceState(trace, "Invalid user code");
 		}
 
 		public void NoChange(StateTraceLog trace)
 		{
-			throw new NotImplementedException();
+			traceState(trace, "No change");
 		}
 
 		public void StateProcessed(StateTraceLog trace, IEnumerable<IEvent> events)
 		{
-			throw new NotImplementedException();
+			traceState(trace, "Processed");
+			events.EmptyIfNull().ForEach(e => traceState(trace, e.GetType().Name));
+		}
+
+		private void traceState(StateTraceLog trace, string message)
+		{
+			if (trace == null) return;
+			_writer.Write(new RtaTracerLog<StateTraceLog>
+			{
+				Log = trace,
+				Message = message,
+				Process = _process
+			});
 		}
 	}
 }

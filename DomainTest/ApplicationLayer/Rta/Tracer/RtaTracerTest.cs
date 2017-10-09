@@ -3,8 +3,11 @@ using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -50,26 +53,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
-		public void ShouldLogStateReceivedWithBoxName()
+		public void ShouldLogStateReceivedWithProcess()
 		{
 			Target.Trace("usercode");
 
 			Target.StateReceived("usercode", "statecode");
 
-			var boxName = Environment.GetEnvironmentVariable("COMPUTERNAME")
-						   ?? Environment.GetEnvironmentVariable("HOSTNAME");
-			Logs.ReadOfType<StateTraceLog>().Single().Process.Should().Contain(boxName);
-		}
-
-		[Test]
-		public void ShouldLogStateReceivedWithProcessId()
-		{
-			Target.Trace("usercode");
-
-			Target.StateReceived("usercode", "statecode");
-
-			var processId = Process.GetCurrentProcess().Id.ToString();			
-			Logs.ReadOfType<StateTraceLog>().Single().Process.Should().Contain(processId);
+			Logs.ReadOfType<StateTraceLog>().Single().Process.Should().Be(RtaTracer.ProcessName());
 		}
 
 		[Test]
@@ -120,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		{
 			Target.Trace("usercode");
 
-			Target.StateReceived("usercode2", "statecode");
+			Target.StateReceived("idontmatch", "statecode");
 
 			Logs.ReadOfType<StateTraceLog>().Should().Be.Empty();
 		}
@@ -133,6 +123,146 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Target.StateReceived("usercode", "statecode");
 
 			Logs.ReadOfType<StateTraceLog>().Single().Log.Id.Should().Not.Be(Guid.Empty);
+		}
+
+		[Test]
+		public void ShouldLogInvalidStateCode()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode");
+			Target.InvalidStateCode(trace);
+
+			var log = Logs.ReadOfType<StateTraceLog>().Single(x => x.Message == "Invalid state code");
+			log.Process.Should().Be(RtaTracer.ProcessName());
+			log.Log.Should().Be.SameInstanceAs(trace);
+		}
+
+		[Test]
+		public void ShouldNotLogInvalidStateCodeWhenUserCodeIsNotMatched()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("idontmatch", "statecode");
+			Target.InvalidStateCode(trace);
+
+			Logs.ReadOfType<StateTraceLog>().Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldLogStateProcessing()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode");
+			Target.StateProcessing(trace);
+
+			var log = Logs.ReadOfType<StateTraceLog>().Single(x => x.Message == "Processing");
+			log.Process.Should().Be(RtaTracer.ProcessName());
+			log.Log.Should().Be.SameInstanceAs(trace);
+		}
+
+		[Test]
+		public void ShouldNotLogStateProcessingWhenUserCodeIsNotMatched()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("idontmatch", "statecode");
+			Target.StateProcessing(trace);
+
+			Logs.ReadOfType<StateTraceLog>().Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldLogInvalidAuthenticationKey()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode");
+			Target.InvalidAuthenticationKey(trace);
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain("Invalid authentication key");
+		}
+
+		[Test]
+		public void ShouldLogInvalidSourceId()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode");
+			Target.InvalidSourceId(trace);
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain("Invalid source Id");
+		}
+
+		[Test]
+		public void ShouldLogInvalidUserCode()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode");
+			Target.InvalidUserCode(trace);
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain("Invalid user code");
+		}
+
+		[Test]
+		public void ShouldLogNoChange()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode");
+			Target.NoChange(trace);
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain("No change");
+		}
+
+		[Test]
+		public void ShouldLogStateProcessed()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode");
+			Target.StateProcessed(trace, null);
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain("Processed");
+		}
+
+		[Test]
+		public void ShouldLogStateProcessedWithEvents()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode");
+			Target.StateProcessed(trace, new[] {new PersonStateChangedEvent()});
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain(typeof(PersonStateChangedEvent).Name);
+		}
+
+		[Test]
+		public void ShouldLogStateProcessedWith2Events()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode");
+			Target.StateProcessed(trace, new IEvent[] {new PersonStateChangedEvent(), new PersonActivityStartEvent()});
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain(typeof(PersonStateChangedEvent).Name);
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain(typeof(PersonActivityStartEvent).Name);
+		}
+
+		[Test]
+		public void ShouldLogStateProcessedWithRandomEvent()
+		{
+			Target.Trace("usercode");
+
+			var trace = Target.StateReceived("usercode", "statecode");
+			var eventz = new IEvent[]
+					{new PersonOutOfAdherenceEvent(), new PersonInAdherenceEvent(), new PersonNeutralAdherenceEvent()}.Randomize()
+				.First();
+			Target.StateProcessed(trace, new IEvent[] {eventz});
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain(eventz.GetType().Name);
 		}
 	}
 }
