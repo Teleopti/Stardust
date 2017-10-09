@@ -1642,6 +1642,7 @@
     <Content Include="WFM\css\_staffing.scss" />
     <Content Include="WFM\css\_grouppage.scss" />
     <Content Include="WFM\css\_organizationpicker.scss" />
+    <Content Include="WFM\.prettierrc.json" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions-function-tree.html" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions-tree.html" />
