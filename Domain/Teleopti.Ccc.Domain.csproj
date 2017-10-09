@@ -266,11 +266,15 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\OrganizationSiteModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceMaintainer.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IRtaTracer.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueWriter.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoLoggedOutStateGroupsException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateQueueTenants.cs" />
+    <Compile Include="ApplicationLayer\Rta\Tracer\IRtaTracer.cs" />
+    <Compile Include="ApplicationLayer\Rta\Tracer\IRtaTracerReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Tracer\IRtaTracerWriter.cs" />
+    <Compile Include="ApplicationLayer\Rta\Tracer\NoRtaTracer.cs" />
+    <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracer.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\RtaTracerViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteWithOpenHourProvider.cs" />
