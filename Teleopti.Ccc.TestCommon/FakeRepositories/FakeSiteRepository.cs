@@ -63,5 +63,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _data.OrderBy(x => x.Description.Name);
 		}
+
+		public IEnumerable<ISite> LoadAllWithFetchingOpenHours()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

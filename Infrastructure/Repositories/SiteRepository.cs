@@ -48,10 +48,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    public IEnumerable<ISite> LoadAllOrderByName()
 	    {
 			return Session.CreateCriteria<Site>()
-				.SetFetchMode("OpenHourCollection", FetchMode.Join)
 				.AddOrder(Order.Asc("Description.Name"))
 				.List<ISite>();
 			
 	    }
-    }
+
+	    public IEnumerable<ISite> LoadAllWithFetchingOpenHours()
+	    {
+			return Session.CreateCriteria<Site>()
+				.SetFetchMode("OpenHourCollection", FetchMode.Join)
+				.List<ISite>();
+		}
+	}
 }

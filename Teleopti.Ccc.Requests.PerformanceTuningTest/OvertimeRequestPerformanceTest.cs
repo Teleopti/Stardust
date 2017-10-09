@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>
 							  {
-								  SiteRepository.LoadAllOrderByName();
+								  SiteRepository.LoadAllWithFetchingOpenHours();
 								  UpdateStaffingLevel.Update(period);
 								  requests = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(new DateTime(2016, 01, 16, 16, 0, 0).Utc(), new DateTime(2016, 01, 16, 20, 0, 0).Utc()));
 							  });

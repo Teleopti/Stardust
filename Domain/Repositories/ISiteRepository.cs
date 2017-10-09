@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         ICollection<ISite> FindSiteByDescriptionName(string name);
 	    IEnumerable<ISite> FindSitesContain(string searchString, int maxHits);
 	    IEnumerable<ISite> LoadAllOrderByName();
-
+	    IEnumerable<ISite> LoadAllWithFetchingOpenHours();
     }
 }

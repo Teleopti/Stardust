@@ -149,5 +149,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(name1, sites[0].Description.Name);
 			Assert.AreEqual(name2, sites[1].Description.Name);
 		}
-    }
+
+		[Test]
+		public void ShouldLoadSitesWithoutDuplicatedValues()
+		{
+			var name1 = "site1";
+			var name2 = "site2";
+			ISite site1 = new Site(name1);
+			ISite site2 = new Site(name2);
+			PersistAndRemoveFromUnitOfWork(site1);
+			PersistAndRemoveFromUnitOfWork(site2);
+
+			var site2OpenHour1 = new SiteOpenHour
+			{
+				Parent = site2,
+				WeekDay = System.DayOfWeek.Monday,
+				TimePeriod = new Interfaces.Domain.TimePeriod(8, 17),
+				IsClosed = false
+			};
+			var site2OpenHour2 = new SiteOpenHour
+			{
+				Parent = site2,
+				WeekDay = System.DayOfWeek.Tuesday,
+				TimePeriod = new Interfaces.Domain.TimePeriod(8, 17),
+				IsClosed = false
+			};
+			PersistAndRemoveFromUnitOfWork(site2OpenHour1);
+			PersistAndRemoveFromUnitOfWork(site2OpenHour2);
+
+			var sites = new SiteRepository(UnitOfWork).LoadAllOrderByName().ToList();
+			Assert.AreEqual(2, sites.Count);
+			Assert.AreEqual(name1, sites[0].Description.Name);
+			Assert.AreEqual(name2, sites[1].Description.Name);
+		}
+	}
 }
