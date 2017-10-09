@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		    IContainer container = configureContainer();
 #if (!DEBUG)
-		    //NHibernateProfiler.Initialize();
 		    SetReleaseMode();
 		    var applicationStarter = container.Resolve<ApplicationStartup>();
 		    if (applicationStarter.LogOn())
