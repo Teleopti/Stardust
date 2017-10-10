@@ -257,7 +257,9 @@
 					<!--ko if:isTeamScheduleNoReadModelEnable -->
 					<tbody data-bind="foreach: toDrawSchedules ">
 						<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible">
-							<td id="shift-trade-agent-name" class="shift-trade-agent-name floatleft " data-bind="text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></td>
+							<td id="shift-trade-agent-name" class="shift-trade-agent-name">
+								<p class="relative mrg0" data-bind="text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></p>
+							</td>
 							<td class="shift-trade-possible-trade-schedule">
 								<!-- ko if: $data.isNotScheduled -->
 									<div class="not-scheduled-text">@Resources.NotScheduled</div>
@@ -295,7 +297,7 @@
 					<!--ko ifnot:isTeamScheduleNoReadModelEnable -->
 					<tbody data-bind="foreach: toDrawSchedules, visible:!isTeamScheduleNoReadModelEnable()">
 						<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible">
-							<td id="shift-trade-agent-name" class="shift-trade-agent-name floatleft " data-bind="text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></td>
+							<td id="shift-trade-agent-name" class="shift-trade-agent-name" data-bind="text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></td>
 							<td class="shift-trade-possible-trade-schedule">
 								<div data-bind="foreach: $data.layers">
 									<div class="shift-trade-layer-container floatleft">

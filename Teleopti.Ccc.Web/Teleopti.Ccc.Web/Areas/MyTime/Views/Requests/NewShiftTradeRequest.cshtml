@@ -221,7 +221,7 @@
 				</thead>
 				<tbody data-bind="foreach: possibleTradeSchedules">
 					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
-						<td class="shift-trade-agent-name floatleft">
+						<td class="shift-trade-agent-name">
 							<div data-bind="style:$root.showContractTime && {'font-weight': 'bold'}, text: $data.agentName, tooltip: { title: $data.agentName, html: true}">@Resources.MySchedule</div>
 							<!--ko if:$root.showContractTime-->
 							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: contractTime"></div>
@@ -369,10 +369,8 @@
 						<!--/ko-->
 						<td></td>
 					</tr>
-				</tbody>
-				<tbody>
 					<tr data-bind="hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
-						<td class="shift-trade-agent-name floatleft">
+						<td class="shift-trade-agent-name">
 							<div data-bind="style:$root.showContractTime && {'font-weight': 'bold'}, text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></div>
 							<!--ko if:$root.showContractTime-->
 							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: $data.selectedSchedule().contractTime"></div>

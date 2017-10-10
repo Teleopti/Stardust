@@ -1,5 +1,5 @@
 ﻿.hoverBorder {
-	outline: solid 1px rgba(0, 0, 0, 0.15);
+	outline: solid 1px rgba(90, 205, 249, 1);
 }
 
 .disabled {
@@ -161,6 +161,22 @@
 	margin: 4px 0;
 }
 
+
+.shift-trade-add-schedule {
+	position: relative;
+	white-space: nowrap;
+}
+
+.shift-trade-my-schedule-row,
+.shift-trade-person-schedule-row{
+	height: 31px;
+	border-bottom: 1px #ddd solid;
+}
+
+.shift-trade-person-schedule-row:nth-child(odd){
+	background: #eee;
+}
+
 @media(max-width: 768px) {
 	.shift-trade-timeline {
 		height: 100%;
@@ -218,12 +234,6 @@
 		top: 3px;
 	}
 
-.shift-trade-add-schedule {
-	position: relative;
-	white-space: nowrap;
-	/*margin-top: 18px;*/
-}
-
 .shift-trade-schedule-loading {
 	position: absolute;
 	width: 100%;
@@ -246,10 +256,6 @@
 		word-break: break-all;
 		white-space: normal;
 		width: 195px;
-	}
-
-	#Requests-body-inner .shift-trade-person-schedule-row:nth-child(odd) .shift-trade-agent-name{
-		color: #9E9E9E;
 	}
 }
 
@@ -321,7 +327,7 @@
 }
 
 .add-shift-trade-detail-section {
-	margin: 0;
+	margin: 5px 0 0 0;
 }
 
 	.add-shift-trade-detail-section .col-md-6 {
@@ -485,7 +491,7 @@
 }
 
 .shift-trade-dayoff {
-	padding-top: 5px;
+	
 	text-align: center;
 	width: 100%;
 	height: 100%;
@@ -499,7 +505,7 @@
 .choose-history-divider {
 	border: 0;
 	height: 0;
-	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	border-top: 2px solid rgba(0, 0, 0, 0.1);
 	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
