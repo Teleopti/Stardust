@@ -16,26 +16,61 @@
 		$document = $injector.get('$document');
 	}));
 
-	it('should view no available data by default', function () {
-		var panel = setupComponent();
-		var chart = panel[0].querySelector('#staffingChart');
-		var noDataPanel = panel[0].querySelectorAll(".nodata");
-		expect(chart).toEqual(null);
-		expect(noDataPanel.length).toEqual(1);
-	})
+	it('should view no available data by default',
+		function() {
+			var panel = setupComponent();
+			var chart = panel[0].querySelector('#staffingChart');
+			var noDataPanel = panel[0].querySelectorAll(".nodata");
+			expect(chart).toEqual(null);
+			expect(noDataPanel.length).toEqual(1);
+		});
 
-	it('should view chart if data available', function () {
-		var scope = $rootScope.$new();
-		
-		var panel = setupComponent('selected-date="2017-09-27"', scope);
-		var ctrl = panel.isolateScope().vm;
-		ctrl.setSkill({ Id: 'XYZ' });
-		scope.$apply();
-		var chart = panel[0].querySelectorAll('#staffingChart');
-		var noDataPanel = panel[0].querySelectorAll(".nodata");
-		expect(chart.length).toEqual(1);
-		expect(noDataPanel.length).toEqual(0);
-	})
+	it('should view chart if data available',
+		function() {
+			var scope = $rootScope.$new();
+
+			var panel = setupComponent('selected-date="2017-09-27"', scope);
+			var ctrl = panel.isolateScope().vm;
+			ctrl.setSkill({ Id: 'XYZ' });
+			scope.$apply();
+			var chart = panel[0].querySelectorAll('#staffingChart');
+			var noDataPanel = panel[0].querySelectorAll(".nodata");
+			expect(chart.length).toEqual(1);
+			expect(noDataPanel.length).toEqual(0);
+		});
+
+	it('should view no available data when no skill selected',
+		function() {
+			var scope = $rootScope.$new();
+			var panel = setupComponent('selected-date="2017-09-27"', scope);
+			scope.$apply();
+
+			var chart = panel[0].querySelector('#staffingChart');
+			var noDataPanel = panel[0].querySelectorAll(".nodata");
+			expect(chart).toEqual(null);
+			expect(noDataPanel.length).toEqual(1);
+		});
+
+	it('should view no available data when check skill then uncheck skill',
+		function() {
+			var scope = $rootScope.$new();
+
+			var panel = setupComponent('selected-date="2017-09-27"', scope);
+			var ctrl = panel.isolateScope().vm;
+			ctrl.setSkill({ Id: 'XYZ' });
+			scope.$apply();
+
+			ctrl.setSkill();
+			scope.$apply();
+
+			ctrl.useShrinkageForStaffing();
+			scope.$apply();
+
+			var chart = panel[0].querySelector('#staffingChart');
+			var noDataPanel = panel[0].querySelectorAll(".nodata");
+			expect(chart).toEqual(null);
+			expect(noDataPanel.length).toEqual(1);
+		});
 
 	function setupComponent(attrs, scope) {
 		var el;

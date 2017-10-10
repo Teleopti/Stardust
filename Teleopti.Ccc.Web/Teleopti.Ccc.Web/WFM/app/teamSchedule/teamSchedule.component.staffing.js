@@ -10,16 +10,16 @@
 		}
 	});
 
-	StaffingInfoController.$inject = ['$scope','$timeout','TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService'];
+	StaffingInfoController.$inject = ['$scope', '$timeout', 'TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService'];
 
-	function StaffingInfoController($scope,$timeout, SkillService, StaffingInfoService, ChartService) {
+	function StaffingInfoController($scope, $timeout, SkillService, StaffingInfoService, ChartService) {
 		var vm = this;
 		vm.preselectedSkills = {};
 		vm.skills = [];
 		vm.skillGroups = [];
 
 		vm.isLoading = false;
-		vm.staffingDataAvailable = false;
+		var staffingDataAvailable = false;
 
 		vm.useShrinkage = false;
 		var selectedSkill = null;
@@ -29,37 +29,38 @@
 			vm.useShrinkage = !vm.useShrinkage;
 			return generateChart();
 		}
-
+		vm.showStaffingInfo = function () {
+			return staffingDataAvailable && (!!selectedSkill || !!selectedSkillGroup);
+		}
 		vm.setSkill = function (selectedItem) {
+			selectedSkill = null;
+			selectedSkillGroup = null;
 			if (!angular.isDefined(selectedItem)) {
-				vm.staffingDataAvailable = false;
 				return;
 			}
 			var isSelectedSkillArea = selectedItem.hasOwnProperty('Skills');
 			if (isSelectedSkillArea) {
 				selectedSkillGroup = selectedItem;
-				selectedSkill = null;
 			} else {
 				selectedSkill = selectedItem;
-				selectedSkillGroup = null;
 			}
 			generateChart();
 		}
 
-		SkillService.getAllSkills().then(function(data) {
+		SkillService.getAllSkills().then(function (data) {
 			vm.skills = data;
 		});
 
-		SkillService.getAllSkillGroups().then(function(data) {
+		SkillService.getAllSkillGroups().then(function (data) {
 			vm.skillGroups = data.SkillAreas;
 		});
 
 		$scope.$on('teamSchedule.dateChanged',
-			function() {
+			function () {
 				generateChart();
 			});
 		$scope.$on('teamSchedule.command.scheduleChangedApplied',
-			function() {
+			function () {
 				generateChart();
 			});
 
@@ -77,19 +78,18 @@
 		}
 
 		function staffingPrecheck(data) {
+			staffingDataAvailable = false;
 			if (!angular.equals(data, {}) && data != null) {
 				if (data.Time.length > 0 && data.ScheduledStaffing && data.ForecastedStaffing) {
-					vm.staffingDataAvailable = true;
+					staffingDataAvailable = true;
 				}
-			} else {
-				vm.staffingDataAvailable = false;
 			}
-			return vm.staffingDataAvailable;
+			return staffingDataAvailable;
 		}
 
 		function generateChartForView(data) {
-			$timeout(function() {
-				var chart = c3.generate(ChartService.staffingChartConfig(data));
+			$timeout(function () {
+				c3.generate(ChartService.staffingChartConfig(data));
 			});
 		}
 	}

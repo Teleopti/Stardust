@@ -15,12 +15,12 @@
 	</div>
 	<div>
 		<md-progress-linear ng-show="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-		<div class="con-row" ng-if="vm.staffingDataAvailable">
+		<div class="con-row" ng-if="vm.showStaffingInfo()">
 			<div class="con-flex">
 				<div class="wfm-chart intraday-chart" id="staffingChart"></div>
 			</div>
 		</div>
-		<div class="con-row" ng-if="!vm.staffingDataAvailable">
+		<div class="con-row" ng-if="!vm.showStaffingInfo()">
 			<div class="con-flex line-center nodata">
 				<i class="mdi mdi-information-outline line-center"></i>
 				<h1>{{'NoDataAvailable' | translate}}</h1>
