@@ -28,6 +28,8 @@ angular.module('wfm.rta').provider('RtaState', function() {
                     es: {array: true}
                 },
                 templateUrl: function() {
+                	if (toggles.RTA_UnifiedSkillGroupManagement_45417)
+                		return 'app/rta/rta/overview/view.RTA_UnifiedSkillGroupManagement_45417.html';
                     if (toggles.RTA_RememberMyPartOfTheBusiness_39082)
                         return 'app/rta/rta/overview/view.RTA_RememberMyPartOfTheBusiness_39082.html';
                     else return 'app/rta/rta/overview/view.html';

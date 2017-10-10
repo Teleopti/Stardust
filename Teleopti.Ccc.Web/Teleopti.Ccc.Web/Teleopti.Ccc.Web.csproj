@@ -1546,6 +1546,7 @@
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\resourceplanner\web_performance_tests\temp.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_UnifiedSkillGroupManagement_45417.html" />
+    <Content Include="WFM\app\rta\rta\overview\view.RTA_UnifiedSkillGroupManagement_45417.html" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_UnifiedSkillGroupManagement_45417.html" />
     <Content Include="WFM\app\rta\shared\polling.service.js" />
     <Content Include="WFM\app\rta\shared\_modules.js" />
