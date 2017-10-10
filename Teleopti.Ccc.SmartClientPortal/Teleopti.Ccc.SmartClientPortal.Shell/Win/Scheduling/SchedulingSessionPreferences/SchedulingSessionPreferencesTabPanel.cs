@@ -38,21 +38,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 
 			tableLayoutPanel2.RowStyles[2].Height = 0;
 			tableLayoutPanel2.RowStyles[1].Height = 0;
-			
-
-			//REMOVE THESE CONTROLS WITH TOGGLE 
-			labelResourceCalculateEveryColon.Visible = true;
-			numericUpDownResourceCalculateEvery.Visible = true;
-			labelScheduleOrSchedules1.Visible = true;
-
-			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff || hideScheduleFrequency)
-			{
-				labelResourceCalculateEveryColon.Visible = false;
-				numericUpDownResourceCalculateEvery.Visible = false;
-				labelScheduleOrSchedules1.Visible = false;
-			}
-			//
-
 			_schedulingOptions = schedulingOptions;
 			_shiftCategories = shiftCategories;
 			_scheduleTags = scheduleTags;
@@ -257,7 +242,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 				_localSchedulingOptions.ShiftCategory = null;
 			_localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.TagToUseOnScheduling = (IScheduleTag) comboBoxAdvTag.SelectedItem;
-			_localSchedulingOptions.ResourceCalculateFrequency = (int) numericUpDownResourceCalculateEvery.Value;
 			_localSchedulingOptions.ShowTroubleshot = checkBoxShowTroubleShot.Checked;
 
 			if (checkBoxTeamSameActivity.Checked)
@@ -296,8 +280,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			checkBoxUseShiftCategoryRestrictions.Checked = _localSchedulingOptions.UseShiftCategoryLimitations;
 
 			checkBoxUseShiftCategory.Checked = _localSchedulingOptions.ShiftCategory != null;
-
-			numericUpDownResourceCalculateEvery.Value = _localSchedulingOptions.ResourceCalculateFrequency;
 			checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleshot;
 
 			checkBoxUseAverageShiftLengths.Checked = _localSchedulingOptions.UseAverageShiftLengths;

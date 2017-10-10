@@ -74,9 +74,6 @@
 			this.labelScheduleOrSchedules2 = new System.Windows.Forms.Label();
 			this.numericUpDownRefreshRate = new System.Windows.Forms.NumericUpDown();
 			this.label1 = new System.Windows.Forms.Label();
-			this.labelScheduleOrSchedules1 = new System.Windows.Forms.Label();
-			this.numericUpDownResourceCalculateEvery = new System.Windows.Forms.NumericUpDown();
-			this.labelResourceCalculateEveryColon = new System.Windows.Forms.Label();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxUseMaximumPersons = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxUseMinimumPersons = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
@@ -120,7 +117,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvShiftCategory)).BeginInit();
 			this.tableLayoutPanel8.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).BeginInit();
 			this.tableLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseMaximumPersons)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseMinimumPersons)).BeginInit();
@@ -395,7 +391,7 @@
 			this.label6.AutoSize = true;
 			this.label6.Location = new System.Drawing.Point(3, 12);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(140, 15);
+			this.label6.Size = new System.Drawing.Size(139, 15);
 			this.label6.TabIndex = 0;
 			this.label6.Text = "xxTagChangesWithColon";
 			// 
@@ -404,7 +400,7 @@
 			this.comboBoxAdvTag.BackColor = System.Drawing.Color.White;
 			this.comboBoxAdvTag.BeforeTouchSize = new System.Drawing.Size(233, 23);
 			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvTag.Location = new System.Drawing.Point(149, 3);
+			this.comboBoxAdvTag.Location = new System.Drawing.Point(148, 3);
 			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
 			this.comboBoxAdvTag.Size = new System.Drawing.Size(233, 23);
 			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -800,9 +796,6 @@
 			this.tableLayoutPanel8.Controls.Add(this.labelScheduleOrSchedules2, 3, 1);
 			this.tableLayoutPanel8.Controls.Add(this.numericUpDownRefreshRate, 2, 1);
 			this.tableLayoutPanel8.Controls.Add(this.label1, 1, 1);
-			this.tableLayoutPanel8.Controls.Add(this.labelScheduleOrSchedules1, 3, 0);
-			this.tableLayoutPanel8.Controls.Add(this.numericUpDownResourceCalculateEvery, 2, 0);
-			this.tableLayoutPanel8.Controls.Add(this.labelResourceCalculateEveryColon, 1, 0);
 			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 383);
 			this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
@@ -856,50 +849,6 @@
 			this.label1.TabIndex = 20;
 			this.label1.Text = "xxRefreshScreenEveryColon";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelScheduleOrSchedules1
-			// 
-			this.labelScheduleOrSchedules1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.labelScheduleOrSchedules1.Location = new System.Drawing.Point(317, 0);
-			this.labelScheduleOrSchedules1.Name = "labelScheduleOrSchedules1";
-			this.labelScheduleOrSchedules1.Size = new System.Drawing.Size(178, 32);
-			this.labelScheduleOrSchedules1.TabIndex = 19;
-			this.labelScheduleOrSchedules1.Text = "xxScheduleOrSchedules";
-			this.labelScheduleOrSchedules1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// numericUpDownResourceCalculateEvery
-			// 
-			this.numericUpDownResourceCalculateEvery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.numericUpDownResourceCalculateEvery.Location = new System.Drawing.Point(249, 6);
-			this.numericUpDownResourceCalculateEvery.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-			this.numericUpDownResourceCalculateEvery.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.numericUpDownResourceCalculateEvery.Name = "numericUpDownResourceCalculateEvery";
-			this.numericUpDownResourceCalculateEvery.Size = new System.Drawing.Size(58, 23);
-			this.numericUpDownResourceCalculateEvery.TabIndex = 57;
-			this.numericUpDownResourceCalculateEvery.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDownResourceCalculateEvery.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			// 
-			// labelResourceCalculateEveryColon
-			// 
-			this.labelResourceCalculateEveryColon.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.labelResourceCalculateEveryColon.Location = new System.Drawing.Point(13, 0);
-			this.labelResourceCalculateEveryColon.Name = "labelResourceCalculateEveryColon";
-			this.labelResourceCalculateEveryColon.Size = new System.Drawing.Size(230, 32);
-			this.labelResourceCalculateEveryColon.TabIndex = 17;
-			this.labelResourceCalculateEveryColon.Text = "xxResourceCalculateEveryColon";
-			this.labelResourceCalculateEveryColon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// tableLayoutPanel6
 			// 
@@ -1022,7 +971,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvShiftCategory)).EndInit();
 			this.tableLayoutPanel8.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).EndInit();
 			this.tableLayoutPanel6.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseMaximumPersons)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseMinimumPersons)).EndInit();
@@ -1068,9 +1016,6 @@
         private System.Windows.Forms.Label labelScheduleOrSchedules2;
         private System.Windows.Forms.NumericUpDown numericUpDownRefreshRate;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label labelScheduleOrSchedules1;
-        private System.Windows.Forms.NumericUpDown numericUpDownResourceCalculateEvery;
-        private System.Windows.Forms.Label labelResourceCalculateEveryColon;
         private System.Windows.Forms.Panel pnlBlockTeamScheduling;
         private System.Windows.Forms.Panel pnlShiftCategory;
 		private System.Windows.Forms.Label lblUseRestrictions;
