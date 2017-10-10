@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff;
-using Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
@@ -114,6 +113,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
 			};
 
 			return dataCollection;
+		}
+
+		private class MatrixDataForTest : MatrixData
+		{
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+			public MatrixDataForTest(IEnumerable<IScheduleDayData> scheduleDayDataCollectionForTest)
+				: base(null)
+			{
+				foreach (var scheduleDayData in scheduleDayDataCollectionForTest)
+				{
+					ScheduleDayDataDictionary.Add(scheduleDayData.DateOnly, scheduleDayData);
+				}
+
+			}
+
+			public void SetDayOff(DateOnly date)
+			{
+				ScheduleDayDataDictionary[date].IsDayOff = true;
+			}
 		}
 	}
 }

@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 {
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void CanFilterOnNotAllowedCategoriesWithEmptyList()
 		{
 			IShiftCategory shiftCategory1 = new ShiftCategory("allowed");
-			var ret = _target.Filter(new List<IShiftCategory> { shiftCategory1 }, new List<ShiftProjectionCache>(), new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var ret = _target.Filter(new List<IShiftCategory> { shiftCategory1 }, new List<ShiftProjectionCache>());
 			Assert.IsNotNull(ret);
 		}
 
@@ -49,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			IList<ShiftProjectionCache> caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
 			IList<IShiftCategory> categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
-			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly());
 			using (_mocks.Record())
 			{
 				Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
@@ -59,10 +56,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var ret = _target.Filter(categoriesNotAllowed, caches, finderResult);
+				var ret = _target.Filter(categoriesNotAllowed, caches);
 				Assert.AreEqual(1, ret.Count);
 				Assert.AreEqual(shiftCategory1, ret[0].TheWorkShift.ShiftCategory);
-				ret = _target.Filter(new List<IShiftCategory>(), caches, finderResult);
+				ret = _target.Filter(new List<IShiftCategory>(), caches);
 				Assert.AreEqual(3, ret.Count);
 			}
 		}
@@ -70,12 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly());
-			
-			var result = _target.Filter(new List<IShiftCategory>(), null, finderResult);
-			Assert.IsNull(result);
-			
-			result = _target.Filter(new List<IShiftCategory>(), new List<ShiftProjectionCache>(), null);
+			var result = _target.Filter(new List<IShiftCategory>(), null);
 			Assert.IsNull(result);
 		}
 	}

@@ -13,18 +13,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 	{
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly Func<IWorkShiftFinderResultHolder> _allResults;
 
-		public BestShiftChooser(MatrixListFactory matrixListFactory, IEffectiveRestrictionCreator effectiveRestrictionCreator, Func<IWorkShiftFinderResultHolder> allResults)
+		public BestShiftChooser(MatrixListFactory matrixListFactory, IEffectiveRestrictionCreator effectiveRestrictionCreator)
 		{
 			_matrixListFactory = matrixListFactory;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_allResults = allResults;
 		}
 
 		public IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
 			SchedulingOptions schedulingOptions,
-			IWorkShiftFinderService finderService)
+			WorkShiftFinderService finderService)
 		{
 			if (schedulePart == null)
 				throw new ArgumentNullException(nameof(schedulePart));
@@ -41,8 +39,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				if (personPeriod.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)
 					if (!schedulePart.IsScheduled())
 					{
-						DateTime schedulingTime = DateTime.Now;
-						WorkShiftFinderServiceResult cache;
+						IWorkShiftCalculationResultHolder cache;
 						using (PerformanceOutput.ForOperation("Finding the best shift"))
 						{
 							IScheduleMatrixPro matrix =
@@ -51,14 +48,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 							var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 							cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);
 						}
-						var result = cache.FinderResult;
-						_allResults().AddResults(new List<WorkShiftFinderResult> {result}, schedulingTime);
 
-						if (cache.ResultHolder == null)
-							return null;
-
-						result.Successful = true;
-						return cache.ResultHolder.ShiftProjection.TheMainShift;
+						return cache?.ShiftProjection.TheMainShift;
 					}
 			}
 			return null;

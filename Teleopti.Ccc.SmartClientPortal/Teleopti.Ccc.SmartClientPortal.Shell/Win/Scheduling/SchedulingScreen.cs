@@ -1213,14 +1213,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				var bestShiftChooser = _container.Resolve<BestShiftChooser>();
 				var schedulingOptions = new SchedulingOptions {UseRotations = false};
-				var finderService = _container.Resolve<IWorkShiftFinderService>();
+				var finderService = _container.Resolve<WorkShiftFinderService>();
 				// This is not working now I presume (SelectedSchedules is probably not correct)
 				foreach (IScheduleDay schedulePart in _scheduleView.SelectedSchedules())
 				{
 					if (!schedulePart.HasDayOff())
 					{
-						IEditableShift selectedShift = bestShiftChooser.PrepareAndChooseBestShift(schedulePart, schedulingOptions,
-							finderService);
+						IEditableShift selectedShift = bestShiftChooser.PrepareAndChooseBestShift(schedulePart, schedulingOptions, finderService);
 						if (selectedShift != null)
 						{
 							schedulePart.AddMainShift(selectedShift);
@@ -2198,8 +2197,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			afterBackgroundWorkersCompleted(e.Cancelled);
 		}
 
-
-		[RemoveMeWithToggle("Remove WorkShiftFinderResultHolder-if", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		private void afterBackgroundWorkersCompleted(bool canceled)
 		{
 			_personsToValidate.Clear();
@@ -2221,41 +2218,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			releaseUserInterface(canceled);
 
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
+			if (_schedulingOptions.ShowTroubleshot)
 			{
-				if (_schedulingOptions.ShowTroubleshot)
+				var scheduleDays = _scheduleView.SelectedSchedules();
+				if (scheduleDays.Any())
 				{
-					var scheduleDays = _scheduleView.SelectedSchedules();
-					if (scheduleDays.Any())
-					{
-						var startDay = scheduleDays.First();
-						var endDay = scheduleDays.Last();
-						var selectedPeriod = new DateOnlyPeriod(startDay.DateOnlyAsPeriod.DateOnly, endDay.DateOnlyAsPeriod.DateOnly);
+					var startDay = scheduleDays.First();
+					var endDay = scheduleDays.Last();
+					var selectedPeriod = new DateOnlyPeriod(startDay.DateOnlyAsPeriod.DateOnly, endDay.DateOnlyAsPeriod.DateOnly);
 
-						var validationResult = _container.Resolve<SchedulingValidator>()
-							.Validate(_scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), selectedPeriod, false);
-						if (validationResult.InvalidResources.Any())
-							new AgentValidationResult(validationResult).Show(this);
-					}
+					var validationResult = _container.Resolve<SchedulingValidator>()
+						.Validate(_scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), selectedPeriod, false);
+					if (validationResult.InvalidResources.Any())
+						new AgentValidationResult(validationResult).Show(this);
 				}
 			}
 
-			else if (!_scheduleOptimizerHelper.WorkShiftFinderResultHolder.LastResultIsSuccessful)
-			{
-				var workShiftFinderResultHolder = _scheduleOptimizerHelper.WorkShiftFinderResultHolder;
-				if (_schedulingOptions.ShowTroubleshot ||
-					workShiftFinderResultHolder.AlwaysShowTroubleshoot)
-					new SchedulingResult(workShiftFinderResultHolder, true, _schedulerState.CommonNameDescription).Show(this);
-				else
-					ViewBase.ShowInformationMessage(this,
-						string.Format(CultureInfo.CurrentCulture, Resources.NoOfAgentDaysCouldNotBeScheduled,
-							_scheduleOptimizerHelper.WorkShiftFinderResultHolder.GetResults(false, true).Count)
-						, Resources.SchedulingResult);	
-			}
-
 			_schedulingOptions.ShowTroubleshot = false;
-			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
-
 			if (SikuliHelper.InteractiveMode)
 			{
 				var skillTabPage = _tabSkillData.TabPages[0];
@@ -3029,7 +3008,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 							_schedulerState.CommonStateHolder.ActiveShiftCategories,
-							_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289), _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags,
+							_groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags,
 							"SchedulingOptions", _schedulerState.CommonStateHolder.ActiveActivities))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
@@ -3068,7 +3047,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				using (
 					var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 						_schedulerState.CommonStateHolder.ActiveShiftCategories,
-						_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289), 
 						_groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptionsActivities",
 						_schedulerState.CommonStateHolder.ActiveActivities))
 				{
@@ -3172,8 +3150,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						}
 					}
 
-					//hack - to be fixed
-					if (progress != null && _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
+					if (progress != null)
 					{
 						var part = progress.SchedulePart;
 						if (part != null)

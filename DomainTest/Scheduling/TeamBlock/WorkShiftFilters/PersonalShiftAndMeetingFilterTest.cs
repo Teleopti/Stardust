@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,15 +25,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private PersonalShiftAndMeetingFilter _target;
 		private IScheduleDay _part;
 		private IPersonAssignment _personAssignment;
-		private WorkShiftFinderResult _finderResult;
 
 		public void setup()
 		{
 			_mocks = new MockRepository();
-			_target = new PersonalShiftAndMeetingFilter(()=> new SchedulerStateHolder(new SchedulingResultStateHolder(), new CommonStateHolder(null), new TimeZoneGuard()));
+			_target = new PersonalShiftAndMeetingFilter();
 			_part = _mocks.StrictMock<IScheduleDay>();
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
 		}
 
 		[Test]
@@ -192,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var shiftsList = _target.Filter(shifts, _part, _finderResult);
+				var shiftsList = _target.Filter(shifts, _part);
 				Assert.That(shiftsList.Count, Is.EqualTo(1));
 			}
 		}
@@ -236,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var shiftsList = _target.Filter(shifts, _part, _finderResult);
+				var shiftsList = _target.Filter(shifts, _part);
 				Assert.That(shiftsList.Count, Is.EqualTo(0));
 			}
 		}

@@ -96,8 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var stateHolder = SchedulerStateHolder.Fill(scenario, date, new[] { agent }, scheduleDatas, skillDay);
 			var permissionState = Target.CheckPreferenceDayOffForDisplay(stateHolder.Schedules[agent].ScheduledDay(date));
 
-			Assert.AreEqual(PermissionState.Broken, permissionState);	
+			Assert.AreEqual(PermissionState.Broken, permissionState);
 		}
-		
 	}
 }

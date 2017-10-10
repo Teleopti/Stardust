@@ -1,27 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
     public class ScheduleService : IScheduleService
     {
 	    private readonly Func<ISchedulerStateHolder> _stateHolder;
-	    private readonly IWorkShiftFinderService _finderService;
+	    private readonly WorkShiftFinderService _finderService;
 		private readonly MatrixListFactory _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-        private readonly Dictionary<Tuple<Guid,DateOnly>,WorkShiftFinderResult> _finderResults = new Dictionary<Tuple<Guid, DateOnly>, WorkShiftFinderResult>();
 
         public ScheduleService(
 					Func<ISchedulerStateHolder> stateHolder,
-			IWorkShiftFinderService finderService,
+			WorkShiftFinderService finderService,
 					MatrixListFactory scheduleMatrixListCreator,
             IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, 
             IEffectiveRestrictionCreator effectiveRestrictionCreator)
@@ -31,13 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _scheduleMatrixListCreator = scheduleMatrixListCreator;
             _shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
-        }
-
-        public ReadOnlyCollection<WorkShiftFinderResult> FinderResults => new ReadOnlyCollection<WorkShiftFinderResult>(_finderResults.Values.ToArray());
-
-	    public void ClearFinderResults()
-        {
-            _finderResults.Clear();
         }
 
 		//only one usage of this, try to remove
@@ -72,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
             {
-                WorkShiftFinderServiceResult cache;
+				IWorkShiftCalculationResultHolder cache;
                 if (schedulePart.IsScheduled())
                 {
                     return true;
@@ -83,10 +73,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 if (effectiveRestriction == null)
                 {
-                    var finderResult = new WorkShiftFinderResult(person, scheduleDateOnly);
-                    finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.ConflictingRestrictions, 0, 0));
-                    if (!_finderResults.ContainsKey(finderResult.PersonDateKey))
-                        _finderResults.Add(finderResult.PersonDateKey, finderResult);
                     return false;
                 }
 
@@ -105,26 +91,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     cache = _finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);
                 }
 
-                if (cache.ResultHolder == null)
+                if (cache == null)
                 {
-                    if (!_finderResults.ContainsKey(cache.FinderResult.PersonDateKey))
-                    {
-                        _finderResults.Add(cache.FinderResult.PersonDateKey, cache.FinderResult);
-                    }
                     return false;
                 }
 
-	            WorkShiftFinderResult res;
-	            if (_finderResults.TryGetValue(cache.FinderResult.PersonDateKey, out res))
-	            {
-		            res.Successful = true;
-	            }
-
-	            schedulePart.AddMainShift(cache.ResultHolder.ShiftProjection.TheMainShift);
+	            schedulePart.AddMainShift(cache.ShiftProjection.TheMainShift);
                 rollbackService.Modify(schedulePart);
 
-            	resourceCalculateDelayer.CalculateIfNeeded(scheduleDateOnly, cache.ResultHolder.ShiftProjection.WorkShiftProjectionPeriod, false);
-
+            	resourceCalculateDelayer.CalculateIfNeeded(scheduleDateOnly, cache.ShiftProjection.WorkShiftProjectionPeriod, false);
                 return true;
             }
         }

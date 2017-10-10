@@ -10,21 +10,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IScheduleService _scheduleService;
-		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly IResourceCalculation _resourceOptimization;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IUserTimeZone _userTimeZone;
 
 		public NightRestWhiteSpotSolverServiceFactory(IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IScheduleService scheduleService, 
-			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, 
 			IResourceCalculation resourceOptimization,
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IUserTimeZone userTimeZone)
 		{
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_scheduleService = scheduleService;
-			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_resourceOptimization = resourceOptimization;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_userTimeZone = userTimeZone;
@@ -34,8 +31,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			return new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
 				_deleteAndResourceCalculateService,
-				_scheduleService, _workShiftFinderResultHolder,
-				new ResourceCalculateDelayer(_resourceOptimization, 1, considerShortBreaks, _schedulingResultStateHolder(), _userTimeZone));
+				_scheduleService, 
+				new ResourceCalculateDelayer(_resourceOptimization, considerShortBreaks, _schedulingResultStateHolder(), _userTimeZone));
 		}
 	}
 }

@@ -2,21 +2,18 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 {
 	[TestFixture]
 	public class EffectiveRestrictionShiftFilterTest
 	{
-		private IEffectiveRestrictionShiftFilter _target;
+		private EffectiveRestrictionShiftFilter _target;
 		private MockRepository _mocks;
 
 		[SetUp]
@@ -31,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
 			using (_mocks.Record())
 			{
@@ -52,8 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				bool ret = _target.Filter(schedulingOptions, effectiveRestriction, result);
-				result.FilterResults.Count.Should().Be.EqualTo(1);
+				bool ret = _target.Filter(schedulingOptions, effectiveRestriction);
 				Assert.IsFalse(ret);
 			}
 		}
@@ -64,7 +59,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
 			using (_mocks.Record())
 			{
@@ -83,8 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				bool ret = _target.Filter(schedulingOptions, effectiveRestriction, result);
-				result.FilterResults.Count.Should().Be.EqualTo(1);
+				bool ret = _target.Filter(schedulingOptions, effectiveRestriction);
 				Assert.IsFalse(ret);
 			}
 		}
@@ -94,7 +87,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 			using (_mocks.Record())
 			{
 				Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
@@ -111,9 +103,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				bool ret = _target.Filter(schedulingOptions, effectiveRestriction, result);
+				bool ret = _target.Filter(schedulingOptions, effectiveRestriction);
 				Assert.IsTrue(ret);
-				Assert.AreEqual(0, result.FilterResults.Count);
 			}
 		}
 
@@ -122,11 +113,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			SchedulingOptions schedulingOptions = new SchedulingOptions();
 			IEffectiveRestriction effectiveRestriction = null;
-			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
-			bool ret = _target.Filter(schedulingOptions, effectiveRestriction, result);
+			bool ret = _target.Filter(schedulingOptions, effectiveRestriction);
 			Assert.IsFalse(ret);
-			result.FilterResults.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -138,14 +127,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			IShiftCategory category1 = new ShiftCategory("optCat");
 			category1.SetId(Guid.NewGuid());
 			var options = new SchedulingOptions{ShiftCategory = category1};
-			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
 
 			Expect.Call(effective.ShiftCategory).Return(category).Repeat.Twice();
 
 			_mocks.ReplayAll();
-			var ret = _target.Filter(options, effective, finderResult);
+			var ret = _target.Filter(options, effective);
 			Assert.That(ret, Is.False);
-			Assert.That(finderResult.FilterResults.Count, Is.GreaterThan(0));
 			_mocks.VerifyAll();
 		}
 
@@ -158,12 +145,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
 				new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(8, 0, 0)),
 				null, null, null, new List<IActivityRestriction>());
-			var options = new SchedulingOptions();
-			var result = _target.Filter(options, effectiveRestriction, null);
-			Assert.IsFalse(result);
 
-			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
-			result = _target.Filter(null, effectiveRestriction, finderResult);
+			var result = _target.Filter(null, effectiveRestriction);
 			Assert.IsFalse(result);
 		}
 	}

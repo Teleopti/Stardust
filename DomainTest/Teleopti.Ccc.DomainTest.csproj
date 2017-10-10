@@ -384,7 +384,6 @@
     <Compile Include="Reports\ScheduleChangedByUserViewModelProviderTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromSkillCombinationsTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />
-    <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
     <Compile Include="ResourcePlanner\Validation\MissingForecastValidatorTest.cs" />
     <Compile Include="ResourcePlanner\Validation\DesktopSchedulingValidatorTest.cs" />
     <Compile Include="ResourcePlanner\Validation\PersonContractScheduleValidatorTest.cs" />
@@ -467,7 +466,6 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingTimeZoneTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\SchedulingTrackResourceCalculationsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\TeamBlockPeriodSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\TakeShiftWithLatestShiftStartIfSameShiftValue.cs" />
     <Compile Include="SchedulingScenarios\TeamBlockType.cs" />
@@ -967,7 +965,6 @@
     <Compile Include="Payroll\PayrollExportProgressTest.cs" />
     <Compile Include="Payroll\PayrollResultDetailTest.cs" />
     <Compile Include="ResourceCalculation\AbsencePreferenceFullDayLayerCreatorTest.cs" />
-    <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\FullIntervalFinderTest.cs" />
@@ -977,14 +974,12 @@
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\SkillDayIntraIntervalFinderTest.cs" />
     <Compile Include="ResourceCalculation\PeriodResourceDetailTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillProviderTest.cs" />
-    <Compile Include="ResourceCalculation\WorkShiftFinderResultHolderTest.cs" />
     <Compile Include="Scheduling\Assignment\CurrentScheduleSummaryCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
     <Compile Include="Scheduling\Assignment\MergeScheduleDayTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment_MoveActivityTest.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleDaySignificantPartTest.cs" />
-    <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftServiceTest.cs" />
     <Compile Include="Scheduling\BackToLegalShift\LegalShiftDeciderTest.cs" />
     <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailabilityTest.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalDataTest.cs" />
@@ -1006,7 +1001,6 @@
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverEarlierTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ActivityIntervalDataCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\AllTeamMembersInSelectionSpecificationTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\DayOff\TeamBlockMissingDayOffHandlerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\FirstShiftInTeamBlockFinderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDaysTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillIntervalTest.cs" />
@@ -1043,13 +1037,11 @@
     <Compile Include="Scheduling\TeamBlock\Specification\TeamMemberTerminationOnBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockDayOffsInPeriodValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptionsTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelectorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameEndTimeTeamSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet3.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateTest.cs" />
@@ -1076,9 +1068,7 @@
     <Compile Include="Scheduling\Assignment\SchedulePartStringVisualizerTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitCheckerTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinderTest.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\DaysOffSchedulingServiceTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreatorTest.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\MatrixDataListInSteadyStateTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapperTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataTest.cs" />
@@ -1087,7 +1077,6 @@
     <Compile Include="Scheduling\MasterActivityTest.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecificationTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTrackerTest.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\MissingDaysOffSchedulerTest.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorterTest.cs" />
     <Compile Include="Scheduling\PublicNoteTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCounterCreatorTest.cs" />
@@ -1242,7 +1231,6 @@
     <Compile Include="ResourceCalculation\SkillStaffPeriodDataHolderTest.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodStatisticsForSkillIntradayTest.cs" />
     <Compile Include="ResourceCalculation\SwapServiceTest.cs" />
-    <Compile Include="ResourceCalculation\WorkShiftFinderResultTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffOutsideScheduleExceptionTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteOptionTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteSchedulePartServiceTest.cs" />

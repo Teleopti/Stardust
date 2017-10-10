@@ -18,11 +18,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	public class PersonalShiftsShiftFilterTest
 	{
 		private MockRepository _mocks;
-		private IPersonalShiftsShiftFilter _target;
+		private PersonalShiftsShiftFilter _target;
 		private IScheduleDay _part;
 		private IPerson _person;
 		private readonly DateOnly _dateOnly = new DateOnly(2013, 3, 1);
-		private WorkShiftFinderResult _finderResult;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
 		[SetUp]
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks = new MockRepository();
 			_person = PersonFactory.CreatePerson("Bill");
 			_part = ScheduleDayFactory.Create(_dateOnly,_person);
-			_finderResult = new WorkShiftFinderResult(_person, _dateOnly);
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_target = new PersonalShiftsShiftFilter(_personalShiftMeetingTimeChecker);
 		}
@@ -77,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var shiftsList = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
+				var shiftsList = _target.Filter(schedules, _dateOnly, _person, shifts);
 				Assert.That(shiftsList.Count, Is.EqualTo(1));
 			}
 		}
@@ -117,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			using (_mocks.Record())
 			{
-				var shiftList = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
+				var shiftList = _target.Filter(schedules, _dateOnly, _person, shifts);
 				Assert.That(shiftList.Count, Is.EqualTo(1));
 			}
 		}
@@ -127,10 +125,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			var schedules = MockRepository.GenerateMock<IScheduleDictionary>();
 			schedules.Expect(x => x[_person].ScheduledDay(_dateOnly)).Return(_part);
-			var shiftsList = _target.Filter(schedules, _dateOnly, _person, new List<ShiftProjectionCache>(), _finderResult);
+			var shiftsList = _target.Filter(schedules, _dateOnly, _person, new List<ShiftProjectionCache>());
 			Assert.That(shiftsList.Count, Is.EqualTo(0));
 			
-			shiftsList = _target.Filter(schedules, _dateOnly, _person, null, _finderResult);
+			shiftsList = _target.Filter(schedules, _dateOnly, _person, null);
 			Assert.IsNull(shiftsList);
 		}
 
@@ -147,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var schedules = MockRepository.GenerateMock<IScheduleDictionary>();
 			schedules.Expect(x => x[_person].ScheduledDay(_dateOnly)).Return(_part);
 
-			var shiftsList = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
+			var shiftsList = _target.Filter(schedules, _dateOnly, _person, shifts);
 			Assert.That(shiftsList.Count, Is.EqualTo(1));
 		}
 	}

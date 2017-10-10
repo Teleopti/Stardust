@@ -67,9 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private ShiftProjectionCache filterAndSelect(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions, IGroupPersonSkillAggregator groupPersonSkillAggregator, bool isSameOpenHoursInBlock)
 		{
 			var shifts = _workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, schedules, datePointer, teamBlockInfo, effectiveRestriction,
-				schedulingOptions,
-				new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupMembers.First(), datePointer),
-				isSameOpenHoursInBlock, useShiftsForRestrictions, allSkillDays);
+				schedulingOptions, isSameOpenHoursInBlock, useShiftsForRestrictions, allSkillDays);
 
 			if (shifts.IsNullOrEmpty())
 				return null;

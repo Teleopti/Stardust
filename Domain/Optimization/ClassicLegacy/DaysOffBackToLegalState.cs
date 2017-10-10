@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 {
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IOptimizationPreferences optimizationPreferences,
-			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			var solverContainers =
@@ -56,17 +54,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 					if (!backToLegalStateSolverContainer.Result)
 					{
 						backToLegalStateSolverContainer.MatrixOriginalStateContainer.StillAlive = false;
-						WorkShiftFinderResult workShiftFinderResult =
-							new WorkShiftFinderResult(backToLegalStateSolverContainer.MatrixOriginalStateContainer.ScheduleMatrix.Person,
-								DateOnly.Today)
-							{ Successful = false };
-						foreach (string descriptionKey in backToLegalStateSolverContainer.FailedSolverDescriptionKeys)
-						{
-							string localizedText = Resources.ResourceManager.GetString(descriptionKey);
-							var workShiftFilterResult = new WorkShiftFilterResult(localizedText, 0, 0);
-							workShiftFinderResult.AddFilterResults(workShiftFilterResult);
-						}
-						workShiftFinderResultHolder().AddResults(new List<WorkShiftFinderResult> { workShiftFinderResult }, DateTime.Now);
 					}
 				}
 			}

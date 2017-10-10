@@ -102,9 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IEffectiveRestriction restriction, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules, bool useShiftsForRestrictions)
 		{
 			var shifts = _workShiftFilterService.FilterForTeamMember(schedules, day, person, teamBlockSingleDayInfo, restriction,
-						schedulingOptions,
-						new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), 
-						useShiftsForRestrictions, allSkillDays);
+						schedulingOptions, useShiftsForRestrictions, allSkillDays);
 
 			if (shifts.IsNullOrEmpty())
 				return null;

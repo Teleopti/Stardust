@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationPreferences optimizationPreferences, 
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			GroupPageLight groupPageLight,
-			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			var stateHolder = _schedulerStateHolder();
@@ -88,7 +87,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 													schedulingOptions,
 													dayOffOptimizationPreferenceProvider,
 													optimizationPreferences,
-													workShiftFinderResultHolder,
 													resourceOptimizerPersonOptimized);
 					var workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
 					foreach (var matrixOriginalStateContainer in matrixListOriginalStateContainer)
@@ -101,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
 				_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder(), _userTimeZone);
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder(), _userTimeZone);
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(stateHolder.AllPermittedPersons, stateHolder.Schedules, groupPageLight);
 
 				_teamBlockDayOffOptimizer.OptimizeDaysOff(matrixList,

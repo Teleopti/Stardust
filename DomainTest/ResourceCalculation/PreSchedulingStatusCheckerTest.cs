@@ -58,8 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
 			}
 
-			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
-			var ret =_target.CheckStatus(_part, finderResult, _schedulingOptions);
+			var ret =_target.CheckStatus(_part, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -74,8 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
 			}
 
-			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
-			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
+			var ret = _target.CheckStatus(_part,  _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -98,8 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			}
 
-			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
-			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
+			var ret = _target.CheckStatus(_part, _schedulingOptions);
             Assert.IsFalse(ret);
             Assert.AreEqual(_person, _target.Person);
             Assert.AreEqual(_scheduleDateOnly, _target.ScheduleDateOnly);
@@ -125,8 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			}
 
-			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
-			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
+			var ret = _target.CheckStatus(_part,  _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -149,8 +145,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
 			}
 
-			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
-			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
+			var ret = _target.CheckStatus(_part, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -174,8 +169,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
 			}
 
-			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
-			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
+			var ret = _target.CheckStatus(_part, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -200,8 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
 			}
 
-			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
-			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
+			var ret = _target.CheckStatus(_part, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -225,8 +218,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_person.Id).Return(Guid.Empty).Repeat.Any();
 			}
 
-			var finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
-			var ret = _target.CheckStatus(_part, finderResult, _schedulingOptions);
+			var ret = _target.CheckStatus(_part, _schedulingOptions);
             Assert.IsTrue(ret);
         }
     }

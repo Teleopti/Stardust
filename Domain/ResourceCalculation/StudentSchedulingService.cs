@@ -11,10 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public interface IStudentSchedulingService
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		IList<WorkShiftFinderResult> FinderResults { get; }
-		void ClearFinderResults();
 		bool DoTheScheduling(IList<IScheduleDay> selectedParts, SchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
-
 	}
 
 	/// <summary>
@@ -55,9 +52,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var skills = _schedulingResultStateHolder.Skills;
 			if (skills.Length == 0) return false;
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper,
 				schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder, _userTimeZone);
-
 
 			schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
 			doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true,
@@ -71,14 +67,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			return doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, false,
 				resourceCalculateDelayer, rollbackService);
-		}
-
-
-		public IList<WorkShiftFinderResult> FinderResults => _scheduleService.FinderResults.ToList();
-
-		public void ClearFinderResults()
-		{
-			_scheduleService.ClearFinderResults();
 		}
 
 		private CancelSignal onDayScheduled(SchedulingServiceBaseEventArgs args)

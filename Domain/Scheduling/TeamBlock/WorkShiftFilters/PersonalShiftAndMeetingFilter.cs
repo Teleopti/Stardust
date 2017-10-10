@@ -1,29 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IPersonalShiftAndMeetingFilter
 	{
-		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, IScheduleDay schedulePart, WorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, IScheduleDay schedulePart);
 	}
 
 	public class PersonalShiftAndMeetingFilter : IPersonalShiftAndMeetingFilter
 	{
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-
-		public PersonalShiftAndMeetingFilter(Func<ISchedulerStateHolder> schedulerStateHolder)
-		{
-			_schedulerStateHolder = schedulerStateHolder;
-		}
-
-		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, IScheduleDay schedulePart, WorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, IScheduleDay schedulePart)
 		{
 			if (shiftList.Count == 0)
 				return shiftList;
@@ -33,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			var meetings = schedulePart.PersonMeetingCollection();
 			var personalAssignment = schedulePart.PersonAssignment();
-			int cntBefore = shiftList.Count;
 			IList<ShiftProjectionCache> workShiftsWithinPeriod =
 				shiftList.Select(s => new {s, Period = s.MainShiftProjection.Period()})
 					.Where(
@@ -42,14 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 							s.s.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignment))
 					.Select(s => s.s)
 					.ToList();
-
-			var currentTimeZone = _schedulerStateHolder().TimeZoneInfo;
-			finderResult.AddFilterResults(
-				new WorkShiftFilterResult(
-					string.Format(CultureInfo.InvariantCulture,
-						UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
-						period.Value.StartDateTimeLocal(currentTimeZone), period.Value.EndDateTimeLocal(currentTimeZone)), cntBefore,
-					workShiftsWithinPeriod.Count));
 
 			return workShiftsWithinPeriod;
 		}

@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	public class SchedulePlanningPeriodCommandHandler
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
-		private readonly IFullScheduling _fullScheduling;
+		private readonly FullScheduling _fullScheduling;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
 
-		public SchedulePlanningPeriodCommandHandler(IPlanningPeriodRepository planningPeriodRepository, IFullScheduling fullScheduling, ILoggedOnUser loggedOnUser, IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPopulatingPublisher)
+		public SchedulePlanningPeriodCommandHandler(IPlanningPeriodRepository planningPeriodRepository, FullScheduling fullScheduling, ILoggedOnUser loggedOnUser, IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPopulatingPublisher)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
 			_fullScheduling = fullScheduling;

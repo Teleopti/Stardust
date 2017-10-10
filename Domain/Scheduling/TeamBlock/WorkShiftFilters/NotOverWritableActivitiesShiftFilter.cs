@@ -9,25 +9,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface INotOverWritableActivitiesShiftFilter
 	{
-		IList<ShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateToSchedule, IPerson person,
-															IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult);
+		IList<ShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateToSchedule, IPerson person, IList<ShiftProjectionCache> shiftList);
 	}
 
 	public class NotOverWritableActivitiesShiftFilter : INotOverWritableActivitiesShiftFilter
 	{
-		public IList<ShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateToSchedule, IPerson person,
-		                                           IList<ShiftProjectionCache> shiftList, WorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(IScheduleDictionary scheduleDictionary, DateOnly dateToSchedule, IPerson person, IList<ShiftProjectionCache> shiftList)
 		{
 			if (shiftList == null) return null;
 			if (person == null) return null;
-			if (finderResult == null) return null;
 			
 			if (shiftList.Count == 0) return shiftList;
 			var part = scheduleDictionary[person].ScheduledDay(dateToSchedule);
 
 			var meetings = part.PersonMeetingCollection();
 			var personAssignment = part.PersonAssignment(true);
-			var cnt = shiftList.Count;
 
 			if (meetings.Count == 0 && !personAssignment.PersonalActivities().Any())
 				return shiftList;
@@ -39,8 +35,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 							x =>
 								!((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&
 								isActivityIntersectedWithMeetingOrPersonalShift(personAssignment, meetings, x))).ToList();
-			finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstActivities,
-			                                                        cnt, filteredList.Count));
 
 			return filteredList;
 		}

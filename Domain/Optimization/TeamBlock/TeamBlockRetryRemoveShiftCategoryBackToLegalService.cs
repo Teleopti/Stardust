@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IEnumerable<IScheduleMatrixPro> scheduleMatrixListPros,
 			ISchedulingProgress backgroundWorker)
 		{
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
 			backgroundWorker.ReportProgress(0, new TeleoptiProgressChangeMessage(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot));
 			foreach (var matrix in scheduleMatrixListPros)
 			{

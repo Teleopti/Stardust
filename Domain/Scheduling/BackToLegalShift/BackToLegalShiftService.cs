@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 {
@@ -26,19 +24,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		private readonly IBackToLegalShiftWorker _backToLegalShiftWorker;
 		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 		private readonly ILegalShiftDecider _legalShiftDecider;
-		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public BackToLegalShiftService(IBackToLegalShiftWorker backToLegalShiftWorker,
 			IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider,
-			IWorkShiftFinderResultHolder workShiftFinderResultHolder, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
+			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
 			IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_backToLegalShiftWorker = backToLegalShiftWorker;
 			_firstShiftInTeamBlockFinder = firstShiftInTeamBlockFinder;
 			_legalShiftDecider = legalShiftDecider;
-			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
@@ -51,9 +47,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		{
 			//single block, single team
 			int processedBlocks = 0;
-			_workShiftFinderResultHolder.Clear();
-			_workShiftFinderResultHolder.AlwaysShowTroubleshoot = true;
-			var workShiftFinderResultList = new List<WorkShiftFinderResult>();
 			foreach (var selectedTeamBlock in selectedTeamBlocks.GetRandom(selectedTeamBlocks.Count, true))
 			{
 				isSingleTeamSingleDay(selectedTeamBlock);
@@ -81,13 +74,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 					continue;
 				}
 
-				var success = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulingResultStateHolder.Schedules, person.VirtualSchedulePeriod(date), out int targetDaysOff, out IList<IScheduleDay> daysOffNow);
+				var success = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulingResultStateHolder.Schedules, person.VirtualSchedulePeriod(date), out int _, out IList<IScheduleDay> _);
 
 				if (!success)
 				{
-					var workShiftFinderResult = new WorkShiftFinderResult(person, date);
-					workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(string.Format(CultureInfo.InvariantCulture, Resources.WrongNumberOfDayOffsInSchedulePeriod, targetDaysOff, daysOffNow.Count), 0, 0));
-					workShiftFinderResultList.Add(workShiftFinderResult);
 					continue;
 				}
 
@@ -98,13 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				success = _backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService,
 					resourceCalculateDelayer, schedulingResultStateHolder);
 
-				if (!success)
-				{
-					var workShiftFinderResult = new WorkShiftFinderResult(person, date);
-					workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(Resources.CouldNotFindAnyValidShiftInShiftBag, 0, 0));
-					workShiftFinderResultList.Add(workShiftFinderResult);
-				}
-				else
+				if (success)
 				{
 					if (overTimeActivities.Any())
 					{
@@ -112,7 +96,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 
 						foreach (var overtimeShiftLayer in overTimeActivities)
 						{
-							scheduledDay.CreateAndAddOvertime(overtimeShiftLayer.Payload, overtimeShiftLayer.Period, overtimeShiftLayer.DefinitionSet);
+							scheduledDay.CreateAndAddOvertime(overtimeShiftLayer.Payload, overtimeShiftLayer.Period,
+								overtimeShiftLayer.DefinitionSet);
 						}
 						schedulingResultStateHolder.Schedules.Modify(scheduledDay, _scheduleDayChangeCallback);
 						resourceCalculateDelayer.CalculateIfNeeded(date, null, false);
@@ -122,7 +107,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				progressResult = onProgress(selectedTeamBlocks.Count, processedBlocks);
 				if (progressResult.ShouldCancel) return;
 			}
-			_workShiftFinderResultHolder.AddResults(workShiftFinderResultList, DateTime.Now);
 		}
 
 		private CancelSignal onProgress(int totalBlocks, int processedBlocks)

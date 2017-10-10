@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private readonly DateOnly _dateOnly = new DateOnly(2013, 3, 1);
 		private INotOverWritableActivitiesShiftFilter _target;
 		private IScheduleDay _part;
-		private WorkShiftFinderResult _finderResult;
 		private IPerson _person;
 
 		[SetUp]
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks = new MockRepository();
 			_person = PersonFactory.CreatePerson("Bill");
 			_part = ScheduleDayFactory.Create(_dateOnly,_person);
-			_finderResult = new WorkShiftFinderResult(_person, new DateOnly(2009, 2, 3));
 			_target = new NotOverWritableActivitiesShiftFilter();
 		}
 
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 																						   currentDate.AddHours(13)));
 
 			var workShift = new WorkShift(new ShiftCategory("Day"));
-			workShift.LayerCollection.Add(getLunchLayer(currentDate, lunch));
+			workShift.LayerCollection.Add(getLunchLayer(lunch));
 
 			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
 			shiftProjectionCache.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly,TimeZoneInfo.Utc));
@@ -58,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
 
 			_mocks.ReplayAll();
-			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
+			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts);
 			retShifts.Count.Should().Be.EqualTo(0);
 			_mocks.VerifyAll();
 		}
@@ -74,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 
 			_mocks.ReplayAll();
-			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
+			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts);
 			retShifts.Count.Should().Be.EqualTo(1);
 			_mocks.VerifyAll();
 		}
@@ -102,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_part.Add(meeting.GetPersonMeetings(_person).First());
 
 			var workShift = new WorkShift(new ShiftCategory("Day"));
-			workShift.LayerCollection.Add(getLunchLayer(currentDate,lunch));
+			workShift.LayerCollection.Add(getLunchLayer(lunch));
 
 			var shiftProjectionCache = new ShiftProjectionCache(workShift,new PersonalShiftMeetingTimeChecker());
 			shiftProjectionCache.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var schedules = _mocks.StrictMock<IScheduleDictionary>();
 			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
 			_mocks.ReplayAll();
-			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
+			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts);
 			retShifts.Count.Should().Be.EqualTo(0);
 			_mocks.VerifyAll();
 		}
@@ -125,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var schedules = _mocks.StrictMock<IScheduleDictionary>();
 			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
 			_mocks.ReplayAll();
-			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts, _finderResult);
+			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts);
 			retShifts.Count.Should().Be.EqualTo(1);
 			_mocks.VerifyAll();
 		}
@@ -133,20 +131,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(null, _dateOnly, _person, null, _finderResult);
+			var result = _target.Filter(null, _dateOnly, _person, null);
 			Assert.IsNull(result);
 
-			result = _target.Filter(null, _dateOnly, null, new List<ShiftProjectionCache>(), _finderResult);
+			result = _target.Filter(null, _dateOnly, null, new List<ShiftProjectionCache>());
 			Assert.IsNull(result);
 
-			result = _target.Filter(null, _dateOnly, _person, new List<ShiftProjectionCache>(), null);
-			Assert.IsNull(result);
-
-			result = _target.Filter(null, _dateOnly, _person, new List<ShiftProjectionCache>(), _finderResult);
+			result = _target.Filter(null, _dateOnly, _person, new List<ShiftProjectionCache>());
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 
-		private static WorkShiftActivityLayer getLunchLayer(DateTime currentDate, IActivity lunch)
+		private static WorkShiftActivityLayer getLunchLayer(IActivity lunch)
 		{
 			return new WorkShiftActivityLayer(lunch, new DateTimePeriod(WorkShift.BaseDate.AddHours(11), WorkShift.BaseDate.AddHours(12)));
 		}

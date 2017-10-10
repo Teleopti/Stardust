@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
 				_scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
+			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
 			var matrixes = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, people, period);
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions,

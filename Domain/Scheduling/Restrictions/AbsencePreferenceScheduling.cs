@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
-	//copied from AbsencePreferenceScheduler
 	public class AbsencePreferenceScheduling
 	{
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;

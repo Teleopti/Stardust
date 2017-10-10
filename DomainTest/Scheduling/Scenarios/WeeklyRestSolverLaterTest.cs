@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 						new NullScheduleTag()
 						)
 					),
-				new ResourceCalculateDelayer(CascadingResourceCalculation, 1, true, SchedulerStateHolder.SchedulingResultState, UserTimeZone.Make()),
+				new ResourceCalculateDelayer(CascadingResourceCalculation, true, SchedulerStateHolder.SchedulingResultState, UserTimeZone.Make()),
 				selectedPeriod,
 				matrixlist,
 				new NoSchedulingProgress(),
@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 						new NullScheduleTag()
 						)
 					),
-							new ResourceCalculateDelayer(CascadingResourceCalculation, 1, true, SchedulerStateHolder.SchedulingResultState, UserTimeZone.Make()),
+							new ResourceCalculateDelayer(CascadingResourceCalculation, true, SchedulerStateHolder.SchedulingResultState, UserTimeZone.Make()),
 				selectedPeriod,
 				matrixlist,
 				new NoSchedulingProgress(),

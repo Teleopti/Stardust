@@ -88,8 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
 
 			var shifts = _workShiftFilterService.FilterForTeamMember(schedulingResultStateHolder.Schedules, day, person, teamBlockSingleDayInfo, restriction,
-				schedulingOptions,
-				new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), false, allSkillDays);
+				schedulingOptions, false, allSkillDays);
 
 			if (shifts.IsNullOrEmpty())
 				return Enumerable.Empty<IWorkShiftCalculationResultHolder>();

@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldFilterActivityRestriction()
 		{
-			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 2));
 			IActivity testActivity = ActivityFactory.CreateActivity("test");
 			IActivity breakActivity = ActivityFactory.CreateActivity("lunch");
 			var breakPeriod = new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc));
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 																				  new EndTimeLimitation(),
 																				  new WorkTimeLimitation(), null, null, null,
 																				  activityRestrictions);
-			var ret = _target.Filter(_dateOnly, _person, casheList, effectiveRestriction, finderResult);
+			var ret = _target.Filter(_dateOnly, _person, casheList, effectiveRestriction);
 			Assert.AreEqual(2, ret.Count);
 
 			var activityRestriction = new ActivityRestriction(breakActivity)
@@ -77,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 																				  new WorkTimeLimitation(), null, null, null,
 																				  activityRestrictions);
 
-			ret = _target.Filter(_dateOnly, _person, casheList, effectiveRestriction, finderResult);
+			ret = _target.Filter(_dateOnly, _person, casheList, effectiveRestriction);
 			Assert.AreEqual(1, ret.Count);
 		}
 
@@ -90,13 +89,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 																				  new EndTimeLimitation(),
 																				  new WorkTimeLimitation(), null, null, null,
 																				  activityRestrictions);
-			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
-			var result = _target.Filter(_dateOnly, _person, casheList, null, finderResult);
+			var result = _target.Filter(_dateOnly, _person, casheList, null);
 			Assert.IsNull(result);
 			
-			result = _target.Filter(_dateOnly, null, casheList, effectiveRestriction, finderResult);
-			Assert.IsNull(result);
-			result = _target.Filter(_dateOnly, _person, casheList, effectiveRestriction, null);
+			result = _target.Filter(_dateOnly, null, casheList, effectiveRestriction);
 			Assert.IsNull(result);
 		}
 	}

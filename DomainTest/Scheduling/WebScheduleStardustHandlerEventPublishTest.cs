@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	public class WebScheduleStardustHandlerEventPublishTest : SchedulingScenario, ISetup
 	{
 		public WebScheduleStardustHandler Target;
-		public IFullScheduling FullScheduling;
+		public FullScheduling FullScheduling;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 		private IBusinessUnit businessUnit;
 
-		public WebScheduleStardustHandlerEventPublishTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerEasierBlockScheduling46155)
+		public WebScheduleStardustHandlerEventPublishTest(bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerEasierBlockScheduling46155)
 		{
 		}
 

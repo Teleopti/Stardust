@@ -41,20 +41,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void ShouldFilterAccordingToEarliestEndTimeLimitation()
 		{
 			var earlistEnd = new DateTime(2013, 3, 1, 17, 0, 0, DateTimeKind.Utc);
-			var result = _target.Filter(getCashes(), earlistEnd, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var result = _target.Filter(getCashes(), earlistEnd);
 			Assert.That(result.Count, Is.EqualTo(2));
 		}
 
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(getCashes(), new DateTime(), null);
+			var result = _target.Filter(null, new DateTime());
 			Assert.IsNull(result);
 
-			result = _target.Filter(null, new DateTime(), new WorkShiftFinderResult(new Person(), new DateOnly()));
-			Assert.IsNull(result);
-
-			result = _target.Filter(new List<ShiftProjectionCache>(),new DateTime(), new WorkShiftFinderResult(new Person(), new DateOnly()));
+			result = _target.Filter(new List<ShiftProjectionCache>(),new DateTime());
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 

@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class FullScheduling : IFullScheduling
+	public class FullScheduling
 	{
 		private readonly SchedulingCommandHandler _schedulingCommandHandler;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;

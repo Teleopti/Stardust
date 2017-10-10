@@ -3,30 +3,20 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
-	public interface IEffectiveRestrictionShiftFilter
+	public class EffectiveRestrictionShiftFilter
 	{
-		bool Filter(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftFinderResult finderResult);
-	}
-	
-	public class EffectiveRestrictionShiftFilter : IEffectiveRestrictionShiftFilter
-	{
-		public bool Filter(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftFinderResult finderResult)
+		public bool Filter(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction)
 		{
 			if (schedulingOptions == null) return false;
 		    if (effectiveRestriction == null)
 			{
-				finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.ConflictingRestrictions, 0,
-																		 0));
 				return false;
 			}
-			if (finderResult == null) return false;
 
 		    if (effectiveRestriction.ShiftCategory != null && schedulingOptions.ShiftCategory != null)
 			{
 				if (effectiveRestriction.ShiftCategory.Id != schedulingOptions.ShiftCategory.Id)
 				{
-					finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.ConflictingShiftCategories, 0,
-																		 0));
 					return false;
 				}
 			}
@@ -57,7 +47,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			if (!haveRestrictions)
 			{
-				finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.NoRestrictionDefined, 0, 0));
 				return false;
 			}
 

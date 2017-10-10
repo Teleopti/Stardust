@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
 				SkillActivity = phoneActivity
 			};
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState, UserTimeZone.Make());
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, true, stateHolder.SchedulingResultState, UserTimeZone.Make());
 			TimeZoneGuard.SetTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
 			Target.SchedulePersonOnDay(stateHolder.Schedules[agent], overtimePreference,
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
 				SkillActivity = phoneActivity
 			};
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState, UserTimeZone.Make());
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, true, stateHolder.SchedulingResultState, UserTimeZone.Make());
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
 			TimeZoneGuard.SetTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
 			Target.SchedulePersonOnDay(stateHolder.Schedules[agent], overtimePreference,

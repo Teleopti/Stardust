@@ -12,12 +12,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private IPersonPeriod _currentPersonPeriod;
         private IVirtualSchedulePeriod _currentSchedulePeriod;
         private IScheduleDay _schedulePart;
-        private WorkShiftFinderResult _finderResult;
 
-        public bool CheckStatus(IScheduleDay schedulePart, WorkShiftFinderResult finderResult, SchedulingOptions schedulingOptions)
+        public bool CheckStatus(IScheduleDay schedulePart, SchedulingOptions schedulingOptions)
         {
             _schedulePart = schedulePart;
-            _finderResult = finderResult;
             _validPeriod = schedulePart.DateOnlyAsPeriod.Period();
             _scheduleDayUtc = _validPeriod.StartDateTime;
 
@@ -34,32 +32,27 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             if (SchedulePeriod.IsValid == false)
             {
-                loggFilterResult(UserTexts.Resources.NoSchedulePeriodIsDefinedForTheDate, 0, 0);
                 return false;
             }
 
             if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff && PersonPeriod.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)
             {
-                loggFilterResult(UserTexts.Resources.TheEmploymentTypeIsNotFixedStaff, 0, 0);
                 return false;
             }
             //only fixed staff will be scheduled this way
             if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff && PersonPeriod.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)
             {
-                loggFilterResult(UserTexts.Resources.TheEmploymentTypeIsNotHourlyStaff, 0, 0);
                 return false;
             }
 
             //no day off
             if (_schedulePart.IsScheduled())
             {
-                loggFilterResult(UserTexts.Resources.ThereIsAlreadyADayOff, 0, 0);
                 return false;
             }
 
             if (PersonPeriod.RuleSetBag == null)
             {
-                loggFilterResult(UserTexts.Resources.NoRuleSetBagDefined, 0, 0);
                 return false;
             }
             return true;
@@ -91,11 +84,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IPerson Person
         {
             get { return _schedulePart.Person; }
-        }
-
-        private void loggFilterResult(string message, int countWorkShiftsBefore, int countWorkShiftsAfter)
-        {
-			_finderResult.AddFilterResults(new WorkShiftFilterResult(message, countWorkShiftsBefore, countWorkShiftsAfter));
         }
     }
 }

@@ -26,82 +26,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	[DomainTest]
 	public class TeamBlockScheduleCommandTest
 	{
-		public IScheduling Target;
+		public Domain.Scheduling.Legacy.Commands.Scheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IResourceCalculation ResourceOptimizationHelper;
 		public Func<IScheduleDayChangeCallback> ScheduleDayChangeCallback;
 		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public Func<IWorkShiftFinderResultHolder> WorkShiftFinderResultHolder;
-
-		[Test]
-		public void ShouldBeAbleToScheduleTeamWithAllMembersLoadedButOneMemberFilteredOut()
-		{
-			//two agents in the same team, everything equal
-			//both agents in PersonsInOrganization
-			//one agent in filteredPersons
-			var firstDay = new DateOnly(2015, 10, 12);
-			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
-			var scenario = new Scenario("_");
-			var phoneActivity = new Activity("_");
-			var skill = SkillFactory.CreateSkillWithId("skill");
-			skill.TimeZone = TimeZoneInfo.Utc;
-			skill.Activity = phoneActivity;
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(12, 0, 20, 0));
-
-			var skilldays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				10, 10, 10, 10, 10, 10, 10);
-
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var team1 = new Team().WithDescription(new Description("team1"));
-
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var normalRuleSet =
-				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(12, 0, 12, 0, 15),
-					new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
-			var ruleSetBag = new RuleSetBag(normalRuleSet);
-
-			var agent1 = PersonFactory.CreatePersonWithPersonPeriod(firstDay, new[] {skill}).WithId();
-			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			agent1.AddSchedulePeriod(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1));
-			agent1.Period(firstDay).Team = team1;
-			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
-
-			var agent2 = PersonFactory.CreatePersonWithPersonPeriod(firstDay, new[] {skill}).WithId();
-			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			agent2.AddSchedulePeriod(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1));
-			agent2.Period(firstDay).Team = team1;
-			agent2.Period(firstDay).RuleSetBag = ruleSetBag;
-
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] {agent1, agent2},
-				Enumerable.Empty<IPersonAssignment>(), skilldays);
-			stateHolder.ResetFilteredPersons();
-			stateHolder.FilterPersons(new List<IPerson> {agent1});
-
-			var schedulingOptions = new SchedulingOptions
-			{
-				UseAvailability = true,
-				UsePreferences = true,
-				UseRotations = true,
-				UseStudentAvailability = false,
-				DayOffTemplate = new DayOffTemplate(),
-				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
-				UseTeam = true,
-				TeamSameShiftCategory = true,
-				TagToUseOnScheduling = NullScheduleTag.Instance
-			};
-
-			var blockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences()
-			{
-				UseBlockSameStartTime = schedulingOptions.BlockSameStartTime,
-				UseBlockSameShift = schedulingOptions.BlockSameShift,
-				UseBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory,
-				BlockTypeValue = schedulingOptions.BlockFinderTypeForAdvanceScheduling
-			});
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 }, period, blockPreferenceProvider);
-			WorkShiftFinderResultHolder().GetResults(true, true).Count.Should().Be.EqualTo(0);
-		}
 
 		[Test]
 		public void ShouldHandleBlockSamerStartTimeInCombinationWithRotationWithSpecifyedShiftCategoryOnBlockStartingDateBug41378()

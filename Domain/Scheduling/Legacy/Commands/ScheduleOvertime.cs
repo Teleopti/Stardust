@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var stateholder = _schedulerStateHolder();
 			_resourceCalculation.ResourceCalculate(stateholder.RequestedPeriod.DateOnlyPeriod, stateholder.SchedulingResultState.ToResourceOptimizationData(stateholder.ConsiderShortBreaks, false));
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, stateholder.SchedulingResultState, _userTimeZone);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, true, stateholder.SchedulingResultState, _userTimeZone);
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			var cancel = false;

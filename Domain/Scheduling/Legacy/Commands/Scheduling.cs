@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class Scheduling : IScheduling
+	public class Scheduling
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IBlockPreferenceProvider blockPreferenceProvider)
 		{
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1,
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 
 				schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,

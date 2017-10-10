@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 						UseDaysOffPerWeek = false,
 						UseConsecutiveWorkdays = false,
 						UseFullWeekendsOff = false,
-					}), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
+					}), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
 
 				var standardDeviation = getResultingStandardDeviation(period, stateHolder);
 				if (standardDeviation <= targetStandardDeviation)
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 						ConsecutiveWorkdaysValue = new MinMax<int>(1, 6),
 						UseFullWeekendsOff = true,
 						FullWeekendsOffValue = new MinMax<int>(1, 2)
-					}), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
+					}), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
 
 				var standardDeviation = getResultingStandardDeviation(period, stateHolder);
 				if (standardDeviation <= targetStandardDeviation)

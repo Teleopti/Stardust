@@ -341,7 +341,6 @@
     <Compile Include="Scheduling\Assignment\AlwaysResourceCalculateAfterDelete.cs" />
     <Compile Include="Scheduling\CurrentSchedulingCallback.cs" />
     <Compile Include="Scheduling\ExtendSelectedPeriodForMonthlyScheduling.cs" />
-    <Compile Include="Scheduling\FullSchedulingOLD.cs" />
     <Compile Include="Scheduling\FullSchedulingResult.cs" />
     <Compile Include="Scheduling\IConvertSchedulingCallbackToSchedulingProgress.cs" />
     <Compile Include="Scheduling\ICurrentSchedulingCallback.cs" />
@@ -406,11 +405,9 @@
     <Compile Include="ResourcePlanner\Validation\SchedulingValidationError.cs" />
     <Compile Include="ResourcePlanner\Validation\SchedulingValidator.cs" />
     <Compile Include="ResourcePlanner\Validation\ValidationResult.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\AdvanceDaysOffSchedulingServiceOLD.cs" />
     <Compile Include="Scheduling\IPersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\ISchedulingCallback.cs" />
     <Compile Include="Scheduling\Legacy\Commands\Scheduling.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\TeamBlockSchedulingOLD.cs" />
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeExecuteWrapper.cs" />
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeServiceWithoutStateholder.cs" />
     <Compile Include="Scheduling\NoSchedulingCallback.cs" />
@@ -1050,7 +1047,6 @@
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftExtender.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IWorkShiftFinderService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftLimiter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftMinMaxCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftRuleSet.cs" />
@@ -2497,7 +2493,6 @@
     <Compile Include="Repositories\TimeFilterInfo.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager28317.cs" />
-    <Compile Include="ResourceCalculation\FixedStaffSchedulingService.cs" />
     <Compile Include="ResourceCalculation\FurnessDataConverter.cs" />
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\FullIntervalFinder.cs" />
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\IntraIntervalFinder.cs" />
@@ -2530,7 +2525,6 @@
     <Compile Include="Scheduling\INextPlanningPeriodProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\AgentRestrictionsNoWorkShiftfFinder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\BackToLegalShiftCommand.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\ClassicScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CommonStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DaysOnlyHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\NoSchedulingProgress.cs" />
@@ -2682,7 +2676,6 @@
     <Compile Include="Scheduling\Rules\NonMainShiftActivityRule.cs" />
     <Compile Include="Scheduling\Rules\MinWeekWorkTimeRule.cs" />
     <Compile Include="Scheduling\TeamBlock\ActivityIntervalDataCreator.cs" />
-    <Compile Include="Scheduling\TeamBlock\DayOff\TeamBlockMissingDayOffHandler.cs" />
     <Compile Include="Scheduling\TeamBlock\FirstShiftInTeamBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
@@ -2729,7 +2722,6 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingCompletionChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptions.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSingleDayScheduler.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingService.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecification.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateService.cs" />
     <Compile Include="Scheduling\Assignment\IValidateScheduleRange.cs" />
@@ -2750,11 +2742,8 @@
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitChecker.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDaysOffSchedulingService.cs" />
     <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinder.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\DayOffScheduler.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\DaysOffSchedulingService.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixData.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreator.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\MatrixDataListInSteadyState.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataWithToFewDaysOff.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayData.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapper.cs" />
@@ -2766,7 +2755,6 @@
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecification.cs" />
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTracker.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\MissingDaysOffScheduler.cs" />
     <Compile Include="Scheduling\Assignment\MeetingLayer.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorter.cs" />
     <Compile Include="Scheduling\PublicNote.cs" />
@@ -2932,7 +2920,6 @@
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFilter.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHolder.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyService.cs" />
-    <Compile Include="ResourceCalculation\WorkShiftFinderResultHolder.cs" />
     <Compile Include="Scheduling\Assignment\DayOffOutsideScheduleException.cs" />
     <Compile Include="Scheduling\Assignment\DeleteOption.cs" />
     <Compile Include="Scheduling\Assignment\DeleteSchedulePartService.cs" />
@@ -2960,7 +2947,6 @@
     <Compile Include="Scheduling\NoteByDateSorter.cs" />
     <Compile Include="Scheduling\PersonAbsence.cs" />
     <Compile Include="Scheduling\ResourceCalculateDelayer.cs" />
-    <Compile Include="Scheduling\Restrictions\AbsencePreferenceScheduler.cs" />
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecification.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreator.cs" />
@@ -3058,7 +3044,6 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamDayOffModifier.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamDayOffScheduler.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryTeamSpecification.cs" />
@@ -3253,8 +3238,6 @@
     <Compile Include="ResourceCalculation\ShiftProjectionCache.cs" />
     <Compile Include="ResourceCalculation\SchedulingOptions.cs" />
     <Compile Include="ResourceCalculation\SwapService.cs" />
-    <Compile Include="ResourceCalculation\WorkShiftFilterResult.cs" />
-    <Compile Include="ResourceCalculation\WorkShiftFinderResult.cs" />
     <Compile Include="Scheduling\ActivitySorter.cs" />
     <Compile Include="Scheduling\DayOffTemplate.cs" />
     <Compile Include="Security\AuthorizationData\DefinedLicenseOptionNames.cs" />

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		private readonly TimeSpan _expectedContractTime;
 
-		public SchedulingDesktopBlockContractTimeTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerEasierBlockScheduling46155)
+		public SchedulingDesktopBlockContractTimeTest(bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerEasierBlockScheduling46155)
 		{
 			_expectedContractTime = TimeSpan.FromHours(resourcePlannerEasierBlockScheduling46155 ? 176 : 160);
 		}

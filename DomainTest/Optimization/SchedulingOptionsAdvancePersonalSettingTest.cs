@@ -24,9 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			    UseMinimumStaffing = true,
 			    UseMaximumStaffing = true,
 			    UseAverageShiftLengths = true,
-				RefreshRate = 32,
-				ResourceCalculateFrequency = 12
-				
+				RefreshRate = 32
 		    };
 
 		    target.MapFrom(options);
@@ -39,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		    targetOptions.UseMinimumStaffing.Should().Be.True();
 		    targetOptions.UseAverageShiftLengths.Should().Be.True();
 		    targetOptions.RefreshRate.Should().Be.EqualTo(32);
-		    targetOptions.ResourceCalculateFrequency.Should().Be.EqualTo(12);
 		}
     }
 }

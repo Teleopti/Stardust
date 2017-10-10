@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	public class SchedulingIslandTests : SchedulingScenario
 	{
 		public ReduceIslandsLimits ReduceIslandsLimits;
-		public IFullScheduling Target;
+		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
@@ -31,9 +31,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldNotUseSkillsThatWereRemovedDuringIslandCreation()
 		{
-			if(!ResourcePlannerMergeTeamblockClassicScheduling44289)
-				Assert.Ignore("Not valid when islands aren't created");
-
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 1);
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12);
@@ -61,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(activityC);
 		}
 
-		public SchedulingIslandTests(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerEasierBlockScheduling46155)
+		public SchedulingIslandTests(bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerEasierBlockScheduling46155)
 		{
 		}
 	}

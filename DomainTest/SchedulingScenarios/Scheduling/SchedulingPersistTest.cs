@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[DomainTest]
 	public class SchedulingPersistTest : SchedulingScenario
 	{
-		public IFullScheduling Target;
+		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillDayRepository SkillDayRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeSkillRepository SkillRepository;
 
-		public SchedulingPersistTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerEasierBlockScheduling46155)
+		public SchedulingPersistTest(bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerEasierBlockScheduling46155)
 		{
 		}
 

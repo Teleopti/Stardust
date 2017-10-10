@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private EffectiveRestriction _effectiveRestriction;
-		private WorkShiftFinderResult _finderResult;
-		private IWorkTimeLimitationShiftFilter _target;
+		private WorkTimeLimitationShiftFilter _target;
 		private IWorkShift _workShift1;
 		private IWorkShift _workShift2;
 
@@ -46,15 +45,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(8, 0, 0)),
 				null, null, null, new List<IActivityRestriction>());
 
-			_finderResult = new WorkShiftFinderResult(PersonFactory.CreatePerson("bill"), new DateOnly(2009, 2, 3));
-
-			_target = new WorkTimeLimitationShiftFilter(new SwedishCulture());
+			_target = new WorkTimeLimitationShiftFilter();
 		}
 
 		[Test]
 		public void CanFilterOnRestrictionMinMaxWorkTimeWithEmptyList()
 		{
-			var ret = _target.Filter(new List<ShiftProjectionCache>(), _effectiveRestriction, _finderResult);
+			var ret = _target.Filter(new List<ShiftProjectionCache>(), _effectiveRestriction);
 			Assert.IsNotNull(ret);
 		}
 
@@ -66,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
 				new WorkTimeLimitation(null, null),
 				null, null, null, new List<IActivityRestriction>());
-			var ret = _target.Filter(getCashes(), effectiveRestriction, _finderResult);
+			var ret = _target.Filter(getCashes(), effectiveRestriction);
 			Assert.AreEqual(3, ret.Count);
 		}
 
@@ -101,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
 				c2.SetDate(dateOnlyAsDateTimePeriod);
 				shifts.Add(c2);
-				retShifts = _target.Filter(shifts, _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
+				retShifts = _target.Filter(shifts, _effectiveRestriction);
 
 			}
 			retShifts.Should().Contain(c1);
@@ -111,13 +108,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(null, _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var result = _target.Filter(null, _effectiveRestriction);
 			Assert.IsNull(result);
 
-			result = _target.Filter(new List<ShiftProjectionCache>(), null, new WorkShiftFinderResult(new Person(), new DateOnly()));
-			Assert.IsNull(result);
-
-			result = _target.Filter(new List<ShiftProjectionCache>(), _effectiveRestriction, null);
+			result = _target.Filter(new List<ShiftProjectionCache>(), null);
 			Assert.IsNull(result);
 		}
 

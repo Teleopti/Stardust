@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 						continue;
 
 					var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
-				    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, stateHolder, _userTimeZone);
+				    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, stateHolder, _userTimeZone);
 
 					if (!_scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
 					{

@@ -22,10 +22,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private ShiftCategory _category;
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
-		private IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
+		private ValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private ILatestStartTimeLimitationShiftFilter _latestStartTimeLimitationShiftFilter;
 		private IEarliestEndTimeLimitationShiftFilter _earliestEndTimeLimitationShiftFilter;
-		private ITimeLimitsRestrictionShiftFilter _target;
+		private TimeLimitsRestrictionShiftFilter _target;
 		private EffectiveRestriction _effectiveRestriction;
 		private IPerson _person;
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_person = PersonFactory.CreatePerson("bill");
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_validDateTimePeriodShiftFilter = _mocks.StrictMock<IValidDateTimePeriodShiftFilter>();
+			_validDateTimePeriodShiftFilter = new ValidDateTimePeriodShiftFilter();
 			_latestStartTimeLimitationShiftFilter = _mocks.StrictMock<ILatestStartTimeLimitationShiftFilter>();
 			_earliestEndTimeLimitationShiftFilter = _mocks.StrictMock<IEarliestEndTimeLimitationShiftFilter>();
 			_effectiveRestriction = new EffectiveRestriction(
@@ -56,30 +56,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void CanFilterOnEffectiveRestriction()
 		{
-			var ret = _target.Filter(_dateOnly, _person, getCashes(), _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var ret = _target.Filter(_dateOnly, _person, getCashes(), _effectiveRestriction);
 			Assert.IsNotNull(ret);
 		}
 
 		[Test]
 		public void CanFilterOnRestrictionTimeLimitsWithEmptyList()
 		{
-			var ret = _target.Filter(_dateOnly, _person, new List<ShiftProjectionCache>(), _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var ret = _target.Filter(_dateOnly, _person, new List<ShiftProjectionCache>(), _effectiveRestriction);
 			Assert.IsNotNull(ret);
 		}
 
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(_dateOnly, null, new List<ShiftProjectionCache>(), _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var result = _target.Filter(_dateOnly, null, new List<ShiftProjectionCache>(), _effectiveRestriction);
 			Assert.IsNull(result);
 
-			result = _target.Filter(_dateOnly, _person, null, _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			result = _target.Filter(_dateOnly, _person, null, _effectiveRestriction);
 			Assert.IsNull(result);
 
-			result = _target.Filter(_dateOnly, _person, new List<ShiftProjectionCache>(), null, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			result = _target.Filter(_dateOnly, _person, new List<ShiftProjectionCache>(), null);
 			Assert.IsNull(result);
 			
-			result = _target.Filter(_dateOnly, _person, new List<ShiftProjectionCache>(), _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			result = _target.Filter(_dateOnly, _person, new List<ShiftProjectionCache>(), _effectiveRestriction);
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 

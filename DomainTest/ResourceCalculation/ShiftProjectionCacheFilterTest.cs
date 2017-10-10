@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IShiftCategory _category;
         private IActivity _activity;
         private IEffectiveRestriction _effectiveRestriction;
-        private WorkShiftFinderResult _finderResult;
         private MockRepository _mocks;
         private TimeZoneInfo _timeZoneInfo;
         private IScheduleRange _scheduleRange;
@@ -49,11 +47,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
                 new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(8, 0, 0)),
                 null, null, null, new List<IActivityRestriction>());
-            _finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
             _rules = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
 	        _personalShiftAndMeetingFilter = _mocks.StrictMock<IPersonalShiftAndMeetingFilter>();
 	        _notOverWritableActivitiesShiftFilter = _mocks.StrictMock<INotOverWritableActivitiesShiftFilter>();
-			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter, new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new TimeZoneGuard());
+			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter);
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
         	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
@@ -64,7 +61,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var schedulingOptions = new SchedulingOptions();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-            var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
             using (_mocks.Record())
             {
@@ -85,8 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
-	            result.FilterResults.Count.Should().Be.EqualTo(1);
+                bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction);
                 Assert.IsFalse(ret);
             }
         }
@@ -96,13 +91,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             SchedulingOptions schedulingOptions = new SchedulingOptions();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
 			using (_mocks.Record())
             {
                 Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
                 Expect.Call(effectiveRestriction.IsPreferenceDay).Return(false);
-                Expect.Call(() => result.AddFilterResults(null)).IgnoreArguments();
             }
 
             schedulingOptions.UseRotations = false;
@@ -116,8 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
-				result.FilterResults.Count.Should().Be.EqualTo(2);
+                bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction);
 				Assert.IsFalse(ret);
             }
         }
@@ -127,7 +119,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             SchedulingOptions schedulingOptions = new SchedulingOptions();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			var result = new WorkShiftFinderResult(new Person(), new DateOnly());
             using (_mocks.Record())
             {
                 Expect.Call(effectiveRestriction.ShiftCategory).Return(null);
@@ -144,9 +135,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
+                bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction);
                 Assert.IsTrue(ret);
-                Assert.AreEqual(0, result.FilterResults.Count);
             }
         }
 
@@ -155,17 +145,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	    {
 		    SchedulingOptions schedulingOptions = new SchedulingOptions();
 		    IEffectiveRestriction effectiveRestriction = null;
-		    var result = new WorkShiftFinderResult(new Person(), new DateOnly());
 
-		    bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction, result);
-		    result.FilterResults.Count.Should().Be.EqualTo(1);
+		    bool ret = _target.CheckRestrictions(schedulingOptions, effectiveRestriction);
 		    Assert.IsFalse(ret);
 	    }
 
 	    [Test]
         public void CanFilterOnEffectiveRestrictionAndNotAllowedShiftCategories()
         {
-            var ret = _target.FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, _timeZoneInfo, GetCashes(), _effectiveRestriction, new List<IShiftCategory>(), _finderResult);
+            var ret = _target.FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, _timeZoneInfo, GetCashes(), _effectiveRestriction, new List<IShiftCategory>());
             Assert.AreEqual(0, ret.Count);
         }
 
@@ -197,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                                   new EndTimeLimitation(),
                                                                                   new WorkTimeLimitation(), null, null, null,
                                                                                   activityRestrictions);
-            var ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _timeZoneInfo, casheList, effectiveRestriction, _finderResult);
+            var ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _timeZoneInfo, casheList, effectiveRestriction);
             Assert.AreEqual(2, ret.Count);
 
             var activityRestriction = new ActivityRestriction(breakActivity)
@@ -211,27 +199,27 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                                   new WorkTimeLimitation(), null, null, null,
                                                                                   activityRestrictions);
 
-            ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _timeZoneInfo, casheList, effectiveRestriction, _finderResult);
+            ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _timeZoneInfo, casheList, effectiveRestriction);
             Assert.AreEqual(0, ret.Count);
         }
 
         [Test]
         public void CanFilterOnEffectiveRestriction()
         {
-            var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _timeZoneInfo, GetCashes(), _effectiveRestriction, _finderResult);
+            var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _timeZoneInfo, GetCashes(), _effectiveRestriction);
             Assert.IsNotNull(ret);
         }
         [Test]
         public void CanFilterOnRestrictionTimeLimitsWithEmptyList()
         {
-            var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _timeZoneInfo, new List<ShiftProjectionCache>(), _effectiveRestriction, _finderResult);
+            var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _timeZoneInfo, new List<ShiftProjectionCache>(), _effectiveRestriction);
             Assert.IsNotNull(ret);
         }
 
         [Test]
         public void CanFilterOnRestrictionMinMaxWorkTimeWithEmptyList()
         {
-            var ret = _target.FilterOnRestrictionMinMaxWorkTime(new List<ShiftProjectionCache>(), _effectiveRestriction, _finderResult);
+            var ret = _target.FilterOnRestrictionMinMaxWorkTime(new List<ShiftProjectionCache>(), _effectiveRestriction);
             Assert.IsNotNull(ret);
         }
         [Test]
@@ -242,28 +230,28 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
                 new WorkTimeLimitation(null, null),
                 null, null, null, new List<IActivityRestriction>());
-            var ret = _target.FilterOnRestrictionMinMaxWorkTime(GetCashes(), effectiveRestriction, _finderResult);
+            var ret = _target.FilterOnRestrictionMinMaxWorkTime(GetCashes(), effectiveRestriction);
             Assert.AreEqual(3, ret.Count);
         }
 
         [Test]
         public void CanFilterOnCategoryWithEmptyList()
         {
-            var ret = _target.FilterOnShiftCategory(_category, new List<ShiftProjectionCache>(), _finderResult);
+            var ret = _target.FilterOnShiftCategory(_category, new List<ShiftProjectionCache>());
             Assert.IsNotNull(ret);
         }
 
         [Test]
         public void CanFilterOnCategoryWithCategoryIsNull()
         {
-            var ret = _target.FilterOnShiftCategory(null, GetCashes(), _finderResult);
+            var ret = _target.FilterOnShiftCategory(null, GetCashes());
             Assert.AreEqual(3, ret.Count);
         }
 
         [Test]
         public void CanFilterOnNotAllowedCategoriesWithEmptyList()
         {
-            var ret = _target.FilterOnNotAllowedShiftCategories(new List<IShiftCategory> { _category }, new List<ShiftProjectionCache>(), _finderResult);
+            var ret = _target.FilterOnNotAllowedShiftCategories(new List<IShiftCategory> { _category }, new List<ShiftProjectionCache>());
             Assert.IsNotNull(ret);
         }
 
@@ -299,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
                 c2.SetDate(dateOnlyAsDateTimePeriod);
                 shifts.Add(c2);
-                retShifts = _target.FilterOnRestrictionMinMaxWorkTime(shifts, _effectiveRestriction, new WorkShiftFinderResult(new Person(), new DateOnly()));
+                retShifts = _target.FilterOnRestrictionMinMaxWorkTime(shifts, _effectiveRestriction);
 
             }
             retShifts.Should().Contain(c1);
@@ -338,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
                 c2.SetDate(dateOnlyAsDateTimePeriod);
                 shifts.Add(c2);
-                retShifts = _target.FilterOnContractTime(minMaxcontractTime, shifts, new WorkShiftFinderResult(new Person(), new DateOnly()));
+                retShifts = _target.FilterOnContractTime(minMaxcontractTime, shifts);
 
             }
             retShifts.Should().Contain(c1);
@@ -361,7 +349,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	        var cache3 = new ShiftProjectionCache(workShift3,personalShiftMeetingTimeChecker);
             
             IList<ShiftProjectionCache> caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
-            var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly());
             using (_mocks.Record())
             {
                 Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
@@ -372,10 +359,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                var ret = _target.FilterOnShiftCategory(shiftCategory1, caches, finderResult);
+                var ret = _target.FilterOnShiftCategory(shiftCategory1, caches);
                 Assert.AreEqual(1, ret.Count);
                 Assert.AreEqual(shiftCategory1, ret[0].TheWorkShift.ShiftCategory);
-                ret = _target.FilterOnShiftCategory(shiftCategory2, caches, finderResult);
+                ret = _target.FilterOnShiftCategory(shiftCategory2, caches);
                 Assert.AreEqual(2, ret.Count);
             }
         }
@@ -398,7 +385,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
             var categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
-			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly());
 			using (_mocks.Record())
             {
                 Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
@@ -408,10 +394,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                var ret = _target.FilterOnNotAllowedShiftCategories(categoriesNotAllowed, caches, finderResult);
+                var ret = _target.FilterOnNotAllowedShiftCategories(categoriesNotAllowed, caches);
                 Assert.AreEqual(1, ret.Count);
                 Assert.AreEqual(shiftCategory1, ret[0].TheWorkShift.ShiftCategory);
-                ret = _target.FilterOnNotAllowedShiftCategories(new List<IShiftCategory>(), caches, finderResult);
+                ret = _target.FilterOnNotAllowedShiftCategories(new List<IShiftCategory>(), caches);
                 Assert.AreEqual(3, ret.Count);
             }
         }
@@ -425,7 +411,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             using (_mocks.Playback())
             {
-                var ret = _target.FilterOnBusinessRules(_scheduleRange, GetCashes(), _dateOnly, _finderResult);
+                var ret = _target.FilterOnBusinessRules(_scheduleRange, GetCashes(), _dateOnly);
                 Assert.AreEqual(0, ret.Count);
             }
         }
@@ -443,7 +429,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             using (_mocks.Playback())
             {
-                var ret = _target.FilterOnBusinessRules(_scheduleRange, GetCashes(), _dateOnly, _finderResult);
+                var ret = _target.FilterOnBusinessRules(_scheduleRange, GetCashes(), _dateOnly);
                 Assert.AreEqual(2, ret.Count);
             }
         }
@@ -465,7 +451,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             Expect.Call(_rules.PossiblePeriod(_scheduleRange, _dateOnly)).Return(scheduleDayPeriod).Repeat.Twice();
             _mocks.ReplayAll();
-            var ret = _target.FilterOnBusinessRules(persons, _scheduleDictionary, _dateOnly, GetCashes(), _finderResult);
+            var ret = _target.FilterOnBusinessRules(persons, _scheduleDictionary, _dateOnly, GetCashes());
             Assert.AreEqual(2, ret.Count);
             _mocks.VerifyAll();
         }
@@ -510,7 +496,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
                 c2.SetDate(dateOnlyAsDateTimePeriod);
                 shifts.Add(c2);
-                retShifts = _target.FilterOnStartAndEndTime(scheduleDayPeriod, shifts, new WorkShiftFinderResult(new Person(), new DateOnly()));
+                retShifts = _target.FilterOnStartAndEndTime(scheduleDayPeriod, shifts);
 
             }
 
@@ -531,9 +517,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(effective.ShiftCategory).Return(_category).Repeat.Twice();
             
             _mocks.ReplayAll();
-            var ret = _target.CheckRestrictions(options, effective, _finderResult);
+            var ret = _target.CheckRestrictions(options, effective);
             Assert.That(ret, Is.False);
-            Assert.That(_finderResult.FilterResults.Count, Is.GreaterThan(0));
             _mocks.VerifyAll();
 
         }

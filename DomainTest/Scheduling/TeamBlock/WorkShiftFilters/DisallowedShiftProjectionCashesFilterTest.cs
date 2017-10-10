@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 {
@@ -24,22 +22,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldReturnNullWhenShiftProjectinCashesIsNull()
 		{
-			var result = _target.Filter(new List<ShiftProjectionCache>(), null, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var result = _target.Filter(new List<ShiftProjectionCache>(), null);
 			Assert.IsNull(result);
-		}
-
-		[Test]
-		public void ShouldReturnNullWhenFinderResultIsNull()
-		{
-			var result = _target.Filter(new List<ShiftProjectionCache>(), new List<ShiftProjectionCache>(), null);
-			Assert.IsNull(result);	
 		}
 
 		[Test]
 		public void ShouldReturnShiftProjectionCashesWhenNoShiftProjectionCashesInList()
 		{
 			var shiftProjectionCashes = new List<ShiftProjectionCache>();
-			var result = _target.Filter(new List<ShiftProjectionCache>(), shiftProjectionCashes, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var result = _target.Filter(new List<ShiftProjectionCache>(), shiftProjectionCashes);
 			Assert.AreEqual(shiftProjectionCashes, result);		
 		}
 
@@ -48,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			var shiftProjectionCashes = new List<ShiftProjectionCache>{_shiftProjectionCache1};
 
-			var result = _target.Filter(new List<ShiftProjectionCache>(), shiftProjectionCashes, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var result = _target.Filter(new List<ShiftProjectionCache>(), shiftProjectionCashes);
 			Assert.AreEqual(shiftProjectionCashes, result);
 		}
 
@@ -61,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var shiftProjectionCashes = new List<ShiftProjectionCache> { shiftProjectionCash1, shiftProjectionCash2 };
 			var notAllowedShiftProjectionCashes = new List<ShiftProjectionCache> { shiftProjectionCash1 };
 
-			var result = _target.Filter(notAllowedShiftProjectionCashes, shiftProjectionCashes, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var result = _target.Filter(notAllowedShiftProjectionCashes, shiftProjectionCashes);
 			Assert.AreEqual(1, result.Count);
 			Assert.AreEqual(shiftProjectionCash2, result[0]);
 				

@@ -6,19 +6,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
-	public interface ITimeLimitsRestrictionShiftFilter
+	public class TimeLimitsRestrictionShiftFilter
 	{
-		IList<ShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<ShiftProjectionCache> shiftList,
-															IEffectiveRestriction restriction, WorkShiftFinderResult finderResult);
-	}
-
-	public class TimeLimitsRestrictionShiftFilter : ITimeLimitsRestrictionShiftFilter
-	{
-		private readonly IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
+		private readonly ValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private readonly ILatestStartTimeLimitationShiftFilter _latestStartTimeLimitationShiftFilter;
 		private readonly IEarliestEndTimeLimitationShiftFilter _earliestEndTimeLimitationShiftFilter;
 
-		public TimeLimitsRestrictionShiftFilter(IValidDateTimePeriodShiftFilter validDateTimePeriodShiftFilter,
+		public TimeLimitsRestrictionShiftFilter(ValidDateTimePeriodShiftFilter validDateTimePeriodShiftFilter,
 			ILatestStartTimeLimitationShiftFilter latestStartTimeLimitationShiftFilter,
 			IEarliestEndTimeLimitationShiftFilter earliestEndTimeLimitationShiftFilter)
 		{
@@ -27,8 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_earliestEndTimeLimitationShiftFilter = earliestEndTimeLimitationShiftFilter;
 		}
 
-		public IList<ShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<ShiftProjectionCache> shiftList,
-																  IEffectiveRestriction restriction, WorkShiftFinderResult finderResult)
+		public IList<ShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction)
 		{
 			if (person == null) return null;
 			if (shiftList == null) return null;
@@ -50,17 +43,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 				if (restriction.StartTimeLimitation.StartTime.HasValue || restriction.EndTimeLimitation.EndTime.HasValue)
 				{
 					var validPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(startStart), timeZone), TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(endEnd), timeZone));
-					workShiftsWithinPeriod = _validDateTimePeriodShiftFilter.Filter(workShiftsWithinPeriod, validPeriod, finderResult);
+					workShiftsWithinPeriod = _validDateTimePeriodShiftFilter.Filter(workShiftsWithinPeriod, validPeriod);
 				}
 
 				if (restriction.StartTimeLimitation.EndTime.HasValue)
 				{
-					workShiftsWithinPeriod = _latestStartTimeLimitationShiftFilter.Filter(workShiftsWithinPeriod, TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(restriction.StartTimeLimitation.EndTime.Value), timeZone), finderResult);
+					workShiftsWithinPeriod = _latestStartTimeLimitationShiftFilter.Filter(workShiftsWithinPeriod, TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(restriction.StartTimeLimitation.EndTime.Value), timeZone));
 				}
 
 				if (restriction.EndTimeLimitation.StartTime.HasValue)
 				{
-					workShiftsWithinPeriod = _earliestEndTimeLimitationShiftFilter.Filter(workShiftsWithinPeriod, TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(restriction.EndTimeLimitation.StartTime.Value), timeZone), finderResult);
+					workShiftsWithinPeriod = _earliestEndTimeLimitationShiftFilter.Filter(workShiftsWithinPeriod, TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(restriction.EndTimeLimitation.StartTime.Value), timeZone));
 				}
 			}
 			return workShiftsWithinPeriod;

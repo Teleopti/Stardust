@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
-		private readonly IScheduleExecutor _scheduleExecutor;
+		private readonly ScheduleExecutor _scheduleExecutor;
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		private readonly ICurrentSchedulingCallback _currentSchedulingCallback;
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						IFillSchedulerStateHolder fillSchedulerStateHolder,
-						IScheduleExecutor scheduleExecutor, 
+						ScheduleExecutor scheduleExecutor, 
 						ISchedulingOptionsProvider schedulingOptionsProvider,
 						ICurrentSchedulingCallback currentSchedulingCallback,
 						ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,

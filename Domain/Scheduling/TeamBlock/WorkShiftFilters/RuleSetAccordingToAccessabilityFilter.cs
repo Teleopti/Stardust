@@ -1,39 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
-    public interface IRuleSetAccordingToAccessabilityFilter
-    {
-        IEnumerable<IWorkShiftRuleSet> FilterForRoleModel(IGroupPersonSkillAggregator groupPersonSkillAggregator, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, bool useShiftsForRestrictions);
-        IEnumerable<IWorkShiftRuleSet> FilterForTeamMember(IPerson person, DateOnly dateOnly, SchedulingOptions schedulingOptions, bool useShiftsForRestrictions);
-    }
-
-	[RemoveMeWithToggle("Merge this with old", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-	public class RuleSetAccordingToAccessabilityFilter : RuleSetAccordingToAccessabilityFilterOLD
-	{
-		protected override IEnumerable<IWorkShiftRuleSet> filterForShiftsForRestrictions(IEnumerable<IWorkShiftRuleSet> filteredList, bool useShiftsForRestrictions)
-		{
-			return filteredList.Where(x => x.OnlyForRestrictions == useShiftsForRestrictions);
-		}
-
-		public RuleSetAccordingToAccessabilityFilter(RuleSetBagExtractorProvider ruleSetBagExtractorProvider, TeamBlockIncludedWorkShiftRuleFilter teamBlockIncludedWorkShiftRuleFilter, IRuleSetSkillActivityChecker ruleSetSkillActivityChecker) : base(ruleSetBagExtractorProvider, teamBlockIncludedWorkShiftRuleFilter, ruleSetSkillActivityChecker)
-		{
-		}
-	}
-
-
-	public class RuleSetAccordingToAccessabilityFilterOLD : IRuleSetAccordingToAccessabilityFilter
+	public class RuleSetAccordingToAccessabilityFilter
     {
         private readonly RuleSetBagExtractorProvider _ruleSetBagExtractorProvider;
         private readonly TeamBlockIncludedWorkShiftRuleFilter _teamBlockIncludedWorkShiftRuleFilter;
 	    private readonly IRuleSetSkillActivityChecker _ruleSetSkillActivityChecker;
 
-	    public RuleSetAccordingToAccessabilityFilterOLD(RuleSetBagExtractorProvider ruleSetBagExtractorProvider,
+	    public RuleSetAccordingToAccessabilityFilter(RuleSetBagExtractorProvider ruleSetBagExtractorProvider,
 		    TeamBlockIncludedWorkShiftRuleFilter teamBlockIncludedWorkShiftRuleFilter,
 		    IRuleSetSkillActivityChecker ruleSetSkillActivityChecker)
 	    {
@@ -53,12 +32,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
             return filteredList;
         }
 
-	    protected virtual IEnumerable<IWorkShiftRuleSet> filterForShiftsForRestrictions(IEnumerable<IWorkShiftRuleSet> filteredList, bool useShiftsForRestrictions)
+	    private static IEnumerable<IWorkShiftRuleSet> filterForShiftsForRestrictions(IEnumerable<IWorkShiftRuleSet> filteredList, bool useShiftsForRestrictions)
 	    {
-		    return useShiftsForRestrictions ? 
-				filteredList : 
-				filteredList.Where(w => !w.OnlyForRestrictions);
-	    }
+			return filteredList.Where(x => x.OnlyForRestrictions == useShiftsForRestrictions);
+		}
 
 	    public IEnumerable<IWorkShiftRuleSet> FilterForTeamMember(IPerson person, DateOnly explicitDateToCheck, SchedulingOptions schedulingOptions, bool useShiftsForRestrictions)
         {

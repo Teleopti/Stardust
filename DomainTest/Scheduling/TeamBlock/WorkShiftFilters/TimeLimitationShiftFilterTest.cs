@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_category.SetId(Guid.NewGuid());
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new ValidDateTimePeriodShiftFilter(new TimeZoneGuard(), new UserCulture(CurrentTeleoptiPrincipal.Make()));
+			_target = new ValidDateTimePeriodShiftFilter();
 		}
 
 		[Test]
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			var startTime = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2013, 3, 1, 17, 30, 0, DateTimeKind.Utc);
-			var result = _target.Filter(getCashes(), new DateTimePeriod(startTime, endTime), new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var result = _target.Filter(getCashes(), new DateTimePeriod(startTime, endTime));
 			Assert.That(result.Count, Is.EqualTo(1));
 		}
 
@@ -54,13 +53,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var startTime = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2013, 3, 1, 17, 30, 0, DateTimeKind.Utc);
 			
-			var result = _target.Filter(null, new DateTimePeriod(startTime, endTime), new WorkShiftFinderResult(new Person(), new DateOnly()));
-			Assert.IsNull(result);
-
-			result = _target.Filter(new List<ShiftProjectionCache>(), new DateTimePeriod(startTime, endTime), null);
+			var result = _target.Filter(null, new DateTimePeriod(startTime, endTime));
 			Assert.IsNull(result);
 			
-			result = _target.Filter(new List<ShiftProjectionCache>(), new DateTimePeriod(startTime, endTime), new WorkShiftFinderResult(new Person(), new DateOnly()));
+			result = _target.Filter(new List<ShiftProjectionCache>(), new DateTimePeriod(startTime, endTime));
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 

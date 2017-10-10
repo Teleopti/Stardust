@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class ScheduleOptimizerHelper
 	{
-		private Func<IWorkShiftFinderResultHolder> _allResults;
 		private ISchedulingProgress _backgroundWorker;
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly MoveTimeOptimizerCreator _moveTimeOptimizerCreator;
@@ -48,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak,
 				IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairnessService,
 				OptimizeIntradayIslandsDesktop optimizeIntradayIslandsDesktop,
-				Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 				ExtendReduceTimeHelper extendReduceTimeHelper,
 				ExtendReduceDaysOffHelper extendReduceDaysOffHelper,
 				Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -70,7 +67,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 			_equalNumberOfCategoryFairnessService = equalNumberOfCategoryFairnessService;
 			_optimizeIntradayDesktop = optimizeIntradayIslandsDesktop;
-			_allResults = workShiftFinderResultHolder;
 			_extendReduceTimeHelper = extendReduceTimeHelper;
 			_extendReduceDaysOffHelper = extendReduceDaysOffHelper;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -116,15 +112,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			service.ReportProgress += resourceOptimizerPersonOptimized;
 			service.Execute();
 			service.ReportProgress -= resourceOptimizerPersonOptimized;
-		}
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-		public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder => _allResults();
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-		public void ResetWorkShiftFinderResults()
-		{
-			_allResults().Clear();
 		}
 
 		public void ReOptimize(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
@@ -343,7 +330,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_backgroundWorker.ReportProgress(1, args);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(),
 				tagSetter);
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 
 				schedulingOptions.ConsiderShortBreaks, _stateHolder(), _userTimeZone);
 			_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedAgents,
 				rollbackService, resourceCalculateDelayer, _backgroundWorker);
@@ -426,10 +413,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				return;
 
 			if (_progressEvent != null && _progressEvent.Cancel) return;
-			_allResults = () => new WorkShiftFinderResultHolder();
 
 			_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedAgents, _backgroundWorker, optimizerPreferences,
-				dayOffOptimizationPreferenceProvider, new GroupPageLight("_", GroupPageType.SingleAgent), _allResults,
+				dayOffOptimizationPreferenceProvider, new GroupPageLight("_", GroupPageType.SingleAgent), 
 				resourceOptimizerPersonOptimized);
 		}
 

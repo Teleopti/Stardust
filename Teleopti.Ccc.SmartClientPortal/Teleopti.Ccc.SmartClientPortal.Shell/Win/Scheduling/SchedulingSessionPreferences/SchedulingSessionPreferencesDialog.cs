@@ -22,8 +22,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 	{
 		private readonly SchedulingOptions _schedulingOptions;
 		private readonly IEnumerable<IShiftCategory> _shiftCategories;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-		private readonly bool _hideScheduleFrequency;
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
 		private readonly IList<GroupPageLight> _groupPages;
 		private readonly IList<GroupPageLight> _groupPagesForTeamBlockPer;
@@ -37,7 +35,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		public SchedulingSessionPreferencesDialog(
 			SchedulingOptions schedulingOptions, 
 			IEnumerable<IShiftCategory> shiftCategories, 
-			bool hideScheduleFrequency,
 			ISchedulerGroupPagesProvider groupPagesProvider,
 			IEnumerable<IScheduleTag> scheduleTags, 
 			string settingValue, 
@@ -46,7 +43,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		{
 			_schedulingOptions = schedulingOptions;
 			_shiftCategories = shiftCategories;
-			_hideScheduleFrequency = hideScheduleFrequency;
 			_groupPagesProvider = groupPagesProvider;
 			_groupPages = groupPagesProvider.GetGroups(true);
 			_groupPagesForTeamBlockPer = groupPagesProvider.GetGroups(true);
@@ -128,7 +124,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			loadPersonalSettings();
 
 			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories,
-				 _hideScheduleFrequency, _groupPagesProvider, _scheduleTags, _availableActivity);
+				 _groupPagesProvider, _scheduleTags, _availableActivity);
 
 			addToHelpContext();
 			setColor();

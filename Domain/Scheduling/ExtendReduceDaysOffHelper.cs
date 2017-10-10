@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class ExtendReduceDaysOffHelper 
 	{
-		private readonly Func<IWorkShiftFinderResultHolder> _allResults;
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly IScheduleService _scheduleService;
@@ -33,8 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
-		public ExtendReduceDaysOffHelper(Func<IWorkShiftFinderResultHolder> allResults,
-			MatrixListFactory matrixListFactory,
+		public ExtendReduceDaysOffHelper(MatrixListFactory matrixListFactory,
 										IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
 										IScheduleService scheduleService,
 										IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
@@ -49,7 +47,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 										IScheduleDayEquator scheduleDayEquator,
 										IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
 		{
-			_allResults = allResults;
 			_matrixListFactory = matrixListFactory;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 			_scheduleService = scheduleService;
@@ -124,12 +121,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var daysOffLegalStateValidatorsFactory = _daysOffLegalStateValidatorsFactory;
 				var validators = daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(bitArray,
 					optimizerPreferences, dayOffOptimizePreference);
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1, true, schedulerStateHolder.SchedulingResultState, _userTimeZone);
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, true, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 
 				INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
 					new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
 						deleteAndResourceCalculateService,
-						scheduleServiceForFlexibleAgents, _allResults, resourceCalculateDelayer);
+						scheduleServiceForFlexibleAgents, resourceCalculateDelayer);
 
 				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
 

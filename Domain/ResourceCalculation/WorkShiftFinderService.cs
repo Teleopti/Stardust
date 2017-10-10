@@ -5,12 +5,11 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class WorkShiftFinderService : IWorkShiftFinderService
+    public class WorkShiftFinderService
     {
         private readonly IShiftProjectionCacheFilter _shiftProjectionCacheFilter;
         private readonly Func<IPersonSkillPeriodsDataHolderManager> _personSkillPeriodsDataHolderManager;
@@ -41,25 +40,24 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    _personSkillDayCreator = personSkillDayCreator;
         }
 
-        public WorkShiftFinderServiceResult FindBestShift(IScheduleDay schedulePart, SchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction)
+        public IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, SchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction)
         {
             _workShiftMinMaxCalculator().ResetCache();
 			var scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
             var person = schedulePart.Person;
-			var finderResult = new WorkShiftFinderResult(person, scheduleDateOnly);
-            var status = _preSchedulingStatusChecker().CheckStatus(schedulePart, finderResult, schedulingOptions);
+            var status = _preSchedulingStatusChecker().CheckStatus(schedulePart, schedulingOptions);
             
-            if (!status) return new WorkShiftFinderServiceResult(null,finderResult);
+            if (!status) return null;
 
             IVirtualSchedulePeriod currentSchedulePeriod = person.VirtualSchedulePeriod(scheduleDateOnly);
 
             if (!currentSchedulePeriod.IsValid)
-				return new WorkShiftFinderServiceResult(null, finderResult);
+				return null;
 
-            if (!_shiftProjectionCacheFilter.CheckRestrictions(schedulingOptions, effectiveRestriction, finderResult))
-				return new WorkShiftFinderServiceResult(null, finderResult);
+			if (!_shiftProjectionCacheFilter.CheckRestrictions(schedulingOptions, effectiveRestriction))
+				return null;
 
-            var personPeriod = person.Period(scheduleDateOnly);
+			var personPeriod = person.Period(scheduleDateOnly);
             IRuleSetBag bag = personPeriod.RuleSetBag;
 
             var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(schedulePart.DateOnlyAsPeriod, bag, false, true);
@@ -71,17 +69,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					var x = s.TheMainShift;
 				});
-				result = findBestShift(effectiveRestriction, currentSchedulePeriod, scheduleDateOnly, person, matrix, schedulingOptions, finderResult,shiftList);
+				result = findBestShift(effectiveRestriction, currentSchedulePeriod, scheduleDateOnly, person, matrix, schedulingOptions, shiftList);
 	        }
-            else
-            {
-	            finderResult.AddFilterResults(new WorkShiftFilterResult(Resources.NoShiftsFound, 0 ,0));
-            }
 
 			if (result == null && (schedulingOptions.UsePreferences || schedulingOptions.UseAvailability || schedulingOptions.UseRotations || schedulingOptions.UseStudentAvailability))
 			{
 				if (!effectiveRestriction.IsRestriction)
-					return new WorkShiftFinderServiceResult(result, finderResult);
+					return null;
 
 				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(schedulePart.DateOnlyAsPeriod, bag, true,
 					true);
@@ -92,11 +86,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						var x = s.TheMainShift;
 					});
 					result = findBestShift(effectiveRestriction, currentSchedulePeriod, scheduleDateOnly, person, matrix,
-						schedulingOptions, finderResult, shiftList);
+						schedulingOptions, shiftList);
 				}
 			}
 
-            return new WorkShiftFinderServiceResult(result,finderResult);
+            return result;
         }
 
         private IWorkShiftCalculationResultHolder findHighestValueMainShift(
@@ -104,8 +98,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IWorkShiftCalculatorSkillStaffPeriodData dataHolders, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,
-            SchedulingOptions schedulingOptions,
-			WorkShiftFinderResult workShiftFinderResult
+            SchedulingOptions schedulingOptions
 		)
         {
 			var person = currentSchedulePeriod.Person;
@@ -146,8 +139,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				if (highestShiftValue <= 0)
 				{
-					workShiftFinderResult.StoppedOnOverstaffing = true;
-					workShiftFinderResult.Successful = true;
 					return null;
 				}
 			}
@@ -176,14 +167,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        return null;
         }
 
-
-	    private void loggFilterResult(string message, int countWorkShiftsBefore, int countWorkShiftsAfter, WorkShiftFinderResult workShiftFinderResult)
-        {
-            workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(message, countWorkShiftsBefore, countWorkShiftsAfter));
-        }
-
 		private IWorkShiftCalculationResultHolder findBestShift(IEffectiveRestriction effectiveRestriction,
-            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, WorkShiftFinderResult workShiftFinderResult, IList<ShiftProjectionCache> shiftList)
+            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IList<ShiftProjectionCache> shiftList)
         {
 			using (PerformanceOutput.ForOperation("Filtering shifts before calculating"))
 			{
@@ -202,8 +187,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				                                                                                         shiftList,
 				                                                                                         effectiveRestriction,
 				                                                                                         schedulingOptions.
-				                                                                                         	NotAllowedShiftCategories,
-				                                                                                         workShiftFinderResult);
+				                                                                                         	NotAllowedShiftCategories);
 
 
 				if (shiftList.Count == 0)
@@ -214,13 +198,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				if (!allowedMinMax.HasValue)
 				{
-					loggFilterResult(Resources.NoShiftsThatMatchesTheContractTimeCouldBeFound, shiftList.Count, 0, workShiftFinderResult);
 					return null;
 				}
 
 				IScheduleRange wholeRange = _resultStateHolder().Schedules[person];
-				shiftList = _shiftProjectionCacheFilter.Filter(_resultStateHolder().Schedules, allowedMinMax.Value, shiftList, dateOnly, wholeRange,
-				                                                workShiftFinderResult);
+				shiftList = _shiftProjectionCacheFilter.Filter(_resultStateHolder().Schedules, allowedMinMax.Value, shiftList, dateOnly, wholeRange);
 				if (shiftList.Count == 0)
 					return null;
 
@@ -240,7 +222,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 var nonBlendPeriods = personSkillPeriodsDataHolderManager.GetPersonNonBlendSkillSkillStaffPeriods(personSkillDay);
                 var dataholder = personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(personSkillDay);
 
-				result = findHighestValueMainShift(shiftList, new WorkShiftCalculatorSkillStaffPeriodData(dataholder), nonBlendPeriods, virtualSchedulePeriod, schedulingOptions, workShiftFinderResult);
+				result = findHighestValueMainShift(shiftList, new WorkShiftCalculatorSkillStaffPeriodData(dataholder), nonBlendPeriods, virtualSchedulePeriod, schedulingOptions);
             }
 
             return result;

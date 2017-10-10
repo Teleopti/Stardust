@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_allMatrixes = new List<IScheduleMatrixPro> {_matrix1, _matrix2};
 			_scheduleOptions = new SchedulingOptions();
-			_target = new ContractTimeShiftFilter(()=>_workShiftMinMaxCalculator, new SwedishCulture());
+			_target = new ContractTimeShiftFilter(()=>_workShiftMinMaxCalculator);
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_workShift1 = _mocks.StrictMock<IWorkShift>();
 			_workShift2 = _mocks.StrictMock<IWorkShift>();
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResult(new Person(), new DateOnly()));
+				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions);
 
 				retShifts.Should().Contain(c1);
 				retShifts.Count.Should().Be.EqualTo(1);
@@ -113,8 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				IList<ShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions,
-					new WorkShiftFinderResult(new Person(), new DateOnly()));
+				IList<ShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions);
 
 				retShifts.Should().Contain(c1);
 				retShifts.Count.Should().Be.EqualTo(1);
@@ -150,8 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				IList<ShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions,
-					new WorkShiftFinderResult(new Person(), new DateOnly()));
+				IList<ShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions);
 
 				retShifts.Should().Contain(c1);
 				retShifts.Count.Should().Be.EqualTo(1);
@@ -196,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResult(new Person(), new DateOnly()));
+				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions);
 
 				retShifts.Should().Contain(c1);
 				retShifts.Count.Should().Be.EqualTo(1);
@@ -227,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResult(new Person(), new DateOnly()));
+				var retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions);
 
 				retShifts.Count.Should().Be.EqualTo(0);
 			}
@@ -238,15 +235,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void ShouldCheckParameters()
 		{
 			var dateOnly = new DateOnly(2013, 3, 1);
-			var result = _target.Filter(dateOnly, _allMatrixes, null, _scheduleOptions, new WorkShiftFinderResult(new Person(), new DateOnly()));
+			var result = _target.Filter(dateOnly, _allMatrixes, null, _scheduleOptions);
 			Assert.IsNull(result);
-			result = _target.Filter(dateOnly, _allMatrixes, new List<ShiftProjectionCache>(), _scheduleOptions, null);
+			result = _target.Filter(dateOnly, null, new List<ShiftProjectionCache>(), _scheduleOptions);
 			Assert.IsNull(result);
-			result = _target.Filter(dateOnly, null, new List<ShiftProjectionCache>(), _scheduleOptions,
-				new WorkShiftFinderResult(new Person(), new DateOnly()));
-			Assert.IsNull(result);
-			result = _target.Filter(dateOnly, _allMatrixes, new List<ShiftProjectionCache>(), _scheduleOptions,
-				new WorkShiftFinderResult(new Person(), new DateOnly()));
+			result = _target.Filter(dateOnly, _allMatrixes, new List<ShiftProjectionCache>(), _scheduleOptions);
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 	}

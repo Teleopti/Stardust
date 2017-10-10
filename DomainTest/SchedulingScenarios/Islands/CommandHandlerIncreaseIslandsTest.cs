@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 	[TestFixture(SUT.IntradayOptimization)]
 	[TestFixture(SUT.Scheduling)]
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class CommandHandlerIncreaseIslandsTest
 	{
 		private readonly SUT _sut;

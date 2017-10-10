@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder,
 				_scheduleDayChangeCallback,
 				tagSetter);
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingResultStateHolder, _userTimeZone);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, true, schedulingResultStateHolder, _userTimeZone);
 			_backToLegalShiftService.Progress += _backToLegalShiftService_Progress;
 			_backToLegalShiftService.Execute(selectedTeamBlocks, schedulingOptions, schedulingResultStateHolder, rollbackService,
 				resourceCalculateDelayer);

@@ -3,26 +3,20 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 {
 	[DatabaseTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class FullSchedulingUowTest : IConfigureToggleManager
+	public class FullSchedulingUowTest
 	{
-		private readonly bool _resourcePlannerMergeTeamblockClassicScheduling44289;
-		public IFullScheduling Target;
+		public FullScheduling Target;
 		public IScenarioRepository ScenarioRepository;
 		public IDayOffTemplateRepository DayOffTemplateRepository;
 		public ICurrentUnitOfWorkFactory UnitOfWorkFactory;
@@ -40,13 +34,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public IJobResultRepository JobResultRepository;
 
-		protected PlanningPeriod PlanningPeriod;
-
-		public FullSchedulingUowTest(bool resourcePlannerMergeTeamblockClassicScheduling44289)
-		{
-			_resourcePlannerMergeTeamblockClassicScheduling44289 = resourcePlannerMergeTeamblockClassicScheduling44289;
-		}
-
 		[TestCase(true)]
 		[TestCase(false)]
 		public void ShouldDoSchedulingForPlanningPeriod(bool teamScheduling)
@@ -59,12 +46,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				SchedulingOptionsProvider.SetFromTest(defaultOptions);
 			}
 
-			fillDatabaseWithEnoughDataToRunScheduling();
+			var planningPeriod = fillDatabaseWithEnoughDataToRunScheduling();
 
-			Target.DoScheduling(PlanningPeriod.Id.Value);
+			Target.DoScheduling(planningPeriod.Id.Value);
 		}
 
-		private void fillDatabaseWithEnoughDataToRunScheduling()
+		private PlanningPeriod fillDatabaseWithEnoughDataToRunScheduling()
 		{
 			var scenario = new Scenario("_") { DefaultScenario = true };
 			var activity = new Activity("_");
@@ -79,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				.WithPersonPeriod(ruleSetBag, null, team).InTimeZone(TimeZoneInfo.Utc)
 				.WithSchedulePeriodOneWeek(date);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
-			PlanningPeriod = new PlanningPeriod(period);
+			var planningPeriod = new PlanningPeriod(period);
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -97,15 +84,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				PersonRepository.Add(agent);
 				var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow);
 				JobResultRepository.Add(jobResult);
-				PlanningPeriodRepository.Add(PlanningPeriod);
+				PlanningPeriodRepository.Add(planningPeriod);
 				uow.PersistAll();
 			}
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if(_resourcePlannerMergeTeamblockClassicScheduling44289)
-				toggleManager.Enable(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289);
+			return planningPeriod;
 		}
 	}
 }

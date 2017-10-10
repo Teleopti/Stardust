@@ -4,19 +4,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IPreSchedulingStatusChecker
     {
-		/// <summary>
-		/// Checks the status.
-		/// </summary>
-		/// <param name="schedulePart">The schedule part.</param>
-		/// <param name="finderResult">The finder result.</param>
-		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <returns></returns>
-		bool CheckStatus(IScheduleDay schedulePart, WorkShiftFinderResult finderResult, SchedulingOptions schedulingOptions);
+		bool CheckStatus(IScheduleDay schedulePart, SchedulingOptions schedulingOptions);
         /// <summary>
         /// Gets the person period.
         /// </summary>

@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				var schedulingOptionsCreator = new SchedulingOptionsCreator();
 				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
 
 				var optimizer = new ExtendReduceTimeOptimizer(
 					personalSkillsPeriodValueCalculator,
