@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			{
 				personRequest = _personRequestRepository.Find(form.EntityId.Value);
 			}
+
 			if (personRequest != null)
 			{
 				var existingPeriod = personRequest.Request.Period;
@@ -64,7 +65,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 					if (updatedRows == 0)
 						throw new InvalidOperationException();
 				}
-
 			}
 			else
 			{
@@ -77,12 +77,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 				_personRequestRepository.Add(personRequest);
 				checkAndProcessDeny(personRequest);
+			}
 
-				if (!personRequest.IsDenied)
-				{
-					_absenceRequestIntradayFilter.Process(personRequest);
-				}
-
+			if (!personRequest.IsDenied)
+			{
+				_absenceRequestIntradayFilter.Process(personRequest);
 			}
 
 			return _requestsMapper.Map(personRequest);

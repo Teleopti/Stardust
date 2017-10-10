@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public AbsenceRequestFormMapper AbsenceRequestFormToPersonRequest;
 		public RequestsViewModelMapper RequestsViewModelMappingProfile;
 		public FakeCommandDispatcher CommandDispatcher;
-		
+
 		private static readonly DateTime nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
 		private DateOnly _today = new DateOnly(nowTime);
 		private IWorkflowControlSet _workflowControlSet;
@@ -90,8 +90,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 		}
 
-
-        [Test]
+		[Test]
 		public void ShouldAddRequest()
 		{
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
@@ -445,8 +444,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.AddDays(1).Add(TimeSpan.FromMinutes(21)));
 		}
 
-		
-
 		[Test]
 		public void ShouldNotUpdateQueuedRequestPeriodIfItsSameAsRequest()
 		{
@@ -516,6 +513,66 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			personRequest1.IsDenied.Should().Be(false);
 			personRequest1.IsPending.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldApproveRequestWhenChangingToAutoGrant()
+		{
+			var absence1 = createAbsence();
+			var absence2 = createAbsence("absence2");
+
+			var absenceRequestAutoGrantOnProcess = (IProcessAbsenceRequest)new GrantAbsenceRequest();
+			var absenceRequestAutoGrantOffProcess = new PendingAbsenceRequest();
+
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence1,
+				AbsenceRequestProcess = absenceRequestAutoGrantOnProcess,
+				OpenForRequestsPeriod = new DateOnlyPeriod(_today, _today.AddDays(10)),
+				Period = new DateOnlyPeriod(_today, _today.AddDays(10)),
+				PersonAccountValidator = new AbsenceRequestNoneValidator()
+			});
+
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence2,
+				AbsenceRequestProcess = absenceRequestAutoGrantOffProcess,
+				OpenForRequestsPeriod = new DateOnlyPeriod(_today.AddDays(-14), _today.AddDays(30)),
+				Period = new DateOnlyPeriod(_today.AddDays(-14), _today.AddDays(30)),
+				PersonAccountValidator = new PersonAccountBalanceValidator()
+			});
+
+			var dateTimePeriodForm = new DateTimePeriodForm
+			{
+				StartDate = _today.AddDays(15),
+				EndDate = _today.AddDays(15),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			};
+			_workflowControlSet.AbsenceRequestOpenPeriods[1].StaffingThresholdValidator = new StaffingThresholdValidator();
+
+			var form = createAbsenceRequestForm(dateTimePeriodForm, absence2.Id.Value);
+			var formId = form.EntityId;
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.IsPending.Should().Be(true);
+
+			dateTimePeriodForm = new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			};
+
+			form = createAbsenceRequestForm(dateTimePeriodForm, absence1.Id.Value);
+			form.EntityId = formId;
+			Persister.Persist(form);
+			
+			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
 		}
 
 		private void tryPersist()
@@ -612,11 +669,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			return form;
 		}
 
-		private IAbsence createAbsence()
+		private AbsenceRequestForm createAbsenceRequestForm(DateTimePeriodForm period, Guid absenceId)
 		{
-			var absence = AbsenceFactory.CreateAbsence("holiday").WithId();
-			absence.Description = new Description("hliday");
-			absence.SetBusinessUnit(BusinessUnitFactory.CreateWithId("temp"));
+			var form = new AbsenceRequestForm
+			{
+				AbsenceId = absenceId,
+				Subject = "test",
+				Period = period
+			};
+			form.EntityId = absenceId;
+			return form;
+		}
+
+		private IAbsence createAbsence(string name = "holiday")
+		{
+			var absence = AbsenceFactory.CreateAbsence(name).WithId();
+			absence.Description = new Description("desc" + name);
+			absence.SetBusinessUnit(BusinessUnitFactory.CreateWithId("temp" + name));
 			AbsenceRepository.Add(absence);
 			return absence;
 		}
