@@ -16,7 +16,14 @@
             NodeSelectedMark: "selected"
         }
 
-        vm.data = {
+        vm.optionTwo = {
+            NodeDisplayName: "label",
+            NodeChildrenName: "nodes",
+            NodeSelectedMark: "selected",
+            RootSelectUnique: true
+        }
+
+        var data = {
             nodes: [
                 {
                     label: 'parent1',
@@ -52,7 +59,7 @@
                                             selected: false,
                                             nodes: [
                                                 {
-                                                    label: 'grandchild1',
+                                                    label: 'grandchild2',
                                                     id: '23',
                                                     selected: false,
                                                     nodes: []
@@ -95,11 +102,77 @@
                                     nodes: []
                                 }
                             ]
+                        },
+                        {
+                            label: 'child3',
+                            id: '7',
+                            selected: false,
+                            nodes: [
+                                {
+                                    label: 'grandchild1',
+                                    id: '8',
+                                    selected: false,
+                                    nodes: []
+                                },
+                                {
+                                    label: 'grandchild2',
+                                    id: '8',
+                                    selected: false,
+                                    nodes: []
+                                },
+                                {
+                                    label: 'grandchild3',
+                                    id: '8',
+                                    selected: false,
+                                    nodes: []
+                                },
+                                {
+                                    label: 'grandchild4',
+                                    id: '8',
+                                    selected: false,
+                                    nodes: []
+                                },
+                                {
+                                    label: 'grandchild5',
+                                    id: '8',
+                                    selected: false,
+                                    nodes: []
+                                }
+                            ]
+                        },
+                        {
+                            label: 'child4',
+                            id: '7',
+                            selected: false,
+                            nodes: [
+                                {
+                                    label: 'grandchild2',
+                                    id: '8',
+                                    selected: false,
+                                    nodes: []
+                                }
+                            ]
+                        },
+                        {
+                            label: 'child5',
+                            id: '7',
+                            selected: false,
+                            nodes: [
+                                {
+                                    label: 'grandchild2',
+                                    id: '8',
+                                    selected: false,
+                                    nodes: []
+                                }
+                            ]
                         }
                     ]
                 }
             ]
         };
 
+        vm.dataOne = angular.copy(data);
+        vm.dataTwo = angular.copy(data);
+        vm.dataThree = angular.copy(data);
     }
 })();
