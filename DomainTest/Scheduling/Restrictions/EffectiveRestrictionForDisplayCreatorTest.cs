@@ -82,5 +82,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			result.IsAvailabilityDay.Should().Be.True();
 			result.IsRestriction.Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldNotThrowNullExceptionWhenCreatingEffectiveRestrictionBasedOnInvalidInputs()
+		{
+			var availability = new AvailabilityRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(20, 0, 0), new TimeSpan(22, 0, 0)),
+				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(17, 0, 0)),
+				WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(9, 0, 0))
+			};
+
+			var studentAvailability = new StudentAvailabilityRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(17, 0, 0)),
+				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(17, 0, 0)),
+				WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(9, 0, 0))
+			};
+
+			var effectiveRestrictionOptions = new EffectiveRestrictionOptions {UsePreference = true, UseAvailability = true, UseStudentAvailability = true};
+
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			scheduleDay.Stub(x => x.RestrictionCollection()).Return(new IRestrictionBase[]{availability, studentAvailability });
+
+			var target = new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(),
+				new RestrictionCombiner());
+			IEffectiveRestriction result = null;
+			
+			Assert.DoesNotThrow(() => {
+				result = target.MakeEffectiveRestriction(scheduleDay, effectiveRestrictionOptions);
+			});
+			result.Should().Be.EqualTo(null);
+		}
 	}
 }
