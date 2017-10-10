@@ -26,6 +26,13 @@
 		};
 		vm.changesData = [];
 
+		vm.orgData = [];
+		vm.option = {
+				NodeDisplayName: "Name",
+				NodeChildrenName: "ChildNodes",
+				NodeSelectedMark: "selected"
+		}
+
 		vm.sendForm = sendForm;
 		vm.refreshData = refreshData;
 		vm.maxResults = 100;
@@ -33,6 +40,7 @@
 		init();
 		function init() {
 			getChangedBy();
+			getOrgData();
 		}
 
 		function getChangedBy() {
@@ -43,6 +51,12 @@
 					Default: true
 				})
 				vm.changedBy = result;
+			});
+		}
+
+		function getOrgData() {
+			ReportsService.getOrganization.get().$promise.then(function (result) {
+				vm.orgData = result.BusinessUnit;
 			});
 		}
 

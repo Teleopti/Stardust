@@ -19,34 +19,34 @@
         vm.selectNode = selectNode;
 
         function selectNode(item) {
-            if (item.$parent.node.selected == true) {
-                if (item.$parent.node.nodes.length !== 0) {
-                    setChildrenNodesToUnselect(item.$parent.node.nodes);
-                    return item.$parent.node.selected = false;
+            if (item.$parent.node[vm.nodeSelectedMark] == true) {
+                if (item.$parent.node[vm.nodeChildrenName].length !== 0) {
+                    setChildrenNodesToUnselect(item.$parent.node[vm.nodeChildrenName]);
+                    return item.$parent.node[vm.nodeSelectedMark] = false;
                 } else {
-                    return item.$parent.node.selected = false;
+                    return item.$parent.node[vm.nodeSelectedMark] = false;
                 }
             }
             var indexList = MapParentIndex(item);
-            return setParentNodesToSelect(vm.data.nodes, 0, indexList);
+            return setParentNodesToSelect(vm.data[vm.nodeChildrenName], 0, indexList);
         }
 
         function setChildrenNodesToUnselect(children) {
             children.forEach(function (child) {
-                child.selected = false;
-                if (child.nodes.length !== 0) {
-                    return setChildrenNodesToUnselect(child.nodes);
+                child[vm.nodeSelectedMark] = false;
+                if (child[vm.nodeChildrenName] && child[vm.nodeChildrenName].length !== 0) {
+                    return setChildrenNodesToUnselect(child[vm.nodeChildrenName]);
                 }
             });
         }
 
         function setParentNodesToSelect(data, i, indexList) {
             var index = indexList[i];
-            data[index].selected = true;
-            if (data[index].nodes && data[index].nodes.length > 0) {
+            data[index][vm.nodeSelectedMark] = true;
+            if (data[index][vm.nodeChildrenName] && data[index][vm.nodeChildrenName].length > 0) {
                 if (i + 1 == indexList.length)
                     return;
-                setParentNodesToSelect(data[index].nodes, i + 1, indexList);
+                setParentNodesToSelect(data[index][vm.nodeChildrenName], i + 1, indexList);
             }
         }
 
