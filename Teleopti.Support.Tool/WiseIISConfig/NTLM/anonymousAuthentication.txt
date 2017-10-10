@@ -1,7 +1,7 @@
 Analytics;False
 PMService;True
 RTA;True
-SDK;False
+SDK;True
 Web;True
 Client;True
 TeleoptiWFM;True
