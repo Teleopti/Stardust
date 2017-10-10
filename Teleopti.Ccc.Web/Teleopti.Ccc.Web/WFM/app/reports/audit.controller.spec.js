@@ -27,6 +27,9 @@ describe('AuditTrailCtrl', function () {
     $httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
       return [200, true]
     });
+    $httpBackend.whenGET('../api/Permissions/OrganizationSelection').respond(function (method, url, data, headers) {
+      return [200, true]
+    });
 
     $httpBackend.whenPOST('../api/Reports/ScheduleAuditTrailReport').respond(function (method, url, data, headers) {
       return [200,
