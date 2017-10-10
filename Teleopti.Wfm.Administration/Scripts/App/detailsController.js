@@ -27,7 +27,7 @@
 		vm.AnalDbOk = false;
 		vm.AnalDbCheckMessage = "Input Analytics database";
 		vm.CommandTimeout = 0;
-		vm.MaximumSessionTime = 0;
+		vm.MaximumSessionTime = undefined;
 		vm.Message = "";
 		vm.AllowDelete = false;
 		
@@ -73,7 +73,7 @@
 					vm.CommandTimeout = data.CommandTimeout;
 					vm.Active = data.Active;
 					vm.MobileQRCodeUrl = data.MobileQRCodeUrl;
-					vm.MaximumSessionTime = data.MaximumSessionTime;
+					vm.MaximumSessionTime = data.MaximumSessionTime === 0 ? undefined : data.MaximumSessionTime;
 					//vm.CheckAppDb();
 					//vm.CheckAnalDb();
 					vm.CheckDelete();
