@@ -20,6 +20,14 @@
 				</div>
 				<div class="con-flex x3">
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goCreateSchedulingSetting()"><i class="mdi mdi-plus"></i> {{'NewPlanGroupSchedulingSetting' | translate}}</button>
+					<div class="wfm-chip-wrap">
+						<span class="wfm-chip">
+							<span class="chip-handle">
+								<i class="mdi mdi-alert-circle"></i>
+							</span>
+							<span class="chip-text">Settings are sorted by priority</span>
+						</span>
+					</div>
 					<button class="wfm-btn wfm-btn-invis-disabled" ng-click=""><i class="mdi mdi-information-outline"></i> {{'HelpLabel' | translate}}</button>
 				</div>
 			</div>
@@ -72,13 +80,13 @@
 							</tr>
 							<tr>
 								<td translate>FullWeekEndsOff</td>
-								<td>{{dayOffRule.MinFullWeekendsOff}}</td>
-								<td>{{dayOffRule.MaxFullWeekendsOff}}</td>
+								<td>{{setting.MinFullWeekendsOff}}</td>
+								<td>{{setting.MaxFullWeekendsOff}}</td>
 							</tr>
 							<tr>
 								<td translate>FullWeekEndDaysOff</td>
-								<td>{{dayOffRule.MinWeekendDaysOff}}</td>
-								<td>{{dayOffRule.MaxWeekendDaysOff}}</td>
+								<td>{{setting.MinWeekendDaysOff}}</td>
+								<td>{{setting.MaxWeekendDaysOff}}</td>
 							</tr>
 						</tbody>
 					</table>

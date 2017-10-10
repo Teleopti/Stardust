@@ -405,3 +405,7 @@ wfm-card.pp-validation-card > md-card {
     display: inline-block;
     border-radius: 25px;
 }
+
+.pg-prio-buttoms-wrapper > .ng-hide.ng-hide-animate{
+	display: none !important;
+}

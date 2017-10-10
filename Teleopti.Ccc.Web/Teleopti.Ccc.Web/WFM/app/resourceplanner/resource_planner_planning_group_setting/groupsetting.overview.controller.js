@@ -129,7 +129,6 @@
 				Priority: setting.Priority
 			});
 		}
-			if (setting.Priority < 2)
 	}
 
 	function directiveController($state, $stateParams, $translate, PlanGroupSettingService, localeLanguageSortingService) {
@@ -143,7 +142,7 @@
 
 		function getDayOffRules() {
 			return PlanGroupSettingService.getSettingsByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
-				vm.schedulingSetting = data.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
+				vm.schedulingSetting = data.sort(localeLanguageSortingService.localeSort('-Priority', '-Default', '+Name'));
 				return getBlockSchedulingSetting();
 			});
 		}
