@@ -87,8 +87,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             permissionState = restrictionChecker.CheckRotations(schedulePart);
             drawRestrictionIcon.DrawRotation(permissionState);
 
-	       
-            permissionState = restrictionChecker.CheckPreference(schedulePart);
+			permissionState = checkPreferenceForDisplay(schedulePart, restrictionChecker);
 
 			var mustHavePreference = false;
 	        if (permissionState != PermissionState.None)
@@ -100,8 +99,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
             permissionState = restrictionChecker.CheckStudentAvailability(schedulePart);
             drawRestrictionIcon.DrawStudentAvailability(permissionState);
-
         }
+		
+		private static PermissionState checkPreferenceForDisplay(IScheduleDay schedulePart, RestrictionChecker restrictionChecker)
+		{
+			var preferenceDay = schedulePart?.PreferenceDay();
+			if (preferenceDay?.Restriction == null) 
+				return PermissionState.None;
+			var permissionState = restrictionChecker.CheckPreferenceDayOffForDisplay(schedulePart);
+			if (permissionState != PermissionState.Broken) 
+				permissionState = restrictionChecker.CheckPreferenceAbsence(permissionState, schedulePart);
+			if (permissionState != PermissionState.Unspecified && permissionState != PermissionState.Satisfied)
+				return permissionState;
+			var permissionStateShift = restrictionChecker.CheckPreferenceShift(schedulePart);
+			if (permissionStateShift == PermissionState.Broken || permissionStateShift == PermissionState.Satisfied) 
+				permissionState = permissionStateShift;
+
+			return permissionState;
+		} 
 
         internal override void QueryRowHeight(object sender, GridRowColSizeEventArgs e)
         {

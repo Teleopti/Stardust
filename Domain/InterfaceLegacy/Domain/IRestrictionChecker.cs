@@ -103,6 +103,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <returns></returns>
 		PermissionState CheckPreferenceDayOff(IScheduleDay schedulePart);
+		
+		PermissionState CheckPreferenceDayOffForDisplay(IScheduleDay schedulePart);
 
         /// <summary>
         /// Check preference Shift

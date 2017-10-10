@@ -224,13 +224,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 return PermissionState.None;
 
             var permissionState = PermissionState.Unspecified;
-			var dataRestrictions = (from r in schedulePart.PersistableScheduleDataCollection()
-                                    where r is IPreferenceDay
-                                    select (IPreferenceDay)r);
-
-            var preference = (from r in dataRestrictions
-                              where r.Restriction != null
-                              select r.Restriction).FirstOrDefault();
+			var preference = restrictionPreference(schedulePart);
 
             if (preference == null)
                 return PermissionState.None;
@@ -241,27 +235,54 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (!schedulePart.IsScheduled() && preference.DayOffTemplate != null)
 				return PermissionState.Unspecified;
 
-			var ass = schedulePart.PersonAssignment();
-	        var dayOff = ass?.DayOff();
-	        if (dayOff != null)
-	        {
-		        permissionState = PermissionState.Satisfied;
+			permissionState = checkPrefrenceDayOffAssignedWithDayOff(schedulePart, permissionState, preference);
 
-		        if (preference.DayOffTemplate != null)
-		        {
-			        if (!ass.AssignedWithDayOff(preference.DayOffTemplate))
-			        {
-				        //Need to do a return here because the visualLayerCollection can be empty 
-				        return PermissionState.Broken;
-			        }
-		        }
-		        else
-			        return PermissionState.Broken;
-	        }
 	        return permissionState;
         }
 
-		private static IPreferenceRestriction RestrictionPreference(IScheduleDay schedulePart)
+		public PermissionState CheckPreferenceDayOffForDisplay(IScheduleDay schedulePart)
+		{
+			if (schedulePart == null)
+				return PermissionState.None;
+
+			var permissionState = PermissionState.Unspecified;
+			var preference = restrictionPreference(schedulePart);
+
+			if (preference == null)
+				return PermissionState.None;
+
+			if (schedulePart.SignificantPart() == SchedulePartView.MainShift && preference.DayOffTemplate != null)
+				return PermissionState.Broken;
+
+			if (!schedulePart.IsScheduled() && preference.DayOffTemplate != null)
+				return PermissionState.Unspecified;
+
+			permissionState = checkPrefrenceDayOffAssignedWithDayOff(schedulePart, permissionState, preference);
+
+			return permissionState;
+		}
+
+		private static PermissionState checkPrefrenceDayOffAssignedWithDayOff(IScheduleDay schedulePart, PermissionState permissionState, IPreferenceRestriction preference)
+		{
+			var ass = schedulePart.PersonAssignment();
+			var dayOff = ass?.DayOff();
+			if (dayOff == null) return permissionState;
+			permissionState = PermissionState.Satisfied;
+			if (preference.DayOffTemplate != null)
+			{
+				if (!ass.AssignedWithDayOff(preference.DayOffTemplate))
+				{
+					//Need to do a return here because the visualLayerCollection can be empty 
+					return PermissionState.Broken;
+				}
+			}
+			else
+				return PermissionState.Broken;
+
+			return permissionState;
+		}
+
+		private static IPreferenceRestriction restrictionPreference(IScheduleDay schedulePart)
         {
 			var preferenceDay = schedulePart.PreferenceDay();
 			return preferenceDay?.Restriction;
@@ -274,7 +295,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             var permissionState = PermissionState.Unspecified;
 
-			var preference = RestrictionPreference(schedulePart);
+			var preference = restrictionPreference(schedulePart);
 
             if (preference == null)
                 return PermissionState.None;
@@ -345,7 +366,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (schedulePart == null)
                 return PermissionState.None;
 
-			var preference = RestrictionPreference(schedulePart);
+			var preference = restrictionPreference(schedulePart);
 
             if (preference == null)
                 return PermissionState.None;
@@ -374,7 +395,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (schedulePart == null)
 				return false;
 
-			var preference = RestrictionPreference(schedulePart);
+			var preference = restrictionPreference(schedulePart);
 
 			if (preference == null)
 				return false;
@@ -389,7 +410,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             PermissionState permissionState;
 
-			var preference = RestrictionPreference(schedulePart);
+			var preference = restrictionPreference(schedulePart);
 
             if (preference != null && preference.MustHave)
             {
@@ -419,7 +440,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		public PermissionState CheckPreferenceAbsence(PermissionState permissionState, IScheduleDay schedulePart)
         {
 			var preferenceAbsenceChecker = new PreferenceAbsenceChecker(schedulePart);
-			return preferenceAbsenceChecker.CheckPreferenceAbsence(RestrictionPreference(schedulePart), permissionState);
+			return preferenceAbsenceChecker.CheckPreferenceAbsence(restrictionPreference(schedulePart), permissionState);
         }
 
 		private PermissionState checkPreferenceShiftCategory(IPreferenceRestriction preference, PermissionState permissionState, IScheduleDay schedulePart)
