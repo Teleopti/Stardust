@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 	[RequestPerformanceTuningTest]
 	[Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
 	[Toggle(Toggles.Wfm_Requests_HandleFourteenDaysFast_43390)]
-	public class WaitlistRequestProcessor14DaysPerformanceTest : PerformanceTestWithOneTimeSetup
+	public class WaitlistRequestProcessor14DaysOneSkillPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
 		public MutableNow Now;
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
 				connection.Open();
-				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "Prepare100PerDayWaitlistedRequest14DaysTest.sql";
+				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "PrepareWaitlistedRequest14DaysTest.sql";
 				var script = File.ReadAllText(path);
 
 				using (var command = new SqlCommand(script, connection))
@@ -113,11 +113,11 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				});
 			});
 		}
-		
+
 		[Test]
-		public void Run100WaitlistedRequestsPerDayFor14Days()
+		public void RunWaitlistedRequestsOneSkillFor14Days()
 		{
-			Now.Is("2016-04-06 06:59");
+			Now.Is("2016-04-06 03:59");
 
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
