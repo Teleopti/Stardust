@@ -458,7 +458,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test]
-		[Ignore("#46151 to be fixed")]
 		public void ShouldNotMoveDayOffWhenUsingConsecutiveWorkDaysAndHavingDayOffPreference100Percent()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); 

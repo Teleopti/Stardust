@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				return PermissionState.Broken;
 
 			if (!schedulePart.IsScheduled() && preference.DayOffTemplate != null)
-				return PermissionState.Unspecified;
+				return PermissionState.Broken;
 
 			permissionState = checkPrefrenceDayOffAssignedWithDayOff(schedulePart, permissionState, preference);
 
