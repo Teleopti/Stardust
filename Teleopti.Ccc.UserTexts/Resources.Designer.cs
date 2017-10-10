@@ -4872,7 +4872,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By seniority.
+        ///   Looks up a localized string similar to Seniority.
         /// </summary>
         public static string BySeniority {
             get {
@@ -20209,6 +20209,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoOptionalColumnIsSelected {
             get {
                 return ResourceManager.GetString("NoOptionalColumnIsSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No overtime type found in your contract. Please contact your administrator..
+        /// </summary>
+        public static string NoOvertimeType {
+            get {
+                return ResourceManager.GetString("NoOvertimeType", resourceCulture);
             }
         }
         

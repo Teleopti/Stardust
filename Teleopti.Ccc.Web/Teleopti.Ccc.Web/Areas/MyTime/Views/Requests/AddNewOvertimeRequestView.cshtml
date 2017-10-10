@@ -28,6 +28,13 @@
 				</select>
 			</div>
 		</div>
+		
+		@if (Model.OvertimeTypes.Count == 0)
+		{
+			<div class="alert alert-warning">
+				@Resources.NoOvertimeType
+			</div>
+		}
 
 		<div class="row form-group">
 			<div class="col-xs-4 col-sm-4 col-md-4 overtime-request-date">
@@ -85,6 +92,9 @@
 	</div>
 	<div class="pull-right">
 		<button class="request-new-cancel btn" data-bind="click: CancelAddRequest, visible: ShowCancelButton">@Resources.Cancel</button>
-		<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, visible: IsEditable">@Resources.Save</button>
+		@if (Model.OvertimeTypes.Count > 0)
+		{
+			<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, visible: IsEditable">@Resources.Save</button>
+		}
 	</div>
 </div>

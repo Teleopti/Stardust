@@ -16611,4 +16611,8 @@ Do you want to participate?</value>
     <value>Break Preferences Start Time By Max:</value>
     <comment>Only allow shifts to move startime by x when optimizing</comment>
   </data>
+  <data name="NoOvertimeType" xml:space="preserve">
+    <value>No overtime type found in your contract. Please contact your administrator.</value>
+    <comment>Error message in myttime when no overtime type found in agent's contract</comment>
+  </data>
 </root>
