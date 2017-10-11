@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			result.BusinessRulesValidationResults.Should().Be.Empty();
 		}
 
-		public FullSchedulingResultTest(bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerEasierBlockScheduling46155)
+		public FullSchedulingResultTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155)
 		{
 		}
 	}

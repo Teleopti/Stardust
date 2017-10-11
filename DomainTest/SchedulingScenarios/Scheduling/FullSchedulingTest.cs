@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(blockedByAccessibility ? 10 : 8);
 		}
 
-		public FullSchedulingTest(bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerEasierBlockScheduling46155)
+		public FullSchedulingTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155)
 		{
 		}
 	}

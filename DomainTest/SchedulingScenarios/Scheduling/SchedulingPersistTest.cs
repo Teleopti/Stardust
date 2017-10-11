@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeSkillRepository SkillRepository;
 
-		public SchedulingPersistTest(bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerEasierBlockScheduling46155)
+		public SchedulingPersistTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155)
 		{
 		}
 

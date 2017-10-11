@@ -13,16 +13,7 @@ using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	public interface IIoCTestContext
-	{
-		void SimulateRestart();
-	};
-
-	public interface INotCompatibleWithIoCTest
-	{
-	}
-
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
 	public class IoCTestAttribute : Attribute, ITestAction, IIoCTestContext
 	{
 		public ActionTargets Targets => ActionTargets.Test;
@@ -68,6 +59,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			Startup(_container);
 			_service.InjectFrom(_container);
 			BeforeTest();
+			(_fixture as ITestInterceptor)?.OnBefore();
 		}
 
 		public void AfterTest(ITest testDetails)
@@ -154,6 +146,12 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			disposeContainer();
 			rebuildContainer();
 			_service.InjectFrom(_container);
+		}
+
+		public void SimulateNewRequest()
+		{
+			var scope = _container.BeginLifetimeScope();
+			_service.InjectFrom(scope);
 		}
 
 		private class ignoringTestDoubles : SystemImpl

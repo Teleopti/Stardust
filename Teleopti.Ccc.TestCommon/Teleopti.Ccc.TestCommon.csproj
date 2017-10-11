@@ -372,13 +372,16 @@
     <Compile Include="FakeData\FakeCurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeRepositories\FakeStateQueue.cs" />
     <Compile Include="IoC\FakePermissionsAttribute.cs" />
+    <Compile Include="IoC\IIoCTestContext.cs" />
     <Compile Include="IoC\InfrastructureTestAttribute.cs" />
+    <Compile Include="IoC\INotCompatibleWithIoCTest.cs" />
     <Compile Include="IoC\IntegrationIoCTest.cs" />
     <Compile Include="IoC\IoCTestService.cs" />
     <Compile Include="IoC\ISetupConfiguration.cs" />
     <Compile Include="IoC\ISystem.cs" />
     <Compile Include="IoC\ITestDoubleFor.cs" />
     <Compile Include="IoC\IntegrationIoCTestAttribute.cs" />
+    <Compile Include="IoC\ITestInterceptor.cs" />
     <Compile Include="IoC\RealPermissionsAttribute.cs" />
     <Compile Include="IoC\RepositoriesMustNotBeUsedException.cs" />
     <Compile Include="IoC\SetupThrowingTestDoublesForRepositories.cs" />

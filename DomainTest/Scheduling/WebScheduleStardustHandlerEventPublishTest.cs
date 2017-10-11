@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 		private IBusinessUnit businessUnit;
 
-		public WebScheduleStardustHandlerEventPublishTest(bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerEasierBlockScheduling46155)
+		public WebScheduleStardustHandlerEventPublishTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 {
 	public class IoCTestService
 	{
-		private IContainer _container;
+		private ILifetimeScope _container;
 		private readonly MethodInfo _method;
 		private readonly IEnumerable<object> _injectTo;
 
@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_method = method;
 		}
 
-		public void InjectFrom(IContainer container)
+		public void InjectFrom(ILifetimeScope container)
 		{
 			_container = container;
 			_injectTo.ForEach(x => InjectTo(_container, x));
 		}
 
-		public static void InjectTo(IContainer container, object instance)
+		public static void InjectTo(ILifetimeScope container, object instance)
 		{
 			var type = instance.GetType();
 			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(x => x.CanWrite);
