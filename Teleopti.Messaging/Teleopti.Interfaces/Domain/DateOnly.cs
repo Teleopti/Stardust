@@ -50,10 +50,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: micke
 		/// Created date: 2008-10-18
 		/// </remarks>
-		public int Year
-		{
-			get { return _internalDateTime.Year; }
-		}
+		public int Year => _internalDateTime.Year;
 
 		/// <summary>
 		/// Gets the month.
@@ -63,10 +60,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: micke
 		/// Created date: 2008-10-18
 		/// </remarks>
-		public int Month
-		{
-			get { return _internalDateTime.Month; }
-		}
+		public int Month => _internalDateTime.Month;
 
 		/// <summary>
 		/// Gets the day.
@@ -76,10 +70,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: micke
 		/// Created date: 2008-10-18
 		/// </remarks>
-		public int Day
-		{
-			get { return _internalDateTime.Day; }
-		}
+		public int Day => _internalDateTime.Day;
 
 		/// <summary>
 		/// Days the of week.
@@ -89,10 +80,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: micke
 		/// Created date: 2008-10-18
 		/// </remarks>
-		public DayOfWeek DayOfWeek
-		{
-			get { return _internalDateTime.DayOfWeek; }
-		}
+		public DayOfWeek DayOfWeek => _internalDateTime.DayOfWeek;
 
 		/// <summary>
 		/// Gets the date.
@@ -127,10 +115,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: micke
 		/// Created date: 2008-10-18
 		/// </remarks>
-		public static DateOnly MaxValue
-		{
-			get { return new DateOnly(DateHelper.MaxSmallDateTime); }
-		}
+		public static DateOnly MaxValue => new DateOnly(DateHelper.MaxSmallDateTime);
 
 		/// <summary>
 		/// Gets the min value.
@@ -140,10 +125,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: micke
 		/// Created date: 2008-10-18
 		/// </remarks>
-		public static DateOnly MinValue
-		{
-			get { return new DateOnly(DateHelper.MinSmallDateTime); }
-		}
+		public static DateOnly MinValue => new DateOnly(DateHelper.MinSmallDateTime);
 
 		/// <summary>
 		/// Gets the today. HA HA !!1
@@ -153,10 +135,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: HenryG
 		/// Created date: 2010-04-20
 		/// </remarks>
-		public static DateOnly Today
-		{
-			get { return new DateOnly(DateTime.Today); }
-		}
+		public static DateOnly Today => new DateOnly(DateTime.Today);
 
 		#region operators
 

@@ -344,12 +344,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
             var specificDate1 = new SpecificDate
             {
-                Date = new DateOnly(new DateTime(2015, 1, 20)),
+                Date = new DateOnly(2015, 1, 20),
                 DateId = 20
             };
             var specificDate2 = new SpecificDate
             {
-                Date = new DateOnly(new DateTime(2015, 1, 26)),
+                Date = new DateOnly(2015, 1, 26),
                 DateId = 26
             };
             analyticsDataFactory.Setup(specificDate1);
@@ -380,12 +380,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
             var specificDate1 = new SpecificDate
             {
-                Date = new DateOnly(new DateTime(2015, 1, 7)),
+                Date = new DateOnly(2015, 1, 7),
                 DateId = 7
             };
             var specificDate2 = new SpecificDate
             {
-                Date = new DateOnly(new DateTime(2015, 1, 15)),
+                Date = new DateOnly(2015, 1, 15),
                 DateId = 15
             };
             analyticsDataFactory.Setup(specificDate1);
@@ -416,12 +416,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
             var specificDate1 = new SpecificDate
             {
-                Date = new DateOnly(new DateTime(2015, 1, 20)),
+                Date = new DateOnly(2015, 1, 20),
                 DateId = 20
             };
             var specificDate2 = new SpecificDate
             {
-                Date = new DateOnly(new DateTime(2015, 1, 26)),
+                Date = new DateOnly(2015, 1, 26),
                 DateId = 26
             };
             analyticsDataFactory.Setup(specificDate1);
@@ -482,12 +482,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			var specificDate1 = new SpecificDate
 			{
-				Date = new DateOnly(new DateTime(2015, 1, 12)),
+				Date = new DateOnly(2015, 1, 12),
 				DateId = 12
 			};
 			var specificDate2 = new SpecificDate
 			{
-				Date = new DateOnly(new DateTime(2015, 1, 25)),
+				Date = new DateOnly(2015, 1, 25),
 				DateId = 25
 			};
 			analyticsDataFactory.Setup(specificDate1);
@@ -518,12 +518,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			var specificDate1 = new SpecificDate
 			{
-				Date = new DateOnly(new DateTime(2015, 1, 12)),
+				Date = new DateOnly(2015, 1, 12),
 				DateId = 12
 			};
 			var specificDate2 = new SpecificDate
 			{
-				Date = new DateOnly(new DateTime(2015, 1, 25)),
+				Date = new DateOnly(2015, 1, 25),
 				DateId = 25
 			};
 			analyticsDataFactory.Setup(specificDate1);
