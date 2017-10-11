@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 					Browser.Interactions.Click("#addShiftTradeRequest");
 				},
 				() => Browser.Interactions.IsExists(".ready-loading-flag.is-ready-loaded"),
-				TimeSpan.FromMilliseconds(1000));
+				TimeSpan.FromMilliseconds(2000));
 		}
 
 		private static void gotoShiftTradeBulletinBoardToday()
