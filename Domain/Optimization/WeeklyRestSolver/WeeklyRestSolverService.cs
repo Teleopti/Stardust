@@ -165,9 +165,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private bool isFullTeamSelected(IEnumerable<IPerson> selectedPersons, IPerson person, ITeamBlockGenerator teamBlockGenerator,
 			SchedulingOptions schedulingOptions, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod week, IEnumerable<IPerson> personsInOrganisation)
 		{
-			var teamBlockInfo =
-				teamBlockGenerator.Generate(personsInOrganisation, allPersonMatrixList, week, new List<IPerson> {person}, schedulingOptions).First();
-			return _allTeamMembersInSelectionSpecification.IsSatifyBy(teamBlockInfo.TeamInfo, selectedPersons);
+			var teamBlockInfos = teamBlockGenerator.Generate(personsInOrganisation, allPersonMatrixList, week, new List<IPerson> {person}, schedulingOptions);
+			return teamBlockInfos.Any() && _allTeamMembersInSelectionSpecification.IsSatifyBy(teamBlockInfos.First().TeamInfo, selectedPersons);
 		}
 	}
 }

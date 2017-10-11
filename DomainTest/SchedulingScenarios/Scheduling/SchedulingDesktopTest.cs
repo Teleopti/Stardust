@@ -143,7 +143,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("46126 to be fixed")]
 		public void ShouldNotCrashWhenSolvingWeeklyRest()
 		{
 			var firstDay = new DateOnly(2017, 5, 14);
