@@ -73,7 +73,7 @@
 	display: inline-block;
 	font-size: 1.2em;
 	width: 120px;
-	padding: 10px;
+	padding: 10px 5px !important;
 }
 
 .mobile-month-calendar-icon {

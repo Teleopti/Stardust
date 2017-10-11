@@ -6,24 +6,12 @@ Layout = null;
 	<div class="navbar navbar-teleopti subnavbar">
 		<div class="container mobile-month-view-nav">
 			<ul class="nav navbar-nav navbar-teleopti row submenu">
-				<li class="mobile-datepicker">
-					<span class="input-group">
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" data-bind="click: previousMonth">
-								<i class="glyphicon glyphicon-chevron-left"></i>
-							</button>
-						</span>
-						<input id="CurrentMonth" class="form-control text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
-							<button class="btn btn-default" type="button" data-bind="click: nextMonth">
-								<i class="glyphicon glyphicon-chevron-right"></i>
-							</button>
-						</span>
-					</span>
-				</li>
+				<li class="mobile-month-datepicker">
+					<a class="text-center formatted-date-text" data-bind="text: formattedSelectedDate"></a>
+					<a class="mobile-month-calendar-icon" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1, calendarPlacement: 'center' }">
+						<i class="glyphicon glyphicon-calendar"></i>
+					</a>
+ 				</li>
 				<li>
 					<a href="#Schedule/MobileDay">
 						<i class="glyphicon glyphicon-home"></i>

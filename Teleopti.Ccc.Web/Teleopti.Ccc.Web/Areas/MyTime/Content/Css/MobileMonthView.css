@@ -3,7 +3,7 @@
 }
 
 .mobile-month-view .mobile-month-view-nav .navbar-teleopti {
-	margin: 0;
+	margin: 5px;
 	display: flex;
 	justify-content: space-between;
 }
@@ -56,8 +56,7 @@
 
 .mobile-month-view .mobile-month-view-nav .submenu li a {
 	display: inline-block;
-	padding-left: 5px;
-	padding-right: 5px;
+	padding: 5px;
 	text-align: center;
 	min-width: 35px;
 	height: 100%;
