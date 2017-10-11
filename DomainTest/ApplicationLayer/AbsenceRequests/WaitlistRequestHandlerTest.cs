@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
+	[Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747)]
 	public class WaitlistRequestHandlerTest : ISetup
 	{
 		public WaitlistRequestHandler Target;
@@ -836,7 +837,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 
-			waitListedRequest.IsWaitlisted.Should().Be.True();
+			waitListedRequest.IsDenied.Should().Be.True();
 			waitListedRequest2.IsApproved.Should().Be.True();
 		}
 

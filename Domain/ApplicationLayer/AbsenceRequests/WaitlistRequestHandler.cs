@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
 		private readonly IContractScheduleRepository _contractScheduleRepository;
 		private readonly IHandleCommand<ApproveRequestCommand> _approveRequestCommandHandler;
-		private readonly IAlreadyAbsentValidator _alreadyAbsentValidator;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
+		private readonly IAbsenceRequestSynchronousValidator _absenceRequestSynchronousValidator;
 
 		public WaitlistRequestHandler(ISkillCombinationResourceRepository skillCombinationResourceRepository,
 			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			SchedulePartModifyAndRollbackServiceWithoutStateHolder rollbackService,
 			ISkillTypeRepository skillTypeRepository, IPersonRepository personRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository,
 			IContractScheduleRepository contractScheduleRepository, IHandleCommand<ApproveRequestCommand> approveRequestCommandHandler,
-			IAlreadyAbsentValidator alreadyAbsentValidator, IStardustJobFeedback stardustJobFeedback)
+			IStardustJobFeedback stardustJobFeedback, IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator)
 		{
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_scheduleStorage = scheduleStorage;
@@ -85,8 +85,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_partTimePercentageRepository = partTimePercentageRepository;
 			_contractScheduleRepository = contractScheduleRepository;
 			_approveRequestCommandHandler = approveRequestCommandHandler;
-			_alreadyAbsentValidator = alreadyAbsentValidator;
 			_stardustJobFeedback = stardustJobFeedback;
+			_absenceRequestSynchronousValidator = absenceRequestSynchronousValidator;
 		}
 
 		public class WaitlistHelpers
@@ -225,11 +225,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				foreach (var pRequest in requestsNotHandled)
 				{
-					if (_alreadyAbsentValidator.Validate((IAbsenceRequest)pRequest.Request, helpers.PersonsSchedules[pRequest.Person]))
+					
+					var result = _absenceRequestSynchronousValidator.Validate(pRequest);
+					if(!result.IsValid)
 					{
-						pRequest.Deny(nameof(Resources.RequestDenyReasonAlreadyAbsent), new PersonRequestCheckAuthorization(), null,
-							PersonRequestDenyOption.AlreadyAbsence);
-						_stardustJobFeedback.SendProgress($"Already absent for request {pRequest.Id.GetValueOrDefault()}");
+						pRequest.Deny(result.ValidationErrors, new PersonRequestCheckAuthorization(), null,
+									PersonRequestDenyOption.AutoDeny | result.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None));
+						_stardustJobFeedback.SendProgress(result.ValidationErrors);
 						continue;
 					}
 					if (isRequestUsingShrinkage(pRequest))
@@ -523,7 +525,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		//		{
 		//			var requestPeriod = pRequest.Request.Period;
 		//			var schedules = helpers.PersonsSchedules[pRequest.Person];
-		//			if (_alreadyAbsentValidator.Validate((IAbsenceRequest) pRequest.Request, schedules))
+		//			if (_alreadyAbsentValidator.Validate((IAbsenceRequest)pRequest.Request, schedules))
 		//			{
 		//				pRequest.Deny(nameof(Resources.RequestDenyReasonAlreadyAbsent), new PersonRequestCheckAuthorization(), null,
 		//					PersonRequestDenyOption.AlreadyAbsence);
@@ -538,7 +540,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		//				continue;
 		//			}
 
-		//			var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest) pRequest.Request);
+		//			var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)pRequest.Request);
 		//			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 		//			var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
 		//			if (staffingThresholdValidators.Any())
@@ -560,7 +562,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		//				var personAssignment = scheduleDay.PersonAssignment();
 		//				if (personAssignment == null) continue;
 
-		//				var absenceRequest = (IAbsenceRequest) pRequest.Request;
+		//				var absenceRequest = (IAbsenceRequest)pRequest.Request;
 		//				scheduleDay.CreateAndAddAbsence(new AbsenceLayer(absenceRequest.Absence, pRequest.Request.Period));
 
 		//				_rollbackService.ModifyStrictly(scheduleDay, new NoScheduleTagSetter(), NewBusinessRuleCollection.Minimum());
@@ -595,7 +597,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		//				}
 		//				var validatedRequest =
 		//					staffingThresholdValidators.FirstOrDefault()
-		//						.ValidateLight((IAbsenceRequest) pRequest.Request, skillStaffingIntervalsToValidate);
+		//						.ValidateLight((IAbsenceRequest)pRequest.Request, skillStaffingIntervalsToValidate);
 		//				_rollbackService.RollbackMinimumChecks();
 		//				if (validatedRequest.IsValid)
 		//				{
