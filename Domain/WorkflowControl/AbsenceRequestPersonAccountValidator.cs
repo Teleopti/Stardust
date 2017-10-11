@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -23,8 +24,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var workflowControlSet = person.WorkflowControlSet;
 			
 			var absenceRequestOpenPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
-			var waitlistingIsEnabled = workflowControlSet.WaitlistingIsEnabled (absenceRequest);
-
+			//var waitlistingIsEnabled = workflowControlSet.WaitlistingIsEnabled (absenceRequest);
 
 			if (absenceRequestOpenPeriod?.PersonAccountValidator is AbsenceRequestNoneValidator)
 			{
@@ -33,16 +33,27 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			var personAbsenceAccounts = _personAbsenceAccountProvider.Find(personRequest.Person);
 			var personAbsenceAccount = personAbsenceAccounts.Find(absenceRequest.Absence);
+
+			return ValidatedRequestWithPersonAccount(personRequest, scheduleRange, personAbsenceAccount);
+		}
+
+		public static IValidatedRequest ValidatedRequestWithPersonAccount(IPersonRequest personRequest, IScheduleRange scheduleRange,
+			IPersonAbsenceAccount personAbsenceAccount)
+		{
+			var person = personRequest.Person;
 			var requestPeriod = personRequest.Request.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 			var affectedAccounts = personAbsenceAccount?.Find(requestPeriod);
 
+			var validatedRequest = ValidatedRequest.Valid;
 			if (affectedAccounts == null)
-				return ValidatedRequest.Valid;
+				return validatedRequest;
 
 			foreach (var affectedAccount in affectedAccounts)
 			{
+				var waitlistingIsEnabled = person.WorkflowControlSet.WaitlistingIsEnabled(personRequest.Request as IAbsenceRequest);
 				if (affectedAccount.IsExceeded)
 				{
+					
 					return error(waitlistingIsEnabled);
 				}
 
@@ -60,15 +71,20 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				var scheduleDays =
 					new List<IScheduleDay>(scheduleRange.ScheduledDayCollection(intersectingPeriod.Value));
 
+				var affectedTimePerAccount = TimeSpan.Zero; 
 				foreach (var day in scheduleDays)
 				{
 					if (isAccountDay)
 					{
+						if (absenseOnDay(day, personRequest))
+							continue;
+
 						numberDays = calculateDays(day, numberDays);
 						if (TimeSpan.FromDays(numberDays) > affectedAccount.Remaining)
 						{
 							return error(waitlistingIsEnabled);
 						}
+						affectedTimePerAccount = TimeSpan.FromDays(numberDays);
 					}
 					else if (isAccountTime)
 					{
@@ -77,11 +93,20 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 						{
 							return error(waitlistingIsEnabled);
 						}
+						affectedTimePerAccount = TimeSpan.FromMinutes(numberMinutes);
 					}
 				}
+				validatedRequest.AffectedTimePerAccount.AddOrUpdate(affectedAccount, affectedTimePerAccount,
+					(account, span) => affectedTimePerAccount);
 			}
 
-			return ValidatedRequest.Valid;
+			return validatedRequest;
+		}
+
+		private static bool absenseOnDay(IScheduleDay day, IPersonRequest personRequest)
+		{
+			var absenceRequest = personRequest.Request as IAbsenceRequest;
+			return day.PersonAbsenceCollection().Any(x => x.Layer.Payload == absenceRequest.Absence);
 		}
 
 		private static int calculateDays(IScheduleDay day, int numberDays)
@@ -100,7 +125,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return numberMinutes;
 		}
 
-		private IValidatedRequest error(bool waitlistingIsenabled)
+		private static IValidatedRequest error(bool waitlistingIsenabled)
 		{
 			return waitlistingIsenabled 
 				? new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestWaitlistedReasonPersonAccount } 

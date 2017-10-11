@@ -10,11 +10,15 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.DomainTest.Scheduling.Tracking;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -24,6 +28,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
@@ -784,7 +789,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldDenyShortTimeAbsenseRequest()
+		public void ShouldDenyExpiredAbsenseRequest()
 		{
 			SetUp();
 			Now.Is(new DateTime(2016, 12, 1, 6, 00, 00, DateTimeKind.Utc));
@@ -952,6 +957,60 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			waitListedRequest2.IsApproved.Should().Be.False();
 		}
 
+		[Test]
+		public void ShouldOnlyApproveRequestNotOverlapping()
+		{
+			SetUp();
+			Now.Is(new DateTime(2016, 12, 1, 6, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("phone");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
+			var waitListedAgent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+
+			});
+			wfcs.AbsenceRequestWaitlistEnabled = true;
+		
+			waitListedAgent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent, scenario, activity, period, new ShiftCategory("category")));
+
+			IPersonRequest waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
+			waitListedRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			PersonRequestRepository.Add(waitListedRequest);
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10)
+			});
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
+
+			var personRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
+			personRequest.Deny("Denied!", new PersonRequestAuthorizationCheckerForTest());
+			PersonRequestRepository.Add(personRequest);
+			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
+
+			waitListedRequest.IsApproved.Should().Be.True();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be.EqualTo(nameof(Resources.RequestDenyReasonAlreadyAbsent));
+		}
+
+
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
 		{
 			return new SkillCombinationResource
@@ -962,8 +1021,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				SkillCombination = skillCombinations
 			};
 		}
-
-
 	}
 
 

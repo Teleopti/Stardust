@@ -23,6 +23,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_absenceAccounts.Remove(entity);
 		}
 
+		public void Clear()
+		{
+			_absenceAccounts.Clear();
+		}
+
 		public IPersonAbsenceAccount Get(Guid id)
 		{
 			return _absenceAccounts.SingleOrDefault(account => account.Id == id);
@@ -50,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var personAccountCollection = new PersonAccountCollection(person);
 			personAbsenceAccounts.ForEach(personAbsenceAccount =>
 			{
-				if (!personAccountCollection.Any(pc => pc.Absence == personAbsenceAccount.Absence))
+				if (personAccountCollection.All(pc => pc.Absence != personAbsenceAccount.Absence))
 				{
 					personAccountCollection.Add(personAbsenceAccount);
 				}

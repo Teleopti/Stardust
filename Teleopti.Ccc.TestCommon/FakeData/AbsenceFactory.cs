@@ -2,6 +2,7 @@
 using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -44,7 +45,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return ret;
         }
 
-	    public static IAbsence CreateAbsenceWithId()
+		public static IAbsence CreateAbsenceWithTracker(string name, ITracker tracker)
+		{
+			InParameter.NotNull("name", name);
+			IAbsence ret = new Absence();
+			ret.Description = new Description(name, name.Substring(0, 2));
+			ret.DisplayColor = Color.Red;
+			ret.Tracker = tracker;
+			return ret;
+		}
+
+		public static IAbsence CreateAbsenceWithId()
 	    {
 		    var ret = CreateAbsence("absence");
 			ret.SetId(Guid.NewGuid());

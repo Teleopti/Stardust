@@ -118,3 +118,4 @@ Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.ServiceBusTest/PayrollTestDlls/ReadMe.txt
 .idea
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/.node/NodeHash.txt
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/.node/WfmFileHash.txt
+.axoCover/settings.json
