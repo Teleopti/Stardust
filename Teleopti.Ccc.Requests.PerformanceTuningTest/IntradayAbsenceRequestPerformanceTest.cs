@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
 				connection.Open();
+				StardustJobFeedback.SendProgress($"Will run script");
 				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "Prepare200RequestForIntradayTest.sql";
 				var script = File.ReadAllText(path);
 
@@ -67,6 +68,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 					command.ExecuteNonQuery();
 				}
 				connection.Close();
+				StardustJobFeedback.SendProgress($"Have been running the script");
 			}
 
 			var now = Now.UtcDateTime();
@@ -74,6 +76,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>
 							  {
+								  StardustJobFeedback.SendProgress($"Preload for less lazy load");
 								  WorkflowControlSetRepository.LoadAll();
 								  AbsenceRepository.LoadAll();
 								  WorkloadRepository.LoadAll();
@@ -84,10 +87,12 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 								  PartTimePercentageRepository.LoadAll();
 								  ContractScheduleRepository.LoadAllAggregate();
 								  DayOffTemplateRepository.LoadAll();
-
+								  StardustJobFeedback.SendProgress($"Will update staffing readmodel");
 								  UpdateStaffingLevel.Update(period);
-								  requests = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(new DateTime(2016, 03, 16, 7, 0, 0).Utc(), new DateTime(2016, 03, 16, 10, 0, 0).Utc()));
+								  StardustJobFeedback.SendProgress($"Done update staffing readmodel");
 								  PersonRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
+								  requests = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(new DateTime(2016, 03, 16, 7, 0, 0).Utc(), new DateTime(2016, 03, 16, 10, 0, 0).Utc()));
+								  
 							  });
 		}
 
@@ -99,15 +104,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			StardustJobFeedback.SendProgress($"Will process {requests.Count} requests");
-
-			//WithUnitOfWork.Do(() =>
-			//				  {
-			//					  foreach (var request in requests)
-			//					  {
-			//						  AbsenceRequestIntradayFilter.Process(request);
-			//					  }
-			//				  });
-
 
 			foreach (var request in requests)
 			{
