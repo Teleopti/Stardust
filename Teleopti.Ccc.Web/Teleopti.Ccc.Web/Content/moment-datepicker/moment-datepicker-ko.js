@@ -92,6 +92,9 @@
     			if ($(element).is('button')) {
     				options.calendarPlacement = 'left';
     			}
+                if($(element).hasClass('center')){
+                    options.calendarPlacement = 'center';
+                }
 		    }
 
             var dataType = options.dataType || detectDataType(ko.utils.unwrapObservable(valueAccessor()));
