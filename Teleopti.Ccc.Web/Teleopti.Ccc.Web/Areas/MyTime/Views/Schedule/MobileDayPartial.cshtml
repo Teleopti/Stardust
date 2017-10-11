@@ -41,6 +41,7 @@
 <div class="mobile-start-day">
 	<div class="navbar navbar-teleopti subnavbar">
 		<div class="container mobile-start-day-nav">
+			<!-- ko ifnot: mobileMonthEnabled -->
 			<ul class="nav navbar-nav navbar-teleopti row submenu">
 				<li class="mobile-datepicker">
 					<div class="input-group">
@@ -65,9 +66,32 @@
 						<i class="glyphicon glyphicon-home"></i>
 					</a>
 				</li>
-				<li class="mobile-month-icon" data-bind="visible: mobileMonthEnabled, click: navigateToMonthView">
+				<li class="mobile-message" data-bind="click: navigateToMessages">
 					<a>
-						<img src="~/Areas/MyTime/Content/Images/monthViewIcon.png">
+						<i class="glyphicon glyphicon-envelope"></i>
+						<span id="MobileDayView-message" class="badge" data-bind="text: unreadMessageCount">
+						</span>
+					</a>
+				</li>
+				<li class="mobile-request" data-bind="click: function(e, d){ if(requestsCount() > 0){navigateToRequests();}}">
+					<a id="MobileDayView-request" data-bind="visible: requestsCount() > 0">
+						<i class="glyphicon glyphicon-comment"></i>
+					</a>
+				</li>
+			</ul>
+			<!-- /ko -->
+
+			<!-- ko if: mobileMonthEnabled -->
+			<ul class="nav navbar-nav navbar-teleopti row submenu">
+				<li class="mobile-month-datepicker">
+					<a data-bind="text: displayDate" class="formatted-date-text"></a>
+					<a href="#Schedule/MobileMonth/" class="mobile-month-calendar-icon">
+						<i class="glyphicon glyphicon-calendar"></i>
+					</a>
+ 				</li>
+				<li class="mobile-today" data-bind="click: today">
+					<a>
+						<i class="glyphicon glyphicon-home"></i>
 					</a>
 				</li>
 				<li class="mobile-message" data-bind="click: navigateToMessages">
@@ -83,6 +107,7 @@
 					</a>
 				</li>
 			</ul>
+			<!-- /ko -->
 		</div>
 	</div>
 
