@@ -142,6 +142,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulerStateHolder.Schedules[agent].ScheduledDay(period.StartDate.AddDays(9)).PersonAssignment(true).DayOff().Should().Not.Be.Null();
 		}
 
+		[Test]
+		[Ignore("46126 to be fixed")]
+		public void ShouldNotCrashWhenSolvingWeeklyRest()
+		{
+			var firstDay = new DateOnly(2017, 5, 14);
+			var firstDayPreviousWeek = firstDay.AddDays(-6);
+			var dataPeriod = new DateOnlyPeriod(firstDayPreviousWeek, firstDay.AddDays(7));
+			var schedulePeriod = new DateOnlyPeriod(firstDay, firstDay.AddDays(7));
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var activity = new Activity("_").WithId();
+			activity.InWorkTime = true;
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var scenario = new Scenario("_");
+			var weeklyRestToLongToBeFulfilled = TimeSpan.FromHours(48);
+			var workTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(90), TimeSpan.FromHours(8), weeklyRestToLongToBeFulfilled);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_") { WorkTimeDirective = workTimeDirective, EmploymentType = EmploymentType.FixedStaffNormalWorkTime };
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodOneWeek(firstDay);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 10, 10);	
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 8; i++)
+			{
+				var ass = new PersonAssignment(agent, scenario, firstDayPreviousWeek.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
+				asses.Add(ass);
+				if (i==6) ass.SetDayOff(new DayOffTemplate());		
+			}
+			SchedulerStateHolderFrom.Fill(scenario, dataPeriod, new[] { agent }, asses, skillDays);
+			var schedulingOptions = new SchedulingOptions { ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff };
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, schedulePeriod);
+			});
+		}
+
 		public SchedulingDesktopTest(bool resourcePlannerEasierBlockScheduling46155) : base(resourcePlannerEasierBlockScheduling46155)
 		{
 		}
