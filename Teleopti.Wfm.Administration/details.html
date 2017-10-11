@@ -19,7 +19,7 @@
 					<div class="importCaption">Aggregation database:<span class="detail"> {{detailsVm.AggregationDatabase}}</span></div>
 					
 					<div class="form-group">
-						<label class="importCaption" for="commandtimeout">Command timeout</label>
+						<label class="importCaption" for="commandtimeout">Command timeout (in seconds)</label>
 						<input class="form-control" id="commandtimeout" type="number" min="30" max="600" required ng-model="detailsVm.CommandTimeout" placeholder="Command timeout">
 					</div>
 					
@@ -30,7 +30,7 @@
 					</div>
 					
 					<div class="form-group">
-						<label class="importCaption" for="maximumSessionTime">Maximum session timeout for web</label>
+						<label class="importCaption" for="maximumSessionTime">Maximum session timeout for web (in minutes)</label>
 						<input class="form-control" id="maximumSessionTime" type="number" min="1" ng-model="detailsVm.MaximumSessionTime" placeholder="In minutes">
 					</div>
 					
