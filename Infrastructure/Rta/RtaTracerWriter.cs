@@ -2,28 +2,32 @@ using System;
 using System.Data;
 using log4net;
 using log4net.Appender;
+using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class RtaTracerWriter : IRtaTracerWriter, IDisposable
 	{
-		private readonly ILog log = LogManager.GetLogger("Teleopti.RtaTracer");
+		private readonly ILog _log = LogManager.GetLogger("Teleopti.RtaTracer");
+		private readonly IJsonSerializer serializer;
 
-		public RtaTracerWriter(IConnectionStrings connectionStrings, IConfigReader config)
+		public RtaTracerWriter(IConnectionStrings connectionStrings, IConfigReader config, IJsonDeserializer deserializer, IJsonSerializer serializer)
 		{
+			this.serializer = serializer;
 			var appender = new AdoNetAppender()
 			{
 				Name = "RtaTracer",
 				BufferSize = config.ReadValue("RtaTracerBufferSize", 20),
 				ConnectionType = typeof(System.Data.SqlClient.SqlConnection).AssemblyQualifiedName,
 				ConnectionString = connectionStrings.AnalyticsFor("Teleopti.RtaTracer"),
-				CommandText = "INSERT INTO [RtaTracer] ([Time],[Message]) VALUES (@log_date, @message)",
+				CommandText = "INSERT INTO [RtaTracer] ([Time], [MessageType], [Message]) VALUES (@log_date, @messageType, @message)",
 			};
 			appender.AddParameter(new AdoNetAppenderParameter
 			{
@@ -31,13 +35,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				DbType = DbType.DateTime,
 				Layout = new RawTimeStampLayout()
 			});
-			appender.AddParameter(new AdoNetAppenderParameter
+			appender.AddParameter(new ValueFromJsonSerializedMessageParameter(deserializer)
+			{
+				ParameterName = "@messageType",
+				ValueReader = d => d.Type
+			});
+			appender.AddParameter(new ValueFromJsonSerializedMessageParameter(deserializer)
 			{
 				ParameterName = "@message",
-				DbType = DbType.String,
-				Size = 4000,
-				Layout = (IRawLayout) new RawLayoutConverter().ConvertFrom(new PatternLayout("%message"))
+				ValueReader = d => serializer.SerializeObject(d.Log)
 			});
+
 			appender.ActivateOptions();
 
 			logger().AddAppender(appender);
@@ -54,9 +62,30 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return (LogManager.GetLogger("Teleopti.RtaTracer").Logger as Logger);
 		}
 
-		public void Write<T>(RtaTracerLog<T> log2)
+		public void Write<T>(RtaTracerLog<T> log)
 		{
-			log.Debug(log2.Message);
+			_log.Debug(serializer.SerializeObject(new {Log = log, Type = typeof(T).Name}));
+		}
+	}
+
+	public class ValueFromJsonSerializedMessageParameter : AdoNetAppenderParameter
+	{
+		private readonly IJsonDeserializer _deserializer;
+		public Func<dynamic, object> ValueReader;
+		
+		public ValueFromJsonSerializedMessageParameter(IJsonDeserializer deserializer)
+		{
+			_deserializer = deserializer;
+			DbType = DbType.String;
+			Size = int.MaxValue;
+			Layout = (IRawLayout) new RawLayoutConverter().ConvertFrom(new PatternLayout("%message"));
+		}
+
+		public override void FormatValue(IDbCommand command, LoggingEvent loggingEvent)
+		{
+			var serialized = loggingEvent.RenderedMessage;
+			var obj = _deserializer.DeserializeObject<dynamic>(serialized);
+			((IDbDataParameter) command.Parameters[ParameterName]).Value = ValueReader.Invoke(obj);
 		}
 	}
 }
