@@ -37,6 +37,18 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 		subscribed = true;
 	}
 
+	function registerSwipeEvent() {
+		$(".mobile-month-view .pagebody").swipe({
+			swipeLeft: function () {
+				vm.nextMonth();
+			},
+			swipeRight: function () {
+				vm.previousMonth();
+			},
+			preventDefaultEvents: false
+		});
+	}
+
 	function initViewModel() {
 		vm = new Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel(Teleopti.MyTimeWeb.Schedule.MobileMonth);
 		applyBindings();
@@ -65,13 +77,14 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 					Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialDispose);
 			}
 		},
-		PartialInit: function(readyForInteractionCallback, completelyLoadedCallback, ajaxobj, mywindow) {
+		PartialInit: function(readyForInteractionCallback, completelyLoadedCallback, ajaxobj) {
 			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
 			dataService = new Teleopti.MyTimeWeb.Schedule.MobileMonth.DataService(ajax);
 			completelyLoaded = completelyLoadedCallback;
 			initViewModel();
 			fetchData();
-			mywindow = mywindow || window;
+
+			registerSwipeEvent();
 			readyForInteractionCallback && readyForInteractionCallback();
 		},
 		ReloadScheduleListener: function(notification) {

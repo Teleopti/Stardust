@@ -2,6 +2,8 @@
 	var hash = '',
 		ajax,
 		requestSuccessData,
+		fakeMonthData,
+		fakeUserData,
 		fetchMonthDataRequestCount = 0;
 
 	module('Teleopti.MyTimeWeb.Schedule.MobileMonth', {
@@ -14,8 +16,6 @@
 	});
 
 	test('should use short month name', function() {
-		Teleopti.MyTimeWeb.Common.UseJalaaliCalendar = false;
-		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow());
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 
@@ -23,13 +23,37 @@
 	});
 
 	test('should navigate to corresponding date after tapping on a date cell', function() {
-		Teleopti.MyTimeWeb.Common.UseJalaaliCalendar = false;
-		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow());
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		vm.weekViewModels()[0].dayViewModels()[0].navigateToDayView();
 
 		equal(hash, 'Schedule/MobileDay/2017/10/01');
+	});
+
+	test('should navigate to previous month when swiping right', function() {
+		var html = '<div class="mobile-month-view"><div class="pagebody"></div></div>';
+		$('body').append(html);
+
+		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
+
+		$('.mobile-month-view .pagebody').swipe('option').swipeRight();
+
+		equal(vm.selectedDate().format('YYYY-MM-DD'), '2017-09-12');
+		$('.mobile-month-view .pagebody').remove();
+	});
+
+	test('should navigate to next month when swiping left', function(){
+		var html = '<div class="mobile-month-view"><div class="pagebody"></div></div>';
+		$('body').append(html);
+
+		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
+
+		$('.mobile-month-view .pagebody').swipe('option').swipeLeft();
+
+		equal(vm.selectedDate().format('YYYY-MM-DD'), '2017-11-12');
+		$('.mobile-month-view .pagebody').remove();
 	});
 
 	function getDefaultSetting() {
@@ -56,55 +80,73 @@
 	}
 
 	function setup() {
+		initAjax();
 		initContext();
+		Teleopti.MyTimeWeb.Common.UseJalaaliCalendar = false;
+		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow(), ajax);
+	}
 
-		var fakeMonthData = {
-			"ScheduleDays": [{
-				"Date": "2017-10-01T00:00:00",
-				"FixedDate": "2017-10-01",
-				"Absence": null,
-				"IsDayOff": true,
-				"Shift": {
-					"Name": null,
-					"ShortName": null,
-					"Color": null,
-					"TimeSpan": "12:00 PM - 12:00 PM",
-					"WorkingHours": "0:00"
+	function initAjax(){
+		fakeMonthData = {
+			'ScheduleDays': [{
+				'Date': '2017-10-01T00:00:00',
+				'FixedDate': '2017-10-01',
+				'Absence': null,
+				'IsDayOff': true,
+				'Shift': {
+					'Name': null,
+					'ShortName': null,
+					'Color': null,
+					'TimeSpan': '12:00 PM - 12:00 PM',
+					'WorkingHours': '0:00'
 				},
-				"HasOvertime": false,
-				"SeatBookings": []
+				'HasOvertime': false,
+				'SeatBookings': []
 			}],
-			"CurrentDate": "2017-10-12T00:00:00",
-			"FixedDate": "2017-10-12",
-			"DayHeaders": [{
-				"Name": "Sunday",
-				"ShortName": "Sun"
+			'CurrentDate': '2017-10-12T00:00:00',
+			'FixedDate': '2017-10-12',
+			'DayHeaders': [{
+				'Name': 'Sunday',
+				'ShortName': 'Sun'
 			}, {
-				"Name": "Monday",
-				"ShortName": "Mon"
+				'Name': 'Monday',
+				'ShortName': 'Mon'
 			}, {
-				"Name": "Tuesday",
-				"ShortName": "Tue"
+				'Name': 'Tuesday',
+				'ShortName': 'Tue'
 			}, {
-				"Name": "Wednesday",
-				"ShortName": "Wed"
+				'Name': 'Wednesday',
+				'ShortName': 'Wed'
 			}, {
-				"Name": "Thursday",
-				"ShortName": "Thu"
+				'Name': 'Thursday',
+				'ShortName': 'Thu'
 			}, {
-				"Name": "Friday",
-				"ShortName": "Fri"
+				'Name': 'Friday',
+				'ShortName': 'Fri'
 			}, {
-				"Name": "Saturday",
-				"ShortName": "Sat"
+				'Name': 'Saturday',
+				'ShortName': 'Sat'
 			}]
 		};
 
+		fakeUserData = {
+			'BusinessUnitId': '928dd0bc-bf40-412e-b970-9b5e015aadea',
+			'DataSourceName': 'Teleopti WFM',
+			'Url': 'http://localhost:52858/TeleoptiWFM/Web/',
+			'AgentId': '11610fe4-0130-4568-97de-9b5e015b2564'
+		};
+
 		ajax = {
-			Ajax: function (options) {
-				if (options.url === "../api/Schedule/FetchMonthData") {
+			Ajax: function(options) {
+				if (options.url === '../api/Schedule/FetchMonthData') {
 					fetchMonthDataRequestCount++;
+					if (options.data.date) {
+						fakeMonthData.FixedDate = moment(options.data.date).format("YYYY-MM-DD");
+					}
 					options.success(fakeMonthData);
+				}
+				if (options.url === '/UserData/FetchUserData') {
+					options.success(fakeUserData);
 				}
 			}
 		};
