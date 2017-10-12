@@ -604,3 +604,15 @@ item: Execute Program
   Default Directory=%SUPPORTTOOLS_TMP%
   Flags=00000110
 end
+item: If/While Statement
+  Variable=PM_INSTALL_TMP
+  Value=True
+end
+item: Execute Program
+  Pathname=.\Teleopti.Support.Tool.exe
+  Command Line=-PM "%SQL_AUTH_STRING_TMP%;Database=%DB_CCC7_TMP%;"
+  Default Directory=%SUPPORTTOOLS_TMP%
+  Flags=00000110
+end
+item: End Block
+end
