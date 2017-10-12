@@ -113,11 +113,16 @@ namespace Teleopti.Support.Tool.Tool
 				{
 					Command = new ConfigServerCommand(_args.ElementAt(1));
 				}
+
+				if (argument.StartsWith("-PM"))
+				{
+					Command = new SavePmConfigurationCommand(_args.ElementAt(1));
+				}
 			});
 
 		}
 
 	}
 
-
+	
 }

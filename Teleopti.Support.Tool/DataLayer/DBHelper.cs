@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
+using Teleopti.Support.Tool.Tool;
 
 namespace  Teleopti.Support.Tool.DataLayer
 {
@@ -77,6 +78,18 @@ namespace  Teleopti.Support.Tool.DataLayer
 			using (var ds = Execute("select [Key], [Value] from Tenant.ServerConfiguration", builder.InitialCatalog))
 			{
 				return ds.Tables[0].AsEnumerable().ToDictionary(row => row.Field<string>(0), row => row.Field<string>(1));
+			}
+		}
+
+		public void SavePmConfiguration(PmConfiguration pmConfiguration)
+		{
+			var builder = new SqlConnectionStringBuilder(ConnectionString);
+			using (Execute($"Update [Tenant].[ServerConfiguration] Set [Value] = '{pmConfiguration.AS_DATABASE}' where [Key] = 'AS_DATABASE'", builder.InitialCatalog))
+			using (Execute($"Update [Tenant].[ServerConfiguration] Set [Value] = '{pmConfiguration.AS_SERVER_NAME}' where [Key] = 'AS_SERVER_NAME'", builder.InitialCatalog))
+			using (Execute($"Update [Tenant].[ServerConfiguration] Set [Value] = '{pmConfiguration.ETLPM_BINDING_NAME}' where [Key] = 'ETLPM_BINDING_NAME'", builder.InitialCatalog))
+			using (Execute($"Update [Tenant].[ServerConfiguration] Set [Value] = '{pmConfiguration.PM_INSTALL}' where [Key] = 'PM_INSTALL'", builder.InitialCatalog))
+			using (Execute($"Update [Tenant].[ServerConfiguration] Set [Value] = '{pmConfiguration.PM_SERVICE}' where [Key] = 'PM_SERVICE'", builder.InitialCatalog))
+			{
 			}
 		}
 
@@ -403,5 +416,6 @@ namespace  Teleopti.Support.Tool.DataLayer
             // ReSharper restore PossibleNullReferenceException
         }
 
+	    
     }
 }
