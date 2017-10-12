@@ -47,6 +47,10 @@
 				},
 				templateUrl: 'app/teamSchedule/html/weekViewSchedule.html',
 				controller: 'TeamScheduleWeeklyController as vm'
+			}).state('teams.exportSchedule',
+			{
+				url: '/exportSchedule',
+				templateUrl: 'app/teamSchedule/html/exportSchedule.html'
 			});
 	}
 })();

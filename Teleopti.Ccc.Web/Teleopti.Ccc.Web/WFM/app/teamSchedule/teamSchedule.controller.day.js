@@ -134,6 +134,10 @@
 			$mdSidenav(settingsContainerId).toggle();
 		};
 
+		vm.openExportPanel = function () {
+			$state.go('teams.exportSchedule');
+		}
+
 		vm.commonCommandCallback = function(trackId, personIds) {
 			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
 

@@ -54,7 +54,7 @@
 		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)"></timezone-picker>
 
 		<div class="wfm-switch" ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
-			<input type="checkbox" id="switchStaffing" ng-model="vm.staffingEnabled"/>
+			<input type="checkbox" id="switchStaffing" ng-model="vm.staffingEnabled" />
 			<label for="switchStaffing">
 				<span class="wfm-switch-label" translate>ShowStaffing</span>
 				<span class="wfm-switch-toggle"></span>
@@ -81,7 +81,12 @@
 
 				</label>
 			</div>
-			<span class="settings-container inline-block cursor-pointer" ng-click="vm.openSettingsPanel()">
+
+			<span class="icon-container inline-block cursor-pointer" ng-if="vm.toggles.WfmTeamSchedule_ExportSchedulesToExcel_45795" ng-click="vm.openExportPanel()">
+				<i class="mdi mdi-file-excel"></i>
+			</span>
+
+			<span class="icon-container inline-block cursor-pointer" ng-click="vm.openSettingsPanel()">
 				<i class="mdi mdi-settings"></i>
 			</span>
 
@@ -139,7 +144,7 @@
 		</div>
 	</div>
 
-	<staffing-info ng-if="vm.staffingEnabled" selected-date="vm.scheduleDate" ></staffing-info>
+	<staffing-info ng-if="vm.staffingEnabled" selected-date="vm.scheduleDate"></staffing-info>
 
-	
+
 </div>
