@@ -1,53 +1,69 @@
 ﻿<div>
 	<h5>Export Schedule</h5>
-	<table class="wfm-table">
-		<tbody>
-			<tr>
-				<td>{{'From' | translate}}</td>
-				<td>
-					<md-datepicker ng-model="vm.configuration.startDate" md-placeholder="{{'From' | translate}}"></md-datepicker>
-				</td>
-			</tr>
-			<tr>
-				<td>{{'To' | translate}}</td>
-				<td>
-					<md-datepicker ng-model="vm.configuration.endDate" md-placeholder="{{'To' | translate}}"></md-datepicker>
-				</td>
-			</tr>
-			<tr>
-				<td>{{'Groups' | translate}}</td>
-				<td>
-					<group-page-picker   group-pages="vm.availableGroups"
-									   class="group-picker-container inline-block"
-									   selected-groups="vm.configuration.selectedGroups"></group-page-picker>
-				</td>
-			</tr>
-			<tr>
-				<td>{{'Scenario' | translate}}</td>
-				<td>
-					<md-select ng-model="vm.configuration.scenarioId" placeholder="{{ 'Scenario'|translate }}">
-						<md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario.Id">{{::scenario.Name}}</md-option>
-					</md-select>
-				</td>
-			</tr>
-			
-			<tr>
-				<td>{{'Timezone' | translate}}</td>
-				<td>
-					<md-select ng-model="vm.configuration.timezoneId" placeholder="{{ 'Timezone'|translate }}">
-						<md-option ng-repeat="timezone in vm.timezones" ng-value="timezone.Id">{{::timezone.Name}}</md-option>
-					</md-select>
-				</td>
-			</tr>
-			<tr>
-				<td>{{'OptionalColumns' | translate}}</td>
-				<td>
-					<md-select multiple ng-model="vm.configuration.optionalColumnId" placeholder="{{ 'OptionalColumns'|translate }}">
-						<md-option ng-repeat="optionalColumn in vm.optionalColumns" ng-value="optionalColumn.Id">{{::optionalColumn.Name}}</md-option>
-					</md-select>
-				</td>
-			</tr>
+	<form>
+		<table class="wfm-table">
+			<tbody>
+				<tr>
+					<td>{{'From' | translate}}</td>
+					<td>
+						<md-datepicker ng-model="vm.configuration.startDate" md-placeholder="{{'From' | translate}}" required md-min-date="vm.maxStartDate" md-max-date="vm.configuration.endDate"></md-datepicker>
+					</td>
+				</tr>
+				<tr>
+					<td>{{'To' | translate}}</td>
+					<td>
+						<md-datepicker ng-model="vm.configuration.endDate" md-placeholder="{{'To' | translate}}" md-min-date="vm.configuration.startDate" md-max-date="vm.maxEndDate" required></md-datepicker>
+					</td>
+				</tr>
+				<tr>
+					<td>{{'Groups' | translate}}</td>
+					<td>
+						<group-page-picker group-pages="vm.availableGroups"
+										   class="group-picker-container inline-block"
+										   selected-groups="vm.configuration.selectedGroups" required></group-page-picker>
+					</td>
+				</tr>
+				<tr>
+					<td>{{'Scenario' | translate}}</td>
+					<td>
+						<md-select ng-model="vm.configuration.scenarioId" placeholder="{{ 'Scenario'|translate }}" required>
+							<md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario.Id">{{::scenario.Name}}</md-option>
+						</md-select>
+					</td>
+				</tr>
 
-		</tbody>
-	</table>
+				<tr>
+					<td>{{'Timezone' | translate}}</td>
+					<td>
+						<md-select ng-model="vm.configuration.timezoneId" placeholder="{{ 'Timezone'|translate }}" required>
+							<md-option ng-repeat="timezone in vm.timezones" ng-value="timezone.Id">{{::timezone.Name}}</md-option>
+						</md-select>
+					</td>
+				</tr>
+				<tr>
+					<td>{{'OptionalColumns' | translate}}</td>
+					<td>
+						<md-select multiple ng-model="vm.configuration.optionalColumnId" placeholder="{{ 'OptionalColumns'|translate }}">
+							<md-option ng-repeat="optionalColumn in vm.optionalColumns" ng-value="optionalColumn.Id">{{::optionalColumn.Name}}</md-option>
+						</md-select>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+		<div class="footer">
+			<div class="right">
+				<button type="button" class="wfm-btn wfm-btn-invis-default"
+						ng-click="vm.gotoDayView()">
+					{{ 'Cancel'|translate }}
+				</button>
+				<button class="wfm-btn"
+						ng-class="{'wfm-btn-invis-primary': !$ctrl.invalidFile(), 'wfm-btn-invis-disabled': $ctrl.invalidFile()}"
+						ng-disabled="$ctrl.invalidFile()"
+						ng-click="vm.startExport()">
+					{{ 'Start'|translate }}
+				</button>
+			</div>
+		</div>
+	</form>
 </div>

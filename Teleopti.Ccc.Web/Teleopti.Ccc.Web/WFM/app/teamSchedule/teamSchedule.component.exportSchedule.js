@@ -9,10 +9,7 @@
 	TeamsExportScheduleCtrl.$inject = ['groupPageService', 'exportScheduleService'];
 	function TeamsExportScheduleCtrl(groupPageService, exportScheduleService) {
 		var vm = this;
-		vm.configuration = {
-			startDate: new Date(),
-			endDate: new Date()
-		};
+		vm.configuration = {};
 		vm.scenarios = [];
 		vm.optionalColumns = [];
 		vm.availableGroups = { BusinessHierarchy: [], GroupPages: [] };
@@ -21,6 +18,32 @@
 			groupIds: [],
 			groupPageId: ''
 		};
+
+		vm.maxEndDate = moment(new Date()).add(31, 'days').toDate();
+		vm.maxStartDate = moment(new Date()).add(-31, 'days').toDate();
+		var startDate = new Date();
+		var endDate = new Date();
+		Object.defineProperty(vm.configuration, 'startDate',
+			{
+				get: function () {
+					return startDate;
+				},
+				set: function (value) {
+					startDate = value;
+					vm.maxEndDate = moment(startDate).add(31, 'days').toDate();
+				}
+			});
+
+		Object.defineProperty(vm.configuration, 'endDate',
+			{
+				get: function () {
+					return endDate;
+				},
+				set: function (value) {
+					endDate = value;
+					vm.maxStartDate = moment(endDate).add(-31, 'days').toDate();
+				}
+			});
 
 		vm.getGroupPagesAsync = function () {
 			var startDate = moment(vm.configuration.startDate).format('YYYY-MM-DD');
@@ -51,6 +74,11 @@
 				vm.optionalColumns = data;
 			});
 		}
+
+		vm.gotoDayView = function () {
+
+		}
+		vm.startExport = function () { }
 
 		vm.$onInit = function () {
 			vm.getGroupPagesAsync();
