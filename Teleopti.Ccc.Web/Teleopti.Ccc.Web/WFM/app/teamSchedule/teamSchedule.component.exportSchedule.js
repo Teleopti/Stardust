@@ -6,21 +6,26 @@
 		controllerAs: 'vm'
 	});
 
-	TeamsExportScheduleCtrl.$inject = ['groupPageService','exportScheduleService'];
-	function TeamsExportScheduleCtrl( groupPageService, exportScheduleService) {
+	TeamsExportScheduleCtrl.$inject = ['groupPageService', 'exportScheduleService'];
+	function TeamsExportScheduleCtrl(groupPageService, exportScheduleService) {
 		var vm = this;
-		vm.configuration = {};
+		vm.configuration = {
+			startDate: new Date(),
+			endDate: new Date()
+		};
 		vm.scenarios = [];
-		vm.availableGroups = {BusinessHierarchy:[],GroupPages:[]};
+		vm.optionalColumns = [];
+		vm.availableGroups = { BusinessHierarchy: [], GroupPages: [] };
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],
 			groupPageId: ''
 		};
 
-		vm.getGroupPagesAsync = function (date) {
-			var dateStr = moment(date).format('YYYY-MM-DD');
-			groupPageService.fetchAvailableGroupPages(dateStr, dateStr).then(function (data) {
+		vm.getGroupPagesAsync = function () {
+			var startDate = moment(vm.configuration.startDate).format('YYYY-MM-DD');
+			var endDate = moment(vm.configuration.endDate).format('YYYY-MM-DD');
+			groupPageService.fetchAvailableGroupPages(startDate, endDate).then(function (data) {
 				vm.availableGroups = data;
 			});
 		};
@@ -28,12 +33,30 @@
 		vm.getScenariosAsync = function () {
 			exportScheduleService.getScenarioData().then(function (data) {
 				vm.scenarios = data;
+				if (!!data.length) {
+					vm.configuration.scenarioId = data[0].Id;
+				}
 			});
 		};
-		
+
+		vm.getTimezonesAsync = function () {
+			exportScheduleService.getTimezonesData().then(function (data) {
+				vm.timezones = data.Timezones;
+				vm.configuration.timezoneId = data.DefaultTimezone;
+			});
+		}
+
+		vm.getOptionalColumnsAsync = function () {
+			exportScheduleService.getOptionalColumnsData().then(function (data) {
+				vm.optionalColumns = data;
+			});
+		}
+
 		vm.$onInit = function () {
-			vm.getGroupPagesAsync(new Date());
+			vm.getGroupPagesAsync();
 			vm.getScenariosAsync();
+			vm.getTimezonesAsync();
+			vm.getOptionalColumnsAsync();
 		}
 	}
 })(angular);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IToggleManager _toggleManager;
 		private readonly SkillViewModelBuilder _skillBuilder;
 		private readonly IScenarioRepository _scenarioRepository;
+		private readonly IOptionalColumnRepository _optionalColumnRepository;
 
 		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider,
 			IScheduleValidationProvider validationProvider,
@@ -35,7 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			ITeamsProvider teamProvider,
 			IToggleManager toggleManager,
 			SkillViewModelBuilder skillBuilder,
-			IScenarioRepository scenarioRepository)
+			IScenarioRepository scenarioRepository,
+			IOptionalColumnRepository optionalColumnRepository)
 		{
 			_teamScheduleDataProvider = teamScheduleDataProvider;
 			_validationProvider = validationProvider;
@@ -44,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_toggleManager = toggleManager;
 			_skillBuilder = skillBuilder;
 			_scenarioRepository = scenarioRepository;
+			_optionalColumnRepository = optionalColumnRepository;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchActivities")]
@@ -140,6 +144,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual IHttpActionResult GetAllScenarios()
 		{
 			return Ok(_scenarioRepository.FindAllSorted().Select(sc => new { sc.Id, sc.Description.Name }));
+		}
+
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/OptionalColumns")]
+		public virtual IHttpActionResult GetAllOptionalColumns()
+		{
+			return Ok(_optionalColumnRepository.GetOptionalColumns<Person>().Select(oc => new { oc.Id, oc.Name}));
 		}
 	}
 

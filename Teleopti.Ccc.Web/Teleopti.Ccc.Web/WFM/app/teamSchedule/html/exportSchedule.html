@@ -3,6 +3,18 @@
 	<table class="wfm-table">
 		<tbody>
 			<tr>
+				<td>{{'From' | translate}}</td>
+				<td>
+					<md-datepicker ng-model="vm.configuration.startDate" md-placeholder="{{'From' | translate}}"></md-datepicker>
+				</td>
+			</tr>
+			<tr>
+				<td>{{'To' | translate}}</td>
+				<td>
+					<md-datepicker ng-model="vm.configuration.endDate" md-placeholder="{{'To' | translate}}"></md-datepicker>
+				</td>
+			</tr>
+			<tr>
 				<td>{{'Groups' | translate}}</td>
 				<td>
 					<group-page-picker   group-pages="vm.availableGroups"
@@ -18,6 +30,24 @@
 					</md-select>
 				</td>
 			</tr>
+			
+			<tr>
+				<td>{{'Timezone' | translate}}</td>
+				<td>
+					<md-select ng-model="vm.configuration.timezoneId" placeholder="{{ 'Timezone'|translate }}">
+						<md-option ng-repeat="timezone in vm.timezones" ng-value="timezone.Id">{{::timezone.Name}}</md-option>
+					</md-select>
+				</td>
+			</tr>
+			<tr>
+				<td>{{'OptionalColumns' | translate}}</td>
+				<td>
+					<md-select multiple ng-model="vm.configuration.optionalColumnId" placeholder="{{ 'OptionalColumns'|translate }}">
+						<md-option ng-repeat="optionalColumn in vm.optionalColumns" ng-value="optionalColumn.Id">{{::optionalColumn.Name}}</md-option>
+					</md-select>
+				</td>
+			</tr>
+
 		</tbody>
 	</table>
 </div>
