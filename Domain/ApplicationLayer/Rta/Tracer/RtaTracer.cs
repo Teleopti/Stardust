@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using NPOI.SS.Formula.Functions;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 {
@@ -14,12 +13,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		private readonly IKeyValueStorePersister _keyValues;
 		private readonly string _process;
 		private readonly INow _now;
+		private readonly WithReadModelUnitOfWork _readModelUnitOfWork;
 
-		public RtaTracer(IRtaTracerWriter writer, IKeyValueStorePersister keyValues, INow now)
+		public RtaTracer(IRtaTracerWriter writer, IKeyValueStorePersister keyValues, INow now, WithReadModelUnitOfWork readModelUnitOfWork)
 		{
 			_writer = writer;
 			_keyValues = keyValues;
 			_now = now;
+			_readModelUnitOfWork = readModelUnitOfWork;
 			_process = ProcessName();
 		}
 
@@ -33,12 +34,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public void Trace(string usercode)
 		{
-			_keyValues.Update("RtaTracerUserCode", usercode);
+			_readModelUnitOfWork.Do(() => _keyValues.Update("RtaTracerUserCode", usercode));
 		}
 
 		public void Stop()
 		{
-			_keyValues.Delete("RtaTracerUserCode");
+			_readModelUnitOfWork.Do(() => _keyValues.Delete("RtaTracerUserCode"));
 		}
 
 		public void ProcessReceived()
@@ -63,9 +64,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public StateTraceLog StateReceived(string userCode, string stateCode)
 		{
-			var tracedUserCode = _keyValues.Get("RtaTracerUserCode");
+			var tracedUserCode = _readModelUnitOfWork.Get(() => _keyValues.Get("RtaTracerUserCode"));
 			if (tracedUserCode == null || !tracedUserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase))
 				return null;
+
 			var trace = new StateTraceLog
 			{
 				Id = Guid.NewGuid(),
