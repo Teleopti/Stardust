@@ -222,33 +222,35 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			
 		}
 		
-		[Test]
-		public void ShouldRespectStartTimeTolerance_TakeShiftWithinToleranceShiftCategoryPreference()
+		[TestCase(1, ExpectedResult = false)]
+		[TestCase(2, ExpectedResult = true)]
+		public bool ShouldRespectStartTimeTolerance_TakeShiftWithinToleranceShiftCategoryPreference(int breakByMaxHours)
 		{
 			if(_resourcePlanner_BreakPreferenceStartTimeByMax_46002 == BreakPreferenceStartTimeByMax.DoNotConsiderBreakPreferenceStartTimeByMax) Assert.Ignore();
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
+			var shiftCategoryPrefered = new ShiftCategory("_").WithId();
 			var dateOnly = new DateOnly(2010, 1, 1);
-			var ruleSetInsideTolerance = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(17, 0, 18, 0, 15), shiftCategory));
-			var ruleSetOutsideTolerance = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(11, 0, 11, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), new ShiftCategory("_").WithId()));
-			var ruleSetBag = new RuleSetBag(ruleSetInsideTolerance, ruleSetOutsideTolerance);	
-			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var intervalDemands = new List<Tuple<int, TimeSpan>>{new Tuple<int, TimeSpan>(17,TimeSpan.FromMinutes(360)), new Tuple<int, TimeSpan>(18, TimeSpan.FromMinutes(360))};	
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(11, 0, 11, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategoryPrefered));
+			var ruleSetBag = new RuleSetBag(ruleSet1, ruleSet2);	
+			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();	
+			var intervalDemands = new List<Tuple<int, TimeSpan>>{new Tuple<int, TimeSpan>(9, TimeSpan.FromMinutes(360))};
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), intervalDemands);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneWeek(dateOnly);
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17));
-			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = shiftCategory};
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategoryPrefered).WithLayer(phoneActivity, new TimePeriod(11, 20));
+			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = shiftCategoryPrefered};
 			var preferenceDay = new PreferenceDay(agent, dateOnly, preferenceRestriction);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
 			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optimizationPreferences.General.UsePreferences = true;
 			optimizationPreferences.General.PreferencesValue = 0d;
-			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60);
+			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromHours(breakByMaxHours);
 
 			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
 
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(9);
+			return stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Equals(9);
 		}
 		
 		[Test]

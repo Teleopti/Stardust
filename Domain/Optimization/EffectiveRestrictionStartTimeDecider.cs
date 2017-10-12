@@ -41,8 +41,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private static bool jumpOutEarly(SchedulingOptions schedulingOptions, IPreferenceRestriction restriction)
 		{
+
 			return !schedulingOptions.BreakPreferenceStartTimeByMaxIsActive || schedulingOptions.BreakPreferenceStartTimeByMax == TimeSpan.Zero || 
-				   !schedulingOptions.IsClassic() || restriction == null || !restriction.StartTimeLimitation.HasValue();
+				   !schedulingOptions.IsClassic() || restriction == null || !restriction.StartTimeLimitation.HasValue() && restriction.ShiftCategory == null;
 		}
 	}
 	
