@@ -56,6 +56,28 @@
 		$('.mobile-month-view .pagebody').remove();
 	});
 
+	test('should reload data when schedules change within period', function(){
+		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
+		fetchMonthDataRequestCount = 0;
+		Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener({
+			StartDate: '2017-10-01T00:00:00',
+			EndDate: '2017-10-02T00:00:00'
+		});
+
+		equal(fetchMonthDataRequestCount, 1);
+	});
+
+	test('should not reload data when schedules change outside period', function(){
+		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
+		fetchMonthDataRequestCount = 0;
+		Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener({
+			StartDate: '2017-10-08T00:00:00',
+			EndDate: '2017-10-09T00:00:00'
+		});
+
+		equal(fetchMonthDataRequestCount, 0);
+	});
+
 	function getDefaultSetting() {
 		return {
 			defaultNavigation: '/',
@@ -80,6 +102,7 @@
 	}
 
 	function setup() {
+		fetchMonthDataRequestCount = 0;
 		initAjax();
 		initContext();
 		Teleopti.MyTimeWeb.Common.UseJalaaliCalendar = false;
@@ -102,6 +125,90 @@
 				},
 				'HasOvertime': false,
 				'SeatBookings': []
+			}, {
+				"Date": "2017-10-02T00:00:00",
+				"FixedDate": "2017-10-02",
+				"Absence": null,
+				"IsDayOff": false,
+				"Shift": {
+					"Name": "Early",
+					"ShortName": "AM",
+					"Color": "rgb(128,255,128)",
+					"TimeSpan": "8:30 AM - 5:30 PM",
+					"WorkingHours": "8:00"
+				},
+				"HasOvertime": false,
+				"SeatBookings": []
+			}, {
+				"Date": "2017-10-03T00:00:00",
+				"FixedDate": "2017-10-03",
+				"Absence": null,
+				"IsDayOff": false,
+				"Shift": {
+					"Name": "Early",
+					"ShortName": "AM",
+					"Color": "rgb(128,255,128)",
+					"TimeSpan": "8:00 AM - 5:00 PM",
+					"WorkingHours": "8:00"
+				},
+				"HasOvertime": false,
+				"SeatBookings": []
+			}, {
+				"Date": "2017-10-04T00:00:00",
+				"FixedDate": "2017-10-04",
+				"Absence": null,
+				"IsDayOff": false,
+				"Shift": {
+					"Name": "Early",
+					"ShortName": "AM",
+					"Color": "rgb(128,255,128)",
+					"TimeSpan": "8:00 AM - 5:00 PM",
+					"WorkingHours": "8:00"
+				},
+				"HasOvertime": false,
+				"SeatBookings": []
+			}, {
+				"Date": "2017-10-05T00:00:00",
+				"FixedDate": "2017-10-05",
+				"Absence": null,
+				"IsDayOff": false,
+				"Shift": {
+					"Name": "Day",
+					"ShortName": "DY",
+					"Color": "rgb(255,192,128)",
+					"TimeSpan": "10:00 AM - 7:00 PM",
+					"WorkingHours": "8:00"
+				},
+				"HasOvertime": false,
+				"SeatBookings": []
+			}, {
+				"Date": "2017-10-06T00:00:00",
+				"FixedDate": "2017-10-06",
+				"Absence": null,
+				"IsDayOff": false,
+				"Shift": {
+					"Name": "Day",
+					"ShortName": "DY",
+					"Color": "rgb(255,192,128)",
+					"TimeSpan": "10:00 AM - 7:00 PM",
+					"WorkingHours": "8:00"
+				},
+				"HasOvertime": false,
+				"SeatBookings": []
+			}, {
+				"Date": "2017-10-07T00:00:00",
+				"FixedDate": "2017-10-07",
+				"Absence": null,
+				"IsDayOff": true,
+				"Shift": {
+					"Name": null,
+					"ShortName": null,
+					"Color": null,
+					"TimeSpan": "12:00 PM - 12:00 PM",
+					"WorkingHours": "0:00"
+				},
+				"HasOvertime": false,
+				"SeatBookings": []
 			}],
 			'CurrentDate': '2017-10-12T00:00:00',
 			'FixedDate': '2017-10-12',

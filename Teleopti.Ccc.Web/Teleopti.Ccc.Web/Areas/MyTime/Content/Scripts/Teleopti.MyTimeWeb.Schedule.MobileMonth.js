@@ -30,7 +30,7 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 
 	function subscribeForChanges() {
 		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
-			successCallback: Teleopti.MyTimeWeb.Schedule.MobileStartDay.ReloadScheduleListener,
+			successCallback: Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener,
 			domainType: "IScheduleChangedInDefaultScenario",
 			page: "Teleopti.MyTimeWeb.Schedule"
 		});
@@ -92,7 +92,10 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
 			var selectedDate = vm.selectedDate().toDate();
 
-			if (messageStartDate <= selectedDate && messageEndDate >= selectedDate) {
+			var weekViewModels = vm.weekViewModels();
+			var periodStartDateMoment = moment(weekViewModels[0].dayViewModels()[0].date);
+			var periodEndDateMoment = moment(weekViewModels[weekViewModels.length -1].dayViewModels()[6].date);
+			if (periodStartDateMoment <= moment(messageStartDate) && moment(messageEndDate) <= periodEndDateMoment) {
 				fetchData();
 			}
 		},
