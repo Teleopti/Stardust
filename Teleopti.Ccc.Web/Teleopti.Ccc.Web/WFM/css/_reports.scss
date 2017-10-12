@@ -1,4 +1,4 @@
-﻿.wfm-reports {
+.wfm-reports {
 	.people-search-input {
 		display: inline-block;
 		padding-top: 10px;
@@ -33,25 +33,59 @@
 		table tr {
 			height: 30px;
 		}
-		table td.bronze{
-			background-image: url(../app/reports/images/bronze.png);
-			background-repeat: no-repeat;
-			background-position:center;
-		}
-		td.silver{
-			background-image: url(../app/reports/images/silver.png);
-			background-repeat: no-repeat;
-			background-position:center;
-		}
-		td.gold{
-			background-image: url(../app/reports/images/gold.png);
-			background-repeat: no-repeat;
-			background-position:center;
-		}
 		table td.agent-badge-num {
 			width: 10%;
 			text-align: center;
 		}
+
+		.agent-star{
+			position: relative;
+			outline: none!important;
+			top: 7px;
+			z-index: 2;
+		}
+		.agent-star:before{
+			transform-origin: top;
+			font-size: 200%!important;
+		}
+		.agent-star:after{
+			content:'';
+			height: 20px;
+			background: $blue-500;
+			left: 5px;
+			right: 5px;
+			top: -25px;
+			position: absolute;
+			z-index: -1;
+			clip-path: polygon(50% 0%, 100% 0, 100% 75%, 50% 100%, 0% 75%, 0 0);
+			border-left: 5px solid $green-300;
+			border-right: 5px solid $green-300;
+		}
+		.agent-star:focus:before{
+			animation-name: swing;
+	    animation-duration: 2s;
+			animation-timing-function: cubic-bezier(.5,0,.5,1);
+		}
+
+		@keyframes swing {
+		    0%   {transform: rotate(0deg);}
+		    20%  {transform: rotate(-10deg);}
+		    40%  {transform: rotate(10deg);}
+				60%  {transform: rotate(-3deg);}
+				80%  {transform: rotate(3deg);}
+		    100% {transform: rotate(0deg);}
+		}
+
+		.gold{
+			color: #ffda00;
+		}
+		.silver{
+			color: #cccccc;
+		}
+		.bronze{
+			color: #b56f00;
+		}
+
 		.background-gray {
 			background: $gray-300 !important;
 			-webkit-print-color-adjust: exact;

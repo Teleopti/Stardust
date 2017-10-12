@@ -1,25 +1,25 @@
-﻿<style type="text/css">
-	#materialcontainer.container.content {
-		overflow: visible;
+<style type="text/css">
+#materialcontainer.container.content {
+	overflow: visible;
+}
+
+.wfm-reports.wfm-reports {
+	max-width: none;
+}
+
+#leftsidenav {
+	display: none;
+}
+
+@media print {
+	.layout-container, #materialcontainer {
+		display: block !important;
 	}
 
-	.wfm-reports.wfm-reports {
-		max-width: none;
+	#leftsidenav, #lefttoogle, span.people-search-input {
+		display: none !important;
 	}
-
-	#leftsidenav {
-		display: none;
-	}
-
-	@media print {
-		.layout-container, #materialcontainer {
-			display: block !important;
-		}
-
-		#leftsidenav, #lefttoogle, span.people-search-input {
-			display: none !important;
-		}
-	}
+}
 </style>
 
 <div class="leaderboard-container" ng-click="vm.toggleOffDateRangePickerFn()">
@@ -49,9 +49,15 @@
 						<tr>
 							<td class="agent-badge-header">{{'Rank' | translate}}</td>
 							<td class="agent-badge-header">{{'AgentName' | translate}} </td>
-							<td class="agent-badge-num gold"></td>
-							<td class="agent-badge-num silver"></td>
-							<td class="agent-badge-num bronze"></td>
+							<td class="agent-badge-num">
+								<i tabindex="0" class="mdi mdi-star agent-star gold"></i>
+							</td>
+							<td class="agent-badge-num">
+								<i tabindex="0" class="mdi mdi-star agent-star silver"></i>
+							</td>
+							<td class="agent-badge-num">
+								<i tabindex="0" class="mdi mdi-star agent-star bronze"></i>
+							</td>
 						</tr>
 					</thead>
 
