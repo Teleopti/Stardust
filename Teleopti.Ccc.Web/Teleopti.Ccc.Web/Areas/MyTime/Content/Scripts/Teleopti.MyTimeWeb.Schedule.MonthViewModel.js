@@ -5,150 +5,145 @@
 /// <reference path="~/Content/moment/moment.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 
-if (typeof (Teleopti) === 'undefined') {
+if (typeof(Teleopti) === 'undefined') {
 	Teleopti = {};
 }
-if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+if (typeof(Teleopti.MyTimeWeb) === 'undefined') {
 	Teleopti.MyTimeWeb = {};
 }
-if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
+if (typeof(Teleopti.MyTimeWeb.Schedule) === 'undefined') {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selectedDate) {
-
+Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function(scheduleDate, selectedDate) {
 	var self = this;
+
 	var currentDate = moment(scheduleDate.FixedDate, 'YYYY-MM-DD');
-	this.currentDate = currentDate;
-	this.date = scheduleDate.FixedDate;
+	self.currentDate = currentDate;
+	self.date = scheduleDate.FixedDate;
 
 	if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
-		this.dayOfMonth = currentDate.jDate();
-		this.isOutsideMonth = (selectedDate.jMonth() != currentDate.jMonth());
+		self.dayOfMonth = currentDate.jDate();
+		self.isOutsideMonth = (selectedDate.jMonth() != currentDate.jMonth());
 	} else {
-		this.dayOfMonth = currentDate.date();
-		this.isOutsideMonth = (selectedDate.month() != currentDate.month());
+		self.dayOfMonth = currentDate.date();
+		self.isOutsideMonth = (selectedDate.month() != currentDate.month());
 	}
 
-	this.absenceName = scheduleDate.Absence ? scheduleDate.Absence.Name : null;
-	this.absenceShortName = scheduleDate.Absence ? scheduleDate.Absence.ShortName : null;
-	this.hasAbsence = this.absenceName != null;
-	this.isFullDayAbsence = scheduleDate.Absence ? scheduleDate.Absence.IsFullDayAbsence : null;
-	this.hasOvertime = scheduleDate.HasOvertime;
+	self.absenceName = scheduleDate.Absence ? scheduleDate.Absence.Name : null;
+	self.absenceShortName = scheduleDate.Absence ? scheduleDate.Absence.ShortName : null;
+	self.hasAbsence = self.absenceName != null;
+	self.isFullDayAbsence = scheduleDate.Absence ? scheduleDate.Absence.IsFullDayAbsence : null;
+	self.hasOvertime = scheduleDate.HasOvertime;
 
-	this.hasSeatBooking = scheduleDate.SeatBookings && scheduleDate.SeatBookings.length > 0;
+	self.hasSeatBooking = scheduleDate.SeatBookings && scheduleDate.SeatBookings.length > 0;
 
-	this.seatBookings = scheduleDate.SeatBookings;
+	self.seatBookings = scheduleDate.SeatBookings;
 
-	var getValueOrEmptyString = function (object) {
+	var getValueOrEmptyString = function(object) {
 		return object || '';
-	}
-	
-	var formatSeatBooking = function (seatBooking) {
+	};
 
+	var formatSeatBooking = function(seatBooking) {
 		var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
 
 		var fullSeatName = seatBooking.LocationPath != '' ? seatBooking.LocationPath + '/' : '';
 		fullSeatName += getValueOrEmptyString(seatBooking.LocationPrefix) + seatBooking.SeatName + getValueOrEmptyString(seatBooking.LocationSuffix);
-		
+
 		return bookingText.format(
-				Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.StartDateTime),
-				Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.EndDateTime),
-				fullSeatName
-				);
+			Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.StartDateTime),
+			Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.EndDateTime),
+			fullSeatName
+		);
 	};
 
-	self.seatBookingMessage = ko.computed(function () {
-        var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
+	self.seatBookingMessage = ko.computed(function() {
+		var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 
 		var message = '<div class="seatbooking-tooltip">' +
-            '<span class="tooltip-header">{0}</span><table class="seatbooking-tooltip-table">'.format(userTexts.SeatBookings);
+			'<span class="tooltip-header">{0}</span><table class="seatbooking-tooltip-table">'.format(userTexts.SeatBookings);
 		var messageEnd = '</table></div>';
 
 		if (self.seatBookings != null) {
-			self.seatBookings.forEach(function (seatBooking) {
+			self.seatBookings.forEach(function(seatBooking) {
 				message += formatSeatBooking(seatBooking);
 			});
 		}
 		message += messageEnd;
 
-
 		return message;
-
 	});
 
-	self.seatName =function (seatBooking)
-	{
+	self.seatName = function(seatBooking) {
 		return getValueOrEmptyString(seatBooking.LocationPrefix) + seatBooking.SeatName + getValueOrEmptyString(seatBooking.LocationSuffix);
-		
 	};
 
 	self.navigateToDayView = function() {
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.currentDate.format("YYYY-MM-DD")));
 	};
 
-	this.isDayOff = scheduleDate.IsDayOff;
-
-	this.shiftName = scheduleDate.Shift ? scheduleDate.Shift.Name : null;
-	this.shiftShortName = scheduleDate.Shift ? scheduleDate.Shift.ShortName : null;
-	if(scheduleDate.Shift && scheduleDate.Shift.TimeSpan){
+	self.isDayOff = scheduleDate.IsDayOff;
+	self.shiftName = scheduleDate.Shift ? scheduleDate.Shift.Name : null;
+	self.shiftShortName = scheduleDate.Shift ? scheduleDate.Shift.ShortName : null;
+	if (scheduleDate.Shift && scheduleDate.Shift.TimeSpan) {
 		var tempTimespan = scheduleDate.Shift.TimeSpan.split('-');
 		self.shiftStartTime = tempTimespan[0];
 		self.shiftEndTime = tempTimespan[1];
 	}
-	this.shiftTimeSpan = scheduleDate.Shift ? scheduleDate.Shift.TimeSpan : null;
-	this.shiftWorkingHours = scheduleDate.Shift ? scheduleDate.Shift.WorkingHours : null;
-	this.shiftColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
-	self.absenceColor  = 'rgba(250, 0, 0, .5)';
-	this.hasShift = this.shiftName != null;
-	this.backgroundColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
-	this.shiftTextColor = this.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(this.backgroundColor) : 'black';
+	self.shiftTimeSpan = scheduleDate.Shift ? scheduleDate.Shift.TimeSpan : null;
+	self.shiftWorkingHours = scheduleDate.Shift ? scheduleDate.Shift.WorkingHours : null;
+	self.shiftColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
+	self.absenceColor = 'rgba(250, 0, 0, .5)';
+	self.hasShift = self.shiftName != null;
+	self.backgroundColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
+	self.shiftTextColor = self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black';
 
-	this.isOutsideMonth = (selectedDate.month() != currentDate.month());
-	self.currentDayColor = moment().month() == currentDate.month() && this.dayOfMonth == new Date().getDate() ? 'red' : '';
+	self.isOutsideMonth = (selectedDate.month() != currentDate.month());
+	self.currentDayColor = moment().month() == currentDate.month() && self.dayOfMonth == new Date().getDate() ? 'red' : '';
 };
 
-Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {
+Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function() {
 	this.dayViewModels = ko.observableArray();
 };
 
-Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
+Teleopti.MyTimeWeb.Schedule.MonthViewModel = function() {
 	var self = this;
-	this.weekViewModels = ko.observableArray();
-    this.weekDayNames = ko.observableArray();
 
-	this.selectedDate = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ? moment(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash) : moment());
+	self.weekViewModels = ko.observableArray();
+	self.weekDayNames = ko.observableArray();
 
-	this.formattedSelectedDate = ko.computed(function () {
+	self.selectedDate = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ? moment(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash) : moment());
+
+	self.formattedSelectedDate = ko.computed(function() {
 		return Teleopti.MyTimeWeb.Common.FormatMonth(self.selectedDate());
 	});
 
-	this.nextMonth = function () {
+	self.nextMonth = function() {
 		var date = self.selectedDate().clone();
 		date.add('months', 1);
 		self.selectedDate(date);
 	};
 
-	this.previousMonth = function () {
+	self.previousMonth = function() {
 		var date = self.selectedDate().clone();
 		date.add('months', -1);
 		self.selectedDate(date);
 	};
 
-	self.today = function () {
+	self.today = function() {
 		var probabilityPart = getProbabilityUrlPart();
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + probabilityPart);
 	};
 
-	this.week = function (day) {
+	self.week = function(day) {
 		var d = day.currentDate;
-		if (typeof (d) === 'undefined') {
+		if (typeof(d) === 'undefined') {
 			d = self.selectedDate();
 			d.startOf('month');
 		}
 		var probabilityPart = getProbabilityUrlPart();
-		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')) 
-			+ probabilityPart);
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')) +
+			probabilityPart);
 	};
 
 	function getProbabilityUrlPart() {
@@ -160,13 +155,12 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
 		return probabilityPart;
 	}
 
-	self.month = function () {
+	self.month = function() {
 		var d = self.selectedDate();
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
 	};
 
-	this.readData = function (data) {
-
+	self.readData = function(data) {
 		var useJalaaliCalendar = Teleopti.MyTimeWeb.Common.UseJalaaliCalendar;
 
 		if (useJalaaliCalendar) {
