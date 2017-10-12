@@ -35,15 +35,16 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			JobHelper jobHelper,
 			JobExtractor jobExtractor,
 			Tenants tenants,
-			IBaseConfigurationRepository baseConfigurationRepository)
+			IBaseConfigurationRepository baseConfigurationRepository,
+			PmInfoProvider pmInfoProvider)
 		{
 			_jobHelper = jobHelper;
 			_jobExtractor = jobExtractor;
 			_tenants = tenants;
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
-			_cube = ConfigurationManager.AppSettings["cube"];
-			_pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
+			_cube = pmInfoProvider.Cube();
+			_pmInstallation = pmInfoProvider.PmInstallation();
 		}
 
 		public void Initialize(DateTime serviceStartTime, Action stopService)

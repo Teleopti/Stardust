@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Teleopti.Support.Library.Config;
 using Teleopti.Support.Tool.DataLayer;
 
@@ -39,14 +37,6 @@ namespace Teleopti.Support.Tool.Tool
 				{
 					result.AS_DATABASE = setting.ReplaceWith;
 				}
-				if (setting.SearchFor == $"$({nameof(PmConfiguration.PM_SERVICE)})")
-				{
-					result.PM_SERVICE = setting.ReplaceWith;
-				}
-				if (setting.SearchFor == $"$({nameof(PmConfiguration.ETLPM_BINDING_NAME)})")
-				{
-					result.ETLPM_BINDING_NAME = setting.ReplaceWith;
-				}
 			}
 			return result;
 		}
@@ -57,8 +47,6 @@ namespace Teleopti.Support.Tool.Tool
 		public bool PM_INSTALL { get; set; }
 		public string AS_SERVER_NAME { get; set; }
 		public string AS_DATABASE { get; set; }
-		public string PM_SERVICE { get; set; }
-		public string ETLPM_BINDING_NAME { get; set; }
 	}
 
 	public class ConfigServerCommand : ISupportCommand

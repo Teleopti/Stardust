@@ -86,9 +86,7 @@ namespace  Teleopti.Support.Tool.DataLayer
 			var builder = new SqlConnectionStringBuilder(ConnectionString);
 			using (Execute($"Update [Tenant].[ServerConfiguration] Set [Value] = '{pmConfiguration.AS_DATABASE}' where [Key] = 'AS_DATABASE'", builder.InitialCatalog))
 			using (Execute($"Update [Tenant].[ServerConfiguration] Set [Value] = '{pmConfiguration.AS_SERVER_NAME}' where [Key] = 'AS_SERVER_NAME'", builder.InitialCatalog))
-			using (Execute($"Update [Tenant].[ServerConfiguration] Set [Value] = '{pmConfiguration.ETLPM_BINDING_NAME}' where [Key] = 'ETLPM_BINDING_NAME'", builder.InitialCatalog))
 			using (Execute($"Update [Tenant].[ServerConfiguration] Set [Value] = '{pmConfiguration.PM_INSTALL}' where [Key] = 'PM_INSTALL'", builder.InitialCatalog))
-			using (Execute($"Update [Tenant].[ServerConfiguration] Set [Value] = '{pmConfiguration.PM_SERVICE}' where [Key] = 'PM_SERVICE'", builder.InitialCatalog))
 			{
 			}
 		}

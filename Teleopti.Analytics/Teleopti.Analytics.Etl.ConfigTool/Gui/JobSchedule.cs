@@ -5,10 +5,12 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
@@ -61,14 +63,15 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 
 		private void fillJobCombo()
 		{
+			var pmInfoProvider = App.Container.Resolve<PmInfoProvider>();
 			var jobCollection =
 				 new JobCollection(
 					new JobParameters(
 						null, 1,
 						_baseConfiguration.TimeZoneCode,
 						_baseConfiguration.IntervalLength.Value,
-						ConfigurationManager.AppSettings["cube"],
-						ConfigurationManager.AppSettings["pmInstallation"],
+						pmInfoProvider.Cube(),
+						pmInfoProvider.PmInstallation(),
 						CultureInfo.CurrentCulture,
 						new IocContainerHolder(App.Container), 
 						_baseConfiguration.RunIndexMaintenance

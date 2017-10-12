@@ -31,6 +31,7 @@ namespace Teleopti.Analytics.Etl.Common
 		{
 			builder.RegisterType<EtlService>().SingleInstance();
 			builder.RegisterType<EtlJobStarter>().SingleInstance();
+			builder.RegisterType<PmInfoProvider>().SingleInstance();
 			builder.RegisterType<JobExtractor>().SingleInstance();
 			builder.RegisterType<JobHelper>().SingleInstance();
 			builder.RegisterType<Tenants>().SingleInstance();

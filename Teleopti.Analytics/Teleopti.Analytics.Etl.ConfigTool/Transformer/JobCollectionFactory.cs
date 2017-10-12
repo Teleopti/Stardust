@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
-using System.Configuration;
 using System.Globalization;
 using Autofac;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
@@ -28,12 +28,13 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 		{
 			get
 			{
+				var pmInfoProvider = App.Container.Resolve<PmInfoProvider>();
 				var jobParameters = new JobParameters(
 					null, 1,
 					_baseConfiguration.TimeZoneCode,
 					_baseConfiguration.IntervalLength.Value,
-					ConfigurationManager.AppSettings["cube"],
-					ConfigurationManager.AppSettings["pmInstallation"],
+					pmInfoProvider.Cube(),
+					pmInfoProvider.PmInstallation(),
 					CultureInfo.CurrentCulture,
 					new IocContainerHolder(App.Container), 
 					_baseConfiguration.RunIndexMaintenance
