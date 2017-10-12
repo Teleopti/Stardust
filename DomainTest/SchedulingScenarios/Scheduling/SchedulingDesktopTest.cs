@@ -177,8 +177,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#46221 - to be fixed")]
-		public void ShouldConsiderPersonPeriodStartingAfterSelectedPeriodFirstDay()
+		public void ShouldConsiderPersonPeriodsInsideSelectedPeriod()
 		{
 			var firstDay = new DateOnly(2017, 5, 15);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
@@ -196,9 +195,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
 			
-			for (var i = 1; i < 6; i++)
+			for (var i = 0; i < 6; i++)
 			{
-				schedulerStateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(i)).IsScheduled().Should().Be.True();
+				if (i == 0)
+				{
+					schedulerStateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(i)).IsScheduled().Should().Be.False();
+				}
+				else
+				{
+					schedulerStateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(i)).IsScheduled().Should().Be.True();
+				}
 			}
 		}
 
