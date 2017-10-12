@@ -105,6 +105,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
+		public void ShouldLogPreviousTraceWhenStopped()
+		{
+			Target.Trace("usercode");
+			var trace = Target.StateReceived("usercode", "statecode");
+			Target.Stop();
+
+			Target.StateProcessing(trace);
+
+			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain("Processing");
+		}
+		
+		[Test]
 		public void ShouldNotLogWhenUserCodeIsNotMatched()
 		{
 			Target.Trace("usercode");
@@ -288,5 +300,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Logs.ReadOfType<StateTraceLog>().Select(x => x.Log).Should().Contain(trace);
 			Logs.ReadOfType<StateTraceLog>().Select(x => x.Log).Should().Not.Contain(null);
 		}
+		
 	}
 }

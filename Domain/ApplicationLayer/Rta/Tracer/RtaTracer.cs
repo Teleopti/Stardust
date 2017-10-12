@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -37,20 +38,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		public virtual void Stop() => _keyValues.Delete("RtaTracerUserCode");
 
 		[ReadModelUnitOfWork]
-		protected virtual string TracedUserCode() => _keyValues.Get("RtaTracerUserCode");
+		protected virtual string TracedUserCode()
+		{
+			var tracing = _keyValues.Get("RtaTracerUserCode");
+			log(new TracingLog {Tracing = tracing}, "Tracing");
+			return tracing;
+		}
 
-		public void ProcessReceived() => log(new ProcessReceivedLog {RecievedAt = _now.UtcDateTime()}, "Data received at");
-		public void ProcessProcessing() => log(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
-		public void ProcessActivityCheck() => log(new ActivityCheckLog {ActivityCheckAt = _now.UtcDateTime()}, "Activity check at");
+		public void ProcessReceived()
+		{
+			if (shouldTrace())
+				log(new ProcessReceivedLog {RecievedAt = _now.UtcDateTime()}, "Data received at");
+		}
+
+		public void ProcessProcessing()
+		{
+			if (shouldTrace())
+				log(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
+		}
+
+		public void ProcessActivityCheck()
+		{
+			if (shouldTrace())
+				log(new ActivityCheckLog {ActivityCheckAt = _now.UtcDateTime()}, "Activity check at");
+		}
 
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace) => traces.ForEach(trace);
 
 		public StateTraceLog StateReceived(string userCode, string stateCode)
 		{
-			var tracedUserCode = TracedUserCode();
-			if (tracedUserCode == null || !tracedUserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase))
+			if (!shouldTrace(userCode))
 				return null;
-
 			var trace = new StateTraceLog
 			{
 				Id = Guid.NewGuid(),
@@ -68,10 +86,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		public void InvalidUserCode(StateTraceLog trace) => log(trace, "Invalid user code");
 		public void NoChange(StateTraceLog trace) => log(trace, "No change");
 
-		public void StateProcessed(StateTraceLog trace, IEnumerable<IEvent> events)
+		public void StateProcessed(StateTraceLog trace, IEnumerable<IEvent> events) =>
+			new[] {"Processed"}
+				.Concat(events.EmptyIfNull().Select(e => e.GetType().Name))
+				.ForEach(m => log(trace, m));
+
+		private bool shouldTrace() => TracedUserCode() != null;
+
+		private bool shouldTrace(string userCode)
 		{
-			log(trace, "Processed");
-			events.EmptyIfNull().ForEach(e => log(trace, e.GetType().Name));
+			var tracedUserCode = TracedUserCode();
+			if (tracedUserCode == null)
+				return false;
+			return tracedUserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase);
 		}
 
 		private void log<T>(T log, string message)

@@ -275,6 +275,7 @@
     <Compile Include="ApplicationLayer\Rta\Tracer\IRtaTracerWriter.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\NoRtaTracer.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracer.cs" />
+    <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerLog.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\RtaTracerViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteWithOpenHourProvider.cs" />
