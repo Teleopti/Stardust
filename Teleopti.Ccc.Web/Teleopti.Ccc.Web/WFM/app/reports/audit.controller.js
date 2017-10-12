@@ -73,7 +73,7 @@
 			ReportsService.getAuditTrailResult.searching(postObj).$promise.then(function (response) {
 				vm.loading = false;
 				if (response.length < 1) {
-					NoticeService.error($translate.instant('noSearchResults'), 5000, true);
+					NoticeService.warning($translate.instant('noSearchResults'), 5000, true);
 					return;
 				}
 				else {
