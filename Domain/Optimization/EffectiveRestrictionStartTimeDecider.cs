@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IEffectiveRestriction Decide(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IScheduleDay scheduleDay)
 		{
 			var restriction = scheduleDay.PreferenceDay()?.Restriction;
-			if (jumpOutEarly(schedulingOptions, restriction)) 
+			if (jumpOutEarly(schedulingOptions, restriction))
 				return effectiveRestriction;
 
 			var earliestStart = restriction.StartTimeLimitation.StartTime?.Add(-schedulingOptions.BreakPreferenceStartTimeByMax);
@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (latestEnd.HasValue)
 				latestEnd = TimeSpanExtensions.TakeMin(latestEnd, new TimeSpan(23, 59, 59));
-			
+
 			return new EffectiveRestriction(
-				new StartTimeLimitation(earliestStart, latestEnd), 
-				new EndTimeLimitation(), 
-				new WorkTimeLimitation(), 
+				new StartTimeLimitation(earliestStart, latestEnd),
+				new EndTimeLimitation(),
+				new WorkTimeLimitation(),
 				null,
 				null,
 				null,
@@ -42,19 +42,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private static bool jumpOutEarly(SchedulingOptions schedulingOptions, IPreferenceRestriction restriction)
 		{
 
-			return !schedulingOptions.BreakPreferenceStartTimeByMaxIsActive || schedulingOptions.BreakPreferenceStartTimeByMax == TimeSpan.Zero || 
-				   !schedulingOptions.IsClassic() || restriction == null || !restriction.StartTimeLimitation.HasValue() && restriction.ShiftCategory == null;
+			return restriction == null || 
+				!schedulingOptions.BreakPreferenceStartTimeByMaxIsActive ||
+				schedulingOptions.BreakPreferenceStartTimeByMax == TimeSpan.Zero ||
+				(!restriction.StartTimeLimitation.HasValue() && restriction.ShiftCategory == null) ||
+				!schedulingOptions.IsClassic();
 		}
 	}
-	
-	
-	
+
+
+
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002)]
 	public interface IEffectiveRestrictionStartTimeDecider
 	{
 		IEffectiveRestriction Decide(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IScheduleDay scheduleDay);
 	}
-	
+
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002)]
 	public class EffectiveRestrictionStartTimeDeciderOff : IEffectiveRestrictionStartTimeDecider
