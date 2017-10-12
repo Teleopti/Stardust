@@ -22,19 +22,13 @@ namespace Teleopti.Ccc.Domain.Islands
 
 			foreach (var agent in agents)
 			{
-				var personPeriod = agent.Period(period.StartDate);
-				if (personPeriod == null)
-				{
-					var personPeriods = agent.PersonPeriods(period);
-					if(personPeriods.IsEmpty()) continue;		
-					personPeriod = personPeriods.First();
-				}
-				
+				var personPeriod = agent.Period(period.StartDate) ?? agent.Period(period.EndDate);
+
 				var agentsSkills = new HashSet<ISkill>(_personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill));
 				if(!agentsSkills.Any())
 					continue;
 
-				if (skillSets.TryGetValue(agentsSkills, out ISet<IPerson> list))
+				if (skillSets.TryGetValue(agentsSkills, out var list))
 				{
 					list.Add(agent);
 				}
