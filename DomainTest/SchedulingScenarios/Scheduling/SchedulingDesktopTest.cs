@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -174,6 +175,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, schedulePeriod);
 			});
+		}
+		[Test]
+		[Ignore("#46221 - to be fixed")]
+		public void ShouldConsiderPersonPeriodStartingAfterSelectedPeriodFirstDay()
+		{
+			var firstDay = new DateOnly(2017, 5, 15);
+			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(6));
+			var personPeriodFirstDay = firstDay.AddDays(1);
+			var activity = new Activity("_").WithId();
+			var skill = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var contract = new ContractWithMaximumTolerance();
+			var personContract = new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_"));
+			var personPeriod = new PersonPeriod(personPeriodFirstDay, personContract, new Team {Site = new Site("_")}){RuleSetBag = new RuleSetBag(ruleSet)};
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodOneWeek(personPeriodFirstDay);
+			agent.AddPersonPeriod(personPeriod);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 10, 10);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays);
+			var schedulingOptions = new SchedulingOptions { ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff };
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
+
+			for (var i = 1; i < 6; i++)
+			{
+				schedulerStateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(i)).IsScheduled().Should().Be.True();	
+			}
 		}
 
 		public SchedulingDesktopTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155)
