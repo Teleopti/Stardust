@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Islands
 		{
 			if (_skillSets != null)
 				throw new NotSupportedException("Nested virtualSkillGroupResult context.");
-			_skillSets = _createSkillSets.Create(personsInOrganization, period.StartDate);
+			_skillSets = _createSkillSets.Create(personsInOrganization, period);
 			return new GenericDisposable(() => { _skillSets = null; });
 		}
 	}

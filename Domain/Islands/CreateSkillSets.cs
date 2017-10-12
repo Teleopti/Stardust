@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -15,15 +16,20 @@ namespace Teleopti.Ccc.Domain.Islands
 			_personalSkillsProvider = personalSkillsProvider;
 		}
 
-		public SkillSets Create(IEnumerable<IPerson> agents, DateOnly date)
+		public SkillSets Create(IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var skillSets = new Dictionary<ISet<ISkill>, ISet<IPerson>>(new SameSkillSetSkillsComparer());
 
 			foreach (var agent in agents)
 			{
-				var personPeriod = agent.Period(date);
+				var personPeriod = agent.Period(period.StartDate);
 				if (personPeriod == null)
-					continue;
+				{
+					var personPeriods = agent.PersonPeriods(period);
+					if(personPeriods.IsEmpty()) continue;		
+					personPeriod = personPeriods.First();
+				}
+				
 				var agentsSkills = new HashSet<ISkill>(_personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill));
 				if(!agentsSkills.Any())
 					continue;
