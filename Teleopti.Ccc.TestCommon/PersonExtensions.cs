@@ -53,7 +53,12 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return agent.WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), null, skills);
 		}
-		
+
+		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
+		{
+			return agent.WithPersonPeriod(periodStart, new RuleSetBag(ruleSet), new ContractWithMaximumTolerance(), null, skills);
+		}
+
 		public static Person WithPersonPeriod(this Person agent, IRuleSetBag ruleSetBag, params ISkill[] skills)
 		{
 			return agent.WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), null, skills);
@@ -95,7 +100,12 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, IRuleSetBag ruleSetBag, IContract contract, ITeam team, params ISkill[] skills)
 		{
-			var personPeriod = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") });
+			return agent.WithPersonPeriod(DateOnly.MinValue, ruleSetBag, contract, team, skills);
+		}
+
+		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IRuleSetBag ruleSetBag, IContract contract, ITeam team, params ISkill[] skills)
+		{
+			var personPeriod = new PersonPeriod(periodStart, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") });
 			if (skills.Any())
 			{
 				foreach (var skill in skills)
