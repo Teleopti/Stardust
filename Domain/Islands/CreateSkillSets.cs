@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -23,6 +22,8 @@ namespace Teleopti.Ccc.Domain.Islands
 			foreach (var agent in agents)
 			{
 				var personPeriod = agent.Period(period.StartDate) ?? agent.Period(period.EndDate);
+				if (personPeriod == null)
+					continue;
 
 				var agentsSkills = new HashSet<ISkill>(_personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill));
 				if(!agentsSkills.Any())
