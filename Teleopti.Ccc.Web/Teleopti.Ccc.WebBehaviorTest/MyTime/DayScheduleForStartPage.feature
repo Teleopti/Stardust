@@ -58,6 +58,7 @@ Scenario: View day schedule after login
 		| Week day       | Friday            |
 
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
+@OnlyRunIfDisabled('MyTimeWeb_MonthlyScheduleMobileView_45004')
 Scenario: Should view schedule for tomorrow
 	Given I am american
 	And I have a shift with
@@ -73,8 +74,9 @@ Scenario: Should view schedule for tomorrow
 		| Time span      | 9:00 AM - 6:00 PM |
 		| Shift category | Early             |
 		| Week day       | Saturday          |
-	
+
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
+@OnlyRunIfDisabled('MyTimeWeb_MonthlyScheduleMobileView_45004')
 Scenario: Should view schedule for the day before
 	Given I am american
 	And I have a shift with

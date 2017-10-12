@@ -78,6 +78,7 @@ Scenario: Should hide staffing probability
 	Then I should not see the probability in schedule
 
 @OnlyRunIfEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')
+@OnlyRunIfDisabled('MyTimeWeb_MonthlyScheduleMobileView_45004')
 Scenario: Probability setting should be kept when date changed
 	Given tomorrow I have a full day absence
 	When I am viewing mobile view for today
