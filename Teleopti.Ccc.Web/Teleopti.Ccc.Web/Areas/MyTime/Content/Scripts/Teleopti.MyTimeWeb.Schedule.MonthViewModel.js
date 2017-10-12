@@ -83,20 +83,29 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
 		
 	};
 
+	self.navigateToDayView = function() {
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.currentDate.format("YYYY-MM-DD")));
+	};
 
 	this.isDayOff = scheduleDate.IsDayOff;
 
 	this.shiftName = scheduleDate.Shift ? scheduleDate.Shift.Name : null;
 	this.shiftShortName = scheduleDate.Shift ? scheduleDate.Shift.ShortName : null;
+	if(scheduleDate.Shift && scheduleDate.Shift.TimeSpan){
+		var tempTimespan = scheduleDate.Shift.TimeSpan.split('-');
+		self.shiftStartTime = tempTimespan[0];
+		self.shiftEndTime = tempTimespan[1];
+	}
 	this.shiftTimeSpan = scheduleDate.Shift ? scheduleDate.Shift.TimeSpan : null;
 	this.shiftWorkingHours = scheduleDate.Shift ? scheduleDate.Shift.WorkingHours : null;
 	this.shiftColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
+	self.absenceColor  = 'rgba(250, 0, 0, .5)';
 	this.hasShift = this.shiftName != null;
 	this.backgroundColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
 	this.shiftTextColor = this.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(this.backgroundColor) : 'black';
 
 	this.isOutsideMonth = (selectedDate.month() != currentDate.month());
-
+	self.currentDayColor = moment().month() == currentDate.month() && this.dayOfMonth == new Date().getDate() ? 'red' : '';
 };
 
 Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {

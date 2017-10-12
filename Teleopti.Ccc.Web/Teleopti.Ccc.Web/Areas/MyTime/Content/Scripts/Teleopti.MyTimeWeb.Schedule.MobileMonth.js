@@ -20,33 +20,37 @@ if (typeof(Teleopti.MyTimeWeb.Schedule) === "undefined") {
 Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 	var vm,
 		completelyLoaded,
-		currentPage = "Teleopti.MyTimeWeb.Schedule",
+		subscribed = false,
+		dataService,
 		ajax;
 
 	function cleanBinding() {
 		ko.cleanNode($("#page")[0]);
 	};
 
-	function registerUserInfoLoadedCallback() {
-		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
-			$(".moment-datepicker").attr("data-bind",
-				"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'center', autoHide: true, weekStart: " + data.WeekStart + "}");
-
-			initViewModel(data.WeekStart);
-			fetchData();
+	function subscribeForChanges() {
+		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
+			successCallback: Teleopti.MyTimeWeb.Schedule.MobileStartDay.ReloadScheduleListener,
+			domainType: "IScheduleChangedInDefaultScenario",
+			page: "Teleopti.MyTimeWeb.Schedule"
 		});
+		subscribed = true;
 	}
 
-	function initViewModel(weekStart) {
-		vm = new Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel();
+	function initViewModel() {
+		vm = new Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel(Teleopti.MyTimeWeb.Schedule.MobileMonth);
 		applyBindings();
 	}
 
-	function fetchData() { }
+	function fetchData() {
+		dataService.fetchData(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash,
+			fetchDataSuccessCallback);
+	}
 
 	function fetchDataSuccessCallback(data) {
 		vm.readData(data);
 		completelyLoaded && completelyLoaded();
+		if (!subscribed) subscribeForChanges();
 	}
 
 	function applyBindings() {
@@ -63,8 +67,10 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 		},
 		PartialInit: function(readyForInteractionCallback, completelyLoadedCallback, ajaxobj, mywindow) {
 			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
+			dataService = new Teleopti.MyTimeWeb.Schedule.MobileMonth.DataService(ajax);
 			completelyLoaded = completelyLoadedCallback;
-			registerUserInfoLoadedCallback();
+			initViewModel();
+			fetchData();
 			mywindow = mywindow || window;
 			readyForInteractionCallback && readyForInteractionCallback();
 		},
@@ -86,6 +92,10 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 		ReloadSchedule: function(date) {
 			vm.isLoading(true);
 			var requestDate = date || vm.selectedDate();
+			dataService.fetchData(requestDate.format("YYYY/MM/DD"),
+				function (data) {
+					vm.readData(data);
+				});
 		},
 		Ajax: function() {
 			return ajax;

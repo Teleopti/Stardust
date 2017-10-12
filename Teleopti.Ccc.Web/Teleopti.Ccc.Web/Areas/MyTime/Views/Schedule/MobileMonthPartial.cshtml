@@ -2,6 +2,29 @@
 @{
 Layout = null;
 }
+<style>
+	html, body, article#body, section#page, .mobile-month-view {
+		height: 100%;
+		cursor: pointer;
+	}
+	#body-inner{
+		height: calc(100% - 21px);
+	}
+	.pagebody{
+		padding: 0 5px;
+		height: calc(100% - 50px);
+		overflow-y: auto;
+		margin: 0;
+		-webkit-overflow-scrolling: touch;
+	}
+	.tooltip{
+		margin: 0;
+	}
+	.datepicker.dropdown-menu{
+		position: fixed;
+		z-index: 199;
+	}
+</style>
 <div class="mobile-month-view">
 	<div class="navbar navbar-teleopti subnavbar">
 		<div class="container mobile-month-view-nav">
@@ -30,6 +53,96 @@ Layout = null;
 					</a>
 				</li>
 			</ul>
+		</div>
+	</div>
+
+	<div class="container pagebody">
+		<div class="mobile-month-row-fluid mobile-month-row-head clearfix" data-bind="foreach: weekDayNames">
+			<div class="mobile-month-cell mobile-month-weekday-header weekday-shortname" data-bind="text: ShortName"></div>
+		</div>
+		<div class="mobile-month-box clearfix" data-bind="foreach: weekViewModels">
+			<div class="mobile-month-row-fluid clearfix" data-bind="foreach: dayViewModels, css: {'has-overtime-or-absence': $parent.hasAbsenceOrOvertime, 'has-overtime-and-absence': $parent.hasAbsenceAndOvertime}">
+				<div class="mobile-month-cell">
+					<div class="mobile-month-day" data-bind="click: navigateToDayView, css: {'mobile-month-day-outmonth': isOutsideMonth}">
+						<!-- ko if: !hasShift && !isFullDayAbsence && !isDayOff-->
+						<div class="shift"></div>
+						<!-- /ko -->
+						<!-- ko if: hasShift && !isFullDayAbsence -->
+						<div class="shift">
+							<div data-bind="style: {backgroundColor: shiftColor}">
+								<div>
+									<strong data-bind="text: shiftShortName"></strong>
+								</div>
+							</div>
+							<div class="shift-timespan">
+								<span data-bind="text: shiftStartTime"></span>
+								<p> - </p>
+								<span data-bind="text: shiftEndTime"></span>
+							</div>
+							<div class="absence-and-overtime">
+								<!-- ko if: hasAbsence -->
+								<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor}">
+									<strong data-bind="text: absenceShortName"></strong>
+								</div>
+								<!-- /ko -->
+								<!-- ko if: hasOvertime -->
+								<div class="overtime-info-cell">
+									<strong>OT</strong>
+								</div>
+								<!-- /ko -->
+							</div>
+						</div>
+						<!-- /ko -->
+
+						<!-- ko if: isFullDayAbsence -->
+						<div class="shift absence">
+							<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor}">
+								<strong data-bind="text: absenceShortName"></strong>
+							</div>
+
+							<!-- ko if: hasOvertime -->
+							<div class="overtime-info-cell">
+								<strong>OT</strong>
+							</div>
+							<!-- /ko -->
+						</div>
+						<!-- /ko -->
+
+						<!-- ko if: isDayOff && !hasAbsence -->
+						<div class="shift is-day-off">
+							<div class="dayoff-img">
+								<strong>DO</strong>
+							</div>
+							<!-- ko if: hasOvertime -->
+							<div class="overtime-info-cell">
+								<strong>OT</strong>
+							</div>
+							<!-- /ko -->
+						</div>
+						<!-- /ko -->
+
+						<!-- ko if: isDayOff && hasAbsence -->
+						<div class="shift is-day-off">
+							<div class="dayoff-img">
+								<strong>DO</strong>
+							</div>
+							<div class="absence-and-overtime">
+								<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor}">
+									<strong data-bind="text: absenceShortName"></strong>
+								</div>
+								<!-- ko if: hasOvertime -->
+								<div class="overtime-info-cell">
+									<strong>OT</strong>
+								</div>
+								<!-- /ko -->
+							</div>
+						</div>
+						<!-- /ko -->
+
+						<span data-bind="text: dayOfMonth, style: {background: currentDayColor}" class="date-number"></span>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
