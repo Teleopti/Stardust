@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaToolViewModelBuilderFromAgentState>().As<IRtaToolViewModelBuilder>().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_RtaTracer_45597))
-				builder.RegisterType<RtaTracer>().As<IRtaTracer>().SingleInstance();
+				builder.RegisterType<RtaTracer>().As<IRtaTracer>().SingleInstance().ApplyAspects();
 			else
 				builder.RegisterType<NoRtaTracer>().As<IRtaTracer>().SingleInstance();
 			builder.RegisterType<RtaTracerReader>().As<IRtaTracerReader>().SingleInstance();
