@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -25,12 +27,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly ITeamsProvider _teamProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly SkillViewModelBuilder _skillBuilder;
+		private readonly IScenarioRepository _scenarioRepository;
 
 		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider,
 			IScheduleValidationProvider validationProvider,
 			IShiftCategoryProvider shiftCategoryProvider,
-			ITeamsProvider teamProvider, 
-			IToggleManager toggleManager, SkillViewModelBuilder skillBuilder)
+			ITeamsProvider teamProvider,
+			IToggleManager toggleManager,
+			SkillViewModelBuilder skillBuilder,
+			IScenarioRepository scenarioRepository)
 		{
 			_teamScheduleDataProvider = teamScheduleDataProvider;
 			_validationProvider = validationProvider;
@@ -38,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_teamProvider = teamProvider;
 			_toggleManager = toggleManager;
 			_skillBuilder = skillBuilder;
+			_scenarioRepository = scenarioRepository;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchActivities")]
@@ -101,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchPermittedTeamHierachy")]
 		public virtual BusinessUnitWithSitesViewModel FetchPermittedTeamHierachy(DateTime date)
 		{
-			return  _teamProvider.GetPermittedTeamHierachy(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			return _teamProvider.GetPermittedTeamHierachy(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/GetOrganizationWithPeriod")]
@@ -128,6 +134,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual IHttpActionResult GetAllSkills()
 		{
 			return Ok(_skillBuilder.BuildSkillsConnectedWithQueue());
+		}
+
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/Scenarios")]
+		public virtual IHttpActionResult GetAllScenarios()
+		{
+			return Ok(_scenarioRepository.FindAllSorted().Select(sc => new { sc.Id, sc.Description.Name }));
 		}
 	}
 

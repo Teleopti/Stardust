@@ -6,10 +6,11 @@
 		controllerAs: 'vm'
 	});
 
-	TeamsExportScheduleCtrl.$inject = ['$q', 'groupPageService'];
-	function TeamsExportScheduleCtrl($q, groupPageService) {
+	TeamsExportScheduleCtrl.$inject = ['groupPageService','exportScheduleService'];
+	function TeamsExportScheduleCtrl( groupPageService, exportScheduleService) {
 		var vm = this;
-
+		vm.configuration = {};
+		vm.scenarios = [];
 		vm.availableGroups = {BusinessHierarchy:[],GroupPages:[]};
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
@@ -23,9 +24,16 @@
 				vm.availableGroups = data;
 			});
 		};
+
+		vm.getScenariosAsync = function () {
+			exportScheduleService.getScenarioData().then(function (data) {
+				vm.scenarios = data;
+			});
+		};
 		
 		vm.$onInit = function () {
 			vm.getGroupPagesAsync(new Date());
+			vm.getScenariosAsync();
 		}
 	}
 })(angular);

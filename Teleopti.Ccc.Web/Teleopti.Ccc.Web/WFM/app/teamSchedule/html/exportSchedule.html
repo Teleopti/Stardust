@@ -7,13 +7,15 @@
 				<td>
 					<group-page-picker   group-pages="vm.availableGroups"
 									   class="group-picker-container inline-block"
-									   selected-groups="vm.selectedGroups"></group-page-picker>
+									   selected-groups="vm.configuration.selectedGroups"></group-page-picker>
 				</td>
 			</tr>
 			<tr>
 				<td>{{'Scenario' | translate}}</td>
 				<td>
-					
+					<md-select ng-model="vm.configuration.scenarioId" placeholder="{{ 'Scenario'|translate }}">
+						<md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario.Id">{{::scenario.Name}}</md-option>
+					</md-select>
 				</td>
 			</tr>
 		</tbody>
