@@ -69,6 +69,7 @@
 		WfmTeamSchedule_SortRows_45056,
 		WfmTeamSchedule_DisplayAndEditPublicNote_44783,
 		WfmTeamSchedule_ShowStaffingInfo_45206,
+		WfmTeamSchedule_ExportSchedulesToExcel_45795,
 
 		WebByPassDefaultPermissionCheck_37984,
 
