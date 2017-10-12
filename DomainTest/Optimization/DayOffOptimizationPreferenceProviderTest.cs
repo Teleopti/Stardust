@@ -198,15 +198,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			daysOffPreferences.ConsecutiveWorkdaysValue.Should().Be.EqualTo(new MinMax<int>(1, 2));
 			daysOffPreferences.DaysOffPerWeekValue.Should().Be.EqualTo(new MinMax<int>(3, 4));
 			daysOffPreferences.ConsecutiveDaysOffValue.Should().Be.EqualTo(new MinMax<int>(5, 6));
-			daysOffPreferences.FullWeekendsOffValue.Should().Be.EqualTo(new MinMax<int>(7, 8));
-			daysOffPreferences.WeekEndDaysOffValue.Should().Be.EqualTo(new MinMax<int>(9, 10));
+			//daysOffPreferences.FullWeekendsOffValue.Should().Be.EqualTo(new MinMax<int>(7, 8));
+			//daysOffPreferences.WeekEndDaysOffValue.Should().Be.EqualTo(new MinMax<int>(9, 10));
 			daysOffPreferences.UseConsecutiveDaysOff.Should().Be.True();
 			daysOffPreferences.UseConsecutiveWorkdays.Should().Be.True();
 			daysOffPreferences.ConsiderWeekAfter.Should().Be.True();
 			daysOffPreferences.ConsiderWeekBefore.Should().Be.True();
 			daysOffPreferences.UseDaysOffPerWeek.Should().Be.True();
-			daysOffPreferences.UseFullWeekendsOff.Should().Be.True();
-			daysOffPreferences.UseWeekEndDaysOff.Should().Be.True();
+			//daysOffPreferences.UseFullWeekendsOff.Should().Be.True();
+			//daysOffPreferences.UseWeekEndDaysOff.Should().Be.True();
 		}
 	}
 }
