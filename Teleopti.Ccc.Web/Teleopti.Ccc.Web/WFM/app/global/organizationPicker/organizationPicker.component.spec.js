@@ -7,7 +7,7 @@
 
 		inject(function($injector) {
 			$componentController = $injector.get('$componentController');
-			$q = $injector.get('$q');
+			// $q = $injector.get('$q');
 			$compile = $injector.get('$compile');
 			$rootScope = $injector.get('$rootScope');
 			$document = $injector.get('$document');
@@ -88,7 +88,7 @@
 		$rootScope.sitesAndTeams = fakeDatasource().Children;
 		var picker = setupPicker('sites-and-teams="sitesAndTeams"');
 		var target;
-
+		
 		try {
 			target = picker.find('div').scope().$ctrl.groupList;
 		} catch (e) {

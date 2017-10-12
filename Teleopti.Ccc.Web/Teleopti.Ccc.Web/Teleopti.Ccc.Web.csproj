@@ -1413,8 +1413,10 @@
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.min.js" />
-    <Content Include="WFM\app\global\tree-picker\tree.directive.js" />
-    <Content Include="WFM\app\global\tree-picker\tree_data.html" />
+    <Content Include="WFM\app\global\tree-picker\tree.component.js" />
+    <Content Include="WFM\app\global\tree-picker\tree.component.typeOne.spec.js" />
+    <Content Include="WFM\app\global\tree-picker\tree.component.typeTwo.spec.js" />
+    <Content Include="WFM\app\global\tree-picker\tree_data.tpl.html" />
     <Content Include="WFM\app\global\tree-picker\_modules.js" />
     <Content Include="WFM\app\reports\audit.controller.spec.js" />
     <Content Include="WFM\app\forecasting\refact\forecast-chart.component.js" />

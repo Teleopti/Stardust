@@ -3,24 +3,53 @@
 
     angular
         .module('wfm.treePicker')
+        .component('treeDataOne', {
+            templateUrl: 'app/global/tree-picker/tree_data.tpl.html',
+            controller: 'TreeDataOneController',
+            controllerAs: 'vm',
+            bindings: {
+                data: "=",
+                option: "="
+            }
+        })
+        .component('treeDataTwo', {
+            templateUrl: 'app/global/tree-picker/tree_data.tpl.html',
+            controller: 'TreeDataTwoController',
+            controllerAs: 'vm',
+            bindings: {
+                data: "=",
+                option: "="
+            }
+        })
         .controller('TreeDataOneController', TreeDataOneController)
         .controller('TreeDataTwoController', TreeDataTwoController)
-        .directive('treeDataOne', treeDataOneDirective)
-        .directive('treeDataTwo', treeDataTwoDirective)
         .directive('treeAnimate', treeAnimate);
 
-    TreeDataOneController.$inject = ['$state', '$stateParams', '$translate'];
+    TreeDataOneController.$inject = [];
+    TreeDataTwoController.$inject = [];
 
-    function TreeDataOneController($state, $stateParams, $translate) {
+    function TreeDataOneController() {
         var vm = this;
 
-        vm.nodeDisplayName = vm.option.NodeDisplayName ? vm.option.NodeDisplayName : "name";
-        vm.nodeChildrenName = vm.option.NodeChildrenName ? vm.option.NodeChildrenName : "children";
-        vm.nodeSelectedMark = vm.option.NodeSelectedMark ? vm.option.NodeSelectedMark : "mark";
-
+        vm.node;
+        vm.nodeDisplayName = "name";
+        vm.nodeChildrenName = "children";
+        vm.nodeSelectedMark = "mark";
         vm.selectNode = selectNode;
 
+        vm.$onInit = fetchSetting;
+
+        function fetchSetting() {
+            if (angular.isDefined(vm.option)) {
+                vm.nodeDisplayName = vm.option.NodeDisplayName ? vm.option.NodeDisplayName : "name";
+                vm.nodeChildrenName = vm.option.NodeChildrenName ? vm.option.NodeChildrenName : "children";
+                vm.nodeSelectedMark = vm.option.NodeSelectedMark ? vm.option.NodeSelectedMark : "mark";
+            }
+            return;
+        }
+
         function selectNode(item) {
+            vm.node = item;
             if (item.$parent.node[vm.nodeSelectedMark] == true) {
                 if (item.$parent.node[vm.nodeChildrenName] && item.$parent.node[vm.nodeChildrenName].length !== 0) {
                     setChildrenNodesToUnselect(item.$parent.node[vm.nodeChildrenName]);
@@ -42,22 +71,35 @@
         function setParentNodesSelectState(data, state) {
             data.node[vm.nodeSelectedMark] = state;
             if (data.$parent.$parent.node) {
-                return setParentNodesSelectState(data.$parent.$parent);
+                return setParentNodesSelectState(data.$parent.$parent, state);
             }
         }
     }
 
-    function TreeDataTwoController($state, $stateParams, $translate) {
+    function TreeDataTwoController() {
         var vm = this;
 
-        vm.nodeDisplayName = vm.option.NodeDisplayName ? vm.option.NodeDisplayName : "name";
-        vm.nodeChildrenName = vm.option.NodeChildrenName ? vm.option.NodeChildrenName : "children";
-        vm.nodeSelectedMark = vm.option.NodeSelectedMark ? vm.option.NodeSelectedMark : "mark";
-        var rootSelectUnique = vm.option.RootSelectUnique ? vm.option.RootSelectUnique : false;
-
+        var rootSelectUnique = "false;"
+        vm.node;
+        vm.nodeDisplayName = "name";
+        vm.nodeChildrenName = "children";
+        vm.nodeSelectedMark = "mark";
         vm.selectNode = selectNode;
 
+        vm.$onInit = fetchSetting;
+
+        function fetchSetting() {
+            if (angular.isDefined(vm.option)) {
+                vm.nodeDisplayName = vm.option.NodeDisplayName ? vm.option.NodeDisplayName : "name";
+                vm.nodeChildrenName = vm.option.NodeChildrenName ? vm.option.NodeChildrenName : "children";
+                vm.nodeSelectedMark = vm.option.NodeSelectedMark ? vm.option.NodeSelectedMark : "mark";
+                rootSelectUnique = vm.option.RootSelectUnique ? vm.option.RootSelectUnique : false;
+            }
+            return;
+        }
+
         function selectNode(item) {
+            vm.node = item;
             var state = !item.$parent.node[vm.nodeSelectedMark];
             item.$parent.node[vm.nodeSelectedMark] = state;
             if (rootSelectUnique) {
@@ -165,33 +207,5 @@
                 }
             }
         }
-    }
-
-    function treeDataOneDirective() {
-        var directive = {
-            restrict: 'EA',
-            scope: {
-                data: "=",
-                option: "="
-            },
-            templateUrl: 'app/global/tree-picker/tree_data.html',
-            controller: 'TreeDataOneController as vm',
-            bindToController: true,
-        };
-        return directive;
-    }
-
-    function treeDataTwoDirective() {
-        var directive = {
-            restrict: 'EA',
-            scope: {
-                data: "=",
-                option: "="
-            },
-            templateUrl: 'app/global/tree-picker/tree_data.html',
-            controller: 'TreeDataTwoController as vm',
-            bindToController: true,
-        };
-        return directive;
     }
 })();
