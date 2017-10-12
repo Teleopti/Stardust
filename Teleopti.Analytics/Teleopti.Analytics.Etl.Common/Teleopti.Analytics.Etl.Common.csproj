@@ -178,7 +178,6 @@
     <Compile Include="Interfaces\Common\TimeZonePeriod.cs" />
     <Compile Include="Interfaces\PerformanceManager\IPmPermissionExtractor.cs" />
     <Compile Include="Interfaces\PerformanceManager\IPmPermissionTransformer.cs" />
-    <Compile Include="Interfaces\PerformanceManager\IPMService.cs" />
     <Compile Include="Interfaces\PerformanceManager\PmSynchronizeException.cs" />
     <Compile Include="Interfaces\PerformanceManager\PmUser.cs" />
     <Compile Include="Interfaces\PerformanceManager\ResultDto.cs" />
