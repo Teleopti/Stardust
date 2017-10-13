@@ -98,16 +98,18 @@ Layout = null;
 
 						<!-- ko if: isFullDayAbsence -->
 						<div class="shift absence">
-							<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor, color: absenceTextColor}">
-								<strong data-bind="text: absenceShortName"></strong>
-							</div>
+							<div class="absence-and-overtime">
+								<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor, color: absenceTextColor}">
+									<strong data-bind="text: absenceShortName"></strong>
+								</div>
 
-							<!-- ko if: hasOvertime -->
-							<div class="overtime-info-cell" data-bind="style: {backgroundColor: overtimeColor, color: overtimeTextColor}">
-								<strong>OT</strong>
-								<span data-bind="visible: hasMultipleOvertimes">..</span>
+								<!-- ko if: hasOvertime -->
+								<div class="overtime-info-cell" data-bind="style: {backgroundColor: overtimeColor, color: overtimeTextColor}">
+									<strong>OT</strong>
+									<span data-bind="visible: hasMultipleOvertimes">..</span>
+								</div>
+								<!-- /ko -->
 							</div>
-							<!-- /ko -->
 						</div>
 						<!-- /ko -->
 
@@ -116,12 +118,14 @@ Layout = null;
 							<div class="dayoff-img">
 								<strong>DO</strong>
 							</div>
-							<!-- ko if: hasOvertime -->
-							<div class="overtime-info-cell" data-bind="style: {backgroundColor: overtimeColor, color: overtimeTextColor}">
-								<strong>OT</strong>
-								<span data-bind="visible: hasMultipleOvertimes">..</span>
+							<div class="absence-and-overtime">
+								<!-- ko if: hasOvertime -->
+								<div class="overtime-info-cell" data-bind="style: {backgroundColor: overtimeColor, color: overtimeTextColor}">
+									<strong>OT</strong>
+									<span data-bind="visible: hasMultipleOvertimes">..</span>
+								</div>
+								<!-- /ko -->
 							</div>
-							<!-- /ko -->
 						</div>
 						<!-- /ko -->
 
