@@ -4,13 +4,10 @@
 ..\TeleoptiCCC\Analytics\web.config,BuildArtifacts\AnalyticsWeb.config
 ..\TeleoptiCCC\Client\ClickOnce\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy,BuildArtifacts\AppRaptor.config
 ..\TeleoptiCCC\Client\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy,BuildArtifacts\AppRaptor.config
-..\TeleoptiCCC\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config,BuildArtifacts\AppETLService.config
-..\TeleoptiCCC\ETL\Tools\Teleopti.Analytics.Etl.ConfigTool.exe.config,BuildArtifacts\AppETLTool.config
 ..\TeleoptiCCC\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config,BuildArtifacts\AppRTATestApplication.config
 ..\TeleoptiCCC\IntradayTools\Testapplication\Teleopti.Ccc.Intraday.TestApplication.exe.config,BuildArtifacts\AppIntradayTestApplication.config
 ..\TeleoptiCCC\SDK\LegalNotice.txt,BuildArtifacts\LegalNotice.txt
 ..\TeleoptiCCC\SDK\web.config,BuildArtifacts\SDKWeb.config
-..\TeleoptiCCC\ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.Host.exe.config,BuildArtifacts\ServiceBusHost.config
 ..\TeleoptiCCC\Web\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
 ..\TeleoptiCCC\Web\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
 ..\TeleoptiCCC\Web\Web.config,BuildArtifacts\Web.Root.Web.config
