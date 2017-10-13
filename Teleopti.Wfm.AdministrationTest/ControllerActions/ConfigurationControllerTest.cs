@@ -22,10 +22,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			var configurationModels = Target.GetAllConfigurations().Content;
-			configurationModels.First().Key.Should().Be.EqualTo("FrameAncestors");
-			configurationModels.First().Value.Should().Be.EqualTo("");
-			configurationModels.Last().Key.Should().Be.EqualTo("InstrumentationKey");
-			configurationModels.Last().Value.Should().Be.EqualTo("");
+			configurationModels.SingleOrDefault(x => x.Key == "FrameAncestors").Should().Not.Be.Null();
+			configurationModels.SingleOrDefault(x => x.Key == "InstrumentationKey").Should().Not.Be.Null();
 		}
 
 		[Test]
