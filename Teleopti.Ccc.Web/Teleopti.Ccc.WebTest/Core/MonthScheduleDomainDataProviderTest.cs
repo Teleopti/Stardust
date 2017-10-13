@@ -1,59 +1,53 @@
-using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
+using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core
 {
-    [TestFixture]
-    public class MonthScheduleDomainDataProviderTest
-    {
-        private IScheduleProvider scheduleProvider;
-	    private IMonthScheduleDomainDataProvider target;
+	[TestFixture]
+	public class MonthScheduleDomainDataProviderTest
+	{
+		private FakeScheduleProvider scheduleProvider;
+		private IMonthScheduleDomainDataProvider target;
 
 
-        [SetUp]
-        public void Setup()
-        {
-            scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			target = new MonthScheduleDomainDataProvider(scheduleProvider, 
+		[SetUp]
+		public void Setup()
+		{
+			scheduleProvider = new FakeScheduleProvider();
+			target = new MonthScheduleDomainDataProvider(scheduleProvider,
 				new FakeToggleManager(), MockRepository.GenerateMock<ISeatOccupancyProvider>());
-        }
+		}
 
-        [Test]
-        public void ShouldMapDate()
-        {
-            var today = DateOnly.Today;
-	        scheduleProvider
-		        .Stub(sp => sp.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
-		        .Return(new List<IScheduleDay>());
+		[Test]
+		public void ShouldMapDate()
+		{
+			var today = DateOnly.Today;
 
 			var result = target.Get(today, true);
 
-            result.CurrentDate.Should().Be.EqualTo(today);
-        }
+			result.CurrentDate.Should().Be.EqualTo(today);
+		}
 
 
-        [Test]
-        [SetCulture("sv-SE")]
-		[Ignore("fix build")]
+		[Test]
+		[SetCulture("sv-SE")]
 		public void ShouldMapDays()
-        {
-            var date = new DateOnly(2014,1,11);
-			scheduleProvider
-				.Stub(sp => sp.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
-				.Return(new List<IScheduleDay>());
+		{
+			var date = new DateOnly(2014, 1, 11);
+			scheduleProvider.AddScheduleDay(ScheduleDayFactory.Create(new DateOnly(2013, 12, 30)));
 
-			target.Get(date, true);
+			var result = target.Get(date, true);
 
-            scheduleProvider.AssertWasCalled(x => x.GetScheduleForPeriod(new DateOnlyPeriod(2013,12,30,2014,2,2)));
-        }
-    }
+			result.Days.Count().Should().Be(1);
+			result.Days.ElementAt(0).ScheduleDay.DateOnlyAsPeriod.DateOnly.Should().Be(new DateOnly(2013, 12, 30));
+		}
+	}
 }
