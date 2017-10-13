@@ -30,16 +30,6 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function(scheduleDate, selectedD
 		self.isOutsideMonth = (selectedDate.month() != currentDate.month());
 	}
 
-	self.absenceName = scheduleDate.Absence ? scheduleDate.Absence.Name : null;
-	self.absenceShortName = scheduleDate.Absence ? scheduleDate.Absence.ShortName : null;
-	self.hasAbsence = self.absenceName != null;
-	self.isFullDayAbsence = scheduleDate.Absence ? scheduleDate.Absence.IsFullDayAbsence : null;
-	self.hasOvertime = scheduleDate.HasOvertime;
-
-	self.hasSeatBooking = scheduleDate.SeatBookings && scheduleDate.SeatBookings.length > 0;
-
-	self.seatBookings = scheduleDate.SeatBookings;
-
 	var getValueOrEmptyString = function(object) {
 		return object || '';
 	};
@@ -82,6 +72,17 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function(scheduleDate, selectedD
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.currentDate.format("YYYY-MM-DD")));
 	};
 
+
+	self.absenceName = scheduleDate.Absences ? scheduleDate.Absences[0].Name : null;
+	self.absenceShortName = scheduleDate.Absences ? scheduleDate.Absences[0].ShortName : null;
+	self.hasAbsence = self.absenceName != null;
+	self.hasMultipleAbsences = scheduleDate.Absences && scheduleDate.Absences.length > 1;
+	self.isFullDayAbsence = scheduleDate.Absences ? scheduleDate.Absences[0].IsFullDayAbsence : null;
+	self.hasOvertime = scheduleDate.Overtimes != null;
+	self.hasMultipleOvertimes = scheduleDate.Overtimes && scheduleDate.Overtimes.length > 1;
+	self.overtimeColor = scheduleDate.Overtimes ? scheduleDate.Overtimes[0].Color : '';
+	self.hasSeatBooking = scheduleDate.SeatBookings && scheduleDate.SeatBookings.length > 0;
+	self.seatBookings = scheduleDate.SeatBookings;
 	self.isDayOff = scheduleDate.IsDayOff;
 	self.shiftName = scheduleDate.Shift ? scheduleDate.Shift.Name : null;
 	self.shiftShortName = scheduleDate.Shift ? scheduleDate.Shift.ShortName : null;
@@ -93,7 +94,7 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function(scheduleDate, selectedD
 	self.shiftTimeSpan = scheduleDate.Shift ? scheduleDate.Shift.TimeSpan : null;
 	self.shiftWorkingHours = scheduleDate.Shift ? scheduleDate.Shift.WorkingHours : null;
 	self.shiftColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
-	self.absenceColor = 'rgba(250, 0, 0, .5)';
+	self.absenceColor = scheduleDate.Absences ? scheduleDate.Absences[0].Color : '';
 	self.hasShift = self.shiftName != null;
 	self.backgroundColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
 	self.shiftTextColor = self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black';

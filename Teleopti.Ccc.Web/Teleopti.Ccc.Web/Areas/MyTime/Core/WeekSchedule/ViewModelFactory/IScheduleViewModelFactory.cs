@@ -12,5 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly, StaffingPossiblityType staffingPossiblityType);
 
 		MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly);
+
+		MonthScheduleViewModel CreateMobileMonthViewModel(DateOnly dateOnly);
 	}
 }

@@ -23,11 +23,11 @@ $(document).ready(function () {
 
 		viewModelMonth.readData({
 			ScheduleDays: [{
-				Absence: {
+				Absences: [{
 					Name: "Illness",
 					ShortName: "IL",
 					IsFullDayAbsence: true
-				}
+				}]
 			}]
 		});
 
@@ -81,7 +81,7 @@ $(document).ready(function () {
 
 		vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
 		vm.readData({
-			ScheduleDays: [{ Absence: { Name: "Illness" } }]
+			ScheduleDays: [{ Absences: [{ Name: "Illness" }] }]
 		});
 		equal(vm.weekViewModels()[0].dayViewModels()[0].hasAbsence, true);
 	});

@@ -1,7 +1,6 @@
 ﻿$(document).ready(function() {
 	var hash = '',
 		ajax,
-		requestSuccessData,
 		fakeMonthData,
 		fakeUserData,
 		fetchMonthDataRequestCount = 0;
@@ -114,7 +113,7 @@
 			'ScheduleDays': [{
 				'Date': '2017-10-01T00:00:00',
 				'FixedDate': '2017-10-01',
-				'Absence': null,
+				'Absences': null,
 				'IsDayOff': true,
 				'Shift': {
 					'Name': null,
@@ -128,7 +127,7 @@
 			}, {
 				"Date": "2017-10-02T00:00:00",
 				"FixedDate": "2017-10-02",
-				"Absence": null,
+				"Absences": null,
 				"IsDayOff": false,
 				"Shift": {
 					"Name": "Early",
@@ -142,7 +141,7 @@
 			}, {
 				"Date": "2017-10-03T00:00:00",
 				"FixedDate": "2017-10-03",
-				"Absence": null,
+				"Absences": null,
 				"IsDayOff": false,
 				"Shift": {
 					"Name": "Early",
@@ -156,7 +155,7 @@
 			}, {
 				"Date": "2017-10-04T00:00:00",
 				"FixedDate": "2017-10-04",
-				"Absence": null,
+				"Absences": null,
 				"IsDayOff": false,
 				"Shift": {
 					"Name": "Early",
@@ -170,7 +169,7 @@
 			}, {
 				"Date": "2017-10-05T00:00:00",
 				"FixedDate": "2017-10-05",
-				"Absence": null,
+				"Absences": null,
 				"IsDayOff": false,
 				"Shift": {
 					"Name": "Day",
@@ -184,7 +183,7 @@
 			}, {
 				"Date": "2017-10-06T00:00:00",
 				"FixedDate": "2017-10-06",
-				"Absence": null,
+				"Absences": null,
 				"IsDayOff": false,
 				"Shift": {
 					"Name": "Day",
@@ -198,7 +197,7 @@
 			}, {
 				"Date": "2017-10-07T00:00:00",
 				"FixedDate": "2017-10-07",
-				"Absence": null,
+				"Absences": null,
 				"IsDayOff": true,
 				"Shift": {
 					"Name": null,
@@ -245,7 +244,7 @@
 
 		ajax = {
 			Ajax: function(options) {
-				if (options.url === '../api/Schedule/FetchMonthData') {
+				if (options.url === '../api/Schedule/FetchMobileMonthData') {
 					fetchMonthDataRequestCount++;
 					if (options.data.date) {
 						fakeMonthData.FixedDate = moment(options.data.date).format("YYYY-MM-DD");

@@ -83,11 +83,13 @@ Layout = null;
 								<!-- ko if: hasAbsence -->
 								<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor}">
 									<strong data-bind="text: absenceShortName"></strong>
+									<span data-bind="visible: hasMultipleAbsences">..</span>
 								</div>
 								<!-- /ko -->
 								<!-- ko if: hasOvertime -->
-								<div class="overtime-info-cell">
+								<div class="overtime-info-cell" data-bind="style: {backgroundColor:overtimeColor}">
 									<strong>OT</strong>
+									<span data-bind="visible: hasMultipleOvertimes">..</span>
 								</div>
 								<!-- /ko -->
 							</div>
@@ -101,8 +103,9 @@ Layout = null;
 							</div>
 
 							<!-- ko if: hasOvertime -->
-							<div class="overtime-info-cell">
+							<div class="overtime-info-cell" data-bind="style: {backgroundColor:overtimeColor}">
 								<strong>OT</strong>
+								<span data-bind="visible: hasMultipleOvertimes">..</span>
 							</div>
 							<!-- /ko -->
 						</div>
@@ -114,8 +117,9 @@ Layout = null;
 								<strong>DO</strong>
 							</div>
 							<!-- ko if: hasOvertime -->
-							<div class="overtime-info-cell">
+							<div class="overtime-info-cell" data-bind="style: {backgroundColor:overtimeColor}">
 								<strong>OT</strong>
+								<span data-bind="visible: hasMultipleOvertimes">..</span>
 							</div>
 							<!-- /ko -->
 						</div>
@@ -129,10 +133,12 @@ Layout = null;
 							<div class="absence-and-overtime">
 								<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor}">
 									<strong data-bind="text: absenceShortName"></strong>
+									<span data-bind="visible: hasMultipleAbsences">..</span>
 								</div>
 								<!-- ko if: hasOvertime -->
-								<div class="overtime-info-cell">
+								<div class="overtime-info-cell" data-bind="style: {backgroundColor:overtimeColor}">
 									<strong>OT</strong>
+									<span data-bind="visible: hasMultipleOvertimes">..</span>
 								</div>
 								<!-- /ko -->
 							</div>

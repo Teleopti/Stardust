@@ -2,7 +2,7 @@
 	var self = this;
 	self.fetchData = function (date, successCallback) {
 		ajax.Ajax({
-			url: "../api/Schedule/FetchMonthData",
+			url: "../api/Schedule/FetchMobileMonthData",
 			dataType: "json",
 			type: "GET",
 			data: {

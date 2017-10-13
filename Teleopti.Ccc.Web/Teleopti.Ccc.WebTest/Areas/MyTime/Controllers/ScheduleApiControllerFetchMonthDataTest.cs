@@ -7,11 +7,16 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.SeatPlanning;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.WebTest.Core.IoC;
@@ -23,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
-	public class ScheduleApiControllerFetchMonthDataTest
+	public class ScheduleApiControllerFetchMonthDataTest : ISetup
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
@@ -32,7 +37,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakePersonRequestRepository PersonRequestRepository;
-		
+		public FakeSeatBookingRepository SeatBookingRepository;
+		public FakeSeatMapRepository SeatMapRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeSeatMapRepository>().For<ISeatMapLocationRepository>();
+		}
+
 		[Test]
 		public void ShouldHaveTheFirstDayOfTheFirstWeekInMonth()
 		{
@@ -87,12 +99,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchMonthData(null);
 
-			result.ScheduleDays.First().Absence.Name.Should().Be.EqualTo("Illness");
-			result.ScheduleDays.First().Absence.ShortName.Should().Be.EqualTo("IL");
+			result.ScheduleDays.First().Absences[0].Name.Should().Be.EqualTo("Illness");
+			result.ScheduleDays.First().Absences[0].ShortName.Should().Be.EqualTo("IL");
+		}
+
+
+		[Test]
+		public void ShouldMapAbsenceColor()
+		{
+			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
+				new AbsenceLayer(new Absence { DisplayColor = Color.Red, Description = new Description("Illness", "IL") }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
+
+			var result = Target.FetchMonthData(null);
+
+			result.ScheduleDays.First().Absences[0].Color.Should().Be.EqualTo($"rgb({Color.Red.R},{Color.Red.G},{Color.Red.B})");
 		}
 
 		[Test]
-		public void ShouldMapAbsenceRespectingPriority()
+		public void ShouldMapAbsencesRespectingPriority()
 		{
 			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
 							new AbsenceLayer(new Absence { Description = new Description("a", "IL"), Priority = 1 }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
@@ -101,7 +125,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 							new AbsenceLayer(new Absence { Description = new Description("a", "HO"), Priority = 100 }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
 
 			var result = Target.FetchMonthData(null);
-			result.ScheduleDays.First().Absence.ShortName.Should().Be.EqualTo("IL");
+			result.ScheduleDays.First().Absences[0].ShortName.Should().Be.EqualTo("IL");
+			result.ScheduleDays.First().Absences[1].ShortName.Should().Be.EqualTo("HO");
 		}
 
 		[Test]
@@ -114,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new AbsenceLayer(new Absence { Description = new Description("Illness", "IL") }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
 
 			var result = Target.FetchMonthData(null);
-			result.ScheduleDays.First().Absence.IsFullDayAbsence.Should().Be.True();
+			result.ScheduleDays.First().Absences[0].IsFullDayAbsence.Should().Be.True();
 		}
 
 		[Test]
@@ -202,6 +227,45 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchMonthData(null).ScheduleDays.ElementAt(1);
 			result.Shift.WorkingHours.Should().Be(TimeHelper.GetLongHourMinuteTimeString(TimeSpan.FromHours(9), CultureInfo.CurrentUICulture));
 		}
-		
+
+		[Test]
+		[SetCulture("en-US")]
+		[Toggle(Domain.FeatureFlags.Toggles.MyTimeWeb_ShowSeatBookingMonthView_39068)]
+		public void ShouldNotLoadSeatBookingForMobileMonthView()
+		{
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 1));
+			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
+			assignment.AddActivity(new Activity("a") { InWorkTime = true, InContractTime = true }, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var seatMapLocation = new SeatMapLocation().WithId();
+			SeatMapRepository.Add(seatMapLocation);
+			var seat = seatMapLocation.AddSeat("s1", 1);
+			SeatBookingRepository.Add(new SeatBooking(User.CurrentUser(), new DateOnly(2014, 12, 1),
+				new DateTime(2014, 12, 1, 8, 0, 0), new DateTime(2014, 12, 1, 9, 0, 0)){ Seat = seat });
+
+			var result = Target.FetchMobileMonthData(null).ScheduleDays.ElementAt(1);
+			result.SeatBookings.Should().Be.Null();
+		}
+
+		[Test]
+		[SetCulture("en-US")]
+		public void ShouldMapOvertimes()
+		{
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 1));
+			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
+			assignment.AddActivity(new Activity("a") { InWorkTime = true, InContractTime = true }, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			assignment.AddOvertimeActivity(new Activity("ot") {DisplayColor = Color.Purple}
+				, new DateTimePeriod(2014, 12, 1, 16, 2014, 12, 1, 18),
+				new MultiplicatorDefinitionSet("overtime time", MultiplicatorType.Overtime));
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchMobileMonthData(null).ScheduleDays.ElementAt(1);
+			result.Overtimes.Length.Should().Be(1);
+			result.Overtimes.FirstOrDefault().Name.Should().Be("ot");
+			result.Overtimes.FirstOrDefault().Color.Should().Be($"rgb({Color.Purple.R},{Color.Purple.G},{Color.Purple.B})");
+		}
 	}
 }

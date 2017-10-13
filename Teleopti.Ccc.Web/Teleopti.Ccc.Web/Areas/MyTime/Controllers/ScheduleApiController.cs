@@ -66,5 +66,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var showForDate = date ?? new DateOnly(nowForUser.Date);
 			return _scheduleViewModelFactory.CreateMonthViewModel(showForDate);
 		}
+
+		[UnitOfWork, Route("api/Schedule/FetchMobileMonthData"), HttpGet]
+		public virtual MonthScheduleViewModel FetchMobileMonthData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date)
+		{
+			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
+			var showForDate = date ?? new DateOnly(nowForUser.Date);
+			return _scheduleViewModelFactory.CreateMobileMonthViewModel(showForDate);
+		}
+
 	}
 }

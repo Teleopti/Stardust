@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var result = target.Map(monthDomainData);
 
 			//assert
-			result.ScheduleDays.Single().Absence.Name.Should().Be.EqualTo("Illness");
+			result.ScheduleDays.Single().Absences[0].Name.Should().Be.EqualTo("Illness");
 		}
 
 		[Test]
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
 			var result = target.Map(monthDomainData);
 
-			result.ScheduleDays.Single().Absence.ShortName.Should().Be.EqualTo("IL");
+			result.ScheduleDays.Single().Absences[0].ShortName.Should().Be.EqualTo("IL");
 		}
 
 		[Test]
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var result = target.Map(monthDomainData);
 
 			//assert
-			result.ScheduleDays.Single().Absence.IsFullDayAbsence.Should().Be.True();
+			result.ScheduleDays.Single().Absences[0].IsFullDayAbsence.Should().Be.True();
 		}
 
 		[Test]

@@ -35,20 +35,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 
 		private MonthDayViewModel map(MonthScheduleDayDomainData s)
 		{
+			var overtimes = mapOvertimes(s);
 			return new MonthDayViewModel
 			{
 				Date = s.ScheduleDay.DateOnlyAsPeriod.DateOnly.Date,
 				FixedDate = s.ScheduleDay.DateOnlyAsPeriod.DateOnly.ToFixedClientDateOnlyFormat(),
-				Absence = absence(s),
-				HasOvertime =
-					s.ScheduleDay != null && s.ScheduleDay.PersonAssignment() != null &&
-					s.ScheduleDay.PersonAssignment().ShiftLayers.OfType<OvertimeShiftLayer>().Any(),
+				Absences = mapAbsences(s),
+				Overtimes = overtimes,
 				SeatBookings = s.SeatBookingInformation,
 				IsDayOff = isDayOff(s),
 				Shift = shift(s)
 			};
 		}
-	
+
 		private ShiftViewModel shift(MonthScheduleDayDomainData s)
 		{
 			var personAssignment = s.ScheduleDay.PersonAssignment();
@@ -80,26 +79,46 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 				   || significantPart == SchedulePartView.ContractDayOff;
 		}
 
-		private static AbsenceViewModel absence(MonthScheduleDayDomainData s)
+		private static AbsenceViewModel[] mapAbsences(MonthScheduleDayDomainData s)
 		{
 			var significantPart = s.ScheduleDay.SignificantPartForDisplay();
 			var absenceCollection = s.ScheduleDay.PersonAbsenceCollection();
 			if (absenceCollection.Any())
 			{
-				var absence =
+				var personAbsences =
 					absenceCollection.OrderBy(a => a.Layer.Payload.Priority)
-						.ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a))
-						.First();
-				var name = absence.Layer.Payload.Description.Name;
-				var shortName = absence.Layer.Payload.Description.ShortName;
-				return new AbsenceViewModel
+						.ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a));
+				return personAbsences.Select(personAbsence =>
 				{
-					Name = name,
-					ShortName = shortName,
-					IsFullDayAbsence = significantPart == SchedulePartView.FullDayAbsence
-				};
+					var payload = personAbsence.Layer.Payload;
+					return new AbsenceViewModel
+					{
+						Name = payload.Description.Name,
+						ShortName = payload.Description.ShortName,
+						Color = formatRgbColor(payload.DisplayColor),
+						IsFullDayAbsence = significantPart == SchedulePartView.FullDayAbsence
+					};
+				}).ToArray();
 			}
 			return null;
+		}
+
+		private static OvertimeViewModel[] mapOvertimes(MonthScheduleDayDomainData s)
+		{
+			var personAssignment = s.ScheduleDay.PersonAssignment();
+			if (personAssignment == null) return null;
+			var overtimes = personAssignment.ShiftLayers.OfType<OvertimeShiftLayer>();
+			if (!overtimes.Any()) return null;
+			return overtimes.OrderBy(overtime => overtime.Period.StartDateTime).Select(overtime =>
+			{
+				var payload = overtime.Payload;
+				return new OvertimeViewModel
+				{
+					Name = payload.Description.Name,
+					ShortName = payload.Description.ShortName,
+					Color = formatRgbColor(payload.DisplayColor)
+				};
+			}).ToArray();
 		}
 
 		private static string formatRgbColor(Color color)

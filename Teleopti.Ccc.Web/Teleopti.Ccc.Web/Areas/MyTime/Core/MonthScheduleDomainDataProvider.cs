@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			_seatBookingProvider = seatBookingProvider;
 		}
 
-		public MonthScheduleDomainData Get(DateOnly date)
+		public MonthScheduleDomainData Get(DateOnly date, bool loadSeatBooking)
 		{
 
 			var firstDate = DateHelper.GetFirstDateInMonth(date.Date, CultureInfo.CurrentCulture);
@@ -31,9 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			lastDate = DateHelper.GetLastDateInWeek(lastDate, CultureInfo.CurrentCulture);
 			var period = new DateOnlyPeriod(new DateOnly(firstDate), new DateOnly(lastDate));
 
-			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(period).ToList();
+			var scheduleDays =
+				_scheduleProvider.GetScheduleForPeriod(period, new Domain.Common.ScheduleDictionaryLoadOptions(false, false))
+					.ToList();
 			var showSeatBookings = _toggleManager.IsEnabled(Toggles.MyTimeWeb_ShowSeatBookingMonthView_39068);
-			var seatBookings = showSeatBookings ? _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays) : null;
+			var seatBookings = loadSeatBooking && showSeatBookings ? _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays) : null;
 
 			var days = scheduleDays.Select(scheduleDay => new MonthScheduleDayDomainData
 			{

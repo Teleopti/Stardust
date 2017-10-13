@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		        .Stub(sp => sp.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 		        .Return(new List<IScheduleDay>());
 
-			var result = target.Get(today);
+			var result = target.Get(today, true);
 
             result.CurrentDate.Should().Be.EqualTo(today);
         }
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core
 				.Stub(sp => sp.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
 				.Return(new List<IScheduleDay>());
 
-			target.Get(date);
+			target.Get(date, true);
 
             scheduleProvider.AssertWasCalled(x => x.GetScheduleForPeriod(new DateOnlyPeriod(2013,12,30,2014,2,2)));
         }
