@@ -47,7 +47,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			swipeRight: function () {
 				vm.previousDay();
 			},
-			preventDefaultEvents: false
+			preventDefaultEvents: false,
+			threshold: 20
 		});
 	}
 

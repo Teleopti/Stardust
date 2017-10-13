@@ -45,7 +45,8 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 			swipeRight: function () {
 				vm.previousMonth();
 			},
-			preventDefaultEvents: false
+			preventDefaultEvents: false,
+			threshold: 20
 		});
 	}
 
