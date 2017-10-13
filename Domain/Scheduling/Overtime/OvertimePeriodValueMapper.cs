@@ -3,12 +3,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public interface IOvertimePeriodValueMapper
-	{
-		IList<OvertimePeriodValue> Map(IEnumerable<IOvertimeSkillIntervalData> dataList);
-	}
-
-	public class OvertimePeriodValueMapper : IOvertimePeriodValueMapper
+	public class OvertimePeriodValueMapper
 	{
         public IList<OvertimePeriodValue> Map(IEnumerable<IOvertimeSkillIntervalData> dataList)
         {

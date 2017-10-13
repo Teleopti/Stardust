@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	{
 		private readonly IOvertimeDateTimePeriodExtractor _overtimeDateTimePeriodExtractor;
 		private readonly OvertimeRelativeDifferenceCalculator _overtimeRelativeDifferenceCalculator;
-		private readonly IOvertimePeriodValueMapper _overtimePeriodValueMapper;
+		private readonly OvertimePeriodValueMapper _overtimePeriodValueMapper;
 
 		public CalculateBestOvertimeBeforeOrAfter(IOvertimeDateTimePeriodExtractor overtimeDateTimePeriodExtractor, OvertimeRelativeDifferenceCalculator overtimeRelativeDifferenceCalculator,
-												  IOvertimePeriodValueMapper overtimePeriodValueMapper)
+												  OvertimePeriodValueMapper overtimePeriodValueMapper)
 		{
 			_overtimeDateTimePeriodExtractor = overtimeDateTimePeriodExtractor;
 			_overtimeRelativeDifferenceCalculator = overtimeRelativeDifferenceCalculator;
