@@ -55,7 +55,7 @@ namespace Teleopti.Support.Library.Config
 			{
 				var replaceWith = searchReplace.ReplaceWith;
 
-				// replace appsetting and xml comment before "normal" tags
+				//replace appsetting and xml comment before "normal" tags
 				var name = searchReplace.SearchFor.Replace("$(", "").Replace(")", "");
 				yield return xmlAppSetting(name, searchReplace.ReplaceWith);
 				yield return xmlComment(name, searchReplace.ReplaceWith);
