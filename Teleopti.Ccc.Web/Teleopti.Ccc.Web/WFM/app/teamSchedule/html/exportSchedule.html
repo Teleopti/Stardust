@@ -1,18 +1,18 @@
 ﻿<div>
 	<h5>Export Schedule</h5>
-	<form>
+	<form name="exportScheduleForm">
 		<table class="wfm-table">
 			<tbody>
 				<tr>
 					<td>{{'From' | translate}}</td>
 					<td>
-						<md-datepicker ng-model="vm.configuration.startDate" md-placeholder="{{'From' | translate}}" required md-min-date="vm.maxStartDate" md-max-date="vm.configuration.endDate"></md-datepicker>
+						<md-datepicker ng-model="vm.configuration.startDate" md-placeholder="{{'From' | translate}}" ng-change="vm.onStartDateChanged()" required></md-datepicker>
 					</td>
 				</tr>
 				<tr>
 					<td>{{'To' | translate}}</td>
 					<td>
-						<md-datepicker ng-model="vm.configuration.endDate" md-placeholder="{{'To' | translate}}" md-min-date="vm.configuration.startDate" md-max-date="vm.maxEndDate" required></md-datepicker>
+						<md-datepicker name="endDate" ng-model="vm.configuration.endDate" md-placeholder="{{'To' | translate}}" md-min-date="vm.configuration.startDate" md-max-date="vm.maxEndDate" required></md-datepicker>
 					</td>
 				</tr>
 				<tr>
@@ -43,7 +43,7 @@
 				<tr>
 					<td>{{'OptionalColumns' | translate}}</td>
 					<td>
-						<md-select multiple ng-model="vm.configuration.optionalColumnId" placeholder="{{ 'OptionalColumns'|translate }}">
+						<md-select multiple ng-model="vm.configuration.optionalColumnIds" xng-required="vm.validateSelectedOptionalColumns()" placeholder="{{ 'OptionalColumns'|translate }}">
 							<md-option ng-repeat="optionalColumn in vm.optionalColumns" ng-value="optionalColumn.Id">{{::optionalColumn.Name}}</md-option>
 						</md-select>
 					</td>

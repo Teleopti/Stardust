@@ -18,10 +18,10 @@
 			'wfm.focusInput',
 			'wfm.groupPage'
 	])
-	.config(['$mdThemingProvider', teamScheduleConfig])
+	.config(['$mdThemingProvider','$mdDateLocaleProvider', teamScheduleConfig])
 		.run(['$rootScope', '$state', '$location', 'FavoriteSearchDataService','groupPageService', teamScheduleRun]);
 
-	function teamScheduleConfig($mdThemingProvider) {
+	function teamScheduleConfig($mdThemingProvider, $mdDateLocaleProvider) {
 		var teleoptiStyleguideWarnMap = $mdThemingProvider.extendPalette('orange', {
 			'400': 'FFC285',
 			'500': 'FFA726',
@@ -39,6 +39,10 @@
 			.warnPalette('teleoptiStyleguideWarn', {
 				'default': '400'
 			});
+
+		$mdDateLocaleProvider.formatDate = function (date) {
+			return moment(date).format('YYYY-MM-DD');
+		};
 	}
 
 	function teamScheduleRun($rootScope, $state, $location, FavoriteSearchDataService,GroupPageService) {

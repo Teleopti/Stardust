@@ -1,15 +1,19 @@
 ﻿(function (angular) {
 	'use strict';
-	angular.module('wfm.teamSchedule').component('teamsExportSchedule', {
-		controller: TeamsExportScheduleCtrl,
-		templateUrl: 'app/teamSchedule/html/exportSchedule.html',
-		controllerAs: 'vm'
-	});
+	angular.module('wfm.teamSchedule').component('teamsExportSchedule',
+			{
+				controller: TeamsExportScheduleCtrl,
+				templateUrl: 'app/teamSchedule/html/exportSchedule.html',
+				controllerAs: 'vm'
+			});
 
-	TeamsExportScheduleCtrl.$inject = ['groupPageService', 'exportScheduleService'];
-	function TeamsExportScheduleCtrl(groupPageService, exportScheduleService) {
+	TeamsExportScheduleCtrl.$inject = ['$timeout', 'groupPageService', 'exportScheduleService'];
+	function TeamsExportScheduleCtrl($timeout, groupPageService, exportScheduleService) {
 		var vm = this;
-		vm.configuration = {};
+		vm.configuration = {
+			startDate : new Date(),
+			endDate : new Date()
+		};
 		vm.scenarios = [];
 		vm.optionalColumns = [];
 		vm.availableGroups = { BusinessHierarchy: [], GroupPages: [] };
@@ -19,31 +23,17 @@
 			groupPageId: ''
 		};
 
-		vm.maxEndDate = moment(new Date()).add(31, 'days').toDate();
-		vm.maxStartDate = moment(new Date()).add(-31, 'days').toDate();
-		var startDate = new Date();
-		var endDate = new Date();
-		Object.defineProperty(vm.configuration, 'startDate',
-			{
-				get: function () {
-					return startDate;
-				},
-				set: function (value) {
-					startDate = value;
-					vm.maxEndDate = moment(startDate).add(31, 'days').toDate();
-				}
+		vm.maxEndDate = moment(new Date()).add(30, 'days').toDate();
+		vm.onStartDateChanged = function() {
+			vm.maxEndDate = moment(vm.configuration.startDate).add(30, 'days').toDate();
+			$timeout(function() {
+				vm.configuration.endDate = moment(vm.configuration.endDate).toDate();
 			});
+		}
 
-		Object.defineProperty(vm.configuration, 'endDate',
-			{
-				get: function () {
-					return endDate;
-				},
-				set: function (value) {
-					endDate = value;
-					vm.maxStartDate = moment(endDate).add(-31, 'days').toDate();
-				}
-			});
+		vm.validateSelectedOptionalColumns = function() {
+			return Array.isArray(vm.configuration.optionalColumnIds) && vm.configuration.optionalColumnIds.length <= 1;
+		}
 
 		vm.getGroupPagesAsync = function () {
 			var startDate = moment(vm.configuration.startDate).format('YYYY-MM-DD');
