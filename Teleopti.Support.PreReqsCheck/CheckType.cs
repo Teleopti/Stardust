@@ -3,6 +3,7 @@
 	public enum CheckType
 	{
 		Db,
-		Web
+		Web,
+		Worker
 	}
 }

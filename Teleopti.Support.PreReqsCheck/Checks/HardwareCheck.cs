@@ -34,6 +34,11 @@ namespace CheckPreRequisites.Checks
 				var webLimits = new WebLimits();
 				CheckMemory(numberOfAgent, webLimits);
 				CheckCpuCores(numberOfAgent, webLimits);
+			}else if (checkType == CheckType.Worker)
+			{
+				var workerLimits= new WorkerLimits();
+				CheckMemory(numberOfAgent, workerLimits);
+				CheckCpuCores(numberOfAgent, workerLimits);
 			}
 		}
 

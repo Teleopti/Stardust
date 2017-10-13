@@ -77,7 +77,6 @@
     </Compile>
     <Compile Include="InteropServices\SafeNativeMethods.cs" />
     <Compile Include="InteropServices\SystemMetric.cs" />
-    <Compile Include="MinimumRequirements.cs" />
     <Compile Include="Program.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

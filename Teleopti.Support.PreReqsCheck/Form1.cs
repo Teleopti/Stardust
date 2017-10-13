@@ -40,6 +40,13 @@ namespace CheckPreRequisites
 				if(!dbInstance.Equals("NoInstanceDetected"))
 					_databaseCheck.RunDbChecks(dbInstance);
 			}
+
+			if (comboBoxServerSetup.SelectedItem.ToString().Contains("Worker"))
+			{
+				AgentLevel();
+				_hardwareCheck.RunHardWareChecks((int)numericUpDownAgents.Value, CheckType.Worker);
+				_webCheck.Get461OrHigerFromRegistry();
+			}
 		}
 
 		private void CheckDbConnection_Click(object sender, EventArgs e)

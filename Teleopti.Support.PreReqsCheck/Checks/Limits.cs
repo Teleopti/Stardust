@@ -39,6 +39,22 @@ namespace CheckPreRequisites.Checks
 		}
 	}
 
+	public class WorkerLimits : Limits
+	{
+		public WorkerLimits()
+		{
+			All = new List<Limit>
+			{
+				new Limit(400, 4, 8),
+				new Limit(1500, 4, 16),
+				new Limit(4000, 6, 16),
+				new Limit(10000, 8, 16),
+				new Limit(20000, 8, 32, 4),
+				new Limit(int.MaxValue, 8, 32, 6)
+			};
+		}
+	}
+
 	public class Limit
 	{
 		public Limit(int maxAgents, int processor, int memory, int numberOfServers = 1)
