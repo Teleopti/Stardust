@@ -347,7 +347,10 @@
     <Content Include="ConfigFiles\ConfigFiles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ConfigFiles\DeployConfigFiles.txt">
+    <Content Include="ConfigFiles\DeployConfigFilesWeb.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ConfigFiles\DeployConfigFilesWorker.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\Teleopti-WFM-main-icon256.png" />
