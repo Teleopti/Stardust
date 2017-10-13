@@ -16,8 +16,9 @@
 
 			var token = getSessionToken();
 			var url = getParameterByName('RelayState');
+			var hash = getParameterByName('RelayHashState');
 
-			window.location.replace('idp?protocol=awfos&ssoToken='+token+'&RelayState=' + url);
+			window.location.replace('idp?protocol=awfos&ssoToken='+token+'&RelayState=' + url + '&RelayHashState=' + hash);
 		};
 
 		function getSessionToken() {
