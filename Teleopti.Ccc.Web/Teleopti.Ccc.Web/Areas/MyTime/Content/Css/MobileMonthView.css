@@ -170,6 +170,7 @@
 .mobile-month-day .shift-timespan {
 	padding: 5px;
 	line-height: 12px;
+	color: black;
 }
 
 .mobile-month-day .shift-timespan p {
