@@ -76,12 +76,12 @@ namespace Teleopti.Support.Tool.Tool
 					Mode = new ModeFile("ConfigFiles.txt");
 					Command = modeCommonCommand;
 				}
-				if (argument.StartsWith("-MODEPLOYWeb"))
+				if (argument.StartsWith("-MODEPLOYWEB"))
 				{
 					Mode = new ModeFile("DeployConfigFilesWeb.txt");
 					Command = modeDeployCommand;
 				}
-				if (argument.StartsWith("-MODEPLOYWorker"))
+				if (argument.StartsWith("-MODEPLOYWORKER"))
 				{
 					Mode = new ModeFile("DeployConfigFilesWorker.txt");
 					Command = modeDeployCommand;
