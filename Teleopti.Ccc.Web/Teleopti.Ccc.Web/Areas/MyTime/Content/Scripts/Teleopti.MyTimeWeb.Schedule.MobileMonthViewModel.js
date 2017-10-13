@@ -31,16 +31,20 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 		return Teleopti.MyTimeWeb.Common.FormatMonthShort(self.selectedDate());
 	});
 
-	self.nextMonth = function() {
+	self.nextMonth = function () {
+		removeSelectedDateSubscription();
 		var date = self.selectedDate().clone();
 		date.add('months', 1);
 		self.selectedDate(date);
+		parent.ReloadSchedule(date);
 	};
 
-	self.previousMonth = function() {
+	self.previousMonth = function () {
+		removeSelectedDateSubscription();
 		var date = self.selectedDate().clone();
 		date.add('months', -1);
 		self.selectedDate(date);
+		parent.ReloadSchedule(date);
 	};
 
 	self.readData = function(data) {
@@ -78,12 +82,16 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 	}
 
 	function setSelectedDateSubscription(date) {
-		if (self.selectedDateSubscription)
-			self.selectedDateSubscription.dispose();
+		removeSelectedDateSubscription();
 
 		self.selectedDate(moment(date));
 		self.selectedDateSubscription = self.selectedDate.subscribe(function(date) {
 			parent.ReloadSchedule(date);
 		});
 	};
+
+	function removeSelectedDateSubscription() {
+		if (self.selectedDateSubscription)
+			self.selectedDateSubscription.dispose();
+	}
 };
