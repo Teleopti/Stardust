@@ -102,7 +102,7 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function(scheduleDate, selectedD
 	self.shiftTextColor = self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black';
 
 	self.isOutsideMonth = (selectedDate.month() != currentDate.month());
-	self.currentDayColor = moment().month() == currentDate.month() && self.dayOfMonth == new Date().getDate() ? 'red' : '';
+	self.currentDayColor = moment().year() == currentDate.year() && moment().month() == currentDate.month() && self.dayOfMonth == new Date().getDate() ? 'red' : '';
 };
 
 Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function() {
