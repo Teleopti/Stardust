@@ -21,12 +21,12 @@ namespace Teleopti.Analytics.Etl.Common.Service
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(EtlJobStarter));
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
+		private readonly PmInfoProvider _pmInfoProvider;
 
 		private readonly string _connectionString;
-		private readonly string _cube;
 		private readonly JobExtractor _jobExtractor;
 		private readonly JobHelper _jobHelper;
-		private readonly string _pmInstallation;
+
 		private readonly Tenants _tenants;
 		private DateTime _serviceStartTime;
 		private Action _stopService;
@@ -42,9 +42,9 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			_jobExtractor = jobExtractor;
 			_tenants = tenants;
 			_baseConfigurationRepository = baseConfigurationRepository;
+			_pmInfoProvider = pmInfoProvider;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
-			_cube = pmInfoProvider.Cube();
-			_pmInstallation = pmInfoProvider.PmInstallation();
+			
 		}
 
 		public void Initialize(DateTime serviceStartTime, Action stopService)
@@ -95,14 +95,16 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				culture = CultureInfo.GetCultureInfo(configHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
 			Thread.CurrentThread.CurrentCulture = culture;
 
+			var cube = _pmInfoProvider.Cube();
+			var pmInstallation = _pmInfoProvider.PmInstallation();
 			log.Debug("Extracting job to run from schedule");
 			var jobToRun = _jobExtractor.ExtractJobFromSchedule(
 				 scheduleToRun,
 				 _jobHelper,
 				 configHandler.BaseConfiguration.TimeZoneCode,
 				 configHandler.BaseConfiguration.IntervalLength.Value,
-				 _cube,
-				 _pmInstallation,
+				 cube,
+				 pmInstallation,
 				 configHandler.BaseConfiguration.RunIndexMaintenance,
 				 culture
 				 );
