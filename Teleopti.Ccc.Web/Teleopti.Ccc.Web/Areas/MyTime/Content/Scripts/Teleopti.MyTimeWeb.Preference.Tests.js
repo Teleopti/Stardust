@@ -150,16 +150,18 @@
 	});
 
 	test("should load period feedback", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return false; };
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { if (x == "MyTimeWeb_PreferencePerformanceForMultipleUsers_43322") return true; };
+		var fakeHtml = '<ul id="fakePreferenceHtml"><li data-mytime-date="2012-06-13"></li><ul>';
+		$('body').append(fakeHtml);
 
 		var ajax = {
 			Ajax: function (options) {
 				if (options.url == "Preference/PreferencesAndSchedules") {
 					options.success();
 				}
-				if (options.url == "PreferenceFeedback/PeriodFeedback") {
-					equal(options.url, "PreferenceFeedback/PeriodFeedback", "period feedback ajax url");
-					equal(options.data.Date, "2012-06-13", "period feedback date");
+				if (options.url == "Preference/PeriodFeedback") {
+					equal(options.url, "Preference/PeriodFeedback", "period feedback ajax url");
+					equal(options.data.startDate, "2012-06-13", "period feedback date");
 				}
 			}
 		};
@@ -171,6 +173,8 @@
 
 		var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax, portal);
 		target.InitViewModels();
+
+		$('#fakePreferenceHtml').remove();
 	});
 
 	test("should clear day view models on init", function () {
