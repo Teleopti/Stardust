@@ -275,11 +275,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
-			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().SingleInstance();
 			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().SingleInstance();
 			builder.RegisterType<SchedulePeriodListShiftCategoryBackToLegalStateService>().As<ISchedulePeriodListShiftCategoryBackToLegalStateService>().InstancePerLifetimeScope();
 
-			builder.RegisterType<WorkTimeStartEndExtractor>().As<IWorkTimeStartEndExtractor>().InstancePerLifetimeScope();
+			builder.RegisterType<WorkTimeStartEndExtractor>().As<IWorkTimeStartEndExtractor>().SingleInstance();
 			builder.RegisterType<DayOffOptimizerValidator>().As<IDayOffOptimizerValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<NewDayOffRule>().As<INewDayOffRule>().InstancePerLifetimeScope();
 
@@ -345,15 +345,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AnalyzePersonAccordingToAvailability>().SingleInstance();
 			builder.RegisterType<AdjustOvertimeLengthBasedOnAvailability>().SingleInstance();
-			builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>().InstancePerLifetimeScope();
-			builder.RegisterType<OvertimePeriodValueMapper>().InstancePerLifetimeScope();
-			builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>().InstancePerLifetimeScope();
+			builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>().SingleInstance();
+			builder.RegisterType<OvertimePeriodValueMapper>().SingleInstance();
+			builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>().SingleInstance();
 
 			builder.RegisterType<OvertimeLengthDecider>();
 			builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
-			builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>().InstancePerLifetimeScope();
-			builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>().As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>().InstancePerLifetimeScope();
-			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>().SingleInstance();
+			builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>().As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>().SingleInstance();
+			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>().SingleInstance();
 			builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixLockableBitArrayConverterEx>().As<IScheduleMatrixLockableBitArrayConverterEx>().SingleInstance();
 			builder.RegisterType<MoveTimeDecisionMaker2>().As<IMoveTimeDecisionMaker>().SingleInstance();
@@ -525,7 +525,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
 		{
-			builder.RegisterType<ValidateFoundMovedDaysSpecification>().As<IValidateFoundMovedDaysSpecification>().InstancePerLifetimeScope();
+			builder.RegisterType<ValidateFoundMovedDaysSpecification>().As<IValidateFoundMovedDaysSpecification>().SingleInstance();
 			builder.RegisterType<DayValueUnlockedIndexSorter>().SingleInstance();
 			builder.RegisterType<TeamBlockMoveTimeDescisionMaker>().As<ITeamBlockMoveTimeDescisionMaker>();
 
@@ -552,39 +552,39 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SuitableDayOffsToGiveAway>().As<ISuitableDayOffsToGiveAway>().SingleInstance();
 			builder.RegisterType<PostSwapValidationForTeamBlock>().As<IPostSwapValidationForTeamBlock>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonDayOffPointsCalculator>().As<IPersonDayOffPointsCalculator>();
-			builder.RegisterType<PersonShiftCategoryPointCalculator>().As<IPersonShiftCategoryPointCalculator>().InstancePerLifetimeScope();
+			builder.RegisterType<PersonShiftCategoryPointCalculator>().As<IPersonShiftCategoryPointCalculator>().SingleInstance();
 		}
 
 		private static void registerFairnessOptimizationService(ContainerBuilder builder)
 		{
-			builder.RegisterType<TeamBlockSeniorityValidator>().As<ITeamBlockSeniorityValidator>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockSeniorityValidator>().As<ITeamBlockSeniorityValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockSeniorityFairnessOptimizationService>().As<ITeamBlockSeniorityFairnessOptimizationService>().InstancePerLifetimeScope();
 			builder.RegisterType<ConstructTeamBlock>().As<IConstructTeamBlock>().InstancePerLifetimeScope();
-			builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>().InstancePerLifetimeScope();
-			builder.RegisterType<ShiftCategoryPointExtractor>().As<IShiftCategoryPointExtractor>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>().SingleInstance();
+			builder.RegisterType<ShiftCategoryPointExtractor>().As<IShiftCategoryPointExtractor>().SingleInstance();
 			builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>().SingleInstance();
-			builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockSwapValidator>().As<ITeamBlockSwapValidator>().InstancePerLifetimeScope();
+			builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>().SingleInstance();
+			builder.RegisterType<TeamBlockSwapValidator>().As<ITeamBlockSwapValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSwap>().As<ITeamBlockSwap>();
 			builder.RegisterType<TeamBlockLockValidator>().As<ITeamBlockLockValidator>().SingleInstance();
 			builder.RegisterType<SeniorityTeamBlockSwapValidator>().As<ISeniorityTeamBlockSwapValidator>().InstancePerLifetimeScope();
-			builder.RegisterType<DayOffRulesValidator>().As<IDayOffRulesValidator>().InstancePerLifetimeScope();
+			builder.RegisterType<DayOffRulesValidator>().As<IDayOffRulesValidator>().SingleInstance();
 			builder.RegisterType<SeniorityTeamBlockSwapper>().As<ISeniorityTeamBlockSwapper>().InstancePerLifetimeScope();
 
 			//ITeamBlockSameTimeZoneValidator
 
 			//common
-			builder.RegisterType<TeamMemberCountValidator>().As<ITeamMemberCountValidator>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockContractTimeValidator>().As<ITeamBlockContractTimeValidator>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockSameSkillValidator>().As<ITeamBlockSameSkillValidator>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockPersonsSkillChecker>().As<ITeamBlockPersonsSkillChecker>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockSameRuleSetBagValidator>().As<ITeamBlockSameRuleSetBagValidator>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockSameTimeZoneValidator>().As<ITeamBlockSameTimeZoneValidator>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamMemberCountValidator>().As<ITeamMemberCountValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockContractTimeValidator>().As<ITeamBlockContractTimeValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockSameSkillValidator>().As<ITeamBlockSameSkillValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockPersonsSkillChecker>().As<ITeamBlockPersonsSkillChecker>().SingleInstance();
+			builder.RegisterType<TeamBlockSameRuleSetBagValidator>().As<ITeamBlockSameRuleSetBagValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockSameTimeZoneValidator>().As<ITeamBlockSameTimeZoneValidator>().SingleInstance();
 		}
 
-		private void registerTeamBlockCommon(ContainerBuilder builder)
+		private static void registerTeamBlockCommon(ContainerBuilder builder)
 		{
 			builder.RegisterType<LocateMissingIntervalsIfMidNightBreak>().As<ILocateMissingIntervalsIfMidNightBreak>();
 			builder.RegisterType<FilterOutIntervalsAfterMidNight>().As<IFilterOutIntervalsAfterMidNight>().SingleInstance();
