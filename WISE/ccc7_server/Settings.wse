@@ -610,27 +610,27 @@ end
 item: Remark
   Text===============================================
 end
+item: If/While Statement
+  Variable=WORKER_ROLE_TMP
+  Value=True
+end
 item: Execute Program
   Pathname=.\Teleopti.Support.Tool.exe
   Command Line=-MODEPLOYWorker
   Default Directory=%SUPPORTTOOLS_TMP%
   Flags=00000110
 end
-item: If/While Statement
-  Variable=WORKER_ROLE_TMP
-  Value=True
-end
 item: End Block
+end
+item: If/While Statement
+  Variable=WEB_ROLE_TMP
+  Value=True
 end
 item: Execute Program
   Pathname=.\Teleopti.Support.Tool.exe
   Command Line=-MODEPLOYWeb
   Default Directory=%SUPPORTTOOLS_TMP%
   Flags=00000110
-end
-item: If/While Statement
-  Variable=WEB_ROLE_TMP
-  Value=True
 end
 item: End Block
 end
