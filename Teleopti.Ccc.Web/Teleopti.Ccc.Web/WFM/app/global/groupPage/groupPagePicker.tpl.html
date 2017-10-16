@@ -1,5 +1,5 @@
 <div class="group-picker-wrapper">
-	<md-select-value role="button" class="md-select-value" ng-click="$ctrl.openMenu($event)" ng-class="{'none-selected': $ctrl.selectedGroups.groupIds.length == 0}">
+	<md-select-value role="button" required class="md-select-value" ng-click="$ctrl.openMenu($event)" ng-class="{'none-selected': $ctrl.selectedGroups.groupIds.length == 0, 'invalid':$ctrl.required && $ctrl.selectedGroups.groupIds.length == 0}">
 		<span class="selected-text">{{ $ctrl.groupPagesSelectedText() }}</span>
 		<span class="md-select-icon" aria-hidden="true"></span>
 	</md-select-value>

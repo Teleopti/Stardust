@@ -9,7 +9,8 @@
 				onOpen: '&?',
 				onClose: '&?',
 				groupPages: '<',
-				selectedGroups: '<'
+				selectedGroups: '<',
+				required:'<'
 			}
 		});
 

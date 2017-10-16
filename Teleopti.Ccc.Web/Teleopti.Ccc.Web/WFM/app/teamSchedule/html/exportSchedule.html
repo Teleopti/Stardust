@@ -22,7 +22,7 @@
 					<td>
 						<group-page-picker group-pages="vm.availableGroups"
 										   class="group-picker-container inline-block"
-										   selected-groups="vm.configuration.selectedGroups" required></group-page-picker>
+										   selected-groups="vm.configuration.selectedGroups" required="true"></group-page-picker>
 					</td>
 				</tr>
 				<tr>
@@ -62,8 +62,8 @@
 					{{ 'Cancel'|translate }}
 				</button>
 				<button class="wfm-btn"
-						ng-class="{'wfm-btn-invis-primary': !$ctrl.invalidFile(), 'wfm-btn-invis-disabled': $ctrl.invalidFile()}"
-						ng-disabled="$ctrl.invalidFile()"
+						ng-class="{'wfm-btn-invis-primary': vm.isApplyEnabled(), 'wfm-btn-invis-disabled': !vm.isApplyEnabled()}"
+						ng-disabled="!vm.isApplyEnabled()"
 						ng-click="vm.startExport()">
 					{{ 'Start'|translate }}
 				</button>

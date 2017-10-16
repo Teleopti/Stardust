@@ -7,8 +7,8 @@
 				controllerAs: 'vm'
 			});
 
-	TeamsExportScheduleCtrl.$inject = ['$timeout', 'groupPageService', 'exportScheduleService'];
-	function TeamsExportScheduleCtrl($timeout, groupPageService, exportScheduleService) {
+	TeamsExportScheduleCtrl.$inject = ['$timeout', '$scope', 'groupPageService', 'exportScheduleService'];
+	function TeamsExportScheduleCtrl($timeout, $scope, groupPageService, exportScheduleService) {
 		var vm = this;
 		vm.configuration = {
 			startDate : new Date(),
@@ -36,6 +36,11 @@
 				vm.configuration.optionalColumnIds.length >= 3 && 
 				vm.configuration.optionalColumnIds.indexOf(optionalColumnId) === -1;
 			return result;
+		}
+
+		vm.isApplyEnabled = function() {
+
+			return $scope.exportScheduleForm.$valid && vm.configuration.selectedGroups && vm.configuration.selectedGroups.groupIds && vm.configuration.selectedGroups.groupIds.length > 0;
 		}
 
 		vm.getGroupPagesAsync = function () {
