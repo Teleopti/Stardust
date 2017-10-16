@@ -88,7 +88,7 @@ Layout = null;
 								<!-- /ko -->
 								<!-- ko if: hasOvertime -->
 								<div class="overtime-info-cell" data-bind="style: {backgroundColor:overtimeColor, color: overtimeTextColor}">
-									<strong>OT</strong>
+									<strong>@Resources.OvertimeShortName</strong>
 									<span data-bind="visible: hasMultipleOvertimes">..</span>
 								</div>
 								<!-- /ko -->
@@ -105,7 +105,7 @@ Layout = null;
 
 								<!-- ko if: hasOvertime -->
 								<div class="overtime-info-cell" data-bind="style: {backgroundColor: overtimeColor, color: overtimeTextColor}">
-									<strong>OT</strong>
+									<strong>@Resources.OvertimeShortName</strong>
 									<span data-bind="visible: hasMultipleOvertimes">..</span>
 								</div>
 								<!-- /ko -->
@@ -116,12 +116,12 @@ Layout = null;
 						<!-- ko if: isDayOff && !hasAbsence -->
 						<div class="shift is-day-off">
 							<div class="dayoff-img">
-								<strong>DO</strong>
+								<strong> @Resources.DayOffShortName </strong>
 							</div>
 							<div class="absence-and-overtime">
 								<!-- ko if: hasOvertime -->
 								<div class="overtime-info-cell" data-bind="style: {backgroundColor: overtimeColor, color: overtimeTextColor}">
-									<strong>OT</strong>
+									<strong>@Resources.OvertimeShortName</strong>
 									<span data-bind="visible: hasMultipleOvertimes">..</span>
 								</div>
 								<!-- /ko -->
@@ -132,7 +132,7 @@ Layout = null;
 						<!-- ko if: isDayOff && hasAbsence -->
 						<div class="shift is-day-off">
 							<div class="dayoff-img">
-								<strong>DO</strong>
+								<strong>@Resources.DayOffShortName</strong>
 							</div>
 							<div class="absence-and-overtime">
 								<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor, color: absenceTextColor}">
@@ -141,7 +141,7 @@ Layout = null;
 								</div>
 								<!-- ko if: hasOvertime -->
 								<div class="overtime-info-cell" data-bind="style: {backgroundColor: overtimeColor, color: overtimeTextColor}">
-									<strong>OT</strong>
+									<strong>@Resources.OvertimeShortName</strong>
 									<span data-bind="visible: hasMultipleOvertimes">..</span>
 								</div>
 								<!-- /ko -->

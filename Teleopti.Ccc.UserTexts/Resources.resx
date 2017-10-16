@@ -16615,4 +16615,8 @@ Do you want to participate?</value>
     <value>No overtime type found in your contract. Please contact your administrator.</value>
     <comment>Error message in myttime when no overtime type found in agent's contract</comment>
   </data>
+  <data name="OvertimeShortName" xml:space="preserve">
+    <value>OT</value>
+    <comment>Short name of Overtime</comment>
+  </data>
 </root>
