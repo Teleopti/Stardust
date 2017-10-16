@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory)) { Description = new Description("_") };
 			var ruleSetBag = new RuleSetBag(ruleSet) { Description = new Description("_") };
 			var date = new DateOnly(2017, 6, 1);
-			var period = new DateOnlyPeriod(date, date.AddDays(1));
 			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))};
 			var skill = new Skill().IsOpen().For(activity);
 			skill.SkillType.Description = new Description("_");
@@ -63,25 +61,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			var agent = new Person()
 				.WithPersonPeriod(ruleSetBag, contract, skill).InTimeZone(TimeZoneInfo.Utc)
 				.WithSchedulePeriodOneDay(date);
-			var ass1 = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(startHourOfPresentShift, startHourOfPresentShift + 8)).ShiftCategory(shiftCategory);
-			persistSetupData(scenario, activity, skill, skillDay, agent, date, shiftCategory, ass1);
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(startHourOfPresentShift, startHourOfPresentShift + 8)).ShiftCategory(shiftCategory);
+			persistSetupData(scenario, activity, skill, skillDay, agent, date, shiftCategory, ass);
 			agentsTimezoneChanged(agent, TimeZoneInfo.FindSystemTimeZoneById(newTimezoneForAgent));
-			var stateHolder = fillSchedulersStateHolder(scenario, period, agent, ass1, skillDay);
+			var stateHolder = SchedulerStateHolder.Fill(scenario, date, agent, ass, skillDay);
 
-			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, date.ToDateOnlyPeriod());
 
 			Assert.DoesNotThrow(() =>
 			{
 				Persister.Persist(stateHolder.Schedules);
 			});
-		}
-
-		private ISchedulerStateHolder fillSchedulersStateHolder(Scenario scenario, DateOnlyPeriod period, Person agent, IPersonAssignment ass1, ISkillDay skillDay)
-		{
-			//would be much better if using same logic as schedulingscreen but... 100s of rows in schedulingscreen ATM :(
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] {agent}, new[] {ass1}, skillDay);
-			stateHolder.Schedules.TakeSnapshot(); //let's see if this could be put in Fill method instead
-			return stateHolder;
 		}
 
 		private void agentsTimezoneChanged(Person agent, TimeZoneInfo newTimezone)

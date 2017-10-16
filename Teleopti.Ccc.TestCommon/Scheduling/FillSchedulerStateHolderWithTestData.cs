@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 
 			stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
 			stateHolder.CommonStateHolder.SetDayOffTemplate(DayOffFactory.CreateDayOff());
+			stateHolder.Schedules.TakeSnapshot();
 			return stateHolder;
 		}
 
@@ -71,7 +72,17 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			IEnumerable<IScheduleData> persistableScheduleData,
 			ISkillDay skillDay)
 		{
-			return Fill(stateHolderFunc, scenario, new DateOnlyPeriod(date, date), agents, persistableScheduleData, skillDay);
+			return Fill(stateHolderFunc, scenario, date.ToDateOnlyPeriod(), agents, persistableScheduleData, skillDay);
+		}
+
+		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,
+			IScenario scenario,
+			DateOnly date,
+			IPerson agent,
+			IScheduleData persistableScheduleData,
+			ISkillDay skillDay)
+		{
+			return Fill(stateHolderFunc, scenario, date.ToDateOnlyPeriod(), new []{agent}, new []{persistableScheduleData}, skillDay);
 		}
 	}
 }
