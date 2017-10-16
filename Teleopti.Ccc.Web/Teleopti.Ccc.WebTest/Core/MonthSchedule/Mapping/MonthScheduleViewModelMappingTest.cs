@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		{
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			target = new MonthScheduleViewModelMapper(_projectionProvider,
-				new PushMessageProvider(null, new FakePushMessageDialogueRepository()));
+				new PushMessageProvider(new FakeLoggedOnUser(), new FakePushMessageDialogueRepository()));
 		}
 
 		[Test]
