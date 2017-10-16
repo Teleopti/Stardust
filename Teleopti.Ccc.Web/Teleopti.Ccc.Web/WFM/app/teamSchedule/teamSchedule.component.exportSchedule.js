@@ -43,6 +43,12 @@
 			var endDate = moment(vm.configuration.endDate).format('YYYY-MM-DD');
 			groupPageService.fetchAvailableGroupPages(startDate, endDate).then(function (data) {
 				vm.availableGroups = data;
+				if (data.LogonUserTeamId) {
+					vm.configuration.selectedGroups = {
+						mode: 'BusinessHierarchy',
+						groupIds: [vm.availableGroups.LogonUserTeamId]
+					};
+				}
 			});
 		};
 
