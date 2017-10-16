@@ -1642,6 +1642,7 @@
     <Content Include="WFM\app\staffing\staffing.importData.template.html" />
     <Content Include="WFM\app\teamSchedule\html\exportSchedule.html" />
     <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.exportSchedule.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.staffing.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.staffing.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.exportSchedule.js" />

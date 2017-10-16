@@ -31,8 +31,11 @@
 			});
 		}
 
-		vm.validateSelectedOptionalColumns = function() {
-			return Array.isArray(vm.configuration.optionalColumnIds) && vm.configuration.optionalColumnIds.length <= 1;
+		vm.isOptionalColDisabled = function(optionalColumnId) {
+			var result = vm.configuration.optionalColumnIds &&
+				vm.configuration.optionalColumnIds.length >= 3 && 
+				vm.configuration.optionalColumnIds.indexOf(optionalColumnId) === -1;
+			return result;
 		}
 
 		vm.getGroupPagesAsync = function () {

@@ -1,18 +1,20 @@
-﻿<div>
+﻿<div class="export-schedule">
 	<h5>Export Schedule</h5>
 	<form name="exportScheduleForm">
 		<table class="wfm-table">
 			<tbody>
 				<tr>
-					<td>{{'From' | translate}}</td>
+					<td>{{'Period' | translate}}</td>
 					<td>
-						<md-datepicker ng-model="vm.configuration.startDate" md-placeholder="{{'From' | translate}}" ng-change="vm.onStartDateChanged()" required></md-datepicker>
-					</td>
-				</tr>
-				<tr>
-					<td>{{'To' | translate}}</td>
-					<td>
-						<md-datepicker name="endDate" ng-model="vm.configuration.endDate" md-placeholder="{{'To' | translate}}" md-min-date="vm.configuration.startDate" md-max-date="vm.maxEndDate" required></md-datepicker>
+						<div>
+							<span class="td-margin">
+								<md-datepicker ng-model="vm.configuration.startDate" md-placeholder="{{'From' | translate}}" ng-change="vm.onStartDateChanged()" required></md-datepicker>
+							</span>
+							<span>
+								<md-datepicker name="endDate" ng-model="vm.configuration.endDate" md-placeholder="{{'To' | translate}}" md-min-date="vm.configuration.startDate" md-max-date="vm.maxEndDate" required></md-datepicker>
+							</span>
+						</div>
+						<div class="tips">{{'ExportSchedulesMaximumDays' | translate}}</div>
 					</td>
 				</tr>
 				<tr>
@@ -31,7 +33,6 @@
 						</md-select>
 					</td>
 				</tr>
-
 				<tr>
 					<td>{{'Timezone' | translate}}</td>
 					<td>
@@ -43,9 +44,12 @@
 				<tr>
 					<td>{{'OptionalColumns' | translate}}</td>
 					<td>
-						<md-select multiple ng-model="vm.configuration.optionalColumnIds" xng-required="vm.validateSelectedOptionalColumns()" placeholder="{{ 'OptionalColumns'|translate }}">
-							<md-option ng-repeat="optionalColumn in vm.optionalColumns" ng-value="optionalColumn.Id">{{::optionalColumn.Name}}</md-option>
-						</md-select>
+						<div>
+							<md-select multiple ng-model="vm.configuration.optionalColumnIds" placeholder="{{ 'OptionalColumns'|translate }}">
+								<md-option ng-repeat="optionalColumn in vm.optionalColumns" ng-disabled="vm.isOptionalColDisabled(optionalColumn.Id)" ng-value="optionalColumn.Id">{{::optionalColumn.Name}}</md-option>
+							</md-select>
+						</div>
+						<div class="tips">{{'ExportSchedulesMaximumOptionalColumns' | translate}}</div>
 					</td>
 				</tr>
 
