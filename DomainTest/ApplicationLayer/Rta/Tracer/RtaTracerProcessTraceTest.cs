@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 	public class RtaTracerProcessTraceTest
 	{
 		public IRtaTracer Target;
-		public FakeKeyValueStorePersister KeyValueStore;
 		public FakeRtaTracerPersister Logs;
 		public MutableNow Now;
 

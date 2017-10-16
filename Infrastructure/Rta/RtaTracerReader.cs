@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class RtaTracerReader : IRtaTracerReader
 	{
-		private readonly ICurrentAnalyticsUnitOfWork _unitOfWork;
 		private readonly IJsonDeserializer _deserializer;
+		private readonly ICurrentDataSource _dataSource;
+		private readonly RtaTracerSessionFactory _sessionFactory;
 
-		public RtaTracerReader(ICurrentAnalyticsUnitOfWork unitOfWork, IJsonDeserializer deserializer)
+		public RtaTracerReader(IJsonDeserializer deserializer, ICurrentDataSource dataSource, RtaTracerSessionFactory sessonFactory)
 		{
-			_unitOfWork = unitOfWork;
 			_deserializer = deserializer;
+			_dataSource = dataSource;
+			_sessionFactory = sessonFactory;
 		}
 
 		private class internalModel
@@ -28,18 +29,21 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<RtaTracerLog<T>> ReadOfType<T>()
 		{
-			return _unitOfWork.Current().Session()
-				.CreateSQLQuery($@"SELECT Time, Message FROM RtaTracer WHERE MessageType = :MessageType")
-				.SetParameter("MessageType", typeof(T).Name)
-				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
-				.List<internalModel>()
-				.Select(x =>
-				{
-					var model = _deserializer.DeserializeObject<RtaTracerLog<T>>(x.Message);
-					model.Time = x.Time;
-					return model;
-				})
-				.ToArray();
+			using (var session = _sessionFactory.OpenSession())
+				return session
+					.CreateSQLQuery($@"SELECT Time, Message FROM RtaTracer.Logs WHERE MessageType = :MessageType AND Tenant = :Tenant")
+					.SetParameter("Tenant", _dataSource.CurrentName())
+					.SetParameter("MessageType", typeof(T).Name)
+					.SetResultTransformer(Transformers.AliasToBean<internalModel>())
+					.List<internalModel>()
+					.Select(x =>
+					{
+						var model = _deserializer.DeserializeObject<RtaTracerLog<T>>(x.Message);
+						model.Time = x.Time;
+						return model;
+					})
+					.ToArray();
 		}
+		
 	}
 }

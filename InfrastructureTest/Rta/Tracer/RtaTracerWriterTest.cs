@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 {
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
 	[AnalyticsDatabaseTest]
@@ -18,15 +18,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	{
 		public IRtaTracerWriter Target;
 		public IRtaTracerReader Reader;
-		public WithAnalyticsUnitOfWork Uow;
 		public MutableNow Now;
+		public ICurrentDataSource DataSource;
 
 		[Test]
 		public void ShouldWrite()
 		{
-			Target.Write(new RtaTracerLog<ProcessReceivedLog>());
+			Target.Write(new RtaTracerLog<ProcessReceivedLog> {Tenant = DataSource.CurrentName()});
 
-			var actual = Uow.Get(() => Reader.ReadOfType<ProcessReceivedLog>());
+			var actual = Reader.ReadOfType<ProcessReceivedLog>();
 			actual.Should().Not.Be.Null();
 		}
 
@@ -36,10 +36,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Target.Write(new RtaTracerLog<ProcessReceivedLog>
 			{
 				Message = "message",
+				Tenant = DataSource.CurrentName(),
 				Log = new ProcessReceivedLog {RecievedAt = "2017-10-11 10:00".Utc()}
 			});
 
-			var actual = Uow.Get(() => Reader.ReadOfType<ProcessReceivedLog>()).Single();
+			var actual = Reader.ReadOfType<ProcessReceivedLog>().Single();
 			actual.Message.Should().Be("message");
 			actual.Log.RecievedAt.Should().Be("2017-10-11 10:00".Utc());
 		}
@@ -48,29 +49,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldWriteTime()
 		{
 			var now = Now.UtcDateTime();
-			Target.Write(new RtaTracerLog<ProcessReceivedLog>());
+			Target.Write(new RtaTracerLog<ProcessReceivedLog> {Tenant = DataSource.CurrentName()});
 
-			var actual = Uow.Get(() => Reader.ReadOfType<ProcessReceivedLog>()).Single();
+			var actual = Reader.ReadOfType<ProcessReceivedLog>().Single();
 			actual.Time.Should().Be.GreaterThanOrEqualTo(now);
 		}
 
 		[Test]
 		public void ShouldWrite2DifferentLogs()
 		{
-			Target.Write(new RtaTracerLog<ProcessReceivedLog>());
-			Target.Write(new RtaTracerLog<ProcessProcessingLog>());
+			Target.Write(new RtaTracerLog<ProcessReceivedLog> {Tenant = DataSource.CurrentName()});
+			Target.Write(new RtaTracerLog<ProcessProcessingLog> {Tenant = DataSource.CurrentName()});
 
-			Uow.Get(() => Reader.ReadOfType<ProcessReceivedLog>()).Should().Have.Count.EqualTo(1);
-			Uow.Get(() => Reader.ReadOfType<ProcessProcessingLog>()).Should().Have.Count.EqualTo(1);
+			Reader.ReadOfType<ProcessReceivedLog>().Should().Have.Count.EqualTo(1);
+			Reader.ReadOfType<ProcessProcessingLog>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldWriteAHugeMessage()
 		{
 			var message = new string('x', short.MaxValue);
-			Target.Write(new RtaTracerLog<StateTraceLog> {Message = message});
+			Target.Write(new RtaTracerLog<StateTraceLog> {Tenant = DataSource.CurrentName(), Message = message});
 
-			Uow.Get(() => Reader.ReadOfType<StateTraceLog>()).Single().Message.Should().Be(message);
+			Reader.ReadOfType<StateTraceLog>().Single().Message.Should().Be(message);
 		}
 	}
 }

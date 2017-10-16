@@ -114,6 +114,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeTeamCardReader>().For<ITeamCardReader>();
 			system.UseTestDouble<FakeOrganizationReader>().For<IOrganizationReader>();
 			system.UseTestDouble<FakeRtaTracerPersister>().For<IRtaTracerReader, IRtaTracerWriter>();
+			system.UseTestDouble<FakeRtaTracerConfigPersister>().For<IRtaTracerConfigPersister>();
 			//
 
 			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();

@@ -302,8 +302,6 @@
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesSkillsTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderBusinessUnitTest.cs" />
-    <Compile Include="Rta\RtaTracerTest.cs" />
-    <Compile Include="Rta\RtaTracerWriterTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStateForUpsert.cs" />
     <Compile Include="Rta\ReadModels\AgentState\AgentStateReadModelPersisterExtensions.cs" />
     <Compile Include="Rta\ReadModels\AgentState\Reader\ForExcludingStateGroups.cs" />
@@ -349,6 +347,10 @@
     <Compile Include="Rta\Service\UnrecognizedStatesTest.cs" />
     <Compile Include="Rta\ReadModels\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="Rta\Service\UnrecognizedStatesTest2.cs" />
+    <Compile Include="Rta\Tracer\RtaTracerConfigPersisterTest.cs" />
+    <Compile Include="Rta\Tracer\RtaTracerTest.cs" />
+    <Compile Include="Rta\Tracer\RtaTracerWriterTenantTest.cs" />
+    <Compile Include="Rta\Tracer\RtaTracerWriterTest.cs" />
     <Compile Include="Rta\WithUnitOfWorkWithRecurringEvents.cs" />
     <Compile Include="Scheduling\FullSchedulingUowTest.cs" />
     <Compile Include="Scheduling\MoveAgentToNewTimeZoneTest.cs" />

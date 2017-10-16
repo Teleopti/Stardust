@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 	public class RtaTracerLog<T>
 	{
 		public DateTime Time;
+		public string Tenant;
 		public string Process;
 		public string Message;
 		public T Log;

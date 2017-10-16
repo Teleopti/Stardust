@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using Teleopti.Ccc.Domain.Common;
 
@@ -5,12 +6,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class PerTenant<T>
 	{
+		private readonly Func<T> _factory;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly ConcurrentDictionary<string, T> _cache = new ConcurrentDictionary<string, T>();
 
 		public PerTenant(ICurrentDataSource dataSource)
 		{
 			_dataSource = dataSource;
+		}
+
+		public PerTenant(ICurrentDataSource dataSource, Func<T> factory)
+		{
+			_dataSource = dataSource;
+			_factory = factory;
 		}
 
 		public void Set(T value)
@@ -23,7 +31,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			get
 			{
 				T ret;
-				_cache.TryGetValue(_dataSource.CurrentName(), out ret);
+				if (_cache.TryGetValue(_dataSource.CurrentName(), out ret))
+					return ret;
+				if (_factory == null) 
+					return ret;
+				ret = _factory.Invoke();
+				Set(ret);
 				return ret;
 			}
 		}

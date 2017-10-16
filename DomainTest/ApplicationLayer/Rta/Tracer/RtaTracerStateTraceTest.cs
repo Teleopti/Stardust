@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 	public class RtaTracerStateTraceTest
 	{
 		public IRtaTracer Target;
-		public FakeKeyValueStorePersister KeyValueStore;
 		public FakeRtaTracerPersister Logs;
+		public FakeRtaTracerConfigPersister Config;
 
 		[Test]
 		public void ShouldLogStateReceived()
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public void ShouldLogWhenStartedByOtherProcess()
 		{
 			Target.Stop();
-			KeyValueStore.Update("RtaTracerUserCode", "usercode");
+			Config.UpdateForTenant("usercode");
 
 			Target.StateReceived("usercode", "statecode");
 

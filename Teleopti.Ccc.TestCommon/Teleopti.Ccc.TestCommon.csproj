@@ -281,6 +281,7 @@
     <Compile Include="FakeData\FakeRequestFactory.cs" />
     <Compile Include="FakeRepositories\Rta\FakeHistoricalChangeReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeOrganizationReader.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeRtaTracerConfigPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeTeamCardReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaTracerPersister.cs" />
     <Compile Include="FakeSchedulingSourceScope.cs" />

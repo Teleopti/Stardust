@@ -7,33 +7,42 @@ using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class RtaTracerWriter : IRtaTracerWriter, IDisposable
 	{
 		private readonly ILog _log = LogManager.GetLogger("Teleopti.RtaTracer");
+		private readonly ICurrentDataSource _dataSource;
 		private readonly IJsonSerializer serializer;
 
-		public RtaTracerWriter(IConnectionStrings connectionStrings, IConfigReader config, IJsonDeserializer deserializer, IJsonSerializer serializer)
+		public RtaTracerWriter(ICurrentDataSource dataSource, IConfigReader config, IJsonDeserializer deserializer, IJsonSerializer serializer)
 		{
+			_dataSource = dataSource;
 			this.serializer = serializer;
 			var appender = new AdoNetAppender()
 			{
 				Name = "RtaTracer",
 				BufferSize = config.ReadValue("RtaTracerBufferSize", 20),
 				ConnectionType = typeof(System.Data.SqlClient.SqlConnection).AssemblyQualifiedName,
-				ConnectionString = connectionStrings.AnalyticsFor("Teleopti.RtaTracer"),
-				CommandText = "INSERT INTO [RtaTracer] ([Time], [MessageType], [Message]) VALUES (@log_date, @messageType, @message)",
+				ConnectionString = config.ConnectionString("RtaTracer"),
+				CommandText = "INSERT INTO RtaTracer.[Logs] ([Time], [Tenant], [MessageType], [Message]) VALUES (@log_date, @tenant, @messageType, @message)",
 			};
 			appender.AddParameter(new AdoNetAppenderParameter
 			{
 				ParameterName = "@log_date",
 				DbType = DbType.DateTime,
 				Layout = new RawTimeStampLayout()
+			});
+			appender.AddParameter(new ValueFromJsonSerializedMessageParameter(deserializer)
+			{
+				ParameterName = "@tenant",
+				ValueReader = d => d.Tenant
 			});
 			appender.AddParameter(new ValueFromJsonSerializedMessageParameter(deserializer)
 			{
@@ -64,7 +73,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public void Write<T>(RtaTracerLog<T> log)
 		{
-			_log.Debug(serializer.SerializeObject(new {Log = log, Type = typeof(T).Name}));
+			_log.Debug(serializer.SerializeObject(new {Log = log, Tenant = log.Tenant, Type = typeof(T).Name}));
 		}
 	}
 
@@ -72,7 +81,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly IJsonDeserializer _deserializer;
 		public Func<dynamic, object> ValueReader;
-		
+
 		public ValueFromJsonSerializedMessageParameter(IJsonDeserializer deserializer)
 		{
 			_deserializer = deserializer;

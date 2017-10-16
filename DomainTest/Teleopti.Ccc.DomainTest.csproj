@@ -224,6 +224,7 @@
     <Compile Include="ApplicationLayer\Rta\StateQueue\QueueTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerProcessTraceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerStateTraceTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerTenantTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ForEntireBuTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\PermittedViewModelBuilderTest.cs" />

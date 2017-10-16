@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool;
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			_config.Cache().This<TenantLoader>(b => b
 				.CacheMethod(x => x.TenantNameByKey(null))
 				.CacheMethod(x => x.Authenticate(null))
-				);
+			);
 			builder.CacheByClassProxy<TenantLoader>().ApplyAspects().SingleInstance();
 
 			builder.RegisterType<AgentStateReadModelPersister>().As<IAgentStateReadModelPersister>().SingleInstance().ApplyAspects();
@@ -112,8 +111,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<NoRtaTracer>().As<IRtaTracer>().SingleInstance();
 			builder.RegisterType<RtaTracerReader>().As<IRtaTracerReader>().SingleInstance();
 			builder.RegisterType<RtaTracerWriter>().As<IRtaTracerWriter>().SingleInstance();
+			builder.RegisterType<RtaTracerConfigPersister>().As<IRtaTracerConfigPersister>().SingleInstance();
+			builder.RegisterType<RtaTracerSessionFactory>().SingleInstance();
 		}
-
 	}
-	
 }
