@@ -45,7 +45,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 
 		[Test]
 		[Ignore("#45727 - 2 be cont")]
-		public void ShouldNotCrashWhenAgentHasChangedTimeZone()
+		public void ShouldNotCrashWhenAgentHasChangedTimeZone(
+			[Values(1, 12, 23)] int startHourOfPresentShift,
+			[Values("Mountain Standard Time", "Singapore Standard Time", "GMT Standard Time")] string newTimezoneForAgent)
 		{
 			var scenario = new Scenario { DefaultScenario = true };
 			var activity = new Activity("_");
@@ -61,10 +63,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			var agent = new Person()
 				.WithPersonPeriod(ruleSetBag, contract, skill).InTimeZone(TimeZoneInfo.Utc)
 				.WithSchedulePeriodOneDay(date);
-			const int startHour = 2;
-			var ass1 = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(startHour, startHour + 8)).ShiftCategory(shiftCategory);
+			var ass1 = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(startHourOfPresentShift, startHourOfPresentShift + 8)).ShiftCategory(shiftCategory);
 			persistSetupData(scenario, activity, skill, skillDay, agent, date, shiftCategory, ass1);
-			agentsTimezoneChanged(agent);
+			agentsTimezoneChanged(agent, TimeZoneInfo.FindSystemTimeZoneById(newTimezoneForAgent));
 			var stateHolder = fillSchedulersStateHolder(scenario, period, agent, ass1, skillDay);
 
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
@@ -83,11 +84,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			return stateHolder;
 		}
 
-		private void agentsTimezoneChanged(Person agent)
+		private void agentsTimezoneChanged(Person agent, TimeZoneInfo newTimezone)
 		{
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
+				agent.PermissionInformation.SetDefaultTimeZone(newTimezone);
 				PersonRepository.Add(agent);
 				uow.PersistAll();
 			}
