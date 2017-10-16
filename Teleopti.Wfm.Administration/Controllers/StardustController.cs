@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Web.Http;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Staffing;
@@ -139,11 +136,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			var allNodes = _stardustRepository.GetAllWorkerNodes();
 			if (!allNodes.Any())
-				return InternalServerError(
-					new Exception("No nodes registered! Make sure that the Teleopti Service Bus service is running."));
+				return Ok("No nodes registered! Make sure that the Teleopti Service Bus service is running.");
 			if (!allNodes.Any(x => x.Alive))
-				return InternalServerError(new Exception(
-					"No node is sending heartbeats. Make sure that the Teleopti Service Bus service is running."));
+				 return Ok("No node is sending heartbeats. Make sure that the Teleopti Service Bus service is running.");
 
 			foreach (var node in allNodes.Where(x => x.Alive))
 			{
@@ -154,12 +149,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 				}
 				catch (Exception)
 				{
-					return InternalServerError(new Exception(
-						$"Node {node.Url} does not respond. Is the firewall configured so the worker server allows incoming traffic on ports 14100-14199?"));
+					return Ok($"Node {node.Url} does not respond. Make sure that the Teleopti Service Bus service is running. Is the firewall configured so the worker server allows incoming traffic on ports 14100-14199?");
 				}
 				if (!result)
-					return InternalServerError(new Exception(
-						$"Node {node.Url} does not respond. Is the firewall configured so the worker server allows incoming traffic on ports 14100-14199?"));
+					return Ok($"Node {node.Url} does not respond. Make sure that the Teleopti Service Bus service is running. Is the firewall configured so the worker server allows incoming traffic on ports 14100-14199?");
 			}
 
 			var id = _stardustSender.Send(new StardustHealthCheckEvent { JobName = "Stardust HealthCheck", UserName = "Health Check" });
@@ -175,13 +168,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Thread.Sleep(TimeSpan.FromMilliseconds(500));
 			}
 			if(healthCheckJob.Ended != null && healthCheckJob.Result != "Success")
-				return InternalServerError(new Exception(
-					"The healthCheck job failed during execution. Check the Failed Jobs tab for more information."));
+				return Ok("The healthCheck job failed during execution. Check the Failed Jobs tab for more information.");
 			var queuedJobs = _stardustRepository.GetAllQueuedJobs(0, 5);
 			if(healthCheckJob.Ended == null || queuedJobs.Any())
-				return InternalServerError(new Exception(
-					"Something is wrong with Stardust and it smells like a bug!"));
-			return Ok();
+				return Ok("Something is wrong with Stardust and it smells like a bug!");
+			return Ok("Everything looks OK!");
 		}
 
 	

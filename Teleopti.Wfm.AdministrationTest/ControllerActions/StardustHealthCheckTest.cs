@@ -1,6 +1,10 @@
 ﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Web.Http.Results;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
@@ -30,27 +34,27 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		}
 		
 		[Test]
-		public void ShouldRespond200IfEverythingIsOk()
+		public void ShouldBeHappyEverythingIsOk()
 		{
 			StardustRepository.Has(new WorkerNode());
-			var result = Target.HealthCheck();
-			Assert.IsInstanceOf<OkResult>(result);
+			var response = Target.HealthCheck() as OkNegotiatedContentResult<string>;
+			response.Content.Should().Contain("Everything looks OK!");
 		}
 
 		[Test]
-		public void ShouldRespond500IfNoNodesRegistered()
+		public void ShouldComplainIfNoNodesRegistered()
 		{
-			var result = Target.HealthCheck();
-			Assert.IsInstanceOf<ExceptionResult>(result);
+			var response = Target.HealthCheck() as OkNegotiatedContentResult<string>;
+			response.Content.Should().Contain("No nodes registered!");
 		}
 
 		[Test]
-		public void ShouldRespond500IfNoNodeAlive()
+		public void ShouldComplainIfNoNodeAlive()
 		{
 			var node = new WorkerNode {Alive = false};
 			StardustRepository.Has(node);
-			var result = Target.HealthCheck();
-			Assert.IsInstanceOf<ExceptionResult>(result);
+			var response = Target.HealthCheck() as OkNegotiatedContentResult<string>;
+			response.Content.Should().Contain("No node is sending heartbeats.");
 		}
 	}
 }

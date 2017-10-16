@@ -1,28 +1,29 @@
 ﻿(function() {
-	'use strict';
+	"use strict";
 
 	angular
-		.module('adminApp')
-		.controller('summaryController', summaryController, ['tokenHeaderService']);
+		.module("adminApp")
+		.controller("summaryController", summaryController, ["tokenHeaderService"]);
 
 	function summaryController($http, tokenHeaderService) {
 		/* jshint validthis:true */
 		var vm = this;
-		vm.title = 'Stardust Summary';
-		vm.NodeError = '';
-		vm.JobError = '';
+		vm.title = "Stardust Summary";
+		vm.NodeError = "";
+		vm.JobError = "";
 		vm.triggerResourceCalculation = triggerResourceCalculation;
 		vm.healthCheck = healthCheck;
 		vm.selectTenant = selectTenant;
+		vm.result = "";
 		$http.get("./Stardust/Jobs/1/5", tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.RunningJobs = data;
 			})
-			.error(function(xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+			.error(function(xhr, ajaxOptions) {
+				console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 				vm.JobError = ajaxOptions;
 				if (xhr !== "") {
-					vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
+					vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 				}
 			});
 
@@ -30,11 +31,11 @@
 			.success(function(data) {
 				vm.FailedJobs = data;
 			})
-			.error(function(xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+			.error(function(xhr, ajaxOptions) {
+				console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 				vm.JobError = ajaxOptions;
 				if (xhr !== "") {
-					vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
+					vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 				}
 			});
 
@@ -42,11 +43,11 @@
 			.success(function(data) {
 				vm.QueuedJobs = data;
 			})
-			.error(function(xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+			.error(function(xhr, ajaxOptions) {
+				console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 				vm.JobError = ajaxOptions;
 				if (xhr !== "") {
-					vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
+					vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 				}
 			});
 
@@ -54,11 +55,11 @@
 			.success(function(data) {
 				vm.WorkerNodes = data;
 			})
-			.error(function(xhr, ajaxOptions, thrownError) {
+			.error(function(xhr, ajaxOptions) {
 				vm.NodeError = ajaxOptions;
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 				if (xhr !== "") {
-					vm.NodeError = vm.NodeError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
+					vm.NodeError = vm.NodeError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 				}
 
 			});
@@ -84,10 +85,14 @@
 		}
 
 		function healthCheck() {
+			vm.result = "running...";
 			$http.get("./Stardust/HealthCheck",
-				tokenHeaderService.getHeaders())
-				.success(function (data) {
-					vm.HealthCheck = data;
+					tokenHeaderService.getHeaders())
+				.success(function(data) {
+					vm.result = data;
+				})
+				.error(function() {
+					vm.result = "Something is wrong but we can't figure out what!";
 				});
 		}
 	}
