@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -81,14 +81,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				RuleSetBagRepository.Add(agent.Period(date).RuleSetBag);
 				PersonRepository.Add(agent);
 				PlanningPeriodRepository.Add(planningPeriod);
-
-				//ett ass, börjar 08:00
-				uow.PersistAll();
+				PersonAssignmentRepository.Add(new PersonAssignment(agent, scenario, date).WithLayer(activity, new DateTimePeriod(2017, 6, 1, 8, 2017, 6, 1, 16)));
+				uow.PersistAll();	
 			}
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				//i ny tran -> vrid agents tidszon 9 timmar
+				var person = PersonRepository.LoadAll().First();
+				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
 				uow.PersistAll();
 			}
 
