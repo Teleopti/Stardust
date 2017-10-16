@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -19,6 +20,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -39,10 +41,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakeSeatBookingRepository SeatBookingRepository;
 		public FakeSeatMapRepository SeatMapRepository;
+		public FakePushMessageDialogueRepository PushMessageDialogueRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSeatMapRepository>().For<ISeatMapLocationRepository>();
+			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
 		}
 
 		[Test]
@@ -266,6 +270,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Overtimes.Length.Should().Be(1);
 			result.Overtimes.FirstOrDefault().Name.Should().Be("ot");
 			result.Overtimes.FirstOrDefault().Color.Should().Be($"rgb({Color.Purple.R},{Color.Purple.G},{Color.Purple.B})");
+		}
+
+		[Test]
+		public void ShouldMapUnReadMessageCount()
+		{
+			PushMessageDialogueRepository.Add(new PushMessageDialogue(new PushMessage(), User.CurrentUser()));
+
+			var result = Target.FetchMobileMonthData(null);
+			var unReadMessagetCount = result.UnReadMessageCount;
+
+			unReadMessagetCount.Should().Be(1);
 		}
 	}
 }

@@ -10,7 +10,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -26,9 +28,10 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void Setup()
 		{
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
-			target = new MonthScheduleViewModelMapper(_projectionProvider);
+			target = new MonthScheduleViewModelMapper(_projectionProvider,
+				new PushMessageProvider(null, new FakePushMessageDialogueRepository()));
 		}
-		
+
 		[Test]
 		public void ShouldMapDate()
 		{

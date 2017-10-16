@@ -32,7 +32,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.periods = [];
 	self.layers = ko.observableArray();
 	self.scheduleHeight = ko.observable();
-	self.unreadMessageCount = ko.observable(0);
+	self.unreadMessageCount = ko.observable();
 	self.requestsCount = ko.observable(0);
 	self.requestViewModel = ko.observable();
 

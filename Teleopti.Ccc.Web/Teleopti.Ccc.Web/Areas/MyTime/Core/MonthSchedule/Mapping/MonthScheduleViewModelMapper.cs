@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -12,10 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 	public class MonthScheduleViewModelMapper
 	{
 		private readonly IProjectionProvider _projectionProvider;
+		private readonly IPushMessageProvider _pushMessageProvider;
 
-		public MonthScheduleViewModelMapper(IProjectionProvider projectionProvider)
+		public MonthScheduleViewModelMapper(IProjectionProvider projectionProvider, IPushMessageProvider pushMessageProvider)
 		{
 			_projectionProvider = projectionProvider;
+			_pushMessageProvider = pushMessageProvider;
 		}
 
 		public MonthScheduleViewModel Map(MonthScheduleDomainData s)
@@ -29,7 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 							.Select(
 								w =>
 									new Description(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(w),
-										CultureInfo.CurrentUICulture.DateTimeFormat.GetAbbreviatedDayName(w)))
+										CultureInfo.CurrentUICulture.DateTimeFormat.GetAbbreviatedDayName(w))),
+				UnReadMessageCount = _pushMessageProvider.UnreadMessageCount
 			};
 		}
 
