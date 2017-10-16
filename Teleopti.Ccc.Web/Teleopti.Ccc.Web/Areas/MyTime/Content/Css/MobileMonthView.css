@@ -202,7 +202,7 @@
 .mobile-month-view .mobile-month-view-nav .submenu li a > span.badge {
 	position: absolute;
 	top: 5px;
-	right: -2px;
+	left: 50%;
 	font-size: 12px;
 	padding: 3px;
 }

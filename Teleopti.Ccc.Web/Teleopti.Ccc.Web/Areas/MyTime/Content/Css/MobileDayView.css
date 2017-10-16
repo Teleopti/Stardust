@@ -55,7 +55,7 @@
 .mobile-start-day .mobile-start-day-nav .submenu li.mobile-message a > span.badge {
 	position: absolute;
 	top: 5px;
-	right: -2px;
+	left: 50%;
 	font-size: 12px;
 	padding: 3px;
 }
