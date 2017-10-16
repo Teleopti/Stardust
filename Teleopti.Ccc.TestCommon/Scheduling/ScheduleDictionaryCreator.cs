@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
+namespace Teleopti.Ccc.TestCommon.Scheduling
 {
 	public static class ScheduleDictionaryCreator
 	{

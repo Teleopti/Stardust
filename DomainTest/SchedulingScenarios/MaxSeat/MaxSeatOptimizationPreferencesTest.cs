@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.Scheduling;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {

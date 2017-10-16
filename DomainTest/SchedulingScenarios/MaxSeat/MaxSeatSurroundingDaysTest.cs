@@ -14,6 +14,7 @@ using Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat.TestData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat

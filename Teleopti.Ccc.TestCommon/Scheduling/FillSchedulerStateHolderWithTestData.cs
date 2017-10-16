@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
+namespace Teleopti.Ccc.TestCommon.Scheduling
 {
 	public static class FillSchedulerStateHolderWithTestData
 	{
