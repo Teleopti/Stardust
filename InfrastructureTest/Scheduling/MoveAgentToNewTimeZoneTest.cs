@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 {
 	[InfrastructureTest]
 	[UseIocForFatClient]
-	public class MoveAgentToNewTimeZoneDesktopTest : ISetup
+	public class MoveAgentToNewTimeZoneDesktopTest
 	{
 		public DesktopScheduling Target;
 		public IScenarioRepository ScenarioRepository;
@@ -67,6 +67,44 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				.WithSchedulePeriodOneDay(date);
 			const int startHour = 2;
 			var ass1 = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(startHour, startHour + 8)).ShiftCategory(shiftCategory);
+			persistSetupData(scenario, activity, skill, skillDays, agent, date, shiftCategory, ass1);
+			agentsTimezoneChanged(agent);
+			var stateHolder = setupSchedulersStateHolder(scenario, period, skill);
+
+			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+
+			Assert.DoesNotThrow(() =>
+			{
+				Persister.Persist(stateHolder.Schedules);
+			});
+		}
+
+		private ISchedulerStateHolder setupSchedulersStateHolder(Scenario scenario, DateOnlyPeriod period, ISkill skill)
+		{
+			ISchedulerStateHolder stateHolder;
+			using (UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				stateHolder = Fill(SchedulerStateHolder, scenario, period,
+					PersonRepository.FindPeopleInOrganization(period, true),
+					PersonAssignmentRepository.Find(period, scenario),
+					SkillDayRepository.FindRange(period, skill, scenario));
+				stateHolder.Schedules.TakeSnapshot();
+			}
+			return stateHolder;
+		}
+
+		private void agentsTimezoneChanged(Person agent)
+		{
+			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
+				PersonRepository.Add(agent);
+				uow.PersistAll();
+			}
+		}
+
+		private void persistSetupData(Scenario scenario, Activity activity, ISkill skill, IEnumerable<ISkillDay> skillDays, Person agent, DateOnly date, ShiftCategory shiftCategory, IPersonAssignment ass1)
+		{
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				ScenarioRepository.Add(scenario);
@@ -87,28 +125,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				PersonAssignmentRepository.Add(ass1);
 				uow.PersistAll();
 			}
-			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-			{
-				agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
-				PersonRepository.Add(agent);
-				uow.PersistAll();
-			}
-			ISchedulerStateHolder stateHolder;
-			using (UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-			{
-				stateHolder = Fill(SchedulerStateHolder, scenario, period,
-					PersonRepository.FindPeopleInOrganization(period, true), 
-					PersonAssignmentRepository.Find(period, scenario), 
-					SkillDayRepository.FindRange(period, skill, scenario));
-				stateHolder.Schedules.TakeSnapshot();
-			}
-
-			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
-
-			Assert.DoesNotThrow(() =>
-			{
-				Persister.Persist(stateHolder.Schedules);
-			});
 		}
 
 		//flytta
@@ -157,11 +173,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				((ScheduleRange)ret[scheduleData.Person]).Add(scheduleData);
 			}
 			return ret;
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			//system.UseTestDouble<ScheduleRangePersister>().For<IScheduleRangePersister>();
 		}
 	}
 }
