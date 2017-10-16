@@ -1,29 +1,67 @@
 <div class="tree">
-    <ol ng-model="vm.data">
-        <li node-id="$index" ng-repeat="node in vm.data[vm.nodeChildrenName]" ng-include="'tree_child_renderer.html'"></li>
-    </ol>
+  <ol ng-model="vm.data" style="padding:0;">
+    <li node-id="$index" ng-repeat="node in vm.data[vm.nodeChildrenName]" ng-include="'tree_child_renderer.html'"></li>
+  </ol>
 </div>
 
 <script type="text/ng-template" id="tree_child_renderer.html">
-    <div class="tree-toggle-group" tree-animate>
-        <div class="toggle-handle">
-            <i ng-hide="!node[vm.nodeChildrenName] || node[vm.nodeChildrenName].length==0 " class="mdi mdi-chevron-right"></i>
-        </div>
-        <div class="tree-handle-wrapper" ng-click="vm.selectNode(this)">
-            <div ng-class="{'selected-true': node[vm.nodeSelectedMark]}" ng-bind="node[vm.nodeDisplayName]"></div>
-        </div>
+  <div class="tree-toggle-group" tree-animate ng-class="{'selected-true': node[vm.nodeSelectedMark]}">
+    <div class="toggle-handle">
+      <i ng-hide="!node[vm.nodeChildrenName] || node[vm.nodeChildrenName].length==0 " class="mdi mdi-chevron-right"></i>
     </div>
-    <ol ng-model="node">
-        <li node-id="$index" ng-repeat="node in node[vm.nodeChildrenName]" ng-include="'tree_child_renderer.html'" class="close"></li>
-    </ol>
+    <div class="tree-handle-wrapper" ng-click="vm.selectNode(this)">
+      <div ng-bind="node[vm.nodeDisplayName]"></div>
+    </div>
+  </div>
+  <ol ng-model="node">
+    <li node-id="$index" ng-repeat="node in node[vm.nodeChildrenName]" ng-include="'tree_child_renderer.html'" class="close"></li>
+  </ol>
 </script>
 
 <style>
-    .selected-true {
-        background: pink;
-    }
 
-    .close {
-        display: none;
-    }
+.close {
+  display: none;
+}
+
+.tree-toggle-group{
+  padding:5px;
+  align-items: center;
+  border: 1px dotted rgba(0,0,0,0.1);
+  border-top: none;
+}
+.tree-handle-wrapper{
+  cursor:pointer;
+  position:relative;
+  margin-left: 3rem;
+}
+
+.selected-true{
+  background: transparent;
+}
+
+.tree-handle-wrapper:before{
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left:-3rem;
+  border-radius: 2px;
+  transition: background-color .2s ease-in-out;
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.3);
+  content: "";
+  text-align: center;
+  color: #fff;
+}
+
+.selected-true .tree-handle-wrapper:before{
+  background-color: #66c2ff;
+  content: "✓";
+  text-align: center;
+  color: #fff;
+}
+
+.tree li{
+  border:none;
+}
 </style>
