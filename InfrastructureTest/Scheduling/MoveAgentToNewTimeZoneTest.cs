@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IScheduleDictionaryPersister Persister;
 
 		[Test]
-		[Ignore("#45727 - 2 be cont")]
 		public void ShouldNotCrashWhenAgentHasChangedTimeZone(
 			[Values(1, 12, 23)] int startHourOfPresentShift,
 			[Values("Mountain Standard Time", "Singapore Standard Time", "GMT Standard Time")] string newTimezoneForAgent)

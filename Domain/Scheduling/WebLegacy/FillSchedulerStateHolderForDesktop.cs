@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			}
 			//Maybe this should be done per agent instead? So far, testing has shown that fastest is to this with as many schedule days as possible though
 			//Could it cause OOM ex in REALLY big dbs?
-			toDic.Modify(ScheduleModifier.Scheduler, toScheduleDays, NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
+			toDic.Modify(ScheduleModifier.Scheduler, toScheduleDays, NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter(), true);
 		}
 	}
 }
