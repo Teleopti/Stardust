@@ -206,3 +206,8 @@
 	font-size: 12px;
 	padding: 3px;
 }
+
+.mobile-month-view .container .data-loading-gif {
+	margin: 100px auto;
+	display: block;
+}

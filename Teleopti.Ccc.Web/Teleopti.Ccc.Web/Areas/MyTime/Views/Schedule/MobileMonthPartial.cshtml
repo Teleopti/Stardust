@@ -56,6 +56,11 @@ Layout = null;
 	</div>
 
 	<div class="container pagebody">
+		<!-- ko if: isLoading -->
+		<img class="data-loading-gif" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="...">
+		<!-- /ko -->
+		
+		<!-- ko if: !isLoading() -->
 		<div class="mobile-month-row-fluid mobile-month-row-head clearfix" data-bind="foreach: weekDayNames">
 			<div class="mobile-month-cell mobile-month-weekday-header weekday-shortname" data-bind="text: ShortName"></div>
 		</div>
@@ -153,5 +158,6 @@ Layout = null;
 				</div>
 			</div>
 		</div>
+		<!-- /ko -->
 	</div>
 </div>

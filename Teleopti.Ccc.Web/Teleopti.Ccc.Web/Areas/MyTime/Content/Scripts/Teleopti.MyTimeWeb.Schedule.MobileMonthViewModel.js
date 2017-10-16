@@ -65,6 +65,7 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 		self.weekViewModels.push(newWeek);
 		setUseFullHeightForDateCells();
 		setSelectedDateSubscription(data.FixedDate);
+		self.isLoading(false);
 	};
 
 	function setUseFullHeightForDateCells() {
