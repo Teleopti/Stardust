@@ -7,8 +7,8 @@
 				controllerAs: 'vm'
 			});
 
-	TeamsExportScheduleCtrl.$inject = ['$timeout', '$scope', 'groupPageService', 'exportScheduleService'];
-	function TeamsExportScheduleCtrl($timeout, $scope, groupPageService, exportScheduleService) {
+	TeamsExportScheduleCtrl.$inject = ['$state','$timeout', '$scope', 'groupPageService', 'exportScheduleService'];
+	function TeamsExportScheduleCtrl($state, $timeout, $scope, groupPageService, exportScheduleService) {
 		var vm = this;
 		vm.configuration = {
 			startDate : new Date(),
@@ -80,7 +80,7 @@
 		}
 
 		vm.gotoDayView = function () {
-
+			$state.go('teams.dayView');
 		}
 		vm.startExport = function () { }
 

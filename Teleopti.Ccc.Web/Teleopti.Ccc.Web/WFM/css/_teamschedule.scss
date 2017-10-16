@@ -1213,12 +1213,25 @@ note-editor {
 	}
 }
 
-.export-schedule{
-	.wfm-table td{
-		border:none;
-
+.export-schedule {
+	.wfm-table td {
+		border: none;
 	}
-	.wfm-table .td-margin{
-		margin-right:20px;
+
+	.wfm-table .td-margin {
+		margin-right: 20px;
+	}
+
+	.tips .mdi-information-outline:before {
+		font-size: 13px !important;
+	}
+
+
+	.tips .mdi-information-outline {
+		padding-right: 5px;
+	}
+
+	.footer .right {
+		text-align:right;
 	}
 }

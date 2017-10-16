@@ -50,7 +50,7 @@
 			}).state('teams.exportSchedule',
 			{
 				url: '/exportSchedule',
-				templateUrl: 'app/teamSchedule/html/exportSchedule.html'
+				templateUrl: 'app/teamSchedule/html/exportScheduleView.html'
 			});
 	}
 })();

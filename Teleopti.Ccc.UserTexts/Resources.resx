@@ -16615,6 +16615,18 @@ Do you want to participate?</value>
     <value>OT</value>
     <comment>Short name of Overtime</comment>
   </data>
+  <data name="ExportSchedule" xml:space="preserve">
+    <value>Export Schedules</value>
+    <comment>Export Schedules</comment>
+  </data>
+  <data name="ExportSchedulesMaximumDays" xml:space="preserve">
+    <value>Maximum 31 days can be selected</value>
+    <comment>restriction for export schedule in teams</comment>
+  </data>
+  <data name="ExportSchedulesMaximumOptionalColumns" xml:space="preserve">
+    <value>Maximum 3 optional columns can be selected</value>
+    <comment>restriction for export schedule in teams</comment>
+  </data>
   <data name="ShiftTradeTargetTimeRuleName" xml:space="preserve">
     <value>Contract time tolerance</value>
     <comment>Displayed name for schedule validation rule "ShiftTradeTargetTimeRule"</comment>

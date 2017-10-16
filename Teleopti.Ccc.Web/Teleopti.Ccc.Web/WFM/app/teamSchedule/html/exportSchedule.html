@@ -1,5 +1,4 @@
 ﻿<div class="export-schedule">
-	<h5>Export Schedule</h5>
 	<form name="exportScheduleForm">
 		<table class="wfm-table">
 			<tbody>
@@ -14,7 +13,7 @@
 								<md-datepicker name="endDate" ng-model="vm.configuration.endDate" md-placeholder="{{'To' | translate}}" md-min-date="vm.configuration.startDate" md-max-date="vm.maxEndDate" required></md-datepicker>
 							</span>
 						</div>
-						<div class="tips">{{'ExportSchedulesMaximumDays' | translate}}</div>
+						<div class="tips"><i class="mdi mdi-information-outline"></i>{{'ExportSchedulesMaximumDays' | translate}}</div>
 					</td>
 				</tr>
 				<tr>
@@ -49,7 +48,7 @@
 								<md-option ng-repeat="optionalColumn in vm.optionalColumns" ng-disabled="vm.isOptionalColDisabled(optionalColumn.Id)" ng-value="optionalColumn.Id">{{::optionalColumn.Name}}</md-option>
 							</md-select>
 						</div>
-						<div class="tips">{{'ExportSchedulesMaximumOptionalColumns' | translate}}</div>
+						<div class="tips"><i class="mdi mdi-information-outline"></i>{{'ExportSchedulesMaximumOptionalColumns' | translate}}</div>
 					</td>
 				</tr>
 
@@ -59,7 +58,7 @@
 			<div class="right">
 				<button type="button" class="wfm-btn wfm-btn-invis-default"
 						ng-click="vm.gotoDayView()">
-					{{ 'Cancel'|translate }}
+					{{ 'Back'|translate }}
 				</button>
 				<button class="wfm-btn"
 						ng-class="{'wfm-btn-invis-primary': vm.isApplyEnabled(), 'wfm-btn-invis-disabled': !vm.isApplyEnabled()}"

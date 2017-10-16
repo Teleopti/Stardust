@@ -11279,6 +11279,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Schedules.
+        /// </summary>
+        public static string ExportSchedule {
+            get {
+                return ResourceManager.GetString("ExportSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum 31 days can be selected.
+        /// </summary>
+        public static string ExportSchedulesMaximumDays {
+            get {
+                return ResourceManager.GetString("ExportSchedulesMaximumDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum 3 optional columns can be selected.
+        /// </summary>
+        public static string ExportSchedulesMaximumOptionalColumns {
+            get {
+                return ResourceManager.GetString("ExportSchedulesMaximumOptionalColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Staffing.
         /// </summary>
         public static string ExportStaffing {
