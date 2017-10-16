@@ -105,7 +105,9 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IRuleSetBag ruleSetBag, IContract contract, ITeam team, params ISkill[] skills)
 		{
-			var personPeriod = new PersonPeriod(periodStart, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") });
+			var defaultTeam = new Team {Site = new Site("_")};
+			defaultTeam.SetDescription(new Description("_"));
+			var personPeriod = new PersonPeriod(periodStart, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), defaultTeam);
 			if (skills.Any())
 			{
 				foreach (var skill in skills)

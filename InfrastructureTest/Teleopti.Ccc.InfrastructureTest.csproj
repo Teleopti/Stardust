@@ -351,6 +351,7 @@
     <Compile Include="Rta\Service\UnrecognizedStatesTest2.cs" />
     <Compile Include="Rta\WithUnitOfWorkWithRecurringEvents.cs" />
     <Compile Include="Scheduling\FullSchedulingUowTest.cs" />
+    <Compile Include="Scheduling\MoveAgentToNewTimeZoneTest.cs" />
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldOverwriteExternalDelete.cs" />
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldDeleteExternalModification.cs" />
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldOverwriteExternalModification.cs" />
