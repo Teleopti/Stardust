@@ -36,6 +36,7 @@ datepicker.place = function() {
 };
 
 datepicker.show = function (e) {
+    $('div.datepicker').hide();
     if (this.isInput && this.element.is(':disabled')) { return; }
 
     else if (this.element.children('input').is(':disabled')) { return; }

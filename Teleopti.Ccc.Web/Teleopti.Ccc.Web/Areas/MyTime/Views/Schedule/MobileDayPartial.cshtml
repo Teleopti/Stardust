@@ -84,7 +84,7 @@
 			<!-- ko if: mobileMonthEnabled -->
 			<ul class="nav navbar-nav navbar-teleopti row submenu">
 				<li class="mobile-month-datepicker">
-					<a data-bind="text: displayDate" class="formatted-date-text"></a>
+					<a data-bind="attr: { href: mobileMonthUrl}, text: displayDate" class="formatted-date-text"></a>
 					<a class="mobile-month-calendar-icon" data-bind="attr: { href: mobileMonthUrl}">
 						<i class="glyphicon glyphicon-calendar"></i>
 					</a>

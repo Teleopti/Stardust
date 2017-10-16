@@ -44,6 +44,7 @@
 	padding-right: 5px;
 	text-align: center;
 	min-width: 35px;
+	height: 40px;
 }
 .mobile-start-day .mobile-start-day-nav .submenu li a > i {
 	transform: scale(1.3);
@@ -61,8 +62,6 @@
 
 .mobile-month-datepicker {
 	flex-direction: row !important;
-	border: 1px dashed #ddd;
-	border-radius: 4px;
 	height: 40px;
 	padding: 0 !important;
 }
@@ -71,13 +70,12 @@
 	font-weight: bold;
 	color: white;
 	display: inline-block;
-	font-size: 1.2em;
+	font-size: 1.1em;
 	width: 120px;
 	padding: 10px 5px !important;
 }
 
 .mobile-month-calendar-icon {
-	border-left: 1px dashed #ddd;
 	padding-left: 10px;
 	padding-right: 10px;
 }

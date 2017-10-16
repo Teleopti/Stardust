@@ -30,11 +30,11 @@ Layout = null;
 		<div class="container mobile-month-view-nav">
 			<ul class="nav navbar-nav navbar-teleopti row submenu">
 				<li class="mobile-month-datepicker">
-					<a class="text-center formatted-date-text" data-bind="text: formattedSelectedDate"></a>
+					<a class="text-center formatted-date-text" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1, calendarPlacement: 'right' }, text: formattedSelectedDate"></a>
 					<a class="mobile-month-calendar-icon" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1, calendarPlacement: 'center' }">
 						<i class="glyphicon glyphicon-calendar"></i>
 					</a>
- 				</li>
+ 				</li> 
 				<li>
 					<a href="#Schedule/MobileDay">
 						<i class="glyphicon glyphicon-home"></i>
