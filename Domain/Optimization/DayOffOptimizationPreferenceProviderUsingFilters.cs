@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				ConsiderWeekBefore = true,
 				DaysOffPerWeekValue = planningGroupSettings.DayOffsPerWeek,
 				UseDaysOffPerWeek = true,
-				//FullWeekendsOffValue = planningGroupSettings.FullWeekendsOff,
-				//UseFullWeekendsOff = true,
-				//WeekEndDaysOffValue = planningGroupSettings.WeekendDaysOff,
-				//UseWeekEndDaysOff = true
+				FullWeekendsOffValue = planningGroupSettings.FullWeekendsOff,
+				UseFullWeekendsOff = true,
+				WeekEndDaysOffValue = planningGroupSettings.WeekendDaysOff,
+				UseWeekEndDaysOff = true
 			};
 		}
 	}
