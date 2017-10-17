@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
+
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IActivityChangeCheckerFromScheduleChangeProcessor
@@ -15,14 +17,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ActivityChangeChecker : IActivityChangeCheckerFromScheduleChangeProcessor
 	{
 		private readonly IContextLoader _contextLoader;
+		private readonly IRtaTracer _tracer;
 
-		public ActivityChangeChecker(IContextLoader contextLoader)
+		public ActivityChangeChecker(IContextLoader contextLoader, IRtaTracer tracer)
 		{
 			_contextLoader = contextLoader;
+			_tracer = tracer;
 		}
 
 		public void CheckForActivityChanges()
 		{
+			_tracer.ProcessActivityCheck();
 			_contextLoader.ForActivityChanges();
 		}
 	}
