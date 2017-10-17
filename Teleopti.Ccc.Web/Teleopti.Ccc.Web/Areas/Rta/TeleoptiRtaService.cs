@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			return handleRtaExceptions(() =>
 			{
 				userCode = fixUserCode(userCode);
-				stateCode = fixStateCode(null, stateCode, platformTypeId, isLoggedOn);
+				stateCode = fixStateCode(stateCode, platformTypeId, isLoggedOn);
 				BatchInputModel input = null;
 				if (isClosingSnapshot(userCode, isSnapshot))
 					input = new BatchInputModel
@@ -90,25 +90,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			_rtaTracer.ProcessReceived();
 			return handleRtaExceptions(() =>
 			{
-				var statesWithTrace =
-					from s in externalUserStateBatch
-					select new
-					{
-						s.UserCode,
-						s.StateCode,
-						s.StateDescription,
-						s.IsLoggedOn,
-						TraceInfo = _rtaTracer.StateReceived(s.UserCode, s.StateCode)
-					};
-				
 				IEnumerable<BatchStateInputModel> states = (
-						from s in statesWithTrace
+						from s in externalUserStateBatch
 						select new BatchStateInputModel
 						{
 							UserCode = fixUserCode(s.UserCode),
-							StateCode = fixStateCode(s.TraceInfo, s.StateCode, platformTypeId, s.IsLoggedOn),
-							StateDescription = s.StateDescription,
-							TraceLog = s.TraceInfo
+							StateCode = fixStateCode(s.StateCode, platformTypeId, s.IsLoggedOn),
+							StateDescription = s.StateDescription
 						})
 					.ToArray();
 
@@ -143,27 +131,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			return userCode.Trim();
 		}
 
-		private string fixStateCode(StateTraceLog traceLog, string stateCode, string platformTypeId, bool isLoggedOn)
+		private string fixStateCode(string stateCode, string platformTypeId, bool isLoggedOn)
 		{
 			if (!isLoggedOn)
 				stateCode = "LOGGED-OFF";
 
 			if (stateCode == null)
-			{
-				_rtaTracer.InvalidStateCode(traceLog);
-				throw new InvalidStateCodeException("State code is required");
-			}
+				return null;
 
 			stateCode = stateCode.Trim();
 
 			if (!string.IsNullOrEmpty(platformTypeId) && platformTypeId != Guid.Empty.ToString())
 				stateCode = $"{stateCode} ({platformTypeId})";
-
-			if (stateCode.Length > 300)
-			{
-				_rtaTracer.InvalidStateCode(traceLog);
-				throw new InvalidStateCodeException("State code can not exceed 300 characters (including platform type id)");
-			}
 
 			return stateCode;
 		}

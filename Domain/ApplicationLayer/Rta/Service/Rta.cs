@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Enqueue(BatchInputModel batch)
 		{
 			validateAuthenticationKey(batch);
+			validateStateCodes(batch);
 			_tenants.Poke();
 			_analytics.Do(() => _queueWriter.Enqueue(batch));
 		}
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_tracer.For(batch.States.EmptyIfNull().Select(x => x.TraceLog), _tracer.StateProcessing);
 			validateAuthenticationKey(batch);
+			validateStateCodes(batch);
 			_contextLoader.ForBatch(batch);
 			if (batch.CloseSnapshot)
 				_contextLoader.ForClosingSnapshot(batch.SnapshotId.Value, batch.SourceId);
@@ -82,6 +84,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				_tracer.For(input.States.EmptyIfNull().Select(x => x.TraceLog), _tracer.InvalidAuthenticationKey);
 				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
+			}
+		}
+
+		private void validateStateCodes(BatchInputModel batch)
+		{
+			var nullStateCode = batch.States.EmptyIfNull().FirstOrDefault(x => x.StateCode == null);
+			if (nullStateCode != null)
+			{
+				_tracer.InvalidStateCode(nullStateCode.TraceLog);
+				throw new InvalidStateCodeException("State code is required");
+			}
+
+			var hugeStateCode = batch.States.EmptyIfNull().FirstOrDefault(x => x.StateCode.Length > 300);
+			if (hugeStateCode != null)
+			{
+				_tracer.InvalidStateCode(hugeStateCode.TraceLog);
+				throw new InvalidStateCodeException("State code can not exceed 300 characters (including platform type id)");
 			}
 		}
 
