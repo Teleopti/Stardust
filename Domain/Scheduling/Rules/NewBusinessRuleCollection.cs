@@ -54,9 +54,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				},
 				{
 					typeof (SiteOpenHoursRule), BusinessRuleFlags.SiteOpenHoursRule
-				},
-				{
-					typeof(ShiftTradeValidationFailedRule), BusinessRuleFlags.ShiftTradeValidationFailedRule
 				}
 			};
 
@@ -98,9 +95,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				},
 				{
 					BusinessRuleFlags.SiteOpenHoursRule, "SiteOpeningHours"
-				},
-				{
-					BusinessRuleFlags.ShiftTradeValidationFailedRule, "ShiftTradeSpecification"
 				}
 			};
 

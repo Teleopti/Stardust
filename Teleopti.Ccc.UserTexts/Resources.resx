@@ -16471,10 +16471,6 @@ Do you want to participate?</value>
     <value>There are waitlisted requests for this period already, please wait.</value>
     <comment>Message to agent when the request gets waitlisted because there exists wailtlisted requests already.</comment>
   </data>
-  <data name="ShiftTradeSpecification" xml:space="preserve">
-    <value>Shift trade specification</value>
-    <comment>Tip message to show in broken rules of shift trade request in WFM</comment>
-  </data>
   <data name="NoAgentsToBeDisplayed" xml:space="preserve">
     <value>No agents to be displayed</value>
     <comment>Message displayed in RTA agents view when there are no agents in the view</comment>
