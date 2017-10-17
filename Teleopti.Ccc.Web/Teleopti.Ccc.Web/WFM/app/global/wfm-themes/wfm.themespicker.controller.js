@@ -14,7 +14,7 @@
 		vm.showOverlay = showOverlay;
 		vm.personalizeToggle = true;
 
-	
+
 		checkThemeState().then(function (result) {
 			if (result.data.Name == null) {
 				result.data.Name = "classic";
@@ -34,12 +34,12 @@
 		}
 
 		function toggleOverlay(state) {
+
 			if (state === true || state === false) {
 				vm.showOverlay = state;
 				replaceCurrentTheme(vm.currentTheme, vm.showOverlay);
 			} else {
 				toggleActiveOverlay();
-				focusMenu();
 			}
 		}
 
@@ -50,12 +50,9 @@
 				return;
 			} else {
 				toggleActiveTheme();
-				focusMenu();
 			}
 			vm.darkTheme = !vm.darkTheme;
 		};
-
-
 
 		function toggleActiveTheme() {
 			if (vm.darkTheme) {
@@ -83,10 +80,6 @@
 				deferred.resolve(response);
 			});
 			return deferred.promise;
-		}
-
-		function focusMenu() {
-			document.getElementById("themeMenu").focus();
 		}
 	}
 })();

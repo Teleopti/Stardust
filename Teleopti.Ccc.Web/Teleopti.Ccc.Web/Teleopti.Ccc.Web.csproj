@@ -2096,7 +2096,6 @@
     <Content Include="WFM\app\forecasting\forecasting.service.js" />
     <Content Include="WFM\app\global\areas\areas.controller.js" />
     <Content Include="WFM\app\global\areas\areas.service.js" />
-    <Content Include="WFM\app\global\wfm-themes\themes-menu.html" />
     <Content Include="WFM\app\global\notifications\notifications.controller.js" />
     <Content Include="WFM\app\global\notifications\notifications.service.js" />
     <Content Include="WFM\app\outbound\outbound.filter.js" />

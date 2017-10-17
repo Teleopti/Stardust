@@ -16623,4 +16623,11 @@ Do you want to participate?</value>
     <value>Show Staffing</value>
     <comment>toggle in day view</comment>
   </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Let us know what you think</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>User settings</value>
+    <comment>wfm navbar icon tooltip</comment>
+  </data>
 </root>

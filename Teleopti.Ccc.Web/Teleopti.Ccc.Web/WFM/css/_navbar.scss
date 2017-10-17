@@ -5,7 +5,6 @@
 		z-index: 1000;
 		top:-10px;
 		left: -3px;
-		color:$white;
 
 		input{
 			display: none;
@@ -92,7 +91,6 @@
 	top: 8px;
 	z-index: 1000;
 	left: 150px;
-	color: white;
 }
 
 .businessunit-menu > .context-menu-bottom{
@@ -167,4 +165,97 @@
 	.nav-context-menu .nav-context-menu-left{
 		text-transform:inherit!important;
 	}
+}
+
+.navbar i {
+	color: $text-color-standard;
+}
+
+.nav-tools .wfm-popup-wrap {
+	right: 0;
+	top: 50px;
+	min-width: 250px;
+}
+
+.nav-link-wrap{
+	cursor: pointer;
+	color: $text-color-standard;
+	width: 100%;
+}
+
+.nav-link-wrap:hover{
+	background: $gray012;
+}
+
+.nav-item-inactive{
+	color: $white!important;
+	background: transparent;
+}
+
+.nav-item-active{
+	color: $white!important;
+	background: $gray012!important;
+}
+
+.navbar .card-context {
+	margin: 5px;
+}
+
+.feedback{
+	width: 64px;
+	height: 64px;
+	margin-top: -22px;
+	margin-left: -22px;
+	background: $blue-300;
+	transform-origin: center;
+	transform: scale(0.8) rotateY(0deg) rotate(-5deg) translateY(0);
+	animation-name: nod;
+	animation-duration: 4s;
+}
+
+@keyframes nod {
+	0%  {transform: scale(0.8) rotateY(0deg) rotate(-5deg) translateY(0);}
+	1%  {transform: scale(0.8) rotateY(-5deg) rotate(0deg) translateY(-5px);}
+	20% {transform: scale(0.8) rotateY(5deg) rotate(0deg) translateY(5px);}
+	40% {transform: scale(0.8) rotateY(-3deg) rotate(0deg) translateY(-3px);}
+	60% {transform: scale(0.8) rotateY(3deg) rotate(0deg) translateY(3px);}
+	80% {transform: scale(0.8) rotateY(-1deg) rotate(-3deg) translateY(-1px);}
+	100%{transform: scale(0.8) rotateY(0deg) rotate(-5deg) translateY(0);}
+}
+
+.eye{
+	transform-origin: center;
+	transform: rotateY(0deg);
+	animation-name: blink;
+	animation-duration: 2s;
+	animation-iteration-count: 2;
+}
+@keyframes blink {
+	0%  {transform: rotateX(0deg);}
+	50% {transform: rotateX(180deg);}
+	100%{transform: rotateX(0deg);}
+}
+
+.feedback-wrap{
+	transform-origin: center;
+	transform: scale(0.6);
+	animation-name: resizeA;
+	animation-duration: 4s;
+	transition: 0.5s transform ease;
+}
+
+.feedback-wrap:hover{
+	transform: scale(0.8);
+}
+
+@keyframes resizeA {
+	0%  {transform: scale(1);}
+	80% {transform: scale(1);}
+	100%{transform: scale(0.6);}
+}
+
+.even-icon{
+	width: 34px;
+	height: 34px;
+	overflow: hidden;
 }

@@ -11792,6 +11792,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Let us know what you think.
+        /// </summary>
+        public static string Feedback {
+            get {
+                return ResourceManager.GetString("Feedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fi&amp;nd what:.
         /// </summary>
         public static string FiAmpersandndWhatColon {
@@ -35562,6 +35571,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UseRotations {
             get {
                 return ResourceManager.GetString("UseRotations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User settings.
+        /// </summary>
+        public static string UserSettings {
+            get {
+                return ResourceManager.GetString("UserSettings", resourceCulture);
             }
         }
         
