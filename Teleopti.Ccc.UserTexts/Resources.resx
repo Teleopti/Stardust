@@ -16615,4 +16615,8 @@ Do you want to participate?</value>
     <value>OT</value>
     <comment>Short name of Overtime</comment>
   </data>
+  <data name="ShiftTradeTargetTimeRuleName" xml:space="preserve">
+    <value>Contract time tolerance</value>
+    <comment>Displayed name for schedule validation rule "ShiftTradeTargetTimeRule"</comment>
+  </data>
 </root>

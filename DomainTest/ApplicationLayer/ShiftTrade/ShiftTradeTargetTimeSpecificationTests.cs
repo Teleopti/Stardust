@@ -105,6 +105,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		}
 
 		[Test, SetCulture("en-US")]
+		public void ShouldSetBrokenRulesWhenSpecificationConfiguredAsPending()
+		{
+			var shiftTradeBusinessRuleConfig = new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(ShiftTradeTargetTimeSpecification).FullName,
+				Enabled = true,
+				HandleOptionOnFailed = RequestHandleOption.Pending
+			};
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[] { shiftTradeBusinessRuleConfig });
+			Assert.IsTrue(personRequest.IsPending);
+
+			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest);
+			Assert.IsTrue(personRequest.IsPending);
+
+			var denyReason = Resources.ResourceManager.GetString("ShiftTradeTargetTimePendingReason");
+			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains(denyReason));
+			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.ShiftTradeTargetTimeRule));
+		}
+
+		[Test, SetCulture("en-US")]
 		public void ShouldPendingWhenAutoGrantIsOff()
 		{
 			var shiftTradeBusinessRuleConfig = new ShiftTradeBusinessRuleConfig

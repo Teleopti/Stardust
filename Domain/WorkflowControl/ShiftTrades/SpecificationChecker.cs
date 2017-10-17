@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				new ShiftTradeSettings()).BusinessRuleConfigs;
 
 			var allSpecificationsSatisfied = true;
+			Type firstSpecificationType = null;
 			string firstDenyReason = null;
 			foreach (var specification in _shiftTradeSpecifications)
 			{
@@ -37,21 +39,22 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				if (result.IsOk) continue;
 
 				if (ruleConfig == null ||
-					(ruleConfig.HandleOptionOnFailed != null && ruleConfig.HandleOptionOnFailed.Value == RequestHandleOption.AutoDeny))
+					ruleConfig.HandleOptionOnFailed != null && ruleConfig.HandleOptionOnFailed.Value == RequestHandleOption.AutoDeny)
 				{
-					return new ShiftTradeRequestValidationResult(false, true, specification.DenyReason);
+					return new ShiftTradeRequestValidationResult(false, true, specification.DenyReason){SpecificationType = specification.GetType()};
 				}
 
 				allSpecificationsSatisfied = false;
 				if (firstDenyReason == null)
 				{
 					firstDenyReason = specification.PendingReason;
+					firstSpecificationType = specification.GetType();
 				}
 			}
 
 			return allSpecificationsSatisfied
 				? new ShiftTradeRequestValidationResult(true, false, "")
-				: new ShiftTradeRequestValidationResult(false, false, firstDenyReason);
+				: new ShiftTradeRequestValidationResult(false, false, firstDenyReason) { SpecificationType = firstSpecificationType};
 		}
 	}
 }

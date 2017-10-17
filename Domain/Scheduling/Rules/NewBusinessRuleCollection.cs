@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
@@ -54,6 +55,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				},
 				{
 					typeof (SiteOpenHoursRule), BusinessRuleFlags.SiteOpenHoursRule
+				},
+				{
+					typeof (ShiftTradeTargetTimeSpecification), BusinessRuleFlags.ShiftTradeTargetTimeRule
 				}
 			};
 
@@ -95,6 +99,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				},
 				{
 					BusinessRuleFlags.SiteOpenHoursRule, "SiteOpeningHours"
+				},
+				{
+					BusinessRuleFlags.ShiftTradeTargetTimeRule, "ShiftTradeTargetTimeRuleName"
 				}
 			};
 

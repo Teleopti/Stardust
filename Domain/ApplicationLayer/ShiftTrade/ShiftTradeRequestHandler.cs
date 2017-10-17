@@ -161,7 +161,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					if (!validationResult.IsOk)
 					{
 						allEnabledRules.Add(new ShiftTradeValidationFailedRule(getValidationMessage(validationResult, personRequest),
-							personRequest.Request.Period.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone())));
+							personRequest.Request.Period.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone()),
+							validationResult.SpecificationType));
 					}
 
 					var approvalService = _requestFactory.GetRequestApprovalService(allEnabledRules, scenario,

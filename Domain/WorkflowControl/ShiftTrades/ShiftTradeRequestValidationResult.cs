@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
+﻿using System;
+
+namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
 	/// <summary>
 	/// Result when validating a ShiftTradeRequest
@@ -48,5 +50,7 @@
 		/// Created date: 2010-05-27
 		/// </remarks>
 		public string DenyReason { get; private set; }
+
+		public Type SpecificationType { get; set; }
 	}
 }
