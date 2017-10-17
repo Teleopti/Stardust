@@ -164,6 +164,10 @@
 				} else if (value >= 0) {
 					scaffold.under[index] = 0;
 				}
+				if (!scaffold.over[index])
+					scaffold.over[index] = 0;
+				if (!scaffold.under[index])
+					scaffold.under[index] = 0;
 			}
 			scaffold.under.unshift('UnderStaffScaffold');
 			scaffold.over.unshift('OverStaffScaffold');
