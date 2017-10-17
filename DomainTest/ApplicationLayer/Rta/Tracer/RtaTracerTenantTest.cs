@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
@@ -22,99 +24,137 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		[Test]
 		public void ShouldLogProcessReceivedForAllTenants()
 		{
-			Tenants.Has("tenant1");
-			Tenants.Has("tenant2");
-			using (DataSource.OnThisThreadUse("tenant1"))
-				Target.Trace("usercode1");
-			using (DataSource.OnThisThreadUse("tenant2"))
-				Target.Trace("usercode2");
+			Tenants.Has("firstTenant");
+			Tenants.Has("secondTenant");
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Target.Trace("firstUserCode");
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Target.Trace("secondUserCode");
 
 			Target.ProcessReceived();
 
-			using (DataSource.OnThisThreadUse("tenant1"))
+			using (DataSource.OnThisThreadUse("firstTenant"))
 				Logs.ReadOfType<ProcessReceivedLog>().Should().Have.Count.EqualTo(1);
-			using (DataSource.OnThisThreadUse("tenant2"))
+			using (DataSource.OnThisThreadUse("secondTenant"))
 				Logs.ReadOfType<ProcessReceivedLog>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldLogProcessProcessingForCurrentTenant()
 		{
-			Tenants.Has("tenant1");
-			Tenants.Has("tenant2");
-			using (DataSource.OnThisThreadUse("tenant1"))
-				Target.Trace("usercode1");
-			using (DataSource.OnThisThreadUse("tenant2"))
-				Target.Trace("usercode2");
+			Tenants.Has("firstTenant");
+			Tenants.Has("secondTenant");
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Target.Trace("firstUserCode");
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Target.Trace("secondUserCode");
 
-			using (DataSource.OnThisThreadUse("tenant1"))
+			using (DataSource.OnThisThreadUse("firstTenant"))
 				Target.ProcessProcessing();
 
-			using (DataSource.OnThisThreadUse("tenant1"))
+			using (DataSource.OnThisThreadUse("firstTenant"))
 				Logs.ReadOfType<ProcessProcessingLog>().Should().Have.Count.EqualTo(1);
-			using (DataSource.OnThisThreadUse("tenant2"))
+			using (DataSource.OnThisThreadUse("secondTenant"))
 				Logs.ReadOfType<ProcessProcessingLog>().Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldOnlyLogProcessProcessingForCurrentTenant()
 		{
-			Tenants.Has("tenant1");
-			Tenants.Has("tenant2");
-			using (DataSource.OnThisThreadUse("tenant1"))
-				Target.Trace("usercode1");
-			using (DataSource.OnThisThreadUse("tenant2"))
+			Tenants.Has("firstTenant");
+			Tenants.Has("secondTenant");
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Target.Trace("firstUserCode");
+			using (DataSource.OnThisThreadUse("secondTenant"))
 				Target.Stop();
 
-			using (DataSource.OnThisThreadUse("tenant1"))
+			using (DataSource.OnThisThreadUse("firstTenant"))
 				Target.ProcessProcessing();
-			using (DataSource.OnThisThreadUse("tenant2"))
+			using (DataSource.OnThisThreadUse("secondTenant"))
 				Target.ProcessProcessing();
 
-			using (DataSource.OnThisThreadUse("tenant1"))
+			using (DataSource.OnThisThreadUse("firstTenant"))
 				Logs.ReadOfType<ProcessProcessingLog>().Should().Have.Count.EqualTo(1);
-			using (DataSource.OnThisThreadUse("tenant2"))
+			using (DataSource.OnThisThreadUse("secondTenant"))
 				Logs.ReadOfType<ProcessProcessingLog>().Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldLogProcessActivityCheckForCurrentTenant()
 		{
-			Tenants.Has("tenant1");
-			Tenants.Has("tenant2");
-			using (DataSource.OnThisThreadUse("tenant1"))
-				Target.Trace("usercode1");
-			using (DataSource.OnThisThreadUse("tenant2"))
-				Target.Trace("usercode2");
+			Tenants.Has("firstTenant");
+			Tenants.Has("secondTenant");
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Target.Trace("firstUserCode");
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Target.Trace("secondUserCode");
 
-			using (DataSource.OnThisThreadUse("tenant1"))
+			using (DataSource.OnThisThreadUse("firstTenant"))
 				Target.ProcessActivityCheck();
 
-			using (DataSource.OnThisThreadUse("tenant1"))
+			using (DataSource.OnThisThreadUse("firstTenant"))
 				Logs.ReadOfType<ActivityCheckLog>().Should().Have.Count.EqualTo(1);
-			using (DataSource.OnThisThreadUse("tenant2"))
+			using (DataSource.OnThisThreadUse("secondTenant"))
 				Logs.ReadOfType<ActivityCheckLog>().Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldOnlyLogProcessActivityCheckForCurrentTenant()
 		{
-			Tenants.Has("tenant1");
-			Tenants.Has("tenant2");
-			using (DataSource.OnThisThreadUse("tenant1"))
-				Target.Trace("usercode1");
-			using (DataSource.OnThisThreadUse("tenant2"))
+			Tenants.Has("firstTenant");
+			Tenants.Has("secondTenant");
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Target.Trace("firstUserCode");
+			using (DataSource.OnThisThreadUse("secondTenant"))
 				Target.Stop();
 
-			using (DataSource.OnThisThreadUse("tenant1"))
+			using (DataSource.OnThisThreadUse("firstTenant"))
 				Target.ProcessActivityCheck();
-			using (DataSource.OnThisThreadUse("tenant2"))
+			using (DataSource.OnThisThreadUse("secondTenant"))
 				Target.ProcessActivityCheck();
 
-			using (DataSource.OnThisThreadUse("tenant1"))
+			using (DataSource.OnThisThreadUse("firstTenant"))
 				Logs.ReadOfType<ActivityCheckLog>().Should().Have.Count.EqualTo(1);
-			using (DataSource.OnThisThreadUse("tenant2"))
+			using (DataSource.OnThisThreadUse("secondTenant"))
 				Logs.ReadOfType<ActivityCheckLog>().Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldLogStateReceivedForCurrentTenant()
+		{
+			Tenants.Has("firstTenant");
+			Tenants.Has("secondTenant");
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Target.Trace("firstUserCode");
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Target.Trace("secondUserCode");
+
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Target.StateReceived("secondUserCode", "statecode");
+
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Logs.ReadOfType<StateTraceLog>().Should().Have.Count.EqualTo(0);
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Logs.ReadOfType<StateTraceLog>().Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotLogStateReceivedForOtherTenant()
+		{
+			Tenants.Has("firstTenant");
+			Tenants.Has("secondTenant");
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Target.Trace("firstUserCode");
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Target.Trace("secondUserCode");
+
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Target.StateReceived("firstUserCode", "statecode");
+
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Logs.ReadOfType<StateTraceLog>().Should().Have.Count.EqualTo(0);
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Logs.ReadOfType<StateTraceLog>().Should().Have.Count.EqualTo(0);
 		}
 	}
 }

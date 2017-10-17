@@ -37,33 +37,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public void Stop() => _config.DeleteForTenant();
 
-		private IEnumerable<RtaTracerConfig> traces()
-		{
-			return _config.ReadAll().ForEach(t =>
-				write(new TracingLog {Tracing = t?.UserCode}, "Tracing", t.Tenant)
-			);
-		}
-
-		public void ProcessReceived()
-		{
-			write2(new ProcessReceivedLog {RecievedAt = _now.UtcDateTime()}, "Data received at");
-		}
-
-		public void ProcessProcessing()
-		{
-			write2(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
-		}
-
-		public void ProcessActivityCheck()
-		{
-			write2(new ActivityCheckLog {ActivityCheckAt = _now.UtcDateTime()}, "Activity check at");
-		}
+		public void ProcessReceived() => writeForCurrentOrConfigured(new ProcessReceivedLog {RecievedAt = _now.UtcDateTime()}, "Data received at");
+		public void ProcessProcessing() => writeForCurrentOrConfigured(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
+		public void ProcessActivityCheck() => writeForCurrentOrConfigured(new ActivityCheckLog {ActivityCheckAt = _now.UtcDateTime()}, "Activity check at");
 
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace) => traces.ForEach(trace);
 
 		public StateTraceLog StateReceived(string userCode, string stateCode)
 		{
-			if (!shouldTrace(userCode))
+			var tracer = tracerFor(userCode);
+			if (tracer == null)
 				return null;
 			var trace = new StateTraceLog
 			{
@@ -71,52 +54,59 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 				User = userCode,
 				StateCode = stateCode
 			};
-			write(trace, "Received");
+			justWrite(trace, "Received", tracer.Tenant);
 			return trace;
 		}
 
-		public void InvalidStateCode(StateTraceLog trace) => write(trace, "Invalid state code");
-		public void StateProcessing(StateTraceLog trace) => write(trace, "Processing", _dataSource.CurrentName());
-		public void InvalidAuthenticationKey(StateTraceLog trace) => write(trace, "Invalid authentication key");
-		public void InvalidSourceId(StateTraceLog trace) => write(trace, "Invalid source Id");
-		public void InvalidUserCode(StateTraceLog trace) => write(trace, "Invalid user code");
-		public void NoChange(StateTraceLog trace) => write(trace, "No change");
+		public void InvalidStateCode(StateTraceLog trace) => writeIfTraced(trace, "Invalid state code");
+		public void StateProcessing(StateTraceLog trace) => writeIfTraced(trace, "Processing");
+		public void InvalidAuthenticationKey(StateTraceLog trace) => writeIfTraced(trace, "Invalid authentication key");
+		public void InvalidSourceId(StateTraceLog trace) => writeIfTraced(trace, "Invalid source Id");
+		public void InvalidUserCode(StateTraceLog trace) => writeIfTraced(trace, "Invalid user code");
+		public void NoChange(StateTraceLog trace) => writeIfTraced(trace, "No change");
 
 		public void StateProcessed(StateTraceLog trace, IEnumerable<IEvent> events) =>
 			new[] {"Processed"}
 				.Concat(events.EmptyIfNull().Select(e => e.GetType().Name))
-				.ForEach(m => write(trace, m));
+				.ForEach(m => writeIfTraced(trace, m));
 
-		private bool shouldTrace(string userCode)
-		{
-			var tracedUserCode = traces().FirstOrDefault()?.UserCode;
-			if (tracedUserCode == null)
-				return false;
-			return tracedUserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase);
-		}
 
-		private void write2<T>(T log, string message)
+		private IEnumerable<RtaTracerConfig> tracers() => _config.ReadAll().ForEach(t =>
+			justWrite(new TracingLog {Tracing = t?.UserCode}, "Tracing", t.Tenant)
+		);
+
+		private RtaTracerConfig tracerFor(string userCode) => (
+			from t in tracers()
+			where t.Tenant == _dataSource.CurrentName() &&
+				  t.UserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase)
+			select t
+		).FirstOrDefault();
+
+		private void writeForCurrentOrConfigured<T>(T log, string message)
 		{
-			var traces = this.traces();
-			var currentTenant = _dataSource.CurrentName() != null;
-			var currentTenantTrace = traces.Where(x => x.Tenant == _dataSource.CurrentName());
-			var tenants = currentTenant ? currentTenantTrace : traces;
-			tenants.ForEach(t =>
-				write(log, message, t.Tenant)
+			var allTracers = tracers();
+			var hasCurrentTenant = _dataSource.CurrentName() != null;
+			var currentTenantTracer = allTracers.Where(x => x.Tenant == _dataSource.CurrentName());
+			var tracersToWrite = hasCurrentTenant ? currentTenantTracer : allTracers;
+			tracersToWrite.ForEach(t =>
+				justWrite(log, message, t.Tenant)
 			);
 		}
 
-		private void write<T>(T log, string message, string tenant = null)
+		private void writeIfTraced(StateTraceLog log, string message)
 		{
 			if (log == null)
 				return;
+			justWrite(log, message, _dataSource.CurrentName());
+		}
+
+		private void justWrite<T>(T log, string message, string tenant) =>
 			_writer.Write(new RtaTracerLog<T>
 			{
 				Log = log,
 				Message = message,
 				Process = _process,
-				Tenant = tenant ?? _dataSource.CurrentName()
+				Tenant = tenant
 			});
-		}
 	}
 }
