@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 					model.Priority = allSettingses.IsEmpty() ? 0 : allSettingses.Max(x => x.Priority) + 1;
 					planningGroupSettings = new PlanningGroupSettings(planningGroup);
 				}
-				setProperies(planningGroupSettings, model, true);
+				setProperies(planningGroupSettings, model);
 				_planningGroupSettingsRepository.Add(planningGroupSettings);
 			}
 			else
 			{
 				var planningGroupSettings = _planningGroupSettingsRepository.Get(model.Id);
-				setProperies(planningGroupSettings, model, false);
+				setProperies(planningGroupSettings, model);
 			}
 		}
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 
-		private void setProperies(PlanningGroupSettings planningGroupSettings, PlanningGroupSettingsModel planningGroupSettingsModel, bool setPriority)
+		private void setProperies(PlanningGroupSettings planningGroupSettings, PlanningGroupSettingsModel planningGroupSettingsModel)
 		{
 			planningGroupSettings.DayOffsPerWeek = new MinMax<int>(planningGroupSettingsModel.MinDayOffsPerWeek, planningGroupSettingsModel.MaxDayOffsPerWeek);
 			planningGroupSettings.ConsecutiveDayOffs = new MinMax<int>(planningGroupSettingsModel.MinConsecutiveDayOffs, planningGroupSettingsModel.MaxConsecutiveDayOffs);
@@ -66,8 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			planningGroupSettings.BlockSameStartTime = planningGroupSettingsModel.BlockSameStartTime;
 			planningGroupSettings.BlockSameShiftCategory = planningGroupSettingsModel.BlockSameShiftCategory;
 			planningGroupSettings.BlockSameShift = planningGroupSettingsModel.BlockSameShift;
-			if (setPriority)
-				planningGroupSettings.Priority = planningGroupSettingsModel.Priority;
+			planningGroupSettings.Priority = planningGroupSettingsModel.Priority;
 			planningGroupSettings.FullWeekendsOff = new MinMax<int>(planningGroupSettingsModel.MinFullWeekendsOff, planningGroupSettingsModel.MaxFullWeekendsOff);
 			planningGroupSettings.WeekendDaysOff = new MinMax<int>(planningGroupSettingsModel.MinWeekendDaysOff, planningGroupSettingsModel.MaxWeekendDaysOff);
 

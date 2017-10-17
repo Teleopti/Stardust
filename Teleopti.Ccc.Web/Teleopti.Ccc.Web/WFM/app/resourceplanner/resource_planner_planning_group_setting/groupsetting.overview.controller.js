@@ -7,14 +7,14 @@
 		.controller('schedulingSettingDirectiveOverviewController', directiveController)
 		.directive('schedulingSetting', dayoffRulesDirective);
 
-	overviewController.$inject = ['$state', '$stateParams', '$translate', 'PlanGroupSettingService', 'planningGroupInfo', 'schedulingSettingInfo', 'localeLanguageSortingService'];
+	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'PlanGroupSettingService', 'planningGroupInfo', 'schedulingSettingInfo', 'localeLanguageSortingService'];
 
-	function overviewController($state, $stateParams, $translate, PlanGroupSettingService, planningGroupInfo, schedulingSettingInfo, localeLanguageSortingService) {
+	function overviewController($state, $timeout, $stateParams, $translate, PlanGroupSettingService, planningGroupInfo, schedulingSettingInfo, localeLanguageSortingService) {
 		var vm = this;
 
 		vm.requestSent = false;
 		vm.selectedSchedulingSetting = {};
-		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Priority', '-Default', '+Name'));
+		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
 		vm.textManageSchedulingSetting = $translate.instant("ManagePlanningGroupSchedulingSetting").replace("{0}", planningGroupInfo.Name);
 		vm.textOfAppliedFilter = $translate.instant("PlanGroupSchedulingSettingAppliedFilters").replace("{0}", planningGroupInfo.Name);
@@ -25,6 +25,7 @@
 		vm.setHigherPriority = setHigherPriority;
 		vm.setLowerPriority = setLowerPriority;
 		vm.disableButton = disableButton;
+		vm.setColor = setColor;
 
 		getBlockSchedulingSetting();
 
@@ -40,6 +41,16 @@
 					item.BlockSchedulingSetting = $translate.instant("IndividualFlexible") + " (" + $translate.instant("Default") + ")";
 				}
 			});
+		}
+
+		function setColor(index) {
+			if (index == 0) {
+				var opacity = 0.05;
+			}
+			var opacity = 1 - index / vm.schedulingSetting.length;
+			return {
+				'border-left': '10px solid rgba(156, 39, 176,' + opacity.toFixed(2) + ')'
+			}
 		}
 
 		function getSchedulingSettingInfo(setting) {
@@ -78,33 +89,46 @@
 		}
 
 		function setHigherPriority(setting, index) {
-			var tempPrio = setting.Priority;
 			if (setting.Priority == vm.schedulingSetting[0].Priority)
 				return;
-			setting.Priority = vm.schedulingSetting[index - 1].Priority;
-			vm.schedulingSetting[index - 1].Priority = tempPrio;
-			persist(setting);
-			persist(vm.schedulingSetting[index - 1]);
+			addAnimate(index)
+			switchPrio(setting, vm.schedulingSetting[index - 1])
 			return resortDisplayOrder(vm.schedulingSetting);
 		}
 
 		function setLowerPriority(setting, index) {
-			var tempPrio = setting.Priority;
 			if (setting.Priority < 2)
 				return;
-			setting.Priority = vm.schedulingSetting[index + 1].Priority;
-			vm.schedulingSetting[index + 1].Priority = tempPrio;
-			persist(setting);
-			persist(vm.schedulingSetting[index + 1]);
+			addAnimate(index)
+			switchPrio(setting, vm.schedulingSetting[index + 1])
 			return resortDisplayOrder(vm.schedulingSetting);
 		}
+
+		function switchPrio(item1, item2) {
+			var temp = item1.Priority;
+			item1.Priority = item2.Priority;
+			item2.Priority = temp;
+			persist(item1);
+			persist(item2);
+			return;
+		}
+
+		function addAnimate(id) {
+			if (id == null)
+				return;
+			var item = document.getElementById(id).getElementsByTagName("md-card")[0];
+			item.classList.remove("pg-list-card-animate");
+			item.classList.add("pg-list-card-animate");
+			return $timeout(function () { item.classList.remove("pg-list-card-animate"); }, 2005);
+		}
+
 
 		function resortDisplayOrder(array) {
 			return array.sort(localeLanguageSortingService.localeSort('-Priority', '-Default', '+Name'));
 		}
 
 		function disableButton(index) {
-			if (index < vm.schedulingSetting.length - 2 )
+			if (index < vm.schedulingSetting.length - 2)
 				return false;
 			return true;
 		}
@@ -137,6 +161,7 @@
 		vm.schedulingSetting = [];
 		vm.textManageSchedulingSetting = $translate.instant("ManagePlanningGroupSchedulingSetting").replace("{0}", vm.planningGroup.Name);
 		vm.textOfAppliedFilter = $translate.instant("PlanGroupSchedulingSettingAppliedFilters").replace("{0}", vm.planningGroup.Name);
+		vm.setColor = setColor;
 
 		getDayOffRules();
 
@@ -145,6 +170,16 @@
 				vm.schedulingSetting = data.sort(localeLanguageSortingService.localeSort('-Priority', '-Default', '+Name'));
 				return getBlockSchedulingSetting();
 			});
+		}
+
+		function setColor(index) {
+			if (index == 0) {
+				var opacity = 0.05;
+			}
+			var opacity = 1 - index / vm.schedulingSetting.length;
+			return {
+				'border-left': '10px solid rgba(156, 39, 176,' + opacity.toFixed(2) + ')'
+			}
 		}
 
 		function getBlockSchedulingSetting() {

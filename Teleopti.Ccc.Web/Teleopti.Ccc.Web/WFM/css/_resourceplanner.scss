@@ -15,14 +15,14 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	margin:0;
 }
 
-/*refactor me: heat map*/
 .filter-boxes{
 	display:block;
 	width:auto;
 	float:left;
 	margin: 5px;
 	min-width:20rem;
-
+	border-top:8px solid;
+ 
 	.head-actions{
 		margin-top:0;
 		float: none;
@@ -32,11 +32,22 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	}
 }
 
+.priority-color-bar {
+	text-align: center;
+    padding-bottom: 5px;
+    background: linear-gradient( 90deg, rgb(128,0,128), rgba(128,0,128,0.05) ) left bottom #f0f0f0 no-repeat;
+	background-size: 100% 6px;
+	margin-left: -10px;
+	padding:5px
+}
+
+/*refactor me: heat map*/
+
 .resourceplanner-box {
 	background: 0 0;
     /* outline: gray solid 1px; */
     text-align: center;
-    height: auto;
+    height: auto; 
     width: auto;
 	position: relative;
     cursor: pointer;
@@ -336,11 +347,13 @@ table.overview {
 }
 
 .pp-tabContent {
-    display:none;
+	display:none;
+	overflow:hidden;
 }
 
 .pp-tabContent.active {
 	display:block;
+	overflow:hidden;
 }
 
 .pp-overview-dashborad-header {
@@ -350,7 +363,7 @@ table.overview {
 }
 
 wfm-card.pp-validation-card > md-card {
-	border-left: 5px solid $red-600 ;
+	border-left: 10px solid $red-600 ;
 }
 
 .pp-validation-wfm-list > md-content {
@@ -387,13 +400,19 @@ wfm-card.pp-validation-card > md-card {
     padding: 5px 0px;
 }
 
-.pg-setting-card-wrapper {
+.pg-setting-mini-card-wrapper {
 	text-align: center;
 	background: $white ;
 	width: 100%;
 	height: 100%;
 	border: 5px solid $white ;
 	border-radius: 5px;
+}
+
+.pg-setting-mini-card-title {
+	padding: 5px;
+	margin: 5px;
+	border-bottom: 1px $gray026   solid;
 }
 
 .pg-setting-wfm-list > md-content {
@@ -409,3 +428,82 @@ wfm-card.pp-validation-card > md-card {
 .pg-prio-buttoms-wrapper > .ng-hide.ng-hide-animate{
 	display: none !important;
 }
+
+//for new setting overview design
+wfm-card-list.pg-setting-list > md-content {
+	margin: -10px 0px 0 -3px;
+}
+
+md-card > .wfm-card-content {
+	padding:0px;
+}
+
+md-card > .wfm-card-title {
+	margin-left: 10px ;
+}
+
+.pg-setting-card-priority-color {
+	margin-left: -25px;
+}
+
+.pg-setting-card-header-wrapper {
+	display: flex;
+}
+
+.pg-setting-card-title {
+	flex: 3;
+	margin-left: 20px;
+}
+
+.pg-setting-card-main {
+	flex: 3;
+}
+
+.pg-setting-card-action {
+	flex: 1;
+	text-align: end;
+	margin-right: 10px;
+}
+
+.pg-setting-card-content {
+	background-color: $gray012;
+}
+
+.pg-setting-priority-scale {
+	margin-left: 5px;
+	background: linear-gradient(90deg, rgb(128, 0, 128), rgba(156, 39, 176, 0.05 ));
+	height: 20px;
+	width: 70px;
+	-webkit-clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);
+	clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);
+}
+
+.pg-setting-priority-label {
+	background-color: $gray-300;
+	padding: 5px;
+	margin: 5px;
+	border: 5px  $gray-300 solid;
+	border-radius: 5px;
+}
+
+.pg-list-card-animate {	
+	-webkit-animation: pgListCardAnimate 2s 1;
+	-moz-animation: pgListCardAnimate 2s 1;
+	-o-animation: pgListCardAnimate 2s 1;
+	animation: pgListCardAnimate 2s 1;
+}
+
+@keyframes pgListCardAnimate {
+	0%, 100% {
+		transform: perspective(1px) scale(1.0);
+	}
+	20%, 60%, 80% {
+		transform: perspective(1px) scale(1.01);
+	}
+}
+
+
+
+
+
+

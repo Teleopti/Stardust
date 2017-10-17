@@ -11,6 +11,7 @@
         var vm = this;
 
         var maxHits = 100;
+        var priorityNumber = null;
         vm.dayOffsPerWeek = {
             MinDayOffsPerWeek: 1,
             MaxDayOffsPerWeek: 3
@@ -112,6 +113,7 @@
                         MinFullWeekEndDaysOff: result.MinWeekendDaysOff,
                         MaxFullWeekEndDaysOff: result.MaxWeekendDaysOff
                     };
+                    priorityNumber = result.Priority;
                     if (result.BlockFinderType !== 0) {
                         vm.blockSchedulingSetting = {
                             BlockFinderType: result.BlockFinderType,
@@ -319,6 +321,7 @@
                     MaxFullWeekendsOff: vm.fullWeekEndsOff.MaxFullWeekEndsOff,
                     MinWeekendDaysOff: vm.fullWeekEndDaysOff.MinFullWeekEndDaysOff,
                     MaxWeekendDaysOff: vm.fullWeekEndDaysOff.MaxFullWeekEndDaysOff,
+                    Priority: priorityNumber,
                     Id: vm.filterId,
                     Name: vm.name,
                     Default: vm.default,

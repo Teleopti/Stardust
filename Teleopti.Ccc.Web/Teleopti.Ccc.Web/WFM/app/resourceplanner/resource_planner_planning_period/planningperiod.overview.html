@@ -137,8 +137,9 @@
 	</div>
 </div>
 <div class="pp-tabContent" id="tabs-2" pp-validation val-data="vm.valData" val-loading="vm.valLoading" val-number="vm.valNumber()"></div>
-<div class="con-row pp-tabContent" id="tabs-3">
+<div class="con-row pp-tabContent" id="tabs-3" scheduling-setting is-disable="vm.isDisableDo" planning-group="vm.planningGroup">
 	<div class="con-flex">
+		<div ></div>
 		<div class="panel material-depth-1">
 			<div class="con-row pp-overview-dashborad-header">
 				<button ng-click="vm.goDoRulesSetting()" class="wfm-btn wfm-btn-invis-default"><i class="mdi mdi-settings"></i> {{'PlanGroupScheduling' | translate}}</button>
@@ -151,7 +152,7 @@
 					</span>
 				</div>
 			</div>
-			<div scheduling-setting is-disable="vm.isDisableDo" planning-group="vm.planningGroup"></div>
+
 		</div>
 	</div>
 </div>

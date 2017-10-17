@@ -16654,4 +16654,12 @@ Do you want to participate?</value>
     <value>Selected groups</value>
     <comment>Selected groups</comment>
   </data>
+  <data name="PriorityHigher" xml:space="preserve">
+    <value>Priority Higher</value>
+    <comment>text for pririty higher on web plan moudule</comment>
+  </data>
+  <data name="PriorityLower" xml:space="preserve">
+    <value>Priority Lower	</value>
+    <comment>text for pririty lower on web plan moudule</comment>
+  </data>
 </root>
