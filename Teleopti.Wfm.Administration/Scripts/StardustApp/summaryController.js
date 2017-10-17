@@ -14,11 +14,20 @@
 		vm.triggerResourceCalculation = triggerResourceCalculation;
 		vm.healthCheck = healthCheck;
 		vm.selectTenant = selectTenant;
+		vm.displayFailedJobs = vm.displayQueuedJobs = vm.displayNodes = vm.displayHistory = "none";
+		vm.showFailureAlert = vm.showNodesAlert = vm.showHistoryAlert = vm.showHealthAlert = "none";
+		vm.noHistoryMessage = vm.noFailedJobsMessage = vm.noQueuedJobsMessage = vm.noNodesMessage = "";
 		vm.result = "";
+
 		$http.get("./Stardust/Jobs/1/5", tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.RunningJobs = data;
-			})
+				if (data.length > 0) {
+					vm.displayHistory = "";
+				} else {
+					vm.noHistoryMessage = "No jobs have been processed during the last 7 days!";
+					vm.showHistoryAlert = "";
+				}})
 			.error(function(xhr, ajaxOptions) {
 				console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 				vm.JobError = ajaxOptions;
@@ -30,6 +39,11 @@
 		$http.get("./Stardust/FailedJobs/1/5", tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.FailedJobs = data;
+				if (data.length > 0) {
+					vm.displayFailedJobs = "";
+					vm.showFailureAlert = "";
+				} else
+					vm.noFailedJobsMessage = "No job failures to show!";
 			})
 			.error(function(xhr, ajaxOptions) {
 				console.log(xhr.Message + ": " + xhr.ExceptionMessage);
@@ -42,6 +56,10 @@
 		$http.get("./Stardust/QueuedJobs/1/5", tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.QueuedJobs = data;
+				if (data.length > 0) {
+					vm.displayQueuedJobs = "";
+				} else
+					vm.noQueuedJobsMessage = "Job queue is empty!";
 			})
 			.error(function(xhr, ajaxOptions) {
 				console.log(xhr.Message + ": " + xhr.ExceptionMessage);
@@ -54,6 +72,12 @@
 		$http.get("./Stardust/AliveWorkerNodes", tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.WorkerNodes = data;
+				if (data.length > 0) {
+					vm.displayNodes = "";
+				} else {
+					vm.noNodesMessage = "No nodes are running. Run the health check to figure out why.";
+					vm.showNodesAlert = "";
+				}
 			})
 			.error(function(xhr, ajaxOptions) {
 				vm.NodeError = ajaxOptions;
@@ -82,17 +106,21 @@
 				},
 				tokenHeaderService.getHeaders()
 			);
+			window.location.reload();
 		}
 
 		function healthCheck() {
-			vm.result = "running...";
+			vm.result = "Running...";
 			$http.get("./Stardust/HealthCheck",
 					tokenHeaderService.getHeaders())
 				.success(function(data) {
 					vm.result = data;
+					if (data !== "Everything looks OK!")
+						vm.showHealthAlert = "";
 				})
 				.error(function() {
 					vm.result = "Something is wrong but we can't figure out what!";
+					vm.showHealthAlert = "";
 				});
 		}
 	}

@@ -35,20 +35,18 @@
 						</button>
 						<br/>
 						<br/>
-						{{vm.result}}
+						<md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showHealthAlert}}"></md-icon> {{vm.result}}
 					</p>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-9 summary-jobs ">
 			<div class="panel panel-default ">
-				<div class="panel-heading">Failures
+				<div class="panel-heading">
+					Failures  <md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showFailureAlert}}"></md-icon> 
 				</div>
 				<div class="panel-body">
-					<p>
-						Monitor jobs that have caused errors.
-					</p>
-					<table>
+					<table style="display:{{vm.displayFailedJobs}}">
 						<thead>
 						<tr>
 							<th>Type</th>
@@ -67,17 +65,15 @@
 						</tr>
 						</tbody>
 					</table>
-					<a class="button" href="#StardustDashboard/failedJobs">See more results &raquo;</a>
+					<p>{{vm.noFailedJobsMessage}}</p>
+					<a class="button" href="#StardustDashboard/failedJobs" style="display:{{vm.displayFailedJobs}}">See more results &raquo;</a>
 				</div>
 			</div>
 			<div class="panel panel-default ">
 				<div class="panel-heading">Queue
 				</div>
 				<div class="panel-body">
-					<p>
-						Monitor jobs that are in queue waiting for a free node.
-					</p>
-					<table>
+					<table style="display:{{vm.displayQueuedJobs}}">
 						<thead>
 						<tr>
 							<th>Type</th>
@@ -91,17 +87,14 @@
 						</tr>
 						</tbody>
 					</table>
-					<a class="button" href="#StardustDashboard/queue">See more results &raquo;</a>
+					<p>{{vm.noQueuedJobsMessage}}</p>
+					<a class="button" href="#StardustDashboard/queue" style="display:{{vm.displayQueuedJobs}}">See more results &raquo;</a>
 				</div>
 			</div>
 			<div class="panel panel-default">
-				<div class="panel-heading">History
-				</div>
+				<div class="panel-heading">History</div>
 				<div class="panel-body ">
-					<p>
-						Monitor the history of jobs and the current processing ones. You can see details about the jobs, when they were processed, what node was running it, see logs from the job etc.
-					</p>
-					<table>
+					<table style="display:{{vm.displayHistory}}">
 						<thead>
 						<tr>
 							<th>Type</th>
@@ -119,18 +112,14 @@
 						</tr>
 						</tbody>
 					</table>
-					<a class="button" href="#StardustDashboard/jobs">See more results &raquo;</a>
+					<p><md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showHistoryAlert}}"></md-icon>   {{vm.noHistoryMessage}}</p>
+					<a class="button" href="#StardustDashboard/jobs" style="display:{{vm.displayHistory}}">See more results &raquo;</a>
 				</div>
 			</div>
 			<div class="panel panel-default ">
-				<div class="panel-heading">Nodes
-					
-				</div>
+				<div class="panel-heading">Nodes</div>
 				<div class="panel-body">
-					<p>
-						Monitor the nodes that executes the long running background jobs. You can see their latest heartbeats and what jobs they are running.
-					</p>
-					<table>
+					<table style="display:{{vm.displayNodes}}">
 						<thead>
 						<tr>
 							<th>Url</th>
@@ -148,7 +137,8 @@
 						</tr>
 						</tbody>
 					</table>
-					<a class="button" href="#StardustDashboard/nodes">See more results &raquo;</a>
+					<p><md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showNodesAlert}}"></md-icon>   {{vm.noNodesMessage}}</p>
+					<a class="button" href="#StardustDashboard/nodes" style="display:{{vm.displayNodes}}">See more results &raquo;</a>
 				</div>
 			</div>
 		</div>
