@@ -13,13 +13,13 @@
 				<div class="con-row">
 					<div class="con-flex">
 						<label class="input-icon">
-							<input style="margin-top: 10px;" type="text" value="{{vm.userCode}}">
+							<input style="margin-top: 10px;" ng-model="vm.userCode" type="text">
 						</label>
 					</div>
 					<div class="con-flex">
-						<button class="wfm-btn wfm-btn-invis-primary">Trace</button>
-						<button class="wfm-btn wfm-btn-invis-primary">Stop</button>
-						<button class="wfm-btn wfm-btn-invis-primary">Clear</button>
+						<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.trace()">Trace</button>
+						<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.stop()">Stop</button>
+						<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.clear()">Clear</button>
 					</div>
 				</div>
 			</div>

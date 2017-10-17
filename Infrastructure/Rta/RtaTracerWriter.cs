@@ -2,29 +2,25 @@ using System;
 using System.Data;
 using log4net;
 using log4net.Appender;
+using log4net.Config;
 using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class RtaTracerWriter : IRtaTracerWriter, IDisposable
 	{
 		private readonly ILog _log = LogManager.GetLogger("Teleopti.RtaTracer");
-		private readonly ICurrentDataSource _dataSource;
-		private readonly IJsonSerializer serializer;
+		private readonly IJsonSerializer _serializer;
 
-		public RtaTracerWriter(ICurrentDataSource dataSource, IConfigReader config, IJsonDeserializer deserializer, IJsonSerializer serializer)
+		public RtaTracerWriter(IConfigReader config, IJsonDeserializer deserializer, IJsonSerializer serializer)
 		{
-			_dataSource = dataSource;
-			this.serializer = serializer;
+			_serializer = serializer;
 			var appender = new AdoNetAppender()
 			{
 				Name = "RtaTracer",
@@ -57,6 +53,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 			appender.ActivateOptions();
 
+			// not really tested
+			logger().Level = Level.All;
+
 			logger().AddAppender(appender);
 			logger().Hierarchy.Configured = true;
 		}
@@ -68,12 +67,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		private static Logger logger()
 		{
-			return (LogManager.GetLogger("Teleopti.RtaTracer").Logger as Logger);
+			return LogManager.GetLogger("Teleopti.RtaTracer").Logger as Logger;
 		}
 
 		public void Write<T>(RtaTracerLog<T> log)
 		{
-			_log.Debug(serializer.SerializeObject(new {Log = log, Tenant = log.Tenant, Type = typeof(T).Name}));
+			_log.Debug(_serializer.SerializeObject(new { Log = log, log.Tenant, Type = typeof(T).Name }));
 		}
 	}
 
@@ -87,14 +86,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_deserializer = deserializer;
 			DbType = DbType.String;
 			Size = int.MaxValue;
-			Layout = (IRawLayout) new RawLayoutConverter().ConvertFrom(new PatternLayout("%message"));
+			Layout = (IRawLayout)new RawLayoutConverter().ConvertFrom(new PatternLayout("%message"));
 		}
 
 		public override void FormatValue(IDbCommand command, LoggingEvent loggingEvent)
 		{
 			var serialized = loggingEvent.RenderedMessage;
 			var obj = _deserializer.DeserializeObject<dynamic>(serialized);
-			((IDbDataParameter) command.Parameters[ParameterName]).Value = ValueReader.Invoke(obj);
+			((IDbDataParameter)command.Parameters[ParameterName]).Value = ValueReader.Invoke(obj);
 		}
 	}
 }
