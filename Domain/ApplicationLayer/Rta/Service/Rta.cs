@@ -44,6 +44,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[TenantScope]
 		public virtual void Enqueue(BatchInputModel batch)
 		{
+			batch.States.EmptyIfNull()
+				.ForEach(x => { x.TraceLog = _tracer.StateReceived(x.UserCode, x.StateCode); });
 			validateAuthenticationKey(batch);
 			validateStateCodes(batch);
 			_tenants.Poke();
@@ -64,6 +66,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[TenantScope]
 		public virtual void Process(BatchInputModel batch)
 		{
+			batch.States.EmptyIfNull()
+				.ForEach(x => { x.TraceLog = _tracer.StateReceived(x.UserCode, x.StateCode); });
 			process(batch);
 		}
 
