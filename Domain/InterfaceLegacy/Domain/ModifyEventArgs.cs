@@ -8,12 +8,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// </summary>
     public class ModifyEventArgs : EventArgs
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModifyEventArgs"/> class.
-        /// </summary>
-        /// <param name="modifier">The modifier.</param>
-        /// <param name="person">The person.</param>
-        /// <param name="period">The period.</param>
         public ModifyEventArgs(ScheduleModifier modifier, IPerson person, DateTimePeriod period, IScheduleDay modifiedPart)
         {
             Modifier = modifier;

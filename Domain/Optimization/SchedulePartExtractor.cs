@@ -15,10 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IPerson _person;
         private readonly IScheduleDay _schedulePart;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SelectedSchedulePeriodData"/> class.
-        /// </summary>
-        /// <param name="schedulePart">The schedule part.</param>
         public SchedulePartExtractor(IScheduleDay schedulePart)
         {
             InParameter.NotNull(nameof(schedulePart), schedulePart);

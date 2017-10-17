@@ -18,12 +18,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             _dayIndexCalculator = dayIndexCalculator;
         }
 
-        /// <summary>
-        /// Executes the calculation on the specified lockable bit array.
-        /// </summary>
-        /// <param name="lockableBitArray">The lockable bit array.</param>
-        /// <param name="raise">if set to <c>true</c> [raise].</param>
-        /// <returns></returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public int? Execute(ILockableBitArray lockableBitArray,  bool raise, DateOnlyPeriod period)
         {
