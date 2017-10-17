@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		internal static ISession Session(this ICurrentUnitOfWork unitOfWork)
 		{
-			return ((NHibernateUnitOfWork) unitOfWork.Current()).Session;
+			return unitOfWork.Current().Session();
 		}
 
 		internal static ISession Session(this IUnitOfWorkFactory unitOfWorkFactory)
 		{
-			return ((NHibernateUnitOfWork) unitOfWorkFactory.CurrentUnitOfWork()).Session;
+			return unitOfWorkFactory.CurrentUnitOfWork().Session();
 		}
 
 		internal static IStatelessSession Session(this IStatelessUnitOfWork statelessUnitOfWork)
@@ -23,12 +23,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		internal static ISession Session(this IUnitOfWork unitOfWork)
 		{
-			var application = unitOfWork as NHibernateUnitOfWork;
-			if (application != null)
-				return application.Session;
-			var analytics = unitOfWork as AnalyticsUnitOfWork;
-			if (analytics != null)
-				return analytics.Session;
+			switch (unitOfWork)
+			{
+				case NHibernateUnitOfWork application:
+					return application.Session;
+				case AnalyticsUnitOfWork analytics:
+					return analytics.Session;
+			}
 			return null;
 		}
 	}
