@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private readonly IToggleManager _toggles;
-		private readonly IRtaTracer _rtaTracer;
+		private readonly IRtaTracer _tracer;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(TeleoptiRtaService));
 
-		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta, IToggleManager toggles, IRtaTracer rtaTracer)
+		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta, IToggleManager toggles, IRtaTracer tracer)
 		{
 			_rta = rta;
 			_toggles = toggles;
-			_rtaTracer = rtaTracer;
+			_tracer = tracer;
 		}
 
 		public int SaveExternalUserState(
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			DateTime batchId,
 			bool isSnapshot)
 		{
-			_rtaTracer.ProcessReceived();
+			_tracer.ProcessReceived();
 			return handleRtaExceptions(() =>
 			{
 				userCode = fixUserCode(userCode);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			string sourceId,
 			ICollection<ExternalUserState> externalUserStateBatch)
 		{
-			_rtaTracer.ProcessReceived();
+			_tracer.ProcessReceived();
 			return handleRtaExceptions(() =>
 			{
 				IEnumerable<BatchStateInputModel> states = (

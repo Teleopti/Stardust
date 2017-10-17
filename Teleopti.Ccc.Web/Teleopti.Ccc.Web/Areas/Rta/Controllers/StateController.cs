@@ -15,19 +15,20 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private readonly INow _now;
 		private readonly IToggleManager _toggles;
-		private readonly IRtaTracer _rtaTracer;
+		private readonly IRtaTracer _tracer;
 
-		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, INow now, IToggleManager toggles, IRtaTracer rtaTracer)
+		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, INow now, IToggleManager toggles, IRtaTracer tracer)
 		{
 			_rta = rta;
 			_now = now;
 			_toggles = toggles;
-			_rtaTracer = rtaTracer;
+			_tracer = tracer;
 		}
 
 		[HttpPost, Route("Rta/State/Change")]
 		public IHttpActionResult Change([FromBody] ExternalUserStateWebModel input)
 		{
+			_tracer.ProcessReceived();
 			return handleRtaExceptions(new BatchInputModel
 			{
 				AuthenticationKey = input.AuthenticationKey,
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[HttpPost, Route("Rta/State/Batch")]
 		public IHttpActionResult Batch([FromBody] ExternalUserBatchWebModel input)
 		{
+			_tracer.ProcessReceived();
 			return handleRtaExceptions(new BatchInputModel
 			{
 				AuthenticationKey = input.AuthenticationKey,
