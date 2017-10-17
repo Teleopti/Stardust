@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Aop;
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<TenantAuthenticationAlwaysAuthenticated>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<ImportAgentHandler>().As<IHandle<ImportAgentEvent>>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<ProcessWaitlistedRequestsHandler>().As<IHandle<ProcessWaitlistedRequestsEvent>>().SingleInstance().ApplyAspects();
+			builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
 		}
 	}
 }
