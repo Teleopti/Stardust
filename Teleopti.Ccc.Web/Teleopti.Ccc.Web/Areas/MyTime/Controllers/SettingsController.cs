@@ -113,8 +113,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				{
 					ret.IsAuthenticationSuccessful = true;
 				}
-				_httpContext.Current().Response.TrySkipIisCustomErrors = true;
-				_httpContext.Current().Response.StatusCode = 400;
 			}
 			return Json(ret);
 		}

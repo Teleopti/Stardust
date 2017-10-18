@@ -106,9 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			Assert.IsFalse(result.IsSuccessful);
 		}
-
-
-
+		
 		[Test]
 		public void ShouldGetCalendarLinkStatus()
 		{
