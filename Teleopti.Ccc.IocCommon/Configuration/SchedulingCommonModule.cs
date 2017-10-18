@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TimeZoneGuard>().As<ITimeZoneGuard>().SingleInstance();
 			builder.RegisterType<OverriddenBusinessRulesHolder>().As<IOverriddenBusinessRulesHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>().InstancePerLifetimeScope();
-			builder.RegisterType<SchedulingResultStateHolderProvider>().As<ISchedulingResultStateHolderProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<SchedulingResultStateHolderProvider>().As<ISchedulingResultStateHolderProvider>().SingleInstance();
 			builder.RegisterType<ScheduleDayForPerson>().As<IScheduleDayForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRangeForPerson>().As<IScheduleRangeForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<PreSchedulingStatusChecker>().As<IPreSchedulingStatusChecker>().InstancePerLifetimeScope();
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RuleSetDeletedShiftCategoryChecker>()
 				.As<IRuleSetDeletedShiftCategoryChecker>()
 				.SingleInstance();
-			builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().InstancePerLifetimeScope();
+			builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().SingleInstance();
 			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager28317>().SingleInstance();
 			builder.RegisterType<ScheduleChangesAffectedDates>().SingleInstance();
 			builder.RegisterType<AffectedDates>().SingleInstance();
