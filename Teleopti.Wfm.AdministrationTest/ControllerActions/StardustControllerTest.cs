@@ -23,12 +23,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			Target = new StardustController(StardustRepository, new FakeStardustSender(), new FakeTenants(), new StaffingSettingsReader(), new FakePigNode());
 		}
 
-		[Test]
-		public void RunningJobsListShouldNotCrash()
-		{
-			Target.RunningJobsList();
-		}
-
 
 		[Test]
 		public void JobHistoryDetailsShouldNotCrash()

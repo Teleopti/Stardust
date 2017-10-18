@@ -51,6 +51,11 @@ namespace Teleopti.Wfm.AdministrationTest
 			throw new NotImplementedException();
 		}
 
+		public IList<Job> GetAllJobs(JobFilterModel filter)
+		{
+			throw new NotImplementedException();
+		}
+
 		public List<Job> GetAllQueuedJobs(int @from, int to)
 		{
 			return new List<Job>();

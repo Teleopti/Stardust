@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Wfm.Administration.Models.Stardust;
 
@@ -91,23 +89,28 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return jobs;
 		}
 
-		public IList<Job> GetAllRunningJobs()
+		public IList<Job> GetAllJobs(JobFilterModel filter)
 		{
 			var jobs = new List<Job>();
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				const string selectCommandText = @"SELECT  [JobId] ,[Name] ,[Created] ,[CreatedBy] ,[Started] ,[Ended] ,[Serialized] ,[Type] ,[SentToWorkerNodeUri] ,[Result] 
-													FROM [Stardust].[Job] WITH(NOLOCK) WHERE Ended IS NULL order by Created desc";
+				 var selectCommandText =
+					$@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
+											FROM Stardust.Job WITH(NOLOCK) ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to
+ AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					getAllJobsCommand.Parameters.AddWithValue("@from", filter.From);
+					getAllJobsCommand.Parameters.AddWithValue("@to", filter.To);
+					//getAllJobsCommand.Parameters.AddWithValue("@dataSource", filter.DataSource);
+					using (var reader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						if (!sqlDataReader.HasRows) return jobs;
-						while (sqlDataReader.Read())
+						if (!reader.HasRows) return jobs;
+						while (reader.Read())
 						{
-							var job = createJobFromSqlDataReader(sqlDataReader);
+							var job = createJobFromSqlDataReader(reader);
 							setTotalDuration(job);
 							jobs.Add(job);
 						}

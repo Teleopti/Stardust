@@ -17,12 +17,15 @@
 		vm.resultsTo = vm.limit;
 		vm.resultsFrom = 1;
 		vm.moreJobs = true;
-		vm.getNewFreshData = getNewFreshData;
+		vm.getMoreData = getMoreData;
 		vm.selectTenant = selectTenant;
+		vm.search = search;
 		vm.Jobs = [];
+		var allTenantsString = "All Tenants";
+		vm.dataSourceFilter = allTenantsString;
 		var refreshInterval = 3000;
-
-		getJobs();
+		
+		getJobsByFilter();
 
 		var refreshPromise = $interval(pollNewData, refreshInterval);
 
@@ -56,8 +59,35 @@
 						vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
 					}
 				});
-		};
-		function getNewFreshData() {
+		}
+
+		function getJobsByFilter(dataExists) {
+			if (vm.dataSourceFilter === allTenantsString) {
+				getJobs(dataExists);
+			} else {
+				var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": vm.dataSourceFilter };
+				$http.get("./Stardust/Jobs", tokenHeaderService.getHeadersAndParams(params))
+					.success(function (data) {
+						if (data.length < vm.limit) {
+							vm.moreJobs = false;
+						}
+						if (dataExists) {
+							vm.Jobs = vm.Jobs.concat(data);
+						} else {
+							vm.Jobs = data;
+						}
+					})
+					.error(function (xhr, ajaxOptions, thrownError) {
+						console.log(xhr.Message + ": " + xhr.ExceptionMessage);
+						vm.JobError = ajaxOptions;
+						if (xhr !== "") {
+							vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
+						}
+					});
+			}
+		}
+
+		function getMoreData() {
 			vm.resultsFrom += vm.limit;
 			vm.resultsTo += vm.limit;
 			getJobs(true);
@@ -66,16 +96,21 @@
 		function pollNewData() {
 			var tmpFrom = vm.resultsFrom;
 			vm.resultsFrom = 1;
-			getJobs();
+			getJobsByFilter();
 			vm.resultsFrom = tmpFrom;
 		}
 
 		function back() {
 			window.history.back();
-		};
+		}
 
 		function selectTenant(name) {
-			vm.selectedTenantName = name;
-		};
+			vm.selectedDataSource = name;
+		}
+
+		function search() {
+			vm.dataSourceFilter = vm.selectedDataSource;
+			pollNewData();
+		}
 	}
 })();

@@ -8,12 +8,10 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">Filter</div>
 						<div class="panel-body">
-							<p>Work in progress.. <br/>
-							History still works without filter</p>
 							<div class="dropdown" style="padding-bottom: 10px">
 								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-									<span ng-show="!vm.selectedTenantName">All Tenants</span>
-									<span ng-show="vm.selectedTenantName">{{vm.selectedTenantName}}</span>
+									<span ng-show="!vm.selectedDataSource">All Tenants</span>
+									<span ng-show="vm.selectedDataSource">{{vm.selectedDataSource}}</span>
 									<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -21,7 +19,7 @@
 									<li ng-repeat="tenant in vm.Tenants" ng-click="vm.selectTenant(tenant.Name)"><a>{{tenant.Name}}</a></li>
 								</ul>
 							</div>
-							<button class="btn btn-primary" style="float: right;" ng-click="vm.getNewFreshData()">
+							<button class="btn btn-primary" style="float: right;" ng-click="vm.search()">
 								<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_search_white_24px.svg"></md-icon>
 							</button>
 						</div>					
@@ -53,7 +51,7 @@
 								</tr>
 								</tbody>
 							</table>
-							<a class="button" ng-show="vm.moreJobs" style="cursor:pointer" ng-click="vm.getNewFreshData()">See more results &raquo;</a>
+							<a class="button" ng-show="vm.moreJobs" style="cursor:pointer" ng-click="vm.getMoreData()">See more results &raquo;</a>
 						</div>
 					</div>
 				</div>

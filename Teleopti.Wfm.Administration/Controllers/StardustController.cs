@@ -34,6 +34,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_pingNode = pingNode;
 		}
 
+		[HttpGet, Route("Stardust/Jobs")]
+		public IHttpActionResult JobHistoryFiltered(int from, int to, string dataSource)
+		{
+			return Ok(_stardustRepository.GetAllJobs(new JobFilterModel(){DataSource = dataSource, From = from, To = to}));
+		}
+
 		[HttpGet, Route("Stardust/Jobs/{from}/{to}")]
 		public IHttpActionResult JobHistoryList(int from, int to)
 		{
@@ -44,12 +50,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public IHttpActionResult FailedJobHistoryList(int from, int to)
 		{
 			return Ok(_stardustRepository.GetAllFailedJobs(from, to));
-		}
-
-		[HttpGet, Route("Stardust/RunningJobs")]
-		public IHttpActionResult RunningJobsList()
-		{
-			return Ok(_stardustRepository.GetAllRunningJobs());
 		}
 
 		[HttpGet, Route("Stardust/JobsByNode/{nodeId}/{from}/{to}")]
@@ -177,11 +177,5 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 	
 
-	}
-
-	public class LogOnModel
-	{
-		public string Tenant;
-		public int Days;
 	}
 }

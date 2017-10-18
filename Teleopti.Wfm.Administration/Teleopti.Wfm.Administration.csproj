@@ -329,6 +329,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Models\Stardust\LogOnModel.cs" />
+    <Compile Include="Models\Stardust\JobFilterModel.cs" />
     <Compile Include="Core\Stardust\IPingNode.cs" />
     <Compile Include="Core\Stardust\PingNode.cs" />
     <Compile Include="Core\Stardust\IStardustRepository.cs" />
