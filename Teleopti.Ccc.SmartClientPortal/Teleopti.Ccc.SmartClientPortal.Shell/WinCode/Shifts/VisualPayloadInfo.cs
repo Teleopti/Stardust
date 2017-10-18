@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 
@@ -23,46 +24,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts
             _underlyingActivities = "";
         }
 
-        public DateTime StartTime
-        {
-            get { return _startTime; }
-        }
+        public DateTime StartTime => _startTime;
 
-        public DateTime EndTime
-        {
-            get { return _endTime; }
-        }
+		public DateTime EndTime => _endTime;
 
-        public Color Color
-        {
-            get { return _color; }
-        }
+		public Color Color => _color;
 
-        public string Name
-        {
-            get { return _name; }
-        }
+		public string Name => _name;
 
-        public bool Validate()
+		public bool Validate()
         {
             return true;
         }
 
-        public string UnderlyingActivities
-        {get { return _underlyingActivities; }
-        }
+        public string UnderlyingActivities => _underlyingActivities;
 
-        public void SetUnderlyingActivities(IList<IActivity> activities)
+		public void SetUnderlyingActivities(IList<IActivity> activities)
         {
-            if (activities == null) throw new ArgumentNullException("activities");
-            // loop through and create a string for tooltip
-
-            _underlyingActivities = "\n" + UserTexts.Resources.MasterActivityCanResultInColon;
-
-            foreach (var activity in activities)
-            {
-                _underlyingActivities += "\n" + activity.Name;
-            }
+            if (activities == null) throw new ArgumentNullException(nameof(activities));
+            
+			_underlyingActivities = string.Concat("\n", UserTexts.Resources.MasterActivityCanResultInColon, "\n",
+				string.Join("\n", activities.Select(a => a.Name)));
         }
     }
 }

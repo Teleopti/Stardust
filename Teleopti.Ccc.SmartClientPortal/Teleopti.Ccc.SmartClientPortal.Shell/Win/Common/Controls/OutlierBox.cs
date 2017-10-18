@@ -148,15 +148,7 @@ this.ResumeLayout(false);
                     var info = new ToolTipInfo();
                     var item = ((ListBoxItem<IOutlier>) listBox.Items[hoverIndex]);
 
-                    var allDates = item.Value.Dates.OrderBy(d => d.Date);
-                    foreach (var date in allDates)
-                    {
-                        info.Body.Text += date.ToShortDateString(CultureInfo.CurrentCulture);
-                        if (!date.Equals(allDates.Last()))
-                        {
-                            info.Body.Text += "\n";
-                        }
-                    }
+					info.Body.Text = string.Join("\n", item.Value.Dates.OrderBy(d => d.Date).Select(d => d.ToShortDateString(CultureInfo.CurrentCulture)));
                     info.Header.Text = item.DisplayText;
                     var font = new Font(info.Header.Font.FontFamily, info.Header.Font.Size,FontStyle.Bold);
                     info.Header.Font = font;
