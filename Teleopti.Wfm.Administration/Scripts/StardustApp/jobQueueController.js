@@ -5,7 +5,7 @@
 		.module("adminApp")
 		.controller("jobQueueController", jobQueueController, ["tokenHeaderService"]);
 
-	function jobQueueController($http, $interval, tokenHeaderService) {
+	function jobQueueController($http, $interval, tokenHeaderService, $scope) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.title = "Stardust Queue";
@@ -29,6 +29,13 @@
 		var refreshInterval = 3000;
 
 		getJobs();
+
+		var refreshPromise = $interval(pollNewData, refreshInterval);
+
+		$scope.$on("$destroy",
+			function () {
+				$interval.cancel(refreshPromise);
+			});
 
 		function getJobs(dataExists) {
 			$http.get("./Stardust/QueuedJobs/" + vm.resultsFrom + "/" + vm.resultsTo, tokenHeaderService.getHeaders())
@@ -113,8 +120,6 @@
 			getJobs();
 			vm.resultsFrom = tmpFrom;
 		}
-
-		$interval(pollNewData, refreshInterval);
 
 		function back() {
 			window.history.back();

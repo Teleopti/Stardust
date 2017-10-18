@@ -35,7 +35,7 @@
 						</button>
 						<br/>
 						<br/>
-						<md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showHealthAlert}}"></md-icon> {{vm.result}}
+						<md-icon md-svg-src="Content/images/error_alert_24px.svg" ng-show="vm.showHealthAlert"></md-icon> {{vm.result}}
 					</p>
 				</div>
 			</div>
@@ -43,10 +43,10 @@
 		<div class="col-md-9">
 			<div class="panel panel-default ">
 				<div class="panel-heading">
-					Failures  <md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showFailureAlert}}"></md-icon> 
+					Failures  <md-icon md-svg-src="Content/images/error_alert_24px.svg" ng-show="vm.showFailureAlert"></md-icon> 
 				</div>
 				<div class="panel-body">
-					<table style="display:{{vm.displayFailedJobs}}">
+					<table ng-show="vm.anyFailedJobs">
 						<thead>
 						<tr>
 							<th>Tenant</th>
@@ -66,15 +66,15 @@
 						</tr>
 						</tbody>
 					</table>
-					<p>{{vm.noFailedJobsMessage}}</p>
-					<a class="button" href="#StardustDashboard/failedJobs" style="display:{{vm.displayFailedJobs}}">See more results &raquo;</a>
+					<p ng-show="!vm.anyFailedJobs">No job failures to show!</p>
+					<a class="button" href="#StardustDashboard/failedJobs" ng-show="vm.anyFailedJobs">See more results &raquo;</a>
 				</div>
 			</div>
 			<div class="panel panel-default ">
 				<div class="panel-heading">Queue
 				</div>
 				<div class="panel-body">
-					<table style="display:{{vm.displayQueuedJobs}}">
+					<table ng-show="vm.anyQueuedJobs">
 						<thead>
 						<tr>
 							<th>Tenant</th>
@@ -90,14 +90,14 @@
 						</tr>
 						</tbody>
 					</table>
-					<p>{{vm.noQueuedJobsMessage}}</p>
-					<a class="button" href="#StardustDashboard/queue" style="display:{{vm.displayQueuedJobs}}">See more results &raquo;</a>
+					<p ng-show="!vm.anyQueuedJobs">Job queue is empty!</p>
+					<a class="button" href="#StardustDashboard/queue" ng-show="vm.anyQueuedJobs">See more results &raquo;</a>
 				</div>
 			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">History</div>
 				<div class="panel-body ">
-					<table style="display:{{vm.displayHistory}}">
+					<table ng-show="vm.anyHistory">
 						<thead>
 						<tr>
 							<th>Tenant</th>
@@ -117,14 +117,14 @@
 						</tr>
 						</tbody>
 					</table>
-					<p><md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showHistoryAlert}}"></md-icon>   {{vm.noHistoryMessage}}</p>
-					<a class="button" href="#StardustDashboard/jobs" style="display:{{vm.displayHistory}}">See more results &raquo;</a>
+					<p ng-show="!vm.anyHistory"><md-icon md-svg-src="Content/images/error_alert_24px.svg" ng-show="vm.showHistoryAlert"></md-icon>   No job has been processed during the last 7 days!</p>
+					<a class="button" href="#StardustDashboard/jobs" ng-show="vm.anyHistory">See more results &raquo;</a>
 				</div>
 			</div>
 			<div class="panel panel-default ">
 				<div class="panel-heading">Nodes</div>
 				<div class="panel-body">
-					<table style="display:{{vm.displayNodes}}">
+					<table ng-show="vm.anyNodes">
 						<thead>
 						<tr>
 							<th>Url</th>
@@ -142,8 +142,7 @@
 						</tr>
 						</tbody>
 					</table>
-					<p><md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showNodesAlert}}"></md-icon>   {{vm.noNodesMessage}}</p>
-					<a class="button" href="#StardustDashboard/nodes" style="display:{{vm.displayNodes}}">See more results &raquo;</a>
+					<p  ng-show="!vm.anyNodes"><md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showNodesAlert}}"></md-icon>   No nodes are running. Run the health check to figure out why.</p>
 				</div>
 			</div>
 		</div>

@@ -5,7 +5,7 @@
 		.module("adminApp")
 		.controller("summaryController", summaryController, ["tokenHeaderService"]);
 
-	function summaryController($http, tokenHeaderService, $interval) {
+	function summaryController($http, tokenHeaderService, $interval, $scope) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.title = "Stardust Summary";
@@ -14,13 +14,17 @@
 		vm.triggerResourceCalculation = triggerResourceCalculation;
 		vm.healthCheck = healthCheck;
 		vm.selectTenant = selectTenant;
-		vm.displayFailedJobs = vm.displayQueuedJobs = vm.displayNodes = vm.displayHistory = "none";
-		vm.showFailureAlert = vm.showNodesAlert = vm.showHistoryAlert = vm.showHealthAlert = "none";
-		vm.noHistoryMessage = vm.noFailedJobsMessage = vm.noQueuedJobsMessage = vm.noNodesMessage = "";
+		vm.anyQueuedJobs = vm.anyFailedJobs = vm.anyHistory = vm.anyNodes = false;
+		vm.showFailureAlert = vm.showNodesAlert = vm.showHistoryAlert = vm.showHealthAlert = false;
 		vm.result = "";
 		refresh();
 
-		$interval(refresh, 3000);
+		var refreshPromise = $interval(refresh, 3000);
+
+		$scope.$on("$destroy",
+			function() {
+				$interval.cancel(refreshPromise);
+			});
 
 		$http.get("./AllTenants", tokenHeaderService.getHeaders())
 			.success(function (data) {
@@ -32,13 +36,11 @@
 				.success(function(data) {
 					vm.RunningJobs = data;
 					if (data.length > 0) {
-						vm.displayHistory = "";
-						vm.noHistoryMessage = "";
-						vm.showHistoryAlert = "none";
+						vm.anyHistory = true;
+						vm.showHistoryAlert = false;
 					} else {
-						vm.displayHistory = "none";
-						vm.noHistoryMessage = "No job has been processed during the last 7 days!";
-						vm.showHistoryAlert = "";
+						vm.anyHistory = false;
+						vm.showHistoryAlert = true;
 					}
 				})
 				.error(function(xhr, ajaxOptions) {
@@ -53,13 +55,11 @@
 				.success(function(data) {
 					vm.FailedJobs = data;
 					if (data.length > 0) {
-						vm.displayFailedJobs = "";
-						vm.showFailureAlert = "";
-						vm.noFailedJobsMessage = "";
+						vm.anyFailedJobs = true;
+						vm.showFailureAlert = true;
 					} else {
-						vm.displayFailedJobs = "none";
-						vm.showFailureAlert = "none";
-						vm.noFailedJobsMessage = "No job failures to show!";
+						vm.anyFailedJobs = false;
+						vm.showFailureAlert = false;
 					}
 				})
 				.error(function(xhr, ajaxOptions) {
@@ -74,11 +74,9 @@
 				.success(function(data) {
 					vm.QueuedJobs = data;
 					if (data.length > 0) {
-						vm.displayQueuedJobs = "";
-						vm.noQueuedJobsMessage = "";
+						vm.anyQueuedJobs = true;
 					} else {
-						vm.displayQueuedJobs = "none";
-						vm.noQueuedJobsMessage = "Job queue is empty!";
+						vm.anyQueuedJobs = false;
 					}
 				})
 				.error(function(xhr, ajaxOptions) {
@@ -93,13 +91,11 @@
 				.success(function(data) {
 					vm.WorkerNodes = data;
 					if (data.length > 0) {
-						vm.displayNodes = "";
-						vm.noNodesMessage = "";
-						vm.showNodesAlert = "none";
+						vm.anyNodes = true;
+						vm.showNodesAlert = false;
 					} else {
-						vm.displayNodes = "none";
-						vm.noNodesMessage = "No nodes are running. Run the health check to figure out why.";
-						vm.showNodesAlert = "";
+						vm.anyNodes = false;
+						vm.showNodesAlert = true;
 					}
 				})
 				.error(function(xhr, ajaxOptions) {
@@ -113,7 +109,7 @@
 
 		function selectTenant(name) {
 			vm.selectedTenantName = name;
-		};
+		}
 
 		function triggerResourceCalculation() {
 			if (!vm.selectedTenantName) return;
@@ -130,17 +126,18 @@
 
 		function healthCheck() {
 			vm.result = "Running...";
+			vm.showHealthAlert = false;
 			$http.get("./Stardust/HealthCheck",
 					tokenHeaderService.getHeaders())
 				.success(function(data) {
 					vm.result = data;
 					if (data !== "Everything looks OK!")
-						vm.showHealthAlert = "";
+						vm.showHealthAlert = true;
 					refresh();
 				})
 				.error(function() {
 					vm.result = "Something is wrong but we can't figure out what!";
-					vm.showHealthAlert = "";
+					vm.showHealthAlert = true;
 				});
 		}
 	}

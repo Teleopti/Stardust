@@ -1,11 +1,11 @@
 ﻿(function () {
-	'use strict';
+	"use strict";
 
 	angular
-		.module('adminApp')
-		.controller('jobFailedController', jobFailedController, ['tokenHeaderService']);
+		.module("adminApp")
+		.controller("jobFailedController", jobFailedController, ["tokenHeaderService"]);
 
-	function jobFailedController($http, $interval, tokenHeaderService) {
+	function jobFailedController($http, $interval, tokenHeaderService, $scope) {
 		/* jshint validthis:true */
 
 		var vm = this;
@@ -19,9 +19,16 @@
 		vm.noMoreJobs = false;
 		vm.getNewFreshData = getNewFreshData;
 		vm.Jobs = [];
-		var refreshInterval = 10000;
+		var refreshInterval = 3000;
 
 		getJobs();
+
+		var refreshPromise = $interval(pollNewData, refreshInterval);
+
+		$scope.$on("$destroy",
+			function () {
+				$interval.cancel(refreshPromise);
+			});
 
 		function getJobs(dataExists) {
 			$http.get("./Stardust/FailedJobs/" + vm.resultsFrom + "/" + vm.resultsTo, tokenHeaderService.getHeaders())
@@ -37,10 +44,10 @@
 
 				})
 				.error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
-						vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
+						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 					}
 				});
 		};
@@ -54,8 +61,6 @@
 			vm.Jobs = [];
 			getJobs();
 		}
-
-		$interval(pollNewData, refreshInterval);
 
 		function back() {
 			window.history.back();

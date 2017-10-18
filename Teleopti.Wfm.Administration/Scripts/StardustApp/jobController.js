@@ -1,11 +1,11 @@
 ﻿(function() {
-	'use strict';
+	"use strict";
 
 	angular
-		.module('adminApp')
-		.controller('jobController', jobController, ['tokenHeaderService']);
+		.module("adminApp")
+		.controller("jobController", jobController, ["tokenHeaderService"]);
 
-	function jobController($http, $interval, tokenHeaderService) {
+	function jobController($http, $interval, tokenHeaderService, $scope) {
 		/* jshint validthis:true */
 
 		var vm = this;
@@ -16,18 +16,31 @@
 		vm.limit = 50;
 		vm.resultsTo = vm.limit;
 		vm.resultsFrom = 1;
-		vm.noMoreJobs = false;
+		vm.moreJobs = true;
 		vm.getNewFreshData = getNewFreshData;
+		vm.selectTenant = selectTenant;
 		vm.Jobs = [];
 		var refreshInterval = 3000;
 
 		getJobs();
 
+		var refreshPromise = $interval(pollNewData, refreshInterval);
+
+		$scope.$on("$destroy",
+			function () {
+				$interval.cancel(refreshPromise);
+			});
+
+		$http.get("./AllTenants", tokenHeaderService.getHeaders())
+			.success(function (data) {
+				vm.Tenants = data;
+			});
+
 		function getJobs(dataExists) {
 			$http.get("./Stardust/Jobs/" + vm.resultsFrom + "/" + vm.resultsTo, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					if (data.length < vm.limit) {
-						vm.noMoreJobs = true;
+						vm.moreJobs = false;
 					}
 					if (dataExists) {
 						vm.Jobs = vm.Jobs.concat(data);
@@ -37,7 +50,7 @@
 					
 				})
 				.error(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ': ' + xhr.ExceptionMessage;
@@ -57,10 +70,12 @@
 			vm.resultsFrom = tmpFrom;
 		}
 
-		$interval(pollNewData, refreshInterval);
-
 		function back() {
 			window.history.back();
+		};
+
+		function selectTenant(name) {
+			vm.selectedTenantName = name;
 		};
 	}
 })();

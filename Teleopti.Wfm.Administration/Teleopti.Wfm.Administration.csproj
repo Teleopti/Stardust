@@ -266,8 +266,6 @@
     <Content Include="Scripts\StardustApp\jobController.js" />
     <Content Include="Scripts\StardustApp\jobQueueDetailsController.js" />
     <Content Include="Scripts\StardustApp\jobQueueController.js" />
-    <Content Include="Scripts\StardustApp\menuController.js" />
-    <Content Include="Scripts\StardustApp\nodeController.js" />
     <Content Include="Scripts\StardustApp\nodeDetailsController.js" />
     <Content Include="Scripts\StardustApp\jobFailedController.js" />
     <Content Include="Scripts\StardustApp\summaryController.js" />
@@ -278,7 +276,6 @@
     <Content Include="StardustDashboard\stardust.html" />
     <Content Include="Scripts\StardustApp\jobDetailsController.js" />
     <Content Include="StardustDashboard\jobs.html" />
-    <Content Include="StardustDashboard\nodes.html" />
     <Content Include="StardustDashboard\queue.html" />
     <Content Include="StardustDashboard\style.css" />
     <Content Include="configurationDetails.html" />
