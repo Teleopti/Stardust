@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Teleopti.Ccc.Web.Areas.Global.Models
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 {
 	public class SearchGroupIdsData
 	{

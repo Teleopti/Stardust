@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -7,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		IScheduleDictionary GetScheduleDictionary(DateOnly date, IPerson person, ScheduleDictionaryLoadOptions loadOptions = null);
 		IScheduleDay GetScheduleDay(DateOnly date, IPerson person, ScheduleDictionaryLoadOptions loadOptions = null);
+		IEnumerable<IScheduleDay> GetScheduleDays(DateOnlyPeriod period, IEnumerable<IPerson> persons, IScenario scenario);
 	}
 }

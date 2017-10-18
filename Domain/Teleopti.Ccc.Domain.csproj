@@ -157,6 +157,10 @@
     <Compile Include="ApplicationLayer\Events\ProcessWaitlistedRequestsEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ReloadSchedules.cs" />
     <Compile Include="ApplicationLayer\Events\StardustJobInfo.cs" />
+    <Compile Include="ApplicationLayer\ExportSchedule\ExportScheduleService.cs" />
+    <Compile Include="ApplicationLayer\ExportSchedule\ScheduleExcelExportData.cs" />
+    <Compile Include="ApplicationLayer\ExportSchedule\SearchGroupIdsData.cs" />
+    <Compile Include="ApplicationLayer\ExportSchedule\TeamsExcelCreator.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentDataModel.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplate.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersister.cs" />
@@ -259,6 +263,10 @@
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAlreadyHasScheduleValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestStartTimeValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestValidationResult.cs" />
+    <Compile Include="ApplicationLayer\PeopleSearch\IPeopleSearchProvider.cs" />
+    <Compile Include="ApplicationLayer\PeopleSearch\PeopleSearchProvider.cs" />
+    <Compile Include="ApplicationLayer\PeopleSearch\PeopleSummaryModel.cs" />
+    <Compile Include="ApplicationLayer\PeopleSearch\PersonFinderSearchCriteria.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandler.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\CrossAgentsAndSkillsResult.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\CrossAgentsAndSkills.cs" />

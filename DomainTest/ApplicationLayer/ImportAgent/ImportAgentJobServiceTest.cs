@@ -103,10 +103,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public void ShouldGetCorrectJobsDetailWhenJobIsNotFinished()
 		{
 			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
-			var person1 = setCurrentLoggedOnUser();
 			CurrentBusinessUnit.OnThisThreadUse(bu1);
-			var job1 = createValidJob();
-
+			setCurrentLoggedOnUser();
+			createValidJob();
 			var detail = Target.GetJobsForCurrentBusinessUnit().FirstOrDefault();
 
 			detail.JobResult.IsWorking().Should().Be(true);
@@ -136,7 +135,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		{
 			var bu1 = BusinessUnitFactory.CreateWithId("bu1");
 			CurrentBusinessUnit.OnThisThreadUse(bu1);
-			var person1 = setCurrentLoggedOnUser();
 			var job1 = createValidJob();
 			job1.Artifacts.Add(new JobResultArtifact(JobResultArtifactCategory.OutputError, "test_error.xlsx", Encoding.ASCII.GetBytes("test")));
 

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -30,6 +32,17 @@ namespace Teleopti.Ccc.Domain.Common
 			var scheduleDicLoadOption = loadOptions ?? new ScheduleDictionaryLoadOptions(false, false);
 			var dictionary = GetScheduleDictionary(date, person, scheduleDicLoadOption);
 			return dictionary[person].ScheduledDay(date);
+		}
+
+		public IEnumerable<IScheduleDay> GetScheduleDays(DateOnlyPeriod period, IEnumerable<IPerson> persons, IScenario scenario)
+		{
+			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
+				persons.ToArray(),
+				new ScheduleDictionaryLoadOptions(false, false),
+				period,
+				scenario);
+
+			return dictionary.SchedulesForPeriod(period, persons.ToArray());
 		}
 	}
 }

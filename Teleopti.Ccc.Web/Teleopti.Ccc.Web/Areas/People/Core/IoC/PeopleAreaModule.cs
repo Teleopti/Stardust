@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.IoC

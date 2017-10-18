@@ -400,7 +400,6 @@
     <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
     <Compile Include="Areas\Global\DataProtectionController.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactory.cs" />
-    <Compile Include="Areas\Global\Models\SearchGroupIdsData.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />
     <Compile Include="Areas\Global\ScenarioViewModel.cs" />
     <Compile Include="Areas\Global\ThemeController.cs" />
@@ -620,8 +619,6 @@
     <Compile Include="Areas\People\Controllers\ResultModel.cs" />
     <Compile Include="Areas\People\Core\Providers\IPersonInfoUpdater.cs" />
     <Compile Include="Areas\People\Core\Providers\IPersonDataProvider.cs" />
-    <Compile Include="Areas\People\Core\Providers\PeopleSearchProvider.cs" />
-    <Compile Include="Areas\People\Core\Models\PeopleSummaryModel.cs" />
     <Compile Include="Areas\People\Core\Providers\PersonInfoUpdater.cs" />
     <Compile Include="Areas\People\Core\Providers\PersonDataProvider.cs" />
     <Compile Include="Areas\Permissions\Controllers\ApplicationFunctionsController.cs" />
@@ -690,7 +687,6 @@
     <Compile Include="Areas\ResourcePlanner\ScheduleController.cs" />
     <Compile Include="Areas\ResourcePlanner\SuggestedPlanningPeriodRangeModel.cs" />
     <Compile Include="Areas\Global\ThrottledAction.cs" />
-    <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaSkillAreaController.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaToolController.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />

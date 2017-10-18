@@ -1,6 +1,6 @@
 ﻿using System;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
