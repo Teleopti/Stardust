@@ -1,5 +1,5 @@
-﻿@ignore
-@RTA
+﻿@RTA
+@OnlyRunIfEnabled('RTA_RtaTracer_45597')
 Feature: Rta tracer
 	In order to manually verify the rta works
 	As a troubleshooter
@@ -17,12 +17,13 @@ Background:
 	 | Start Date     | 2017-01-01   |
 	And there is a state with name 'Ready'
 	
+@ignore
 Scenario: See process trace
 	Given the time is '2017-09-25 08:00'
 	And I view real time adherence trace for 'Pierre Baldi'
 	When 'Pierre Baldi' sets his phone state to 'Ready'
 	Then I should see process tracing 'Pierre Baldi'
-	Then I should see process received data at '2017-09-25 08:00'
+	Then I should see process received data at '08:00'
 
 Scenario: See state trace
 	Given the time is '2017-09-25 08:00'
@@ -31,4 +32,4 @@ Scenario: See state trace
 	Then I should see trace of state 'Ready' being 'Received'
 	And I should see trace of state 'Ready' being 'Processing'
 	And I should see trace of state 'Ready' being 'Processed'
-	And I should see trace of state 'Ready' being 'PersonStateChangeEvent'
+	And I should see trace of state 'Ready' being 'PersonStateChangedEvent'

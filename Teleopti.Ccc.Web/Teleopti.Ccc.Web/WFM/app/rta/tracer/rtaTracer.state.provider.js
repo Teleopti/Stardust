@@ -5,7 +5,7 @@ angular.module('wfm.rtaTracer')
 
 function rtaTracer($stateProvider) {
 	$stateProvider.state('rtaTracer', {
-		url: '/rtaTracer',
+		url: '/rtaTracer?userCode&trace',
 		controller: 'RtaTracerController as vm',
 		templateUrl: 'app/rta/tracer/rtaTracer.html'
 	})

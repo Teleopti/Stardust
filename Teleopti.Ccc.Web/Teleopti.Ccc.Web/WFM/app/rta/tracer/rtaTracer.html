@@ -31,7 +31,7 @@
 		<div class="con-flex">
 			<div class="panel material-depth-1">
 				<table class="wfm-table">
-					<tr ng-repeat="tracer in vm.tracers">
+					<tr ng-repeat="tracer in vm.tracers" class="process">
 						<td width="200px">{{tracer.process}}</td>
 						<td width="200px">Recieved data at: {{tracer.dataReceivedAt}}</td>
 						<td width="200px">Activity check at: {{tracer.activityCheckAt}}</td>
@@ -48,7 +48,7 @@
 			<div class="con-flex">
 				<div class="panel material-depth-1">
 					<table class="wfm-table">
-						<tr ng-repeat="state in tracedUser.states">
+						<tr ng-repeat="state in tracedUser.states" class="trace">
 							<td style="vertical-align: top">{{state.stateCode}}</td>
 							<td><span ng-repeat="trace in state.traces">{{trace}}<br/></span></td>
 						</tr>

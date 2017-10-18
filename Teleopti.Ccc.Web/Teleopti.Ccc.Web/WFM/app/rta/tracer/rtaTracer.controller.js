@@ -4,16 +4,19 @@
 		.module('wfm.rtaTracer')
 		.controller('RtaTracerController', constructor);
 
-	constructor.$inject = ['$http', '$scope', 'rtaPollingService'];
+	constructor.$inject = ['$http', '$scope', 'rtaPollingService', '$stateParams'];
 
-	function constructor($http, $scope, rtaPollingService) {
+	function constructor($http, $scope, rtaPollingService, $stateParams) {
 		var vm = this;
-		vm.userCode = '';
+		vm.userCode = $stateParams.userCode || '';
 		vm.tracers = [];
 
 		vm.trace = function () {
 			$http.get('../api/RtaTracer/Trace', {params: {userCode: vm.userCode}});
 		};
+		
+		if ($stateParams.trace)
+			vm.trace();
 		
 		vm.stop = function () {
 			$http.get('../api/RtaTracer/Stop');
