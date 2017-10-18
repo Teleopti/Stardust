@@ -279,7 +279,6 @@
     <Content Include="Scripts\StardustApp\jobDetailsController.js" />
     <Content Include="StardustDashboard\jobs.html" />
     <Content Include="StardustDashboard\nodes.html" />
-    <Content Include="StardustDashboard\menu.html" />
     <Content Include="StardustDashboard\queue.html" />
     <Content Include="StardustDashboard\style.css" />
     <Content Include="configurationDetails.html" />

@@ -40,7 +40,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-9 summary-jobs ">
+		<div class="col-md-9">
 			<div class="panel panel-default ">
 				<div class="panel-heading">
 					Failures  <md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showFailureAlert}}"></md-icon> 
@@ -49,6 +49,7 @@
 					<table style="display:{{vm.displayFailedJobs}}">
 						<thead>
 						<tr>
+							<th>Tenant</th>
 							<th>Type</th>
 							<th>Started (UTC)</th>
 							<th>Sent to</th>
@@ -57,8 +58,8 @@
 						</thead>
 						<tbody>
 						<tr ng-repeat="job in vm.FailedJobs">
-							<td><a href="#StardustDashboard/jobs/{{job.JobId
-						}}">{{job.Name}}</a></td>
+							<td>{{job.DataSource}}</td>
+							<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
 							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{job.SentToWorkerNodeUri}}</td>
 							<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
@@ -76,12 +77,14 @@
 					<table style="display:{{vm.displayQueuedJobs}}">
 						<thead>
 						<tr>
+							<th>Tenant</th>
 							<th>Type</th>
 							<th>Created (UTC)</th>
 						</tr>
 						</thead>
 						<tbody>
 						<tr ng-repeat="job in vm.QueuedJobs">
+							<td>{{job.DataSource}}</td>
 							<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
 							<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 						</tr>
@@ -97,6 +100,7 @@
 					<table style="display:{{vm.displayHistory}}">
 						<thead>
 						<tr>
+							<th>Tenant</th>
 							<th>Type</th>
 							<th>Started (UTC)</th>
 							<th>Sent to</th>
@@ -105,6 +109,7 @@
 						</thead>
 						<tbody>
 						<tr ng-repeat="job in vm.RunningJobs">
+							<td>{{job.DataSource}}</td>
 							<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
 							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{job.SentToWorkerNodeUri}}</td>

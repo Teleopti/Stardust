@@ -9,9 +9,10 @@
 		/* jshint validthis:true */
 
 		var vm = this;
-		vm.title = 'Stardust Failed Jobs';
-		vm.NodeError = '';
-		vm.JobError = '';
+		vm.title = "Stardust Failed Jobs";
+		vm.NodeError = "";
+		vm.JobError = "";
+		vm.back = back;
 		vm.limit = 50;
 		vm.resultsTo = vm.limit;
 		vm.resultsFrom = 1;
@@ -56,5 +57,8 @@
 
 		$interval(pollNewData, refreshInterval);
 
+		function back() {
+			window.history.back();
+		};
 	}
 })();

@@ -1,8 +1,7 @@
 ﻿
 <div class="container body-content" ng-controller="jobFailedController as vm">
-	<div class="nav" ng-include="'./StardustDashboard/menu.html'" role="navigation"></div>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12"><a style="float: left; padding-top: 25px; padding-right: 50px"><img alt="back" src="Content/images/left_round.png" ng-click="vm.back()" /></a>
 			<h3>Failed Jobs</h3>
 			<div class="row">
 				<div class="col-md-7">
@@ -13,22 +12,24 @@
 			<div>
 				<table>
 					<thead>
-						<tr>
-							<th>Type</th>
-							<th>Finished (UTC)</th>
-							<th>Total Duration</th>
-							<th>Sent to</th>
-							<th>Result</th>
-						</tr>
+					<tr>
+						<th>Tenant</th>
+						<th>Type</th>
+						<th>Finished (UTC)</th>
+						<th>Total Duration</th>
+						<th>Sent to</th>
+						<th>Result</th>
+					</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="job in vm.Jobs">
-							<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
-							<td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{job.TotalDuration}}</td>
-							<td>{{job.SentToWorkerNodeUri}}</td>
-							<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
-						</tr>
+					<tr ng-repeat="job in vm.Jobs">
+						<td>{{job.DataSource}}</td>
+						<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
+						<td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						<td>{{job.TotalDuration}}</td>
+						<td>{{job.SentToWorkerNodeUri}}</td>
+						<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
+					</tr>
 					</tbody>
 				</table>
 			</div>

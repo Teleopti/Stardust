@@ -155,7 +155,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					return Ok($"Node {node.Url} does not respond. Make sure that the Teleopti Service Bus service is running. Is the firewall configured so the worker server allows incoming traffic on ports 14100-14199?");
 			}
 
-			var id = _stardustSender.Send(new StardustHealthCheckEvent { JobName = "Stardust HealthCheck", UserName = "Health Check" });
+			var id = _stardustSender.Send(new StardustHealthCheckEvent { JobName = "Stardust Health Check", UserName = "Stardust", LogOnDatasource = "Health Check"});
 			var waiting = true;
 			var healthCheckJob = new Job();
 			var stopwatch = new Stopwatch();
@@ -168,7 +168,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Thread.Sleep(TimeSpan.FromMilliseconds(500));
 			}
 			if(healthCheckJob.Ended != null && healthCheckJob.Result != "Success")
-				return Ok("The healthCheck job failed during execution. Check the Failed Jobs tab for more information.");
+				return Ok("The Health Check job failed during execution. Check the Failed Jobs tab for more information.");
 			var queuedJobs = _stardustRepository.GetAllQueuedJobs(0, 5);
 			if(healthCheckJob.Ended == null || queuedJobs.Any())
 				return Ok("Something is wrong with Stardust and it smells like a bug!");

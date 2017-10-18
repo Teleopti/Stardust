@@ -28,9 +28,6 @@ namespace Teleopti.Wfm.Administration.Models.Stardust
 
 		public string TotalDuration { get; set; }
 
-		public string DataSource()
-		{
-			return JsonConvert.DeserializeObject<EventWithInfrastructureContext>(Serialized).LogOnDatasource;
-		}
+		public string DataSource => JsonConvert.DeserializeObject<EventWithInfrastructureContext>(Serialized).LogOnDatasource;
 	}
 }

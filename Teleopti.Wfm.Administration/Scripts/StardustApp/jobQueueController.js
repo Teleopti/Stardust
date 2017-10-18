@@ -1,16 +1,17 @@
 ﻿(function () {
-	'use strict';
+	"use strict";
 
 	angular
-		.module('adminApp')
-		.controller('jobQueueController', jobQueueController, ['tokenHeaderService']);
+		.module("adminApp")
+		.controller("jobQueueController", jobQueueController, ["tokenHeaderService"]);
 
 	function jobQueueController($http, $interval, tokenHeaderService) {
 		/* jshint validthis:true */
 		var vm = this;
-		vm.title = 'Stardust Queue';
-		vm.NodeError = '';
-		vm.JobError = '';
+		vm.title = "Stardust Queue";
+		vm.NodeError = "";
+		vm.JobError = "";
+		vm.back = back;
 		vm.limit = 50;
 		vm.resultsTo = vm.limit;
 		vm.resultsFrom = 1;
@@ -25,7 +26,7 @@
 		vm.toggleAll = toggleAll;
 		vm.Jobs = [];
 		vm.selected = [];
-		var refreshInterval = 10000;
+		var refreshInterval = 3000;
 
 		getJobs();
 
@@ -71,7 +72,7 @@
 
 		function isIndeterminate() {
 			return (vm.selected.length !== 0 &&
-				 vm.selected.length !== vm.Jobs.length);
+				vm.selected.length !== vm.Jobs.length);
 		};
 
 		function isChecked() {
@@ -114,5 +115,9 @@
 		}
 
 		$interval(pollNewData, refreshInterval);
+
+		function back() {
+			window.history.back();
+		};
 	}
 })();
