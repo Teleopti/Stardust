@@ -30722,6 +30722,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contract time tolerance.
+        /// </summary>
+        public static string ShiftTradeTargetTimeRuleName {
+            get {
+                return ResourceManager.GetString("ShiftTradeTargetTimeRuleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift with contract time betweeen.
         /// </summary>
         public static string ShiftWithContractTimeBetweeen {
@@ -31087,6 +31096,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowRightPanel {
             get {
                 return ResourceManager.GetString("ShowRightPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Staffing.
+        /// </summary>
+        public static string ShowStaffing {
+            get {
+                return ResourceManager.GetString("ShowStaffing", resourceCulture);
             }
         }
         

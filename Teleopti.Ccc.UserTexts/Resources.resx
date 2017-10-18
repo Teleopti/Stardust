@@ -16619,4 +16619,8 @@ Do you want to participate?</value>
     <value>Contract time tolerance</value>
     <comment>Displayed name for schedule validation rule "ShiftTradeTargetTimeRule"</comment>
   </data>
+  <data name="ShowStaffing" xml:space="preserve">
+    <value>Show Staffing</value>
+    <comment>toggle in day view</comment>
+  </data>
 </root>
