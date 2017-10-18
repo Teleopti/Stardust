@@ -9,10 +9,12 @@
 		var scenarioUrl = "../api/TeamScheduleData/Scenarios";
 		var timezoneUrl = '../api/Global/TimeZone';
 		var optionalColumnUrl = '../api/TeamScheduleData/OptionalColumns';
+		var startExportUrl = '../api/TeamSchedule/StartExport';
 
 		self.getScenarioData = getScenarioData;
 		self.getTimezonesData = getTimezonesData;
 		self.getOptionalColumnsData = getOptionalColumnsData;
+		self.startExport = startExport;
 
 		function getOptionalColumnsData() {
 			return $q(function (resolve, reject) {
@@ -42,7 +44,31 @@
 					reject(err);
 				});
 			});
+		}
 
+		function startExport(input) {
+			
+			return $q(function(resolve, reject) {
+				$http.post(startExportUrl, normalizeInput(input)).then(function(response) {
+						resolve(response.data);
+					},
+					function(err) {
+						reject(err);
+					});
+			});
+		}
+		function normalizeInput(input) {
+			var normalizedSelectedGroups = {
+				SelectedGroupIds: input.selectedGroups.groupIds,
+				SelectedGroupPageId: input.selectedGroups.groupPageId
+			};
+			return {
+				StartDate: moment(input.startDate).format('YYYY-MM-DD'),
+				EndDate: moment(input.endDate).format('YYYY-MM-DD'),
+				ScenarioId: input.scenarioId,
+				TimezoneId: input.timezoneId,
+				SelectedGroups: normalizedSelectedGroups
+			};
 		}
 	}
 })();

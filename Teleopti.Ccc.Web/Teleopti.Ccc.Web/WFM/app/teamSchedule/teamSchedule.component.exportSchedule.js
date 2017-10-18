@@ -39,7 +39,6 @@
 		}
 
 		vm.isApplyEnabled = function() {
-
 			return $scope.exportScheduleForm.$valid && vm.configuration.selectedGroups && vm.configuration.selectedGroups.groupIds && vm.configuration.selectedGroups.groupIds.length > 0;
 		}
 
@@ -82,7 +81,11 @@
 		vm.gotoDayView = function () {
 			$state.go('teams.dayView');
 		}
-		vm.startExport = function () { }
+		vm.startExport = function() {
+			exportScheduleService.startExport(vm.configuration).then(function(data) {
+				
+			});
+		}
 
 		vm.$onInit = function () {
 			vm.getGroupPagesAsync();

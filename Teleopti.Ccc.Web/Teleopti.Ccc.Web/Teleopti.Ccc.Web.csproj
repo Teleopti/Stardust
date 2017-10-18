@@ -700,6 +700,7 @@
     <Compile Include="Areas\Start\Controllers\UserTokenController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\MaximumSessionTimeProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\EditScheduleNoteFormData.cs" />
+    <Compile Include="Areas\TeamSchedule\Controllers\ExportScheduleController.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\FavoriteSearchProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Models\FavoriteSearchViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\MoveNonoverwritableLayersFormData.cs" />
