@@ -7,9 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Shifts
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum ActivityType
     {
         /// <summary>
@@ -40,10 +37,7 @@ namespace Teleopti.Ccc.WinCode.Shifts
             _type = type;
             _item = item;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
+		
         public ActivityType ActivityType
         {
             get { return _type; }
