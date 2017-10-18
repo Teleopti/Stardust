@@ -222,28 +222,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			dayAccount2.Accrued.Should().Be.EqualTo(TimeSpan.FromDays(0));
 		}
 
-		[Test]
-		public void ShouldHandleRequestSpanningMultiplePersonAccountsBothDayAndTime()
-		{
-			SetUp();
-			PersonRequestRepository.RequestRepository.Clear();
-
-			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 2, 12);
-			waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
-			waitListedRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
-			PersonRequestRepository.Add(waitListedRequest);
-
-			var timeAccount = new AccountTime(new DateOnly(2016, 12, 2)).WithId();
-			personAccounts.Add(timeAccount);
-			account.Accrued = TimeSpan.FromDays(1);
-			timeAccount.Accrued = TimeSpan.FromHours(8);
-
-			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
-			waitListedRequest.IsApproved.Should().Be.True();
-			account.Accrued.Should().Be.EqualTo(TimeSpan.FromDays(0));
-			timeAccount.Accrued.Should().Be.EqualTo(TimeSpan.FromHours(4));
-		}
-
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
 		{
 			return new SkillCombinationResource
