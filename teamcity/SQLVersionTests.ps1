@@ -233,9 +233,9 @@ function global:DropDatabase () {
         if ($count -gt 0) {
 
         Write-Output "$(Get-Date -f $timeStampFormat) - Dropping Database: $AppDB on $SQLAzure"
-        ExecuteSqlQuery $ConnectionString $Query_DropAzureDB_App        
+        RunAndRetryNonQuery $ConnectionString $Query_DropAzureDB_App        
         Write-OutPut "$(Get-Date -f $timeStampFormat) - Dropping Database: $MartDB on $SQLAzure"
-        ExecuteSqlQuery $ConnectionString $Query_DropAzureDB_Mart
+        RunAndRetryNonQuery $ConnectionString $Query_DropAzureDB_Mart
 
         } 
     }
