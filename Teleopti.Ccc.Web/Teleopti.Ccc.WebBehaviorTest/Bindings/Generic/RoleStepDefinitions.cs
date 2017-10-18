@@ -36,11 +36,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var role = new RoleConfigurable
 			{
-				AccessToEveryone = true,
-				AccessToAnywhere = true,
-				AccessToIntraday = true,
-				ViewUnpublishedSchedules = true
-				// put any that defaults to false to true here as needed
+				AccessToEverything = true,
+				AccessToEveryone = true
 			};
 			DataMaker.Data().Apply(role);
 			DataMaker.Data().Apply(new RoleForUser {Name = role.Name});
