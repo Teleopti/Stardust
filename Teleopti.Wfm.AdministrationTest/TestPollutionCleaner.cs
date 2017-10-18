@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.AdministrationTest
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
 			var sqlVersion = new SqlVersion(12, false);
-			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", sqlVersion);
+			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", sqlVersion.IsAzure);
 			connStringBuilder.InitialCatalog = DatabaseHelper.MasterDatabaseName;
 
 			var executor = new ExecuteSql(() =>
@@ -55,7 +55,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			{
 				executor.Execute(conn => dropLogin(appUser, conn));
 			}
-
+			
 			var databaseTasks = new DatabaseTasks(executor);
 			var databases = new[]
 			{

@@ -17,8 +17,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
 			DatabaseType = databaseType;
 			Logger = log;
+			IsAzure = new SqlConnectionStringBuilder(connectionString).DataSource.Contains(".database.windows.net");
 
-			_usingMaster = new ExecuteSql(() => openConnection(true), Logger);
+			if (IsAzure)  //in Azure
+				_usingMaster = new ExecuteSql(() => openConnection(), Logger);
+			else
+				_usingMaster = new ExecuteSql(() => openConnection(true), Logger);
+
 			_usingDatabase = new ExecuteSql(() => openConnection(), Logger);
 
 		}
@@ -32,6 +37,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public string ConnectionString { get; private set; }
 		public DatabaseType DatabaseType { get; private set; }
 		public string DatabaseName { get; private set; }
+		public bool IsAzure { get; private set; }
 
 		public string DbManagerFolderPath { get; set; }
 
@@ -75,14 +81,14 @@ namespace Teleopti.Ccc.DBManager.Library
 			var azureStart = new AzureStartDDL(databaseFolder, _usingDatabase);
 			azureStart.Apply(DatabaseType);
 		}
-
-		public bool LoginCanBeCreated(string login, string password, SqlVersion sqlVersion, out string message)
+		
+		public bool LoginCanBeCreated(string login, string password, bool isAzure, out string message)
 		{
 			try
 			{
 				var loginHandler = LoginTasks();
-				loginHandler.CreateLogin(login, password, false, sqlVersion);
-				loginHandler.DropLogin(login, sqlVersion);
+				loginHandler.CreateLogin(login, password, false, IsAzure);
+				loginHandler.DropLogin(login, isAzure);
 				message = "";
 				return true;
 			}
@@ -105,7 +111,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 			var permissionsHandler = new PermissionsHelper(Logger, databaseFolder, _usingDatabase);
-			permissionsHandler.CreatePermissions(login, pwd, sqlVersion);
+			permissionsHandler.CreatePermissions(login, pwd, IsAzure);
 		}
 
 		public bool HasCreateDbPermission(SqlVersion sqlVersion)
@@ -115,13 +121,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			return Convert.ToBoolean(_usingDatabase.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')"));
 		}
 
-		public bool HasCreateViewAndLoginPermission(SqlVersion sqlVersion)
+		public bool HasCreateViewAndLoginPermission()
 		{
-			if (sqlVersion.IsAzure)
+			if (IsAzure)
 			{
 				const string pwd = "tT12@andSomeMore";
 				var login = Guid.NewGuid().ToString().Replace("-", "#");
-				var definition = sqlVersion.ProductVersion >= 12 ? "USER" : "LOGIN";
+				var definition = "USER";
 				var createSql = string.Format("CREATE {2} [{0}] WITH PASSWORD = N'{1}'", login, pwd, definition);
 				var dropSql = string.Format("DROP {1} [{0}]", login, definition);
 				try
@@ -150,7 +156,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				_usingDatabase,
 				databaseFolder,
 				Logger);
-			schemaCreator.Create(DatabaseType, Version());
+			schemaCreator.Create(DatabaseType, IsAzure);
 		}
 
 		public int DatabaseVersion()

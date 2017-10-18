@@ -93,7 +93,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-            DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "Password", new SqlVersion(12,false));
+            DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "Password", false);
 
 			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", CreateDbPassword = "password", AppUser = "user", AppPassword = "Passw0rd", FirstUser = "user", FirstUserPassword = "password", BusinessUnit = "BU"};
 
@@ -101,7 +101,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			result.Success.Should().Be.False();
 			result.Message.Should().Contain("Login can not be created.");
 		}
-
+		
 		[Test]
 		public void ShouldReturnTrueCreatedDb()
 		{

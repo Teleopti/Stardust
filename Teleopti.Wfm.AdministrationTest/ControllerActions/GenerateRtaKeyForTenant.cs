@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			system.UseTestDouble<GetImportUsersFake>().For<IGetImportUsers>();
 			system.UseTestDouble<CreateBusinessUnitFake>().For<ICreateBusinessUnit>();
 		}
-
+		
 		[Test]
 		public void ShouldGenerateRtaKeyWhenCreatingDatabases()
 		{

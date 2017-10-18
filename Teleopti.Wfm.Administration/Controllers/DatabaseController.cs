@@ -87,8 +87,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!version.IsAzure)
 				newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionString(model));
 			_persistTenant.Persist(newTenant);
-
-			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword, version);
+			
+			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword, version.IsAzure);
 			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
 
 			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);

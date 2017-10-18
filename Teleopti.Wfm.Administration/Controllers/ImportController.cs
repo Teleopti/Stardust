@@ -121,7 +121,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			return Json(_tenantExists.Check(tenant));
 		}
-
+		
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("CheckAppLogin")]
@@ -135,7 +135,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var canCreate = _databaseHelperWrapper.LoginCanBeCreated(connectionToNewDb, model.UserName, model.Password, version, out message);
 			if(!canCreate)
 				return Json(new TenantResultModel { Success = false, Message = message });
-			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.UserName, model.Password,version);
+			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.UserName, model.Password,version.IsAzure);
 			return Json(new TenantResultModel {Success = true, Message = "Created new login."});
 		}
 

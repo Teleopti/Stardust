@@ -30,8 +30,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var builder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "alogin", "password", new SqlVersion(12,false));
-
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "alogin", "password", false);
+			
 			var model = new CreateTenantModel
 			{
 				AppUser = "alogin",

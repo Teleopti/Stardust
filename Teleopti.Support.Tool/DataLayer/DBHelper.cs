@@ -179,7 +179,7 @@ namespace  Teleopti.Support.Tool.DataLayer
             }
             return connectionIsOk;
         }
-
+		
         /// <summary>
         /// Test to connect to the database database 
         /// </summary>

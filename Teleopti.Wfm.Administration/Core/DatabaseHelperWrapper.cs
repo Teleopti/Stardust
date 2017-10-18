@@ -122,11 +122,11 @@ namespace Teleopti.Wfm.Administration.Core
 			return helper.LoginTasks().LoginExists(login, isAzure);
 		}
 
-		public void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion sqlVersion)
+		public void CreateLogin(string connectionToNewDb, string login, string password, bool IsAzure)
 		{
 			// type does not mather now
 			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
-			helper.LoginTasks().CreateLogin(login, password, false, sqlVersion);
+			helper.LoginTasks().CreateLogin(login, password, false, IsAzure);
 		}
 
 		public bool HasCreateDbPermission(string connectionString, SqlVersion isAzure)
@@ -138,14 +138,14 @@ namespace Teleopti.Wfm.Administration.Core
 		public bool HasCreateViewAndLoginPermission(string connectionString, SqlVersion isAzure)
 		{
 			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
-			return helper.HasCreateViewAndLoginPermission(isAzure);
+			return helper.HasCreateViewAndLoginPermission();
 		}
-
+		
 		public bool LoginCanBeCreated(string connectionString, string login, string password, SqlVersion sqlVersion,
 			out string message)
 		{
 			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
-			return helper.LoginCanBeCreated(login, password, sqlVersion, out message);
+			return helper.LoginCanBeCreated(login, password, helper.IsAzure, out message);
 		}
 
 		public void DeActivateTenantOnImport(string connectionString)

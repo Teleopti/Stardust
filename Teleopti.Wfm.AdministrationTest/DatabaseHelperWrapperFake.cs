@@ -30,7 +30,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			return false;
 		}
 
-		public void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion sqlVersion)
+		public void CreateLogin(string connectionToNewDb, string login, string password, bool isAzure)
 		{
 		}
 

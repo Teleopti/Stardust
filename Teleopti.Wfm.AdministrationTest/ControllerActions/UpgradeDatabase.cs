@@ -27,11 +27,11 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			builder.IntegratedSecurity = false;
 			builder.UserID = "dbcreatorperson";
 			builder.Password = "password";
-
+			
 			var helper = new DatabaseHelper(builder.ConnectionString, DatabaseType.TeleoptiCCC7);
 			helper.CreateByDbManager();
-
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString,"appuser", "password", new SqlVersion(12,false));
+			
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString,"appuser", "password", false);
 
 			var builderAnal = TestPollutionCleaner.TestTenantAnalyticsConnection();
 			builderAnal.IntegratedSecurity = false;

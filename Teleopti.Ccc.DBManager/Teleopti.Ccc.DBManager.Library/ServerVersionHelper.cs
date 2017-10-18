@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class ServerVersionHelper
 	{
 		private const string AzureEdition = "SQL Azure";
-
+		
 		private readonly ExecuteSql _masterExecuteSql;
 
 		public ServerVersionHelper(ExecuteSql masterExecuteSql)

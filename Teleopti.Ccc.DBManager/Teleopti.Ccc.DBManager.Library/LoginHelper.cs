@@ -51,33 +51,24 @@ namespace Teleopti.Ccc.DBManager.Library
 			return
 				Convert.ToBoolean(_masterExecuteSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> {{"@login", login}}));
 		}
-
-		public void DropLogin(string user, SqlVersion sqlVersion)
+		
+		public void DropLogin(string user, bool isAzure)
 		{
-			if (!sqlVersion.IsAzure || (sqlVersion.IsAzure && sqlVersion.ProductVersion < 12))
+			if (!isAzure)
 			{
 				var sql = string.Format("DROP LOGIN [{0}]", user);
 				_masterExecuteSql.ExecuteTransactionlessNonQuery(sql);	
 			}
 		}
 
-		public void CreateLogin(string user, string pwd, bool iswingroup, SqlVersion sqlVersion)
+		public void CreateLogin(string user, string pwd, bool iswingroup, bool isAzure)
 		{
 			//TODO: check if windows group and run win logon script instead of "SQL Logins - Create.sql"
 			string sql;
-			if (sqlVersion.IsAzure)
+			if (isAzure)
 			{
 				if (iswingroup)
 					_masterExecuteSql.ExecuteNonQuery("PRINT 'Windows Logins cannot be added to Windows Azure for the momement'");
-				else
-				{
-					if (sqlVersion.ProductVersion < 12)
-					{
-						var operation = azureLoginExist(user) ? "ALTER" : "CREATE";
-						sql = string.Format("{0} LOGIN [{1}] WITH PASSWORD=N'{2}'", operation, user, pwd);
-						_masterExecuteSql.ExecuteTransactionlessNonQuery(sql);
-					}
-				}
 			}
 			else
 			{

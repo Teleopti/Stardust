@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 			});
 		}
-
+		
 		public int ExecuteScalar(string sql, int timeout = 30, IDictionary<string, object> parameters = null)
 		{
 			parameters = parameters ?? new Dictionary<string, object>();

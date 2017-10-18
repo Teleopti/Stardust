@@ -56,9 +56,9 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			builder.IntegratedSecurity = false;
 			builder.UserID = "dbcreatorperson";
 			builder.Password = "password";
-
+			
 			var sqlVersion = new SqlVersion(12, false);
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", sqlVersion);
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", sqlVersion.IsAzure);
 			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser", "password", sqlVersion,
 				"NewFineTenant", 1);
 
