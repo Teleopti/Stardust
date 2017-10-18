@@ -73,10 +73,11 @@
 
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
+		var expectSelectedDate = moment(vm.selectedDate()).add('months', -1);
 
 		$('.mobile-month-view .pagebody').swipe('option').swipeRight();
 
-		equal(vm.selectedDate().format('YYYY-MM-DD'), '2017-09-12');
+		equal(vm.selectedDate().format('YYYY-MM-DD'), expectSelectedDate.format('YYYY-MM-DD'));
 		$('.mobile-month-view .pagebody').remove();
 	});
 
@@ -86,10 +87,11 @@
 
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
+		var expectSelectedDate = moment(vm.selectedDate()).add('months', 1);
 
 		$('.mobile-month-view .pagebody').swipe('option').swipeLeft();
 
-		equal(vm.selectedDate().format('YYYY-MM-DD'), '2017-11-12');
+		equal(vm.selectedDate().format('YYYY-MM-DD'), expectSelectedDate.format('YYYY-MM-DD'));
 		$('.mobile-month-view .pagebody').remove();
 	});
 
@@ -97,8 +99,8 @@
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		fetchMonthDataRequestCount = 0;
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener({
-			StartDate: '2017-10-01T00:00:00',
-			EndDate: '2017-10-02T00:00:00'
+			StartDate: 'D2017-10-01T00:00:00',
+			EndDate: 'D2017-10-02T00:00:00'
 		});
 
 		equal(fetchMonthDataRequestCount, 1);
@@ -108,8 +110,8 @@
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		fetchMonthDataRequestCount = 0;
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener({
-			StartDate: '2017-10-08T00:00:00',
-			EndDate: '2017-10-09T00:00:00'
+			StartDate: 'D2017-10-08T00:00:00',
+			EndDate: 'D2017-10-09T00:00:00'
 		});
 
 		equal(fetchMonthDataRequestCount, 0);

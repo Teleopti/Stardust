@@ -831,16 +831,12 @@ $(document).ready(function () {
 		};
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded = function (callback) {
 			callback({ WeekStart: 1 });
-		}
-		Teleopti.MyTimeWeb.MessageBroker = {
-			ConvertMbDateTimeToJsDate: function (date) {
-				return date;
-			}
-		}
-		Teleopti.MyTimeWeb.Schedule.PartialInit(function () { },
-			function () { },
-			ajax
-		);
+		};
+		var tempFn = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate;
+		Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate = function (date) {
+			return date;
+		};
+		Teleopti.MyTimeWeb.Schedule.PartialInit(function () { }, function () { }, ajax);
 		Teleopti.MyTimeWeb.Schedule.SetupViewModel(
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues,
 			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
@@ -853,5 +849,7 @@ $(document).ready(function () {
 		var date = momentWithLocale(basedDate).weekday(1);
 		Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener({ StartDate: date, EndDate: date });
 		equal(probabilityParamterValue, constants.probabilityType.overtime);
+
+		Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate = tempFn;
 	});
 });

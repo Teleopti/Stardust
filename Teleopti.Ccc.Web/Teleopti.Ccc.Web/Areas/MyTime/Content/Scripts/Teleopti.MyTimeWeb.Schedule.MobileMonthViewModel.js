@@ -26,25 +26,22 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 
 	self.unreadMessageCount = ko.observable();
 	self.selectedDate = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ? moment(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash) : moment());
+	self.getSelectedDate = ko.computed(self.selectedDate).extend({throttle: 50});
 
 	self.formattedSelectedDate = ko.computed(function() {
 		return Teleopti.MyTimeWeb.Common.FormatMonthShort(self.selectedDate());
 	});
 
 	self.nextMonth = function () {
-		removeSelectedDateSubscription();
 		var date = self.selectedDate().clone();
 		date.add('months', 1);
 		self.selectedDate(date);
-		parent.ReloadSchedule(date);
 	};
 
 	self.previousMonth = function () {
-		removeSelectedDateSubscription();
 		var date = self.selectedDate().clone();
 		date.add('months', -1);
 		self.selectedDate(date);
-		parent.ReloadSchedule(date);
 	};
 
 	self.readData = function(data) {
@@ -64,7 +61,7 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 		}
 		self.weekViewModels.push(newWeek);
 		setUseFullHeightForDateCells();
-		setSelectedDateSubscription(data.FixedDate);
+		setSelectedDateSubscription();
 		self.isLoading(false);
 	};
 
@@ -83,17 +80,13 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 		});
 	}
 
-	function setSelectedDateSubscription(date) {
-		removeSelectedDateSubscription();
+	function setSelectedDateSubscription() {
+		if (self.selectedDateSubscription)
+			self.selectedDateSubscription.dispose();
 
-		self.selectedDate(moment(date));
-		self.selectedDateSubscription = self.selectedDate.subscribe(function(date) {
+		self.selectedDateSubscription = self.getSelectedDate.subscribe(function(date) {
+			self.isLoading(true);
 			parent.ReloadSchedule(date);
 		});
 	};
-
-	function removeSelectedDateSubscription() {
-		if (self.selectedDateSubscription)
-			self.selectedDateSubscription.dispose();
-	}
 };
