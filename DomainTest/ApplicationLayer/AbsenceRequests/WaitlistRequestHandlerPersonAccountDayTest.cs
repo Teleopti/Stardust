@@ -164,6 +164,86 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			waitListedRequest2.IsApproved.Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldApproveRequestSpanningMultipleDaysUsingPersonAccountDay()
+		{
+			SetUp();
+			PersonRequestRepository.RequestRepository.Clear();
+
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 2, 14);
+			waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
+			waitListedRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			PersonRequestRepository.Add(waitListedRequest);
+
+			account.Accrued = TimeSpan.FromDays(2);
+			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
+			waitListedRequest.IsApproved.Should().Be.True();
+			account.Accrued.Should().Be.EqualTo(TimeSpan.Zero);
+		}
+
+
+		[Test]
+		public void ShouldDenyRequestSpanningMultipleDaysUsingPersonAccountDay()
+		{
+			SetUp();
+			PersonRequestRepository.RequestRepository.Clear();
+
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 2, 14);
+			waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
+			waitListedRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			PersonRequestRepository.Add(waitListedRequest);
+
+			account.Accrued = TimeSpan.FromDays(1);
+			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
+			waitListedRequest.IsDenied.Should().Be.True();
+			//waitListedRequest.IsWaitlisted.Should().Be.False(); // coming PBI
+			account.Accrued.Should().Be.EqualTo(TimeSpan.FromDays(1));
+		}
+
+		[Test]
+		public void ShouldHandleRequestSpanningMultiplePersonAccountDay()
+		{
+			SetUp();
+			PersonRequestRepository.RequestRepository.Clear();
+
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 2, 14);
+			waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
+			waitListedRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			PersonRequestRepository.Add(waitListedRequest);
+
+			var dayAccount2 = new AccountDay(new DateOnly(2016, 12, 2)).WithId();
+			personAccounts.Add(dayAccount2);
+			account.Accrued = TimeSpan.FromDays(1);
+			dayAccount2.Accrued = TimeSpan.FromDays(1);
+
+			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
+			waitListedRequest.IsApproved.Should().Be.True();
+			account.Accrued.Should().Be.EqualTo(TimeSpan.FromDays(0));
+			dayAccount2.Accrued.Should().Be.EqualTo(TimeSpan.FromDays(0));
+		}
+
+		[Test]
+		public void ShouldHandleRequestSpanningMultiplePersonAccountsBothDayAndTime()
+		{
+			SetUp();
+			PersonRequestRepository.RequestRepository.Clear();
+
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 2, 12);
+			waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
+			waitListedRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			PersonRequestRepository.Add(waitListedRequest);
+
+			var timeAccount = new AccountTime(new DateOnly(2016, 12, 2)).WithId();
+			personAccounts.Add(timeAccount);
+			account.Accrued = TimeSpan.FromDays(1);
+			timeAccount.Accrued = TimeSpan.FromHours(8);
+
+			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
+			waitListedRequest.IsApproved.Should().Be.True();
+			account.Accrued.Should().Be.EqualTo(TimeSpan.FromDays(0));
+			timeAccount.Accrued.Should().Be.EqualTo(TimeSpan.FromHours(4));
+		}
+
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
 		{
 			return new SkillCombinationResource
