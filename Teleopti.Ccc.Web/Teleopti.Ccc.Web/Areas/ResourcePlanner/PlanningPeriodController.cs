@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 				validationResult = _basicSchedulingValidator.Validate(
 					_planningGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.PlanningGroup).AllPeople.ToList(),
-					planningPeriod.Range, true);
+					planningPeriod.Range);
 			}
 			return Ok(validationResult);
 		}

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			_validators = validators;
 		}
 
-		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period, bool fromWeb)
+		public ValidationResult Validate(IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var result = new ValidationResult();
 			foreach (var validator in _validators)
