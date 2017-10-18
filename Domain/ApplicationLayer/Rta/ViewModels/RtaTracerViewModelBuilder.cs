@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					ActivityCheckAt = activityCheckAt
 				};
 
-			var logs = _reader.ReadOfType<StateTraceLog>();
+			var logs = _reader.ReadOfType<StateTraceLog>().OrderByDescending(x => x.Time);
 			var users = logs.Select(x => x.Log.User).Distinct();
 			var tracedUsers =
 					from user in users
@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						let logsForTraceId = logs.Where(x => x.Log.Id == s)
 						let traces = from t in logsForTraceId
 							where !t.Message.IsNullOrEmpty()
-							select $"{(t.Process.IsNullOrEmpty() ? "" : $"{t.Process} :")}{t.Message}"
+							orderby  t.Time
+							select $"{(t.Process.IsNullOrEmpty() ? "" : $"{t.Process}: ")}{t.Message}"
 						select new TracedState
 						{
 							StateCode = logsForTraceId.Select(x => x.Log.StateCode).FirstOrDefault(),

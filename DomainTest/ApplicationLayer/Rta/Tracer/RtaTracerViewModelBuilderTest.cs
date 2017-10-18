@@ -286,6 +286,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
+		public void ShouldHave2TracedUsersOrderedByLatestFirst()
+		{
+			RtaTracers
+				.Has(new RtaTracerLog<StateTraceLog>
+				{
+					Time = "2017-10-18 10:00".Utc(),
+					Log = new StateTraceLog
+					{
+						User = "usercode1"
+					}
+				})
+				.Has(new RtaTracerLog<StateTraceLog>
+				{
+					Time = "2017-10-18 10:01".Utc(),
+					Log = new StateTraceLog
+					{
+						User = "usercode2"
+					}
+				})
+				;
+
+			Target.Build().TracedUsers.Select(x => x.User)
+				.Should().Have.SameSequenceAs("usercode2", "usercode1");
+		}
+
+		[Test]
 		public void ShouldHaveStateCode()
 		{
 			RtaTracers
@@ -326,6 +352,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 			Target.Build().TracedUsers.Single().States.Select(x => x.StateCode)
 				.Should().Have.SameValuesAs("statecode1", "statecode2");
+		}
+
+		[Test]
+		public void ShouldHave2StateCodesOrderedByLatestFirst()
+		{
+			RtaTracers
+				.Has(new RtaTracerLog<StateTraceLog>
+				{
+					Time = "2017-10-18 10:00".Utc(),
+					Log = new StateTraceLog
+					{
+						User = "usercode",
+						Id = Guid.NewGuid(),
+						StateCode = "statecode1"
+					}
+				})
+				.Has(new RtaTracerLog<StateTraceLog>
+				{
+					Time = "2017-10-18 10:01".Utc(),
+					Log = new StateTraceLog
+					{
+						User = "usercode",
+						Id = Guid.NewGuid(),
+						StateCode = "statecode2"
+					}
+				})
+				;
+
+			Target.Build().TracedUsers.Single().States.Select(x => x.StateCode)
+				.Should().Have.SameSequenceAs("statecode2", "statecode1");
 		}
 
 		[Test]
@@ -431,6 +487,35 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
+		public void ShouldHave2MessagesOrderedByLatestLast()
+		{
+			var traceId = Guid.NewGuid();
+			RtaTracers
+				.Has(new RtaTracerLog<StateTraceLog>
+					{
+						Time = "2017-10-18 10:00".Utc(),
+						Log = new StateTraceLog
+						{
+							Id = traceId,
+						},
+						Message = "Processing"
+					},
+					new RtaTracerLog<StateTraceLog>
+					{
+						Time = "2017-10-18 10:01".Utc(),
+						Log = new StateTraceLog
+						{
+							Id = traceId,
+						},
+						Message = "Processed"
+					})
+				;
+
+			Target.Build().TracedUsers.Single().States.Single().Traces
+				.Should().Have.SameSequenceAs("Processing", "Processed");
+		}
+
+		[Test]
 		public void ShouldHaveMessageForEachTrace()
 		{
 			var trace1 = Guid.NewGuid();
@@ -471,14 +556,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		[Test]
 		public void ShouldMapTracedUsersSyncronously()
 		{
-			var recevied = new RtaTracerLog<StateTraceLog> {Log = new StateTraceLog {User = "usercode", StateCode = "statecode"}, Message = "message"};
+			var recevied = new RtaTracerLog<StateTraceLog>
+			{
+				Log = new StateTraceLog {User = "usercode", StateCode = "statecode"},
+				Message = "message"
+			};
 			RtaTracers.Has(recevied);
 
 			var result = Target.Build();
 			recevied.Log.User = "mutated";
 			recevied.Log.StateCode = "mutated";
 			recevied.Message = "mutated";
-			
+
 			result.TracedUsers.Single().User
 				.Should().Be("usercode");
 			result.TracedUsers.Single().States.Single().StateCode
@@ -486,6 +575,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			result.TracedUsers.Single().States.Single().Traces.Single()
 				.Should().Be("message");
 		}
-		
 	}
 }
