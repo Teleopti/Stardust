@@ -2,11 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -21,10 +18,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public OptimizationResult(Func<ISchedulerStateHolder> schedulerStateHolder, IFindSchedulesForPersons findSchedulesForPersons, 
-			IUserTimeZone userTimeZone, ICurrentScenario currentScenario, ICurrentUnitOfWork currentUnitOfWork, 
+			IUserTimeZone userTimeZone, ICurrentScenario currentScenario,  
 			ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule, DayOffBusinessRuleValidation dayOffBusinessRuleValidation)
 		{
 			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
@@ -33,18 +29,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_findSchedulesForPersons = findSchedulesForPersons;
 			_userTimeZone = userTimeZone;
 			_currentScenario = currentScenario;
-			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		[TestLog]
 		[UnitOfWork]
 		public virtual OptimizationResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople)
 		{
-			//some hack to get rid of lazy load ex
-			var uow = _currentUnitOfWork.Current();
-			uow.Reassociate(fixedStaffPeople);
-			//
-
 			var resultStateHolder = _schedulerStateHolder().SchedulingResultState;
 			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(period, fixedStaffPeople, resultStateHolder);
 

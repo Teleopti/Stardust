@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -12,18 +11,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IUserTimeZone _userTimeZone;
 
 		public FullSchedulingResult(ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
-			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork,
-			IFindSchedulesForPersons findSchedulesForPersons, ICurrentScenario currentScenario, IUserTimeZone userTimeZone)
+			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, IFindSchedulesForPersons findSchedulesForPersons, 
+			ICurrentScenario currentScenario, IUserTimeZone userTimeZone)
 		{
 			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
-			_currentUnitOfWork = currentUnitOfWork;
 			_findSchedulesForPersons = findSchedulesForPersons;
 			_currentScenario = currentScenario;
 			_userTimeZone = userTimeZone;
@@ -31,10 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public SchedulingResultModel Execute(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople)
 		{
-			//some hack to get rid of lazy load ex
-			var uow = _currentUnitOfWork.Current();
-			uow.Reassociate(fixedStaffPeople);
-			//
 			var personsProvider = new PersonsInOrganizationProvider(fixedStaffPeople) { DoLoadByPerson = true };
 			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(new ScheduleDateTimePeriod(period.ToDateTimePeriod(_userTimeZone.TimeZone()), fixedStaffPeople), _currentScenario.Current(), personsProvider, new ScheduleDictionaryLoadOptions(false, false, false), fixedStaffPeople);
 
