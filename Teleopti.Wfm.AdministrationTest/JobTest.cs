@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			var e = new UpdateStaffingLevelReadModelEvent {LogOnDatasource = datasource};
 			var ser = JsonConvert.SerializeObject(e);
 			var job = new Job {Serialized = ser};
-			job.DataSource().Should().Be.EqualTo(datasource);
+			job.DataSource.Should().Be.EqualTo(datasource);
 		}
 	}
 }
