@@ -11,7 +11,7 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
-	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var ajax;
 	var vm;
 
 	function asmMessageListViewModel() {
@@ -35,10 +35,11 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		});
 
 		self.isLoading = ko.observable(true);
-
+		self.hasMoreMessages = ko.observable(true);
 		self.shouldShowMessage = ko.computed(function () {
-			return self.asmMessageList().length === 0 && !self.isLoading();
+			return self.asmMessageList().length === 0 && !self.isLoading() && self.hasMoreMessages();
 		});
+
 		self.CreateAsmMessageList = function (dataList) {
 			var asmMessageItems = new Array();
 			$.each(dataList, function (position, element) {
@@ -170,6 +171,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			success: function (data, textStatus, jqXHR) {
 				messageItem.isRead(true);
 				_noMoreToLoad();
+				_reloadWhenAllMessagesAreMarkedRead();
 				messageItem.isSending(false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -185,6 +187,13 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 				messageItem.isSending(false);
 			}
 		});
+	}
+
+	function _reloadWhenAllMessagesAreMarkedRead() {
+		if(vm.asmMessageList().length === 0){
+			vm.hasMoreMessages(false);
+			_loadAPage();
+		}
 	}
 
 	function _displayValidationError(data, messageItem) {
@@ -288,13 +297,14 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	}
 
 	return {
-		Init: function () {
+		Init: function (ajaxobj) {
+			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
 			_initScrollPaging();
 		},
 		AddNewMessageAtTop: function (messageItem) {
 			_addNewMessageAtTop(messageItem);
 		},
-		//For testing:
+		//For scenario testing:
 		AddReplyText: function (theReply) {
 			$.each(vm.asmMessageList(), function (index, value) {
 				value.reply(theReply);
@@ -302,6 +312,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		},
 		DeleteMessage: function (messageId) {
 			_deleteMessage(messageId);
+		},
+		Vm: function () {
+			return vm;
 		}
 	};
 })(jQuery);

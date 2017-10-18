@@ -85,6 +85,7 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.RequestDetail.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.FakeData.js?bust=<%=version %>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.AsmMessage.List.js?bust=<%=version %>"></script>
 
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Tests.js?bust=<%=version%>"></script>
@@ -117,6 +118,7 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileStartDay.Tests.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileMonth.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.Tests.js?bust=<%=version %>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.AsmMessage.List.Tests.js?bust=<%=version %>"></script>
 		
 	</head>
 	<body>
