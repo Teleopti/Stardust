@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 {
 	[DomainTest]
 	[ThrowIfRepositoriesAreUsed]
+	[UseIocForFatClient]
 	public class DesktopSchedulingValidatorTest
 	{
 		public SchedulingValidator Target;

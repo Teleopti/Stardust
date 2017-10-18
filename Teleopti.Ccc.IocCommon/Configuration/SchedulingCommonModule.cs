@@ -509,14 +509,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerValidators(builder);
 		}
 
-		private static void registerValidators(ContainerBuilder builder)
+		private void registerValidators(ContainerBuilder builder)
 		{
 			builder.RegisterType<NextPlanningPeriodProvider>().SingleInstance().As<INextPlanningPeriodProvider>();
 			builder.RegisterType<SchedulingValidator>().SingleInstance();
-			builder.RegisterType<MissingForecastValidator>().AsSelf().As<IScheduleValidator>().SingleInstance();
+			if (!_configuration.Args().IsFatClient)
+			{
+				builder.RegisterType<MissingForecastValidator>().AsSelf().As<IScheduleValidator>().SingleInstance();
+				builder.RegisterType<PersonSchedulePeriodValidator>().As<IScheduleValidator>().SingleInstance();				
+			}
 			builder.RegisterType<PersonSkillValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonPeriodValidator>().As<IScheduleValidator>().SingleInstance();
-			builder.RegisterType<PersonSchedulePeriodValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonShiftBagValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonPartTimePercentageValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonContractValidator>().As<IScheduleValidator>().SingleInstance();

@@ -70,8 +70,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				validationResult.Add(missingForecast, GetType());
 			}
 		}
-
-		public bool AlsoRunInDesktop => false;
 	}
 
 	public class MissingForecastRange

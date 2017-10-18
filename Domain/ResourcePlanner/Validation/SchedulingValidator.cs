@@ -18,10 +18,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			var result = new ValidationResult();
 			foreach (var validator in _validators)
 			{
-				if(fromWeb || validator.AlsoRunInDesktop)
-				{
-					validator.FillResult(result, agents, period);
-				}
+				validator.FillResult(result, agents, period);
 			}
 			return result;
 		}
