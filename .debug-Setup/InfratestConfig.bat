@@ -3,6 +3,7 @@ SETLOCAL
 
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-14%
+SET DriveLetter=%ROOTDIR:~0,2%
 SET CCC7DB=%~1
 SET AnalyticsDB=%~2
 SET ToggleMode=%~3
@@ -52,13 +53,14 @@ for /f "tokens=1* delims=%splitsub%" %%A in ("%part1%") do set part1=%%A & set S
 SQLCMD -S%SRV% -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-setup\database\tsql\AddUserForTest.sql"
 
 ::Run supportTool to replace all config
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(DB_CCC7) "%CCC7DB%"
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(DB_ANALYTICS) "%AnalyticsDB%"
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(AS_DATABASE) "%AnalyticsDB%"
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(ToggleMode) "%ToggleMode%"
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(SQL_AUTH_STRING) "%sqlAuthString%"
-"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTEST
-
+%DriveLetter%
+CD "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\"
+Teleopti.Support.Tool.exe -SET $(DB_CCC7) "%CCC7DB%"
+Teleopti.Support.Tool.exe -SET $(DB_ANALYTICS) "%AnalyticsDB%"
+Teleopti.Support.Tool.exe -SET $(AS_DATABASE) "%AnalyticsDB%"
+Teleopti.Support.Tool.exe -SET $(ToggleMode) "%ToggleMode%"
+Teleopti.Support.Tool.exe -SET $(SQL_AUTH_STRING) "%sqlAuthString%"
+Teleopti.Support.Tool.exe -MOTEST
 ENDLOCAL
 goto:eof
 
