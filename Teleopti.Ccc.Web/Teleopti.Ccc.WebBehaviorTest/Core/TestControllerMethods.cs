@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void WebRequestOutsideBrowser(string pageUrl)
 		{
 			var url = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
-			using (var client = new WebClientWithTimeout(TimeSpan.FromSeconds(60)))
+			using (var client = new WebClientWithTimeout(TimeSpan.FromSeconds(90)))
 			{
 				var credentials = new CredentialCache();
 				credentials.Add(url, "NTLM", CredentialCache.DefaultNetworkCredentials);
