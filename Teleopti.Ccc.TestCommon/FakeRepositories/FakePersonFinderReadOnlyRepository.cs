@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonFinderReadOnlyRepository : IPersonFinderReadOnlyRepository
 	{
-		private IList<IPerson> _personList = new List<IPerson>();
+		private readonly IList<IPerson> _personList = new List<IPerson>();
 		public void Has(IPerson person)
 		{
 			_personList.Add(person);

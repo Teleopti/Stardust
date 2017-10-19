@@ -16646,4 +16646,8 @@ Do you want to participate?</value>
     <value>{0}: A shift begins the day before or the day after and that is not allowed. This was probably caused by changing agent time zone in People. Change to correct time zone or just press delete this day to correct it.</value>
     <comment>Used in validations</comment>
   </data>
+  <data name="MaximumAgentToExport" xml:space="preserve">
+    <value>You can export a maximum of 1000 agents each time. But you are exporting {0}.</value>
+    <comment>error message when export agents larger than 1000</comment>
+  </data>
 </root>

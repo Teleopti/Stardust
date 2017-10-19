@@ -16934,6 +16934,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can export a maximum of 1000 agents each time. But you are exporting {0}..
+        /// </summary>
+        public static string MaximumAgentToExport {
+            get {
+                return ResourceManager.GetString("MaximumAgentToExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum Employees.
         /// </summary>
         public static string MaximumEmployees {

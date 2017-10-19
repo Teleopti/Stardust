@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
@@ -50,8 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			var people = peopleToExport(input);
 			if (people.Count > 1000)
 			{
-				processResult.FailReason = "We only allow exporting maximum 1000 agents, you're trying to export " + people.Count +
-										   " agents."; //TODO
+				processResult.FailReason = string.Format(Resources.MaximumAgentToExport, people.Count); //TODO
 
 				return processResult;
 			}
@@ -128,9 +128,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 				PersonRows = personRows.ToArray()
 			};
 		}
-		
-		
-
 		private PersonRow createPersonScheduleRow(IPerson p, IList<IScheduleDay> scheduleDays, IList<Guid> optionalColIds, TimeZoneInfo timeZone)
 		{
 			var hasPermissionToViewUnpublished =

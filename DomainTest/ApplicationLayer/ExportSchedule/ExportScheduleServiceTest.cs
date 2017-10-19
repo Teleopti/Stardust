@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
@@ -145,6 +146,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var scheduleData = sheet.GetRow(9);
 			
 			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo("value1");
+			
+		}
+		
+		[Test]
+		public void ShouldReturnFailureWhenPeopleToExportMoreThan1000()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			for (int i = 0; i < 1001; i++)
+			{
+				var person = PersonFactory.CreatePerson("ashley" + i, "andeen").WithId();
+				person.AddPersonPeriod(new PersonPeriod(new DateOnly(scheduleDate.AddDays(-1)), PersonContractFactory.CreatePersonContract(), team ));
+				PersonFinder.Has(person);
+				PersonRepository.Has(person);
+			}
+
+	
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupIds = new[] {Guid.NewGuid().ToString()}
+				},
+			};
+
+			var result = Target.ExportToExcel(input);
+
+			result.FailReason.Should().Be.EqualTo(string.Format(Resources.MaximumAgentToExport,1001));
 			
 		}
 
