@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 	[Toggle(Toggles.ResourcePlanner_ShowSwitchedTimeZone_46303)]
 	public class ScheduleStartOnWrongDateValidatorTest : ISetup
 	{
-		public Func<ISchedulerStateHolder> StateHolder; //just a way to be able to create a Ischeduledictionary... MAybe some easier way? Claes?
+		public Func<ISchedulerStateHolder> StateHolder;
 		public SchedulingValidator Target;
 
 		[Test]
@@ -40,18 +40,18 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 		[TestCase(8, "Mountain Standard Time", ExpectedResult = false)]
 		[TestCase(23, "Mountain Standard Time", ExpectedResult = false)]
 		[TestCase(1, "GMT Standard Time", ExpectedResult = false)]
-		[TestCase(8, "GMT Standard Time", ExpectedResult = false)]
-		[TestCase(23, "GMT Standard Time", ExpectedResult = false)]
+		[TestCase(22, "GMT Standard Time", ExpectedResult = false)]
 		[TestCase(1, "Singapore Standard Time", ExpectedResult = false)]
 		[TestCase(8, "Singapore Standard Time", ExpectedResult = false)]
+		[TestCase(16, "Singapore Standard Time", ExpectedResult = true)]
 		[TestCase(23, "Singapore Standard Time", ExpectedResult = true)]
-		[Ignore("to_be_continued")]
-		public bool ShouldReturnValidationErrorWhenAgentChangedToTimeZoneEarlier(int startHourOfPresentShift, string newTimezoneForAgent)
+		public bool ShouldReturnValidationErrorIfAgentChangedToTimeZoneEarlier(int startHourOfPresentShift, string newTimezoneForAgent)
 		{
 			var scenario = new Scenario();
 			var date = DateOnly.Today;
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			var ass = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory("_")).WithLayer(new Activity(), new TimePeriod(startHourOfPresentShift, startHourOfPresentShift + 8));
+			var ass = new PersonAssignment(agent, scenario, date)
+				.WithLayer(new Activity(), new TimePeriod(startHourOfPresentShift, startHourOfPresentShift + 8));
 			var state = StateHolder.Fill(scenario, date, agent, ass);
 			
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById(newTimezoneForAgent));
@@ -64,6 +64,5 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 		{
 			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
 		}
-		
 	}
 }
