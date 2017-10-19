@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonSkillValidator : IScheduleValidator
 	{
-		public void FillResult(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillResult(ValidationResult validationResult, IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			var validationErrors = from person in people
 				let periods = person.PersonPeriods(range)

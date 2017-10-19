@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			return result;
 		}
 
-		public void FillResult(ValidationResult validationResult, IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillResult(ValidationResult validationResult, IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod range)
 		{
 			var missingForecasts = GetMissingForecast(range).ToList();
 			var skills = new HashSet<ISkill>();

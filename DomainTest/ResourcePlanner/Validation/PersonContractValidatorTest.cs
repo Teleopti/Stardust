@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var person = PersonFactory.CreatePerson().WithId();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(startDate));
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(null, new[] { person }, planningPeriod).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractValidator)));
 
 			result.Should().Be.Empty();
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			((IDeleteTag)personPeriod.PersonContract.Contract).SetDeleted();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Validate(new[] { person }, planningPeriod).InvalidResources
+			var result = Target.Validate(null, new[] { person }, planningPeriod).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractValidator)));
 
 			result.Should().Not.Be.Empty();
