@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -15,14 +16,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly SchedulingCommandHandler _schedulingCommandHandler;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IScheduleDictionaryPersister _persister;
 		private readonly FullSchedulingResult _fullSchedulingResult;
 		private readonly SchedulingInformationProvider _schedulingInformationProvider;
 
 		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, 
 			IFillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<ISchedulerStateHolder> schedulerStateHolder, 
-			IScheduleDictionaryPersister persister,
 			FullSchedulingResult fullSchedulingResult,
 			SchedulingInformationProvider schedulingInformationProvider)
 		{
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
-			_persister = persister;
 			_fullSchedulingResult = fullSchedulingResult;
 			_schedulingInformationProvider = schedulingInformationProvider;
 		}
@@ -48,23 +46,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				AgentsToSchedule = stateHolder.AllPermittedPersons,
 				PlanningPeriodId = planningPeriodId
 			});
-			_persister.Persist(stateHolder.Schedules);
-			return CreateResult(schedulingInformation.Period);
+			return CreateResult(stateHolder.AllPermittedPersons, schedulingInformation.Period);
 		}
 
 		[TestLog]
 		[UnitOfWork]
-		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period)
+		protected virtual SchedulingResultModel CreateResult(IEnumerable<IPerson> fixedStaffPeople, DateOnlyPeriod period)
 		{
-			return _fullSchedulingResult.Execute(period, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period).ToList());
+			return _fullSchedulingResult.Execute(period, fixedStaffPeople);
 		}
 
 		[TestLog]
 		[UnitOfWork]
 		protected virtual void Setup(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
-			var stateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(stateHolder, people, null, period);
+			_fillSchedulerStateHolder.Fill(_schedulerStateHolder(), people, null, period);
 		}
 	}
 }
