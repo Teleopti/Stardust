@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
@@ -22,12 +23,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 		private readonly IScheduleDayProvider _scheduleProvider;
 		private readonly IScenarioRepository _scenarioRepo;
 		private readonly IUserTextTranslator _userTextTranslator;
+		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
+		private readonly ITeamRepository _teamRepository;
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
-		private readonly IGroupPageRepository _groupPageRepository;
 
 
 		public ExportScheduleService(IPeopleSearchProvider searchProvider, IPersonRepository personRepository, IPermissionProvider permissionProvider, ICommonAgentNameProvider commonAgentNameProvider, IScheduleDayProvider scheduleProvider, IScenarioRepository scenarioRepo, 
-			IUserTextTranslator userTextTranslator, IOptionalColumnRepository optionalColumnRepository, IGroupPageRepository groupPageRepository)
+			IUserTextTranslator userTextTranslator, IOptionalColumnRepository optionalColumnRepository, IGroupingReadOnlyRepository groupingReadOnlyRepository, ITeamRepository teamRepository)
 		{
 			_searchProvider = searchProvider;
 			_personRepository = personRepository;
@@ -37,7 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			_scenarioRepo = scenarioRepo;
 			_userTextTranslator = userTextTranslator;
 			_optionalColumnRepository = optionalColumnRepository;
-			_groupPageRepository = groupPageRepository;
+			_groupingReadOnlyRepository = groupingReadOnlyRepository;
+			_teamRepository = teamRepository;
 		}
 
 		public ProcessExportResult ExportToExcel(ExportScheduleForm input)
@@ -87,17 +90,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 
 			var scenario = _scenarioRepo.Load(input.ScenarioId);
 
-			var selectedGroupNames = input.SelectedGroups.SelectedGroupIds;
+			string selectedGroupNames;
+			if (input.SelectedGroups.SelectedGroupPageId == Guid.Empty)
+			{
+				var selectedTeams = _teamRepository.FindTeams(input.SelectedGroups.GroupIds);
+				selectedGroupNames = string.Join(",", selectedTeams.Select(t => t.SiteAndTeam).ToArray());
+			}
+			else if (!input.SelectedGroups.IsDynamic)
+			{
+				var parentGroups = _groupingReadOnlyRepository.GetGroupPage(input.SelectedGroups.SelectedGroupPageId);
+				var selectedGroups = _groupingReadOnlyRepository.FindGroups(input.SelectedGroups.GroupIds, period);
+				selectedGroupNames = string.Join(",", selectedGroups.Select(g => parentGroups.PageName + "/" + g.GroupName).ToArray());
+			}
+			else
+			{
+				var selectedGroupPage = _optionalColumnRepository.GetOptionalColumns<Person>().Where(o=> o.AvailableAsGroupPage).Single(p => p.Id == input.SelectedGroups.SelectedGroupPageId);
+				var selectedGroups = _optionalColumnRepository.UniqueValuesOnColumn(selectedGroupPage.Id.GetValueOrDefault()).Where(ocv => input.SelectedGroups.DynamicOptionalValues.Contains(ocv.Description));
+				selectedGroupNames = string.Join(",", selectedGroups.Select(g => selectedGroupPage.Name + "/" + g.Description).ToArray());
+			}
 
 			var scheduleDays = _scheduleProvider.GetScheduleDays(period, peopleToExport, scenario);
 
 			var personRows = peopleToExport.Select(p => createPersonScheduleRow(p, scheduleDays.Where(sd => sd.Person.Id == p.Id).ToList(), input.OptionalColumnIds?.ToList() ?? new List<Guid>(), timeZone));
 
 			var optionalColumnNames = "";
-			//input.OptionalColumnIds.ForEach(oc =>
-			//{
-			//	optionalColumnNames = string.Join(",", _optionalColumnRepository.UniqueValuesOnColumn(oc));
-			//});
+			var selectedOptionalColumns = _optionalColumnRepository.GetOptionalColumns<Person>().Where(p => input.OptionalColumnIds.Contains(p.Id.GetValueOrDefault()));
+			optionalColumnNames = string.Join(",", selectedOptionalColumns.Select(oc => oc.Name));
 
 			return new ScheduleExcelExportData
 			{
@@ -110,6 +128,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 				PersonRows = personRows.ToArray()
 			};
 		}
+		
+		
 
 		private PersonRow createPersonScheduleRow(IPerson p, IList<IScheduleDay> scheduleDays, IList<Guid> optionalColIds, TimeZoneInfo timeZone)
 		{
@@ -125,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			{
 				optionalColIds.ForEach(o =>
 				{
-					if (p.OptionalColumnValueCollection.Any(v => v.Id.GetValueOrDefault() == o))
+					if (p.OptionalColumnValueCollection.Any(v => v.Parent.Id.GetValueOrDefault() == o))
 					{
 						var optionalColumValue = p.OptionalColumnValueCollection.Single(x => x.Parent.Id == o).Description;
 						optionalColumns.Add(optionalColumValue);

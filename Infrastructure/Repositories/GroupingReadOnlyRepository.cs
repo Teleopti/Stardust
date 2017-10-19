@@ -33,6 +33,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<ReadOnlyGroupPage>();
 		}
 
+		public ReadOnlyGroupPage GetGroupPage(Guid groupPageId)
+		{
+			const string sql =
+				"SELECT DISTINCT PageName,PageId "
+				+ "FROM ReadModel.groupingreadonly "
+				+ "WHERE businessunitid=:businessUnitId "+ 
+				" And PageId=:pageId";
+			return _currentUnitOfWork.Session().CreateSQLQuery(sql).SetGuid("businessUnitId", getBusinessUnitId())
+				.SetGuid("pageId", groupPageId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupPage)))
+				.SetReadOnly(true)
+				.UniqueResult<ReadOnlyGroupPage>();
+		}
+
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnly queryDate)
 		{
 			const string sql =
@@ -107,6 +121,35 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupDetail>();
+		}
+
+		public IEnumerable<ReadOnlyGroupDetail> FindGroups(IEnumerable<Guid> groupIds, DateOnlyPeriod period)
+		{
+			const string sql =
+				"SELECT DISTINCT GroupName, "
+				+ "GroupId, "
+				+ "CAST('00000000-0000-0000-0000-000000000000' AS uniqueidentifier) PersonId, "
+				+ "'' FirstName, "
+				+ "'' LastName, "
+				+ "'' EmploymentNumber, "
+				+ "CAST('00000000-0000-0000-0000-000000000000' AS uniqueidentifier) TeamId, "
+				+ "CAST('00000000-0000-0000-0000-000000000000' AS uniqueidentifier) SiteId, "
+				+ "BusinessUnitId "
+				+ "FROM ReadModel.groupingreadonly "
+				+ "WHERE businessunitid=:businessUnitId AND pageid=:pageId "
+				+ "AND GroupId in (:groupIds)"
+				+ "AND :startDate <= isnull(EndDate, '2059-12-31') "
+				+ "AND :endDate >= StartDate "
+				+ "AND (LeavingDate >= :startDate OR LeavingDate IS NULL) "
+				+ "ORDER BY groupname";
+			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
+				.SetGuid("businessUnitId", getBusinessUnitId())
+				.SetString("groupIds", string.Join(",", groupIds))
+				.SetDateOnly("startDate", period.StartDate)
+				.SetDateOnly("endDate", period.EndDate)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
+				.SetReadOnly(true)
+				.List<ReadOnlyGroupDetail>();
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForPeople(IEnumerable<Guid> peopleIdCollection)

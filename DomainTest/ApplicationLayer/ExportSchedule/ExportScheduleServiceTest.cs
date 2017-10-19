@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -32,6 +30,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
 		public FakePersonFinderReadOnlyRepository PersonFinder;
+		public FakeTeamRepository TeamRepository;
+		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
+		public FakeOptionalColumnRepository OptionalColumnRepository;
+		
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<ExportScheduleService>();
@@ -43,6 +45,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
+			system.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
 		}
 
 		[Test]
@@ -62,8 +66,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			PersonFinder.Has(person);
 			PersonRepository.Has(person);
 			var shift = ShiftCategoryFactory.CreateShiftCategory("Day");
+			var period = new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario,
-				ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17),
+				ActivityFactory.CreateActivity("Phone"), period,
 				shift);
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9));
@@ -91,9 +96,58 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			scheduleData.Cells[0].StringCellValue.Should().Be.EqualTo("ashley@andeen");
 			scheduleData.Cells[1].StringCellValue.Should().Be.EqualTo("1234");
 			scheduleData.Cells[2].StringCellValue.Should().Be.EqualTo("mySite/myTeam");
-			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo("Da 08:00 - 17:00");
+			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo(shift.Description.ShortName + " " + period.TimePeriod(TimeZoneInfo.Utc).ToShortTimeString());
 
 		}
+
+		[Test]
+		public void ShouldDisplayOptionalColumnValuesInScheduleSummaryInContentRow()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			var person = PersonFactory.CreatePerson("ashley", "andeen").WithId();
+			person.SetEmploymentNumber("1234");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(scheduleDate.AddDays(-1)), PersonContractFactory.CreatePersonContract(), team ));
+			PersonFinder.Has(person);
+			PersonRepository.Has(person);
+			
+			var optionalColumn = new OptionalColumn("opt1").WithId();
+			var optionalColumnValue1 = new OptionalColumnValue("value1").WithId();
+			var optionalColumnValue2 = new OptionalColumnValue("value2").WithId();
+			
+			person.AddOptionalColumnValue(optionalColumnValue1, optionalColumn);
+			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(optionalColumnValue1);
+			OptionalColumnRepository.AddPersonValues(optionalColumnValue2);
+			
+			
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupIds = new[] {Guid.NewGuid().ToString()}
+				},
+				OptionalColumnIds = new []{optionalColumn.Id.GetValueOrDefault()}
+			};
+
+			var byteArray = Target.ExportToExcel(input).Data;
+			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
+			var sheet = workbook.GetSheetAt(0);
+
+			var scheduleData = sheet.GetRow(9);
+			
+			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo("value1");
+			
+		}
+
 
 		[Test, Ignore("Check internally for development")]
 		public void ShouldExportExcelWithCorrectFormat()
@@ -137,8 +191,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			File.WriteAllBytes(@"C:\schedule.xlsx", byteArray);
 		}
 
-		[Test, Ignore("fix it later")]
-		public void ShouldDisplaySelectedGroupsInHeaderRow()
+		[Test]
+		public void ShouldDisplaySelectedTeamsInHeaderRow()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
@@ -147,6 +201,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			TeamRepository.Has(team);
 
 			var input = new ExportScheduleForm
 			{
@@ -167,59 +222,121 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 
 
 		}
-	}
+		
+		[Test]
+		public void ShouldDisplaySelectedGroupsInHeaderRow()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
-	public class FakePersonFinderReadOnlyRepository : IPersonFinderReadOnlyRepository
-	{
-		private IList<IPerson> _personList = new List<IPerson>();
-		public void Has(IPerson person)
-		{
-			_personList.Add(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			TeamRepository.Has(team);
+			var groupPage = new ReadOnlyGroupPage
+			{
+				PageId = Guid.NewGuid(),
+				PageName = "my page"
+			};
+			var groupDetail = new ReadOnlyGroupDetail
+			{
+				GroupId = Guid.NewGuid(),
+				PageId = groupPage.PageId,
+				GroupName = "test value"
+			};
+
+			GroupingReadOnlyRepository.Has(new [] {groupPage}, new [] {groupDetail});
+
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupPageId = groupPage.PageId,
+					SelectedGroupIds = new[] { groupDetail.GroupId.ToString() }
+				}
+			};
+			var byteArray = Target.ExportToExcel(input).Data;
+			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
+			var sheet = workbook.GetSheetAt(0);
+
+			sheet.GetRow(0).Cells[1].StringCellValue.Should().Be.EqualTo("my page/test value");
 		}
-		public void Find(IPersonFinderSearchCriteria personFinderSearchCriteria)
+		
+		[Test]
+		public void ShouldDisplaySelectedDynamicGroupsInHeaderRow()
 		{
-			throw new NotImplementedException();
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			TeamRepository.Has(team);
+			var dynamicGroupPage = new OptionalColumn("my page")
+			{
+				AvailableAsGroupPage = true
+			}.WithId();
+			var groupValue = new OptionalColumnValue("my value");
+			var person = PersonFactory.CreatePerson("ashley", "andeen").WithId();
+			person.AddOptionalColumnValue(groupValue, dynamicGroupPage);
+			OptionalColumnRepository.Add(dynamicGroupPage);
+			OptionalColumnRepository.AddPersonValues(groupValue);
+
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupPageId = dynamicGroupPage.Id.GetValueOrDefault(),
+					SelectedGroupIds = new[] { groupValue.Description }
+				}
+			};
+			var byteArray = Target.ExportToExcel(input).Data;
+			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
+			var sheet = workbook.GetSheetAt(0);
+
+			sheet.GetRow(0).Cells[1].StringCellValue.Should().Be.EqualTo("my page/my value");
 		}
 
-		public void FindInTeams(IPersonFinderSearchCriteria personFinderSearchCriteria, Guid[] teamIds)
+		[Test]
+		public void ShouldDisplaySelectedOptionalColumnsInHeadrRow()
 		{
-			throw new NotImplementedException();
-		}
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			
+			var optionalCol1 = new OptionalColumn("opt1").WithId();
+			var optionalCol2 = new OptionalColumn("opt2").WithId();
+			OptionalColumnRepository.Add(optionalCol1);
+			OptionalColumnRepository.Add(optionalCol2);
+			
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
+				},
+				OptionalColumnIds = new []{optionalCol1.Id.GetValueOrDefault()}
+			};
+			
+			var byteArray = Target.ExportToExcel(input).Data;
+			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
+			var sheet = workbook.GetSheetAt(0);
 
-		public void FindPeople(IPeoplePersonFinderSearchCriteria personFinderSearchCriteria)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void UpdateFindPerson(ICollection<Guid> ids)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void UpdateFindPersonData(ICollection<Guid> ids)
-		{
-			throw new NotImplementedException();
-		}
-
-		public List<Guid> FindPersonIdsInTeams(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			throw new NotImplementedException();
-		}
-
-		public List<Guid> FindPersonIdsInTeamsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			throw new NotImplementedException();
-		}
-
-		public List<Guid> FindPersonIdsInGroupsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			return _personList.Select(p => p.Id.GetValueOrDefault()).ToList();
-		}
-
-		public List<Guid> FindPersonIdsInDynamicOptionalGroupPages(DateOnlyPeriod period, Guid groupPageId, string[] dynamicValues,
-			IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			throw new NotImplementedException();
+			sheet.GetRow(4).Cells[1].StringCellValue.Should().Be.EqualTo("opt1");
 		}
 	}
 }

@@ -41,6 +41,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _details;
 		}
 
+		public ReadOnlyGroupPage GetGroupPage(Guid groupPageId)
+		{
+			return _readOnlyGroupPages.Single(p => p.PageId == groupPageId);
+		}
+
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage, DateOnly queryDate)
 		{
 			return _details;
@@ -98,6 +103,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnlyPeriod period, params Guid[] groupPageIds)
+		{
+			return _details;
+		}
+
+		public IEnumerable<ReadOnlyGroupDetail> FindGroups(IEnumerable<Guid> groupIds, DateOnlyPeriod period)
 		{
 			return _details;
 		}
