@@ -75,6 +75,27 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 				.Should().Be.False();
 		}
 
+		[Test]
+		[Ignore("2 be fixed")]
+		public void VerifyValidationErrorProperties()
+		{
+			var scenario = new Scenario();
+			var date = DateOnly.Today;
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var ass = new PersonAssignment(agent, scenario, date)
+				.WithLayer(new Activity(), new TimePeriod(1, 9));
+			var state = StateHolder.Fill(scenario, date, agent, ass);
+			
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
+			var result = Target.Validate(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod())
+				.InvalidResources.Single(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateValidator)));
+
+			result.ResourceId.Should().Be.EqualTo(agent.Id.Value);
+			result.ResourceName.Should().Be.EqualTo(agent.Name.ToString(NameOrderOption.FirstNameLastName));
+			result.ResourceType.Should().Be.EqualTo(ValidationResourceType.Agent);
+			result.ValidationErrors.Any(x => "nån output vi bestämmer - in i resursfil?".Equals(x)).Should().Be.True();
+		}
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
