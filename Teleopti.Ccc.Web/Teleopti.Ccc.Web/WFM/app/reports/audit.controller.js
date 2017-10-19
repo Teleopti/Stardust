@@ -71,7 +71,8 @@
 				ChangesOccurredEndDate: moment(vm.dateChangeRange.endDate).format("YYYY-MM-DD"),
 				AffectedPeriodStartDate: moment(vm.dateModifyRange.startDate).format("YYYY-MM-DD"),
 				AffectedPeriodEndDate: moment(vm.dateModifyRange.endDate).format("YYYY-MM-DD"),
-				MaximumResults: vm.maxResults
+				MaximumResults: vm.maxResults,
+				TeamIds: vm.filteredOrgData
 			};
 			vm.loading = true;
 			ReportsService.getAuditTrailResult.searching(postObj).$promise.then(function (response) {
