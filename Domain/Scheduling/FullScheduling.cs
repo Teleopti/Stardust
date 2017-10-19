@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -28,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			SchedulingInformationProvider schedulingInformationProvider,
 			ICurrentUnitOfWork currentUnitOfWork)
 		{
-			_schedulingCommandHandler = schedulingCommandHandler;
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
