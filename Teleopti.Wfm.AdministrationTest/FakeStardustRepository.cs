@@ -105,5 +105,10 @@ namespace Teleopti.Wfm.AdministrationTest
 		{
 			return _nodes.FirstOrDefault(x => x.Id == nodeId);
 		}
+
+		public List<string> GetAllTypes()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

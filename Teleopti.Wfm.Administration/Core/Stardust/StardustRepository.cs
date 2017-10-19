@@ -89,22 +89,53 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return jobs;
 		}
 
+		public List<string> GetAllTypes()
+		{
+			const string selectCommandText = "SELECT DISTINCT Type FROM Stardust.Job WITH(NOLOCK)";
+			var types = new List<string>();
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				using (var selectTypesCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var sqlDataReader = selectTypesCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (!sqlDataReader.HasRows) return types;
+						while (sqlDataReader.Read())
+						{
+							types.Add(sqlDataReader.GetString(0).Substring(44));
+						}
+					}
+				}
+			}
+			return types;
+		}
+
 		public IList<Job> GetAllJobs(JobFilterModel filter)
 		{
 			var jobs = new List<Job>();
 
+			var selectCommandText =
+				@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
+				FROM Stardust.Job WITH(NOLOCK) ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to ";
+
+			if (filter.DataSource != null)
+				selectCommandText = selectCommandText + $@"AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
+
+			if(filter.Type != null)
+				selectCommandText = selectCommandText + $@"AND Type = 'Teleopti.Ccc.Domain.ApplicationLayer.Events.{filter.Type}' ";
+
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				 var selectCommandText =
-					$@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
-											FROM Stardust.Job WITH(NOLOCK) ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to
- AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
+	//			 var selectCommandText =
+	//				$@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
+	//										FROM Stardust.Job WITH(NOLOCK) ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to
+ //AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					getAllJobsCommand.Parameters.AddWithValue("@from", filter.From);
 					getAllJobsCommand.Parameters.AddWithValue("@to", filter.To);
-					//getAllJobsCommand.Parameters.AddWithValue("@dataSource", filter.DataSource);
 					using (var reader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
 						if (!reader.HasRows) return jobs;

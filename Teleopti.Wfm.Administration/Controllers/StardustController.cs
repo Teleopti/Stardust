@@ -35,9 +35,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 		}
 
 		[HttpGet, Route("Stardust/Jobs")]
-		public IHttpActionResult JobHistoryFiltered(int from, int to, string dataSource)
+		public IHttpActionResult JobHistoryFiltered(int from, int to, string dataSource = null, string type = null)
 		{
-			return Ok(_stardustRepository.GetAllJobs(new JobFilterModel(){DataSource = dataSource, From = from, To = to}));
+			return Ok(_stardustRepository.GetAllJobs(new JobFilterModel{DataSource = dataSource, Type = type, From = from, To = to}));
 		}
 
 		[HttpGet, Route("Stardust/Jobs/{from}/{to}")]
@@ -106,6 +106,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			_stardustRepository.DeleteQueuedJobs(ids);
 			return Ok();
+		}
+
+		[HttpGet, Route("Stardust/Types")]
+		public IHttpActionResult JobTypes()
+		{
+			return Ok(_stardustRepository.GetAllTypes());
 		}
 
 		[HttpPost, Route("Stardust/TriggerResourceCalculation")]

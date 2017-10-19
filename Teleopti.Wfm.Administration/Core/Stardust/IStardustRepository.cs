@@ -19,5 +19,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 		List<Guid> SelectAllBus(string connString);
 		List<Guid> SelectAllTenants();
 		WorkerNode WorkerNode(Guid nodeId);
+		List<string> GetAllTypes();
 	}
 }

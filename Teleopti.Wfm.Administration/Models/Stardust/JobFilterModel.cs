@@ -5,5 +5,6 @@
 		public int From;
 		public int To;
 		public string DataSource;
+		public string Type;
 	}
 }
