@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		}
 
 		[Test]
-		public void ShouldExportScheduleToExcel()
+		public void ShouldGeneratePersonScheduleSummaryInContentRow()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
@@ -83,8 +83,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			};
 
 			var byteArray = Target.ExportToExcel(input).Data;
-
-			//File.WriteAllBytes(@"C:\schedule.xlsx", byteArray);
 			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
 			var sheet = workbook.GetSheetAt(0);
 
@@ -93,6 +91,79 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			scheduleData.Cells[1].StringCellValue.Should().Be.EqualTo("1234");
 			scheduleData.Cells[2].StringCellValue.Should().Be.EqualTo("mySite/myTeam");
 			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo("Da 8:00 - 17:00");
+
+		}
+
+		[Test, Ignore("Check internally for development")]
+		public void ShouldExportExcelWithCorrectFormat()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			var person = PersonFactory.CreatePerson("ashley", "andeen").WithId();
+			person.SetEmploymentNumber("1234");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(scheduleDate.AddDays(-1)), PersonContractFactory.CreatePersonContract(), team));
+			PersonFinder.Has(person);
+			PersonRepository.Has(person);
+			var shift = ShiftCategoryFactory.CreateShiftCategory("Day");
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario,
+				ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17),
+				shift);
+			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
+				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
+				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
+			ScheduleStorage.Add(pa);
+
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
+				}
+			};
+
+			var byteArray = Target.ExportToExcel(input).Data;
+
+			File.WriteAllBytes(@"C:\schedule.xlsx", byteArray);
+		}
+
+		[Test, Ignore("fix it later")]
+		public void ShouldDisplaySelectedGroupsInHeaderRow()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupIds = new[] { team.Id.ToString() }
+				}
+			};
+			var byteArray = Target.ExportToExcel(input).Data;
+			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
+			var sheet = workbook.GetSheetAt(0);
+
+			sheet.GetRow(0).Cells[1].StringCellValue.Should().Be.EqualTo("mySite/myTeam");
+
 
 		}
 	}

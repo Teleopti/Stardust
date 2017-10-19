@@ -87,6 +87,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 
 			var scenario = _scenarioRepo.Load(input.ScenarioId);
 
+			var selectedGroupNames = input.SelectedGroups.SelectedGroupIds;
+
 			var scheduleDays = _scheduleProvider.GetScheduleDays(period, peopleToExport, scenario);
 
 			var personRows = peopleToExport.Select(p => createPersonScheduleRow(p, scheduleDays.Where(sd => sd.Person.Id == p.Id).ToList(), input.OptionalColumnIds?.ToList() ?? new List<Guid>(), timeZone));
@@ -99,6 +101,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 
 			return new ScheduleExcelExportData
 			{
+				SelectedGroups = selectedGroupNames.ToString(),
 				DateFrom = input.StartDate.Date,
 				DateTo = input.EndDate.Date,
 				Scenario = input.ScenarioName,
