@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeScheduleAuditTrailReport>().For<IScheduleAuditTrailReport>();
 				system.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
 				system.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
-
+				system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
 			}
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
 			system.AddService<FakeSchedulingSourceScope>();

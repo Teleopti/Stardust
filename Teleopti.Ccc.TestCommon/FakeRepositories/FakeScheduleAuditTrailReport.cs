@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private readonly IUserTimeZone _timeZone;
 		private readonly IList<IPerson> modifiedByList = new List<IPerson>();
-		private readonly IList<ScheduleAuditingReportData> auditingReportList = new List<ScheduleAuditingReportData>();
+		private readonly IList<ScheduleAuditingReportDataForTest> auditingReportList = new List<ScheduleAuditingReportDataForTest>();
 
 		public FakeScheduleAuditTrailReport(IUserTimeZone timeZone)
 		{
@@ -29,15 +29,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return modifiedByList;
 		}
 
-		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, int maximumResults)
+		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, int maximumResults, IList<IPerson> scheduledAgents)
 		{
-			IList<ScheduleAuditingReportData> hits;
+			IList<ScheduleAuditingReportDataForTest> hits;
 			
 			if (changedByPerson == null)
 			{
 				hits = auditingReportList
 					.Where(x => changedPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ModifiedAt)
-								&& scheduledPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ScheduleStart))
+								&& scheduledPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ScheduleStart)
+								&& scheduledAgents.Select(y => y.Id.Value).Contains(x.scheduleAgentId))
 					.Take(maximumResults)
 					.ToList();
 			}
@@ -46,7 +47,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				hits = auditingReportList
 					.Where(x => x.ModifiedBy == changedByPerson.Id.Value.ToString()
 								&& changedPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ModifiedAt)
-								&& scheduledPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ScheduleStart))
+								&& scheduledPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ScheduleStart)
+								&& scheduledAgents.Select(y => y.Id.Value).Contains(x.scheduleAgentId))
 					.Take(maximumResults)
 					.ToList();
 			}
@@ -58,13 +60,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				auditItem.ScheduleStart = TimeZoneHelper.ConvertFromUtc(auditItem.ScheduleStart, _timeZone.TimeZone());
 				auditItem.ScheduleEnd = TimeZoneHelper.ConvertFromUtc(auditItem.ScheduleEnd, _timeZone.TimeZone());
 			}
-
-			return hits;
+			
+			var ret =  hits.Select(y => y as ScheduleAuditingReportData).ToList();
+			return ret;
 		}
 
-		public void Has(ScheduleAuditingReportData scheduleAuditingReportData)
+		public void Has(ScheduleAuditingReportDataForTest scheduleAuditingReportData)
 		{
 			auditingReportList.Add(scheduleAuditingReportData);
 		}
+	}
+
+	public class ScheduleAuditingReportDataForTest : ScheduleAuditingReportData
+	{
+		public Guid scheduleAgentId { get; set; }
 	}
 }

@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			return _currentUnitOfWork.Current().Session().GetNamedQuery("RevisionPeople").List<IPerson>();
 		}
 
-		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, int maximumResults)
+	
+		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, int maximumResults, IList<IPerson> scheduledAgents)
 		{
 			var auditSession = _currentUnitOfWork.Current().Session().Auditer();
 			var ret = new List<ScheduleAuditingReportData>();
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
 				.AddModifiedByIfNotNull(changedByPerson)
 				.Add(AuditEntity.Property("Date").Between(scheduledPeriod.StartDate, scheduledPeriod.EndDate))
+				.Add(AuditEntity.Property("Person").In(scheduledAgents))
 				.AddOrder(AuditEntity.RevisionProperty("ModifiedAt").Desc())
 				.SetMaxResults(maximumResults)
 				.Results()
@@ -56,6 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.AddModifiedByIfNotNull(changedByPerson)
 				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(scheduledPeriodAgentTimeZone.EndDateTime))
 				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(scheduledPeriodAgentTimeZone.StartDateTime))
+				.Add(AuditEntity.Property("Person").In(scheduledAgents))
 				.AddOrder(AuditEntity.RevisionProperty("ModifiedAt").Desc())
 				.SetMaxResults(maximumResults)
 				.Results()

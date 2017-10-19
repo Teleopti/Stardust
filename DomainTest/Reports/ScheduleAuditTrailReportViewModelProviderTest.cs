@@ -21,34 +21,37 @@ namespace Teleopti.Ccc.DomainTest.Reports
 		public FakeScheduleAuditTrailReport FakeScheduleAuditTrailReport;
 		public FakePersonRepository PersonRepository;
 		public FakeUserTimeZone TimeZone;
+		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
+
+		private IPerson modifiedByPerson;
+		private IPerson scheduledAgent;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			
+		}
+
+		[SetUp]
+		public void Setup()
+		{
+			modifiedByPerson = PersonFactory.CreatePersonWithGuid("Joe", "Doe");
+			scheduledAgent = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
 		}
 
 		[Test]
 		public void ShouldReturnViewModel()
 		{
-			var person = PersonFactory.CreatePersonWithGuid("Joe", "Doe");
-			PersonRepository.Has(person);
-			var changedAt = new DateTime(2016, 8, 1, 10, 0, 0);
-			var scheduleStart = new DateTime(2016, 8, 23, 8, 0, 0);
-			var scheduleEnd = new DateTime(2016, 8, 23, 17, 0, 0);
-			var auditTrailData = createAuditingData(person, changedAt, scheduleStart, scheduleEnd);
+			PrepareFakeDb();
+			var scheduledAgentNotInReport = PersonFactory.CreatePersonWithGuid("John", "Smith");
+			PersonRepository.Has(scheduledAgentNotInReport);
+			var changeDate= new DateTime(2016, 8, 1);
+			var scheduleDate = new DateTime(2016, 8, 23);
+			var auditTrailData = createAuditingData(changeDate, scheduleDate, scheduledAgent);
+			createAuditingData(changeDate, scheduleDate, scheduledAgentNotInReport);
 
-			var searchParam = new AuditTrailSearchParams()
-			{
-				ChangedByPersonId = person.Id.Value,
-				ChangesOccurredStartDate = new DateTime(2016, 8, 1),
-				ChangesOccurredEndDate = new DateTime(2016, 8, 1),
-				AffectedPeriodStartDate = new DateTime(2016,8,23),
-				AffectedPeriodEndDate = new DateTime(2016,8,23),
-				MaximumResults = 1
-			};
+			var searchParam = AuditTrailSearchParams(modifiedByPerson, changeDate, scheduleDate, 100);
 			var vm = Target.Provide(searchParam);
-
+			
 			vm.Count.Should().Be.EqualTo(1);
 			vm.First().ModifiedBy.Should().Be.EqualTo(auditTrailData.ModifiedBy);
 			vm.First().ModifiedAt.Should().Be.EqualTo(auditTrailData.ModifiedAt);
@@ -59,30 +62,32 @@ namespace Teleopti.Ccc.DomainTest.Reports
 			vm.First().ScheduleEnd.Should().Be.EqualTo(auditTrailData.ScheduleEnd);
 			vm.First().ShiftType.Should().Be.EqualTo(auditTrailData.ShiftType);
 		}
-
+		
 		[Test]
 		public void ShouldReturnViewModelForHawaiiTimeZone()
 		{
 			TimeZone.IsHawaii();
 
-			var person = PersonFactory.CreatePersonWithGuid("Joe", "Doe");
-			PersonRepository.Has(person);
-
+			PrepareFakeDb();
 			var changedAtUtc = new DateTime(2016, 8, 1, 4, 0, 0);
 			var scheduleStartUtc = new DateTime(2016, 8, 23, 2, 0, 0);
 			var scheduleEndUtc = new DateTime(2016, 8, 23, 10, 0, 0);
-			createAuditingData(person, changedAtUtc, scheduleStartUtc, scheduleEndUtc);
-
-			var searchParamLocalTime = new AuditTrailSearchParams()
+			var auditTrailData = new ScheduleAuditingReportDataForTest()
 			{
-				ChangedByPersonId = person.Id.Value,
-				ChangesOccurredStartDate = new DateTime(2016, 7, 31),
-				ChangesOccurredEndDate = new DateTime(2016, 7, 31),
-				AffectedPeriodStartDate = new DateTime(2016, 8, 22),
-				AffectedPeriodEndDate = new DateTime(2016, 8, 22),
-				MaximumResults = 1
+				ModifiedBy = modifiedByPerson.Id.Value.ToString(),
+				ModifiedAt = changedAtUtc,
+				AuditType = "New",
+				Detail = "OverTime",
+				ScheduledAgent = scheduledAgent.Name.ToString(),
+				scheduleAgentId = scheduledAgent.Id.Value,
+				ScheduleStart = scheduleStartUtc,
+				ScheduleEnd = scheduleEndUtc,
+				ShiftType = "Shift"
 			};
-			var vm = Target.Provide(searchParamLocalTime);
+			FakeScheduleAuditTrailReport.Has(auditTrailData);
+
+			var searchParam = AuditTrailSearchParams(modifiedByPerson, new DateTime(2016, 7, 31), new DateTime(2016, 8, 22), 100);
+			var vm = Target.Provide(searchParam);
 
 			vm.Count.Should().Be.EqualTo(1);
 			vm.First().ModifiedAt.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(changedAtUtc, TimeZone.TimeZone()));
@@ -90,25 +95,17 @@ namespace Teleopti.Ccc.DomainTest.Reports
 			vm.First().ScheduleEnd.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(scheduleEndUtc, TimeZone.TimeZone()));
 		}
 
+		
+
 		[Test]
 		public void ShouldReturnViewModelForAllPersonsWhoChangeSchedule()
 		{
-			var person = PersonFactory.CreatePersonWithGuid("Joe", "Doe");
-			PersonRepository.Has(person);
-			var changedAt = new DateTime(2016, 8, 1, 10, 0, 0);
-			var scheduleStart = new DateTime(2016, 8, 23, 8, 0, 0);
-			var scheduleEnd = new DateTime(2016, 8, 23, 17, 0, 0);
-			createAuditingData(person, changedAt, scheduleStart, scheduleEnd);
+			PrepareFakeDb();
+			var changeDate = new DateTime(2016, 8, 1);
+			var scheduleDate = new DateTime(2016, 8, 23);
+			createAuditingData(changeDate, scheduleDate, scheduledAgent);
 
-			var searchParam = new AuditTrailSearchParams()
-			{
-				ChangedByPersonId = Guid.Empty,
-				ChangesOccurredStartDate = new DateTime(2016, 8, 1),
-				ChangesOccurredEndDate = new DateTime(2016, 8, 1),
-				AffectedPeriodStartDate = new DateTime(2016, 8, 23),
-				AffectedPeriodEndDate = new DateTime(2016, 8, 23),
-				MaximumResults = 1
-			};
+			var searchParam = AuditTrailSearchParams(null, changeDate, scheduleDate, 100);
 			var vm = Target.Provide(searchParam);
 
 			vm.Count.Should().Be.EqualTo(1);
@@ -117,43 +114,56 @@ namespace Teleopti.Ccc.DomainTest.Reports
 		[Test]
 		public void ShouldReturnGivenNumberOfResults()
 		{
-			var person = PersonFactory.CreatePersonWithGuid("Joe", "Doe");
-			PersonRepository.Has(person);
-			var changedAt = new DateTime(2016, 8, 1, 10, 0, 0);
-			var scheduleStart = new DateTime(2016, 8, 23, 8, 0, 0);
-			var scheduleEnd = new DateTime(2016, 8, 23, 17, 0, 0);
-			createAuditingData(person, changedAt, scheduleStart, scheduleEnd);
-			createAuditingData(person, changedAt, scheduleStart, scheduleEnd);
+			PrepareFakeDb();
+			var changeDate = new DateTime(2016, 8, 1);
+			var scheduleDate = new DateTime(2016, 8, 23);
+			createAuditingData(changeDate, scheduleDate, scheduledAgent);
+			createAuditingData(changeDate, scheduleDate, scheduledAgent);
 
-			var searchParam = new AuditTrailSearchParams()
-			{
-				ChangedByPersonId = Guid.Empty,
-				ChangesOccurredStartDate = new DateTime(2016, 8, 1),
-				ChangesOccurredEndDate = new DateTime(2016, 8, 1),
-				AffectedPeriodStartDate = new DateTime(2016, 8, 23),
-				AffectedPeriodEndDate = new DateTime(2016, 8, 23),
-				MaximumResults = 1
-			};
+			var searchParam = AuditTrailSearchParams(modifiedByPerson, changeDate, scheduleDate, 1);
 			var vm = Target.Provide(searchParam);
 
 			vm.Count.Should().Be.EqualTo(1);
 		}
 
-		private ScheduleAuditingReportData createAuditingData(IPerson person, DateTime changedAt, DateTime scheduleStart, DateTime scheduleEnd)
+		private ScheduleAuditingReportData createAuditingData(DateTime changeDate, DateTime scheduleDate, IPerson scheduledAgent)
 		{
-			ScheduleAuditingReportData auditTrailData = new ScheduleAuditingReportData()
+			var auditTrailData = new ScheduleAuditingReportDataForTest()
 			{
-				ModifiedBy = person.Id.Value.ToString(),
-				ModifiedAt = changedAt,
+				ModifiedBy = modifiedByPerson.Id.Value.ToString(),
+				ModifiedAt = changeDate.AddHours(10),
 				AuditType = "New",
 				Detail = "OverTime",
-				ScheduledAgent = "John",
-				ScheduleStart = scheduleStart,
-				ScheduleEnd = scheduleEnd,
+				ScheduledAgent = scheduledAgent.Name.ToString(),
+				scheduleAgentId = scheduledAgent.Id.Value,
+				ScheduleStart = scheduleDate.AddHours(6),
+				ScheduleEnd = scheduleDate.AddHours(11),
 				ShiftType = "Shift"
 			};
 			FakeScheduleAuditTrailReport.Has(auditTrailData);
 			return auditTrailData;
 		}
+
+		private void PrepareFakeDb()
+		{
+			PersonRepository.Has(modifiedByPerson);
+			PersonRepository.Has(scheduledAgent);
+			PersonFinderReadOnlyRepository.Has(scheduledAgent.Id.Value);
+		}
+
+		private AuditTrailSearchParams AuditTrailSearchParams(IPerson modifiedBy, DateTime changeDate, DateTime affectedDate, int maximumResults)
+		{
+			var searchParam = new AuditTrailSearchParams()
+			{
+				ChangedByPersonId = modifiedBy?.Id.Value ?? Guid.Empty,
+				ChangesOccurredStartDate = changeDate,
+				ChangesOccurredEndDate = changeDate,
+				AffectedPeriodStartDate = affectedDate,
+				AffectedPeriodEndDate = affectedDate,
+				MaximumResults = maximumResults
+			};
+			return searchParam;
+		}
+
 	}
 }
