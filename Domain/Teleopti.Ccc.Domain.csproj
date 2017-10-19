@@ -581,7 +581,6 @@
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestUpdater.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestValidator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestValidatorProvider.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestWaitlistProcessor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestWaitlistProvider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestWorkflowControlSetValidator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAccount.cs" />

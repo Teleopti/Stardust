@@ -173,7 +173,6 @@
     </Compile>
     <Compile Include="Absence\MultiAbsenceRequestsUpdater.cs" />
     <Compile Include="Absence\AbsenceRequestUpdater.cs" />
-    <Compile Include="Absence\AbsenceRequestWaitlistProcessor.cs" />
     <Compile Include="Absence\AbsenceRequestValidatorProvider.cs" />
     <Compile Include="Analytics\Tables\fact_schedule.cs" />
     <Compile Include="Aop\AspectApplicationException.cs" />
