@@ -148,6 +148,7 @@
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\SkillStaffingReadModelDataLoader.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsByToggle.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
     <Compile Include="Analytics\Transformer\AnalyticsTimeZoneUpdater.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandler.cs" />

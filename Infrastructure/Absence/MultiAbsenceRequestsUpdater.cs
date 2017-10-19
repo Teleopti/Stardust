@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 					var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
 
-
+					// TODO skip loading if no personAccount Check
 					IPersonAccountCollection allAccounts;
 					if (!_schedulingResultStateHolder.AllPersonAccounts.TryGetValue(absenceRequest.Person, out allAccounts))
 						allAccounts = new PersonAccountCollection(absenceRequest.Person);

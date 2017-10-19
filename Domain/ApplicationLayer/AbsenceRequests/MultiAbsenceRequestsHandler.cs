@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -25,11 +26,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IMultiAbsenceRequestsUpdater _multiAbsenceRequestsUpdater;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
+		private readonly IFilterRequests _filterRequests;
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository,
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater, 
+			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, IFilterRequests filterRequests)
 		{
 			_personRequestRepository = personRequestRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -38,6 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_multiAbsenceRequestsUpdater = multiAbsenceRequestsUpdater;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
+			_filterRequests = filterRequests;
 		}
 
 		[AsSystem]
@@ -146,7 +150,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				DateTimePeriod period = new DateTimePeriod(min.Utc(), max.Utc());
 				var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();
-				requests.AddRange(_personRequestRepository.Find(waitListIds));
+
+				var waitlistedRequests = _personRequestRepository.Find(waitListIds).ToList();
+
+				requests.AddRange(_filterRequests.Filter(waitlistedRequests));
 				_feedback.SendProgress($"Picked up {waitListIds.Count} waitlisted requests in period {period}.");
 			}
 

@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	[EnabledBy(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
-	public class WaitlistProcessPublisher : IHandleEvent<TenantDayTickEvent>, IRunOnHangfire
+	public class WaitlistProcessPublisher : IHandleEvent<TenantHourTickEvent>, IRunOnHangfire
 	{
 		private readonly IEventPublisher _publisher;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 
 		[UnitOfWork]
-		public virtual void Handle(TenantDayTickEvent tenantDayTickEvent)
+		public virtual void Handle(TenantHourTickEvent tenantDayTickEvent)
 		{
 			var businessUnits = _businessUnitRepository.LoadAll();
 			using (_updatedBySystemUser.Context())
