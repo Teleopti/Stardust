@@ -76,7 +76,6 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 		}
 
 		[Test]
-		[Ignore("2 be fixed")]
 		public void VerifyValidationErrorProperties()
 		{
 			var scenario = new Scenario();
