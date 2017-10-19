@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 		[TestCase(8, "Singapore Standard Time", ExpectedResult = false)]
 		[TestCase(16, "Singapore Standard Time", ExpectedResult = true)]
 		[TestCase(23, "Singapore Standard Time", ExpectedResult = true)]
-		public bool ShouldReturnValidationErrorIfAgentChangedToTimeZoneEarlier(int startHourOfPresentShift, string newTimezoneForAgent)
+		public bool ShouldReturnValidationErrorIfAgentChangedToTimeZone(int startHourOfPresentShift, string newTimezoneForAgent)
 		{
 			var scenario = new Scenario();
 			var date = DateOnly.Today;
