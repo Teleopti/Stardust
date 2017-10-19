@@ -324,6 +324,7 @@
     <Compile Include="Optimization\EffectiveRestrictionStartTimeDecider.cs" />
     <Compile Include="Optimization\TeamBlock\BlockPreferencesMapper.cs" />
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />
+    <Compile Include="ResourcePlanner\Validation\ScheduleStartOnWrongDateValidator.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />

@@ -518,6 +518,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<MissingForecastValidator>().AsSelf().As<IScheduleValidator>().SingleInstance();
 				builder.RegisterType<PersonSchedulePeriodValidator>().As<IScheduleValidator>().SingleInstance();				
 			}
+			if (_configuration.Toggle(Toggles.ResourcePlanner_ShowSwitchedTimeZone_46303))
+			{
+				builder.RegisterType<ScheduleStartOnWrongDateValidator>().As<IScheduleValidator>().SingleInstance();
+			}
 			builder.RegisterType<PersonSkillValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonPeriodValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonShiftBagValidator>().As<IScheduleValidator>().SingleInstance();

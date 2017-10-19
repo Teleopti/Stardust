@@ -250,6 +250,7 @@
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
+    <Compile Include="ResourcePlanner\Validation\ScheduleStartOnWrongDateValidatorTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockContractTimeTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCheckerTest.cs" />
