@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 		{
 			if (schedules == null)
 				return;
-			throw new System.NotImplementedException();
 		}
 	}
 }

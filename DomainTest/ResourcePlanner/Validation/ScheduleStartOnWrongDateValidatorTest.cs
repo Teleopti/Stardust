@@ -4,6 +4,7 @@ using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -35,22 +36,28 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			});
 		}
 
-		[Test]
+		[TestCase(1, "Mountain Standard Time", ExpectedResult = true)]
+		[TestCase(8, "Mountain Standard Time", ExpectedResult = false)]
+		[TestCase(23, "Mountain Standard Time", ExpectedResult = false)]
+		[TestCase(1, "GMT Standard Time", ExpectedResult = false)]
+		[TestCase(8, "GMT Standard Time", ExpectedResult = false)]
+		[TestCase(23, "GMT Standard Time", ExpectedResult = false)]
+		[TestCase(1, "Singapore Standard Time", ExpectedResult = false)]
+		[TestCase(8, "Singapore Standard Time", ExpectedResult = false)]
+		[TestCase(23, "Singapore Standard Time", ExpectedResult = true)]
 		[Ignore("to_be_continued")]
-		public void ShouldReturnValidationErrorWhenAgentChangedToTimeZoneEarlier()
+		public bool ShouldReturnValidationErrorWhenAgentChangedToTimeZoneEarlier(int startHourOfPresentShift, string newTimezoneForAgent)
 		{
 			var scenario = new Scenario();
 			var date = DateOnly.Today;
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			var ass = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory("_")).WithLayer(new Activity(), new TimePeriod(8, 17));
-			var state = StateHolder.Fill(scenario, date, agent, ass, null);
+			var ass = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory("_")).WithLayer(new Activity(), new TimePeriod(startHourOfPresentShift, startHourOfPresentShift + 8));
+			var state = StateHolder.Fill(scenario, date, agent, ass);
 			
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
-			var result = Target.Validate(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod());
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById(newTimezoneForAgent));
 			
-			result.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateValidator)))
-				.Should().Be.True();
-
+			return Target.Validate(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod())
+				.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateValidator)));
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

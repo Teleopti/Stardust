@@ -84,5 +84,14 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 		{
 			return Fill(stateHolderFunc, scenario, date.ToDateOnlyPeriod(), new []{agent}, new []{persistableScheduleData}, skillDay);
 		}
+		
+		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,
+			IScenario scenario,
+			DateOnly date,
+			IPerson agent,
+			IScheduleData persistableScheduleData)
+		{
+			return Fill(stateHolderFunc, scenario, date.ToDateOnlyPeriod(), new []{agent}, new []{persistableScheduleData}, Enumerable.Empty<ISkillDay>());
+		}
 	}
 }
