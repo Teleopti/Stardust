@@ -167,6 +167,18 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
 			validationError.ValidationErrors.Should().Contain(Resources.NoMatchingSchedulePeriod);
 		}
+		
+		[Test]
+		public void PersonWithSchedulePeriodOfOneDay()
+		{
+			var date = DateOnly.Today;
+			var person = new Person().WithId()
+				.WithSchedulePeriodOneDay(date);
+
+			Target.Validate(null, new[] { person }, date.ToDateOnlyPeriod()).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonSchedulePeriodValidator)))
+				.Should().Be.Empty();
+		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{

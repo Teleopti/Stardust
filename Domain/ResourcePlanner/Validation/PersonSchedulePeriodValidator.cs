@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 						var start = range.StartDate;
 						var incrementor = personIncrementor.PeriodIncrementor(schedulePeriod.PeriodType,
 							person.PermissionInformation.Culture());
-						while (start < range.EndDate)
+						while (start < range.EndDate || 
+							   (schedulePeriod.PeriodType==SchedulePeriodType.Day && start == range.EndDate))
 						{
 							var period = schedulePeriod.GetSchedulePeriod(start);
 							if (period.HasValue)
