@@ -9,8 +9,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		public void Trace(string usercode)
 		{
 		}
-		
+
 		public void Stop()
+		{
+		}
+
+		public void Clear()
 		{
 		}
 
@@ -21,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		public void ProcessProcessing()
 		{
 		}
-		
+
 		public void ProcessActivityCheck()
 		{
 		}

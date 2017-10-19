@@ -72,5 +72,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 
 			Reader.ReadOfType<StateTraceLog>().Single().Message.Should().Be(message);
 		}
+
+		[Test]
+		public void ShouldClear()
+		{
+			Target.Write(new RtaTracerLog<ProcessReceivedLog> {Tenant = DataSource.CurrentName()});
+
+			Target.Clear();
+
+			Reader.ReadOfType<ProcessReceivedLog>().Should().Be.Empty();
+		}
 	}
 }

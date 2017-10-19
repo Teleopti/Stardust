@@ -107,5 +107,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			log.Process.Should().Be(RtaTracer.ProcessName());
 			log.Log.Tracing.Should().Contain("usercode");
 		}
+		
+		[Test]
+		public void ShouldClearLogs()
+		{
+			Target.Trace("usercode");
+			Target.ProcessReceived();
+
+			Target.Clear();
+
+			Logs.ReadOfType<ProcessReceivedLog>().Should().Be.Empty();
+		}
 	}
 }

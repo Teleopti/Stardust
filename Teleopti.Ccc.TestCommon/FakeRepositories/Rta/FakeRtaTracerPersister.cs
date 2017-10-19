@@ -34,5 +34,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			_data.Add(log);
 		}
+
+		public void Clear()
+		{
+			_data.Clear();
+		}
 	}
 }

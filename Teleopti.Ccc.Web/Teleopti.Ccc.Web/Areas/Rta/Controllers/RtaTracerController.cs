@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_tracer = tracer;
 		}
 
-		[AnalyticsUnitOfWork, HttpGet, Route("api/RtaTracer/Traces")]
+		[HttpGet, Route("api/RtaTracer/Traces")]
 		public virtual IHttpActionResult Traces()
 		{
 			return Ok(_viewModel.Build());
@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[HttpGet, Route("api/RtaTracer/Clear")]
 		public virtual IHttpActionResult Clear()
 		{
+			_tracer.Clear();
 			return Ok();
 		}
 	}

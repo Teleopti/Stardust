@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		}
 
 		public void Trace(string usercode) => _config.UpdateForTenant(usercode);
-
 		public void Stop() => _config.DeleteForTenant();
+		public void Clear() => _writer.Clear();
 
 		public void ProcessReceived() => writeForCurrentOrConfigured(new ProcessReceivedLog {RecievedAt = _now.UtcDateTime()}, "Data received at");
 		public void ProcessProcessing() => writeForCurrentOrConfigured(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");

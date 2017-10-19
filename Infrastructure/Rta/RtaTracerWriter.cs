@@ -17,10 +17,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ILog _log = LogManager.GetLogger("Teleopti.RtaTracer");
 		private readonly IJsonSerializer _serializer;
+		private readonly RtaTracerSessionFactory _sessionFactory;
+		private readonly ICurrentDataSource _dataSource;
 
-		public RtaTracerWriter(IConfigReader config, IJsonDeserializer deserializer, IJsonSerializer serializer)
+		public RtaTracerWriter(IConfigReader config, IJsonDeserializer deserializer, IJsonSerializer serializer, RtaTracerSessionFactory sessionFactory, ICurrentDataSource dataSource)
 		{
 			_serializer = serializer;
+			_sessionFactory = sessionFactory;
+			_dataSource = dataSource;
 			var appender = new AdoNetAppender()
 			{
 				Name = "RtaTracer",
@@ -72,7 +76,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public void Write<T>(RtaTracerLog<T> log)
 		{
-			_log.Debug(_serializer.SerializeObject(new { Log = log, log.Tenant, Type = typeof(T).Name }));
+			_log.Debug(_serializer.SerializeObject(new {Log = log, log.Tenant, Type = typeof(T).Name}));
+		}
+
+		public void Clear()
+		{
+			using (var session = _sessionFactory.OpenSession())
+				session
+					.CreateSQLQuery($@"DELETE RtaTracer.Logs WHERE Tenant = :Tenant")
+					.SetParameter("Tenant", _dataSource.CurrentName())
+					.ExecuteUpdate();
 		}
 	}
 
@@ -86,14 +99,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_deserializer = deserializer;
 			DbType = DbType.String;
 			Size = int.MaxValue;
-			Layout = (IRawLayout)new RawLayoutConverter().ConvertFrom(new PatternLayout("%message"));
+			Layout = (IRawLayout) new RawLayoutConverter().ConvertFrom(new PatternLayout("%message"));
 		}
 
 		public override void FormatValue(IDbCommand command, LoggingEvent loggingEvent)
 		{
 			var serialized = loggingEvent.RenderedMessage;
 			var obj = _deserializer.DeserializeObject<dynamic>(serialized);
-			((IDbDataParameter)command.Parameters[ParameterName]).Value = ValueReader.Invoke(obj);
+			((IDbDataParameter) command.Parameters[ParameterName]).Value = ValueReader.Invoke(obj);
 		}
 	}
 }
