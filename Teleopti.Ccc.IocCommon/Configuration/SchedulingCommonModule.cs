@@ -569,7 +569,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>().SingleInstance();
 			builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>().SingleInstance();
 			builder.RegisterType<TeamBlockSwapValidator>().As<ITeamBlockSwapValidator>().SingleInstance();
-			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockSwap>().As<ITeamBlockSwap>();
 			builder.RegisterType<TeamBlockLockValidator>().As<ITeamBlockLockValidator>().SingleInstance();
 			builder.RegisterType<SeniorityTeamBlockSwapValidator>().As<ISeniorityTeamBlockSwapValidator>().InstancePerLifetimeScope();
