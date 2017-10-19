@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -43,21 +39,16 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 		[Ignore("to_be_continued")]
 		public void ShouldReturnValidationErrorWhenAgentChangedToTimeZoneEarlier()
 		{
-			var scenario = new Scenario("_");
-			var activity = ActivityFactory.CreateActivity("_");
-			var dateOnly = new DateOnly(2010, 1, 1);
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(21, 0, 21, 0, 15), new ShiftCategory("_").WithId()));
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new List<Tuple<int, TimeSpan>>());
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet).WithSchedulePeriodOneDay(dateOnly);
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(8, 17));
+			var scenario = new Scenario();
+			var date = DateOnly.Today;
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var ass = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory("_")).WithLayer(new Activity(), new TimePeriod(8, 17));
+			var state = StateHolder.Fill(scenario, date, agent, ass, null);
+			
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
-			var state = StateHolder.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass }, skillDay);
+			var result = Target.Validate(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod());
 			
-			var result = Target.Validate(state.Schedules, new[] {agent}, dateOnly.ToDateOnlyPeriod());
-			
-			result.InvalidResources.SelectMany(x => x.ValidationTypes)
-				.Any(x => x == typeof(SchedulingValidator))
+			result.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateValidator)))
 				.Should().Be.True();
 
 		}
