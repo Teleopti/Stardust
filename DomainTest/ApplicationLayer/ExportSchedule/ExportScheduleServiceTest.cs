@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			scheduleData.Cells[0].StringCellValue.Should().Be.EqualTo("ashley@andeen");
 			scheduleData.Cells[1].StringCellValue.Should().Be.EqualTo("1234");
 			scheduleData.Cells[2].StringCellValue.Should().Be.EqualTo("mySite/myTeam");
-			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo("Da 8:00 - 17:00");
+			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo("Da 08:00 - 17:00");
 
 		}
 
