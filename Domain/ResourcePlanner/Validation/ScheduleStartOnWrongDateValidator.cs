@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			var scheduleDays = schedules.SchedulesForPeriod(period, agents.ToArray());
 			foreach (var scheduleDay in scheduleDays)
 			{
-				var startLocal = scheduleDay.PersonAssignment().Period
+				var startLocal = scheduleDay.PersonAssignment(true).Period
 					.StartDateTimeLocal(scheduleDay.Person.PermissionInformation.DefaultTimeZone());
 				var dateOfScheduleDay = scheduleDay.DateOnlyAsPeriod.DateOnly.Date; 
 				if (startLocal < dateOfScheduleDay || startLocal >= dateOfScheduleDay.AddDays(1))

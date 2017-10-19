@@ -60,6 +60,21 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 				.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateValidator)));
 		}
 
+		[TestCase("Mountain Standard Time")]
+		[TestCase("GMT Standard Time")]
+		[TestCase("Singapore Standard Time")]
+		public void ShouldNotReturnValidationErrorIfScheduleDayMissPersonAssignment(string timezoneForAgent)
+		{
+			var scenario = new Scenario();
+			var date = DateOnly.Today;
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timezoneForAgent));
+			var state = StateHolder.Fill(scenario, date, agent);
+			
+			Target.Validate(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod())
+				.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateValidator)))
+				.Should().Be.False();
+		}
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
