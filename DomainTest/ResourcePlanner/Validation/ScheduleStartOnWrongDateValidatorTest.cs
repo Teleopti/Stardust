@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
 			var result = Target.Validate(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod())
-				.InvalidResources.Single(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateValidator)));
+				.InvalidResources.Single();
 
 			result.ResourceId.Should().Be.EqualTo(agent.Id.Value);
 			result.ResourceName.Should().Be.EqualTo(agent.Name.ToString(NameOrderOption.FirstNameLastName));
