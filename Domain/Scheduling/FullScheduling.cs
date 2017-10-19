@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -18,12 +19,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly FullSchedulingResult _fullSchedulingResult;
 		private readonly SchedulingInformationProvider _schedulingInformationProvider;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, 
 			IFillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<ISchedulerStateHolder> schedulerStateHolder, 
 			FullSchedulingResult fullSchedulingResult,
-			SchedulingInformationProvider schedulingInformationProvider)
+			SchedulingInformationProvider schedulingInformationProvider,
+			ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_schedulingCommandHandler = schedulingCommandHandler;
@@ -31,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulerStateHolder = schedulerStateHolder;
 			_fullSchedulingResult = fullSchedulingResult;
 			_schedulingInformationProvider = schedulingInformationProvider;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		public virtual SchedulingResultModel DoScheduling(Guid planningPeriodId)
@@ -53,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual SchedulingResultModel CreateResult(IEnumerable<IPerson> fixedStaffPeople, DateOnlyPeriod period)
 		{
+			_currentUnitOfWork.Current().Reassociate(fixedStaffPeople);
 			return _fullSchedulingResult.Execute(period, fixedStaffPeople);
 		}
 
