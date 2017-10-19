@@ -120,6 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
+		[SetCulture("sv-SE")]
 		public void ShouldContainDataRecievedAt()
 		{
 			RtaTracers
@@ -132,6 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
+		[SetCulture("sv-SE")]
 		public void ShouldOnlyContainLatestDataRecievedAt()
 		{
 			RtaTracers
@@ -156,6 +158,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
+		[SetCulture("sv-SE")]
 		public void ShouldContainDataReceivedAtForTheProcess()
 		{
 			RtaTracers
@@ -181,6 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
+		[SetCulture("sv-SE")]
 		public void ShouldContainAcitivtyCheckAt()
 		{
 			RtaTracers
@@ -196,6 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
+		[SetCulture("sv-SE")]
 		public void ShouldContainActivityCheckAtForTheProcess()
 		{
 			RtaTracers
@@ -221,6 +226,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
+		[SetCulture("sv-SE")]
 		public void ShouldContainLatestActivityCheckedAt()
 		{
 			RtaTracers

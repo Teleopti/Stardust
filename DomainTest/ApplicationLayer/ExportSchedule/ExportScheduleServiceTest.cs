@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		}
 
 		[Test]
+		[SetCulture("sv-SE")]
 		public void ShouldGeneratePersonScheduleSummaryInContentRow()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
