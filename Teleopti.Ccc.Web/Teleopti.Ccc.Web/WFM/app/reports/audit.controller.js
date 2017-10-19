@@ -26,16 +26,20 @@
 		};
 		vm.changesData = [];
 
+		vm.filteredOrgData = [];
 		vm.orgData = [];
 		vm.option = {
-				NodeDisplayName: "Name",
-				NodeChildrenName: "ChildNodes",
-				NodeSelectedMark: "selected"
+			NodeDisplayName: "Name",
+			NodeChildrenName: "ChildNodes",
+			NodeSelectedMark: "selected"
 		}
 
 		vm.sendForm = sendForm;
 		vm.refreshData = refreshData;
+		vm.calculateOrgSelection = calculateOrgSelection;
 		vm.maxResults = 100;
+
+		vm.label = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.filteredOrgData.length )
 
 		init();
 		function init() {
@@ -106,6 +110,23 @@
 				]
 			};
 			vm.chartLoaded = true;
+		}
+
+		function calculateOrgSelection(nodes) {
+			for (var i = 0; i < nodes.length; i++) {
+				if (nodes[i].Type === 'Team') {
+					if (vm.filteredOrgData.indexOf(nodes[i].Id) == -1 && nodes[i].selected === true) {
+						vm.filteredOrgData.push(nodes[i].Id)
+					}
+					else if(vm.filteredOrgData.indexOf(nodes[i].Id) !== -1 && nodes[i].selected === false){
+						vm.filteredOrgData.splice(vm.filteredOrgData.indexOf(nodes[i].Id), 1)
+					}
+				}
+				else if (nodes[i].ChildNodes && nodes[i].Type==='Site'){
+					calculateOrgSelection(nodes[i].ChildNodes);
+				}
+			}
+					vm.label = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.filteredOrgData.length )
 		}
 
 		function refreshData(keyword) {
