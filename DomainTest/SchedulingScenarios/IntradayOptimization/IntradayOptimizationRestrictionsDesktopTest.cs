@@ -306,19 +306,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		{
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
-			var shiftCategory = new ShiftCategory("_").WithId();
 			var dateOnly = new DateOnly(2010, 1, 1);
-			var ruleSetInsideTolerance = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), new ShiftCategory("_").WithId()));
-			var ruleSetOutsideTolerance = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(19, 0, 19, 0, 15), new ShiftCategory("_").WithId()));
-			var ruleSetBag = new RuleSetBag(ruleSetInsideTolerance, ruleSetOutsideTolerance);	
-			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var intervalDemands = new List<Tuple<int, TimeSpan>>{new Tuple<int, TimeSpan>(17,TimeSpan.FromMinutes(360)), new Tuple<int, TimeSpan>(18, TimeSpan.FromMinutes(360))};	
-			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), intervalDemands);
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSetBag, skill).WithSchedulePeriodOneWeek(dateOnly);
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17));
-			var activityRestriction = new ActivityRestriction(phoneActivity);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), new ShiftCategory("_").WithId()));
+			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();	
+			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new List<Tuple<int, TimeSpan>>());
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phoneActivity, new TimePeriod(8, 17));
 			var preferenceRestriction = new PreferenceRestriction {StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))};
-			preferenceRestriction.AddActivityRestriction(activityRestriction);
+			preferenceRestriction.AddActivityRestriction(new ActivityRestriction(phoneActivity));
 			var preferenceDay = new PreferenceDay(agent, dateOnly, preferenceRestriction);
 			SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
 			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
