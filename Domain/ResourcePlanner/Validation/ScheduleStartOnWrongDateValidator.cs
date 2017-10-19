@@ -7,6 +7,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class ScheduleStartOnWrongDateValidator : IScheduleValidator
 	{
+		public static string ErrorOutput = "Ändra denna sträng till resursnyckel sen {0}"; // = Resources.Blabla
+		
 		public void FillResult(ValidationResult validationResult, IScheduleDictionary schedules, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			if (schedules == null)

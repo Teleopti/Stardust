@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			result.ResourceId.Should().Be.EqualTo(agent.Id.Value);
 			result.ResourceName.Should().Be.EqualTo(agent.Name.ToString(NameOrderOption.FirstNameLastName));
 			result.ResourceType.Should().Be.EqualTo(ValidationResourceType.Agent);
-			result.ValidationErrors.Any(x => "nån output vi bestämmer - in i resursfil?".Equals(x)).Should().Be.True();
+			result.ValidationErrors.Any(x => string.Format(ScheduleStartOnWrongDateValidator.ErrorOutput, date).Equals(x)).Should().Be.True();
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
