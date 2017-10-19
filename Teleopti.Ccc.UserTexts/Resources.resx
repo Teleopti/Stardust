@@ -16642,4 +16642,8 @@ Do you want to participate?</value>
     <value>User settings</value>
     <comment>wfm navbar icon tooltip</comment>
   </data>
+  <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
+    <value>{0}: A shift begins the day before or the day after and that is not allowed. This was probably caused by changing agent time zone in People. Change to correct time zone or just press delete this day to correct it.</value>
+    <comment>Used in validations</comment>
+  </data>
 </root>

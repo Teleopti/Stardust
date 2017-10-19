@@ -30478,6 +30478,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}: A shift begins the day before or the day after and that is not allowed. This was probably caused by changing agent time zone in People. Change to correct time zone or just press delete this day to correct it..
+        /// </summary>
+        public static string ShiftStartsDayBeforeOrAfter {
+            get {
+                return ResourceManager.GetString("ShiftStartsDayBeforeOrAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shifts within day.
         /// </summary>
         public static string ShiftsWithinDay {
