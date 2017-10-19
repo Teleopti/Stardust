@@ -55,7 +55,7 @@ Scenario: Open unread message
 	When I am viewing messages
 	And I click on the message with the title 'New message'
 	Then I should see the message detail form with the message 'Text in message'
-
+@Ignore
 Scenario: Confirm message is read
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -66,7 +66,7 @@ Scenario: Confirm message is read
 	When I confirm reading the message with the title 'New message'
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
-
+@Ignore
 Scenario: Confirm message is read after entering a textreply
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
