@@ -224,6 +224,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelBatchTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftMeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\StateQueue\QueueTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerActivityCheckTraceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerProcessTraceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerStateTraceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerTenantTest.cs" />

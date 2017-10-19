@@ -39,6 +39,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 			return null;
 		}
 
+		public StateTraceLog ActivityCheck(Guid personId)
+		{
+			return null;
+		}
+
+		public StateTraceLog SnapshotLogout(Guid personId, string stateCode)
+		{
+			return null;
+		}
+
 		public void InvalidStateCode(StateTraceLog trace)
 		{
 		}

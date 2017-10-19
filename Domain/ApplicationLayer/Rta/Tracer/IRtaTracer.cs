@@ -10,15 +10,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		void Stop();
 		void Clear();
 
-		
+
 		void ProcessReceived();
 		void ProcessProcessing();
 		void ProcessActivityCheck();
-		
+
 
 		void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace);
 
 		StateTraceLog StateReceived(string userCode, string stateCode);
+		StateTraceLog ActivityCheck(Guid personId);
+		StateTraceLog SnapshotLogout(Guid personId, string stateCode);
+
 		void InvalidStateCode(StateTraceLog trace);
 
 		void StateProcessing(StateTraceLog trace);

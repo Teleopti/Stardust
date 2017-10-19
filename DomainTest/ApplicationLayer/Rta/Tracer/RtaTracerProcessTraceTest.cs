@@ -93,7 +93,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Logs.ReadOfType<ActivityCheckLog>().Should().Be.Empty();
 		}
 
-		// needs more tests! but it should work ok for now!
 		[Test]
 		public void ShouldLogTracing()
 		{

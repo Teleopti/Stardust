@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 
 			Target.ProcessState(new StateForTest
 			{
-				AuthenticationKey = "!#¤atAbgT%",
+				AuthenticationKey = "!#Â¤atAbgT%",
 				StateCode = "InCall",
 				StateDescription = "InCall",
 				UserCode = "usercode",
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 
 			Target.Process(new BatchInputModel
 			{
-				AuthenticationKey = "!#¤atAbgT%",
+				AuthenticationKey = "!#Â¤atAbgT%",
 				SourceId = "-1",
 				States = Enumerable.Range(0, 20)
 					.Select(i => new BatchStateInputModel

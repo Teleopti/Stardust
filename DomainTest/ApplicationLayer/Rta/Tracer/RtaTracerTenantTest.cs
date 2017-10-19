@@ -1,18 +1,17 @@
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 {
-	[DomainTest]
-	[LoggedOff]
+	[RtaTest]
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
 	public class RtaTracerTenantTest
 	{
@@ -20,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public FakeRtaTracerPersister Logs;
 		public FakeTenants Tenants;
 		public IDataSourceScope DataSource;
+		public FakeRtaDatabase Database;
 
 		[Test]
 		public void ShouldLogProcessReceivedForAllTenants()
@@ -155,6 +155,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 				Logs.ReadOfType<StateTraceLog>().Should().Have.Count.EqualTo(0);
 			using (DataSource.OnThisThreadUse("secondTenant"))
 				Logs.ReadOfType<StateTraceLog>().Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldLogActivityCheckForCurrentTenant()
+		{
+			var person = Guid.NewGuid();
+			Database
+				.WithTenant("firstTenant")
+				.WithTenant("secondTenant")
+				.WithAgent("secondUserCode", person);
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Target.Trace("firstUserCode");
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Target.Trace("secondUserCode");
+
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Target.ActivityCheck(person);
+
+			using (DataSource.OnThisThreadUse("firstTenant"))
+				Logs.ReadOfType<StateTraceLog>().Should().Have.Count.EqualTo(0);
+			using (DataSource.OnThisThreadUse("secondTenant"))
+				Logs.ReadOfType<StateTraceLog>().Should().Have.Count.EqualTo(1);
 		}
 	}
 }

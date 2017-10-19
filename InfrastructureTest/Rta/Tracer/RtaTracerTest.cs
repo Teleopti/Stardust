@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -22,6 +23,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 			Tracer.StateReceived("usercode", "statecode");
 
 			Target.ReadOfType<StateTraceLog>()
+				.Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldTrace2()
+		{
+			Tracer.Trace("usercode");
+
+			Tracer.ActivityCheck(Guid.NewGuid());
+
+			Target.ReadOfType<TracingLog>()
+				.Should().Have.Count.EqualTo(1);
+		}
+		
+		[Test]
+		public void ShouldTraceProcessReceived()
+		{
+			Tracer.Trace("usercode");
+
+			Tracer.ProcessReceived();
+
+			Target.ReadOfType<TracingLog>()
 				.Should().Have.Count.EqualTo(1);
 		}
 
