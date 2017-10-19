@@ -48,6 +48,7 @@
 		MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686,
 		MyTimeWeb_OvertimeRequest_44558,
 		MyTimeWeb_MonthlyScheduleMobileView_45004,
+		MyTimeWeb_WaitListPositionEnhancement_46301,
 
 		Backlog_Module_23980,
 
