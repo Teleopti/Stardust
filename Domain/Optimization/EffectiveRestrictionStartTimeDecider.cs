@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var restriction = scheduleDay.PreferenceDay()?.Restriction;
 			if (jumpOutEarly(schedulingOptions, restriction))
-				return effectiveRestriction;
-
+				return new EffectiveRestriction();
+			
 			var earliestStart = restriction.StartTimeLimitation.StartTime?.Add(-schedulingOptions.BreakPreferenceStartTimeByMax);
 			var latestEnd = restriction.StartTimeLimitation.EndTime?.Add(schedulingOptions.BreakPreferenceStartTimeByMax);
 			foreach (var ruleSet in scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly)
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public IEffectiveRestriction Decide(SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IScheduleDay scheduleDay)
 		{
-			return effectiveRestriction;
+			return new EffectiveRestriction();
 		}
 	}
 }
