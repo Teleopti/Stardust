@@ -29,20 +29,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 		}
 
-		protected override void ProcessTransactions(string tenant, IContextLoadingStrategy strategy,
-			IEnumerable<Func<IEnumerable<AgentState>>> transactions, ConcurrentBag<Exception> exceptions)
+		protected override void ProcessTransactions(string tenant, IContextLoadingStrategy strategy, IEnumerable<Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>>> transactions, ConcurrentBag<Exception> exceptions)
 		{
 			var taskTransactionCount = Math.Max(2, transactions.Count() / strategy.ParallelTransactions);
 
 			var tasks = transactions
 				.Batch(taskTransactionCount)
-				.Select(transactionBatch =>
-				{
-					return Task.Factory.StartNew(() =>
-					{
-						transactionBatch.ForEach(transaction => { ProcessTransaction(tenant, strategy, transaction, exceptions); });
-					});
-				})
+				.Select(transactionBatch => { return Task.Factory.StartNew(() => { transactionBatch.ForEach(transaction => { ProcessTransaction(tenant, strategy, transaction, exceptions); }); }); })
 				.ToArray();
 
 			Task.WaitAll(tasks);
@@ -127,11 +120,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				var transactions = items
 					.Batch(transactionSize)
-					.Select(some => new Func<IEnumerable<AgentState>>(() =>
+					.Select(some => new Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>>(() =>
 					{
 						var result = _agentStatePersister.LockNLoad(some, strategy.DeadLockVictim);
 						refreshCaches(strategy, strategyContext, result.ScheduleVersion, result.MappingVersion);
-						return result.AgentStates;
+						return result.AgentStates.Select(x => (x, strategy.GetTraceFor(x)));
 					}))
 					.ToArray();
 
@@ -173,8 +166,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return maxTransactionSize;
 		}
 
-		protected virtual void ProcessTransactions(string tenant, IContextLoadingStrategy strategy,
-			IEnumerable<Func<IEnumerable<AgentState>>> transactions, ConcurrentBag<Exception> exceptions)
+		protected virtual void ProcessTransactions(
+			string tenant,
+			IContextLoadingStrategy strategy,
+			IEnumerable<Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>>> transactions,
+			ConcurrentBag<Exception> exceptions)
 		{
 			Parallel.ForEach(
 				transactions,
@@ -188,7 +184,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected virtual void ProcessTransaction(
 			string tenant,
 			IContextLoadingStrategy strategy,
-			Func<IEnumerable<AgentState>> transaction,
+			Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>> transaction,
 			ConcurrentBag<Exception> exceptions)
 		{
 			try
@@ -207,22 +203,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected virtual void Transaction(
 			string tenant,
 			IContextLoadingStrategy strategy,
-			Func<IEnumerable<AgentState>> agentStates
+			Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>> agentStates
 		)
 		{
 			WithUnitOfWork(() =>
 			{
 				var events = agentStates
 						.Invoke()
-						.Select(state =>
+						.Select(x =>
 							new ProcessInput(
 								strategy.CurrentTime,
 								strategy.DeadLockVictim,
-								strategy.GetInputFor(state),
-								state,
-								_scheduleCache.Read(state.PersonId),
+								strategy.GetInputFor(x.state),
+								x.state,
+								_scheduleCache.Read(x.state.PersonId),
 								_stateMapper,
-								_appliedAlarm
+								_appliedAlarm,
+								x.traceLog
 							)
 						)
 						.Select(x => _processor.Process(x))

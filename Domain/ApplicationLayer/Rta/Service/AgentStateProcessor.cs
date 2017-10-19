@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public readonly StateMapper StateMapper;
 		public readonly InputInfo Input;
 		public readonly AgentState Stored;
+		public readonly StateTraceLog TraceLog;
 
 		public ProcessInput(
 			DateTime currentTime,
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			AgentState stored,
 			IEnumerable<ScheduledActivity> schedule,
 			StateMapper stateMapper,
-			ProperAlarm appliedAlarm)
+			ProperAlarm appliedAlarm,
+			StateTraceLog traceLog)
 		{
 			CurrentTime = currentTime;
 			DeadLockVictim = deadLockVictim;
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Schedule = schedule;
 			StateMapper = stateMapper;
 			AppliedAlarm = appliedAlarm;
+			TraceLog = traceLog;
 		}
 	}
 
@@ -89,13 +92,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var processed = resultState != null;
 
 				if (!processed)
-					_tracer.NoChange(input.Input?.TraceLog);
+					_tracer.NoChange(input.TraceLog);
 
 				return new ProcessResult
 				{
 					Processed = processed,
 					Events = eventCollector.Pop(),
-					TraceLog = input.Input?.TraceLog,
+					TraceLog = input.TraceLog,
 					State = resultState
 				};
 			}

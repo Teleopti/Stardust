@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		IEnumerable<Guid> PersonIds(StrategyContext context);
 		InputInfo GetInputFor(AgentState state);
+		StateTraceLog GetTraceFor(AgentState state);
 	}
 
 	public class StrategyContext
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public abstract IEnumerable<Guid> PersonIds(StrategyContext context);
 		public abstract InputInfo GetInputFor(AgentState state);
+		public abstract StateTraceLog GetTraceFor(AgentState state);
 	}
 
 	public class BatchStrategy : ContextLoadingStrategy
@@ -119,10 +121,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StateCode = input.StateCode,
 				StateDescription = input.StateDescription,
 				SnapshotId = _batch.SnapshotId,
-				SnapshotDataSourceId = _dataSourceId,
-				TraceLog = input.TraceLog
+				SnapshotDataSourceId = _dataSourceId
 			};
 		}
+
+		public override StateTraceLog GetTraceFor(AgentState state) => _matches[state.PersonId].TraceLog;
 	}
 
 	public class ClosingSnapshotStrategy : ContextLoadingStrategy
@@ -145,10 +148,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public override IEnumerable<Guid> PersonIds(StrategyContext context)
 		{
 			IEnumerable<Guid> personIds = null;
-			context.WithUnitOfWork(() =>
-			{
-				personIds = Persister.FindForClosingSnapshot(_snapshotId, _dataSourceId, _stateMapper.LoggedOutStateGroupIds());
-			});
+			context.WithUnitOfWork(() => { personIds = Persister.FindForClosingSnapshot(_snapshotId, _dataSourceId, _stateMapper.LoggedOutStateGroupIds()); });
 			return personIds;
 		}
 
@@ -160,6 +160,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				SnapshotId = _snapshotId,
 				SnapshotDataSourceId = _dataSourceId
 			};
+		}
+
+		public override StateTraceLog GetTraceFor(AgentState state)
+		{
+			return null;
 		}
 
 		public override void VerifyConfiguration(StrategyContext strategyContext)
@@ -203,6 +208,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		public override InputInfo GetInputFor(AgentState state)
+		{
+			return null;
+		}
+
+		public override StateTraceLog GetTraceFor(AgentState state)
 		{
 			return null;
 		}

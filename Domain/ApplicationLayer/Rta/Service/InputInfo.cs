@@ -11,6 +11,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public string StateDescription { get; set; }
 		public DateTime? SnapshotId { get; set; }
 		public int? SnapshotDataSourceId { get; set; }
-		public StateTraceLog TraceLog { get; set; }
 	}
 }
