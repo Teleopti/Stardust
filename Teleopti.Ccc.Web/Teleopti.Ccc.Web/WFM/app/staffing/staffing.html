@@ -19,7 +19,7 @@
                     <md-item-template>
                         <i ng-class="vm.dynamicIcon(skill)"></i>
                         <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-                        <md-tooltip>
+                        <md-tooltip id="skill-tooltip">
                             <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
                             <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
                             <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
