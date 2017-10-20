@@ -132,14 +132,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly DateTime _snapshotId;
 		private readonly StateMapper _stateMapper;
+		private readonly IRtaTracer _tracer;
 		private readonly int _dataSourceId;
 
-		public ClosingSnapshotStrategy(DateTime snapshotId, string sourceId, DateTime time, IConfigReader config,
-			IAgentStatePersister persister, StateMapper stateMapper, DataSourceMapper dataSourceMapper) : base(config, persister,
-			time)
+		public ClosingSnapshotStrategy(
+			DateTime snapshotId,
+			string sourceId,
+			DateTime time,
+			IConfigReader config,
+			IAgentStatePersister persister,
+			StateMapper stateMapper,
+			DataSourceMapper dataSourceMapper,
+			IRtaTracer tracer) : base(config, persister, time)
 		{
 			_snapshotId = snapshotId;
 			_stateMapper = stateMapper;
+			_tracer = tracer;
 			_dataSourceId = dataSourceMapper.ValidateSourceId(sourceId, null);
 			ParallelTransactions = Config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
 			MaxTransactionSize = Config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
@@ -164,7 +172,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public override StateTraceLog GetTraceFor(AgentState state)
 		{
-			return null;
+			return _tracer.SnapshotLogout(state.PersonId, Rta.LogOutBySnapshot);
 		}
 
 		public override void VerifyConfiguration(StrategyContext strategyContext)

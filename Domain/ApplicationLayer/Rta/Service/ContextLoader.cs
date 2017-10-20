@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		public void ForBatch(BatchInputModel batch) => Process(new BatchStrategy(batch, _now.UtcDateTime(), _config, _agentStatePersister, _dataSourceMapper, _externalLogonMapper, _tracer));
-		public void ForClosingSnapshot(DateTime snapshotId, string sourceId) => Process(new ClosingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _dataSourceMapper));
+		public void ForClosingSnapshot(DateTime snapshotId, string sourceId) => Process(new ClosingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _dataSourceMapper, _tracer));
 		public void ForActivityChanges() => Process(new ActivityChangesStrategy(_now.UtcDateTime(), _config, _agentStatePersister, _keyValues, _scheduleCache, _tracer));
 
 		protected void Process(IContextLoadingStrategy strategy)
