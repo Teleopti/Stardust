@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                     if(deficit.HasValue)
                         retList.Add(Math.Abs(deficit.Value - max - 1));
                     else
-                        retList.Add(deficit);
+                        retList.Add(null);
                     
                 }
                 return new ReadOnlyCollection<double?>(retList);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                 if (deficit.HasValue)
                     retList.Add(deficit.Value + min + 1);
                 else
-                    retList.Add(deficit);
+                    retList.Add(null);
             }
             return new ReadOnlyCollection<double?>(retList);
         }

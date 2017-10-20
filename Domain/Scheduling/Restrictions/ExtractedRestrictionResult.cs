@@ -57,13 +57,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (schedulingOptions.UseRotations)
 			{
 				effectiveRestriction = extractRotations(effectiveRestriction);
-				if (effectiveRestriction == null) return effectiveRestriction;
+				if (effectiveRestriction == null) return null;
 			}
 
 			if (schedulingOptions.UsePreferences)
 			{
 				effectiveRestriction = extractPreferences(effectiveRestriction, schedulingOptions);
-				if (effectiveRestriction == null) return effectiveRestriction;
+				if (effectiveRestriction == null) return null;
 			}
 			// if it IsLimitedWorkday at this point we shall not add a dayoff 
 			if (isLimitedWorkday(effectiveRestriction))
@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (schedulingOptions.UseAvailability)
 			{
 				effectiveRestriction = extractAvailabilities(effectiveRestriction);
-				if (effectiveRestriction == null) return effectiveRestriction;
+				if (effectiveRestriction == null) return null;
 			}
 
 			if (schedulingOptions.UseStudentAvailability)
 			{
 				effectiveRestriction = extractStudentAvailabilities(effectiveRestriction);
-				if (effectiveRestriction == null) return effectiveRestriction;
+				if (effectiveRestriction == null) return null;
 			}
 
 			return effectiveRestriction;

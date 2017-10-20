@@ -458,7 +458,7 @@ namespace Teleopti.Ccc.Domain.Common
             IPersonPeriod period = null;
 
             if (isTerminated(dateOnly))
-                return period;
+                return null;
 
             foreach (IPersonPeriod personPeriod in InternalPersonPeriodCollection)
             {
@@ -513,7 +513,7 @@ namespace Teleopti.Ccc.Domain.Common
             ISchedulePeriod period = null;
 
             if (isTerminated(dateOnly))
-                return period;
+                return null;
 
             //get list with periods where startdate is less than inparam date
             IList<ISchedulePeriod> periods = PersonSchedulePeriodCollection.Where(s => s.DateFrom <= dateOnly).ToArray();
