@@ -11,21 +11,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IExternalLogonReader _externalLogonReader;
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly PerTenant<string> _version;
-		private readonly PerTenant<ILookup<key, Guid>> _cache1;
-		private readonly PerTenant<ILookup<string, Guid>> _cache2;
+		private readonly PerTenant<ILookup<key, Guid>> _personIdForDataSourceAndUserCode;
+		private readonly PerTenant<ILookup<string, Guid>> _personIdForUserCode;
 
 		public ExternalLogonMapper(IExternalLogonReader externalLogonReader, IKeyValueStorePersister keyValueStore, ICurrentDataSource dataSource)
 		{
 			_externalLogonReader = externalLogonReader;
 			_keyValueStore = keyValueStore;
 			_version = new PerTenant<string>(dataSource);
-			_cache1 = new PerTenant<ILookup<key, Guid>>(dataSource);
-			_cache2 = new PerTenant<ILookup<string, Guid>>(dataSource);
+			_personIdForDataSourceAndUserCode = new PerTenant<ILookup<key, Guid>>(dataSource);
+			_personIdForUserCode = new PerTenant<ILookup<string, Guid>>(dataSource);
 		}
 
 		public IEnumerable<Guid> PersonIdsFor(int dataSourceId, string userCode)
 		{
-			return _cache1.Value[new key
+			return _personIdForDataSourceAndUserCode.Value[new key
 			{
 				dataSourceId = dataSourceId,
 				userCode = userCode
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public IEnumerable<Guid> PersonIdsFor(string userCode)
 		{
-			return _cache2.Value[userCode];
+			return _personIdForUserCode.Value[userCode];
 		}
 
 		[ReadModelUnitOfWork]
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return;
 
 			var data = _externalLogonReader.Read();
-			_cache1.Set(
+			_personIdForDataSourceAndUserCode.Set(
 				data
 					.ToLookup(x => new key
 					{
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						userCode = x.UserCode
 					}, x => x.PersonId)
 			);
-			_cache2.Set(
+			_personIdForUserCode.Set(
 				data.ToLookup(x => x.UserCode, x => x.PersonId)
 			);
 			_version.Set(latestVersion);
