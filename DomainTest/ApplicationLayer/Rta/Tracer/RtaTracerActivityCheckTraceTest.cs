@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public IRtaTracer Target;
 		public FakeRtaTracerPersister Logs;
 		public FakeRtaTracerConfigPersister Config;
+		public IDataSourceScope DataSource;
 
 		[Test]
 		public void ShouldLogActivityCheck()
@@ -27,11 +29,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			var userCode = RandomName.Make();
 			Database
 				.WithAgent(userCode, person);
-			Target.Trace(userCode);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.Trace(userCode);
 
-			Target.ActivityCheck(person);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.ActivityCheck(person);
 
-			Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Contain(userCode);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Contain(userCode);
 		}
 
 		[Test]
@@ -41,9 +46,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Database
 				.WithAgent("usercode", person);
 
-			Target.ActivityCheck(person);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.ActivityCheck(person);
 
-			Logs.ReadOfType<StateTraceLog>().Should().Be.Empty();
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Logs.ReadOfType<StateTraceLog>().Should().Be.Empty();
 		}
 
 		[Test]
@@ -56,11 +63,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 				.WithAgent(userCode, person)
 				.WithExternalLogon(userCode2)
 				;
-			Target.Trace(userCode2);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.Trace(userCode2);
 
-			Target.ActivityCheck(person);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.ActivityCheck(person);
 
-			Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Contain(userCode2);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Contain(userCode2);
 		}
 
 		[Test]
@@ -72,13 +82,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 				.WithAgent("usercode1", person1)
 				.WithAgent("usercode2", person2)
 				;
-			Target.Trace("usercode2");
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.Trace("usercode2");
 
-			Target.ActivityCheck(person1);
-			Target.ActivityCheck(person2);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.ActivityCheck(person1);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.ActivityCheck(person2);
 
-			Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Contain("usercode2");
-			Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Not.Contain("usercode1");
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Contain("usercode2");
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Not.Contain("usercode1");
 		}
 
 		[Test]
@@ -87,11 +102,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent("usercode", person);
-			Target.Trace("usercode");
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.Trace("usercode");
 
-			Target.ActivityCheck(person);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.ActivityCheck(person);
 
-			Logs.ReadOfType<StateTraceLog>().Single().Message.Should().Be("Activity checked");
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Logs.ReadOfType<StateTraceLog>().Single().Message.Should().Be("Activity checked");
 		}
 
 		[Test]
@@ -105,16 +123,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 				.WithAgent("pierre baldi", person2)
 				.WithExternalLogon("usercode")
 				;
-			Target.Trace("usercode");
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.Trace("usercode");
 
-			Target.ActivityCheck(person1);
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.ActivityCheck(person1);
 
-			var actual = Logs.ReadOfType<TracingLog>().Single();
-			actual.Log.Tracing.Should().Contain("usercode");
-			actual.Log.Tracing.Should().Contain("jågej");
-			actual.Log.Tracing.Should().Contain("kjax");
-			actual.Log.Tracing.Should().Contain("pierre");
-			actual.Log.Tracing.Should().Contain("baldi");
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+			{
+				var actual = Logs.ReadOfType<TracingLog>().Single();
+				actual.Log.Tracing.Should().Contain("usercode");
+				actual.Log.Tracing.Should().Contain("jågej");
+				actual.Log.Tracing.Should().Contain("kjax");
+				actual.Log.Tracing.Should().Contain("pierre");
+				actual.Log.Tracing.Should().Contain("baldi");
+			}
 		}
 	}
 }

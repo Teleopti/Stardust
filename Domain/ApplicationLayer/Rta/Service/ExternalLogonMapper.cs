@@ -11,23 +11,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IExternalLogonReader _externalLogonReader;
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly PerTenant<string> _version;
-		private readonly PerTenant<ILookup<key, Guid>> _cache;
+		private readonly PerTenant<ILookup<key, Guid>> _cache1;
+		private readonly PerTenant<ILookup<string, Guid>> _cache2;
 
 		public ExternalLogonMapper(IExternalLogonReader externalLogonReader, IKeyValueStorePersister keyValueStore, ICurrentDataSource dataSource)
 		{
 			_externalLogonReader = externalLogonReader;
 			_keyValueStore = keyValueStore;
 			_version = new PerTenant<string>(dataSource);
-			_cache = new PerTenant<ILookup<key, Guid>>(dataSource);
+			_cache1 = new PerTenant<ILookup<key, Guid>>(dataSource);
+			_cache2 = new PerTenant<ILookup<string, Guid>>(dataSource);
 		}
 
 		public IEnumerable<Guid> PersonIdsFor(int dataSourceId, string userCode)
 		{
-			return _cache.Value[new key
+			return _cache1.Value[new key
 			{
 				dataSourceId = dataSourceId,
 				userCode = userCode
 			}];
+		}
+
+		public IEnumerable<Guid> PersonIdsFor(string userCode)
+		{
+			return _cache2.Value[userCode];
 		}
 
 		[ReadModelUnitOfWork]
@@ -38,14 +45,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (!refresh)
 				return;
 
-			_cache.Set(
-				_externalLogonReader
-					.Read()
+			var data = _externalLogonReader.Read();
+			_cache1.Set(
+				data
 					.ToLookup(x => new key
 					{
 						dataSourceId = x.DataSourceId.Value,
 						userCode = x.UserCode
 					}, x => x.PersonId)
+			);
+			_cache2.Set(
+				data.ToLookup(x => x.UserCode, x => x.PersonId)
 			);
 			_version.Set(latestVersion);
 		}
@@ -56,9 +66,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public string userCode;
 
 			#region
+
 			protected bool Equals(key other)
 			{
-				return dataSourceId == other.dataSourceId 
+				return dataSourceId == other.dataSourceId
 					   && string.Equals(userCode, other.userCode, StringComparison.OrdinalIgnoreCase);
 			}
 
@@ -74,9 +85,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				unchecked
 				{
-					return (dataSourceId*397) ^ (userCode != null ? userCode.ToUpper().GetHashCode() : 0);
+					return (dataSourceId * 397) ^ (userCode != null ? userCode.ToUpper().GetHashCode() : 0);
 				}
 			}
+
 			#endregion
 		}
 	}

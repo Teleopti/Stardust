@@ -19,21 +19,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		private readonly string _process;
 		private readonly INow _now;
 		private readonly ICurrentDataSource _dataSource;
-		private readonly IExternalLogonReader _externalLogons;
+		private readonly ExternalLogonMapper _mapper;
 		private readonly IPersonRepository _persons;
 
 		public RtaTracer(IRtaTracerWriter writer,
 			IRtaTracerConfigPersister config,
 			INow now,
 			ICurrentDataSource dataSource,
-			IExternalLogonReader externalLogons,
+			ExternalLogonMapper mapper,
 			IPersonRepository persons)
 		{
 			_writer = writer;
 			_config = config;
 			_now = now;
 			_dataSource = dataSource;
-			_externalLogons = externalLogons;
+			_mapper = mapper;
 			_persons = persons;
 			_process = ProcessName();
 		}
@@ -107,13 +107,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		[TenantScope, UnitOfWork, ReadModelUnitOfWork]
 		protected virtual tracer makeTracerFromConfig(RtaTracerConfig tracer)
 		{
-			var userCodePersonIds = _externalLogons.Read();
-			var personIdsForUserCode = userCodePersonIds
-					.Where(x => tracer.UserCode == x.UserCode)
-					.Select(x => x.PersonId)
-					.ToArray()
-				;
-
+			_mapper.Refresh();
+			var personIdsForUserCode = _mapper.PersonIdsFor(tracer.UserCode);
 			return new tracer
 			{
 				Tenant = tracer.Tenant,

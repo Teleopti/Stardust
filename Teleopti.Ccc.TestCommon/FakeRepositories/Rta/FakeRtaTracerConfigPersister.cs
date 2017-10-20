@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			_dataSource = dataSource;
 		}
-		
+
 		public IEnumerable<RtaTracerConfig> ReadAll()
 		{
 			return _data.ToArray();
@@ -23,6 +24,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void UpdateForTenant(string userCode)
 		{
+			if (_dataSource.CurrentName() == null)
+				throw new Exception("Tenant scope is required (not null constraint exception in a real db)");
 			_data = _data
 				.Except(x => x.Tenant == _dataSource.CurrentName())
 				.Append(new RtaTracerConfig
@@ -35,6 +38,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void DeleteForTenant()
 		{
+			if (_dataSource.CurrentName() == null)
+				throw new Exception("Tenant scope is required (not null constraint exception in a real db)");
 			_data = _data
 				.Except(x => x.Tenant == _dataSource.CurrentName())
 				.ToArray();
