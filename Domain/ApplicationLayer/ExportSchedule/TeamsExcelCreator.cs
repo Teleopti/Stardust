@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
-using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Teleopti.Ccc.UserTexts;

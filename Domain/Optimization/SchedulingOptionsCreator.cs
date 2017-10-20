@@ -1,7 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {

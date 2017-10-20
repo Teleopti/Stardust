@@ -1,8 +1,6 @@
 using System;
-using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
