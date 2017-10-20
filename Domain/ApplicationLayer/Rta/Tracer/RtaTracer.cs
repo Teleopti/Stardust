@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace) => traces.ForEach(trace);
 
-		public StateTraceLog StateReceived(string userCode, string stateCode) => writeTraceStart(tracerFor(userCode), stateCode, "Received");
-		public StateTraceLog ActivityCheck(Guid personId) => writeTraceStart(tracerFor(personId), null, "Activity checked");
+		public StateTraceLog StateReceived(string userCode, string stateCode) => startStateTrace(tracerFor(userCode), stateCode, "Received");
+		public StateTraceLog ActivityCheck(Guid personId) => startStateTrace(tracerFor(personId), null, "Activity checked");
 		public StateTraceLog SnapshotLogout(Guid personId, string stateCode) => null;
 
 		public void InvalidStateCode(StateTraceLog trace) => writeIfTraced(trace, "Invalid state code");
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 				.Concat(events.EmptyIfNull().Select(e => e.GetType().Name))
 				.ForEach(m => writeIfTraced(trace, m));
 
-		protected class config
+		protected class tracer
 		{
 			public string Tenant;
 			public string UserCode;
@@ -81,54 +81,47 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 			public IEnumerable<Guid> Persons;
 		}
 
-		private IEnumerable<config> tracers() =>
-			_config.ReadAll().Select(tracer =>
-				{
-					var config = GetConfigForTenant(tracer);
-					justWrite(new TracingLog {Tracing = config.User}, "Tracing", config.Tenant);
-					return config;
-				})
-				.ToArray();
-
-
-		[TenantScope, UnitOfWork, ReadModelUnitOfWork]
-		protected virtual config GetConfigForTenant(RtaTracerConfig tracer)
-		{
-			var userCodePersonIds = _externalLogons.Read();
-			var persons = _persons.LoadAll();
-			var personIdsForUserCode = userCodePersonIds
-				.Where(x => tracer.UserCode == x.UserCode)
-				.Select(x => x.PersonId)
-				.ToArray();
-			var user = tracer.UserCode;
-			foreach (var personId in personIdsForUserCode)
-			{
-				user += persons.Single(x => x.Id.Value == personId).Name;
-			}
-
-			return new config
-			{
-				Tenant = tracer.Tenant,
-				UserCode = tracer.UserCode,
-				User = user,
-				Persons = personIdsForUserCode
-			};
-		}
-
-
-		private config tracerFor(string userCode) => (
+		private tracer tracerFor(string userCode) => (
 			from t in tracers()
 			where t.Tenant == _dataSource.CurrentName() &&
 				  t.UserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase)
 			select t
 		).FirstOrDefault();
 
-		private config tracerFor(Guid personId) => (
+		private tracer tracerFor(Guid personId) => (
 			from t in tracers()
 			where t.Tenant == _dataSource.CurrentName() &&
 				  t.Persons.Any(p => p == personId)
 			select t
 		).FirstOrDefault();
+
+		private IEnumerable<tracer> tracers() =>
+			_config.ReadAll().Select(tracer =>
+				{
+					var config = makeTracerFromConfig(tracer);
+					justWrite(new TracingLog {Tracing = config.User}, "Tracing", config.Tenant);
+					return config;
+				})
+				.ToArray();
+
+		[TenantScope, UnitOfWork, ReadModelUnitOfWork]
+		protected virtual tracer makeTracerFromConfig(RtaTracerConfig tracer)
+		{
+			var userCodePersonIds = _externalLogons.Read();
+			var personIdsForUserCode = userCodePersonIds
+					.Where(x => tracer.UserCode == x.UserCode)
+					.Select(x => x.PersonId)
+					.ToArray()
+				;
+
+			return new tracer
+			{
+				Tenant = tracer.Tenant,
+				UserCode = tracer.UserCode,
+				User = $"{tracer.UserCode}: {string.Join(", ", personIdsForUserCode.Select(x => _persons.Get(x).Name))}",
+				Persons = personIdsForUserCode
+			};
+		}
 
 		private void writeForCurrentOrConfigured<T>(T log, string message)
 		{
@@ -141,7 +134,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 			);
 		}
 
-		private StateTraceLog writeTraceStart(config tracer, string stateCode, string message)
+		private StateTraceLog startStateTrace(tracer tracer, string stateCode, string message)
 		{
 			if (tracer == null)
 				return null;
