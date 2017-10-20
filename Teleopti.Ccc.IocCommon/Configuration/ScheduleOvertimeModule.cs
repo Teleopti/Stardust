@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleOvertimeService>();
 			builder.RegisterType<ScheduleOvertimeServiceWithoutStateholder>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleOvertimeWithoutStateHolder>().InstancePerLifetimeScope();
-			builder.RegisterType<CalculateBestOvertimeBeforeOrAfter>().InstancePerLifetimeScope();
+			builder.RegisterType<CalculateBestOvertimeBeforeOrAfter>().SingleInstance();
 			builder.RegisterType<OvertimeDateTimePeriodExtractor>().As<IOvertimeDateTimePeriodExtractor>().SingleInstance();
 			builder.RegisterType<OvertimeRelativeDifferenceCalculator>().SingleInstance();
 			builder.RegisterType<AddOverTime>().InstancePerLifetimeScope();
