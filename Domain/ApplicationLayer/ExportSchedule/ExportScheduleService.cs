@@ -113,9 +113,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 
 			var personRows = peopleToExport.Select(p => createPersonScheduleRow(p, scheduleDays.Where(sd => sd.Person.Id == p.Id).ToList(), input.OptionalColumnIds?.ToList() ?? new List<Guid>(), timeZone));
 
-			var optionalColumnNames = "";
-			var selectedOptionalColumns = _optionalColumnRepository.GetOptionalColumns<Person>().Where(p => input.OptionalColumnIds.Contains(p.Id.GetValueOrDefault()));
-			optionalColumnNames = string.Join(",", selectedOptionalColumns.Select(oc => oc.Name));
+			var selectedOptionalColumns = input.OptionalColumnIds == null ? new List<IOptionalColumn>() : _optionalColumnRepository.GetOptionalColumns<Person>().Where(p => input.OptionalColumnIds.Contains(p.Id.GetValueOrDefault()));
+			var optionalColumnNames = string.Join(",", selectedOptionalColumns.Select(oc => oc.Name));
 
 			return new ScheduleExcelExportData
 			{

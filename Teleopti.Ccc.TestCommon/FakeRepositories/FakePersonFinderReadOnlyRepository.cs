@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public List<Guid> FindPersonIdsInTeamsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
-			throw new NotImplementedException();
+			return _personList.Select(p => p.Id.GetValueOrDefault()).ToList();
 		}
 
 		public List<Guid> FindPersonIdsInGroupsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria)

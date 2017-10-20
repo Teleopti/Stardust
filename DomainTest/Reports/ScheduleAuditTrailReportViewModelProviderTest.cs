@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Reports
 		{
 			PersonRepository.Has(modifiedByPerson);
 			PersonRepository.Has(scheduledAgent);
-			PersonFinderReadOnlyRepository.Has(scheduledAgent.Id.Value);
+			PersonFinderReadOnlyRepository.Has(scheduledAgent);
 		}
 
 		private AuditTrailSearchParams AuditTrailSearchParams(IPerson modifiedBy, DateTime changeDate, DateTime affectedDate, int maximumResults)
