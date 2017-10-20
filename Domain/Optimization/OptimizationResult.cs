@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
@@ -67,20 +68,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private static Dictionary<ISkill, IEnumerable<ISkillDay>> getAllSkillsForPlanningGroup(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople,
 			ISchedulingResultStateHolder resultStateHolder)
 		{
-			var planningGroupSkills = new List<ISkill>();
+			var planningGroupSkills = new HashSet<ISkill>();
 			foreach (var person in fixedStaffPeople)
 			{
-				for (var i = person.PersonPeriodCollection.Count - 1; i >= 0; i--)
-				{
-					if (person.PersonPeriodCollection[i].StartDate > period.EndDate) continue;
-					foreach (var skill in person.PersonPeriodCollection[i].PersonSkillCollection)
-					{
-						if (!planningGroupSkills.Contains(skill.Skill))
-							planningGroupSkills.Add(skill.Skill);
-					}
-					if (person.PersonPeriodCollection[i].StartDate <= period.StartDate)
-						break;
-				}
+				var periods = person.PersonPeriods(period);
+				periods.SelectMany(p => p.PersonSkillCollection).ForEach(s => planningGroupSkills.Add(s.Skill));
 			}
 
 			var planningGroupSkillsDictionary =
