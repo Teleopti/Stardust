@@ -35,9 +35,11 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		});
 
 		self.isLoading = ko.observable(true);
-		self.hasMoreMessages = ko.observable(true);
+		self.hasMoreMessages = ko.computed(function () {
+			return _getMessageCount() - self.asmMessageList().length > 0;
+		});
 		self.shouldShowMessage = ko.computed(function () {
-			return self.asmMessageList().length === 0 && !self.isLoading() && self.hasMoreMessages();
+			return self.asmMessageList().length === 0 && !self.isLoading() && !self.hasMoreMessages();
 		});
 
 		self.CreateAsmMessageList = function (dataList) {
@@ -191,7 +193,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 	function _reloadWhenAllMessagesAreMarkedRead() {
 		if(vm.asmMessageList().length === 0){
-			vm.hasMoreMessages(false);
 			_loadAPage();
 		}
 	}
@@ -279,6 +280,20 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 	function _hasMoreToLoad() {
 		return $('.arrow-down').is(':visible');
+	}
+
+	function _getMessageCount() {
+		var messageCount;
+		ajax.Ajax({
+			url: "Message/MessagesCount",
+			dataType: "json",
+			type: 'GET',
+			async: false,
+			success: function (data) {
+				messageCount = data.UnreadMessagesCount;
+			}
+		});
+		return messageCount;
 	}
 
 	function _loading() {
