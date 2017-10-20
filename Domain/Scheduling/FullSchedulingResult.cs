@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
@@ -13,14 +12,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly SchedulingValidator _schedulingValidator;
+		private readonly SuccessfulScheduledAgents _successfulScheduledAgents;
 
 		public FullSchedulingResult(IFindSchedulesForPersons findSchedulesForPersons, 
-			ICurrentScenario currentScenario, IUserTimeZone userTimeZone, SchedulingValidator schedulingValidator)
+			ICurrentScenario currentScenario, IUserTimeZone userTimeZone, SchedulingValidator schedulingValidator,
+			SuccessfulScheduledAgents successfulScheduledAgents)
 		{
 			_findSchedulesForPersons = findSchedulesForPersons;
 			_currentScenario = currentScenario;
 			_userTimeZone = userTimeZone;
 			_schedulingValidator = schedulingValidator;
+			_successfulScheduledAgents = successfulScheduledAgents;
 		}
 
 		public SchedulingResultModel Execute(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople)
@@ -30,23 +32,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			return new SchedulingResultModel
 			{
-				ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
+				ScheduledAgentsCount = _successfulScheduledAgents.Execute(scheduleOfSelectedPeople, period),
 				BusinessRulesValidationResults = _schedulingValidator.Validate(scheduleOfSelectedPeople, fixedStaffPeople, period).InvalidResources
 			};
-		}
-
-		//move to seperate class
-		private static int successfulScheduledAgents(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, DateOnlyPeriod periodToCheck)
-		{
-			return schedules.Count(x =>
-			{
-				var targetSummary = x.Value.CalculatedTargetTimeSummary(periodToCheck);
-				var scheduleSummary = x.Value.CalculatedCurrentScheduleSummary(periodToCheck);
-				return targetSummary.TargetTime.HasValue &&
-					   targetSummary.TargetTime - targetSummary.NegativeTargetTimeTolerance <= scheduleSummary.ContractTime &&
-					   targetSummary.TargetTime + targetSummary.PositiveTargetTimeTolerance >= scheduleSummary.ContractTime &&
-				   		x.Value.CalculatedCurrentScheduleSummary(periodToCheck).DaysWithoutSchedule == 0;
-			});
 		}
 	}
 }

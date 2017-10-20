@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class OptimizationResult
 	{
 		private readonly SchedulingValidator _schedulingValidator;
+		private readonly SuccessfulScheduledAgents _successfulScheduledAgents;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
 		private readonly IUserTimeZone _userTimeZone;
@@ -21,9 +22,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public OptimizationResult(Func<ISchedulerStateHolder> schedulerStateHolder, IFindSchedulesForPersons findSchedulesForPersons, 
 			IUserTimeZone userTimeZone, ICurrentScenario currentScenario,  
-			SchedulingValidator schedulingValidator)
+			SchedulingValidator schedulingValidator, SuccessfulScheduledAgents successfulScheduledAgents)
 		{
 			_schedulingValidator = schedulingValidator;
+			_successfulScheduledAgents = successfulScheduledAgents;
 			_schedulerStateHolder = schedulerStateHolder;
 			_findSchedulesForPersons = findSchedulesForPersons;
 			_userTimeZone = userTimeZone;
@@ -50,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			var result = new OptimizationResultModel
 			{
-				ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
+				ScheduledAgentsCount = _successfulScheduledAgents.Execute(scheduleOfSelectedPeople, period),
 				BusinessRulesValidationResults = validationResults
 			};
 
@@ -85,32 +87,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				resultStateHolder.SkillDays.Where(skill => planningGroupSkills.Contains(skill.Key))
 					.ToDictionary(skill => skill.Key, skill => skill.Value);
 			return planningGroupSkillsDictionary;
-		}
-		
-		private static int successfulScheduledAgents(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, DateOnlyPeriod periodToCheck)
-		{
-			return schedules.Count(x => isAgentScheduled(x.Value, periodToCheck));
-		}
-
-		private static bool isAgentScheduled(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
-		{
-			return isAgentFulfillingContractTime(scheduleRange, periodToCheck) &&
-				   getAgentScheduleDaysWithoutSchedule(scheduleRange, periodToCheck) == 0;
-		}
-
-		private static bool isAgentFulfillingContractTime(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
-		{
-			var targetSummary = scheduleRange.CalculatedTargetTimeSummary(periodToCheck);
-			var scheduleSummary = scheduleRange.CalculatedCurrentScheduleSummary(periodToCheck);
-			return targetSummary.TargetTime.HasValue &&
-				   targetSummary.TargetTime - targetSummary.NegativeTargetTimeTolerance <= scheduleSummary.ContractTime &&
-				   targetSummary.TargetTime + targetSummary.PositiveTargetTimeTolerance >= scheduleSummary.ContractTime;
-		}
-
-		private static int getAgentScheduleDaysWithoutSchedule(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
-		{
-			var scheduleSummary = scheduleRange.CalculatedCurrentScheduleSummary(periodToCheck);
-			return scheduleSummary.DaysWithoutSchedule;
 		}
 	}
 }
