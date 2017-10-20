@@ -537,7 +537,6 @@
     <Compile Include="Scheduler\FakeScheduleView.cs" />
     <Compile Include="Scheduler\FilterHourlyAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\FilterOvertimeAvailabilityPresenterTest.cs" />
-    <Compile Include="Scheduler\DaysOnlyHelperTest.cs" />
     <Compile Include="Scheduler\MatrixUnselectedDaysLockerTest.cs" />
     <Compile Include="Scheduler\ModifySchedulePartTests.cs" />
     <Compile Include="Scheduler\MultiplicatorsetForPasteSpecialFilterTest.cs" />

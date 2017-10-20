@@ -2541,7 +2541,6 @@
     <Compile Include="Scheduling\Legacy\Commands\AgentRestrictionsNoWorkShiftfFinder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\BackToLegalShiftCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CommonStateHolder.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\DaysOnlyHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\NoSchedulingProgress.cs" />
     <Compile Include="Scheduling\Legacy\Commands\Gridlock.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GridlockDictionary.cs" />
