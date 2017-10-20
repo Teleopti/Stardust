@@ -117,6 +117,32 @@
 		equal(fetchMonthDataRequestCount, 0);
 	});
 
+	test('should reload data in viewing month', function(){
+		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
+		vm.selectedDate(moment('2017-10-12'));
+
+		fetchMonthDataRequestCount = 0;
+		fakeMonthData.ScheduleDays.forEach(function(d){
+			d.Date = moment(d.Date).add(1, 'month').format('YYYY-MM-DDTHH:mm');
+			d.FixedDate = moment(d.FixedDate).add(1, 'month').format('YYYY-MM-DD');
+		});
+		fakeMonthData.CurrentDate = moment(fakeMonthData.CurrentDate).add(1, 'month').format('YYYY-MM-DDTHH:mm');
+		fakeMonthData.FixedDate = moment(fakeMonthData.FixedDate).add(1, 'month').format('YYYY-MM-DDTHH:mm');
+
+		vm.nextMonth();
+
+		setTimeout(function(){
+			Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener({
+				StartDate: 'D2017-11-12T00:00:00',
+				EndDate: 'D2017-11-12T00:00:00'
+			});
+			equal(fetchMonthDataRequestCount, 1);
+		}, 500);
+
+		equal(vm.selectedDate().format('YYYY-MM-DD'), '2017-11-12');
+	});
+
 	function getDefaultSetting() {
 		return {
 			defaultNavigation: '/',

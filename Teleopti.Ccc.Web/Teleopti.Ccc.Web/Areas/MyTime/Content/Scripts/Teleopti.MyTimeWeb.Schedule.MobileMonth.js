@@ -55,8 +55,8 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 		applyBindings();
 	}
 
-	function fetchData() {
-		dataService.fetchData(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash,
+	function fetchData(date) {
+		dataService.fetchData(date || Teleopti.MyTimeWeb.Portal.ParseHash().dateHash,
 			fetchDataSuccessCallback);
 	}
 
@@ -98,7 +98,7 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 			var periodEndDateMoment = moment(weekViewModels[weekViewModels.length -1].dayViewModels()[6].date);
 
 			if (periodStartDateMoment <= moment(messageStartDate) && moment(messageEndDate) <= periodEndDateMoment) {
-				fetchData();
+				fetchData(vm.selectedDate().format('YYYY/MM/DD'));
 			}
 		},
 		PartialDispose: function() {
@@ -109,7 +109,7 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 		},
 		ReloadSchedule: function(date) {
 			var requestDate = date || vm.selectedDate();
-			dataService.fetchData(requestDate.format("YYYY/MM/DD"),
+			dataService.fetchData(requestDate.format('YYYY/MM/DD'),
 				function (data) {
 					vm.readData(data);
 				});
