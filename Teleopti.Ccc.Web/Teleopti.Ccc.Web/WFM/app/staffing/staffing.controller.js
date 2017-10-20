@@ -197,7 +197,7 @@
 		}
 
 		function selectedSkillChange(skill) {
-			document.getElementById("skill-tooltip").style.visibility='hidden';
+			document.getElementById("skill-tooltip").remove();
 			if (skill == null) return;
 			generateChart(skill, null);
 			selectSkillOrArea(skill, null);
