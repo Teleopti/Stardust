@@ -27,6 +27,36 @@ CREATE TABLE #workloads(id int)
 INSERT INTO #workloads
 SELECT * FROM SplitStringInt(@workload_set)
 
+
+IF EXISTS (SELECT 1 FROM #workloads WHERE id = -1)
+BEGIN
+	--queues not connected will be connected to the 'Not Defined' workload
+	DECLARE @maxdate as smalldatetime = CAST('20591231' as smalldatetime)
+	INSERT INTO mart.bridge_queue_workload
+		( 
+		queue_id, 
+		workload_id, 
+		skill_id,
+		business_unit_id,
+		datasource_id, 
+		insert_date, 
+		update_date, 
+		datasource_update_date
+		)
+	SELECT 
+		queue_id		= dq.queue_id, 
+		workload_id		= -1, 
+		skill_id		= -1,
+		business_unit_id = -1,
+		datasource_id	= -1, 
+		insert_date		= getdate(), 
+		update_date		= getdate(), 
+		datasource_update_date	= isnull(dq.datasource_update_date,@maxdate)
+	FROM
+		mart.dim_queue	dq
+	WHERE queue_id NOT in (select queue_id from mart.bridge_queue_workload)
+END
+
 SELECT
 	id		= dq.queue_id,
 	name	= dq.queue_name
