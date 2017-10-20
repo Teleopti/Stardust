@@ -178,12 +178,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IKeyValueStorePersister _keyValues;
 		private readonly ScheduleCache _scheduleCache;
+		private readonly IRtaTracer _tracer;
 
-		public ActivityChangesStrategy(DateTime time, IConfigReader config, IAgentStatePersister persister,
-			IKeyValueStorePersister keyValues, ScheduleCache scheduleCache) : base(config, persister, time)
+		public ActivityChangesStrategy(
+			DateTime time,
+			IConfigReader config,
+			IAgentStatePersister persister,
+			IKeyValueStorePersister keyValues,
+			ScheduleCache scheduleCache,
+			IRtaTracer tracer) : base(config, persister, time)
 		{
 			_keyValues = keyValues;
 			_scheduleCache = scheduleCache;
+			_tracer = tracer;
 			ParallelTransactions = Config.ReadValue("RtaActivityChangesParallelTransactions", 7);
 			MaxTransactionSize = Config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
 			DeadLockVictim = DeadLockVictim.Yes;
@@ -214,7 +221,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public override StateTraceLog GetTraceFor(AgentState state)
 		{
-			return null;
+			return _tracer.ActivityCheck(state.PersonId);
 		}
 	}
 }
