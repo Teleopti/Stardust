@@ -63,15 +63,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
             IScheduleMatrixPro matrix,
             SchedulingOptions schedulingOptions);
 
-        ///// <summary>
-        ///// Mins the max allowed shift contract time.
-        ///// </summary>
-        ///// <param name="dayToSchedule">The day to schedule.</param>
-        ///// <param name="matrix">The matrix.</param>
-        ///// <param name="schedulingOptions">The scheduling options.</param>
-        ///// <returns></returns>
-        //MinMax<TimeSpan>? MinMaxAllowedShiftContractTime(DateOnly dayToSchedule, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
-
         /// <summary>
         /// Possibles the min max time for period.
         /// </summary>
