@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var planningGroupSkills = new List<ISkill>();
 			foreach (var person in fixedStaffPeople)
 			{
-				for (var i = person.PersonPeriodCollection.Count - 1; i == 0; i--)
+				for (var i = person.PersonPeriodCollection.Count - 1; i >= 0; i--)
 				{
 					if (person.PersonPeriodCollection[i].StartDate > period.EndDate) continue;
 					foreach (var skill in person.PersonPeriodCollection[i].PersonSkillCollection)

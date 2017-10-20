@@ -128,5 +128,35 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			result.SkillResultList.Count().Should().Be.EqualTo(1);
 			result.SkillResultList.First().SkillName.Should().Be.EqualTo("relevant skill");
 		}
+		[Test]
+		public void ShouldReturnSkillsForRelevantPersonPeriod()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has("_");
+			var relevantSkill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
+			var irrelevantSkill = SkillRepository.Has("irrelevant skill", activity, new TimePeriod(8, 16));
+
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriodMonth = new SchedulePeriod(new DateOnly(2015, 1, 1), SchedulePeriodType.Month, 1);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var contract = new ContractWithMaximumTolerance();
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriodMonth, ruleSet, irrelevantSkill);
+			var personPeriod = new PersonPeriod(new DateOnly(2015,1,1), new PersonContract(contract,new PartTimePercentage("_"),new ContractSchedule("_") ), new Team());
+			personPeriod.AddPersonSkill(new PersonSkill(relevantSkill,new Percent(100)));
+			agent.AddPersonPeriod(personPeriod);
+			
+			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(contract));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, SchedulePeriodType.Day, planningGroup);
+
+			SkillDayRepository.Has(relevantSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
+
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(1)), new TimePeriod(8, 0, 16, 0));
+
+			var result = Target.Execute(planningPeriod.Id.Value);
+			result.SkillResultList.Count().Should().Be.EqualTo(1);
+			result.SkillResultList.First().SkillName.Should().Be.EqualTo("relevant skill");
+		}
 	}
 }
