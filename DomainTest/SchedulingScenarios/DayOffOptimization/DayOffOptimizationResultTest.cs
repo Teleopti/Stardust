@@ -94,7 +94,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var result = Target.Execute(planningPeriod.Id.Value);
 			result.ScheduledAgentsCount.Should().Be.EqualTo(0);
 			result.BusinessRulesValidationResults.Count().Should().Be.EqualTo(1);
-			result.BusinessRulesValidationResults.FirstOrDefault().BusinessRuleCategory.Should().Be(BusinessRuleCategory.DayOff);
 		}
 
 		[Test]

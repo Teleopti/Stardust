@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			return new BusinessRulesValidationResult
 			{
-				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod,
 				BusinessRuleCategoryText = "Schedule period",
 				Message = UserTexts.Resources.SchedulePeriodNotInRange,
 				Name = x.Name.ToString(NameOrderOption.FirstNameLastName)

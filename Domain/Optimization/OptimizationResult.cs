@@ -102,7 +102,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					result.Add(new BusinessRulesValidationResult
 					{
-						BusinessRuleCategory = BusinessRuleCategory.DayOff,
 						//should be in resource files - not now to prevent translation
 						BusinessRuleCategoryText = "Days off",
 						Message =
@@ -114,7 +113,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					result.Add(new BusinessRulesValidationResult
 					{
-						BusinessRuleCategory = BusinessRuleCategory.DayOff,
 						BusinessRuleCategoryText = "Scheduled time",
 						Message =
 							string.Format(UserTexts.Resources.TargetScheduleTimeNotFullfilled, DateHelper.HourMinutesString(item.Value.CalculatedTargetTimeHolder(periodToCheck).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)),
@@ -128,7 +126,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					{
 						result.Add(new BusinessRulesValidationResult
 						{
-							BusinessRuleCategory = BusinessRuleCategory.DayOff,
 							BusinessRuleCategoryText = "Scheduled time",
 							Message = string.Format(UserTexts.Resources.AgentHasDaysWithoutAnySchedule, agentScheduleDaysWithoutSchedule),
 							Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
@@ -143,7 +140,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			return schedulePeriodNotInRange.Contains(new BusinessRulesValidationResult
 			{
-				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod,
 				//should be in resource files - not now to prevent translation
 				BusinessRuleCategoryText = "Schedule period",
 				Name = person.Name.ToString(NameOrderOption.FirstNameLastName)
