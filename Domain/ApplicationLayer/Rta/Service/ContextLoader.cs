@@ -84,22 +84,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_tracer = tracer;
 		}
 
-		public void ForBatch(BatchInputModel batch)
-		{
-			Process(new BatchStrategy(batch, _now.UtcDateTime(), _config, _agentStatePersister, _dataSourceMapper,
-				_externalLogonMapper, _tracer));
-		}
-
-		public void ForClosingSnapshot(DateTime snapshotId, string sourceId)
-		{
-			Process(new ClosingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister,
-				_stateMapper, _dataSourceMapper));
-		}
-
-		public void ForActivityChanges()
-		{
-			Process(new ActivityChangesStrategy(_now.UtcDateTime(), _config, _agentStatePersister, _keyValues, _scheduleCache));
-		}
+		public void ForBatch(BatchInputModel batch) => Process(new BatchStrategy(batch, _now.UtcDateTime(), _config, _agentStatePersister, _dataSourceMapper, _externalLogonMapper, _tracer));
+		public void ForClosingSnapshot(DateTime snapshotId, string sourceId) => Process(new ClosingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _dataSourceMapper));
+		public void ForActivityChanges() => Process(new ActivityChangesStrategy(_now.UtcDateTime(), _config, _agentStatePersister, _keyValues, _scheduleCache));
 
 		protected void Process(IContextLoadingStrategy strategy)
 		{
@@ -115,8 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var itemsCount = items.Count();
 			if (itemsCount > 0)
 			{
-				var transactionSize = calculateTransactionSize(strategy.MaxTransactionSize, strategy.ParallelTransactions,
-					itemsCount);
+				var transactionSize = calculateTransactionSize(strategy.MaxTransactionSize, strategy.ParallelTransactions, itemsCount);
 
 				var transactions = items
 					.Batch(transactionSize)
@@ -151,8 +137,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new System.AggregateException(exceptions);
 		}
 
-		private void refreshCaches(IContextLoadingStrategy strategy, StrategyContext strategyContext,
-			CurrentScheduleReadModelVersion scheduleVersion, string mappingVersion)
+		private void refreshCaches(IContextLoadingStrategy strategy, StrategyContext strategyContext, CurrentScheduleReadModelVersion scheduleVersion, string mappingVersion)
 		{
 			_scheduleCache.Refresh(scheduleVersion);
 			_stateMapper.Refresh(mappingVersion);
