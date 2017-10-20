@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		}
 
 		[Test]
-		[SetCulture("sv-SE")]
 		public void ShouldGeneratePersonScheduleSummaryInContentRow()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
@@ -100,6 +99,52 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo(shift.Description.ShortName + " " + period.TimePeriod(TimeZoneInfo.Utc).ToShortTimeString());
 
 		}
+		
+		[Test]
+		public void ShouldDisplayOptionalColumnHeaderInScheduleSummaryInContentRow()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			var person = PersonFactory.CreatePerson("ashley", "andeen").WithId();
+			person.SetEmploymentNumber("1234");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(scheduleDate.AddDays(-1)), PersonContractFactory.CreatePersonContract(), team ));
+			PersonFinder.Has(person);
+			PersonRepository.Has(person);
+			
+			var optionalColumn = new OptionalColumn("opt1").WithId();
+			var optionalColumnValue1 = new OptionalColumnValue("value1").WithId();
+			var optionalColumnValue2 = new OptionalColumnValue("value2").WithId();
+			
+			person.AddOptionalColumnValue(optionalColumnValue1, optionalColumn);
+			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(optionalColumnValue1);
+			OptionalColumnRepository.AddPersonValues(optionalColumnValue2);
+			
+			
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupIds = new[] {Guid.NewGuid().ToString()}
+				},
+				OptionalColumnIds = new []{optionalColumn.Id.GetValueOrDefault()}
+			};
+
+			var byteArray = Target.ExportToExcel(input).Data;
+			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
+			var sheet = workbook.GetSheetAt(0);
+
+			var headerRow = sheet.GetRow(8);
+			headerRow.Cells[3].StringCellValue.Should().Be.EqualTo("opt1");
+		}
 
 		[Test]
 		public void ShouldDisplayOptionalColumnValuesInScheduleSummaryInContentRow()
@@ -144,7 +189,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var sheet = workbook.GetSheetAt(0);
 
 			var scheduleData = sheet.GetRow(9);
-			
 			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo("value1");
 			
 		}
@@ -344,7 +388,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		}
 
 		[Test]
-		public void ShouldDisplaySelectedOptionalColumnsInHeadrRow()
+		public void ShouldDisplaySelectedOptionalColumnsInHeaderRow()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);

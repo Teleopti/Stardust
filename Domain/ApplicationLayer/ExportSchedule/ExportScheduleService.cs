@@ -114,14 +114,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			var personRows = peopleToExport.Select(p => createPersonScheduleRow(p, scheduleDays.Where(sd => sd.Person.Id == p.Id).ToList(), input.OptionalColumnIds?.ToList() ?? new List<Guid>(), timeZone));
 
 			var selectedOptionalColumns = input.OptionalColumnIds == null ? new List<IOptionalColumn>() : _optionalColumnRepository.GetOptionalColumns<Person>().Where(p => input.OptionalColumnIds.Contains(p.Id.GetValueOrDefault()));
-			var optionalColumnNames = string.Join(",", selectedOptionalColumns.Select(oc => oc.Name));
+			var optionalColumnNames = selectedOptionalColumns.Select(oc => oc.Name).ToArray();
 
 			return new ScheduleExcelExportData
 			{
-				SelectedGroups = selectedGroupNames.ToString(),
+				SelectedGroups = selectedGroupNames,
 				DateFrom = input.StartDate.Date,
 				DateTo = input.EndDate.Date,
-				Scenario = input.ScenarioName,
+				Scenario = scenario.Description.Name,
 				OptionalColumns = optionalColumnNames,
 				Timezone = timeZone.DisplayName,
 				PersonRows = personRows.ToArray()

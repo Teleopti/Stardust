@@ -9,9 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 		public DateTime DateFrom;
 		public DateTime DateTo;
 		public string Scenario;
-		public string OptionalColumns;
+		public string[] OptionalColumns;
 		public string Timezone;
-		public string[] ColumnHeaders;
 		public PersonRow[] PersonRows;
 	}
 
@@ -44,6 +43,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 		public string TimezoneId;
 		public SearchGroupIdsData SelectedGroups;
 		public Guid[] OptionalColumnIds;
-		public string ScenarioName;
 	}
 }

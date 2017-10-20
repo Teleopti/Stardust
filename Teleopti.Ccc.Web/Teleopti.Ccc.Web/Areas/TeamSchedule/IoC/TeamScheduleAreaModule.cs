@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 			builder.RegisterType<ProjectionSplitter>().As<IProjectionSplitter>().SingleInstance();
 
 			builder.RegisterType<FavoriteSearchProvider>().As<IFavoriteSearchProvider>().SingleInstance();
+			builder.RegisterType<ExportScheduleService>().SingleInstance();
 		}
 	}
 }

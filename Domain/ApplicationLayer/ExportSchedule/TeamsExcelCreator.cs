@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Teleopti.Ccc.UserTexts;
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 		{
 			addRow(sheet, new[]
 			{
-				new CellData("Selected groups", _cellStyleGeneralBold),
+				new CellData(Resources.SelectedGroups, _cellStyleGeneralBold),
 				new CellData(data.SelectedGroups),
 				new CellData(""),
 				new CellData(""),
@@ -97,27 +98,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 
 			addRow(sheet, new[]
 			{
-				new CellData("Date from", _cellStyleGeneralBold),
+				new CellData(Resources.From, _cellStyleGeneralBold),
 				new CellData(data.DateFrom, _cellStyleDate)
 			});
 			addRow(sheet, new[]
 			{
-				new CellData("Date to", _cellStyleGeneralBold),
+				new CellData(Resources.To, _cellStyleGeneralBold),
 				new CellData(data.DateTo, _cellStyleDate)
 			});
 			addRow(sheet, new[]
 			{
-				new CellData("Scenario", _cellStyleGeneralBold),
+				new CellData(Resources.Scenario, _cellStyleGeneralBold),
 				new CellData(data.Scenario)
 			});
 			addRow(sheet, new[]
 			{
-				new CellData("Optional column(s)", _cellStyleGeneralBold),
-				new CellData(data.OptionalColumns)
+				
+				new CellData(Resources.OptionalColumn, _cellStyleGeneralBold),
+				new CellData(string.Join(",", data.OptionalColumns))
 			});
 			addRow(sheet, new[]
 			{
-				new CellData("Timezone", _cellStyleGeneralBold),
+				new CellData(Resources.TimeZone, _cellStyleGeneralBold),
 				new CellData(data.Timezone)
 			});
 			addRow(sheet, new[]
@@ -176,6 +178,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			var bold = workbook.CreateFont();
 			bold.Boldweight = (short)FontBoldWeight.Bold;
 			_cellStyleDateBold.SetFont(bold);
+			_cellStyleDateBold.Alignment = HorizontalAlignment.Left;
 
 			_cellStyleGeneralBold = workbook.CreateCellStyle();
 			_cellStyleGeneralBold.DataFormat = HSSFDataFormat.GetBuiltinFormat("General");

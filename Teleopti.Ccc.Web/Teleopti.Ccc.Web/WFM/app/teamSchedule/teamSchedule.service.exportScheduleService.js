@@ -49,7 +49,15 @@
 		function startExport(input) {
 			
 			return $q(function(resolve, reject) {
-				$http.post(startExportUrl, normalizeInput(input)).then(function(response) {
+				$http({
+						url: startExportUrl,
+						method: 'POST',
+						data: normalizeInput(input),
+						responseType: 'arraybuffer',
+						headers:{
+							Accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+						}
+					}).then(function(response) {
 						resolve(response.data);
 					},
 					function(err) {
@@ -67,7 +75,8 @@
 				EndDate: moment(input.endDate).format('YYYY-MM-DD'),
 				ScenarioId: input.scenarioId,
 				TimezoneId: input.timezoneId,
-				SelectedGroups: normalizedSelectedGroups
+				SelectedGroups: normalizedSelectedGroups,
+				OptionalColumnIds: input.optionalColumnIds 
 			};
 		}
 	}

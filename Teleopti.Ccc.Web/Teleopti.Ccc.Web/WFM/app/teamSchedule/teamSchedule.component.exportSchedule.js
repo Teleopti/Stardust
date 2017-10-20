@@ -83,7 +83,7 @@
 		}
 		vm.startExport = function() {
 			exportScheduleService.startExport(vm.configuration).then(function(data) {
-				
+				saveData(data);
 			});
 		}
 
@@ -92,6 +92,12 @@
 			vm.getScenariosAsync();
 			vm.getTimezonesAsync();
 			vm.getOptionalColumnsAsync();
+		}
+
+		function saveData(data, status, headers, config) {
+			var blob = new Blob([data]);
+			vm.exporting = false;
+			saveAs(blob, 'TeamsExportedSchedules' + moment().format('YYYY-MM-DD') + '.xlsx');
 		}
 	}
 })(angular);

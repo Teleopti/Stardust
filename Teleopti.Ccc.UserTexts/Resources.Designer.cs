@@ -29234,6 +29234,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected groups.
+        /// </summary>
+        public static string SelectedGroups {
+            get {
+                return ResourceManager.GetString("SelectedGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enabled items.
         /// </summary>
         public static string SelectedItems {
