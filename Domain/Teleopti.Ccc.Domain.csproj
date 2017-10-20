@@ -2205,7 +2205,6 @@
     <Compile Include="Scheduling\Legacy\Commands\ScheduleRangeForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TargetScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TeleoptiProgressChangeMessage.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\WorkShiftBackToLegalStateServiceFactory.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangedDetail.cs" />
     <Compile Include="Scheduling\PeriodExctractorFromScheduleParts.cs" />
     <Compile Include="Scheduling\PersistConflict.cs" />
