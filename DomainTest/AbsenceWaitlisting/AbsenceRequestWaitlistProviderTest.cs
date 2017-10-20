@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
@@ -13,33 +12,42 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 {
+	[DomainTest]
 	[TestFixture]
-	public class AbsenceRequestWaitlistProviderTest
+	public class AbsenceRequestWaitlistProviderTest : ISetup
 	{
-		private IPersonRepository _personRepository;
-		private IPersonRequestRepository _personRequestRepository;
+		public IPersonRepository PersonRepository;
+		public IPersonRequestRepository PersonRequestRepository;
+		public IAbsenceRequestWaitlistProvider AbsenceRequestWaitlistProvider;
+		public MutableNow Now;
 		private IAbsence _absence;
 		private WorkflowControlSet _workflowControlSet;
-		private AbsenceRequestWaitlistProvider _absenceRequestWaitlistProvider;
-
-		[SetUp]
-		public void SetUp()
+		private DateTime baseTime;
+		
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_personRepository = new FakePersonRepositoryLegacy2();
-			_personRequestRepository = new FakePersonRequestRepository();
+			system.UseTestDouble<FakePersonRepositoryLegacy2>().For<IPersonRepository>();
+
 			_absence = AbsenceFactory.CreateAbsence("Holiday");
-			_workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+
+			_workflowControlSet = createWorkFlowControlSet(new DateTime(2014, 01, 01),
 				new DateTime(2059, 12, 31), _absence).WithId();
-			_absenceRequestWaitlistProvider = new AbsenceRequestWaitlistProvider(_personRequestRepository);
+
+			baseTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 		}
 
 		[Test]
 		public void ShouldReturnWaitlistByCreateTime()
 		{
-			var baseTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(baseTime);
+
 			var baseCreatedOn = new DateTime(2016, 01, 01);
 
 			var person1 = createAndSetupPerson(_workflowControlSet);
@@ -60,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 
 			//absenceTwo intersects absenceOne and absenceThree
 			var waitlist =
-				_absenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequest2.Period,
+				AbsenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequest2.Period,
 				_workflowControlSet).ToArray();
 
 			Assert.AreEqual(3, waitlist.Length);
@@ -73,8 +81,8 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 		[Test]
 		public void ShouldReturnWaitlistByPersonSeniorityThenCreateTime()
 		{
-			var baseTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 			var baseCreatedOn = new DateTime(2016, 01, 01);
+			Now.Is(baseTime);
 
 			var workflowControlSetProcessWaitlistBySeniority = createWorkFlowControlSet(
 				new DateTime(2016, 01, 01), new DateTime(2059, 12, 31), _absence,
@@ -108,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			property.SetValue(absenceRequest4.Parent, baseCreatedOn.AddHours(11));
 
 			var waitlist =
-				_absenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequest2.Period,
+				AbsenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequest2.Period,
 				workflowControlSetProcessWaitlistBySeniority).ToArray();
 
 			Assert.AreEqual(4, waitlist.Length);
@@ -134,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 					new DateTime(2016, 3, 1, 14, 00, 00, DateTimeKind.Utc)));
 
 			//absenceTwo intersects absenceThree only
-			var waitlist = _absenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequestTwo.Period, _workflowControlSet).ToArray();
+			var waitlist = AbsenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequestTwo.Period, _workflowControlSet).ToArray();
 
 			Assert.AreEqual(2, waitlist.Length);
 
@@ -160,9 +168,40 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
 					new DateTime(2016, 3, 1, 18, 00, 00, DateTimeKind.Utc)));
 
-			var position = new AbsenceRequestWaitlistProvider(_personRequestRepository).GetPositionInWaitlist(absenceRequestTwo);
+			var position = AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo);
 
 			Assert.AreEqual(2, position);
+		}
+
+		[Test]
+		public void ShouldReturnCorrectPositionInWaitlistWithDifferentWCS()
+		{
+			Now.Is(baseTime);
+
+			var workflowControlSet1 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var workflowControlSet2 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 15, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 19, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 8, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 16, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestThree = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 18, 00, 00, DateTimeKind.Utc)));
+
+			Assert.AreEqual(1, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestOne));
+			Assert.AreEqual(2, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo));
+			Assert.AreEqual(1, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestThree));
 		}
 
 		[Test]
@@ -188,12 +227,10 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
 					new DateTime(2016, 3, 1, 11, 00, 00, DateTimeKind.Utc)));
 
-			var waitlistProvider = new AbsenceRequestWaitlistProvider(_personRequestRepository);
-
-			Assert.AreEqual(1, waitlistProvider.GetPositionInWaitlist(absenceRequestOne));
-			Assert.AreEqual(1, waitlistProvider.GetPositionInWaitlist(absenceRequestTwo));
-			Assert.AreEqual(3, waitlistProvider.GetPositionInWaitlist(absenceRequestThree));
-			Assert.AreEqual(3, waitlistProvider.GetPositionInWaitlist(absenceRequestFour));
+			Assert.AreEqual(1, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestOne));
+			Assert.AreEqual(1, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo));
+			Assert.AreEqual(3, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestThree));
+			Assert.AreEqual(3, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestFour));
 		}
 
 		[Test]
@@ -211,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			property.SetValue(absenceRequestTwo.Parent, new DateTime(2016, 01, 01, 12, 00, 00));
 
 			//absenceTwo intersects absenceOne
-			var waitlist = _absenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequestTwo.Period, _workflowControlSet).ToArray();
+			var waitlist = AbsenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequestTwo.Period, _workflowControlSet).ToArray();
 
 			Assert.AreEqual(1, waitlist.Length);
 			Assert.IsTrue(waitlist[0].Request == absenceRequestTwo);
@@ -233,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 
 			//absenceTwo intersects absenceOne
 			var waitlist =
-				_absenceRequestWaitlistProvider.GetWaitlistedRequests(
+				AbsenceRequestWaitlistProvider.GetWaitlistedRequests(
 					new DateTimePeriod(new DateTime(2016, 7, 7, 8, 0, 0, DateTimeKind.Utc),
 						new DateTime(2016, 7, 9, 16, 00, 00, DateTimeKind.Utc)), _workflowControlSet).ToArray();
 
@@ -241,11 +278,43 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			Assert.IsTrue(waitlist[0].Request == absenceRequest2);
 		}
 
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.MyTimeWeb_WaitListPositionEnhancement_46301)]
+		public void ShouldCalculateWaitListedPositionRegardlessWorkflowControlSet()
+		{
+			Now.Is(baseTime);
+
+			var workflowControlSet1 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var workflowControlSet2 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestThree = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 20, 00, 00, DateTimeKind.Utc)));
+
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestOne).Should().Be(1);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo).Should().Be(2);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestThree).Should().Be(3);
+		}
+
 		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet,
 			bool isPersonDeleted = false)
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			_personRepository.Add(person);
+			PersonRepository.Add(person);
 
 			person.WorkflowControlSet = workflowControlSet;
 
@@ -300,7 +369,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 				personRequest.Deny( "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 			}
 
-			_personRequestRepository.Add(personRequest);
+			PersonRequestRepository.Add(personRequest);
 
 			return absenceRequest;
 		}
