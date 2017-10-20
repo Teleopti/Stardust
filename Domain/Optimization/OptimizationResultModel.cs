@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IList<OptimizationResultSkill> _skillResultList = new List<OptimizationResultSkill>();
 		public int ScheduledAgentsCount { get; set; }
-		public IEnumerable<BusinessRulesValidationResult> BusinessRulesValidationResults { get; set; }
+		public IEnumerable<SchedulingValidationError> BusinessRulesValidationResults { get; set; }
 
 		public IEnumerable<OptimizationResultSkill> SkillResultList
 		{
