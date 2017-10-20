@@ -46,9 +46,11 @@
 						<span class="shift-trade-dayoff-name" data-bind="text: $parent.otherSchedule().dayOffText"></span>
 					</span>
 				</div>
-				<span class="shift-trade-request-my-schedule" data-bind="style: otherSchedule().myScheduleStyleJson, visible: otherSchedule().isMySchedule">@Resources.MySchedule</span>
 			</div>
 		</div>
+		<div class="shift-trade-request-my-schedule" data-bind="visible: otherSchedule().isMySchedule">
+		<span style="color: gray">&#10149;</span>
+		@Resources.MySchedule</div>
 	</div>
 	<!-- /ko -->
 	<!-- /ko -->

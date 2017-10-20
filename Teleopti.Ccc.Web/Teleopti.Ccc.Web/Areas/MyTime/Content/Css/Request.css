@@ -214,6 +214,10 @@
 		height: 30px;
 	}
 
+.shift-trade-layer{
+	display: inline-block;
+}
+
 .shift-trade-layer.add {
 	height: 20px;
 	top: 5px;
@@ -368,7 +372,8 @@
 .shift-trade-swap-detail-schedule {
 	position: absolute;
 	left: 0px;
-	display: inline;
+	display: inline-block;
+	width: 100%;
 }
 
 .shift-trade-swap-detail-schedule-to {
@@ -376,9 +381,11 @@
 	left: 0px;
 	display: inline;
 	margin-top: 24px;
+	width: 100%;
 }
 
 .shift-trade-swap-detail-schedule-row {
+	width: 100%;
 	height: 22px;
 	position: absolute;
 }
@@ -387,7 +394,7 @@
 	height: 46px;
 	position: absolute;
 	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
-	width: 450px;
+	width: 100%;
 }
 
 .shift-trade-swap-detail-agent-name {
@@ -643,9 +650,9 @@ input[type=search]::-ms-clear {
 }
 
 .shift-trade-request-my-schedule {
-	width: 100px;
-	display: inline-block;
-	margin-top: 22px;
+	width: auto;
+	margin-top: 45px;
+	float: right;
 }
 
 @media (max-width: 767px) {
