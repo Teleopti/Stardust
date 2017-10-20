@@ -118,9 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="help_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\help_32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="information_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\information_16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -185,9 +182,6 @@
   <data name="Budgets_filled_space_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Budgets_filled_space_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Intraday_filled_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Intraday_filled_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Intraday_filled_space_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Intraday_filled_space_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -230,17 +224,8 @@
   <data name="Teleopti_WFM_main_icon_simplified_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Teleopti-WFM-main-icon_simplified-16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Forecasts2_filled_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Forecasts2_filled_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Forecasts2_filled_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Forecasts2_filled_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_tree_BU" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_tree_BU.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Budgets_filled_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Budgets_filled_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_BusinessUnit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_BusinessUnit.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -421,9 +406,6 @@
   </data>
   <data name="ccc_paste_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_paste_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Teleopti_WFM_main_icon_simplified_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Teleopti-WFM-main-icon_simplified-16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_ContractPartTimePercentage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_ContractPartTimePercentage.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

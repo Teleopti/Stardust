@@ -61,16 +61,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [Test]
         public void VerifyProjectionReturnsAllMultiplicatorLayersWithUnderlyingLayersWhenOBTime()
         {
-            ///Setup for multiplicator-projection:
-            ///Should Create a projection of following layers:
-            /// Projected layers      MultiplicatorLayers   Projected w. OBTime multiplic
-            /// X 04:00-05:00         04:00-05:00
-            /// X 05:00-06:00         05:00-06:00
-            ///                       06:00-07:00
-            /// X                     07:00-08:00             07:00-08:00         
-            ///                                               08:00-09:00
-            ///                                               10:00-11:00
-            ///                                               11:00-12:00
+            //Setup for multiplicator-projection:
+            //Should Create a projection of following layers:
+            // Projected layers      MultiplicatorLayers   Projected w. OBTime multiplic
+            // X 04:00-05:00         04:00-05:00
+            // X 05:00-06:00         05:00-06:00
+            //                       06:00-07:00
+            // X                     07:00-08:00             07:00-08:00         
+            //                                               08:00-09:00
+            //                                               10:00-11:00
+            //                                               11:00-12:00
             _multiplicatorLayersPeriods = CreatePeriods(_baseDateTime.AddHours(3), 4);
             _multiplicatorLayers = CreateMultiplicatorLayers(_definitionSet, _multiplicatorLayersPeriods, _obTimeMultiplicator);
             var projection = CreateVisualLayerCollection(_layerPeriods, _layerWithMultiplicatorPeriods, _definitionSet);
@@ -273,18 +273,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         public void VerifyProjectionWithUnevenPeriodsOBTime()
         {
             //Setup for multiplicator-projection:
-            ///Should Create a projection of following layers:
-            /// Projected layers      MultiplicatorLayers   Projected w. OBTime multiplic
-            /// X 04:00-05:00         04:00-05:00
-            /// X 05:00-06:00         05:00-06:00
-            ///                       06:00-07:00
-            /// X                     07:00-08:00             07:00-08:00  
-            /// X                     08:00-08:55             08:00
-            /// X                     08:55-08:58
-            /// X                     08:58                        -09:00
-            ///                                               10:00-11:00   
-            ///                             -11:47            11:00-12:00  
-            ///                       15:00-16:00
+            //Should Create a projection of following layers:
+            // Projected layers      MultiplicatorLayers   Projected w. OBTime multiplic
+            // X 04:00-05:00         04:00-05:00
+            // X 05:00-06:00         05:00-06:00
+            //                       06:00-07:00
+            // X                     07:00-08:00             07:00-08:00  
+            // X                     08:00-08:55             08:00
+            // X                     08:55-08:58
+            // X                     08:58                        -09:00
+            //                                               10:00-11:00   
+            //                             -11:47            11:00-12:00  
+            //                       15:00-16:00
             DateTime four = _baseDateTime.AddHours(4);
             DateTime eight = _baseDateTime.AddHours(8);
             DateTime eleven = _baseDateTime.AddHours(11);
@@ -326,16 +326,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [Test]
         public void VerifyProjectionReturnsMultiplicatorLayersWithUnderlyingLayersWhenOvertime()
         {
-            ///Setup for multiplicator-projection:
-            ///Should Create a projection of following layers:
-            /// Projected layers      MultiplicatorLayers   Projected w. Overtime multiplic
-            ///   04:00-05:00         04:00-05:00
-            ///   05:00-06:00         05:00-06:00
-            ///                       06:00-07:00
-            /// X                     07:00-08:00             07:00-08:00         
-            ///                                               08:00-09:00
-            ///                                               10:00-11:00
-            ///                                               11:00-12:00
+            //Setup for multiplicator-projection:
+            //Should Create a projection of following layers:
+            // Projected layers      MultiplicatorLayers   Projected w. Overtime multiplic
+            //   04:00-05:00         04:00-05:00
+            //   05:00-06:00         05:00-06:00
+            //                       06:00-07:00
+            // X                     07:00-08:00             07:00-08:00         
+            //                                               08:00-09:00
+            //                                               10:00-11:00
+            //                                               11:00-12:00
             _multiplicatorLayersPeriods = CreatePeriods(_baseDateTime.AddHours(3), 4);
             _multiplicatorLayers = CreateMultiplicatorLayers(_definitionSet, _multiplicatorLayersPeriods, _overtimeMultiplicator);
             var overtimeShift = CreateVisualLayerCollectionForOvertime(_layerWithMultiplicatorPeriods, _definitionSet);
@@ -484,19 +484,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [Test]
         public void VerifyProjectionWithUnevenPeriodsOnOvertime()
         {
-            ///Setup for multiplicator-projection:
-            ///Should Create a projection of following layers:
-            /// Projected layers      MultiplicatorLayers   Projected w. Overtime multiplic
-            ///   04:00-05:00         04:00-05:00
-            ///   05:00-06:00         05:00-06:00
-            ///                       06:00-07:00
-            /// X                     07:00-08:00             07:00-08:00  
-            /// X                     08:00-08:55             08:00
-            /// X                     08:55-08:58
-            /// X                     08:58                        -09:00
-            ///                                               10:00-11:00   
-            ///                             -11:47            11:00-12:00  
-            ///                       15:00-16:00
+            //Setup for multiplicator-projection:
+            //Should Create a projection of following layers:
+            // Projected layers      MultiplicatorLayers   Projected w. Overtime multiplic
+            //   04:00-05:00         04:00-05:00
+            //   05:00-06:00         05:00-06:00
+            //                       06:00-07:00
+            // X                     07:00-08:00             07:00-08:00  
+            // X                     08:00-08:55             08:00
+            // X                     08:55-08:58
+            // X                     08:58                        -09:00
+            //                                               10:00-11:00   
+            //                             -11:47            11:00-12:00  
+            //                       15:00-16:00
             
             DateTime seven = _baseDateTime.AddHours(7);
             DateTime eight = _baseDateTime.AddHours(8);
@@ -538,16 +538,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [Test]
         public void VerifyCombinesOBTimeDefinitionSets()
         {
-            ///Setup for multiplicator-projection:
-            ///Should Create a projection of following layers:
-            /// Projected layers      MultiplicatorLayers   Projected w. OBTime multiplic
-            /// X 04:00-05:00         04:00-05:00 D1
-            /// X 05:00-06:00         05:00-06:00 D1
-            ///                       06:00-07:00 D2
-            /// X                     07:00-08:00 D2          07:00-08:00 D1         
-            ///                                               08:00-09:00 D1
-            ///                                               09:00-10:00 D2
-            ///                                               10:00-11:00 D2
+            //Setup for multiplicator-projection:
+            //Should Create a projection of following layers:
+            // Projected layers      MultiplicatorLayers   Projected w. OBTime multiplic
+            // X 04:00-05:00         04:00-05:00 D1
+            // X 05:00-06:00         05:00-06:00 D1
+            //                       06:00-07:00 D2
+            // X                     07:00-08:00 D2          07:00-08:00 D1         
+            //                                               08:00-09:00 D1
+            //                                               09:00-10:00 D2
+            //                                               10:00-11:00 D2
 
             IMultiplicatorDefinitionSet definitionSet2 = _mocker.StrictMock<IMultiplicatorDefinitionSet>();
             
@@ -589,11 +589,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [Test]
         public void VerifyCombinesOvertimeDefinitionSets()
         {
-            ///Setup for multiplicator-projection:
-            ///Should Create a projection of following layers:
-            ///MultiplicatorLayers
-            ///07:00-09:00 D2 / M2
-            ///08:00-11:00 D1 / M1
+            //Setup for multiplicator-projection:
+            //Should Create a projection of following layers:
+            //MultiplicatorLayers
+            //07:00-09:00 D2 / M2
+            //08:00-11:00 D1 / M1
 
             var period1 = new DateTimePeriod(_baseDateTime.AddHours(7), _baseDateTime.AddHours(9));
             var period2 = new DateTimePeriod(_baseDateTime.AddHours(8), _baseDateTime.AddHours(11));
@@ -638,16 +638,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "NUnit.Framework.Assert.AreEqual(System.Object,System.Object,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "NUnit.Framework.Assert.AreEqual(System.Int32,System.Int32,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldNotReturnOBWhereWorkingOvertime()
         {
-            ///Setup for multiplicator-projection:
-            ///Should Create a projection of following layers:
-            /// Projected layers      MultiplicatorLayersOBtime   MultilpicatorLayersOvertime        Projected w. OBTime multiplic
-            /// OB 04:00-05:00         04:00-05:00 D1
-            /// OB 05:00-06:00         05:00-06:00 D1
-            ///                        06:00-07:00 D1
-            /// OB                     07:00-08:00 D1                                                 07:00-08:00 D1         
-            /// OB                     08:00-09:00 D1                                                 08:00-09:00 D1
-            /// OB,OT                  09:00-10:00 D1              09:00-10:00 D2                     09:00-10:00 D2
-            /// OT                                                 10:00-11:00 D2                     10:00-11:00 D2
+            //Setup for multiplicator-projection:
+            //Should Create a projection of following layers:
+            // Projected layers      MultiplicatorLayersOBtime   MultilpicatorLayersOvertime        Projected w. OBTime multiplic
+            // OB 04:00-05:00         04:00-05:00 D1
+            // OB 05:00-06:00         05:00-06:00 D1
+            //                        06:00-07:00 D1
+            // OB                     07:00-08:00 D1                                                 07:00-08:00 D1         
+            // OB                     08:00-09:00 D1                                                 08:00-09:00 D1
+            // OB,OT                  09:00-10:00 D1              09:00-10:00 D2                     09:00-10:00 D2
+            // OT                                                 10:00-11:00 D2                     10:00-11:00 D2
 
             IMultiplicatorDefinitionSet definitionSet2 = _mocker.StrictMock<IMultiplicatorDefinitionSet>();
             _multiplicatorLayers = CreateMultiplicatorLayers(_definitionSet, CreatePeriods(_baseDateTime.AddHours(3), 6), _obTimeMultiplicator);

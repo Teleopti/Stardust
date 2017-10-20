@@ -16,13 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	/// <summary>
-	/// Ropository for SkillDay
-	/// </summary>
-	/// <remarks>
-	/// Created by: robink
-	/// Created date: 2008-01-08
-	/// </remarks>
 	public class SkillDayRepository : Repository<ISkillDay>, ISkillDayRepository, IFillWithEmptySkillDays
 	{
 		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
@@ -40,17 +33,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			
 		}
 
-		/// <summary>
-		/// Finds the range.
-		/// </summary>
-		/// <param name="period">The period.</param>
-		/// <param name="skill">The skill.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2008-04-01
-		/// </remarks>
 		public ICollection<ISkillDay> FindRange(DateOnlyPeriod period,
 												ISkill skill,
 												IScenario scenario)
@@ -167,20 +149,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	            .SetFetchMode("WorkloadDayCollection", FetchMode.Join);
 	    }
 
-		/// <summary>
-		/// Gets all skill days.
-		/// Temprorary function! GUI should use skill days from now on...
-		/// </summary>
-		/// <param name="period">The period.</param>
-		/// <param name="skillDays">The skill days.</param>
-		/// <param name="skill">The skill.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <param name="addToRepository">if set to <c>true</c> [add to repository].</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
 		public ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario, Action<IEnumerable<ISkillDay>> optionalAction)
 		{
 		    var uniqueDays = period.DayCollection();
@@ -209,16 +177,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ret;
 		}
 
-		/// <summary>
-		/// Finds the last skill day date.
-		/// </summary>
-		/// <param name="workload">The workload.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: peterwe
-		/// Created date: 2008-04-08
-		/// </remarks>
 		public DateOnly FindLastSkillDayDate(IWorkload workload, IScenario scenario)
 		{
 			InParameter.NotNull(nameof(workload), workload);
@@ -237,16 +195,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return latestDate.Value;
 		}
 
-		/// <summary>
-		/// Deletes the specified date time period.
-		/// </summary>
-		/// <param name="dateTimePeriod">The date time period.</param>
-		/// <param name="skill">The skill.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <remarks>
-		/// Created by: henryg
-		/// Created date: 2008-12-11
-		/// </remarks>
 		public void Delete(DateOnlyPeriod dateTimePeriod, ISkill skill, IScenario scenario)
 		{
 			ICollection<ISkillDay> skillDays = FindRange(dateTimePeriod, skill, scenario);

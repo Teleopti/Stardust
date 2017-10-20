@@ -24,15 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             //
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuthorizationEntity"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="description">The description.</param>
-        /// <remarks>
-        /// Created by: tamasb
-        /// Created date: 11/23/2007
-        /// </remarks>
         public EntityConverterTestClass(string name, string description)
         {
             _name = name;

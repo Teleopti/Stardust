@@ -12,13 +12,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		private static readonly FieldInfo DateTimeFormatInfoReadOnly = typeof(DateTimeFormatInfo).GetField("m_isReadOnly", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 		private static readonly FieldInfo DateTimeFormatInfoCalendar = typeof(DateTimeFormatInfo).GetField("calendar", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 	
-
-		/// <summary> 
-		/// Fixes the DateTimeFormatInfo for Persian resources (months and week day names), and optionally sets the calendar to PersianCalendar. 
-		/// </summary> 
-		/// <param name="info">The DateTimeFormatInfo to be fixed.</param> 
-		/// <param name="usePersianCalendar">If set, the calendar will be set to PersianCalendar.</param> 
-		/// <returns>The fixed DateTimeFormatInfo.</returns> 
 		public static DateTimeFormatInfo FixPersianDateTimeFormat(DateTimeFormatInfo info)
 		{
 			if (info == null)

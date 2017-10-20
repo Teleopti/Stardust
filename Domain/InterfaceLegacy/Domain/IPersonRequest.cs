@@ -148,19 +148,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <value>Time for when item was updated on server</value>
 		DateTime UpdatedOnServerUtc { get; }
 
-        /// <summary>
-        /// Approves this instance.
-        /// </summary>
-        /// <param name="approvalService">The approval service.</param>
-        /// <param name="authorization"></param>
         IList<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService, IPersonRequestCheckAuthorization authorization, bool isAutoGrant = false);
 
-	    /// <summary>
-	    /// Denies this instance.
-	    /// </summary>
-	    /// <param name="denyPerson">The deny person.</param>
-	    /// <param name="denyReasonTextResourceKey">The deny reason text resource key.</param>
-	    /// <param name="authorization"></param>
 	    void Deny(string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization, IPerson denyPerson = null, PersonRequestDenyOption personRequestDenyOption = PersonRequestDenyOption.None);
 
         /// <summary>

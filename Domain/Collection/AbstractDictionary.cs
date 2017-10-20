@@ -3,17 +3,6 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
-    /// <summary>
-    /// Decorator for IDictionary<K, T>.
-    /// Used to be able to override methods 
-    /// becuase there is no base class for this in BCL
-    /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    /// <remarks>
-    /// Created by: rogerkr
-    /// Created date: 2010-04-29
-    /// </remarks>
     public abstract class AbstractDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
 
