@@ -2991,7 +2991,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_schedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff;
 				_schedulingOptions.WorkShiftLengthHintOption =
 					WorkShiftLengthHintOption.AverageWorkTime;
-				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
 				try
 				{
 					if (backToLegalShift)
@@ -4753,7 +4752,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var allNewRules = _schedulerState.SchedulingResultState.GetRulesToRun();
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
-			var toggleManager = _container.Resolve<IToggleManager>();
 			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), _container.Resolve<IScheduleStorageRepositoryWrapper>());
 			var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());
 			var exportToScenarioAbsenceFinder = new ExportToScenarioAbsenceFinder();
