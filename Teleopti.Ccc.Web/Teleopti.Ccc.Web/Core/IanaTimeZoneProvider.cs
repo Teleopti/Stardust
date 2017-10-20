@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Web.Core
 
             var mappings = _tzdbSource.WindowsMapping.MapZones;
             var item = mappings.FirstOrDefault(x => x.TzdbIds.Any(links.Contains));
-            if (item == null) return null;
-            return item.WindowsId;
+			return item?.WindowsId;
         }
 
         // This will return the "primary" IANA zone that matches the given windows zone.
@@ -41,8 +40,7 @@ namespace Teleopti.Ccc.Web.Core
 	    {
 		    if (windowsZoneId.Equals("UTC", StringComparison.OrdinalIgnoreCase))
 			    return "Etc/UTC";
-			var tzi = TimeZoneInfo.FindSystemTimeZoneById(windowsZoneId);
-			var tzid = _tzdbSource.MapTimeZoneId(tzi);
+			var tzid = _tzdbSource.WindowsMapping.PrimaryMapping[windowsZoneId];
 			if (tzid == null) return String.Empty;
 			return _tzdbSource.CanonicalIdMap[tzid];
 	    }

@@ -1,5 +1,4 @@
-﻿using DDay.iCal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -58,9 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			else if (isEndFilter)
 			{
 				//only do it for end time filter
-				IList<MinMax<DateTime>> oldCopy = new List<MinMax<DateTime>>();
-				oldCopy.AddRange(periodsList);
-
+				var oldCopy = new List<MinMax<DateTime>>(periodsList);
 				foreach (var t in oldCopy)
 				{
 					// plus 24 hours to get night shifts which may end with tomorrow
