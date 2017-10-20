@@ -11,9 +11,12 @@
 	function TeamsExportScheduleCtrl($state, $timeout, $scope, groupPageService, exportScheduleService) {
 		var vm = this;
 		vm.configuration = {
-			startDate : new Date(),
-			endDate : new Date()
+			period:{
+				startDate : new Date(),
+				endDate : new Date()
+			}
 		};
+		vm.periodPickerType = 'popup';
 		vm.scenarios = [];
 		vm.optionalColumns = [];
 		vm.availableGroups = { BusinessHierarchy: [], GroupPages: [] };
@@ -22,14 +25,14 @@
 			groupIds: [],
 			groupPageId: ''
 		};
-
-		vm.maxEndDate = moment(new Date()).add(30, 'days').toDate();
-		vm.onStartDateChanged = function() {
-			vm.maxEndDate = moment(vm.configuration.startDate).add(30, 'days').toDate();
-			$timeout(function() {
-				vm.configuration.endDate = moment(vm.configuration.endDate).toDate();
-			});
-		}
+		vm.dateRangeCustomValidators = [{
+			key: 'lessThan31Days',
+			message: 'ExportSchedulesMaximumDays',
+			validate: function(start, end) {
+				var maxEndDate = moment(start).add(30, 'days');
+				return moment(end).isSame(maxEndDate) || moment(end).isBefore(maxEndDate);
+			}
+		}];
 
 		vm.isOptionalColDisabled = function(optionalColumnId) {
 			var result = vm.configuration.optionalColumnIds &&

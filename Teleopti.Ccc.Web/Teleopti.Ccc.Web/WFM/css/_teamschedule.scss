@@ -1214,24 +1214,32 @@ note-editor {
 }
 
 .export-schedule {
-	.wfm-table td {
-		border: none;
+  .form-table {
+	width: 100%;
+	text-align: left;
+	& > tbody > tr > td {
+	  border: none;
+	  line-height: 2em;
+	  color: rgba(0, 0, 0, .87);
+	  padding: 5px;
+	  background-color: $white;
 	}
 
-	.wfm-table .td-margin {
-		margin-right: 20px;
+	.td-margin {
+	  margin-right: 20px;
 	}
 
 	.tips .mdi-information-outline:before {
-		font-size: 13px !important;
+	  font-size: 13px !important;
 	}
-
 
 	.tips .mdi-information-outline {
-		padding-right: 5px;
+	  padding-right: 5px;
 	}
+  }
 
-	.footer .right {
-		text-align:right;
-	}
+  .footer .right {
+	text-align: right;
+  }
+
 }

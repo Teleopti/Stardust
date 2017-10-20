@@ -71,8 +71,8 @@
 				SelectedGroupPageId: input.selectedGroups.groupPageId
 			};
 			return {
-				StartDate: moment(input.startDate).format('YYYY-MM-DD'),
-				EndDate: moment(input.endDate).format('YYYY-MM-DD'),
+				StartDate: moment(input.period.startDate).format('YYYY-MM-DD'),
+				EndDate: moment(input.period.endDate).format('YYYY-MM-DD'),
 				ScenarioId: input.scenarioId,
 				TimezoneId: input.timezoneId,
 				SelectedGroups: normalizedSelectedGroups,

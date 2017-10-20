@@ -1,18 +1,13 @@
 ﻿<div class="export-schedule">
 	<form name="exportScheduleForm">
-		<table class="wfm-table">
+		<table class="form-table">
 			<tbody>
 				<tr>
 					<td>{{'Period' | translate}}</td>
 					<td>
-						<div>
-							<span class="td-margin">
-								<md-datepicker ng-model="vm.configuration.startDate" md-placeholder="{{'From' | translate}}" ng-change="vm.onStartDateChanged()" required></md-datepicker>
-							</span>
-							<span>
-								<md-datepicker name="endDate" ng-model="vm.configuration.endDate" md-placeholder="{{'To' | translate}}" md-min-date="vm.configuration.startDate" md-max-date="vm.maxEndDate" required></md-datepicker>
-							</span>
-						</div>
+						<date-range-picker ng-model="vm.configuration.period"
+										   template-type="vm.periodPickerType"
+										   custom-validators="vm.dateRangeCustomValidators"></date-range-picker>
 						<div class="tips"><i class="mdi mdi-information-outline"></i>{{'ExportSchedulesMaximumDays' | translate}}</div>
 					</td>
 				</tr>
