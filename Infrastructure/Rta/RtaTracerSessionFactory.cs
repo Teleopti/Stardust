@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class RtaTracerSessionFactory : IDisposable
 	{
-		private readonly ISessionFactory _sessionFactory;
+		private readonly Lazy<ISessionFactory> _sessionFactory;
 
 		public RtaTracerSessionFactory(IConfigReader config)
 		{
-			_sessionFactory = buildSessionFactory(config.ConnectionString("RtaTracer"));
+			_sessionFactory = new Lazy<ISessionFactory>(() => buildSessionFactory(config.ConnectionString("RtaTracer")));
 		}
 
-		private ISessionFactory buildSessionFactory(string connectionString)
+		private static ISessionFactory buildSessionFactory(string connectionString)
 		{
 			var configuration = new Configuration();
 			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, connectionString);
@@ -25,12 +25,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public ISession OpenSession()
 		{
-			return _sessionFactory.OpenSession();
+			return _sessionFactory.Value.OpenSession();
 		}
 
 		public void Dispose()
 		{
-			_sessionFactory.Dispose();
+			if (_sessionFactory.IsValueCreated)
+				_sessionFactory.Value.Dispose();
 		}
 	}
 }
