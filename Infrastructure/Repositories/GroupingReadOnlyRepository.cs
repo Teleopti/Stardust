@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				+ "CAST('00000000-0000-0000-0000-000000000000' AS uniqueidentifier) SiteId, "
 				+ "BusinessUnitId "
 				+ "FROM ReadModel.groupingreadonly "
-				+ "WHERE businessunitid=:businessUnitId AND pageid=:pageId "
+				+ "WHERE businessunitid=:businessUnitId "
 				+ "AND GroupId in (:groupIds)"
 				+ "AND :startDate <= isnull(EndDate, '2059-12-31') "
 				+ "AND :endDate >= StartDate "

@@ -56,7 +56,7 @@
 					{{ 'Back'|translate }}
 				</button>
 				<button class="wfm-btn"
-						ng-class="{'wfm-btn-invis-primary': vm.isApplyEnabled(), 'wfm-btn-invis-disabled': !vm.isApplyEnabled()}"
+						ng-class="{'wfm-btn-invis-primary': vm.isApplyEnabled(), 'wfm-btn-invis-disabled': !vm.isApplyEnabled() || vm.isExporting}"
 						ng-disabled="!vm.isApplyEnabled()"
 						ng-click="vm.startExport()">
 					{{ 'Start'|translate }}

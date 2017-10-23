@@ -33,6 +33,7 @@
 				return moment(end).isSame(maxEndDate) || moment(end).isBefore(maxEndDate);
 			}
 		}];
+		vm.isExporting = false;
 
 		vm.isOptionalColDisabled = function(optionalColumnId) {
 			var result = vm.configuration.optionalColumnIds &&
@@ -85,7 +86,10 @@
 			$state.go('teams.dayView');
 		}
 		vm.startExport = function() {
+			if (vm.isExporting) return;
+			vm.isExporting = true;
 			exportScheduleService.startExport(vm.configuration).then(function(response) {
+			        vm.isExporting = false;
 				var failReason = response.headers()['message']
 				if(failReason && failReason.length > 0){
 					NoticeService.error(failReason, null, true);
