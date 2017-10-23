@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.Collection;
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 		{
 			var period = new DateOnlyPeriod(input.StartDate, input.EndDate);
 
-			var timeZone = TimeZoneInfo.GetSystemTimeZones().Single(t => t.Id == input.TimezoneId);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(input.TimezoneId);
 
 			var scenario = _scenarioRepo.Load(input.ScenarioId);
 
@@ -91,19 +90,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			if (input.SelectedGroups.SelectedGroupPageId == Guid.Empty)
 			{
 				var selectedTeams = _teamRepository.FindTeams(input.SelectedGroups.GroupIds);
-				selectedGroupNames = string.Join(",", selectedTeams.Select(t => t.SiteAndTeam).ToArray());
+				selectedGroupNames = string.Join(",", selectedTeams.Select(t => t.SiteAndTeam));
 			}
 			else if (!input.SelectedGroups.IsDynamic)
 			{
 				var parentGroups = _groupingReadOnlyRepository.GetGroupPage(input.SelectedGroups.SelectedGroupPageId);
 				var selectedGroups = _groupingReadOnlyRepository.FindGroups(input.SelectedGroups.GroupIds, period);
-				selectedGroupNames = string.Join(",", selectedGroups.Select(g => parentGroups.PageName + "/" + g.GroupName).ToArray());
+				selectedGroupNames = string.Join(",", selectedGroups.Select(g => parentGroups.PageName + "/" + g.GroupName));
 			}
 			else
 			{
-				var selectedGroupPage = _optionalColumnRepository.GetOptionalColumns<Person>().Where(o=> o.AvailableAsGroupPage).Single(p => p.Id == input.SelectedGroups.SelectedGroupPageId);
+				var selectedGroupPage = _optionalColumnRepository.GetOptionalColumns<Person>().Single(p => p.AvailableAsGroupPage && p.Id == input.SelectedGroups.SelectedGroupPageId);
 				var selectedGroups = _optionalColumnRepository.UniqueValuesOnColumn(selectedGroupPage.Id.GetValueOrDefault()).Where(ocv => input.SelectedGroups.DynamicOptionalValues.Contains(ocv.Description));
-				selectedGroupNames = string.Join(",", selectedGroups.Select(g => selectedGroupPage.Name + "/" + g.Description).ToArray());
+				selectedGroupNames = string.Join(",", selectedGroups.Select(g => selectedGroupPage.Name + "/" + g.Description));
 			}
 			var scheduleDayLookup = _scheduleProvider.GetScheduleDays(period, peopleToExport, scenario).ToLookup(x => x.Person);
 
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			var hasPermissionToViewConfidential =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
-			var personRows = scheduleDayLookup.Select(sl => createPersonScheduleRow(sl, input.OptionalColumnIds?.ToList() ?? new List<Guid>(), timeZone, hasPermissionToViewUnpublished, hasPermissionToViewConfidential, nameDescriptionSetting)).OrderBy(r => r.Name).ToArray();
+			var personRows = scheduleDayLookup.Select(sl => createPersonScheduleRow(sl, input.OptionalColumnIds?.ToArray() ?? new Guid[0], timeZone, hasPermissionToViewUnpublished, hasPermissionToViewConfidential, nameDescriptionSetting)).OrderBy(r => r.Name).ToArray();
 			var selectedOptionalColumns = input.OptionalColumnIds == null ? new List<IOptionalColumn>() : _optionalColumnRepository.GetOptionalColumns<Person>().Where(p => input.OptionalColumnIds.Contains(p.Id.GetValueOrDefault()));
 			var optionalColumnNames = selectedOptionalColumns.Select(oc => oc.Name).ToArray();
 			return new ScheduleExcelExportData
@@ -127,24 +126,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 				PersonRows = personRows
 			};
 		}
-		private PersonRow createPersonScheduleRow(IGrouping<IPerson, IScheduleDay> personScheduleGroup, IList<Guid> optionalColIds, TimeZoneInfo timeZone, bool hasPermissionToViewUnpublished, bool hasPermissionToViewConfidential, ICommonNameDescriptionSetting nameDescriptionSetting)
+		
+		private PersonRow createPersonScheduleRow(IGrouping<IPerson, IScheduleDay> personScheduleGroup, Guid[] optionalColIds, TimeZoneInfo timeZone, bool hasPermissionToViewUnpublished, bool hasPermissionToViewConfidential, ICommonNameDescriptionSetting nameDescriptionSetting)
 		{
 			var p = personScheduleGroup.Key;
 			var scheduleDays = personScheduleGroup;
 			var name = nameDescriptionSetting.BuildCommonNameDescription(p);
 			var optionalColumns = new List<string>();
-			if (optionalColIds.Any())
-			{
-				optionalColIds.ForEach(o =>
-				{
-					var matchedOptionalColumValue = p.OptionalColumnValueCollection.SingleOrDefault(x => x.Parent.Id == o);
-					if (matchedOptionalColumValue != null)
-					{
-						optionalColumns.Add(matchedOptionalColumValue.Description);
-					}
-				});
-			}
 
+			optionalColIds.ForEach(o =>
+			{
+				var matchedOptionalColumValue = p.OptionalColumnValueCollection.SingleOrDefault(x => x.Parent.Id == o);
+				if (matchedOptionalColumValue != null)
+				{
+					optionalColumns.Add(matchedOptionalColumValue.Description);
+				}
+			});
+			
 			var scheduleSummarys = scheduleDays
 				.Select(sd =>
 				{
@@ -188,7 +186,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			return new PersonRow
 			{
 				Name = name,
-				SiteNTeam = p.MyTeam(scheduleDays.First().DateOnlyAsPeriod.DateOnly) == null ? string.Empty:p.MyTeam(scheduleDays.First().DateOnlyAsPeriod.DateOnly).SiteAndTeam,
+				SiteNTeam = p.MyTeam(scheduleDays.First().DateOnlyAsPeriod.DateOnly)?.SiteAndTeam ?? string.Empty,
 				EmploymentNumber = p.EmploymentNumber,
 				OptionalColumns = optionalColumns.ToArray(),
 				ScheduleDaySummarys = scheduleSummarys.ToArray()
