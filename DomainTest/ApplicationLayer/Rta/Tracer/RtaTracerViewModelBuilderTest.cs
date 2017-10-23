@@ -122,19 +122,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
-		public void ShouldContainDataRecievedAt()
+		public void ShouldContainDataReceivedAt()
 		{
 			RtaTracers
 				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
-					Log = new ProcessReceivedLog {RecievedAt = "2017-10-04 08:00:01".Utc()}
+					Log = new ProcessReceivedLog {ReceivedAt = "2017-10-04 08:00:01".Utc()}
 				});
 
 			Target.Build().Tracers.Single().DataReceivedAt.Should().Be("08:00:01");
 		}
 
 		[Test]
-		public void ShouldOnlyContainLatestDataRecievedAt()
+		public void ShouldOnlyContainLatestDataReceivedAt()
 		{
 			RtaTracers
 				.Has(new RtaTracerLog<ProcessReceivedLog>
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 					Process = "process",
 					Log = new ProcessReceivedLog
 					{
-						RecievedAt = "2017-10-04 08:00:01".Utc()
+						ReceivedAt = "2017-10-04 08:00:01".Utc()
 					}
 				})
 				.Has(new RtaTracerLog<ProcessReceivedLog>
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 					Process = "process",
 					Log = new ProcessReceivedLog
 					{
-						RecievedAt = "2017-10-04 08:00:11".Utc()
+						ReceivedAt = "2017-10-04 08:00:11".Utc()
 					}
 				});
 
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 					Process = "p1",
 					Log = new ProcessReceivedLog
 					{
-						RecievedAt = "2017-10-05 08:00:00".Utc()
+						ReceivedAt = "2017-10-05 08:00:00".Utc()
 					}
 				})
 				.Has(new RtaTracerLog<ProcessReceivedLog>
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 					Process = "p2",
 					Log = new ProcessReceivedLog
 					{
-						RecievedAt = "2017-10-05 08:00:10".Utc()
+						ReceivedAt = "2017-10-05 08:00:10".Utc()
 					}
 				});
 
@@ -183,20 +183,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
-		public void ShouldContainDataRecievedByAndCount()
+		public void ShouldContainDataReceivedByAndCount()
 		{
 			RtaTracers
 				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
 					Log = new ProcessReceivedLog
 					{
-						RecievedBy = "method",
-						RecievedCount = 123
+						ReceivedBy = "method",
+						ReceivedCount = 123
 					}
 				});
 
 			Target.Build().Tracers.Single().DataReceivedBy.Should().Be("method");
-			Target.Build().Tracers.Single().RecievedCount.Should().Be(123);
+			Target.Build().Tracers.Single().DataReceivedCount.Should().Be(123);
 		}
 
 		[Test]

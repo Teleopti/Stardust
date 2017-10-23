@@ -36,12 +36,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 			{
 				Message = "message",
 				Tenant = DataSource.CurrentName(),
-				Log = new ProcessReceivedLog {RecievedAt = "2017-10-11 10:00".Utc()}
+				Log = new ProcessReceivedLog {ReceivedAt = "2017-10-11 10:00".Utc()}
 			});
 
 			var actual = Reader.ReadOfType<ProcessReceivedLog>().Single();
 			actual.Message.Should().Be("message");
-			actual.Log.RecievedAt.Should().Be("2017-10-11 10:00".Utc());
+			actual.Log.ReceivedAt.Should().Be("2017-10-11 10:00".Utc());
 		}
 
 		[Test]

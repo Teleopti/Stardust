@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			var log = Logs.ReadOfType<ProcessReceivedLog>().Single();
 			log.Message.Should().Be("Data received at");
 			log.Process.Should().Be(RtaTracer.ProcessName());
-			log.Log.RecievedAt.Should().Be("2017-10-09 13:00".Utc());
+			log.Log.ReceivedAt.Should().Be("2017-10-09 13:00".Utc());
 		}
 
 		[Test]
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Target.ProcessReceived("method", 123);
 
 			var log = Logs.ReadOfType<ProcessReceivedLog>().Single();
-			log.Log.RecievedBy.Should().Be("method");
-			log.Log.RecievedCount.Should().Be(123);
+			log.Log.ReceivedBy.Should().Be("method");
+			log.Log.ReceivedCount.Should().Be(123);
 		}
 
 		[Test]
