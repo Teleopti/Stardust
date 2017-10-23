@@ -99,6 +99,17 @@ describe('RtaTracerController', function () {
 		expect(vm.tracers[0].activityCheckAt).toBe('2017-10-02 09:21:' + random);
 		expect(vm.tracers[0].tracing).toBe('usercode34, Ashley Andeen' + random);
 	});
+	
+	it('should display tracer exception', function () {
+		$fakeBackend.withTracer({
+			Exception: 'something is broken'
+		});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		expect(vm.tracers[0].exception).toBe('something is broken');
+	});
 
 	it('should display user codes', function () {
 		$fakeBackend.withTracedUser({
@@ -162,7 +173,7 @@ describe('RtaTracerController', function () {
 
 		expect(vm.tracedUsers[0].states[0].traces[0]).toBe('ActivityCheck');
 	});
-	
+
 	it('should display 2 trace lines', function () {
 		$fakeBackend.withTracedUser({
 			States: [
@@ -180,17 +191,17 @@ describe('RtaTracerController', function () {
 	it('should poll', function () {
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
-		
+
 		$fakeBackend.withTracedUser({
 			States: [
 				{Traces: ["ActivityCheck"]}
 			]
 		});
 		c.wait(1000);
-		
+
 		expect(vm.tracedUsers[0].states[0].traces[0]).toBe('ActivityCheck');
 	});
-	
+
 	it('should stop', function () {
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;

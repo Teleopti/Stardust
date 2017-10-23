@@ -2,11 +2,13 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 {
@@ -249,6 +251,51 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 			Target.Build().Tracers.Single().ActivityCheckAt
 				.Should().Be("08:00:10");
+		}
+
+		[Test]
+		//[SetCulture("sv-SE")]
+		//Adding this culture is NOT the solution, 
+		//there is actually a bbug if this is needed so please inform us of the bbug instead of adding it
+		// ;)
+		public void ShouldContainProcessException()
+		{
+			var exceptionType = RandomName.Make(nameof(InvalidAuthenticationKeyException));
+			RtaTracers
+				.Has(new RtaTracerLog<ProcessExceptionLog>
+				{
+					Log = new ProcessExceptionLog
+					{
+						Type = exceptionType
+					}
+				});
+
+			Target.Build().Tracers.Single().Exception.Should().Be(exceptionType);
+		}
+
+		[Test]
+		public void ShouldContainLatestProcessException()
+		{
+			RtaTracers
+				.Has(new RtaTracerLog<ProcessExceptionLog>
+				{
+					Time = "2017-10-05 08:00:00".Utc(),
+					Log = new ProcessExceptionLog
+					{
+						Type = "not this one"
+					}
+				})
+				.Has(new RtaTracerLog<ProcessExceptionLog>
+				{
+					Time = "2017-10-05 08:00:10".Utc(),
+					Log = new ProcessExceptionLog
+					{
+						Type = "this one"
+					}
+				});
+
+			Target.Build().Tracers.Single().Exception
+				.Should().Be("this one");
 		}
 
 		[Test]

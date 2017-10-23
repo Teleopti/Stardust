@@ -30,6 +30,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		{
 		}
 
+		public void ProcessException(Exception exception)
+		{
+			
+		}
+
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace)
 		{
 		}
@@ -54,10 +59,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		}
 
 		public void StateProcessing(StateTraceLog trace)
-		{
-		}
-
-		public void InvalidAuthenticationKey(StateTraceLog trace)
 		{
 		}
 

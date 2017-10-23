@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		public void ProcessReceived() => writeForCurrentOrConfigured(new ProcessReceivedLog {RecievedAt = _now.UtcDateTime()}, "Data received at");
 		public void ProcessProcessing() => writeForCurrentOrConfigured(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
 		public void ProcessActivityCheck() => writeForCurrentOrConfigured(new ActivityCheckLog {ActivityCheckAt = _now.UtcDateTime()}, "Activity check at");
+		public void ProcessException(Exception exception) => writeForCurrentOrConfigured(new ProcessExceptionLog {Type = exception.GetType().Name}, exception.Message);
 
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace) => traces.ForEach(trace);
 
@@ -63,7 +64,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public void InvalidStateCode(StateTraceLog trace) => writeIfTraced(trace, "Invalid state code");
 		public void StateProcessing(StateTraceLog trace) => writeIfTraced(trace, "Processing");
-		public void InvalidAuthenticationKey(StateTraceLog trace) => writeIfTraced(trace, "Invalid authentication key");
 		public void InvalidSourceId(StateTraceLog trace) => writeIfTraced(trace, "Invalid source Id");
 		public void InvalidUserCode(StateTraceLog trace) => writeIfTraced(trace, "Invalid user code");
 		public void NoChange(StateTraceLog trace) => writeIfTraced(trace, "No change");

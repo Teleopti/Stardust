@@ -34,7 +34,8 @@
 							process: tracer.Process,
 							dataReceivedAt: tracer.DataReceivedAt,
 							activityCheckAt: tracer.ActivityCheckAt,
-							tracing: tracer.Tracing
+							tracing: tracer.Tracing,
+							exception: tracer.Exception
 						};
 					});
 				vm.tracedUsers = response.data.TracedUsers

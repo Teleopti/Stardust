@@ -1,6 +1,9 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -40,6 +43,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
 				Logs.ReadOfType<StateTraceLog>().Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldTracePersonStateChangedEvent()
+		{
+			Database
+				.WithAgent("usercode")
+				.WithStateGroup(null, "statecode")
+				.WithStateCode("statecode");
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Tracer.Trace("usercode");
+
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			});
+
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain(nameof(PersonStateChangedEvent));
+		}
+
+		[Test]
+		public void ShouldTraceInvalidAuthenticationKey()
+		{
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Tracer.Trace("usercode");
+			
+			try
+			{
+				Target.ProcessState(new StateForTest
+				{
+					AuthenticationKey = "key"
+				});
+			}
+			catch
+			{
+			}
+
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Logs.ReadOfType<ProcessExceptionLog>().Select(x => x.Log.Type).Should().Contain(nameof(InvalidAuthenticationKeyException));
 		}
 	}
 }

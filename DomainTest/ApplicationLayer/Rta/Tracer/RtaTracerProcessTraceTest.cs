@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -61,6 +63,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
+		public void ShouldLogProcessException()
+		{
+			Target.Trace("usercode");
+
+			Target.ProcessException(new InvalidAuthenticationKeyException("blip blop"));
+
+			var log = Logs.ReadOfType<ProcessExceptionLog>().Single();
+			log.Message.Should().Be("blip blop");
+			log.Process.Should().Be(RtaTracer.ProcessName());
+			log.Log.Type.Should().Be(nameof(InvalidAuthenticationKeyException));
+		}
+
+		[Test]
+		public void ShouldLogAnyProcessException()
+		{
+			Target.Trace("usercode");
+
+			Target.ProcessException(new NullReferenceException());
+
+			Logs.ReadOfType<ProcessExceptionLog>().Single()
+				.Log.Type.Should().Be(nameof(NullReferenceException));
+		}
+
+		[Test]
 		public void ShouldNotLogProcessReceivedWhenStopped()
 		{
 			Target.Trace("usercode");
@@ -106,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			log.Process.Should().Be(RtaTracer.ProcessName());
 			log.Log.Tracing.Should().Contain("usercode");
 		}
-		
+
 		[Test]
 		public void ShouldClearLogs()
 		{

@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		void ProcessReceived();
 		void ProcessProcessing();
 		void ProcessActivityCheck();
+		void ProcessException(Exception exception);
 
 
 		void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace);
@@ -25,7 +26,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		void InvalidStateCode(StateTraceLog trace);
 
 		void StateProcessing(StateTraceLog trace);
-		void InvalidAuthenticationKey(StateTraceLog trace);
 		void InvalidSourceId(StateTraceLog trace);
 
 		void InvalidUserCode(StateTraceLog trace);

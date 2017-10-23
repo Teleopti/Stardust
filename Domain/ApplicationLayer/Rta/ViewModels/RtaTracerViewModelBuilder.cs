@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Helper;
 
@@ -19,20 +20,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var tracings = _reader.ReadOfType<TracingLog>().ToLookup(x => x.Process);
 			var dataReceivedAts = _reader.ReadOfType<ProcessReceivedLog>().ToLookup(x => x.Process);
 			var activityCheckerAts = _reader.ReadOfType<ActivityCheckLog>().ToLookup(x => x.Process);
+			var exceptions = _reader.ReadOfType<ProcessExceptionLog>().ToLookup(x => x.Process);
 			var processes = tracings.Select(x => x.Key).Concat(
 					dataReceivedAts.Select(x => x.Key)).Concat(
-					activityCheckerAts.Select(x => x.Key))
+					activityCheckerAts.Select(x => x.Key)).Concat(
+					exceptions.Select(x => x.Key))
 				.Distinct();
 			var tracers = from process in processes
 				let tracing = tracings[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Tracing
 				let dataReceivedAt = dataReceivedAts[process].Max(r => r.Log?.RecievedAt)?.ToString("T")
 				let activityCheckAt = activityCheckerAts[process].Max(r => r.Log?.ActivityCheckAt)?.ToString("T")
+				let exception = exceptions[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Type
 				select new Tracer
 				{
 					Process = process,
 					Tracing = tracing,
 					DataReceivedAt = dataReceivedAt,
-					ActivityCheckAt = activityCheckAt
+					ActivityCheckAt = activityCheckAt,
+					Exception = exception
 				};
 
 			var logs = _reader.ReadOfType<StateTraceLog>().OrderByDescending(x => x.Time);
@@ -45,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						let logsForTraceId = logs.Where(x => x.Log.Id == s)
 						let traces = from t in logsForTraceId
 							where !t.Message.IsNullOrEmpty()
-							orderby  t.Time
+							orderby t.Time
 							select $"{(t.Process.IsNullOrEmpty() ? "" : $"{t.Process}: ")}{t.Message}"
 						select new TracedState
 						{
@@ -79,6 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string DataReceivedAt;
 		public string ActivityCheckAt;
 		public string Tracing;
+		public string Exception;
 	}
 
 	public class TracedUser

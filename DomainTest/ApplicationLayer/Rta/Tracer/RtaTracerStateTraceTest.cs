@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain("Processing");
 		}
-		
+
 		[Test]
 		public void ShouldNotLogWhenUserCodeIsNotMatched()
 		{
@@ -182,17 +182,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Target.StateProcessing(trace);
 
 			Logs.ReadOfType<StateTraceLog>().Should().Be.Empty();
-		}
-
-		[Test]
-		public void ShouldLogInvalidAuthenticationKey()
-		{
-			Target.Trace("usercode");
-
-			var trace = Target.StateReceived("usercode", "statecode");
-			Target.InvalidAuthenticationKey(trace);
-
-			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain("Invalid authentication key");
 		}
 
 		[Test]
@@ -275,7 +264,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 			Logs.ReadOfType<StateTraceLog>().Select(x => x.Message).Should().Contain(eventz.GetType().Name);
 		}
-		
+
 		[Test]
 		public void ShouldLogStateReceivedForMultiple()
 		{
@@ -288,7 +277,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Logs.ReadOfType<StateTraceLog>().Select(x => x.Log).Should().Contain(trace1);
 			Logs.ReadOfType<StateTraceLog>().Select(x => x.Log).Should().Contain(trace2);
 		}
-		
+
 		[Test]
 		public void ShouldLogStateReceivedForMultiple2()
 		{
@@ -300,6 +289,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Logs.ReadOfType<StateTraceLog>().Select(x => x.Log).Should().Contain(trace);
 			Logs.ReadOfType<StateTraceLog>().Select(x => x.Log).Should().Not.Contain(null);
 		}
-		
 	}
 }

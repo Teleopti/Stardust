@@ -21,6 +21,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		public DateTime? ProcessingAt;
 	}
 
+	public class ProcessExceptionLog
+	{
+		public string Type;
+	}
+
 	public class ActivityCheckLog
 	{
 		public DateTime? ActivityCheckAt;
