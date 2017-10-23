@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div ui-view>
     <div class="view-header with-fab with-desc">
         <div class="view-title">
             <h1><i class="mdi mdi-account-switch"></i> {{'Staffing' | translate}}</h1>
@@ -34,19 +34,26 @@
 					</i>
             </div>
             <div class="con-flex">
-                <md-autocomplete id="area-id" class="autocomplete-skill" md-selected-item="vm.selectedArea" md-search-text="searchSkillAreaText"
-                    md-selected-item-change="vm.selectedAreaChange(area)" md-items="area in vm.querySearchAreas(searchSkillAreaText)"
-                    md-item-text="area.Name" md-min-length="0" placeholder="{{'SelectSkillArea'|translate}}">
-                    <md-item-template>
-                        <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
-                    </md-item-template>
-                    <md-not-found>
-                        {{'RepViewerNoMoreMatches'|translate}}
-                    </md-not-found>
-                </md-autocomplete>
-                <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
-						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
-					</i>
+                <div class="con-row">
+                    <div class="con-flex x3">
+                        <md-autocomplete id="area-id" class="autocomplete-skill" md-selected-item="vm.selectedArea" md-search-text="searchSkillAreaText"
+                            md-selected-item-change="vm.selectedAreaChange(area)" md-items="area in vm.querySearchAreas(searchSkillAreaText)"
+                            md-item-text="area.Name" md-min-length="0" placeholder="{{'SelectSkillArea'|translate}}">
+                            <md-item-template>
+                                <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                {{'RepViewerNoMoreMatches'|translate}}
+                            </md-not-found>
+                        </md-autocomplete>
+                        <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
+                            <md-tooltip>{{'Clear'|translate}}</md-tooltip>
+                        </i>
+                    </div>
+                        <div class="con-flex">
+                        <skill-group-button on-click="vm.configMode()" />
+                    </div>
+                </div>
             </div>
             <div class="con-flex" style="margin-top: -10px;">
                 <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay(vm.selectedDate)"></team-schedule-datepicker>
