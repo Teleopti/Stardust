@@ -96,22 +96,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 			catch (InvalidAuthenticationKeyException e)
 			{
-				if (!handler.InvalidAuthenticationKey(e))
+				if (!traceAndHandleException(e, handler.InvalidAuthenticationKey))
 					throw;
 			}
 			catch (LegacyAuthenticationKeyException e)
 			{
-				if (!handler.LegacyAuthenticationKey(e))
+				if (!traceAndHandleException(e, handler.LegacyAuthenticationKey))
 					throw;
 			}
 			catch (InvalidSourceException e)
 			{
-				if (!handler.InvalidSource(e))
+				if (!traceAndHandleException(e, handler.InvalidSource))
 					throw;
 			}
 			catch (InvalidUserCodeException e)
 			{
-				if (!handler.InvalidUserCode(e))
+				if (!traceAndHandleException(e, handler.InvalidUserCode))
 					throw;
 			}
 			catch (AggregateException e)
@@ -122,16 +122,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.ToArray();
 
 				var invalidAuthenticationKeyExceptions = exceptions.OfType<InvalidAuthenticationKeyException>().ToArray();
-				if (!invalidAuthenticationKeyExceptions.All(handler.InvalidAuthenticationKey))
+				if (!invalidAuthenticationKeyExceptions.All(x => traceAndHandleException(x, handler.InvalidAuthenticationKey)))
 					throw;
 				var legacyAuthenticationKeyExceptions = exceptions.OfType<LegacyAuthenticationKeyException>().ToArray();
-				if (!legacyAuthenticationKeyExceptions.All(handler.LegacyAuthenticationKey))
+				if (!legacyAuthenticationKeyExceptions.All(x => traceAndHandleException(x, handler.LegacyAuthenticationKey)))
 					throw;
 				var invalidSourceExceptions = exceptions.OfType<InvalidSourceException>().ToArray();
-				if (!invalidSourceExceptions.All(handler.InvalidSource))
+				if (!invalidSourceExceptions.All(x => traceAndHandleException(x, handler.InvalidSource)))
 					throw;
 				var invalidUserCodeExceptions = exceptions.OfType<InvalidUserCodeException>().ToArray();
-				if (!invalidUserCodeExceptions.All(handler.InvalidUserCode))
+				if (!invalidUserCodeExceptions.All(x => traceAndHandleException(x, handler.InvalidUserCode)))
 					throw;
 
 				if (!exceptions
@@ -139,14 +139,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.Except(legacyAuthenticationKeyExceptions)
 					.Except(invalidSourceExceptions)
 					.Except(invalidUserCodeExceptions)
-					.All(handler.OtherException))
+					.All(x => traceAndHandleException(x, handler.OtherException)))
 					throw;
 			}
 			catch (Exception e)
 			{
-				if (!handler.OtherException(e))
+				if (!traceAndHandleException(e, handler.OtherException))
 					throw;
 			}
+		}
+
+		private bool traceAndHandleException<T>(T e, Func<T, bool> handleMethod) where T : Exception
+		{
+			_tracer.ProcessException(e);
+			return handleMethod.Invoke(e);
 		}
 
 		private void process(BatchInputModel batch)
