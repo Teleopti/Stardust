@@ -7,6 +7,9 @@
 
     function stateConfig($stateProvider) {
         $stateProvider.state('staffing', {
+            params: {
+                isNewSkillArea: false,
+            },
             url: '/staffing',
             templateUrl: 'app/staffing/staffing.html',
             controller: 'StaffingController as vm'
@@ -35,5 +38,14 @@
                     });
                 }
             })
+            .state("staffing.skill-area-config", {
+                params: {
+                    isNewSkillArea: false,
+                    returnState: "staffing"
+                },
+                url: "/skill-area-config",
+                templateUrl: "app/global/skill-group/skillgroup.html",
+                controller: "SkillGroupController as vm"
+              })
     }
 })();

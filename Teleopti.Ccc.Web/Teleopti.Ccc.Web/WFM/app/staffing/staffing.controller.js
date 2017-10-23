@@ -5,8 +5,8 @@
 		.module('wfm.staffing')
 		.controller('StaffingController', StaffingController);
 
-	StaffingController.$inject = ['staffingService', '$state', 'Toggle', 'UtilService', 'ChartService', '$filter', 'NoticeService', '$translate'];
-	function StaffingController(staffingService, $state, toggleService, utilService, chartService, $filter, NoticeService, $translate) {
+	StaffingController.$inject = ['staffingService', '$state', 'Toggle', 'UtilService', 'ChartService', '$filter', 'NoticeService', '$translate', '$scope'];
+	function StaffingController(staffingService, $state, toggleService, utilService, chartService, $filter, NoticeService, $translate, $scope) {
 		var vm = this;
 
 		vm.selectedSkill;
@@ -60,6 +60,24 @@
 		getSkillAreas();
 		getCompensations();
 		getStaffingSettings();
+
+		vm.onStateChanged = function(evt, to, params, from) {
+			if(to.name !== 'staffing'){
+				return;
+			}
+			
+			if(params.isNewSkillArea === true){
+				getSkillAreas();
+			}
+		};
+	  
+		$scope.$on('$stateChangeSuccess', vm.onStateChanged);
+
+		vm.configMode = function() {
+			$state.go('staffing.skill-area-config', {
+			  isNewSkillArea: false
+			});
+		};
 
 		function isOvertimeSuggestionEnabled() {
 			return toggleService.WfmStaffing_AddOvertime_42524;

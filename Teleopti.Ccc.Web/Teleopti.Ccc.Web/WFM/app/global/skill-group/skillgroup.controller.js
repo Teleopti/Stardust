@@ -55,7 +55,7 @@
 				})
 				.$promise.then(function (result) {
 				notifySkillAreaCreation();
-				$state.go('intraday', {isNewSkillArea: true});
+				$state.go($state.params.returnState, {isNewSkillArea: true});
 			});
 		};
 
