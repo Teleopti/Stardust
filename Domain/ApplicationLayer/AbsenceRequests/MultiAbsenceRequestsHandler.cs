@@ -25,13 +25,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IMultiAbsenceRequestsUpdater _multiAbsenceRequestsUpdater;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
+		private readonly IAbsenceRequestWaitlistProvider _absenceRequestWaitlistProvider;
 		private readonly IFilterRequests _filterRequests;
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository,
 			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater, 
-			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, IFilterRequests filterRequests)
+			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, IFilterRequests filterRequests, IAbsenceRequestWaitlistProvider absenceRequestWaitlistProvider)
 		{
 			_personRequestRepository = personRequestRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_multiAbsenceRequestsUpdater = multiAbsenceRequestsUpdater;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 			_filterRequests = filterRequests;
+			_absenceRequestWaitlistProvider = absenceRequestWaitlistProvider;
 		}
 
 		[AsSystem]
@@ -148,12 +150,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			if (max > min && atleastOneWaitlistedWfc)
 			{
 				DateTimePeriod period = new DateTimePeriod(min.Utc(), max.Utc());
-				var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();
-
-				var waitlistedRequests = _personRequestRepository.Find(waitListIds).ToList();
-
-				requests.AddRange(_filterRequests.Filter(waitlistedRequests));
-				_feedback.SendProgress($"Picked up {waitListIds.Count} waitlisted requests in period {period}.");
+				var waitlistedRequests = _absenceRequestWaitlistProvider.GetWaitlistedRequests(period);
+				requests.AddRange(_filterRequests.Filter(waitlistedRequests.ToList()));
+				_feedback.SendProgress($"Picked up {waitlistedRequests.Count} waitlisted requests in period {period}.");
 			}
 
 

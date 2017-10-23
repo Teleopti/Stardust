@@ -18,6 +18,12 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			_personRequestRepository = personRequestRepository;
 		}
 
+		public IList<IPersonRequest> GetWaitlistedRequests(DateTimePeriod period)
+		{
+			var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();
+			return _personRequestRepository.Find(waitListIds).ToList();
+		}
+
 		public int GetPositionInWaitlist(IAbsenceRequest absenceRequest)
 		{
 			var personRequest = absenceRequest.Parent as PersonRequest;
