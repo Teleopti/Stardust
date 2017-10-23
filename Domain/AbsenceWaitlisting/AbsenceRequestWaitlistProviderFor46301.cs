@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 
 		public IEnumerable<IPersonRequest> GetWaitlistedRequests(DateTimePeriod period, IWorkflowControlSet workflowControlSet)
 		{
-			return getWaitlistedRequests(period, workflowControlSet, null);
+			return getRequestsInWaitlist(period, workflowControlSet, null);
 		}
 
 		public int GetPositionInWaitlist(IAbsenceRequest absenceRequest)
@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			if (personRequest == null || !personRequest.IsWaitlisted) return 0;
 
 			var queryAbsenceRequestsPeriod = absenceRequest.Period.ChangeEndTime(TimeSpan.FromSeconds(-1));
-			var waitlistedRequests = getWaitlistedRequests(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet, getBudgetGroup(absenceRequest)).ToList();
-			var index = waitlistedRequests.FindIndex(perRequest => perRequest.Id == personRequest.Id);
+			var requestsInWaitlist = getRequestsInWaitlist(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet, getBudgetGroup(absenceRequest)).ToList();
+			var index = requestsInWaitlist.FindIndex(perRequest => perRequest.Id == personRequest.Id);
 			return index > -1 ? index + 1 : 0;
 		}
 
-		private IEnumerable<IPersonRequest> getWaitlistedRequests(DateTimePeriod period, IWorkflowControlSet workflowControlSet, IBudgetGroup budgetGroup)
+		private IEnumerable<IPersonRequest> getRequestsInWaitlist(DateTimePeriod period, IWorkflowControlSet workflowControlSet, IBudgetGroup budgetGroup)
 		{
 			var requestTypes = new[] { RequestType.AbsenceRequest };
 			var requestFilter = new RequestFilter
