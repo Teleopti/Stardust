@@ -8,6 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 {
+	[DisabledBy(FeatureFlags.Toggles.MyTimeWeb_WaitListPositionEnhancement_46301)]
 	public class AbsenceRequestWaitlistProvider : IAbsenceRequestWaitlistProvider
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;

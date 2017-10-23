@@ -9,6 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 {
+	[EnabledBy(FeatureFlags.Toggles.MyTimeWeb_WaitListPositionEnhancement_46301)]
 	public class AbsenceRequestWaitlistProviderFor46301 : IAbsenceRequestWaitlistProvider
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
@@ -19,6 +20,22 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		}
 
 		public IEnumerable<IPersonRequest> GetWaitlistedRequests(DateTimePeriod period, IWorkflowControlSet workflowControlSet)
+		{
+			return getWaitlistedRequests(period, workflowControlSet, null);
+		}
+
+		public int GetPositionInWaitlist(IAbsenceRequest absenceRequest)
+		{
+			var personRequest = absenceRequest.Parent as PersonRequest;
+			if (personRequest == null || !personRequest.IsWaitlisted) return 0;
+
+			var queryAbsenceRequestsPeriod = absenceRequest.Period.ChangeEndTime(TimeSpan.FromSeconds(-1));
+			var waitlistedRequests = getWaitlistedRequests(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet, getBudgetGroup(absenceRequest)).ToList();
+			var index = waitlistedRequests.FindIndex(perRequest => perRequest.Id == personRequest.Id);
+			return index > -1 ? index + 1 : 0;
+		}
+
+		private IEnumerable<IPersonRequest> getWaitlistedRequests(DateTimePeriod period, IWorkflowControlSet workflowControlSet, IBudgetGroup budgetGroup)
 		{
 			var requestTypes = new[] { RequestType.AbsenceRequest };
 			var requestFilter = new RequestFilter
@@ -31,7 +48,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			int count;
 			var waitlistedRequests =
 				from request in _personRequestRepository.FindAbsenceAndTextRequests(requestFilter, out count, true)
-				where requestShouldBeProcessed(request)
+				where requestShouldBeProcessed(request, budgetGroup)
 				select request;
 
 			var processOrder = workflowControlSet.AbsenceRequestWaitlistProcessOrder;
@@ -40,21 +57,11 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 				: waitlistedRequests.OrderBy(x => x.CreatedOn);
 		}
 
-		public int GetPositionInWaitlist(IAbsenceRequest absenceRequest)
+		private bool requestShouldBeProcessed(IPersonRequest request, IBudgetGroup budgetGroup)
 		{
-			var personRequest = absenceRequest.Parent as PersonRequest;
+			if (getBudgetGroup(request.Request) != budgetGroup)
+				return false;
 
-			if (personRequest == null || !personRequest.IsWaitlisted) return 0;
-
-			var queryAbsenceRequestsPeriod = absenceRequest.Period.ChangeEndTime(TimeSpan.FromSeconds(-1));
-			var waitlistedRequests =
-				GetWaitlistedRequests(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet).ToList();
-			var index = waitlistedRequests.FindIndex(perRequest => perRequest.Id == personRequest.Id);
-			return index > -1 ? index + 1 : 0;
-		}
-
-		private bool requestShouldBeProcessed(IPersonRequest request)
-		{
 			if (request.IsWaitlisted)
 				return true;
 
@@ -65,6 +72,11 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 				request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)request.Request)
 					.AbsenceRequestProcess.GetType() == typeof(GrantAbsenceRequest);
 			return isAutoGrant;
+		}
+
+		private IBudgetGroup getBudgetGroup(IRequest request)
+		{
+			return request.Person.PersonPeriods(request.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone())).FirstOrDefault()?.BudgetGroup;
 		}
 	}
 }
