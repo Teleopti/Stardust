@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockSameStartTime = true,
 				BlockSameShift = true,
 				BlockSameShiftCategory = true,
-				Priority = 1,
 				MinFullWeekendsOff = 2,
 				MaxFullWeekendsOff = 6,
 				MinWeekendDaysOff = 2,
@@ -63,7 +62,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameStartTime.Should().Be.True();
 			inDb.BlockSameShift.Should().Be.True();
 			inDb.BlockSameShiftCategory.Should().Be.True();
-			inDb.Priority.Should().Be.EqualTo(1);
 			inDb.FullWeekendsOff.Should().Be.EqualTo(new MinMax<int>(model.MinFullWeekendsOff, model.MaxFullWeekendsOff));
 			inDb.WeekendDaysOff.Should().Be.EqualTo(new MinMax<int>(model.MinWeekendDaysOff, model.MaxWeekendDaysOff));
 		}
@@ -88,7 +86,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				BlockSameStartTime = true,
 				BlockSameShift = true,
 				BlockSameShiftCategory = true,
-				Priority = 1,
 				MinFullWeekendsOff = 2,
 				MaxFullWeekendsOff = 6,
 				MinWeekendDaysOff = 2,
@@ -106,7 +103,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.BlockSameStartTime.Should().Be.True();
 			inDb.BlockSameShift.Should().Be.True();
 			inDb.BlockSameShiftCategory.Should().Be.True();
-			inDb.Priority.Should().Be.EqualTo(1);
 			inDb.FullWeekendsOff.Should().Be.EqualTo(new MinMax<int>(model.MinFullWeekendsOff, model.MaxFullWeekendsOff));
 			inDb.WeekendDaysOff.Should().Be.EqualTo(new MinMax<int>(model.MinWeekendDaysOff, model.MaxWeekendDaysOff));
 		}
@@ -464,6 +460,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var inDbs = PlanningGroupSettingsRepository.LoadAll();
 			inDbs.Last().Priority.Should().Be.EqualTo(3);
+		}
+
+		[Test]
+		public void ShouldNotChangeThePriorityWhenModifySettings()
+		{
+			var id = Guid.NewGuid();
+			PlanningGroupSettingsRepository.Add(new PlanningGroupSettings
+			{
+				Priority = 2
+			}.WithId(id));
+			var model = new PlanningGroupSettingsModel {Id = id};
+
+			Target.Persist(model);
+
+			var inDbs = PlanningGroupSettingsRepository.LoadAll();
+			inDbs.First().Priority.Should().Be.EqualTo(2);
 		}
 	}
 }
