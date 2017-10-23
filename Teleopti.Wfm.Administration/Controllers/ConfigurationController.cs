@@ -34,6 +34,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			const string frameAncestors = "FrameAncestors";
 			const string instrumentationKey = "InstrumentationKey";
+			const string asDatabase = "AS_DATABASE";
+			const string asServerName = "AS_SERVER_NAME";
+			const string pmInstall = "PM_INSTALL";
 			return serverConfigurations.Select(serverConfiguration =>
 			{
 				var configurationModel = new ConfigurationModel
@@ -48,6 +51,18 @@ namespace Teleopti.Wfm.Administration.Controllers
 				if (configurationModel.Key == instrumentationKey)
 				{
 					configurationModel.Description = "Add Application Insights instrumentation key for log analytics.";
+				}
+				if (configurationModel.Key == asDatabase)
+				{
+					configurationModel.Description = "Analysis database for PM service.";
+				}
+				if (configurationModel.Key == asServerName)
+				{
+					configurationModel.Description = "Analysis database server for PM service.";
+				}
+				if (configurationModel.Key == pmInstall)
+				{
+					configurationModel.Description = "Indicate whether PM service is installed.";
 				}
 				return configurationModel;
 			});
