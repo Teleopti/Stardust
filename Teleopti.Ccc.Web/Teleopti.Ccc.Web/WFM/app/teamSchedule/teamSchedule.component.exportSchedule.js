@@ -86,7 +86,6 @@
 			$state.go('teams.dayView');
 		}
 		vm.startExport = function() {
-			if (vm.isExporting) return;
 			vm.isExporting = true;
 			exportScheduleService.startExport(vm.configuration).then(function(response) {
 			        vm.isExporting = false;

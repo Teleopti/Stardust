@@ -50,6 +50,7 @@
 			</tbody>
 		</table>
 		<div class="footer">
+			<md-progress-linear ng-if="vm.isExporting" md-mode="indeterminate"></md-progress-linear>
 			<div class="right">
 				<button type="button" class="wfm-btn wfm-btn-invis-default"
 						ng-click="vm.gotoDayView()">
@@ -57,7 +58,7 @@
 				</button>
 				<button class="wfm-btn"
 						ng-class="{'wfm-btn-invis-primary': vm.isApplyEnabled(), 'wfm-btn-invis-disabled': !vm.isApplyEnabled() || vm.isExporting}"
-						ng-disabled="!vm.isApplyEnabled()"
+						ng-disabled="!vm.isApplyEnabled() || vm.isExporting"
 						ng-click="vm.startExport()">
 					{{ 'Start'|translate }}
 				</button>
