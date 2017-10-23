@@ -368,9 +368,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
 
 			request.Should().Not.Be(null);
-			request.IsDenied.Should().Be(true);
-			request.IsWaitlisted.Should().Be(isWaitlisted);
-			request.DenyReason.Should().Be(isWaitlisted ? Resources.RequestWaitlistedReasonPersonAccount : Resources.RequestDenyReasonPersonAccount);
+			request.IsDenied.Should().Be.True();
+			request.IsWaitlisted.Should().Be.False();
+			request.DenyReason.Should().Be(Resources.RequestDenyReasonPersonAccount);
 		}
 
 		[Test]
@@ -410,8 +410,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be(true);
-			request.IsWaitlisted.Should().Be(isWaitlisted);
-			request.DenyReason.Should().Be(isWaitlisted ? Resources.RequestWaitlistedReasonPersonAccount : Resources.RequestDenyReasonPersonAccount);
+			request.IsWaitlisted.Should().Be.False();
+			request.DenyReason.Should().Be(Resources.RequestDenyReasonPersonAccount);
 		}
 
 		[Test]

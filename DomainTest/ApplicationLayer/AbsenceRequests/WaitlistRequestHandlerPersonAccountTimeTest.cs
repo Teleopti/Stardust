@@ -147,6 +147,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			SetUp();
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
+			waitListedRequest.IsWaitlisted.Should().Be.False();
 			waitListedRequest.IsDenied.Should().Be.True();
 		}
 
@@ -167,6 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 			waitListedRequest.IsApproved.Should().Be.True();
+			waitListedRequest2.IsWaitlisted.Should().Be.False();
 			waitListedRequest2.IsDenied.Should().Be.True();
 		}
 
@@ -177,7 +179,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			account.Accrued = TimeSpan.FromHours(2);
 
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
+			waitListedRequest.IsWaitlisted.Should().Be.False();
 			waitListedRequest.IsDenied.Should().Be.True();
+			waitListedRequest2.IsWaitlisted.Should().Be.False();
 			waitListedRequest2.IsDenied.Should().Be.True();
 		}
 
@@ -251,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var account2 = new AccountTime(new DateOnly(2016, 12, 2)) { Accrued = TimeSpan.FromHours(3) }.WithId();
 			personAccounts.Add(account2);
 
-			var period = new DateTimePeriod(2016, 12, 1, 12, 2016, 12, 2, 12);
+			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 2, 12);
 			waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
 			waitListedRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 			PersonRequestRepository.Add(waitListedRequest);
@@ -259,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 			waitListedRequest.IsDenied.Should().Be.True();
-			waitListedRequest.IsWaitlisted.Should().Be.True();
+			waitListedRequest.IsWaitlisted.Should().Be.False();
 			account.Remaining.Should().Be.EqualTo(TimeSpan.FromHours(10));
 			account2.Remaining.Should().Be.EqualTo(TimeSpan.FromHours(3));
 		}

@@ -181,7 +181,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			account.Accrued.Should().Be.EqualTo(TimeSpan.Zero);
 		}
 
-
 		[Test]
 		public void ShouldDenyRequestSpanningMultipleDaysUsingPersonAccountDay()
 		{
@@ -196,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			account.Accrued = TimeSpan.FromDays(1);
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 			waitListedRequest.IsDenied.Should().Be.True();
-			//waitListedRequest.IsWaitlisted.Should().Be.False(); // coming PBI
+			waitListedRequest.IsWaitlisted.Should().Be.False();
 			account.Accrued.Should().Be.EqualTo(TimeSpan.FromDays(1));
 		}
 

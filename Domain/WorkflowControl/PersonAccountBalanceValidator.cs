@@ -1,23 +1,17 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public class PersonAccountBalanceValidator : IAbsenceRequestValidator
 	{
-		private string _invalidReason = "RequestDenyReasonPersonAccount";
-
+		//TODO: What is this??
 		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
 
-		public string InvalidReason
-		{
-			get { return _invalidReason; }
-		}
+		public string InvalidReason => nameof(Resources.RequestDenyReasonPersonAccount);
 
-		public string DisplayText
-		{
-			get { return UserTexts.Resources.Yes; }
-		}
+		public string DisplayText => UserTexts.Resources.Yes;
 
 		public IValidatedRequest Validate(IAbsenceRequest absenceRequest,
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
@@ -37,11 +31,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			if (!validatedRequest.IsValid)
 			{
-				if (waitlistingIsEnabled(absenceRequest))
-					_invalidReason = "RequestWaitlistedReasonPersonAccount";
 				validatedRequest.ValidationErrors =
-					UserTexts.Resources.ResourceManager.GetString(_invalidReason,
+					UserTexts.Resources.ResourceManager.GetString(InvalidReason,
 						person.PermissionInformation.UICulture());
+				validatedRequest.DenyOption = PersonRequestDenyOption.InsufficientPersonAccount;
 			}
 			return validatedRequest;
 		}
@@ -66,17 +59,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 						 (BudgetGroupHeadCountSpecification != null ? BudgetGroupHeadCountSpecification.GetHashCode() : 0);
 				return result;
 			}
-		}
-
-		private static bool waitlistingIsEnabled(IAbsenceRequest absenceRequest)
-		{
-			var person = absenceRequest.Person;
-			var workflowControlSet = person.WorkflowControlSet;
-			if (workflowControlSet != null && workflowControlSet.WaitlistingIsEnabled(absenceRequest))
-			{
-				return true;
-			}
-			return false;
 		}
 	}
 }

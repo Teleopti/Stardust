@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		None = 0,
 		AutoDeny = 1,
 		AlreadyAbsence = 2,
-		RequestExpired = 4
+		RequestExpired = 4,
+		InsufficientPersonAccount = 8
 	}
 }
