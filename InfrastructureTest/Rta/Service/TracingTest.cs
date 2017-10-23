@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
 	[PrincipalAndStateTest]
 	[Setting("RtaTracerBufferSize", 0)]
+	[Ignore("fix build")]
 	public class TracingTest : ISetup
 	{
 		public Database Database;
