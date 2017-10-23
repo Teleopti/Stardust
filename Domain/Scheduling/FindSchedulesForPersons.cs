@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var periodBasedOnSelectedPersons = new ScheduleDateTimePeriod(period.VisiblePeriod, selectedPersons);
 			DoLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary, periodBasedOnSelectedPersons.LongLoadedDateOnlyPeriod(), selectedPersons);
-			DoLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary, period.LongVisibleDateOnlyPeriod(), personsInOrganization.Except(selectedPersons));
+			DoLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary, periodBasedOnSelectedPersons.LongVisibleDateOnlyPeriod(), personsInOrganization.Except(selectedPersons));
 		}
 	}
 }
