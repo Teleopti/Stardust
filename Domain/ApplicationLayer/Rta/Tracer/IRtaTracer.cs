@@ -6,6 +6,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 {
 	public interface IRtaTracer
 	{
+		void RefreshTracers();
+		
 		void Trace(string usercode);
 		void Stop();
 		void Clear();

@@ -109,6 +109,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<RtaTracer>().As<IRtaTracer>().SingleInstance().ApplyAspects();
 			else
 				builder.RegisterType<NoRtaTracer>().As<IRtaTracer>().SingleInstance();
+			builder.RegisterType<RtaTracerRefresher>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaTracerReader>().As<IRtaTracerReader>().SingleInstance();
 			builder.RegisterType<RtaTracerWriter>().As<IRtaTracerWriter>().SingleInstance();
 			builder.RegisterType<RtaTracerConfigPersister>().As<IRtaTracerConfigPersister>().SingleInstance();

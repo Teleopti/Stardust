@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using NPOI.SS.Formula.Functions;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -21,6 +22,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		private readonly ICurrentDataSource _dataSource;
 		private readonly ExternalLogonMapper _mapper;
 		private readonly IPersonRepository _persons;
+
+		private IEnumerable<tracer> _tracers;
 
 		public RtaTracer(IRtaTracerWriter writer,
 			IRtaTracerConfigPersister config,
@@ -53,9 +56,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public void ProcessReceived(string method, int? count) => writeForCurrentOrConfigured(new ProcessReceivedLog
 		{
-			RecievedAt = _now.UtcDateTime(),
-			RecievedBy = method,
-			RecievedCount = count ?? 0
+			ReceivedAt = _now.UtcDateTime(),
+			ReceivedBy = method,
+			ReceivedCount = count ?? 0
 		}, "Data received at");
 
 		public void ProcessProcessing() => writeForCurrentOrConfigured(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
@@ -101,8 +104,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 			select t
 		).FirstOrDefault();
 
-		private IEnumerable<tracer> tracers() =>
-			_config.ReadAll().Select(tracer =>
+		private IEnumerable<tracer> tracers()
+		{
+			if (_tracers == null)
+				RefreshTracers();
+			return _tracers;
+		}
+
+		public void RefreshTracers() =>
+			_tracers = _config.ReadAll().Select(tracer =>
 				{
 					var config = makeTracerFromConfig(tracer);
 					justWrite(new TracingLog {Tracing = config.User}, "Tracing", config.Tenant);

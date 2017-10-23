@@ -77,5 +77,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		public void StateProcessed(StateTraceLog trace, IEnumerable<IEvent> events)
 		{
 		}
+
+		public void RefreshTracers()
+		{
+		}
 	}
 }

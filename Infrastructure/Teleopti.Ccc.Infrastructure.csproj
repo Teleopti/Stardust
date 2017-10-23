@@ -259,6 +259,7 @@
     <Compile Include="Rta\Persisters\OrganizationReader.cs" />
     <Compile Include="Rta\Persisters\RtaTracerConfigPersister.cs" />
     <Compile Include="Rta\RtaTracerReader.cs" />
+    <Compile Include="Rta\RtaTracerRefresher.cs" />
     <Compile Include="Rta\RtaTracerSessionFactory.cs" />
     <Compile Include="Rta\RtaTracerWriter.cs" />
     <Compile Include="Rta\StateQueueWorker.cs" />
