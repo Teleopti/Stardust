@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 				})
 				.ToArray();
 
-		[TenantScope, UnitOfWork, ReadModelUnitOfWork]
+		[TenantScope, UnitOfWork]
 		protected virtual tracer makeTracerFromConfig(RtaTracerConfig tracer)
 		{
 			_mapper.Refresh();
