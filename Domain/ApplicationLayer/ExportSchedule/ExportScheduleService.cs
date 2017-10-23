@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			var people = peopleToExport(input);
 			if (people.Count > 1000)
 			{
-				processResult.FailReason = string.Format(Resources.MaximumAgentToExport, people.Count); //TODO
+				processResult.FailReason = string.Format(Resources.MaximumAgentToExport, people.Count); 
 				return processResult;
 			}
 			var exportData = prepareExportData(input, people);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			var hasPermissionToViewConfidential =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
-			var personRows = scheduleDayLookup.Select(sl => createPersonScheduleRow(sl.Key, sl.ToList(), input.OptionalColumnIds?.ToList() ?? new List<Guid>(), timeZone, hasPermissionToViewUnpublished, hasPermissionToViewConfidential, nameDescriptionSetting)).ToArray();
+			var personRows = scheduleDayLookup.Select(sl => createPersonScheduleRow(sl, input.OptionalColumnIds?.ToList() ?? new List<Guid>(), timeZone, hasPermissionToViewUnpublished, hasPermissionToViewConfidential, nameDescriptionSetting)).OrderBy(r => r.Name).ToArray();
 			var selectedOptionalColumns = input.OptionalColumnIds == null ? new List<IOptionalColumn>() : _optionalColumnRepository.GetOptionalColumns<Person>().Where(p => input.OptionalColumnIds.Contains(p.Id.GetValueOrDefault()));
 			var optionalColumnNames = selectedOptionalColumns.Select(oc => oc.Name).ToArray();
 			return new ScheduleExcelExportData
@@ -127,8 +127,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 				PersonRows = personRows
 			};
 		}
-		private PersonRow createPersonScheduleRow(IPerson p, IList<IScheduleDay> scheduleDays, IList<Guid> optionalColIds, TimeZoneInfo timeZone, bool hasPermissionToViewUnpublished, bool hasPermissionToViewConfidential, ICommonNameDescriptionSetting nameDescriptionSetting)
+		private PersonRow createPersonScheduleRow(IGrouping<IPerson, IScheduleDay> personScheduleGroup, IList<Guid> optionalColIds, TimeZoneInfo timeZone, bool hasPermissionToViewUnpublished, bool hasPermissionToViewConfidential, ICommonNameDescriptionSetting nameDescriptionSetting)
 		{
+			var p = personScheduleGroup.Key;
+			var scheduleDays = personScheduleGroup;
 			var name = nameDescriptionSetting.BuildCommonNameDescription(p);
 			var optionalColumns = new List<string>();
 			if (optionalColIds.Any())

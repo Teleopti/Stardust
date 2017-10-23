@@ -100,6 +100,48 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		}
 		
 		[Test]
+		public void ShouldSortPersonScheduleSummaryInContentRow()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			var person = PersonFactory.CreatePerson("ashley", "andeen").WithId();
+			var person1 = PersonFactory.CreatePerson("b", "b").WithId();
+			person.SetEmploymentNumber("1234");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(scheduleDate.AddDays(-1)), PersonContractFactory.CreatePersonContract(), team ));
+			
+			PersonFinder.Has(person1);
+			PersonFinder.Has(person);
+			
+			PersonRepository.Has(person1);
+			PersonRepository.Has(person);
+			
+
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupIds = new[] {Guid.NewGuid().ToString()}
+				}
+			};
+
+			var byteArray = Target.ExportToExcel(input).Data;
+			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
+			var sheet = workbook.GetSheetAt(0);
+
+			sheet.GetRow(9).Cells[0].StringCellValue.Should().Be.EqualTo("ashley@andeen");
+			sheet.GetRow(10).Cells[0].StringCellValue.Should().Be.EqualTo("b@b");
+		}
+		
+		[Test]
 		public void ShouldDisplayOptionalColumnHeaderInScheduleSummaryInContentRow()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
