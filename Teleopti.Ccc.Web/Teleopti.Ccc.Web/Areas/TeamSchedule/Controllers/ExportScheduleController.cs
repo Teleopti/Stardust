@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -24,13 +25,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			var result = _exportScheduleService.ExportToExcel(input);
 
-			return createResponse(result.Data, "TeamsExportedSchedules.xlsx");
+			return createResponse(result, "TeamsExportedSchedules.xlsx");
 		}
 
-		private HttpResponseMessage createResponse(byte[] data, string fileName)
+		private HttpResponseMessage createResponse(ProcessExportResult result, string fileName)
 		{
 			var response = new HttpResponseMessage();
-			response.Content = new ByteArrayContent(data);
+			if (!result.FailReason.IsNullOrEmpty())
+			{
+				response.Headers.Add("Message", result.FailReason);
+				return response;
+			}
+			response.Content = new ByteArrayContent(result.Data);
 			response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			response.Content.Headers.Add("Content-Disposition", $"attachment; filename={fileName}");
 			return response;

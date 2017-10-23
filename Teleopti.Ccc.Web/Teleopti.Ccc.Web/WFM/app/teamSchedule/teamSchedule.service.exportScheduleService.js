@@ -58,7 +58,7 @@
 							Accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 						}
 					}).then(function(response) {
-						resolve(response.data);
+						resolve(response);
 					},
 					function(err) {
 						reject(err);

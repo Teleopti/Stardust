@@ -7,8 +7,8 @@
 				controllerAs: 'vm'
 			});
 
-	TeamsExportScheduleCtrl.$inject = ['$state','$timeout', '$scope', 'groupPageService', 'exportScheduleService'];
-	function TeamsExportScheduleCtrl($state, $timeout, $scope, groupPageService, exportScheduleService) {
+	TeamsExportScheduleCtrl.$inject = ['$state','$timeout', '$scope', 'groupPageService', 'exportScheduleService', 'NoticeService'];
+	function TeamsExportScheduleCtrl($state, $timeout, $scope, groupPageService, exportScheduleService, NoticeService) {
 		var vm = this;
 		vm.configuration = {
 			period:{
@@ -85,8 +85,15 @@
 			$state.go('teams.dayView');
 		}
 		vm.startExport = function() {
-			exportScheduleService.startExport(vm.configuration).then(function(data) {
-				saveData(data);
+			exportScheduleService.startExport(vm.configuration).then(function(response) {
+				var failReason = response.headers()['message']
+				if(failReason && failReason.length > 0){
+					NoticeService.error(failReason, null, true);
+				}
+				else{
+					saveData(data);
+				}
+				
 			});
 		}
 
