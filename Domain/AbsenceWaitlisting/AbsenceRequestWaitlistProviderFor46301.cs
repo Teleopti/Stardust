@@ -19,11 +19,6 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			_personRequestRepository = personRequestRepository;
 		}
 
-		public IEnumerable<IPersonRequest> GetWaitlistedRequests(DateTimePeriod period, IWorkflowControlSet workflowControlSet)
-		{
-			return getRequestsInWaitlist(period, workflowControlSet, null);
-		}
-
 		public int GetPositionInWaitlist(IAbsenceRequest absenceRequest)
 		{
 			var personRequest = absenceRequest.Parent as PersonRequest;

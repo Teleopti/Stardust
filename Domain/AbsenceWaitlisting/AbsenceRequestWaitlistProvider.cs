@@ -25,13 +25,13 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			if (personRequest == null || !personRequest.IsWaitlisted) return 0;
 
 			var queryAbsenceRequestsPeriod = absenceRequest.Period.ChangeEndTime(TimeSpan.FromSeconds(-1));
-			var waitlistedRequests =
-				GetWaitlistedRequests(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet).ToList();
-			var index = waitlistedRequests.FindIndex(perRequest => perRequest.Id == personRequest.Id);
+			var requestsInWaitlist =
+				getRequestsInWaitlist(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet).ToList();
+			var index = requestsInWaitlist.FindIndex(perRequest => perRequest.Id == personRequest.Id);
 			return index > -1 ? index + 1 : 0;
 		}
 
-		public IEnumerable<IPersonRequest> GetWaitlistedRequests(DateTimePeriod period,
+		private IEnumerable<IPersonRequest> getRequestsInWaitlist(DateTimePeriod period,
 			IWorkflowControlSet workflowControlSet)
 		{
 			var requestTypes = new[] {RequestType.AbsenceRequest};
