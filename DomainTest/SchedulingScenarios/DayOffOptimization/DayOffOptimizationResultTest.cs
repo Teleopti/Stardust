@@ -157,5 +157,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			result.SkillResultList.Count().Should().Be.EqualTo(1);
 			result.SkillResultList.First().SkillName.Should().Be.EqualTo("relevant skill");
 		}
+
+		[Test]
+		public void ShouldOnlyIncludeActiveSkills()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has("_");
+			var activeSkill = SkillRepository.Has("active skill", activity, new TimePeriod(8, 16));
+			var inactiveSkill = SkillRepository.Has("inactive skill", activity, new TimePeriod(8, 16));
+
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(new DateOnly(2015, 1, 1), SchedulePeriodType.Week, 1);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var contract = new ContractWithMaximumTolerance();
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, activeSkill,inactiveSkill);
+			agent.DeactivateSkill(inactiveSkill, agent.PersonPeriodCollection.First());
+
+			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(contract));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, SchedulePeriodType.Day, planningGroup);
+
+			SkillDayRepository.Has(activeSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
+
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(1)), new TimePeriod(8, 0, 16, 0));
+
+			var result = Target.Execute(planningPeriod.Id.Value);
+			result.SkillResultList.Count().Should().Be.EqualTo(1);
+			result.SkillResultList.First().SkillName.Should().Be.EqualTo("active skill");
+		}
 	}
 }
