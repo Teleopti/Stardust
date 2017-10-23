@@ -94,7 +94,7 @@
 					NoticeService.error(failReason, null, true);
 				}
 				else{
-					saveData(data);
+					saveData(response.data);
 				}
 				
 			});
