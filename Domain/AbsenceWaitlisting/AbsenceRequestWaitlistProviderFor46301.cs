@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
@@ -54,7 +55,16 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 
 		private bool requestShouldBeProcessed(IPersonRequest request)
 		{
-			return request.IsWaitlisted || request.IsNew;
+			if (request.IsWaitlisted)
+				return true;
+
+			if (!request.IsPending)
+				return false;
+
+			var isAutoGrant =
+				request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)request.Request)
+					.AbsenceRequestProcess.GetType() == typeof(GrantAbsenceRequest);
+			return isAutoGrant;
 		}
 	}
 }

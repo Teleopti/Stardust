@@ -310,6 +310,42 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestThree).Should().Be(3);
 		}
 
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.MyTimeWeb_WaitListPositionEnhancement_46301)]
+		public void ShouldCalculateWaitListedPositionBasedOnWaitlistedAndAutoGrantPendingStatus()
+		{
+			Now.Is(baseTime);
+
+			var workflowControlSet1 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var workflowControlSet2 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			createNewAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			createNewAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var pendingAbsenceRequest = createNewAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+			((PersonRequest)pendingAbsenceRequest.Parent).ForcePending();
+
+			var waitlistedAbsenceRequest = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 20, 00, 00, DateTimeKind.Utc)));
+
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(waitlistedAbsenceRequest).Should().Be(2);
+		}
+
 		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet,
 			bool isPersonDeleted = false)
 		{
@@ -324,7 +360,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 		}
 
 		private static WorkflowControlSet createWorkFlowControlSet(DateTime startDate, DateTime endDate,
-			IAbsence absence, WaitlistProcessOrder processOrder = WaitlistProcessOrder.FirstComeFirstServed)
+			IAbsence absence, WaitlistProcessOrder processOrder = WaitlistProcessOrder.FirstComeFirstServed,bool isAutoGrant = true)
 		{
 			var workflowControlSet = new WorkflowControlSet
 			{
@@ -339,7 +375,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 				Absence = absence,
 				Period = dateOnlyPeriod,
 				OpenForRequestsPeriod = dateOnlyPeriod,
-				AbsenceRequestProcess = new GrantAbsenceRequest()
+				AbsenceRequestProcess = isAutoGrant? new GrantAbsenceRequest() : (ProcessAbsenceRequest)new PendingAbsenceRequest()
 			};
 
 			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
