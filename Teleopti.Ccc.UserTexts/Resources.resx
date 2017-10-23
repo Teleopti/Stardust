@@ -16620,11 +16620,11 @@ Do you want to participate?</value>
     <comment>Export Schedules</comment>
   </data>
   <data name="ExportSchedulesMaximumDays" xml:space="preserve">
-    <value>Maximum 31 days can be selected</value>
+    <value>A maximum of 31 days can be selected</value>
     <comment>restriction for export schedule in teams</comment>
   </data>
   <data name="ExportSchedulesMaximumOptionalColumns" xml:space="preserve">
-    <value>Maximum 3 optional columns can be selected</value>
+    <value>A maximum of 3 optional columns can be selected</value>
     <comment>restriction for export schedule in teams</comment>
   </data>
   <data name="ShiftTradeTargetTimeRuleName" xml:space="preserve">
@@ -16647,7 +16647,7 @@ Do you want to participate?</value>
     <comment>Used in validations</comment>
   </data>
   <data name="MaximumAgentToExport" xml:space="preserve">
-    <value>You can export a maximum of 1000 agents each time. But you are exporting {0}.</value>
+    <value>You can only export a maximum of 1000 agents each time,  you are attempting to export {0}.</value>
     <comment>error message when export agents larger than 1000</comment>
   </data>
   <data name="SelectedGroups" xml:space="preserve">

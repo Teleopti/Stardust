@@ -11288,7 +11288,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum 31 days can be selected.
+        ///   Looks up a localized string similar to A maximum of 31 days can be selected.
         /// </summary>
         public static string ExportSchedulesMaximumDays {
             get {
@@ -11297,7 +11297,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum 3 optional columns can be selected.
+        ///   Looks up a localized string similar to A maximum of 3 optional columns can be selected.
         /// </summary>
         public static string ExportSchedulesMaximumOptionalColumns {
             get {
@@ -16934,7 +16934,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can export a maximum of 1000 agents each time. But you are exporting {0}..
+        ///   Looks up a localized string similar to You can only export a maximum of 1000 agents each time,  you are attempting to export {0}..
         /// </summary>
         public static string MaximumAgentToExport {
             get {
