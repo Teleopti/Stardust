@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				CloseSnapshot = true
 			});
 		}
-
 	}
 
 	public class StateForTest
@@ -107,31 +106,31 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 
 		public FakeRtaDatabase(
-			FakeTenants tenants, 
-			FakePersonRepository persons, 
-			FakeBusinessUnitRepository businessUnits, 
-			FakeSiteRepository sites, 
-			FakeTeamRepository teams, 
-			FakeContractRepository contracts, 
-			FakePartTimePercentageRepository partTimePercentages, 
-			FakeContractScheduleRepository contractSchedules, 
-			FakeApplicationRoleRepository applicationRoles, 
-			FakeScenarioRepository scenarios, 
-			FakeDayOffTemplateRepository dayOffTemplates, 
-			FakePersonAssignmentRepository personAssignments, 
-			FakeApplicationFunctionRepository applicationFunctions, 
-			FakeAvailableDataRepository availableDatas, 
-			IDefinedRaptorApplicationFunctionFactory allApplicationFunctions, 
-			FakeAbsenceRepository absences, 
-			FakePersonAbsenceRepository personAbsences, 
-			FakeActivityRepository activities, 
-			FakeCommonAgentNameProvider commonAgentNameProvider, 
-			FakeSkillRepository skills, 
-			FakeGroupingReadOnlyRepository groupings, 
-			FakeRtaStateGroupRepository stateGroups, 
-			FakeRtaMapRepository mappings, 
+			FakeTenants tenants,
+			FakePersonRepository persons,
+			FakeBusinessUnitRepository businessUnits,
+			FakeSiteRepository sites,
+			FakeTeamRepository teams,
+			FakeContractRepository contracts,
+			FakePartTimePercentageRepository partTimePercentages,
+			FakeContractScheduleRepository contractSchedules,
+			FakeApplicationRoleRepository applicationRoles,
+			FakeScenarioRepository scenarios,
+			FakeDayOffTemplateRepository dayOffTemplates,
+			FakePersonAssignmentRepository personAssignments,
+			FakeApplicationFunctionRepository applicationFunctions,
+			FakeAvailableDataRepository availableDatas,
+			IDefinedRaptorApplicationFunctionFactory allApplicationFunctions,
+			FakeAbsenceRepository absences,
+			FakePersonAbsenceRepository personAbsences,
+			FakeActivityRepository activities,
+			FakeCommonAgentNameProvider commonAgentNameProvider,
+			FakeSkillRepository skills,
+			FakeGroupingReadOnlyRepository groupings,
+			FakeRtaStateGroupRepository stateGroups,
+			FakeRtaMapRepository mappings,
 			FakeRtaRuleRepository rules,
-			FakeExternalLogOnRepository externalLogOns, 
+			FakeExternalLogOnRepository externalLogOns,
 			FakeDataSources dataSources,
 			FakeAgentStatePersister agentStates,
 			FakeAgentStateReadModelPersister agentStateReadModels,
@@ -139,38 +138,38 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeMeetingRepository meetings,
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId,
 			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository
-			) : base(
-				tenants, 
-				persons, 
-				businessUnits, 
-				sites, 
-				teams, 
-				contracts, 
-				partTimePercentages, 
-				contractSchedules, 
-				applicationRoles, 
-				scenarios, 
-				dayOffTemplates, 
-				personAssignments, 
-				applicationFunctions, 
-				availableDatas, 
-				allApplicationFunctions, 
-				absences, 
-				personAbsences, 
-				activities, 
-				commonAgentNameProvider, 
-				skills, 
-				groupings, 
-				stateGroups, 
-				mappings,
-				rules,
-				externalLogOns, 
-				dataSources,
-				teamCardReader,
-				meetings,
-				agentStateReadModels,
-				hardcodedSkillGroupingPageId,
-				multiplicatorDefinitionSetRepository)
+		) : base(
+			tenants,
+			persons,
+			businessUnits,
+			sites,
+			teams,
+			contracts,
+			partTimePercentages,
+			contractSchedules,
+			applicationRoles,
+			scenarios,
+			dayOffTemplates,
+			personAssignments,
+			applicationFunctions,
+			availableDatas,
+			allApplicationFunctions,
+			absences,
+			personAbsences,
+			activities,
+			commonAgentNameProvider,
+			skills,
+			groupings,
+			stateGroups,
+			mappings,
+			rules,
+			externalLogOns,
+			dataSources,
+			teamCardReader,
+			meetings,
+			agentStateReadModels,
+			hardcodedSkillGroupingPageId,
+			multiplicatorDefinitionSetRepository)
 		{
 			_agentStates = agentStates;
 			_agentStateReadModels = agentStateReadModels;
@@ -182,7 +181,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public AgentState StoredStateFor(Guid personId) => _agentStates.ForPersonId(personId);
 		public AgentStateReadModel PersistedReadModel => _agentStateReadModels.Models.SingleOrDefault();
 		public IEnumerable<IRtaState> StateCodes => _stateGroups.LoadAll().Single().StateCollection;
-		
+
 		public string TenantName()
 		{
 			return _tenants.Tenants().Single().Name;
@@ -217,7 +216,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return base.WithScenario(id, @default) as FakeRtaDatabase;
 		}
 	}
-	
+
 	public static class FakeDatabaseScheduleExtensions
 	{
 		public static FakeRtaDatabase WithSchedule(this FakeDatabase fakeDataBuilder, Guid personId, Guid activityId, string start, string end)
@@ -229,7 +228,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return fakeDataBuilder.WithSchedule(personId, activityId, start, end, null, name, null);
 		}
-		
+
 		public static FakeRtaDatabase WithSchedule(this FakeDatabase fakeDataBuilder, Guid personId, Guid activityId, string name, string belongsToDate, string start, string end)
 		{
 			return fakeDataBuilder.WithSchedule(personId, activityId, start, end, belongsToDate, null, Color.Black);
@@ -249,7 +248,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return fakeDataBuilder.WithSchedule(personId, Guid.NewGuid(), start, end, null, name, null);
 		}
-		
+
 		public static FakeDatabase WithSchedule(this FakeDatabase database, Guid personId, string start, string end)
 		{
 			return database.WithSchedule(personId, Guid.NewGuid(), start, end, null, null, null);
@@ -263,7 +262,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			fakeDataBuilder.WithAssignedActivity(start, end);
 			return fakeDataBuilder as FakeRtaDatabase;
 		}
-
 	}
-
 }

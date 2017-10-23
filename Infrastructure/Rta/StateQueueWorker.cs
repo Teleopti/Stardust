@@ -17,12 +17,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private readonly StateQueueTenants _tenants;
 		private readonly IDistributedLockAcquirer _distributedLock;
 		private readonly IRtaTracer _tracer;
-		private static readonly ILog Log = LogManager.GetLogger(typeof(StateQueueWorker));
 
 		public StateQueueWorker(
 			Domain.ApplicationLayer.Rta.Service.Rta rta,
 			StateQueueTenants tenants,
-			IDistributedLockAcquirer distributedLock, 
+			IDistributedLockAcquirer distributedLock,
 			IRtaTracer tracer)
 		{
 			_rta = rta;
@@ -46,41 +45,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				bool iterated;
 				do
 				{
-					iterated = handleRtaExceptions(() => _rta.QueueIteration(tenant));
+					iterated = _rta.QueueIteration(tenant, new CatchAndLogAll());
 				} while (iterated);
 			});
-		}
-
-		private bool handleRtaExceptions(Func<bool> call)
-		{
-			try
-			{
-				return call.Invoke();
-			}
-			catch (InvalidSourceException e)
-			{
-				Log.Error("Source id was invalid.", e);
-			}
-			catch (InvalidUserCodeException e)
-			{
-				Log.Info("User code was invalid.", e);
-			}
-			catch (AggregateException e)
-			{
-				var onlyInvalidUserCode =
-					e.AllExceptions()
-						.Where(x => x.GetType() != typeof(AggregateException))
-						.All(x => x.GetType() == typeof(InvalidUserCodeException));
-				if (onlyInvalidUserCode)
-					Log.Info("Batch contained invalid user code.", e);
-				else
-					Log.Error("Unhandled exception occurred processing states from queue", e);
-			}
-			catch (Exception e)
-			{
-				Log.Error("Unhandled exception occurred processing states from queue", e);
-			}
-			return true;
 		}
 	}
 }

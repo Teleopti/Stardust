@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		public IHttpActionResult Change([FromBody] ExternalUserStateWebModel input)
 		{
 			_tracer.ProcessReceived();
-			return handleRtaExceptions(new BatchInputModel
+			return process(new BatchInputModel
 			{
 				AuthenticationKey = input.AuthenticationKey,
 				SourceId = input.SourceId,
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		public IHttpActionResult Batch([FromBody] ExternalUserBatchWebModel input)
 		{
 			_tracer.ProcessReceived();
-			return handleRtaExceptions(new BatchInputModel
+			return process(new BatchInputModel
 			{
 				AuthenticationKey = input.AuthenticationKey,
 				SourceId = input.SourceId,
@@ -63,32 +63,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			});
 		}
 
-		private IHttpActionResult handleRtaExceptions(BatchInputModel input)
+		private IHttpActionResult process(BatchInputModel input)
 		{
-			try
-			{
-				if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-					_rta.Enqueue(input);
-				else
-					_rta.Process(input);
-			}
-			catch (InvalidAuthenticationKeyException e)
-			{
-				return BadRequest(e.Message);
-			}
-			catch (LegacyAuthenticationKeyException e)
-			{
-				return BadRequest(e.Message);
-			}
-			catch (InvalidSourceException e)
-			{
-				return BadRequest(e.Message);
-			}
-			catch (InvalidUserCodeException e)
-			{
-				return BadRequest(e.Message);
-			}
-
+			var exceptionHandler = new InvalidInputMessage();
+			if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
+				_rta.Enqueue(input, exceptionHandler);
+			else
+				_rta.Process(input, exceptionHandler);
+			if (exceptionHandler.Message != null)
+				return BadRequest(exceptionHandler.Message);
 			return Ok();
 		}
 	}

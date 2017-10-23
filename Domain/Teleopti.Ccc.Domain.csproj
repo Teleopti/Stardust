@@ -278,6 +278,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\OrganizationSiteModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceMaintainer.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IRtaExceptionHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueWriter.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoLoggedOutStateGroupsException.cs" />

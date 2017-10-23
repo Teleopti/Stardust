@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Collection;
@@ -40,35 +41,112 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_tracer = tracer;
 		}
 
+		public void Enqueue(BatchInputModel batch) => Enqueue(batch, null);
+		public bool QueueIteration(string tenant) => QueueIteration(tenant, null);
+		public void Process(BatchInputModel batch) => Process(batch, null);
+
 		[LogInfo]
 		[TenantScope]
-		public virtual void Enqueue(BatchInputModel batch)
+		public virtual void Enqueue(BatchInputModel batch, IRtaExceptionHandler exceptionHandler)
 		{
-			batch.States.EmptyIfNull()
-				.ForEach(x => { x.TraceLog = _tracer.StateReceived(x.UserCode, x.StateCode); });
-			validateAuthenticationKey(batch);
-			validateStateCodes(batch);
-			_tenants.Poke();
-			_analytics.Do(() => _queueWriter.Enqueue(batch));
+			handleExceptions(exceptionHandler, () =>
+			{
+				batch.States.EmptyIfNull()
+					.ForEach(x => { x.TraceLog = _tracer.StateReceived(x.UserCode, x.StateCode); });
+				validateAuthenticationKey(batch);
+				validateStateCodes(batch);
+				_tenants.Poke();
+				_analytics.Do(() => _queueWriter.Enqueue(batch));
+			});
 		}
 
 		[LogInfo]
 		[TenantScope]
-		public virtual bool QueueIteration(string tenant)
+		public virtual bool QueueIteration(string tenant, IRtaExceptionHandler exceptionHandler)
 		{
-			var input = _analytics.Get(() => _queueReader.Dequeue());
-			if (input == null) return false;
-			process(input);
-			return true;
+			var iterated = false;
+			handleExceptions(exceptionHandler, () =>
+			{
+				var input = _analytics.Get(() => _queueReader.Dequeue());
+				iterated = input != null;
+				if (iterated)
+					process(input);
+			});
+			return iterated;
 		}
 
 		[LogInfo]
 		[TenantScope]
-		public virtual void Process(BatchInputModel batch)
+		public virtual void Process(BatchInputModel batch, IRtaExceptionHandler exceptionHandler)
 		{
-			batch.States.EmptyIfNull()
-				.ForEach(x => { x.TraceLog = _tracer.StateReceived(x.UserCode, x.StateCode); });
-			process(batch);
+			handleExceptions(exceptionHandler, () =>
+			{
+				batch.States.EmptyIfNull()
+					.ForEach(x => { x.TraceLog = _tracer.StateReceived(x.UserCode, x.StateCode); });
+				process(batch);
+			});
+		}
+
+		private void handleExceptions(IRtaExceptionHandler handler, Action call)
+		{
+			handler = handler ?? new ThrowAll();
+			try
+			{
+				call.Invoke();
+			}
+			catch (InvalidAuthenticationKeyException e)
+			{
+				if (!handler.InvalidAuthenticationKey(e))
+					throw;
+			}
+			catch (LegacyAuthenticationKeyException e)
+			{
+				if (!handler.LegacyAuthenticationKey(e))
+					throw;
+			}
+			catch (InvalidSourceException e)
+			{
+				if (!handler.InvalidSource(e))
+					throw;
+			}
+			catch (InvalidUserCodeException e)
+			{
+				if (!handler.InvalidUserCode(e))
+					throw;
+			}
+			catch (AggregateException e)
+			{
+				var exceptions = e
+					.AllExceptions()
+					.Where(x => x.GetType() != typeof(AggregateException))
+					.ToArray();
+
+				var invalidAuthenticationKeyExceptions = exceptions.OfType<InvalidAuthenticationKeyException>().ToArray();
+				if (!invalidAuthenticationKeyExceptions.All(handler.InvalidAuthenticationKey))
+					throw;
+				var legacyAuthenticationKeyExceptions = exceptions.OfType<LegacyAuthenticationKeyException>().ToArray();
+				if (!legacyAuthenticationKeyExceptions.All(handler.LegacyAuthenticationKey))
+					throw;
+				var invalidSourceExceptions = exceptions.OfType<InvalidSourceException>().ToArray();
+				if (!invalidSourceExceptions.All(handler.InvalidSource))
+					throw;
+				var invalidUserCodeExceptions = exceptions.OfType<InvalidUserCodeException>().ToArray();
+				if (!invalidUserCodeExceptions.All(handler.InvalidUserCode))
+					throw;
+
+				if (!exceptions
+					.Except(invalidAuthenticationKeyExceptions)
+					.Except(legacyAuthenticationKeyExceptions)
+					.Except(invalidSourceExceptions)
+					.Except(invalidUserCodeExceptions)
+					.All(handler.OtherException))
+					throw;
+			}
+			catch (Exception e)
+			{
+				if (!handler.OtherException(e))
+					throw;
+			}
 		}
 
 		private void process(BatchInputModel batch)
