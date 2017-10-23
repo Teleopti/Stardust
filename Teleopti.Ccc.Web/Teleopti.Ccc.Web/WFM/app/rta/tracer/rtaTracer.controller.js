@@ -33,6 +33,8 @@
 						return {
 							process: tracer.Process,
 							dataReceivedAt: tracer.DataReceivedAt,
+							dataReceivedBy: tracer.DataReceivedBy,
+							dataReceivedCount: tracer.DataReceivedCount,
 							activityCheckAt: tracer.ActivityCheckAt,
 							tracing: tracer.Tracing,
 							exception: tracer.Exception

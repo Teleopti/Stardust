@@ -26,16 +26,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					activityCheckerAts.Select(x => x.Key)).Concat(
 					exceptions.Select(x => x.Key))
 				.Distinct();
+
 			var tracers = from process in processes
 				let tracing = tracings[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Tracing
-				let dataReceivedAt = dataReceivedAts[process].Max(r => r.Log?.RecievedAt)?.ToString("T")
+				let dataReceived = dataReceivedAts[process].OrderBy(r => r.Log?.RecievedAt).LastOrDefault()?.Log
 				let activityCheckAt = activityCheckerAts[process].Max(r => r.Log?.ActivityCheckAt)?.ToString("T")
 				let exception = exceptions[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Type
 				select new Tracer
 				{
 					Process = process,
 					Tracing = tracing,
-					DataReceivedAt = dataReceivedAt,
+					DataReceivedAt = dataReceived?.RecievedAt?.ToString("T"),
+					DataReceivedBy = dataReceived?.RecievedBy,
+					RecievedCount = dataReceived?.RecievedCount ?? 0,
 					ActivityCheckAt = activityCheckAt,
 					Exception = exception
 				};
@@ -82,6 +85,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	{
 		public string Process;
 		public string DataReceivedAt;
+		public string DataReceivedBy;
+		public int RecievedCount;
 		public string ActivityCheckAt;
 		public string Tracing;
 		public string Exception;

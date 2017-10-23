@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			DateTime batchId,
 			bool isSnapshot)
 		{
-			_tracer.ProcessReceived();
+			_tracer.ProcessReceived("SaveExternalUserState", 1);
 			userCode = fixUserCode(userCode);
 			stateCode = fixStateCode(stateCode, platformTypeId, isLoggedOn);
 			BatchInputModel input = null;
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			string sourceId,
 			ICollection<ExternalUserState> externalUserStateBatch)
 		{
-			_tracer.ProcessReceived();
+			_tracer.ProcessReceived("SaveBatchExternalUserState", externalUserStateBatch?.Count);
 			IEnumerable<BatchStateInputModel> states = (
 					from s in externalUserStateBatch
 					select new BatchStateInputModel

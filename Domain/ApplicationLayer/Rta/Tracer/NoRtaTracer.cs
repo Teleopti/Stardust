@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		{
 		}
 
-		public void ProcessReceived()
+		public void ProcessReceived(string method, int? count)
 		{
 		}
 

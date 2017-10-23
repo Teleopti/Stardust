@@ -110,7 +110,21 @@ describe('RtaTracerController', function () {
 
 		expect(vm.tracers[0].exception).toBe('something is broken');
 	});
+	
+	it('should display tracer recevied by and count', function () {
+		$fakeBackend.withTracer({
+			DataReceivedBy: 'method',
+			DataReceivedCount: 123
+		});
 
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		expect(vm.tracers[0].dataReceivedBy).toBe('method');
+		expect(vm.tracers[0].dataReceivedCount).toBe(123);
+	});
+
+	
 	it('should display user codes', function () {
 		$fakeBackend.withTracedUser({
 			User: 'usercode34, Ashley Andeen'

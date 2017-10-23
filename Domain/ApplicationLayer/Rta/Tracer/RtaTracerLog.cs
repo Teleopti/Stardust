@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 	public class ProcessReceivedLog
 	{
 		public DateTime? RecievedAt;
+		public string RecievedBy;
+		public int RecievedCount;
 	}
 
 	public class ProcessProcessingLog

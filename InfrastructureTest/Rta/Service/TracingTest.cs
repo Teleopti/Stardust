@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 			Tracer.Trace("usercode1");
 			Context.Logout();
 		
-			Tracer.ProcessReceived();
+			Tracer.ProcessReceived(null, null);
 			Rta.Process(new BatchForTest
 			{
 				States = new[]

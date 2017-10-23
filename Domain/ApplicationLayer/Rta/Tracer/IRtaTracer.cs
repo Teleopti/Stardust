@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		void Clear();
 
 
-		void ProcessReceived();
+		void ProcessReceived(string method, int? count);
 		void ProcessProcessing();
 		void ProcessActivityCheck();
 		void ProcessException(Exception exception);

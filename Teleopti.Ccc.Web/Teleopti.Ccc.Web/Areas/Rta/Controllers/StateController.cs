@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[HttpPost, Route("Rta/State/Change")]
 		public IHttpActionResult Change([FromBody] ExternalUserStateWebModel input)
 		{
-			_tracer.ProcessReceived();
+			_tracer.ProcessReceived("Rta/State/Change", 1);
 			return process(new BatchInputModel
 			{
 				AuthenticationKey = input.AuthenticationKey,
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[HttpPost, Route("Rta/State/Batch")]
 		public IHttpActionResult Batch([FromBody] ExternalUserBatchWebModel input)
 		{
-			_tracer.ProcessReceived();
+			_tracer.ProcessReceived("Rta/State/Batch", input?.States?.Count());
 			return process(new BatchInputModel
 			{
 				AuthenticationKey = input.AuthenticationKey,

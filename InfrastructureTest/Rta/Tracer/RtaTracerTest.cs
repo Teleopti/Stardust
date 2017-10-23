@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 		{
 			Tracer.Trace("usercode");
 
-			Tracer.ProcessReceived();
+			Tracer.ProcessReceived(null, null);
 
 			Target.ReadOfType<TracingLog>()
 				.Should().Have.Count.EqualTo(1);

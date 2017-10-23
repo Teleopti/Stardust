@@ -26,12 +26,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Now.Is("2017-10-09 13:00");
 			Target.Trace("usercode");
 
-			Target.ProcessReceived();
+			Target.ProcessReceived(null, null);
 
 			var log = Logs.ReadOfType<ProcessReceivedLog>().Single();
 			log.Message.Should().Be("Data received at");
 			log.Process.Should().Be(RtaTracer.ProcessName());
 			log.Log.RecievedAt.Should().Be("2017-10-09 13:00".Utc());
+		}
+
+		[Test]
+		public void ShouldLogProcessReceivedByAndCount()
+		{
+			Now.Is("2017-10-09 13:00");
+			Target.Trace("usercode");
+
+			Target.ProcessReceived("method", 123);
+
+			var log = Logs.ReadOfType<ProcessReceivedLog>().Single();
+			log.Log.RecievedBy.Should().Be("method");
+			log.Log.RecievedCount.Should().Be(123);
 		}
 
 		[Test]
@@ -92,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Target.Trace("usercode");
 			Target.Stop();
 
-			Target.ProcessReceived();
+			Target.ProcessReceived(null, null);
 
 			Logs.ReadOfType<ProcessReceivedLog>().Should().Be.Empty();
 		}
@@ -125,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Now.Is("2017-10-12 13:00");
 			Target.Trace("usercode");
 
-			Target.ProcessReceived();
+			Target.ProcessReceived(null, null);
 
 			var log = Logs.ReadOfType<TracingLog>().Single();
 			log.Message.Should().Be("Tracing");
@@ -137,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public void ShouldClearLogs()
 		{
 			Target.Trace("usercode");
-			Target.ProcessReceived();
+			Target.ProcessReceived(null, null);
 
 			Target.Clear();
 

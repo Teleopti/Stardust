@@ -51,7 +51,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		public void Stop() => _config.DeleteForTenant();
 		public void Clear() => _writer.Clear();
 
-		public void ProcessReceived() => writeForCurrentOrConfigured(new ProcessReceivedLog {RecievedAt = _now.UtcDateTime()}, "Data received at");
+		public void ProcessReceived(string method, int? count) => writeForCurrentOrConfigured(new ProcessReceivedLog
+		{
+			RecievedAt = _now.UtcDateTime(),
+			RecievedBy = method,
+			RecievedCount = count ?? 0
+		}, "Data received at");
+
 		public void ProcessProcessing() => writeForCurrentOrConfigured(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
 		public void ProcessActivityCheck() => writeForCurrentOrConfigured(new ActivityCheckLog {ActivityCheckAt = _now.UtcDateTime()}, "Activity check at");
 		public void ProcessException(Exception exception) => writeForCurrentOrConfigured(new ProcessExceptionLog {Type = exception.GetType().Name}, exception.Message);

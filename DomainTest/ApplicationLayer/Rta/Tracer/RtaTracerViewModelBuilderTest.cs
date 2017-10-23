@@ -122,7 +122,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
-		[SetCulture("sv-SE")]
 		public void ShouldContainDataRecievedAt()
 		{
 			RtaTracers
@@ -135,7 +134,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
-		[SetCulture("sv-SE")]
 		public void ShouldOnlyContainLatestDataRecievedAt()
 		{
 			RtaTracers
@@ -160,7 +158,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
-		[SetCulture("sv-SE")]
 		public void ShouldContainDataReceivedAtForTheProcess()
 		{
 			RtaTracers
@@ -183,6 +180,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 			Target.Build().Tracers.Single(x => x.Process == "p1").DataReceivedAt
 				.Should().Be("08:00:00");
+		}
+
+		[Test]
+		public void ShouldContainDataRecievedByAndCount()
+		{
+			RtaTracers
+				.Has(new RtaTracerLog<ProcessReceivedLog>
+				{
+					Log = new ProcessReceivedLog
+					{
+						RecievedBy = "method",
+						RecievedCount = 123
+					}
+				});
+
+			Target.Build().Tracers.Single().DataReceivedBy.Should().Be("method");
+			Target.Build().Tracers.Single().RecievedCount.Should().Be(123);
 		}
 
 		[Test]
@@ -272,7 +286,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 			Target.Build().Tracers.Single().Exception.Should().Be(exceptionType);
 		}
-
+		
 		[Test]
 		public void ShouldContainLatestProcessException()
 		{
