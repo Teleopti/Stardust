@@ -50,6 +50,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 			return $"{boxName}:{processId}";
 		}
 
+		public void RefreshTracers() =>
+			_tracers = _config.ReadAll().Select(tracer =>
+				{
+					var config = makeTracerFromConfig(tracer);
+					justWrite(new TracingLog {Tracing = config.User}, "Tracing", config.Tenant);
+					return config;
+				})
+				.ToArray();
+
+		public void FlushBuffer() => _writer.Flush();
+
 		public void Trace(string usercode) => _config.UpdateForTenant(usercode);
 		public void Stop() => _config.DeleteForTenant();
 		public void Clear() => _writer.Clear();
@@ -110,15 +121,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 				RefreshTracers();
 			return _tracers;
 		}
-
-		public void RefreshTracers() =>
-			_tracers = _config.ReadAll().Select(tracer =>
-				{
-					var config = makeTracerFromConfig(tracer);
-					justWrite(new TracingLog {Tracing = config.User}, "Tracing", config.Tenant);
-					return config;
-				})
-				.ToArray();
 
 		[TenantScope, UnitOfWork]
 		protected virtual tracer makeTracerFromConfig(RtaTracerConfig tracer)

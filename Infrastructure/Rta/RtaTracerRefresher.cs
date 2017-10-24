@@ -1,6 +1,7 @@
 using System;
 using Hangfire.Server;
 using log4net;
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -10,7 +11,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly IRtaTracer _tracer;
 		private readonly INow _now;
-		private DateTime _nextTime;
+		private readonly TimeSpan _interval = TimeSpan.FromSeconds(10);
+
 		private static readonly ILog Log = LogManager.GetLogger(typeof(RtaTracerRefresher));
 
 		public RtaTracerRefresher(IRtaTracer tracer, INow now)
@@ -21,20 +23,24 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public void Execute(BackgroundProcessContext context)
 		{
-			var now = _now.UtcDateTime();
-			if (now >= _nextTime)
+			try
 			{
-				try
-				{
-					_tracer.RefreshTracers();
-				}
-				catch (Exception e)
-				{
-					Log.Error("Exception occurred refreshing the rta tracer", e);
-				}
-				_nextTime = roundUp(now, TimeSpan.FromSeconds(10));
+				_tracer.RefreshTracers();
+				_tracer.FlushBuffer();
+				context.CancellationToken.WaitHandle.WaitOne(waitTime());
 			}
-			context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMilliseconds(1000));
+			catch (Exception e)
+			{
+				Log.Error("Exception occurred refreshing the rta tracer", e);
+				context.CancellationToken.WaitHandle.WaitOne(_interval);
+			}
+		}
+
+		private TimeSpan waitTime()
+		{
+			var nextTime = roundUp(_now.UtcDateTime().AddSeconds(1), _interval);
+			var untilNextTime = _now.UtcDateTime().Subtract(nextTime).Duration();
+			return untilNextTime > _interval ? _interval : untilNextTime;
 		}
 
 		private static DateTime roundUp(DateTime dt, TimeSpan d)

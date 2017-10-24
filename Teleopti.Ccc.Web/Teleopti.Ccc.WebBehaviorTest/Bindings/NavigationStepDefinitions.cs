@@ -508,6 +508,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			Navigation.GoToRtaTracer(userCode);
+			Browser.Interactions.AssertAnyContains(".process", userCode);
 		}
 
 		[When(@"I view agent details view for agent '(.*)'")]

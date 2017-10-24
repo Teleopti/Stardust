@@ -17,7 +17,6 @@ Background:
 	 | Start Date     | 2017-01-01   |
 	And there is a state with name 'Ready'
 	
-@ignore
 Scenario: See process trace
 	Given the time is '2017-09-25 08:00'
 	And I view real time adherence trace for 'Pierre Baldi'

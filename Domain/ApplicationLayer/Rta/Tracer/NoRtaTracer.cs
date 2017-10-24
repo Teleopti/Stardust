@@ -6,6 +6,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 {
 	public class NoRtaTracer : IRtaTracer
 	{
+		public void RefreshTracers()
+		{
+		}
+
+		public void FlushBuffer()
+		{
+		}
+
 		public void Trace(string usercode)
 		{
 		}
@@ -32,7 +40,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public void ProcessException(Exception exception)
 		{
-			
 		}
 
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace)
@@ -75,10 +82,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		}
 
 		public void StateProcessed(StateTraceLog trace, IEnumerable<IEvent> events)
-		{
-		}
-
-		public void RefreshTracers()
 		{
 		}
 	}

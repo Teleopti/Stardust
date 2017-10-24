@@ -1,5 +1,7 @@
 using System;
 using System.Data;
+using System.Linq;
+using Castle.Core.Internal;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -33,13 +35,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		private ILog makeAppender()
 		{
-			var appender = new AdoNetAppender()
+			var appender = new AdoNetAppender
 			{
 				Name = "RtaTracer",
 				BufferSize = _config.ReadValue("RtaTracerBufferSize", 20),
 				ConnectionType = typeof(System.Data.SqlClient.SqlConnection).AssemblyQualifiedName,
 				ConnectionString = _config.ConnectionString("RtaTracer"),
 				CommandText = "INSERT INTO RtaTracer.[Logs] ([Time], [Tenant], [MessageType], [Message]) VALUES (@log_date, @tenant, @messageType, @message)",
+				ReconnectOnError = true
 			};
 			appender.AddParameter(new AdoNetAppenderParameter
 			{
@@ -70,24 +73,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 			logger().AddAppender(appender);
 			logger().Hierarchy.Configured = true;
-			
+
 			return LogManager.GetLogger("Teleopti.RtaTracer");
 		}
 
-		public void Dispose()
-		{
-			logger().RemoveAllAppenders();
-		}
+		public void Dispose() => logger().RemoveAllAppenders();
 
-		private static Logger logger()
-		{
-			return LogManager.GetLogger("Teleopti.RtaTracer").Logger as Logger;
-		}
+		private static Logger logger() => LogManager.GetLogger("Teleopti.RtaTracer").Logger as Logger;
 
-		public void Write<T>(RtaTracerLog<T> log)
-		{
-			_log.Value.Debug(_serializer.SerializeObject(new {Log = log, log.Tenant, Type = typeof(T).Name}));
-		}
+		public void Write<T>(RtaTracerLog<T> log) => _log.Value.Debug(_serializer.SerializeObject(new {Log = log, log.Tenant, Type = typeof(T).Name}));
+
+		public void Flush() => logger().Appenders.OfType<AdoNetAppender>().ForEach(x => x.Flush());
 
 		public void Clear()
 		{
