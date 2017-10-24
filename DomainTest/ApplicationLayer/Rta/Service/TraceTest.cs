@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[TestFixture]
 	[RtaTest]
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
+	[Setting("UseSafeRtaTracer", false)]
 	public class TraceTest
 	{
 		public FakeRtaDatabase Database;
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
 				Tracer.Trace("usercode");
-			
+
 			try
 			{
 				Target.ProcessState(new StateForTest

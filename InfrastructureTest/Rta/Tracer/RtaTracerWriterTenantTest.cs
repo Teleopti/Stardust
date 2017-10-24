@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
 	[AnalyticsDatabaseTest]
 	[Setting("RtaTracerBufferSize", 0)]
+	[Setting("UseSafeRtaTracer", false)]
 	public class RtaTracerWriterTenantTest : ISetup
 	{
 		public IRtaTracerWriter Target;
@@ -22,12 +23,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 		public ICurrentDataSource Tenant;
 		public IDataSourceScope DataSource;
 		public FakeDataSourceForTenant DataSources;
-		
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 		}
-		
+
 		[Test]
 		public void ShouldWriteTenant()
 		{
@@ -60,6 +61,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 			using (DataSource.OnThisThreadUse("another tenant"))
 				Reader.ReadOfType<ProcessReceivedLog>().Should().Not.Be.Empty();
 		}
-
 	}
 }

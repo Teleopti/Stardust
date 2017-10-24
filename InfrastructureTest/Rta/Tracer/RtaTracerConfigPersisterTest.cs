@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
 	[AnalyticsDatabaseTest]
 	[Setting("RtaTracerBufferSize", 0)]
+	[Setting("UseSafeRtaTracer", false)]
 	public class RtaTracerConfigPersisterTest : ISetup
 	{
 		public FakeDataSourceForTenant Tenants;
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 
 			Target.ReadAll().Should().Be.Empty();
 		}
-		
+
 		[Test]
 		public void ShouldDeleteForTenant()
 		{

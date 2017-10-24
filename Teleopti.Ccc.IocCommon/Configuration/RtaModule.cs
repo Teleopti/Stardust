@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Aop;
@@ -106,7 +107,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaToolViewModelBuilderFromAgentState>().As<IRtaToolViewModelBuilder>().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_RtaTracer_45597))
-				builder.RegisterType<RtaTracer>().As<IRtaTracer>().SingleInstance().ApplyAspects();
+			{
+				if (_config.Args().ConfigReader.ReadValue("UseSafeRtaTracer", true))
+				{
+					builder.RegisterType<RtaTracer>().SingleInstance().ApplyAspects();
+					builder.RegisterType<SafeRtaTracer>().As<IRtaTracer>().SingleInstance();
+				}
+				else
+				{
+					builder.RegisterType<RtaTracer>().As<IRtaTracer>().SingleInstance().ApplyAspects();
+				}
+			}
 			else
 				builder.RegisterType<NoRtaTracer>().As<IRtaTracer>().SingleInstance();
 			builder.RegisterType<RtaTracerRefresher>().SingleInstance().ApplyAspects();

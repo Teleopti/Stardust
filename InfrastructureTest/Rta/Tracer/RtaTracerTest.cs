@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
 	[AnalyticsDatabaseTest]
 	[Setting("RtaTracerBufferSize", 0)]
+	[Setting("UseSafeRtaTracer", false)]
 	public class RtaTracerTest
 	{
 		public IRtaTracer Tracer;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 			Target.ReadOfType<TracingLog>()
 				.Should().Have.Count.EqualTo(1);
 		}
-		
+
 		[Test]
 		public void ShouldTraceProcessReceived()
 		{

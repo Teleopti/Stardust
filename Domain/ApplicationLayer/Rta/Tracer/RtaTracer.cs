@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 			_process = ProcessName();
 		}
 
-
 		public static string ProcessName()
 		{
 			var boxName = Environment.GetEnvironmentVariable("COMPUTERNAME")

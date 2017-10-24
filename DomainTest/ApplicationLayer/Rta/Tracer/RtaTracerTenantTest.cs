@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 {
 	[RtaTest]
 	[Toggle(Toggles.RTA_RtaTracer_45597)]
+	[Setting("UseSafeRtaTracer", false)]
 	public class RtaTracerTenantTest
 	{
 		public IRtaTracer Target;

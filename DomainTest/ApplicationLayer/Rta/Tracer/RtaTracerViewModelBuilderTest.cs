@@ -13,6 +13,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 {
 	[DomainTest]
+	[Setting("UseSafeRtaTracer", false)]
 	public class RtaTracerViewModelBuilderTest
 	{
 		public RtaTracerViewModelBuilder Target;
@@ -286,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 			Target.Build().Tracers.Single().Exception.Should().Be(exceptionType);
 		}
-		
+
 		[Test]
 		public void ShouldContainLatestProcessException()
 		{
