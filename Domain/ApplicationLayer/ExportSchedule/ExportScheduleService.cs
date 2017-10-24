@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			{
 				var parentGroups = _groupingReadOnlyRepository.GetGroupPage(input.SelectedGroups.SelectedGroupPageId);
 				var selectedGroups = _groupingReadOnlyRepository.FindGroups(input.SelectedGroups.GroupIds, period);
-				selectedGroupNames = string.Join(",", selectedGroups.Select(g => parentGroups.PageName + "/" + g.GroupName));
+				selectedGroupNames = string.Join(",", selectedGroups.Select(g => _userTextTranslator.TranslateText(parentGroups.PageName) + "/" + g.GroupName));
 			}
 			else
 			{

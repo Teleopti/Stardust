@@ -440,6 +440,49 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 
 			sheet.GetRow(0).Cells[1].StringCellValue.Should().Be.EqualTo("my page/test value");
 		}
+		[Test]
+		public void ShouldDisplayTranslatedSelectedBuiltInGroupsInHeaderRow()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			TeamRepository.Has(team);
+			var groupPage = new ReadOnlyGroupPage
+			{
+				PageId = Guid.NewGuid(),
+				PageName = "xxContract"
+			};
+			var groupDetail = new ReadOnlyGroupDetail
+			{
+				GroupId = Guid.NewGuid(),
+				PageId = groupPage.PageId,
+				GroupName = "test value"
+			};
+
+			GroupingReadOnlyRepository.Has(new [] {groupPage}, new [] {groupDetail});
+
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupPageId = groupPage.PageId,
+					SelectedGroupIds = new[] { groupDetail.GroupId.ToString() }
+				}
+			};
+			var byteArray = Target.ExportToExcel(input).Data;
+			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
+			var sheet = workbook.GetSheetAt(0);
+
+			sheet.GetRow(0).Cells[1].StringCellValue.Should().Be.EqualTo("Contract/test value");
+		}
 		
 		[Test]
 		public void ShouldDisplaySelectedDynamicGroupsInHeaderRow()
