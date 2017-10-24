@@ -12540,7 +12540,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forecasted average handle time.
+        ///   Looks up a localized string similar to Forecasted average handling time.
         /// </summary>
         public static string ForecastedAverageHandleTime {
             get {

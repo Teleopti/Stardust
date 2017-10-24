@@ -14332,7 +14332,7 @@ Check your internet connection or contact your administrator.</value>
     <value>Create skill group</value>
   </data>
   <data name="ForecastedAverageHandleTime" xml:space="preserve">
-    <value>Forecasted average handle time</value>
+    <value>Forecasted average handling time</value>
     <comment>legend label in intraday chart</comment>
   </data>
   <data name="IncomingTraffic" xml:space="preserve">
