@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public SchedulingResultModel Execute(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople)
 		{
-			var personsProvider = new PersonsInOrganizationProvider(fixedStaffPeople) { DoLoadByPerson = true };
+			var personsProvider = new PersonProvider(fixedStaffPeople) { DoLoadByPerson = true };
 			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(new ScheduleDateTimePeriod(period.ToDateTimePeriod(_userTimeZone.TimeZone()), fixedStaffPeople), _currentScenario.Current(), personsProvider, new ScheduleDictionaryLoadOptions(false, false, false), fixedStaffPeople);
 
 			return new SchedulingResultModel

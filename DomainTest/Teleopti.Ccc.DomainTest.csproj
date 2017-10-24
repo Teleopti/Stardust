@@ -666,7 +666,6 @@
     <Compile Include="Common\VirtualSchedulePeriodFinderTest.cs" />
     <Compile Include="Common\PersonProviderTest.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriodTest.cs" />
-    <Compile Include="Common\PersonsInOrganizationProviderTest.cs" />
     <Compile Include="DayOffPlanning\CMSBCaseSolverTest.cs" />
     <Compile Include="DayOffPlanning\CMSBOneFreeWeekendMax5WorkingDaysDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\ConsecutiveDayOffValidatorTest.cs" />

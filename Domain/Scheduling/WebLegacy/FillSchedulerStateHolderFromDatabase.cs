@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
 			schedulerStateHolderTo.SetRequestedScenario(scenario);
-			var personProvider = new PersonsInOrganizationProvider(agents) {DoLoadByPerson = true }; //TODO: this is experimental
+			var personProvider = new PersonProvider(agents) {DoLoadByPerson = true }; //TODO: this is experimental
 			schedulerStateHolderTo.LoadSchedules(_findSchedulesForPersons, personProvider,
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				new ScheduleDateTimePeriod(dateTimePeriod, agents, new SchedulerRangeToLoadCalculator(dateTimePeriod)));

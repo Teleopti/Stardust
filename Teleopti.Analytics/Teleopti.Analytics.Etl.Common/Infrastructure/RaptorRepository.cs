@@ -602,7 +602,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
-				var personsInOrganizationProvider = new PersonsInOrganizationProvider(persons) { DoLoadByPerson = true };
+				var personsInOrganizationProvider = new PersonProvider(persons) { DoLoadByPerson = true };
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
 
 				var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);

@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		private ReportDataPackage<IReportData> getReportDataForScheduleTimePerActivityReport(ReportSettingsScheduledTimePerActivityModel model)
 		{
 			IScheduleDateTimePeriod period = new ScheduleDateTimePeriod(model.Period.ToDateTimePeriod(model.TimeZone));
-			IPersonProvider personsProvider = new PersonsInOrganizationProvider(model.Persons)
+			IPersonProvider personsProvider = new PersonProvider(model.Persons)
 												  {
 													  DoLoadByPerson = true
 												  };

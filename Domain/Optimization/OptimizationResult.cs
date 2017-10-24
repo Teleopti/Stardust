@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var resultStateHolder = _schedulerStateHolder().SchedulingResultState;
 			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(period, fixedStaffPeople, resultStateHolder);
 
-			var personsProvider = new PersonsInOrganizationProvider(fixedStaffPeople) { DoLoadByPerson = true };
+			var personsProvider = new PersonProvider(fixedStaffPeople) { DoLoadByPerson = true };
 			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(
 				new ScheduleDateTimePeriod(period.ToDateTimePeriod(_userTimeZone.TimeZone()), fixedStaffPeople), _currentScenario.Current(), personsProvider, 
 				new ScheduleDictionaryLoadOptions(false, false, false), fixedStaffPeople);

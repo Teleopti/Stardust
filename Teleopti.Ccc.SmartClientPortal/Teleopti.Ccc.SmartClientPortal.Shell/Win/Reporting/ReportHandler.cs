@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		{
 			if (stateHolder == null) throw new ArgumentNullException(nameof(stateHolder));
 			var period = new ScheduleDateTimePeriod(stateHolder.RequestedPeriod.Period(), stateHolder.SchedulingResultState.PersonsInOrganization);
-			IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons) { DoLoadByPerson = true};
+			IPersonProvider personsInOrganizationProvider = new PersonProvider(persons) { DoLoadByPerson = true};
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 			unitOfWork.Reassociate(persons);
 			var repositoryFactory = new RepositoryFactory();

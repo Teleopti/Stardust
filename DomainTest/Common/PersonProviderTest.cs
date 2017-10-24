@@ -37,27 +37,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreSame(_persons[1], resultList[1]);
         }
 
-        [Test]
-        public void VerifyWhenCreatingWithPersonRepositoryGetBackLoadedPersons()
-        {
-            _target = new PersonProvider(_personRepository);
-
-            IList<IPerson> resultList = null;
-
-            using(_mockRepository.Record())
-            {
-                Expect.Call(_personRepository.FindAllSortByName())
-                    .Return(_persons);
-            }
-            using(_mockRepository.Playback())
-            {
-                resultList = _target.GetPersons();
-            }
-
-            Assert.IsNotNull(_target);
-            Assert.AreSame(_persons[0], resultList[0]);
-            Assert.AreSame(_persons[1], resultList[1]);
-        }
 
         [Test]
         public void ShouldBeAbleToGetAndSetDoLoadByPerson()

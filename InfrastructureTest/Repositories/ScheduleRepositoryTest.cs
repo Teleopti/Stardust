@@ -138,55 +138,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Expect.Call(_repositoryFactory.CreateMeetingRepository(_unitOfWork)).Return(_meetingRepository).Repeat.Any();
 		}
 
-		[Test]
-		public void VerifyCanLoadAllBasedOnPeriodAndScenario()
-		{
-			IList<IPerson> persons = new List<IPerson>();
-			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longDateOnlyPeriod);
-			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-
-			IScheduleDictionary retDic;
-
-			//setup fake objects
-			IPerson per1 = PersonFactory.CreatePerson("sdvfbvv").WithId();
-			IPerson per2 = PersonFactory.CreatePerson("bdfbvdfbd").WithId();
-			persons.Add(per1);
-			persons.Add(per2);
-
-			var visiblePeople = new List<IPerson>(persons);
-
-			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			IPersonAssignment pAss1 = addPersonAssignment(per1, period);
-			IPersonAssignment pAss2 = addPersonAssignment(per2, period);
-
-			IPersonAbsence pAbs = addAbsence(per1);
-
-			addMeeting(per1);
-			addPreference(per1);
-			addNote(per1);
-			addPublicNote(per1);
-			addAgentDayScheduleTag(per1);
-
-			using (_mocks.Record())
-			{
-				expectScheduleLoadForAll(persons, visiblePeople);
-			}
-			using (_mocks.Playback())
-			{
-				retDic = _target.FindSchedulesForPersons(_schedPeriod, _scenario, personsProvider, scheduleDictionaryLoadOptions, visiblePeople);
-			}
-			Assert.AreEqual(2, retDic.Count);
-			Assert.IsTrue(retDic[per1].Contains(pAss1));
-			Assert.IsTrue(retDic[per2].Contains(pAss2));
-			Assert.IsTrue(retDic[per1].Contains(pAbs));
-			Assert.IsTrue(retDic[per1].Contains(_prefDays[0]));
-			Assert.IsTrue(retDic[per1].Contains(_notes[0]));
-			Assert.IsTrue(retDic[per1].Contains(_agentDayScheduleTags[0]));
-
-			Assert.IsNotNull(((ScheduleRange)retDic[per1]).Snapshot);
-			Assert.IsNotNull(((ScheduleRange)retDic[per2]).Snapshot);
-			Assert.IsTrue(retDic[per1].ScheduledDay(new DateOnly(2000, 6, 1)).PersonMeetingCollection().Count == 1);
-		}
 		
 		private void addMeeting(IPerson person)
 		{
@@ -235,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			peopleInOrganization.Add(person1);
 			peopleInOrganization.Add(person2);
 			peopleInOrganization.Add(person3);
-			IPersonProvider personsProvider = new PersonsInOrganizationProvider(peopleInOrganization) { DoLoadByPerson = true };
+			IPersonProvider personsProvider = new PersonProvider(peopleInOrganization) { DoLoadByPerson = true };
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 			person3.TerminatePerson(new DateOnly(2000, 1, 8), new PersonAccountUpdaterDummy());
@@ -286,7 +237,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			peopleInOrganization.Add(person1);
 			peopleInOrganization.Add(person2);
 			peopleInOrganization.Add(person3);
-			IPersonProvider personsProvider = new PersonsInOrganizationProvider(peopleInOrganization) { DoLoadByPerson = true };
+			IPersonProvider personsProvider = new PersonProvider(peopleInOrganization) { DoLoadByPerson = true };
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true)
 			{
 				LoadDaysAfterLeft = true
@@ -334,7 +285,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			//setup fake objects
 			IPerson person3 = PersonFactory.CreatePerson("xxxxxx").WithId();
 			peopleInOrganization.Add(person3);
-			IPersonProvider personsProvider = new PersonsInOrganizationProvider(peopleInOrganization) { DoLoadByPerson = true };
+			IPersonProvider personsProvider = new PersonProvider(peopleInOrganization) { DoLoadByPerson = true };
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 			person3.TerminatePerson(new DateOnly(2000, 1, 8), new PersonAccountUpdaterDummy());
@@ -469,36 +420,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Expect.Call(_availabilityDayRep.Find(_searchPeriod, visiblePeople)).Return(_studentAvailabilityDays);
 			Expect.Call(_overtimeAvailabilityRepository.Find(_searchPeriod, visiblePeople))
 	  .Return(_overtimeAvailbilityDays);
-		}
-
-		[Test]
-		public void VerifyRotationRestrictionOnSchedulePart()
-		{
-			IList<IPerson> persons = new List<IPerson>();
-
-			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longDateOnlyPeriod);
-			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-
-			IScheduleDictionary retDic;
-
-			//setup fake objects
-			IPerson per1 = PersonFactory.CreatePerson("sdfpojsdpofjk").WithId();
-			persons.Add(per1);
-
-			addRotation(per1);
-			addPersonAssignment(per1, new DateTimePeriod(2000, 2, 1, 2000, 2, 2));
-
-			var visiblePeople = new List<IPerson>(persons);
-			using (_mocks.Record())
-			{
-				expectScheduleLoadForAll(persons, visiblePeople);
-			}
-			using (_mocks.Playback())
-			{
-				retDic = _target.FindSchedulesForPersons(_schedPeriod, _scenario, personsProvider, scheduleDictionaryLoadOptions, visiblePeople);
-			}
-			var coll = retDic[per1].ScheduledDay(new DateOnly(2000, 2, 1)).PersonRestrictionCollection();
-			Assert.AreEqual(1, coll.Count);
 		}
 
 		private void expectScheduleLoadForAll(IList<IPerson> persons, IList<IPerson> visiblePeople)

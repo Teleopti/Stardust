@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			ISkillDayLoadHelper skillDayLoadHelper)
 			: this(personRepository, personAbsenceAccountRepository, skillRepository, workloadRepository, scheduleStorage,
 				peopleAndSkillLoaderDecider, skillDayLoadHelper,
-				p => new PersonsInOrganizationProvider(p))
+				p => new PersonProvider(p))
 		{
 		}
 

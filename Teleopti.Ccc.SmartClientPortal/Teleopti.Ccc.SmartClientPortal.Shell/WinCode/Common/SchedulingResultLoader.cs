@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			var requestedPeriod = SchedulerState.RequestedPeriod.Period().ChangeEndTime(TimeSpan.FromHours(24)).ChangeStartTime(TimeSpan.FromHours(-24));
 
             IPersonProvider personsInOrganizationProvider =
-                new PersonsInOrganizationProvider(SchedulerState.SchedulingResultState.PersonsInOrganization);
+                new PersonProvider(SchedulerState.SchedulingResultState.PersonsInOrganization);
             personsInOrganizationProvider.DoLoadByPerson =
                 _loadScheduleByPersonSpecification.IsSatisfiedBy(_deciderResult);
 

@@ -3797,7 +3797,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (PerformanceOutput.ForOperation("Loading schedules " + period.LoadedPeriod()))
 			{
 				IPersonProvider personsInOrganizationProvider =
-					new PersonsInOrganizationProvider(stateHolder.SchedulingResultState.PersonsInOrganization);
+					new PersonProvider(stateHolder.SchedulingResultState.PersonsInOrganization);
 				// If the people in organization is filtered out to 70% or less of all people then flag 
 				// so that a criteria for that is used later when loading schedules.
 				var loaderSpecification = new LoadScheduleByPersonSpecification();

@@ -1957,7 +1957,6 @@
     <Compile Include="Common\LogWriter.cs" />
     <Compile Include="Common\PersonProvider.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriod.cs" />
-    <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
     <Compile Include="Config\ConfigReaderExtensions.cs" />

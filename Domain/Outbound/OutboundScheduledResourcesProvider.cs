@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 				_repositoryFactory);
 			schedulerStateHolder.ResetFilteredPersons();
 			//TODO: using schedulestorage here will load unnecesary big period
-			schedulerStateHolder.LoadSchedules(_scheduleStorage, new PersonsInOrganizationProvider(people.AllPeople),
+			schedulerStateHolder.LoadSchedules(_scheduleStorage, new PersonProvider(people.AllPeople),
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				new ScheduleDateTimePeriod(dateTimePeriod, people.FixedStaffPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
 

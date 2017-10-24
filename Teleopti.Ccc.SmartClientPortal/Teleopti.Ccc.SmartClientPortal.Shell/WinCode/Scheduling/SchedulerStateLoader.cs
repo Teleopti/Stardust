@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		private void initializeSchedules(IUnitOfWork uow, IScheduleDateTimePeriod scheduleDateTimePeriod)
 		{
-			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_schedulerState.SchedulingResultState.PersonsInOrganization);
+			IPersonProvider personsProvider = new PersonProvider(_schedulerState.SchedulingResultState.PersonsInOrganization);
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 			IScheduleStorage scheduleStorage = _scheduleStorageFactory.Create(uow);
 
