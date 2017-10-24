@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public StateTraceLog StateReceived(string userCode, string stateCode) => startStateTrace(tracerFor(userCode), stateCode, "Received");
 		public StateTraceLog ActivityCheck(Guid personId) => startStateTrace(tracerFor(personId), null, "Activity checked");
-		public StateTraceLog SnapshotLogout(Guid personId, string stateCode) => null;
+		public StateTraceLog SnapshotLogout(Guid personId, string stateCode) => startStateTrace(tracerFor(personId), stateCode, "Snapshot logout");
 
 		public void InvalidStateCode(StateTraceLog trace) => writeIfTraced(trace, "Invalid state code");
 		public void StateProcessing(StateTraceLog trace) => writeIfTraced(trace, "Processing");
