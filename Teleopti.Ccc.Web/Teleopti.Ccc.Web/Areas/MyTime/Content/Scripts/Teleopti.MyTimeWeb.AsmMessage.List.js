@@ -35,9 +35,10 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		});
 
 		self.isLoading = ko.observable(true);
-		self.hasMoreMessages = ko.computed(function () {
+		self.hasMoreMessages = function () {
 			return _getMessageCount() - self.asmMessageList().length > 0;
-		});
+		};
+
 		self.shouldShowMessage = ko.computed(function () {
 			return self.asmMessageList().length === 0 && !self.isLoading() && !self.hasMoreMessages();
 		});
