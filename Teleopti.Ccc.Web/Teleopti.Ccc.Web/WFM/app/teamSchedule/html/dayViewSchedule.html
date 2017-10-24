@@ -83,7 +83,11 @@
 			</div>
 
 			<span class="icon-container inline-block cursor-pointer" ng-if="vm.toggles.WfmTeamSchedule_ExportSchedulesToExcel_45795" ng-click="vm.openExportPanel()">
-				<i class="mdi mdi-file-excel"></i>
+				<i class="mdi mdi-file-excel">
+					<md-tooltip>
+						{{'ExportSchedule'|translate}}
+					</md-tooltip>
+				</i>
 			</span>
 
 			<span class="icon-container inline-block cursor-pointer" ng-click="vm.openSettingsPanel()">
