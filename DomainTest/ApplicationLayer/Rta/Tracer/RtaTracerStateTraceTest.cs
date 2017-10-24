@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			Target.StateReceived("usercode", "statecode");
 
 			Logs.ReadOfType<StateTraceLog>().Single().Log.StateCode.Should().Be("statecode");
-			Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Be("usercode");
+			Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Contain("usercode");
 		}
 
 		[Test]

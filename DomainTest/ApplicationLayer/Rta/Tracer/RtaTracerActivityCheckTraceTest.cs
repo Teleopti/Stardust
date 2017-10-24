@@ -140,5 +140,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 				actual.Log.Tracing.Should().Contain("baldi");
 			}
 		}
+
+		[Test]
+		public void ShouldLogTracingUser()
+		{
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			Database
+				.WithAgent("jågej kjax", person1)
+				.WithExternalLogon("usercode")
+				.WithAgent("pierre baldi", person2)
+				.WithExternalLogon("usercode")
+				;
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.Trace("usercode");
+
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+				Target.ActivityCheck(person1);
+
+			using (DataSource.OnThisThreadUse(Database.TenantName()))
+			{
+				var actual = Logs.ReadOfType<StateTraceLog>().Single();
+				actual.Log.User.Should().Contain("usercode");
+				actual.Log.User.Should().Contain("jågej");
+				actual.Log.User.Should().Contain("kjax");
+				actual.Log.User.Should().Contain("pierre");
+				actual.Log.User.Should().Contain("baldi");
+			}
+		}
 	}
 }

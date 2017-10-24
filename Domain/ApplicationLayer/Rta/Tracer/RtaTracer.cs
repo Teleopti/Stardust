@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		protected class tracer
 		{
 			public string Tenant;
-			public string UserCode;
 			public string User;
+			public string UserCode;
 			public IEnumerable<Guid> Persons;
 		}
 
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 			var trace = new StateTraceLog
 			{
 				Id = Guid.NewGuid(),
-				User = tracer.UserCode,
+				User = tracer.User,
 				StateCode = stateCode
 			};
 			justWrite(trace, message, tracer.Tenant);
