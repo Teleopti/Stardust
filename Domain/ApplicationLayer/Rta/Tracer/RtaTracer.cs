@@ -75,6 +75,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public void FlushBuffer() => _writer.Flush();
 
+		public void PurgeLogs()
+		{
+			if (!enabled())
+				return;
+			_writer.Purge();
+		}
+
 		public void Trace(string usercode) => _config.UpdateForTenant(usercode);
 		public void Stop() => _config.DeleteForTenant();
 		public void Clear() => _writer.Clear();

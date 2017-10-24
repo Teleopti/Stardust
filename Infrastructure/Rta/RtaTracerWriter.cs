@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -22,8 +23,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private readonly IJsonSerializer _serializer;
 		private readonly RtaTracerSessionFactory _sessionFactory;
 		private readonly ICurrentDataSource _dataSource;
+		private readonly INow _now;
+		private readonly TimeSpan _keepLogs;
 
-		public RtaTracerWriter(IConfigReader config, IJsonDeserializer deserializer, IJsonSerializer serializer, RtaTracerSessionFactory sessionFactory, ICurrentDataSource dataSource)
+		public RtaTracerWriter(IConfigReader config, IJsonDeserializer deserializer, IJsonSerializer serializer, RtaTracerSessionFactory sessionFactory, ICurrentDataSource dataSource, INow now)
 		{
 			_log = new Lazy<ILog>(makeAppender);
 			_config = config;
@@ -31,6 +34,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_serializer = serializer;
 			_sessionFactory = sessionFactory;
 			_dataSource = dataSource;
+			_now = now;
+			_keepLogs = TimeSpan.FromMinutes(_config.ReadValue("RtaTracerPurgeKeepMinutes", 60));
 		}
 
 		private ILog makeAppender()
@@ -48,7 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{
 				ParameterName = "@log_date",
 				DbType = DbType.DateTime,
-				Layout = new RawTimeStampLayout()
+				Layout = new RawUtcTimeStampLayout()
 			});
 			appender.AddParameter(new ValueFromJsonSerializedMessageParameter(_deserializer)
 			{
@@ -91,6 +96,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				session
 					.CreateSQLQuery($@"DELETE RtaTracer.Logs WHERE Tenant = :Tenant")
 					.SetParameter("Tenant", _dataSource.CurrentName())
+					.ExecuteUpdate();
+		}
+
+		public void Purge()
+		{
+			using (var session = _sessionFactory.OpenSession())
+				session
+					.CreateSQLQuery($@"DELETE RtaTracer.Logs WHERE Time <= :Time")
+					.SetParameter("Time", _now.UtcDateTime().Add(_keepLogs.Negate()))
 					.ExecuteUpdate();
 		}
 	}

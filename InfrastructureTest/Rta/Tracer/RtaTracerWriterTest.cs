@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
@@ -82,6 +83,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 			Target.Clear();
 
 			Reader.ReadOfType<ProcessReceivedLog>().Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldPurge()
+		{
+			Target.Write(new RtaTracerLog<ProcessReceivedLog> {Tenant = DataSource.CurrentName()});
+			Now.Is(DateTime.UtcNow.AddHours(1).AddMinutes(1));
+
+			Target.Purge();
+
+			Reader.ReadOfType<ProcessReceivedLog>().Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotPurgeWithinOneHour()
+		{
+			Target.Write(new RtaTracerLog<ProcessReceivedLog> {Tenant = DataSource.CurrentName()});
+			Now.Is(DateTime.UtcNow.AddMinutes(59));
+
+			Target.Purge();
+
+			Reader.ReadOfType<ProcessReceivedLog>().Should().Not.Be.Empty();
+		}
+
+		[Test]
+		[Setting("RtaTracerPurgeKeepMinutes", 2 * 60)]
+		public void ShouldNotPurgeWithinTwoHours()
+		{
+			Target.Write(new RtaTracerLog<ProcessReceivedLog> {Tenant = DataSource.CurrentName()});
+			Now.Is(DateTime.UtcNow.AddHours(1).AddMinutes(59));
+
+			Target.Purge();
+
+			Reader.ReadOfType<ProcessReceivedLog>().Should().Not.Be.Empty();
 		}
 	}
 }

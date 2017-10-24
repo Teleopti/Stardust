@@ -5,5 +5,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		void Write<T>(RtaTracerLog<T> log);
 		void Flush();
 		void Clear();
+		void Purge();
 	}
 }

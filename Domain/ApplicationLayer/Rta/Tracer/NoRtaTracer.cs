@@ -14,6 +14,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		{
 		}
 
+		public void PurgeLogs()
+		{
+		}
+
 		public void Trace(string usercode)
 		{
 		}

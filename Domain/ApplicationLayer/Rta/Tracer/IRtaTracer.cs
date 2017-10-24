@@ -8,6 +8,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 	{
 		void RefreshTracers();
 		void FlushBuffer();
+		void PurgeLogs();
+		
 
 		void Trace(string usercode);
 		void Stop();

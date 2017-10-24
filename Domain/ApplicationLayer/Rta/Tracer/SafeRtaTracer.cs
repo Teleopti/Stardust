@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public void RefreshTracers() => _unsafe.RefreshTracers();
 		public void FlushBuffer() => _unsafe.FlushBuffer();
+		public void PurgeLogs() => _unsafe.PurgeLogs();
+
 		public void Trace(string usercode) => _unsafe.Trace(usercode);
 		public void Stop() => _unsafe.Stop();
 		public void Clear() => _unsafe.Clear();

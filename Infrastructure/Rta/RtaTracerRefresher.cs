@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{
 				_tracer.RefreshTracers();
 				_tracer.FlushBuffer();
+				_tracer.PurgeLogs();
 				context.CancellationToken.WaitHandle.WaitOne(waitTime());
 			}
 			catch (Exception e)
