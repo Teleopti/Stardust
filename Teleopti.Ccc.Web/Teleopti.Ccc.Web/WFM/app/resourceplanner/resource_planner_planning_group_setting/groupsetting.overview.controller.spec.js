@@ -140,6 +140,7 @@ describe('planningGroupSettingOverviewController', function () {
 
         var priority = vm.schedulingSetting[2].Priority;
         var id = vm.schedulingSetting[2].Id;
+        vm.test = true;
         vm.setHigherPriority(vm.schedulingSetting[2], 2);
 
         $httpBackend.flush();
@@ -156,6 +157,7 @@ describe('planningGroupSettingOverviewController', function () {
 
         var priority = vm.schedulingSetting[1].Priority;
         var id = vm.schedulingSetting[1].Id;
+        vm.test = true;
         vm.setLowerPriority(vm.schedulingSetting[1], 1);
 
         $httpBackend.flush();

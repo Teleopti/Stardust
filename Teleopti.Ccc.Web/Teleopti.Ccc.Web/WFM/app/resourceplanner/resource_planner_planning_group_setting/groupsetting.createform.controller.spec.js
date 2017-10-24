@@ -68,7 +68,8 @@ describe('planningGroupSettingEditController', function () {
                 MaxFullWeekendsOff: 8,
                 MinWeekendDaysOff: 0,
                 MaxWeekendDaysOff: 16,
-                Filters: []
+                Filters: [],
+                Priority: 0
             }, {}];
         });
 
@@ -96,7 +97,8 @@ describe('planningGroupSettingEditController', function () {
                     Id: "79c466f0-cbe8-4209-b949-9b5e015b23f7",
                     FilterType: "contract",
                     Name: "Full time Fixed staff"
-                }]
+                }],
+                Priority: 5
             }, {}];
         });
     }));
@@ -210,7 +212,8 @@ describe('planningGroupSettingEditController', function () {
             MinFullWeekendsOff: 0,
             MaxFullWeekendsOff: 8,
             MinWeekendDaysOff: 0,
-            MaxWeekendDaysOff: 16
+            MaxWeekendDaysOff: 16,
+            Priority: 5
         });
 
         expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
@@ -269,7 +272,8 @@ describe('planningGroupSettingEditController', function () {
             MinFullWeekendsOff: 0,
             MaxFullWeekendsOff: 8,
             MinWeekendDaysOff: 0,
-            MaxWeekendDaysOff: 16
+            MaxWeekendDaysOff: 16,
+            Priority: 5
         });
 
         expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
@@ -339,7 +343,8 @@ describe('planningGroupSettingEditController', function () {
             MinFullWeekendsOff: 0,
             MaxFullWeekendsOff: 8,
             MinWeekendDaysOff: 0,
-            MaxWeekendDaysOff: 16
+            MaxWeekendDaysOff: 16,
+            Priority: 0
         });
 
         expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
