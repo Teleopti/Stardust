@@ -6,7 +6,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport)]
 	public class ScheduleAuditTrailController : ApiController
 	{
 		private readonly PersonsWhoChangedSchedulesViewModelProvider _personsWhoChangedSchedulesViewModelProvider;

@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
@@ -53,10 +54,7 @@ namespace Teleopti.Ccc.Domain.Reports
 							new MatrixFunctionGroup
 							{
 								LocalizedDescription = Resources.ScheduleAnalysis,
-								ApplicationFunctions =
-								(from a in PermittedReportFunctions
-									where analysisReports().Contains(a.ForeignId.ToUpper())
-									select a).ToList()
+								ApplicationFunctions = getScheduleAnalysisApplicationFunctions()
 							},
 							new MatrixFunctionGroup
 							{
@@ -107,10 +105,28 @@ namespace Teleopti.Ccc.Domain.Reports
 									select a
 							}
 					};
+				
 				matrixFunctionGroups = from g in matrixFunctionGroups where g.ApplicationFunctions.Any() select g;
 
 				return matrixFunctionGroups;
 			}
+		}
+
+		private List<IApplicationFunction> getScheduleAnalysisApplicationFunctions()
+		{
+			var ret = (from a in PermittedReportFunctions
+				where analysisReports().Contains(a.ForeignId.ToUpper())
+				select a)
+				.ToList();
+			var auditApplicationFunction = PrincipalAuthorization.Current()
+				.GrantedFunctions().FirstOrDefault(a => a.ForeignId == "0148");
+			if (auditApplicationFunction != null)
+			{
+				auditApplicationFunction.IsWebReport = true;
+				ret.Add(auditApplicationFunction);
+			}
+
+			return ret;
 		}
 
 		public IEnumerable<IApplicationFunction> PermittedCustomReportFunctions

@@ -117,6 +117,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 
 			// Reports
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports, "xxBadgeLeaderBoardReport", DefinedRaptorApplicationFunctionForeignIds.ViewBadgeLeaderboardUnderReports);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport, "xxScheduleAuditTrailReport", DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport);
 
 			// Agent Portal Web
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MyTimeWeb, "xxMyTimeWeb", DefinedRaptorApplicationFunctionForeignIds.MyTimeWeb);

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.DomainTest.Reports
 {
@@ -92,6 +93,38 @@ namespace Teleopti.Ccc.DomainTest.Reports
 					Assert.That(actualReportFunctionGroups.Count(), Is.EqualTo(1));
 					Assert.That(actualReportFunctionGroups.ElementAt(0).ApplicationFunctions.Single(),
 									Is.SameAs(reportFunctions.First()));
+					Assert.That(actualReportFunctionGroups.ElementAt(0).ApplicationFunctions.Single().IsWebReport,
+						Is.EqualTo(false));
+				}
+			}
+		}
+
+		[Test]
+		public void ShouldProvideAuditTrailInPermittedReportFunctions()
+		{
+			var authorization = _mocks.StrictMock<IAuthorization>();
+			
+			var reportFunctions = new List<IApplicationFunction>
+			{
+				new ApplicationFunction {ForeignId = "0148", ForeignSource = DefinedForeignSourceNames.SourceRaptor}
+			};
+
+			using (_mocks.Record())
+			{
+				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(reportFunctions).Repeat.AtLeastOnce();
+			}
+			using (_mocks.Playback())
+			{
+				using (CurrentAuthorization.ThreadlyUse(authorization))
+				{
+				
+					IEnumerable<IMatrixFunctionGroup> actualReportFunctionGroups = _target.PermittedCategorizedReportFunctions.ToList();
+
+					Assert.That(actualReportFunctionGroups.Count(), Is.EqualTo(1));
+					Assert.That(actualReportFunctionGroups.ElementAt(0).ApplicationFunctions.Single(),
+						Is.SameAs(reportFunctions.First()));
+					Assert.That(actualReportFunctionGroups.ElementAt(0).ApplicationFunctions.Single().IsWebReport,
+						Is.EqualTo(true));
 				}
 			}
 		}

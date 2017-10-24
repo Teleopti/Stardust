@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 					Url = _reportUrl.Build(report.ForeignId),
 					Name = report.LocalizedFunctionDescription,
 					Category = reportCollection.LocalizedDescription,
+					IsWebReport = report.IsWebReport
 				}))
 				.ToList();
 

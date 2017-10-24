@@ -102,5 +102,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Used together with ForeignId property to define a fogeign application function.
         /// </remarks>
         string ForeignSource { get; set; }
-    }
+
+	    bool IsWebReport { get; set; }
+	}
 }

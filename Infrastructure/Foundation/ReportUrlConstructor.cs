@@ -21,12 +21,17 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var matrixWebsiteUrl = _reportServer ?? "/";
 			if (!matrixWebsiteUrl.EndsWith("/")) matrixWebsiteUrl += "/";
 
-			var url = string.Format(CultureInfo.InvariantCulture, "{0}Reporting/Report/{1}#{2}",
-											matrixWebsiteUrl, reportId, reportId);
+			string url = null;
+			if (reportId != "0148")
+				url = string.Format(CultureInfo.InvariantCulture, "{0}Reporting/Report/{1}#{2}",
+					matrixWebsiteUrl, reportId, reportId);
+			else if (reportId == "0148")
+				url = "auditTrail";
 			var uri = new Uri(url, UriKind.RelativeOrAbsolute);
 			return _configReader.ReadValue("UseRelativeConfiguration", false)
 				? "/" + new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(uri)
 				: uri.ToString();
+
 		}
 	}
 }
