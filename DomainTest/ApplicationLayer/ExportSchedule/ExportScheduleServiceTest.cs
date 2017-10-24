@@ -235,6 +235,58 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		}
 		
 		[Test]
+		public void ShouldDisplayEmptyOptionalColumnValuesInScheduleSummaryWhenNoValueInContentRow()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			var person = PersonFactory.CreatePerson("ashley", "andeen").WithId();
+			person.SetEmploymentNumber("1234");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(scheduleDate.AddDays(-1)), PersonContractFactory.CreatePersonContract(), team ));
+			PersonFinder.Has(person);
+			PersonRepository.Has(person);
+			
+			var optionalColumn = new OptionalColumn("opt1").WithId();
+			var optionalColumnValue = new OptionalColumnValue("value2").WithId();
+			
+			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(optionalColumnValue);
+			var shift = ShiftCategoryFactory.CreateShiftCategory("Day");
+			var period = new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario,
+				ActivityFactory.CreateActivity("Phone"), period,
+				shift);
+			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
+				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
+				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
+			ScheduleStorage.Add(pa);
+			
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupIds = new[] {Guid.NewGuid().ToString()}
+				},
+				OptionalColumnIds = new []{optionalColumn.Id.GetValueOrDefault()}
+			};
+
+			var byteArray = Target.ExportToExcel(input).Data;
+			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
+			var sheet = workbook.GetSheetAt(0);
+
+			var scheduleData = sheet.GetRow(9);
+			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo("");
+		}
+		
+		[Test]
 		public void ShouldReturnFailureWhenPeopleToExportMoreThan1000()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

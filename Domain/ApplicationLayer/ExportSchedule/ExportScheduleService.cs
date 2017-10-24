@@ -137,10 +137,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			optionalColIds.ForEach(o =>
 			{
 				var matchedOptionalColumValue = p.OptionalColumnValueCollection.SingleOrDefault(x => x.Parent.Id == o);
-				if (matchedOptionalColumValue != null)
-				{
-					optionalColumns.Add(matchedOptionalColumValue.Description);
-				}
+				optionalColumns.Add(matchedOptionalColumValue != null ? matchedOptionalColumValue.Description : string.Empty);
 			});
 			
 			var scheduleSummarys = scheduleDays
