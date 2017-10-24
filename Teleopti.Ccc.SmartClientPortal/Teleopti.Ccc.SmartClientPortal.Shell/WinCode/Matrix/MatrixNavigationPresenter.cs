@@ -63,7 +63,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 			}
 			else
 			{
-				var url = _reportUrlConstructor.Build(applicationFunction.ForeignId);
+				if (applicationFunction.ForeignId == "0148")
+					applicationFunction.IsWebReport = false;
+				var url = _reportUrlConstructor.Build(applicationFunction);
 				_view.OpenUrl(new Uri(url));
 			}
 		}

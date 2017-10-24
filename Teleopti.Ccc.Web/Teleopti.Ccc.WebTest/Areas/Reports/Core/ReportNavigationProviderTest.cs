@@ -156,9 +156,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 	public class FakeReportUrl : IReportUrl
 	{
 		private string matrixUrl = "Selection.aspx?ReportId={0}&BuId=00000001";
-		public string Build(string reportId)
+
+		public string Build(IApplicationFunction applicationFunction)
 		{
-			return string.Format(matrixUrl, reportId);
+			return string.Format(matrixUrl, applicationFunction.ForeignId);
 		}
 	}
 }

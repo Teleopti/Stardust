@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			applicationFunciton.Stub(x => x.LocalizedFunctionDescription).Return(localizedFunctionDescription);
 			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>() { applicationFunciton });
 			var matrixUrl = "Selection.aspx?ReportId=foreignId&BuId=00000001";
-			_matrixWebsiteUrl.Stub(x => x.Build(applicationFunciton.ForeignId)).Return(matrixUrl);
+			_matrixWebsiteUrl.Stub(x => x.Build(applicationFunciton)).Return(matrixUrl);
 
 			var target = new ReportItemsProvider(_reportsProvider, _matrixWebsiteUrl);
 			var result = target.GetReportItems();

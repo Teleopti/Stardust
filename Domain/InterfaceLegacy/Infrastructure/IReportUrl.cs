@@ -1,7 +1,9 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
 	public interface IReportUrl
 	{
-		string Build(string reportId);
+		string Build(IApplicationFunction applicationFunction);
 	}
 }

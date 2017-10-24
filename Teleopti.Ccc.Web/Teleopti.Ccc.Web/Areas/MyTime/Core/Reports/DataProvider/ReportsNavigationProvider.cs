@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 			{
 				reportsList.Add(new ReportNavigationItem
 				{
-					Url = _reportUrl.Build(applicationFunction.ForeignId),
+					Url = _reportUrl.Build(applicationFunction),
 					Title = applicationFunction.LocalizedFunctionDescription,
 					Id = new Guid(applicationFunction.ForeignId)
 				});

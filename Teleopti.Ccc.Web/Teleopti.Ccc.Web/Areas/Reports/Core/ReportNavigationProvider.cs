@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 
 			var reportList = grantedFuncs.Select(applicationFunction => new ReportItem
 			{
-				Url = _reportUrl.Build(applicationFunction.ForeignId),
+				Url = _reportUrl.Build(applicationFunction),
 				Name = applicationFunction.LocalizedFunctionDescription,
 			}).ToList();
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 			var reportItems = getCategorizedReports()
 				.SelectMany(reportCollection => reportCollection.ApplicationFunctions.Select(report => new CategorizedReportItem
 				{
-					Url = _reportUrl.Build(report.ForeignId),
+					Url = _reportUrl.Build(report),
 					Name = report.LocalizedFunctionDescription,
 					Category = reportCollection.LocalizedDescription,
 					IsWebReport = report.IsWebReport

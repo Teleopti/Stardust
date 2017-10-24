@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		{
 			var applicationFunction = MockRepository.GenerateMock<IApplicationFunction>();
 			applicationFunction.Stub(x => x.ForeignId).Return("1");
-			_urlConstructor.Stub(x => x.Build("1")).Return("http://matrixWebsiteUrl/Reporting/report/1");
+			_urlConstructor.Stub(x => x.Build(applicationFunction)).Return("http://matrixWebsiteUrl/Reporting/report/1");
 			_view.Stub(x => x.OpenUrl(new Uri("http://matrixWebsiteUrl/Reporting/report/1")));
 
 			_target.LinkClick(applicationFunction, false);

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			{
 				reportItems.Add(new ReportItem
 				{
-					Url = _matrixWebsiteUrl.Build(applicationFunction.ForeignId),
+					Url = _matrixWebsiteUrl.Build(applicationFunction),
 					Name = applicationFunction.LocalizedFunctionDescription,
 				});
 			}
