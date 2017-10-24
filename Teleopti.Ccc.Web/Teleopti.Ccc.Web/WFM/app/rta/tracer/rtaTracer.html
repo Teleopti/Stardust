@@ -34,8 +34,8 @@
 					<tr ng-repeat="tracer in vm.tracers" class="process">
 						<td width="200px">{{tracer.process}}</td>
 						<td width="400px">Received {{tracer.dataReceivedCount}} states by {{tracer.dataReceivedBy}} at {{tracer.dataReceivedAt}}</td>
-						<td width="200px">Check at: {{tracer.activityCheckAt}}</td>
-						<td>Tracing: {{tracer.tracing}}</td>
+						<td width="200px">Checked at {{tracer.activityCheckAt}}</td>
+						<td>Tracing {{tracer.tracing}}</td>
 						<td width="400px">Last exception: {{tracer.exception}}</td>
 					</tr>
 				</table>
