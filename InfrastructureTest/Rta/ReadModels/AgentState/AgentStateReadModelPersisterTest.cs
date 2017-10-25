@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var state = new AgentStateReadModelForTest();
 
-			Target.PersistWithAssociation(state);
+			Target.Upsert(state);
 
 			Target.Load(state.PersonId)
 				.Should().Not.Be.Null();
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				AlarmColor = Color.Red.ToArgb(),
 			};
 
-			Target.PersistWithAssociation(state);
+			Target.Upsert(state);
 
 			var model = Target.Load(personId);
 			model.BusinessUnitId.Should().Be(businessUnitId);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			Target.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				Shift = new[]
@@ -86,14 +86,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Target.PersistWithAssociation(
+			Target.Upsert(
 				new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					TeamId = teamId,
 				});
 
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			Target.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				TeamId = teamId,
@@ -115,14 +115,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Target.PersistWithAssociation(
+			Target.Upsert(
 				new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					TeamId = teamId,
 				});
 
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			Target.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				TeamId = teamId,
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.PersistWithAssociation(new AgentStateReadModel
+			Target.Upsert(new AgentStateReadModel
 			{
 				PersonId = personId,
 				BusinessUnitId = Guid.NewGuid(),
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				}
 			};
 
-			Target.PersistWithAssociation(state);
+			Target.Upsert(state);
 
 			var outOfAdherence = Target.Load(state.PersonId)
 				.OutOfAdherences.Single();
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		public void ShouldUpdateOutOfAdherences()
 		{
 			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			Target.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				OutOfAdherences = new[]
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				}
 			});
 
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			Target.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				OutOfAdherences = new[]
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			Target.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				OutOfAdherences = Enumerable.Range(0, 59)
@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var personId = Guid.NewGuid();
 			var stateGroupId = Guid.NewGuid();
 
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			Target.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				StateGroupId = stateGroupId
@@ -275,13 +275,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 			var stateGroupId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			Target.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				StateGroupId = null
 			});
 
-			Target.PersistWithAssociation(new AgentStateReadModelForTest
+			Target.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				StateGroupId = stateGroupId
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
+			Target.Upsert(new AgentStateReadModelForTest { PersonId = personId });
 
 			Target.UpsertAssociation(new AssociationInfo()
 			{
@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		public void ShouldUnSoftDeleteWhenUpdatingPersonAssociation()
 		{
 			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
+			Target.Upsert(new AgentStateReadModelForTest { PersonId = personId });
 			Target.UpsertDeleted(personId);
 
 			Target.UpsertAssociation(new AssociationInfo()
@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 			var model = new AgentStateReadModelForTest { PersonId = personId };
-			Target.PersistWithAssociation(model);
+			Target.Upsert(model);
 
 			Target.UpsertDeleted(personId);
 
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		public void ShouldUpdateEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId, IsDeleted = false });
+			Target.Upsert(new AgentStateReadModelForTest() { PersonId = personId, IsDeleted = false });
 
 			Target.UpsertEmploymentNumber(personId, "abc");
 
@@ -425,7 +425,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		public void ShouldUpdateFirstAndLastName()
 		{
 			var personId = Guid.NewGuid();
-			Target.PersistWithAssociation(new AgentStateReadModelForTest()
+			Target.Upsert(new AgentStateReadModelForTest()
 			{
 				PersonId = personId,
 				FirstName = "ashley",

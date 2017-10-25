@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
 			Publisher.AddHandler(typeof(CurrentScheduleReadModelUpdater));
 			Publisher.AddHandler(typeof(ExternalLogonReadModelUpdater));
+			Publisher.AddHandler(typeof(AgentStateReadModelMaintainer));
 			Publisher.AddHandler(typeof(AgentStateReadModelUpdater));
 			var logOutBySnapshot = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot;
 			Analytics.WithDataSource(9, "sourceId");

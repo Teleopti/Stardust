@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
 			Publisher.AddHandler(typeof(ExternalLogonReadModelUpdater));
+			Publisher.AddHandler(typeof(AgentStateReadModelMaintainer));
 			Publisher.AddHandler(typeof(AgentStateReadModelUpdater));
 			Analytics.WithDataSource(7, new BatchForTest().SourceId);
 			Database

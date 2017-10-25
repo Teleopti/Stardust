@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		}
 
 		[LogInfo]
-		public virtual void Persist(AgentStateReadModel model)
+		public virtual void Update(AgentStateReadModel model)
 		{
-			var query = _unitOfWork.Current().Session()
+			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
 					UPDATE [ReadModel].[AgentState]
 					SET
@@ -66,85 +66,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("AlarmColor", model.AlarmColor)
 				.SetParameter("Shift", model.Shift != null ? _serializer.SerializeObject(model.Shift) : null, NHibernateUtil.StringClob)
 				.SetParameter("OutOfAdherences", model.OutOfAdherences != null ? _serializer.SerializeObject(model.OutOfAdherences) : null, NHibernateUtil.StringClob)
-				.SetParameter("StateGroupId", model.StateGroupId);
-			
-			var updated = query.ExecuteUpdate();
-
-			if (updated == 0)
-			{
-				_unitOfWork.Current().Session()
-					.CreateSQLQuery(@"
-						INSERT INTO [ReadModel].[AgentState]
-						(
-							PersonId,
-							BusinessUnitId,
-							SiteId,
-							TeamId,
-							ReceivedTime,
-							Activity,
-							NextActivity, 
-							NextActivityStartTime, 
-							StateName, 
-							StateStartTime, 
-							RuleName, 
-							RuleStartTime, 
-							RuleColor, 
-							StaffingEffect, 
-							IsRuleAlarm, 
-							AlarmStartTime, 
-							AlarmColor,
-							Shift,
-							OutOfAdherences,
-							StateGroupId,
-							IsDeleted
-						)
-						VALUES
-						(
-							:PersonId,
-							:BusinessUnitId,
-							:SiteId,
-							:TeamId,
-							:ReceivedTime,
-							:Activity,
-							:NextActivity, 
-							:NextActivityStartTime, 
-							:StateName, 
-							:StateStartTime, 
-							:RuleName, 
-							:RuleStartTime, 
-							:RuleColor, 
-							:StaffingEffect, 
-							:IsRuleAlarm, 
-							:AlarmStartTime, 
-							:AlarmColor,
-							:Shift,
-							:OutOfAdherences,
-							:StateGroupId,
-							0		
-						)
-					")
-					.SetParameter("PersonId", model.PersonId)
-					.SetParameter("BusinessUnitId", model.BusinessUnitId)
-					.SetParameter("SiteId", model.SiteId)
-					.SetParameter("TeamId", model.TeamId)
-					.SetParameter("ReceivedTime", model.ReceivedTime)
-					.SetParameter("Activity", model.Activity)
-					.SetParameter("NextActivity", model.NextActivity)
-					.SetParameter("NextActivityStartTime", model.NextActivityStartTime)
-					.SetParameter("StateName", model.StateName)
-					.SetParameter("StateStartTime", model.StateStartTime)
-					.SetParameter("RuleName", model.RuleName)
-					.SetParameter("RuleStartTime", model.RuleStartTime)
-					.SetParameter("RuleColor", model.RuleColor)
-					.SetParameter("StaffingEffect", model.StaffingEffect)
-					.SetParameter("IsRuleAlarm", model.IsRuleAlarm)
-					.SetParameter("AlarmStartTime", model.AlarmStartTime)
-					.SetParameter("AlarmColor", model.AlarmColor)
-					.SetParameter("Shift", model.Shift != null ? _serializer.SerializeObject(model.Shift) : null, NHibernateUtil.StringClob)
-					.SetParameter("OutOfAdherences", model.OutOfAdherences != null ? _serializer.SerializeObject(model.OutOfAdherences) : null, NHibernateUtil.StringClob)
-					.SetParameter("StateGroupId", model.StateGroupId)
-					.ExecuteUpdate();
-			}
+				.SetParameter("StateGroupId", model.StateGroupId)
+				.ExecuteUpdate();
 		}
 
 		public virtual void UpsertDeleted(Guid personId)
@@ -287,7 +210,6 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.SetParameter("PersonId", personId)
 				.SetParameter("EmploymentNumber", employmentNumber)
 				.ExecuteUpdate();
-
 		}
 
 		public void UpsertName(Guid personId, string firstName, string lastName)
@@ -360,13 +282,15 @@ WHERE SiteId = :SiteId")
 
 		private class internalModel : AgentStateReadModel
 		{
-			public new string Shift {
+			public new string Shift
+			{
 				set { base.Shift = value != null ? JsonConvert.DeserializeObject<IEnumerable<AgentStateActivityReadModel>>(value) : null; }
 			}
-			public new string OutOfAdherences {
+
+			public new string OutOfAdherences
+			{
 				set { base.OutOfAdherences = value != null ? JsonConvert.DeserializeObject<IEnumerable<AgentStateOutOfAdherenceReadModel>>(value) : null; }
 			}
 		}
-
 	}
 }

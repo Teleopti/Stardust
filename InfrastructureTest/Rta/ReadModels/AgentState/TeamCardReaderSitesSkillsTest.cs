@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { personId });
-				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					IsRuleAlarm = true,
@@ -61,13 +61,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { personWithSkill, personWithoutSkill });
-				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personWithSkill,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc()
 				});
-				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personWithoutSkill,
 					IsRuleAlarm = true,

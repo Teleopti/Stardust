@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			Publisher.AddHandler<ScheduleChangeProcessor>();
 			Publisher.AddHandler<AgentStateMaintainer>();
 
+			Publisher.AddHandler<AgentStateReadModelMaintainer>();
 			Publisher.AddHandler<AgentStateReadModelUpdater>();
 		}
 	}
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			FakeStorage storage,
 			IEnumerable<ITransactionHook> hooks,
 			INow now
-			)
+		)
 		{
 			_publisher = publisher;
 			_storage = storage;
@@ -117,5 +118,4 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			time.IfMinutePassed(() => { _publisher.Publish(new TenantMinuteTickEvent()); });
 		}
 	}
-	
 }

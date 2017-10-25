@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var team = Guid.NewGuid();
 			var site = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var team1 = Guid.NewGuid();
 			var team2 = Guid.NewGuid();
 			var site = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				SiteId = site,
 				SiteName = "Site"
 			});
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var team = Guid.NewGuid();
 			var site = Guid.NewGuid();
 			var person = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = person,

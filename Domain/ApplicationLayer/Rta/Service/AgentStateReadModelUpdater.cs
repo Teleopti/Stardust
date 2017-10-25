@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 								.ToArray()
 							;
 
-					_persister.Persist(model);
+					_persister.Update(model);
 				});
 		}
 

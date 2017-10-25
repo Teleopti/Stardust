@@ -66,23 +66,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldNotPersistAssociation()
-		{
-			Database
-				.WithAgent("user", Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
-
-			Target.ProcessState(new StateForTest
-			{
-				UserCode = "user",
-				StateCode = "state"
-			});
-
-			Database.PersistedReadModel.TeamId.Should().Be(null);
-			Database.PersistedReadModel.SiteId.Should().Be(null);
-			Database.PersistedReadModel.BusinessUnitId.Should().Be(null);
-		}
-		
-		[Test]
 		public void ShouldUpdateCurrentActivityChanges()
 		{
 			var person = Guid.NewGuid();

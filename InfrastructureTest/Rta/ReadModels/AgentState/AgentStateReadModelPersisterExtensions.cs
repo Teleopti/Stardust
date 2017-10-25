@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
 	public static class AgentStateReadModelPersisterExtensions
 	{
-		public static void PersistWithAssociation(this IAgentStateReadModelPersister instance, AgentStateReadModel model)
+		public static void Upsert(this IAgentStateReadModelPersister instance, AgentStateReadModel model)
 		{
 			instance.UpsertAssociation(new AssociationInfo
 			{
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				TeamId = model.TeamId.GetValueOrDefault(),
 				TeamName = model.TeamName
 			});
-			instance.Persist(model);
+			instance.Update(model);
 		}
 	}
 }

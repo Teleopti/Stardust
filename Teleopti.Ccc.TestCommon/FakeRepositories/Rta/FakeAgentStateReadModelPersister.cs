@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IAgentStateReadModelPersister,
 		IAgentStateReadModelReader
 	{
-
 		private readonly INow _now;
 
 		private readonly ConcurrentDictionary<Guid, AgentStateReadModel> _data =
@@ -46,13 +45,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<AgentStateReadModel> Models => _data.Values.ToArray();
 
-		public void Persist(AgentStateReadModel model)
+		public void Update(AgentStateReadModel model)
 		{
-			AgentStateReadModel removed;
-			_data.TryRemove(model.PersonId, out removed);
-			_data.AddOrUpdate(model.PersonId, model.CopyBySerialization(), (g, m) => model);
+			if (_data.ContainsKey(model.PersonId))
+				_data.AddOrUpdate(model.PersonId, model.CopyBySerialization(), (g, m) => model);
 		}
-		
+
 		public AgentStateReadModel Load(Guid personId)
 		{
 			return _data.ContainsKey(personId) ? _data[personId].CopyBySerialization() : null;
@@ -160,15 +158,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 
 
-
-
-
-
-
-
-
-
-
 		public IEnumerable<AgentStateReadModel> Read(AgentStateFilter filter)
 		{
 			var result = Enumerable.Empty<AgentStateReadModel>();
@@ -189,10 +178,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			if (filter.InAlarm)
 				result = filterInAlarm(result)
 					.OrderBy(x => x.AlarmStartTime);
-		
+
 			return result.Take(50).ToArray();
 		}
-		
+
 		private IEnumerable<AgentStateReadModel> includeSites(IEnumerable<Guid> siteIds)
 			=> from model in _data.Values
 				from siteId in siteIds
@@ -212,7 +201,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		private IEnumerable<AgentStateReadModel> filterSkills(IEnumerable<AgentStateReadModel> models, IEnumerable<Guid> skillIds)
 			=> from model in models
-
 				let personSkillIds = from s in _personSkills where s.PersonId == model.PersonId select s.SkillId
 				let skillsMatch = (from s1 in skillIds from s2 in personSkillIds where s1 == s2 select 1).Any()
 				where skillsMatch
@@ -222,16 +210,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			=> from model in models
 				where !excludedStateGroupIds.Contains(model.StateGroupId)
 				select model;
-
-
-
-
-		
-
-
-
-
-
 
 
 		public IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds) => null;

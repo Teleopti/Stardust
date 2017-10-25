@@ -25,13 +25,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var site = Guid.NewGuid();
 			var businessUnit = BusinessUnit.Current().Id.Value;
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = businessUnit,
 				PersonId = Guid.NewGuid(),
 				SiteId = site
 			});
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = Guid.NewGuid(),
 				PersonId = Guid.NewGuid(),

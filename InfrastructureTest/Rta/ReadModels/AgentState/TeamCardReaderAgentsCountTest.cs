@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		public void ShouldReadAgentsCount()
 		{
 			var team = Guid.NewGuid();
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -41,14 +41,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var team = Guid.NewGuid();
 			var businessUnitId = BusinessUnit.Current().Id.Value;
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = businessUnitId,
 				PersonId = Guid.NewGuid(),
 				TeamId = team,
 				TeamName = "team"
 			});
-			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = businessUnitId,
 				PersonId = Guid.NewGuid(),
