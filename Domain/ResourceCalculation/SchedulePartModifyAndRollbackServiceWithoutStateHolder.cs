@@ -29,6 +29,27 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    return false;
 	    }
 		
+		public bool ModifyStrictly(IEnumerable<IScheduleDay> scheduleParts, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
+		{
+			var originalStackSize = _rollbackStack.Count;
+
+			foreach (var schedulePart in scheduleParts)
+			{
+				var partToSave = schedulePart.ReFetch();
+				var responses = modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter, newBusinessRuleCollection);
+				
+				_rollbackStack.Push(partToSave);
+				if (responses.Any())
+				{
+					while(_rollbackStack.Count != originalStackSize)
+						rollbackLast(NewBusinessRuleCollection.Minimum());
+
+					return false;
+				}
+			}
+			return true;
+		}
+		
 	    public void RollbackMinimumChecks()
 	    {
 			while (_rollbackStack.Count > 0)

@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeSkillDayRepository SkillDayRepository;
-		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
-		public IScheduleStorage ScheduleStorage;
+//		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
+//		public IScheduleStorage ScheduleStorage;
 		public MutableNow Now;
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakeTenants Tenants;

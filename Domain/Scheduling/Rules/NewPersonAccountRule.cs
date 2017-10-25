@@ -10,16 +10,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
 	public class NewPersonAccountRule : INewBusinessRule
 	{
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-		
+		private IScheduleDictionary _scheduleDictionary;
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 
 		private static readonly object modifiedAccountLock = new object();
 
-		public NewPersonAccountRule(ISchedulingResultStateHolder schedulingResultStateHolder,
+		public NewPersonAccountRule(IScheduleDictionary scheduleDictionary,
 			IDictionary<IPerson, IPersonAccountCollection> allAccounts)
 		{
-			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_scheduleDictionary = scheduleDictionary;
 			_allAccounts = allAccounts;
 		}
 
@@ -78,11 +77,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 					if (lastRemaining != affectedAccount.Remaining)
 					{
-						if (_schedulingResultStateHolder.Schedules == null)
-							_schedulingResultStateHolder.Schedules = rangeClones.Values.FirstOrDefault().Owner;
 						//Tell someone this account is dirty
 						lock (modifiedAccountLock)
-							_schedulingResultStateHolder.Schedules.ModifiedPersonAccounts.Add((IPersonAbsenceAccount) affectedAccount.Root());
+						{
+							if (_scheduleDictionary == null)
+								_scheduleDictionary = rangeClones.Values.FirstOrDefault().Owner;
+							_scheduleDictionary.ModifiedPersonAccounts.Add((IPersonAbsenceAccount) affectedAccount.Root());
+						}
 					}
 
 					var oldResponses = rangeCloneValueKey.Value.BusinessRuleResponseInternalCollection;

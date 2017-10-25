@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			waitListedAgent = PersonRepository.Has(skill);
 			absence = AbsenceFactory.CreateAbsenceWithTracker("Holiday", Tracker.CreateTimeTracker());
+			absence.InContractTime = true;
 			personAccounts = new PersonAbsenceAccount(waitListedAgent, absence);
 			account = new AccountTime(new DateOnly(2016, 3, 1)) { Accrued = TimeSpan.FromHours(2) }.WithId();
 			personAccounts.Add(account);

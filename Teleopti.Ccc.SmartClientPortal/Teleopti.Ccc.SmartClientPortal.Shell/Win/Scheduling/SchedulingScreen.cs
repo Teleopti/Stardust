@@ -3650,7 +3650,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void validatePersonAccounts(IPerson person)
 		{
 			IScheduleRange range = SchedulerState.SchedulingResultState.Schedules[person];
-			var rule = new NewPersonAccountRule(SchedulerState.SchedulingResultState,
+			var rule = new NewPersonAccountRule(SchedulerState.SchedulingResultState.Schedules,
 				SchedulerState.SchedulingResultState.AllPersonAccounts);
 			IList<IBusinessRuleResponse> toRemove = new List<IBusinessRuleResponse>();
 			IList<IBusinessRuleResponse> exposedBusinessRuleResponseCollection =

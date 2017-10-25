@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public AbsenceRequestSynchronousValidator(IExpiredRequestValidator expiredRequestValidator
 			, IAlreadyAbsentValidator alreadyAbsentValidator, IScheduleStorage scheduleStorage
-			, ICurrentScenario currentScenario, IAbsenceRequestWorkflowControlSetValidator absenceRequestWorkflowControlSetValidator, IAbsenceRequestPersonAccountValidator absenceRequestPersonAccountValidator)
+			, ICurrentScenario currentScenario, IAbsenceRequestWorkflowControlSetValidator absenceRequestWorkflowControlSetValidator, 
+			IAbsenceRequestPersonAccountValidator absenceRequestPersonAccountValidator)
 		{
 			_expiredRequestValidator = expiredRequestValidator;
 			_alreadyAbsentValidator = alreadyAbsentValidator;
@@ -34,7 +35,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var person = personRequest.Person;
 			var absenceRequest = personRequest.Request as IAbsenceRequest;
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false, false), absenceRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()).Inflate(1)
+				new ScheduleDictionaryLoadOptions(false, false), absenceRequest.Period.ToDateOnlyPeriod(
+				person.PermissionInformation.DefaultTimeZone()).Inflate(1)
 				, _currentScenario.Current());
 
 			var scheduleRange = scheduleDictionary[person];
@@ -53,11 +55,41 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			return new ValidatedRequest { IsValid = true };
 		}
+
+		public IValidatedRequest Validate(IPersonRequest personRequest, IScheduleRange scheduleRange, IPersonAbsenceAccount personAbsenceAccount)
+		{
+			var result = _absenceRequestWorkflowControlSetValidator.Validate(personRequest);
+			if (!result.IsValid)
+				return result;
+
+			var absenceRequest = personRequest.Request as IAbsenceRequest;
+			var requestExpired = _expiredRequestValidator.ValidateExpiredRequest(absenceRequest, scheduleRange);
+			if (!requestExpired.IsValid)
+				return requestExpired;
+
+			if (_alreadyAbsentValidator.Validate(absenceRequest, scheduleRange))
+				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonAlreadyAbsent
+					, DenyOption = PersonRequestDenyOption.AlreadyAbsence };
+
+			var personAccountValidateResult = 
+				AbsenceRequestPersonAccountValidator.ValidatedRequestWithPersonAccount(personRequest, scheduleRange, personAbsenceAccount);
+			if (!personAccountValidateResult.IsValid)
+				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonPersonAccount
+					, DenyOption = PersonRequestDenyOption.InsufficientPersonAccount };
+
+			return new ValidatedRequest { IsValid = true };	
+		}
 	}
 
 	public class AbsenceRequestSynchronousValidator40747ToggleOff : IAbsenceRequestSynchronousValidator
 	{
 		public IValidatedRequest Validate(IPersonRequest personRequest)
+		{
+			return new ValidatedRequest { IsValid = true };
+		}
+
+		public IValidatedRequest Validate(IPersonRequest personRequest, IScheduleRange scheduleRange,
+			IPersonAbsenceAccount personAbsenceAccount)
 		{
 			return new ValidatedRequest { IsValid = true };
 		}

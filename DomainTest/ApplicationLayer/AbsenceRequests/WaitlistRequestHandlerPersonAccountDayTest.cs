@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			waitListedAgent = PersonRepository.Has(skill);
 			absence = AbsenceFactory.CreateAbsenceWithTracker("Holiday", Tracker.CreateDayTracker());
 			personAccounts = new PersonAbsenceAccount(waitListedAgent, absence);
-			account = new AccountDay(new DateOnly(2016, 3, 1)) { Accrued = TimeSpan.FromDays(0) }.WithId();
+			account = new AccountDay(new DateOnly(2016, 3, 1)) { Accrued = TimeSpan.FromDays(1) }.WithId();
 			personAccounts.Add(account);
 			PersonAbsenceAccountRepository.Add(personAccounts);
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			waitListedRequest.IsApproved.Should().Be.True();
 			waitListedRequest2.IsApproved.Should().Be.True();
 		}
-
+		
 		[Test]
 		public void ShouldApproveRequestSpanningMultipleDaysUsingPersonAccountDay()
 		{
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			account.Accrued = TimeSpan.FromDays(2);
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 			waitListedRequest.IsApproved.Should().Be.True();
-			account.Accrued.Should().Be.EqualTo(TimeSpan.Zero);
+			account.Remaining.Should().Be.EqualTo(TimeSpan.Zero);
 		}
 
 		[Test]
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 			waitListedRequest.IsDenied.Should().Be.True();
 			waitListedRequest.IsWaitlisted.Should().Be.False();
-			account.Accrued.Should().Be.EqualTo(TimeSpan.FromDays(1));
+			account.Remaining.Should().Be.EqualTo(TimeSpan.FromDays(1));
 		}
 
 		[Test]
@@ -217,8 +217,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 			waitListedRequest.IsApproved.Should().Be.True();
-			account.Accrued.Should().Be.EqualTo(TimeSpan.FromDays(0));
-			dayAccount2.Accrued.Should().Be.EqualTo(TimeSpan.FromDays(0));
+			account.Remaining.Should().Be.EqualTo(TimeSpan.FromDays(0));
+			dayAccount2.Remaining.Should().Be.EqualTo(TimeSpan.FromDays(0));
 		}
 
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)

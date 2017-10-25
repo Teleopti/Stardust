@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
             _stateHolder = new SchedulingResultStateHolder();
             _allAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
-            _target = new NewPersonAccountRule(_stateHolder, _allAccounts);
+            _target = new NewPersonAccountRule(_stateHolder.Schedules, _allAccounts);
 			_permissionChecker = new PersistableScheduleDataPermissionChecker();
         }
 

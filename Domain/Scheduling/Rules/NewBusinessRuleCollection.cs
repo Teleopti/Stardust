@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),
 						new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)),
 				new NewDayOffRule(new WorkTimeStartEndExtractor()),
-				new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts),
+				new NewPersonAccountRule(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.AllPersonAccounts),
 				new NotOverwriteLayerRule()
 
 				//This one takes to long time tu run first time when caches are empty, so put on hold for now
@@ -291,7 +291,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			if (schedulingResultStateHolder == null) return null;
 			var ret = new NewBusinessRuleCollection
 			{
-				new NewPersonAccountRule(schedulingResultStateHolder, personAccounts)
+				new NewPersonAccountRule(schedulingResultStateHolder.Schedules, personAccounts)
+			};
+			return ret;
+		}
+		
+		public static INewBusinessRuleCollection MinimumAndPersonAccount(IScheduleDictionary scheduleDictionary, IDictionary<IPerson, IPersonAccountCollection> personAccounts)
+		{
+			var ret = new NewBusinessRuleCollection
+			{
+				new NewPersonAccountRule(scheduleDictionary, personAccounts)
 			};
 			return ret;
 		}
