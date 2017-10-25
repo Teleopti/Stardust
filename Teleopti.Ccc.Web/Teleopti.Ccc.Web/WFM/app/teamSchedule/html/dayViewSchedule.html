@@ -59,17 +59,15 @@
 				</label>
 
 			</div>
-		</div>
 
-		
-
-		<div class="warning-container" ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
-			<div id="show-warnings" class="wfm-switch inline-block">
-				<input type="checkbox" id="validateWarning" ng-model="vm.currentSettings.validateWarningEnabled" ng-change="vm.checkValidationWarningForCurrentPage()" />
-				<label for="validateWarning">
-					<span class="wfm-switch-label" translate>ShowWarnings</span>
-					<span class="wfm-switch-toggle"></span>
-				</label>
+			<div class="warning-container" ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
+				<div id="show-warnings" class="wfm-switch inline-block">
+					<input type="checkbox" id="validateWarning" ng-model="vm.currentSettings.validateWarningEnabled" ng-change="vm.checkValidationWarningForCurrentPage()" />
+					<label for="validateWarning">
+						<span class="wfm-switch-label" translate>ShowWarnings</span>
+						<span class="wfm-switch-toggle"></span>
+					</label>
+				</div>
 			</div>
 		</div>
 
