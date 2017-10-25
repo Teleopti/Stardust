@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod()
+		public void ShouldNotIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod_AgentOutsidePeriod()
 		{
 			var date = new DateOnly(2000,1,1);
 			var dateWithNotSelectedAgentAss = date.AddWeeks(3);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldNotIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod()
+		public void ShouldNotIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod_ScheduleOutsidePeriod()
 		{
 			if (!_loadByPerson)
 				Assert.Ignore("If green -> better perf in RAM due to less loaded. Skip this for now though - fix if necessary.");
