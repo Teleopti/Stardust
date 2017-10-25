@@ -133,6 +133,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				});
 			}
 
+			if (filter.RequestFilters != null)
+			{
+				var statusFilter = filter.RequestFilters.FirstOrDefault(f => f.Key == RequestFilterField.Status);
+				if (statusFilter.Key == RequestFilterField.Status && !string.IsNullOrWhiteSpace(statusFilter.Value))
+				{
+					var statusTexts = statusFilter.Value.Split(' ')
+						.Select(x => Enum.GetName(typeof(PersonRequestStatus), int.Parse(x))).ToArray();
+					requests = requests.Where(r => statusTexts.Contains(r.StatusText));
+				}
+			}
+
+
 			requests = requests.Where(r => !((Person)r.Person).IsDeleted);
 			count = requests.Count();
 			return requests.ToList();

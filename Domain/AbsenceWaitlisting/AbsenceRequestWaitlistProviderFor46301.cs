@@ -46,7 +46,11 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			{
 				Period = period,
 				RequestTypes = requestTypes,
-				ExcludeRequestsOnFilterPeriodEdge = true
+				ExcludeRequestsOnFilterPeriodEdge = true,
+				RequestFilters = new Dictionary<RequestFilterField, string>
+				{
+					{ RequestFilterField.Status, $"{(int)PersonRequestStatus.Pending} {(int)PersonRequestStatus.Waitlisted}" }
+				}
 			};
 
 			var allAndTextRequests =
@@ -78,9 +82,6 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 
 			if (request.IsWaitlisted)
 				return true;
-
-			if (!request.IsPending)
-				return false;
 
 			var isAutoGrant =
 				request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)request.Request)
