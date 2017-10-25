@@ -26,15 +26,6 @@
 					}
 				}
 
-				// push in web reports
-				if (ToggleSvc.WFM_AuditTrail_44006) {
-					result.push({
-						Category: $translate.instant('ScheduleAnalysis'),
-						IsWebReport: true,
-						Name:$translate.instant('ScheduleAuditTrailReport'),
-						Url:"auditTrail"
-					})
-				}
 				vm.reports = result;
 				vm.reports = groupReports(result);
 				vm.reports = sortReportByType(vm.reports);
