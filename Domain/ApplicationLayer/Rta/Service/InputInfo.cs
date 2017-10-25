@@ -11,5 +11,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public string StateDescription { get; set; }
 		public DateTime? SnapshotId { get; set; }
 		public int? SnapshotDataSourceId { get; set; }
+		
+		// for logging
+		public override string ToString() => $"SourceId: {SourceId}, UserCode: {UserCode}, StateCode: {StateCode}, StateDescription: {StateDescription}, SnapshotId: {SnapshotId}, SnapshotDataSourceId: {SnapshotDataSourceId}";
 	}
 }

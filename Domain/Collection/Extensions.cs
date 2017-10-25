@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			InParameter.ValueMustBeLargerThanZero(nameof(batchSize), batchSize);
 			var wrappedSource = new List<T>(source);
-			var count = (int) Math.Ceiling(wrappedSource.Count/(double) batchSize);
+			var count = (int) Math.Ceiling(wrappedSource.Count / (double) batchSize);
 			var partitions = new List<T>[count];
 
 			var k = 0;
@@ -270,15 +270,21 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public static int IndexOf<T>(this IEnumerable<T> collection, T targetValue)
 		{
-			return collection.Select((value, index) => new { value, index })
-						.Where(pair => pair.value.Equals(targetValue))
-						.Select(pair => pair.index + 1)
-						.FirstOrDefault() - 1;
+			return collection.Select((value, index) => new {value, index})
+					   .Where(pair => pair.value.Equals(targetValue))
+					   .Select(pair => pair.index + 1)
+					   .FirstOrDefault() - 1;
 		}
 
 		public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> instance)
 		{
 			return instance ?? Enumerable.Empty<T>();
+		}
+
+		public static string StringJoin<T>(this IEnumerable<T> instance, Func<T, string> selector, string separator)
+		{
+			// a tad easier than using Aggregate(..)
+			return string.Join(separator, instance.EmptyIfNull().Select(selector));
 		}
 
 		public static TSource SingleOrDefaultNullSafe<TSource>(this IEnumerable<TSource> collection)
@@ -293,6 +299,5 @@ namespace Teleopti.Ccc.Domain.Collection
 			if (second == null) return false;
 			return first.SequenceEqual(second);
 		}
-
 	}
 }

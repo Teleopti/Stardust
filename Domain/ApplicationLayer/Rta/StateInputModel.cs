@@ -15,17 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public IEnumerable<BatchStateInputModel> States { get; set; }
 
 		// for logging
-		public override string ToString()
-		{
-			var states =
-				States.EmptyIfNull().Any()
-					? States.EmptyIfNull()
-						.Select(x => x.ToString())
-						.Aggregate((current, next) => current + ", " + next)
-					: "";
-			return $"AuthenticationKey: {AuthenticationKey}, SourceId: {SourceId}, SnapshotId: {SnapshotId}, States: {states}";
-		}
-
+		public override string ToString() => $"AuthenticationKey: {AuthenticationKey}, SourceId: {SourceId}, SnapshotId: {SnapshotId}, States: {States.StringJoin(x => x.ToString(), ",")}";
 	}
 
 	public class BatchStateInputModel
@@ -36,11 +26,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public StateTraceLog TraceLog { get; set; }
 
 		// for logging
-		public override string ToString()
-		{
-			return $"UserCode: {UserCode}, StateCode: {StateCode}, StateDescription: {StateDescription}";
-		}
-
+		public override string ToString() => $"UserCode: {UserCode}, StateCode: {StateCode}, StateDescription: {StateDescription}";
 	}
-
 }

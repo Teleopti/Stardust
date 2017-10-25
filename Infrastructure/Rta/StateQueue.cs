@@ -1,5 +1,6 @@
 using System.Linq;
 using NHibernate;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private readonly IJsonSerializer _serializer;
 		private readonly IJsonDeserializer _deserializer;
 
-		public StateQueue(ICurrentAnalyticsUnitOfWork unitOfWork, 
+		public StateQueue(ICurrentAnalyticsUnitOfWork unitOfWork,
 			IJsonSerializer serializer,
 			IJsonDeserializer deserializer)
 		{
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_deserializer = deserializer;
 		}
 
-		public void Enqueue(BatchInputModel model)
+		[LogInfo]
+		public virtual void Enqueue(BatchInputModel model)
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"INSERT INTO RTA.StateQueue VALUES (:model)")
@@ -31,7 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.ExecuteUpdate();
 		}
 
-		public BatchInputModel Dequeue()
+		[LogInfo]
+		public virtual BatchInputModel Dequeue()
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"DELETE TOP (1) FROM RTA.StateQueue OUTPUT DELETED.Model")

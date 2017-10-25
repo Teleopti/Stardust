@@ -14,6 +14,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public AgentState State;
 		public IEnumerable<IEvent> Events;
 		public StateTraceLog TraceLog;
+
+		// for logging
+		public override string ToString() => $"Processed: {Processed}, State: {State}, Events: {Events.StringJoin(x => x.GetType().Name, ", ")}";
 	}
 
 	public class ProcessInput
@@ -46,6 +49,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			AppliedAlarm = appliedAlarm;
 			TraceLog = traceLog;
 		}
+
+		// for logging
+		public override string ToString() => $"CurrentTime: {CurrentTime}, DeadLockVictim: {DeadLockVictim}, Schedule: {Schedule.StringJoin(x => x.Name, ", ")}, Input: {Input}";
 	}
 
 	public class AgentStateProcessor
