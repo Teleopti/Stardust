@@ -81,12 +81,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return new FakeScheduleRange(dict, new ScheduleParameters(scenario, person, period));
 		}
 
-		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario,
-														   IPersonProvider personsProvider,
-														   ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-														   IEnumerable<IPerson> visiblePersons)
+		public IScheduleDictionary FindSchedulesForPersons(IScenario scenario, IPersonProvider personsProvider, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod dateTimePeriod, IEnumerable<IPerson> visiblePersons, bool extendPeriodBasedOnVisiblePersons)
 		{
-			var dateTimePeriod = period.VisiblePeriod;
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
 
 			if (_data.Any())

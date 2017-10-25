@@ -41,8 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			command.ErrorMessages = new List<string>();
 
-			var dic = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(command.Period), scenario, new PersonProvider(new []{person}), new ScheduleDictionaryLoadOptions(false, false), new[] {person});
-				//(new[]{person}, new ScheduleDictionaryLoadOptions(false, false), command.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), scenario);
+			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new PersonProvider(new []{person}), new ScheduleDictionaryLoadOptions(false, false), command.Period, new[] {person}, false);
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			scheduleDay.CreateAndAddOvertime(activity,command.Period,multiplicatorDefinitionSet,false);

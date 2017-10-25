@@ -605,8 +605,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				var personsInOrganizationProvider = new PersonProvider(persons) { DoLoadByPerson = true };
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
 
-				var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
-				var schedulesDictionary = scheduleRepository.FindSchedulesForPersons(scheduleDateTimePeriod, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, persons);
+				var schedulesDictionary = scheduleRepository.FindSchedulesForPersons(scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, period, persons, false);
 
 				//Clean ScheduleDictionary from all persons not present in PersonsInOrganization
 				IList<IPerson> personsToRemove = new List<IPerson>();

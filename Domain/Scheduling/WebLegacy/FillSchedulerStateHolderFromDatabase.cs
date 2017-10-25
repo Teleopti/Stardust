@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var personProvider = new PersonProvider(agents) {DoLoadByPerson = true }; //TODO: this is experimental
 			schedulerStateHolderTo.LoadSchedules(_findSchedulesForPersons, personProvider,
 				new ScheduleDictionaryLoadOptions(true, false, false),
-				new ScheduleDateTimePeriod(dateTimePeriod, agents, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
+				dateTimePeriod);
 		}
 
 		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)

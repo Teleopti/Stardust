@@ -127,11 +127,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 				var rep = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
-				var dictionary = rep.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
-																								 Scenario,
+				var dictionary = rep.FindSchedulesForPersons(Scenario,
 																								 new PersonProvider(new[] { Person }),
 																								 new ScheduleDictionaryLoadOptions(true, true),
-																								 new List<IPerson> { Person });
+																								 new DateTimePeriod(1800, 1, 1, 2040, 1, 1), new List<IPerson> { Person }, false);
 				return dictionary[Person];
 			}
 		}

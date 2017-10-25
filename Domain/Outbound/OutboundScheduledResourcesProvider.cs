@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			//TODO: using schedulestorage here will load unnecesary big period
 			schedulerStateHolder.LoadSchedules(_scheduleStorage, new PersonProvider(people.AllPeople),
 				new ScheduleDictionaryLoadOptions(true, false, false),
-				new ScheduleDateTimePeriod(dateTimePeriod, people.FixedStaffPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
+				dateTimePeriod);
 
 			var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(true, false);
 			foreach (var dateOnly in period.DayCollection())

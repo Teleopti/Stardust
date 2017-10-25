@@ -210,9 +210,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var persons = personHashset.ToList();
 			helpers.DateOnlyPeriodOne = ExtractSkillForecastIntervals.GetLongestPeriod(helpers.Skills, inflatedPeriod);
 			helpers.PersonsSchedules =
-				_scheduleStorage.FindSchedulesForPersons(
-					new ScheduleDateTimePeriod(helpers.LoadSchedulesPeriodToCoverForMidnightShifts, persons), _currentScenario.Current(),
-					new PersonProvider(persons) { DoLoadByPerson = true }, new ScheduleDictionaryLoadOptions(false, false), persons);
+				_scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(),
+					new PersonProvider(persons) { DoLoadByPerson = true }, new ScheduleDictionaryLoadOptions(false, false), helpers.LoadSchedulesPeriodToCoverForMidnightShifts, persons, true);
 
 			helpers.PersonAbsenceAccounts = _personAbsenceAccountRepository.FindByUsers(persons);
 			helpers.RequestApprovalService = new AbsenceRequestApprovalService(_currentScenario.Current(), helpers.PersonsSchedules,

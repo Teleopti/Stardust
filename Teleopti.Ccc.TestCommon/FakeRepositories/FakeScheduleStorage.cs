@@ -11,9 +11,41 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
+	public static class KeepOldIncorrectBehaviourOfTheFake
+	{
+		public static IScheduleDictionary FindSchedulesForPersons(this FakeScheduleStorage storage, IScheduleDateTimePeriod period, IScenario scenario,
+			IPersonProvider personsProvider,
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			IEnumerable<IPerson> visiblePersons)
+		{
+			var dateTimePeriod = period.LongLoadedDateOnlyPeriod().ToDateTimePeriod(TimeZoneInfo.Utc);
+			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
+			if (storage._data == null || !storage._data.Any())
+			{
+				return schedules;
+			}
+
+			foreach (var visiblePerson in visiblePersons)
+			{
+				var range = new ScheduleRange(schedules, new ScheduleParameters(scenario, visiblePerson, dateTimePeriod),new ByPassPersistableScheduleDataPermissionChecker());
+				foreach (var scheduleData in storage._data)
+				{
+					if (scheduleData.Person == null || !scheduleData.Person.Equals(range.Person))
+						continue;
+					if(scheduleData.Period.Intersect(dateTimePeriod))
+						range.Add(scheduleData);
+				}
+				//var updatedRange = range.UpdateCalcValues(0, new TimeSpan());
+				schedules.AddTestItem(visiblePerson, range);
+			}
+			schedules.TakeSnapshot();
+			return schedules;
+		}
+	}
+	
 	public class FakeScheduleStorage : IScheduleStorage
 	{
-		private readonly IList<IPersistableScheduleData> _data = new List<IPersistableScheduleData>();
+		internal readonly IList<IPersistableScheduleData> _data = new List<IPersistableScheduleData>();
 
 		public DateTimePeriod ThePeriodThatWasUsedForFindingSchedules { get; private set; }
 
@@ -101,33 +133,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, absencesPeriod, scheduleData)[person];
 		}
 
-		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario,
-			IPersonProvider personsProvider,
-			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-			IEnumerable<IPerson> visiblePersons)
+		public IScheduleDictionary FindSchedulesForPersons(IScenario scenario, IPersonProvider personsProvider, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod dateTimePeriod, IEnumerable<IPerson> visiblePersons, bool extendPeriodBasedOnVisiblePersons)
 		{
-			var dateTimePeriod = period.LongLoadedDateOnlyPeriod().ToDateTimePeriod(TimeZoneInfo.Utc);
-			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
-			if (_data == null || !_data.Any())
-			{
-				return schedules;
-			}
-
-			foreach (var visiblePerson in visiblePersons)
-			{
-				var range = new ScheduleRange(schedules, new ScheduleParameters(scenario, visiblePerson, dateTimePeriod),new ByPassPersistableScheduleDataPermissionChecker());
-				foreach (var scheduleData in _data)
-				{
-					if (scheduleData.Person == null || !scheduleData.Person.Equals(range.Person))
-						continue;
-					if(scheduleData.Period.Intersect(dateTimePeriod))
-						range.Add(scheduleData);
-				}
-				//var updatedRange = range.UpdateCalcValues(0, new TimeSpan());
-				schedules.AddTestItem(visiblePerson, range);
-			}
-			schedules.TakeSnapshot();
-			return schedules;
+			var period = new ScheduleDateTimePeriod(dateTimePeriod, personsProvider.GetPersons());
+			return this.FindSchedulesForPersons(period, scenario, personsProvider, scheduleDictionaryLoadOptions, visiblePersons);
 		}
 
 		public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)

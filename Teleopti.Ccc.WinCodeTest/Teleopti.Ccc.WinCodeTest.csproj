@@ -279,11 +279,9 @@
     <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
     <Compile Include="Common\ScheduleContractTimeCalculatorTest.cs" />
-    <Compile Include="Common\ScheduleDataLoaderTest.cs" />
     <Compile Include="Common\ReportSettingsHostPresenterTest.cs" />
     <Compile Include="Common\SchedulePeriodCloseCalculatorTest.cs" />
     <Compile Include="Common\ScheduleTargetTimeCalculatorTest.cs" />
-    <Compile Include="Common\SchedulingResultLoaderTest.cs" />
     <Compile Include="Common\OvertimeLayerViewModelTest.cs" />
     <Compile Include="Common\PersonalShiftLayerViewModelTest.cs" />
     <Compile Include="Common\MainShiftLayerViewModelTest.cs" />

@@ -95,8 +95,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 				weeks.Add(period);
 			}
 
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(weeks.Min(x => x.StartDateTime), weeks.Max(x => x.EndDateTime))), _currentScenario.Current(), new PersonProvider(persons) { DoLoadByPerson = true}, 
-							new ScheduleDictionaryLoadOptions(false, false), persons);
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(), new PersonProvider(persons), 
+							new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(weeks.Min(x => x.StartDateTime), weeks.Max(x => x.EndDateTime)), persons, false);
 			
 			return _scheduleOvertimeExecuteWrapper.Execute(overTimeSuggestionModel.OvertimePreferences, new SchedulingProgress(), scheduleDictionary, persons, new DateOnlyPeriod(userDateOnly.AddDays(-1), userDateOnly.AddDays(1)), overtimePeriod, allSkills,skills, showPeriod);
 		}

@@ -296,7 +296,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		//from tree
 		private ReportDataPackage<IReportData> getReportDataForScheduleTimePerActivityReport(ReportSettingsScheduledTimePerActivityModel model)
 		{
-			IScheduleDateTimePeriod period = new ScheduleDateTimePeriod(model.Period.ToDateTimePeriod(model.TimeZone));
 			IPersonProvider personsProvider = new PersonProvider(model.Persons)
 												  {
 													  DoLoadByPerson = true
@@ -311,12 +310,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 					//get these first so they are loaded
 					_componentContext.Resolve<IActivityRepository>().LoadAll();
 					unitOfWork.Reassociate(model.Persons);
-					IScheduleDictionary dic = _componentContext.Resolve<IScheduleStorage>().FindSchedulesForPersons(
-							period,
-							model.Scenario,
+					IScheduleDictionary dic = _componentContext.Resolve<IScheduleStorage>().FindSchedulesForPersons(model.Scenario,
 							personsProvider,
 							scheduleDictionaryLoadOptions,
-							model.Persons);
+							model.Period.ToDateTimePeriod(model.TimeZone),
+							model.Persons, false);
 
 					IList<IReportDataParameter> parameters = ReportHandler.CreateScheduleTimePerActivityParameters(model, _currentCulture);
 					ReportHandler.CreateScheduleTimePerActivityData(dic, model, data);

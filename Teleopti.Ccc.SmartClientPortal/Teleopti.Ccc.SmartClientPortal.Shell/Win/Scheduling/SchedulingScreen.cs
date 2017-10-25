@@ -3792,9 +3792,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadSchedules(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
 			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
 		{
-			var period = new ScheduleDateTimePeriod(stateHolder.RequestedPeriod.Period(),
-				stateHolder.SchedulingResultState.PersonsInOrganization);
-			using (PerformanceOutput.ForOperation("Loading schedules " + period.LoadedPeriod()))
+			var period = stateHolder.RequestedPeriod.Period();
+			using (PerformanceOutput.ForOperation("Loading schedules " + period))
 			{
 				IPersonProvider personsInOrganizationProvider =
 					new PersonProvider(stateHolder.SchedulingResultState.PersonsInOrganization);

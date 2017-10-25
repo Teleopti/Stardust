@@ -69,12 +69,10 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 					.Where(p => p.Period(new DateOnly(Now.UtcDateTime())) != null) // UserThatCreatesTestData has no period
 					.ToList();
 
-				schedules = Schedules.FindSchedulesForPersons(
-					new ScheduleDateTimePeriod(new DateTimePeriod(dates.Min().Utc(), dates.Max().AddDays(1).Utc())),
-					scenario,
+				schedules = Schedules.FindSchedulesForPersons(scenario,
 					new PersonProvider(persons),
 					new ScheduleDictionaryLoadOptions(false, false),
-					persons);
+					new DateTimePeriod(dates.Min().Utc(), dates.Max().AddDays(1).Utc()), persons, false);
 				schedules.TakeSnapshot();
 				var phone = Activities.LoadAll().Single(x => x.Name == "Phone");
 

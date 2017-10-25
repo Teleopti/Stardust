@@ -71,13 +71,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		{
 			var period = date.ToDateTimePeriod(_timeZone.TimeZone());
 			var options = new ScheduleDictionaryLoadOptions(true, true);
-			var schedulePeriod = new ScheduleDateTimePeriod(period);
 			var personProvider = new PersonProvider(people)
 			{
 				DoLoadByPerson = true
 			};
 
-			return _scheduleStorage.FindSchedulesForPersons(schedulePeriod, scenario, personProvider, options, people);
+			return _scheduleStorage.FindSchedulesForPersons(scenario, personProvider, options, period, people, false);
 		}
 
 		private IBusinessRuleResponse[] swapShifts(DateOnly date, IPerson[] people, IScheduleDictionary scheduleDictionary, TrackedCommandInfo trackedCommandInfo)

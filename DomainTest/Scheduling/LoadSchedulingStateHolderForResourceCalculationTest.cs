@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
 			_scheduleStorage.Stub(
 #pragma warning disable 618
-				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null))
+				x => x.FindSchedulesForPersons(scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, new DateTimePeriod(), null, false))
 #pragma warning restore 618
 				.IgnoreArguments()
 				.Return(scheduleDictionary);
@@ -93,47 +93,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			_schedulingResultStateHolder.Schedules.Should().Be.SameInstanceAs(scheduleDictionary);
 			_schedulingResultStateHolder.SkillDays.Should().Be.SameInstanceAs(skillDictionary);
-		}
-
-		[Test]
-		public void ShouldNotLoadRestrictionAndNotes()
-		{
-			var period = new DateTimePeriod(2010, 2, 1, 2010, 2, 2);
-			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
-			IPerson person = PersonFactory.CreatePerson();
-			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var personsInOrganizationProvider = MockRepository.GenerateMock<IPersonProvider>();
-
-			var skills = new List<ISkill> { SkillFactory.CreateSkill("test") };
-			var requestedPeople = new List<IPerson> { person };
-			var peopleInOrganization = new List<IPerson> { person };
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
-			var skillDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skills[0], new ISkillDay[] { } } };
-
-			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
-			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
-			_scheduleStorage.Stub(
-#pragma warning disable 618
-				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, null, null))
-#pragma warning restore 618
-				.IgnoreArguments()
-				.Return(scheduleDictionary);
-			_skillRepository.Stub(x => x.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
-			_peopleAndSkillLoadDecider.Stub(x => x.Execute(scenario,period,peopleInOrganization)).Return(MockRepository.GenerateMock<ILoaderDeciderResult>());
-			_skillDayLoadHelper.Stub(x => x.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario))
-				.Return(skillDictionary);
-
-			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder, loadLight: false);
-
-			_scheduleStorage.AssertWasCalled(
-#pragma warning disable 618
-				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, null, null),
-#pragma warning restore 618
-				o =>
-					o.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Same(scenario),
-						Rhino.Mocks.Constraints.Is.Anything(),
-						new Rhino.Mocks.Constraints.PredicateConstraint<ScheduleDictionaryLoadOptions>(
-							x => x.LoadNotes == false && x.LoadRestrictions == false), Rhino.Mocks.Constraints.Is.Anything()));
 		}
 
 		[Test]
@@ -157,9 +116,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_scheduleStorage.Stub(
 				x =>
 #pragma warning disable 618
-					x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions,
+					x.FindSchedulesForPersons(scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions,
 #pragma warning restore 618
-						visiblePeople)).IgnoreArguments().Return(scheduleDictionary);
+						new DateTimePeriod(), visiblePeople, false)).IgnoreArguments().Return(scheduleDictionary);
 			_skillRepository.Stub(x => x.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
 			_peopleAndSkillLoadDecider.Stub(x => x.Execute(scenario, period, requestedPeople))
 				.Return(MockRepository.GenerateMock<ILoaderDeciderResult>());

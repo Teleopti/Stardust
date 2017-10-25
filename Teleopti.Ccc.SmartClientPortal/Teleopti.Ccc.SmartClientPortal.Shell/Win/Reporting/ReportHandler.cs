@@ -184,13 +184,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		private static void loadSchedules(IUnitOfWork unitOfWork, IEnumerable<IPerson> persons, ISchedulerStateHolder stateHolder)
 		{
 			if (stateHolder == null) throw new ArgumentNullException(nameof(stateHolder));
-			var period = new ScheduleDateTimePeriod(stateHolder.RequestedPeriod.Period(), stateHolder.SchedulingResultState.PersonsInOrganization);
 			IPersonProvider personsInOrganizationProvider = new PersonProvider(persons) { DoLoadByPerson = true};
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 			unitOfWork.Reassociate(persons);
 			var repositoryFactory = new RepositoryFactory();
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-			stateHolder.LoadSchedules(new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
+			stateHolder.LoadSchedules(new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)), personsInOrganizationProvider, scheduleDictionaryLoadOptions, stateHolder.RequestedPeriod.Period());
 		}
 	
 		public static IList<IReportDataParameter> CreateScheduleAuditingParameters(ReportSettingsScheduleAuditingModel model, IFormatProvider culture)

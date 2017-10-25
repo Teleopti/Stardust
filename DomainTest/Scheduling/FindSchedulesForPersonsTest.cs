@@ -36,12 +36,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var notSelectedAgent = new Person().WithSchedulePeriodOneDay(dateWithNotSelectedAgentAss).InTimeZone(TimeZoneInfo.Utc).WithId();
 			PersonAssignmentRepository.Has(notSelectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), dateWithNotSelectedAgentAss, new TimePeriod(8, 17));
 
-			var schedules = Target.FindSchedulesForPersons(
-					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { selectedAgent, notSelectedAgent }),
-					scenario,
+			var schedules = Target.FindSchedulesForPersons(scenario,
 					new PersonProvider(new[] { selectedAgent, notSelectedAgent }) { DoLoadByPerson = _loadByPerson },
 					new ScheduleDictionaryLoadOptions(false, false),
-					new[] { selectedAgent });
+					date.ToDateTimePeriod(TimeZoneInfo.Utc),
+					new[] { selectedAgent }, true);
 
 			schedules[notSelectedAgent].ScheduledDay(dateWithNotSelectedAgentAss).PersonAssignment(true).ShiftLayers
 				.Should().Be.Empty();
@@ -60,12 +59,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var notSelectedAgent = new Person().WithSchedulePeriodOneWeek(date).InTimeZone(TimeZoneInfo.Utc).WithId();
 			PersonAssignmentRepository.Has(notSelectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), dateWithNotSelectedAgentAss, new TimePeriod(8,17));
 
-			var schedules = Target.FindSchedulesForPersons(
-					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] {selectedAgent, notSelectedAgent}),
-					scenario,
+			var schedules = Target.FindSchedulesForPersons(scenario,
 					new PersonProvider(new[] {selectedAgent, notSelectedAgent}) {DoLoadByPerson = _loadByPerson },
 					new ScheduleDictionaryLoadOptions(false, false),
-					new[] {selectedAgent});
+					date.ToDateTimePeriod(TimeZoneInfo.Utc),
+					new[] {selectedAgent}, true);
 
 			schedules[notSelectedAgent].ScheduledDay(dateWithNotSelectedAgentAss).PersonAssignment(true).ShiftLayers
 				.Should().Be.Empty();
@@ -80,12 +78,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var selectedAgent = new Person().WithSchedulePeriodOneDay(date).InTimeZone(TimeZoneInfo.Utc).WithId();
 			PersonAssignmentRepository.Has(selectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), dateWithNotSelectedAgentAss, new TimePeriod(8, 17));
 
-			var schedules = Target.FindSchedulesForPersons(
-					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { selectedAgent }),
-					scenario,
+			var schedules = Target.FindSchedulesForPersons(scenario,
 					new PersonProvider(new[] { selectedAgent }) { DoLoadByPerson = _loadByPerson },
 					new ScheduleDictionaryLoadOptions(false, false),
-					new[] { selectedAgent });
+					date.ToDateTimePeriod(TimeZoneInfo.Utc),
+					new[] { selectedAgent }, true);
 
 			schedules[selectedAgent].ScheduledDay(dateWithNotSelectedAgentAss).PersonAssignment(true).ShiftLayers
 				.Should().Not.Be.Empty();
@@ -100,12 +97,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var notSelectedAgent = new Person().WithSchedulePeriodOneWeek(date).InTimeZone(TimeZoneInfo.Utc).WithId();
 			PersonAssignmentRepository.Has(notSelectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), date, new TimePeriod(8, 17));
 
-			var schedules = Target.FindSchedulesForPersons(
-					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { selectedAgent, notSelectedAgent }),
-					scenario,
+			var schedules = Target.FindSchedulesForPersons(scenario,
 					new PersonProvider(new[] { selectedAgent, notSelectedAgent }) { DoLoadByPerson = _loadByPerson },
 					new ScheduleDictionaryLoadOptions(false, false),
-					new[] { selectedAgent });
+					date.ToDateTimePeriod(TimeZoneInfo.Utc),
+					new[] { selectedAgent }, true);
 
 			schedules[notSelectedAgent].ScheduledDay(date).PersonAssignment(true).ShiftLayers
 				.Should().Not.Be.Empty();
@@ -122,12 +118,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var selectedAgentAss = new PersonAssignment(selectedAgent, scenario, dateWithAssignment);
 			PersonAssignmentRepository.Has(selectedAgentAss);
 
-			var schedules = Target.FindSchedulesForPersons(
-					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { selectedAgent, notSelectedAgent }),
-					scenario,
+			var schedules = Target.FindSchedulesForPersons(scenario,
 					new PersonProvider(new[] { selectedAgent, notSelectedAgent }) { DoLoadByPerson = _loadByPerson },
 					new ScheduleDictionaryLoadOptions(false, false),
-					new[] { selectedAgent });
+					date.ToDateTimePeriod(TimeZoneInfo.Utc),
+					new[] { selectedAgent }, true);
 
 			schedules[selectedAgent].Contains(selectedAgentAss, true).Should().Be.False();
 		}
@@ -140,12 +135,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var selectedAgent = new Person().WithSchedulePeriodOneDay(date).InTimeZone(TimeZoneInfo.Utc).WithId();
 			PersonAssignmentRepository.Has(selectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), date, new TimePeriod(8, 17));
 
-			var schedules = Target.FindSchedulesForPersons(
-					new ScheduleDateTimePeriod(date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { selectedAgent }),
-					scenario,
+			var schedules = Target.FindSchedulesForPersons(scenario,
 					new PersonProvider(new[] { selectedAgent }) { DoLoadByPerson = _loadByPerson },
 					new ScheduleDictionaryLoadOptions(false, false),
-					new[] { selectedAgent });
+					date.ToDateTimePeriod(TimeZoneInfo.Utc),
+					new[] { selectedAgent }, true);
 
 			schedules[selectedAgent].ScheduledDay(date).PersistableScheduleDataCollection().Count()
 				.Should().Be.EqualTo(1);

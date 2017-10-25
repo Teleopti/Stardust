@@ -44,16 +44,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 
-		    var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period, requestedPersons);
 		    schedulingResultStateHolder.Schedules =
 #pragma warning disable 618
 			    _scheduleStorage.FindSchedulesForPersons(
 #pragma warning restore 618
-				    scheduleDateTimePeriod,
-				    scenario,
+					scenario,
 				    personsProvider,
 				    scheduleDictionaryLoadOptions,
-				    requestedPersons); //rk - fattar inte, för rörigt. lägger till detta av nån anledning här
+				    period,
+					requestedPersons, true);
 
 		    schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
 		    schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();

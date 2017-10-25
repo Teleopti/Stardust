@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(() => view.EnableInteractions());
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
 				callback.ReassociateDataForAllPeople();
-				Expect.Call(scheduleStorage.FindSchedulesForPersons(null, null, null, null, null)).IgnoreArguments()
+				Expect.Call(scheduleStorage.FindSchedulesForPersons(null, null, null, new DateTimePeriod(), null, false)).IgnoreArguments()
 					.Return(dictionaryToExportTo);
 				LastCall.IgnoreArguments();
 				Expect.Call(moveSvc.CopySchedulePartsToAnotherDictionary(dictionaryToExportTo, partsToMove)).Return(warnings);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(() => view.EnableInteractions());
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
 				callback.ReassociateDataForAllPeople();
-				Expect.Call(scheduleStorage.FindSchedulesForPersons(null, null, null, null, null)).Return(dictionaryToExportTo);
+				Expect.Call(scheduleStorage.FindSchedulesForPersons(null, null, null, new DateTimePeriod(), null, false)).Return(dictionaryToExportTo);
 				LastCall.IgnoreArguments();
 				Expect.Call(moveSvc.CopySchedulePartsToAnotherDictionary(dictionaryToExportTo, partsToMove)).Return(warnings);
 				verifyScenarioText();
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void VerifyInitializeWhenPersonIsMissingForSchedule()
 		{
 			partsToMove.Add(createDummyPart(new Person()));
-			Assert.Throws<ArgumentException>(() => Initialize(target)); //annat exception här?
+			Assert.Throws<ArgumentException>(() => Initialize(target)); //annat exception hï¿½r?
 		}
 
 		[Test]
@@ -378,7 +378,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private static IEnumerable<IBusinessRuleResponse> threeRuleResponsesTwoWithSameMessageAndPerson()
 		{
 			IPerson sharedPerson = new Person().WithName(new Name("Roger", "Moore"));
-			const string sharedMessage = "EnGång";
+			const string sharedMessage = "EnGï¿½ng";
 			return new List<IBusinessRuleResponse>
 					   {
 						   new BusinessRuleResponse(typeof (int), sharedMessage, false, false, new DateTimePeriod(), sharedPerson, new DateOnlyPeriod(new DateOnly(),new DateOnly() ), "tjillevippen"),

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public IScheduleDictionary ScheduleDictionaryToPersist { get; private set; }
 
-		//ingen modell till denna då formuläret inte har något
+		//ingen modell till denna dï¿½ formulï¿½ret inte har nï¿½got
 		//modifierbart state
 		public ExportToScenarioResultPresenter(IUnitOfWorkFactory uowFactory,
 												IExportToScenarioResultView view,
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				var personProvider = new PersonProvider(_fullyLoadedPersonsToMove);
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 				_callback.ReassociateDataForAllPeople();
-				ScheduleDictionaryToPersist = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
+				ScheduleDictionaryToPersist = _scheduleStorage.FindSchedulesForPersons(_exportScenario, personProvider, scheduleDictionaryLoadOptions, schedulePartPeriod(), _fullyLoadedPersonsToMove, true);
 				_involvedAbsences = _exportToScenarioAbsenceFinder.Find(_exportScenario, ScheduleDictionaryToPersist, _fullyLoadedPersonsToMove,_schedulePartsToExport, _datesToExport);
 				
 				return _moveSchedules.CopySchedulePartsToAnotherDictionary(ScheduleDictionaryToPersist, _schedulePartsToExport);

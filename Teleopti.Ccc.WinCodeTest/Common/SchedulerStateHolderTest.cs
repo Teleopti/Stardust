@@ -96,12 +96,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
             using(mocks.Record())
             {
-                Expect.Call(scheduleStorage.FindSchedulesForPersons(scheduleDictionary.Period, target.RequestedScenario, personsProvider, scheduleDictionaryLoadOptions, selectedPersons))
+                Expect.Call(scheduleStorage.FindSchedulesForPersons(target.RequestedScenario, personsProvider, scheduleDictionaryLoadOptions, scheduleDictionary.Period.VisiblePeriod, selectedPersons, true))
                     .Return(scheduleDictionary);
             }
             using(mocks.Playback())
             {
-                target.LoadSchedules(scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDictionary.Period);
+                target.LoadSchedules(scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDictionary.Period.VisiblePeriod);
             }
             Assert.AreSame(scheduleDictionary, target.Schedules);
             Assert.AreEqual(period.LoadedPeriod(), target.Schedules.Period.LoadedPeriod());
@@ -185,10 +185,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			personRequest.ForcePending();
 			((IShiftTradeRequest) personRequest.Request).SetShiftTradeStatus(ShiftTradeStatus.Referred, new PersonRequestAuthorizationCheckerForTest());
 
-			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, null, personList))
+			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, new DateTimePeriod(), personList, false))
 							  .IgnoreArguments()
 							  .Return(new ScheduleDictionary(scenario, dtp, _permissionChecker));
-			target.LoadSchedules(scheduleRepository, null, null, dtp);
+			target.LoadSchedules(scheduleRepository, null, null, dtp.VisiblePeriod);
 
 		    repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
 		    personRequestRepository.Expect(
@@ -221,10 +221,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			personRequest.ForcePending();
 			((IShiftTradeRequest)personRequest.Request).SetShiftTradeStatus(ShiftTradeStatus.Referred, new PersonRequestAuthorizationCheckerForTest());
 
-			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, null, personList))
+			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, new DateTimePeriod(), personList, false))
 							  .IgnoreArguments()
 							  .Return(new ScheduleDictionary(scenario, dtp, _permissionChecker));
-			target.LoadSchedules(scheduleRepository, null, null, dtp);
+			target.LoadSchedules(scheduleRepository, null, null, dtp.VisiblePeriod);
 
 			repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
 			personRequestRepository.Expect(
@@ -274,10 +274,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			personRequest.ForcePending();
 			((IShiftTradeRequest)personRequest.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByMe, new PersonRequestAuthorizationCheckerForTest());
 
-			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, null, personList))
+			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, new DateTimePeriod(), personList, false))
 							  .IgnoreArguments()
 							  .Return(new ScheduleDictionary(scenario, dtp, _permissionChecker));
-			target.LoadSchedules(scheduleRepository, null, null, dtp);
+			target.LoadSchedules(scheduleRepository, null, null, dtp.VisiblePeriod);
 
 			repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
 			personRequestRepository.Expect(
@@ -405,16 +405,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var personProvider = mocks.StrictMock<IPersonProvider>();
             var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
             var scheduleDateTimePeriod = mocks.StrictMock<IScheduleDateTimePeriod>();
-			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(null, personProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod));
-        }
-
-        [Test]
-        public void ShouldThrowExceptionOnNullPeriod()
-        {
-            var personProvider = mocks.StrictMock<IPersonProvider>();
-            var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
-            var scheduleRepository = mocks.StrictMock<IFindSchedulesForPersons>();
-			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(scheduleRepository, personProvider, scheduleDictionaryLoadOptions, null));
+			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(null, personProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod));
         }
 
 		[Test]

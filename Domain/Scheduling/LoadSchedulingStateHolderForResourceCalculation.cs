@@ -74,16 +74,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var personsProvider = _personProviderMaker.Invoke(schedulingResultStateHolder.PersonsInOrganization);
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 
-			 var scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod(period.StartDateTime.AddDays(-9), period.EndDateTime.AddDays(2)));
 			schedulingResultStateHolder.Schedules =
 #pragma warning disable 618
 				_scheduleStorage.FindSchedulesForPersons(
 #pragma warning restore 618
-					scheduleDateTimePeriod,
 					scenario, 
 					personsProvider,
                     scheduleDictionaryLoadOptions,
-					requestedPersons); //rk - fattar inte, för rörigt. lägger till detta av nån anledning här
+					new DateTimePeriod(period.StartDateTime.AddDays(-9), period.EndDateTime.AddDays(2)),
+					requestedPersons, false);
 
 			schedulingResultStateHolder.AllPersonAccounts = loadLight
 				? new Dictionary<IPerson, IPersonAccountCollection>()

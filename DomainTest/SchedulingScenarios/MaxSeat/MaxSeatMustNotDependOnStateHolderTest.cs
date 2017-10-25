@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			}
 
 			public void LoadSchedules(IFindSchedulesForPersons findSchedulesForPersons, IPersonProvider personsProvider,
-				ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDateTimePeriod period)
+				ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod period)
 			{
 				throw new NotImplementedException();
 			}

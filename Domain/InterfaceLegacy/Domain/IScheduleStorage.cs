@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	public interface IScheduleStorage
+	public interface IScheduleStorage :IFindSchedulesForPersons
 	{
 		void Add(IPersistableScheduleData scheduleData);
 		void Remove(IPersistableScheduleData scheduleData);
@@ -30,13 +31,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			IScenario scenario);
 
 		IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null);
-
-		IScheduleDictionary FindSchedulesForPersons(
-			IScheduleDateTimePeriod period,
-			IScenario scenario,
-			IPersonProvider personsProvider,
-			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-			IEnumerable<IPerson> visiblePersons);
 
 		IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id);
 	}

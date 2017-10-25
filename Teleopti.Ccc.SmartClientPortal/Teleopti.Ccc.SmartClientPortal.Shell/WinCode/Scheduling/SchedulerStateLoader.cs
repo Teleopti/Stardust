@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
 				using (uow.DisableFilter(QueryFilter.Deleted))
 					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
-				_schedulerState.LoadSchedules((IFindSchedulesForPersons)scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
+				_schedulerState.LoadSchedules((IFindSchedulesForPersons)scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod);
 			}
 		}
 
