@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldNotIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod_AgentOutsidePeriod()
+		public void ShouldNotIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod()
 		{
 			var date = new DateOnly(2000,1,1);
 			var dateWithNotSelectedAgentAss = date.AddWeeks(3);
