@@ -47,29 +47,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldNotIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod_ScheduleOutsidePeriod()
-		{
-			if (!_loadByPerson)
-				Assert.Ignore("If green -> better perf in RAM due to less loaded. Skip this for now though - fix if necessary.");
-
-			var date = DateOnly.Today;
-			var dateWithNotSelectedAgentAss = date.AddDays(3);
-			var scenario = new Scenario("_");
-			var selectedAgent = new Person().WithSchedulePeriodOneDay(date).InTimeZone(TimeZoneInfo.Utc).WithId();
-			var notSelectedAgent = new Person().WithSchedulePeriodOneWeek(date).InTimeZone(TimeZoneInfo.Utc).WithId();
-			PersonAssignmentRepository.Has(notSelectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), dateWithNotSelectedAgentAss, new TimePeriod(8,17));
-
-			var schedules = Target.FindSchedulesForPersons(scenario,
-					new PersonProvider(new[] {selectedAgent, notSelectedAgent}) {DoLoadByPerson = _loadByPerson },
-					new ScheduleDictionaryLoadOptions(false, false),
-					date.ToDateTimePeriod(TimeZoneInfo.Utc),
-					new[] {selectedAgent}, true);
-
-			schedules[notSelectedAgent].ScheduledDay(dateWithNotSelectedAgentAss).PersonAssignment(true).ShiftLayers
-				.Should().Be.Empty();
-		}
-
-		[Test]
 		public void ShouldIncludeSelectedAgentsScheduleOutsideChoosenPeriod()
 		{
 			var date = DateOnly.Today;
