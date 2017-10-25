@@ -40,7 +40,7 @@
 				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<table>
+			<table ng-show="vm.scheduleFullyLoaded && vm.total <= 500">
 				<thead head-width-helper>
 					<tr class="weekview-thead">
 						<th class="agent-name-colomn"></th>

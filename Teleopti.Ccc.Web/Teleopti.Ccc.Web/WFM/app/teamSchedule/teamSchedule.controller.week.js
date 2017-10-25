@@ -99,7 +99,8 @@
 				vm.isLoading = false;
 				vm.scheduleFullyLoaded = true;
 				vm.searchOptions.focusingSearch = false;
-			}).catch(function () {
+				vm.total = data.Total;
+			}, function () {
 				vm.isLoading = false;
 				vm.searchOptions.focusingSearch = false;
 			});
