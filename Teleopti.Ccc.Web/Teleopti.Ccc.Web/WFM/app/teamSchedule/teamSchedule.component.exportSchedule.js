@@ -20,7 +20,7 @@
 		vm.scenarios = [];
 		vm.optionalColumns = [];
 		vm.availableGroups = { BusinessHierarchy: [], GroupPages: [] };
-		vm.selectedGroups = {
+		vm.configuration.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],
 			groupPageId: ''
