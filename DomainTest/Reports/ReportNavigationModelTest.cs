@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.DomainTest.Reports
 {
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Reports
 				new ReportScheduledTimePerActivityVisible(),
 				new ReportScheduledTimeVsTargetVisible(),
 				new ReportAuditTrailVisible()
-			});
+			}, new ScheduleAnalysisProvider());
 			_licenseActivator = _mocks.DynamicMock<ILicenseActivator>();
 			DefinedLicenseDataFactory.SetLicenseActivator("for test", _licenseActivator);
 		}
@@ -113,6 +112,12 @@ namespace Teleopti.Ccc.DomainTest.Reports
 			{
 				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(reportFunctions).Repeat.AtLeastOnce();
 			}
+			_target = new ReportNavigationModel(new List<IReportVisible>
+			{
+				new ReportScheduledTimePerActivityVisible(),
+				new ReportScheduledTimeVsTargetVisible(),
+				new ReportAuditTrailVisible()
+			}, new ScheduleAnalysisAuditTrailProvider());
 			using (_mocks.Playback())
 			{
 				using (CurrentAuthorization.ThreadlyUse(authorization))

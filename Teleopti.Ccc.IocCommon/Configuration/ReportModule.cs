@@ -22,9 +22,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ReportScheduledTimeVsTargetVisible>().As<IReportVisible>().SingleInstance();
 			builder.RegisterType<ReportAuditTrailVisible>().As<IReportVisible>().SingleInstance();
 
+			builder.RegisterType<ReportNavigationModel>().As<IReportNavigationModel>();
+
 			builder.RegisterType<PersonsWhoChangedSchedulesViewModelProvider>().SingleInstance();
 			builder.RegisterType<ScheduleAuditTrailReport>().As<IScheduleAuditTrailReport>().SingleInstance();
 			builder.RegisterType<ScheduleAuditTrailReportViewModelProvider>().SingleInstance();
+
+			if (_configuration.Toggle(Toggles.WFM_AuditTrail_44006))
+				builder.RegisterType<ScheduleAnalysisAuditTrailProvider>().As<IScheduleAnalysisProvider>().SingleInstance();
+			else
+				builder.RegisterType<ScheduleAnalysisProvider>().As<IScheduleAnalysisProvider>().SingleInstance();
 		}
 	}
 }

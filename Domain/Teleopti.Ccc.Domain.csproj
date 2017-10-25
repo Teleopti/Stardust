@@ -332,6 +332,9 @@
     <Compile Include="Optimization\TeamBlock\BlockPreferencesMapper.cs" />
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />
     <Compile Include="Repositories\PersonBudgetGroupName.cs" />
+    <Compile Include="Reports\IScheduleAnalysisProvider.cs" />
+    <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />
+    <Compile Include="Reports\ScheduleAnalysisProvider.cs" />
     <Compile Include="ResourcePlanner\Validation\ScheduleStartOnWrongDateValidator.cs" />
     <Compile Include="Scheduling\SuccessfulScheduledAgents.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />

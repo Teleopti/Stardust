@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
@@ -13,10 +12,12 @@ namespace Teleopti.Ccc.Domain.Reports
 	public partial class ReportNavigationModel : IReportNavigationModel
 	{
 		private readonly IEnumerable<IReportVisible> _reportVisibleList;
+		private readonly IScheduleAnalysisProvider _scheduleAnalysisProvider;
 
-		public ReportNavigationModel(IEnumerable<IReportVisible> reportVisibleList)
+		public ReportNavigationModel(IEnumerable<IReportVisible> reportVisibleList, IScheduleAnalysisProvider scheduleAnalysisProvider)
 		{
 			_reportVisibleList = reportVisibleList;
+			_scheduleAnalysisProvider = scheduleAnalysisProvider;
 		}
 		public IEnumerable<IApplicationFunction> PermittedReportFunctions
 		{
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Reports
 							new MatrixFunctionGroup
 							{
 								LocalizedDescription = Resources.ScheduleAnalysis,
-								ApplicationFunctions = getScheduleAnalysisApplicationFunctions()
+								ApplicationFunctions = _scheduleAnalysisProvider.GetScheduleAnalysisApplicationFunctions(PermittedReportFunctions.ToList())
 							},
 							new MatrixFunctionGroup
 							{
@@ -112,23 +113,6 @@ namespace Teleopti.Ccc.Domain.Reports
 			}
 		}
 
-		private List<IApplicationFunction> getScheduleAnalysisApplicationFunctions()
-		{
-			var ret = (from a in PermittedReportFunctions
-				where analysisReports().Contains(a.ForeignId.ToUpper())
-				select a)
-				.ToList();
-			var auditApplicationFunction = PrincipalAuthorization.Current()
-				.GrantedFunctions().FirstOrDefault(a => a.ForeignId == "0148");
-			if (auditApplicationFunction != null)
-			{
-				auditApplicationFunction.IsWebReport = true;
-				ret.Add(auditApplicationFunction);
-			}
-
-			return ret;
-		}
-
 		public IEnumerable<IApplicationFunction> PermittedCustomReportFunctions
 		{
 			get
@@ -141,19 +125,6 @@ namespace Teleopti.Ccc.Domain.Reports
 					   where groupedMatrixFunctionForeignIds.Contains(f.ForeignId) == false
 					   select f;
 			}
-		}
-		private static IEnumerable<string> analysisReports()
-		{
-			// old "21", "18", "17", "19", "26", "29"
-			return new[]
-			  {
-				  "132E3AF2-3557-4EA7-813E-05CD4869D5DB",
-				  "63243F7F-016E-41D1-9432-0787D26F9ED5",
-				  "009BCDD2-3561-4B59-A719-142CD9216727",
-				  "BAA446C2-C060-4F39-83EA-B836B1669331",
-				  "2F222F0A-4571-4462-8FBE-0C747035994A",
-				  "C052796F-1C8A-4905-9246-FF1FF8BD30E5"
-			  };
 		}
 
 		private static IEnumerable<string> preferencesReports()

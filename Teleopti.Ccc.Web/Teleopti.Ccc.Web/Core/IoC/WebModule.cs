@@ -5,6 +5,7 @@ using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 {
 	public class WebModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private static IIocConfiguration _configuration;
 		private readonly HttpConfiguration _httpConfiguration;
 
 		public WebModule(IIocConfiguration configuration, HttpConfiguration httpConfiguration)
@@ -133,7 +134,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>();
 			builder.RegisterType<PushMessageProvider>().As<IPushMessageProvider>();
 			builder.RegisterType<ReportsProvider>().As<IReportsProvider>();
-			builder.RegisterType<ReportNavigationModel>().As<IReportNavigationModel>();
 			builder.RegisterType<ReportsNavigationProvider>().As<IReportsNavigationProvider>();
 			builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
 			builder.RegisterType<AnalyticsPermissionsUpdater>().As<IAnalyticsPermissionsUpdater>().InstancePerRequest().ApplyAspects();
