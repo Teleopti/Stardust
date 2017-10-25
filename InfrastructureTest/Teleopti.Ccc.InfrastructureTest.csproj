@@ -580,7 +580,6 @@
     <Compile Include="Repositories\RuleSetBagRepositoryTest.cs" />
     <Compile Include="Repositories\ScorecardRepositoryTest.cs" />
     <Compile Include="Repositories\ValidatedVolumeDayRepositoryTest.cs" />
-    <Compile Include="Repositories\ScheduleRepositoryTest.cs" />
     <Compile Include="Repositories\SkillDayRepositoryTest.cs" />
     <Compile Include="Repositories\PersonAbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\PersonAssignmentRepositoryTest.cs" />
