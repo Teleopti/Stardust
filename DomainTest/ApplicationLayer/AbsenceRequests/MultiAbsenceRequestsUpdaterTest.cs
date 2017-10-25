@@ -949,8 +949,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.IsWaitlisted.Should().Be.True();
-			personRequest.DenyReason.Should().Be.EqualTo(Resources.RequestWaitlistedReasonPersonAccount);
+			personRequest.IsWaitlisted.Should().Be.False();
+			personRequest.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonPersonAccount);
 		}
 
 		[Test]

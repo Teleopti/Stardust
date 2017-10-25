@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 	    }
 
 	    [Test]
-		public void ShouldGetWaitlistedInvalidReason()
+		public void ShouldGetDenyReasonPersonAccountInvalidReason()
 	    {
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
 
@@ -207,10 +207,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 
-			Assert.IsTrue(_target.InvalidReason.Equals("RequestWaitlistedReasonPersonAccount"));
+			Assert.IsTrue(_target.InvalidReason.Equals(nameof(Resources.RequestDenyReasonPersonAccount)));
 			Assert.IsFalse(result.IsValid);
 
-			var errorMessage = Resources.RequestWaitlistedReasonPersonAccount;
+			var errorMessage = Resources.RequestDenyReasonPersonAccount;
 			Assert.IsTrue(result.ValidationErrors.Equals(errorMessage));
 		}
 
