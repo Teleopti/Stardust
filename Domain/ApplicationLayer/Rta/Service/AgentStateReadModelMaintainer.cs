@@ -1,7 +1,9 @@
 using System;
+using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -14,13 +16,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IHandleEvent<TeamNameChangedEvent>,
 		IRunOnHangfire
 	{
-		private readonly IAgentStateReadModelPersister _persister;
+		private static ILog Log = LogManager.GetLogger(typeof(AgentStateReadModelMaintainer));
 
-		public AgentStateReadModelMaintainer(IAgentStateReadModelPersister persister)
+		private readonly IAgentStateReadModelPersister _persister;
+		private readonly IJsonSerializer _serializer;
+
+		public AgentStateReadModelMaintainer(IAgentStateReadModelPersister persister, IJsonSerializer serializer)
 		{
 			_persister = persister;
+			_serializer = serializer;
 		}
-		
+
 		[UnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
@@ -48,6 +54,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonNameChangedEvent @event)
 		{
+			if (@event.PersonId == Guid.Empty ||
+				string.IsNullOrWhiteSpace(@event.FirstName) ||
+				string.IsNullOrWhiteSpace(@event.LastName))
+			{
+				Log.Error("PersonNameChangedEvent received was invalid " + _serializer.SerializeObject(@event));
+				return;
+			}
 			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName);
 		}
 
@@ -68,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_persister.UpdateSiteName(@event.SiteId, @event.Name);
 		}
-		
+
 		[UnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
