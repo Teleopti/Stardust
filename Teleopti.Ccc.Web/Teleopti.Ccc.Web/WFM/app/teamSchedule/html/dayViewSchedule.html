@@ -49,18 +49,19 @@
 						  team-name-map="vm.teamNameMap"
 						  selected-favorite="vm.selectedFavorite"
 						  selected-sort-option="vm.sortOption"></view-changer>
+			<timezone-picker class="timezone-picker" available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)"></timezone-picker>
+
+			<div class="wfm-switch" ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
+				<input type="checkbox" id="switchStaffing" ng-model="vm.staffingEnabled" />
+				<label for="switchStaffing">
+					<span class="wfm-switch-label" translate>ShowStaffing</span>
+					<span class="wfm-switch-toggle"></span>
+				</label>
+
+			</div>
 		</div>
 
-		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)"></timezone-picker>
-
-		<div class="wfm-switch" ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
-			<input type="checkbox" id="switchStaffing" ng-model="vm.staffingEnabled" />
-			<label for="switchStaffing">
-				<span class="wfm-switch-label" translate>ShowStaffing</span>
-				<span class="wfm-switch-toggle"></span>
-			</label>
-
-		</div>
+		
 
 		<div class="warning-container" ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
 			<div id="show-warnings" class="wfm-switch inline-block">

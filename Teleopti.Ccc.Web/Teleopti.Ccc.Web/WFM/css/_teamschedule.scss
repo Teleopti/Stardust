@@ -317,8 +317,8 @@ wfm-multiple-search-input .advanced-input {
 	display: -ms-flexbox;
 	display: flex;
 	flex-direction: row;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
 	-ms-flex-pack: justify;
 	justify-content: space-between;
 
@@ -338,6 +338,10 @@ wfm-multiple-search-input .advanced-input {
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		height: 100%;
+	  
+	  	.timezone-picker{
+		  padding-top: 5px;
+		}
 	}
 
 	.people-search-container {
@@ -368,9 +372,10 @@ wfm-multiple-search-input .advanced-input {
 
 	.rightside-part {
 		display: flex;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 		flex-direction: row;
 		justify-content: flex-start;
+	  	align-self: auto;
 	}
 
 	timezone-picker {
