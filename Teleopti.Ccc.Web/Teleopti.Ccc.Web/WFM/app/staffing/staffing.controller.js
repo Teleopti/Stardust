@@ -40,6 +40,9 @@
 		vm.compensations = [];
 		vm.selectedDate = new Date();
 
+		vm.unifiedSkillGroupManagement = false;
+		vm.HasPermissionToModifySkillArea = false;
+
 		var events = [];
 		var allSkills = [];
 		var allSkillAreas = [];
@@ -60,6 +63,7 @@
 		getSkillAreas();
 		getCompensations();
 		getStaffingSettings();
+		isUnifiedSkillGroupManagementEnabled();
 
 		vm.onStateChanged = function(evt, to, params, from) {
 			if(to.name !== 'staffing'){
@@ -81,6 +85,10 @@
 
 		function isOvertimeSuggestionEnabled() {
 			return toggleService.WfmStaffing_AddOvertime_42524;
+		}
+
+		function isUnifiedSkillGroupManagementEnabled(){
+			vm.unifiedSkillGroupManagement = toggleService.WFM_Unified_Skill_Group_Management_45417;
 		}
 
 		function toggleOverstaffSettings() {
@@ -210,6 +218,7 @@
 		function getSkillAreas() {
 			var query = staffingService.getSkillAreas.get();
 			query.$promise.then(function (response) {
+				vm.HasPermissionToModifySkillArea = response.HasPermissionToModifySkillArea;
 				allSkillAreas = response.SkillAreas;
 			})
 		}

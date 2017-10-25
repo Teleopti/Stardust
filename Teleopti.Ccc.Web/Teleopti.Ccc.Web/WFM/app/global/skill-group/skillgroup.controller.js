@@ -4,7 +4,6 @@
 
 	SkillGroupController.$inject = [
 		'$state',
-		'intradayService',
 		'SkillGroupSvc',
 		'$filter',
 		'NoticeService',
@@ -12,7 +11,7 @@
 		'Toggle',
 		'skillIconService'];
 
-	function SkillGroupController($state, intradayService, SkillGroupSvc, $filter, NoticeService, $translate, toggleSvc, skillIconService) {
+	function SkillGroupController($state, SkillGroupSvc, $filter, NoticeService, $translate, toggleSvc, skillIconService) {
 		var vm = this;
 		vm.skills = [];
 		vm.skillAreaName = '';
@@ -67,7 +66,7 @@
 			NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
 		};
 
-		intradayService.getSkills.query().$promise.then(function (skills) {
+		SkillGroupSvc.getSkills.query().$promise.then(function (skills) {
 			vm.skills = skills;
 		});
 	}
