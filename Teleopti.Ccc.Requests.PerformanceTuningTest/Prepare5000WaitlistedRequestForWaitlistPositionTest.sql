@@ -35,6 +35,7 @@ FROM   person p
 WHERE  pp.startdate < @end 
 	   AND pp.enddate > @start 
 	   AND s.businessunit = @businessUnitId 
+	   AND p.WorkflowControlSet IS NOT NULL
 
 --double people 
 INSERT INTO #tempperson 

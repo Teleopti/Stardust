@@ -38,8 +38,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 		private IList<IPersonRequest> _requests;
 		private DateTime _nowDateTime;
-		private ICollection<IPerson> _personList;
-		private IWorkflowControlSet _defaultWorkflowControlSet;
 
 
 		public override void OneTimeSetUp()
@@ -65,23 +63,13 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			_requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>
 			{
-				var wfcs = WorkflowControlSetRepository.LoadAll();
-				_defaultWorkflowControlSet = wfcs.FirstOrDefault();
+				WorkflowControlSetRepository.LoadAll();
 				AbsenceRepository.LoadAll();
 
 				var reqIds =
 					PersonRequestRepository.GetWaitlistRequests(new DateTimePeriod(new DateTime(2016, 04, 06, 8, 0, 0).Utc(),
 						new DateTime(2016, 04, 06, 17, 0, 0).Utc()));
-				_requests = PersonRequestRepository.Find(reqIds);
-				_personList = PersonRepository.FindPeople(_requests.Select(x => x.Person.Id.GetValueOrDefault()));
-
-				_personList.ForEach(person =>
-				{
-					if (person.WorkflowControlSet == null)
-						person.WorkflowControlSet = _defaultWorkflowControlSet;
-
-					person.WorkflowControlSet.AbsenceRequestWaitlistEnabled = true;
-				});
+				_requests = PersonRequestRepository.Find(reqIds).Where(p => p.Person.WorkflowControlSet != null).ToList();
 			});
 		}
 
