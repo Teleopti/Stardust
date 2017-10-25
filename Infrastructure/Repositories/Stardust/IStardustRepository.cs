@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Wfm.Administration.Models.Stardust;
 
-namespace Teleopti.Wfm.Administration.Core.Stardust
+namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 {
 	public interface IStardustRepository
 	{

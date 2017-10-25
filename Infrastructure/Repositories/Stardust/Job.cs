@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 
-namespace Teleopti.Wfm.Administration.Models.Stardust
+namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 {
 	public class Job
 	{

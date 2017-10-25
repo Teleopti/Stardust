@@ -253,6 +253,12 @@
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
     <Compile Include="Repositories\RequestPeriod.cs" />
+    <Compile Include="Repositories\Stardust\IStardustRepository.cs" />
+    <Compile Include="Repositories\Stardust\Job.cs" />
+    <Compile Include="Repositories\Stardust\JobDetail.cs" />
+    <Compile Include="Repositories\Stardust\JobFilterModel.cs" />
+    <Compile Include="Repositories\Stardust\StardustRepository.cs" />
+    <Compile Include="Repositories\Stardust\WorkerNode.cs" />
     <Compile Include="Repositories\UserDeviceRepository.cs" />
     <Compile Include="Repositories\RequeueHangfireRepository.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepositoryOld.cs" />

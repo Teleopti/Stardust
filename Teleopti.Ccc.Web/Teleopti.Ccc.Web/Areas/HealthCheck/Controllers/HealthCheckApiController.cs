@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.ServiceProcess;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using Microsoft.VisualBasic.Devices;
@@ -15,6 +17,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
@@ -31,9 +34,10 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IToggleManager _toggleManager;
 		private readonly HangfireUtilities _hangfireUtilities;
 		private readonly IReadModelValidator _readModelValidator;
+		private readonly IStardustRepository _stardustRepository;
 
 		public HealthCheckApiController(IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
-												  IStardustSender stardustSender, IToggleManager toggleManager, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator)
+												  IStardustSender stardustSender, IToggleManager toggleManager, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator, IStardustRepository stardustRepository)
 		{
 			_etlJobStatusRepository = etlJobStatusRepository;
 			_etlLogObjectRepository = etlLogObjectRepository;
@@ -41,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			_toggleManager = toggleManager;
 		    _hangfireUtilities = hangfireUtilities;
 			_readModelValidator = readModelValidator;
+			_stardustRepository = stardustRepository;
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/LoadEtlJobHistory")]
@@ -102,9 +107,32 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 				};
 
 			var computerInfo = new ServerComputer();
-			var services = System.ServiceProcess.ServiceController.GetServices();
+			var nodes = _stardustRepository.GetAllWorkerNodes();
+			var hosts = nodes.Select(x => x.Url.Host).Distinct().ToList();
+			var servicesResult = new List<object>();
+			foreach (var host in hosts)
+			{
+				try
+				{
+					var remoteServices = ServiceController.GetServices(host);
+					var teleoptServices = remoteServices.Where(s => s.ServiceName.Contains("Teleopti")).Select(p => new
+					{
+						DisplayName = host + " " + p.DisplayName,
+						p.Status
+					}).ToArray();
+					servicesResult.AddRange(teleoptServices);
+				}
+				catch (InvalidOperationException ioe) when (ioe.InnerException is Win32Exception &&
+															ioe.InnerException.Message.Contains("Access is denied"))
+				{
+					servicesResult.Add(new {DisplayName = host + " Access is denied", Status = 1});
+				}
+				catch (Exception e)
+				{
+					servicesResult.Add(new {DisplayName = host + " Error: " + e.Message, Status = 1});
+				}
+			}
 			
-
 			return Ok(new 
 			{
 				Data =
@@ -125,11 +153,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 						},
 						RunningServices = new
 						{
-							Services = services.Where(s => s.ServiceName.Contains("Teleopti")).Select(p => new
-							{
-								p.DisplayName,
-								p.Status
-							})
+							Services = servicesResult.ToArray()
 						}
 					}});
 		}

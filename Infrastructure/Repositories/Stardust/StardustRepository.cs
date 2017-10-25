@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Wfm.Administration.Models.Stardust;
 
-namespace Teleopti.Wfm.Administration.Core.Stardust
+namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 {
 	public class StardustRepository : IStardustRepository
 	{

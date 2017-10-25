@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Wfm.Administration.Models.Stardust
+﻿namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 {
 	public class JobFilterModel
 	{
