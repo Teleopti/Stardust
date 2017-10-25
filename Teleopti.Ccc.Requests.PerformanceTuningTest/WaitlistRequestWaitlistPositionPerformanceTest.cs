@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		}
 
 		[Test]
-		public void Run5000WaitlistedRequests()
+		public void GetPositionOf100WaitlistedRequests()
 		{
 			Now.Is("2016-04-06 06:59");
 
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 			WithUnitOfWork.Do(() =>
 			{
-				foreach (var request in _requests)
+				foreach (var request in _requests.Take(100))
 				{
 					AbsenceRequestWaitlistProvider.GetPositionInWaitlist((IAbsenceRequest)request.Request);
 				}
