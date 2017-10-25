@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeWriteSideRepository<IActivity> ActivityRepository;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
 		public FakeCurrentScenario CurrentScenario;
-		public FakeScheduleStorage ScheduleStorage;
+		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakeUserTimeZone UserTimeZone;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<AddActivityCommandHandlerWithoutDeltas>().For<IHandleCommand<AddActivityCommand>>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 			system.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();

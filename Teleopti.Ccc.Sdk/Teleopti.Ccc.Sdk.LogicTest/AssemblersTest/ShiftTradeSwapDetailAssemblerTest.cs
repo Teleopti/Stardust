@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new SdkProjectionServiceFactory(), new ScheduleTagAssembler(new FakeScheduleTagRepository()));
 			
 			var scenario = new FakeCurrentScenario();
-			var storage = new FakeScheduleStorage();
+			var storage = new FakeScheduleStorage_DoNotUse();
 
 	        var dictionary = storage.FindSchedulesForPersonsOnlyInGivenPeriod(new [] { person1,person2}, new ScheduleDictionaryLoadOptions(false, false),
 		        new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenario.Current());

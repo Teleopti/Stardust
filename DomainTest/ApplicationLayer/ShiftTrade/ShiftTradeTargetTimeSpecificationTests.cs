@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_currentScenario = new FakeCurrentScenario();
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
 			_personRepository = new FakePersonRepositoryLegacy2();
-			_scheduleStorage = new FakeScheduleStorage();
+			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			_businessRuleProvider = new FakeBusinessRuleProvider();
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository,
 				_businessRuleProvider,  _currentScenario, new FakeScheduleProjectionReadOnlyActivityProvider());

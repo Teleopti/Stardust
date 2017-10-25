@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		public EditScheduleNoteCommandHandler Target;
 		public FakeWriteSideRepository<IPerson> PersonRepo;
-		public FakeScheduleStorage ScheduleStorage;
+		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakeCurrentScenario CurrentScenario;
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<EditScheduleNoteCommandHandler>().For<IHandleCommand<EditScheduleNoteCommand>>();
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 		}

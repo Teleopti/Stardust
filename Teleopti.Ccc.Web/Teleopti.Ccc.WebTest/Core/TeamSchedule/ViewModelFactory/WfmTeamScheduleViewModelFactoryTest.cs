@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public TeamScheduleViewModelFactory Target;
 		public FakePeopleSearchProvider PeopleSearchProvider;
 		public FakePersonRepository PersonRepository;
-		public FakeScheduleStorage ScheduleStorage;
+		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeUserTimeZone UserTimeZone;
 		public Areas.Global.FakePermissionProvider PermissionProvider;

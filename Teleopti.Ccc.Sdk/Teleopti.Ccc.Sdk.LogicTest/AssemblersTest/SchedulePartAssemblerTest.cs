@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 		    var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
 		    var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-		    var scheduleStorage = new FakeScheduleStorage();
+		    var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 		    var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
 		    var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
 		    var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
 			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
 			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
 
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
 			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
 			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
 			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
 			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
 			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
 			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
 			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
 			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
 			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
 			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
 			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
 			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
 			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
 			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
 			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
@@ -413,7 +413,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
 			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
 			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
 			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
@@ -464,7 +464,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 		    var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
 		    var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-		    var scheduleStorage = new FakeScheduleStorage();
+		    var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 		    var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
 		    var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
 		    var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,

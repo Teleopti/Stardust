@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scenario = ScenarioFactory.CreateScenarioAggregate("Default",true);
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var absenceRepository = new FakeAbsenceRepository();
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var businessRulesForPersonalAccountUpdate =
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var otherScenario = ScenarioFactory.CreateScenarioAggregate("Test", false).WithId();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			var absenceRepository = new FakeAbsenceRepository();
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			scenarioRepository.Add(otherScenario);

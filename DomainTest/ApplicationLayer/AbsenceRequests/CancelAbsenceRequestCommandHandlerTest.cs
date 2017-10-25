@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public ApprovalServiceForTest ApprovalService;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
-		public FakeScheduleStorage ScheduleStorage;
+		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakePersonRepository PersonRepository;
 		public CancelAbsenceRequestCommandValidator CancelAbsenceRequestCommandValidator;
 		public FakeCurrentScenario CurrentScenario;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<CancelAbsenceRequestCommandValidator>().For<ICancelAbsenceRequestCommandValidator>();
 			system.UseTestDouble<WriteProtectedScheduleCommandValidator>().For<IWriteProtectedScheduleCommandValidator>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();

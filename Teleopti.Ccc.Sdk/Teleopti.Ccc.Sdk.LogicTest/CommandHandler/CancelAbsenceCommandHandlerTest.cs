@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class CancelAbsenceCommandHandlerTest
     {
-        private FakeScheduleStorage _scheduleStorage;
+        private FakeScheduleStorage_DoNotUse _scheduleStorage;
         private IScenarioRepository _scenarioRepository;
         private CancelAbsenceCommandHandler _target;
         private IPerson _person;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_absence = AbsenceFactory.CreateAbsence("Sick").WithId();
 			_scenario = ScenarioFactory.CreateScenarioWithId("Default",true);
 
-			_scheduleStorage = new FakeScheduleStorage();
+			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			_scenarioRepository = new FakeScenarioRepository(_scenario);
             
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();

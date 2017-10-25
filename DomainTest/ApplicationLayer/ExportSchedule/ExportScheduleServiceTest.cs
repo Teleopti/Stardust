@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 	{
 		public FakeCurrentScenario CurrentScenario;
 		public ExportScheduleService Target;
-		public FakeScheduleStorage ScheduleStorage;
+		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
 		public FakePersonFinderReadOnlyRepository PersonFinder;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<PeopleSearchProvider>().For<IPeopleSearchProvider>();
 			system.UseTestDouble<UserTextTranslator>().For<IUserTextTranslator>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
 			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();

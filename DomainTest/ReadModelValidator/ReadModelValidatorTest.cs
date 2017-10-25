@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		public IPersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeScheduleDayReadModelRepository ScheduleDayReadModelRepository;
-		public FakeScheduleStorage ScheduleStorage;
+		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public ReadModelScheduleDayValidator ReadModelScheduleDayValidator;
 		public FakeReadModelValidationResultPersistor ReadModelValidationResultPersistor;
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>()
 				.For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<FakeScheduleDayReadModelRepository>().For<IScheduleDayReadModelRepository>();

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class MyTeamRemovePersonAbsenceCommandHandlerTest
 	{
 		private SaveSchedulePartService _saveSchedulePartService;
-		private FakeScheduleStorage _scheduleStorage;
+		private FakeScheduleStorage_DoNotUse _scheduleStorage;
 		private BusinessRulesForPersonalAccountUpdate _businessRulesForAccountUpdate;
 
 		[SetUp]
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
-			_scheduleStorage = new FakeScheduleStorage();
+			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, CurrentUnitOfWork.Make(), new EmptyScheduleDayDifferenceSaver());
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository,
 				new DoNothingScheduleDayChangeCallBack());

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private FakeWriteSideRepository<IPerson> _personRepository;
 		private FakeWriteSideRepository<IAbsence> _absenceRepository;
 		private FakeCurrentScenario _currentScenario;
-		private FakeScheduleStorage _scheduleStorage;
+		private FakeScheduleStorage_DoNotUse _scheduleStorage;
 		private PersonAbsenceCreator _personAbsenceCreator;
 		private IAbsenceCommandConverter _absenceCommandConverter;
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
 			_currentScenario = new FakeCurrentScenario();
 			
-			_scheduleStorage = new FakeScheduleStorage();
+			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_scheduleStorage, new EmptyScheduleDayDifferenceSaver());
 			
 			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());

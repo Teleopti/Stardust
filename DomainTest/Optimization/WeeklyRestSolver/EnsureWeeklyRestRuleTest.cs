@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
     {
         private IEnsureWeeklyRestRule _target;
         private IPerson _person;
-	    private FakeScheduleStorage _scheduleStorage;
+	    private FakeScheduleStorage_DoNotUse _scheduleStorage;
 
 	    [SetUp]
         public void Setup()
         {
             _person = PersonFactory.CreatePerson();
 
-	        _scheduleStorage = new FakeScheduleStorage();
+	        _scheduleStorage = new FakeScheduleStorage_DoNotUse();
 		    var workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
 		    _target = new EnsureWeeklyRestRule(workTimeStartEndExtractor, new DayOffMaxFlexCalculator(workTimeStartEndExtractor));
         }

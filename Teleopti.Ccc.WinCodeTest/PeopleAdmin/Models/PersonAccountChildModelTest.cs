@@ -279,13 +279,13 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             var scenario = new FakeCurrentScenario();
             var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
 	        
-	        _targetDay = new PersonAccountChildModel(new TraceableRefreshService(scenario, new FakeScheduleStorage()), _acc, account, null, null);
+	        _targetDay = new PersonAccountChildModel(new TraceableRefreshService(scenario, new FakeScheduleStorage_DoNotUse()), _acc, account, null, null);
         }
 
         private void SetTargetDayWithoutAccount(ICurrentScenario scenario)
         {
 			var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
-	        _targetDay = new PersonAccountChildModel(new TraceableRefreshService(scenario,new FakeScheduleStorage()), _acc, account, null, null);
+	        _targetDay = new PersonAccountChildModel(new TraceableRefreshService(scenario,new FakeScheduleStorage_DoNotUse()), _acc, account, null, null);
         }
 
         [Test]

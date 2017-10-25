@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			defaultScenario.SetId(Guid.NewGuid());
 			_scenarioRepository = new FakeScenarioRepository(defaultScenario);
 
-			_scheduleStorage = new FakeScheduleStorage();
+			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			_swapAndModifyServiceNew = MockRepository.GenerateMock<ISwapAndModifyServiceNew>();
 
 			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_scheduleStorage, new EmptyScheduleDayDifferenceSaver());

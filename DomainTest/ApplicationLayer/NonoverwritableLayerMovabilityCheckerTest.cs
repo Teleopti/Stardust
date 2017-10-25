@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		public FakePersonRepository PersonRepository;
 		public FakeCurrentScenario CurrentScenario;
-		public FakeScheduleStorage ScheduleStorage;
+		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public NonoverwritableLayerMovabilityChecker Target;
 
 		[Test]
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<NonoverwritableLayerMovabilityChecker>().For<INonoverwritableLayerMovabilityChecker>();
 		}
 	}

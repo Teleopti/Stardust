@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class MoveShiftCommandHandlerTest : ISetup
 	{
 		public MoveShiftCommandHandler Target;
-		public FakeScheduleStorage ScheduleStorage;
+		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
 		public FakeWriteSideRepository<IPerson> PersonRepository;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakeSchedulePersonProvider>().For<ISchedulePersonProvider>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();

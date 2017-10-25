@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 		    personAbsenceAccount.Add(secondAccount);
 			
 		    var scenario = ScenarioFactory.CreateScenarioAggregate();
-		    var storage = new FakeScheduleStorage();
+		    var storage = new FakeScheduleStorage_DoNotUse();
 		    storage.Add(new PersonAbsence(person, scenario,
 			    new AbsenceLayer(absence,
 				    firstAccount.StartDate.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()))));

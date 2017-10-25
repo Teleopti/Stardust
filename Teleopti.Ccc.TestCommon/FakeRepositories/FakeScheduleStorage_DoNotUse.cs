@@ -11,9 +11,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public static class KeepOldIncorrectBehaviourOfTheFake
+	public static class KeepOldIncorrectBehaviourOfTheFake_JustToMakeTestsStillGreen
 	{
-		public static IScheduleDictionary FindSchedulesForPersons(this FakeScheduleStorage storage, IScheduleDateTimePeriod period, IScenario scenario,
+		public static IScheduleDictionary FindSchedulesForPersons(this FakeScheduleStorage_DoNotUse storage, IScheduleDateTimePeriod period, IScenario scenario,
 			IPersonProvider personsProvider,
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			IEnumerable<IPerson> visiblePersons)
@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 	}
 	
-	public class FakeScheduleStorage : IScheduleStorage
+	//Don't fake IScheduleStorage - use the real one instead
+	public class FakeScheduleStorage_DoNotUse : IScheduleStorage
 	{
 		internal readonly IList<IPersistableScheduleData> _data = new List<IPersistableScheduleData>();
 

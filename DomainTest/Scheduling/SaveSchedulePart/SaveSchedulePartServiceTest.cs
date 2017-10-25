@@ -109,13 +109,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public MutableNow Now;
-		public FakeScheduleStorage ScheduleStorage;
+		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 		}
 
 		[Test]

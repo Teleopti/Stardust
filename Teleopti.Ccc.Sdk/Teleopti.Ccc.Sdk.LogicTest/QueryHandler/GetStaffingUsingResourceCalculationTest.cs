@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			multisiteDayRepository = new FakeMultisiteDayRepository();
 			loadSchedulingStateHolderForResourceCalculation =
 				new LoadSchedulingStateHolderForResourceCalculation(personRepository, new FakePersonAbsenceAccountRepository(),
-					skillRepository, new FakeWorkloadRepository(), new FakeScheduleStorage(),
+					skillRepository, new FakeWorkloadRepository(), new FakeScheduleStorage_DoNotUse(),
 					new PeopleAndSkillLoaderDecider(personRepository, new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>())),
 					new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository));
 			schedulingResultStateHolder = new SchedulingResultStateHolder();
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			loadSchedulingStateHolderForResourceCalculation =
 				new LoadSchedulingStateHolderForResourceCalculation(personRepository, new FakePersonAbsenceAccountRepository(),
-					skillRepository, new FakeWorkloadRepository(), new FakeScheduleStorage(),
+					skillRepository, new FakeWorkloadRepository(), new FakeScheduleStorage_DoNotUse(),
 					new PeopleAndSkillLoaderDecider(personRepository, new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>())),
 					new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository));
 

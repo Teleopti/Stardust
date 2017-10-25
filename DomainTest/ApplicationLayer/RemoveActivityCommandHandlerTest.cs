@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class RemoveActivityCommandHandlerTest  :ISetup
 	{
 		public RemoveActivityCommandHandler Target;
-		public FakeScheduleStorage ScheduleStorage;
+		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
 		private IActivity _mainActivity;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<RemoveActivityCommandHandler>().For<IHandleCommand<RemoveActivityCommand>>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();

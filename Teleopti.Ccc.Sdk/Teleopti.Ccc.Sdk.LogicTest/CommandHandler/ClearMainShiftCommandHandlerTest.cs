@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	    public void ClearMainShiftFromTheDictionarySuccessfully()
 	    {
 			var scenario = ScenarioFactory.CreateScenarioAggregate("Default", true).WithId();
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var accountRepository = new FakePersonAbsenceAccountRepository();
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ClearMainShiftShouldNotTouchOvertime()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate("Default", true).WithId();
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var accountRepository = new FakePersonAbsenceAccountRepository();
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	    public void ClearMainShiftFromTheDictionaryForGivenScenarioSuccessfully()
 	    {
 			var newScenario = ScenarioFactory.CreateScenarioWithId("High", false);
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(newScenario);
 			var accountRepository = new FakePersonAbsenceAccountRepository();
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ClearMainShiftWithScheduleTag()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate("Default", true).WithId();
-			var scheduleStorage = new FakeScheduleStorage();
+			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var personRepository = new FakePersonRepositoryLegacy();
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var accountRepository = new FakePersonAbsenceAccountRepository();
