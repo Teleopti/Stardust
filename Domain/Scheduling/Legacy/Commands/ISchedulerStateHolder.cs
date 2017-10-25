@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		void ResetFilteredPersonsHourlyAvailability();
 
-		void LoadSchedules(IFindSchedulesForPersons findSchedulesForPersons, IPersonProvider personsProvider, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod period);
+		void LoadSchedules(IFindSchedulesForPersons findSchedulesForPersons, IPersonProvider personsInOrganization, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod period);
 
 		IScheduleDictionary Schedules { get; }
 
