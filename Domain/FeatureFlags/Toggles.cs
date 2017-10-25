@@ -112,6 +112,7 @@
 		ResourcePlanner_BreakPreferenceStartTimeByMax_46002,
 		ResourcePlanner_EasierBlockScheduling_46155,
 		ResourcePlanner_ShowSwitchedTimeZone_46303,
+		ResourcePlanner_FasterLoading_46307,
 
 		Wfm_DisplayOnlineHelp_39402,
 

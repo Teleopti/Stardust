@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			    return 0;
 		    }
 
+			[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterLoading_46307)]
 		    public double PercentageOfPeopleFiltered => 0;
 	    }
     }

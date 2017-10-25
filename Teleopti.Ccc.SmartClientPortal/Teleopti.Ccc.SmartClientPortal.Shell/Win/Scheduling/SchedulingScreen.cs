@@ -3529,6 +3529,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (_scheduleView != null) enableSwapButtons(_scheduleView.SelectedSchedules());
 		}
 
+		[RemoveMeWithToggle("Remove get/setDeciderResult", Toggles.ResourcePlanner_FasterLoading_46307)]
 		private void loadAndOptimizeData(DoWorkEventArgs e)
 		{
 			var optimizerHelper = new OptimizerHelperHelper();
@@ -3789,6 +3790,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_isAuditingSchedules = auditSetting.IsScheduleEnabled;
 		}
 
+		[RemoveMeWithToggle("Will automatically be simplified when removing other stuff related to toggle....", Toggles.ResourcePlanner_FasterLoading_46307)]
 		private void loadSchedules(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
 			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
 		{

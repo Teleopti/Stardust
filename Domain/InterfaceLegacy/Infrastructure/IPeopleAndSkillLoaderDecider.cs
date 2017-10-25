@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -47,9 +48,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 
 		int FilterSkills(ISkill[] skills, Action<ISkill> removeSkill, Action<ISkill> addSkill);
 
-		///<summary>
-		/// Shows how many percent of all people injected into method FilterPeople that is filtered out. If FilterPeople is not executed then zero wil be returned.
-		///</summary>
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterLoading_46307)]
 		double PercentageOfPeopleFiltered { get; }
 	}
 }

@@ -3,8 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -13,17 +15,21 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[DomainTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class FindSchedulesForPersonsTest
+	[TestFixture(true, false)]
+	[TestFixture(false, false)]
+	[TestFixture(true, true)]
+	[TestFixture(false, true)]
+	public class FindSchedulesForPersonsTest : IConfigureToggleManager
 	{
 		private readonly bool _loadByPerson;
+		private readonly bool _resourcePlannerFasterLoading46307;
 		public IFindSchedulesForPersons Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
-		public FindSchedulesForPersonsTest(bool loadByPerson)
+		public FindSchedulesForPersonsTest(bool loadByPerson, bool resourcePlannerFasterLoading46307)
 		{
 			_loadByPerson = loadByPerson;
+			_resourcePlannerFasterLoading46307 = resourcePlannerFasterLoading46307;
 		}
 
 		[Test]
@@ -120,6 +126,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			schedules[selectedAgent].ScheduledDay(date).PersistableScheduleDataCollection().Count()
 				.Should().Be.EqualTo(1);
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if(_resourcePlannerFasterLoading46307)
+				toggleManager.Enable(Toggles.ResourcePlanner_FasterLoading_46307);
 		}
 	}
 }

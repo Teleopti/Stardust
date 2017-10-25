@@ -75,12 +75,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ScheduleStorage>()
-				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
-				.As<IScheduleStorage>()
-				.As<IFindSchedulesForPersons>()
-				.AsSelf()
-				.SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterLoading_46307))
+			{
+				builder.RegisterType<ScheduleStorage46307>()
+					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
+					.As<IScheduleStorage>()
+					.As<IFindSchedulesForPersons>()
+					.AsSelf()
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<ScheduleStorage>()
+					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
+					.As<IScheduleStorage>()
+					.As<IFindSchedulesForPersons>()
+					.AsSelf()
+					.SingleInstance();
+			}
 
 			builder.RegisterType<MaxSeatPeak>().SingleInstance();
 			builder.RegisterType<IsOverMaxSeat>().SingleInstance();

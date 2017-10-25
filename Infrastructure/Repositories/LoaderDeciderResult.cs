@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public Guid[] SiteGuidDependencies { get; private set; }
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterLoading_46307)]
 		public double PercentageOfPeopleFiltered => _percentageOfPeopleFiltererd * 100;
 
 		public int FilterPeople(ICollection<IPerson> people)
