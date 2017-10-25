@@ -169,11 +169,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			input.AuthenticationKey = LegacyAuthenticationKey.MakeEncodingSafe(input.AuthenticationKey);
 			if (!_tenantLoader.Authenticate(input.AuthenticationKey))
-			{
-				var exception = new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
-				_tracer.ProcessException(exception);
-				throw exception;
-			}
+				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 		}
 
 		private void validateStateCodes(BatchInputModel batch)
