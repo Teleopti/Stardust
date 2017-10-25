@@ -462,7 +462,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDbs.Last().Priority.Should().Be.EqualTo(3);
 		}
 
-		[Test, Ignore("Temporarily ignore it to fix build and notice LinM to check..")]
+		[Test]
 		public void ShouldNotChangeThePriorityWhenModifySettings()
 		{
 			var id = Guid.NewGuid();
@@ -470,7 +470,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Priority = 2
 			}.WithId(id));
-			var model = new PlanningGroupSettingsModel {Id = id};
+			var model = new PlanningGroupSettingsModel
+			{
+				Id = id,
+				Priority = 2
+			};
 
 			Target.Persist(model);
 

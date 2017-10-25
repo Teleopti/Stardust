@@ -150,9 +150,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, SchedulePeriodType.Day, planningGroup);
 
 			SkillDayRepository.Has(relevantSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
+			SkillDayRepository.Has(irrelevantSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
 
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(1)), new TimePeriod(8, 0, 16, 0));
-
+			
 			var result = Target.Execute(planningPeriod.Id.Value);
 			result.SkillResultList.Count().Should().Be.EqualTo(1);
 			result.SkillResultList.First().SkillName.Should().Be.EqualTo("relevant skill");
@@ -179,6 +180,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, SchedulePeriodType.Day, planningGroup);
 
 			SkillDayRepository.Has(activeSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
+			SkillDayRepository.Has(inactiveSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
 
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(1)), new TimePeriod(8, 0, 16, 0));
 
