@@ -735,5 +735,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetProjection(Projections.Id())
 				.List<Guid>();
 		}
+
+		public IList<PersonBudgetGroupName> FindBudgetGroupNameForPeople(IList<Guid> personIds, DateTime startDate)
+		{
+			var results = new List<PersonBudgetGroupName>();
+			foreach(var personIdBatch in personIds.Batch(100))
+			{
+				results.AddRange(Session.CreateSQLQuery(
+						"exec ReadModel.GetBudgetGroupNamesForPeople @PersonIds	= :PersonIds, @StartDate = :StartDate")
+					.SetDateTime("StartDate", startDate)
+					.SetString("PersonIds", String.Join(",", personIdBatch))
+					.SetResultTransformer(Transformers.AliasToBean(typeof(PersonBudgetGroupName)))
+					.SetReadOnly(true)
+					.List<PersonBudgetGroupName>());
+			}
+			return results;
+		}
 	}
 }

@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			var people = from per in _storage.LoadAll<IPerson>()
 						 let periods = per.PersonPeriods(period)
-				where periods.Any(personPeriod => personPeriod.Team == team)
-				select per;
+						 where periods.Any(personPeriod => personPeriod.Team == team)
+						 select per;
 
 			return people.ToList();
 		}
@@ -147,8 +147,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			var people = from per in _storage.LoadAll<IPerson>()
 						 let periods = per.PersonPeriods(period)
-				where periods.Any(personPeriod => personPeriod.Team == team)
-				select per;
+						 where periods.Any(personPeriod => personPeriod.Team == team)
+						 select per;
 
 			return people.ToList();
 
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var result = new List<IPerson>();
 			foreach (var person in people)
 			{
-				if(planningGroup.Filters.Any(x => x.IsValidFor(person, period.StartDate)))
+				if (planningGroup.Filters.Any(x => x.IsValidFor(person, period.StartDate)))
 					result.Add(person);
 			}
 			return result;
@@ -289,6 +289,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			return FindPeopleInPlanningGroup(planningGroup, period).Select(x => x.Id.GetValueOrDefault()).ToList();
+		}
+
+		public IList<PersonBudgetGroupName> FindBudgetGroupNameForPeople(IList<Guid> personIds, DateTime startDate)
+		{
+			return _storage.LoadAll<IPerson>()
+				.Where(x => personIds.Contains(x.Id.Value))
+				.Select(x =>
+					new PersonBudgetGroupName
+					{
+						PersonId = x.Id.Value,
+						BudgetGroupName = x.PersonPeriods(new DateOnly(startDate).ToDateOnlyPeriod()).FirstOrDefault()?.BudgetGroup?.Name
+					}).ToList();
 		}
 
 		public void ReversedOrder()

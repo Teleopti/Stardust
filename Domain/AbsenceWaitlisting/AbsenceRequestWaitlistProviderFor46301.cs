@@ -13,10 +13,12 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 	public class AbsenceRequestWaitlistProviderFor46301 : IAbsenceRequestWaitlistProvider
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly IPersonRepository _personRepository;
 
-		public AbsenceRequestWaitlistProviderFor46301(IPersonRequestRepository personRequestRepository)
+		public AbsenceRequestWaitlistProviderFor46301(IPersonRequestRepository personRequestRepository, IPersonRepository personRepository)
 		{
 			_personRequestRepository = personRequestRepository;
+			_personRepository = personRepository;
 		}
 
 		public IList<IPersonRequest> GetWaitlistedRequests(DateTimePeriod period)
@@ -28,17 +30,18 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		public int GetPositionInWaitlist(IAbsenceRequest absenceRequest)
 		{
 			var personRequest = absenceRequest.Parent as PersonRequest;
+
 			if (personRequest == null || !personRequest.IsWaitlisted) return 0;
 
-			var queryAbsenceRequestsPeriod = absenceRequest.Period.ChangeEndTime(TimeSpan.FromSeconds(-1));
-			var requestsInWaitlist = getRequestsInWaitlist(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet, getBudgetGroup(absenceRequest)).ToList();
+			var requestsInWaitlist = getRequestsInWaitlist(absenceRequest).ToList();
 			var index = requestsInWaitlist.FindIndex(perRequest => perRequest.Id == personRequest.Id);
 			return index > -1 ? index + 1 : 0;
 		}
 
-		private IEnumerable<IPersonRequest> getRequestsInWaitlist(DateTimePeriod period, IWorkflowControlSet workflowControlSet, IBudgetGroup budgetGroup)
+		private IEnumerable<IPersonRequest> getRequestsInWaitlist(IAbsenceRequest absenceRequest)
 		{
 			var requestTypes = new[] { RequestType.AbsenceRequest };
+			var period = absenceRequest.Period.ChangeEndTime(TimeSpan.FromSeconds(-1));
 			var requestFilter = new RequestFilter
 			{
 				Period = period,
@@ -46,21 +49,31 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 				ExcludeRequestsOnFilterPeriodEdge = true
 			};
 
-			int count;
-			var waitlistedRequests =
-				from request in _personRequestRepository.FindAbsenceAndTextRequests(requestFilter, out count, true)
-				where requestShouldBeProcessed(request, budgetGroup)
-				select request;
+			var allAndTextRequests =
+				_personRequestRepository.FindAbsenceAndTextRequests(requestFilter, out _, true).ToList();
 
-			var processOrder = workflowControlSet.AbsenceRequestWaitlistProcessOrder;
+			var personIds = allAndTextRequests.Select(a => a.Person.Id.Value).Distinct().ToList();
+
+
+			var budgetGroupNames = _personRepository.FindBudgetGroupNameForPeople(personIds, period.StartDateTime)
+				.ToDictionary(x => x.PersonId, x => x.BudgetGroupName);
+
+			var waitlistedRequests = allAndTextRequests.Where(request =>
+			{
+				budgetGroupNames.TryGetValue(request.Person.Id.Value, out string requestBudgetGroupName);
+				budgetGroupNames.TryGetValue(absenceRequest.Person.Id.Value, out string currentUserRequestBudgetGroupName);
+				return requestShouldBeProcessed(request, requestBudgetGroupName, currentUserRequestBudgetGroupName);
+			});
+
+			var processOrder = absenceRequest.Person.WorkflowControlSet.AbsenceRequestWaitlistProcessOrder;
 			return processOrder == WaitlistProcessOrder.BySeniority
 				? waitlistedRequests.OrderByDescending(x => x.Person.Seniority).ThenBy(x => x.CreatedOn)
 				: waitlistedRequests.OrderBy(x => x.CreatedOn);
 		}
 
-		private bool requestShouldBeProcessed(IPersonRequest request, IBudgetGroup budgetGroup)
+		private bool requestShouldBeProcessed(IPersonRequest request, string requestBudgetGroupName, string currentUserBudgetGroupName)
 		{
-			if (getBudgetGroup(request.Request) != budgetGroup)
+			if (currentUserBudgetGroupName != requestBudgetGroupName)
 				return false;
 
 			if (request.IsWaitlisted)
@@ -73,11 +86,6 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 				request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)request.Request)
 					.AbsenceRequestProcess.GetType() == typeof(GrantAbsenceRequest);
 			return isAutoGrant;
-		}
-
-		private IBudgetGroup getBudgetGroup(IRequest request)
-		{
-			return request.Person.PersonPeriods(request.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone())).FirstOrDefault()?.BudgetGroup;
 		}
 	}
 }
