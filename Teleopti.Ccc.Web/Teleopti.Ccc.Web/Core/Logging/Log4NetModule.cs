@@ -82,7 +82,16 @@ namespace Teleopti.Ccc.Web.Core.Logging
 			application.Error += Application_Error;
 		}
 
-		public void Application_Error(object sender, EventArgs e) { _log4NetLogger.LogException(_getServerError.Invoke()); }
+		public void Application_Error(object sender, EventArgs e)
+		{
+			var exception = _getServerError.Invoke();
+			if (exception is HttpException && (exception as HttpException).ErrorCode == unchecked((int) 0x80070057))
+			{
+				// ignore “The remote host closed the connection” exception from signalr, https://github.com/SignalR/SignalR/issues/2632
+				return;
+			}
+			_log4NetLogger.LogException(exception);
+		}
 		
 		public void Dispose()
 		{
