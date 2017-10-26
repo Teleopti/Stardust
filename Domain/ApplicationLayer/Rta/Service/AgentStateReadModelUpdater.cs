@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DateTime? NextActivityStartTime { get; set; }
 
 		public IEnumerable<ScheduledActivity> ActivitiesInTimeWindow { get; set; }
-
 	}
 
 	public class AgentStateReadModelUpdater :
@@ -51,8 +50,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			events.GroupBy(x => ((dynamic) x).PersonId as Guid?)
 				.ForEach(eventsForPerson =>
 				{
-					var model = _persister.Load(eventsForPerson.Key.Value) ?? new AgentStateReadModel();
-					if (model.IsDeleted) return;
+					var model = _persister.Load(eventsForPerson.Key.Value);
+					if (model == null)
+						return;
+					if (model.IsDeleted)
+						return;
 
 					eventsForPerson.ForEach(e => handle(model, (dynamic) e));
 
@@ -131,7 +133,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						EndTime = null
 					}).ToArray();
 		}
-
 	}
-
 }
