@@ -4,8 +4,10 @@ insert into ApplicationFunctionInRole(
            ,[ApplicationFunction]
            ,[InsertedOn])
 	select 
-		ApplicationRole,
-		'EFE028F5-F1C0-477C-9A98-7EF73CD09296',
+		afr.ApplicationRole,
+		af.Id,
 		getdate()
-	from ApplicationFunctionInRole 
-	where ApplicationFunction = '2DD8E2CD-645D-475B-8DFE-1219FEC66CFA'
+	from ApplicationFunctionInRole  afr
+	inner join ApplicationFunction af
+	on af.Id = afr.ApplicationFunction
+	where af.ForeignId = '0059'
