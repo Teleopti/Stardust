@@ -134,6 +134,7 @@ ResourcePlanner_RetireKeepPercentageOfShifts_45688 = true
 ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_EasierBlockScheduling_46155 = RC
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
+ResourcePlanner_FasterLoading_46307 = RC
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
 Wfm_DisplayOnlineHelp_39402 = true
