@@ -47,12 +47,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		protected void InternalHandle(PersonCollectionChangedEventBase @event)
 		{
-			var didRun = false;
-			_distributedLockAcquirer.TryLockForTypeOf(this, () =>
+			var didRun = new Dictionary<Guid, bool>();
+			foreach (var personId in @event.PersonIdCollection)
 			{
-				didRun = true;
-				foreach (var personId in @event.PersonIdCollection)
+				didRun.Add(personId, false);
+				_distributedLockAcquirer.TryLockForTypeOfAnd(this, personId.ToString(), () =>
 				{
+					didRun[personId] = true;
 					try
 					{
 						_analyticsScheduleRepository.RunWithExceptionHandling(() =>
@@ -65,11 +66,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						PublishFixSchedule(personId, @event);
 						throw;
 					}
-				}
+				});
+			}
 
-			});
-			if (!didRun)
-				throw new Exception("Another handler is running currently, explicitly failing to retry!");
+			foreach (var didRunForPerson in didRun)
+			{
+				if (!didRunForPerson.Value)
+					throw new Exception(
+						$"Another handler is running currently for person {didRunForPerson.Key}, explicitly failing to retry!");
+			}
 		}
 
 		// This handler is for legacy reasons, if we have failing events before we moved the handler to another event that are requeued
