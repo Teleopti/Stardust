@@ -119,7 +119,7 @@ function global:CheckEditionAndVersion ()
 
     Write-Output "$(Get-Date -f $timeStampFormat) - Checking SQL Version & Edition on [$global:SQLServerInstance]"		
 	
-    $CheckVersion = RunAndRetryNonQuery $ConnectionString $query
+    $CheckVersion = ExecuteSQLQuery $ConnectionString $query
 
     $global:SQLVersion = $CheckVersion.Column1
 
