@@ -47,10 +47,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private int fairnessTypeAsInt = (int)FairnessType.EqualNumberOfShiftCategory;
 		private bool _overtimeProbabilityEnabled;
 		private bool _autoGrantOvertimeRequest;
+		private IList<IOvertimeRequestOpenPeriod> _overtimeRequestOpenPeriods;
 
 		public WorkflowControlSet()
 		{
 			_absenceRequestOpenPeriods = new List<IAbsenceRequestOpenPeriod>();
+			_overtimeRequestOpenPeriods = new List<IOvertimeRequestOpenPeriod>();
 			_allowedPreferenceShiftCategories = new HashSet<IShiftCategory>();
 			_allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>();
 			_allowedPreferenceAbsences = new HashSet<IAbsence>();
@@ -98,6 +100,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			absenceRequestOpenPeriod.SetParent(this);
 			_absenceRequestOpenPeriods.Add(absenceRequestOpenPeriod);
+		}
+
+		public virtual void AddOpenOvertimeRequestPeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		{
+			overtimeRequestOpenPeriod.SetParent(this);
+			_overtimeRequestOpenPeriods.Add(overtimeRequestOpenPeriod);
 		}
 
 		public virtual IOpenAbsenceRequestPeriodExtractor GetExtractorForAbsence(IAbsence absence)
@@ -371,6 +379,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			get { return _autoGrantOvertimeRequest; }
 			set { _autoGrantOvertimeRequest = value; }
+		}
+
+		public virtual ReadOnlyCollection<IOvertimeRequestOpenPeriod> OvertimeRequestOpenPeriods
+		{
+			get { return new ReadOnlyCollection<IOvertimeRequestOpenPeriod>(_overtimeRequestOpenPeriods); }
 		}
 
 		public virtual void AddAllowedAbsenceForReport(IAbsence absence)

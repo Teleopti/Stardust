@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created date: 2010-04-15
 		/// </remarks>
 		void AddOpenAbsenceRequestPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod);
+		void AddOpenOvertimeRequestPeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod);
 
 		/// <summary>
 		/// Gets the extractor for absence.
@@ -306,5 +307,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool OvertimeProbabilityEnabled { get; set; }
 
 		bool AutoGrantOvertimeRequest { get; set; }
+		ReadOnlyCollection<IOvertimeRequestOpenPeriod> OvertimeRequestOpenPeriods { get; }
 	}
 }

@@ -318,6 +318,7 @@
     <Compile Include="Infrastructure\Events\RequeueHangfireEvent.cs" />
     <Compile Include="Infrastructure\PublishInitializeReadModelEventHandler.cs" />
     <Compile Include="Infrastructure\RequeueHangfireEventHandler.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestOpenPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestProcessor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserDevice.cs" />
@@ -3480,6 +3481,7 @@
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidator.cs" />
     <Compile Include="WorkflowControl\ExpiredRequestValidator.cs" />
+    <Compile Include="WorkflowControl\OvertimeRequestOpenPeriod.cs" />
     <Compile Include="WorkflowControl\RequestExpirationValidator.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecificationForAbsence.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequest.cs" />
@@ -4001,6 +4003,11 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenRollingPeriod.hbm.xml" />
+    <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenDatePeriod.hbm.xml" />
+    <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenPeriod.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SystemSetting\UserDevice.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

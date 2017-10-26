@@ -66,10 +66,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             workflowControlSet.AddAllowedPreferenceShiftCategory(_shiftCategory);
             workflowControlSet.AddAllowedPreferenceAbsence(_absence);
             workflowControlSet.AddAllowedAbsenceForReport(_absence);
-				workflowControlSet.AbsenceRequestExpiredThreshold = 15;
+                workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 
             workflowControlSet.AutoGrantShiftTradeRequest = true;
-	        workflowControlSet.OvertimeProbabilityEnabled = false;
+            workflowControlSet.OvertimeProbabilityEnabled = false;
             return workflowControlSet;
         }
 
@@ -138,22 +138,54 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(result[0].AllowedPreferenceActivity, Is.EqualTo(activity));
         }
 
-		[Test]
-		public void VerifyAbsenceProbabilityEnabled()
-		{
-			IWorkflowControlSet org = CreateAggregateWithCorrectBusinessUnit();
-			org.AbsenceProbabilityEnabled = true;
-			PersistAndRemoveFromUnitOfWork(org);
+        [Test]
+        public void VerifyAbsenceProbabilityEnabled()
+        {
+            IWorkflowControlSet org = CreateAggregateWithCorrectBusinessUnit();
+            org.AbsenceProbabilityEnabled = true;
+            PersistAndRemoveFromUnitOfWork(org);
 
-			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
-			var result = repository.LoadAllSortByName();
-			Assert.That(result.Count, Is.EqualTo(1));
-			Assert.That(result[0].AbsenceProbabilityEnabled, Is.EqualTo(true));
-		}
+            IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+            var result = repository.LoadAllSortByName();
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result[0].AbsenceProbabilityEnabled, Is.EqualTo(true));
+        }
 
+        [Test]
+        public void ShouldSaveOvertimeRequestOpenDatePeriod()
+        {
+            var org = CreateAggregateWithCorrectBusinessUnit();
+            org.AddOpenOvertimeRequestPeriod(
+                new OvertimeRequestOpenDatePeriod() { Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3)), AutoGrantType = OvertimeRequestAutoGrantType.Yes });
+            PersistAndRemoveFromUnitOfWork(org);
 
+            IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+            var result = repository.LoadAllSortByName();
 
-		protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result[0].OvertimeRequestOpenPeriods.Count, Is.EqualTo(1));
+            Assert.That(result[0].OvertimeRequestOpenPeriods[0].AutoGrantType, Is.EqualTo(OvertimeRequestAutoGrantType.Yes));
+            Assert.That(result[0].OvertimeRequestOpenPeriods[0].GetPeriod(DateOnly.Today), Is.EqualTo(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3))));
+        }
+
+        [Test]
+        public void ShouldSaveOvertimeRequestOpenRollingPeriod()
+        {
+            var org = CreateAggregateWithCorrectBusinessUnit();
+            org.AddOpenOvertimeRequestPeriod(
+                new OvertimeRequestOpenRollingPeriod() { BetweenDays = new MinMax<int>(1, 4), AutoGrantType = OvertimeRequestAutoGrantType.Yes });
+            PersistAndRemoveFromUnitOfWork(org);
+
+            IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+            var result = repository.LoadAllSortByName();
+
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result[0].OvertimeRequestOpenPeriods.Count, Is.EqualTo(1));
+            Assert.That(result[0].OvertimeRequestOpenPeriods[0].AutoGrantType, Is.EqualTo(OvertimeRequestAutoGrantType.Yes));
+            Assert.That(result[0].OvertimeRequestOpenPeriods[0].GetPeriod(DateOnly.Today), Is.EqualTo(new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.Today.AddDays(4))));
+        }
+
+        protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new WorkflowControlSetRepository(currentUnitOfWork);
         }

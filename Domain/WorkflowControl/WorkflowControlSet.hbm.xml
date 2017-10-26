@@ -32,6 +32,11 @@
             <index type="Byte" column ="OrderIndex" />
             <one-to-many class="AbsenceRequestOpenPeriod" />
         </list>
+        <list name="OvertimeRequestOpenPeriods" cascade="all-delete-orphan" inverse="true" lazy="false">
+            <key column="Parent" />
+            <index type="Byte" column ="OrderIndex" />
+            <one-to-many class="OvertimeRequestOpenPeriod" />
+        </list>
         <many-to-one name="AllowedPreferenceActivity"
                      class="Teleopti.Ccc.Domain.Scheduling.Activity"
                      not-null="false"
