@@ -83,7 +83,7 @@
 			skillPickerPreselectedItem: function () {
 				if (state.skillAreaId)
 					return { skillAreaId: state.skillAreaId }
-				return { skillIds: state.skillIds };
+				return { skillIds: angular.isArray(state.skillIds) ? state.skillIds : [state.skillIds] };
 			},
 
 			hasSkillSelection: function () {
