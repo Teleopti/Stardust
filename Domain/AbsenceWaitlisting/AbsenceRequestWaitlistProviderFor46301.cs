@@ -83,6 +83,9 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			if (request.IsWaitlisted)
 				return true;
 
+			if (request.Person.WorkflowControlSet == null)
+				return false;
+
 			var isAutoGrant =
 				request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)request.Request)
 					.AbsenceRequestProcess.GetType() == typeof(GrantAbsenceRequest);

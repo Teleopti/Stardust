@@ -3,7 +3,10 @@ DECLARE @end DATETIME = '2016-04-09 00:00:00'
 DECLARE @startRequest DATETIME = '2016-04-06 8:00:00' 
 DECLARE @endRequest DATETIME = '2016-04-06 17:00:00' 
 DECLARE @waitlistedStatus INT = 5 
-DECLARE @businessUnitId uniqueidentifier = '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B' 
+DECLARE @pendingStatus INT = 0 
+DECLARE @businessUnitId uniqueidentifier = '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B'
+DECLARE @absenceTypeId uniqueidentifier = '3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F'
+DECLARE @systemUserId uniqueidentifier = '3F0886AB-7B25-4E95-856A-0D726EDC2A67'
 
 DELETE FROM personabsence 
 WHERE  [minimum] BETWEEN @start AND @end 
@@ -11,83 +14,113 @@ WHERE  [minimum] BETWEEN @start AND @end
 
 DELETE FROM absencerequest 
 WHERE  request IN (SELECT id 
-				   FROM   request 
-				   WHERE  startdatetime BETWEEN @start AND @end) 
+					FROM   request 
+					WHERE  startdatetime BETWEEN @start AND @end) 
 
 DELETE FROM request 
 WHERE  startdatetime BETWEEN @start AND @end 
-	   AND id NOT IN (SELECT request 
-					  FROM   shifttraderequest) 
+		AND id NOT IN (SELECT request 
+						FROM   shifttraderequest) 
 
 DELETE FROM personrequest 
 WHERE  id NOT IN(SELECT parent 
-				 FROM   request) 
+					FROM   request) 
 
 SELECT DISTINCT TOP 2500 p.* 
 INTO   #tempperson 
 FROM   person p 
-	   INNER JOIN personperiod pp 
-			   ON pp.parent = p.id 
-	   INNER JOIN team t 
-			   ON t.id = pp.team 
-	   INNER JOIN [site] s 
-			   ON t.site = s.id 
+		INNER JOIN personperiod pp 
+				ON pp.parent = p.id 
+		INNER JOIN team t 
+				ON t.id = pp.team 
+		INNER JOIN [site] s 
+				ON t.site = s.id 
 WHERE  pp.startdate < @end 
-	   AND pp.enddate > @start 
-	   AND s.businessunit = @businessUnitId 
-	   AND p.WorkflowControlSet IS NOT NULL
-
---double people 
-INSERT INTO #tempperson 
-SELECT * 
-FROM   #tempperson 
+		AND pp.enddate > @start 
+		AND s.businessunit = @businessUnitId 
+		AND p.WorkflowControlSet IS NOT NULL
 
 DECLARE @PersonRequestId UNIQUEIDENTIFIER 
 DECLARE @RequestId UNIQUEIDENTIFIER 
 DECLARE @person_id UNIQUEIDENTIFIER 
 DECLARE request_cursor CURSOR FOR 
-  SELECT id 
-  FROM   #tempperson 
+	SELECT id 
+	FROM   #tempperson 
 
 OPEN request_cursor 
 
 FETCH next FROM request_cursor INTO @person_id 
 
 WHILE @@FETCH_STATUS = 0 
-  BEGIN 
-	  SELECT @PersonRequestId = Newid() 
+	BEGIN 
+		-- waitlisted request begin
+		SELECT @PersonRequestId = Newid() 
 
-	  INSERT INTO personrequest 
-	  SELECT @PersonRequestId, 
-			 1, 
-			 '3F0886AB-7B25-4E95-856A-0D726EDC2A67', 
-			 '3F0886AB-7B25-4E95-856A-0D726EDC2A67', 
-			 '2017-10-24', 
-			 '2017-10-24', 
-			 @person_id, 
-			 @waitlistedStatus, 
-			 'Performance test waitlist position', 
-			 'full day absence request', 
-			 0, 
-			 @businessUnitId, 
-			 '', 
-			 Getutcdate(), 
-			 NULL 
+		INSERT INTO personrequest 
+		SELECT @PersonRequestId, 
+				1, 
+				@systemUserId, 
+				@systemUserId, 
+				'2017-10-24', 
+				'2017-10-24', 
+				@person_id, 
+				@waitlistedStatus, 
+				'Performance test waitlist position', 
+				'waitlisted absence request', 
+				0, 
+				@businessUnitId, 
+				'', 
+				Getutcdate(), 
+				NULL 
 
-	  SELECT @RequestId = Newid() 
+		SELECT @RequestId = Newid() 
 
-	  INSERT INTO request 
-	  SELECT @RequestId, 
-			 @PersonRequestId, 
-			 @startRequest, 
-			 @endRequest 
+		INSERT INTO request 
+		SELECT @RequestId, 
+				@PersonRequestId, 
+				@startRequest, 
+				@endRequest 
 
-	  INSERT INTO absencerequest 
-	  SELECT @RequestId, 
-			 '3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F' 
+		INSERT INTO absencerequest 
+		SELECT @RequestId, 
+				@absenceTypeId 
+		-- waitlisted request end
+
+		-- pending request begin
+		SELECT @PersonRequestId = Newid()
+
+		INSERT INTO personrequest 
+		SELECT @PersonRequestId, 
+				1, 
+				@systemUserId, 
+				@systemUserId, 
+				'2017-10-24', 
+				'2017-10-24', 
+				@person_id, 
+				@pendingStatus, 
+				'Performance test waitlist position', 
+				'pending absence request', 
+				0, 
+				@businessUnitId, 
+				'', 
+				Getutcdate(), 
+				NULL 
+
+		SELECT @RequestId = Newid() 
+
+		INSERT INTO request 
+		SELECT @RequestId, 
+				@PersonRequestId, 
+				@startRequest, 
+				@endRequest 
+
+		INSERT INTO absencerequest 
+		SELECT @RequestId, 
+				@absenceTypeId
+		-- pending request end
 
 	FETCH next FROM request_cursor INTO @person_id 
-  END 
+	END 
 
 CLOSE request_cursor; 
 
