@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
 		private readonly Func<ICollection> _configureLogging;
 		private readonly Func<Exception> _getServerError;
 		public const string LogMessageException = "Log4NetModule caught an unhandled exception";
+		public const string LogMessageExceptionOuter = "Log4NetModule caught an unhandled exception (outer)";
 		public const string LogMessage404 = "A 404 occurred";
 
 		public Log4NetModule() : this(LogManager.GetLogger(typeof(Log4NetModule)), XmlConfigurator.Configure, () => HttpContext.Current.Server.GetLastError()) { }
@@ -79,6 +80,9 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
 		private void LogException(Exception exception)
 		{
 			var innerMostException = GetInnerMostException(exception);
+
+			if (innerMostException != exception)
+				_logger.Error(LogMessageExceptionOuter, exception);
 
 			if (innerMostException is HttpException && ((HttpException) innerMostException).GetHttpCode() == 404)
 				_logger.Warn(LogMessage404, innerMostException);
