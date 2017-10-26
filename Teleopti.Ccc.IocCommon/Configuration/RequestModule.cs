@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillStaffingReadModelDataLoader>().As<ISkillStaffingReadModelDataLoader>();
 			builder.RegisterType<OvertimeRequestSkillProvider>().As<IOvertimeRequestSkillProvider>();
 			builder.RegisterType<SkillOpenHourFilter>().As<ISkillOpenHourFilter>();
+			builder.RegisterType<WaitlistPreloadService>().AsSelf().InstancePerLifetimeScope();
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)
