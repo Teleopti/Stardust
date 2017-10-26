@@ -20,6 +20,6 @@ namespace Teleopti.Ccc.Domain.Common
             return _innerPersons;
         }
 
-        public bool DoLoadByPerson { get; set; }
-    }
+		public bool DoLoadByPerson { get; set; } = true;
+	}
 }
