@@ -108,7 +108,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 
 		public IEnumerable<MatrixTreeNode> CreateTree(IEnumerable<IApplicationFunction> permittedOnlineReportFunctions)
 		{
-			var rootTreeNode = new MatrixTreeNode { DisplayName = Resources.RealTime, ImageIndex = 0 };
+			if (!permittedOnlineReportFunctions.Any())
+				return new List<MatrixTreeNode> { };
+			var rootTreeNode = new MatrixTreeNode {DisplayName = Resources.RealTime, ImageIndex = 0};
 			IList<MatrixTreeNode> nodes = new List<MatrixTreeNode>();
 
 			foreach (IApplicationFunction func in permittedOnlineReportFunctions)

@@ -110,6 +110,16 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		}
 
 		[Test]
+		public void ShouldNotCreateRealTimeTreeIfNoChildNodes()
+		{
+			var realTimeFunctions = new List<IApplicationFunction> {  };
+
+			var tree = _target.CreateTree(realTimeFunctions).ToList();
+
+			Assert.AreEqual(0, tree.Count());
+		}
+
+		[Test]
 		public void ShouldCreateTreeNodeFromApplicationFunction()
 		{
 			var applicationFunction = _mocks.Stub<IApplicationFunction>();

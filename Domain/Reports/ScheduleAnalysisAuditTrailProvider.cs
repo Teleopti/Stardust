@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.Reports
 {
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Reports
 				where analysisReports().Contains(a.ForeignId.ToUpper())
 				select a).ToList();
 
-			var auditApplicationFunction = applicationFunctions.FirstOrDefault(a => a.ForeignId == "0148");
+			var auditApplicationFunction = PrincipalAuthorization.Current().GrantedFunctions().FirstOrDefault(a => a.ForeignId == "0148");
 			if (auditApplicationFunction != null)
 			{
 				auditApplicationFunction.IsWebReport = true;

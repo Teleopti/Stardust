@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -56,7 +58,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new[] { period };
 		}
 
-		public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
+		public IEnumerable<IApplicationFunction> GrantedFunctions() {return new List<IApplicationFunction>
+		{
+			new ApplicationFunction {ForeignId = "0148", ForeignSource = DefinedForeignSourceNames.SourceRaptor}
+		}; }
 
 		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
 		{
