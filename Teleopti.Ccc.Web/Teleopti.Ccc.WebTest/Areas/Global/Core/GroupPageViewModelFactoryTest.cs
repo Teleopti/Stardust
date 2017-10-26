@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		public FakePermissionProvider PermissionProvider;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeOptionalColumnRepository OptionalColumnRepository;
-		public FakePersonRepository PersonRepository;
+		public FakePersonRepository PersonRepository; 
+		public ITeamRepository TeamRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -107,17 +108,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 				PageId = Guid.NewGuid()
 			};
 			var businessUnitId = Guid.NewGuid();
-			var siteId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
+			var team = TeamFactory.CreateTeam("team1", "site1").WithId();
+			team.Site.WithId();
 			var groupDetails = new List<ReadOnlyGroupDetail>
 			{
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "site1/team1",
-					SiteId = siteId,
-					TeamId =  teamId,
-					GroupId = Guid.NewGuid(),
+					GroupName = team.SiteAndTeam,
+					SiteId = team.Site.Id,
+					TeamId =  team.Id,
+					GroupId = team.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
@@ -128,6 +129,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 					BusinessUnitId = businessUnitId
 				}
 			};
+			TeamRepository.Add(team);
 			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage },
 				groupDetails);
 			
@@ -138,10 +140,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			var gpChildren = orgs[0].Children;
 			orgs.Count.Should().Be.EqualTo(1);
 			orgs[0].Name.Should().Be.EqualTo("site1");
-			orgs[0].Id.Should().Be.EqualTo(siteId);
+			orgs[0].Id.Should().Be.EqualTo(team.Site.Id);
 			gp.Name.Should().Be.EqualTo(groupPage.PageName);
 			gpChildren.Count.Should().Be.EqualTo(1);
-			gpChildren.Single().Id.Should().Be.EqualTo(teamId);
+			gpChildren.Single().Id.Should().Be.EqualTo(team.Id);
 		}
 		[Test]
 		public void ShouldReturnSortedGroupPages()
@@ -164,34 +166,42 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
+			var team1 = TeamFactory.CreateTeam("Team1", "Site1").WithId();
+			team1.Site.WithId(siteId);
+
+			var team2 = TeamFactory.CreateTeam("ATeam", "Site1").WithId();
+			team2.Site.WithId(siteId);
+
+			var team3 = TeamFactory.CreateTeam("ATeam", "ASite").WithId();
+			team3.Site.WithId();
+			
 			var groupDetails = new List<ReadOnlyGroupDetail>
 			{
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "Site1/Team1",
+					GroupName = team1.SiteAndTeam,
 					SiteId = siteId,
-					TeamId =  teamId,
-					GroupId = Guid.NewGuid(),
+					TeamId =  team1.Id,
+					GroupId = team1.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "Site1/ATeam",
+					GroupName = team2.SiteAndTeam,
 					SiteId = siteId,
-					TeamId = Guid.NewGuid(),
-					GroupId = Guid.NewGuid(),
+					TeamId = team2.Id,
+					GroupId = team2.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "ASite/ATeam",
-					SiteId = Guid.NewGuid(),
-					TeamId = Guid.NewGuid(),
-					GroupId = Guid.NewGuid(),
+					GroupName = team3.SiteAndTeam,
+					SiteId = team3.Site.Id,
+					TeamId = team3.Id,
+					GroupId = team3.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
@@ -216,6 +226,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 					BusinessUnitId = businessUnitId
 				}
 			};
+			TeamRepository.Add(team1);
+			TeamRepository.Add(team2);
+			TeamRepository.Add(team3);
 			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage, groupPage2 },
 				groupDetails);
 
@@ -299,6 +312,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			};
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
+			var team1 = TeamFactory.CreateTeam("Team1", "Site1").WithId();
+			team1.Site.WithId(siteId);
+			
+			var team2 = TeamFactory.CreateTeam("åTeam", "Site1").WithId();
+			team2.Site.WithId(siteId);
+			
+			var team3 = TeamFactory.CreateTeam("ATeam", "åSite").WithId();
+			team3.Site.WithId();
+			
 			var groupDetails = new List<ReadOnlyGroupDetail>
 			{
 				new ReadOnlyGroupDetail
@@ -318,32 +340,37 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "Site1/Team1",
-					SiteId = siteId,
-					TeamId = Guid.NewGuid(),
-					GroupId = Guid.NewGuid(),
+					GroupName = team1.SiteAndTeam,
+					SiteId = team1.Site.Id,
+					TeamId = team1.Id,
+					GroupId = team1.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "Site1/åTeam",
-					SiteId = siteId,
-					TeamId = Guid.NewGuid(),
-					GroupId = Guid.NewGuid(),
+					GroupName = team2.SiteAndTeam,
+					SiteId = team2.Site.Id,
+					TeamId = team2.Id,
+					GroupId = team2.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "åSite/ATeam",
-					SiteId = Guid.NewGuid(),
-					TeamId = Guid.NewGuid(),
-					GroupId = Guid.NewGuid(),
+					GroupName = team3.SiteAndTeam,
+					SiteId = team3.Site.Id,
+					TeamId = team3.Id,
+					GroupId = team3.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				}
 			};
-
+			TeamRepository.Add(team1);
+			
+			TeamRepository.Add(team2);
+			
+			TeamRepository.Add(team3);
+			
 			GroupingReadOnlyRepository.Has(new[] {mainPage, groupPage,groupPage1,groupPage2 },
 				groupDetails);
 
@@ -383,24 +410,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			var site2Id = Guid.NewGuid();
 			var team1InSite1Id = Guid.NewGuid();
 			var team1InSite2Id = Guid.NewGuid();
+			
+			var team1Site1 = TeamFactory.CreateTeam("team1", "site1");
+			team1Site1.SetId(team1InSite1Id);
+			team1Site1.Site.WithId(site1Id);
+
+			var team1Site2 = TeamFactory.CreateTeam("team1", "site2");
+			team1Site2.SetId(team1InSite2Id);
+			team1Site2.Site.WithId(site2Id);
+			
 			var groupDetails = new List<ReadOnlyGroupDetail>
 			{
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "site1/team1",
+					GroupName = team1Site1.SiteAndTeam,
 					SiteId = site1Id,
 					TeamId =  team1InSite1Id,
-					GroupId = Guid.NewGuid(),
+					GroupId = team1InSite1Id,
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "site2/team1",
+					GroupName = team1Site2.SiteAndTeam,
 					SiteId = site2Id,
 					TeamId =  team1InSite2Id,
-					GroupId = Guid.NewGuid(),
+					GroupId = team1InSite2Id,
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
@@ -409,7 +445,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 					GroupName = "Email",
 					SiteId = site1Id,
 					TeamId = team1InSite1Id,
-					GroupId = team1InSite1Id,
+					GroupId = Guid.NewGuid(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
@@ -418,10 +454,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 					GroupName = "Outbound",
 					SiteId = site2Id,
 					TeamId = team1InSite2Id,
-					GroupId = team1InSite2Id,
+					GroupId = Guid.NewGuid(),
 					BusinessUnitId = businessUnitId
 				}
 			};
+			TeamRepository.Add(team1Site1);
+			TeamRepository.Add(team1Site2);
+			
 			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage },
 				groupDetails);
 			PermissionProvider.Enable();
@@ -464,35 +503,43 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
+			var team1 = TeamFactory.CreateTeam("Team1", "Site1").WithId();
+			team1.Site.WithId(siteId);
+			
+			var team2 = TeamFactory.CreateTeam("ATeam", "Site1").WithId();
+			team2.Site.WithId(siteId);
+			
+			var team3 = TeamFactory.CreateTeam("ATeam", "ASite").WithId();
+			team3.Site.WithId();
+			
 			var childGroupId = Guid.NewGuid();
 			var groupDetails = new List<ReadOnlyGroupDetail>
 			{
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "Site1/Team1",
+					GroupName = team1.SiteAndTeam,
 					SiteId = siteId,
-					TeamId =  teamId,
-					GroupId = Guid.NewGuid(),
+					TeamId =  team1.Id,
+					GroupId = team1.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "Site1/ATeam",
+					GroupName = team2.SiteAndTeam,
 					SiteId = siteId,
-					TeamId = Guid.NewGuid(),
-					GroupId = Guid.NewGuid(),
+					TeamId = team2.Id,
+					GroupId = team2.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "ASite/ATeam",
-					SiteId = Guid.NewGuid(),
-					TeamId = Guid.NewGuid(),
-					GroupId = Guid.NewGuid(),
+					GroupName = team3.SiteAndTeam,
+					SiteId = team3.Site.Id,
+					TeamId = team3.Id,
+					GroupId = team3.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
@@ -517,6 +564,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 					BusinessUnitId = businessUnitId
 				}
 			};
+			TeamRepository.Add(team1);
+			TeamRepository.Add(team2);
+			TeamRepository.Add(team3);
 			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage},
 				groupDetails);
 
@@ -527,7 +577,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			gps.Length.Should().Be.EqualTo(1);
 			gp0.Children.Count.Should().Be.EqualTo(2);
 		}
-
 
 		[Test]
 		public void ShouldReturnLogonUserTeamIdInViewModel()
@@ -546,27 +595,37 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			
 			var site2Id = Guid.NewGuid();
 			var site = SiteFactory.CreateSiteWithOneTeam("mySite").WithId();
-			var site1Id = site.Id;
+			var site1Id = Guid.NewGuid();
+	
 			var team1InSite1Id = site.TeamCollection.Single().WithId().Id;
 			var team1InSite2Id = Guid.NewGuid();
+
+			var team1Site1 = TeamFactory.CreateTeam("team1", "site1");
+			team1Site1.SetId(team1InSite1Id);
+			team1Site1.Site.WithId(site1Id);
+
+			var team1Site2 = TeamFactory.CreateTeam("team1", "site2");
+			team1Site2.SetId(team1InSite2Id);
+			team1Site2.Site.WithId(site2Id);
+			
 			var groupDetails = new List<ReadOnlyGroupDetail>
 			{
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "site1/team1",
+					GroupName = team1Site1.SiteAndTeam,
 					SiteId = site1Id,
-					TeamId =  team1InSite1Id,
-					GroupId = Guid.NewGuid(),
+					TeamId =  team1Site1.Id,
+					GroupId = team1Site1.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
 				{
 					PageId = Group.PageMainId,
-					GroupName = "site2/team1",
+					GroupName = team1Site2.SiteAndTeam,
 					SiteId = site2Id,
-					TeamId =  team1InSite2Id,
-					GroupId = Guid.NewGuid(),
+					TeamId =  team1Site2.Id,
+					GroupId = team1Site2.Id.GetValueOrDefault(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
@@ -575,7 +634,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 					GroupName = "Email",
 					SiteId = site1Id,
 					TeamId = team1InSite1Id,
-					GroupId = team1InSite1Id.GetValueOrDefault(),
+					GroupId = Guid.NewGuid(),
 					BusinessUnitId = businessUnitId
 				},
 				new ReadOnlyGroupDetail
@@ -584,10 +643,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 					GroupName = "Outbound",
 					SiteId = site2Id,
 					TeamId = team1InSite2Id,
-					GroupId = team1InSite2Id,
+					GroupId = Guid.NewGuid(),
 					BusinessUnitId = businessUnitId
 				}
 			};
+			TeamRepository.Add(team1Site1);
+			TeamRepository.Add(team1Site2);
 			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage },
 				groupDetails);
 			var me = PersonFactory.CreatePerson("me").WithId();
@@ -617,6 +678,59 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			gpChildren.Count.Should().Be.EqualTo(1);
 			gpChildren.Single().Id.Should().Be.EqualTo(team1InSite1Id);
 			result.LogonUserTeamId.Should().Be.EqualTo(team1InSite1Id);
+		}
+
+		[Test]
+		public void ShouldReturnAvailableGroupPagesWithCorrectPageName()
+		{
+			var mainPage = new ReadOnlyGroupPage()
+			{
+				PageName = "Main",
+				PageId = Group.PageMainId
+			};
+			var groupPage = new ReadOnlyGroupPage
+			{
+				PageName = "Skill",
+				PageId = Guid.NewGuid()
+			};
+			var businessUnitId = Guid.NewGuid();
+			var team = TeamFactory.CreateTeam("team/200","Site/1000").WithId();
+			team.Site.WithId();
+			var groupDetails = new List<ReadOnlyGroupDetail>
+			{
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					GroupName = team.SiteAndTeam,
+					SiteId = team.Site.Id,
+					TeamId =  team.Id,
+					GroupId = team.Id.GetValueOrDefault(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = groupPage.PageId,
+					GroupName = "Email",
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				}
+			};
+			TeamRepository.Add(team);
+			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage },
+				groupDetails);
+
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var orgs = result.BusinessHierarchy.ToList();
+			var gp = result.GroupPages[0];
+			var gpChildren = orgs[0].Children;
+			orgs.Count.Should().Be.EqualTo(1);
+			orgs[0].Name.Should().Be.EqualTo("Site/1000");
+			orgs[0].Id.Should().Be.EqualTo(team.Site.Id);
+			orgs[0].Children[0].Name.Should().Be.EqualTo("team/200");
+			gp.Name.Should().Be.EqualTo(groupPage.PageName);
+			gpChildren.Count.Should().Be.EqualTo(1);
+			gpChildren.Single().Id.Should().Be.EqualTo(team.Id);
 		}
 	}
 

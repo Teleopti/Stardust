@@ -18,12 +18,13 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
+		private readonly ITeamRepository _teamRepository;
 
 		public GroupPageViewModelFactory(
 			IGroupingReadOnlyRepository groupingReadOnlyRepository,
 			IUserTextTranslator userTextTranslator,
 			IUserUiCulture uiCulture, ILoggedOnUser loggedOnUser,
-			IPermissionProvider permissionProvider, IOptionalColumnRepository optionalColumnRepository)
+			IPermissionProvider permissionProvider, IOptionalColumnRepository optionalColumnRepository, ITeamRepository teamRepository)
 		{
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_userTextTranslator = userTextTranslator;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			_loggedOnUser = loggedOnUser;
 			_permissionProvider = permissionProvider;
 			_optionalColumnRepository = optionalColumnRepository;
+			_teamRepository = teamRepository;
 		}
 
 		public GroupPagesViewModel CreateViewModel(DateOnlyPeriod period, string functionPath)
@@ -47,17 +49,19 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			var orgsLookup = allAvailableGroups[Group.PageMainId].ToLookup(g => g.SiteId);
 			foreach (var siteLookUp in orgsLookup)
 			{
-				var permittedTeams = orgsLookup[siteLookUp.Key].Where(team => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, team));
-				if (!permittedTeams.Any())
+				var permittedTeamGroups = orgsLookup[siteLookUp.Key].Where(team => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, team));
+				if (!permittedTeamGroups.Any())
 					continue;
+				var permittedTeams = _teamRepository.FindTeams(permittedTeamGroups.Select(x => x.GroupId));
 				var children = permittedTeams.Select(t => new TeamViewModel
 				{
-					Name = t.GroupName.Split('/')[1],
-					Id = t.TeamId.GetValueOrDefault()
+					Name = t.Description.Name,
+					Id = t.Id.GetValueOrDefault()
 				}).OrderBy(c => c.Name, stringComparer);
 				actualOrgs.Add(new SiteViewModelWithTeams
 				{
-					Name = permittedTeams.First().GroupName.Split('/')[0],
+					
+					Name = permittedTeams.First().Site.Description.Name,
 					Id = siteLookUp.Key.GetValueOrDefault(),
 					Children = children.ToList()
 				});
