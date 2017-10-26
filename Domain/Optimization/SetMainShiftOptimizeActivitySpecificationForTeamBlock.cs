@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						if(!unlockedMembers.Contains(scheduleMatrixPro.Person))
 							continue;
 
-						var editableShift = scheduleMatrixPro.GetScheduleDayByKey(unLockedDate).DaySchedulePart().GetEditorShift();
+						var editableShift = scheduleMatrixPro.GetScheduleDayByKey(unLockedDate)?.DaySchedulePart().GetEditorShift();
 						if(editableShift != null)
 							specification = specification.And(new MainShiftOptimizeActivitiesSpecification(_correctAlteredBetween, optimizerActivitiesPreferences, editableShift, unLockedDate));
 					}

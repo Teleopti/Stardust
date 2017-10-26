@@ -372,7 +372,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 		
 		[Test]
-		[Ignore("#45318 - to be fixed")]
 		public void ShouldNotCrashOnSelectionOverMultipleSchedulePeriodsUsingBlockAndActivityPreferences()
 		{
 			var date = new DateOnly(2017, 11, 27);
