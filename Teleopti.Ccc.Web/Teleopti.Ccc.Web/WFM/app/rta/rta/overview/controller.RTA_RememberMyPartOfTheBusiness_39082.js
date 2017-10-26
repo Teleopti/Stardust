@@ -14,8 +14,12 @@
 		vm.skillAreas = skillAreas || [];
 		vm.siteCards = [];
 		vm.totalAgentsInAlarm = 0;
-		
-		vm.skillPickerPreselectedItem = rtaStateService.skillPickerPreselectedItem();
+
+		Object.defineProperty(vm, 'skillPickerPreselectedItem', {
+			get: function () {
+				return rtaStateService.skillPickerPreselectedItem();
+			}
+		});
 
 		vm.displayNoSitesMessage = function () { return vm.siteCards.length == 0; };
 		vm.displayNoSitesForSkillMessage = rtaStateService.hasSkillSelection;

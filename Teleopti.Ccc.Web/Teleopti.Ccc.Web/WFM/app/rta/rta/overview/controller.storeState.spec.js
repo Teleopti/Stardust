@@ -65,7 +65,7 @@ describe('RtaOverviewController open/close site', function () {
 		});
 
 		expect($sessionStorage.rtaState.siteIds).toEqual(['parisId']);
-		expect($sessionStorage.rtaState.skillIds).toEqual('skillId');
+		expect($sessionStorage.rtaState.skillIds).toEqual(['skillId']);
 	});
 
 });

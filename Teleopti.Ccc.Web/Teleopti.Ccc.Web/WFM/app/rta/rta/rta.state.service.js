@@ -81,9 +81,7 @@
 			},
 
 			skillPickerPreselectedItem: function () {
-				if (state.skillAreaId)
-					return { skillAreaId: state.skillAreaId }
-				return { skillIds: angular.isArray(state.skillIds) ? state.skillIds : [state.skillIds] };
+				return state.skillPickerPreselectedItem;
 			},
 
 			hasSkillSelection: function () {
@@ -201,7 +199,11 @@
 
 			// skill stuff
 			state.skillIds = state.skillIds || [];
-
+			state.skillIds = angular.isArray(state.skillIds) ? state.skillIds : [state.skillIds];
+			if (state.skillAreaId)
+				state.skillPickerPreselectedItem = { skillAreaId: state.skillAreaId }
+			else 
+				state.skillPickerPreselectedItem =  { skillIds: state.skillIds };
 		}
 
 		function storeState() {

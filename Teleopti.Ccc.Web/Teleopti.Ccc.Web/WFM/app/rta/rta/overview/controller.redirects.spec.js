@@ -117,7 +117,7 @@ describe('RtaOverviewController redirects', function () {
 			vm.selectSkillOrSkillArea(vm.skills[0]);
 		});
 
-		expect(lastGoParams.skillIds).toEqual('channelSalesId');
+		expect(lastGoParams.skillIds).toEqual(['channelSalesId']);
 	});
 
 	it('should go to sites by skill area state', function () {
@@ -138,7 +138,7 @@ describe('RtaOverviewController redirects', function () {
 		});
 
 		expect(lastGoParams.skillAreaId).toEqual(undefined);
-		expect(lastGoParams.skillIds).toEqual('channelSalesId');
+		expect(lastGoParams.skillIds).toEqual(['channelSalesId']);
 	});
 
 	it('should go to sites with skill area when changing selection from skill to skill area', function () {
