@@ -371,34 +371,33 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			schedulerStateHolderFrom.Schedules[agentBC].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(9);
 		}
 		
-		[TestCase(1)]
-		[TestCase(10)]
+		[Test]
 		[Ignore("#45318 - to be fixed")]
-		public void ShouldNotCrashOnSelectionOverMultipleSchedulePeriodsUsingBlockAndActivityPreferences(int periodLengthToOptimize)
+		public void ShouldNotCrashOnSelectionOverMultipleSchedulePeriodsUsingBlockAndActivityPreferences()
 		{
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var date = new DateOnly(2017, 11, 27);
 			var scenario = new Scenario().WithId();
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var activity = new Activity().WithId();
 			var skill = new Skill().WithId().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(new DateOnly(2017, 11, 23));
-			var ass = new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(7, 15));			
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, Tuple.Create(new TimePeriod(15, 16), 10d));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill).WithSchedulePeriodOneWeek(new DateOnly(2017, 11, 23));
+			var ass = new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));			
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 1);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), agent, ass, skillDay);
 			var optimizationPreferences = new OptimizationPreferences
 			{
 				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance, OptimizationStepShiftsWithinDay = true },
-				Extra = new ExtraPreferences { UseTeamBlockOption = true, UseBlockSameShiftCategory = true, BlockTypeValue = BlockFinderType.SchedulePeriod},
+				Extra = new ExtraPreferences { UseTeamBlockOption = true, UseBlockSameShiftCategory = true, BlockTypeValue = BlockFinderType.BetweenDayOff},
 				Shifts = {KeepActivityLength = true, ActivityToKeepLengthOn = activity}
 			};
 
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] {agent}, new DateOnlyPeriod(date, date.AddDays(periodLengthToOptimize)), optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
-
-			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().Period.EndDateTime.Hour
-				.Should().Be.EqualTo(16);
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Execute(new NoSchedulingProgress(), stateHolder, new[] {agent}, new DateOnlyPeriod(date, date.AddDays(4)), optimizationPreferences,
+					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+			});
 		}
+		
 
 		public IntradayOptimizationTeamBlockDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerBreakPreferenceStartTimeByMax46002)
 		{
