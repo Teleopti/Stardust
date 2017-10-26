@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
-		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					IScenarioRepository scenarioRepository,
 					ISkillDayLoadHelper skillDayLoadHelper,
 					IFindSchedulesForPersons findSchedulesForPersons,
-					IPersonAbsenceAccountRepository personAbsenceAccountRepository,
 					IRepositoryFactory repositoryFactory,
 					IPersonRepository personRepository,
 					ISkillRepository skillRepository,
@@ -40,7 +38,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_findSchedulesForPersons = findSchedulesForPersons;
-			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_repositoryFactory = repositoryFactory;
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
@@ -87,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			schedulerStateHolderTo.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, _userTimeZone.TimeZone());
-			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(agents);
+			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
 		}
 	}
 }
