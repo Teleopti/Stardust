@@ -56,24 +56,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFindGroupsWithGroupIdBasedOnPeroidFromReadModel()
 		{
-			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+			var personToTest = PersonFactory.CreatePerson("dummyAgent0");
+			var personToTest1 = PersonFactory.CreatePerson("dummyAgent1");
 
 			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
 
 			var personContract = PersonContractFactory.CreatePersonContract();
+			var personContract1 = PersonContractFactory.CreatePersonContract("anotherContract","contractSchedule","partTimePercentage");
 			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
 				personContract,
 				team);
 			personToTest.AddPersonPeriod(personPeriod);
+			personToTest1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1),
+				personContract1,
+				team));
 
 			WithUnitOfWork.Do(() =>
 			{
 				SiteRepository.Add(team.Site);
 				TeamRepository.Add(team);
 				ContractRepository.Add(personContract.Contract);
+				ContractRepository.Add(personContract1.Contract);
 				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				ContractScheduleRepository.Add(personContract1.ContractSchedule);
 				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+				PartTimePercentageRepository.Add(personContract1.PartTimePercentage);
 				PersonRepository.Add(personToTest);
+				PersonRepository.Add(personToTest1);
 			});
 
 			WithUnitOfWork.Do(() =>
@@ -85,10 +94,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				var items = Target.FindGroups(new List<Guid>
 				{
-					team.Id.GetValueOrDefault()
+					personContract.Contract.Id.GetValueOrDefault(),
+					personContract1.Contract.Id.GetValueOrDefault()
 				}, new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1));
 				
-				items.Count().Should().Be.EqualTo(1);
+				items.Count().Should().Be.EqualTo(2);
 
 			});
 		}

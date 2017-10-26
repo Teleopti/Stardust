@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				+ "ORDER BY groupname";
 			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
 				.SetGuid("businessUnitId", getBusinessUnitId())
-				.SetString("groupIds", string.Join(",", groupIds))
+				.SetParameterList("groupIds", groupIds.ToArray())
 				.SetDateOnly("startDate", period.StartDate)
 				.SetDateOnly("endDate", period.EndDate)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
