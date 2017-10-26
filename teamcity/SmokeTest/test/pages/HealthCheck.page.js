@@ -12,7 +12,7 @@ var HealthCheckPage = Object.create(LoginPage, {
 	
 	signin: { value: function() {
 		LoginPage.signin(this);
-		this.serviceList.waitForExist(60 * 1000);
+		this.serviceList.waitForExist(150 * 1000);
 		this.stardustStatus.waitForExist(60 * 1000);
     } }
 });
