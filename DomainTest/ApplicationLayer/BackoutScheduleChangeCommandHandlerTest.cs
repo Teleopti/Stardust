@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakeCurrentScenario CurrentScenario;
-		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
 		public FakeAuditSettingRepository AuditSettingRepository;
 		public FakeWriteSideRepository<IAbsence> AbsenceRepository;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
