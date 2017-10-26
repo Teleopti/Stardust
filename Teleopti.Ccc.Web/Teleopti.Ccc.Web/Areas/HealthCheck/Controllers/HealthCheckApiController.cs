@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.ServiceProcess;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 
 			var computerInfo = new ServerComputer();
 			var nodes = _stardustRepository.GetAllWorkerNodes();
-			var hosts = nodes.Select(x => x.Url.Host).Distinct().ToList();
+			var hosts = nodes.Where(x => x.Alive).Select(x => x.Url.Host).Distinct().ToList();
 			var servicesResult = new List<object>();
 			foreach (var host in hosts)
 			{
