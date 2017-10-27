@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -24,17 +23,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-
 	[TestFixture]
 	[DomainTest]
 	public class FixNotOverwriteLayerCommandHandlerTest : ISetup
 	{
 		public FixNotOverwriteLayerCommandHandler Target;
 		public FakeWriteSideRepository<IPerson> PersonRepository;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public FakeScenarioRepository CurrentScenario;
+		public IScheduleStorage ScheduleStorage;
 		public FakeUserTimeZone UserTimeZone;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakePersonSkillProvider PersonSkillProvider;
 		public MutableNow Now;
@@ -46,8 +45,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FixNotOverwriteLayerCommandHandler>()
 				.For<IHandleCommand<FixNotOverwriteLayerCommand>>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
@@ -60,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixNotOverwriteLayerInShift()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			PersonRepository.Add(PersonFactory.CreatePersonWithId());
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
@@ -80,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 14));
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 12));
 			pa.ShiftLayers.ForEach(l => l.WithId());
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var command = new FixNotOverwriteLayerCommand
 			{
@@ -89,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var loadedPersonAss = ScheduleStorage.LoadAll().Single() as PersonAssignment;
+			var loadedPersonAss = PersonAssignmentRepository.LoadAll().Single();
 
 			var movedLunchLayer = loadedPersonAss.ShiftLayers.First(l => l.Payload == lunchActivity);
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 15));
@@ -98,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseFixNotOverwriteLayerEvent()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			PersonRepository.Add(PersonFactory.CreatePersonWithId());
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
@@ -118,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 14));
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 12));
 			pa.ShiftLayers.ForEach(l => l.WithId());
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var operatePersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -134,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var loadedPersonAss = ScheduleStorage.LoadAll().Single() as PersonAssignment;
+			var loadedPersonAss = PersonAssignmentRepository.LoadAll().Single();
 
 			var movedLunchLayer = loadedPersonAss.ShiftLayers.First(l => l.Payload == lunchActivity);
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 15));
@@ -149,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixNotOverwriteLayerThatIsCoveredByMultipleLayersInShift()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			PersonRepository.Add(PersonFactory.CreatePersonWithId());
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
@@ -170,9 +167,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 12));
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 15));
 			pa.ShiftLayers.ForEach(l => l.WithId());
-			ScheduleStorage.Add(pa);
-
-
+			PersonAssignmentRepository.Add(pa);
+			
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),
@@ -180,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var loadedPersonAss = ScheduleStorage.LoadAll().Single() as PersonAssignment;
+			var loadedPersonAss = PersonAssignmentRepository.LoadAll().Single();
 
 			var movedLunchLayer = loadedPersonAss.ShiftLayers.First(l => l.Payload == lunchActivity);
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 08, 2013, 11, 14, 11));
@@ -189,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixNotOverwriteLayerThatIsCoveredByMultipleLayersAndOneEndIsOutsideTheMainShift()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			PersonRepository.Add(PersonFactory.CreatePersonWithId());
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
@@ -210,9 +206,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 12));
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 15));
 			pa.ShiftLayers.ForEach(l => l.WithId());
-			ScheduleStorage.Add(pa);
-
-
+			PersonAssignmentRepository.Add(pa);
+			
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),
@@ -220,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var loadedPersonAss = ScheduleStorage.LoadAll().Single() as PersonAssignment;
+			var loadedPersonAss = PersonAssignmentRepository.LoadAll().Single();
 
 			var movedLunchLayer = loadedPersonAss.ShiftLayers.First(l => l.Payload == lunchActivity);
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 15, 2013, 11, 14, 18));
@@ -229,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixMultipleNotOverwriteLayersInShift()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			PersonRepository.Add(PersonFactory.CreatePersonWithId());
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
@@ -252,9 +247,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(shortBreakActivity, new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 14));
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
-			ScheduleStorage.Add(pa);
-
-
+			PersonAssignmentRepository.Add(pa);
+			
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),
@@ -262,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var loadedPersonAss = ScheduleStorage.LoadAll().Single() as PersonAssignment;
+			var loadedPersonAss = PersonAssignmentRepository.LoadAll().Single();
 
 			var movedLunchLayer = loadedPersonAss.ShiftLayers.First(l => l.Payload == lunchActivity);
 			var movedShortBreakLayer = loadedPersonAss.ShiftLayers.First(l => l.Payload == shortBreakActivity);
@@ -273,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixNotOverwritableLayerWhichIsAlreadyOverwrittenInShift()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			PersonRepository.Add(PersonFactory.CreatePersonWithId());
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
@@ -294,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 12));
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var command = new FixNotOverwriteLayerCommand
 			{
@@ -303,7 +297,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var loadedPersonAss = ScheduleStorage.LoadAll().Single() as PersonAssignment;
+			var loadedPersonAss = PersonAssignmentRepository.LoadAll().Single();
 
 			var movedLunchLayer = loadedPersonAss.ShiftLayers.First(l => l.Payload == lunchActivity);
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 10));
@@ -312,7 +306,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixMultipleNotOverwritableLayersWhenTheyOverlapEachOther()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			PersonRepository.Add(PersonFactory.CreatePersonWithId());
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
@@ -335,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(shortBreakActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 13));
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var command = new FixNotOverwriteLayerCommand
 			{
@@ -344,7 +338,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var loadedPersonAss = ScheduleStorage.LoadAll().Single() as PersonAssignment;
+			var loadedPersonAss = PersonAssignmentRepository.LoadAll().Single();
 
 			var movedLunchLayer = loadedPersonAss.ShiftLayers.First(l => l.Payload == lunchActivity);
 			var movedShortBreakLayer = loadedPersonAss.ShiftLayers.First(l => l.Payload == shortBreakActivity);
@@ -355,7 +349,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReturnErrorMessageWhenScheduleDayCanNotBeFixedCompletely()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			PersonRepository.Add(PersonFactory.CreatePersonWithId());
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
@@ -378,7 +372,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 12));
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 9, 2013, 11, 14, 17));
 			pa.ShiftLayers.ForEach(l => l.WithId());
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var command = new FixNotOverwriteLayerCommand
 			{
@@ -400,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill }, new DateOnlyPeriod(), null, new[] { skill });
 			SkillRepository.Add(skill);
 
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 
@@ -430,7 +424,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(shortBreakActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 13));
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var command = new FixNotOverwriteLayerCommand
 			{

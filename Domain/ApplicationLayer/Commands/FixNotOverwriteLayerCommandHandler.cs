@@ -16,23 +16,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	[EnabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step4_43389)]
 	public class FixNotOverwriteLayerCommandHandler : IHandleCommand<FixNotOverwriteLayerCommand>
 	{
-		private IScheduleDayProvider _scheduleDayProvider;
 		private readonly IProxyForId<IPerson> _personForId;
-		private INonoverwritableLayerMovingHelper _movingHelper;
+		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ICurrentScenario _currentScenario;
+		private readonly INonoverwritableLayerMovingHelper _movingHelper;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 
-		public FixNotOverwriteLayerCommandHandler(INonoverwritableLayerMovingHelper movingHelper, IProxyForId<IPerson> personForId, IScheduleDayProvider scheduleDayProvider, IScheduleDifferenceSaver scheduleDifferenceSaver)
+		public FixNotOverwriteLayerCommandHandler(INonoverwritableLayerMovingHelper movingHelper, IProxyForId<IPerson> personForId, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver)
 		{
 			_movingHelper = movingHelper;
 			_personForId = personForId;
-			_scheduleDayProvider = scheduleDayProvider;
+			_scheduleStorage = scheduleStorage;
+			_currentScenario = currentScenario;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 		}
 
 		public void Handle(FixNotOverwriteLayerCommand command)
 		{
 			var person = _personForId.Load(command.PersonId);
-			var dict = _scheduleDayProvider.GetScheduleDictionary(command.Date, person);
+			var dict = _scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(), new PersonProvider(new[] {person}),
+				new ScheduleDictionaryLoadOptions(false, false),
+				command.Date.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()), new[] {person}, false);
 			var rule = new NotOverwriteLayerRule();
 			var scheduleRange = dict[person];
 			var scheduledDay = scheduleRange.ScheduledDay(command.Date);
@@ -74,9 +78,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	[DisabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step4_43389)]
 	public class FixNotOverwriteLayerCommandHandlerNoDeltas : IHandleCommand<FixNotOverwriteLayerCommand>
 	{
-		private IScheduleDayProvider _scheduleDayProvider;
+		private readonly IScheduleDayProvider _scheduleDayProvider;
 		private readonly IProxyForId<IPerson> _personForId;
-		private INonoverwritableLayerMovingHelper _movingHelper;
+		private readonly INonoverwritableLayerMovingHelper _movingHelper;
 		private readonly IWriteSideRepositoryTypedId<IPersonAssignment,PersonAssignmentKey> _personAssignmentRepository;
 		private readonly ICurrentScenario _currentScenario;
 
