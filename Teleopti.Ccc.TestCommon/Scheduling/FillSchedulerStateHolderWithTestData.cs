@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			foreach (var agent in agents)
 			{
 				stateHolder.AllPermittedPersons.Add(agent);
-				stateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
+				stateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 			}
 			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 			var uniqueSkills = new HashSet<ISkill>();

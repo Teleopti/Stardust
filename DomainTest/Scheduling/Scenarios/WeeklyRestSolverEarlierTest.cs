@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		{
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(weekPeriod, TimeZoneInfo.Utc);
 			SchedulerStateHolder.FilterPersons(new[] { agent });
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
+			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			foreach (var date in weekPeriod.DayCollection())
@@ -493,7 +493,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.RussiaTz7ZoneInfo());
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(weekPeriod, TimeZoneInfoFactory.MoskowTimeZoneInfo());
 			SchedulerStateHolder.FilterPersons(new[] { agent });
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
+			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			foreach (var date in weekPeriod.DayCollection())
@@ -516,7 +516,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
 			var selectedPeriod = new DateOnlyPeriod(2016, 3, 22, 2016, 3, 22);
-			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod);
+			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.LoadedAgents, selectedPeriod);
 			var dayOffPreferences = new DaysOffPreferences();
 			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 			var optimizationPreferences = new OptimizationPreferences();
@@ -591,7 +591,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.RussiaTz7ZoneInfo());
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(weekPeriod, TimeZoneInfoFactory.MoskowTimeZoneInfo());
 			SchedulerStateHolder.FilterPersons(new[] { agent });
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
+			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			foreach (var date in weekPeriod.DayCollection())
@@ -614,7 +614,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
 			var selectedPeriod = new DateOnlyPeriod(2016, 3, 22, 2016, 3, 22);
-			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod);
+			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.LoadedAgents, selectedPeriod);
 			var dayOffPreferences = new DaysOffPreferences();
 			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 			var optimizationPreferences = new OptimizationPreferences();

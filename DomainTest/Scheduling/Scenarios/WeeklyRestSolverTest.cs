@@ -86,14 +86,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
 			SchedulerStateHolder.FilterPersons(new[] { agent1, agent2 });
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent1);
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent2);
+			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent1);
+			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent2);
 			
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent1, agent2 }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
-			foreach (var agent in SchedulerStateHolder.SchedulingResultState.PersonsInOrganization)
+			foreach (var agent in SchedulerStateHolder.SchedulingResultState.LoadedAgents)
 			{
 				var ass = new PersonAssignment(agent, scenario, dateOnly.AddDays(-1));
 				var startTimeUtc = TimeZoneHelper.ConvertToUtc(dateOnly.AddDays(-1).Date.AddHours(22).AddMinutes(0), agent.PermissionInformation.DefaultTimeZone());
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			var selectedPeriod = new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly);
 			var optimizationPref = new OptimizationPreferences();
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
-			Target.Resolve(optimizationPref, selectedPeriod, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(), dayOffOptimizationPreferenceProvider);
+			Target.Resolve(optimizationPref, selectedPeriod, SchedulerStateHolder.SchedulingResultState.LoadedAgents.ToList(), dayOffOptimizationPreferenceProvider);
 
 			scheduleDictionary[agent1].ScheduledDay(dateOnly.AddDays(-1)).IsScheduled().Should().Be.False();
 			scheduleDictionary[agent2].ScheduledDay(dateOnly.AddDays(-1)).IsScheduled().Should().Be.False();

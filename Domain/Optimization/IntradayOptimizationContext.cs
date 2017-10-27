@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IDisposable Create(DateOnlyPeriod period)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			var virtualSkillContext = _virtualSkillContext.Create(schedulerStateHolder.SchedulingResultState.PersonsInOrganization, period);
+			var virtualSkillContext = _virtualSkillContext.Create(schedulerStateHolder.SchedulingResultState.LoadedAgents, period);
 			var resourceContext = _resourceCalculationContext.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true, period);
 			return new GenericDisposable(() =>
 			{

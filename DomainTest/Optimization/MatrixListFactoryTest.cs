@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 25), TimeZoneInfo.Utc);
 			SchedulerStateHolder.FilterPersons(new[] { agent });
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
+			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(new Scenario("unimportant"), new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
@@ -63,12 +63,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 25), TimeZoneInfo.Utc);
 			SchedulerStateHolder.FilterPersons(new[] { agent });
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
+			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(new Scenario("unimportant"), new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;	
 
-			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
+			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.LoadedAgents, new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
 
 			matrixList.Count().Should().Be.GreaterThan(1);
 		}
@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 25), TimeZoneInfo.Utc);
 			SchedulerStateHolder.FilterPersons(new[] { agent });
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
+			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(new Scenario("unimportant"), new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
-			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.PersonsInOrganization, new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
+			var matrixList = Target.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, SchedulerStateHolder.SchedulingResultState.LoadedAgents, new DateOnlyPeriod(2015, 10, 12, 2015, 10, 12));
 
 			matrixList.First().UnlockedDays.Length.Should().Be.EqualTo(1);
 			matrixList.First().UnlockedDays[0].Day.Should().Be.EqualTo(new DateOnly(2015, 10, 12));
@@ -120,8 +120,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2016, 1, 4, 2016, 2, 28), TimeZoneInfo.Utc);
 			SchedulerStateHolder.FilterPersons(new[] { agent1, agent2 });
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent1);
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent2);
+			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent1);
+			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent2);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(new Scenario("unimportant"), new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent1, agent2 }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;

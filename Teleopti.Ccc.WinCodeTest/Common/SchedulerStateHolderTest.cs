@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             personRequest.SetId(Guid.NewGuid());
 
             IList<IPersonRequest> originalList = new List<IPersonRequest> {personRequest};
-            target.SchedulingResultState.PersonsInOrganization = new Collection<IPerson> {person1};
+            target.SchedulingResultState.LoadedAgents = new Collection<IPerson> {person1};
             using (mocks.Record())
             {
                 Expect.Call(personRequestRepository.Find(personRequest.Id.Value))
@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             IPersonRequest personRequest = new PersonRequest(person1);
             personRequest.SetId(Guid.NewGuid());
-            target.SchedulingResultState.PersonsInOrganization = new Collection<IPerson> { person1 };
+            target.SchedulingResultState.LoadedAgents = new Collection<IPerson> { person1 };
             using (mocks.Record())
             {
                 Expect.Call(personRequestRepository.Find(personRequest.Id.Value))

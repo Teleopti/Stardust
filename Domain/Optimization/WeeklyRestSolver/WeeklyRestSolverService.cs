@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 								if (success)
 								{
-									var teamBlockInfo = teamBlockGenerator.Generate(schedulingResultStateHolder.PersonsInOrganization, allPersonMatrixList, personWeek.Week, new List<IPerson> { person }, schedulingOptions).First();
+									var teamBlockInfo = teamBlockGenerator.Generate(schedulingResultStateHolder.LoadedAgents, allPersonMatrixList, personWeek.Week, new List<IPerson> { person }, schedulingOptions).First();
 									var brokenShiftCategoryLimitations = !_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences);
 									
 									var currentBrokenWeek = _brokenWeekCounterForAPerson.CountBrokenWeek(selectedPeriodScheduleDays,
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 										//rollback this week 
 										_shiftNudgeManager.RollbackLastScheduledWeek(rollbackService, resourceCalculateDelayer);
 										if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions,
-											allPersonMatrixList, personWeek.Week, schedulingResultStateHolder.PersonsInOrganization))
+											allPersonMatrixList, personWeek.Week, schedulingResultStateHolder.LoadedAgents))
 											_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange,
 												possiblePositionsToFix.First().Key, rollbackService, selectedPeriod, personMatrix, optimizationPreferences);
 									}
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 							}
 							if (!success && firstDayOfElement != DateOnly.MinValue)
 							{
-								if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions, allPersonMatrixList, personWeek.Week, schedulingResultStateHolder.PersonsInOrganization))
+								if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions, allPersonMatrixList, personWeek.Week, schedulingResultStateHolder.LoadedAgents))
 									_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, firstDayOfElement, rollbackService, selectedPeriod, personMatrix, optimizationPreferences);
 							}
 						}

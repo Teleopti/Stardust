@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created by: micke
 		/// Created date: 2008-11-10
 		/// </remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        ICollection<IPerson> PersonsInOrganization { get; set; }
+        ICollection<IPerson> LoadedAgents { get; set; }
 
         /// <summary>
         /// Gets or sets the skill days.

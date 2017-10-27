@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 
                 args.TempSkills = tempSkills;
                 
-                var tempPersons = new List<IPerson>(_schedulingResultStateHolder.PersonsInOrganization);
+                var tempPersons = new List<IPerson>(_schedulingResultStateHolder.LoadedAgents);
                 deciderResult.FilterPeople(tempPersons);
                 var scheduleDateTimePeriod = new ScheduleDateTimePeriod(args.Period, tempPersons,
                                                                         new MeetingScheduleRangeToLoadCalculator(

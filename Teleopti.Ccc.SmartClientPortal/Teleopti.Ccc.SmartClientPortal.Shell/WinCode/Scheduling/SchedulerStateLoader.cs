@@ -147,10 +147,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				businessUnitRepository.LoadAllBusinessUnitSortedByName(); //Load the business units into this uow
 				IPersonRepository service = _repositoryFactory.CreatePersonRepository(uow);
 
-				_schedulerState.SchedulingResultState.PersonsInOrganization =
+				_schedulerState.SchedulingResultState.LoadedAgents =
 					service.FindAllAgents(_schedulerState.RequestedPeriod.DateOnlyPeriod, true);
 
-				foreach (IPerson person in _schedulerState.SchedulingResultState.PersonsInOrganization)
+				foreach (IPerson person in _schedulerState.SchedulingResultState.LoadedAgents)
 				{
 					if (!_schedulerState.AllPermittedPersons.Contains(person))
 					{
@@ -220,13 +220,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		private void initializeSchedules(IUnitOfWork uow, IScheduleDateTimePeriod scheduleDateTimePeriod)
 		{
-			IPersonProvider personsProvider = new PersonProvider(_schedulerState.SchedulingResultState.PersonsInOrganization);
+			IPersonProvider personsProvider = new PersonProvider(_schedulerState.SchedulingResultState.LoadedAgents);
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 			IScheduleStorage scheduleStorage = _scheduleStorageFactory.Create(uow);
 
 			using (PerformanceOutput.ForOperation("Loading schedules"))
 			{
-				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
+				uow.Reassociate(_schedulerState.SchedulingResultState.LoadedAgents);
 				using (uow.DisableFilter(QueryFilter.Deleted))
 					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
 				_schedulerState.LoadSchedules((IFindSchedulesForPersons)scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod);

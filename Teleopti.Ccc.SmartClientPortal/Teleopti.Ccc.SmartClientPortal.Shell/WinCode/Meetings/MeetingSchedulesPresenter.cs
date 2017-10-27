@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 					var period = _currentPeriod.ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
 					var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period,
 																							  _schedulerStateHolder.SchedulingResultState.
-																								PersonsInOrganization,
+																								LoadedAgents,
 																							  new MeetingScheduleRangeToLoadCalculator(period));
 				_schedulerStateLoader.LoadSchedules(scheduleDateTimePeriod);
 				

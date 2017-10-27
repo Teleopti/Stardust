@@ -570,7 +570,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 
-				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
+				uow.Reassociate(_schedulerState.SchedulingResultState.LoadedAgents);
 				_schedulerMessageBrokerHandler.HandleMeetingChange(e.ModifiedMeeting, e.Delete);
 				invalidateAfterMeetingChange(e);
 			}
@@ -2340,7 +2340,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                                                       LanguageResourceHelper.Translate("XXAgentsColon") + " " +
                                                       _schedulerState.FilteredCombinedAgentsDictionary.Count + " " +
                                                       LanguageResourceHelper.Translate("XXLoadedColon") +
-                                                      " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
+                                                      " " + _schedulerState.SchedulingResultState.LoadedAgents.Count;
 
 				if (!_showEditor)
 					return;
@@ -2501,7 +2501,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + " " +
 													  _schedulerState.FilteredCombinedAgentsDictionary.Count + " " + 
 													  LanguageResourceHelper.Translate("XXLoadedColon") +
-													  " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
+													  " " + _schedulerState.SchedulingResultState.LoadedAgents.Count;
 			toolStripStatusLabelNumberOfAgents.Visible = true;
 
 			var loadedPeriod = _schedulerState.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
@@ -3571,11 +3571,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 
 				var period = new ScheduleDateTimePeriod(SchedulerState.RequestedPeriod.Period(),
-					SchedulerState.SchedulingResultState.PersonsInOrganization);
+					SchedulerState.SchedulingResultState.LoadedAgents);
 				if (!_teamLeaderMode)
 				{
 					var options = new SchedulingOptions();
-					optimizerHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.PersonsInOrganization,
+					optimizerHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.LoadedAgents,
 						SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container.Resolve<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>());
 					SchedulerState.ConsiderShortBreaks = options.ConsiderShortBreaks;
 				}
@@ -3735,7 +3735,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			using (PerformanceOutput.ForOperation("Executing and filtering loader decider"))
 			{
-				ICollection<IPerson> peopleInOrg = SchedulerState.SchedulingResultState.PersonsInOrganization;
+				ICollection<IPerson> peopleInOrg = SchedulerState.SchedulingResultState.LoadedAgents;
 				int peopleCountFromBeginning = peopleInOrg.Count;
 				var decider = _teamLeaderMode ? new PeopleAndSkillLoaderDeciderForTeamLeaderMode() : _peopleAndSkillLoaderDecider;
 				var result = decider.Execute(_schedulerState.RequestedScenario, _schedulerState.RequestedPeriod.Period(),
@@ -3752,7 +3752,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				peopleInOrg = new HashSet<IPerson>(peopleInOrg);
 				SchedulerState.AllPermittedPersons.ForEach(peopleInOrg.Add);
-				SchedulerState.SchedulingResultState.PersonsInOrganization = peopleInOrg;
+				SchedulerState.SchedulingResultState.LoadedAgents = peopleInOrg;
 				log.Info("No, changed my mind... Removed " + (peopleCountFromBeginning - peopleInOrg.Count) + " people.");
 				var skills = stateHolder.SchedulingResultState.Skills;
 				int orgSkills = skills.Length;
@@ -3798,7 +3798,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (PerformanceOutput.ForOperation("Loading schedules " + period))
 			{
 				IPersonProvider personsInOrganizationProvider =
-					new PersonProvider(stateHolder.SchedulingResultState.PersonsInOrganization);
+					new PersonProvider(stateHolder.SchedulingResultState.LoadedAgents);
 				// If the people in organization is filtered out to 70% or less of all people then flag 
 				// so that a criteria for that is used later when loading schedules.
 				var loaderSpecification = new LoadScheduleByPersonSpecification();
@@ -4314,7 +4314,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void skillGridMenuItemAgentSkillAnalyser_Click(object sender, EventArgs e)
 		{
-			using (var analyzer = new AgentSkillAnalyzer(SchedulerState.SchedulingResultState.PersonsInOrganization,
+			using (var analyzer = new AgentSkillAnalyzer(SchedulerState.SchedulingResultState.LoadedAgents,
 				SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.SkillDays,
 				SchedulerState.RequestedPeriod.DateOnlyPeriod, _container.Resolve<CreateIslands>()))
 			{

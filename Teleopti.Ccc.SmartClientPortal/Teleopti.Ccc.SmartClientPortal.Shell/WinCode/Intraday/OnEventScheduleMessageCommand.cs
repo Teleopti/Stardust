@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
                 uow.Reassociate(_schedulingResultLoader.Contracts);
                 uow.Reassociate(_schedulingResultLoader.ContractSchedules);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.RequestedScenario);
-                uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization);
+                uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.LoadedAgents);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.Absences);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.Activities);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.ShiftCategories);
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 
 		private bool isRelevantPerson(Guid personId)
 		{
-			return _schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization.Any(p => p.Id == personId);
+			return _schedulingResultLoader.SchedulerState.SchedulingResultState.LoadedAgents.Any(p => p.Id == personId);
 		}
     }
 }

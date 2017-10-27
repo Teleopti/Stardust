@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			//can we use fewer also with team? what happens if AgentA and AgentB have different scheduleperiods? (does it even matter?)
 			var matrixes = schedulingOptions.UseTeam ? 
-				_matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod) : 
+				_matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.LoadedAgents, selectedPeriod) : 
 				_matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
 
 			_advanceDaysOffSchedulingService.Execute(schedulingCallback, matrixes, selectedAgents,

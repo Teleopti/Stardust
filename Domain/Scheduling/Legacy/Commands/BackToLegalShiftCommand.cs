@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _blockPreferencesMapper);
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
-			var allMatrixes = selectedPeriod.HasValue ? _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.PersonsInOrganization, selectedPeriod.Value) : new List<IScheduleMatrixPro>();
+			var allMatrixes = selectedPeriod.HasValue ? _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.LoadedAgents, selectedPeriod.Value) : new List<IScheduleMatrixPro>();
 			var selectedPersons = _extractor.ExtractPersons(selectedSchedules);
-			var selectedTeamBlocks = teamBlockGenerator.Generate(schedulingResultStateHolder.PersonsInOrganization, allMatrixes, selectedPeriod.GetValueOrDefault(), selectedPersons, schedulingOptions);
+			var selectedTeamBlocks = teamBlockGenerator.Generate(schedulingResultStateHolder.LoadedAgents, allMatrixes, selectedPeriod.GetValueOrDefault(), selectedPersons, schedulingOptions);
 			var tagSetter = new ScheduleTagSetter(KeepOriginalScheduleTag.Instance);
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder,
 				_scheduleDayChangeCallback,

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var enumerable = personMeetings.ToArray();
-                unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
+                unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.LoadedAgents);
 
                 IMeetingRepository meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
                 foreach (IPersonMeeting personMeeting in enumerable)
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (!LazyLoadingManager.IsInitialized(reloadedMeeting.Activity))
 					LazyLoadingManager.Initialize(reloadedMeeting.Activity);
 
-				unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
+				unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.LoadedAgents);
 				var persons = reloadedMeeting.MeetingPersons.Select(m => m.Person).ToArray();
 
 				if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, reloadedMeeting.StartDate, scheduleViewBase, PrincipalAuthorization.Current())) return;

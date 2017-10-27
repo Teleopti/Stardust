@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					  select s).ToArray();
 		}
 
-		public ICollection<IPerson> PersonsInOrganization { get; set; }
+		public ICollection<IPerson> LoadedAgents { get; set; }
 		public IScheduleDictionary Schedules { get; set; }
 		public bool SkipResourceCalculation { get; set; }
 		public bool UseValidation { get; set; }
@@ -42,14 +42,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public SchedulingResultStateHolder()
 		{
-			PersonsInOrganization = new List<IPerson>();
+			LoadedAgents = new List<IPerson>();
 			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
 		}
 
 		public SchedulingResultStateHolder(ICollection<IPerson> personsInOrganization, IScheduleDictionary schedules, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
 			: this()
 		{
-			PersonsInOrganization = personsInOrganization;
+			LoadedAgents = personsInOrganization;
 			Schedules = schedules;
 			SkillDays = skillDays;
 		}
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_skillDays = null;
 			_skills.Clear();
 			_visibleSkills = null;
-			PersonsInOrganization = new List<IPerson>();
+			LoadedAgents = new List<IPerson>();
 			AllPersonAccounts = null;
 			Schedules = null;
 		}

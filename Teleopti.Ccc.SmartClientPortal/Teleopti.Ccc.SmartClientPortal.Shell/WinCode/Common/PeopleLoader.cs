@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                     }
                 }
             }
-            _schedulerStateHolder.SchedulingResultState.PersonsInOrganization = _peopleInOrg;
+            _schedulerStateHolder.SchedulingResultState.LoadedAgents = _peopleInOrg;
             _schedulerStateHolder.ResetFilteredPersons();
 
             return _schedulerStateHolder;

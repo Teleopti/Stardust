@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.SetRequestedScenario(scenario);
 			FillAgents(schedulerStateHolderTo, agentsInIsland, period);
 			removeUnwantedAgents(schedulerStateHolderTo, agentsInIsland);
-			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period, onlyUseSkills);
+			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period, onlyUseSkills);
 			skills = includeParentMultisiteSkills(skills);
 			FillSkillDays(schedulerStateHolderTo, scenario, skills, period);
 			removeUnwantedSkillsAndSkillDays(schedulerStateHolderTo, skills);
-			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
+			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
 			setLocks(schedulerStateHolderTo, lockInfoForStateHolder);
@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				{
 					schedulerStateHolderTo.AllPermittedPersons.Remove(agent);
 				}
-				foreach (var agent in schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
+				foreach (var agent in schedulerStateHolderTo.SchedulingResultState.LoadedAgents.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
 				{
-					schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Remove(agent);
+					schedulerStateHolderTo.SchedulingResultState.LoadedAgents.Remove(agent);
 				}
 			}
 		}
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private static void removeUnwantedScheduleRanges(ISchedulerStateHolder schedulerStateHolderTo)
 		{
-			foreach (var person in schedulerStateHolderTo.Schedules.Keys.Where(person => !schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Contains(person)).ToList())
+			foreach (var person in schedulerStateHolderTo.Schedules.Keys.Where(person => !schedulerStateHolderTo.SchedulingResultState.LoadedAgents.Contains(person)).ToList())
 			{
 				schedulerStateHolderTo.Schedules.Remove(person);
 			}

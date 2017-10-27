@@ -59,19 +59,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_workloadRepository.LoadAll();
 			schedulingResultStateHolder.AddSkills(skills);
 
-			schedulingResultStateHolder.PersonsInOrganization = optionalLoadOrganizationFunc != null ?
+			schedulingResultStateHolder.LoadedAgents = optionalLoadOrganizationFunc != null ?
 				optionalLoadOrganizationFunc(dateOnlyPeriod) : _personRepository.FindAllAgents(dateOnlyPeriod, false);
 
 			var result = _peopleAndSkillLoaderDecider.Execute(scenario, period, requestedPersons);
-			result.FilterPeople(schedulingResultStateHolder.PersonsInOrganization);
+			result.FilterPeople(schedulingResultStateHolder.LoadedAgents);
 			result.FilterSkills(skills,schedulingResultStateHolder.RemoveSkill,s => schedulingResultStateHolder.AddSkills(s));
 
 			var personsToAdd = from p in requestedPersons
-							   where !schedulingResultStateHolder.PersonsInOrganization.Contains(p)
+							   where !schedulingResultStateHolder.LoadedAgents.Contains(p)
 			                   select p;
-			personsToAdd.ForEach(p => schedulingResultStateHolder.PersonsInOrganization.Add(p));
+			personsToAdd.ForEach(p => schedulingResultStateHolder.LoadedAgents.Add(p));
 
-			var personsProvider = _personProviderMaker.Invoke(schedulingResultStateHolder.PersonsInOrganization);
+			var personsProvider = _personProviderMaker.Invoke(schedulingResultStateHolder.LoadedAgents);
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 
 			schedulingResultStateHolder.Schedules =

@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					throw new InvalidDataException("ScheduleDictionary could not be initiated");
 			}
 
-			// Clean ScheduleDictionary from all persons not present in PersonsInOrganization
+			// Clean ScheduleDictionary from all persons not present in LoadedAgents
 			var personIds = personsInOrganization.ToDictionary(p => p.Id);
             var personsToRemove = new List<IPerson>();
             foreach (var person in scheduleDictionary.Keys)

@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				using (ISchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder())
 				{
 					stateHolder.Schedules = scheduleDictionary;
-					stateHolder.PersonsInOrganization = personList;
+					stateHolder.LoadedAgents = personList;
 
 					var fullWeekOuterWeekPeriodCreator = new FullWeekOuterWeekPeriodCreator(schedulePeriod.DateOnlyPeriod, person);
 					var scheduleMatrix = new ScheduleMatrixPro(stateHolder, fullWeekOuterWeekPeriodCreator, schedulePeriod);

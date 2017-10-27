@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
         public virtual void Execute(IEventMessage eventMessage)
         {
             var person =
-                _schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization.FirstOrDefault(
+                _schedulingResultLoader.SchedulerState.SchedulingResultState.LoadedAgents.FirstOrDefault(
                     p => p.Id == eventMessage.ReferenceObjectId);
             if (person == null)
             {
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
                 uow.Reassociate(_schedulingResultLoader.Contracts);
                 uow.Reassociate(_schedulingResultLoader.ContractSchedules);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.RequestedScenario);
-                uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization);
+                uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.LoadedAgents);
 
                 deleteOnEvent(message);
                 associateRootsForPersonAssignment(uow);

@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			StateHolder.SetRequestedScenario(scenario);
 			StateHolder.SchedulingResultState.Schedules = dictionary;
 			StateHolder.AllPermittedPersons.Add(person);
-			StateHolder.SchedulingResultState.PersonsInOrganization = StateHolder.AllPermittedPersons;
+			StateHolder.SchedulingResultState.LoadedAgents = StateHolder.AllPermittedPersons;
 			StateHolder.FilterPersons(StateHolder.AllPermittedPersons);
 			StateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2014, 3, 22, 2014, 4, 4),
 				TimeZoneInfo.Utc);

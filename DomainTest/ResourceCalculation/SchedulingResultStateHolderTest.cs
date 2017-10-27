@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<ISkill> list = target.VisibleSkills;
             Assert.IsNotNull(list);
             Assert.AreEqual(1, target.Skills.Length);
-            Assert.IsNotNull(target.PersonsInOrganization);
+            Assert.IsNotNull(target.LoadedAgents);
             Assert.IsNotNull(target.Schedules);
             Assert.IsNotNull(target.SkillDays);
             Assert.IsNotNull(target.SkillStaffPeriodHolder);

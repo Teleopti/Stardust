@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					if (_allPersons == null)
 					{
-						_allPersons = new List<IPerson>(_stateHolder().SchedulingResultState.PersonsInOrganization);
+						_allPersons = new List<IPerson>(_stateHolder().SchedulingResultState.LoadedAgents);
 					}
 				}
 				

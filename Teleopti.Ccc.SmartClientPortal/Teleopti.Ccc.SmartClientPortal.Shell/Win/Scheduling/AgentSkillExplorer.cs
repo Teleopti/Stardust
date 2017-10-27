@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public void Setup(ISchedulerStateHolder stateHolder, ILifetimeScope container)
 		{
 			var singleSkillDictionary = container.Resolve<ISingleSkillDictionary>();
-			singleSkillDictionary.Create(stateHolder.SchedulingResultState.PersonsInOrganization.ToList(), stateHolder.RequestedPeriod.DateOnlyPeriod);
+			singleSkillDictionary.Create(stateHolder.SchedulingResultState.LoadedAgents.ToList(), stateHolder.RequestedPeriod.DateOnlyPeriod);
 			listView.View = View.Details;
 			listView.GridLines = true;
 			listView.FullRowSelect = true;
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			var period = stateHolder.RequestedPeriod.DateOnlyPeriod;
 
-			foreach (var person in stateHolder.SchedulingResultState.PersonsInOrganization)
+			foreach (var person in stateHolder.SchedulingResultState.LoadedAgents)
 			{
 				foreach (var day in period.DayCollection())
 				{

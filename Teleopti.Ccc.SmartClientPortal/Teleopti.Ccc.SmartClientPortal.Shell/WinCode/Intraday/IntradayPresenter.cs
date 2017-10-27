@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 				using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 				{
 					reassociateCommonStateHolder(uow);
-					uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization);
+					uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.LoadedAgents);
 					uow.Reassociate(MultiplicatorDefinitionSets);
 					foreach (var range in SchedulerStateHolder.Schedules.Values)
 					{

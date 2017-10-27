@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingProgress backgroundWorker)
 		{
 			_backgroundWorker = backgroundWorker;
-			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_stateHolder().Schedules, _stateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
+			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_stateHolder().Schedules, _stateHolder().SchedulingResultState.LoadedAgents, selectedPeriod);
 			new MatrixOvertimeLocker(allMatrixes).Execute();
 			_intervalOptimizationService.ReportProgress += intervalOptimizationServiceReportProgress;
 			_intervalOptimizationService.Execute(optimizationPreferences, selectedPeriod, selectedAgents, _stateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer);

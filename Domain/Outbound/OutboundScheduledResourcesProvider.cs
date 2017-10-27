@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, allSkills, scenario);
 			var schedulerStateHolder = _schedulerStateHolder();
 			var stateHolder = schedulerStateHolder.SchedulingResultState;
-			stateHolder.PersonsInOrganization = people.AllPeople;
+			stateHolder.LoadedAgents = people.AllPeople;
 			stateHolder.SkillDays = forecast;
 			stateHolder.AddSkills(allSkills);
 			deciderResult.FilterSkills(allSkills,stateHolder.RemoveSkill,s => stateHolder.AddSkills(s));

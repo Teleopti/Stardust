@@ -607,7 +607,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				var schedulesDictionary = scheduleRepository.FindSchedulesForPersons(scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, period, persons, false);
 
-				//Clean ScheduleDictionary from all persons not present in PersonsInOrganization
+				//Clean ScheduleDictionary from all persons not present in LoadedAgents
 				IList<IPerson> personsToRemove = new List<IPerson>();
 				foreach (var keyValuePair in schedulesDictionary)
 				{

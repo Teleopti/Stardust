@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
 			{
-				var teamInfo = teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.PersonsInOrganization, selectedPerson, selectedPeriod, allPersonMatrixList);
+				var teamInfo = teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.LoadedAgents, selectedPerson, selectedPeriod, allPersonMatrixList);
 				if (teamInfo != null)
 					allTeamInfoListOnStartDate.Add(teamInfo);
 			}

@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				uow.Reassociate(_owner.SchedulerState.SchedulingResultState.PersonsInOrganization);
+				uow.Reassociate(_owner.SchedulerState.SchedulingResultState.LoadedAgents);
 				uow.Reassociate(dataToReassociate(null));
 				_presenter.DoWork(e);
 			}

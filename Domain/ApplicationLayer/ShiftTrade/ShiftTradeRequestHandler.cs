@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private void clearStateHolder()
 		{
 			_schedulingResultStateHolder.Schedules = null;
-			_schedulingResultStateHolder.PersonsInOrganization = null;
+			_schedulingResultStateHolder.LoadedAgents = null;
 		}
 
 		private INewBusinessRuleCollection getAllEnabledBusinessRules(CultureInfo cultureInfo, AcceptShiftTradeEvent @event)

@@ -125,12 +125,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_skillDayLoadHelper.Stub(x => x.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario))
 				.Return(new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
-			Assert.AreEqual(0, _schedulingResultStateHolder.PersonsInOrganization.Count);
+			Assert.AreEqual(0, _schedulingResultStateHolder.LoadedAgents.Count);
 			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder, loadLight: false);
 
 			_peopleAndSkillLoadDecider.AssertWasCalled(x => x.Execute(scenario, period, requestedPeople));
-			Assert.AreEqual(1, _schedulingResultStateHolder.PersonsInOrganization.Count);
-			Assert.IsTrue(_schedulingResultStateHolder.PersonsInOrganization.Contains(person));
+			Assert.AreEqual(1, _schedulingResultStateHolder.LoadedAgents.Count);
+			Assert.IsTrue(_schedulingResultStateHolder.LoadedAgents.Contains(person));
 		}
 	}
 }

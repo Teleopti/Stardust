@@ -163,12 +163,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
         private void initializePeopleInOrganization()
         {
-            ICollection<IPerson> peopleInOrg = SchedulerState.SchedulingResultState.PersonsInOrganization;
+            ICollection<IPerson> peopleInOrg = SchedulerState.SchedulingResultState.LoadedAgents;
             _deciderResult.FilterPeople(peopleInOrg);
 
             peopleInOrg = new HashSet<IPerson>(peopleInOrg);
             SchedulerState.AllPermittedPersons.ForEach(peopleInOrg.Add);
-            SchedulerState.SchedulingResultState.PersonsInOrganization = peopleInOrg;
+            SchedulerState.SchedulingResultState.LoadedAgents = peopleInOrg;
 
             SchedulerState.ResetFilteredPersons();
         }
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			var requestedPeriod = SchedulerState.RequestedPeriod.Period().ChangeEndTime(TimeSpan.FromHours(24)).ChangeStartTime(TimeSpan.FromHours(-24));
 
             IPersonProvider personsInOrganizationProvider =
-                new PersonProvider(SchedulerState.SchedulingResultState.PersonsInOrganization);
+                new PersonProvider(SchedulerState.SchedulingResultState.LoadedAgents);
             personsInOrganizationProvider.DoLoadByPerson =
                 _loadScheduleByPersonSpecification.IsSatisfiedBy(_deciderResult);
 
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         {
             uow.Reassociate(Contracts);
             uow.Reassociate(ContractSchedules);
-            uow.Reassociate(SchedulerState.SchedulingResultState.PersonsInOrganization);
+            uow.Reassociate(SchedulerState.SchedulingResultState.LoadedAgents);
         }
 
         private void loadCommonState(IUnitOfWork uow)

@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				//set back
 				optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
 
-				var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_stateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
+				var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_stateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.LoadedAgents, selectedPeriod);
 				runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes,
 					selectedAgents.ToArray(), rollbackService, resourceCalculateDelayer, backgroundWorker,
 					dayOffOptimizationPreferenceProvider);
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var matrixListForFairness = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_stateHolder().Schedules, _stateHolder().PersonsInOrganization, selectedPeriod);
+			var matrixListForFairness = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_stateHolder().Schedules, _stateHolder().LoadedAgents, selectedPeriod);
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, optimizationPreferences, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(),
 				_scheduleDayChangeCallback(), tagSetter);

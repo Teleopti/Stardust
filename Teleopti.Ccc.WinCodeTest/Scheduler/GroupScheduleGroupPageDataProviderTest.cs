@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			_uow = MockRepository.GenerateMock<IUnitOfWork>();
             
-            _resultHolder.Stub(x => x.PersonsInOrganization).Return(_people);
+            _resultHolder.Stub(x => x.LoadedAgents).Return(_people);
 			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 
             _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(),
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldGetAllLoadedFromStateHolder()
 		{
 			var person1 = PersonFactory.CreatePerson("ittan");
-			var person2 = PersonFactory.CreatePerson("tvåan");
+			var person2 = PersonFactory.CreatePerson("tvÃ¥an");
 			var person3 = PersonFactory.CreatePerson("trean");
 			
 			_people.Clear();

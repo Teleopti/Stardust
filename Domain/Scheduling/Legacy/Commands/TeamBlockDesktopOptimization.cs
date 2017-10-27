@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.CollectingData, optimizationPreferences.Advanced.RefreshScreenInterval);
 			_backgroundWorker.ReportProgress(1, args);
 
-			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
+			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.LoadedAgents, selectedPeriod);
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
 				_dayOffOptimizationDesktopTeamBlock.Execute(selectedPeriod, selectedPersons, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, schedulingOptions.GroupOnGroupPageForTeamBlockPer, null);
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);
 				}
 
-				allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod);
+				allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.LoadedAgents, selectedPeriod);
 
 				solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
 					rollbackServiceWithResourceCalculation, allMatrixes,
@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						resourceCalculateDelayer,
 						_schedulerStateHolder().SchedulingResultState.SkillDays,
 						_schedulerStateHolder().Schedules,
-						_schedulerStateHolder().SchedulingResultState.PersonsInOrganization,
+						_schedulerStateHolder().SchedulingResultState.LoadedAgents,
 						NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState),
 						teamBlockGenerator,
 						new FixedBlockPreferenceProvider(optimizationPreferences.Extra));

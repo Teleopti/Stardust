@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons,
 		    ISchedulingResultStateHolder schedulingResultStateHolder)
 	    {
-		    schedulingResultStateHolder.PersonsInOrganization = requestedPersons.ToList();
+		    schedulingResultStateHolder.LoadedAgents = requestedPersons.ToList();
 
-		    var personsProvider = _personProviderMaker.Invoke(schedulingResultStateHolder.PersonsInOrganization);
+		    var personsProvider = _personProviderMaker.Invoke(schedulingResultStateHolder.LoadedAgents);
 		    personsProvider.DoLoadByPerson = true;
 
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);

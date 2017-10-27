@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				set { throw new NotImplementedException(); }
 			}
 
-			public ICollection<IPerson> PersonsInOrganization
+			public ICollection<IPerson> LoadedAgents
 			{
 				get { throw new NotImplementedException(); }
 				set { throw new NotImplementedException(); }

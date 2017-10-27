@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private bool isRelevantPerson(Guid personId)
 		{
-			return _owner.SchedulerState.SchedulingResultState.PersonsInOrganization.Any(p => p.Id == personId);
+			return _owner.SchedulerState.SchedulingResultState.LoadedAgents.Any(p => p.Id == personId);
 		}
 
 		public void FillReloadedScheduleData(IPersistableScheduleData databaseVersionOfEntity)
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	  public void ReassociateDataForAllPeople()
 		{
 			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
-			uow.Reassociate(_owner.SchedulerState.SchedulingResultState.PersonsInOrganization);
+			uow.Reassociate(_owner.SchedulerState.SchedulingResultState.LoadedAgents);
 			reassociateScheduleStuff(uow);
 		}
 

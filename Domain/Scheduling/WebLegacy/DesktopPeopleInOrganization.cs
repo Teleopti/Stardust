@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public IEnumerable<IPerson> Agents(DateOnlyPeriod period)
 		{
-			return _desktopContext.CurrentContext().SchedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization;
+			return _desktopContext.CurrentContext().SchedulerStateHolderFrom.SchedulingResultState.LoadedAgents;
 		}
 	}
 }

@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			};
 
 			var shiftNudgeDirective = createShiftNudgeDirective(scheduleDay, overtimePreferences);
-			var teamInfo = _teamInfoFactory.CreateTeamInfo(stateHolder.SchedulingResultState.PersonsInOrganization, agent, date, _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, new[] { scheduleDay }));
+			var teamInfo = _teamInfoFactory.CreateTeamInfo(stateHolder.SchedulingResultState.LoadedAgents, agent, date, _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, new[] { scheduleDay }));
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder());
 			if (teamBlockInfo == null)
 				return;

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                 var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
                 foreach (IPerson selectedPerson in selectedPersons)
                 {
-                    ITeamInfo teamInfo = _teamInfoFactory.CreateTeamInfo(_schedulingResultStateHolder().PersonsInOrganization, selectedPerson, selectedPeriod, allPersonMatrixList);
+                    ITeamInfo teamInfo = _teamInfoFactory.CreateTeamInfo(_schedulingResultStateHolder().LoadedAgents, selectedPerson, selectedPeriod, allPersonMatrixList);
                     if (teamInfo != null)
                         allTeamInfoListOnStartDate.Add(teamInfo);
                 }

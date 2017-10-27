@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(),
 				schedulingOptions,
 				new NoSchedulingProgress(),
-				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
+				schedulerStateHolder.SchedulingResultState.LoadedAgents.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
 				);
 
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.False();

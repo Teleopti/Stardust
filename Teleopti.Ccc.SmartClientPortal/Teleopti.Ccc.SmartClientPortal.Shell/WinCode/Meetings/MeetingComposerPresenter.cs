@@ -125,13 +125,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             }
             else
             {
-                var availablePersons = _schedulerStateHolder.SchedulingResultState.PersonsInOrganization;
+                var availablePersons = _schedulerStateHolder.SchedulingResultState.LoadedAgents;
 	            var multi = _schedulerStateHolder.CommonStateHolder.MultiplicatorDefinitionSets;
 
                 _schedulerStateHolder = new SchedulerStateHolder(_schedulerStateHolder.RequestedScenario,
                                                                  _schedulerStateHolder.RequestedPeriod,
 																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())),new SchedulingResultStateHolder(), new TimeZoneGuard());
-                _schedulerStateHolder.SchedulingResultState.PersonsInOrganization = new List<IPerson>(availablePersons);
+                _schedulerStateHolder.SchedulingResultState.LoadedAgents = new List<IPerson>(availablePersons);
 					((List<IMultiplicatorDefinitionSet>)_schedulerStateHolder.CommonStateHolder.MultiplicatorDefinitionSets).AddRange(multi);
             }
 
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 
         public void ShowAddressBook()
         {
-            var notDeletedPersons = SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Cast<IDeleteTag>().Where(person => !person.IsDeleted).Cast<IPerson>().ToList();
+            var notDeletedPersons = SchedulerStateHolder.SchedulingResultState.LoadedAgents.Cast<IDeleteTag>().Where(person => !person.IsDeleted).Cast<IPerson>().ToList();
             var addressBookViewModel = new AddressBookViewModel(
                     ContactPersonViewModel.Parse(notDeletedPersons,
                                                  CommonNameDescriptionSetting).ToList(), _model.RequiredParticipants,

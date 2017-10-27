@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(), 
 				new SchedulingOptions(),
 				new NoSchedulingProgress(), 
-				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
+				schedulerStateHolder.SchedulingResultState.LoadedAgents.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
 				);
 		
 			var allAssignmentsStartTime = schedulerStateHolder.Schedules.Select(keyValuePair => keyValuePair.Value).
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(), 
 				options,
 				new NoSchedulingProgress(),
-				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
+				schedulerStateHolder.SchedulingResultState.LoadedAgents.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
 				);
 
 			var allAssignmentsStartTime = schedulerStateHolder.Schedules.Select(keyValuePair => keyValuePair.Value).
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(),
 				new SchedulingOptions(),
 				new NoSchedulingProgress(),
-				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
+				schedulerStateHolder.SchedulingResultState.LoadedAgents.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
 				);
 
 			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference

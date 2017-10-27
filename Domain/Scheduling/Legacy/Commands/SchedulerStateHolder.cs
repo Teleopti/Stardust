@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         {
 	        var allPermittedPersonIds = AllPermittedPersons.Select(x => x.Id.GetValueOrDefault()).ToArray();
 	        _filteredAgents =
-		        SchedulingResultState.PersonsInOrganization.Where(p => Array.IndexOf(allPermittedPersonIds, p.Id.Value) >= 0)
+		        SchedulingResultState.LoadedAgents.Where(p => Array.IndexOf(allPermittedPersonIds, p.Id.Value) >= 0)
 			        .OrderBy(CommonAgentName)
 			        .ToDictionary(p => p.Id.Value);
 			_combinedFilteredAgents = new Lazy<IDictionary<Guid, IPerson>>(combinedFilters);
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (updatedRequest != null)
 			{
-				if (!SchedulingResultState.PersonsInOrganization.Contains(updatedRequest.Person)) //Do not try to update persons that are not loaded in scheduler
+				if (!SchedulingResultState.LoadedAgents.Contains(updatedRequest.Person)) //Do not try to update persons that are not loaded in scheduler
 					return null;
 
 				updatePersonAccountFromBroker(scheduleStorage, updatedRequest);

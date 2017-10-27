@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var leftDate = dayOffDateToWorkWith.AddDays(-1);
 			var rightDate = dayOffDateToWorkWith.AddDays(1);
 
-			var possibleLeftTeamBlocks = teamBlockGenerator.Generate(schedulingResultStateHolder.PersonsInOrganization, allPersonMatrixList, new DateOnlyPeriod(leftDate, leftDate),
+			var possibleLeftTeamBlocks = teamBlockGenerator.Generate(schedulingResultStateHolder.LoadedAgents, allPersonMatrixList, new DateOnlyPeriod(leftDate, leftDate),
 				new List<IPerson> {person},
 				schedulingOptions);
 			var filteredPossibleLeftTeamBlocks = new List<ITeamBlockInfo>();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				lockUnSelectedInTeamBlock(leftTeamBlock, selectedPersons, selectedPeriod);
 			}
 
-			var possibleRightTeamBlocks = teamBlockGenerator.Generate(schedulingResultStateHolder.PersonsInOrganization, allPersonMatrixList,
+			var possibleRightTeamBlocks = teamBlockGenerator.Generate(schedulingResultStateHolder.LoadedAgents, allPersonMatrixList,
 				new DateOnlyPeriod(rightDate, rightDate),
 				new List<IPerson> {person}, schedulingOptions);
 			ITeamBlockInfo rightTeamBlock = null;

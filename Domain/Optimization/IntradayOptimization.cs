@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, stateHolder.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);
 			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
-			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(stateHolder.Schedules, stateHolder.SchedulingResultState.PersonsInOrganization, period);
+			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(stateHolder.Schedules, stateHolder.SchedulingResultState.LoadedAgents, period);
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons,_schedulerStateHolder().Schedules, optimizationPreferences.Extra.TeamGroupPage);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _blockPreferencesMapper);
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					resourceCalculateDelayer,
 					stateHolder.SchedulingResultState.SkillDays,
 					stateHolder.Schedules,
-					stateHolder.SchedulingResultState.PersonsInOrganization,
+					stateHolder.SchedulingResultState.LoadedAgents,
 					NewBusinessRuleCollection.AllForScheduling(stateHolder.SchedulingResultState),
 					teamBlockGenerator,
 					blockPreferenceProvider);

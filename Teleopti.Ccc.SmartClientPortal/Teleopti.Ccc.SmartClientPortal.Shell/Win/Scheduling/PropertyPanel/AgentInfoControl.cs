@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 
 			var service = _container.Resolve<IDistributionReportService>();
 			var report = service.CreateReport(person, _groupPagePerDate.GetGroupPageByDate(dateOnly),
-				state.PersonsInOrganization.ToList(), state.Schedules);
+				state.LoadedAgents.ToList(), state.Schedules);
 			foreach (var shiftCategory in report.DistributionDictionary.Keys)
 			{
 				var item = new ListViewItem(shiftCategory.Description.Name);
