@@ -538,7 +538,6 @@
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationContextPeriodTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationResultTest.cs" />
     <Compile Include="SchedulingScenarios\TimeBetweenDaysOptimization\TimeBetweenDaysOptimizationTeamBlockDesktopTest.cs" />
-    <Compile Include="Scheduling\BackToLegalShiftCommandTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandSpecificTest.cs" />
