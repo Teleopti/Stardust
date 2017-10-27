@@ -42,7 +42,9 @@ namespace Teleopti.Ccc.WebTest.Filters
 		{
 			SetupRoutes();
 			_controller = CreateTestController(_controllerAction);
+			// ReSharper disable All 
 			invoker.InvokeAction(_controller.ControllerContext, "DummyAction");
+			// ReSharper restore All 
 			return invoker.ActionResult;
 		}
 

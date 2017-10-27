@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.WebTest.Core
 	[TestFixture]
 	public class ErrorMessageResolverTest
 	{
+		private const string controllerName = "Persmission";
+		private const string actionName = "Error";
 		private ErrorMessageProvider target;
 
 		[SetUp]
@@ -21,8 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldDefaultReturnGenericMessage()
 		{
-			var ex = new Exception("bla bla");
-			var handleErrorInfo = new HandleErrorInfo(ex, "Persmission", "Error");
+			var handleErrorInfo = creatHandleErrorInfo(new Exception("bla bla"));
 
 			target.ResolveMessage(handleErrorInfo)
 				.Should().Be.EqualTo(ErrorMessageProvider.GenericMessage);
@@ -31,8 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldDefaultReturnGenericShortMessage()
 		{
-			var ex = new Exception("bla bla");
-			var handleErrorInfo = new HandleErrorInfo(ex, "Persmission", "Error");
+			var handleErrorInfo = creatHandleErrorInfo(new Exception("bla bla"));
 
 			target.ResolveShortMessage(handleErrorInfo)
 				.Should().Be.EqualTo(ErrorMessageProvider.GenericShortMessage);
@@ -43,11 +43,18 @@ namespace Teleopti.Ccc.WebTest.Core
 		public void PermissionErrorShouldReturnPermissionMessage()
 		{
 			const string errorMessage = "You dont have permission";
-			var handleErrorInfo = new HandleErrorInfo(new PermissionException(errorMessage), "Persmission", "Error");
+			var handleErrorInfo = creatHandleErrorInfo(new PermissionException(errorMessage));
 
 			var result = target.ResolveMessage(handleErrorInfo);
 
 			result.Should().Be.EqualTo(errorMessage);
+		}
+
+		private HandleErrorInfo creatHandleErrorInfo(Exception ex)
+		{
+			// ReSharper disable All 
+			return new HandleErrorInfo(ex, controllerName, actionName);
+			// ReSharper restore All 
 		}
 	}
 }
