@@ -1997,7 +1997,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridBaseStyle6,
 			gridBaseStyle7,
 			gridBaseStyle8});
-			this.gridControlOvertimeRequestOpenPeriods.ColCount = 11;
+			this.gridControlOvertimeRequestOpenPeriods.ColCount = 6;
 			this.gridControlOvertimeRequestOpenPeriods.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
 			new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.gridControlOvertimeRequestOpenPeriods.ContextMenuStrip = this.contextMenuStripOpenPeriodsGrid;

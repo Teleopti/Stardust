@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			{
 				ExpectInitialize(repositoryCollection);
 				ExpectSetSelectedWorkflowControlSetModel();
-				Expect.Call(_view.ConfirmDeleteOfAbsenceRequestPeriod()).Return(true);
+				Expect.Call(_view.ConfirmDeleteOfRequestPeriod()).Return(true);
 				_view.SetOpenPeriodsGridRowCount(0);
 				_view.RefreshOpenPeriodsGrid();
 			}
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			{
 				ExpectInitialize(repositoryCollection);
 				ExpectSetSelectedWorkflowControlSetModel();
-				Expect.Call(_view.ConfirmDeleteOfAbsenceRequestPeriod()).Return(false);
+				Expect.Call(_view.ConfirmDeleteOfRequestPeriod()).Return(false);
 			}
 			using (_mocks.Playback())
 			{

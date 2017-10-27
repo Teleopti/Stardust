@@ -68,10 +68,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		void SetOpenPeriodsGridRowCount(int rowCount);
 
 		/// <summary>
-		/// Confirms the delete of absence request period.
+		/// Confirms the delete of request period.
 		/// </summary>
 		/// <returns></returns>
-		bool ConfirmDeleteOfAbsenceRequestPeriod();
+		bool ConfirmDeleteOfRequestPeriod();
 
 		/// <summary>
 		/// Gets the absence request period selected.
@@ -202,5 +202,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		void SetOvertimeProbability(bool overtimeProbability);
 		void SetAutoGrantOvertimeRequest(bool autoGrantOvertimeRequest);
+
+		void RefreshOvertimeOpenPeriodsGrid();
+
+		void SetOvertimeOpenPeriodsGridRowCount(int rowCount);
 	}
 }

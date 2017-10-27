@@ -13,17 +13,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		private IOvertimeRequestOpenPeriod _overtimeRequestOpenPeriod;
 		private OvertimeRequestPeriodTypeModel _periodType;
 
-		public OvertimeRequestPeriodModel(IOvertimeRequestOpenPeriod absenceRequestOpenPeriod, WorkflowControlSetModel owner)
+		public OvertimeRequestPeriodModel(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, WorkflowControlSetModel owner)
 		{
 			Owner = owner;
-			SetDomainEntity(absenceRequestOpenPeriod);
+			SetDomainEntity(overtimeRequestOpenPeriod);
 		}
 
 		public IOvertimeRequestOpenPeriod DomainEntity => _overtimeRequestOpenPeriod;
 
 		public OvertimeRequestPeriodTypeModel PeriodType => _periodType;
 
-		public OvertimeRequestAutoGrantType OvertimeRequestAutoGrantType
+		public OvertimeRequestAutoGrantType AutoGrantType
 		{
 			get => _overtimeRequestOpenPeriod.AutoGrantType;
 			set
@@ -129,9 +129,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			}
 		}
 
-		public void SetDomainEntity(IOvertimeRequestOpenPeriod absenceRequestOpenPeriod)
+		public void SetDomainEntity(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
 		{
-			_overtimeRequestOpenPeriod = absenceRequestOpenPeriod;
+			_overtimeRequestOpenPeriod = overtimeRequestOpenPeriod;
 			_periodType = new OvertimeRequestPeriodTypeModel(_overtimeRequestOpenPeriod, string.Empty);
 			foreach (var periodType in WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters)
 			{

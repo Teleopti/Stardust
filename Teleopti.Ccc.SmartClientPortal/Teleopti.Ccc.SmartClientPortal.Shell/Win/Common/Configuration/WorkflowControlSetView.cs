@@ -22,6 +22,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateTimePeriodVisualizer;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.UserTexts;
@@ -107,8 +108,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			foreach (var value in Enum.GetValues(typeof(OvertimeRequestAutoGrantType)))
 			{
-				var multiplicatorTypeView = new OvertimeRequestAutoGrantTypeAdapter((OvertimeRequestAutoGrantType)value);
-				_overtimeRequestAutoGrantTypeAdapterCollection.Add(multiplicatorTypeView);
+				var autoGrantTypeView = new OvertimeRequestAutoGrantTypeAdapter((OvertimeRequestAutoGrantType) value)
+				{
+					DisplayName = LanguageResourceHelper.Translate(Enum.GetName(typeof(OvertimeRequestAutoGrantType), value))
+				};
+				_overtimeRequestAutoGrantTypeAdapterCollection.Add(autoGrantTypeView);
 			}
 		}
 
@@ -233,7 +237,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			var autoGrantColumn =
 				new SFGridDropDownEnumColumn<OvertimeRequestPeriodModel, OvertimeRequestAutoGrantTypeAdapter, OvertimeRequestAutoGrantType>(
-					"OvertimeRequestAutoGrantType", Resources.AutoGrant," ", _overtimeRequestAutoGrantTypeAdapterCollection, "DisplayName", "AutoGrantType");
+					"AutoGrantType", Resources.AutoGrant," ", _overtimeRequestAutoGrantTypeAdapterCollection, "DisplayName", "AutoGrantType");
 
 			columnList.Add(autoGrantColumn);
 
@@ -392,6 +396,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridControlAbsenceRequestOpenPeriods.BeginUpdate();
 			_presenter.SetSelectedWorkflowControlSetModel(selectedItem);
 			_gridHelper.SetSourceList(selectedItem.AbsenceRequestPeriodModels);
+			_overtimeRequestOpenPeriodGridHelper.SetSourceList(selectedItem.OvertimeRequestPeriodModels);
 			gridControlAbsenceRequestOpenPeriods.EndUpdate();
 			refreshProjectionGrid();
 
@@ -693,13 +698,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			refreshProjectionGrid();
 		}
 
+		public void RefreshOvertimeOpenPeriodsGrid()
+		{
+			gridControlOvertimeRequestOpenPeriods.Invalidate();
+		}
+
 		public void SetOpenPeriodsGridRowCount(int rowCount)
 		{
 			gridControlAbsenceRequestOpenPeriods.RowCount = 0;
 			gridControlAbsenceRequestOpenPeriods.RowCount = rowCount + gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount;
 		}
 
-		public bool ConfirmDeleteOfAbsenceRequestPeriod()
+		public void SetOvertimeOpenPeriodsGridRowCount(int rowCount)
+		{
+			gridControlOvertimeRequestOpenPeriods.RowCount = 0;
+			gridControlOvertimeRequestOpenPeriods.RowCount = rowCount + gridControlOvertimeRequestOpenPeriods.Rows.HeaderCount;
+		}
+
+		public bool ConfirmDeleteOfRequestPeriod()
 		{
 			string caption = string.Format(CurrentCulture, Resources.ConfirmDelete);
 			DialogResult dialogResult = ViewBase.ShowConfirmationMessage(Resources.AreYouSureYouWantToDelete, caption);
@@ -1311,12 +1327,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void buttonAdvDeleteOvertimeRequestPeriod_Click(object sender, EventArgs e)
 		{
-			
+			ReadOnlyCollection<OvertimeRequestPeriodModel> selectedOvertimeRequestPeriodModels =
+				_overtimeRequestOpenPeriodGridHelper.FindSelectedItems(gridControlOvertimeRequestOpenPeriods.Rows.HeaderCount + 1);
+
+			_presenter.DeleteOvertimeRequestPeriod(new List<OvertimeRequestPeriodModel>(selectedOvertimeRequestPeriodModels));
 		}
 
 		private void buttonAddOvertimeRequestPeriod_Click(object sender, EventArgs e)
 		{
-			
+			_presenter.AddOvertimeRequestOpenDatePeriod();
 		}
 
 		private void gridControlOvertimeRequestOpenPeriods_MouseDown(object sender, MouseEventArgs e)

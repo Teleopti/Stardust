@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		bool IsNew { get; }
 		IWorkflowControlSet OriginalDomainEntity { get; }
 		IList<AbsenceRequestPeriodModel> AbsenceRequestPeriodModels { get; }
+		IList<OvertimeRequestPeriodModel> OvertimeRequestPeriodModels { get; }
 		DateTime? SchedulePublishedToDate { get; set; }
 		DateOnlyPeriod PreferenceInputPeriod { get; set; }
 		DateOnlyPeriod PreferencePeriod { get; set; }
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		private static IList<AbsenceRequestPeriodTypeModel> _defaultAbsenceRequestPeriodAdapters;
 		private static IList<OvertimeRequestPeriodTypeModel> _defaultOvertimeRequestPeriodAdapters;
 		private readonly List<AbsenceRequestPeriodModel> _absenceRequestPeriodModels = new List<AbsenceRequestPeriodModel>();
+		private readonly List<OvertimeRequestPeriodModel> _overtimeRequestPeriodModels = new List<OvertimeRequestPeriodModel>();
 
 		public WorkflowControlSetModel(IWorkflowControlSet domainEntity)
 			: this(domainEntity, domainEntity.EntityClone()) { }
@@ -168,6 +170,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				_absenceRequestPeriodModels.Clear();
 				_absenceRequestPeriodModels.AddRange(DomainEntity.AbsenceRequestOpenPeriods.Select(a => new AbsenceRequestPeriodModel(a, this)));
 				return _absenceRequestPeriodModels;
+			}
+		}
+
+		public IList<OvertimeRequestPeriodModel> OvertimeRequestPeriodModels
+		{
+			get
+			{
+				_overtimeRequestPeriodModels.Clear();
+				_overtimeRequestPeriodModels.AddRange(DomainEntity.OvertimeRequestOpenPeriods.Select(a => new OvertimeRequestPeriodModel(a, this)));
+				return _overtimeRequestPeriodModels;
 			}
 		}
 

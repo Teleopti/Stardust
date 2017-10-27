@@ -102,6 +102,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created date: 2010-04-22
 		/// </remarks>
 		int RemoveOpenAbsenceRequestPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod);
+		int RemoveOpenOvertimeRequestPeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod);
 
 		/// <summary>
 		/// Inserts the period.

@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetName(_selectedModel.Name);
 			_view.SetUpdatedInfo(_selectedModel.UpdatedInfo);
 			_view.SetOpenPeriodsGridRowCount(_selectedModel.AbsenceRequestPeriodModels.Count);
+			_view.SetOvertimeOpenPeriodsGridRowCount(_selectedModel.OvertimeRequestPeriodModels.Count);
 			_view.SetWriteProtectedDays(_selectedModel.WriteProtection);
 			_view.LoadDateOnlyVisualizer();
 			_view.SetMatchingSkills(_selectedModel);
@@ -310,6 +311,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			addNewOpenPeriod(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item);
 		}
 
+		public void AddOvertimeRequestOpenDatePeriod()
+		{
+			addNewOvertimeRequestOpenPeriod(WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters[0].Item);
+		}
+
 		public void AddOpenRollingPeriod()
 		{
 			addNewOpenPeriod(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item);
@@ -330,15 +336,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.RefreshOpenPeriodsGrid();
 		}
 
+		private void addNewOvertimeRequestOpenPeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		{
+			_selectedModel.DomainEntity.AddOpenOvertimeRequestPeriod(overtimeRequestOpenPeriod);
+			_selectedModel.IsDirty = true;
+
+			_view.SetOvertimeOpenPeriodsGridRowCount(_selectedModel.OvertimeRequestPeriodModels.Count);
+			_view.RefreshOvertimeOpenPeriodsGrid();
+		}
+
 		public void DeleteAbsenceRequestPeriod(IList<AbsenceRequestPeriodModel> absenceRequestPeriodModels)
 		{
 			if (absenceRequestPeriodModels == null || absenceRequestPeriodModels.Count == 0)
 				return;
 
-			if (!_view.ConfirmDeleteOfAbsenceRequestPeriod())
+			if (!_view.ConfirmDeleteOfRequestPeriod())
 				return;
 
 			deleteSelectedAbsenceRequestPeriods(absenceRequestPeriodModels);
+		}
+
+		public void DeleteOvertimeRequestPeriod(IList<OvertimeRequestPeriodModel> overtimeRequestPeriodModels)
+		{
+			if (overtimeRequestPeriodModels == null || overtimeRequestPeriodModels.Count == 0)
+				return;
+
+			if (!_view.ConfirmDeleteOfRequestPeriod())
+				return;
+
+			deleteSelectedOvertimeRequestPeriods(overtimeRequestPeriodModels);
 		}
 
 		private void deleteSelectedAbsenceRequestPeriods(IEnumerable<AbsenceRequestPeriodModel> absenceRequestPeriodModels)
@@ -351,6 +377,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_selectedModel.IsDirty = true;
 			_view.SetOpenPeriodsGridRowCount(_selectedModel.AbsenceRequestPeriodModels.Count);
 			_view.RefreshOpenPeriodsGrid();
+		}
+
+		private void deleteSelectedOvertimeRequestPeriods(IEnumerable<OvertimeRequestPeriodModel> overtimeRequestPeriodModels)
+		{
+			foreach (var overtimeRequestPeriodModel in overtimeRequestPeriodModels)
+			{
+				_selectedModel.DomainEntity.RemoveOpenOvertimeRequestPeriod(overtimeRequestPeriodModel.DomainEntity);
+			}
+
+			_selectedModel.IsDirty = true;
+			_view.SetOvertimeOpenPeriodsGridRowCount(_selectedModel.OvertimeRequestPeriodModels.Count);
+			_view.RefreshOvertimeOpenPeriodsGrid();
 		}
 
 		public void NextProjectionPeriod()

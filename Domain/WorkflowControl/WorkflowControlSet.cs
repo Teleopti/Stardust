@@ -139,6 +139,14 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return orderIndex;
 		}
 
+		public virtual int RemoveOpenOvertimeRequestPeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		{
+			var orderIndex = _overtimeRequestOpenPeriods.IndexOf(overtimeRequestOpenPeriod);
+			_overtimeRequestOpenPeriods.Remove(overtimeRequestOpenPeriod);
+
+			return orderIndex;
+		}
+
 		public virtual void InsertPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod, int orderIndex)
 		{
 			absenceRequestOpenPeriod.SetParent(this);
