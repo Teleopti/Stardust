@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			removeUnwantedSkillsAndSkillDays(schedulerStateHolderTo, skills);
 			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
-			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.ChoosenAgents, period);
+			PostFill(schedulerStateHolderTo, period);
 			setLocks(schedulerStateHolderTo, lockInfoForStateHolder);
 			schedulerStateHolderTo.ResetFilteredPersons();
 		}
@@ -129,6 +129,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected abstract void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period);
 		protected abstract void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period);
 		protected abstract void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period);
-		protected abstract void PostFill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period);
+		protected abstract void PostFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period);
 	}
 }

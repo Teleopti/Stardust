@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.CommonStateHolder.SetDayOffTemplate(dayOffTemplate);
 		}
 
-		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
 			schedulerStateHolderTo.RequestedPeriod = _desktopContext.CurrentContext().SchedulerStateHolderFrom.RequestedPeriod;
 			schedulerStateHolderTo.ConsiderShortBreaks = false; //TODO check if this is the wanted behaviour in other cases than intraday optimization
