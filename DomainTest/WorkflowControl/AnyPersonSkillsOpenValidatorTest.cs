@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -11,22 +12,23 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
-	public class AllPersonSkillsOpenValidatorTest
+	public class AnyPersonSkillsOpenValidatorTest
 	{
 		private readonly AnyPersonSkillsOpenValidator _target = new AnyPersonSkillsOpenValidator();
 		private IPerson _person;
 		private Absence _absence;
+		private ISkill _skill;
 
 		[SetUp]
 		public void Setup()
 		{
-			var skill = SkillFactory.CreateSkill("Phone");
+			_skill = SkillFactory.CreateSkill("Phone");
 			var timePeriods = Enumerable.Repeat(new TimePeriod(8, 18), 5).ToArray();
-			WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, timePeriods);
+			WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(_skill, timePeriods);
 			//skill.WorkloadCollection.First().TemplateWeekCollection[0].OpenHourList[0].
 			var date = new DateOnly(2016, 4, 1);
 			_person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(date);
-			_person.AddSkill(skill, date);
+			_person.AddSkill(_skill, date);
 			_absence = new Absence();
 		}
 		
@@ -67,6 +69,40 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void ShouldHandleMultiDayRequest()
 		{
 			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,23,9))).WithId();
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			validatedRequest.IsValid.Should().Be.True();
+		}
+		
+		[Test]
+		public void ShouldHandleSkillsInDifferentTimezones()
+		{
+			_skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,23,13))).WithId();
+			var request2 = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,23,12))).WithId();
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			var validatedRequest2 = _target.Validate(request2.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			validatedRequest.IsValid.Should().Be.True();
+			validatedRequest2.IsValid.Should().Be.False();
+		}
+		
+		[Test]
+		public void ShouldHandleMultiplePersonSkills()
+		{
+			var skill2 = SkillFactory.CreateSkill("Mail");
+			_person.AddSkill(skill2, new DateOnly(2016, 4, 1));
+			var timePeriods = Enumerable.Repeat(new TimePeriod(8, 18), 7).ToArray();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill2, timePeriods);
+			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,22,9))).WithId();
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			validatedRequest.IsValid.Should().Be.True();
+		}		
+		
+		[Test]
+		public void ShouldHandleMultipleWorkloads()
+		{
+			var timePeriods = Enumerable.Repeat(new TimePeriod(8, 18), 7).ToArray();
+			WorkloadFactory.CreateWorkloadWithOpenHours(_skill, timePeriods);
+			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,22,9))).WithId();
 			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
 			validatedRequest.IsValid.Should().Be.True();
 		}

@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			foreach (var personSkill in personSkills)
 			{
 				var skill = personSkill.Skill;
-				var requestPeriodInSkillTimezone = TimeZoneHelper.ConvertFromUtc(requestPeriod, skill.TimeZone);
-				var dateOnlyPeriod = requestPeriodInSkillTimezone.ToDateOnlyPeriod(skill.TimeZone);
+				
+				var dateOnlyPeriod = requestPeriod.ToDateOnlyPeriod(skill.TimeZone);
 				var weekDaysInvolved = dateOnlyPeriod.DayCollection().Select(d => d.DayOfWeek).Distinct();
 
 				foreach (var requestDay in dateOnlyPeriod.DayCollection())
@@ -32,12 +32,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 						var openHoursForRequestDay = workload.TemplateWeekCollection[(int) requestDay.DayOfWeek].OpenHourList;
 						if (!openHoursForRequestDay.Any()) continue;
 
-						var utcDate = new DateTime(requestDay.Date.Ticks, DateTimeKind.Utc);
-						var workloadOpenPeriod = new DateTimePeriod(utcDate, utcDate);
-						workloadOpenPeriod = workloadOpenPeriod.ChangeEndTime(openHoursForRequestDay.First().EndTime);
-						workloadOpenPeriod = workloadOpenPeriod.ChangeStartTime(openHoursForRequestDay.First().StartTime);
+						var utcDateTimeStart = new DateTime(requestDay.Date.Ticks).Add(openHoursForRequestDay.First().StartTime);
+						var utcDateTimeEnd = new DateTime(requestDay.Date.Ticks).Add(openHoursForRequestDay.First().EndTime);
 						
-						if (requestPeriodInSkillTimezone.Intersect(workloadOpenPeriod))
+						var workloadOpenPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(utcDateTimeStart, skill.TimeZone), 
+							TimeZoneHelper.ConvertToUtc(utcDateTimeEnd, skill.TimeZone));
+
+						if (requestPeriod.Intersect(workloadOpenPeriod))
 							return new ValidatedRequest {IsValid = true};
 					}
 				}
