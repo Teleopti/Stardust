@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				IScenario scenario = GetGivenScenarioOrDefault(query);
-				var people = _personRepository.FindPeopleInOrganizationLight(datePeriod);
+				var people = _personRepository.FindAllAgentsLight(datePeriod);
 
 				IScheduleDictionary scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
 

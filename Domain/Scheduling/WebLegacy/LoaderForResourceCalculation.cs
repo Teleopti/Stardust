@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				_shiftCategoryRepository.LoadAll();
 			}	
 			_skillRepository.FindAllWithSkillDays(period);
-			_agents = _personRepository.FindPeopleInOrganizationQuiteLight(period);
+			_agents = _personRepository.FindAllAgentsQuiteLight(period);
 		}
 
 		private static IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)

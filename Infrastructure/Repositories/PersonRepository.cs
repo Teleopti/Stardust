@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return persons;
 		}
 
-		public ICollection<IPerson> FindPeopleInOrganizationLight(DateOnlyPeriod period)
+		public ICollection<IPerson> FindAllAgentsLight(DateOnlyPeriod period)
 		{
 			IMultiCriteria multiCrit = Session.CreateMultiCriteria()
 				 .Add(personPeriodsOnlyTeamAndSite(period));
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return persons;
 		}
 
-		public ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period)
+		public ICollection<IPerson> FindAllAgentsQuiteLight(DateOnlyPeriod period)
 		{
 			IMultiCriteria multiCrit = Session.CreateMultiCriteria()
 				 .Add(personPeriodsOnlyTeamAndSite(period)).Add(personSchedule(period)).Add(personPeriodSkills(period));

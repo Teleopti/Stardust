@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, IEnumerable<Guid> choosenAgentIds, DateOnlyPeriod period)
 		{
-			var allPeople = _personRepository.FindPeopleInOrganizationLight(period);
+			var allPeople = _personRepository.FindAllAgentsLight(period);
 			schedulerStateHolderTo.SchedulingResultState.LoadedAgents = allPeople.ToList();
 			schedulerStateHolderTo.ChoosenAgents.Clear();
 			allPeople.Where(x => choosenAgentIds==null || choosenAgentIds.Contains(x.Id.Value))

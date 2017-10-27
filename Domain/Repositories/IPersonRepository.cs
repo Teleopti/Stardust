@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period);
 
-		ICollection<IPerson> FindPeopleInOrganizationLight(DateOnlyPeriod period);
+		ICollection<IPerson> FindAllAgentsLight(DateOnlyPeriod period);
 		ICollection<IPerson> FindPeople(IEnumerable<Guid> peopleId);
 		ICollection<IPerson> FindPeople(IEnumerable<IPerson> people);
 		ICollection<IPerson> FindPeopleSimplify(IEnumerable<Guid> people);
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IPerson LoadPersonAndPermissions(Guid id);
 
-		ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period);
+		ICollection<IPerson> FindAllAgentsQuiteLight(DateOnlyPeriod period);
 
 		IList<IPerson> FindUsers(DateOnly date);
 		IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);

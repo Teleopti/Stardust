@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 				_resourceCalculationPrerequisitesLoader.Execute();
 
-				var allPeople = _personRepository.FindPeopleInOrganizationQuiteLight(dateOnlyPeriodForResourceCalc);
+				var allPeople = _personRepository.FindAllAgentsQuiteLight(dateOnlyPeriodForResourceCalc);
 
 				_loadSchedulingStateHolderForResourceCalculation.Execute(requestedScenario, periodForResourceCalc, allPeople,
 					_schedulingResultStateHolder, p => allPeople, true);

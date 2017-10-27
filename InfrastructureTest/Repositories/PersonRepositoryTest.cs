@@ -1017,10 +1017,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			createPersonWithRuleSets(team);
 			createPersonWithRuleSets(team2);
 
-			IPerson loadedPerson = new List<IPerson>(target.FindPeopleInOrganizationLight(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1)))[0];
+			IPerson loadedPerson = new List<IPerson>(target.FindAllAgentsLight(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1)))[0];
 			Assert.IsFalse(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag));
 			Session.Clear();
-			loadedPerson = new List<IPerson>(target.FindPeopleInOrganizationLight(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1)))[0];
+			loadedPerson = new List<IPerson>(target.FindAllAgentsLight(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1)))[0];
 			Assert.AreEqual(2, loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection.Count);
 		}
 

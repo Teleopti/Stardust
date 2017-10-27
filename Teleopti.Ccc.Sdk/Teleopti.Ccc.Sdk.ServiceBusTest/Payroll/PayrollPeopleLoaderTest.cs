@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
             using (mocks.Record())
             {
                 Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(personRepository);
-                Expect.Call(personRepository.FindPeopleInOrganizationLight(payrollExportPeriod)).Return(new List<IPerson>{personInExport,personNotInExport});
+                Expect.Call(personRepository.FindAllAgentsLight(payrollExportPeriod)).Return(new List<IPerson>{personInExport,personNotInExport});
             }
             using (mocks.Playback())
             {

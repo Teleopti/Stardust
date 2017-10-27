@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			using (mocks.Record())
 			{
 				var periodForQuery = new DateOnlyPeriod(budgetDay1.Day.AddDays(-1), budgetDay1.Day.AddDays(1));
-				Expect.Call(personRepository.FindPeopleInOrganizationLight(periodForQuery)).Return(people);
+				Expect.Call(personRepository.FindAllAgentsLight(periodForQuery)).Return(people);
 			}
 			using (mocks.Playback())
 			{

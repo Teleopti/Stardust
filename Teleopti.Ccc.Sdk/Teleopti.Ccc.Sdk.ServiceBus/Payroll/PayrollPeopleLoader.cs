@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
         public IEnumerable<IPerson> GetPeopleForExport(RunPayrollExportEvent message, DateOnlyPeriod payrollExportPeriod, IUnitOfWork unitOfWork)
         {
             var personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
-            var allPeople = personRepository.FindPeopleInOrganizationLight(payrollExportPeriod);
+            var allPeople = personRepository.FindAllAgentsLight(payrollExportPeriod);
             return allPeople.Where(p => message.ExportPersonIdCollection.Contains(p.Id.GetValueOrDefault()));
         }
     }

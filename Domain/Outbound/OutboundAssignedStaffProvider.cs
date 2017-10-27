@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		public PeopleSelection Load(IList<IOutboundCampaign> campaigns, DateOnlyPeriod period)
 		{
-			var allPeople = _personRepository.FindPeopleInOrganizationLight(period).ToList();
+			var allPeople = _personRepository.FindAllAgentsLight(period).ToList();
 			var affectedSkills = campaigns.Select(campaign => campaign.Skill).ToList();
 
 			var selectedPeople = new HashSet<IPerson>();

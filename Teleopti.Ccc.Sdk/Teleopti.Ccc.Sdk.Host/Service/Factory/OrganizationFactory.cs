@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
         {
             var rep = new PersonRepository(new ThisUnitOfWork(unitOfWork));
                 ICollection<IPerson> coll =
-                    rep.FindPeopleInOrganizationLight(new DateOnlyPeriod(queryDateTime, queryDateTime));
+                    rep.FindAllAgentsLight(new DateOnlyPeriod(queryDateTime, queryDateTime));
                 IPersonCollection ret = new PersonCollection(functionPath, coll, queryDateTime);
             
             return ret;

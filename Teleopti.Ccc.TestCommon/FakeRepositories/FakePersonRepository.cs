@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 		}
 
-		public ICollection<IPerson> FindPeopleInOrganizationLight(DateOnlyPeriod period)
+		public ICollection<IPerson> FindAllAgentsLight(DateOnlyPeriod period)
 		{
 			return _storage.LoadAll<IPerson>().Where(p => p.PersonPeriods(period).Count > 0).ToArray();
 		}
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Get(id);
 		}
 
-		public ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period)
+		public ICollection<IPerson> FindAllAgentsQuiteLight(DateOnlyPeriod period)
 		{
 			return _storage.LoadAll<IPerson>().Where(p => p.PersonPeriods(period).Count > 0).ToArray();
 		}
