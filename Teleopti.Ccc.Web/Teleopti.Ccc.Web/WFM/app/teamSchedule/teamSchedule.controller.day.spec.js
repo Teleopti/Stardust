@@ -6,7 +6,8 @@ describe("teamschedule controller tests", function() {
 		controller,
 		searchScheduleCalledTimes,
 		personSelection,
-		scheduleMgmt;
+		scheduleMgmt,
+		teamScheduleService;
 
 	beforeEach(function() {
 		module('externalModules');
@@ -28,6 +29,7 @@ describe("teamschedule controller tests", function() {
 		personSelection = _PersonSelection_;
 		scheduleMgmt = _ScheduleManagement_;
 		setupMockTeamScheduleService(_TeamSchedule_);
+		teamScheduleService = _TeamSchedule_;
 		controller = setUpController(_$controller_);
 		
 	}));
@@ -189,6 +191,20 @@ describe("teamschedule controller tests", function() {
 		expect(controller.searchOptions.focusingSearch).toEqual(false);
 	});
 
+	it("should  set show only absence value correctly when click showOnlyAbsence", function() {
+		controller.scheduleDate = new Date("2015-10-26");
+		controller.searchOptions = {
+			focusingSearch: true
+		};
+		controller.currentSettings.onlyLoadScheduleWithAbsence = true;
+		controller.toggleShowAbsenceOnly();
+		expect(teamScheduleService.currentInput().IsOnlyAbsences).toEqual(true);
+
+		controller.currentSettings.onlyLoadScheduleWithAbsence = false;
+		controller.toggleShowAbsenceOnly();
+		expect(teamScheduleService.currentInput().IsOnlyAbsences).toEqual(false);
+	});
+
 	function setUpController($controller) {
 		return $controller("TeamScheduleController", {
 			$scope: rootScope,
@@ -197,6 +213,11 @@ describe("teamschedule controller tests", function() {
 	};
 
 	function setupMockTeamScheduleService(teamScheduleService) {
+		var currentInput;
+
+		teamScheduleService.currentInput = function() {
+			return currentInput;
+		}
 
 		teamScheduleService.loadAbsences = {
 			query: function() {
@@ -226,6 +247,7 @@ describe("teamschedule controller tests", function() {
 		};
 
 		teamScheduleService.searchSchedules = function (input) {
+			currentInput = input;
 			var today = "2015-10-26";
 			var scheduleData = {
 				Schedules: [
