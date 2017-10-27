@@ -15121,4 +15121,52 @@ Vill du registrera dig?</value>
   <data name="PlanningGroup" xml:space="preserve">
     <value>Planeringsgrupp</value>
   </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>Skapa kompetensarea</value>
+  </data>
+  <data name="PlanGroupSchedulingSettingAppliedFilters" xml:space="preserve">
+    <value>Följande inställningar används för planeringsgruppen {0}</value>
+  </data>
+  <data name="Plans" xml:space="preserve">
+    <value>Plans</value>
+  </data>
+  <data name="BreakPreferenceStartTimeByMaxColon" xml:space="preserve">
+    <value>Bryt önskemål om starttid med max:</value>
+  </data>
+  <data name="NoOvertimeType" xml:space="preserve">
+    <value>Ingen övertidstyp hittades i ditt kontrakt. Kontakta din systemadministratör. </value>
+  </data>
+  <data name="OvertimeShortName" xml:space="preserve">
+    <value>ÖT</value>
+  </data>
+  <data name="ExportSchedule" xml:space="preserve">
+    <value>Exportera schema</value>
+  </data>
+  <data name="ExportSchedulesMaximumDays" xml:space="preserve">
+    <value>Max 31 dagar kan väljas</value>
+  </data>
+  <data name="ExportSchedulesMaximumOptionalColumns" xml:space="preserve">
+    <value>Max 3 tilläggskolumner kan väljas</value>
+  </data>
+  <data name="ShiftTradeTargetTimeRuleName" xml:space="preserve">
+    <value>Tolerans för kontraktstid</value>
+  </data>
+  <data name="ShowStaffing" xml:space="preserve">
+    <value>Visa bemanning</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Berätta för oss vad du tycker</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>Användarinställningar</value>
+  </data>
+  <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
+    <value>{0}: Ett skift börjar dagen innan eller dagen efter vilket inte är tillåtet. Detta orsakades troligen genom att ändra agentens tidszon i Personer. </value>
+  </data>
+  <data name="MaximumAgentToExport" xml:space="preserve">
+    <value>Du kan exportera max 1000 agenter varje gång, du försöker nu exportera {0}. </value>
+  </data>
+  <data name="SelectedGroups" xml:space="preserve">
+    <value>Valda grupper</value>
+  </data>
 </root>
