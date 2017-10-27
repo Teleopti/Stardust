@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
-using Teleopti.Wfm.Administration.Core.Stardust;
-using Teleopti.Wfm.Administration.Models.Stardust;
+using IStardustRepository = Teleopti.Ccc.Infrastructure.Repositories.Stardust.IStardustRepository;
+using Job = Teleopti.Ccc.Infrastructure.Repositories.Stardust.Job;
+using JobDetail = Teleopti.Ccc.Infrastructure.Repositories.Stardust.JobDetail;
+using JobFilterModel = Teleopti.Ccc.Infrastructure.Repositories.Stardust.JobFilterModel;
+using WorkerNode = Teleopti.Ccc.Infrastructure.Repositories.Stardust.WorkerNode;
 
 namespace Teleopti.Wfm.AdministrationTest
 {

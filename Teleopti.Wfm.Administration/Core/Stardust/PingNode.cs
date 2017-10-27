@@ -2,8 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
-using Teleopti.Wfm.Administration.Models.Stardust;
+using WorkerNode = Teleopti.Ccc.Infrastructure.Repositories.Stardust.WorkerNode;
 
 namespace Teleopti.Wfm.Administration.Core.Stardust
 {

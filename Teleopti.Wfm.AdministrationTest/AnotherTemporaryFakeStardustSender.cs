@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
-using Teleopti.Wfm.Administration.Models.Stardust;
+using Job = Teleopti.Ccc.Infrastructure.Repositories.Stardust.Job;
 
 namespace Teleopti.Wfm.AdministrationTest
 {
