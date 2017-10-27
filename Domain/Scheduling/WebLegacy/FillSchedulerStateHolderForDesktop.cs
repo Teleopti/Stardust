@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_desktopContext = desktopContext;
 		}
 
-		protected override IScenario FetchScenario()
+		protected override void FillDefaultScenario(ISchedulerStateHolder schedulerStateHolderTo)
 		{
-			return _desktopContext.CurrentContext().SchedulerStateHolderFrom.Schedules.Scenario;
+			schedulerStateHolderTo.SetRequestedScenario(_desktopContext.CurrentContext().SchedulerStateHolderFrom.Schedules.Scenario);
 		}
 
 		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, IEnumerable<Guid> choosenAgentIds, DateOnlyPeriod period)

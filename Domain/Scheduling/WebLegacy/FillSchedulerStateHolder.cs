@@ -24,26 +24,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills = null)
 		{
 			PreFill(schedulerStateHolderTo, period);
-			var scenario = FetchScenario();
-			schedulerStateHolderTo.SetRequestedScenario(scenario);
+			FillDefaultScenario(schedulerStateHolderTo);
 			FillAgents(schedulerStateHolderTo, agentsInIsland, choosenAgents, period);
 			removeUnwantedAgents(schedulerStateHolderTo, agentsInIsland);
 			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period, onlyUseSkills);
-			skills = includeParentMultisiteSkills(skills);
-			FillSkillDays(schedulerStateHolderTo, scenario, skills, period);
+			FillSkillDays(schedulerStateHolderTo, schedulerStateHolderTo.RequestedScenario, skills, period);
 			removeUnwantedSkillsAndSkillDays(schedulerStateHolderTo, skills);
-			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period);
+			FillSchedules(schedulerStateHolderTo, schedulerStateHolderTo.RequestedScenario, schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			PostFill(schedulerStateHolderTo, period);
 			setLocks(schedulerStateHolderTo, lockInfoForStateHolder);
 			schedulerStateHolderTo.ResetFilteredPersons();
-		}
-
-		private IEnumerable<ISkill> includeParentMultisiteSkills(IEnumerable<ISkill> skills)
-		{
-			var childSkills = skills.OfType<IChildSkill>();
-			var multisiteSkills = childSkills.Select(c => c.ParentSkill).Distinct();
-			return skills.Concat(multisiteSkills);
 		}
 
 		private static void setLocks(ISchedulerStateHolder schedulerStateHolderTo, LockInfoForStateHolder lockInfoForStateHolder)
@@ -63,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills)
 		{
-			var agentSkills = new HashSet<ISkill>();
+			var skills = new HashSet<ISkill>();
 			foreach (var agent in agents)
 			{
 				foreach (var personPeriod in agent.PersonPeriods(period))
@@ -73,18 +64,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					{
 						if (onlyUseSkills==null || onlyUseSkills.Contains(skill.Id.Value))
 						{
-							agentSkills.Add(skill);
+							skills.Add(skill);
 						}
 					}
 				}
 			}
-
-			return agentSkills;
+			var childSkills = skills.OfType<IChildSkill>();
+			var multisiteSkills = childSkills.Select(c => c.ParentSkill).Distinct();
+			return skills.Concat(multisiteSkills);
 		}
-
+		
 		private static void removeUnwantedAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIdsToKeep)
 		{
-			if (agentIdsToKeep != null) //remove this when also scheduling is converted to "events"
+			if (agentIdsToKeep != null)
 			{
 				foreach (var agent in schedulerStateHolderTo.ChoosenAgents.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
 				{
@@ -126,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			}
 		}
 
-		protected abstract IScenario FetchScenario();
+		protected abstract void FillDefaultScenario(ISchedulerStateHolder schedulerStateHolderTo);
 		protected abstract void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, IEnumerable<Guid> choosenAgentIds, DateOnlyPeriod period);
 		protected abstract void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period);
 		protected abstract void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period);

@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_userTimeZone = userTimeZone;
 		}
 
-		protected override IScenario FetchScenario()
+		protected override void FillDefaultScenario(ISchedulerStateHolder schedulerStateHolderTo)
 		{
-			return _scenarioRepository.LoadDefaultScenario();
+			schedulerStateHolderTo.SetRequestedScenario(_scenarioRepository.LoadDefaultScenario());
 		}
 
 		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, IEnumerable<Guid> choosenAgentIds, DateOnlyPeriod period)
