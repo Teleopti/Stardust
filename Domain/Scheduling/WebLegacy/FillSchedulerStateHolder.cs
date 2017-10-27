@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public abstract class FillSchedulerStateHolder : IFillSchedulerStateHolder
+	public abstract class FillSchedulerStateHolder
 	{
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 

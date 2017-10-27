@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 
 		public IntradayOptimizationEventRunInSyncInFatClientProcessHandler(IIntradayOptimization intradayOptimization,
-			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
+			Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider)
 			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeSchedulesAfterIsland,gridlockManager)

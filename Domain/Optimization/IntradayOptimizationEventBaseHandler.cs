@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IIntradayOptimization _intradayOptimization;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
+		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
 		private readonly IGridlockManager _gridlockManager;
 
 		protected IntradayOptimizationEventBaseHandler(IIntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IFillSchedulerStateHolder fillSchedulerStateHolder,
+			FillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
 			IGridlockManager gridlockManager)
 		{

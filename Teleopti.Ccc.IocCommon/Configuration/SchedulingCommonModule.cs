@@ -444,7 +444,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.ApplyAspects()
 					.SingleInstance();
 				builder.RegisterType<FillSchedulerStateHolderForDesktop>()
-					.As<IFillSchedulerStateHolder>()
+					.As<FillSchedulerStateHolder>()
 					.ApplyAspects()
 					.SingleInstance();
 				builder.RegisterType<DesktopContext>().SingleInstance();
@@ -473,7 +473,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
 				builder.RegisterType<CurrentIntradayOptimizationCallback>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<CurrentSchedulingCallback>().As<ICurrentSchedulingCallback>().AsSelf().SingleInstance();
-				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<IFillSchedulerStateHolder>().ApplyAspects().SingleInstance();
+				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();
 			}
 
 

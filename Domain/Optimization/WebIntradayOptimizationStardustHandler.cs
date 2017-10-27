@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public WebIntradayOptimizationStardustHandler(
 			IIntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, 
-			IFillSchedulerStateHolder fillSchedulerStateHolder,
+			FillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
 			IGridlockManager gridlockManager,
 			IJobResultRepository jobResultRepository,

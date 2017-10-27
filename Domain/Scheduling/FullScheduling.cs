@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class FullScheduling
 	{
 		private readonly SchedulingCommandHandler _schedulingCommandHandler;
-		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
+		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly FullSchedulingResult _fullSchedulingResult;
 		private readonly SchedulingInformationProvider _schedulingInformationProvider;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, 
-			IFillSchedulerStateHolder fillSchedulerStateHolder,
+			FillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<ISchedulerStateHolder> schedulerStateHolder, 
 			FullSchedulingResult fullSchedulingResult,
 			SchedulingInformationProvider schedulingInformationProvider,

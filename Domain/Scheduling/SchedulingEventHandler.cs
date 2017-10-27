@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class SchedulingEventHandler : IRunInSyncInFatClientProcess, IHandleEvent<SchedulingWasOrdered>
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
+		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly ScheduleExecutor _scheduleExecutor;
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		private readonly ICurrentSchedulingCallback _currentSchedulingCallback;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
-						IFillSchedulerStateHolder fillSchedulerStateHolder,
+						FillSchedulerStateHolder fillSchedulerStateHolder,
 						ScheduleExecutor scheduleExecutor, 
 						ISchedulingOptionsProvider schedulingOptionsProvider,
 						ICurrentSchedulingCallback currentSchedulingCallback,

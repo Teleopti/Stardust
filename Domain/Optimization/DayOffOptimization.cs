@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimization
 	{
-		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
+		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 
 		public DayOffOptimization(
-			IFillSchedulerStateHolder fillSchedulerStateHolder, 
+			FillSchedulerStateHolder fillSchedulerStateHolder, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IScheduleDictionaryPersister persister, 
 			IPlanningPeriodRepository planningPeriodRepository,
