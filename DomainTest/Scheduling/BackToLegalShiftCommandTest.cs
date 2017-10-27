@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IFillSchedulerStateHolder FillSchedulerStateHolder;
+		public FillSchedulerStateHolder FillSchedulerStateHolder;
 
 		[Test]
 		public void ShouldRestoreToLegalShiftBagShiftWithSameStartAndEndTime()
