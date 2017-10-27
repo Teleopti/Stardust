@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 					matrixWebsiteUrl, applicationFunction.ForeignId, applicationFunction.ForeignId);
 
 			var uri = new Uri(url, UriKind.RelativeOrAbsolute);
-			return _configReader.ReadValue("UseRelativeConfiguration", false)
+			return (_configReader.ReadValue("UseRelativeConfiguration", false) && !applicationFunction.IsWebReport)
 				? "/" + new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(uri)
 				: uri.ToString();
 
