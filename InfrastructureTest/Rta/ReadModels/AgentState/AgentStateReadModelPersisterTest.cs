@@ -127,11 +127,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				PersonId = personId,
 				TeamId = teamId,
 				Shift = Enumerable.Range(0, 100)
-				.Select(_ => new AgentStateActivityReadModel
-				{
-					Name = new string('x', 100),
-					Color = Color.Green.ToArgb()
-				})
+					.Select(_ => new AgentStateActivityReadModel
+					{
+						Name = new string('x', 100),
+						Color = Color.Green.ToArgb()
+					})
 			});
 
 			Target.Load(personId).Shift.Should().Have.Count.EqualTo(100);
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				TeamName = null,
 
 				ReceivedTime = "2015-01-02 10:00".Utc(),
-				
+
 				StateStartTime = null,
 				StateName = null,
 
@@ -245,13 +245,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			{
 				PersonId = personId,
 				OutOfAdherences = Enumerable.Range(0, 59)
-				.Select(m => new AgentStateOutOfAdherenceReadModel
-				{
-					StartTime = $"2016-06-16 08:{m:00}".Utc(),
-					EndTime = $"2016-06-16 08:{m+1:00}".Utc()
-				})
+					.Select(m => new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = $"2016-06-16 08:{m:00}".Utc(),
+						EndTime = $"2016-06-16 08:{m + 1:00}".Utc()
+					})
 			});
-			
+
 			Target.Load(personId).OutOfAdherences.Should().Have.Count.EqualTo(59);
 		}
 
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			Target.Upsert(new AgentStateReadModelForTest { PersonId = personId });
+			Target.Upsert(new AgentStateReadModelForTest {PersonId = personId});
 
 			Target.UpsertAssociation(new AssociationInfo()
 			{
@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		public void ShouldUnSoftDeleteWhenUpdatingPersonAssociation()
 		{
 			var personId = Guid.NewGuid();
-			Target.Upsert(new AgentStateReadModelForTest { PersonId = personId });
+			Target.Upsert(new AgentStateReadModelForTest {PersonId = personId});
 			Target.UpsertDeleted(personId);
 
 			Target.UpsertAssociation(new AssociationInfo()
@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		public void ShouldUpdateDeleted()
 		{
 			var personId = Guid.NewGuid();
-			var model = new AgentStateReadModelForTest { PersonId = personId };
+			var model = new AgentStateReadModelForTest {PersonId = personId};
 			Target.Upsert(model);
 
 			Target.UpsertDeleted(personId);
@@ -383,12 +383,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			result.IsDeleted.Should().Be(true);
 		}
 
-
 		[Test]
 		public void ShouldUpdateEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
-			Target.Upsert(new AgentStateReadModelForTest() { PersonId = personId, IsDeleted = false });
+			Target.Upsert(new AgentStateReadModelForTest() {PersonId = personId, IsDeleted = false});
 
 			Target.UpsertEmploymentNumber(personId, "abc");
 
@@ -420,7 +419,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			model.LastName.Should().Be("gates");
 			model.IsDeleted.Should().Be(true);
 		}
-		
+
 		[Test]
 		public void ShouldUpdateFirstAndLastName()
 		{
@@ -440,7 +439,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			model.LastName.Should().Be("gates");
 			model.IsDeleted.Should().Be(false);
 		}
-
 
 		[Test]
 		public void ShouldUpdateTeamName()

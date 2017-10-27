@@ -27,38 +27,43 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<AgentStateReadModel> Read(AgentStateFilter filter)
 		{
-			var queryBuilder =
-				new AgentStateReadModelQueryBuilder(_now, _businessUnit)
-					.WithSelection(filter.SiteIds, filter.TeamIds, filter.SkillIds);
+			var builder =
+				new AgentStateReadModelQueryBuilder()
+					.WithoutDeleted()
+					.WithBusinessUnit(_businessUnit.Current().Id.Value)
+					.WithSelection(filter.SiteIds, filter.TeamIds, filter.SkillIds, _now)
+					.WithTextFilter(filter.TextFilter);
 			if (filter.InAlarm)
-				queryBuilder.InAlarm();
+				builder.InAlarm(_now);
 			if (filter.ExcludedStates.EmptyIfNull().Any())
-				queryBuilder.Exclude(filter.ExcludedStates);
-			return load(queryBuilder);
+				builder.Exclude(filter.ExcludedStates);
+			return load(builder);
 		}
-		
+
+		public IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds)
+		{
+			return personIds.Batch(400).SelectMany(personIdsInBatch =>
+					load(
+						new AgentStateReadModelQueryBuilder()
+							.WithoutDeleted()
+							.WithBusinessUnit(_businessUnit.Current().Id.Value)
+							.WithMax(400)
+							.WithPersons(personIdsInBatch)
+					))
+				.ToArray();
+		}
+
 		private IEnumerable<AgentStateReadModel> load(AgentStateReadModelQueryBuilder queryBuilder)
 		{
-			var builder = queryBuilder.Build();
+			var result = queryBuilder.Build();
 			var sqlQuery = _unitOfWork.Current().Session()
-				.CreateSQLQuery(builder.Query);
-			builder.ParameterFuncs
+				.CreateSQLQuery(result.Query);
+			result.ParameterFuncs
 				.ForEach(f => f(sqlQuery));
 			return sqlQuery
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
-
-		}
-		public IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds)
-		{
-			return personIds.Batch(400).SelectMany(personIdBatch => _unitOfWork.Current().Session()
-					.CreateSQLQuery("SELECT * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
-					.SetParameterList("persons", personIdBatch)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
-					.SetReadOnly(true)
-					.List<AgentStateReadModel>())
-				.ToArray();
 		}
 
 

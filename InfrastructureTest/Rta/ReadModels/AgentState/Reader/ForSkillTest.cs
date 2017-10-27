@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 {
 	[DatabaseTest]
 	[TestFixture]
-	public class ForSkill
+	public class ForSkillTest
 	{
 		public IGroupingReadOnlyRepository Groupings;
 		public Database Database;
@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				Groupings.UpdateGroupingReadModel(new[] {agent1});
 				StatePersister.Upsert(new AgentStateReadModelForTest {PersonId = agent1});
 			});
-
 
 			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = new[] {skill1, skill2}}))
 				.Count().Should().Be(1);

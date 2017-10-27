@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class ForOrganization
+	public class ForOrganizationTest
 	{
 		public IJsonSerializer Serializer;
 		public IAgentStateReadModelReader Target;

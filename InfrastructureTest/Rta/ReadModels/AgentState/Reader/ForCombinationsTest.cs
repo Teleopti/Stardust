@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 {
 	[DatabaseTest]
 	[TestFixture]
-	public class ForCombinations
+	public class ForCombinationsTest
 	{
 		public Database Database;
 		public IAgentStateReadModelPersister StatePersister;

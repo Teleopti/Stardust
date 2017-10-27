@@ -20,20 +20,60 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private readonly IList<string> _wheres = new List<string>();
 		private readonly IList<string> _orderbys = new List<string>();
 		private readonly IList<Func<ISQLQuery, IQuery>> _parameters = new List<Func<ISQLQuery, IQuery>>();
-		private readonly INow _now;
+		private int _topCount;
 
-		public AgentStateReadModelQueryBuilder(INow now, ICurrentBusinessUnit businessUnit)
+		public AgentStateReadModelQueryBuilder()
 		{
-			_now = now;
-			_wheres.Add("IsDeleted = 0");
-			_wheres.Add("a.BusinessUnitId = :BusinessUnitId");
-			_parameters.Add(s => s.SetGuid("BusinessUnitId", businessUnit.Current().Id.Value));
+			_topCount = 50;
 		}
 
-		public AgentStateReadModelQueryBuilder WithSelection(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		public AgentStateReadModelQueryBuilder WithoutDeleted()
+		{
+			_wheres.Add("IsDeleted = 0");
+			return this;
+		}
+
+		public AgentStateReadModelQueryBuilder WithBusinessUnit(Guid businessUnit)
+		{
+			_wheres.Add("a.BusinessUnitId = :BusinessUnitId");
+			_parameters.Add(s => s.SetGuid("BusinessUnitId", businessUnit));
+			return this;
+		}
+
+		public AgentStateReadModelQueryBuilder WithMax(int topCount)
+		{
+			_topCount = topCount;
+			return this;
+		}
+
+		public AgentStateReadModelQueryBuilder WithPersons(IEnumerable<Guid> personIds)
+		{
+			_wheres.Add("a.PersonId IN (:personIds)");
+			_parameters.Add(s => s.SetParameterList("personIds", personIds));
+			return this;
+		}
+
+		public AgentStateReadModelQueryBuilder WithTextFilter(string textFilter)
+		{
+			if (!textFilter.IsNullOrEmpty())
+			{
+				textFilter.Split(null)
+					.Select(x => x.Trim())
+					.Where(x => !string.IsNullOrWhiteSpace(x))
+					.Select((w, i) => new {word = w, index = i})
+					.ForEach(x =>
+					{
+						_wheres.Add($"a.TextFilter LIKE :textFilter{x.index}");
+						_parameters.Add(s => s.SetParameter($"textFilter{x.index}", $"%{x.word}%"));
+					});
+			}
+			return this;
+		}
+
+		// put skills in its own With method probably ;)
+		public AgentStateReadModelQueryBuilder WithSelection(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, INow now)
 		{
 			var teamSiteWheres = new List<string>();
-
 			if (siteIds != null)
 			{
 				teamSiteWheres.Add("a.SiteId IN (:siteIds)");
@@ -44,7 +84,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				teamSiteWheres.Add("a.TeamId IN (:teamIds)");
 				_parameters.Add(s => s.SetParameterList("teamIds", teamIds));
 			}
-			
+
 			if (teamSiteWheres.Any())
 				_wheres.Add($"({string.Join(" OR ", teamSiteWheres)})");
 
@@ -56,18 +96,18 @@ AND g.GroupId IN (:SkillIds)
 AND :today BETWEEN g.StartDate and g.EndDate");
 				_parameters.Add(s => s
 					.SetParameterList("SkillIds", skillIds)
-					.SetParameter("today", _now.UtcDateTime().Date)
+					.SetParameter("today", now.UtcDateTime().Date)
 					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Id)
 				);
 			}
 			return this;
 		}
 
-		public AgentStateReadModelQueryBuilder InAlarm()
+		public AgentStateReadModelQueryBuilder InAlarm(INow now)
 		{
 			_wheres.Add("AlarmStartTime <= :now ");
 			_orderbys.Add("AlarmStartTime ASC");
-			_parameters.Add(s => s.SetParameter("now", _now.UtcDateTime()));
+			_parameters.Add(s => s.SetParameter("now", now.UtcDateTime()));
 			return this;
 		}
 
@@ -93,7 +133,37 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 
 		public Selection Build()
 		{
-			var builder = new StringBuilder("SELECT DISTINCT TOP 50 a.* FROM [ReadModel].AgentState a WITH (NOLOCK) ");
+			var builder = new StringBuilder($@"
+				SELECT DISTINCT TOP {_topCount} 
+					a.[PersonId], 
+					a.[BusinessUnitId], 
+					a.[SiteId], 
+					a.[TeamId], 
+					[ReceivedTime], 
+					[Activity], 
+					[NextActivity], 
+					[NextActivityStartTime], 
+					[StateName], 
+					[StateStartTime], 
+					[RuleName], 
+					[RuleStartTime], 
+					[RuleColor], 
+					[StaffingEffect], 
+					[IsRuleAlarm], 
+					[AlarmStartTime], 
+					[AlarmColor], 
+					[Shift], 
+					[OutOfAdherences], 
+					[StateGroupId], 
+					[IsDeleted], 
+					a.[FirstName], 
+					a.[LastName], 
+					a.[EmploymentNumber], 
+					[SiteName], 
+					[TeamName] 
+				FROM 
+					[ReadModel].AgentState a WITH (NOLOCK)
+				");
 
 			_froms.ForEach(s => builder.Append(s));
 
@@ -103,12 +173,9 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 			if (_orderbys.Any())
 			{
 				builder.Append(" ORDER BY ");
-				_orderbys.ForEach(s =>
-				{
-					builder.Append(s);
-				});
+				_orderbys.ForEach(s => { builder.Append(s); });
 			}
-			
+
 			return new Selection
 			{
 				Query = builder.ToString(),

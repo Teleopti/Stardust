@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 {
 	[UnitOfWorkTest]
 	[TestFixture]
-	public class Order
+	public class OrderTest
 	{
 		public Database Database;
 		public IAgentStateReadModelPersister Persister;

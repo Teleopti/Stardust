@@ -64,7 +64,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public IEnumerable<Guid> SkillIds { get; set; } // filter
 		public IEnumerable<Guid?> ExcludedStates { get; set; } // filter
-		public bool InAlarm { get; set; } // filter
+		public string TextFilter { get; set; } // filter
+		public bool InAlarm { get; set; } // filter and sort?
 	}
 
 	public class AgentStatesViewModelBuilder

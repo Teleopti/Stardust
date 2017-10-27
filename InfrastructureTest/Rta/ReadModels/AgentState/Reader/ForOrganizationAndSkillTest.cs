@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 {
 	[DatabaseTest]
 	[TestFixture]
-	public class ForOrganizationAndSkill
+	public class ForOrganizationAndSkillTest
 	{
 		public IGroupingReadOnlyRepository Groupings;
 		public Database Database;

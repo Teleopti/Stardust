@@ -5,6 +5,7 @@ using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						AlarmColor = :AlarmColor,
 						Shift = :Shift,
 						OutOfAdherences = :OutOfAdherences,
-						StateGroupId = :StateGroupId 
+						StateGroupId = :StateGroupId
 					WHERE 
 						PersonId = :PersonId
 				")
@@ -104,10 +105,15 @@ MERGE INTO [ReadModel].[AgentState] AS T
 
 		public AgentStateReadModel Load(Guid personId)
 		{
-			return _unitOfWork.Current().Session()
-				.CreateSQLQuery("SELECT TOP 1 * FROM [ReadModel].[AgentState] WHERE PersonId = :PersonId")
-				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
+			var builder = new AgentStateReadModelQueryBuilder()
+				.WithPersons(new[] {personId})
+				.Build();
+			var sqlQuery = _unitOfWork.Current().Session()
+				.CreateSQLQuery(builder.Query);
+			builder.ParameterFuncs
+				.ForEach(f => f(sqlQuery));
+			return sqlQuery
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.UniqueResult<AgentStateReadModel>();
 		}
