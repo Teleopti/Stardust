@@ -41,7 +41,7 @@
 				<div class="pg-setting-card-title">
 					<b>{{setting.Name}}</b>
 				</div>
-				<div class="pg-setting-card-main">
+				<div class="pg-setting-card-main" ng-show="!setting.Default">
 					<span>{{'SelectedFilters' | translate}}: {{setting.Filters.length}}</span>
 				</div>
 				<div class="pg-setting-card-action" ng-hide="vm.isDisable">
@@ -61,9 +61,9 @@
 			<div class="con-row demo-outline pg-setting-card-content">
 				<div class="con-flex">
 					<div class="con-row">
-						<div class="con-flex">
+						<div class="con-flex" ng-show="!setting.Default">
 							<div class="pg-setting-mini-card-wrapper">
-								<div class="pg-setting-mini-card-title">
+								<div class="pg-setting-mini-card-title" >
 									<b>{{'SelectedFilters' | translate}}</b>
 								</div>
 								<div class="wfm-chip-wrap" ng-repeat="filter in setting.Filters">

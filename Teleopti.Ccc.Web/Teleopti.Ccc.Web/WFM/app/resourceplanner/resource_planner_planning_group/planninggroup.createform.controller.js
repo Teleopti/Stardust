@@ -41,23 +41,23 @@
 		function inputFilterData() {
 			if (vm.searchString == '')
 				return [];
-			var filters = planningGroupService.getFilterData({ searchString: vm.searchString });
-			return filters.$promise.then(function (data) {
-				removeSelectedFiltersInList(data, vm.selectedResults);
-				return vm.filterResults = data;
+			return planningGroupService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
+				return vm.filterResults = removeSelectedFiltersInList(data, vm.selectedResults);
 			});
 		}
 
 		function removeSelectedFiltersInList(filters, selectedFilters) {
-			if (selectedFilters.length == 0)
-				return;
+			var result = angular.copy(filters);
+			if (selectedFilters.length == 0 || filters.length == 0)
+				return filters;
 			for (var i = filters.length - 1; i >= 0; i--) {
 				angular.forEach(selectedFilters, function (selectedItem) {
-					if (filters[i].Id === selectedItem.Id) {
-						filters.splice(i, 1);
+					if (filters[i].Id == selectedItem.Id) {
+						result.splice(i, 1);
 					}
 				});
 			}
+			return result;
 		}
 
 		function selectResultItem(item) {

@@ -129,24 +129,24 @@
         function inputFilterData() {
             if (vm.searchString == '')
                 return [];
-            var filters = PlanGroupSettingService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
-                removeSelectedFiltersInList(data, vm.selectedResults);
-                return vm.filterResults = data;
+            return PlanGroupSettingService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
+                return vm.filterResults = removeSelectedFiltersInList(data, vm.selectedResults);
             });
-            return filters;
         }
 
         function removeSelectedFiltersInList(filters, selectedFilters) {
-            if (selectedFilters.length == 0)
-                return;
-            for (var i = filters.length - 1; i >= 0; i--) {
-                angular.forEach(selectedFilters, function (selectedItem) {
-                    if (filters[i].Id === selectedItem.Id) {
-                        filters.splice(i, 1);
-                    }
-                });
-            }
-        }
+			var result = angular.copy(filters);
+			if (selectedFilters.length == 0 || filters.length == 0)
+				return filters;
+			for (var i = filters.length - 1; i >= 0; i--) {
+				angular.forEach(selectedFilters, function (selectedItem) {
+					if (filters[i].Id == selectedItem.Id) {
+						result.splice(i, 1);
+					}
+				});
+			}
+			return result;
+		}
 
         function clearInput() {
             vm.searchString = '';
