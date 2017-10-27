@@ -6,13 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakePersonAbsenceRepositoryLegacy : FakePersonAbsenceRepository
-	{
-		public FakePersonAbsenceRepositoryLegacy() : base(new FakeStorage())
-		{
-		}
-	}
-
 	public class FakePersonAbsenceRepository : IPersonAbsenceRepository
 	{
 		private readonly FakeStorage _storage;

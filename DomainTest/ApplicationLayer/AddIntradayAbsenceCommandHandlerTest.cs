@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Setup()
 		{
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-			_personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
-			_absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			_personRepository = new FakeWriteSideRepository<IPerson>(new FakeStorage()) { PersonFactory.CreatePersonWithId() };
+			_absenceRepository = new FakeWriteSideRepository<IAbsence>(new FakeStorage()) { AbsenceFactory.CreateAbsenceWithId() };
 			_currentScenario = new FakeCurrentScenario_DoNotUse();
 			
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();

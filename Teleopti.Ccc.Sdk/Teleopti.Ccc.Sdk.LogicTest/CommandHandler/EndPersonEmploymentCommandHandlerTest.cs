@@ -77,10 +77,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			var personAssignmentRepository = new FakePersonAssignmentRepositoryLegacy(personAssignment);
+			var personAssignmentRepository = new FakePersonAssignmentRepository(new FakeStorage());
+			personAssignmentRepository.Has(personAssignment);
 			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory,
 				new ClearPersonRelatedInformation(personAssignmentRepository, new FakeScenarioRepository(scenario),
-					new FakePersonAbsenceRepositoryLegacy()), new PersonAccountUpdaterDummy());
+					new FakePersonAbsenceRepository(new FakeStorage())), new PersonAccountUpdaterDummy());
 
 			target.Handle(endPersonEmploymentCommandDto);
 
@@ -105,10 +106,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			var personAssignmentRepository = new FakePersonAssignmentRepositoryLegacy(personAssignment);
+			var personAssignmentRepository = new FakePersonAssignmentRepository(new FakeStorage());
+			personAssignmentRepository.Has(personAssignment);
 			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory,
 				new ClearPersonRelatedInformation(personAssignmentRepository, new FakeScenarioRepository(scenario),
-					new FakePersonAbsenceRepositoryLegacy()), new PersonAccountUpdaterDummy());
+					new FakePersonAbsenceRepository(new FakeStorage())), new PersonAccountUpdaterDummy());
 
 			target.Handle(endPersonEmploymentCommandDto);
 

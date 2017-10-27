@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldChangeShiftCategory()
 		{
-			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
+			var personRepository = new FakeWriteSideRepository<IPerson>(new FakeStorage()) { PersonFactory.CreatePersonWithId() };
 			var shiftCategoryRepository = new FakeShiftCategoryRepository();
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("sc").WithId();
 			shiftCategoryRepository.Add(shiftCategory);
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personRepository.Single(),
 				mainActivity, new DateTimePeriod(2013, 11, 13, 23, 2013, 11, 14, 8));
 
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { pa };
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(new FakeStorage()) { pa };
 
 			var target = new ChangeShiftCategoryCommandHandler(shiftCategoryRepository, personRepository,
 				new ThisCurrentScenario(personAssignmentRepository.Single().Scenario), personAssignmentRepository);
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReportErrorWhenThereIsNoMainShift()
 		{
-			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
+			var personRepository = new FakeWriteSideRepository<IPerson>(new FakeStorage()) { PersonFactory.CreatePersonWithId() };
 			var shiftCategoryRepository = new FakeShiftCategoryRepository();
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("sc").WithId();
 			shiftCategoryRepository.Add(shiftCategory);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = ScenarioFactory.CreateScenarioWithId("s", true);
 			var pa = PersonAssignmentFactory.CreateEmptyAssignment(personRepository.Single(), scenario, new DateTimePeriod(2013, 11, 13, 12, 2013, 11, 13, 17));
 
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository {pa};			
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(new FakeStorage()) { pa};			
 
 			var target = new ChangeShiftCategoryCommandHandler(shiftCategoryRepository, personRepository,
 				new ThisCurrentScenario(scenario), personAssignmentRepository);

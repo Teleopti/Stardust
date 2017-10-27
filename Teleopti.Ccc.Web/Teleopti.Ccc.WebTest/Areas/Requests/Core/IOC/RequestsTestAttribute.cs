@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble(principalAuthorization).For<IAuthorization>();
 			system.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();
 			system.UseTestDouble(new FakeGroupingReadOnlyRepository()).For<IGroupingReadOnlyRepository>();
-			system.UseTestDouble(new FakePersonAbsenceRepositoryLegacy()).For<IPersonAbsenceRepository>();
+			system.UseTestDouble(new FakePersonAbsenceRepository(new FakeStorage())).For<IPersonAbsenceRepository>();
 			system.UseTestDouble(new FakePersonAbsenceAccountRepository()).For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<FakeQueuedAbsenceRequestRepository>().For<IQueuedAbsenceRequestRepository>();
 			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();

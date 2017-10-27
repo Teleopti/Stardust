@@ -23,10 +23,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var agent = new Person().WithId();
 			var activity = new Activity("act").WithId();
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage);
 			var scenario = new ThisCurrentScenario(new Scenario("scenario"));
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
-			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, new FakeWriteSideRepository<IActivity>{activity}, scenario, new UtcTimeZone());
+			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
+			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, new FakeWriteSideRepository<IActivity>(storage) { activity}, scenario, new UtcTimeZone());
 
 			var cmd = new MoveActivityCommand
 			{
@@ -54,10 +55,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var userTimeZone = new UtcTimeZone();
 			var assignment = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
-			var activityRepository = new FakeWriteSideRepository<IActivity> { activity };
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage) { assignment };
+			var activityRepository = new FakeWriteSideRepository<IActivity>(storage) { activity };
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
 			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, activityRepository, scenario, userTimeZone);
 
 			var cmd = new MoveActivityCommand
@@ -90,10 +92,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var userTimeZone = new SpecificTimeZone(userTimeZoneInfo);
 			var assignment = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
-			var activityRepository = new FakeWriteSideRepository<IActivity> { activity };
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage) { assignment };
+			var activityRepository = new FakeWriteSideRepository<IActivity>(storage) { activity };
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
 			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, activityRepository, scenario, userTimeZone);
 
 			var cmd = new MoveActivityCommand
@@ -125,10 +128,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var userTimeZone = new SpecificTimeZone(userTimeZoneInfo);
 			var assignment = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
-			var activityRepository = new FakeWriteSideRepository<IActivity> { activity };
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage) { assignment };
+			var activityRepository = new FakeWriteSideRepository<IActivity>(storage) { activity };
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
 			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, activityRepository, scenario, userTimeZone);
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();

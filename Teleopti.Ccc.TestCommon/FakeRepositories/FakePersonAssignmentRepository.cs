@@ -7,23 +7,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakePersonAssignmentRepositoryLegacy : FakePersonAssignmentRepository
-	{
-		public FakePersonAssignmentRepositoryLegacy() : base(new FakeStorage())
-		{
-		}
-
-		public FakePersonAssignmentRepositoryLegacy(IPersonAssignment assignment) : base(new FakeStorage())
-		{
-			Has(assignment);
-		}
-	}
-
-	// feel free to continue implementing as see fit
-	// im all for keeping it stupid (in the same manner as an .IgnoreArguments()) until smartness is required
 	public class FakePersonAssignmentRepository : IPersonAssignmentRepository
 	{
 		private readonly FakeStorage _storage;
+
 		public ICurrentSchedulingSource CurrentSchedulingSource { get; set; }
 
 		public FakePersonAssignmentRepository(FakeStorage storage)

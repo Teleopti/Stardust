@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			_personRepository = new FakePersonRepositoryLegacy2();
 
-			_personAbsenceRepository = new FakePersonAbsenceRepositoryLegacy();
+			_personAbsenceRepository = new FakePersonAbsenceRepository(new FakeStorage());
 			_personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService,_businessRulesForAccountUpdate);
 
 

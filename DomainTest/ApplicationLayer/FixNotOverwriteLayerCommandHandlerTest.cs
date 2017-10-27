@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -28,14 +27,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class FixNotOverwriteLayerCommandHandlerTest : ISetup
 	{
 		public FixNotOverwriteLayerCommandHandler Target;
-		public FakeWriteSideRepository<IPerson> PersonRepository;
+		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository CurrentScenario;
-		public IScheduleStorage ScheduleStorage;
 		public FakeUserTimeZone UserTimeZone;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeLoggedOnUser LoggedOnUser;
-		public FakePersonSkillProvider PersonSkillProvider;
 		public MutableNow Now;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
@@ -44,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FixNotOverwriteLayerCommandHandler>()
 				.For<IHandleCommand<FixNotOverwriteLayerCommand>>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
@@ -58,7 +54,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldFixNotOverwriteLayerInShift()
 		{
 			var scenario = CurrentScenario.Has("Default");
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -96,7 +93,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldRaiseFixNotOverwriteLayerEvent()
 		{
 			var scenario = CurrentScenario.Has("Default");
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -147,7 +145,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldFixNotOverwriteLayerThatIsCoveredByMultipleLayersInShift()
 		{
 			var scenario = CurrentScenario.Has("Default");
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -186,7 +185,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldFixNotOverwriteLayerThatIsCoveredByMultipleLayersAndOneEndIsOutsideTheMainShift()
 		{
 			var scenario = CurrentScenario.Has("Default");
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -225,7 +225,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldFixMultipleNotOverwriteLayersInShift()
 		{
 			var scenario = CurrentScenario.Has("Default");
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -268,7 +269,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldFixNotOverwritableLayerWhichIsAlreadyOverwrittenInShift()
 		{
 			var scenario = CurrentScenario.Has("Default");
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -307,7 +309,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldFixMultipleNotOverwritableLayersWhenTheyOverlapEachOther()
 		{
 			var scenario = CurrentScenario.Has("Default");
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -350,7 +353,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldReturnErrorMessageWhenScheduleDayCanNotBeFixedCompletely()
 		{
 			var scenario = CurrentScenario.Has("Default");
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -391,12 +395,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			IntervalLengthFetcher.Has(15);
 			Now.Is(new DateTime(2013, 11, 14, 0, 0, 0, DateTimeKind.Utc));
 			var skill = SkillFactory.CreateSkillWithId("skill", 15);
-			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill }, new DateOnlyPeriod(), null, new[] { skill });
+			
 			SkillRepository.Add(skill);
 
 			var scenario = CurrentScenario.Has("Default");
-			var person = PersonFactory.CreatePersonWithId();
-			PersonRepository.Add(person);
+			var person = PersonRepository.Has(skill);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -419,7 +422,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(shortBreakActivity);
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				PersonRepository.Single(), scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 18), shiftCategory);
+				person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 18), shiftCategory);
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 12));
 			pa.AddActivity(shortBreakActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 13));
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 14));
@@ -428,7 +431,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new FixNotOverwriteLayerCommand
 			{
-				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
 				Date = new DateOnly(2013, 11, 14)
 			};
 			Target.Handle(command);
@@ -446,11 +449,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class FixNotOverwriteLayerCommandHandlerNoDeltasTest:ISetup
 	{
 		public FixNotOverwriteLayerCommandHandlerNoDeltas Target;
-		public FakeWriteSideRepository<IPerson> PersonRepository;
+		public FakePersonRepository PersonRepository;
 		public FakeWriteSideRepository<IActivity> ActivityRepository;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public FakeScenarioRepository CurrentScenario;
 		public FakeUserTimeZone UserTimeZone;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -459,9 +461,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment,PersonAssignmentKey>>();
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
-			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FixNotOverwriteLayerCommandHandlerNoDeltas>().For<IHandleCommand<FixNotOverwriteLayerCommand>>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 			system.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
@@ -471,8 +470,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixNotOverwriteLayerInShift()
 		{
-			var scenario = CurrentScenario.Current();
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var scenario = CurrentScenario.Has("Default");
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -492,9 +492,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);
-			ScheduleStorage.Add(pa);
-
-
+			
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),
@@ -509,8 +507,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseFixNotOverwriteLayerEvent()
 		{
-			var scenario = CurrentScenario.Current();
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var scenario = CurrentScenario.Has("Default");
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -530,8 +529,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);
-			ScheduleStorage.Add(pa);
-
+			
 			var operatePersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
 			var command = new FixNotOverwriteLayerCommand
@@ -559,8 +557,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixNotOverwriteLayerThatIsCoveredByMultipleLayersInShift()
 		{
-			var scenario = CurrentScenario.Current();
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var scenario = CurrentScenario.Has("Default");
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -581,9 +580,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,13,2013,11,14,15));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);
-			ScheduleStorage.Add(pa);
-
-
+			
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),
@@ -598,8 +595,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixNotOverwriteLayerThatIsCoveredByMultipleLayersAndOneEndIsOutsideTheMainShift()
 		{
-			var scenario = CurrentScenario.Current();
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var scenario = CurrentScenario.Has("Default");
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -620,9 +618,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,13,2013,11,14,15));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);
-			ScheduleStorage.Add(pa);
-
-
+			
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),
@@ -637,8 +633,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixMultipleNotOverwriteLayersInShift()
 		{
-			var scenario = CurrentScenario.Current();
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var scenario = CurrentScenario.Has("Default");
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -661,9 +658,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);
-			ScheduleStorage.Add(pa);
-
-
+			
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),
@@ -680,8 +675,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixNotOverwritableLayerWhichIsAlreadyOverwrittenInShift()
 		{
-			var scenario = CurrentScenario.Current();
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var scenario = CurrentScenario.Has("Default");
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -702,8 +698,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);
-			ScheduleStorage.Add(pa);
-
+			
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),
@@ -718,8 +713,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFixMultipleNotOverwritableLayersWhenTheyOverlapEachOther()
 		{
-			var scenario = CurrentScenario.Current();
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var scenario = CurrentScenario.Has("Default");
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -742,8 +738,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);
-			ScheduleStorage.Add(pa);
-
+			
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),
@@ -760,8 +755,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReturnErrorMessageWhenScheduleDayCanNotBeFixedCompletely()
 		{
-			var scenario = CurrentScenario.Current();
-			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var scenario = CurrentScenario.Has("Default");
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
@@ -783,8 +779,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,9,2013,11,14,17));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepo.Add(pa);
-			ScheduleStorage.Add(pa);
-
+			
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.GetValueOrDefault(),

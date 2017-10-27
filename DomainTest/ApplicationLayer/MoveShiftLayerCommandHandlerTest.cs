@@ -234,9 +234,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldReturnPersonAssignmentIsNotValidDotErrorIfPersonAssignmentNotExists()
 		{
 			var agent = new Person().WithId();
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage);
 			var scenario = new ThisCurrentScenario(new Scenario("scenario"));
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
 			var target = new MoveShiftLayerCommandHandlerNoDeltas( personAssignmentRepository, personRepository, scenario);
 
 			var cmd = new MoveShiftLayerCommand
@@ -256,14 +257,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var agent = new Person().WithId();
 			var activity = new Activity("act").WithId();
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage)
 			{
                 PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,
                     activity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
             };
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
             
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
 			var target = new MoveShiftLayerCommandHandlerNoDeltas( personAssignmentRepository, personRepository, scenario);
 
 			var cmd = new MoveShiftLayerCommand
@@ -290,12 +292,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage)
 			{
 				personAss
 			};
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayer = personAssignment.ShiftLayers.Single();
 			shiftLayer.WithId();
@@ -330,12 +333,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage)
 			{
 				personAss
 			};
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayer = personAssignment.ShiftLayers.Single();
 			shiftLayer.WithId();

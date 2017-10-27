@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
@@ -40,11 +41,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var period = new DateTimePeriod(2013, 9, 4, 2013, 9, 5);
 			var person = PersonFactory.CreatePersonWithId();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentRepository(storage);
+			personAssignmentRepository.Has(personAssignment);
 			var target = new ScheduleRefresher(
 				new FakePersonRepositoryLegacy(person),
 				null,
-				new FakePersonAssignmentRepositoryLegacy(personAssignment),
-				new FakePersonAbsenceRepositoryLegacy(),
+				personAssignmentRepository,
+				new FakePersonAbsenceRepository(storage),
 				new noMessageQueueRemoval()
 				);
 			var scheduleDictionary = new ScheduleDictionaryForTest(personAssignment.Scenario, period);
@@ -70,15 +74,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
 			var scenario = personAssignment.Scenario;
 
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2013, 9, 4, 10, 2013, 9, 4, 11));
-			personAbsence.SetId(Guid.NewGuid());
-			var personAbsenceRepository = new FakePersonAbsenceRepositoryLegacy();
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2013, 9, 4, 10, 2013, 9, 4, 11)).WithId();
+			var storage = new FakeStorage();
+			var personAbsenceRepository = new FakePersonAbsenceRepository(storage);
 			personAbsenceRepository.Add(personAbsence);
-
+			var personAssignmentRepository = new FakePersonAssignmentRepository(storage);
+			personAssignmentRepository.Has(personAssignment);
 			var target = new ScheduleRefresher(
 				new FakePersonRepositoryLegacy(person),
 				null,
-				new FakePersonAssignmentRepositoryLegacy(personAssignment),
+				personAssignmentRepository,
 				personAbsenceRepository,
 				new noMessageQueueRemoval()
 			);
@@ -117,11 +122,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var person = PersonFactory.CreatePersonWithId();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
 			var updateScheduleDataFromMessages = MockRepository.GenerateMock<IUpdateScheduleDataFromMessages>();
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentRepository(storage);
+			personAssignmentRepository.Has(personAssignment);
 			var target = new ScheduleRefresher(
 				new FakePersonRepositoryLegacy(person),
 				updateScheduleDataFromMessages,
-				new FakePersonAssignmentRepositoryLegacy(personAssignment),
-				new FakePersonAbsenceRepositoryLegacy(),
+				personAssignmentRepository,
+				new FakePersonAbsenceRepository(storage),
 				new noMessageQueueRemoval()
 				);
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
@@ -158,11 +166,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var period = new DateTimePeriod(2013, 9, 4, 2013, 9, 5);
 			var person = PersonFactory.CreatePersonWithId();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
+			var storage = new FakeStorage();
 			var target = new ScheduleRefresher(
 				new FakePersonRepositoryLegacy(person),
 				null,
-				new FakePersonAssignmentRepositoryLegacy(),
-				new FakePersonAbsenceRepositoryLegacy(),
+				new FakePersonAssignmentRepository(storage),
+				new FakePersonAbsenceRepository(storage),
 				new noMessageQueueRemoval()
 				);
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(personAssignment.Scenario, period, personAssignment);
@@ -186,11 +195,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var period = new DateTimePeriod(2013, 9, 4, 2013, 9, 5);
 			var person = PersonFactory.CreatePersonWithId();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
+			var storage = new FakeStorage();
+			var personAssignmentRepository = new FakePersonAssignmentRepository(storage);
+			personAssignmentRepository.Has(personAssignment);
 			var target = new ScheduleRefresher(
 				new FakePersonRepositoryLegacy(person),
 				null,
-				new FakePersonAssignmentRepositoryLegacy(personAssignment),
-				new FakePersonAbsenceRepositoryLegacy(),
+				personAssignmentRepository,
+				new FakePersonAbsenceRepository(storage),
 				new noMessageQueueRemoval()
 				);
 			var scheduleDictionary = new ScheduleDictionaryForTest(personAssignment.Scenario, period);
@@ -214,11 +226,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var person = PersonFactory.CreatePersonWithId();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
 			var remover = new noMessageQueueRemoval();
+			var storage = new FakeStorage();
 			var target = new ScheduleRefresher(
 				new FakePersonRepositoryLegacy(person),
 				null,
-				new FakePersonAssignmentRepositoryLegacy(),
-				new FakePersonAbsenceRepositoryLegacy(),
+				new FakePersonAssignmentRepository(storage),
+				new FakePersonAbsenceRepository(storage),
 				remover
 				);
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(personAssignment.Scenario, period, personAssignment);

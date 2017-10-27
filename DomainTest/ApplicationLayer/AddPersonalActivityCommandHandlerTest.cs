@@ -217,10 +217,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void SetUp()
 		{
 			_scenario = new Scenario("scenario");
-			_personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
+			_personRepository = new FakeWriteSideRepository<IPerson>(new FakeStorage()) { PersonFactory.CreatePersonWithId() };
 			_personalActivity = ActivityFactory.CreateActivity("personalActivity");
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
-			_activityRepository = new FakeWriteSideRepository<IActivity> {_mainActivity, _personalActivity};
+			_activityRepository = new FakeWriteSideRepository<IActivity>(new FakeStorage()) { _mainActivity, _personalActivity};
 			_date = new DateOnly(2016, 05,17);
 			_startTime = new DateTime(2016, 05, 17, 10, 0, 0, DateTimeKind.Utc);
 			_endTime = new DateTime(2016, 05, 17, 12, 0, 0, DateTimeKind.Utc);
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignment = new PersonAssignment(_personRepository.Single(), _scenario, _date);
 			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
 			personAssignment.AddPersonalActivity(_personalActivity, _personalActivityDateTimePeriod);
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(new FakeStorage())
 			{
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(_personRepository.Single(),_mainActivity, _mainActivityDateTimePeriod)
 			};
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignment = new PersonAssignment(_personRepository.Single(), _scenario, _date);
 			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
 			personAssignment.AddPersonalActivity(_personalActivity, _personalActivityDateTimePeriod);
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(new FakeStorage())
 			{
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(_personRepository.Single(),_mainActivity, _mainActivityDateTimePeriod)
 			};
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var personAssignment = new PersonAssignment(_personRepository.Single(), _scenario, _date);
 			personAssignment.AddPersonalActivity(_personalActivity, _personalActivityDateTimePeriod);
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(new FakeStorage())
 			{
 				personAssignmentYesterday
 			};

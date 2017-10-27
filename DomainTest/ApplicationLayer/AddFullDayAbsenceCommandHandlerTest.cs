@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Setup()
 		{
 			 var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-			_personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
-			_absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			_personRepository = new FakeWriteSideRepository<IPerson>(new FakeStorage()) { PersonFactory.CreatePersonWithId() };
+			_absenceRepository = new FakeWriteSideRepository<IAbsence>(new FakeStorage()) { AbsenceFactory.CreateAbsenceWithId() };
 			_currentScenario = new FakeCurrentScenario_DoNotUse();
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePersonWithId();
 			var agentsTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			person.PermissionInformation.SetDefaultTimeZone(agentsTimeZone);
-			var personRepository = new FakeWriteSideRepository<IPerson> { person };
+			var personRepository = new FakeWriteSideRepository<IPerson>(new FakeStorage()) { person };
 			var absenceCommandConverter = new AbsenceCommandConverter(_currentScenario, personRepository, _absenceRepository, _scheduleStorage, null);
 			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, absenceCommandConverter);
 
