@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
 		public FakeWriteSideRepository<IPerson> PersonRepository;
-		public FakePersonSkillProvider PersonSkillProvider;
+		public FakePersonSkillProvider_DoNotUse PersonSkillProvider;
 		public MutableNow Now;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<MoveShiftLayerCommandHandler>().For<IHandleCommand<MoveShiftLayerCommand>>();
-			system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
+			system.UseTestDouble<FakePersonSkillProvider_DoNotUse>().For<IPersonSkillProvider>();
 		}
 
 		[Test]

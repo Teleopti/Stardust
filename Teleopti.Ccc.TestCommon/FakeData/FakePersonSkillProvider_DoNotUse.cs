@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-    public class FakePersonSkillProvider: IPersonSkillProvider
+    public class FakePersonSkillProvider_DoNotUse: IPersonSkillProvider
     {
         public SkillCombination SkillCombination { get; set; }
 
