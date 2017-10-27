@@ -79,15 +79,11 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
 
 		private void LogException(Exception exception)
 		{
-			var innerMostException = GetInnerMostException(exception);
-
-			if (innerMostException != exception)
-				_logger.Error(LogMessageExceptionOuter, exception);
-
-			if (innerMostException is HttpException && ((HttpException) innerMostException).GetHttpCode() == 404)
-				_logger.Warn(LogMessage404, innerMostException);
+			var httpException = GetInnerMostException(exception) as HttpException;
+			if (httpException != null && httpException.GetHttpCode() == 404)
+				_logger.Warn(LogMessage404, exception);
 			else
-				_logger.Error(LogMessageException, innerMostException);
+				_logger.Error(LogMessageException, exception);
 		}
 
 		private static Exception GetInnerMostException(Exception exception)
