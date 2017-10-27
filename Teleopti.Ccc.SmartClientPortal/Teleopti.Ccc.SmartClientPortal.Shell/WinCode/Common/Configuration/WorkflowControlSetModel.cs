@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 	public class WorkflowControlSetModel : IWorkflowControlSetModel
 	{
 		private static IList<AbsenceRequestPeriodTypeModel> _defaultAbsenceRequestPeriodAdapters;
+		private static IList<OvertimeRequestPeriodTypeModel> _defaultOvertimeRequestPeriodAdapters;
 		private readonly List<AbsenceRequestPeriodModel> _absenceRequestPeriodModels = new List<AbsenceRequestPeriodModel>();
 
 		public WorkflowControlSetModel(IWorkflowControlSet domainEntity)
@@ -148,6 +149,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				setDefaultPeriodIfMissing();
 				return _defaultAbsenceRequestPeriodAdapters;
+			}
+		}
+
+		public static IList<OvertimeRequestPeriodTypeModel> DefaultOvertimeRequestPeriodAdapters
+		{
+			get
+			{
+				setDefaultPeriodIfMissing();
+				return _defaultOvertimeRequestPeriodAdapters;
 			}
 		}
 
@@ -308,10 +318,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				OpenForRequestsPeriod = openPeriod
 			};
 
+			var overtimeOpenDatePeriod = new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				Period = period,
+			};
+
+			var overtimeOpenRollingPeriod = new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				BetweenDays = new MinMax<int>(2, 15),
+			};
+
 			_defaultAbsenceRequestPeriodAdapters = new List<AbsenceRequestPeriodTypeModel>
 			{
 				new AbsenceRequestPeriodTypeModel(openDatePeriod, Resources.FromTo),
 				new AbsenceRequestPeriodTypeModel(openRollingPeriod, Resources.Rolling)
+			};
+
+			_defaultOvertimeRequestPeriodAdapters = new List<OvertimeRequestPeriodTypeModel>
+			{
+				new OvertimeRequestPeriodTypeModel(overtimeOpenDatePeriod, Resources.FromTo),
+				new OvertimeRequestPeriodTypeModel(overtimeOpenRollingPeriod, Resources.Rolling)
 			};
 		}
 

@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private readonly IToggleManager _toggleManager;
 		private readonly WorkflowControlSetPresenter _presenter;
 		private SFGridColumnGridHelper<AbsenceRequestPeriodModel> _gridHelper;
+		private SFGridColumnGridHelper<OvertimeRequestPeriodModel> _overtimeRequestOpenPeriodGridHelper;
 
 		private IDictionary<IAbsence, MonthlyProjectionVisualiser> _projectionCache =
 			new Dictionary<IAbsence, MonthlyProjectionVisualiser>();
@@ -58,6 +59,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			setAbsenceRequestVisibilityOptions(toggleManager);
 			setOvertimeRequestVisibility();
+			loadOvertimeRequestAutoGrantTypeAdapterCollection();
 		}
 
 		private void setOvertimeRequestVisibility()
@@ -70,6 +72,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_OvertimeRequestHandling_45177))
 			{
 				checkBoxAdvAutoGrantOvertimeRequest.Visible = false;
+			}
+
+			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSetting_46417))
+			{
+				tableLayoutPanelOpenForOvertimeRequests.Visible = false;
+				gridControlOvertimeRequestOpenPeriods.Visible = false;
 			}
 		}
 
@@ -91,6 +99,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			control.Hide();
 			var rowIndex = tableLayoutPanelBasic.GetRow(control);
 			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
+		}
+
+		private void loadOvertimeRequestAutoGrantTypeAdapterCollection()
+		{
+			_overtimeRequestAutoGrantTypeAdapterCollection = new List<OvertimeRequestAutoGrantTypeAdapter>();
+
+			foreach (var value in Enum.GetValues(typeof(OvertimeRequestAutoGrantType)))
+			{
+				var multiplicatorTypeView = new OvertimeRequestAutoGrantTypeAdapter((OvertimeRequestAutoGrantType)value);
+				_overtimeRequestAutoGrantTypeAdapterCollection.Add(multiplicatorTypeView);
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -185,6 +204,60 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			twoListSelectorMatchingSkills.SelectedRemoved += twoListSelectorMatchingSkills_SelectedRemoved;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void configureOvertimeRequestPeriodGrid()
+		{
+			var columnList = new List<SFGridColumnBase<OvertimeRequestPeriodModel>>
+			{
+				new SFGridRowHeaderColumn<OvertimeRequestPeriodModel>(string.Empty)
+			};
+
+			// Add cellmodels
+			gridControlOvertimeRequestOpenPeriods.CellModels.Add("IgnoreCell", new IgnoreCellModel(gridControlOvertimeRequestOpenPeriods.Model));
+			var cellModel = new GridDropDownMonthCalendarAdvCellModel(gridControlOvertimeRequestOpenPeriods.Model);
+			cellModel.HideNoneButton();
+			cellModel.HideTodayButton();
+			gridControlOvertimeRequestOpenPeriods.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
+			var cell = new NullableIntegerCellModel(gridControlOvertimeRequestOpenPeriods.Model)
+			{
+				MinValue = 0,
+				MaxValue = 999
+			};
+			gridControlOvertimeRequestOpenPeriods.CellModels.Add("IntegerCellModel", cell);
+
+			var periodTypeDropDownColumn = new SFGridDropDownColumn
+				<OvertimeRequestPeriodModel, OvertimeRequestPeriodTypeModel>(
+				"PeriodType", Resources.Type, " ", WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters, "DisplayText", null);
+
+			columnList.Add(periodTypeDropDownColumn);
+
+			var autoGrantColumn =
+				new SFGridDropDownEnumColumn<OvertimeRequestPeriodModel, OvertimeRequestAutoGrantTypeAdapter, OvertimeRequestAutoGrantType>(
+					"OvertimeRequestAutoGrantType", Resources.AutoGrant," ", _overtimeRequestAutoGrantTypeAdapterCollection, "DisplayName", "AutoGrantType");
+
+			columnList.Add(autoGrantColumn);
+
+			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodStartDate", Resources.Start, Resources.Period));
+			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodEndDate", Resources.End, Resources.Period));
+			columnList.Add(new SFGridIntegerCellWithIgnoreColumn<OvertimeRequestPeriodModel>("RollingStart", Resources.Start, Resources.Rolling));
+			columnList.Add(new SFGridIntegerCellWithIgnoreColumn<OvertimeRequestPeriodModel>("RollingEnd", Resources.End, Resources.Rolling));
+
+			gridControlOvertimeRequestOpenPeriods.Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation | GridMergeCellsMode.MergeColumnsInRow;
+			gridControlOvertimeRequestOpenPeriods.Rows.HeaderCount = 1;
+
+			// Adds column list.
+			var gridColumns = new ReadOnlyCollection<SFGridColumnBase<OvertimeRequestPeriodModel>>(columnList);
+			_overtimeRequestOpenPeriodGridHelper = new SFGridColumnGridHelper<OvertimeRequestPeriodModel>(gridControlOvertimeRequestOpenPeriods,
+																						gridColumns, new List<OvertimeRequestPeriodModel>());
+
+			gridControlOvertimeRequestOpenPeriods.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
+			gridControlOvertimeRequestOpenPeriods.Model.Options.ExcelLikeCurrentCell = true;
+			
+			//gridControlOvertimeRequestOpenPeriods.CurrentCellCloseDropDown += gridControlAbsenceRequestOpenPeriods_CurrentCellCloseDropDown;
+			//gridControlOvertimeRequestOpenPeriods.SaveCellInfo += gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
+			//gridControlOvertimeRequestOpenPeriods.KeyDown += gridControlAbsenceRequestOpenPeriods_KeyDown;
+		}
+
 		private void twoListSelectorAbsencesSelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IAbsence;
@@ -237,6 +310,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_gridHelper?.Dispose();
 			_gridHelper = null;
 			_projectionCache = null;
+
+			_overtimeRequestOpenPeriodGridHelper?.Dispose();
+			_overtimeRequestOpenPeriodGridHelper = null;
 		}
 
 		private void twoListSelectorCategories_SelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
@@ -508,6 +584,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		public void InitializeView()
 		{
 			configureAbsenceRequestPeriodGrid();
+			configureOvertimeRequestPeriodGrid();
 			configureProjectionGrid();
 		}
 
@@ -822,6 +899,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		}
 
 		private bool _loading;
+		private List<OvertimeRequestAutoGrantTypeAdapter> _overtimeRequestAutoGrantTypeAdapterCollection;
 
 		public void LoadDateOnlyVisualizer()
 		{
@@ -1237,6 +1315,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		}
 
 		private void buttonAddOvertimeRequestPeriod_Click(object sender, EventArgs e)
+		{
+			
+		}
+
+		private void gridControlOvertimeRequestOpenPeriods_MouseDown(object sender, MouseEventArgs e)
 		{
 			
 		}

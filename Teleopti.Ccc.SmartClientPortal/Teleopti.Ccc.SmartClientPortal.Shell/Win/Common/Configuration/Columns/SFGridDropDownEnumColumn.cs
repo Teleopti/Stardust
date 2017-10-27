@@ -19,8 +19,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
             _valueMember = valueMember;
         }
 
+		public SFGridDropDownEnumColumn(string bindingProperty, string headerText, string groupHeaderText, IList<TComboItem> comboItems, string displayMember, string valueMember)
+			: this(bindingProperty, headerText, comboItems, displayMember, valueMember)
+		{
+			GroupHeaderText = groupHeaderText;
+		}
 
-        public override int PreferredWidth
+
+		public override int PreferredWidth
         {
             get { return 140; }
         }

@@ -432,6 +432,8 @@
     <Compile Include="WinCode\Common\Commands\TextBoxBehavior.cs" />
     <Compile Include="WinCode\Common\Commands\TwoStepCommandModel.cs" />
     <Compile Include="WinCode\Common\CommonAgentNameProvider.cs" />
+    <Compile Include="WinCode\Common\Configuration\OvertimeRequestPeriodTypeModel.cs" />
+    <Compile Include="WinCode\Common\Configuration\OvertimeRequestPeriodModel.cs" />
     <Compile Include="WinCode\Common\Configuration\AbsenceRequestPeriodModel.cs" />
     <Compile Include="WinCode\Common\Configuration\AbsenceRequestPeriodTypeModel.cs" />
     <Compile Include="WinCode\Common\Configuration\AlarmControlPresenter.cs" />
@@ -1481,6 +1483,7 @@
     <Compile Include="Win\Common\Configuration\ContractScheduleControl.Designer.cs">
       <DependentUpon>ContractScheduleControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win\Common\Configuration\OvertimeRequestAutoGrantTypeAdapter.cs" />
     <Compile Include="Win\Common\Configuration\DayOfWeekAdapter.cs" />
     <Compile Include="Win\Common\Configuration\EarlyStartTimeCellValidator.cs" />
     <Compile Include="Win\Common\Configuration\GamificationSettingControl.cs">

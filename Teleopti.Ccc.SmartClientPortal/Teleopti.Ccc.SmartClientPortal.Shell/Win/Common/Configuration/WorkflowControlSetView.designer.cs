@@ -146,6 +146,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.buttonAddAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAddOvertimeRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.gridControlAbsenceRequestOpenPeriods = new Syncfusion.Windows.Forms.Grid.GridControl();
+			this.gridControlOvertimeRequestOpenPeriods = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.contextMenuStripOpenPeriodsGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemFromToPeriod = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRollingPeriod = new System.Windows.Forms.ToolStripMenuItem();
@@ -229,6 +230,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOpenForAbsenceRequests.SuspendLayout();
 			this.tableLayoutPanelOpenForOvertimeRequests.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).BeginInit();
 			this.contextMenuStripOpenPeriodsGrid.SuspendLayout();
 			this.tabPageAdvShiftTradeRequest.SuspendLayout();
 			this.tableLayoutPanelShiftTrade.SuspendLayout();
@@ -1984,6 +1986,48 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.gridControlAbsenceRequestOpenPeriods.ThemesEnabled = true;
 			this.gridControlAbsenceRequestOpenPeriods.UseRightToLeftCompatibleTextBox = true;
 			this.gridControlAbsenceRequestOpenPeriods.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridControlAbsenceRequestOpenPeriods_MouseDown);
+
+			// 
+			// gridControlOvertimeRequestOpenPeriods
+			// 
+			this.gridControlOvertimeRequestOpenPeriods.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
+			
+			this.gridControlOvertimeRequestOpenPeriods.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
+			gridBaseStyle5,
+			gridBaseStyle6,
+			gridBaseStyle7,
+			gridBaseStyle8});
+			this.gridControlOvertimeRequestOpenPeriods.ColCount = 11;
+			this.gridControlOvertimeRequestOpenPeriods.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
+			new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
+			this.gridControlOvertimeRequestOpenPeriods.ContextMenuStrip = this.contextMenuStripOpenPeriodsGrid;
+			this.gridControlOvertimeRequestOpenPeriods.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
+			this.gridControlOvertimeRequestOpenPeriods.DefaultRowHeight = 20;
+			this.gridControlOvertimeRequestOpenPeriods.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.gridControlOvertimeRequestOpenPeriods.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
+			this.gridControlOvertimeRequestOpenPeriods.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
+			this.gridControlOvertimeRequestOpenPeriods.Location = new System.Drawing.Point(3, 355);
+			this.gridControlOvertimeRequestOpenPeriods.Name = "gridControlOvertimeRequestOpenPeriods";
+			this.gridControlOvertimeRequestOpenPeriods.NumberedColHeaders = false;
+			this.gridControlOvertimeRequestOpenPeriods.NumberedRowHeaders = false;
+			this.gridControlOvertimeRequestOpenPeriods.Office2007ScrollBars = true;
+			this.gridControlOvertimeRequestOpenPeriods.Properties.BackgroundColor = System.Drawing.SystemColors.Window;
+			this.gridControlOvertimeRequestOpenPeriods.Properties.ForceImmediateRepaint = false;
+			this.gridControlOvertimeRequestOpenPeriods.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(212)))));
+			this.gridControlOvertimeRequestOpenPeriods.Properties.MarkColHeader = false;
+			this.gridControlOvertimeRequestOpenPeriods.Properties.MarkRowHeader = false;
+			this.gridControlOvertimeRequestOpenPeriods.RowCount = 0;
+			this.gridControlOvertimeRequestOpenPeriods.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
+			new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
+			this.gridControlOvertimeRequestOpenPeriods.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
+			this.gridControlOvertimeRequestOpenPeriods.Size = new System.Drawing.Size(959, 52);
+			this.gridControlOvertimeRequestOpenPeriods.SmartSizeBox = false;
+			this.gridControlOvertimeRequestOpenPeriods.TabIndex = 26;
+			this.gridControlOvertimeRequestOpenPeriods.Text = "gridControl1";
+			this.gridControlOvertimeRequestOpenPeriods.ThemesEnabled = true;
+			this.gridControlOvertimeRequestOpenPeriods.UseRightToLeftCompatibleTextBox = true;
+			this.gridControlOvertimeRequestOpenPeriods.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridControlOvertimeRequestOpenPeriods_MouseDown);
+
 			// 
 			// contextMenuStripOpenPeriodsGrid
 			// 
@@ -2334,16 +2378,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 1);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvAutoGrantOvertimeRequest, 0, 2);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOpenForOvertimeRequests, 0, 3);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.gridControlOvertimeRequestOpenPeriods, 0, 4);
 			this.tableLayoutPanelETOTRequest.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelETOTRequest.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelETOTRequest.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelETOTRequest.Name = "tableLayoutPanelETOTRequest";
-			this.tableLayoutPanelETOTRequest.RowCount = 5;
+			this.tableLayoutPanelETOTRequest.RowCount = 6;
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelETOTRequest.Size = new System.Drawing.Size(965, 410);
 			this.tableLayoutPanelETOTRequest.TabIndex = 4;
@@ -2492,6 +2538,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOpenForAbsenceRequests.PerformLayout();
 			this.tableLayoutPanelOpenForOvertimeRequests.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).EndInit();
 			this.contextMenuStripOpenPeriodsGrid.ResumeLayout(false);
 			this.tabPageAdvShiftTradeRequest.ResumeLayout(false);
 			this.tableLayoutPanelShiftTrade.ResumeLayout(false);
@@ -2548,6 +2595,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvViewpoint;
 		private Syncfusion.Windows.Forms.Grid.GridControl gridControlVisualisation;
 		private Syncfusion.Windows.Forms.Grid.GridControl gridControlAbsenceRequestOpenPeriods;
+		private Syncfusion.Windows.Forms.Grid.GridControl gridControlOvertimeRequestOpenPeriods;
 		private TableLayoutPanel tableLayoutPanelOpenForAbsenceRequests;
 		private TableLayoutPanel tableLayoutPanelOpenForOvertimeRequests;
 		private Label labelOpenForAbsenceRequests;
