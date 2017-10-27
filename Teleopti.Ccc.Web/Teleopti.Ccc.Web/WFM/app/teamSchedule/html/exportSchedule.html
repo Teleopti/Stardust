@@ -12,7 +12,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>{{'Groups' | translate}}</td>
+					<td>{{'Groupings' | translate}}</td>
 					<td>
 						<group-page-picker group-pages="vm.availableGroups"
 										   class="group-picker-container inline-block"
@@ -28,7 +28,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>{{'Timezone' | translate}}</td>
+					<td>{{'TimeZone' | translate}}</td>
 					<td>
 						<md-select ng-model="vm.configuration.timezoneId" placeholder="{{ 'Timezone'|translate }}" required>
 							<md-option ng-repeat="timezone in vm.timezones" ng-value="timezone.Id">{{::timezone.Name}}</md-option>
