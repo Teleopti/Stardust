@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         public ICollection<IPerson> PeopleInOrg()
         {
             return _peopleInOrg ?? (_peopleInOrg =
-                    _personRepository.FindPeopleInOrganization(_selectedEntitiesForPeriod.SelectedPeriod, true));
+                    _personRepository.FindAllAgents(_selectedEntitiesForPeriod.SelectedPeriod, true));
         }
 
         private ISchedulerStateHolder filterPersonsInOrg() 

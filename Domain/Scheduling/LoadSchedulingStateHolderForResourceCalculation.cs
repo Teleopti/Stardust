@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			schedulingResultStateHolder.AddSkills(skills);
 
 			schedulingResultStateHolder.PersonsInOrganization = optionalLoadOrganizationFunc != null ?
-				optionalLoadOrganizationFunc(dateOnlyPeriod) : _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
+				optionalLoadOrganizationFunc(dateOnlyPeriod) : _personRepository.FindAllAgents(dateOnlyPeriod, false);
 
 			var result = _peopleAndSkillLoaderDecider.Execute(scenario, period, requestedPersons);
 			result.FilterPeople(schedulingResultStateHolder.PersonsInOrganization);

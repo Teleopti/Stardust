@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
                 factory.CreateContractScheduleRepository(unitOfWork).LoadAllAggregate();
 
-                ICollection<IPerson> persons = rep.FindPeopleInOrganization(period, false);
+                ICollection<IPerson> persons = rep.FindAllAgents(period, false);
 				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TimeZoneHelper.CurrentSessionTimeZone), persons, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuard());
             }
         }

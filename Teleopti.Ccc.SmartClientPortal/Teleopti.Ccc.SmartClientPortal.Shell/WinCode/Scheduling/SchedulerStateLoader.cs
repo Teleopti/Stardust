@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				IPersonRepository service = _repositoryFactory.CreatePersonRepository(uow);
 
 				_schedulerState.SchedulingResultState.PersonsInOrganization =
-					service.FindPeopleInOrganization(_schedulerState.RequestedPeriod.DateOnlyPeriod, true);
+					service.FindAllAgents(_schedulerState.RequestedPeriod.DateOnlyPeriod, true);
 
 				foreach (IPerson person in _schedulerState.SchedulingResultState.PersonsInOrganization)
 				{

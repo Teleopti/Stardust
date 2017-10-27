@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.LoadAll<IPerson>().OrderBy(p => p.Name.ToString()).ToArray();
 		}
 
-		public ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData)
+		public ICollection<IPerson> FindAllAgents(DateOnlyPeriod period, bool includeRuleSetData)
 		{
 			return _storage.LoadAll<IPerson>().Where(p => p.PersonPeriods(period).Count > 0).ToList();
 		}

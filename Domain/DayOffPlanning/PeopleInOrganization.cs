@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
 		public IEnumerable<IPerson> Agents(DateOnlyPeriod period)
 		{
-			return _personRepository.FindPeopleInOrganization(period, false);
+			return _personRepository.FindAllAgents(period, false);
 		}
 	}
 }

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             _target = new PeopleLoader(_personRepository, _contractRepository, _schedulerStateHolder, _selectedEntitiesForPeriod, _skillRepository);
 
-            Expect.Call(_personRepository.FindPeopleInOrganization(_requestedPeriod, true)).Return(new List<IPerson>());
+            Expect.Call(_personRepository.FindAllAgents(_requestedPeriod, true)).Return(new List<IPerson>());
             Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(new SchedulingResultStateHolder());
             Expect.Call(_schedulerStateHolder.ResetFilteredPersons);
             Expect.Call(_schedulerStateHolder.AllPermittedPersons).Return(new List<IPerson>());
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void VerifyInitialize()
         {
-            Expect.Call(_personRepository.FindPeopleInOrganization(_requestedPeriod, true)).Return(new List<IPerson>());
+            Expect.Call(_personRepository.FindAllAgents(_requestedPeriod, true)).Return(new List<IPerson>());
             Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(new SchedulingResultStateHolder());
             Expect.Call(_schedulerStateHolder.ResetFilteredPersons);
             Expect.Call(_schedulerStateHolder.AllPermittedPersons).Return(new List<IPerson>());
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _selectedEntities.Add(_team);
             _target = new PeopleLoader(_personRepository, _contractRepository, _schedulerStateHolder, _selectedEntitiesForPeriod, _skillRepository);
             IList<IPerson> returnPersons = new List<IPerson>();
-            Expect.Call(_personRepository.FindPeopleInOrganization(_requestedPeriod, true)).Return(_persons);
+            Expect.Call(_personRepository.FindAllAgents(_requestedPeriod, true)).Return(_persons);
             Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(new SchedulingResultStateHolder());
             Expect.Call(_schedulerStateHolder.ResetFilteredPersons);
             Expect.Call(_schedulerStateHolder.AllPermittedPersons).Return(returnPersons).Repeat.AtLeastOnce();
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _selectedEntities.Add(_person);
             _target = new PeopleLoader(_personRepository, _contractRepository, _schedulerStateHolder, _selectedEntitiesForPeriod, _skillRepository);
             IList<IPerson> returnPersons = new List<IPerson>();
-            Expect.Call(_personRepository.FindPeopleInOrganization(_requestedPeriod, true)).Return(_persons);
+            Expect.Call(_personRepository.FindAllAgents(_requestedPeriod, true)).Return(_persons);
             Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(new SchedulingResultStateHolder());
             Expect.Call(_schedulerStateHolder.ResetFilteredPersons);
             Expect.Call(_schedulerStateHolder.AllPermittedPersons).Return(returnPersons).Repeat.AtLeastOnce();
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void VerifyPeopleInOrg()
         {
-            Expect.Call(_personRepository.FindPeopleInOrganization(_requestedPeriod, true)).Return(new List<IPerson>());
+            Expect.Call(_personRepository.FindAllAgents(_requestedPeriod, true)).Return(new List<IPerson>());
             _mockRep.ReplayAll();
 
             Assert.IsNotNull(_target.PeopleInOrg());

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IPerson> FindPeopleBelongTeams(ITeam[] teams, DateOnlyPeriod period);
 		ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period);
 		ICollection<IPerson> FindAllSortByName();
-		ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData);
+		ICollection<IPerson> FindAllAgents(DateOnlyPeriod period, bool includeRuleSetData);
 		ICollection<IPerson> FindPeopleByEmploymentNumber(string employmentNumber);
 		ICollection<IPerson> FindPeopleByEmploymentNumbers(IEnumerable<string> employmentNumbers);
 

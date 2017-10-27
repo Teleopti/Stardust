@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(activityRepository.LoadAll()).Return(new List<IActivity>());
             Expect.Call(dayOffRepository.LoadAll()).Return(new List<IDayOffTemplate>());
             Expect.Call(shiftCategoryRepository.FindAll()).Return(new List<IShiftCategory>());
-            Expect.Call(personRepository.FindPeopleInOrganization(new DateOnlyPeriod(), true)).IgnoreArguments().Return(
+            Expect.Call(personRepository.FindAllAgents(new DateOnlyPeriod(), true)).IgnoreArguments().Return(
                 new List<IPerson>());
             Expect.Call(contractRepMock.FindAllContractByDescription()).Return(_contractList);
             Expect.Call(contractScheduleRepMock.LoadAllAggregate()).Return(_contractScheduleColl);

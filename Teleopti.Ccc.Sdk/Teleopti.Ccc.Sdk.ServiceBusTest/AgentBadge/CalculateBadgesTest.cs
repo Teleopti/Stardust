@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 
 			var period = new DateOnlyPeriod(new DateOnly(2014, 8, 7), new DateOnly(2014, 8, 9));
-			personRepository.Stub(x => x.FindPeopleInOrganization(period, false))
+			personRepository.Stub(x => x.FindAllAgents(period, false))
 				.Return(new List<IPerson> {new Person()});
 
 			msgRepository = MockRepository.GenerateMock<IPushMessagePersister>();

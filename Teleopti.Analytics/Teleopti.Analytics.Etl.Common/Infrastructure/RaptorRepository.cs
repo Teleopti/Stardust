@@ -531,7 +531,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				List<IPerson> retList = new List<IPerson>();
 				// We want to load all persons, therefore we use a large date scope.
 				var foreverPeriod = new DateOnlyPeriod(1900, 1, 1, 9999, 12, 31);
-				retList.AddRange(repository.FindPeopleInOrganization(foreverPeriod, false));
+				retList.AddRange(repository.FindAllAgents(foreverPeriod, false));
 
 				initializePersonPeriod(retList);
 

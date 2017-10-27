@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var skillDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>{{skills[0],new ISkillDay[]{}}};
 			
 			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
-			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
+			_personRepository.Stub(x => x.FindAllAgents(dateOnlyPeriod, false)).Return(peopleInOrganization);
 			_scheduleStorage.Stub(
 #pragma warning disable 618
 				x => x.FindSchedulesForPersons(scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, new DateTimePeriod(), null, false))
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
 
 			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
-			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
+			_personRepository.Stub(x => x.FindAllAgents(dateOnlyPeriod, false)).Return(peopleInOrganization);
 			_scheduleStorage.Stub(
 				x =>
 #pragma warning disable 618

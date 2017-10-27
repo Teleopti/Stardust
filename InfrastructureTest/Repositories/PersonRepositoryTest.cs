@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(c);
 			PersistAndRemoveFromUnitOfWork(p);
 
-			var snubbar = target.FindPeopleInOrganization(new DateOnlyPeriod(1800, 1, 1, 2100, 1, 1), true);
+			var snubbar = target.FindAllAgents(new DateOnlyPeriod(1800, 1, 1, 2100, 1, 1), true);
 
 			Assert.AreEqual(2, snubbar.First().PersonPeriodCollection.First().PersonContract.ContractSchedule.ContractScheduleWeeks.Count());
 		}
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(ctr, percentage, ctrSched), teamBu));
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1999, 1, 1), new PersonContract(ctr, percentage, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(per);
-			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false).Count);
+			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false).Count);
 		}
 
 		[Test]
@@ -596,7 +596,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			SetupPersonsInOrganizationWithContract();
 
 			Session.Evict(BusinessUnitFactory.BusinessUnitUsedInTest);
-			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false);
+			ICollection<IPerson> res = target.FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false);
 
 			Assert.AreEqual(2, res.Count);
 
@@ -666,7 +666,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyFindPersonInOrganizationWithWorkflowControlSet()
 		{
 			SetupPersonsInOrganizationWithContract();
-			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false);
+			ICollection<IPerson> res = target.FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false);
 			IPerson person = res.FirstOrDefault(p => p.Name.FirstName == "hejhej");
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(person.WorkflowControlSet));
 		}
@@ -1084,10 +1084,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			createPersonWithRuleSets(team);
 			createPersonWithRuleSets(team2);
 
-			IPerson loadedPerson = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false))[0];
+			IPerson loadedPerson = new List<IPerson>(target.FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false))[0];
 			Assert.IsFalse(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag));
 			Session.Clear();
-			loadedPerson = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), true))[0];
+			loadedPerson = new List<IPerson>(target.FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), true))[0];
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedPerson.PersonPeriodCollection.First().RuleSetBag.RuleSetCollection[0].ExtenderCollection));
@@ -1375,7 +1375,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyNumberOfActiveAgentsNotIncreasedWhenEmptyAssignmentsExists()
 		{
 			SetupPersonsInOrganizationWithContract();
-			IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
+			IList<IPerson> resTemp = new List<IPerson>(target.FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
 
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			scenario.DefaultScenario = true;
@@ -1402,7 +1402,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyNumberOfActiveAgentsIfBusinessUnitIsDeleted()
 		{
 			SetupPersonsInOrganizationWithContract();
-			IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
+			IList<IPerson> resTemp = new List<IPerson>(target.FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
 
 			//add pers ass
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -1432,7 +1432,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldNotCountDeletedAsActiveAgents()
 		{
 			SetupPersonsInOrganizationWithContract();
-			var resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
+			var resTemp = new List<IPerson>(target.FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			scenario.DefaultScenario = true;
 			var act = new Activity("df");
@@ -1462,7 +1462,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private void verifyNumberOfActiveAgents()
 		{
 			SetupPersonsInOrganizationWithContract();
-			IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
+			IList<IPerson> resTemp = new List<IPerson>(target.FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
 
 			//add pers ass
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -1696,7 +1696,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(logOn2);
 			PersistAndRemoveFromUnitOfWork(person);
 
-			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2), false);
+			ICollection<IPerson> res = target.FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2), false);
 			Assert.AreEqual(1, res.Count);
 			IPerson per = res.First();
 			Assert.AreEqual(2, per.PersonPeriodCollection.Count);
