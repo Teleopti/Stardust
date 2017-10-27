@@ -5,9 +5,9 @@ insert into ApplicationFunctionInRole(
            ,[InsertedOn])
 	select 
 		afr.ApplicationRole,
-		af.Id,
+		(select Id from ApplicationFunction where ForeignId = '0148'),
 		getdate()
 	from ApplicationFunctionInRole  afr
-	inner join ApplicationFunction af
-	on af.Id = afr.ApplicationFunction
-	where af.ForeignId = '0059'
+	inner join ApplicationFunction old
+		on old.Id = afr.ApplicationFunction
+	where old.ForeignId = '0059'
