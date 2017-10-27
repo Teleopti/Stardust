@@ -19,12 +19,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		}
 
 		[TestLog]
-		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, LockInfoForStateHolder lockInfoForStateHolder, DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills = null)
+		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, 
+			IEnumerable<Guid> choosenAgents, LockInfoForStateHolder lockInfoForStateHolder, 
+			DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills = null)
 		{
 			PreFill(schedulerStateHolderTo, period);
 			var scenario = FetchScenario();
 			schedulerStateHolderTo.SetRequestedScenario(scenario);
-			FillAgents(schedulerStateHolderTo, agentsInIsland, period);
+			FillAgents(schedulerStateHolderTo, agentsInIsland, choosenAgents, period);
 			removeUnwantedAgents(schedulerStateHolderTo, agentsInIsland);
 			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period, onlyUseSkills);
 			skills = includeParentMultisiteSkills(skills);
@@ -125,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		}
 
 		protected abstract IScenario FetchScenario();
-		protected abstract void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period);
+		protected abstract void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, IEnumerable<Guid> choosenAgentIds, DateOnlyPeriod period);
 		protected abstract void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period);
 		protected abstract void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period);
 		protected abstract void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period);

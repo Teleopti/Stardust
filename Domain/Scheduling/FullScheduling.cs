@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual void Setup(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
-			_fillSchedulerStateHolder.Fill(_schedulerStateHolder(), people, null, period);
+			_fillSchedulerStateHolder.Fill(_schedulerStateHolder(), people, null, null, period);
 		}
 	}
 }

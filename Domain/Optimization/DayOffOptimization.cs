@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 				blockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create();
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
 				agents = schedulerStateHolder.ChoosenAgents.FixedStaffPeople(period);
 			}
 			else
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create(planningGroup);
 				blockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
 				var people = _personRepository.FindPeopleInPlanningGroup(planningGroup, period);
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
 				agents = people.FixedStaffPeople(period);
 			}
 
