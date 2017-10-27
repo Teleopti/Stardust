@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	            lock (_lockObject)
 	            {
 					if (_personCollection == null)
-						_personCollection = new List<IPerson>(_stateHolder().AllPermittedPersons);
+						_personCollection = new List<IPerson>(_stateHolder().ChoosenAgents);
 	            }
                 
                 return _personCollection;

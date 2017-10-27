@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, uow, new BackgroundWorker(), new List<ISkill> { _selectedSkill });
 
             Assert.IsTrue(_targetStateHolder.SchedulingResultState.Skills.Contains(_selectedSkill));
-            Assert.IsTrue(_targetStateHolder.AllPermittedPersons.Contains(_permittedPeople[0]));
+            Assert.IsTrue(_targetStateHolder.ChoosenAgents.Contains(_permittedPeople[0]));
             Assert.AreSame(scheduleDictionary, _targetStateHolder.SchedulingResultState.Schedules);
         }
     }

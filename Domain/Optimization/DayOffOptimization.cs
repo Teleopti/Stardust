@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 				blockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create();
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
-				agents = schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period);
+				agents = schedulerStateHolder.ChoosenAgents.FixedStaffPeople(period);
 			}
 			else
 			{

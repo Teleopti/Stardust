@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                 if (isPerson)
                 {
                     if (selectedEntities.Contains(person))
-                        _schedulerStateHolder.AllPermittedPersons.Add(person);
+                        _schedulerStateHolder.ChoosenAgents.Add(person);
                 }
                 if (isTeam)
                 {
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                     {
                         if (selectedEntities.Contains(team))
                         {
-                            _schedulerStateHolder.AllPermittedPersons.Add(person);
+                            _schedulerStateHolder.ChoosenAgents.Add(person);
                             break;
                         }
                     }

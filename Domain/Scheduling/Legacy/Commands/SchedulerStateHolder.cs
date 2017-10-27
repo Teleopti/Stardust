@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_requestedScenario = scenario;
 		}
 
-		public IList<IPerson> AllPermittedPersons => _allPermittedPersons;
+		public IList<IPerson> ChoosenAgents => _allPermittedPersons;
 
 		public bool ConsiderShortBreaks { get; set; } = true;
 
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (period == null) throw new ArgumentNullException(nameof(period));
 
 			SchedulingResultState.Schedules =
-				findSchedulesForPersons.FindSchedulesForPersons(RequestedScenario, personsInOrganization, scheduleDictionaryLoadOptions, period, AllPermittedPersons, true);
+				findSchedulesForPersons.FindSchedulesForPersons(RequestedScenario, personsInOrganization, scheduleDictionaryLoadOptions, period, ChoosenAgents, true);
 		}
 		
 		public void LoadSettings(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _requestedScenario.DefaultScenario)
 				if (personRequestRepository != null)
-					personRequests = personRequestRepository.FindAllRequestModifiedWithinPeriodOrPending(AllPermittedPersons, period);
+					personRequests = personRequestRepository.FindAllRequestModifiedWithinPeriodOrPending(ChoosenAgents, period);
 			
 			var requests = personRequests.FilterBySpecification(new All<IPersonRequest>()
 				                                                .And(afterLoadedPeriodSpecification).Or(
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
         public void ResetFilteredPersons()
         {
-	        var allPermittedPersonIds = AllPermittedPersons.Select(x => x.Id.GetValueOrDefault()).ToArray();
+	        var allPermittedPersonIds = ChoosenAgents.Select(x => x.Id.GetValueOrDefault()).ToArray();
 	        _filteredAgents =
 		        SchedulingResultState.LoadedAgents.Where(p => Array.IndexOf(allPermittedPersonIds, p.Id.Value) >= 0)
 			        .OrderBy(CommonAgentName)
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void FilterPersons(HashSet<Guid> selectedGuids)
 		{
 			var selectedPersons = new Dictionary<Guid, IPerson>();
-			foreach (var person in AllPermittedPersons)
+			foreach (var person in ChoosenAgents)
 			{
 				if (selectedGuids.Contains(person.Id.Value) && !selectedPersons.ContainsKey(person.Id.Value))
 				{

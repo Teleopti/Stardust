@@ -152,9 +152,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 				foreach (IPerson person in _schedulerState.SchedulingResultState.LoadedAgents)
 				{
-					if (!_schedulerState.AllPermittedPersons.Contains(person))
+					if (!_schedulerState.ChoosenAgents.Contains(person))
 					{
-						_schedulerState.AllPermittedPersons.Add(person);
+						_schedulerState.ChoosenAgents.Add(person);
 					}
 				}
 				_schedulerState.ResetFilteredPersons();
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		{
 			using (PerformanceOutput.ForOperation("Reassociating people"))
 			{
-				uow.Reassociate(_schedulerState.AllPermittedPersons);
+				uow.Reassociate(_schedulerState.ChoosenAgents);
 			}
 		}
 

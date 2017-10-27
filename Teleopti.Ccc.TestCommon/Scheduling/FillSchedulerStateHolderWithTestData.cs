@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			stateHolder.SchedulingResultState.Schedules = ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData, agents);
 			foreach (var agent in agents)
 			{
-				stateHolder.AllPermittedPersons.Add(agent);
+				stateHolder.ChoosenAgents.Add(agent);
 				stateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 			}
 			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();

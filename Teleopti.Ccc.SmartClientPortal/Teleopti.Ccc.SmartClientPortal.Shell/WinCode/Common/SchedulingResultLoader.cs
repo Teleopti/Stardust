@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         private void initializeDecider()
         {
 	        _deciderResult = _peopleAndSkillLoaderDecider.Execute(SchedulerState.RequestedScenario, SchedulerState.RequestedPeriod.Period(),
-		        SchedulerState.AllPermittedPersons);
+		        SchedulerState.ChoosenAgents);
         }
 
         private void initializePeopleInOrganization()
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             _deciderResult.FilterPeople(peopleInOrg);
 
             peopleInOrg = new HashSet<IPerson>(peopleInOrg);
-            SchedulerState.AllPermittedPersons.ForEach(peopleInOrg.Add);
+            SchedulerState.ChoosenAgents.ForEach(peopleInOrg.Add);
             SchedulerState.SchedulingResultState.LoadedAgents = peopleInOrg;
 
             SchedulerState.ResetFilteredPersons();

@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
 			schedulerStateHolderTo.SchedulingResultState.LoadedAgents = stateHolderFrom.SchedulingResultState.LoadedAgents.Where(x => agentIds.Contains(x.Id.Value)).ToList();
-			schedulerStateHolderTo.AllPermittedPersons.Clear();
-			stateHolderFrom.AllPermittedPersons.Where(x => agentIds.Contains(x.Id.Value))
-				.ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
+			schedulerStateHolderTo.ChoosenAgents.Clear();
+			stateHolderFrom.ChoosenAgents.Where(x => agentIds.Contains(x.Id.Value))
+				.ForEach(x => schedulerStateHolderTo.ChoosenAgents.Add(x));
 		}
 
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)

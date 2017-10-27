@@ -2147,7 +2147,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void validateAllPersons()
 		{
 			_personsToValidate.Clear();
-			_schedulerState.AllPermittedPersons.ForEach(_personsToValidate.Add);
+			_schedulerState.ChoosenAgents.ForEach(_personsToValidate.Add);
 			validatePersons();
 		}
 
@@ -2724,7 +2724,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IList<ITeam> teams = new List<ITeam>();
 			foreach (IMeetingPerson meetingPerson in meeting.MeetingPersons)
 			{
-				bool quit = !SchedulerState.AllPermittedPersons.Contains(meetingPerson.Person);
+				bool quit = !SchedulerState.ChoosenAgents.Contains(meetingPerson.Person);
 
 				if (!quit)
 				{
@@ -3198,7 +3198,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				var command = _container.Resolve<BackToLegalShiftCommand>();
 				command.Execute(new BackgroundWorkerWrapper(_backgroundWorkerScheduling), argument.SelectedScheduleDays,
-					_schedulerState.SchedulingResultState, _schedulerState.AllPermittedPersons);
+					_schedulerState.SchedulingResultState, _schedulerState.ChoosenAgents);
 			}
 			else
 			{
@@ -3466,7 +3466,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				return;
 
 			_personsToValidate.Clear();
-			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
+			foreach (IPerson permittedPerson in SchedulerState.ChoosenAgents)
 			{
 				_personsToValidate.Add(permittedPerson);
 			}
@@ -3616,7 +3616,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXValidations"));
 			////TODO move into the else clause above
 			_detectedTimeZoneInfos.Add(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
+			foreach (IPerson permittedPerson in SchedulerState.ChoosenAgents)
 			{
 				validatePersonAccounts(permittedPerson);
 				_detectedTimeZoneInfos.Add(permittedPerson.PermissionInformation.DefaultTimeZone());
@@ -3679,9 +3679,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			backgroundWorkerLoadData.ReportProgress(1,
 				string.Format(CultureInfo.CurrentCulture, LanguageResourceHelper.Translate("XXValidatingPersons"),
-					SchedulerState.AllPermittedPersons.Count));
+					SchedulerState.ChoosenAgents.Count));
 			_personsToValidate.Clear();
-			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
+			foreach (IPerson permittedPerson in SchedulerState.ChoosenAgents)
 			{
 				_personsToValidate.Add(permittedPerson);
 			}
@@ -3697,7 +3697,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					var batchedPeople = persons as IList<IPerson> ?? persons.ToList();
 					validatedCount += batchedPeople.Count;
 					backgroundWorkerLoadData.ReportProgress(0,
-					string.Format(CultureInfo.CurrentCulture, resolvedTranslatedString, validatedCount, SchedulerState.AllPermittedPersons.Count));
+					string.Format(CultureInfo.CurrentCulture, resolvedTranslatedString, validatedCount, SchedulerState.ChoosenAgents.Count));
 					_schedulerState.Schedules.ValidateBusinessRulesOnPersons(batchedPeople, loggedOnCulture, rulesToRun);
 				}
 			}
@@ -3739,7 +3739,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				int peopleCountFromBeginning = peopleInOrg.Count;
 				var decider = _teamLeaderMode ? new PeopleAndSkillLoaderDeciderForTeamLeaderMode() : _peopleAndSkillLoaderDecider;
 				var result = decider.Execute(_schedulerState.RequestedScenario, _schedulerState.RequestedPeriod.Period(),
-					SchedulerState.AllPermittedPersons);
+					SchedulerState.ChoosenAgents);
 				setDeciderResult(result);
 
 				int removedPeople = result.FilterPeople(peopleInOrg);
@@ -3751,7 +3751,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				//visning, db-sparning, resursberäkning, visning etc. Så det blir såhär tills större häv
 
 				peopleInOrg = new HashSet<IPerson>(peopleInOrg);
-				SchedulerState.AllPermittedPersons.ForEach(peopleInOrg.Add);
+				SchedulerState.ChoosenAgents.ForEach(peopleInOrg.Add);
 				SchedulerState.SchedulingResultState.LoadedAgents = peopleInOrg;
 				log.Info("No, changed my mind... Removed " + (peopleCountFromBeginning - peopleInOrg.Count) + " people.");
 				var skills = stateHolder.SchedulingResultState.Skills;
@@ -4443,7 +4443,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (_cachedPersonsFilterView == null || _cachedPersonsFilterView.IsDisposed)
 			{
-				var permittedPersons = SchedulerState.AllPermittedPersons.Select(p => p.Id.Value).ToList();
+				var permittedPersons = SchedulerState.ChoosenAgents.Select(p => p.Id.Value).ToList();
 
 				_cachedPersonsFilterView =
 					new PersonsFilterView(SchedulerState.RequestedPeriod.DateOnlyPeriod,

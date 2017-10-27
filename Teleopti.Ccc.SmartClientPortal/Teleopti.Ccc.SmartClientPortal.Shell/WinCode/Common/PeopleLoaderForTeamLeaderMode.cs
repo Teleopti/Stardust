@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             foreach (IPerson person in _peopleInOrg.Value)
             {
                 if (person.TerminalDate == null || person.TerminalDate >= _selectedEntitiesForPeriod.SelectedPeriod.StartDate)
-                _schedulerStateHolder.AllPermittedPersons.Add(person);
+                _schedulerStateHolder.ChoosenAgents.Add(person);
             }
 
-            _schedulerStateHolder.SchedulingResultState.LoadedAgents = _schedulerStateHolder.AllPermittedPersons;
+            _schedulerStateHolder.SchedulingResultState.LoadedAgents = _schedulerStateHolder.ChoosenAgents;
             _schedulerStateHolder.ResetFilteredPersons();
 
             return _schedulerStateHolder;

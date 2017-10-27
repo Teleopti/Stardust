@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				get { throw new NotImplementedException(); }
 			}
 
-			public IList<IPerson> AllPermittedPersons
+			public IList<IPerson> ChoosenAgents
 			{
 				get { throw new NotImplementedException(); }
 			}

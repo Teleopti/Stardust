@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             var persons = _model.Meeting.MeetingPersons.Select(meetingPerson => meetingPerson.Person).ToList();
 
 	        if (_schedulerStateHolder != null &&
-	            persons.Any(person => !_schedulerStateHolder.AllPermittedPersons.Contains(person)))
+	            persons.Any(person => !_schedulerStateHolder.ChoosenAgents.Contains(person)))
 	        {
 		        _schedulerStateHolder = null;
 	        }

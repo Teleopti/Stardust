@@ -44,10 +44,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				Period = schedulingInformation.Period,
 				RunWeeklyRestSolver = false,
 				FromWeb = true,
-				AgentsToSchedule = stateHolder.AllPermittedPersons,
+				AgentsToSchedule = stateHolder.ChoosenAgents,
 				PlanningPeriodId = planningPeriodId
 			});
-			return CreateResult(stateHolder.AllPermittedPersons, schedulingInformation.Period);
+			return CreateResult(stateHolder.ChoosenAgents, schedulingInformation.Period);
 		}
 
 		[TestLog]

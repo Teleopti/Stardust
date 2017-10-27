@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			removeUnwantedSkillsAndSkillDays(schedulerStateHolderTo, skills);
 			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
-			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
+			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.ChoosenAgents, period);
 			setLocks(schedulerStateHolderTo, lockInfoForStateHolder);
 			schedulerStateHolderTo.ResetFilteredPersons();
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 			foreach (var lockInfo in lockInfoForStateHolder.Locks)
 			{
-				var agent = schedulerStateHolderTo.AllPermittedPersons.SingleOrDefault(x => x.Id.Value == lockInfo.AgentId);
+				var agent = schedulerStateHolderTo.ChoosenAgents.SingleOrDefault(x => x.Id.Value == lockInfo.AgentId);
 				if (agent != null)
 				{
 					lockInfoForStateHolder.GridlockManager.AddLock(agent, lockInfo.Date, LockType.Normal);
@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			if (agentIdsToKeep != null) //remove this when also scheduling is converted to "events"
 			{
-				foreach (var agent in schedulerStateHolderTo.AllPermittedPersons.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
+				foreach (var agent in schedulerStateHolderTo.ChoosenAgents.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
 				{
-					schedulerStateHolderTo.AllPermittedPersons.Remove(agent);
+					schedulerStateHolderTo.ChoosenAgents.Remove(agent);
 				}
 				foreach (var agent in schedulerStateHolderTo.SchedulingResultState.LoadedAgents.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
 				{

@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			_scheduleExecutor.Execute(schedulingCallback,
 				schedulingOptions, schedulingProgress,
-				schedulerStateHolder.AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)).ToArray(),
+				schedulerStateHolder.ChoosenAgents.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)).ToArray(),
 				selectedPeriod, @event.RunWeeklyRestSolver, blockPreferenceProvider);
 		}
 	}

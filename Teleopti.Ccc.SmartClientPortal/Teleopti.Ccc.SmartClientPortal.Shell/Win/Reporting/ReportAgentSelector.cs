@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 		private void showFilterDialog()
 		{
-			var all = _stateHolder.AllPermittedPersons.Select(p => p.Id.Value).ToList();
+			var all = _stateHolder.ChoosenAgents.Select(p => p.Id.Value).ToList();
 
 			using (var scheduleFilterView = new PersonsFilterView(_stateHolder.RequestedPeriod.DateOnlyPeriod, _stateHolder.FilteredCombinedAgentsDictionary,
 				ComponentContext,ReportApplicationFunction, _selectedGroupPageKey, all, false))

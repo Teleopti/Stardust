@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		IScenario RequestedScenario { get; }
 
-		IList<IPerson> AllPermittedPersons { get; }
+		IList<IPerson> ChoosenAgents { get; }
 
 		void ResetFilteredPersons();
 

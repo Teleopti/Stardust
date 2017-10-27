@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			var allPeople = _personRepository.FindPeopleInOrganizationLight(period);
 			schedulerStateHolderTo.SchedulingResultState.LoadedAgents = allPeople.ToList();
-			schedulerStateHolderTo.AllPermittedPersons.Clear();
-			allPeople.ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
+			schedulerStateHolderTo.ChoosenAgents.Clear();
+			allPeople.ForEach(x => schedulerStateHolderTo.ChoosenAgents.Add(x));
 		}
 
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)

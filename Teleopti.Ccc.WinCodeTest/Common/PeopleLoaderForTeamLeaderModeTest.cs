@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Expect.Call(_personRepository.FindPeopleBelongTeamWithSchedulePeriod(_team, _requestedPeriod)).Return(_persons);
             Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(new SchedulingResultStateHolder());
             Expect.Call(_schedulerStateHolder.ResetFilteredPersons);
-            Expect.Call(_schedulerStateHolder.AllPermittedPersons).Return(returnPersons).Repeat.AtLeastOnce();
+            Expect.Call(_schedulerStateHolder.ChoosenAgents).Return(returnPersons).Repeat.AtLeastOnce();
             Expect.Call(_contractRepository.FindAllContractByDescription()).Return(_contracts);
             Expect.Call(_uow.DisableFilter(QueryFilter.Deleted)).Return(new disposeStub());
             Expect.Call(_skillRepository.LoadAll());
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _mockRep.ReplayAll();
 
             ISchedulerStateHolder stateHolder = _target.Initialize();
-            Assert.AreEqual(1, stateHolder.AllPermittedPersons.Count);
+            Assert.AreEqual(1, stateHolder.ChoosenAgents.Count);
             _mockRep.VerifyAll();
         }
 
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Expect.Call(_personRepository.FindPeople(_persons)).Return(_persons);
             Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(new SchedulingResultStateHolder());
             Expect.Call(_schedulerStateHolder.ResetFilteredPersons);
-            Expect.Call(_schedulerStateHolder.AllPermittedPersons).Return(returnPersons).Repeat.AtLeastOnce();
+            Expect.Call(_schedulerStateHolder.ChoosenAgents).Return(returnPersons).Repeat.AtLeastOnce();
             Expect.Call(_contractRepository.FindAllContractByDescription()).Return(_contracts);
             Expect.Call(_uow.DisableFilter(QueryFilter.Deleted)).Return(new disposeStub());
             Expect.Call(_skillRepository.LoadAll());
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _mockRep.ReplayAll();
 
             ISchedulerStateHolder stateHolder = _target.Initialize();
-            Assert.AreEqual(1, stateHolder.AllPermittedPersons.Count);
+            Assert.AreEqual(1, stateHolder.ChoosenAgents.Count);
             _mockRep.VerifyAll();
         }
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Expect.Call(_personRepository.FindPeopleBelongTeamWithSchedulePeriod(_team, _requestedPeriod)).Return(_persons);
             Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(new SchedulingResultStateHolder());
             Expect.Call(_schedulerStateHolder.ResetFilteredPersons);
-            Expect.Call(_schedulerStateHolder.AllPermittedPersons).Return(returnPersons).Repeat.AtLeastOnce();
+            Expect.Call(_schedulerStateHolder.ChoosenAgents).Return(returnPersons).Repeat.AtLeastOnce();
             Expect.Call(_contractRepository.FindAllContractByDescription()).Return(_contracts);
             Expect.Call(_uow.DisableFilter(QueryFilter.Deleted)).Return(new disposeStub());
             Expect.Call(_skillRepository.LoadAll());
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _mockRep.ReplayAll();
 
             ISchedulerStateHolder stateHolder = _target.Initialize();
-            Assert.AreEqual(0, stateHolder.AllPermittedPersons.Count);
+            Assert.AreEqual(0, stateHolder.ChoosenAgents.Count);
             _mockRep.VerifyAll();
         }
 
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				Expect.Call(_personRepository.FindPeopleBelongTeamWithSchedulePeriod(_team, _requestedPeriod)).Return(_persons);
 				Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(new SchedulingResultStateHolder());
 				Expect.Call(_schedulerStateHolder.ResetFilteredPersons);
-				Expect.Call(_schedulerStateHolder.AllPermittedPersons).Return(returnPersons).Repeat.AtLeastOnce();
+				Expect.Call(_schedulerStateHolder.ChoosenAgents).Return(returnPersons).Repeat.AtLeastOnce();
 				Expect.Call(_contractRepository.FindAllContractByDescription()).Return(_contracts);
 				Expect.Call(_uow.DisableFilter(QueryFilter.Deleted)).Return(new disposeStub());
 				Expect.Call(_skillRepository.LoadAll());
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			using (_mockRep.Playback())
 			{
 				ISchedulerStateHolder stateHolder = _target.Initialize();
-				Assert.AreEqual(1, stateHolder.AllPermittedPersons.Count);
+				Assert.AreEqual(1, stateHolder.ChoosenAgents.Count);
 			}
 		}
     }
