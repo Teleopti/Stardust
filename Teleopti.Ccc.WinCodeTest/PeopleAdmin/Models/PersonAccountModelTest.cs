@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         {
             using (GridControl grid = new GridControl())
             {
-				var currentScenario = new FakeCurrentScenario();
+				var currentScenario = new FakeCurrentScenario_DoNotUse();
 	            var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 
 								IPersonAccountChildModel adapter1 = new PersonAccountChildModel

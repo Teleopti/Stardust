@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[SetUp]
 		public void Setup()
 		{
-			_scenario = new FakeCurrentScenario();
+			_scenario = new FakeCurrentScenario_DoNotUse();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
 			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository,

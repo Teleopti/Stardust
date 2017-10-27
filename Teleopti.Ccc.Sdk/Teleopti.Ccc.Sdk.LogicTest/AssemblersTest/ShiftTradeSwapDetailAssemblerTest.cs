@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				new ProjectedLayerAssembler(dateTimePeriodAssembler), dateTimePeriodAssembler,
 				new SdkProjectionServiceFactory(), new ScheduleTagAssembler(new FakeScheduleTagRepository()));
 			
-			var scenario = new FakeCurrentScenario();
+			var scenario = new FakeCurrentScenario_DoNotUse();
 			var storage = new FakeScheduleStorage_DoNotUse();
 
 	        var dictionary = storage.FindSchedulesForPersonsOnlyInGivenPeriod(new [] { person1,person2}, new ScheduleDictionaryLoadOptions(false, false),

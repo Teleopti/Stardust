@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			person.AddPersonPeriod(newTestPersonPeriod(date, personPeriodCode));
 			PersonPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
 
-			var scenario = new FakeCurrentScenario().Current();
+			var scenario = new FakeCurrentScenario_DoNotUse().Current();
 			scenario.DefaultScenario = true;
 			scenario.EnableReporting = true;
 			ScenarioRepository.Add(scenario);
@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			person.AddPersonPeriod(newTestPersonPeriod(date, personPeriodCode));
 			PersonPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
 
-			scenario = new FakeCurrentScenario().Current();
+			scenario = new FakeCurrentScenario_DoNotUse().Current();
 			scenario.DefaultScenario = true;
 			scenario.EnableReporting = true;
 			ScenarioRepository.Add(scenario);

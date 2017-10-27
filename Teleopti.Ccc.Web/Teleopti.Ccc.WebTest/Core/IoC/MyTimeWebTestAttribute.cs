@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			var scenario = new FakeCurrentScenario();
+			var scenario = new FakeCurrentScenario_DoNotUse();
 			var principalAuthorization = new FullPermission();
 
 			CurrentAuthorization.DefaultTo(principalAuthorization);

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 	[TestFixture, DomainTest]
 	public class ExportScheduleServiceTest : ISetup
 	{
-		public FakeCurrentScenario CurrentScenario;
+		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public ExportScheduleService Target;
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakeScenarioRepository ScenarioRepository;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<ExportScheduleService>();
-			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
+			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			system.UseTestDouble<PeopleSearchProvider>().For<IPeopleSearchProvider>();
 			system.UseTestDouble<UserTextTranslator>().For<IUserTextTranslator>();
 			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();

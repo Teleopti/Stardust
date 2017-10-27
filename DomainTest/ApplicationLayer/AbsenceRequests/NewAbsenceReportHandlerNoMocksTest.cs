@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	[TestWithStaticDependenciesAvoidUse]
 	class NewAbsenceReportHandlerNoMocksTest
 	{
-		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario();
+		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario_DoNotUse();
 		private FakeSchedulingResultStateHolder _schedulingResultStateHolder;
 		private FakeScheduleDataReadScheduleStorage _scheduleRepository;
 		private LoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;

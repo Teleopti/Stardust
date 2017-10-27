@@ -4,11 +4,11 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeCurrentScenario : ICurrentScenario
+	public class FakeCurrentScenario_DoNotUse : ICurrentScenario
 	{
 		private IScenario _scenario;
 
-		public FakeCurrentScenario()
+		public FakeCurrentScenario_DoNotUse()
 		{
 			_scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
 		}

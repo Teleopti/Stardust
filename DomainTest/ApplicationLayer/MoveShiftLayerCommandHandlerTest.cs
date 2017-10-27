@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		public MoveShiftLayerCommandHandler Target;
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
-		public FakeCurrentScenario CurrentScenario;
+		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
 		public FakeWriteSideRepository<IPerson> PersonRepository;
 		public FakePersonSkillProvider PersonSkillProvider;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
+			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<MoveShiftLayerCommandHandler>().For<IHandleCommand<MoveShiftLayerCommand>>();

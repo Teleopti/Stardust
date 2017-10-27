@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 	{
 
 
-		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario();
+		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario_DoNotUse();
 		private IPersonRepository _personRepository;
 		private IPersonRequestRepository _personRequestRepository;
 		FakeScheduleDataReadScheduleStorage _scheduleRepository;

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var userNow = new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc);
 			skillCombinationResourceRepository = new FakeSkillCombinationResourceRepository(new ThisIsNow(userNow));
 			personRepository = new FakePersonRepositoryLegacy();
-			currentScenario = new FakeCurrentScenario();
+			currentScenario = new FakeCurrentScenario_DoNotUse();
 			skillRepository = new FakeSkillRepository();
 			resourceOptimizationHelper =
 				new CascadingResourceCalculation(

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[SetUp]
 		public void Setup()
 		{
-			_currentScenario = new FakeCurrentScenario();
+			_currentScenario = new FakeCurrentScenario_DoNotUse();
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
 			_personRepository = new FakePersonRepositoryLegacy2();
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();

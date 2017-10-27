@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 		    var personRepository = new FakePersonRepositoryLegacy();
 		    var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-		    var scenarioRepository = new FakeCurrentScenario();
+		    var scenarioRepository = new FakeCurrentScenario_DoNotUse();
 		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 		    var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 			    new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var scenarioRepository = new FakeCurrentScenario();
+			var scenarioRepository = new FakeCurrentScenario_DoNotUse();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var scenarioRepository = new FakeCurrentScenario();
+			var scenarioRepository = new FakeCurrentScenario_DoNotUse();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var scenarioRepository = new FakeCurrentScenario();
+			var scenarioRepository = new FakeCurrentScenario_DoNotUse();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var scenarioRepository = new FakeCurrentScenario();
+			var scenarioRepository = new FakeCurrentScenario_DoNotUse();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 			var personRepository = new FakePersonRepositoryLegacy();
 			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var scenarioRepository = new FakeCurrentScenario();
+			var scenarioRepository = new FakeCurrentScenario_DoNotUse();
 			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
@@ -443,7 +443,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 		    var personRepository = new FakePersonRepositoryLegacy();
 		    var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-		    var scenarioRepository = new FakeCurrentScenario();
+		    var scenarioRepository = new FakeCurrentScenario_DoNotUse();
 		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
 		    var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
 			    new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,

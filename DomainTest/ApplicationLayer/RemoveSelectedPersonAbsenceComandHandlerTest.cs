@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private SaveSchedulePartService _saveSchedulePartService;
 		private FakeScheduleStorage_DoNotUse _scheduleStorage;
 		private BusinessRulesForPersonalAccountUpdate _businessRulesForAccountUpdate;
-		private FakeCurrentScenario _scenario;
+		private FakeCurrentScenario_DoNotUse _scenario;
 		private FakePersonRepository _personRepository;
 		private FakePersonAbsenceRepository _personAbsenceRepository;
 		private PersonAbsenceCreator _personAbsenceCreator;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Setup()
 		{
 
-			_scenario = new FakeCurrentScenario();
+			_scenario = new FakeCurrentScenario_DoNotUse();
 			_currentUnitOfWork = CurrentUnitOfWork.Make();
 
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();

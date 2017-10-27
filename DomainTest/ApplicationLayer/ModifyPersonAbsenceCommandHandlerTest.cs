@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShowThrowExceptionIfPersonAbsenceDoesNotExist()
 		{
-			var currentScenario = new FakeCurrentScenario();
+			var currentScenario = new FakeCurrentScenario_DoNotUse();
 			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), currentScenario.Current(), MockRepository.GenerateMock<IAbsenceLayer>());
 			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository() { personAbsence } ;
 			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone(), _scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseModifyPersonAbsenceEvent()
 		{
-			var currentScenario = new FakeCurrentScenario();
+			var currentScenario = new FakeCurrentScenario_DoNotUse();
 			var originalDateTimePeriod = new DateTimePeriod (2013, 11, 27, 8, 2013, 11, 27, 16);
 			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository()
 				{
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldReduceEndTimeWhenBackToWork()
 		{
 
-			var currentScenario = new FakeCurrentScenario();
+			var currentScenario = new FakeCurrentScenario_DoNotUse();
 			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository()
 				{
 					PersonAbsenceFactory.CreatePersonAbsence (PersonFactory.CreatePersonWithId(), currentScenario.Current(),

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
             _absenceRepository = new FakeAbsenceRepository();
             _currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-            _tracesableRefreshService = new TraceableRefreshService(new FakeCurrentScenario(), new FakeScheduleStorage_DoNotUse());
+            _tracesableRefreshService = new TraceableRefreshService(new FakeCurrentScenario_DoNotUse(), new FakeScheduleStorage_DoNotUse());
             _target = new SetPersonAccountForPersonCommandHandler(_personRepository,_personAbsenceAccountRepository,_absenceRepository,_currentUnitOfWorkFactory,_tracesableRefreshService);
 
             _person = PersonFactory.CreatePerson("test").WithId();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			var absenceRepository = new FakeAbsenceRepository();
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			var currentScenario = new FakeCurrentScenario();
+			var currentScenario = new FakeCurrentScenario_DoNotUse();
 			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var tracesableRefreshService = new TraceableRefreshService(currentScenario, scheduleStorage);
 			

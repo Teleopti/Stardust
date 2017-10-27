@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeLoggedOnUser LoggedOnUser;
 
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
-		public FakeCurrentScenario CurrentScenario;
+		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public FakeAuditSettingRepository AuditSettingRepository;
 		public FakeWriteSideRepository<IAbsence> AbsenceRepository;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<FakeScheduleHistoryRepository>().For<IScheduleHistoryRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
+			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<FakeAggregateRootInitializer>().For<IAggregateRootInitializer>();

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public FakePersonRepository PersonRepository;
 		public Global.FakePermissionProvider PermissionProvider;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
-		public FakeCurrentScenario CurrentScenario;
+		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
 

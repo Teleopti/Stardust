@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				new DateTime(2015, 10, 1, 17, 0, 0, DateTimeKind.Utc));
 
 			var absenceLayer = new AbsenceLayer(new Absence(), dateTimePeriod);
-			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), new FakeCurrentScenario().Current(),
+			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), new FakeCurrentScenario_DoNotUse().Current(),
 				absenceLayer);
 			personAbsence.SetId(Guid.Empty);
 			_scheduleStorage.Add(personAbsence);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaisePersonAbsenceRemovedEvent()
 		{
-			var scenario = new FakeCurrentScenario().Current();
+			var scenario = new FakeCurrentScenario_DoNotUse().Current();
 			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), scenario, MockRepository.GenerateMock<IAbsenceLayer>());
 			personAbsence.SetId(Guid.Empty);
 

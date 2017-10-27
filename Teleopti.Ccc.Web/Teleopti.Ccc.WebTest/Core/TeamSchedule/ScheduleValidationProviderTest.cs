@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 	[TestFixture, DomainTest]
 	public class ScheduleValidationProviderTest : ISetup
 	{
-		public FakeCurrentScenario CurrentScenario;
+		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakePersonRepository PersonRepository;
 		public ScheduleValidationProvider Target;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
+			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<ScheduleValidationProvider>().For<IScheduleValidationProvider>();
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();

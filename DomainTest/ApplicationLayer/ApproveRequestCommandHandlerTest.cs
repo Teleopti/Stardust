@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	[TestWithStaticDependenciesAvoidUse]
 	class ApproveRequestCommandHandlerTest
 	{
-		private FakeCurrentScenario _scenario;
+		private FakeCurrentScenario_DoNotUse _scenario;
 		private FakePersonRequestRepository _personRequestRepository;
 		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private FakeScheduleStorage_DoNotUse _fakeScheduleStorage;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[SetUp]
 		public void Setup()
 		{
-			_scenario = new FakeCurrentScenario();
+			_scenario = new FakeCurrentScenario_DoNotUse();
 			_personRequestRepository = new FakePersonRequestRepository();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 

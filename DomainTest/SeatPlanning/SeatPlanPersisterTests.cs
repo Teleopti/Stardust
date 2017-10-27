@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[SetUp]
 		public void SetUp()
 		{
-			new FakeCurrentScenario();
+			new FakeCurrentScenario_DoNotUse();
 			_seatBookingRepository = new FakeSeatBookingRepository();
 			_seatPlanRepository = new FakeSeatPlanRepository();
 		}

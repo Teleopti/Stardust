@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			assembler = new SkillDataAssembler(dateTimePeriodAssembler);
 			personRepository = new FakePersonRepositoryLegacy();
-			currentScenario = new FakeCurrentScenario();
+			currentScenario = new FakeCurrentScenario_DoNotUse();
 			skillRepository = new FakeSkillRepository();
 			resourceCalculationPrerequisitesLoader =
 				new ResourceCalculationPrerequisitesLoader(new FakeCurrentUnitOfWorkFactory(), new FakeContractScheduleRepository(),

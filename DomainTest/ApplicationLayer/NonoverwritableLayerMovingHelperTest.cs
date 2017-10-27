@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class NonoverwritableLayerMovingHelperTest : ISetup
 	{
 		public FakePersonRepository PersonRepository;
-		public FakeCurrentScenario CurrentScenario;
+		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public NonoverwritableLayerMovingHelper Target;
 
@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
+			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<NonoverwritableLayerMovingHelper>().For<INonoverwritableLayerMovingHelper>();
 			system.UseTestDouble<NonoverwritableLayerChecker>().For<INonoverwritableLayerChecker>();

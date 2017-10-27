@@ -29,13 +29,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private FakeScheduleStorage_DoNotUse _scheduleStorage;
 		private BusinessRulesForPersonalAccountUpdate _businessRulesForAccountUpdate;
 		private PersonAbsenceCreator _personAbsenceCreator;
-		private FakeCurrentScenario _scenario;
+		private FakeCurrentScenario_DoNotUse _scenario;
 
 		[SetUp]
 		public void Setup()
 		{
 
-			_scenario = new FakeCurrentScenario();
+			_scenario = new FakeCurrentScenario_DoNotUse();
 
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository,
