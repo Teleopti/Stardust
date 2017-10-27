@@ -37,7 +37,7 @@
 		vm.sendForm = sendForm;
 		vm.refreshData = refreshData;
 		vm.calculateOrgSelection = calculateOrgSelection;
-		vm.maxResults = 100;
+		vm.maxResults = 10000;
 
 		vm.label = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.filteredOrgData.length )
 
@@ -84,6 +84,10 @@
 				else {
 					vm.changesData = response;
 					generateTable();
+
+					if (response.length >= vm.maxResults) {
+						NoticeService.info($translate.instant('MaxResultsReached').replace('{0}', vm.maxResults), 5000, true);
+					}
 				}
 			});
 		}

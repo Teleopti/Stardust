@@ -16662,4 +16662,8 @@ Do you want to participate?</value>
     <value>Priority Lower	</value>
     <comment>text for pririty lower on web plan moudule</comment>
   </data>
+  <data name="MaxResultsReached" xml:space="preserve">
+    <value>Search result of the keyword(s) will exceed {0}, please refine your search.</value>
+    <comment>dynamic max result message for web reports</comment>
+  </data>
 </root>
