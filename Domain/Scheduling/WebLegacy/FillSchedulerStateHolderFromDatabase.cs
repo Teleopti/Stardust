@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_userTimeZone = userTimeZone;
 		}
 
-		protected override void FillDefaultScenario(ISchedulerStateHolder schedulerStateHolderTo)
+		protected override void FillScenario(ISchedulerStateHolder schedulerStateHolderTo)
 		{
 			schedulerStateHolderTo.SetRequestedScenario(_scenarioRepository.LoadDefaultScenario());
 		}
