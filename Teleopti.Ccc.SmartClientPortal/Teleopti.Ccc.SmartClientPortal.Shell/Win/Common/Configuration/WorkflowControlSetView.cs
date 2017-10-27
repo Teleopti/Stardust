@@ -1230,5 +1230,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			_presenter.SetAutoGrantOvertimeRequest(checkBoxAdvAutoGrantOvertimeRequest.Checked);
 		}
+
+		private void buttonAdvDeleteOvertimeRequestPeriod_Click(object sender, EventArgs e)
+		{
+			
+		}
+
+		private void buttonAddOvertimeRequestPeriod_Click(object sender, EventArgs e)
+		{
+			
+		}
 	}
 }

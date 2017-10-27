@@ -138,9 +138,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.txtAbsenceRequestExpiredThreshold = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.NullableIntegerTextBox();
 			this.labelAbsenceRequestExpriedThreshold = new System.Windows.Forms.Label();
 			this.tableLayoutPanelOpenForAbsenceRequests = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanelOpenForOvertimeRequests = new System.Windows.Forms.TableLayoutPanel();
 			this.labelOpenForAbsenceRequests = new System.Windows.Forms.Label();
+			this.labelOpenForOvertimeRequests = new System.Windows.Forms.Label();
 			this.buttonDeleteAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonDeleteOvertimeRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAddAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonAddOvertimeRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.gridControlAbsenceRequestOpenPeriods = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.contextMenuStripOpenPeriodsGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemFromToPeriod = new System.Windows.Forms.ToolStripMenuItem();
@@ -223,6 +227,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestCancellation.SuspendLayout();
 			this.tableLayoutPanelAbsenceRequestExpiration.SuspendLayout();
 			this.tableLayoutPanelOpenForAbsenceRequests.SuspendLayout();
+			this.tableLayoutPanelOpenForOvertimeRequests.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).BeginInit();
 			this.contextMenuStripOpenPeriodsGrid.SuspendLayout();
 			this.tabPageAdvShiftTradeRequest.SuspendLayout();
@@ -1852,6 +1857,76 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.buttonAddAbsenceRequestPeriod.UseVisualStyleBackColor = false;
 			this.buttonAddAbsenceRequestPeriod.Click += new System.EventHandler(this.buttonAddAbsenceRequestPeriod_Click);
 			// 
+			// tableLayoutPanelOpenForOvertimeRequests
+			// 
+			this.tableLayoutPanelOpenForOvertimeRequests.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
+			this.tableLayoutPanelOpenForOvertimeRequests.ColumnCount = 3;
+			this.tableLayoutPanelOpenForOvertimeRequests.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelOpenForOvertimeRequests.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanelOpenForOvertimeRequests.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanelOpenForOvertimeRequests.Controls.Add(this.labelOpenForOvertimeRequests, 0, 0);
+			this.tableLayoutPanelOpenForOvertimeRequests.Controls.Add(this.buttonDeleteOvertimeRequestPeriod, 2, 0);
+			this.tableLayoutPanelOpenForOvertimeRequests.Controls.Add(this.buttonAddOvertimeRequestPeriod, 1, 0);
+			this.tableLayoutPanelOpenForOvertimeRequests.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelOpenForOvertimeRequests.Location = new System.Drawing.Point(3, 325);
+			this.tableLayoutPanelOpenForOvertimeRequests.Name = "tableLayoutPanelOpenForOvertimeRequests";
+			this.tableLayoutPanelOpenForOvertimeRequests.RowCount = 1;
+			this.tableLayoutPanelOpenForOvertimeRequests.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanelOpenForOvertimeRequests.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+			this.tableLayoutPanelOpenForOvertimeRequests.Size = new System.Drawing.Size(959, 34);
+			this.tableLayoutPanelOpenForOvertimeRequests.TabIndex = 0;
+			// 
+			// labelOpenForOvertimeRequests
+			// 
+			this.labelOpenForOvertimeRequests.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelOpenForOvertimeRequests.AutoSize = true;
+			this.labelOpenForOvertimeRequests.BackColor = System.Drawing.Color.Transparent;
+			this.labelOpenForOvertimeRequests.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelOpenForOvertimeRequests.ForeColor = System.Drawing.Color.GhostWhite;
+			this.labelOpenForOvertimeRequests.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelOpenForOvertimeRequests.Location = new System.Drawing.Point(3, 0);
+			this.labelOpenForOvertimeRequests.Name = "labelOpenForOvertimeRequests";
+			this.labelOpenForOvertimeRequests.Size = new System.Drawing.Size(358, 36);
+			this.labelOpenForOvertimeRequests.TabIndex = 0;
+			this.labelOpenForOvertimeRequests.Text = "xxOpenForOvertimeRequests";
+			this.labelOpenForOvertimeRequests.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// buttonDeleteOvertimeRequestPeriod
+			// 
+			this.buttonDeleteOvertimeRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.buttonDeleteOvertimeRequestPeriod.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonDeleteOvertimeRequestPeriod.BackColor = System.Drawing.Color.White;
+			this.buttonDeleteOvertimeRequestPeriod.BeforeTouchSize = new System.Drawing.Size(28, 28);
+			this.buttonDeleteOvertimeRequestPeriod.ForeColor = System.Drawing.Color.White;
+			this.buttonDeleteOvertimeRequestPeriod.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_temp_DeleteGroup10;
+			this.buttonDeleteOvertimeRequestPeriod.IsBackStageButton = false;
+			this.buttonDeleteOvertimeRequestPeriod.Location = new System.Drawing.Point(924, 4);
+			this.buttonDeleteOvertimeRequestPeriod.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.buttonDeleteOvertimeRequestPeriod.Name = "buttonDeleteOvertimeRequestPeriod";
+			this.buttonDeleteOvertimeRequestPeriod.Size = new System.Drawing.Size(28, 28);
+			this.buttonDeleteOvertimeRequestPeriod.TabIndex = 25;
+			this.buttonDeleteOvertimeRequestPeriod.UseVisualStyle = true;
+			this.buttonDeleteOvertimeRequestPeriod.Click += new System.EventHandler(this.buttonAdvDeleteOvertimeRequestPeriod_Click);
+			// 
+			// buttonAddOvertimeRequestPeriod
+			// 
+			this.buttonAddOvertimeRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.buttonAddOvertimeRequestPeriod.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAddOvertimeRequestPeriod.BackColor = System.Drawing.Color.White;
+			this.buttonAddOvertimeRequestPeriod.BeforeTouchSize = new System.Drawing.Size(28, 28);
+			this.buttonAddOvertimeRequestPeriod.Font = new System.Drawing.Font("Tahoma", 8F);
+			this.buttonAddOvertimeRequestPeriod.ForeColor = System.Drawing.Color.White;
+			this.buttonAddOvertimeRequestPeriod.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.test_add2;
+			this.buttonAddOvertimeRequestPeriod.IsBackStageButton = false;
+			this.buttonAddOvertimeRequestPeriod.Location = new System.Drawing.Point(889, 4);
+			this.buttonAddOvertimeRequestPeriod.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.buttonAddOvertimeRequestPeriod.Name = "buttonAddOvertimeRequestPeriod";
+			this.buttonAddOvertimeRequestPeriod.Size = new System.Drawing.Size(28, 28);
+			this.buttonAddOvertimeRequestPeriod.TabIndex = 24;
+			this.buttonAddOvertimeRequestPeriod.UseVisualStyle = true;
+			this.buttonAddOvertimeRequestPeriod.UseVisualStyleBackColor = false;
+			this.buttonAddOvertimeRequestPeriod.Click += new System.EventHandler(this.buttonAddOvertimeRequestPeriod_Click);
+			// 
 			// gridControlAbsenceRequestOpenPeriods
 			// 
 			this.gridControlAbsenceRequestOpenPeriods.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
@@ -2258,14 +2333,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.panelOvertimeRequestHeaderBasic, 0, 0);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 1);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvAutoGrantOvertimeRequest, 0, 2);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOpenForOvertimeRequests, 0, 3);
 			this.tableLayoutPanelETOTRequest.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelETOTRequest.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelETOTRequest.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelETOTRequest.Name = "tableLayoutPanelETOTRequest";
-			this.tableLayoutPanelETOTRequest.RowCount = 4;
+			this.tableLayoutPanelETOTRequest.RowCount = 5;
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelETOTRequest.Size = new System.Drawing.Size(965, 410);
@@ -2411,7 +2488,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestExpiration.ResumeLayout(false);
 			this.tableLayoutPanelAbsenceRequestExpiration.PerformLayout();
 			this.tableLayoutPanelOpenForAbsenceRequests.ResumeLayout(false);
+			this.tableLayoutPanelOpenForOvertimeRequests.ResumeLayout(false);
 			this.tableLayoutPanelOpenForAbsenceRequests.PerformLayout();
+			this.tableLayoutPanelOpenForOvertimeRequests.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).EndInit();
 			this.contextMenuStripOpenPeriodsGrid.ResumeLayout(false);
 			this.tabPageAdvShiftTradeRequest.ResumeLayout(false);
@@ -2470,9 +2549,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Grid.GridControl gridControlVisualisation;
 		private Syncfusion.Windows.Forms.Grid.GridControl gridControlAbsenceRequestOpenPeriods;
 		private TableLayoutPanel tableLayoutPanelOpenForAbsenceRequests;
+		private TableLayoutPanel tableLayoutPanelOpenForOvertimeRequests;
 		private Label labelOpenForAbsenceRequests;
+		private Label labelOpenForOvertimeRequests;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteAbsenceRequestPeriod;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteOvertimeRequestPeriod;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAddAbsenceRequestPeriod;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAddOvertimeRequestPeriod;
 		private TableLayoutPanel tableLayoutPanelNextPreviousPeriod;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvPreviousProjectionPeriod;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvNextProjectionPeriod;
