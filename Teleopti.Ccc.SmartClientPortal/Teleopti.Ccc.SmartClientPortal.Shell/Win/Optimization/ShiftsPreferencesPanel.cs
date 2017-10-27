@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		[RemoveMeWithToggle("hideKeepShifts45688", Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
+		[RemoveMeWithToggle("hideKeepShifts45688", Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 		public void Initialize(
             IShiftPreferences extraPreferences, IEnumerable<IActivity> availableActivity , int resolution, bool hideKeepShifts45688)
 		{

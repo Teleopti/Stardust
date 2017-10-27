@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		private readonly int _resolution;
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly IEnumerable<IPerson> _selectedPersons;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 		private readonly bool _hideKeepShifts45688;
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002)]
 		private readonly bool _showBreakPreferenceStartTimeByMax46002;

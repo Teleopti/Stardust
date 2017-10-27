@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public bool KeepShiftCategories { get; set; }
         public bool KeepEndTimes { get; set; }
         public bool KeepStartTimes { get; set; }
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 		public bool KeepShifts { get; set; }
         public bool AlterBetween { get; set; }
         public IList<IActivity> SelectedActivities { get; set; }
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IActivity ActivityToKeepLengthOn { get; set; }
 
 	    public TimePeriod SelectedTimePeriod { get; set; }
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
         public double KeepShiftsValue { get; set; }
 
 		public ShiftPreferences()
