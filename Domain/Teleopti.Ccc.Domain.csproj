@@ -3469,6 +3469,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMerger.cs" />
+    <Compile Include="WorkflowControl\AnyPersonSkillsOpenValidator.cs" />
     <Compile Include="WorkflowControl\CheckAbsenceRequestOpenPeriodResult.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenRollingPeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestPersonAccountValidator.cs" />

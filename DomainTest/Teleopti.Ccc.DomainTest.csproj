@@ -1650,6 +1650,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriodTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMergerTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenRollingPeriodTest.cs" />
+    <Compile Include="WorkflowControl\AnyPersonSkillsOpenValidatorTest.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidatorTest.cs" />
     <Compile Include="WorkflowControl\AlreadyAbsentValidatorTest.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidatorTest.cs" />

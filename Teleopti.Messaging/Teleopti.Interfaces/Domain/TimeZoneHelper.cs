@@ -44,6 +44,15 @@ namespace Teleopti.Interfaces.Domain
 											  sourceTimeZone);
 		}
 		
+		public static DateTimePeriod ConvertFromUtc(DateTimePeriod utcDateTimePeriod, TimeZoneInfo sourceTimeZone)
+		{
+			var startTimeInTimeZone =  TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utcDateTimePeriod.StartDateTime, DateTimeKind.Unspecified),
+				sourceTimeZone);
+			var endTimeTimeZone =  TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utcDateTimePeriod.EndDateTime, DateTimeKind.Unspecified),
+				sourceTimeZone);
+			return new DateTimePeriod(startTimeInTimeZone, endTimeTimeZone);
+		}
+		
 		/// <summary>
 		/// Gets the current sessions time zone.
 		/// </summary>
