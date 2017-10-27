@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
@@ -20,9 +21,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly IUpgradeLogRetriever _upgradeLogRetriever;
 		private readonly ILoadAllTenants _loadAllTenants;
+		private readonly IConfigReader _configReader;
 
 		public ImportController(IDatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists, Import import,
-			ICheckDatabaseVersions checkDatabaseVersions, IUpgradeLogRetriever upgradeLogRetriever, ILoadAllTenants loadAllTenants)
+			ICheckDatabaseVersions checkDatabaseVersions, IUpgradeLogRetriever upgradeLogRetriever, ILoadAllTenants loadAllTenants, IConfigReader configReader)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_tenantExists = tenantExists;
@@ -30,6 +32,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_checkDatabaseVersions = checkDatabaseVersions;
 			_upgradeLogRetriever = upgradeLogRetriever;
 			_loadAllTenants = loadAllTenants;
+			_configReader = configReader;
 		}
 
 		[HttpPost]
@@ -157,6 +160,21 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		private string createLoginConnectionString(ImportDatabaseModel model)
 		{
+			if (model.Server.Contains("database.windows.net"))
+			{
+				var con = new SqlConnectionStringBuilder(_configReader.ConnectionString("Tenancy"));
+
+				return new SqlConnectionStringBuilder
+				{
+					UserID = model.AdminUser,
+					Password = model.AdminPassword,
+					DataSource = model.Server,
+					InitialCatalog = con.InitialCatalog,
+					IntegratedSecurity = model.UseIntegratedSecurity
+				}.ConnectionString;
+
+			}
+
 			return new SqlConnectionStringBuilder
 			{
 				UserID = model.AdminUser,
