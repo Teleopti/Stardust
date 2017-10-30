@@ -9,31 +9,36 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAgentDayScheduleTagRepository : IAgentDayScheduleTagRepository
 	{
-		private readonly IList<IAgentDayScheduleTag> agentDayScheduleTags = new List<IAgentDayScheduleTag>();
+		private readonly FakeStorage _storage;
+
+		public FakeAgentDayScheduleTagRepository(FakeStorage storage)
+		{
+			_storage = storage;
+		}
 
 		public void Add(IAgentDayScheduleTag root)
 		{
-			agentDayScheduleTags.Add(root);
+			_storage.Add(root);
 		}
 
 		public void Remove(IAgentDayScheduleTag root)
 		{
-			agentDayScheduleTags.Remove(root);
+			_storage.Remove(root);
 		}
 
 		public IAgentDayScheduleTag Get(Guid id)
 		{
-			return agentDayScheduleTags.FirstOrDefault(x => x.Id == id);
+			return _storage.Get<IAgentDayScheduleTag>(id);
 		}
 
 		public IList<IAgentDayScheduleTag> LoadAll()
 		{
-			return agentDayScheduleTags;
+			return _storage.LoadAll<IAgentDayScheduleTag>().ToArray();
 		}
 
 		public IAgentDayScheduleTag Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return Get(id);
 		}
 
 		IAgentDayScheduleTag ILoadAggregateByTypedId<IAgentDayScheduleTag, Guid>.LoadAggregate(Guid id)
@@ -43,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAgentDayScheduleTag LoadAggregate(Guid id)
 		{
-			return agentDayScheduleTags.First(x => x.Id == id);
+			return Get(id);
 		}
 
 		public IList<IAgentDayScheduleTag> Find(DateTimePeriod period, IScenario scenario)
@@ -54,8 +59,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IAgentDayScheduleTag> Find(DateOnlyPeriod dateOnlyPeriod, IEnumerable<IPerson> personCollection, IScenario scenario)
 		{
-			//change when needed
-			return new List<IAgentDayScheduleTag>();
+			return _storage.LoadAll<IAgentDayScheduleTag>().Where(a => dateOnlyPeriod.Contains(a.TagDate) && personCollection.Contains(a.Person) && scenario.Equals(a.Scenario)).ToArray();
 		}
 	}
 }

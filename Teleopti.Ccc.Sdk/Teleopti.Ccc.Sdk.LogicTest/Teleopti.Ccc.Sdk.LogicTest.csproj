@@ -296,6 +296,10 @@
       <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>
       <Name>Teleopti.Ccc.Sdk.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Sdk.Host\Teleopti.Ccc.Sdk.Host.csproj">
+      <Project>{2B1051CD-C944-4730-88E8-95ED8BEA5B7F}</Project>
+      <Name>Teleopti.Ccc.Sdk.Host</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.Logic\Teleopti.Ccc.Sdk.Logic.csproj">
       <Project>{1277112D-B11A-4358-AF9A-8C9C7A5E701E}</Project>
       <Name>Teleopti.Ccc.Sdk.Logic</Name>
