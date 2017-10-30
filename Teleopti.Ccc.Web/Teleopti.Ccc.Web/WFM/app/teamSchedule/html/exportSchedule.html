@@ -7,7 +7,7 @@
 					<td>
 						<date-range-picker ng-model="vm.configuration.period"
 										   template-type="vm.periodPickerType"
-										   custom-validators="vm.dateRangeCustomValidators"></date-range-picker>
+										   custom-validators="vm.dateRangeCustomValidators" ng-change="vm.onPeriodChanged()"></date-range-picker>
 						<div class="tips"><i class="mdi mdi-information-outline"></i>{{'ExportSchedulesMaximumDays' | translate}}</div>
 					</td>
 				</tr>

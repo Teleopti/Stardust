@@ -1,7 +1,6 @@
 ﻿(function() {
 	describe('exportSchedule controller tests',
 		function() {
-
 			var $componentController;
 			beforeEach(function () {
 				module("wfm.teamSchedule");
@@ -52,8 +51,5 @@
 					}
 				};
 			}
-
-
 		});
-
 })();

@@ -40,11 +40,15 @@
 				vm.configuration.optionalColumnIds.length >= 3 && 
 				vm.configuration.optionalColumnIds.indexOf(optionalColumnId) === -1;
 			return result;
-		}
-
+		};
+		
 		vm.isApplyEnabled = function() {
 			return $scope.exportScheduleForm.$valid && vm.configuration.selectedGroups && vm.configuration.selectedGroups.groupIds && vm.configuration.selectedGroups.groupIds.length > 0;
-		}
+		};
+		
+		vm.onPeriodChanged = function () {
+			vm.getGroupPagesAsync();
+		};
 
 		vm.getGroupPagesAsync = function () {
 			var startDate = moment(vm.configuration.startDate).format('YYYY-MM-DD');
