@@ -45,8 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                     else
                     {
                         // ...and ends today
-                        visualPeriod = new DateTimePeriod(visualLayer.Period.StartDateTime,
-                                                          visualLayer.Period.EndDateTime);
+                        visualPeriod = visualLayer.Period;
                     }
                 }
                 else

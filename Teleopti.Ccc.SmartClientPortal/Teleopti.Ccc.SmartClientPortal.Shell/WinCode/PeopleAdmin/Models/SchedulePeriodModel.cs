@@ -21,19 +21,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             _commonNameDescription = commonNameDescription;
         }
 
-		public IPerson Parent
-        {
-            get { return _containedEntity; }
-        }
+		public IPerson Parent => _containedEntity;
 
-        public string FullName
-        {
-            get {
-	            return _commonNameDescription == null ? _containedEntity.Name.ToString() : _commonNameDescription.BuildCommonNameDescription(_containedEntity);
-            }
-        }
+		public string FullName => _commonNameDescription == null ? _containedEntity.Name.ToString() : _commonNameDescription.BuildCommonNameDescription(_containedEntity);
 
-        public int Number
+		public int Number
         {
             get
             {
@@ -47,7 +39,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         {
             get
             {
-	            return _currentSchedulePeriod == null ? (DateOnly?)null : _currentSchedulePeriod.DateFrom;
+	            return _currentSchedulePeriod?.DateFrom;
             }
 	        set
             {
@@ -65,8 +57,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 		{
 			get
 			{
-				if (_currentSchedulePeriod == null) return null;
-				return _currentSchedulePeriod.PeriodType;
+				return _currentSchedulePeriod?.PeriodType;
 			}
 			set
 			{
@@ -89,8 +80,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         {
             get
             {
-                if (_currentSchedulePeriod == null) return null;
-                return _currentSchedulePeriod.GetDaysOff(_currentSchedulePeriod.DateFrom);
+				return _currentSchedulePeriod?.GetDaysOff(_currentSchedulePeriod.DateFrom);
             }
             set
             {
@@ -99,13 +89,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        public TimeSpan AverageWorkTimePerDay
-        {
-            get
-            {
-	            return _currentSchedulePeriod == null ? TimeSpan.MinValue : _currentSchedulePeriod.AverageWorkTimePerDay;
-            }
-        }
+        public TimeSpan AverageWorkTimePerDay => _currentSchedulePeriod?.AverageWorkTimePerDay ?? TimeSpan.MinValue;
 
 		public virtual TimeSpan AverageWorkTimePerDayOverride
 		{
@@ -166,10 +150,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         public TimeSpan Extra
         {
             get
-            {
-                if (_currentSchedulePeriod == null) return TimeSpan.MinValue;
-                return _currentSchedulePeriod.Extra;
-            }
+			{
+				return _currentSchedulePeriod?.Extra ?? TimeSpan.MinValue;
+			}
             set
             {
                 if (_currentSchedulePeriod != null)
@@ -179,20 +162,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 
         public int OverrideDaysOff
         {
-            get
-            {
-                if (_currentSchedulePeriod == null)
-                    return -1;
-				if (!_currentSchedulePeriod.DaysOff.HasValue)
-					return -1;
-				return _currentSchedulePeriod.DaysOff.Value;
-            }
-            set
-            {
-                if (_currentSchedulePeriod != null)
-                    _currentSchedulePeriod.SetDaysOff(value);
-            }
-        }
+            get => _currentSchedulePeriod?.DaysOff ?? -1;
+			set => _currentSchedulePeriod?.SetDaysOff(value);
+		}
 
         public int PeriodCount
         {
@@ -204,15 +176,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        public bool CanGray
-        {
-            get
-            {
-                return _currentSchedulePeriod == null;
-            }
-        }
+        public bool CanGray => _currentSchedulePeriod == null;
 
-        public bool IsDaysOffOverride
+		public bool IsDaysOffOverride
         {
             get
             {
@@ -227,23 +193,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         {
             get
             {
-                if (_currentSchedulePeriod != null)
-                {
-                    SchedulePeriod currentSchedulePeriod = _currentSchedulePeriod as SchedulePeriod;
-                    if (currentSchedulePeriod != null)
-                        return currentSchedulePeriod.IsAverageWorkTimePerDayOverride;
-                }
-                return false;
+				SchedulePeriod currentSchedulePeriod = _currentSchedulePeriod as SchedulePeriod;
+				if (currentSchedulePeriod != null)
+					return currentSchedulePeriod.IsAverageWorkTimePerDayOverride;
+				return false;
             }
         }
         
 		public int MustHavePreference
         {
             get
-            {
-                if (_currentSchedulePeriod == null) return 0;
-                return _currentSchedulePeriod.MustHavePreference;
-            }
+			{
+				return _currentSchedulePeriod?.MustHavePreference ?? 0;
+			}
             set
             {
                 if (_currentSchedulePeriod != null)
@@ -253,19 +215,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        public ISchedulePeriod SchedulePeriod
-        {
-            get
-            {
-                return _currentSchedulePeriod;
-            }
-        }
+        public ISchedulePeriod SchedulePeriod => _currentSchedulePeriod;
 
-        public void ResetCanBoldPropertyOfChildAdapters()
+		public void ResetCanBoldPropertyOfChildAdapters()
         {
             if (GridControl != null)
             {
-                IList<SchedulePeriodChildModel> childAdapters = GridControl.Tag as
+                var childAdapters = GridControl.Tag as
                     IList<SchedulePeriodChildModel>;
 
                 if (childAdapters != null)
@@ -284,16 +240,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 		{
 			if (CanBold) return true;
 
-			if (GridControl != null)
-			{
-				var childAdapters = GridControl.Tag as IList<SchedulePeriodChildModel>;
+			var childAdapters = GridControl?.Tag as IList<SchedulePeriodChildModel>;
 
-				if (childAdapters != null)
+			if (childAdapters != null)
+			{
+				for (var i = 0; i < childAdapters.Count; i++)
 				{
-					for (var i = 0; i < childAdapters.Count; i++)
-					{
-						if (childAdapters[i].CanBold) return true;
-					}
+					if (childAdapters[i].CanBold) return true;
 				}
 			}
 
@@ -304,12 +257,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 		{
 			get
 			{
-				if (_currentSchedulePeriod != null)
-				{
-					SchedulePeriod currentSchedulePeriod = _currentSchedulePeriod as SchedulePeriod;
-					if (currentSchedulePeriod != null)
-						return currentSchedulePeriod.IsPeriodTimeOverride;
-				}
+				SchedulePeriod currentSchedulePeriod = _currentSchedulePeriod as SchedulePeriod;
+				if (currentSchedulePeriod != null)
+					return currentSchedulePeriod.IsPeriodTimeOverride;
 				return false;
 			}
 		}
@@ -318,11 +268,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 		{
 			get
 			{
-				if (_currentSchedulePeriod == null) return TimeSpan.MinValue;
-				TimeSpan? value = _currentSchedulePeriod.PeriodTime;
-				if (!value.HasValue)
-					return TimeSpan.MinValue;
-				return _currentSchedulePeriod.PeriodTime.Value;
+				TimeSpan? value = _currentSchedulePeriod?.PeriodTime;
+				return value ?? TimeSpan.MinValue;
 			}
 			set
 			{

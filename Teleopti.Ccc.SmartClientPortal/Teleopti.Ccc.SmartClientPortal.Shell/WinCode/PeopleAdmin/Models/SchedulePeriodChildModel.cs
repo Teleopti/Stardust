@@ -57,12 +57,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        public IPerson Parent
-        {
-            get { return (IPerson)ContainedEntity.Root(); }
-        }
+        public IPerson Parent => (IPerson)ContainedEntity.Root();
 
-        /// <summary>
+		/// <summary>
         /// Gets the number.
         /// </summary>
         /// <value>The number.</value>
@@ -72,13 +69,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// </remarks>
         public int Number
         {
-            get
-            {
-                return ContainedEntity.Number;
-            }
-
-            set { ContainedEntity.Number = value; }
-        }
+            get => ContainedEntity.Number;
+			set => ContainedEntity.Number = value;
+		}
 
 		/// <summary>
 		/// Gets the unit.
@@ -90,14 +83,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 		/// </remarks>
 		public SchedulePeriodType? PeriodType
 		{
-			get
-			{
-				return ContainedEntity.PeriodType;
-			}
-			set
-			{
-				ContainedEntity.PeriodType = value.GetValueOrDefault();
-			}
+			get => ContainedEntity.PeriodType;
+			set => ContainedEntity.PeriodType = value.GetValueOrDefault();
 		}
 
         /// <summary>
@@ -110,12 +97,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// </remarks>
         public int DaysOff
         {
-            get
-            {
-                return ContainedEntity.GetDaysOff(ContainedEntity.DateFrom);
-            }
-            set { ContainedEntity.SetDaysOff(value); }
-        }
+            get => ContainedEntity.GetDaysOff(ContainedEntity.DateFrom);
+			set => ContainedEntity.SetDaysOff(value);
+		}
 
         /// <summary>
         /// Gets the average work time per day.
@@ -125,15 +109,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// Created by: Dinesh Ranasinghe
         /// Created date: 2008-06-17
         /// </remarks>
-        public TimeSpan AverageWorkTimePerDay
-        {
-            get
-            {
-                TimeSpan retTimeSpan = ContainedEntity.AverageWorkTimePerDay;
-
-                return retTimeSpan;
-            }
-        }
+        public TimeSpan AverageWorkTimePerDay => ContainedEntity.AverageWorkTimePerDay;
 
 		/// <summary>
 		/// Gets the average work time per day.
@@ -145,16 +121,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 		/// </remarks>
 		public TimeSpan AverageWorkTimePerDayOverride
 		{
-			get
-			{
-				TimeSpan retTimeSpan = ContainedEntity.AverageWorkTimePerDayOverride;
-
-				return retTimeSpan;
-			}
-			set
-			{
-				ContainedEntity.AverageWorkTimePerDayOverride = value;
-			}
+			get => ContainedEntity.AverageWorkTimePerDayOverride;
+			set => ContainedEntity.AverageWorkTimePerDayOverride = value;
 		}
 
         /// <summary>
@@ -163,15 +131,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The balance in.</value>
         public TimeSpan BalanceIn
         {
-            get
-            {
-                return ContainedEntity.BalanceIn;
-            }
-            set
-            {
-                ContainedEntity.BalanceIn = value;
-            }
-        }
+            get => ContainedEntity.BalanceIn;
+			set => ContainedEntity.BalanceIn = value;
+		}
 
         /// <summary>
         /// Gets or sets the balance out.
@@ -179,15 +141,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The balance out.</value>
         public TimeSpan BalanceOut
         {
-            get
-            {
-                return ContainedEntity.BalanceOut;
-            }
-            set
-            {
-                ContainedEntity.BalanceOut = value;
-            }
-        }
+            get => ContainedEntity.BalanceOut;
+			set => ContainedEntity.BalanceOut = value;
+		}
 
         /// <summary>
         /// Gets or sets the extra.
@@ -195,15 +151,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The extra.</value>
         public TimeSpan Extra
         {
-            get
-            {
-                return ContainedEntity.Extra;
-            }
-            set
-            {
-                ContainedEntity.Extra = value;
-            }
-        }
+            get => ContainedEntity.Extra;
+			set => ContainedEntity.Extra = value;
+		}
 
         /// <summary>
         /// Gets or sets the seasonality.
@@ -211,15 +161,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The extra.</value>
         public Percent Seasonality
         {
-            get
-            {
-                return ContainedEntity.Seasonality;
-            }
-            set
-            {
-                ContainedEntity.Seasonality = value;
-            }
-        }
+            get => ContainedEntity.Seasonality;
+			set => ContainedEntity.Seasonality = value;
+		}
 
         /// <summary>
         /// Gets the days off.
@@ -231,16 +175,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// </remarks>
         public int OverrideDaysOff
         {
-            get
-            {
-				if (ContainedEntity == null)
-					return -1;
-				if (!ContainedEntity.DaysOff.HasValue)
-					return -1;
-				return ContainedEntity.DaysOff.Value;
-            }
-            set { ContainedEntity.SetDaysOff(value); }
-        }
+            get => ContainedEntity?.DaysOff ?? -1;
+			set => ContainedEntity.SetDaysOff(value);
+		}
 
         /// <summary>
         /// Gets a value indicating whether this instance can gray.
@@ -250,15 +187,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// Created by: Dinesh Ranasinghe
         /// Created date: 2008-07-23
         /// </remarks>
-        public bool CanGray
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool CanGray => false;
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets a value indicating whether this instance is days off override.
         /// </summary>
         /// <value>
@@ -293,22 +224,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             {
                 SchedulePeriod currentSchedulePeriod = (SchedulePeriod)ContainedEntity;
                 return currentSchedulePeriod.IsAverageWorkTimePerDayOverride;
-
             }
         }
-        public int MustHavePreference
+
+		public int MustHavePreference
         {
-            get
-            {
-                return ContainedEntity.MustHavePreference;
-            }
-            set
-            {
-                ContainedEntity.MustHavePreference = value;
-            }
-        }
-
-
+            get => ContainedEntity.MustHavePreference;
+			set => ContainedEntity.MustHavePreference = value;
+		}
+		
 		/// <summary>
 		/// Gets a value indicating whether the eperiod target is overriden.
 		/// </summary>
@@ -356,9 +280,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// Created by: Dinesh Ranasinghe
         /// Created date: 2008-10-24
         /// </remarks>
-        public ISchedulePeriod SchedulePeriod
-        {
-            get { return ContainedEntity; }
-        }
-    }
+        public ISchedulePeriod SchedulePeriod => ContainedEntity;
+	}
 }
