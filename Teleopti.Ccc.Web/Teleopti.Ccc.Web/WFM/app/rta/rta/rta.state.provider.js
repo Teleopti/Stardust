@@ -76,6 +76,15 @@ angular.module('wfm.rta').provider('RtaState', function() {
                 controller: function($state, $stateParams) {
                     $state.go('rta', $stateParams);
                 }
-            });
+            })
+            .state("rta-skill-area-config", {
+                params: {
+                    isNewSkillArea: false,
+                    returnState: "rta-without-slash"
+                },
+                url: "/rta/skill-area-config",
+                templateUrl: "app/global/skill-group/skillgroup.html",
+                controller: "SkillGroupController as vm"
+              })
     };
 });
