@@ -789,6 +789,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldHaveCompleteProjectionForShiftStartingYesterdayEndingTomorrow()
+		{
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
+			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 20, 45, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 19, 2, 15, 0, DateTimeKind.Utc));
+			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc") { DisplayColor = Color.Red });
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchWeekData(null);
+			result.Days.ElementAt(3).Periods.Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldMapAsmPermission()
 		{
 			var result = Target.FetchWeekData(null);

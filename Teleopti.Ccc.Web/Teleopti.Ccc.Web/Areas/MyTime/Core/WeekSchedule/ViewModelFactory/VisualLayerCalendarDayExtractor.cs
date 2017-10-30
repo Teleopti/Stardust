@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
     public class VisualLayerCalendarDayExtractor
     {
-        public IList<VisualLayerForWebDisplay> CreateVisualPeriods(DateTime date, IEnumerable<IVisualLayer> visualLayerCollection, TimeZoneInfo timeZone)
+        public IList<VisualLayerForWebDisplay> CreateVisualPeriods(DateOnly date, IEnumerable<IVisualLayer> visualLayerCollection, TimeZoneInfo timeZone)
         {
             var returnList = new List<VisualLayerForWebDisplay>();
             
@@ -18,49 +18,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                 if (layer == null)
                     continue;
 
-                DateTimePeriod visualPeriod;
-                if (visualLayer.Period.StartDateTimeLocal(timeZone).Date < date)
-                {
-                    // Layer starts yesterday
-                    if (visualLayer.Period.EndDateTimeLocal(timeZone).Date == date)
-                    {
-                        // ...and ends today
-                        visualPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(date.Date, timeZone), visualLayer.Period.EndDateTime);
-                    }
-                    else
-                    {
-                        // ...and ends yesterday
-                        continue;
-                    }
-                }
-                else if (visualLayer.Period.StartDateTimeLocal(timeZone).Date == date)
-                {
-                    // Layer starts today
-                    if (visualLayer.Period.EndDateTimeLocal(timeZone).Date > date)
-                    {
-                        // ...and ends tomorrow
-                        visualPeriod = new DateTimePeriod(visualLayer.Period.StartDateTime,
-                                                          TimeZoneHelper.ConvertToUtc(date.Date.Add(new TimeSpan(23, 59, 59)), timeZone));
-                    }
-                    else
-                    {
-                        // ...and ends today
-                        visualPeriod = visualLayer.Period;
-                    }
-                }
-                else
-                {
-                    // Layer starts tomorrow
-                    continue;
-                }
-
-                var layerForDisplay = new VisualLayerForWebDisplay(visualLayer.Payload, visualLayer.Period, layer.HighestPriorityActivity, visualLayer.Person)
-                                          {
-                                              VisualPeriod = visualPeriod,
-											  DefinitionSet = visualLayer.DefinitionSet
-                                          };
-                returnList.Add(layerForDisplay);
-            }
+				var completeDate = date.ToDateTimePeriod(timeZone).ChangeEndTime(TimeSpan.FromSeconds(-1));
+				var sharedPeriod = completeDate.Intersection(visualLayer.Period);
+				if (sharedPeriod.HasValue)
+				{
+					var visualPeriod = sharedPeriod.Value;
+					var layerForDisplay = new VisualLayerForWebDisplay(visualLayer.Payload, visualLayer.Period,
+						layer.HighestPriorityActivity, visualLayer.Person)
+					{
+						VisualPeriod = visualPeriod,
+						DefinitionSet = visualLayer.DefinitionSet
+					};
+					returnList.Add(layerForDisplay);
+				}
+			}
 
             return returnList;
         }

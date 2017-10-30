@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
@@ -264,7 +263,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 			var periodViewModelFactory = _periodViewModelFactory;
 			var minMaxTime = adjustMinEndTime(s.MinMaxTime);
-			var periodsViewModels = periodViewModelFactory.CreatePeriodViewModels(projectionList, minMaxTime, s.Date.Date,
+			var periodsViewModels = periodViewModelFactory.CreatePeriodViewModels(projectionList, minMaxTime, s.Date,
 				s.ScheduleDay?.TimeZone) ?? new PeriodViewModel[0];
 			var overtimeAvailabilityPeriodViewModels =
 				periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability,

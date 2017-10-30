@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			_overtimeMapper = overtimeMapper;
 		}
 
-		public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateTime localDate, TimeZoneInfo timeZone)
+		public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone)
 		{
 			var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
 			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
@@ -36,23 +36,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				var meetingPayload = visualLayer.Payload as IMeetingPayload;
 				if (meetingPayload != null)
 				{
+					var formatter = new NoFormatting();
 					meetingModel = new MeetingViewModel
 					{
-						Location = meetingPayload.Meeting.GetLocation(new NoFormatting()),
-						Title = meetingPayload.Meeting.GetSubject(new NoFormatting()),
-						Description = meetingPayload.Meeting.GetDescription(new NoFormatting())
+						Location = meetingPayload.Meeting.GetLocation(formatter),
+						Title = meetingPayload.Meeting.GetSubject(formatter),
+						Description = meetingPayload.Meeting.GetDescription(formatter)
 					};
 				}
 
-				var isOvertimeLayer = visualLayer.DefinitionSet != null &&
-									  visualLayer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime;
+				var isOvertimeLayer = visualLayer.DefinitionSet?.MultiplicatorType == MultiplicatorType.Overtime;
 
 				var timezone = _timeZone.TimeZone();
+				var timePeriod = visualLayer.VisualPeriod.TimePeriod(timezone);
 				var startPositionPercentage =
-					(decimal)(visualLayer.VisualPeriod.TimePeriod(timezone).StartTime - minMaxTime.StartTime).Ticks /
+					(decimal)(timePeriod.StartTime - minMaxTime.StartTime).Ticks /
 					(minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
 				var endPositionPercentage =
-					(decimal)(visualLayer.VisualPeriod.TimePeriod(timezone).EndTime - minMaxTime.StartTime).Ticks /
+					(decimal)(timePeriod.EndTime - minMaxTime.StartTime).Ticks /
 					(minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
 				newList.Add(new PeriodViewModel
 				{

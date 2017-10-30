@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			AssertTimeLine(result.TimeLine.ToList(),8,0,15,0);
 		}
-
+		
 		[Test]
 		public void ShouldUseDefaultTimelineForDayWithoutScheduleAndOvertimeYesterdayInvisible()
 		{
