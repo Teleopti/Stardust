@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		private IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private IGlobalSettingDataRepository _globalSettingsDataRepository;
 		private IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
-		private FakeSchedulingResultStateHolder _schedulingResultStateHolder;
 
 		[SetUp]
 		public void Setup()
@@ -39,8 +38,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			_scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
 			_swapAndModifyService = new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback);
-
-			_schedulingResultStateHolder = new FakeSchedulingResultStateHolder();
 
 			_globalSettingsDataRepository = new FakeGlobalSettingDataRepository();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
@@ -235,8 +232,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 		private void setBusinessRules(IPerson person, PersonAbsenceAccount account)
 		{
-			_schedulingResultStateHolder.Schedules = _scheduleDictionary;
-			_newBusinessRules = NewBusinessRuleCollection.MinimumAndPersonAccount(_schedulingResultStateHolder, new Dictionary<IPerson, IPersonAccountCollection>
+			_newBusinessRules = NewBusinessRuleCollection.MinimumAndPersonAccount(_scheduleDictionary, new Dictionary<IPerson, IPersonAccountCollection>
 			{
 				{person, new PersonAccountCollection(person) {account}}
 			});
