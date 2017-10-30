@@ -54,8 +54,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SkillDays = skillDays;
 		}
 
-		public IEnumerable<IShiftCategory> ShiftCategories { get; set; }
-
 		public IList<IOptionalColumn> OptionalColumns { get; set; }
 
 		public ISkillStaffPeriodHolder SkillStaffPeriodHolder

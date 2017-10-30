@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var teamBlockSeniorityFairnessOptimizationService = _teamBlockSeniorityFairnessOptimizationService;
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
-				schedulingOptions, _schedulerStateHolder().SchedulingResultState.ShiftCategories.ToList(),
+				schedulingOptions, _schedulerStateHolder().CommonStateHolder.ShiftCategories.ToList(),
 				_schedulerStateHolder().Schedules, rollbackService, optimizationPreferences, true,
 				dayOffOptimizationPreferenceProvider);
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;

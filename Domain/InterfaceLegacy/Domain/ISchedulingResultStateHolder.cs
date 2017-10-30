@@ -100,10 +100,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// /// </remarks>
         ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; }
 
-        ///<summary>
-        ///</summary>
-        IEnumerable<IShiftCategory> ShiftCategories { get; set; }
-
 		///<summary>
 		/// If the scheduler is opened in Team Leader Mode
 		///</summary>

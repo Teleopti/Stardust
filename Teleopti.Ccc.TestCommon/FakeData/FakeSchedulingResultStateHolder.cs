@@ -38,8 +38,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			_skillStaffPeriodHolder = skillStaffPeriodHolder;
 		}
-
-		public IEnumerable<IShiftCategory> ShiftCategories { get; set; }
 		public bool TeamLeaderMode { get; set; }
 		public bool UseValidation { get; set; }
 		public INewBusinessRuleCollection GetRulesToRun()

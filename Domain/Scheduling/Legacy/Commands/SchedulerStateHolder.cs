@@ -157,13 +157,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void LoadCommonState(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
 		{
 			CommonStateHolder.LoadCommonStateHolder(repositoryFactory, unitOfWork);
-			_schedulingResultState.ShiftCategories = CommonStateHolder.ShiftCategories;
 		}
 
 		public void LoadCommonStateForResourceCalculationOnly(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
 		{
 			CommonStateHolder.LoadCommonStateHolderForResourceCalculationOnly(repositoryFactory, unitOfWork);
-			_schedulingResultState.ShiftCategories = CommonStateHolder.ShiftCategories;
 		}
 
 		public void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory, IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests)

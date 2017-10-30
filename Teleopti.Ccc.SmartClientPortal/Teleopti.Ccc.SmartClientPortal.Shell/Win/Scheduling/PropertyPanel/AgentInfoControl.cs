@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 					case FairnessType.Seniority :
 						tableLayoutPanelRanking.Visible = true;
 						tableLayoutPanelFairness.Visible = false;
-						updateRankingData(_stateHolder.Schedules[_selectedPerson], _stateHolder.SchedulingResultState.ShiftCategories,
+						updateRankingData(_stateHolder.Schedules[_selectedPerson], _stateHolder.CommonStateHolder.ShiftCategories,
 					                  _stateHolder.FilteredCombinedAgentsDictionary.Values.ToList());
 				        break;
 		        }

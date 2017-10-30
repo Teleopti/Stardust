@@ -206,12 +206,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				get { throw new NotImplementedException(); }
 			}
 
-			public IEnumerable<IShiftCategory> ShiftCategories
-			{
-				get { throw new NotImplementedException(); }
-				set { throw new NotImplementedException(); }
-			}
-
 			public bool TeamLeaderMode
 			{
 				get { throw new NotImplementedException(); }
