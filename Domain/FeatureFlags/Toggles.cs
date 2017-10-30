@@ -25,6 +25,7 @@
 		RTA_RememberMyPartOfTheBusiness_39082,
 		RTA_RtaTracer_45597,
 		RTA_UnifiedSkillGroupManagement_45417,
+		RTA_MonitorAgentsWithLongTimeInState_46475,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
