@@ -20,27 +20,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
     /// </summary>
     public class RequestView : IHelpContext
     {
-        private readonly IUndoRedoContainer _container;
         private readonly IList<IPersonRequest> _personRequestList;
         private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
         private IList<PersonRequestViewModel> _source = new List<PersonRequestViewModel>();
         private readonly HandlePersonRequestViewModel _model;
 	    private readonly ISchedulerStateHolder _schedulerStateHolder;
-	    private IEventAggregator _eventAggregator;
         private readonly IPersonRequestCheckAuthorization _authorization;
 		private bool _isWindowLoaded;
-	    private RequestPresenter _presenter;
+	    private readonly RequestPresenter _presenter;
 
         public RequestView(FrameworkElement handlePersonRequestView, ISchedulerStateHolder schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator)
         {
 	        _schedulerStateHolder = schedulerStateHolder;
-	        _eventAggregator = eventAggregator;
-            _container = container;
             _personRequestList = schedulerStateHolder.PersonRequests;
             _authorization = new PersonRequestCheckAuthorization();
 			_presenter = new RequestPresenter(_authorization);
 			_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.Schedules,_authorization);
-            _model = new HandlePersonRequestViewModel(schedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.ChoosenAgents, _container, allAccountPersonCollection, _eventAggregator, _authorization, schedulerStateHolder.TimeZoneInfo);
+            _model = new HandlePersonRequestViewModel(schedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.ChoosenAgents, container, allAccountPersonCollection, eventAggregator, _authorization, schedulerStateHolder.TimeZoneInfo);
             CreatePersonRequestViewModels(schedulerStateHolder, handlePersonRequestView);
             
             InitObservableListEvents();
