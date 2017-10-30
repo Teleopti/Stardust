@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, () => Resources.Reports, "reports"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebStaffing, () => Resources.WebStaffing, "staffing"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTimeWeb, () => Resources.MyTimeWeb, "myTime"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage, () => Resources.Gamification, "gamification")
 		};
 
 		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager, ILicenseActivatorProvider licenseActivatorProvider, IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter)
@@ -131,6 +132,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebPeople))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_People_PrepareForRelease_39040);
+			}
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage))
+			{
+				return _toggleManager.IsEnabled(Toggles.WFM_Gamification_Setting_With_External_Quality_Values_45003);
 			}
 
 			return true;

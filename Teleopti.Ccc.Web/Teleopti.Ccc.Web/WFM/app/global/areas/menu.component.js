@@ -66,6 +66,10 @@ function MenuController($state) {
 			url: '../MyTime',
 			isStateless: true,
 			isOpenInNewTab: true
+		},
+		{
+			i: 'mdi mdi-trophy',
+			name: 'gamification'
 		}
 	];
 	function setMenuItem() {

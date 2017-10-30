@@ -1422,6 +1422,10 @@
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.min.js" />
+    <Content Include="WFM\app\gamification\gamification.controller.js" />
+    <Content Include="WFM\app\gamification\gamification.routes.js" />
+    <Content Include="WFM\app\gamification\html\gamification.html" />
+    <Content Include="WFM\app\gamification\_modules.js" />
     <Content Include="WFM\app\global\tree-picker\tree.component.js" />
     <Content Include="WFM\app\global\tree-picker\tree.component.typeOne.spec.js" />
     <Content Include="WFM\app\global\tree-picker\tree.component.typeTwo.spec.js" />
