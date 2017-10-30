@@ -165,12 +165,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return Skills.Any() ? Skills.Min(s => s.DefaultResolution) : 15;
 		}
 
-		public void ClearAbsenceDataDuringCurrentRequestHandlingCycle()
-		{
-			addedAbsenceMinutesDictionary.Clear();
-			addedAbsenceHeadCountDictionary.Clear();
-		}
-
 		/// <summary>
 		/// Gets the visible skills.
 		/// </summary>

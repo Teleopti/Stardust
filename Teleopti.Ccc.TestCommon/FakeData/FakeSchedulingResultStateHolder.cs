@@ -92,10 +92,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 		}
 
-		public void ClearAbsenceDataDuringCurrentRequestHandlingCycle()
-		{
-		}
-
 		public void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
 		{
 			

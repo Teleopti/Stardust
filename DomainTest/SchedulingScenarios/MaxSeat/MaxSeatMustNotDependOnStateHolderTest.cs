@@ -286,11 +286,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				throw new NotImplementedException();
 			}
 
-			public void ClearAbsenceDataDuringCurrentRequestHandlingCycle()
-			{
-				throw new NotImplementedException();
-			}
-
 			public void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
 			{
 				throw new NotImplementedException();
