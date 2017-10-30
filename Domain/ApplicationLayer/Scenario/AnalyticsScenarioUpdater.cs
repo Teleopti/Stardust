@@ -76,16 +76,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 			// Add
 			if (analyticsScenario == null)
 			{
-				_analyticsScenarioRepository.AddScenario(transformToAnalyticsScenario(@event, scenario, analyticsBusinessUnit));
+				if (scenario.EnableReporting || scenario.DefaultScenario)
+				{
+					_analyticsScenarioRepository.AddScenario(transformToAnalyticsScenario(@event, scenario, analyticsBusinessUnit, false));
+				}
 			}
 			// Update
 			else
 			{
-				_analyticsScenarioRepository.UpdateScenario(transformToAnalyticsScenario(@event, scenario, analyticsBusinessUnit));
+				_analyticsScenarioRepository.UpdateScenario(scenario.EnableReporting || scenario.DefaultScenario
+					? transformToAnalyticsScenario(@event, scenario, analyticsBusinessUnit, false)
+					: transformToAnalyticsScenario(@event, scenario, analyticsBusinessUnit, true));
 			}
 		}
 
-		private static AnalyticsScenario transformToAnalyticsScenario(ScenarioChangeEvent @event, IScenario scenario, AnalyticBusinessUnit analyticsBusinessUnit)
+		private static AnalyticsScenario transformToAnalyticsScenario(ScenarioChangeEvent @event, IScenario scenario, AnalyticBusinessUnit analyticsBusinessUnit, bool isDeleted)
 		{
 			return new AnalyticsScenario
 			{
@@ -97,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 				DatasourceId = 1,
 				DatasourceUpdateDate = scenario.UpdatedOn.GetValueOrDefault(DateTime.UtcNow),
 				DefaultScenario = scenario.DefaultScenario,
-				IsDeleted = false
+				IsDeleted = isDeleted
 			};
 		}
 	}

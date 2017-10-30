@@ -43,6 +43,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 			analyticsScenario.DefaultScenario.GetValueOrDefault().Should().Be.True();
 			analyticsScenario.ScenarioName.Should().Be.EqualTo("Test scenario");
 		}
+		
+		[Test]
+		public void ShouldOnlyAddScenarioReportableToAnalytics()
+		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			AnalyticsScenarioRepository.Scenarios().Should().Be.Empty();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Test scenario", false);
+			scenario.EnableReporting = false;
+			ScenarioRepository.Add(scenario);
+			Target.Handle(new ScenarioChangeEvent
+			{
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			});
+
+			AnalyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(0);
+		}
 
 		[Test]
 		public void ShouldUpdateScenarioToAnalytics()
@@ -70,6 +87,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 			analyticsScenario.DefaultScenario.GetValueOrDefault().Should().Be.True();
 			analyticsScenario.ScenarioName.Should().Be.EqualTo("New scenario name");
 		}
+		
+		[Test]
+		public void ShouldSetScenarioToDeleteWhenDisableReporting()
+		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			AnalyticsScenarioRepository.Scenarios().Should().Be.Empty();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Scenario name", false);
+			scenario.EnableReporting = false;
+			ScenarioRepository.Add(scenario);
+			AnalyticsScenarioRepository.AddScenario(new AnalyticsScenario
+			{
+				ScenarioCode = scenario.Id.GetValueOrDefault(),
+				ScenarioName = "Scenario name"
+			});
+			AnalyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(1);
+			AnalyticsScenarioRepository.Scenarios().First().IsDeleted.Should().Be.False();
+			
+			Target.Handle(new ScenarioChangeEvent
+			{
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			});
+
+			AnalyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(1);
+			var analyticsScenario = AnalyticsScenarioRepository.Scenarios().First();
+			analyticsScenario.IsDeleted.Should().Be.True();
+		}
 
 		[Test]
 		public void ShouldSetScenarioToDelete()
@@ -96,5 +140,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 			var analyticsScenario = AnalyticsScenarioRepository.Scenarios().First();
 			analyticsScenario.IsDeleted.Should().Be.True();
 		}
+
 	}
 }

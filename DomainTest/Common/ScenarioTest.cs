@@ -117,38 +117,5 @@ namespace Teleopti.Ccc.DomainTest.Common
 			_scenario.Restricted = false;
 			Assert.IsFalse(_scenario.Restricted);
 		}
-		
-		
-		[Test]
-		public void ShouldOnlyPublishScenarioChangeEventForReportableScenario()
-		{
-			var scenario1 = new Scenario("s1")
-			{
-				EnableReporting = true
-			};
-			var scenario2 = new Scenario("s2"){
-				EnableReporting = false
-			};
-			scenario1.NotifyTransactionComplete(DomainUpdateType.Insert);
-			scenario2.NotifyTransactionComplete(DomainUpdateType.Insert);
-			scenario1.PopAllEvents().Single().Should().Be.InstanceOf<ScenarioChangeEvent>();
-			scenario2.PopAllEvents().Should().Be.Empty();
-		}
-		
-		[Test]
-		public void ShouldOnlyPublishScenarioDeleteEventForReportableScenario()
-		{
-			var scenario1 = new Scenario("s1")
-			{
-				EnableReporting = true
-			};
-			var scenario2 = new Scenario("s2"){
-				EnableReporting = false
-			};
-			scenario1.NotifyTransactionComplete(DomainUpdateType.Delete);
-			scenario2.NotifyTransactionComplete(DomainUpdateType.Delete);
-			scenario1.PopAllEvents().Single().Should().Be.InstanceOf<ScenarioDeleteEvent>();
-			scenario2.PopAllEvents().Should().Be.Empty();
-		}
     }
 }
