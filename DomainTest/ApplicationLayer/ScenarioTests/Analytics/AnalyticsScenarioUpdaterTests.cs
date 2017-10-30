@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 {
 	[TestFixture]
 	[DomainTest]
-	public class ScenarioChangedHandlerTests : ISetup
+	public class AnalyticsScenarioUpdaterTests : ISetup
 	{
 		public AnalyticsScenarioUpdater Target;
 		public FakeAnalyticsScenarioRepository AnalyticsScenarioRepository;

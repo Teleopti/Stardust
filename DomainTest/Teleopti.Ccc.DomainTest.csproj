@@ -359,7 +359,7 @@
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerWithoutDeltasTest.cs" />
     <Compile Include="ApplicationLayer\RunWaitlistCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Absences\AnalyticsAbsenceUpdaterTests.cs" />
-    <Compile Include="ApplicationLayer\ScenarioTests\Analytics\ScenarioChangedHandlerTests.cs" />
+    <Compile Include="ApplicationLayer\ScenarioTests\Analytics\AnalyticsScenarioUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjectionReadOnlyUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\GroupingReadModelDataUpdaterTest.cs" />

@@ -17,21 +17,24 @@ namespace Teleopti.Ccc.Domain.Common
 		public override void NotifyTransactionComplete(DomainUpdateType operation)
 		{
 			base.NotifyTransactionComplete(operation);
-			switch (operation)
+			if (_enableReporting)
 			{
-				case DomainUpdateType.Insert:
-				case DomainUpdateType.Update:
-					AddEvent(new ScenarioChangeEvent
-					{
-						ScenarioId = Id.GetValueOrDefault()
-					});
-					break;
-				case DomainUpdateType.Delete:
-					AddEvent(new ScenarioDeleteEvent
-					{
-						ScenarioId = Id.GetValueOrDefault()
-					});
-					break;
+				switch (operation)
+				{
+					case DomainUpdateType.Insert:
+					case DomainUpdateType.Update:
+						AddEvent(new ScenarioChangeEvent
+						{
+							ScenarioId = Id.GetValueOrDefault()
+						});
+						break;
+					case DomainUpdateType.Delete:
+						AddEvent(new ScenarioDeleteEvent
+						{
+							ScenarioId = Id.GetValueOrDefault()
+						});
+						break;
+				}
 			}
 		}
 
