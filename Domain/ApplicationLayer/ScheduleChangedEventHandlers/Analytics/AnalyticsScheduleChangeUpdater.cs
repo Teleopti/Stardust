@@ -63,8 +63,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		[Attempts(10)]
 		public virtual void Handle(ProjectionChangedEvent @event)
 		{
-			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(@event))
-				return;
 			updateForPersonAndDates(@event.PersonId, @event.ScenarioId, @event.LogOnBusinessUnitId,
 				@event.ScheduleDays.Select(x => x.Date), @event.Timestamp);
 		}
@@ -75,12 +73,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		[Attempts(2)]
 		public virtual void Handle(ReloadSchedules @event)
 		{
+			
 			updateForPersonAndDates(@event.PersonId, @event.ScenarioId, @event.LogOnBusinessUnitId,
 				@event.Dates, @event.Timestamp);
 		}
 
 		private void updateForPersonAndDates(Guid personId, Guid scenarioId, Guid businessUnitId, IEnumerable<DateTime> dates, DateTime timestamp)
 		{
+			var scenario = _scenarioRepository.Get(scenarioId);
+			if (scenario == null)
+				throw new Exception($"Could not load scenario {scenarioId} from application database.");
+			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(scenario.DefaultScenario, scenarioId))
+				return;
+			
 			var analyticsScenario = _analyticsScenarioRepository.Get(scenarioId);
 			if (analyticsScenario == null)
 			{
@@ -90,9 +95,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			var person = _personRepository.Get(personId);
 			if (person == null)
 				throw new PersonNotFoundException($"Could not load person {personId} from application database.");
-			var scenario = _scenarioRepository.Get(scenarioId);
-			if (scenario == null)
-				throw new Exception($"Could not load scenario {scenarioId} from application database.");
 
 			foreach (var date in dates)
 			{
@@ -173,6 +175,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 	public interface IAnalyticsScheduleChangeUpdaterFilter
 	{
-		bool ContinueProcessingEvent(ProjectionChangedEvent @event);
+		bool ContinueProcessingEvent(bool isDefaultScenario, Guid scenarioId);
 	}
 }

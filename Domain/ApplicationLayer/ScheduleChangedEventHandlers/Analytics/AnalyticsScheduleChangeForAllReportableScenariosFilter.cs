@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_scenarioRepository = scenarioRepository;
 		}
 
-		public bool ContinueProcessingEvent(ProjectionChangedEvent @event)
+		public bool ContinueProcessingEvent(bool isDefaultScenario, Guid scenarioId)
 		{
-			if (@event.IsDefaultScenario)
+			if (isDefaultScenario)
 				return true;
 
-			return _scenarioRepository.FindEnabledForReportingSorted().Any(a => a.Id.Equals(@event.ScenarioId));
+			return _scenarioRepository.FindEnabledForReportingSorted().Any(a => a.Id.Equals(scenarioId));
 		}
 	}
 }

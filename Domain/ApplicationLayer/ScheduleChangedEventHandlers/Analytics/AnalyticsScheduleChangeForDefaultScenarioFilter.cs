@@ -1,12 +1,13 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+﻿using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	public class AnalyticsScheduleChangeForDefaultScenarioFilter : IAnalyticsScheduleChangeUpdaterFilter
 	{
-		public bool ContinueProcessingEvent(ProjectionChangedEvent @event)
+
+		public bool ContinueProcessingEvent(bool isDefaultScenario, Guid scenarioId)
 		{
-			return @event.IsDefaultScenario;
+			return isDefaultScenario;
 		}
 	}
 }

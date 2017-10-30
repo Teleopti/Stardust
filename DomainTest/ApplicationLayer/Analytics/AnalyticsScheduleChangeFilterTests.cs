@@ -53,52 +53,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Analytics
 		public void DefaultScenarioReportable_ShoulBeProcessed()
 		{
 			addScenarios();
-
-			var @event = new ProjectionChangedEvent
-			{
-				IsDefaultScenario = true,
-				ScenarioId = defaultScenario.Id.GetValueOrDefault()
-			};
-			Target.ContinueProcessingEvent(@event).Should().Be.True();
+			Target.ContinueProcessingEvent(true, reportableScenario.Id.GetValueOrDefault()).Should().Be.True();
 		}
 
 		[Test]
 		public void DefaultScenarioNotReportable_ShoulBeProcessed()
 		{
 			addScenarios();
-
-			var @event = new ProjectionChangedEvent
-			{
-				IsDefaultScenario = true,
-				ScenarioId = defaultScenario.Id.GetValueOrDefault()
-			};
-			Target.ContinueProcessingEvent(@event).Should().Be.True();
+			Target.ContinueProcessingEvent(true, notReportableScenario.Id.GetValueOrDefault()).Should().Be.True();
 		}
 
 		[Test]
 		public void ScenarioReportable_ShoulBeProcessed()
 		{
 			addScenarios();
-
-			var @event = new ProjectionChangedEvent
-			{
-				IsDefaultScenario = false,
-				ScenarioId = reportableScenario.Id.GetValueOrDefault()
-			};
-			Target.ContinueProcessingEvent(@event).Should().Be.True();
+			Target.ContinueProcessingEvent(false, reportableScenario.Id.GetValueOrDefault()).Should().Be.True();
 		}
 
 		[Test]
 		public void ScenarioNotReportable_ShoulNotBeProcessed()
 		{
 			addScenarios();
-
-			var @event = new ProjectionChangedEvent
-			{
-				IsDefaultScenario = false,
-				ScenarioId = notReportableScenario.Id.GetValueOrDefault()
-			};
-			Target.ContinueProcessingEvent(@event).Should().Be.False();
+			Target.ContinueProcessingEvent(false, notReportableScenario.Id.GetValueOrDefault()).Should().Be.False();
 		}
 	}
 }
