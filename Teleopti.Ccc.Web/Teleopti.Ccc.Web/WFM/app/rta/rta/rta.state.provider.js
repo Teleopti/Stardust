@@ -58,13 +58,18 @@ angular.module('wfm.rta').provider('RtaState', function() {
                     es: {array: true}
                 },
                 templateUrl: function() {
-                	if (toggles.RTA_UnifiedSkillGroupManagement_45417)
-                		return 'app/rta/rta/agents/rta-agents.RTA_UnifiedSkillGroupManagement_45417.html';
+					if (toggles.RTA_MonitorAgentsWithLongTimeInState_46475)
+						return 'app/rta/rta/agents/rta-agents.RTA_MonitorAgentsWithLongTimeInState_46475.html';
+					if (toggles.RTA_UnifiedSkillGroupManagement_45417)
+						return 'app/rta/rta/agents/rta-agents.RTA_UnifiedSkillGroupManagement_45417.html';
                     if (toggles.RTA_RememberMyPartOfTheBusiness_39082)
                         return 'app/rta/rta/agents/rta-agents.RTA_RememberMyPartOfTheBusiness_39082.html';
                     else return 'app/rta/rta/agents/rta-agents.html';
                 },
-                controller: 'RtaAgentsController as vm'
+				controllerProvider: function() {
+					if (toggles.RTA_MonitorAgentsWithLongTimeInState_46475) return 'RtaAgentsController46475 as vm';
+					else return 'RtaAgentsController as vm';
+				}
             })
             .state('rta-historical', {
                 url: '/rta/agent-historical/:personId?open',
