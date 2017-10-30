@@ -216,7 +216,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			system.UseTestDouble<NotificationChecker>().For<INotificationChecker>();
 			system.UseTestDouble<FakeNotificationSender>().For<INotificationSender>();
 			system.UseTestDouble<FakeNotificationConfigReader>().For<INotificationConfigReader>();
-			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
 			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();

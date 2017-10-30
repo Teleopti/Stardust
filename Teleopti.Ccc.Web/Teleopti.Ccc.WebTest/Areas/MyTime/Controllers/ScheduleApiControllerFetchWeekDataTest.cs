@@ -37,10 +37,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
 		public ILoggedOnUser User;
-		public FakeScheduleDataReadScheduleStorage ScheduleData;
+		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakePersonRequestRepository PersonRequestRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakeMeetingRepository MeetingRepository;
 
 		[Test]
 		public void ShouldMap()
@@ -141,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var phone = new Activity("p");
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-29 08:00".Utc(), "2015-03-29 17:00".Utc()));
-			ScheduleData.Set(new IScheduleData[] { personAssignment });
+			PersonAssignmentRepository.Has(personAssignment);
 
 			var viewModel = Target.FetchWeekData(date);
 
@@ -160,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var phone = new Activity("p");
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-28 07:45".Utc(), "2015-03-28 17:00".Utc()));
-			ScheduleData.Set(new IScheduleData[] { personAssignment });
+			PersonAssignmentRepository.Has(personAssignment);
 
 			var viewModel = Target.FetchWeekData(date);
 
@@ -179,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var phone = new Activity("p");
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-29 07:45".Utc(), "2015-03-29 17:00".Utc()));
-			ScheduleData.Set(new IScheduleData[] { personAssignment });
+			PersonAssignmentRepository.Has(personAssignment);
 
 			var viewModel = Target.FetchWeekData(date);
 
@@ -200,7 +202,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personAssignment1.AddActivity(phone, new DateTimePeriod("2015-03-28 00:00".Utc(), "2015-03-28 04:00".Utc()));
 			var personAssignment2 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 3, 29));
 			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-03-29 00:00".Utc(), "2015-03-29 04:00".Utc()));
-			ScheduleData.Set(new IScheduleData[] { personAssignment1, personAssignment2 });
+			PersonAssignmentRepository.Has(personAssignment1);
+			PersonAssignmentRepository.Has(personAssignment2);
 
 			var viewModel = Target.FetchWeekData(date);
 
@@ -227,7 +230,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personAssignment1.AddActivity(phone, new DateTimePeriod("2015-10-24 00:00".Utc(), "2015-10-24 04:00".Utc()));
 			var personAssignment2 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 10, 25));
 			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-10-25 00:00".Utc(), "2015-10-25 04:00".Utc()));
-			ScheduleData.Set(new IScheduleData[] { personAssignment1, personAssignment2 });
+			PersonAssignmentRepository.Has(personAssignment1);
+			PersonAssignmentRepository.Has(personAssignment2);
 
 			var viewModel = Target.FetchWeekData(date);
 
@@ -416,14 +420,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			meeting.StartDate = meeting.EndDate = new DateOnly(2014, 12, 15);
 			meeting.StartTime = TimeSpan.FromHours(16);
 			meeting.EndTime = TimeSpan.FromHours(17);
-			ScheduleData.Set(meeting.GetPersonMeetings(User.CurrentUser()).OfType<IScheduleData>().ToList());
+			MeetingRepository.Has(meeting);
 
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
 			var period = new DateTimePeriod(2014, 12, 15, 8, 2014, 12, 15, 17);
 			assignment.AddActivity(new Activity("Phone") { InWorkTime = true, InContractTime = true, DisplayColor = Color.Green },
 				period);
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
-			ScheduleData.Add(assignment);
+			PersonAssignmentRepository.Add(assignment);
 
 			var result = Target.FetchWeekData(null);
 

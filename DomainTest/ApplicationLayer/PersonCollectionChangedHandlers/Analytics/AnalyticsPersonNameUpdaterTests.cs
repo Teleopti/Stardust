@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<AnalyticsPersonNameUpdater>().For<AnalyticsPersonNameUpdater>();
-			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
 		}
 
 		[Test]

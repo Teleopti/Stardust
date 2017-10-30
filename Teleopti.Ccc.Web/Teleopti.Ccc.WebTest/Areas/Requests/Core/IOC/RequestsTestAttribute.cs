@@ -41,17 +41,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble(scenario).For<ICurrentScenario>();
 			system.UseTestDouble(principalAuthorization).For<IAuthorization>();
-			system.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();
-			system.UseTestDouble(new FakeGroupingReadOnlyRepository()).For<IGroupingReadOnlyRepository>();
-			system.UseTestDouble(new FakePersonAbsenceRepository(new FakeStorage())).For<IPersonAbsenceRepository>();
-			system.UseTestDouble(new FakePersonAbsenceAccountRepository()).For<IPersonAbsenceAccountRepository>();
+			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
+			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
+			system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
+			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
+			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			system.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
+			system.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
+			system.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
+			system.UseTestDouble<FakeAgentDayScheduleTagRepository>().For<IAgentDayScheduleTagRepository>();
+			system.UseTestDouble<FakeOvertimeAvailabilityRepository>().For<IOvertimeAvailabilityRepository>();
+			system.UseTestDouble<FakePersonAvailabilityRepository>().For<IPersonAvailabilityRepository>();
+			system.UseTestDouble<FakePersonRotationRepository>().For<IPersonRotationRepository>();
+			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
+			system.UseTestDouble<FakePreferenceDayRepository>().For<IPreferenceDayRepository>();
+			system.UseTestDouble<FakeStudentAvailabilityDayRepository>().For<IStudentAvailabilityDayRepository>();
+			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<FakeQueuedAbsenceRequestRepository>().For<IQueuedAbsenceRequestRepository>();
 			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
+			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 
 			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
 			system.UseTestDouble<FakeRequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
-			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<IScheduleStorage>();
-
+			
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
 			system.UseTestDouble(personRequestCheckAuthorization).For<IPersonRequestCheckAuthorization>();

@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	public class ScheduleApiControllerGetIntradayScheduleEdgeTimeTest
 	{
 		public ScheduleApiController Target;
-		public FakeScheduleDataReadScheduleStorage ScheduleData;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public IScheduleStorage ScheduleData;
 		public ICurrentScenario Scenario;
 		public MutableNow Now;
 		public ILoggedOnUser User;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var phone = new Activity("p");
 			personAssignment.AddActivity(phone, timePeriod);
-			ScheduleData.Set(new IScheduleData[] { personAssignment });
+			PersonAssignmentRepository.Has(personAssignment);
 
 			var result = Target.GetIntradayScheduleEdgeTime(date);
 			result.StartDateTime.Should().Be.EqualTo(timePeriod.StartDateTime.ToString(DateTimeFormatExtensions.FixedDateTimeFormat));
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var phone = new Activity("p");
 			personAssignment.AddActivity(phone, timePeriod);
-			ScheduleData.Set(new IScheduleData[] { personAssignment });
+			PersonAssignmentRepository.Has(personAssignment);
 
 			var result = Target.GetIntradayScheduleEdgeTime(date);
 			result.EndDateTime.Should().Be.EqualTo(timePeriod.EndDateTime.ToString(DateTimeFormatExtensions.FixedDateTimeFormat));
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var phone = new Activity("p");
 			personAssignment.AddActivity(phone, timePeriod);
-			ScheduleData.Set(new IScheduleData[] { personAssignment });
+			PersonAssignmentRepository.Has(personAssignment);
 
 			var result = Target.GetIntradayScheduleEdgeTime(date);
 			result.StartDateTime.Should().Be.EqualTo(timePeriod.StartDateTime.ToString(DateTimeFormatExtensions.FixedDateTimeFormat));
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var defaultDateTimePeriod = new DateTimePeriod(nowDateTimeStr.Utc().AddHours(1), nowDateTimeStr.Utc().AddHours(1));
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 
-			ScheduleData.Set(new IScheduleData[] { personAssignment });
+			PersonAssignmentRepository.Has(personAssignment);
 
 			var result = Target.GetIntradayScheduleEdgeTime(date);
 			result.StartDateTime.Should().Be.EqualTo(defaultDateTimePeriod.StartDateTime.ToString(DateTimeFormatExtensions.FixedDateTimeFormat));
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var defaultDateTimePeriod = new DateTimePeriod(nowDateTimeStr.Utc().AddHours(1), nowDateTimeStr.Utc().AddHours(1));
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 
-			ScheduleData.Set(new IScheduleData[] { personAssignment });
+			PersonAssignmentRepository.Has(personAssignment);
 
 			var result = Target.GetIntradayScheduleEdgeTime(date);
 			result.StartDateTime.Should().Be.EqualTo(defaultDateTimePeriod.StartDateTime.ToString(DateTimeFormatExtensions.FixedDateTimeFormat));

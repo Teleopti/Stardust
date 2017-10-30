@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public FakeSkillCombinationResourceRepository CombinationRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public ILoggedOnUser User;
-		public FakeScheduleDataReadScheduleStorage ScheduleStorage;
+		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario Scenario;
 		public MutableNow Now;
 		public FakeSkillRepository SkillRepository;
@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			system.UseTestDouble<SkillOpenHourFilter>().For<ISkillOpenHourFilter>();
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
-			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>()
 				.For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();

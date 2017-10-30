@@ -20,7 +20,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
 		public ILoggedOnUser User;
-		public FakeScheduleDataReadScheduleStorage ScheduleData;
+		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakePersonRequestRepository PersonRequestRepository;

@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<AnalyticsPersonPeriodUpdater>();
-			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
 		}
 
 		private void basicSetup()

@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
 		public ILoggedOnUser User;
-		public FakeScheduleDataReadScheduleStorage ScheduleData;
+		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
 
 		[Test]

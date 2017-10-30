@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public ScheduleStaffingPossibilityController Target;
 		public ICurrentScenario Scenario;
 		public ILoggedOnUser User;
-		public FakeScheduleDataReadScheduleStorage ScheduleData;
+		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
 		public FakeUserCulture Culture;
 		public FakeUserTimeZone TimeZone;
@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeSkillCombinationResourceRepository CombinationRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		private readonly TimeSpan[] intervals = { TimeSpan.FromMinutes(495), TimeSpan.FromMinutes(510) };
 
@@ -175,7 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupSiteOpenHour();
 			setupDefaultTestData();
 			setupWorkFlowControlSet();
-			ScheduleData.Clear();
+			PersonAssignmentRepository.Clear();
 			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
 				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -324,11 +325,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupDefaultTestData();
-			ScheduleData.Clear();
+			PersonAssignmentRepository.Clear();
 			var person = User.CurrentUser();
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(),
 				Now.ServerDate_DontUse(), new DayOffTemplate());
-			ScheduleData.Set(new List<IScheduleData> { assignment });
+			PersonAssignmentRepository.Has(assignment);
 			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
 				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -391,12 +392,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var startDate = Now.UtcDateTime().Date.AddHours(8);
 			var endDate = Now.UtcDateTime().Date.AddHours(17);
-			var scheduleDatas = new List<IScheduleData>();
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithOvertimeShift(User.CurrentUser(),
 				Scenario.Current(), activity, new DateTimePeriod(startDate, endDate));
-			scheduleDatas.Add(assignment);
-			ScheduleData.Set(scheduleDatas);
-
+			PersonAssignmentRepository.Has(assignment);
 
 			var possibilities =
 				getPossibilityViewModels(null, StaffingPossiblityType.Absence)
@@ -718,12 +716,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var startDate = Now.UtcDateTime().Date.AddHours(8);
 			var endDate = Now.UtcDateTime().Date.AddHours(17);
-			var scheduleDatas = new List<IScheduleData>();
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				Scenario.Current(), new DateTimePeriod(startDate, endDate),
 				ShiftCategoryFactory.CreateShiftCategory(), activities);
-			scheduleDatas.Add(assignment);
-			ScheduleData.Set(scheduleDatas);
+			PersonAssignmentRepository.Has(assignment);
 		}
 
 		private DateOnlyPeriod getAvailablePeriod()
