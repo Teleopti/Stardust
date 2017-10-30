@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
             if (!DesignMode) SetTexts();
         }
 
-		public void Initialize(IExtraPreferences extraPreferences, ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IActivity> availableActivity)
+		public void Initialize(IExtraPreferences extraPreferences, SchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IActivity> availableActivity)
         {
             Preferences = extraPreferences;
 		    _availableActivity = availableActivity;

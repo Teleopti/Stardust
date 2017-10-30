@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private bool _isAuditingSchedules;
 		private IScheduleTag _defaultScheduleTag = NullScheduleTag.Instance;
 		private readonly System.Windows.Forms.Timer _tmpTimer = new System.Windows.Forms.Timer();
-		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
+		private readonly SchedulerGroupPagesProvider _groupPagesProvider;
 		public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
 		private SkillResultViewSetting _skillResultViewSetting;
 		private const int maxCalculatMinMaxCacheEnries = 100000;
@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_virtualSkillHelper = _container.Resolve<IVirtualSkillHelper>();
 			_budgetPermissionService = _container.Resolve<IBudgetPermissionService>();
 			_schedulerState = _container.Resolve<ISchedulerStateHolder>();
-			_groupPagesProvider = _container.Resolve<ISchedulerGroupPagesProvider>();
+			_groupPagesProvider = _container.Resolve<SchedulerGroupPagesProvider>();
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			_skillDayLoadHelper = _container.Resolve<ISkillDayLoadHelper>();

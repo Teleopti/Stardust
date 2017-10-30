@@ -6,11 +6,7 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public interface ISchedulerGroupPagesProvider
-	{
-		IList<GroupPageLight> GetGroups(bool includeSkills);
-	}
-	public class SchedulerGroupPagesProvider : ISchedulerGroupPagesProvider
+	public class SchedulerGroupPagesProvider
 	{
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private IList<IUserDefinedTabLight> _userDefined;

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		private IList<IDataExchange> Panels { get; set; }
 
 		private readonly IList<GroupPageLight> _groupPages;
-		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
+		private readonly SchedulerGroupPagesProvider _groupPagesProvider;
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
 		private readonly IEnumerable<IActivity> _availableActivity;
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 
 		public OptimizationPreferencesDialog(
 			IOptimizationPreferences preferences,
-			ISchedulerGroupPagesProvider groupPagesProvider,
+			SchedulerGroupPagesProvider groupPagesProvider,
 			IEnumerable<IScheduleTag> scheduleTags, 
 			IEnumerable<IActivity> availableActivity, 
 			int resolution,

@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DayOffOptimizerValidator>().As<IDayOffOptimizerValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<NewDayOffRule>().As<INewDayOffRule>().InstancePerLifetimeScope();
 
-			builder.RegisterType<SchedulerGroupPagesProvider>().As<ISchedulerGroupPagesProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<SchedulerGroupPagesProvider>().InstancePerLifetimeScope();
 
 			builder.RegisterType<GroupScheduleGroupPageDataProvider>().AsSelf().As<IGroupScheduleGroupPageDataProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPageCreator>().As<IGroupPageCreator>().SingleInstance();

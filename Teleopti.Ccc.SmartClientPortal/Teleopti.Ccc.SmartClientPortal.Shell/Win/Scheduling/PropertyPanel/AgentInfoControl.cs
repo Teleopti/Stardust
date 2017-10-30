@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
         private IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 		private readonly IDictionary<EmploymentType, string> _employmentTypeList;
     	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
-        private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
+        private readonly SchedulerGroupPagesProvider _groupPagesProvider;
 	    private readonly ILifetimeScope _container;
 	    private readonly DateOnlyPeriod _dateOnlyPeriod;
 	    private readonly DateOnlyPeriod _requestedPeriod;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-	    public AgentInfoControl(ISchedulerGroupPagesProvider groupPagesProvider,
+	    public AgentInfoControl(SchedulerGroupPagesProvider groupPagesProvider,
 	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, IRestrictionExtractor restrictionExtractor,
 															 ISchedulerStateHolder stateHolder)
 		    : this()

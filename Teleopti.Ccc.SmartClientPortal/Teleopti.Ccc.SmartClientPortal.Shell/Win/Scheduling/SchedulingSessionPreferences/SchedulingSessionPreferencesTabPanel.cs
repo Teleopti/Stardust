@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private IList<GroupPageLight> _groupPages;
 		private IEnumerable<IActivity> _availableActivity;
 		private IEnumerable<IScheduleTag> _scheduleTags;
-		private ISchedulerGroupPagesProvider _groupPagesProvider;
+		private SchedulerGroupPagesProvider _groupPagesProvider;
 		private GroupPageLight _singleAgentEntry;
 
 		public SchedulingSessionPreferencesTabPanel()
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			if (!DesignMode) SetTexts();
 		}
 
-		public void Initialize(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
+		public void Initialize(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, SchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
 		{
 			_groupPagesProvider = groupPagesProvider;
 			_availableActivity = availableActivity;

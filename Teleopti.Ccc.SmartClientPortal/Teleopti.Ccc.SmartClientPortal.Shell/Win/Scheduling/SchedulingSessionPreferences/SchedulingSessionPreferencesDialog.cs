@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 	{
 		private readonly SchedulingOptions _schedulingOptions;
 		private readonly IEnumerable<IShiftCategory> _shiftCategories;
-		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
+		private readonly SchedulerGroupPagesProvider _groupPagesProvider;
 		private readonly IList<GroupPageLight> _groupPages;
 		private readonly IList<GroupPageLight> _groupPagesForTeamBlockPer;
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		public SchedulingSessionPreferencesDialog(
 			SchedulingOptions schedulingOptions, 
 			IEnumerable<IShiftCategory> shiftCategories, 
-			ISchedulerGroupPagesProvider groupPagesProvider,
+			SchedulerGroupPagesProvider groupPagesProvider,
 			IEnumerable<IScheduleTag> scheduleTags, 
 			string settingValue, 
 			IEnumerable<IActivity> availableActivity)
