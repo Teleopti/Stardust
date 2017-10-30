@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular.module('wfm.gamification')
-		.component('gamificationSettings', {
-			templateUrl: 'app/gamification/html/g.component.gamificationSettings.tpl.html',
+		.component('gamification', {
+			templateUrl: 'app/gamification/html/g.component.gamification.tpl.html',
 			controller: GamificationSettingsController
 		});
 
