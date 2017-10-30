@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			var provider = new BusinessRuleProvider();
 			var rules = provider.GetBusinessRulesForShiftTradeRequest(
-				new FakeSchedulingResultStateHolder(), true);
+				new FakeSchedulingResultStateHolder_DoNotUse(), true);
 
 			Assert.AreEqual(rules.Count, 12);
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldGetAllEnabledBusinessRulesForShiftTradeRequest()
 		{
-			var stateHolder = new FakeSchedulingResultStateHolder();
+			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
 			switchRuleInSetting(new Dictionary<Type, bool>
 			{
 				{typeof(NewMaxWeekWorkTimeRule), false},
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldGetAllBusinessRulesForShiftTradeRequestIfNotConfigured()
 		{
-			var stateHolder = new FakeSchedulingResultStateHolder();
+			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
 
 			setShiftTradeSetting(new ShiftTradeSettings {BusinessRuleConfigs = null});
 			var target = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);

@@ -307,7 +307,7 @@
     <Compile Include="FakeData\FakePersonContractProvider.cs" />
     <Compile Include="FakeData\FakeScheduleDayForPerson.cs" />
     <Compile Include="FakeData\FakeScheduleDictionary.cs" />
-    <Compile Include="FakeData\FakeSchedulingResultStateHolder.cs" />
+    <Compile Include="FakeData\FakeSchedulingResultStateHolder_DoNotUse.cs" />
     <Compile Include="FakeData\FakeSkillRepository.cs" />
     <Compile Include="FakeData\FakeUnitOfWork.cs" />
     <Compile Include="FakeData\FakeUnitOfWorkFactory.cs" />

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	class NewAbsenceReportHandlerNoMocksTest
 	{
 		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario_DoNotUse();
-		private FakeSchedulingResultStateHolder _schedulingResultStateHolder;
+		private FakeSchedulingResultStateHolder_DoNotUse _schedulingResultStateHolder;
 		private FakeScheduleDataReadScheduleStorage _scheduleRepository;
 		private LoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
 		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[SetUp]
 		public void SetUp()
 		{
-			_schedulingResultStateHolder = new FakeSchedulingResultStateHolder();
+			_schedulingResultStateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
 			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(_personAbsenceAccountRepository, _scheduleRepository);

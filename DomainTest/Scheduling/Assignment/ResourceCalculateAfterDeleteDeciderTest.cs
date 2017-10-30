@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
+			system.UseTestDouble<FakeSchedulingResultStateHolder_DoNotUse>().For<ISchedulingResultStateHolder>();
 		}
 	}
 }

@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public MutableNow Now;
-		public FakeSchedulingResultStateHolder SchedulingResultStateHolder;
+		public FakeSchedulingResultStateHolder_DoNotUse SchedulingResultStateHolder;
 		public FakeLoggedOnUser LoggedOnUser;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
+			system.UseTestDouble<FakeSchedulingResultStateHolder_DoNotUse>().For<ISchedulingResultStateHolder>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 		}

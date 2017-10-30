@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	public class FakeSchedulingResultStateHolder : ISchedulingResultStateHolder
+	public class FakeSchedulingResultStateHolder_DoNotUse : ISchedulingResultStateHolder
 	{
 		private readonly List<ISkill> _skills = new List<ISkill>();
 

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		private IPersonAssignment _personAssignment;
 		private ScheduleDictionaryForTest _scheduleDictionaryWithPersonAssignment;
 		private IAllLayersAreInWorkTimeSpecification _allLayersAreInWorkTimeSpecification;
-		private FakeSchedulingResultStateHolder _schedulingResultState;
+		private FakeSchedulingResultStateHolder_DoNotUse _schedulingResultState;
 		private MeetingSlotImpactCalculator _calculator;
 			
 		private void setup()
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			_scheduleDictionaryWithPersonAssignment = new ScheduleDictionaryForTest(_scenario, new DateTimePeriod(2016, 1, 1, 2016, 1, 10));
 			_scheduleDictionaryWithPersonAssignment.AddPersonAssignment(_personAssignment);
 			_allLayersAreInWorkTimeSpecification = new AllLayersAreInWorkTimeSpecification();
-			_schedulingResultState = new FakeSchedulingResultStateHolder();
+			_schedulingResultState = new FakeSchedulingResultStateHolder_DoNotUse();
 			_schedulingResultState.Schedules = _scheduleDictionaryWithPersonAssignment;
 			_calculator = new MeetingSlotImpactCalculator(_schedulingResultState, _allLayersAreInWorkTimeSpecification);
 		}

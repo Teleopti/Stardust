@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var rulesToRemove = new List<Type> { ruleToRemove1, ruleToRemove2 };
 
-			var stateHolder = new FakeSchedulingResultStateHolder();
+			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
 			var businessRules = NewBusinessRuleCollection.All(new SchedulingResultStateHolder());
 			businessRules.DoNotHaltModify(ruleToRemove1);
 			businessRules.DoNotHaltModify(ruleToRemove2);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldReturnMinWeekWorkTimeRuleConfig()
 		{
-			var stateHolder = new FakeSchedulingResultStateHolder { UseMinWeekWorkTime = true };
+			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse { UseMinWeekWorkTime = true };
 			var businessRules = NewBusinessRuleCollection.All(stateHolder);
 
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldReturnShiftTradeTargetTimeSpecificationRuleConfig()
 		{
-			var stateHolder = new FakeSchedulingResultStateHolder();
+			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
 			var businessRules = NewBusinessRuleCollection.All(stateHolder);
 
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldOnlyReturnConfigurableShiftTradeSpecificationRuleConfig()
 		{
-			var stateHolder = new FakeSchedulingResultStateHolder();
+			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
 			var businessRules = NewBusinessRuleCollection.All(stateHolder);
 
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test(Description = "Verify solution for bug #43527: Strange order of shift trade request settings in Options")]
 		public void ShouldReturnDefaultBusinessRulesConfigInSpecifyOrder()
 		{
-			var stateHolder = new FakeSchedulingResultStateHolder { UseMinWeekWorkTime = true };
+			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse { UseMinWeekWorkTime = true };
 			var businessRules = NewBusinessRuleCollection.All(stateHolder);
 			businessRules.Add(new NonMainShiftActivityRule());
 
