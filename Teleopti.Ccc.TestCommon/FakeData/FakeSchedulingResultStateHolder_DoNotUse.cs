@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public IList<IOptionalColumn> OptionalColumns { get; set; }
 		public bool UseMinWeekWorkTime { get; set; }
 		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
 		{

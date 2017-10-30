@@ -223,12 +223,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				throw new NotImplementedException();
 			}
 
-			public IList<IOptionalColumn> OptionalColumns
-			{
-				get { throw new NotImplementedException(); }
-				set { throw new NotImplementedException(); }
-			}
-
 			public bool UseMinWeekWorkTime
 			{
 				get { throw new NotImplementedException(); }

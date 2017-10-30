@@ -115,11 +115,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </summary>
 		/// <returns></returns>
 		INewBusinessRuleCollection GetRulesToRun();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		IList<IOptionalColumn> OptionalColumns { get; set; }
 		
         /// <summary>
         /// If rule for min week work time should be used

@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
     	private IPerson _selectedPerson;
         private ICollection<DateOnly> _dateOnlyList;
         private readonly ISchedulerStateHolder _stateHolder;
-        private bool _dateIsSelected;
+		private readonly IEnumerable<IOptionalColumn> _optionalColumns;
+		private bool _dateIsSelected;
         private IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 		private readonly IDictionary<EmploymentType, string> _employmentTypeList;
     	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
@@ -62,7 +63,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 
 	    public AgentInfoControl(SchedulerGroupPagesProvider groupPagesProvider,
 	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, IRestrictionExtractor restrictionExtractor,
-															 ISchedulerStateHolder stateHolder)
+															 ISchedulerStateHolder stateHolder,
+			IEnumerable<IOptionalColumn> optionalColumns)
 		    : this()
 	    {
 		    _groupPagesProvider = groupPagesProvider;
@@ -71,7 +73,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 		    _requestedPeriod = requestedPeriod;
 		    _restrictionExtractor = restrictionExtractor;
 		    _stateHolder = stateHolder;
-	    }
+			_optionalColumns = optionalColumns;
+		}
 
 	    public bool MbCacheDisabled
 	    {
@@ -863,7 +866,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 
             try
             {
-                foreach (var column in _stateHolder.SchedulingResultState.OptionalColumns)
+                foreach (var column in _optionalColumns)
                 {
                     createAndAddItem(listViewPerson, column.Name,
 									 person.GetColumnValue(column) != null

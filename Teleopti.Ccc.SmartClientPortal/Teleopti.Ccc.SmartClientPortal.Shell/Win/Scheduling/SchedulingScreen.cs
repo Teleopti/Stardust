@@ -216,6 +216,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private Form _mainWindow;
 		private bool _cancelButtonPressed;
 		private IDaysOffPreferences _daysOffPreferences;
+		private IEnumerable<IOptionalColumn> _optionalColumns;
 
 		#region Constructors
 
@@ -3881,8 +3882,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			using (PerformanceOutput.ForOperation("Loading people"))
 			{
-				SchedulerState.SchedulingResultState.OptionalColumns =
-					new OptionalColumnRepository(uow).GetOptionalColumns<Person>();
+				_optionalColumns = new OptionalColumnRepository(uow).GetOptionalColumns<Person>();
 				var personRep = new PersonRepository(new ThisUnitOfWork(uow));
 				IPeopleLoader loader;
 				if (_teamLeaderMode)
@@ -4405,7 +4405,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
 
 			_agentInfoControl = new AgentInfoControl(_groupPagesProvider, _container, outerPeriod,
-				requestedPeriod, _restrictionExtractor, _schedulerState);
+				requestedPeriod, _restrictionExtractor, _schedulerState, _optionalColumns);
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl, _schedulerState,
 				_container.Resolve<IEffectiveRestrictionCreator>(), maxCalculatMinMaxCacheEnries);
 
