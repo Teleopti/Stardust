@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ReportScheduledTimePerActivityVisible>().As<IReportVisible>().SingleInstance();
 			if (!_configuration.Toggle(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559))
 				builder.RegisterType<ReportScheduledTimeVsTargetVisible>().As<IReportVisible>().SingleInstance();
-			if (!_configuration.Toggle(Toggles.WFM_AuditTrail_44006))
+			if (!_configuration.Toggle(Toggles.Report_Remove_Realtime_AuditTrail_44006))
 				builder.RegisterType<ReportAuditTrailVisible>().As<IReportVisible>().SingleInstance();
 
 			builder.RegisterType<ReportNavigationModel>().As<IReportNavigationModel>();

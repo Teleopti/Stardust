@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 
 		private void hideRealTimeReports(AllFunctions functions)
 		{
-			if (_toggleManager.IsEnabled(Toggles.WFM_AuditTrail_44006))
+			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_AuditTrail_44006))
 			{
 				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport);
 				if (foundFunction != null)
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 					foundFunction.SetHidden();
 				}
 			}
-			else
+			if (!_toggleManager.IsEnabled(Toggles.WFM_AuditTrail_44006))
 			{
 				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport);
 				if (foundFunction != null)
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			}
 			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559)
 				&& _toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560)
-				&& _toggleManager.IsEnabled(Toggles.WFM_AuditTrail_44006))
+				&& _toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_AuditTrail_44006))
 			{
 				foreach (var function in functions.Functions)
 				{
@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 						onlineReportNode.SetHidden();
 					}
 				}
-				
 			}
 		}
 
