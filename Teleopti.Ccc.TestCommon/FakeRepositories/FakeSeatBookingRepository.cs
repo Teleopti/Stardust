@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<ISeatBooking> LoadSeatBookingsForDay (DateOnly date)
 		{
 			return _seatBookings
-				.Where(booking => (booking.BelongsToDate == date)).ToList();
+				.Where(booking => booking.BelongsToDate == date).ToList();
 		}
 
 		public void RemoveSeatBookingsForSeats (IEnumerable<ISeat> seats)

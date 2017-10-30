@@ -4,38 +4,26 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
-	class AbsenceRequestNoMockTest
+	[DomainTest]
+	public class AbsenceRequestNoMockTest
 	{
-
-
-		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario_DoNotUse();
-		private IPersonRepository _personRepository;
-		private IPersonRequestRepository _personRequestRepository;
-		FakeScheduleDataReadScheduleStorage _scheduleRepository;
-		private SwapAndModifyService _swapAndModifyService;
-
-		[SetUp]
-		public void Setup()
-		{
-			_personRepository = new FakePersonRepositoryLegacy2();
-			_personRequestRepository = new FakePersonRequestRepository();
-			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
-			_swapAndModifyService = new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack());
-		}
+		public FakePersonRepository PersonRepository;
+		public FakePersonRequestRepository PersonRequestRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakeScenarioRepository ScenarioRepository;
+		public IScheduleStorage ScheduleRepository;
 		
 		[Test]
 		public void WhenAbsenceRequestIsAcceptedAbsenceShouldBeCorrect()
@@ -44,14 +32,16 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
 			var period = new DateTimePeriod(startDateTime, endDateTime);
 
+			var scenario = ScenarioRepository.Has("Default");
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var person = createAndSetupPerson(startDateTime, endDateTime);
 
 			var personRequest = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
-			var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person, null, period, _currentScenario.Current());
+			var scheduleDictionary = ScheduleRepository.FindSchedulesForPersons(scenario, new PersonProvider(new[] {person}),
+				new ScheduleDictionaryLoadOptions(false, false), period, new[] {person}, false);
 
 			var absenceRequestApprovalService = new AbsenceRequestApprovalService(
-				_currentScenario.Current(),
+				scenario,
 				scheduleDictionary,
 				NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), null);
 
@@ -63,16 +53,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var personAbsence = personAbsences[0];
 
 			personAbsence.Layer.Period.Should().Be.EqualTo(period);
-
 		}
-
-
+		
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
-			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod));
-
-			personRequest.SetId(Guid.NewGuid());
-			_personRequestRepository.Add(personRequest);
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod)).WithId();
+			PersonRequestRepository.Add(personRequest);
 
 			return personRequest;
 		}
@@ -80,21 +66,18 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		private IPerson createAndSetupPerson(DateTime startDateTime, DateTime endDateTime)
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			_personRepository.Add(person);
+			PersonRepository.Add(person);
 
-			var assignmentOne = createAssignment(person, startDateTime, endDateTime, _currentScenario);
-			_scheduleRepository.Set(new IScheduleData[] { assignmentOne });
+			var assignmentOne = createAssignment(person, startDateTime, endDateTime);
+			PersonAssignmentRepository.Has(assignmentOne);
 
 			return person;
 		}
-
-
-		private IPersonAssignment createAssignment(IPerson person, DateTime startDate, DateTime endDate, ICurrentScenario currentScenario)
+		
+		private IPersonAssignment createAssignment(IPerson person, DateTime startDate, DateTime endDate)
 		{
 			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person,
-				currentScenario.Current(), new DateTimePeriod(startDate, endDate));
+				ScenarioRepository.LoadDefaultScenario(), new DateTimePeriod(startDate, endDate));
 		}
-
-
 	}
 }

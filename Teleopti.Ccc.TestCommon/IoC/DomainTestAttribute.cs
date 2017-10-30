@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -141,7 +142,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			else
 			{
 				system.UseTestDouble<FakePersonRepository>().For<IPersonRepository, IProxyForId<IPerson>>();
-				//system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 				system.UseTestDouble<FakeMultisiteDayRepository>().For<IMultisiteDayRepository>();
 				system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 				system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
@@ -152,7 +152,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeExternalLogOnRepository>().For<IExternalLogOnRepository>();
 				system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
 				system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository, IProxyForId<IActivity>>();
-				//system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 				system.UseTestDouble<FakePlanningPeriodRepository>().For<IPlanningPeriodRepository>();
 				system.UseTestDouble<FakeExistingForecastRepository>().For<IExistingForecastRepository>();
 				system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
@@ -234,6 +233,15 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
 				system.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
 				system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
+
+				system.UseTestDouble<FakeSeatBookingRepository>().For<ISeatBookingRepository>();
+				system.UseTestDouble<FakeSeatMapRepository>().For<ISeatMapLocationRepository>();
+				system.UseTestDouble<FakeSeatPlanRepository>().For<ISeatPlanRepository>();
+				system.UseTestDouble<SeatPlanner>().For<ISeatPlanner>();
+				system.UseTestDouble<SeatMapPersister>().For<ISeatMapPersister>();
+				system.UseTestDouble<SeatPlanPersister>().For<ISeatPlanPersister>();
+				system.UseTestDouble<SeatBookingRequestAssembler>().For<ISeatBookingRequestAssembler>();
+				system.UseTestDouble<SeatFrequencyCalculator>().For<ISeatFrequencyCalculator>();
 			}
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
 			system.AddService<FakeSchedulingSourceScope>();

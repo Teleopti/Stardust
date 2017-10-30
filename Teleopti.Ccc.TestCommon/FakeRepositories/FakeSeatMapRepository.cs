@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SeatPlanning;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ISeatMapLocation LoadRootSeatMap()
 		{
-			return _seatMaps.FirstOrDefault();
+			return _seatMaps.FirstOrDefault(s => ((SeatMapLocation)s).ParentLocation == null);
 		}
 
 		public IList<ISeatMapLocation> FindLocations(IList<Guid> locationIds )
