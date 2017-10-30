@@ -2,121 +2,69 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
+using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
     [TestFixture]
-    public class SchedulePartAssemblerTest
-    {
-	    [Test]
+	[DomainTest]
+    public class SchedulePartAssemblerTest : ISetup
+	{
+		public FakePersonRepository PersonRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public FakeScenarioRepository ScenarioRepository;
+		public FakeActivityRepository ActivityRepository;
+		public FakeAbsenceRepository AbsenceRepository;
+		public FakeMeetingRepository MeetingRepository;
+		public IScheduleStorage ScheduleStorage;
+
+		public ISchedulePartAssembler Target;
+
+		[Test]
 	    public void PayrollSpecialProjection()
 	    {
 		    var person = PersonFactory.CreatePerson().WithId();
-
-		    var personRepository = new FakePersonRepositoryLegacy();
-		    var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-		    var scenarioRepository = new FakeCurrentScenario_DoNotUse();
-		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-		    var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-			    new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-				    activityAssembler),
-			    new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
-				    activityAssembler),
-			    new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-				    new FakeMultiplicatorDefinitionSetRepository()));
-		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-		    var personAbsenceAssembler = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
-		    var dayOffAssembler = new DayOffAssembler(new FakeDayOffTemplateRepository());
-		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
-		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
-		    var personAssembler = new PersonAssembler(personRepository,
-			    new WorkflowControlSetAssembler(shiftCategoryAssembler,
-				    dayOffAssembler, activityAssembler,
-				    absenceAssembler), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-		    var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
-		    var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-		    var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-		    var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
-		    var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-		    var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
-			    personDayOffAssembler,
-			    personMeetingAssembler,
-			    new ProjectedLayerAssembler(dateTimePeriodAssembler),
-			    dateTimePeriodAssembler,
-			    sdkProjectionServiceFactory, tagAssembler);
-		    target.PersonRepository = personRepository;
-		    target.ScheduleStorage = scheduleStorage;
-		    target.TimeZone = TimeZoneInfo.Utc;
+			PersonRepository.Has(person);
 			
 		    var act = new Activity("sdf").WithId();
-			var ass = new PersonAssignment(person, scenarioRepository.Current(), new DateOnly(2000, 1, 1));
+			ActivityRepository.Has(act);
+
+			var scenario = ScenarioRepository.Has("Default");
+
+			var ass = new PersonAssignment(person, scenario, new DateOnly(2000, 1, 1));
 			ass.AddActivity(act, new DateTimePeriod(2000,1,1,12,2000,1,2,12));
 			ass.SetShiftCategory(new ShiftCategory("asd").WithId());
-			scheduleStorage.Add(ass);
+			PersonAssignmentRepository.Add(ass);
 			
-		    target.SpecialProjection = "midnightSplit";
-		    target.TimeZone = TimeZoneInfo.Utc;
-		    var dto = target.DomainEntityToDto(scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,new ScheduleDictionaryLoadOptions(false,false), new DateOnlyPeriod(2000,1,1,2000,1,1), scenarioRepository.Current())[person].ScheduledDay(new DateOnly(2000,1,1)));
+		    Target.SpecialProjection = "midnightSplit";
+		    Target.TimeZone = TimeZoneInfo.Utc;
+			var dto = Target.DomainEntityToDto(ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenario)[person]
+				.ScheduledDay(new DateOnly(2000, 1, 1)));
 		    dto.ProjectedLayerCollection.Count.Should().Be.EqualTo(2);
 	    }
 		
 	    [Test]
         public void VerifyDtoToDo()
         {
-			var person = PersonFactory.CreatePerson().WithId();
-
-			var personRepository = new FakePersonRepositoryLegacy();
-			personRepository.Add(person);
-
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-					new FakeMultiplicatorDefinitionSetRepository()));
-			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-			var personAbsenceAssembler = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
-			var dayOffAssembler = new DayOffAssembler(new FakeDayOffTemplateRepository());
-			var shiftCategoryRepository = new FakeShiftCategoryRepository();
-			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
-			var personAssembler = new PersonAssembler(personRepository,
-				new WorkflowControlSetAssembler(shiftCategoryAssembler,
-					dayOffAssembler, activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
-			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
-			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-
-			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
-				personDayOffAssembler,
-				personMeetingAssembler,
-				new ProjectedLayerAssembler(dateTimePeriodAssembler),
-				dateTimePeriodAssembler,
-				sdkProjectionServiceFactory, tagAssembler);
-			target.PersonRepository = personRepository;
-			target.ScheduleStorage = scheduleStorage;
-			target.TimeZone = TimeZoneInfo.Utc;
+			Target.TimeZone = TimeZoneInfo.Utc;
 			
 			DateOnly date = new DateOnly(1900,1,1);
             SchedulePartDto dto = new SchedulePartDto
@@ -127,165 +75,77 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                                           PersonDayOff = new PersonDayOffDto()
                                       };
 
-		    Assert.Throws<NotSupportedException>(() => target.DtoToDomainEntity(dto));
+		    Assert.Throws<NotSupportedException>(() => Target.DtoToDomainEntity(dto));
         }
 
         [Test]
         public void VerifyDoToDtoWithNullValue()
         {
-			var personRepository = new FakePersonRepositoryLegacy();
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-					new FakeMultiplicatorDefinitionSetRepository()));
-			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-			var personAbsenceAssembler = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
-			var dayOffAssembler = new DayOffAssembler(new FakeDayOffTemplateRepository());
-			var shiftCategoryRepository = new FakeShiftCategoryRepository();
-			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
-			var personAssembler = new PersonAssembler(personRepository,
-				new WorkflowControlSetAssembler(shiftCategoryAssembler,
-					dayOffAssembler, activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
-			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
-			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
-				personDayOffAssembler,
-				personMeetingAssembler,
-				new ProjectedLayerAssembler(dateTimePeriodAssembler),
-				dateTimePeriodAssembler,
-				sdkProjectionServiceFactory, tagAssembler);
-			target.PersonRepository = personRepository;
-			target.ScheduleStorage = scheduleStorage;
-			target.TimeZone = TimeZoneInfo.Utc;
+			Target.TimeZone = TimeZoneInfo.Utc;
 			
-			Assert.IsNotNull(target.DomainEntityToDto(null));
+			Assert.IsNotNull(Target.DomainEntityToDto(null));
         }
 		
         [Test]
         public void VerifyDoToDtoWithProjection()
-        {
+		{
 			var person = PersonFactory.CreatePerson().WithId();
-
-			var personRepository = new FakePersonRepositoryLegacy();
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var scenarioRepository = new FakeCurrentScenario_DoNotUse();
-			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-					new FakeMultiplicatorDefinitionSetRepository()));
-			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-			var personAbsenceAssembler = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
-			var dayOffAssembler = new DayOffAssembler(new FakeDayOffTemplateRepository());
-			var shiftCategoryRepository = new FakeShiftCategoryRepository();
-			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
-			var personAssembler = new PersonAssembler(personRepository,
-				new WorkflowControlSetAssembler(shiftCategoryAssembler,
-					dayOffAssembler, activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
-			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
-			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
-				personDayOffAssembler,
-				personMeetingAssembler,
-				new ProjectedLayerAssembler(dateTimePeriodAssembler),
-				dateTimePeriodAssembler,
-				sdkProjectionServiceFactory, tagAssembler);
-			target.PersonRepository = personRepository;
-			target.ScheduleStorage = scheduleStorage;
-			target.TimeZone = TimeZoneInfo.Utc;
+			PersonRepository.Has(person);
 
 			var act = new Activity("sdf").WithId();
-	        act.InContractTime = true;
-			
+			act.InContractTime = true;
+			ActivityRepository.Has(act);
+
 			var actMeeting = new Activity("Meeting").WithId();
-	        actMeeting.InContractTime = false;
+			actMeeting.InContractTime = false;
+			ActivityRepository.Has(actMeeting);
+
+			var scenario = ScenarioRepository.Has("Default");
+
+			Target.TimeZone = TimeZoneInfo.Utc;
 			
-			var ass = new PersonAssignment(person, scenarioRepository.Current(), new DateOnly(2000, 1, 1));
+			var ass = new PersonAssignment(person, scenario, new DateOnly(2000, 1, 1));
 			ass.AddActivity(act, new DateTimePeriod(2000, 1, 1, 12, 2000, 1, 1, 18));
 			ass.SetShiftCategory(new ShiftCategory("asd").WithId());
-			scheduleStorage.Add(ass);
+			PersonAssignmentRepository.Add(ass);
 
 	        var meeting = new Meeting(person, new[] {new MeetingPerson(person, false)}, "subj", "location", "", actMeeting,
-		        scenarioRepository.Current());
+		        scenario);
 	        meeting.EndDate = meeting.StartDate = new DateOnly(2000, 1, 1);
 			meeting.StartTime = TimeSpan.FromHours(16);
 			meeting.EndTime = TimeSpan.FromHours(17);
+			MeetingRepository.Has(meeting);
 
-	        var scheduledDay = scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenarioRepository.Current())[person].ScheduledDay(new DateOnly(2000, 1, 1));
-	        meeting.GetPersonMeetings(person).ForEach(scheduledDay.Add);
-
-	        var dto = target.DomainEntityToDto(scheduledDay);
+			var scheduledDay = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenario)[person]
+				.ScheduledDay(new DateOnly(2000, 1, 1));
+	        
+	        var dto = Target.DomainEntityToDto(scheduledDay);
 	        dto.ContractTime.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(5));
         }
 		
         [Test]
         public void VerifyDoToDtoWithPersonAssignment()
-        {
+		{
 			var person = PersonFactory.CreatePerson().WithId();
-
-			var personRepository = new FakePersonRepositoryLegacy();
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var scenarioRepository = new FakeCurrentScenario_DoNotUse();
-			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-					new FakeMultiplicatorDefinitionSetRepository()));
-			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-			var personAbsenceAssembler = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
-			var dayOffAssembler = new DayOffAssembler(new FakeDayOffTemplateRepository());
-			var shiftCategoryRepository = new FakeShiftCategoryRepository();
-			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
-			var personAssembler = new PersonAssembler(personRepository,
-				new WorkflowControlSetAssembler(shiftCategoryAssembler,
-					dayOffAssembler, activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
-			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
-			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
-				personDayOffAssembler,
-				personMeetingAssembler,
-				new ProjectedLayerAssembler(dateTimePeriodAssembler),
-				dateTimePeriodAssembler,
-				sdkProjectionServiceFactory, tagAssembler);
-			target.PersonRepository = personRepository;
-			target.ScheduleStorage = scheduleStorage;
-			target.TimeZone = TimeZoneInfo.Utc;
+			PersonRepository.Has(person);
 
 			var act = new Activity("sdf").WithId();
 			act.InContractTime = true;
+			ActivityRepository.Has(act);
+			
+			var scenario = ScenarioRepository.Has("Default");
 
-			var ass = new PersonAssignment(person, scenarioRepository.Current(), new DateOnly(2000, 1, 1));
+			Target.TimeZone = TimeZoneInfo.Utc;
+			
+			var ass = new PersonAssignment(person, scenario, new DateOnly(2000, 1, 1));
 			ass.AddActivity(act, new DateTimePeriod(2000, 1, 1, 12, 2000, 1, 1, 18));
 			ass.SetShiftCategory(new ShiftCategory("asd").WithId());
-			scheduleStorage.Add(ass);
+			PersonAssignmentRepository.Add(ass);
 
-			var dto = target.DomainEntityToDto(scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenarioRepository.Current())[person].ScheduledDay(new DateOnly(2000, 1, 1)));
+			var dto = Target.DomainEntityToDto(ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenario)[person]
+				.ScheduledDay(new DateOnly(2000, 1, 1)));
 	        dto.PersonAssignmentCollection.Count.Should().Be.EqualTo(1);
 			dto.ContractTime.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(6));
 		}
@@ -294,44 +154,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		public void ShouldIgnoreNullAssignmentsWhenCreatingDto()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person);
 
-			var personRepository = new FakePersonRepositoryLegacy();
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var scenarioRepository = new FakeCurrentScenario_DoNotUse();
-			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-					new FakeMultiplicatorDefinitionSetRepository()));
-			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-			var personAbsenceAssembler = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
-			var dayOffAssembler = new DayOffAssembler(new FakeDayOffTemplateRepository());
-			var shiftCategoryRepository = new FakeShiftCategoryRepository();
-			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
-			var personAssembler = new PersonAssembler(personRepository,
-				new WorkflowControlSetAssembler(shiftCategoryAssembler,
-					dayOffAssembler, activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
-			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
-			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
-				personDayOffAssembler,
-				personMeetingAssembler,
-				new ProjectedLayerAssembler(dateTimePeriodAssembler),
-				dateTimePeriodAssembler,
-				sdkProjectionServiceFactory, tagAssembler);
-			target.PersonRepository = personRepository;
-			target.ScheduleStorage = scheduleStorage;
-			target.TimeZone = TimeZoneInfo.Utc;
-			
-			var dto = target.DomainEntityToDto(scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenarioRepository.Current())[person].ScheduledDay(new DateOnly(2000, 1, 1)));
+			var scenario = ScenarioRepository.Has("Default");
+
+			Target.TimeZone = TimeZoneInfo.Utc;
+
+			var dto = Target.DomainEntityToDto(ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenario)[person]
+				.ScheduledDay(new DateOnly(2000, 1, 1)));
 			dto.PersonAssignmentCollection.Should().Be.Empty();
 		}
 
@@ -339,49 +170,19 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         public void VerifyDoToDtoWithPersonAbsence()
         {
 			var person = PersonFactory.CreatePerson().WithId();
-
-			var personRepository = new FakePersonRepositoryLegacy();
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var scenarioRepository = new FakeCurrentScenario_DoNotUse();
-			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-					new FakeMultiplicatorDefinitionSetRepository()));
-			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-			var personAbsenceAssembler = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
-			var dayOffAssembler = new DayOffAssembler(new FakeDayOffTemplateRepository());
-			var shiftCategoryRepository = new FakeShiftCategoryRepository();
-			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
-			var personAssembler = new PersonAssembler(personRepository,
-				new WorkflowControlSetAssembler(shiftCategoryAssembler,
-					dayOffAssembler, activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
-			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
-			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
-				personDayOffAssembler,
-				personMeetingAssembler,
-				new ProjectedLayerAssembler(dateTimePeriodAssembler),
-				dateTimePeriodAssembler,
-				sdkProjectionServiceFactory, tagAssembler);
-			target.PersonRepository = personRepository;
-			target.ScheduleStorage = scheduleStorage;
-			target.TimeZone = TimeZoneInfo.Utc;
 			
+			Target.TimeZone = TimeZoneInfo.Utc;
+
+			var scenario = ScenarioRepository.Has("Default");
 			var absence = new Absence {Description = new Description("Ill","SI")}.WithId();
+			AbsenceRepository.Has(absence);
 
-			var personAbsence = new PersonAbsence(person, scenarioRepository.Current(), new AbsenceLayer(absence, new DateTimePeriod(2000, 1, 1, 12, 2000, 1, 1, 18)));
-			scheduleStorage.Add(personAbsence);
+			var personAbsence = new PersonAbsence(person, scenario, new AbsenceLayer(absence, new DateTimePeriod(2000, 1, 1, 12, 2000, 1, 1, 18)));
+			PersonAbsenceRepository.Add(personAbsence);
 
-			var dto = target.DomainEntityToDto(scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenarioRepository.Current())[person].ScheduledDay(new DateOnly(2000, 1, 1)));
+			var dto = Target.DomainEntityToDto(ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenario)[person]
+				.ScheduledDay(new DateOnly(2000, 1, 1)));
 	        dto.PersonAbsenceCollection.Count.Should().Be.EqualTo(1);
         }
 		
@@ -390,49 +191,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
 			var person = PersonFactory.CreatePerson().WithId();
 
-			var personRepository = new FakePersonRepositoryLegacy();
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var scenarioRepository = new FakeCurrentScenario_DoNotUse();
-			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-				new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
-					activityAssembler),
-				new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-					new FakeMultiplicatorDefinitionSetRepository()));
-			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-			var personAbsenceAssembler = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
-			var dayOffAssembler = new DayOffAssembler(new FakeDayOffTemplateRepository());
-			var shiftCategoryRepository = new FakeShiftCategoryRepository();
-			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
-			var personAssembler = new PersonAssembler(personRepository,
-				new WorkflowControlSetAssembler(shiftCategoryAssembler,
-					dayOffAssembler, activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-			var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
-			var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
-			var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-			var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
-				personDayOffAssembler,
-				personMeetingAssembler,
-				new ProjectedLayerAssembler(dateTimePeriodAssembler),
-				dateTimePeriodAssembler,
-				sdkProjectionServiceFactory, tagAssembler);
-			target.PersonRepository = personRepository;
-			target.ScheduleStorage = scheduleStorage;
-			target.TimeZone = TimeZoneInfo.Utc;
+			var scenario = ScenarioRepository.Has("Default");
+			Target.TimeZone = TimeZoneInfo.Utc;
 
 			var dayOff = new DayOffTemplate(new Description("DO","DO")).WithId();
 
-			var personDayOff = new PersonAssignment(person,scenarioRepository.Current(),new DateOnly(2000,1,1)).WithId();
+			var personDayOff = new PersonAssignment(person,scenario,new DateOnly(2000,1,1)).WithId();
 			personDayOff.SetDayOff(dayOff);
-			scheduleStorage.Add(personDayOff);
+			PersonAssignmentRepository.Add(personDayOff);
 
-			var dto = target.DomainEntityToDto(scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenarioRepository.Current())[person].ScheduledDay(new DateOnly(2000, 1, 1)));
+			var dto = Target.DomainEntityToDto(ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenario)[person]
+				.ScheduledDay(new DateOnly(2000, 1, 1)));
 	        dto.PersonDayOff.Should().Not.Be.Null();
         }
 
@@ -441,71 +211,47 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    {
 		    var person = PersonFactory.CreatePerson().WithId();
 
-		    var personRepository = new FakePersonRepositoryLegacy();
-		    var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-		    var scenarioRepository = new FakeCurrentScenario_DoNotUse();
-		    var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-		    var assignmentAssembler = new PersonAssignmentAssembler(new FakeShiftCategoryRepository(),
-			    new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-				    activityAssembler),
-			    new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(), dateTimePeriodAssembler,
-				    activityAssembler),
-			    new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-				    new FakeMultiplicatorDefinitionSetRepository()));
-		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-		    var personAbsenceAssembler = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
-		    var dayOffAssembler = new DayOffAssembler(new FakeDayOffTemplateRepository());
-		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
-		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
-		    var personAssembler = new PersonAssembler(personRepository,
-			    new WorkflowControlSetAssembler(shiftCategoryAssembler,
-				    dayOffAssembler, activityAssembler,
-				    absenceAssembler), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-		    var personDayOffAssembler = new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler);
-		    var personMeetingAssembler = new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler);
-		    var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-		    var sdkProjectionServiceFactory = new SdkProjectionServiceFactory();
-		    var tagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-		    var target = new SchedulePartAssembler(assignmentAssembler, personAbsenceAssembler,
-			    personDayOffAssembler,
-			    personMeetingAssembler,
-			    new ProjectedLayerAssembler(dateTimePeriodAssembler),
-			    dateTimePeriodAssembler,
-			    sdkProjectionServiceFactory, tagAssembler);
-		    target.PersonRepository = personRepository;
-		    target.ScheduleStorage = scheduleStorage;
-		    target.TimeZone = TimeZoneInfo.Utc;
+			var scenario = ScenarioRepository.Has("Default");
+			Target.TimeZone = TimeZoneInfo.Utc;
 			
 		    var absence = new Absence {Description = new Description("Ill", "SI")}.WithId();
+			AbsenceRepository.Has(absence);
 
-		    var personAbsence = new PersonAbsence(person, scenarioRepository.Current(),
+		    var personAbsence = new PersonAbsence(person, scenario,
 			    new AbsenceLayer(absence, new DateTimePeriod(2000, 1, 1, 16, 2000, 1, 2, 2)));
-		    scheduleStorage.Add(personAbsence);
+		    PersonAbsenceRepository.Add(personAbsence);
 
 			var act = new Activity("sdf").WithId();
 			act.InContractTime = true;
+			ActivityRepository.Has(act);
 
-			var ass = new PersonAssignment(person, scenarioRepository.Current(), new DateOnly(2000, 1, 1));
+			var ass = new PersonAssignment(person, scenario, new DateOnly(2000, 1, 1));
 			ass.AddActivity(act, new DateTimePeriod(2000, 1, 1, 12, 2000, 1, 2, 2));
 			ass.SetShiftCategory(new ShiftCategory("asd").WithId());
-			scheduleStorage.Add(ass);
+			PersonAssignmentRepository.Add(ass);
 
 		    var scheduleDay =
-			    scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
-				    new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenarioRepository.Current())[person].ScheduledDay(new DateOnly(
+			    ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				    new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenario)[person].ScheduledDay(new DateOnly(
 					    2000, 1, 1));
 
-			target.SpecialProjection = "excludeAbsences";
-		    var dto = target.DomainEntityToDto(scheduleDay);
+			Target.SpecialProjection = "excludeAbsences";
+		    var dto = Target.DomainEntityToDto(scheduleDay);
 		    Assert.AreEqual(1, dto.ProjectedLayerCollection.Count);
 		    Assert.AreEqual(act.Id, dto.ProjectedLayerCollection.Single().PayloadId);
 
-		    target.SpecialProjection = "excludeAbsencesMidnightSplit";
-		    dto = target.DomainEntityToDto(scheduleDay);
+		    Target.SpecialProjection = "excludeAbsencesMidnightSplit";
+		    dto = Target.DomainEntityToDto(scheduleDay);
 		    Assert.AreEqual(2, dto.ProjectedLayerCollection.Count);
 		    Assert.AreEqual(act.Id, dto.ProjectedLayerCollection.First().PayloadId);
 		    Assert.AreEqual(act.Id, dto.ProjectedLayerCollection.Last().PayloadId);
-	    }
-    }
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
+			system.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
+			system.AddModule(new AssemblerModule());
+		}
+	}
 }

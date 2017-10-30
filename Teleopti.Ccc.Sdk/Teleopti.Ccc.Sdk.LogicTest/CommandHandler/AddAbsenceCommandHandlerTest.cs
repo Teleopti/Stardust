@@ -2,25 +2,34 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
 	[TestFixture]
-    public class AddAbsenceCommandHandlerTest
+	[DomainTest]
+    public class AddAbsenceCommandHandlerTest : ISetup
 	{
+		public FakeScenarioRepository ScenarioRepository;
+		public FakeAbsenceRepository AbsenceRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
+		public FakeScheduleTagRepository ScheduleTagRepository;
+		public IScheduleStorage ScheduleStorage;
+		public AddAbsenceCommandHandler Target;
+
 		private static DateOnly _startDate = new DateOnly(2012, 1, 1);
         private readonly DateOnlyPeriod _dateOnlyPeriod = new DateOnlyPeriod(_startDate, _startDate.AddDays(1));
         
@@ -33,33 +42,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void AbsenceIsAddedSuccessfully()
 		{
-			var scenario = ScenarioFactory.CreateScenarioAggregate("Default",true);
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var absenceRepository = new FakeAbsenceRepository();
-			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var personRepository = new FakePersonRepositoryLegacy();
-			var scenarioRepository = new FakeScenarioRepository(scenario);
-			var businessRulesForPersonalAccountUpdate =
-				new BusinessRulesForPersonalAccountUpdate(new FakePersonAbsenceAccountRepository(),
-					new SchedulingResultStateHolder());
-			var scheduleTagRepository = new FakeScheduleTagRepository();
-			var scheduleTagAssembler = new ScheduleTagAssembler(scheduleTagRepository);
-			var scheduleSaveHandler =
-				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage, new EmptyScheduleDayDifferenceSaver()),
-					new FakePersonAbsenceAccountRepository(), new DoNothingScheduleDayChangeCallBack()));
-
+			var scenario = ScenarioRepository.Has("Default");
+			
 			var person = PersonFactory.CreatePerson().WithId();
-			personRepository.Add(person);
+			PersonRepository.Add(person);
 
 			var absence = AbsenceFactory.CreateAbsence("Sick").WithId();
-			absenceRepository.Add(absence);
+			AbsenceRepository.Add(absence);
 
 			var scheduleTag = new ScheduleTag {Description = "test"}.WithId();
-			scheduleTagRepository.Add(scheduleTag);
-			
-			var target = new AddAbsenceCommandHandler(dateTimePeriodAssembler, absenceRepository, scheduleStorage,
-				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
-				businessRulesForPersonalAccountUpdate, scheduleTagAssembler, scheduleSaveHandler);
+			ScheduleTagRepository.Add(scheduleTag);
 			
 			var addAbsenceCommandDto = new AddAbsenceCommandDto
 			{
@@ -70,8 +62,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				ScheduleTagId = scheduleTag.Id
 			};
 
-			target.Handle(addAbsenceCommandDto);
-			scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+			Target.Handle(addAbsenceCommandDto);
+			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
 				_dateOnlyPeriod, scenario)[person].ScheduledDay(new DateOnly(2012, 1, 1))
 				.PersonAbsenceCollection()
 				.Count.Should()
@@ -81,37 +73,20 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void AbsenceIsAddedToAnotherScenarioSuccessfully()
 		{
-			var scenario = ScenarioFactory.CreateScenarioAggregate("Default", true).WithId();
+			ScenarioRepository.Has("Default");
 			var otherScenario = ScenarioFactory.CreateScenarioAggregate("Test", false).WithId();
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var absenceRepository = new FakeAbsenceRepository();
-			var scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var personRepository = new FakePersonRepositoryLegacy();
-			var scenarioRepository = new FakeScenarioRepository(scenario);
-			scenarioRepository.Add(otherScenario);
-
-			var businessRulesForPersonalAccountUpdate =
-				new BusinessRulesForPersonalAccountUpdate(new FakePersonAbsenceAccountRepository(),
-					new SchedulingResultStateHolder());
-			var scheduleTagRepository = new FakeScheduleTagRepository();
-			var scheduleTagAssembler = new ScheduleTagAssembler(scheduleTagRepository);
-			var scheduleSaveHandler =
-				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage, new EmptyScheduleDayDifferenceSaver()),
-					new FakePersonAbsenceAccountRepository(), new DoNothingScheduleDayChangeCallBack()));
-
+			
+			ScenarioRepository.Has(otherScenario);
+			
 			var person = PersonFactory.CreatePerson().WithId();
-			personRepository.Add(person);
+			PersonRepository.Add(person);
 
 			var absence = AbsenceFactory.CreateAbsence("Sick").WithId();
-			absenceRepository.Add(absence);
+			AbsenceRepository.Add(absence);
 
 			var scheduleTag = new ScheduleTag { Description = "test" }.WithId();
-			scheduleTagRepository.Add(scheduleTag);
-
-			var target = new AddAbsenceCommandHandler(dateTimePeriodAssembler, absenceRepository, scheduleStorage,
-				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
-				businessRulesForPersonalAccountUpdate, scheduleTagAssembler, scheduleSaveHandler);
-
+			ScheduleTagRepository.Add(scheduleTag);
+			
 			var addAbsenceCommandDto = new AddAbsenceCommandDto
 			{
 				Period = _periodDto,
@@ -122,12 +97,20 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				ScenarioId = otherScenario.Id
 			};
 
-			target.Handle(addAbsenceCommandDto);
-			scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+			Target.Handle(addAbsenceCommandDto);
+			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
 				_dateOnlyPeriod, otherScenario)[person].ScheduledDay(new DateOnly(2012, 1, 1))
 				.PersonAbsenceCollection()
 				.Count.Should()
 				.Be.EqualTo(1);
 		}
-    }
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<AddAbsenceCommandHandler>();
+			system.UseTestDouble<ScheduleSaveHandler>().For<IScheduleSaveHandler>();
+			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
+			system.AddModule(new AssemblerModule());
+		}
+	}
 }

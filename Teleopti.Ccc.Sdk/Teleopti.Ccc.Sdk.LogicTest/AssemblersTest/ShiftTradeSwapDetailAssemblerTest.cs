@@ -2,61 +2,45 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
+using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
     [TestFixture]
-    public class ShiftTradeSwapDetailAssemblerTest
-    {
+	[DomainTest]
+    public class ShiftTradeSwapDetailAssemblerTest : ISetup
+	{
+		public FakeScenarioRepository ScenarioRepository;
+		public FakePersonRepository PersonRepository;
+		public IScheduleStorage ScheduleStorage;
+		public IAssembler<IShiftTradeSwapDetail, ShiftTradeSwapDetailDto> Target;
+		
         [Test]
         public void VerifyDtoToDo()
         {
 			var person1 = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person1);
 			var person2 = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person2);
 
 			var date1 = new DateOnly(2009, 9, 22);
 			var date2 = new DateOnly(2009, 9, 21);
 
 			var checksumFrom = -3;
 			var checksumTo = -7;
-
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-			var target = new ShiftTradeSwapDetailAssembler();
-			var shiftCategoryRepository = new FakeShiftCategoryRepository();
-			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-	        var personRepository = new FakePersonRepositoryLegacy();
-			personRepository.Add(person1);
-			personRepository.Add(person2);
-	        var personAssembler = new PersonAssembler(personRepository,
-				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
-					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-			target.PersonAssembler = personAssembler;
-			target.SchedulePartAssembler = new SchedulePartAssembler(
-				new PersonAssignmentAssembler(shiftCategoryRepository,
-					new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-						activityAssembler),
-					new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(),
-						new DateTimePeriodAssembler(), activityAssembler),
-					new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-						new FakeMultiplicatorDefinitionSetRepository())),
-				new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler),
-				new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler),
-				new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler),
-				new ProjectedLayerAssembler(dateTimePeriodAssembler), dateTimePeriodAssembler,
-				new SdkProjectionServiceFactory(), new ScheduleTagAssembler(new FakeScheduleTagRepository()));
-
+			
 			var shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto
                                                                   {
 																	  DateFrom = new DateOnlyDto { DateTime = date1.Date },
@@ -68,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                                                                       ChecksumTo = checksumTo
                                                                   };
 			
-			var shiftTradeSwapDetail = target.DtoToDomainEntity(shiftTradeSwapDetailDto);
+			var shiftTradeSwapDetail = Target.DtoToDomainEntity(shiftTradeSwapDetailDto);
             Assert.AreEqual(shiftTradeSwapDetail.Id.Value,shiftTradeSwapDetailDto.Id.Value);
             Assert.AreEqual(shiftTradeSwapDetail.DateFrom.Date,shiftTradeSwapDetailDto.DateFrom.DateTime);
             Assert.AreEqual(shiftTradeSwapDetail.DateTo.Date, shiftTradeSwapDetailDto.DateTo.DateTime);
@@ -80,9 +64,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
         [Test]
         public void VerifyDoToDto()
-        {
+		{
 			var person1 = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person1);
 			var person2 = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person2);
 
 			var date1 = new DateOnly(2009, 9, 22);
 			var date2 = new DateOnly(2009, 9, 21);
@@ -90,39 +76,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var checksumFrom = -3;
 			var checksumTo = -7;
 
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
-			var target = new ShiftTradeSwapDetailAssembler();
-			var shiftCategoryRepository = new FakeShiftCategoryRepository();
-			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
-			var personRepository = new FakePersonRepositoryLegacy();
-			personRepository.Add(person1);
-			personRepository.Add(person2);
-			var personAssembler = new PersonAssembler(personRepository,
-				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
-					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-			target.PersonAssembler = personAssembler;
-			target.SchedulePartAssembler = new SchedulePartAssembler(
-				new PersonAssignmentAssembler(shiftCategoryRepository,
-					new ActivityLayerAssembler<MainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
-						activityAssembler),
-					new ActivityLayerAssembler<PersonalShiftLayer>(new PersonalShiftLayerConstructor(),
-						new DateTimePeriodAssembler(), activityAssembler),
-					new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
-						new FakeMultiplicatorDefinitionSetRepository())),
-				new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler),
-				new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler),
-				new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler),
-				new ProjectedLayerAssembler(dateTimePeriodAssembler), dateTimePeriodAssembler,
-				new SdkProjectionServiceFactory(), new ScheduleTagAssembler(new FakeScheduleTagRepository()));
-			
-			var scenario = new FakeCurrentScenario_DoNotUse();
-			var storage = new FakeScheduleStorage_DoNotUse();
-
-	        var dictionary = storage.FindSchedulesForPersonsOnlyInGivenPeriod(new [] { person1,person2}, new ScheduleDictionaryLoadOptions(false, false),
-		        new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenario.Current());
+			var scenario = ScenarioRepository.Has("Default");
+	        var dictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new [] { person1,person2}, new ScheduleDictionaryLoadOptions(false, false),
+		        new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1), scenario);
 	        var schedulePart1 = dictionary[person1].ScheduledDay(new DateOnly(2000, 1, 1));
             var schedulePart2 = dictionary[person1].ScheduledDay(new DateOnly(2000, 1, 1));
 
@@ -132,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             shiftTradeSwapDetail.ChecksumFrom = checksumFrom;
             shiftTradeSwapDetail.ChecksumTo = checksumTo;
 
-            var shiftTradeSwapDetailDto = target.DomainEntityToDto(shiftTradeSwapDetail);
+            var shiftTradeSwapDetailDto = Target.DomainEntityToDto(shiftTradeSwapDetail);
             Assert.AreEqual(shiftTradeSwapDetailDto.Id.Value, shiftTradeSwapDetail.Id.Value);
             Assert.AreEqual(shiftTradeSwapDetailDto.DateFrom.DateTime, shiftTradeSwapDetail.DateFrom.Date);
             Assert.AreEqual(shiftTradeSwapDetailDto.DateTo.DateTime, shiftTradeSwapDetail.DateTo.Date);
@@ -141,5 +97,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(shiftTradeSwapDetailDto.ChecksumFrom, shiftTradeSwapDetail.ChecksumFrom);
             Assert.AreEqual(shiftTradeSwapDetailDto.ChecksumTo, shiftTradeSwapDetail.ChecksumTo);
         }
-    }
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
+			system.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
+			system.AddModule(new AssemblerModule());
+		}
+	}
 }

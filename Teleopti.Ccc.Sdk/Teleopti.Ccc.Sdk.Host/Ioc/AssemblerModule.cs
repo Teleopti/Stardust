@@ -44,7 +44,10 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
             builder.RegisterType<ActivityLayerAssembler<MainShiftLayer>>().As<IActivityLayerAssembler<MainShiftLayer>>().InstancePerLifetimeScope();
             builder.RegisterType<ActivityLayerAssembler<PersonalShiftLayer>>().As<IActivityLayerAssembler<PersonalShiftLayer>>().InstancePerLifetimeScope();
 
-        	builder.RegisterType<SdkProjectionServiceFactory>().As<ISdkProjectionServiceFactory>();
+			builder.RegisterType<MainShiftLayerConstructor>().As<ILayerConstructor<MainShiftLayer>>().InstancePerLifetimeScope();
+			builder.RegisterType<PersonalShiftLayerConstructor>().As<ILayerConstructor<PersonalShiftLayer>>().InstancePerLifetimeScope();
+
+			builder.RegisterType<SdkProjectionServiceFactory>().As<ISdkProjectionServiceFactory>();
 
 		}
 
