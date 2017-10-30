@@ -7,6 +7,10 @@ module.exports = function (config) {
 		// base path that will be used to resolve all patterns (eg. files, exclude)
 		basePath: '',
 
+		// to use this attribute, run "npm run devTest -- keyWordFromSpecFileDescribe". example: npm run devTest -- rta
+		client: {
+			args: parseTestPattern(process.argv)
+		},
 
 		// frameworks to use
 		// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
@@ -15,11 +19,19 @@ module.exports = function (config) {
 
 		// list of files / patterns to load in the browser
 		files: [
-			'dist/resources/modules.*',
-			'node_modules/angular-material/angular-material-mocks.js',
-			'node_modules/angular-mocks/angular-mocks.js',
-			'dist/templates.*',
-			'app/**/*.js',
+			// 'dist/resources/modules.js',
+			// 'dist/templates.js',
+			// 'app/**/*.js',
+			// 'node_modules/angular-material/angular-material-mocks.js',
+			// 'node_modules/angular-mocks/angular-mocks.js',
+
+
+			{ pattern: 'dist/resources/modules.js', watched: false },
+			{ pattern: 'dist/templates.js', watched: false },
+			{ pattern: 'node_modules/angular-material/angular-material-mocks.js', watched: false },
+			{ pattern: 'node_modules/angular-mocks/angular-mocks.js', watched: false },
+			{ pattern: 'app/**/!(*.spec|app_desktop_client).js', watched: false },
+			'app/**/*.spec.js',
 
 			//served seat image file at browser because addSeat function need to create seat object from image in seatManagement test.
 			{ pattern: 'app/seatManagement/images/*.svg', watched: false, included: false, served: true }
@@ -83,4 +95,17 @@ module.exports = function (config) {
 		// if true, Karma captures browsers, runs the tests and exits
 		singleRun: true
 	});
+};
+
+function parseTestPattern(argv) {
+	var found = false;
+	var pattern = argv.map(function (v) {
+		if (found) {
+			return v;
+		}
+		if (v === '--') {
+			found = true;
+		}
+	}).filter(function (a) { return a }).join(' ');
+	return pattern ? ['--grep', pattern] : [];
 };

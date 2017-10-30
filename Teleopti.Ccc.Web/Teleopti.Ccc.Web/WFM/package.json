@@ -74,7 +74,7 @@
   "scripts": {
     "pretest": "npm run concat:html",
     "test": "karma start karma.conf.js",
-    "devTest": "npm test -- --reporters dots --no-single-run --autoWatchBatchDelay 1000",
+    "devTest": "npm test -- --reporters dots --no-single-run --autoWatchBatchDelay 1000 --",
     "minify:css": ".\\node_modules\\.bin\\cleancss --source-map './css/style_classic.css' -o ./dist/dist.min.css",
     "prestart": "..\\.node\\grunt.cmd devDist",
     "start": ".\\node_modules\\.bin\\run-p iis openWeb watch:* ",
