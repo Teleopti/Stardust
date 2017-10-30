@@ -25,10 +25,10 @@ GO
 --				2014-02-10 #26422 Redesign with local date
 --
 -- =============================================
---exec mart.etl_fact_schedule_deviation_load @start_date='2013-02-04 00:00:00',@end_date='2013-02-06 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=0
+--exec mart.etl_fact_schedule_deviation_load @start_date='2013-03-01 00:00:00',@end_date='2013-03-01 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=0
 --exec mart.etl_fact_schedule_deviation_load @start_date='2014-02-17 00:00:00',@end_date='2014-02-23 00:00:00',@business_unit_code='9D812B66-A7BD-4FFF-A2D8-A2D90001CAF1',@isIntraday=1
 --exec mart.etl_fact_schedule_deviation_load @start_date='2014-03-04 00:00:00',@end_date='2014-03-05 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=1
---exec mart.etl_fact_schedule_deviation_load @start_date='2014-10-21 00:00:00',@end_date='2014-10-22 00:00:00',@business_unit_code='0B43736B-4ED5-4D9F-B2E4-A34200A7EF70',@isIntraday=3
+--exec mart.etl_fact_schedule_deviation_load @start_date='2013-03-01 00:00:00',@end_date='2013-03-01 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=3
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-06-11 00:00:00',@end_date='2013-06-11 00:00:00',@business_unit_code='13DBFFE3-CA0A-4E7B-8CC8-A3E601034177',@isIntraday=2,@is_delayed_job=NULL,@now_utc=NULL
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-06-11 00:00:00',@end_date='2013-06-11 00:00:00',@business_unit_code='057E2EE2-315E-4DED-B8DA-A3E700F71835',@isIntraday=2,@is_delayed_job=NULL,@now_utc='2013-06-15 00:00:00'
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
@@ -104,7 +104,8 @@ CREATE TABLE #fact_schedule_deviation_merge(
 	[business_unit_id] [int] NULL,
 	[is_logged_in] [bit] NOT NULL,
 	[shift_startdate_id] [int] NULL,
-	[shift_startinterval_id] [smallint] NULL
+	[shift_startinterval_id] [smallint] NULL,
+	person_code uniqueidentifier
 )
 
 CREATE TABLE #fact_schedule (
@@ -774,7 +775,8 @@ INSERT INTO #fact_schedule_deviation_merge
 	ready_time_s,
 	is_logged_in,
 	contract_time_s,
-	business_unit_id
+	business_unit_id,
+	person_code
 	)
 SELECT
 	shift_stardate_local_id	= shift_startdate_local_id,
@@ -787,13 +789,15 @@ SELECT
 	ready_time_s			= sum(isnull(ready_time_s,0)),
 	is_logged_in			= sum(is_logged_in), --Calculated bit value
 	contract_time_s			= sum(isnull(contract_time_s,0)),
-	business_unit_id		= business_unit_id
+	business_unit_id		= business_unit_id,
+	person_code
 FROM 
 	#fact_schedule_deviation
 GROUP BY 
 	shift_startdate_local_id,
 	date_id, 
 	interval_id,
+	person_code,
 	person_id,
 	business_unit_id
 
@@ -868,26 +872,32 @@ BEGIN
  	DELETE fs
 	FROM #stg_schedule_changed ch
  	INNER JOIN mart.fact_schedule_deviation fs
-		ON ch.person_id = fs.person_id
-		AND ch.shift_startdate_local_id = fs.shift_startdate_local_id
+		ON ch.shift_startdate_local_id = fs.shift_startdate_local_id
+	INNER JOIN mart.dim_person p
+		ON ch.person_code = p.person_code AND
+			fs.person_id = p.person_id
 END
 IF @isIntraday = 2 --last 10 intervals
 BEGIN --INTRADAY
 	DELETE fs
 	FROM #fact_schedule_deviation_merge d
 	INNER JOIN mart.fact_schedule_deviation fs
-		ON d.person_id = fs.person_id
-		AND d.shift_startdate_local_id = fs.shift_startdate_local_id
-		AND d.date_id = fs.date_id
-		AND d.interval_id = fs.interval_id
+		ON d.shift_startdate_local_id = fs.shift_startdate_local_id
+			AND d.date_id = fs.date_id
+			AND d.interval_id = fs.interval_id
+	INNER JOIN mart.dim_person p
+		ON d.person_code = p.person_code
+			AND fs.person_id = p.person_id
 END 
 IF @isIntraday = 3 --changed day by SB
 BEGIN
  	DELETE fs
 	FROM #stg_schedule_changed ch
  	INNER JOIN mart.fact_schedule_deviation fs
-		ON ch.person_id = fs.person_id
-		AND ch.shift_startdate_local_id = fs.shift_startdate_local_id
+		ON ch.shift_startdate_local_id = fs.shift_startdate_local_id
+	INNER JOIN mart.dim_person p
+		ON ch.person_code = p.person_code AND
+			fs.person_id = p.person_id
 END
 
 /* Insert of new data */
