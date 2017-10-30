@@ -35,7 +35,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
-	[TestFixture, RequestsTest, Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747)]
+	[TestFixture, RequestsTest, Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747), Toggle(Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384)]
 	public class AbsenceRequestPersisterTest : ISetup
 	{
 		public IPersonRequestRepository PersonRequestRepository;
@@ -46,8 +46,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public IAbsenceRequestPersister Persister;
-		public AbsenceRequestFormMapper AbsenceRequestFormToPersonRequest;
-		public RequestsViewModelMapper RequestsViewModelMappingProfile;
 		public FakeCommandDispatcher CommandDispatcher;
 
 		private static readonly DateTime nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
@@ -99,6 +97,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			setWorkflowControlSet(usePersonAccountValidator: true);
 
+			setupPersonSkills();
 			var personRequest = setupSimpleAbsenceRequest();
 
 			personRequest.Should().Not.Be.Null();
@@ -123,6 +122,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				StartTime = new TimeOfDay(TimeSpan.FromHours(9)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
+			setupPersonSkills();
 
 			Persister.Persist(form);
 
@@ -167,6 +167,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
+			setupPersonSkills();
 
 			var personRequest = Persister.Persist(form);
 			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
@@ -300,6 +301,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, CurrentScenario.Current()
 				, alreadyAbsentPeriod, _absence).WithId());
+			setupPersonSkills();
 
 			var personRequest = Persister.Persist(form);
 			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
@@ -322,6 +324,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
 			});
+			setupPersonSkills();
 
 			var newPersonRequest = setupSimpleAbsenceRequest();
 
@@ -333,6 +336,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
 			});
 			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
+			
 			var personRequest = Persister.Persist(form);
 			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
 
@@ -420,6 +424,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			_absence = createAbsence();
 			setWorkflowControlSet();
 
+			setupPersonSkills();
+
 			var newPersonRequest = setupSimpleAbsenceRequest();
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
@@ -433,17 +439,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
-				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(10)),
 				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
 			});
 			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
+
 			Persister.Persist(form);
 
 			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
-			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(23)));
+			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(10)));
 			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.AddDays(1).Add(TimeSpan.FromMinutes(21)));
 		}
-
+		
 		[Test]
 		public void ShouldNotUpdateQueuedRequestPeriodIfItsSameAsRequest()
 		{
@@ -465,7 +472,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
+			
 			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
+			setupPersonSkills();
+
 			Persister.Persist(form);
 
 			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
@@ -508,6 +518,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			// create cross day absence
 			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, CurrentScenario.Current()
 				, new DateTimePeriod(startDateTime.AddHours(23), startDateTime.AddDays(1).AddHours(7)), _absence).WithId());
+
+			setupPersonSkills();
 
 			var personRequest1 = Persister.Persist(form);
 
@@ -553,6 +565,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var form = createAbsenceRequestForm(dateTimePeriodForm, absence2.Id.Value);
 			var formId = form.EntityId;
+			setupPersonSkills();
 
 			var personRequest = Persister.Persist(form);
 			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
@@ -574,6 +587,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			
 			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
 		}
+		
+		[Test]
+		public void ShouldDenyOffHourRequest()
+		{
+			_absence = createAbsence();
+			setWorkflowControlSet();
+
+			setupPersonSkills();
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
+				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
+			});
+
+			Persister.Persist(form);
+
+			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
+			request.IsDenied.Should().Be.True();
+			request.DenyReason.Should().Be(Resources.RequestDenyReasonNoPersonSkillOpen);
+			request.IsWaitlisted.Should().Be.False();
+		}
+
 
 		private void tryPersist()
 		{
@@ -688,6 +726,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			absence.SetBusinessUnit(BusinessUnitFactory.CreateWithId("temp" + name));
 			AbsenceRepository.Add(absence);
 			return absence;
+		}
+
+		private void setupPersonSkills()
+		{
+			var skill = SkillFactory.CreateSkill("Phone");
+			var timePeriods = Enumerable.Repeat(new TimePeriod(8, 18), 5).ToArray();
+			WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, timePeriods);
+			var date = new DateOnly(2016, 10, 18);
+			//_person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(date);
+			_person.AddSkill(skill, date);
 		}
 	}
 }

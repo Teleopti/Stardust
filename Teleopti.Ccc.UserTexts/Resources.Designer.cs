@@ -26130,6 +26130,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Request was denied because all your skills are closed for the requested period.
+        /// </summary>
+        public static string RequestDenyReasonNoPersonSkillOpen {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonNoPersonSkillOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No workflow control set defined..
         /// </summary>
         public static string RequestDenyReasonNoWorkflow {

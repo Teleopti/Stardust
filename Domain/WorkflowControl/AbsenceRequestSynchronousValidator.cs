@@ -1,4 +1,7 @@
-﻿using Teleopti.Ccc.Domain.Common;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 
@@ -12,11 +15,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IAbsenceRequestPersonAccountValidator _absenceRequestPersonAccountValidator;
+		private readonly IAnyPersonSkillsOpenValidator _anyPersonSkillsOpenValidator;
 
 		public AbsenceRequestSynchronousValidator(IExpiredRequestValidator expiredRequestValidator
 			, IAlreadyAbsentValidator alreadyAbsentValidator, IScheduleStorage scheduleStorage
 			, ICurrentScenario currentScenario, IAbsenceRequestWorkflowControlSetValidator absenceRequestWorkflowControlSetValidator, 
-			IAbsenceRequestPersonAccountValidator absenceRequestPersonAccountValidator)
+			IAbsenceRequestPersonAccountValidator absenceRequestPersonAccountValidator, IAnyPersonSkillsOpenValidator anyPersonSkillsOpenValidator)
 		{
 			_expiredRequestValidator = expiredRequestValidator;
 			_alreadyAbsentValidator = alreadyAbsentValidator;
@@ -24,6 +28,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			_currentScenario = currentScenario;
 			_absenceRequestWorkflowControlSetValidator = absenceRequestWorkflowControlSetValidator;
 			_absenceRequestPersonAccountValidator = absenceRequestPersonAccountValidator;
+			_anyPersonSkillsOpenValidator = anyPersonSkillsOpenValidator;
 		}
 
 		public IValidatedRequest Validate(IPersonRequest personRequest)
@@ -53,7 +58,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonPersonAccount
 					, DenyOption = PersonRequestDenyOption.InsufficientPersonAccount };
 
-			return new ValidatedRequest { IsValid = true };
+			var personSkills =
+				person.PersonPeriods(personRequest.Request.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone())).
+					SelectMany(x => x.PersonSkillCollection).Distinct();
+			return _anyPersonSkillsOpenValidator.Validate(absenceRequest, personSkills);
 		}
 
 		public IValidatedRequest Validate(IPersonRequest personRequest, IScheduleRange scheduleRange, IPersonAbsenceAccount personAbsenceAccount)
@@ -77,7 +85,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonPersonAccount
 					, DenyOption = PersonRequestDenyOption.InsufficientPersonAccount };
 
-			return new ValidatedRequest { IsValid = true };	
+			// We don't check open hours when we process waitlist 
+
+			return new ValidatedRequest(){IsValid = true};
 		}
 	}
 

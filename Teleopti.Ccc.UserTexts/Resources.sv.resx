@@ -15169,4 +15169,7 @@ Vill du registrera dig?</value>
   <data name="SelectedGroups" xml:space="preserve">
     <value>Valda grupper</value>
   </data>
+  <data name="RequestDenyReasonNoPersonSkillOpen" xml:space="preserve">
+    <value>Ansökan nekas på grund av att dina kompetenser är stängda för den valda perioden</value>
+  </data>
 </root>

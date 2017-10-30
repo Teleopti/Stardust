@@ -4,17 +4,26 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-	public class AnyPersonSkillsOpenValidator
+	public interface IAnyPersonSkillsOpenValidator
 	{
-		public AnyPersonSkillsOpenValidator()
-		{
-			
-		}
+		IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills);
+	}
 
+	public class AnyPersonSkillOpenTrueValidator : IAnyPersonSkillsOpenValidator
+	{
+		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills)
+		{
+			return new ValidatedRequest(){IsValid = true};
+		}
+	}
+
+	public class AnyPersonSkillsOpenValidator : IAnyPersonSkillsOpenValidator
+	{
 		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills)
 		{
 			var requestPeriod = absenceRequest.Period;
@@ -48,7 +57,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			{
 				IsValid = false, 
 				DenyOption = PersonRequestDenyOption.AllPersonSkillsClosed, 
-				ValidationErrors = "dgsdg"
+				ValidationErrors = Resources.RequestDenyReasonNoPersonSkillOpen
 			};
 		}
 	}
