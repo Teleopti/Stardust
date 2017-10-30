@@ -384,11 +384,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				throw new NotImplementedException();
 			}
 
-			public void FilterPersons(IList<IPerson> selectedPersons)
-			{
-				throw new NotImplementedException();
-			}
-
 			public void FilterPersonsOvertimeAvailability(IEnumerable<IPerson> selectedPersons)
 			{
 				throw new NotImplementedException();

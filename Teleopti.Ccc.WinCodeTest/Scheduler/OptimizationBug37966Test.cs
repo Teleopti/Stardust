@@ -123,7 +123,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			StateHolder.ChoosenAgents.Add(person);
 			StateHolder.ChoosenAgents.Add(person2);
 			StateHolder.SchedulingResultState.LoadedAgents = StateHolder.ChoosenAgents;
-			StateHolder.FilterPersons(StateHolder.ChoosenAgents);
 			StateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2014, 3, 22, 2014, 4, 4),
 				TimeZoneInfo.Utc);
 			StateHolder.SchedulingResultState.AddSkills(skill);

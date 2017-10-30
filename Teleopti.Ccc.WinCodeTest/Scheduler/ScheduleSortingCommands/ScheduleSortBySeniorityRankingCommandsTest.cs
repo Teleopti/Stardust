@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 	public class ScheduleSortBySeniorityRankingCommandsTest
     {
         private MockRepository _mocks;
-        private ISchedulerStateHolder _stateHolder;
+        private SchedulerStateHolder _stateHolder;
         private ISchedulingResultStateHolder _resultStateHolder;
         private IScheduleDictionary _scheduleDictionary;
         private IScheduleSortCommand _target;

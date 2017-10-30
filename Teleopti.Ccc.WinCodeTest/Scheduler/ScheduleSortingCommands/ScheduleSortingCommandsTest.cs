@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
     public class ScheduleSortingCommandsTest
     {
         private MockRepository _mocks;
-        private ISchedulerStateHolder _stateHolder;
+        private SchedulerStateHolder _stateHolder;
         private ISchedulingResultStateHolder _resultStateHolder;
         private IScheduleDictionary _scheduleDictionary;
         private IScheduleSortCommand _target;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 			IPerson person8 = PersonFactory.CreatePerson("h");
             person8.SetId(Guid.NewGuid());
             IList<IPerson> persons = new List<IPerson> { person1, person2, person3, person4, person5, person6, person7, person8 };
-            _stateHolder.FilterPersons(persons);
+           	_stateHolder.FilterPersons(persons);
 
 			IScheduleDay schedulePart1 = _mocks.StrictMock<IScheduleDay>();
 			IScheduleDay schedulePart2 = _mocks.StrictMock<IScheduleDay>();
