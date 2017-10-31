@@ -16,14 +16,6 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	CREATE TABLE #result(
-		[TeamId] [uniqueidentifier]  NULL,
-		[SiteId] [uniqueidentifier]  NULL,
-		[Team] [nvarchar](50) NOT NULL,
-		[Site] [nvarchar](50) NOT NULL
-		)
-
-	
 	CREATE TABLE #TempPersonPeriodWithEndDate (
 		PersonId uniqueidentifier,
 		Team uniqueidentifier
@@ -50,8 +42,6 @@ BEGIN
 	INNER JOIN Site with(nolock) ON Site.id = Team.Site and Site.BusinessUnit =@bu
 	where (Team.IsDeleted = 1 or Site.IsDeleted = 1) 
 
-
-	
 	INSERT INTO #TempDeletedPerson
 	SELECT Id from Person with(nolock) where  Person.IsDeleted = 1
 	or ISNULL(TerminalDate, '2100-01-01') < @ondate 
@@ -67,22 +57,9 @@ BEGIN
 		where not exists (select id from #TempDeletedTeam dt where dt.id = sub.Team) 
 	    and not exists (select id from #TempDeletedPerson dt where dt.id = sub.PersonId )
 	
-
-	--declare
-	DECLARE @dynamicSQL nvarchar(4000)
-
-	--re-init @dynamicSQL
-	SELECT @dynamicSQL=''
-	
-		INSERT #result
-		SELECT sub.id, Team.Site, team.Name, Site.Name
+	SELECT sub.id TeamId, Team.Site SiteId, team.Name Team, Site.Name Site
 		from #TempTeamWithPerson sub
 		inner join Team with(nolock) on sub.id = Team.Id
 		inner join Site with(nolock) on Team.Site = Site.Id and Site.BusinessUnit =@bu
-		
-		SELECT @dynamicSQL = 'SELECT * FROM #result'
-		EXEC sp_executesql @dynamicSQL 
-			
-	RETURN
 END
 GO

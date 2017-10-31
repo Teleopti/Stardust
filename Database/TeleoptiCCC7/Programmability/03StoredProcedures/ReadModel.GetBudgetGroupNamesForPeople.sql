@@ -20,7 +20,7 @@ BEGIN
 
 	INSERT INTO #ids SELECT * FROM SplitStringString(@PersonIds)
 
-	SELECT PersonId, SearchValue as 'BudgetGroupName' FROM [ReadModel].[FindPerson] as p
+	SELECT PersonId, SearchValue as 'BudgetGroupName' FROM [ReadModel].[FindPerson] as p with (NOLOCK)
 	INNER JOIN #ids ids ON p.PersonId = ids.person
 	WHERE StartDateTime <= @StartDate AND @StartDate <= EndDateTime 
 	AND SearchType = 'BudgetGroup'
