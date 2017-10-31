@@ -30,6 +30,8 @@ namespace Teleopti.Support.Security
 				
 				var applicationScenarios = loadApplicationScenarios(appConnection);
 				var nonReportableScenarios = string.Join(",", applicationScenarios.Where(x => !x.EnableReporting).Select(x => $"'{x.Id}'"));
+				if (string.IsNullOrEmpty(nonReportableScenarios))
+					return 0;
 				
 				log.Debug("Updating dim_scenario...");
 				var transaction = analyticsConnection.BeginTransaction(IsolationLevel.ReadCommitted);
