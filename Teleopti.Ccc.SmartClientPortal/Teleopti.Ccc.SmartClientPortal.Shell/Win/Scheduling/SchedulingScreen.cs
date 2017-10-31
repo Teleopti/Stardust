@@ -3255,10 +3255,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void scheduleStatusBarUpdate(string message)
 		{
+			if (_inUpdate) return;
+			_inUpdate = true;
 			toolStripStatusLabelStatus.Text = message;
+			statusStrip1.Refresh();
 			Application.DoEvents();
+			_inUpdate = false;
 		}
-
 		private void schedulingProgress(int? percent)
 		{
 			if (_inUpdate)
