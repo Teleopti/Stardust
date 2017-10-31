@@ -92,6 +92,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </remarks>
 		void MovePeriodUp(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod);
 
+		void MovePeriodDown(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod);
+		void MovePeriodUp(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod);
+
 		/// <summary>
 		/// Removes the open absence request period.
 		/// </summary>
@@ -309,5 +312,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		bool AutoGrantOvertimeRequest { get; set; }
 		ReadOnlyCollection<IOvertimeRequestOpenPeriod> OvertimeRequestOpenPeriods { get; }
+		void InsertOvertimePeriod(IOvertimeRequestOpenPeriod newOvertimeRequestOpenPeriod, int currentIndex);
 	}
 }

@@ -131,6 +131,24 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			_absenceRequestOpenPeriods.Insert(index - 1, absenceRequestOpenPeriod);
 		}
 
+		public virtual void MovePeriodDown(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		{
+			var index = _overtimeRequestOpenPeriods.IndexOf(overtimeRequestOpenPeriod);
+			if (index >= _overtimeRequestOpenPeriods.Count - 1) { return; }
+
+			_overtimeRequestOpenPeriods.Remove(overtimeRequestOpenPeriod);
+			_overtimeRequestOpenPeriods.Insert(index + 1, overtimeRequestOpenPeriod);
+		}
+
+		public virtual void MovePeriodUp(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		{
+			var index = _overtimeRequestOpenPeriods.IndexOf(overtimeRequestOpenPeriod);
+			if (index <= 0) { return; }
+
+			_overtimeRequestOpenPeriods.Remove(overtimeRequestOpenPeriod);
+			_overtimeRequestOpenPeriods.Insert(index - 1, overtimeRequestOpenPeriod);
+		}
+
 		public virtual int RemoveOpenAbsenceRequestPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
 			var orderIndex = _absenceRequestOpenPeriods.IndexOf(absenceRequestOpenPeriod);
@@ -151,6 +169,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			absenceRequestOpenPeriod.SetParent(this);
 			_absenceRequestOpenPeriods.Insert(orderIndex, absenceRequestOpenPeriod);
+		}
+
+		public virtual void InsertOvertimePeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, int orderIndex)
+		{
+			overtimeRequestOpenPeriod.SetParent(this);
+			_overtimeRequestOpenPeriods.Insert(orderIndex, overtimeRequestOpenPeriod);
 		}
 
 		public virtual ReadOnlyCollection<IAbsenceRequestOpenPeriod> AbsenceRequestOpenPeriods
@@ -206,8 +230,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual IWorkflowControlSet EntityClone()
 		{
-			return entityCloneInternal(absenceOpenPeriod => absenceOpenPeriod.NoneEntityClone(),
-				overtimeOpenPeriod => overtimeOpenPeriod.NoneEntityClone());
+			return entityCloneInternal(absenceOpenPeriod => absenceOpenPeriod.EntityClone(),
+				overtimeOpenPeriod => overtimeOpenPeriod.EntityClone());
 		}
 
 		public virtual DateTime? SchedulePublishedToDate

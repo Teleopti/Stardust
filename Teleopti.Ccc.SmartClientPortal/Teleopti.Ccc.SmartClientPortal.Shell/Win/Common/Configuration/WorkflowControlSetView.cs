@@ -254,9 +254,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridControlOvertimeRequestOpenPeriods.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
 			gridControlOvertimeRequestOpenPeriods.Model.Options.ExcelLikeCurrentCell = true;
 			
-			//gridControlOvertimeRequestOpenPeriods.CurrentCellCloseDropDown += gridControlAbsenceRequestOpenPeriods_CurrentCellCloseDropDown;
-			//gridControlOvertimeRequestOpenPeriods.SaveCellInfo += gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
-			//gridControlOvertimeRequestOpenPeriods.KeyDown += gridControlAbsenceRequestOpenPeriods_KeyDown;
+			gridControlOvertimeRequestOpenPeriods.CurrentCellCloseDropDown += gridControlOvertimeRequestOpenPeriods_CurrentCellCloseDropDown;
+			gridControlOvertimeRequestOpenPeriods.KeyDown += gridControlOvertimeRequestOpenPeriods_KeyDown;
 		}
 
 		private void twoListSelectorAbsencesSelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
@@ -365,6 +364,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			e.Handled = true;
 		}
 
+		private void gridControlOvertimeRequestOpenPeriods_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode != Keys.Delete) return;
+			deleteSelectedOvertimeRequestOpenPeriod();
+			e.Handled = true;
+		}
+
+		private void deleteSelectedOvertimeRequestOpenPeriod()
+		{
+			ReadOnlyCollection<OvertimeRequestPeriodModel> selectedPeriodModels =
+				_overtimeRequestOpenPeriodGridHelper.FindSelectedItems(gridControlOvertimeRequestOpenPeriods.Rows.HeaderCount + 1);
+
+			_presenter.DeleteOvertimeRequestPeriod(new List<OvertimeRequestPeriodModel>(selectedPeriodModels));
+		}
+
 		private void gridControlAbsenceRequestOpenPeriods_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
 			refreshProjectionGrid();
@@ -384,6 +398,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// Replace selected item with a new definition of different type
 			_presenter.SetPeriodType(absenceRequestPeriodModel, chosenAbsenceRequestPeriodTypeModel);
 			gridControlAbsenceRequestOpenPeriods.Invalidate();
+		}
+
+		private void gridControlOvertimeRequestOpenPeriods_CurrentCellCloseDropDown(object sender, PopupClosedEventArgs e)
+		{
+			var gridBase = (GridControl)sender;
+			if (gridBase == null) return;
+			if (gridBase.CurrentCell.RowIndex <= gridBase.CurrentCell.Model.Grid.Rows.HeaderCount ||
+				gridBase.CurrentCell.ColIndex != 1) return;
+			var chosenOvertimeRequestPeriodTypeModel = (OvertimeRequestPeriodTypeModel)gridBase.CurrentCellInfo.CellView.ControlValue;
+
+			var overtimeRequestPeriodModel = _overtimeRequestOpenPeriodGridHelper.FindSelectedItem();
+			if (overtimeRequestPeriodModel.PeriodType.Equals(chosenOvertimeRequestPeriodTypeModel)) return;
+			_presenter.SetOvertimeRequestPeriodType(overtimeRequestPeriodModel, chosenOvertimeRequestPeriodTypeModel);
+			gridControlOvertimeRequestOpenPeriods.Invalidate();
 		}
 
 		private void comboBoxAdvWorkflowControlSet_SelectedIndexChanged(object sender, EventArgs e)
@@ -1031,6 +1059,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void toolStripMenuItemMoveUp_Click(object sender, EventArgs e)
 		{
+			
 			GridRangeInfo activeRange = gridControlAbsenceRequestOpenPeriods.Selections.Ranges.ActiveRange;
 
 			if (activeRange.Top <= gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount + 1) return;
@@ -1056,6 +1085,41 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			}
 
 			gridControlAbsenceRequestOpenPeriods.Selections.ChangeSelection(activeRange, activeRange.OffsetRange(1, 0));
+		}
+
+		private void toolStripMenuItemOvertimeRequestDelete_Click(object sender, EventArgs e)
+		{
+			buttonAdvDeleteOvertimeRequestPeriod_Click(sender, e);
+		}
+
+		private void toolStripMenuItemOvertimeRequestMoveUp_Click(object sender, EventArgs e)
+		{
+
+			GridRangeInfo activeRange = gridControlOvertimeRequestOpenPeriods.Selections.Ranges.ActiveRange;
+
+			if (activeRange.Top <= gridControlOvertimeRequestOpenPeriods.Rows.HeaderCount + 1) return;
+			var selectedItems = _overtimeRequestOpenPeriodGridHelper.FindItemsBySelectionOrPoint(_gridPoint);
+			gridControlOvertimeRequestOpenPeriods.Selections.Clear();
+			foreach (var overtimeRequestPeriodModel in selectedItems)
+			{
+				_presenter.MoveUp(overtimeRequestPeriodModel);
+			}
+
+			gridControlOvertimeRequestOpenPeriods.Selections.ChangeSelection(activeRange, activeRange.OffsetRange(-1, 0));
+		}
+
+		private void toolStripMenuItemOvertimeRequestMoveDown_Click(object sender, EventArgs e)
+		{
+			var activeRange = gridControlOvertimeRequestOpenPeriods.Selections.Ranges.ActiveRange;
+			if (activeRange.Bottom >= gridControlOvertimeRequestOpenPeriods.RowCount) return;
+			var selectedItems = _overtimeRequestOpenPeriodGridHelper.FindItemsBySelectionOrPoint(_gridPoint);
+			gridControlOvertimeRequestOpenPeriods.Selections.Clear();
+			foreach (var overtimeRequestPeriodModel in selectedItems.Reverse())
+			{
+				_presenter.MoveDown(overtimeRequestPeriodModel);
+			}
+
+			gridControlOvertimeRequestOpenPeriods.Selections.ChangeSelection(activeRange, activeRange.OffsetRange(1, 0));
 		}
 
 		private void gridControlAbsenceRequestOpenPeriods_MouseDown(object sender, MouseEventArgs e)
@@ -1086,6 +1150,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			}
 		}
 
+		private void enableOvertimeRequestContextMenu(bool value)
+		{
+			foreach (ToolStripItem item in contextMenuStripOvertimeRequestOpenPeriodsGrid.Items)
+			{
+				item.Enabled = value;
+			}
+		}
+
 		private void toolStripMenuItemFromToPeriod_Click(object sender, EventArgs e)
 		{
 			_presenter.AddOpenDatePeriod();
@@ -1095,6 +1167,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			_presenter.AddOpenRollingPeriod();
 		}
+
+		private void toolStripMenuItemOvertimeRequestFromToPeriod_Click(object sender, EventArgs e)
+		{
+			_presenter.AddOvertimeRequestOpenDatePeriod();
+		}
+
+		private void toolStripMenuItemOvertimeRequestRollingPeriod_Click(object sender, EventArgs e)
+		{
+			_presenter.AddOvertimeRequestOpenRollingPeriod();
+		}
+
 
 		private void comboBoxAdvAllowedPreferenceActivity_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -1338,7 +1421,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void gridControlOvertimeRequestOpenPeriods_MouseDown(object sender, MouseEventArgs e)
 		{
-			
+			if (e.Button != MouseButtons.Right) return;
+			_gridPoint = e.Location;
+			enableOvertimeRequestContextMenu(false);
+			if (_overtimeRequestOpenPeriodGridHelper == null)
+				return;
+
+			OvertimeRequestPeriodModel rightClickedItem = _overtimeRequestOpenPeriodGridHelper.FindItemByPoint(_gridPoint);
+			if (rightClickedItem == null) return;
+			enableOvertimeRequestContextMenu(true);
+
+			var selectedItems = _overtimeRequestOpenPeriodGridHelper.FindSelectedItems(gridControlOvertimeRequestOpenPeriods.Rows.HeaderCount + 1);
+			if (selectedItems.Contains(rightClickedItem)) return;
+			gridControlOvertimeRequestOpenPeriods.Selections.Clear();
+			gridControlOvertimeRequestOpenPeriods.CurrentCell.Deactivate(false);
+			gridControlOvertimeRequestOpenPeriods.Selections.SelectRange(
+				gridControlOvertimeRequestOpenPeriods.PointToRangeInfo(_gridPoint), true);
 		}
 	}
 }

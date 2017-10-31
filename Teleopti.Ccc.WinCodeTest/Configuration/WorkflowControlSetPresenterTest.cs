@@ -372,6 +372,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _view.RefreshOpenPeriodsGrid()).Repeat.Twice();
+				Expect.Call(() => _view.RefreshOvertimeOpenPeriodsGrid()).Repeat.Twice();
 			}
 			using (_mocks.Playback())
 			{
@@ -867,6 +868,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				Expect.Call(() => _view.SetUpdatedInfo("")).IgnoreArguments();
 				Expect.Call(() => _view.SetOpenPeriodsGridRowCount(_workflowControlSetModel.AbsenceRequestPeriodModels.Count))
 					.IgnoreArguments();
+				Expect.Call(() => _view.SetOvertimeOpenPeriodsGridRowCount(_workflowControlSetModel.OvertimeRequestPeriodModels.Count))
+					.IgnoreArguments();
 				Expect.Call(() => _view.SetWriteProtectedDays(null));
 				Expect.Call(() => _view.SetShiftTradeTargetTimeFlexibility(flexibility));
 				Expect.Call(() => _view.FillWorkloadControlSetCombo(null, "Name")).IgnoreArguments();
@@ -1093,6 +1096,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Expect.Call(() => view.SetName("name")).IgnoreArguments();
 			Expect.Call(() => view.SetUpdatedInfo("")).IgnoreArguments();
 			Expect.Call(() => view.SetOpenPeriodsGridRowCount(1)).IgnoreArguments();
+			Expect.Call(() => view.SetOvertimeOpenPeriodsGridRowCount(0)).IgnoreArguments();
 			Expect.Call(() => view.SetWriteProtectedDays(0)).IgnoreArguments();
 			Expect.Call(view.LoadDateOnlyVisualizer).Repeat.Any();
 			Expect.Call(() => view.SetMatchingSkills(null)).IgnoreArguments();

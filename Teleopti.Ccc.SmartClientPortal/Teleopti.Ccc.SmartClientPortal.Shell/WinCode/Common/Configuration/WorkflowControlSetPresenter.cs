@@ -306,6 +306,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_selectedModel.IsDirty = true;
 		}
 
+		public void SetOvertimeRequestPeriodType(OvertimeRequestPeriodModel overtimeRequestPeriodModel, OvertimeRequestPeriodTypeModel periodTypeModel)
+		{
+			int currentIndex =
+				_selectedModel.DomainEntity.OvertimeRequestOpenPeriods.IndexOf(overtimeRequestPeriodModel.DomainEntity);
+			_selectedModel.DomainEntity.RemoveOpenOvertimeRequestPeriod(overtimeRequestPeriodModel.DomainEntity);
+
+			var newOvertimeRequestOpenPeriod = periodTypeModel.Item;
+			_selectedModel.DomainEntity.InsertOvertimePeriod(newOvertimeRequestOpenPeriod, currentIndex);
+			overtimeRequestPeriodModel.SetDomainEntity(newOvertimeRequestOpenPeriod);
+
+			_selectedModel.IsDirty = true;
+		}
+
 		public void AddOpenDatePeriod()
 		{
 			addNewOpenPeriod(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item);
@@ -319,6 +332,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public void AddOpenRollingPeriod()
 		{
 			addNewOpenPeriod(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item);
+		}
+
+		public void AddOvertimeRequestOpenRollingPeriod()
+		{
+			addNewOvertimeRequestOpenPeriod(WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters[1].Item);
 		}
 
 		private void addNewOpenPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
@@ -428,6 +446,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				SelectedModel.IsDirty = true;
 				_view.SetOpenPeriodsGridRowCount(_selectedModel.AbsenceRequestPeriodModels.Count);
 				_view.RefreshOpenPeriodsGrid();
+			}
+		}
+
+		public void MoveUp(OvertimeRequestPeriodModel overtimeRequestPeriodModel)
+		{
+			if (SelectedModel != null)
+			{
+				SelectedModel.DomainEntity.MovePeriodUp(overtimeRequestPeriodModel.DomainEntity);
+				SelectedModel.IsDirty = true;
+				_view.SetOvertimeOpenPeriodsGridRowCount(_selectedModel.OvertimeRequestPeriodModels.Count);
+				_view.RefreshOvertimeOpenPeriodsGrid();
+			}
+		}
+
+		public void MoveDown(OvertimeRequestPeriodModel overtimeRequestPeriodModel)
+		{
+			if (SelectedModel != null)
+			{
+				SelectedModel.DomainEntity.MovePeriodDown(overtimeRequestPeriodModel.DomainEntity);
+				SelectedModel.IsDirty = true;
+				_view.SetOvertimeOpenPeriodsGridRowCount(_selectedModel.OvertimeRequestPeriodModels.Count);
+				_view.RefreshOvertimeOpenPeriodsGrid();
 			}
 		}
 

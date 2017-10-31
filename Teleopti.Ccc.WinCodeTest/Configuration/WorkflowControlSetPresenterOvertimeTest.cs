@@ -207,41 +207,41 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			}
 		}
 
-		//[Test]
-		//public void VerifyMove()
-		//{
-		//	var openDatePeriod =
-		//		(OvertimeRequestOpenDatePeriod)WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters[0].Item;
-		//	((IEntity)openDatePeriod).SetId(Guid.NewGuid());
-		//	var openRollingPeriod =
-		//		(OvertimeRequestOpenRollingPeriod)WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters[1].Item;
-		//	((IEntity)openRollingPeriod).SetId(Guid.NewGuid());
-		//	_workflowControlSet.AddOpenOvertimeRequestPeriod(openDatePeriod);
-		//	_workflowControlSet.AddOpenOvertimeRequestPeriod(openRollingPeriod);
-		//	IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
+		[Test]
+		public void VerifyMove()
+		{
+			var openDatePeriod =
+				(OvertimeRequestOpenDatePeriod)WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters[0].Item;
+			((IEntity)openDatePeriod).SetId(Guid.NewGuid());
+			var openRollingPeriod =
+				(OvertimeRequestOpenRollingPeriod)WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters[1].Item;
+			((IEntity)openRollingPeriod).SetId(Guid.NewGuid());
+			_workflowControlSet.AddOpenOvertimeRequestPeriod(openDatePeriod);
+			_workflowControlSet.AddOpenOvertimeRequestPeriod(openRollingPeriod);
+			IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
 
-		//	using (_mocks.Record())
-		//	{
-		//		ExpectInitialize(repositoryCollection);
-		//		ExpectSetSelectedWorkflowControlSetModel();
-		//		Expect.Call(() => _view.SetOvertimeOpenPeriodsGridRowCount(2)).IgnoreArguments().Repeat.Twice();
-		//		Expect.Call(() => _view.RefreshOvertimeOpenPeriodsGrid()).Repeat.Twice();
-		//	}
-		//	using (_mocks.Playback())
-		//	{
-		//		_target.Initialize();
-		//		_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+			using (_mocks.Record())
+			{
+				ExpectInitialize(repositoryCollection);
+				ExpectSetSelectedWorkflowControlSetModel();
+				Expect.Call(() => _view.SetOvertimeOpenPeriodsGridRowCount(2)).IgnoreArguments().Repeat.Twice();
+				Expect.Call(() => _view.RefreshOvertimeOpenPeriodsGrid()).Repeat.Twice();
+			}
+			using (_mocks.Playback())
+			{
+				_target.Initialize();
+				_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 
-		//		Assert.AreEqual(openDatePeriod, _target.SelectedModel.OvertimeRequestPeriodModels[0].DomainEntity);
-		//		Assert.AreEqual(openRollingPeriod, _target.SelectedModel.OvertimeRequestPeriodModels[1].DomainEntity);
-		//		//_target.MoveUp(_target.SelectedModel.OvertimeRequestPeriodModels[1]);
-		//		Assert.AreEqual(openDatePeriod, _target.SelectedModel.OvertimeRequestPeriodModels[1].DomainEntity);
-		//		Assert.AreEqual(openRollingPeriod, _target.SelectedModel.OvertimeRequestPeriodModels[0].DomainEntity);
-		//		_target.MoveDown(_target.SelectedModel.OvertimeRequestPeriodModels[0]);
-		//		Assert.AreEqual(openDatePeriod, _target.SelectedModel.OvertimeRequestPeriodModels[0].DomainEntity);
-		//		Assert.AreEqual(openRollingPeriod, _target.SelectedModel.OvertimeRequestPeriodModels[1].DomainEntity);
-		//	}
-		//}
+				Assert.AreEqual(openDatePeriod, _target.SelectedModel.OvertimeRequestPeriodModels[0].DomainEntity);
+				Assert.AreEqual(openRollingPeriod, _target.SelectedModel.OvertimeRequestPeriodModels[1].DomainEntity);
+				_target.MoveUp(_target.SelectedModel.OvertimeRequestPeriodModels[1]);
+				Assert.AreEqual(openDatePeriod, _target.SelectedModel.OvertimeRequestPeriodModels[1].DomainEntity);
+				Assert.AreEqual(openRollingPeriod, _target.SelectedModel.OvertimeRequestPeriodModels[0].DomainEntity);
+				_target.MoveDown(_target.SelectedModel.OvertimeRequestPeriodModels[0]);
+				Assert.AreEqual(openDatePeriod, _target.SelectedModel.OvertimeRequestPeriodModels[0].DomainEntity);
+				Assert.AreEqual(openRollingPeriod, _target.SelectedModel.OvertimeRequestPeriodModels[1].DomainEntity);
+			}
+		}
 
 		public void ExpectInitialize(IList<IWorkflowControlSet> repositoryCollection)
 		{

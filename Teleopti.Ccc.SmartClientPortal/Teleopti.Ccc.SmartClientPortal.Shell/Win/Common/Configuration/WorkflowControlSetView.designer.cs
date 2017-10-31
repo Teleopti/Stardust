@@ -148,12 +148,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.gridControlAbsenceRequestOpenPeriods = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.gridControlOvertimeRequestOpenPeriods = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.contextMenuStripOpenPeriodsGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemFromToPeriod = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRollingPeriod = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemMoveUp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemMoveDown = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemOvertimeRequestFromToPeriod = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemOvertimeRequestRollingPeriod = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemOvertimeRequestDelete = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator2OvertimeRequest = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItemOvertimeRequestMoveUp = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemOvertimeRequestMoveDown = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPageAdvShiftTradeRequest = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelShiftTrade = new System.Windows.Forms.TableLayoutPanel();
 			this.panel5 = new System.Windows.Forms.Panel();
@@ -232,6 +239,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).BeginInit();
 			this.contextMenuStripOpenPeriodsGrid.SuspendLayout();
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.SuspendLayout();
 			this.tabPageAdvShiftTradeRequest.SuspendLayout();
 			this.tableLayoutPanelShiftTrade.SuspendLayout();
 			this.panel5.SuspendLayout();
@@ -2000,7 +2008,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.gridControlOvertimeRequestOpenPeriods.ColCount = 6;
 			this.gridControlOvertimeRequestOpenPeriods.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
 			new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
-			this.gridControlOvertimeRequestOpenPeriods.ContextMenuStrip = this.contextMenuStripOpenPeriodsGrid;
+			this.gridControlOvertimeRequestOpenPeriods.ContextMenuStrip = this.contextMenuStripOvertimeRequestOpenPeriodsGrid;
 			this.gridControlOvertimeRequestOpenPeriods.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
 			this.gridControlOvertimeRequestOpenPeriods.DefaultRowHeight = 20;
 			this.gridControlOvertimeRequestOpenPeriods.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2042,6 +2050,63 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.contextMenuStripOpenPeriodsGrid.Name = "contextMenuStripOpenPeriodsGrid";
 			this.contextMenuStripOpenPeriodsGrid.ShowImageMargin = false;
 			this.contextMenuStripOpenPeriodsGrid.Size = new System.Drawing.Size(278, 190);
+
+			// 
+			// contextMenuStripOvertimeRequestOpenPeriodsGrid
+			// 
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.ImageScalingSize = new System.Drawing.Size(32, 32);
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+				this.toolStripMenuItemOvertimeRequestFromToPeriod,
+				this.toolStripMenuItemOvertimeRequestRollingPeriod,
+				this.toolStripMenuItemOvertimeRequestDelete,
+				this.toolStripSeparator2OvertimeRequest,
+				this.toolStripMenuItemOvertimeRequestMoveUp,
+				this.toolStripMenuItemOvertimeRequestMoveDown});
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.Name = "contextMenuStripOvertimeRequestOpenPeriodsGrid";
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.ShowImageMargin = false;
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.Size = new System.Drawing.Size(278, 190);
+
+			// 
+			// toolStripMenuItemOvertimeRequestFromToPeriod
+			// 
+			this.toolStripMenuItemOvertimeRequestFromToPeriod.Name = "toolStripMenuItemOvertimeRequestFromToPeriod";
+			this.toolStripMenuItemOvertimeRequestFromToPeriod.Size = new System.Drawing.Size(277, 36);
+			this.toolStripMenuItemOvertimeRequestFromToPeriod.Text = "xxAddFromToPeriod";
+			this.toolStripMenuItemOvertimeRequestFromToPeriod.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestFromToPeriod_Click);
+			// 
+			// toolStripMenuItemOvertimeRequestRollingPeriod
+			// 
+			this.toolStripMenuItemOvertimeRequestRollingPeriod.Name = "toolStripMenuItemOvertimeRequestRollingPeriod";
+			this.toolStripMenuItemOvertimeRequestRollingPeriod.Size = new System.Drawing.Size(277, 36);
+			this.toolStripMenuItemOvertimeRequestRollingPeriod.Text = "xxAddRollingPeriod";
+			this.toolStripMenuItemOvertimeRequestRollingPeriod.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestRollingPeriod_Click);
+			// 
+			// toolStripMenuItemOvertimeRequestDelete
+			// 
+			this.toolStripMenuItemOvertimeRequestDelete.Name = "toolStripMenuItemOvertimeRequestDelete";
+			this.toolStripMenuItemOvertimeRequestDelete.Size = new System.Drawing.Size(277, 36);
+			this.toolStripMenuItemOvertimeRequestDelete.Text = "xxDelete";
+			this.toolStripMenuItemOvertimeRequestDelete.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestDelete_Click);
+			// 
+			// toolStripSeparator2OvertimeRequest
+			// 
+			this.toolStripSeparator2OvertimeRequest.Name = "toolStripSeparator2OvertimeRequest";
+			this.toolStripSeparator2OvertimeRequest.Size = new System.Drawing.Size(274, 6);
+			// 
+			// toolStripMenuItemOvertimeRequestMoveUp
+			// 
+			this.toolStripMenuItemOvertimeRequestMoveUp.Name = "toolStripMenuItemOvertimeRequestMoveUp";
+			this.toolStripMenuItemOvertimeRequestMoveUp.Size = new System.Drawing.Size(277, 36);
+			this.toolStripMenuItemOvertimeRequestMoveUp.Text = "xxMoveUp";
+			this.toolStripMenuItemOvertimeRequestMoveUp.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestMoveUp_Click);
+			// 
+			// toolStripMenuItemOvertimeRequestMoveDown
+			// 
+			this.toolStripMenuItemOvertimeRequestMoveDown.Name = "toolStripMenuItemOvertimeRequestMoveDown";
+			this.toolStripMenuItemOvertimeRequestMoveDown.Size = new System.Drawing.Size(277, 36);
+			this.toolStripMenuItemOvertimeRequestMoveDown.Text = "xxMoveDown";
+			this.toolStripMenuItemOvertimeRequestMoveDown.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestMoveDown_Click);
+
 			// 
 			// toolStripMenuItemFromToPeriod
 			// 
@@ -2540,6 +2605,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).EndInit();
 			this.contextMenuStripOpenPeriodsGrid.ResumeLayout(false);
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.ResumeLayout(false);
 			this.tabPageAdvShiftTradeRequest.ResumeLayout(false);
 			this.tableLayoutPanelShiftTrade.ResumeLayout(false);
 			this.panel5.ResumeLayout(false);
@@ -2608,6 +2674,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvPreviousProjectionPeriod;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvNextProjectionPeriod;
 		private ContextMenuStrip contextMenuStripOpenPeriodsGrid;
+		private ContextMenuStrip contextMenuStripOvertimeRequestOpenPeriodsGrid;
 		private ToolStripSeparator toolStripSeparator1;
 		private ToolStripMenuItem toolStripMenuItemDelete;
 		private ToolStripSeparator toolStripSeparator2;
@@ -2615,6 +2682,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private ToolStripMenuItem toolStripMenuItemMoveDown;
 		private ToolStripMenuItem toolStripMenuItemFromToPeriod;
 		private ToolStripMenuItem toolStripMenuItemRollingPeriod;
+		private ToolStripMenuItem toolStripMenuItemOvertimeRequestDelete;
+		private ToolStripSeparator toolStripSeparator2OvertimeRequest;
+		private ToolStripMenuItem toolStripMenuItemOvertimeRequestMoveUp;
+		private ToolStripMenuItem toolStripMenuItemOvertimeRequestMoveDown;
+		private ToolStripMenuItem toolStripMenuItemOvertimeRequestFromToPeriod;
+		private ToolStripMenuItem toolStripMenuItemOvertimeRequestRollingPeriod;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageBasic;
 		private TableLayoutPanel tableLayoutPanelBasic;
 		private Panel panel2;
