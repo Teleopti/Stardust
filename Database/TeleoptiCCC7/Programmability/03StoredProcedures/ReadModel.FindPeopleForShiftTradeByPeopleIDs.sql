@@ -62,7 +62,7 @@ BEGIN
            AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate, '2059-12-31')
            AND p.id in (SELECT * FROM @PeopleIds)
           LEFT JOIN PersonSkill ps with (nolock) ON ps.Parent = pp.Id AND ps.Active = 1
-         WHERE (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
+         WHERE (p.TerminalDate >= @scheduleDate OR p.TerminalDate IS NULL)
            AND p.WorkflowControlSet IS NOT NULL
            AND p.id <> @fromPersonId
            AND p.IsDeleted = 0
@@ -83,7 +83,7 @@ BEGIN
            AND p.id in(SELECT * FROM @PeopleIds)
            AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate, '2059-12-31')
          INNER JOIN #personSkill2 ps ON ps.Parent = pp.Id
-         WHERE (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
+         WHERE (p.TerminalDate >= @scheduleDate OR p.TerminalDate IS NULL)
            AND p.WorkflowControlSet IS NOT NULL
            AND p.id <> @fromPersonId
            AND p.IsDeleted = 0
