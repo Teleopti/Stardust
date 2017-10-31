@@ -4,9 +4,9 @@
   angular.module('wfm.forecasting')
   .controller('ForecastRefactController', ForecastCtrl);
 
-  ForecastCtrl.$inject = ['forecastingService', '$interval', '$state', '$stateParams'];
+  ForecastCtrl.$inject = ['forecastingService', '$interval', '$state', '$stateParams',  'NoticeService', '$translate'];
 
-  function ForecastCtrl(forecastingService, $interval, $state, $stateParams) {
+  function ForecastCtrl(forecastingService, $interval, $state, $stateParams, NoticeService, $translate) {
     var vm = this;
     vm.forecastModal = false;
     vm.selectedDayCount = [];
@@ -49,6 +49,12 @@
       vm.isForecastRunning();
       vm.getSkills();
       vm.getScenarios();
+
+      var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
+          .replace('{0}', $translate.instant('Forecasts'))
+          .replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' target='_blank'>")
+          .replace('{2}', '</a>');
+      NoticeService.info(message, null, true);
     }
     init();
 
