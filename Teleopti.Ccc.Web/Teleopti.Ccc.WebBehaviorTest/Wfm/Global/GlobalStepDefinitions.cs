@@ -25,6 +25,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 			Browser.Interactions.ClickUsingJQuery($"#business-unit-select li:contains({businessUnit})");
 		}
 
+		[When(@"I open group pages picker")]
+		public void WhenIOpenGroupPagesPicker()
+		{
+			Browser.Interactions.ClickVisibleOnly(".group-picker-container");
+		}
+
+		[Then(@"I close group pages picker")]
+		public void ThenICloseGroupPagesPicker()
+		{
+			Browser.Interactions.ClickVisibleOnly(".group-page-picker-menu .footer .selection-done");
+		}
+
+		[Then(@"I should see group pages picker tab")]
+		public void ThenIShouldSeeGroupPagesPickerTab()
+		{
+			Browser.Interactions.AssertExists(".group-page-picker-menu i[title='GroupPages']");
+		}
+
+		[Then(@"I click on group page picker icon")]
+		public void ThenIClickOnGroupPagePickerIcon()
+		{
+			Browser.Interactions.ClickVisibleOnly(".group-page-picker-menu i[title='GroupPages']");
+		}
+
+		[Then(@"I select all skills on group page picker")]
+		public void ThenISelectAllSkillsOnGroupPagePicker()
+		{
+			Browser.Interactions.ClickContaining(".group-page-picker-menu .virtual-repeat .repeated-item .md-button", "Skill");
+		}
+
 		public class BusinessUnitData
 		{
 			public string Name { get; set; }

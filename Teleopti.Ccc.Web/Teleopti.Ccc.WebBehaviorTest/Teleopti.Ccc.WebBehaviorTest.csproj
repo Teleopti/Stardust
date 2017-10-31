@@ -645,6 +645,11 @@
       <DependentUpon>Global.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\Global\GlobalStepDefinitions.cs" />
+    <Compile Include="Wfm\Global\GroupPages.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GroupPages.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\Intraday\Intraday.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1145,6 +1150,10 @@
     <None Include="Wfm\Global\Global.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Global.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Global\GroupPages.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GroupPages.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Intraday\Intraday.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

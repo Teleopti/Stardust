@@ -213,6 +213,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click("#applyPersonalActivity");
 		}
 
+		[Then(@"I should see agent '(.*)'")]
+		public void ThenIShouldSeeAgent(string agent)
+		{
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.AssertExistsUsingJQuery(".person-name-column", agent);
+				});
+		}
+
 		[Then(@"I should see agent '(.*)' with shift '(.*)'")]
 		public void ThenIShouldSeeAgentWithShift(string agent, string shift)
 		{
@@ -464,6 +474,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		}
 
 		[When(@"I click button to search for schedules")]
+		[Then(@"I click button to search for schedules")]
 		public void WhenIClickButtonToSearchForSchedules()
 		{
 			Browser.Interactions.Click(".search-icon");
