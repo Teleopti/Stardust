@@ -65,6 +65,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AnalyticsReportableScenarioFixer.cs" />
     <Compile Include="DayOffCodeFixer.cs" />
     <Compile Include="DayOffIndexFixer.cs" />
     <Compile Include="DelayedDataConvert.cs" />

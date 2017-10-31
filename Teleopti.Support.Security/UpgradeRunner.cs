@@ -23,6 +23,7 @@ namespace Teleopti.Support.Security
 		private static readonly ICommandLineCommand reportTextCommand = new ReportTextsCommand();
 		private static readonly ICommandLineCommand DayOffCodeFixer = new DayOffCodeFixer();
 		private static readonly ICommandLineCommand DayOffIndexFixer = new DayOffIndexFixer();
+		private static readonly ICommandLineCommand AnalyticsReportableScenarioFixer = new AnalyticsReportableScenarioFixer();
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 		public IUpgradeLog Logger = new NullLog();
 
@@ -79,6 +80,7 @@ namespace Teleopti.Support.Security
 			LicenseStatusChecker.Execute(databaseArguments);
 			convertDayOffToNewStructure(databaseArguments);
 			initAuditData(databaseArguments);
+			AnalyticsReportableScenarioFixer.Execute(databaseArguments);
 		}
 
 		private void initAuditData(IDatabaseArguments commandLineArgument)
