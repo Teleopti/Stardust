@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 		private readonly LogonModel _model;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(LoginWebView));
 		private readonly ILog _customLogger = LogManager.GetLogger("CustomEOLogger");
+		private bool _isLoggingIn;
 
 		public LoginWebView(LogonModel model)
 		{
@@ -136,11 +137,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 
 		private void WebView_JSFatClientWebLogin(object sender, JSExtInvokeArgs e)
 		{
-			logInfo("EO Browser: Called from the JS to start the login process for fat client");
-			var personId = Guid.Parse(e.Arguments[1].ToString());
-			var businessUnitId = Guid.Parse(e.Arguments[0].ToString());
-			_model.PersonId = personId;
-			Presenter.webLogin(businessUnitId);
+			if(!_isLoggingIn)
+			{
+				try
+				{
+					_isLoggingIn = true;
+					logInfo("EO Browser: Called from the JS to start the login process for fat client");
+					var personId = Guid.Parse(e.Arguments[1].ToString());
+					var businessUnitId = Guid.Parse(e.Arguments[0].ToString());
+					_model.PersonId = personId;
+					Presenter.webLogin(businessUnitId);
+				}
+				finally
+				{
+					_isLoggingIn = false;
+				}
+			}
 		}
 
 		public void ShowStep(bool showBackButton)
