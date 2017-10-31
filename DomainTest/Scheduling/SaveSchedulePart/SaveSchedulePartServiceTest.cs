@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 	[TestFixture]
 	public class SaveSchedulePartServiceTest
 	{
-
 		private IScheduleDifferenceSaver scheduleDifferenceSaver;
 		private ISaveSchedulePartService target;
 		private IPersonAbsenceAccountRepository personAbsenceAccountRepository;
@@ -106,16 +105,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public MutableNow Now;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public IScheduleStorage ScheduleStorage;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 		}
 
 		[Test]
@@ -134,9 +134,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 
 			var assignmentPeriod1 = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 10);
 			var absencePeriod = new DateTimePeriod(2017, 5, 1, 9, 2017, 5, 1, 10);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category"));
-			assignment.SetId(Guid.NewGuid());
-			ScheduleStorage.Add(assignment);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category")).WithId();
+			PersonAssignmentRepository.Add(assignment);
 			var dic = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario);
 			var day = dic[person].ScheduledDay(new DateOnly(2017, 5, 1));
@@ -144,8 +143,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			
 			Target.Save(day, new FakeNewBusinessRuleCollection(),
 				new NullScheduleTag());
-			var resources =  SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 10)).ToList();
-			resources.Count().Should().Be.EqualTo(1);
+			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 10)).ToList();
+			resources.Count.Should().Be.EqualTo(1);
 			resources.First().Resource.Should().Be.EqualTo(-1);
 		}
 
@@ -165,12 +164,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 
 			var assignmentPeriod1 = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 10);
 			var absencePeriod = new DateTimePeriod(2017, 5, 1, 9, 2017, 5, 1, 10);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category"));
-			assignment.SetId(Guid.NewGuid());
-			ScheduleStorage.Add(assignment);
-			var personAbs = new PersonAbsence(person,scenario, new AbsenceLayer(new Absence(), absencePeriod));
-			personAbs.SetId(Guid.NewGuid());
-			ScheduleStorage.Add(personAbs);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category")).WithId();
+			PersonAssignmentRepository.Add(assignment);
+			var personAbs = new PersonAbsence(person,scenario, new AbsenceLayer(new Absence(), absencePeriod)).WithId();
+			PersonAbsenceRepository.Add(personAbs);
 			var dic = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario);
 			var day = dic[person].ScheduledDay(new DateOnly(2017, 5, 1));
@@ -179,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			Target.Save(day, new FakeNewBusinessRuleCollection(),
 				new NullScheduleTag());
 			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 10)).ToList();
-			resources.Count().Should().Be.EqualTo(1);
+			resources.Count.Should().Be.EqualTo(1);
 			resources.First().Resource.Should().Be.EqualTo(1);
 		}
 
@@ -199,9 +196,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 
 			var assignmentPeriod1 = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 10);
 			var assignmentPeriod2 = new DateTimePeriod(2017, 5, 1, 10, 2017, 5, 1, 12);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category"));
-			assignment.SetId(Guid.NewGuid());
-			ScheduleStorage.Add(assignment);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category")).WithId();
+			PersonAssignmentRepository.Add(assignment);
 			var dic = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario);
 			var day = dic[person].ScheduledDay(new DateOnly(2017, 5, 1));
@@ -210,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			Target.Save(day, new FakeNewBusinessRuleCollection(),
 				new NullScheduleTag());
 			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 12)).ToList();
-			resources.Count().Should().Be.EqualTo(2);
+			resources.Count.Should().Be.EqualTo(2);
 			resources.First().Resource.Should().Be.EqualTo(1);
 		}
 
@@ -230,19 +226,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 
 			var assignmentPeriod1 = new DateTimePeriod(2017, 5, 20, 8, 2017, 5, 20, 10);
 			var absencePeriod = new DateTimePeriod(2017, 5, 20, 9, 2017, 5, 20, 10);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category"));
-			assignment.SetId(Guid.NewGuid());
-			ScheduleStorage.Add(assignment);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category")).WithId();
+			PersonAssignmentRepository.Add(assignment);
 			var dic = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 																			  new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario);
 			var day = dic[person].ScheduledDay(new DateOnly(2017, 5, 20));
 			day.CreateAndAddAbsence(new AbsenceLayer(new Absence(), absencePeriod));
+			((IReadOnlyScheduleDictionary)dic).MakeEditable();
 			dic.Modify(day, new FakeNewBusinessRuleCollection());
 
 			Target.Save(day, new FakeNewBusinessRuleCollection(),
 						new NullScheduleTag());
 			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 20, 8, 2017, 5, 20, 10)).ToList();
-			resources.Count().Should().Be.EqualTo(0);
+			resources.Count.Should().Be.EqualTo(0);
 		}
 	}
 
