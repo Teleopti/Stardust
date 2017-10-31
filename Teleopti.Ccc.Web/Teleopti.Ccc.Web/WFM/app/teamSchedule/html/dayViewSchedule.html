@@ -7,80 +7,77 @@
 		</h1>
 	</div>
 </div>
-<div>
-
-</div>
 <div class="team-schedule panel wfm-block material-depth-1" wait-for="vm.boostrap">
 	<div class="teamschedule-header" layout="row">
-		<div class="leftside-part">
+			<div class="leftside-part">
 
-			<favorite-search ng-if="vm.searchEnabled"
-							 current-favorite="vm.selectedFavorite"
-							 apply-favorite="vm.applyFavorite(currentFavorite)"
-							 get-search="vm.getSearch()"
-							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
+				<favorite-search ng-if="vm.searchEnabled"
+								 current-favorite="vm.selectedFavorite"
+								 apply-favorite="vm.applyFavorite(currentFavorite)"
+								 get-search="vm.getSearch()"
+								 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
-			<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled"
-							   group-pages="vm.availableGroups"
-							   on-close="vm.onSelectedTeamsChanged()"
-							   class="group-picker-container inline-block"
-							   selected-groups="vm.selectedGroups"></group-page-picker>
+				<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled"
+								   group-pages="vm.availableGroups"
+								   on-close="vm.onSelectedTeamsChanged()"
+								   class="group-picker-container inline-block"
+								   selected-groups="vm.selectedGroups"></group-page-picker>
 
-			<organization-picker ng-if="!vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled"
-								 sites-and-teams="vm.sitesAndTeams"
-								 class="organization-picker-container inline-block"
-								 on-open="vm.searchOptions.focusingSearch = false"
-								 on-close="vm.onSelectedTeamsChanged()"
-								 selected-text="vm.orgPickerSelectedText()"
-								 selected-team-ids="vm.selectedGroups.groupIds"></organization-picker>
+				<organization-picker ng-if="!vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled"
+									 sites-and-teams="vm.sitesAndTeams"
+									 class="organization-picker-container inline-block"
+									 on-open="vm.searchOptions.focusingSearch = false"
+									 on-close="vm.onSelectedTeamsChanged()"
+									 selected-text="vm.orgPickerSelectedText()"
+									 selected-team-ids="vm.selectedGroups.groupIds"></organization-picker>
 
-			<div class="people-search-container inline-block"
-				 ng-if="vm.searchEnabled"
-				 ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
-				<wfm-multiple-search-input search-options="vm.searchOptions" search-title="vm.searchPlaceholder" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
-			</div>
+				<div class="people-search-container inline-block"
+					 ng-if="vm.searchEnabled"
+					 ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
+					<wfm-multiple-search-input search-options="vm.searchOptions" search-title="vm.searchPlaceholder" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
+				</div>
 
-			<span class="datepicker-container">
+				<span class="datepicker-container">
 				<team-schedule-datepicker selected-date="vm.scheduleDate" status="vm.showDatePicker" on-date-change="vm.onScheduleDateChanged()" class="inline-block"></team-schedule-datepicker>
 			</span>
 
-			<view-changer ng-if="vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"
-						  selected-groups="vm.selectedGroups"
-						  team-name-map="vm.teamNameMap"
-						  selected-favorite="vm.selectedFavorite"
-						  selected-sort-option="vm.sortOption"></view-changer>
-			<timezone-picker class="timezone-picker" available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)"></timezone-picker>
+				<view-changer ng-if="vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"
+							  selected-groups="vm.selectedGroups"
+							  team-name-map="vm.teamNameMap"
+							  selected-favorite="vm.selectedFavorite"
+							  selected-sort-option="vm.sortOption"></view-changer>
+				<timezone-picker class="timezone-picker" available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)"></timezone-picker>
 
-			<div class="wfm-switch" ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
-				<input type="checkbox" id="switchStaffing" ng-model="vm.staffingEnabled" />
-				<label for="switchStaffing">
-					<span class="wfm-switch-label" translate>ShowStaffing</span>
-					<span class="wfm-switch-toggle"></span>
-				</label>
-
-			</div>
-
-			<div class="warning-container" ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
-				<div id="show-warnings" class="wfm-switch inline-block">
-					<input type="checkbox" id="validateWarning" ng-model="vm.currentSettings.validateWarningEnabled" ng-change="vm.checkValidationWarningForCurrentPage()" />
-					<label for="validateWarning">
-						<span class="wfm-switch-label" translate>ShowWarnings</span>
+				<div class="wfm-switch" ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
+					<input type="checkbox" id="switchStaffing" ng-model="vm.staffingEnabled" ng-change="vm.resize()"/>
+					<label for="switchStaffing">
+						<span class="wfm-switch-label" translate>ShowStaffing</span>
 						<span class="wfm-switch-toggle"></span>
+					</label>
+
+				</div>
+
+				<div class="warning-container" ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
+					<div id="show-warnings" class="wfm-switch inline-block">
+						<input type="checkbox" id="validateWarning" ng-model="vm.currentSettings.validateWarningEnabled" ng-change="vm.checkValidationWarningForCurrentPage()" />
+						<label for="validateWarning">
+							<span class="wfm-switch-label" translate>ShowWarnings</span>
+							<span class="wfm-switch-toggle"></span>
+						</label>
+					</div>
+				</div>
+
+				<div class="wfm-switch" ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206 && vm.searchEnabled">
+					<input type="checkbox" id="switchAbsence" ng-model="vm.currentSettings.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()" />
+					<label for="switchAbsence">
+						<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
+						<span class="wfm-switch-toggle"></span>
+
 					</label>
 				</div>
 			</div>
 
-			<div class="wfm-switch" ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206 && vm.searchEnabled">
-				<input type="checkbox" id="switchAbsence" ng-model="vm.currentSettings.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()" />
-				<label for="switchAbsence">
-					<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
-					<span class="wfm-switch-toggle"></span>
-
-				</label>
-			</div>
-		</div>
-
-		<div class="rightside-part">
+			<div class="rightside-part">
 			<span class="icon-container inline-block cursor-pointer" ng-if="vm.toggles.WfmTeamSchedule_ExportSchedulesToExcel_45795" ng-click="vm.openExportPanel()">
 				<i class="mdi mdi-file-excel">
 					<md-tooltip>
@@ -89,63 +86,63 @@
 				</i>
 			</span>
 
-			<span class="icon-container inline-block cursor-pointer" ng-click="vm.openSettingsPanel()">
+				<span class="icon-container inline-block cursor-pointer" ng-click="vm.openSettingsPanel()">
 				<i class="mdi mdi-settings"></i>
 			</span>
 
-			<teamschedule-command-menu class="teamschedule-command"
-									   validate-warning-enabled="vm.currentSettings.validateWarningEnabled"
-									   trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
-		</div>
-	</div>
-	<div class="con-row teamschedule-body relative">
-		<div class="big-table-wrapper relative">
-			<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
-				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
+				<teamschedule-command-menu class="teamschedule-command"
+										   validate-warning-enabled="vm.currentSettings.validateWarningEnabled"
+										   trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
 			</div>
-			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<schedule-table ng-show="vm.scheduleFullyLoaded"
-							select-mode="vm.scheduleTableSelectMode"
-							selected-date="vm.scheduleDate"
-							show-warnings="vm.currentSettings.validateWarningEnabled"
-							selected-timezone="vm.currentTimezone"
-							pagination-options="vm.paginationOptions"
-							selected-sort-option="vm.sortOption" />
+		</div>
+		<div class="con-row teamschedule-body relative">
+			<div class="big-table-wrapper relative" ng-style="vm.scheduleTableWrapperStyle">
+				<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
+					<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
+				</div>
+				<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+				<schedule-table ng-show="vm.scheduleFullyLoaded"
+								select-mode="vm.scheduleTableSelectMode"
+								selected-date="vm.scheduleDate"
+								show-warnings="vm.currentSettings.validateWarningEnabled"
+								selected-timezone="vm.currentTimezone"
+								pagination-options="vm.paginationOptions"
+								selected-sort-option="vm.sortOption" />
+			</div>
+
+			<teamschedule-command-container date="vm.scheduleDate"
+											timezone="vm.currentTimezone"
+											action-callback="vm.commonCommandCallback(trackId, personIds)"
+											on-ready="vm.onCommandContainerReady()"
+											get-load-all-params="vm.getLoadAllSchedulesParams()"
+											is-select-all="vm.hasSelectedAllPeopleInEveryPage">
+			</teamschedule-command-container>
+
+			<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-settings-container">
+				<settings></settings>
+			</md-sidenav>
+
 		</div>
 
-		<teamschedule-command-container date="vm.scheduleDate"
-										timezone="vm.currentTimezone"
-										action-callback="vm.commonCommandCallback(trackId, personIds)"
-										on-ready="vm.onCommandContainerReady()"
-										get-load-all-params="vm.getLoadAllSchedulesParams()"
-										is-select-all="vm.hasSelectedAllPeopleInEveryPage">
-		</teamschedule-command-container>
+		<schedule-change-notifier on-notification="vm.onPersonScheduleChanged"
+								  schedule-date="vm.scheduleDate"
+								  last-command-track-id="vm.lastCommandTrackId"></schedule-change-notifier>
 
-		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-settings-container">
-			<settings></settings>
-		</md-sidenav>
+		<div class="teamschedule-footer" ng-class="{'flex-end':!vm.selectAllVisible() && !vm.hasSelectedAllPeople()}">
+			<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
+				<a href="javascript: void(0);"> {{'SelectAllPeopleInEveryPage' | translate}}</a>
+			</div>
+			<div class="select-all" ng-show="vm.hasSelectedAllPeople()" ng-click="vm.unselectAllForAllPages()">
+				<a href="javascript: void(0);"> {{'UnselectAllPeopleInEveryPage' | translate}}</a>
+			</div>
 
-	</div>
-
-	<schedule-change-notifier on-notification="vm.onPersonScheduleChanged"
-							  schedule-date="vm.scheduleDate"
-							  last-command-track-id="vm.lastCommandTrackId"></schedule-change-notifier>
-
-	<div class="teamschedule-footer" ng-class="{'flex-end':!vm.selectAllVisible() && !vm.hasSelectedAllPeople()}">
-		<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
-			<a href="javascript: void(0);"> {{'SelectAllPeopleInEveryPage' | translate}}</a>
+			<div class="pagination-navigator" ng-if="vm.paginationOptions.totalPages > 0">
+				<md-select class="page-size-selector inline-block" ng-model="vm.paginationOptions.pageSize" ng-change="vm.onPageSizeSelectorChange()" aria-label="page size">
+					<md-option ng-repeat="option in vm.agentsPerPageSelection" ng-value="option">{{option}}</md-option>
+				</md-select>
+				<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
+			</div>
 		</div>
-		<div class="select-all" ng-show="vm.hasSelectedAllPeople()" ng-click="vm.unselectAllForAllPages()">
-			<a href="javascript: void(0);"> {{'UnselectAllPeopleInEveryPage' | translate}}</a>
-		</div>
-
-		<div class="pagination-navigator" ng-if="vm.paginationOptions.totalPages > 0">
-			<md-select class="page-size-selector inline-block" ng-model="vm.paginationOptions.pageSize" ng-change="vm.onPageSizeSelectorChange()" aria-label="page size">
-				<md-option ng-repeat="option in vm.agentsPerPageSelection" ng-value="option">{{option}}</md-option>
-			</md-select>
-			<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
-		</div>
-	</div>
-
-	<staffing-info ng-if="vm.staffingEnabled" selected-date="vm.scheduleDate"></staffing-info>
+	
+	<staffing-info ng-if="vm.staffingEnabled" selected-date="vm.scheduleDate" chart-height="vm.chartHeight"></staffing-info>
 </div>

@@ -6,7 +6,8 @@
 		templateUrl: 'app/teamSchedule/html/staffingInfo.html',
 		bindings: {
 			selectedDate: '<',
-			preselectedSkills: '<'
+			preselectedSkills: '<',
+			chartHeight: '<'
 		}
 	});
 
@@ -24,6 +25,10 @@
 		vm.useShrinkage = false;
 		var selectedSkill = null;
 		var selectedSkillGroup = null;
+		
+		vm.$onChanges = function (changeObj) {
+			
+		};
 
 		vm.useShrinkageForStaffing = function () {
 			vm.useShrinkage = !vm.useShrinkage;
@@ -89,7 +94,9 @@
 
 		function generateChartForView(data) {
 			$timeout(function () {
-				c3.generate(ChartService.staffingChartConfig(data));
+				vm.config = ChartService.staffingChartConfig(data);
+				vm.config.size = {height:vm.chartHeight};
+				c3.generate(vm.config);
 			});
 		}
 	}

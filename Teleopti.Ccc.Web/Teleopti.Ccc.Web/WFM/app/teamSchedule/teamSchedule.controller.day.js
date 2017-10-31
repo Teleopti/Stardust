@@ -9,7 +9,6 @@
 		'$mdSidenav',
 		'$mdComponentRegistry',
 		'TeamSchedule',
-		'GroupScheduleFactory',
 		'PersonSelection',
 		'ScheduleManagement',
 		'NoticeService',
@@ -21,7 +20,7 @@
 		'groupPageService',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, groupPageService) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, groupPageService) {
 		var vm = this;
 
 		vm.isLoading = false;
@@ -55,7 +54,21 @@
 				SearchTerm: vm.searchOptions.keyword
 			};
 		};
-
+		vm.resize = function () {
+			var container = document.querySelector('#materialcontainer');
+			var viewHeader = document.querySelector('.view-header');
+			var header = document.querySelector('.team-schedule .teamschedule-header');
+			var footer = document.querySelector('.teamschedule-footer');
+			var defaultHeight = container.offsetHeight - 62 - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
+			if(vm.staffingEnabled){
+				vm.scheduleTableWrapperStyle = {'height':defaultHeight * 0.6 + 'px',
+					'overflow-y': 'auto'};
+				vm.chartHeight = defaultHeight * 0.3;
+			}
+			else{
+				vm.scheduleTableWrapperStyle = {'height':defaultHeight + 'px','overflow-y': 'hidden'};
+			}
+		};
 		vm.paginationOptions = {
 			pageSize: 20,
 			pageNumber: 1,
@@ -117,7 +130,7 @@
 					break;
 			}
 		});
-
+		
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 
 		vm.teamNameMap = $stateParams.teamNameMap || {};
