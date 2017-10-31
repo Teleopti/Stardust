@@ -46,10 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 
 			var validationResults = _schedulingValidator.Validate(scheduleOfSelectedPeople, fixedStaffPeople, period).InvalidResources;
-			//just to make ShouldShowAgentWithMissingShiftAsNotScheduled green
-			validationResults.Add(new SchedulingValidationError());
-			//
-			
+
 			var result = new OptimizationResultModel
 			{
 				ScheduledAgentsCount = _successfulScheduledAgents.Execute(scheduleOfSelectedPeople, period),

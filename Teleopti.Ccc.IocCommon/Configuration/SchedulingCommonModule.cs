@@ -530,12 +530,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<ScheduleStartOnWrongDateValidator>().As<IScheduleValidator>().SingleInstance();
 			}
+			builder.RegisterType<BusinessRulesValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonSkillValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonPeriodValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonShiftBagValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonPartTimePercentageValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonContractValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonContractScheduleValidator>().As<IScheduleValidator>().SingleInstance();
+			builder.RegisterType<PersonContractScheduleValidator>().As<IScheduleValidator>().SingleInstance();
+			
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
