@@ -81,7 +81,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence)
 		{
-			throw new NotImplementedException();
+			return _storage.LoadAll<IPersonAbsence>()
+				.Where(personAbsence => personAbsence.Person == person && personAbsence.Period.Intersect(period) &&
+										(absence == null || personAbsence.Layer.Payload == absence) && personAbsence.Scenario == scenario).Select(p => p.Period).ToArray();
 		}
 
 		

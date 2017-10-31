@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.Security.Principal
 {
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         public void Setup()
         {
             functionFactory = new DefinedRaptorApplicationFunctionFactory();
-			_currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory().WithCurrent(new FakeUnitOfWorkFactory { Name = tenantName });
+			_currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeStorage()).WithCurrent(new FakeUnitOfWorkFactory(new FakeStorage()) { Name = tenantName });
 			target = new LicensedFunctionsProvider(functionFactory);
         }
 

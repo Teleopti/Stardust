@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 		private void setCurrentDataSource()
 		{
-			var currentUow = new FakeUnitOfWorkFactory();
+			var currentUow = new FakeUnitOfWorkFactory(new FakeStorage());
 			currentUow.Name = "test";
 			CurrentUnitOfWorkFactory.WithCurrent(currentUow);
 		}

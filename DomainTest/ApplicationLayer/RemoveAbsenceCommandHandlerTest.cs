@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, new ThisUnitOfWork(new FakeUnitOfWork()), new EmptyScheduleDayDifferenceSaver());
+			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, new ThisUnitOfWork(new FakeUnitOfWork(new FakeStorage())), new EmptyScheduleDayDifferenceSaver());
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, _personAbsenceAccountRepository,
 				new DoNothingScheduleDayChangeCallBack());
 

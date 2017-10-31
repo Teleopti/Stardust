@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			personRepository.Add(person);
 			fakeTenantLogonDataManager.SetLogon(person.Id.Value,"","my@identi.ty");
 
-			var target = new GetPersonsByIdentitiesQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(), fakeTenantLogonDataManager);
+			var target = new GetPersonsByIdentitiesQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()), fakeTenantLogonDataManager);
 
 			var result = target.Handle(new GetPersonsByIdentitiesQueryDto
 			{

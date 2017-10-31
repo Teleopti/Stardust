@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
@@ -224,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var taskOwnerPeriod = new TaskOwnerPeriod(new DateOnly(2013, 1, 1), new List<ITaskOwner>(), TaskOwnerPeriodType.Other);
 
 
-			_currentUnitOfWork.Stub(a => a.Current()).Return(new FakeUnitOfWork());
+			_currentUnitOfWork.Stub(a => a.Current()).Return(new FakeUnitOfWork(new FakeStorage()));
 
 			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);

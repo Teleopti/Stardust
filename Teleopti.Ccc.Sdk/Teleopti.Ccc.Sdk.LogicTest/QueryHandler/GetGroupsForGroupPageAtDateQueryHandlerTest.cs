@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		{
 			var groupDetail = new ReadOnlyGroupDetail {GroupId = Guid.NewGuid(), GroupName = "My Group"};
 			var groupingReadOnlyRepository = new FakeGroupingReadOnlyRepository(groupDetail);
-			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
+			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeStorage());
 			var target = new GetGroupsForGroupPageAtDateQueryHandler(groupingReadOnlyRepository, currentUnitOfWorkFactory);
 
 			var readOnlyGroupPage = new ReadOnlyGroupPage {PageId = Guid.NewGuid(), PageName = "Test"};

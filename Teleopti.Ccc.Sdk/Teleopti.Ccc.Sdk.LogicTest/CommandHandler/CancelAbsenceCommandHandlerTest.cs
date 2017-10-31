@@ -3,33 +3,33 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
-using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
     [TestFixture]
-    public class CancelAbsenceCommandHandlerTest
+	[DomainTest]
+    public class CancelAbsenceCommandHandlerTest : ISetup
     {
-        private FakeScheduleStorage_DoNotUse _scheduleStorage;
-        private IScenarioRepository _scenarioRepository;
-        private CancelAbsenceCommandHandler _target;
-        private IPerson _person;
-        private IAbsence _absence;
-        private IScenario _scenario;
+        public IScheduleStorage ScheduleStorage;
+        public FakeScenarioRepository ScenarioRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeAbsenceRepository AbsenceRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+        public CancelAbsenceCommandHandler Target;
+		
         private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private readonly DateTimePeriod _period = new DateTimePeriod(_startDate, _startDate.AddDays(1));
         private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto
@@ -37,99 +37,108 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             UtcStartTime = _startDate,
             UtcEndTime = _startDate.AddDays(1)
         };
-
-	    [SetUp]
-        public void Setup()
-        {
-			_person = PersonFactory.CreatePerson().WithId();
-			_absence = AbsenceFactory.CreateAbsence("Sick").WithId();
-			_scenario = ScenarioFactory.CreateScenarioWithId("Default",true);
-
-			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			_scenarioRepository = new FakeScenarioRepository(_scenario);
-            
-			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
-			var personRepository = new FakePersonRepositoryLegacy(_person);
-			var fakePersonAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-		    var businessRulesForPersonalAccountUpdate = new BusinessRulesForPersonalAccountUpdate(fakePersonAbsenceAccountRepository, new SchedulingResultStateHolder());
-			var scheduleTagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-	        var scheduleSaveHandler =
-		        new ScheduleSaveHandler(
-			        new SaveSchedulePartService(
-				        new ScheduleDifferenceSaver(_scheduleStorage, new ThisUnitOfWork(new FakeUnitOfWork()), new EmptyScheduleDayDifferenceSaver()),
-				        fakePersonAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack()));
-
-			_target = new CancelAbsenceCommandHandler(dateTimePeriodAssembler, scheduleTagAssembler, _scheduleStorage, personRepository, _scenarioRepository, currentUnitOfWorkFactory, businessRulesForPersonalAccountUpdate, scheduleSaveHandler);
-        }
-
+		
 	    [Test]
 	    public void AbsenceCancelSuccessfully()
 	    {
-		    _scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _period).WithId());
-		    _scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person);
+			var absence = AbsenceFactory.CreateAbsence("Sick").WithId();
+			AbsenceRepository.Has(absence);
+			var scenario = ScenarioRepository.Has("Default");
 
-		    _target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = _person.Id.GetValueOrDefault() });
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, _period).WithId());
+		    PersonAbsenceRepository.Add(new PersonAbsence(person, scenario, new AbsenceLayer(absence, _period)).WithId());
 
-		    _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+		    Target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = person.Id.GetValueOrDefault() });
+
+		    ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 			    new ScheduleDictionaryLoadOptions(false, false), _period,
-			    _scenario)[_person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(0);
+			    scenario)[person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(0);
 	    }
 
 	    [Test]
 	    public void AbsenceCancelSuccessfullyForGivenType()
 	    {
-		    var absence2 = AbsenceFactory.CreateAbsence("Holiday").WithId();
-
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _period).WithId());
-			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
-			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
-			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(absence2, _period)).WithId());
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person);
+			var absence = AbsenceFactory.CreateAbsence("Sick").WithId();
+			var absence2 = AbsenceFactory.CreateAbsence("Holiday").WithId();
+			AbsenceRepository.Has(absence);
+			AbsenceRepository.Has(absence2);
+			var scenario = ScenarioRepository.Has("Default");
 			
-			_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, _period).WithId());
+			PersonAbsenceRepository.Add(new PersonAbsence(person, scenario, new AbsenceLayer(absence, _period)).WithId());
+			PersonAbsenceRepository.Add(new PersonAbsence(person, scenario, new AbsenceLayer(absence, _period)).WithId());
+			PersonAbsenceRepository.Add(new PersonAbsence(person, scenario, new AbsenceLayer(absence2, _period)).WithId());
+			
+			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false), _period,
-				_scenario)[_person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(3);
-		    _target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = _person.Id.GetValueOrDefault(),AbsenceId = _absence.Id});
+				scenario)[person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(3);
+		    Target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = person.Id.GetValueOrDefault(),AbsenceId = absence.Id});
 
-			_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false), _period,
-				_scenario)[_person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
+				scenario)[person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
 	    }
 
 	    [Test]
         public void AbsenceCancelSuccessfullyForGivenScenario()
         {
-        	var otherScenario = ScenarioFactory.CreateScenarioWithId("other",false);
-			_scenarioRepository.Add(otherScenario);
-			
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _period).WithId());
-			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period)).WithId());
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person);
+			var absence = AbsenceFactory.CreateAbsence("Sick").WithId();
+			AbsenceRepository.Has(absence);
 
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, otherScenario, _period).WithId());
-			_scheduleStorage.Add(new PersonAbsence(_person, otherScenario, new AbsenceLayer(_absence, _period)).WithId());
+			var scenario = ScenarioRepository.Has("Default");
+			var otherScenario = ScenarioFactory.CreateScenarioWithId("other",false);
+			ScenarioRepository.Add(otherScenario);
 			
-			_target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = _person.Id.GetValueOrDefault(),ScenarioId = otherScenario.Id.GetValueOrDefault()});
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, _period).WithId());
+			PersonAbsenceRepository.Add(new PersonAbsence(person, scenario, new AbsenceLayer(absence, _period)).WithId());
 
-			_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, otherScenario, _period).WithId());
+			PersonAbsenceRepository.Add(new PersonAbsence(person, otherScenario, new AbsenceLayer(absence, _period)).WithId());
+			
+			Target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = person.Id.GetValueOrDefault(),ScenarioId = otherScenario.Id.GetValueOrDefault()});
+
+			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false), _period,
-				otherScenario)[_person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(0);
-			_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+				otherScenario)[person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(0);
+			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 					new ScheduleDictionaryLoadOptions(false, false), _period,
-					_scenario)[_person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
+					scenario)[person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void AbsenceCancelSuccessfullyForTwoOverlappingAbsences()
 		{
-			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, _period).WithId());
-			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period.ChangeEndTime(TimeSpan.FromDays(2)))).WithId());
-			_scheduleStorage.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period.ChangeEndTime(TimeSpan.FromDays(4)))).WithId());
-			_periodDto.UtcEndTime = _period.EndDateTime.Add(TimeSpan.FromDays(2));
-			_target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = _person.Id.GetValueOrDefault() });
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person);
 
-			_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+			var absence = AbsenceFactory.CreateAbsence("Sick").WithId();
+			AbsenceRepository.Has(absence);
+
+			var scenario = ScenarioRepository.Has("Default");
+
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, _period).WithId());
+			PersonAbsenceRepository.Add(new PersonAbsence(person, scenario, new AbsenceLayer(absence, _period.ChangeEndTime(TimeSpan.FromDays(2)))).WithId());
+			PersonAbsenceRepository.Add(new PersonAbsence(person, scenario, new AbsenceLayer(absence, _period.ChangeEndTime(TimeSpan.FromDays(4)))).WithId());
+			_periodDto.UtcEndTime = _period.EndDateTime.Add(TimeSpan.FromDays(2));
+			Target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = person.Id.GetValueOrDefault() });
+
+			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 					new ScheduleDictionaryLoadOptions(false, false), _period.ChangeEndTime(TimeSpan.FromDays(3)),
-					_scenario)[_person].ScheduledDay(new DateOnly(_startDate).AddDays(3)).PersonAbsenceCollection(true).Count.Should().Be.EqualTo(1);
+					scenario)[person].ScheduledDay(new DateOnly(_startDate).AddDays(3)).PersonAbsenceCollection(true).Count.Should().Be.EqualTo(1);
 		}
-    }
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<CancelAbsenceCommandHandler>();
+			system.UseTestDouble<ScheduleSaveHandler>().For<IScheduleSaveHandler>();
+			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
+			system.AddModule(new AssemblerModule());
+		}
+	}
 }

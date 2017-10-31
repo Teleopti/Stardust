@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	        target = new SchedulerStateHolder(scenario,
         	                                  new DateOnlyPeriodAsDateTimePeriod(
         	                                  	dtp.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()),
-												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())), schedulingResultStateHolder, new TimeZoneGuard());
+												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(new FakeStorage()))), schedulingResultStateHolder, new TimeZoneGuard());
 			target.SetRequestedScenario(scenario);
             mocks = new MockRepository();
 			_permissionChecker = new PersistableScheduleDataPermissionChecker();

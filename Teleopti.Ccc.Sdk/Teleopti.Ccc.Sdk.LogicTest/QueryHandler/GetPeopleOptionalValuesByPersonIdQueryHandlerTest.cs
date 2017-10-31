@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			optionalColumn = new OptionalColumn("Shoe size");
 
 			target = new GetPeopleOptionalValuesByPersonIdQueryHandler(optionalColumnRepository, personRepository,
-				new FakeCurrentUnitOfWorkFactory());
+				new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
 		}
 
 		[Test]

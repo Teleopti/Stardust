@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			person.SetEmploymentNumber("2234");
 			personRepository.Add(person);
 
-			var target = new GetPersonsByEmploymentNumbersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
+			var target = new GetPersonsByEmploymentNumbersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
 
 			var result = target.Handle(new GetPersonsByEmploymentNumbersQueryDto()
 			{

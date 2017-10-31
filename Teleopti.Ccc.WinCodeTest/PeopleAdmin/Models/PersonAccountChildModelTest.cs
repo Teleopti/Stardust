@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyAccrued()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
 			var scenario = new FakeCurrentScenario_DoNotUse();
 			
 			_targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyBalanceIn()
         {
-            var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+            var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
             var scenario = new FakeCurrentScenario_DoNotUse();
 			var targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
 			var targetTime = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account2, null, _personAccountUpdater);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyBalanceOut()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
 	        var scenario = new FakeCurrentScenario_DoNotUse();
 
 			var targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyDate()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
 			var personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
 			
             _targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null,
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyExtra()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
 	        var scenario = new FakeCurrentScenario_DoNotUse();
 			
             _targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
 
-			var target = new GetPersonByIdQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
+			var target = new GetPersonByIdQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
 			var result = target.Handle(new GetPersonByIdQueryDto {PersonId = person.Id.Value});
 			result.Count.Should().Be.EqualTo(1);
 		}
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
 
-			var target = new GetPersonByIdQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
+			var target = new GetPersonByIdQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
 			var result = target.Handle(new GetPersonByIdQueryDto { PersonId = Guid.NewGuid() });
 			result.Count.Should().Be.EqualTo(0);
 		}

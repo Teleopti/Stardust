@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2001, 1, 1),
 					TeamFactory.CreateTeam("Team 1", "Paris"))
 			};
-			var target = new GetAllPersonPeriodsQueryHandler(personRepository, new FakeCurrentUnitOfWorkFactory(),
+			var target = new GetAllPersonPeriodsQueryHandler(personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()),
 				new PersonPeriodAssembler(new ExternalLogOnAssembler()),new FullPermission());
 			var result =
 #pragma warning disable 618
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2001, 2, 1),
 					TeamFactory.CreateTeam("Team 1", "Paris"))
 			};
-			var target = new GetAllPersonPeriodsQueryHandler(personRepository, new FakeCurrentUnitOfWorkFactory(),
+			var target = new GetAllPersonPeriodsQueryHandler(personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()),
 				new PersonPeriodAssembler(new ExternalLogOnAssembler()), new FullPermission());
 			var result =
 #pragma warning disable 618
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2001, 1, 1),
 					TeamFactory.CreateTeam("Team 1", "Paris"))
 			};
-			var target = new GetAllPersonPeriodsQueryHandler(personRepository, new FakeCurrentUnitOfWorkFactory(),
+			var target = new GetAllPersonPeriodsQueryHandler(personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()),
 				new PersonPeriodAssembler(new ExternalLogOnAssembler()), new NoPermission());
 			var result =
 #pragma warning disable 618

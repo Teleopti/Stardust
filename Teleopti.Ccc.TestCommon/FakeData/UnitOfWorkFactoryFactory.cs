@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             public IUnitOfWork CurrentUnitOfWork()
             {
-               return new FakeUnitOfWork();
+               return new FakeUnitOfWork(new FakeStorage());
             }
 
 	        public bool HasCurrentUnitOfWork()
@@ -38,12 +39,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		        return false;
 	        }
 
-	        public IAuditSetter AuditSetting
-        	{
-        		get { return null; }
-        	}
+	        public IAuditSetter AuditSetting => null;
 
-	        public string ConnectionString { get; private set; }
+			public string ConnectionString { get; }
 			
 	        public IUnitOfWork CreateAndOpenUnitOfWork()
 	        {
@@ -60,12 +58,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 throw new NotImplementedException();
             }
 
-            public string Name
-            {
-                get { return _name; }
-            }
+            public string Name => _name;
 
-            public void Dispose()
+			public void Dispose()
             {
             }
         }

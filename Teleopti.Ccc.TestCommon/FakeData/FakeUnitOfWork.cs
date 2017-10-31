@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeUnitOfWork : IUnitOfWork
 	{
+		private readonly FakeStorage _storage;
+
+		public FakeUnitOfWork(FakeStorage storage)
+		{
+			_storage = storage;
+		}
+
 		public void Dispose()
 		{
-			
 		}
 
 		public IInitiatorIdentifier Initiator()
@@ -24,6 +31,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public T Merge<T>(T root) where T : class, IAggregateRoot
 		{
+			var item = _storage.Get<T>(root.Id.GetValueOrDefault());
+			_storage.Remove(item);
+			_storage.Add(root);
 			return root;
 		}
 

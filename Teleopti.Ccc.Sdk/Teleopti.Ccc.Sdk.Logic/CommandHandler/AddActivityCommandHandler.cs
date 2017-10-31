@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly IScheduleTagAssembler _scheduleTagAssembler;
 		private readonly IScheduleSaveHandler _scheduleSaveHandler;
-
-
+		
 		public AddActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler, IScheduleSaveHandler scheduleSaveHandler)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
@@ -37,10 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_scheduleTagAssembler = scheduleTagAssembler;
 			_scheduleSaveHandler = scheduleSaveHandler;
         }
-
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-		    MessageId = "0"),
-		  System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		
 	    public void Handle(AddActivityCommandDto command)
 	    {
 		    using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())

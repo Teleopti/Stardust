@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyAccrued()
         {
-            var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+            var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
 			
             _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
             ((PersonAccountModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyBalanceIn()
         {
-            var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+            var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
             
             _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
             ((PersonAccountModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		[Test]
         public void VerifyBalanceOut()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
 			
             _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
             ((PersonAccountModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyDate()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
 			_traceableRefreshService.Refresh(_targetDay.CurrentAccount);
             
             _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyExtra()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
 			
             _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
             ((PersonAccountModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);

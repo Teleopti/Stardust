@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				new SchedulingResultStateHolder());
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage,
-				new FromFactory(() => new FakeCurrentUnitOfWorkFactory().Current()), new EmptyScheduleDayDifferenceSaver());
+				new FromFactory(() => new FakeCurrentUnitOfWorkFactory(new FakeStorage()).Current()), new EmptyScheduleDayDifferenceSaver());
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver,personAbsenceAccountRepository,
 				new DoNothingScheduleDayChangeCallBack());
 

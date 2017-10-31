@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
@@ -9,12 +10,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IUnitOfWork CreateAndOpenUnitOfWork()
 		{
-			return new FakeUnitOfWork();
+			return new FakeUnitOfWork(new FakeStorage());
 		}
 
 		public IUnitOfWork CurrentUnitOfWork()
 		{
-			return new FakeUnitOfWork();
+			return new FakeUnitOfWork(new FakeStorage());
 		}
 
 		public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()

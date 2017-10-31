@@ -75,12 +75,9 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: rogerkr
         /// Created date: 2008-02-12
         /// </remarks>
-        public IScheduleDateTimePeriod Period
-        {
-            get { return _period; }
-        }
+        public IScheduleDateTimePeriod Period => _period;
 
-        /// <summary>
+		/// <summary>
         /// Gets the scenario.
         /// </summary>
         /// <value>The scenario.</value>
@@ -88,13 +85,10 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: rogerkr
         /// Created date: 2008-02-12
         /// </remarks>
-        public IScenario Scenario
-        {
-            get { return _scenario; }
-        }
+        public IScenario Scenario => _scenario;
 
 
-        public event EventHandler<ModifyEventArgs> PartModified;
+		public event EventHandler<ModifyEventArgs> PartModified;
 
         public void SetUndoRedoContainer(IUndoRedoContainer container)
         {
@@ -570,12 +564,8 @@ namespace Teleopti.Ccc.Domain.Collection
         private void OnPartModified(ModifyEventArgs e)
 // ReSharper restore InconsistentNaming
         {
-	        var partModified = PartModified;
-	        if (partModified != null)
-            {
-                partModified(this, e);
-            }
-        }
+			PartModified?.Invoke(this, e);
+		}
 
 	    #region IDictionary<T,T>
 
@@ -618,17 +608,11 @@ namespace Teleopti.Ccc.Domain.Collection
             return _dictionary.TryGetValue(key, out value);
         }
 
-        public ICollection<IPerson> Keys
-        {
-            get { return _dictionary.Keys; }
-        }
+        public ICollection<IPerson> Keys => _dictionary.Keys;
 
-        public ICollection<IScheduleRange> Values
-        {
-            get { return _dictionary.Values; }
-        }
+		public ICollection<IScheduleRange> Values => _dictionary.Values;
 
-        public void Clear()
+		public void Clear()
         {
             _dictionary.Clear();
         }
@@ -643,17 +627,11 @@ namespace Teleopti.Ccc.Domain.Collection
             _dictionary.CopyTo(array, arrayIndex);
         }
 
-        public int Count
-        {
-            get { return _dictionary.Count; }
-        }
+        public int Count => _dictionary.Count;
 
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+		public bool IsReadOnly => false;
 
-        IEnumerator<KeyValuePair<IPerson, IScheduleRange>> IEnumerable<KeyValuePair<IPerson, IScheduleRange>>.GetEnumerator()
+		IEnumerator<KeyValuePair<IPerson, IScheduleRange>> IEnumerable<KeyValuePair<IPerson, IScheduleRange>>.GetEnumerator()
         {
             return _dictionary.GetEnumerator();
         }
@@ -675,27 +653,18 @@ namespace Teleopti.Ccc.Domain.Collection
 
         #endregion
 
-    	public bool PermissionsEnabled
-        {
-            get { return _permissionEnabled; }
-        }
+    	public bool PermissionsEnabled => _permissionEnabled;
 
-        public void UsePermissions(bool enabled)
+		public void UsePermissions(bool enabled)
         {
             if(enabled == _permissionEnabled)
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, SetPermissionExMessage, enabled));
             _permissionEnabled = enabled;
         }
 
-        public object SynchronizationObject
-        {
-            get { return _permissionLockObject; }
-        }
+        public object SynchronizationObject => _permissionLockObject;
 
-        protected IDictionary<IPerson, IScheduleRange> BaseDictionary
-        {
-            get { return _dictionary; }
-        }
+		protected IDictionary<IPerson, IScheduleRange> BaseDictionary => _dictionary;
 
 		public DateTime ScheduleLoadedTime { get; set; }
     }

@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[SetUp]
 		public void Setup()
 		{
-			uow = new FakeUnitOfWork();
+			uow = new FakeUnitOfWork(new FakeStorage());
 		}
 
 		/// <summary>

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var person2 = PersonFactory.CreatePerson().WithId(personId2);
 			personRepository.Add(person2);
 
-			var target = new GetPersonsByIdsQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
+			var target = new GetPersonsByIdsQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
 
 			var result = target.Handle(new GetPersonsByIdsQueryDto
 			{

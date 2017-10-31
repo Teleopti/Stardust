@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.AdministrationTest.Core
 		[SetUp]
 		public void Setup()
 		{
-			_dataSourcesFactory = new FakeDataSourcesFactory();
+			_dataSourcesFactory = new FakeDataSourcesFactory(new FakeStorage());
 			_runWithUnitOfWork = new FakeRunWithUnitOfWork();
 			_businessUnitRepository = new FakeBusinessUnitRepository();
 			_personRepository = new FakePersonRepositoryLegacy();
