@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		{
 			system.AddModule(new WebModule(configuration, null));
 
+		    system.AddService<FakeStorage>();
 		    system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
 			system.UseTestDouble(new FakeToggleManager(Domain.FeatureFlags.Toggles.Wfm_ResourcePlanner_32892)).For<IToggleManager>();
