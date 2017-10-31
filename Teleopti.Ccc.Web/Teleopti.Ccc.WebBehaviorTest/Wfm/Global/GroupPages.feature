@@ -33,4 +33,4 @@ Scenario: search agents using group pages picker in teams
 	And I select all skills on group page picker
 	And I close group pages picker
 	And I click button to search for schedules
-	Then I should see agent 'I'
+	Then I should see agent 'I' in the table

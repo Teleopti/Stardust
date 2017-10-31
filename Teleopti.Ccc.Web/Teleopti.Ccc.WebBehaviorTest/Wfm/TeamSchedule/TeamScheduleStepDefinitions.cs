@@ -213,8 +213,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click("#applyPersonalActivity");
 		}
 
-		[Then(@"I should see agent '(.*)'")]
-		public void ThenIShouldSeeAgent(string agent)
+		[Then(@"I should see agent '(.*)' in the table")]
+		public void ThenIShouldSeeAgentInTheTable(string agent)
 		{
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
 				() =>
