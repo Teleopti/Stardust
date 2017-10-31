@@ -31,6 +31,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
+		[Ignore("#46389 - not red yet. Maybe issue something totally different than we thought?")]
+		public void ShouldNotBreakShiftCategoryLimitationOf0()
+		{
+			var date = new DateOnly(2017, 1, 22);
+			var shiftCat = new ShiftCategory("_").WithId();
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen().WithId();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCat));
+			var agent = new Person().WithSchedulePeriodOneDay(date).WithPersonPeriod(ruleSet, skill).InTimeZone(TimeZoneInfo.Utc).WithId();
+			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat) { MaxNumberOf = 1 });
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, date,  agent, skillDay);
+			var schedulingOptions = new SchedulingOptions
+			{ 
+				UseShiftCategoryLimitations = true,
+			};
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[]{ agent }, date.ToDateOnlyPeriod());
+
+			stateholder.Schedules[agent].ScheduledDay(date).PersonAssignment().MainActivities().Any()
+				.Should().Be.False();
+		}
+		
+		[Test]
 		public void ShouldRespectShiftCategoryLimitationWhenUsingTeamAndBlock()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
