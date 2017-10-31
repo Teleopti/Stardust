@@ -48,9 +48,17 @@
 		faker.fake(/\.\.\/api\/AgentStates\/For(.*)/,
 			function (params) {
 				var result = agentStates;
-				
 				// shouldnt it include both sites and teams if both are given?
 				// keeping the possibly wrong behavior for now...
+				if (params.textFilter){
+					result = result.filter(function (a) {
+						var filterString ;
+						for (var key in a) {
+							filterString = filterString + a[key];
+						}
+					return params.textFilter.split(' ').every(function(txt){ return filterString.includes(txt.trim())});
+				})};
+
 				if (params.siteIds)
 					result = result.filter(function (a) {
 						return params.siteIds.indexOf(a.SiteId) >= 0
@@ -59,12 +67,12 @@
 					result = result.filter(function (a) {
 						return params.teamIds.indexOf(a.TeamId) >= 0
 					});
-				
+
 				if (params.skillIds)
 					result = result.filter(function (a) {
 						return params.skillIds.indexOf(a.SkillId) >= 0
 					});
-				
+
 				if (params.inAlarm == 'true'){
 					result = result.filter(function (s) {
 						return s.TimeInAlarm > 0;
@@ -72,7 +80,7 @@
 						return s2.TimeInAlarm - s1.TimeInAlarm;
 					});
 				}
-				
+
 				if (params.excludedStateIds)
 					result = result.filter(function (s) {
 						return params.excludedStateIds.indexOf(s.StateId) === -1;
@@ -83,7 +91,7 @@
 					States: result
 				}];
 			});
-		
+
 		faker.fake(/\.\.\/api\/SkillArea\/For(.*)/,
 			function (params) {
 				var result = skillAreas
