@@ -5,9 +5,9 @@
 	.module('wfm.reports')
 	.controller('AuditTrailController', AuditTrailController);
 
-	AuditTrailController.$inject = ['$filter', 'Toggle', 'uiGridConstants', 'ReportsService', 'NoticeService', '$translate'];
+	AuditTrailController.$inject = ['$filter', 'Toggle', 'uiGridConstants', 'ReportsService', 'NoticeService', '$translate', 'localeLanguageSortingService'];
 
-	function AuditTrailController($filter, ToggleSvc, uiGridConstants, ReportsService, NoticeService, $translate) {
+	function AuditTrailController($filter, ToggleSvc, uiGridConstants, ReportsService, NoticeService, $translate, localeLanguageSortingService) {
 		var vm = this;
 
 		vm.changedBy = [];
@@ -59,8 +59,11 @@
 		}
 
 		function getOrgData() {
-			ReportsService.getOrganization.get().$promise.then(function (result) {
-				vm.orgData = result.BusinessUnit;
+			ReportsService.getOrganization.get().$promise.then(function (data) {
+				if (data.BusinessUnit && data.BusinessUnit.ChildNodes) {
+					data.BusinessUnit.ChildNodes = localeLanguageSortingService.loopSort(data.BusinessUnit.ChildNodes, 'ChildNodes', '+Name');
+				}
+				vm.orgData = data.BusinessUnit;
 			});
 		}
 
