@@ -18,11 +18,14 @@
 		'teamsToggles',
 		'bootstrapCommon',
 		'groupPageService',
+		'SizeStorageService',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, groupPageService) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry,
+									teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, 
+									CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, groupPageService,
+									SizeStorageService) {
 		var vm = this;
-
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 		vm.scheduleDateMoment = function () {
@@ -56,19 +59,27 @@
 				SearchTerm: vm.searchOptions.keyword
 			};
 		};
-		vm.resize = function () {
+		vm.initTeamsSize = function () {
+			var storageSize = SizeStorageService.getSize();
+
 			var container = document.querySelector('#materialcontainer');
 			var viewHeader = document.querySelector('.view-header');
 			var header = document.querySelector('.team-schedule .teamschedule-header');
 			var footer = document.querySelector('.teamschedule-footer');
 
 			var defaultHeight = container.offsetHeight - 62 - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
+
+			var size = storageSize || {
+				tableHeight: defaultHeight * 0.64,
+				chartHeight: defaultHeight * 0.3
+			};
+			
 			if (vm.staffingEnabled) {
 				vm.scheduleTableWrapperStyle = {
-					'height': defaultHeight * 0.6 + 'px',
+					'height': size.tableHeight + 'px',
 					'overflow-y': 'auto'
 				};
-				vm.chartHeight = defaultHeight * 0.3;
+				vm.chartHeight = size.chartHeight;
 			}
 			else {
 				vm.scheduleTableWrapperStyle = {'height': defaultHeight + 'px', 'overflow-y': 'hidden'};
@@ -144,14 +155,16 @@
 			var footer = document.querySelector('.teamschedule-footer');
 			var tableHeight = d.height - footer.offsetHeight;
 			var chartHeight = container.offsetHeight - 62 - viewHeader.offsetHeight - header.offsetHeight - d.height - 50;
-			if (tableHeight <= 50 || chartHeight <= 100) {
+			if (tableHeight <= 100 || chartHeight <= 100) {
+				SizeStorageService.setSize(100, 100);
 				return;
 			}
+			SizeStorageService.setSize(tableHeight, chartHeight);
 			vm.scheduleTableWrapperStyle = {
 				'height': tableHeight + 'px',
 				'overflow-y': 'auto'
 			};
-			vm.chartHeight = container.offsetHeight - 62 - viewHeader.offsetHeight - header.offsetHeight - d.height - 50;
+			vm.chartHeight = chartHeight;
 
 		});
 
