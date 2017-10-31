@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,14 +10,13 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.Permissions.Controllers;
 
-namespace Teleopti.Ccc.WebTest.Areas.Permissions
+namespace Teleopti.Ccc.DomainTest.Common
 {
-	[PermissionsTest]
-	public class OrganizationSelectionControllerTest : ISetup
+	[DomainTest]
+	public class OrganizationSelectionProviderTest : ISetup
 	{
-		public OrganizationSelectionController Target;
+		public OrganizationSelectionProvider Target;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 		public ISiteRepository SiteRepository;
 
@@ -30,9 +29,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		public void ShouldReturnDynamicOptions()
 		{
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
-			dynamic result = Target.GetOrganizationSelection();
-			((ICollection<object>) result.DynamicOptions).Count.Should()
-				.Be.EqualTo(Enum.GetNames(typeof (AvailableDataRangeOption)).Length);
+			var result = Target.Provide(true);
+			result.DynamicOptions.Length.Should()
+				.Be.EqualTo(Enum.GetNames(typeof(AvailableDataRangeOption)).Length);
+		}
+
+		[Test]
+		public void ShouldNotReturnDynamicOptions()
+		{
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			var result = Target.Provide(false);
+			result.DynamicOptions.Length.Should()
+				.Be.EqualTo(0);
 		}
 
 		[Test]
@@ -40,10 +48,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
 			SiteRepository.Add(SiteFactory.CreateSiteWithOneTeam("Team 1"));
-			dynamic result = Target.GetOrganizationSelection();
-			((Guid) result.BusinessUnit.Id).Should().Be.EqualTo(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
-			((ICollection<object>)result.BusinessUnit.ChildNodes).Count.Should().Be.EqualTo(1);
-			((ICollection<object>)(((ICollection<dynamic>)result.BusinessUnit.ChildNodes).First()).ChildNodes).Count.Should().Be.EqualTo(1);
+			var result = Target.Provide(false);
+			((Guid)result.BusinessUnit.Id).Should().Be.EqualTo(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
+			result.BusinessUnit.ChildNodes.Length.Should().Be.EqualTo(1);
+			result.BusinessUnit.ChildNodes.First().ChildNodes.Length.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -51,12 +59,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
 			var siteWithOneTeam = SiteFactory.CreateSiteWithOneTeam("Team 1");
-			
+
 			((IDeleteTag)siteWithOneTeam.TeamCollection[0]).SetDeleted();
 			SiteRepository.Add(siteWithOneTeam);
-			dynamic result = Target.GetOrganizationSelection();
-			((ICollection<object>)(((ICollection<dynamic>)result.BusinessUnit.ChildNodes).First()).ChildNodes).Count.Should().Be.EqualTo(0);
+			var result = Target.Provide(false);
+			result.BusinessUnit.ChildNodes.First().ChildNodes.Length.Should().Be.EqualTo(0);
 		}
-
 	}
 }

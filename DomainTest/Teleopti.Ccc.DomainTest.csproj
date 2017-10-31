@@ -245,6 +245,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTargetTimeSpecificationTests.cs" />
     <Compile Include="Common\EnumExtensionsTest.cs" />
+    <Compile Include="Common\OrganizationSelectionProviderTest.cs" />
     <Compile Include="Common\PersonLeavingTest.cs" />
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />
     <Compile Include="Common\PublishPersonNameChangedEventTest.cs" />
