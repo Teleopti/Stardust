@@ -104,6 +104,9 @@ md-progress-circular{
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+	.wfm-popup-wrap {//move to styleguide
+		min-width:200px;
+	}
 }
 
 @supports (-ms-accelerator: true) {

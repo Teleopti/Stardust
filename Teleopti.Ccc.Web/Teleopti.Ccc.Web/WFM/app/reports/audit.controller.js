@@ -21,7 +21,7 @@
 			endDate: moment().utc()
 		};
 		vm.dateModifyRange = {
-			startDate: moment().utc().subtract(1, 'year'),
+			startDate: moment().utc().subtract(1, 'days'),
 			endDate: moment().utc()
 		};
 		vm.changesData = [];
