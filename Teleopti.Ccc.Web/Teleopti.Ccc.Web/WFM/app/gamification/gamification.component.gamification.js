@@ -4,9 +4,9 @@
 	angular.module('wfm.gamification')
 		.component('gamification', {
 			templateUrl: 'app/gamification/html/g.component.gamification.tpl.html',
-			controller: GamificationSettingsController
+			controller: GamificationController
 		});
 
-	function GamificationSettingsController() {}
+	function GamificationController() {}
 
 })(angular);
