@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					TeamIds = filter.TeamIds,
 					SkillIds = filter.SkillIds,
 					InAlarm = filter.InAlarm,
-					ExcludedStates = filter.ExcludedStateIds
+					ExcludedStates = filter.ExcludedStateIds,
+					TextFilter = filter.TextFilter
 				}));
 		}
 
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 			public IEnumerable<Guid> SkillIds { get; set; } // filter
 			public IEnumerable<Guid?> ExcludedStateIds { get; set; } // filter
+			public string TextFilter { get; set; }
 			public bool InAlarm { get; set; } // filter
 		}
 	}
