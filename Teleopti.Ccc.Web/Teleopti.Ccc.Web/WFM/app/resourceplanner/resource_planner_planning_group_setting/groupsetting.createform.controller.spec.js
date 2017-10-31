@@ -136,8 +136,8 @@ describe('planningGroupSettingEditController', function () {
 
         vm.selectResultItem(vm.filterResults[0]);
 
-        expect(vm.selectedResults.length).toEqual(1);
-        expect(vm.selectedResults[0].Id).toEqual('0ffeb898-11bf-43fc-8104-9b5e015ab3c2');
+        expect(vm.settingInfo.Filters.length).toEqual(1);
+        expect(vm.settingInfo.Filters[0].Id).toEqual('0ffeb898-11bf-43fc-8104-9b5e015ab3c2');
     });
 
     it('should remove one filter from filter results', function () {
@@ -147,9 +147,9 @@ describe('planningGroupSettingEditController', function () {
         $httpBackend.flush();
 
         vm.selectResultItem(vm.filterResults[0]);
-        vm.removeSelectedFilter(vm.selectedResults[0]);
+        vm.removeSelectedFilter(vm.settingInfo.Filters[0]);
 
-        expect(vm.selectedResults.length).toEqual(0);
+        expect(vm.settingInfo.Filters.length).toEqual(0);
     });
 
     it('should not create scheduling setting when submit data is invalid', function () {
@@ -166,7 +166,7 @@ describe('planningGroupSettingEditController', function () {
         $httpBackend.flush();
 
         vm.selectResultItem(vm.filterResults[0]);
-        vm.name = 'New scheduling setting';
+        vm.settingInfo.Name = 'New scheduling setting';
         vm.persist();
         $httpBackend.flush();
 
@@ -179,9 +179,9 @@ describe('planningGroupSettingEditController', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
 
-        expect(vm.filterId).toEqual('8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb');
-        expect(vm.name).toEqual('Scheduling setting 101');
-        expect(vm.default).toEqual(false);
+        expect(vm.settingInfo.Id).toEqual('8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb');
+        expect(vm.settingInfo.Name).toEqual('Scheduling setting 101');
+        expect(vm.settingInfo.Default).toEqual(false);
     });
 
     it('should save new name for selected undefault scheduling setting', function () {
@@ -189,32 +189,11 @@ describe('planningGroupSettingEditController', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
 
-        vm.name = 'Scheduling setting 911';
+        vm.settingInfo.Name = 'Scheduling setting 911';
         vm.persist();
         $httpBackend.flush();
 
-        expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith({
-            BlockFinderType: 0,
-            BlockSameShift: false,
-            BlockSameShiftCategory: false,
-            BlockSameStartTime: false,
-            Id: vm.filterId,
-            Name: 'Scheduling setting 911',
-            Default: vm.default,
-            PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            Filters: vm.selectedResults,
-            MinDayOffsPerWeek: 1,
-            MaxDayOffsPerWeek: 3,
-            MinConsecutiveWorkdays: 2,
-            MaxConsecutiveWorkdays: 6,
-            MinConsecutiveDayOffs: 1,
-            MaxConsecutiveDayOffs: 3,
-            MinFullWeekendsOff: 0,
-            MaxFullWeekendsOff: 8,
-            MinWeekendDaysOff: 0,
-            MaxWeekendDaysOff: 16,
-            Priority: 5
-        });
+        expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith(vm.settingInfo);
 
         expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
@@ -226,69 +205,37 @@ describe('planningGroupSettingEditController', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
 
-        vm.dayOffsPerWeek = {
-            MinDayOffsPerWeek: 2,
-            MaxDayOffsPerWeek: 4
-        };
-        vm.consecDaysOff = {
-            MinConsecDaysOff: 3,
-            MaxConsecDaysOff: 3
-        };
-        vm.consecWorkDays = {
-            MinConsecWorkDays: 1,
-            MaxConsecWorkDays: 5
-        };
-        vm.blockSchedulingSetting = {
-            BlockFinderType: 1,
-            BlockSameShift: false,
-            BlockSameShiftCategory: true,
-            BlockSameStartTime: false
-        };
-        vm.schedulingSettings = [
-            { Id: "IndividualFlexible", Selected: false },
-            { Id: "BlockScheduling", Selected: true }
-            // {Name:"Team Scheduling", Selected: false}
-        ];
+        vm.settingInfo.BlockFinderType = 1;
+        vm.settingInfo.BlockSameShiftCategory = true;
+        vm.settingInfo.BlockSameStartTime = false;
+        vm.settingInfo.BlockSameShift = false;
+        vm.settingInfo.MinDayOffsPerWeek = 2;
+        vm.settingInfo.MaxDayOffsPerWeek = 4;
+        vm.settingInfo.MinConsecutiveWorkdays = 1;
+        vm.settingInfo.MaxConsecutiveWorkdays = 5;
+        vm.settingInfo.MinConsecutiveDayOffs = 3;
+        vm.settingInfo.MaxConsecutiveDayOffs = 3;
+        vm.settingInfo.MinFullWeekendsOff = 1;
+        vm.settingInfo.MaxFullWeekendsOff = 4;
+        vm.settingInfo.MinWeekendDaysOff = 2;
+        vm.settingInfo.MaxWeekendDaysOff = 3;  
 
         vm.persist();
         $httpBackend.flush();
 
-        expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith({
-            BlockFinderType: 1,
-            BlockSameShift: false,
-            BlockSameShiftCategory: true,
-            BlockSameStartTime: false,
-            Id: vm.filterId,
-            Name: vm.name,
-            Default: vm.default,
-            PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            Filters: vm.selectedResults,
-            MinDayOffsPerWeek: 2,
-            MaxDayOffsPerWeek: 4,
-            MinConsecutiveWorkdays: 1,
-            MaxConsecutiveWorkdays: 5,
-            MinConsecutiveDayOffs: 3,
-            MaxConsecutiveDayOffs: 3,
-            MinFullWeekendsOff: 0,
-            MaxFullWeekendsOff: 8,
-            MinWeekendDaysOff: 0,
-            MaxWeekendDaysOff: 16,
-            Priority: 5
-        });
-
+        expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith(vm.settingInfo);
         expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
         });
     });
 
-
     it('should load default scheduling setting', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
         $httpBackend.flush();
 
-        expect(vm.filterId).toEqual('33f52ff4-0314-4a9e-80fa-5c958c57c92f');
-        expect(vm.name).toEqual('Default');
-        expect(vm.default).toEqual(true);
+        expect(vm.settingInfo.Id).toEqual('33f52ff4-0314-4a9e-80fa-5c958c57c92f');
+        expect(vm.settingInfo.Name).toEqual('Default');
+        expect(vm.settingInfo.Default).toEqual(true);
     });
 
     it('should save new setting for default scheduling setting', function () {
@@ -296,56 +243,26 @@ describe('planningGroupSettingEditController', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
         $httpBackend.flush();
 
-        vm.dayOffsPerWeek = {
-            MinDayOffsPerWeek: 2,
-            MaxDayOffsPerWeek: 4
-        };
-        vm.consecDaysOff = {
-            MinConsecDaysOff: 3,
-            MaxConsecDaysOff: 3
-        };
-        vm.consecWorkDays = {
-            MinConsecWorkDays: 1,
-            MaxConsecWorkDays: 5
-        };
-        vm.blockSchedulingSetting = {
-            BlockFinderType: 1,
-            BlockSameShift: false,
-            BlockSameShiftCategory: true,
-            BlockSameStartTime: false
-        };
-        vm.schedulingSettings = [
-            { Id: "IndividualFlexible", Selected: false },
-            { Id: "BlockScheduling", Selected: true }
-            // {Name:"Team Scheduling", Selected: false}
-        ];
+        vm.settingInfo.BlockFinderType = 1;
+        vm.settingInfo.BlockSameShiftCategory = true;
+        vm.settingInfo.BlockSameStartTime = false;
+        vm.settingInfo.BlockSameShift = false;
+        vm.settingInfo.MinDayOffsPerWeek = 2;
+        vm.settingInfo.MaxDayOffsPerWeek = 4;
+        vm.settingInfo.MinConsecutiveWorkdays = 1;
+        vm.settingInfo.MaxConsecutiveWorkdays = 5;
+        vm.settingInfo.MinConsecutiveDayOffs = 3;
+        vm.settingInfo.MaxConsecutiveDayOffs = 3;
+        vm.settingInfo.MinFullWeekendsOff = 1;
+        vm.settingInfo.MaxFullWeekendsOff = 4;
+        vm.settingInfo.MinWeekendDaysOff = 2;
+        vm.settingInfo.MaxWeekendDaysOff = 3;  
 
         vm.persist();
         $httpBackend.flush();
 
         expect(vm.default).toEqual(true);
-        expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith({
-            BlockFinderType: 1,
-            BlockSameShift: false,
-            BlockSameShiftCategory: true,
-            BlockSameStartTime: false,
-            Id: vm.filterId,
-            Name: vm.name,
-            Default: vm.default,
-            PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            Filters: vm.selectedResults,
-            MinDayOffsPerWeek: 2,
-            MaxDayOffsPerWeek: 4,
-            MinConsecutiveWorkdays: 1,
-            MaxConsecutiveWorkdays: 5,
-            MinConsecutiveDayOffs: 3,
-            MaxConsecutiveDayOffs: 3,
-            MinFullWeekendsOff: 0,
-            MaxFullWeekendsOff: 8,
-            MinWeekendDaysOff: 0,
-            MaxWeekendDaysOff: 16,
-            Priority: 0
-        });
+        expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith(vm.settingInfo);
 
         expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
