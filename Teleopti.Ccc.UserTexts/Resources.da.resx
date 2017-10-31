@@ -2310,7 +2310,7 @@ Periods</comment>
     <comment>Work shift rule</comment>
   </data>
   <data name="Workshiftruleset" xml:space="preserve">
-    <value>Indstil vag tregler</value>
+    <value>Indstil vagtregler</value>
     <comment>Work shift rule set</comment>
   </data>
   <data name="Year" xml:space="preserve">
@@ -4145,7 +4145,7 @@ Konti</value>
     <comment>AutomaticUpdate</comment>
   </data>
   <data name="OpenPeople" xml:space="preserve">
-    <value>Åben Medarbejdere</value>
+    <value>Åbn Medarbejdere</value>
     <comment>Open People navigation action</comment>
   </data>
   <data name="Approved" xml:space="preserve">
@@ -4347,6 +4347,10 @@ Konti</value>
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>Indtast Publiceringsdatoer for hvert Team</value>
     <comment>Enter Publishing Dates for each Team</comment>
+  </data>
+  <data name="FilterTeams" xml:space="preserve">
+    <value>Filtrer Teams</value>
+    <comment>Filter Teams</comment>
   </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Publiceringsdatoer for Planer</value>
@@ -8512,13 +8516,13 @@ Periode: {3}</value>
     <value>Dato:</value>
   </data>
   <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Din fraværs forespørgelse er blevet afvis automatisk, på grund af en forretnings regel.</value>
+    <value>Din fraværs forespørgelse er blevet afvis automatisk, på grund af en forretningsregel.</value>
   </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Din fraværs forespørgelse kan ikke behandles, nogle af de indtastede datoer er endnu ikke åbne for forespørelser. </value>
   </data>
   <data name="RequestDenyReasonNoWorkflow" xml:space="preserve">
-    <value>Ingen Arbejdsproces styring defineret.</value>
+    <value>Ingen arbejdsproces styring defineret.</value>
   </data>
   <data name="ActivityAvailableForExtendedPreference" xml:space="preserve">
     <value>Aktiviteten er tilgængelig for udvidet Præferencer</value>
@@ -8569,7 +8573,7 @@ Periode: {3}</value>
     <value>Vagtbytte afvist fordi planlagt kontraktstid er overskredet.</value>
   </data>
   <data name="WorkflowControlSetNotSetDenyReason" xml:space="preserve">
-    <value>Vagtbytte afvist fordi der ikke er defineret en Arbejdsproces styring</value>
+    <value>Vagtbytte afvist fordi der ikke er defineret en arbejdsproces styring</value>
   </data>
   <data name="ShiftTradeRequests" xml:space="preserve">
     <value>Vagtbytte Forespørgelse</value>
@@ -8668,7 +8672,7 @@ Periode: {3}</value>
     <value>Ikke tilladt Vagtkategori</value>
   </data>
   <data name="YouDontHaveAWorkflowControlSet" xml:space="preserve">
-    <value>Du har ikke en Arbejdsproces styring</value>
+    <value>Du har ikke en arbejdsproces styring</value>
   </data>
   <data name="CheckPermissionsForCastle" xml:space="preserve">
     <value>Ikke tilstrækkelige rettigheder.
@@ -8757,8 +8761,8 @@ Denne fejl forekommer typisk ved overgang til sommer/vinter tid. </value>
     <value>Min Profil</value>
   </data>
   <data name="ChangePasswordValidationError" xml:space="preserve">
-    <value>Adgandskoden kunne ikke ændres.
-Verificere venligst at din nuværende adgangskode er korrekt og bekræftelsen på den nye adgangskode er gyldig.
+    <value>Adgangskoden kunne ikke ændres.
+Verificer venligst at din nuværende adgangskode er korrekt og bekræftelsen på den nye adgangskode er gyldig.
 Kontroller reglerne for længde og karaktere. </value>
   </data>
   <data name="PasswordPolicyWarning" xml:space="preserve">
@@ -9379,7 +9383,7 @@ For indstruktioner til de mest almindelige kalender Apps. se  </value>
     <value>Se Detaljer</value>
   </data>
   <data name="EqualOfEachShiftCategory" xml:space="preserve">
-    <value>Ligemange af hver vagtkategori</value>
+    <value>Lige mange af hver vagtkategori</value>
   </data>
   <data name="PointsPerShiftCategory" xml:space="preserve">
     <value>Point pr. vagtkategori</value>
@@ -10506,19 +10510,19 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Kontrollere igen mod Aktiviteter</value>
   </data>
   <data name="Others" xml:space="preserve">
-    <value>Andres</value>
+    <value>Andre</value>
   </data>
   <data name="MyTime" xml:space="preserve">
     <value>Teleopti WFM MyTime</value>
   </data>
   <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
-    <value>Distribution mellem under kompetancer, skal være ligmed 100% </value>
+    <value>Distribution mellem under kompetancer, skal være lig med 100% </value>
   </data>
   <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
-    <value>Maksimal medarbejer optagetperiode skal være større end eller ligmed minimum medarbejere optaget periode.</value>
+    <value>Maksimal medarbejer optagetperiode skal være større end eller lig med minimum medarbejere optaget periode.</value>
   </data>
   <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
-    <value>Maksimale antal af medarbejder skal være større end eller ligmed minimum antal medarbejdere </value>
+    <value>Maksimale antal af medarbejder skal være større end eller lig med minimum antal medarbejdere </value>
   </data>
   <data name="NotReadyTime" xml:space="preserve">
     <value>Ikke klar tid</value>
@@ -10701,7 +10705,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Vælg venligst én af mulighederne "Samme vagtkategori", "Samme start tid" eller " Samme vagt" i blok optimeringen.</value>
   </data>
   <data name="HourShort" xml:space="preserve">
-    <value>t</value>
+    <value>h</value>
   </data>
   <data name="ConfirmRemoval" xml:space="preserve">
     <value>Bekræft fjernelsen</value>
@@ -10890,10 +10894,10 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Sideopsætning</value>
   </data>
   <data name="RepViewerPageWidth" xml:space="preserve">
-    <value>Side brede</value>
+    <value>Side bredde</value>
   </data>
   <data name="RepViewerPreviousPage" xml:space="preserve">
-    <value>Forigeside</value>
+    <value>Forrige side</value>
   </data>
   <data name="RepViewerPrinLayout" xml:space="preserve">
     <value>Udskrivnings  Layout</value>
@@ -10947,7 +10951,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Arbejdstid</value>
   </data>
   <data name="SubjectTooLong" xml:space="preserve">
-    <value>Emne er forlangt</value>
+    <value>Emne er for langt</value>
   </data>
   <data name="Distribution" xml:space="preserve">
     <value>Distribution</value>
@@ -11137,5 +11141,2882 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   </data>
   <data name="OpenShiftsTreeDots" xml:space="preserve">
     <value>Åben vagter...</value>
+  </data>
+  <data name="OutOfIndexRange" xml:space="preserve">
+    <value>Udenfor indeksområde {0} - {1}</value>
+  </data>
+  <data name="CallsSlashDay" xml:space="preserve">
+    <value>Kald/dag</value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>Nyt Kompetence</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>Nöjagtighed</value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>Prognosemetode id: </value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>Bedste metode</value>
+  </data>
+  <data name="StaffingLevels" xml:space="preserve">
+    <value>Bemandingsniveauer</value>
+  </data>
+  <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>Advarsel! Der er ingen historiske data tilgängelige</value>
+  </data>
+  <data name="ApplyProductActivationKey" xml:space="preserve">
+    <value>Indtast Produkt Aktiveringsnögle</value>
+  </data>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>Instruktioner: * Köb en licens (kontaktinformation her www.teleopti.com) * Modtag produkt aktiveringsnöglefil (fx pr. mail) * Gem produkt aktiveringsnöglen på disken * Hvis du har noget arbejde der afventer i systemet, gem dette för indtastning af aktiveringsnöglen * Tast frem til produkt aktiveringsnöglefilen ved hjälp af tasten nedenfor * Anvend produkt aktiveringsnöglen * Systemet vil lukke ned * Genstart My Time for at forny licensen * Start systemet igen</value>
+  </data>
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
+    <value>Produkt aktiveringsnögle "{0}" kunne ikke tilgåes. Fejldetaljer: {1}</value>
+  </data>
+  <data name="DatabaseProblem" xml:space="preserve">
+    <value>Der opstod et problem med at gemme produktaktiveringsnöglen i databasen. Fejldetaljer: {0}</value>
+  </data>
+  <data name="EnterValidFile" xml:space="preserve">
+    <value>Indtast et gyldigt filnavn, inklusiv sti</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>Produkt aktiveringsnöglen er anvendt med succes. Tillykke! Du er nu licenseret bruger af dette prisvindende workforce management system. Applikationen lukker nu. Vigtigt: For at få alle tjenester og webapplikationer til at fungere optimalt og for at få adgang til de nyligt licenseret muligheder, bed venligst din IT afdeling om at köre "Restart Teleopti WFM" fra Teleopti mappen i startmenuen på serveren</value>
+  </data>
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
+    <value>Din produktaktiveringsnögle er udlöbet. venligst indtast en ny</value>
+  </data>
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+    <value>Din produktaktiveringsnögle er ugyldig, muligvis ändret, venligst indtast en ny</value>
+  </data>
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
+    <value>Den produktaktiveringsnögle "{0}" du pröver at indtaste er gammel, den er udlöbet</value>
+  </data>
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
+    <value>Produktaktiveringsnöglen "{0}" er ugyldig, den er muligvis forfalsket</value>
+  </data>
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
+    <value>Produktaktiveringsnöglen "{0}" er ikke i et gyldigt (xml) format. Fejldetaljer: {1}</value>
+  </data>
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
+    <value>Du har endnu ikke indtastet produktaktiveringsnöglen, vär venlig at göre dette</value>
+  </data>
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
+    <value>Produktaktiveringsnögleapplikationen er fejlet</value>
+  </data>
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+    <value>Din produktaktiveringsnögle er kun gyldig indtil {0}, glem ikke at forny den i god tid</value>
+  </data>
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
+    <value>Välg produktaktiveringsnöglefilen</value>
+  </data>
+  <data name="ProductActivationKeyV8" xml:space="preserve">
+    <value>Dette system er licenseret til "{0} i henhold til betingelser i licensaftalen og produktaktiveringsnöglen udlöber {1}                                                           Produktaktiveringsnöglen däkker et maksimum af {2} aktive medarbejdere                                                                         Stor version {5}                                                                               Produkt aktiveringsnögleskema er "{3}"                                         Disse muligheder er aktiverede: {4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
+    <value>Du har {0} aktive medarbejdere men din licens gälder kun {1}. Vär venlig at opgrader din produktaktiveringsnögle snarest</value>
+  </data>
+  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
+    <value>Du har {0} aktive medarbejdere men din licens gälder kun {1}. Du skal opgradere din produktaktiveringsnögle för du kan fortsätte</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+    <value>Denne produktaktiveringsnögle däkker kun {0} aktive medarbejdere, men du har {1}. Du skal have en produkt aktiveringsnögle der däkker alle aktive medarbejdere</value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>Opret kompetence</value>
+  </data>
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
+    <value>Teleopti Produktaktiveringsnögle Undtagelse</value>
+  </data>
+  <data name="AddCampaignIntro" xml:space="preserve">
+    <value>Definer en procent for forventet forögelse eller formindskelse</value>
+  </data>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>Timer pr. uge er ugyldig, mulig grund: maximum timer pr. uge er mindre end minimum timer pr. uge</value>
+  </data>
+  <data name="RequestDenyReasonAutoPurge" xml:space="preserve">
+    <value>Renset da forespörgslen ikke blev håndteret i tide</value>
+  </data>
+  <data name="RequestWaitlistedReasonPersonAccount" xml:space="preserve">
+    <value>Du har ikke tid nok på din personlige konto</value>
+  </data>
+  <data name="Overstaff" xml:space="preserve">
+    <value>Overbemanding</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
+    <value>Denne produktaktiveringsnögle däkker kun {0} pladser. Du skal skaffe en produktaktiveringsnögle der däkker nok pladser.</value>
+  </data>
+  <data name="SeatProductActivationKeyV8" xml:space="preserve">
+    <value>Dette system er licenseret til "{0} i henhold til betingelser i licensaftalen og produktaktiveringsnöglen udlöber {1}                                                           Produktaktiveringsnöglen däkker et maksimum af {2} pladser                                                                                       Stor version {5}                                                                               Produktaktiveringsnögleskema er "{3}"                                         Disse muligheder er aktiverede: {4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
+    <value>Du har nästen nået dit maximum af {0} pladser. Vär venlig at opgrader din produktaktiveringsnögle snarest</value>
+  </data>
+  <data name="YouHaveTooManySeats" xml:space="preserve">
+    <value>Du bruger for mange pladser, du har kun licens til {0}. Du skal opgradere din produktaktiveringsnögle för du kan fortsätte</value>
+  </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value> Total kald &lt;</value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>Kald &lt;</value>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>Tale tid &lt;</value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW &lt;</value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>Forvented värdi tilsidesättes </value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>Campaign tilföjet</value>
+  </data>
+  <data name="CouldNotApply" xml:space="preserve">
+    <value>Kunne ikke tilföjes. Se problemer ovenfor</value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>Outliers</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>Köstatistik uden outliers</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistikker</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Meddelelser</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Deaktivere</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Aktivere</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>Overskriv de forventede värdier</value>
+  </data>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>Fyldte kvoter</value>
+  </data>
+  <data name="ShrinkedAllowance" xml:space="preserve">
+    <value>Kvoter efter gränsevärdi</value>
+  </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>Vellykket</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Du bruger flere medarbejdere ({0}) end din licens tillader ({1}). Du har {2} dage tilbage til at reducere antallet af medarbejdere eller installere en produkt aktivationsnögle der däkker så mange medarbejdere</value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>Prognoser körer</value>
+  </data>
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>Dette er din eksisterende prognose. For at kunne ändre kald, välg dag(e) i diagrammet</value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>Ryd diagram</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Web</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>Prognose</value>
+  </data>
+  <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
+    <value>Vagt kategori begränsninger bliver ikke tjekket når team eller blok er valgt.</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Analyse informatiom</value>
+  </data>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>Välg venligst SDK</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;Behold&gt;</value>
+  </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>Ändr disponible</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>Brug dag i måneden säsonudsving</value>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Forsöger at löse uplanlagte dage</value>
+  </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>Optimering med blokke mellem fridage og uden at overholde at teamet holder fridage sammen er ikke supporteret. Optimeringen vil ikke väre optimal</value>
+  </data>
+  <data name="UnsupportedOptimizationSteps" xml:space="preserve">
+    <value>Optimeringstrin "Vagter til fleksibel arbejdstid", "Dage fri til fleksibel arbejdstid" og "Vagtkategori begränsninger" er ikke udfört når team eller blok er valgt.</value>
+  </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>Team sammenligned med</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Tid i tilstand pr. medarbejder</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Detaljeret overholdelse</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Aktive medarbejdere</value>
+  </data>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>Ingen periode til stede</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>Du kan ikke skabe en anden vagt med tilföj aktivitet</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Sammenlign med teams fra</value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>Klartid / Planlagt Klartid</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Skema skal genindläses</value>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>Fridagspoint: </value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>Anciennitetspoint: </value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>Vagtkategoripoint: </value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>Detaljeret overholdelse</value>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>Resumé</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>Månedlig skema</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Anciennitetsplacering</value>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>Realstid overholdelse overblik</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Navigere</value>
+  </data>
+  <data name="SelectAtleastOnePerson" xml:space="preserve">
+    <value>Välg mindst en person</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>Kun på tilgängelige medarbejdere</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>Ingen overholdelse</value>
+  </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>Tid forud for aktivitetsändring for at varsle medarbejder (sekunder)</value>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>Mindst en dag kan ikke planlägges</value>
+  </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Tillad notifikationer på skrivebordet</value>
+  </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>Ingen datakilde er tilgängelig</value>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>Log på som en anden bruger</value>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>Log på med:</value>
+  </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>Log på som en anden bruger</value>
+  </data>
+  <data name="CalculateLegalState" xml:space="preserve">
+    <value>Beregnet lovlig tilstand</value>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>s</value>
+  </data>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>Nuvärende vagt slutter kl. {0}</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>Näste aktivitet ({0}) starter kl. {1}</value>
+  </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>Löser ugentlig hvile for {0} {1}</value>
+  </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>Teamplanlägning</value>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>&lt;Ingen blokke&gt;</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;Intet team&gt;</value>
+  </data>
+  <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
+    <value>Planlägningsperiode</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Skrivebord</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>Mobil</value>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>Flyt tid på</value>
+  </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>Näste aktivitet</value>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>Näste aktivitets starttid</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>Tid i tilstand</value>
+  </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>Minimum tid pr. uge: </value>
+  </data>
+  <data name="WeeklyWorkTimeBroken" xml:space="preserve">
+    <value>Du har overskredet gränsen for ugentlig arbejdstid</value>
+  </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>Kömålepunkter</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>Tid i alarm</value>
+  </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>Serveren ikke tilgängelig. På grund af dette, kunne visse funktioner ikke aktiveres</value>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>Anciennitetsplacering stigende</value>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>Anciennitetsplacering faldende</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Fil</value>
+  </data>
+  <data name="CompactView" xml:space="preserve">
+    <value>Kompakt overblik</value>
+  </data>
+  <data name="RequestsMenu" xml:space="preserve">
+    <value>Forespörgsler</value>
+  </data>
+  <data name="AgentBadgeSetting" xml:space="preserve">
+    <value>Medarbejder märke</value>
+  </data>
+  <data name="CalculateBadgeWithRank" xml:space="preserve">
+    <value>Beregn märke med placering</value>
+  </data>
+  <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Brug märke for besvarede kald</value>
+  </data>
+  <data name="UseBadgeforAHT" xml:space="preserve">
+    <value>Brug märke for AHT</value>
+  </data>
+  <data name="UseBadgeforAdherence" xml:space="preserve">
+    <value>Brug märke for overholdelse</value>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Gränsevärdi:</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Gränsevärdi for bronze:</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Gränsevärdi for sölv: </value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Gränsevärdi for guld: </value>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>Gränsevärdi (TT:mm:ss):</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
+    <value>Gränsevärdi for bronze (TT:mm:ss):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
+    <value>Gränsevärdi for sölv (TT:mm:ss):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
+    <value>Gränsevärdi for guld (TT:mm:ss):</value>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>Gränsevärdi (%):</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAdherence" xml:space="preserve">
+    <value>Gränsevärdi for bronze(%):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAdherence" xml:space="preserve">
+    <value>Gränsevärdi for sölv(%):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAdherence" xml:space="preserve">
+    <value>Gränsevärdi for guld(%):</value>
+  </data>
+  <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
+    <value>Et sölvmärke er lig med dette antal bronzemärker:</value>
+  </data>
+  <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
+    <value>Et guldmärke er lig med dette antal sölvmärker:</value>
+  </data>
+  <data name="EnableBadge" xml:space="preserve">
+    <value>Aktiver medarbejdermärker</value>
+  </data>
+  <data name="AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Bronzemärkets gränsevärdi for besvarede kald skal väre lavere end sölvmärkets gränsevärdi</value>
+  </data>
+  <data name="AnsweredCallsSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Sölvmärkets gränsevärdi for besvarede kald skal väre lavere end guldmärkets gränsevärdi</value>
+  </data>
+  <data name="AHTBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Bronzemärkets gränsevärdi for AHT skal väre höjere end sölvmärkets gränsevärdi</value>
+  </data>
+  <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Sölvmärkets gränsevärdi for AHT skal väre höjere end guldmärkets gränsevärdi</value>
+  </data>
+  <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
+    <value>Bronzemärkets gränsevärdi for Adherence skal väre lavere end sölvmärkets gränsevärdi</value>
+  </data>
+  <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
+    <value>Sölvmärkets gränsevärdi for Adherence skal väre lavere end guldmärkets gränsevärdi</value>
+  </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>Tilföj aktivitet for</value>
+  </data>
+  <data name="AddingFulldayAbsenceFor" xml:space="preserve">
+    <value>Tilföj heldagsfravär for</value>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>Ikke gennemfört!</value>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>Flytte aktivitet for</value>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>Fjerne fravär for</value>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>Vär venlig at genindläse siden!</value>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>Vär venlig at pröve igen!</value>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>Udfört!</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Tillykke!</value>
+  </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>Fil</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Log ud</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Log ind</value>
+  </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>Du er ikke logget ind</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>Ugen indeholder for lidt arbejdstid({0}). Minimum er {1}</value>
+  </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>Slet skill</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Startside</value>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>Vär venlig at opsätte din emailadresse for at tilgå Teleopti </value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>Du har fået et nyt bronzemärke! Din adherence i {1.yyyy-MM-dd} er over {0}</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>Du har fået et nyt bronzemärke! Din gennemsnitlige AHT i {1.yyyy.MM.dd} er lavere end {0} sekunder</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Du har fået et nyt bronzemärke! Du har besvaret mere end {0} kald i {1.yyyy.MM.dd}.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>Du har fået et nyt guldmärke! Din adherence er over {0} på {1} forskellige dage.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>Du har fået et nyt guldmärke! Din AHT er under {0} sekunder på {1} forskellige dage.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Du har fået et nyt guldmärke! Du har besvaret {0} eller flere kald hver dag på {1} forskellige dage.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>Du har fået et nyt sölvmärke! Din adherence er over {0} på {1} forskellige dage.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>Du har fået et nyt sölvmärke! Din AHT er under {0} sekunder på {1} forskellige dage.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Du har fået et nyt sölvmärke! Du har besvaret {0} eller flere kald hver dag på {1} dage.</value>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>Filtreret liste</value>
+  </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>Filtrer mange personer</value>
+  </data>
+  <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
+    <value>Indtast värdi for vagtkategori</value>
+  </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>Gem prognosen til brug i et andet scenarie</value>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>Gem til</value>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>Filtrerede resultater</value>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>Mulige ligheder</value>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>Avanceret filter</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Lös</value>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>Vis dobbelte modtagere</value>
+  </data>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>Vis märke</value>
+  </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>Vis märke leaderboard</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[Fornavn] [Efternavn]</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[Efternavn] [Fornavn]</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>Medarbejderbeskrivelse</value>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>Mange</value>
+  </data>
+  <data name="Single" xml:space="preserve">
+    <value>Enkelt</value>
+  </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>Nulstil märke</value>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>Juster vagt for at passe til vagtsamling</value>
+  </data>
+  <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
+    <value>Kunne ikke fine nogen gyldig vagt i vagtsamling</value>
+  </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>Kunne ikke nulstille märke, pröv venligst senere!</value>
+  </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0} kan ikke väre tidligere end {1}</value>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>Slut tid</value>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>Start tid</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>Heldags fravär opsätning</value>
+  </data>
+  <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
+    <value>Optimerings skridt "Tid imellem dage" er ikke gennemfört når blok og samme vagt er valgt.</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>Email opsätning</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>Håndter opsätning af notifikationer</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>Notifikationsopsätning</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Notifikationstype</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>Send email fra:</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>Test udsendelse fra:</value>
+  </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>Intra interval saldo problem</value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>Filtrer på intra interval</value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>Gamification leaderboard</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>Vär venlig at åbne for mindst en type märke</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Placering</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>Preferencen kan ikke tilföjes da det valgte element ikke längere er tilgängeligt.</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>Intra interval saldo</value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>Kan ikke finde foretrukken opsätning</value>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>Laveste intra interval saldo</value>
+  </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>Fravärsrapportering</value>
+  </data>
+  <data name="AbsencesAvailableForReport" xml:space="preserve">
+    <value>Tillad fravär for fravärsrapportering</value>
+  </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>Fravär kan ikke rapporteres</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Offentliggör...</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>Offentliggör vagtplan for:</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>Offentliggör vagtplan til:</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>Offentliggör vagtplan</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>Starttid skal väre tidliger end sluttid</value>
+  </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>Rapporter fravär for</value>
+  </data>
+  <data name="FilterOnOpenHours" xml:space="preserve">
+    <value>Filtrer på åbningstider</value>
+  </data>
+  <data name="AbsenceBackToWork" xml:space="preserve">
+    <value>Tilbage på arbejde</value>
+  </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>Anvend på</value>
+  </data>
+  <data name="Planned" xml:space="preserve">
+    <value>Planlagt</value>
+  </data>
+  <data name="UpdatingAbsence" xml:space="preserve">
+    <value>Opdaterer fravär for</value>
+  </data>
+  <data name="BackToWorkCannotBeGreaterThanAbsenceEnd" xml:space="preserve">
+    <value>Tilbage på arbejds-tid kan ikke väre större end fravärs slut-tid</value>
+  </data>
+  <data name="BackToWorkTextPrompt" xml:space="preserve">
+    <value>Retur fra fravär:</value>
+  </data>
+  <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
+    <value>All teammedlemmer skal väre indläst</value>
+  </data>
+  <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
+    <value>Person{0} har personlig aktivitet, overtid eller möde på vagten d. {1}</value>
+  </data>
+  <data name="NotifyAgent" xml:space="preserve">
+    <value>Giv medarbejderen besked</value>
+  </data>
+  <data name="Everyone" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
+    <value>Er du sikker på at du vil slette '{0} gamification opsätning?</value>
+  </data>
+  <data name="DeleteGamificationSetting" xml:space="preserve">
+    <value>Slet gamification opsätning</value>
+  </data>
+  <data name="Gamification" xml:space="preserve">
+    <value>Gamification</value>
+  </data>
+  <data name="NewGamificationSetting" xml:space="preserve">
+    <value>Ny gamification opsätning</value>
+  </data>
+  <data name="NewBadgeSetting" xml:space="preserve">
+    <value>Nyt märke opsätning</value>
+  </data>
+  <data name="RuleWithDifferentThreshold" xml:space="preserve">
+    <value>Brug anden gränsevärdi</value>
+  </data>
+  <data name="RuleWithRatioConvertor" xml:space="preserve">
+    <value>Brug forholdskonvertering</value>
+  </data>
+  <data name="ConfirmDeleteRequest" xml:space="preserve">
+    <value>Er du sikker på, at du vil slette denne forespörgsel?</value>
+  </data>
+  <data name="ChooseGamificationSettingToChange" xml:space="preserve">
+    <value>Välg gamification opsätnings detaljer</value>
+  </data>
+  <data name="EnterGamificationSettingDetails" xml:space="preserve">
+    <value>Indtast gamification opsätnings detaljer</value>
+  </data>
+  <data name="GamificationSettingColon" xml:space="preserve">
+    <value>Gamification opsätning:</value>
+  </data>
+  <data name="GamificationSettingRuleSetsColon" xml:space="preserve">
+    <value>Regel:</value>
+  </data>
+  <data name="ManageGamificationSettings" xml:space="preserve">
+    <value>Håndter gamification opsätning</value>
+  </data>
+  <data name="LogOnFailedIdentityNotFound" xml:space="preserve">
+    <value>Log på fajlet! Ingen konto forbundet til {0}</value>
+  </data>
+  <data name="CannotFindDataSourceWithName" xml:space="preserve">
+    <value>Kan ikke finde datakilde med navn: {0}</value>
+  </data>
+  <data name="SetSettingTargets" xml:space="preserve">
+    <value>Opsät gamification mål</value>
+  </data>
+  <data name="SelectSettingForTeams" xml:space="preserve">
+    <value>Välg opsätning til brug for teams</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Opsätning</value>
+  </data>
+  <data name="SeatPlanner" xml:space="preserve">
+    <value>Plads planlägning</value>
+  </data>
+  <data name="StartDateMustBeGreaterThanToday" xml:space="preserve">
+    <value>Start dato skal väre större end i dag</value>
+  </data>
+  <data name="AnyLocationShouldBeSelected" xml:space="preserve">
+    <value>En lokation skal välges</value>
+  </data>
+  <data name="AnyTeamShouldBeSelected" xml:space="preserve">
+    <value>Et team skal välges</value>
+  </data>
+  <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
+    <value>På {0} er du blevet tildelt plads {1}</value>
+  </data>
+  <data name="YouHaveNotBeenAllocatedSeat" xml:space="preserve">
+    <value>På {0} er du ikke blevet tildelt noget plads</value>
+  </data>
+  <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
+    <value>Start dato skal väre slut dato eller tidligere</value>
+  </data>
+  <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
+    <value>Start dato skal väre i dag eller senere</value>
+  </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>Bund</value>
+  </data>
+  <data name="ManageSenioritySettings" xml:space="preserve">
+    <value>Håndter anciennitets opsätning</value>
+  </data>
+  <data name="RankShiftCategory" xml:space="preserve">
+    <value>Placer vagtkategorier fra bedst til dårligst</value>
+  </data>
+  <data name="RankWorkingDays" xml:space="preserve">
+    <value>Placer arbejdsdage fra bedst til dårligst</value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="ShowExcelReport" xml:space="preserve">
+    <value>Vis excel rapport</value>
+  </data>
+  <data name="ShowPDFReport" xml:space="preserve">
+    <value>Vis PDF rapport</value>
+  </data>
+  <data name="ShowWordReport" xml:space="preserve">
+    <value>Vis Word rapport</value>
+  </data>
+  <data name="DayOffValueColon" xml:space="preserve">
+    <value>Fridags värdi: </value>
+  </data>
+  <data name="ShiftCategoryValueColon" xml:space="preserve">
+    <value>Vagtkategori värdi: </value>
+  </data>
+  <data name="InAdherence" xml:space="preserve">
+    <value>I adherence</value>
+  </data>
+  <data name="NeutralAdherence" xml:space="preserve">
+    <value>Neutral</value>
+  </data>
+  <data name="MaximumNumberOfReportRowsReached" xml:space="preserve">
+    <value>Maksimalt antal räkker i rapporten er nået</value>
+  </data>
+  <data name="NarrowToSeeAll" xml:space="preserve">
+    <value>Formindsk kriterier for at kunne se alt data</value>
+  </data>
+  <data name="DoubleTextBoxGoldThresholdForAdherence" xml:space="preserve">
+    <value>Värdi for guld gränsevärdi bör väre större end resten.</value>
+  </data>
+  <data name="DoubleTextBoxSilverThresholdForAdherence" xml:space="preserve">
+    <value>Värdi for sälv gränsevärdi bör väre större end bronze gränsevärdien for adherence.</value>
+  </data>
+  <data name="GoldThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>Värdi for guld gränsevärdi for besvarede kald bör väre större end resten.</value>
+  </data>
+  <data name="SilverThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>Värdi for sölv gränsevärdi for besvarede kald bör väre större end bronze gränsevärdien for besvarede kald</value>
+  </data>
+  <data name="TimeSpanTextBoxGoldThresholdForAHT" xml:space="preserve">
+    <value>Värdi af guld gränsevärdi for AHT bör väre mindre end resten.</value>
+  </data>
+  <data name="TimeSpanTextBoxSilverThresholdsForAHT" xml:space="preserve">
+    <value>Värdi for sölv gränsevärdi for ATH bör väre mindre end bronze gränsevärdien for AHT</value>
+  </data>
+  <data name="CreateNewRole" xml:space="preserve">
+    <value>Opret ny rolle</value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>Data filter...</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Kopier</value>
+  </data>
+  <data name="ManagePermissions" xml:space="preserve">
+    <value>Håndter tilladelser</value>
+  </data>
+  <data name="ManagePermissionsIntro" xml:space="preserve">
+    <value>Her kan du definere hvem der har tilladelse til at tilgå specificerede dele af systemet</value>
+  </data>
+  <data name="NotSelectedItems" xml:space="preserve">
+    <value>Deaktiver elementer</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Tilladelses filter</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Rolle filter...</value>
+  </data>
+  <data name="SelectedItems" xml:space="preserve">
+    <value>Aktiver elementer</value>
+  </data>
+  <data name="PersonFinderFieldRole" xml:space="preserve">
+    <value>Rolle</value>
+  </data>
+  <data name="NoGamificationSetting" xml:space="preserve">
+    <value>Ingen gamification opsätning</value>
+  </data>
+  <data name="SeatMap" xml:space="preserve">
+    <value>Plads kort</value>
+  </data>
+  <data name="SeatPlan" xml:space="preserve">
+    <value>Plads plan</value>
+  </data>
+  <data name="CheckingForecastingRequirements" xml:space="preserve">
+    <value>Kontroller prognose krav</value>
+  </data>
+  <data name="IssuesText" xml:space="preserve">
+    <value>Problemer</value>
+  </data>
+  <data name="MissingForecastFrom" xml:space="preserve">
+    <value>Manglende prognose format</value>
+  </data>
+  <data name="MissingSkills" xml:space="preserve">
+    <value>Prognose mangler for disse skills</value>
+  </data>
+  <data name="NextPlanningPeriodMessage" xml:space="preserve">
+    <value>Näste planlägningsperiode vil väre fra</value>
+  </data>
+  <data name="PlanningPeriodMissingMessage" xml:space="preserve">
+    <value>Disse krav mangler for at kunne planlägge näste planlägningsperiode:</value>
+  </data>
+  <data name="ToText" xml:space="preserve">
+    <value>til</value>
+  </data>
+  <data name="showMoreHeaderFields" xml:space="preserve">
+    <value>Flere felter til overskrifter</value>
+  </data>
+  <data name="AdherenceCannotBeEmpty" xml:space="preserve">
+    <value>Adherence kan ikke väre tom</value>
+  </data>
+  <data name="NextPlanningPeriod" xml:space="preserve">
+    <value>Näste planlägningsperiode</value>
+  </data>
+  <data name="PlanningPeriod" xml:space="preserve">
+    <value>Planlägningsperiode</value>
+  </data>
+  <data name="DaysAreScheduled" xml:space="preserve">
+    <value>Dage er planlagte</value>
+  </data>
+  <data name="ApplicationLogonExists" xml:space="preserve">
+    <value>Dette login navn ({0}) eksisterer allerede, välg venligst et andet.</value>
+  </data>
+  <data name="IdentityLogonExists" xml:space="preserve">
+    <value>Denne identitet ({0}) eksisterer allerede, välg venligst en anden.</value>
+  </data>
+  <data name="AddGlobalAuthorizationLabel" xml:space="preserve">
+    <value>Välg et overordnet niveau for bemyndigelse</value>
+  </data>
+  <data name="AddSpecificAuthorizationLabel" xml:space="preserve">
+    <value>Tilföj bestemte bemyndigelser i listen nedenfor:</value>
+  </data>
+  <data name="Outbound" xml:space="preserve">
+    <value>Outbound</value>
+  </data>
+  <data name="ForecastAll" xml:space="preserve">
+    <value>Prognosticer alt</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>Metode</value>
+  </data>
+  <data name="GenerateForecastTip" xml:space="preserve">
+    <value>Lav prognose</value>
+  </data>
+  <data name="PeriodSelectionTip" xml:space="preserve">
+    <value>Periode valg</value>
+  </data>
+  <data name="ViewChartTip" xml:space="preserve">
+    <value>Gennemse metode diagram</value>
+  </data>
+  <data name="SelectForecastPeriodIntro" xml:space="preserve">
+    <value>Välg en fremtidig periode at lave prognose for</value>
+  </data>
+  <data name="ForecastPeriod" xml:space="preserve">
+    <value>Fremtidig periode</value>
+  </data>
+  <data name="ForecastPeriodLength" xml:space="preserve">
+    <value>Prognse perioden kan ikke väre mere end et år</value>
+  </data>
+  <data name="ChangePlanningPeriodTo" xml:space="preserve">
+    <value>Ändr planlägningsperioden til</value>
+  </data>
+  <data name="HavingRangeOf" xml:space="preserve">
+    <value>Have räkkevidde af</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisCampaign" xml:space="preserve">
+    <value>Er du sikker på, at du vil slette denne kampagne?</value>
+  </data>
+  <data name="CallListLength" xml:space="preserve">
+    <value>Kalds liste längde</value>
+  </data>
+  <data name="Campaign" xml:space="preserve">
+    <value>Kampagne</value>
+  </data>
+  <data name="CampaignName" xml:space="preserve">
+    <value>Kampagne navn</value>
+  </data>
+  <data name="Campaigns" xml:space="preserve">
+    <value>Kampagner</value>
+  </data>
+  <data name="ConnectAHT" xml:space="preserve">
+    <value>Forbind AHT (er)</value>
+  </data>
+  <data name="ConnectRate" xml:space="preserve">
+    <value>Forbind sats (%)</value>
+  </data>
+  <data name="DeleteCampaign" xml:space="preserve">
+    <value>Slet kampagne</value>
+  </data>
+  <data name="OutboundCampaigns" xml:space="preserve">
+    <value>Outbound kampagne</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Fremskridt</value>
+  </data>
+  <data name="RPCAHT" xml:space="preserve">
+    <value>RPC AHT(s)</value>
+  </data>
+  <data name="RPCR" xml:space="preserve">
+    <value>RPCR(%)</value>
+  </data>
+  <data name="TargetRate" xml:space="preserve">
+    <value>Mål sats(%)</value>
+  </data>
+  <data name="UnproductiveTime" xml:space="preserve">
+    <value>Uproduktiv tid(er)</value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Arbejdstimer</value>
+  </data>
+  <data name="PersonFinderFieldEmploymentNumber" xml:space="preserve">
+    <value>Medarbejdernummer</value>
+  </data>
+  <data name="PersonFinderFieldFirstName" xml:space="preserve">
+    <value>Fornavn</value>
+  </data>
+  <data name="PersonFinderFieldLastName" xml:space="preserve">
+    <value>Efternavn</value>
+  </data>
+  <data name="PersonFinderFieldNote" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="SchedulePeriodNotInRange" xml:space="preserve">
+    <value>Vagtplanens periode interval er ikke indenfor planlägnings perioden</value>
+  </data>
+  <data name="TargetDayOffNotFulfilledMessage" xml:space="preserve">
+    <value>Mål for {0} fridage er ikke opfyldt</value>
+  </data>
+  <data name="UnsupportedTeamBlockOptimizationStep" xml:space="preserve">
+    <value>Optimerings skridt {0} er ikke udfört når team eller blok er valgt.</value>
+  </data>
+  <data name="ReportTimeoutMessage" xml:space="preserve">
+    <value>Beklager men systemet er lidt overbelastet lige nu. Pröv at mindske de valgte kriterier eller pröv igen senere</value>
+  </data>
+  <data name="SeatPlanStatusError" xml:space="preserve">
+    <value>Nogle medarbejdere kunne ikke blive tildelt pladser på denne dag</value>
+  </data>
+  <data name="SeatPlanStatusInProgress" xml:space="preserve">
+    <value>Plads planlägning er lige nu i gang for denne dag</value>
+  </data>
+  <data name="SeatPlanStatusNoSeatPlanned" xml:space="preserve">
+    <value>Der er ikke planlagt nogle pladser på denne dag</value>
+  </data>
+  <data name="SeatPlanStatusOK" xml:space="preserve">
+    <value>Alle de valgte medarbejdere har fået tildelt pladser</value>
+  </data>
+  <data name="AgentCountTitle" xml:space="preserve">
+    <value>medarbejdere</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>Filter lokationer</value>
+  </data>
+  <data name="LoadingSeatPlanStatus" xml:space="preserve">
+    <value>Indläser plads planlägnings status</value>
+  </data>
+  <data name="NoLocationsAvailable" xml:space="preserve">
+    <value>Ingen lokationer er til rådighed</value>
+  </data>
+  <data name="PlanningPeriodsFor" xml:space="preserve">
+    <value>Planlägningsperiode for</value>
+  </data>
+  <data name="PlanSeats" xml:space="preserve">
+    <value>Planläg pladser</value>
+  </data>
+  <data name="SeatCountTitle" xml:space="preserve">
+    <value>pladser</value>
+  </data>
+  <data name="SeatPlanSubmittedOK" xml:space="preserve">
+    <value>Plads planlägning blev udfort med succes</value>
+  </data>
+  <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
+    <value>team eller lokation er ikke valgt</value>
+  </data>
+  <data name="CouldNotGetMessagesFromMessageBroker" xml:space="preserve">
+    <value>Kunne ikke hente besked fra meddelses mägler</value>
+  </data>
+  <data name="CreateCampaign" xml:space="preserve">
+    <value>Lav kampagne</value>
+  </data>
+  <data name="EditCampaign" xml:space="preserve">
+    <value>ret kampagne</value>
+  </data>
+  <data name="NeededPersonHours" xml:space="preserve">
+    <value>Nödvendige timer</value>
+  </data>
+  <data name="StartTimeAndEndTimeMustBeSet" xml:space="preserve">
+    <value>Ugyldig start- eller sluttid</value>
+  </data>
+  <data name="CampaignCreated" xml:space="preserve">
+    <value>Kampagne {0} er blevet oprettet</value>
+  </data>
+  <data name="CampaignFailedCreation" xml:space="preserve">
+    <value>Var ikke i stand til at oprette kampagne: {0}</value>
+  </data>
+  <data name="CampaignFailedLoading" xml:space="preserve">
+    <value>Var ikke i stand til at indläse kampagne: {0}</value>
+  </data>
+  <data name="CampaignFailedUpdate" xml:space="preserve">
+    <value>Var ikke i stand til at opdaterer kampagne: {0}</value>
+  </data>
+  <data name="CampaignUpdated" xml:space="preserve">
+    <value>Kampagne {0} er blevet opdateret</value>
+  </data>
+  <data name="LargeValueRange" xml:space="preserve">
+    <value>0¨~1000000</value>
+  </data>
+  <data name="NewActivityName" xml:space="preserve">
+    <value>Nyt aktivitets navn</value>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>1 ~100</value>
+  </data>
+  <data name="UseExistingActivity" xml:space="preserve">
+    <value>Brug eksisterende aktivitet</value>
+  </data>
+  <data name="ValueRange" xml:space="preserve">
+    <value>0 ~9999</value>
+  </data>
+  <data name="NewCampaignName" xml:space="preserve">
+    <value>Nyt kampagne navn</value>
+  </data>
+  <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
+    <value>Både for- og efternavn er tomme</value>
+  </data>
+  <data name="CampaignNameInvalid" xml:space="preserve">
+    <value>Det tildelte kampagne navn er ikke gyldigt. Det kan höjest indeholde 25 karakterer</value>
+  </data>
+  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
+    <value>tomt password</value>
+  </data>
+  <data name="Ongoing" xml:space="preserve">
+    <value>Igangvärende</value>
+  </data>
+  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>Ingen logon konto;</value>
+  </data>
+  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
+    <value>rolle {0} eksisterer ikke;</value>
+  </data>
+  <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
+    <value>for langt system bruger id;</value>
+  </data>
+  <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
+    <value>for langt fornavn;</value>
+  </data>
+  <data name="TooLongLastnameErrorMsgSemicolon" xml:space="preserve">
+    <value>for langt efternavn;</value>
+  </data>
+  <data name="WindowsUserNameIsInvalidErrorMsgSemicolon" xml:space="preserve">
+    <value>windows bruger navn er ugyldigt:</value>
+  </data>
+  <data name="DuplicatedApplicationLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>dobbelt system bruger id:</value>
+  </data>
+  <data name="DuplicatedWindowsLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>dobbelt windows bruger:</value>
+  </data>
+  <data name="PasswordPolicyErrorMsgSemicolon" xml:space="preserve">
+    <value>ugyldigt password:</value>
+  </data>
+  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>intet system bruger id;</value>
+  </data>
+  <data name="AddBacklog" xml:space="preserve">
+    <value>Manuel backlog</value>
+  </data>
+  <data name="CampaignOverstaff" xml:space="preserve">
+    <value>Tidlig</value>
+  </data>
+  <data name="CampaignUnderSLA" xml:space="preserve">
+    <value>Sen</value>
+  </data>
+  <data name="ManualPlan" xml:space="preserve">
+    <value>Manuel plan</value>
+  </data>
+  <data name="Backlog" xml:space="preserve">
+    <value>Backlog</value>
+  </data>
+  <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Träk og slip .xls eller .xlsx filer her eller klik for at uploade</value>
+  </data>
+  <data name="ImportUsers" xml:space="preserve">
+    <value>Importer brugere</value>
+  </data>
+  <data name="Healthy" xml:space="preserve">
+    <value>Til tiden</value>
+  </data>
+  <data name="ReferToFileTemplate" xml:space="preserve">
+    <value>Venligst henvis til fil skabelon</value>
+  </data>
+  <data name="RejectedFiles" xml:space="preserve">
+    <value>Afviste filer:</value>
+  </data>
+  <data name="GenerateReport" xml:space="preserve">
+    <value>Lav rapport</value>
+  </data>
+  <data name="NoReportForCurrentConditions" xml:space="preserve">
+    <value>Ingen rapport for nuvärende forhold</value>
+  </data>
+  <data name="SeatPlanReport" xml:space="preserve">
+    <value>Plads planlägnings rapport</value>
+  </data>
+  <data name="ManuallyPlanned" xml:space="preserve">
+    <value>Manuel planlagt</value>
+  </data>
+  <data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+    <value>Alle medarbejdere på denne side er valgt</value>
+  </data>
+  <data name="SelectAllMatchedPeople" xml:space="preserve">
+    <value>Klik her for at välfe alle medarbejdere på alle sider</value>
+  </data>
+  <data name="ProcessFailedErrorColon" xml:space="preserve">
+    <value>Processen er fejlet! Fejl:</value>
+  </data>
+  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
+    <value>Opdateringen er vellykket:</value>
+  </data>
+  <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
+    <value>Startdato skal väre lig med eller tidligere end stopdato</value>
+  </data>
+  <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
+    <value>Start- og slutdato skal opsättes</value>
+  </data>
+  <data name="ViewSeatBookings" xml:space="preserve">
+    <value>Se plads bookinger</value>
+  </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>Du skal muligvis skifte vagtsamlingen i overenstemmelse hermed </value>
+  </data>
+  <data name="ClosedDay" xml:space="preserve">
+    <value>Lukke dag</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>Se rapport</value>
+  </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>Håndter medarbejdere</value>
+  </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>Tilret skill</value>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>Ändr vagtsamling</value>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>Välg vagtsamling</value>
+  </data>
+  <data name="SeatHasNoBookings" xml:space="preserve">
+    <value>Ingen bookinger</value>
+  </data>
+  <data name="ConfirmDeleteCampaign" xml:space="preserve">
+    <value>Er du sikker på, at du vil slette denne kampagne?</value>
+  </data>
+  <data name="CampaignFailedRemove" xml:space="preserve">
+    <value>Kunne ikke fjerne kampagne: {0}</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>Valgte medarbejdere</value>
+  </data>
+  <data name="ResetSelection" xml:space="preserve">
+    <value>Nulstil markering</value>
+  </data>
+  <data name="SelectDateInChart" xml:space="preserve">
+    <value>Välg venligst datoer i skemaet</value>
+  </data>
+  <data name="MissingColumnX" xml:space="preserve">
+    <value>Manglende kolonne: {0}</value>
+  </data>
+  <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
+    <value>Den valgte fil kan ikke accepteres. Kontroller venligst fil typen.</value>
+  </data>
+  <data name="SeatBookings" xml:space="preserve">
+    <value>Plads booking</value>
+  </data>
+  <data name="FailedImportedCountColon" xml:space="preserve">
+    <value>Import mislykkedes:</value>
+  </data>
+  <data name="InternalErrorXMsg" xml:space="preserve">
+    <value>Der er sket interne fejl: {0}</value>
+  </data>
+  <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
+    <value>Vär venlig at gennemse det downloadede excel ark for at kontrollere den detaljerede fejl.</value>
+  </data>
+  <data name="SuccessfullyImportedCountColon" xml:space="preserve">
+    <value>Importen er udfört:</value>
+  </data>
+  <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
+    <value>System bruger id bör väre en gyldig email adresse</value>
+  </data>
+  <data name="TooLongWindowsUserErrorMsgSemicolon" xml:space="preserve">
+    <value>for lang windows bruger</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>Booking af plads {0} for {1} er blevet slettet</value>
+  </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>Du bör välge mindst en dag!</value>
+  </data>
+  <data name="CampaignThreshold" xml:space="preserve">
+    <value>Kampagne gränsevärdi</value>
+  </data>
+  <data name="RtaLoggedIn" xml:space="preserve">
+    <value>Logget ind</value>
+  </data>
+  <data name="RtaLoggedOut" xml:space="preserve">
+    <value>Logget ud</value>
+  </data>
+  <data name="ModifySkill" xml:space="preserve">
+    <value>Ändre skill</value>
+  </data>
+  <data name="SeatPlanResultDetailMessage" xml:space="preserve">
+    <value>Forsögt {0} plads booking, {1} lykkedes og {2} fejlede. Der var {3} uplanlagte medarbejdere dage</value>
+  </data>
+  <data name="Seasonality" xml:space="preserve">
+    <value>Säsonudsving</value>
+  </data>
+  <data name="ClearBackgroundImage" xml:space="preserve">
+    <value>Ryd baggrunds billede</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Billede</value>
+  </data>
+  <data name="Seat" xml:space="preserve">
+    <value>Plads</value>
+  </data>
+  <data name="SetBackgroundImage" xml:space="preserve">
+    <value>Opsät baggrunds billede</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="AlignBottom" xml:space="preserve">
+    <value>Tilpas bund</value>
+  </data>
+  <data name="AlignLeft" xml:space="preserve">
+    <value>Tilpas venstre</value>
+  </data>
+  <data name="AlignRight" xml:space="preserve">
+    <value>Tilpas höjre</value>
+  </data>
+  <data name="AlignTop" xml:space="preserve">
+    <value>Tilpas top</value>
+  </data>
+  <data name="BringToFront" xml:space="preserve">
+    <value>Tag den op foran</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Opret</value>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>Se bort fra</value>
+  </data>
+  <data name="FlipItemHorizontally" xml:space="preserve">
+    <value>Vend det valgte horisontalt</value>
+  </data>
+  <data name="FlipItemVertically" xml:space="preserve">
+    <value>Vend det valgte vertikalt</value>
+  </data>
+  <data name="GroupSelectedItems" xml:space="preserve">
+    <value>Gruppe valgte emner</value>
+  </data>
+  <data name="MoveBack" xml:space="preserve">
+    <value>Tilbage</value>
+  </data>
+  <data name="MoveForwards" xml:space="preserve">
+    <value>Frem</value>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>Roter</value>
+  </data>
+  <data name="SendToBack" xml:space="preserve">
+    <value>Send tilbage</value>
+  </data>
+  <data name="SpaceHorizontally" xml:space="preserve">
+    <value>Mellemrum valgte emner horisontalt</value>
+  </data>
+  <data name="SpaceVertically" xml:space="preserve">
+    <value>Mellemrum valgte emner vertikalt</value>
+  </data>
+  <data name="RevertToLastSave" xml:space="preserve">
+    <value>Vend tilbage til det senest gemte</value>
+  </data>
+  <data name="UngroupItems" xml:space="preserve">
+    <value>Ophäv gruppering af emner</value>
+  </data>
+  <data name="NotAllowed" xml:space="preserve">
+    <value>Ikke tilladt</value>
+  </data>
+  <data name="CreateAndManagePlanningPeriods" xml:space="preserve">
+    <value>Opret og vedligehold de forskellige planlägningsperioder</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="PlanningPeriodIsScheduled" xml:space="preserve">
+    <value>Planlägningsperiode er vagtplanlagt</value>
+  </data>
+  <data name="PlanningPeriods" xml:space="preserve">
+    <value>Planlägningsperioder</value>
+  </data>
+  <data name="SelectedFiltersColon" xml:space="preserve">
+    <value>Valgte filtre:</value>
+  </data>
+  <data name="StartNext" xml:space="preserve">
+    <value>Start näste</value>
+  </data>
+  <data name="DailyTotal" xml:space="preserve">
+    <value>Daglig total</value>
+  </data>
+  <data name="SelectToModify" xml:space="preserve">
+    <value>Välg dage i skemaet för ändring</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>Ändr</value>
+  </data>
+  <data name="AccessAllFunctions" xml:space="preserve">
+    <value>Adgang til alle funktioner:</value>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>Ändringer er deaktiveret for foruddefinerede roller</value>
+  </data>
+  <data name="UnselectedItems" xml:space="preserve">
+    <value>Fravalgte emner</value>
+  </data>
+  <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
+    <value>Resultatet af sögeord vil overstige 500, vär venlig at forbedre din sögning</value>
+  </data>
+  <data name="ValidationforFilter" xml:space="preserve">
+    <value>Tilföj venligst et filter</value>
+  </data>
+  <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
+    <value>Både overskriv og kampagne er tilföjet</value>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>Navn er krävet</value>
+  </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>Total ACW &gt;</value>
+  </data>
+  <data name="ScheduleIsRunning" xml:space="preserve">
+    <value>Advarsel: Serveren er optaget med et planlägge, pröv venligst senere</value>
+  </data>
+  <data name="TotalTalkTimeCaret" xml:space="preserve">
+    <value>Total taletid &gt;</value>
+  </data>
+  <data name="ChangePlanningPeriod" xml:space="preserve">
+    <value>Ändr planlägningsperioden</value>
+  </data>
+  <data name="EditFilter" xml:space="preserve">
+    <value>Ändr filter</value>
+  </data>
+  <data name="DeleteFilter" xml:space="preserve">
+    <value>Slet filter</value>
+  </data>
+  <data name="PickAnAbsence" xml:space="preserve">
+    <value>Välg et fravär</value>
+  </data>
+  <data name="ManageRules" xml:space="preserve">
+    <value>Håndter regler</value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>Tilföj lokation</value>
+  </data>
+  <data name="ManageMappings" xml:space="preserve">
+    <value>Håndter kortlägning af regler</value>
+  </data>
+  <data name="Mappings" xml:space="preserve">
+    <value>Kortlägnning af regler</value>
+  </data>
+  <data name="Threshold" xml:space="preserve">
+    <value>Gränsevärdi</value>
+  </data>
+  <data name="IsAlarm" xml:space="preserve">
+    <value>Alarm</value>
+  </data>
+  <data name="createNewRuleset" xml:space="preserve">
+    <value>Opret nyt regelsät</value>
+  </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>Ingen resultater fundet</value>
+  </data>
+  <data name="AlarmColor" xml:space="preserve">
+    <value>Alarm farve</value>
+  </data>
+  <data name="CannotBeDeletedBecauseItIsBeingUsedInMappings" xml:space="preserve">
+    <value>Kan ikke slettes fordi den bruges i kortlägning</value>
+  </data>
+  <data name="SecondsSlashCalls" xml:space="preserve">
+    <value>Sekunder / kald</value>
+  </data>
+  <data name="DaysAreSelectedFrom" xml:space="preserve">
+    <value>{0} dage er valgt fra {1} til {2}</value>
+  </data>
+  <data name="SelectedDayIs" xml:space="preserve">
+    <value>Valgte dage er {0}</value>
+  </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>Overskriv kald eller kampagne for scenariet</value>
+  </data>
+  <data name="NameCantBeMoreThan" xml:space="preserve">
+    <value>Navnet skal väre mindre end 50 karakterer langt</value>
+  </data>
+  <data name="SecondsSpan" xml:space="preserve">
+    <value>Sekunder bör väre mellem 1 og 86400</value>
+  </data>
+  <data name="ShrinkageSpan" xml:space="preserve">
+    <value>Svind bör väre melem 1 og 99</value>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>Alle dage er lukkede</value>
+  </data>
+  <data name="LatestAcquiredTime" xml:space="preserve">
+    <value>Seneste påkrävede tid</value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>Side störrelse</value>
+  </data>
+  <data name="TotalRequestsCount" xml:space="preserve">
+    <value>Total anmodninger täller</value>
+  </data>
+  <data name="ClearOverride" xml:space="preserve">
+    <value>Ryd overskrivning</value>
+  </data>
+  <data name="AddAbsenceSuccessedResult" xml:space="preserve">
+    <value>Det er lykkedes at tilföje fravär for de vaglte medarbejdere</value>
+  </data>
+  <data name="AddAbsenceTotalResult" xml:space="preserve">
+    <value>Tilföjelse af fravär for {0} medarbejder(e), {1} lykkedes og {2} fejlede.</value>
+  </data>
+  <data name="SwapShifts" xml:space="preserve">
+    <value>Byt vagter</value>
+  </data>
+  <data name="ScheduleHasBeenChanged" xml:space="preserve">
+    <value>Vagtplanen er blevet ändret af andre, vär venlig at genindläse vagtplanen.</value>
+  </data>
+  <data name="CommandFailed" xml:space="preserve">
+    <value>Den önskede funktion er fejlet. {0}</value>
+  </data>
+  <data name="RequestsHaveBeenApproved" xml:space="preserve">
+    <value>{0} anmodning(er) er blevet godkendt.</value>
+  </data>
+  <data name="RequestsHaveBeenDenied" xml:space="preserve">
+    <value>{0} anmodning(er) er blevet afvist.</value>
+  </data>
+  <data name="FailedToSwapShifts" xml:space="preserve">
+    <value>Vagtbytte er fejlet.</value>
+  </data>
+  <data name="FinishedSwapShifts" xml:space="preserve">
+    <value>Vagtbyttet er fuldfört med succes</value>
+  </data>
+  <data name="RemoveAbsence" xml:space="preserve">
+    <value>Fjern fravär</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
+    <value>Er du sikker på, at du vil fjerne {0} fravär fra {1} medarbejdere?</value>
+  </data>
+  <data name="FailedToRemoveAbsence" xml:space="preserve">
+    <value>Fjernelse af fravär er fejlet.</value>
+  </data>
+  <data name="FinishedRemoveAbsence" xml:space="preserve">
+    <value>Fravär er fjernet med succes</value>
+  </data>
+  <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
+    <value>Du har ikke tilladelse til at tilföje intradag fravär for {0}</value>
+  </data>
+  <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
+    <value>Du har ikke tilladelse til at tilföje heldagsfravär for {0}</value>
+  </data>
+  <data name="ConnectionErrorMessage" xml:space="preserve">
+    <value>Serveren er utilgängelig! Kontroller din internetforbindelse eller kontakt din administrator.</value>
+  </data>
+  <data name="InternalErrorMessage" xml:space="preserve">
+    <value>Systemet er stödt på en uventet fejl. Hjälp os med at forbedre din oplevelse, ve at sende os en fejlrapport:</value>
+  </data>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>Vis tiden i min tids zone</value>
+  </data>
+  <data name="RequestSubmitterTimeZone" xml:space="preserve">
+    <value>Vis tiden i önskede tids zone</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Filtrer roller</value>
+  </data>
+  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
+    <value>Ugyldige dimensioner! Brug et billede mindre end 2000x4000.</value>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>Indläs billede</value>
+  </data>
+  <data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
+    <value>Ikke et JPEG, SVG eller PNG!</value>
+  </data>
+  <data name="RequestsHaveNotBeenApproved" xml:space="preserve">
+    <value>{0} forespörgsler er ikke godkendt.</value>
+  </data>
+  <data name="RequestsHaveNotBeenDenied" xml:space="preserve">
+    <value>{0} forespörgsler er ikke blevet afvist.</value>
+  </data>
+  <data name="PresentTenseSchedule" xml:space="preserve">
+    <value>Planlägger</value>
+  </data>
+  <data name="SelectedRequestsInfo" xml:space="preserve">
+    <value>Valgt {0} ud af {1} forespörgsler</value>
+  </data>
+  <data name="DayOffRules" xml:space="preserve">
+    <value>Fri dags regler</value>
+  </data>
+  <data name="NewDayOffRule" xml:space="preserve">
+    <value>Ny fri dags regel</value>
+  </data>
+  <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
+    <value>Medarbejdere er planlagt med succes</value>
+  </data>
+  <data name="CriticalUnderstaffingColon" xml:space="preserve">
+    <value>Kritisk underbemanding</value>
+  </data>
+  <data name="InvalidInput" xml:space="preserve">
+    <value>Ugyldigt input</value>
+  </data>
+  <data name="UnderstaffingColon" xml:space="preserve">
+    <value>Underbemanding:</value>
+  </data>
+  <data name="WeekendColon" xml:space="preserve">
+    <value>Weekend:</value>
+  </data>
+  <data name="OverstaffingColon" xml:space="preserve">
+    <value>Overbemanding:</value>
+  </data>
+  <data name="ClearCampaign" xml:space="preserve">
+    <value>Ryd kampagne</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Husker du mig?</value>
+  </data>
+  <data name="MyTeam" xml:space="preserve">
+    <value>Mit team</value>
+  </data>
+  <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
+    <value>Denne planlägningsperiode vil starte fra</value>
+  </data>
+  <data name="AppliedFilters" xml:space="preserve">
+    <value>Indstillinger er anvendt til de fölgende:</value>
+  </data>
+  <data name="SeatBookingsList" xml:space="preserve">
+    <value>Plads booking liste</value>
+  </data>
+  <data name="SeatProperties" xml:space="preserve">
+    <value>Plads egenskaber</value>
+  </data>
+  <data name="IntraOptimize" xml:space="preserve">
+    <value>Optimer intradag</value>
+  </data>
+  <data name="ShowErrors" xml:space="preserve">
+    <value>Vis fejl</value>
+  </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>Anonym</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Ugyldigt nummer</value>
+  </data>
+  <data name="ShowRightPanel" xml:space="preserve">
+    <value>Vis höjre panel</value>
+  </data>
+  <data name="ShowOnlyAbsence" xml:space="preserve">
+    <value>Vis kun fravär</value>
+  </data>
+  <data name="HidePanel" xml:space="preserve">
+    <value>Gem panel</value>
+  </data>
+  <data name="DoubleClickHereToEditText" xml:space="preserve">
+    <value>Dobbelt klik her for at rette teksten</value>
+  </data>
+  <data name="EnableWaitlisting" xml:space="preserve">
+    <value>Aktiver venteliste</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
+    <value>Det forespurgte fravär for {0} kunne ikke godkendes på nuvärende tidspunkt og er sat på venteliste</value>
+  </data>
+  <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
+    <value>Det forespurgte fravär fra {0} til {1} kunne ikke godkendes på nuvärende tidspunkt og er sat på venteliste</value>
+  </data>
+  <data name="Waitlisted" xml:space="preserve">
+    <value>Sat på venteliste</value>
+  </data>
+  <data name="AddEmptyPeriod" xml:space="preserve">
+    <value>Tilfäj åbningstider</value>
+  </data>
+  <data name="DeletePeriod" xml:space="preserve">
+    <value>Slet periode</value>
+  </data>
+  <data name="AgentDetails" xml:space="preserve">
+    <value>Medarbejder detaljer</value>
+  </data>
+  <data name="InAlarm" xml:space="preserve">
+    <value>I alarm</value>
+  </data>
+  <data name="SelectSites" xml:space="preserve">
+    <value>Välg placeringer</value>
+  </data>
+  <data name="SelectTeams" xml:space="preserve">
+    <value>Välg teams</value>
+  </data>
+  <data name="Personalize" xml:space="preserve">
+    <value>Personliggör</value>
+  </data>
+  <data name="ToggleLowLightFilter" xml:space="preserve">
+    <value>Skift lavt lysfilter</value>
+  </data>
+  <data name="NoHierarchiesExist" xml:space="preserve">
+    <value>Ingen hierakier kan findes for den nuvärende forretningsenhed</value>
+  </data>
+  <data name="ToggleAll" xml:space="preserve">
+    <value>Skift alle</value>
+  </data>
+  <data name="WaitlistPosition" xml:space="preserve">
+    <value>Venteliste placering:</value>
+  </data>
+  <data name="LoadedColon" xml:space="preserve">
+    <value>Indläst:</value>
+  </data>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>Fjern al multi dag fravär</value>
+  </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>Skift mörkt tema</value>
+  </data>
+  <data name="CanNotModifyMyRole" xml:space="preserve">
+    <value>Du kan ikke rette i din egen rolle</value>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>En Teleopti WFM verion 8 Produkt aktiverings nögle er krävet for at köre systemet, vär venlig at kontakte Service Desk eller din Account Manager for at få en ny PAK</value>
+  </data>
+  <data name="Replan" xml:space="preserve">
+    <value>Genplanläg</value>
+  </data>
+  <data name="ConfirmToggleAllPermissions" xml:space="preserve">
+    <value>Dette vil ändre status for alle funktioner, er du sikker på at du vil fortsätte?</value>
+  </data>
+  <data name="ConfirmToggleChildPermissions" xml:space="preserve">
+    <value>Dette vil rydde denne funktion og de underordnede funktioner, er du sikker på at du vil fortsätte?</value>
+  </data>
+  <data name="SameDay" xml:space="preserve">
+    <value>Samme dag</value>
+  </data>
+  <data name="FailedMessageForAddingActivity" xml:space="preserve">
+    <value>Kunne ikke tilföje nogen aktivitet for de valgte medarbejdere</value>
+  </data>
+  <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
+    <value>Det er lykkedes at tilföje aktiviteter for de valgte medarbejdere</value>
+  </data>
+  <data name="SelectAnActivity" xml:space="preserve">
+    <value>Välg en aktivitet</value>
+  </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>Kunne ikke fjerne fravär fra en beskyttet vagtplan-</value>
+  </data>
+  <data name="DenyReason" xml:space="preserve">
+    <value>Afvisningsårsag</value>
+  </data>
+  <data name="YouHaveSelectedXAgent" xml:space="preserve">
+    <value>Du har valgt {0} medarbejder(e)</value>
+  </data>
+  <data name="RemoveActivity" xml:space="preserve">
+    <value>Fjern aktivitet</value>
+  </data>
+  <data name="PersonsAreWriteProtected" xml:space="preserve">
+    <value>Vagtplanen er skrivebeskyttet for {0} medarbejder(e). Brug knappen Fravälg for at kunne opdatere de(n) medarbejder(e) som stadig er mulig at ändre</value>
+  </data>
+  <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
+    <value>Du skal välge mindst en medarbejder</value>
+  </data>
+  <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
+    <value>Der skal välges to medarbejdere for at kunne bytte.</value>
+  </data>
+  <data name="NoPermissionAddAgentActivity" xml:space="preserve">
+    <value>Ingen tilladelse til at tilföje aktiviteter til medarbejder(e)</value>
+  </data>
+  <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
+    <value>Ingen tilladelse til at fjerne aktiviteter på medarbejder(e)</value>
+  </data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value>Fravärsforespörgslen for {0} blev annulleret og fraväret er fjernet fra din vagtplan.</value>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>Fravärsforespörgslen fra {0} -{1} blev annulleret og fraväret er fjernet fra din vagtplan.</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Annulleret</value>
+  </data>
+  <data name="ModifySkillArea" xml:space="preserve">
+    <value>Ändr skill område</value>
+  </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>Opret skill område</value>
+  </data>
+  <data name="ForecastedAverageHandleTime" xml:space="preserve">
+    <value>Forventet gennemsnitlig behandlingstid</value>
+  </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>Indgående trafik</value>
+  </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>Her overvåger du intradag värdier, start med at välge et skill eller dit område</value>
+  </data>
+  <data name="OfferedAverageHandleTime" xml:space="preserve">
+    <value>Tilbudt gennemsnitlig behandlingstid</value>
+  </data>
+  <data name="SelectSkillArea" xml:space="preserve">
+    <value>Välg skill område</value>
+  </data>
+  <data name="IncludedSkills" xml:space="preserve">
+    <value>Inkluderet skill</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
+    <value>Er du sikker på at du önsker et fjerne {0} aktiviteter fra {1} medarbejder?</value>
+  </data>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>Det er lykkedes at fjerne aktiviteter fra de valgte medarbejdere</value>
+  </data>
+  <data name="FailedMessageForRemovingActivity" xml:space="preserve">
+    <value>Det er ikke lykkedes at fjerne aktiviteter fra de valgte medarbejdere</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
+    <value>Frvärsforespörgslen for {0} på {1} kunne ikke annulleres da det relaterede fravär ikke kan findes eller er blevet ändret.</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
+    <value>Sletning af aktivitet for {0} medarbejdersktivitet(er). {1} lykkedes og {2} fejlede.</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
+    <value>Frvärsforespörgslen for {0} fra {1} {2} kunne ikke annulleres da det relaterede fravär ikke kan findes eller er blevet ändret.</value>
+  </data>
+  <data name="AddAbsenceFailed" xml:space="preserve">
+    <value>Tilföjelse af fravär er fejlet</value>
+  </data>
+  <data name="RequestsHaveBeenCancelled" xml:space="preserve">
+    <value>{0} forespörgsler er blevet annulleret</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingActivity" xml:space="preserve">
+    <value>Tilföjelse af aktiviteter for {0} medarbejder(e). {1} lykkedes og {2} er fejlet</value>
+  </data>
+  <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
+    <value>{0} forespörgsler er ikke blevet annulleret</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
+    <value>Sletning af fravär for {0} medarbejdersktivitet(er). {1} lykkedes og {2} fejlede.</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>Slet forespörgsel</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequest" xml:space="preserve">
+    <value>Kan ikke annullere fravärsforespörgslen for {0} d. {1} da den ikke er blevet godkendt.</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
+    <value>Kan ikke annullere fravärsforespörgslen for {0} fra {1} - {2} da den ikke er blevet godkendt.</value>
+  </data>
+  <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
+    <value>Er du sikker på at du önsker at annullere denne fravärsforespörgsel?</value>
+  </data>
+  <data name="CancelAbsenceRequest" xml:space="preserve">
+    <value>Annuller godkendt fravärsforespörgsel</value>
+  </data>
+  <data name="CancelAbsenceRequestDescription" xml:space="preserve">
+    <value>Hvis du annullerer denne godkendte fravärforespörgsel vil alt fravär som er lavet på baggrund af denne forespörgsel bliver slettet fra medarbejderens vagtplan.</value>
+  </data>
+  <data name="TryOutTheNewImprovedTeams" xml:space="preserve">
+    <value>Pröv det nye og forbedrede Teams!</value>
+  </data>
+  <data name="WFMReleaseNotification" xml:space="preserve">
+    <value>{0} er blevet forbedret. Vi vil sätte pris på dit {1} feedback. {2} gammel {3} kan tilgåed i en begränset periode.</value>
+  </data>
+  <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
+    <value>Du kan ikke tilföje en aktivitet til {0} på den näste dag uden en vagt</value>
+  </data>
+  <data name="PreviewTheNewIntradayTool" xml:space="preserve">
+    <value>Forhåndsvisning af det nye Intra dag värktöj</value>
+  </data>
+  <data name="ExtendExistingShift" xml:space="preserve">
+    <value>Forläng den eksisterende vagt</value>
+  </data>
+  <data name="NonWorkingDays" xml:space="preserve">
+    <value>Ikke arbejdsdag</value>
+  </data>
+  <data name="UseShiftsFromColon" xml:space="preserve">
+    <value>Brug vagter fra: </value>
+  </data>
+  <data name="AbsenceRequestCancellationThreshold" xml:space="preserve">
+    <value>Antallet af dage för fravärsdato hvor forespörgsler kan blive annulleret:</value>
+  </data>
+  <data name="AbsenceRequestExpiredThreshold" xml:space="preserve">
+    <value>Minimum godkendelsestid gränsevärdi (minutter för forespurgt start):</value>
+  </data>
+  <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
+    <value>Ingen tilladelse til at flytte aktivitet for medarbejder {0}</value>
+  </data>
+  <data name="SelectedAgentsColon" xml:space="preserve">
+    <value>Valgte medarbejdere:</value>
+  </data>
+  <data name="CanNotMoveMultipleAcivitiesForAgent" xml:space="preserve">
+    <value>Kan ikke flytte mange aktiviteter for medarbejder {0}.</value>
+  </data>
+  <data name="CannotDeleteBaseActivity" xml:space="preserve">
+    <value>Kan ikke slette grundliggende aktivitet</value>
+  </data>
+  <data name="LatestActualInterval" xml:space="preserve">
+    <value>Seneste faktiske interval</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingActivity" xml:space="preserve">
+    <value>Flytning af aktiviteter for {0} medarbejder(e), {1} lykkedes og {2} fejlede.</value>
+  </data>
+  <data name="SuccessfulMessageForMovingActivity" xml:space="preserve">
+    <value>Det er lykkedes at flytte aktiviteter for de valgte medarbejdere</value>
+  </data>
+  <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
+    <value>Den nye tid vil ikke blive anvendt på</value>
+  </data>
+  <data name="ScheduleIsWriteProtected" xml:space="preserve">
+    <value>Ikke i stand til at ändre vagtplanen for {0} på {1} da den er skrivebeskyttet.</value>
+  </data>
+  <data name="ConfirmCancelRequest" xml:space="preserve">
+    <value>Annullering af denne forespörgsel vil fjerne alt relateret fravär fra din vagtplan. Er du sikker på, at du vil fortsätte?</value>
+  </data>
+  <data name="AbsenceRequestCancellationThresholdExceeded" xml:space="preserve">
+    <value>Det er for sent at annullerer denne forespörgsel. Denne forespörgsel kunne senest annulleres {0} dage for dens startdato.</value>
+  </data>
+  <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
+    <value>Kan ikke tilföje en aktivitet på en vagt, der tilhörer den forgående dag</value>
+  </data>
+  <data name="LoadRequests" xml:space="preserve">
+    <value>Indläs forespörgsler</value>
+  </data>
+  <data name="RequestInvalidStateTransition" xml:space="preserve">
+    <value>En forespörgsel der er {0} kan ikke väre {1}.</value>
+  </data>
+  <data name="PersonAssignmentIsNotValid" xml:space="preserve">
+    <value>Person opagave er ikke gyldig</value>
+  </data>
+  <data name="Unselect" xml:space="preserve">
+    <value>Fravälg</value>
+  </data>
+  <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
+    <value>Ingen tilladelse til at tilföje personlig aktivitet for medarbejder {0}</value>
+  </data>
+  <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
+    <value>Du kan ikke tilföje personlig aktivitet når der ikke er en vagt</value>
+  </data>
+  <data name="HelpLabel" xml:space="preserve">
+    <value>Hjälp</value>
+  </data>
+  <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
+    <value>Forespörgslen på ventelisten for perioden {0} er påbegyndt behandling</value>
+  </data>
+  <data name="WaitlistPeriod" xml:space="preserve">
+    <value>Alle forespörgsler på ventelisten vil blive behandlet for den valgte periode</value>
+  </data>
+  <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
+    <value>Forespörgslen på ventelisten for perioden {0} er färdigbehandlet</value>
+  </data>
+  <data name="ProcessWaitlist" xml:space="preserve">
+    <value>Behandl venteliste</value>
+  </data>
+  <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
+    <value>Venteliste behandlingen vil köre i baggrunden og kan tage et stykke tid för den er färdig</value>
+  </data>
+  <data name="ShiftTrade" xml:space="preserve">
+    <value>Vagt handel</value>
+  </data>
+  <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
+    <value>Kan ikke flytte flere aktiviteter for de valgte medarbejdere</value>
+  </data>
+  <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>Systemet er licenseret til "{0}" i henhold til vilkår og betingelser i licensaftalen.                                                                                                                                                                                                                          Produktaktiveringsnöglen däkker et maximum af {1} aktive medarbejdere.                                                                                                                          Overordnet version:{4}                                                                                                                                                                                                          Produktaktiveringsnöglen nögle skema er "{2}".                                           Disse muligheder er aktiveret:                                                                         {3}</value>
+  </data>
+  <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>Systemet er licenseret til "{0}" i henhold til vilkår og betingelser i licensaftalen.                                                                                                                                                                                                                          Produktaktiveringsnöglen däkker et maximum af {1} antal pladser.                                                                                                                          Overordnet version:{4}                                                                                                                                                                                                          Produktaktiveringsnöglen nögle skema er "{2}".                                           Disse muligheder er aktiveret:                                                                         {3}</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>Filter rapporter</value>
+  </data>
+  <data name="AbandonedRate" xml:space="preserve">
+    <value>Abandoned rate</value>
+  </data>
+  <data name="SummaryUpToLatestActualInterval" xml:space="preserve">
+    <value>Sammenfatning op til sidste aktuelle interval</value>
+  </data>
+  <data name="ShiftLengthExceed36Hours" xml:space="preserve">
+    <value>Vagtlängde overskrider 36 timer</value>
+  </data>
+  <data name="CannotUndoScheduleChange" xml:space="preserve">
+    <value>Kan ikke vagtplanlägge ändring</value>
+  </data>
+  <data name="PreviewTheNewRequestsModule" xml:space="preserve">
+    <value>Forhåndskig på det nye forespörgselsmodul!</value>
+  </data>
+  <data name="PreviewTheNewPeopleModule" xml:space="preserve">
+    <value>Forhåndskig på det nye medarbejdermodul!</value>
+  </data>
+  <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
+    <value>{0} er blevet forbedret! Vi vil sätte pris på dit {1} feedback. {2}</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>Datointerval</value>
+  </data>
+  <data name="ReportOptions" xml:space="preserve">
+    <value>Rapport muligheder</value>
+  </data>
+  <data name="ShowOnlyAgentsWithNoSeat" xml:space="preserve">
+    <value>Vis kun medarbejdere uden plads</value>
+  </data>
+  <data name="AreYouSureToUndoSelectedSchedule" xml:space="preserve">
+    <value>Er du sikker på at du önsker at fortryde den sidste vagtplansändring for de valgte medarbejdere?</value>
+  </data>
+  <data name="FailedMessageForUndoSchedule" xml:space="preserve">
+    <value>Det er ikke lykkedes at fortryde vagtplansändringer for de valgte medarbejdere</value>
+  </data>
+  <data name="PartialSuccessMessageForUndoSchedule" xml:space="preserve">
+    <value>Fortryd vagtplansändringer for {0} medarbejder(e), {1} lykkedes og {2} fejlede</value>
+  </data>
+  <data name="SuccessfulMessageForUndoSchedule" xml:space="preserve">
+    <value>Det er  lykkedes at fortryde vagtplansändringer for de valgte medarbejdere</value>
+  </data>
+  <data name="Backout" xml:space="preserve">
+    <value>Träkke ud</value>
+  </data>
+  <data name="ShiftTradeRequestScheduleChanged" xml:space="preserve">
+    <value>Vagt handelsforespörgslen for {0} skal accepteres igen. Den anden medarbejders vagtplan er blevet ändret.</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="PausedAt" xml:space="preserve">
+    <value>Pause kl. </value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Spil</value>
+  </data>
+  <data name="RtaPauseDisableNotice" xml:space="preserve">
+    <value>Real time adherence overvågning er aktiveret</value>
+  </data>
+  <data name="RtaPauseEnabledNotice" xml:space="preserve">
+    <value>Real time adherence overvågning er sat på pause kl. {0}! Genoptag ved at klikke spil</value>
+  </data>
+  <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Välg alle medarbejdere på hver side</value>
+  </data>
+  <data name="UnselectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Fravälg alle medarbejdere på hver side</value>
+  </data>
+  <data name="DeletePerson" xml:space="preserve">
+    <value>Slet personer</value>
+  </data>
+  <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
+    <value>Datointerval kan höjest väre 60 dage</value>
+  </data>
+  <data name="OrganizeCascadingSkills" xml:space="preserve">
+    <value>Organiser skills</value>
+  </data>
+  <data name="EditLocationProperty" xml:space="preserve">
+    <value>Ändr lokaltions egenskab</value>
+  </data>
+  <data name="LocationProperties" xml:space="preserve">
+    <value>Lokaltions egenskab</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Präfiks</value>
+  </data>
+  <data name="Suffix" xml:space="preserve">
+    <value>Suffiks</value>
+  </data>
+  <data name="NotAllowedChange" xml:space="preserve">
+    <value>Ikke tillads ändring</value>
+  </data>
+  <data name="NightRest" xml:space="preserve">
+    <value>Nattehvile</value>
+  </data>
+  <data name="WeeklyRestTime" xml:space="preserve">
+    <value>Ugentlig hviletid</value>
+  </data>
+  <data name="PersonAccount" xml:space="preserve">
+    <value>Personlig konto</value>
+  </data>
+  <data name="SkillOpeningHours" xml:space="preserve">
+    <value>Skill åbningstider</value>
+  </data>
+  <data name="ShiftActivity" xml:space="preserve">
+    <value>Vagt aktivitet</value>
+  </data>
+  <data name="MinWeeklyWorkTime" xml:space="preserve">
+    <value>Minimum ugentlig arbejdstid</value>
+  </data>
+  <data name="BrokenRules" xml:space="preserve">
+    <value>Brudte regler</value>
+  </data>
+  <data name="ShowWarnings" xml:space="preserve">
+    <value>Vis advarsler</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRules" xml:space="preserve">
+    <value>Godkend baseret på forretningsregler</value>
+  </data>
+  <data name="SubmitApproveBasedOnBusinessRulesSuccess" xml:space="preserve">
+    <value>Den valgte forespörgsel er ved at blive behandlet baseret på forretnnigsregler.</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRulesFinished" xml:space="preserve">
+    <value>Behandlingen af forespörgslen baseret på forretnnigsregler er afsluttet</value>
+  </data>
+  <data name="NoPermissionToModifyPersonAssignment" xml:space="preserve">
+    <value>Mere information om prognosemetode og outlier detektion</value>
+  </data>
+  <data name="PartialSuccessMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Ändring af vagtkategori for {0} medarbejder(e). {1} gennemfört og {2} fejlet</value>
+  </data>
+  <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Det er lykkedes at ändre vagtkategori for de valgte medarbejdere</value>
+  </data>
+  <data name="MultipleSeatsSelected" xml:space="preserve">
+    <value>(Multiple pladser valgt)</value>
+  </data>
+  <data name="SeatNumber" xml:space="preserve">
+    <value>Plads nummer</value>
+  </data>
+  <data name="AgentsDoNotRequireSeats" xml:space="preserve">
+    <value>Medarbejder behöver ikke en plads</value>
+  </data>
+  <data name="AgentsWithoutBookings" xml:space="preserve">
+    <value>Medarbejder uden booking</value>
+  </data>
+  <data name="SeatBookingSummary" xml:space="preserve">
+    <value>Plads booking resume</value>
+  </data>
+  <data name="SuccessfulBookings" xml:space="preserve">
+    <value>Gennemfört booking</value>
+  </data>
+  <data name="EditShiftCategory" xml:space="preserve">
+    <value>Ändr vagtkategori</value>
+  </data>
+  <data name="SelectACategory" xml:space="preserve">
+    <value>Välg en kategori</value>
+  </data>
+  <data name="LoadingSkills" xml:space="preserve">
+    <value>Indläser skills</value>
+  </data>
+  <data name="LoadingSkillAreas" xml:space="preserve">
+    <value>Indläser skill områder...</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Tilbage til liste</value>
+  </data>
+  <data name="NotOk" xml:space="preserve">
+    <value>Ikke OK</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Konto</value>
+  </data>
+  <data name="RequestInvalidMessageLength" xml:space="preserve">
+    <value>Kan ikke gemme dette svar da den komplette meddelelse overstiger 2000 karaktergränsen</value>
+  </data>
+  <data name="RequestInvalidMessageModification" xml:space="preserve">
+    <value>Kan ikke gemme dit svar til denne forespörgsel da den er blevet {0}</value>
+  </data>
+  <data name="ReplyAndCancel" xml:space="preserve">
+    <value>Svar og annuller</value>
+  </data>
+  <data name="ReplySuccess" xml:space="preserve">
+    <value>Din besked til {0} forespörgsel(er) er blevet gemt</value>
+  </data>
+  <data name="SelectBusinessRulesWithColon" xml:space="preserve">
+    <value>Välg forretnningsregler:</value>
+  </data>
+  <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
+    <value>Valider forespörgsler baseret på budget kvoter</value>
+  </data>
+  <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
+    <value>Valider forespörgsler baseret på intra dag bemandings tjek</value>
+  </data>
+  <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
+    <value>Ikke tilladt at ändre vagtkategori for medarbejder(e)</value>
+  </data>
+  <data name="ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping" xml:space="preserve">
+    <value>Denne aktivitet vil overlappe eksisterende aktiviteter som ikke tillader overlapping.</value>
+  </data>
+  <data name="DoNotModifyForTheseAgents" xml:space="preserve">
+    <value>Lav ikke ändringer på disse medarbejdere</value>
+  </data>
+  <data name="OverrideForTheseAgents" xml:space="preserve">
+    <value>Overskriv for disse medarbejdere</value>
+  </data>
+  <data name="ManageOpenHours" xml:space="preserve">
+    <value>Lokationens åbningstid</value>
+  </data>
+  <data name="SaveSiteOpenHoursSuccess" xml:space="preserve">
+    <value>Åbningstid er blevet opdateret</value>
+  </data>
+  <data name="TheFollowingAgentsHaveAffectedActivities" xml:space="preserve">
+    <value>De fölgende medarbejdere har berörte aktiviteter: </value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourErrorMessage" xml:space="preserve">
+    <value>Ingen åbningstid for {0} fundet for lokation {1} mellem {2} - {3}</value>
+  </data>
+  <data name="SiteOpeningHours" xml:space="preserve">
+    <value>Lokationen åbningstid</value>
+  </data>
+  <data name="BySeniority" xml:space="preserve">
+    <value>Efter anciennitet</value>
+  </data>
+  <data name="FirstComeFirstServed" xml:space="preserve">
+    <value>Först til mölle</value>
+  </data>
+  <data name="ToggleClose" xml:space="preserve">
+    <value>Skift luk</value>
+  </data>
+  <data name="NoChangeHasBeenMade" xml:space="preserve">
+    <value>Ingen ändring er lavet</value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
+    <value>Den uoverskrivelige aktivitet {0} i intervallet {1} er overskrevet af {2} in interval {3}</value>
+  </data>
+  <data name="ConfigureValidationWarnings" xml:space="preserve">
+    <value>Konfigurer valideringsadvarsler</value>
+  </data>
+  <data name="MinWeeklyRestRuleName" xml:space="preserve">
+    <value>Ugentlig hviletid</value>
+  </data>
+  <data name="MinWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Minimum ugentlig arbejdstid</value>
+  </data>
+  <data name="NewDayOffRuleName" xml:space="preserve">
+    <value>Vagt overlapper med fridag</value>
+  </data>
+  <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Maximal ugentlig arbejdstid</value>
+  </data>
+  <data name="NewNightlyRestRuleName" xml:space="preserve">
+    <value>Natlig hviletid</value>
+  </data>
+  <data name="NotOverwriteLayerRuleName" xml:space="preserve">
+    <value>Overskrivning af aktivitet</value>
+  </data>
+  <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
+    <value>Flyt uoverskrivelig aktivitet for disse agenter</value>
+  </data>
+  <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
+    <value>Den nylig tilföjede aktivitet overlapper uoverskrivelige aktiviteter</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>Advarsel</value>
+  </data>
+  <data name="BusinessRuleDayOffFriendlyName" xml:space="preserve">
+    <value>Fridags konflikt</value>
+  </data>
+  <data name="BusinessRuleMaxWeekWorkTimeFriendlyName" xml:space="preserve">
+    <value>Ugen indeholder for meget arbejdstid</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeFriendlyName" xml:space="preserve">
+    <value>Ugen idenholder for lidt arbejdstid</value>
+  </data>
+  <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
+    <value>Natlig hvile er overskredet</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourFriendlyName" xml:space="preserve">
+    <value>Aktivitet udenfor åbningstid for lokation</value>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenFriendlyName" xml:space="preserve">
+    <value>Aktivitet udenfor åbningstid for skill</value>
+  </data>
+  <data name="BusinessRuleOverlappingFriendlyName3" xml:space="preserve">
+    <value>Uoverskrivelig aktivitet er overskrevet</value>
+  </data>
+  <data name="BusinessRulePersonAccountFriendlyName" xml:space="preserve">
+    <value>Personlig konto overstiger pålöben värdi</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
+    <value>Vagt kategori begränsnning er overskredet i perioden</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
+    <value>Vagt kategori begränsnning er overskredet i ugen</value>
+  </data>
+  <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
+    <value>Denne uge har ikke den fastsatte ugenlige hvile</value>
+  </data>
+  <data name="Overwritable" xml:space="preserve">
+    <value>Overskrivelig</value>
+  </data>
+  <data name="ValidationAlerts" xml:space="preserve">
+    <value>Validerings advarsler</value>
+  </data>
+  <data name="AllPermittedSitesToMakeShiftTradeWith" xml:space="preserve">
+    <value>Alle lokationer</value>
+  </data>
+  <data name="ReforecastedStaff" xml:space="preserve">
+    <value>Medarbejdere er blevet prognostiseret igen </value>
+  </data>
+  <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
+    <value>Vagt handelsforespörgslen er blevet afslået da der ikke längere er nok pladser tilgängelig</value>
+  </data>
+  <data name="EnableShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Aktiver maksimum plads validation</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatValidationInterval" xml:space="preserve">
+    <value>Interval som skal bruges når der skal valideres plads forbrug</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Maksimum plads validering</value>
+  </data>
+  <data name="ShiftTradeRequestSettings" xml:space="preserve">
+    <value>Vagt handelsforespörgsel indstillinger</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>Flyt ugyldig overlappende aktivitet</value>
+  </data>
+  <data name="NoPermissionToMoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>Du har ikke tilladelse til at flytte ugyldig overlappende aktivitet</value>
+  </data>
+  <data name="OverlappedNonoverwritableActivitiesExist" xml:space="preserve">
+    <value>Der er stadig overlappende uoverskrivelige aktiviteter</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivitySuccess" xml:space="preserve">
+    <value>Det er lykkedes at flytte ugyldige overlappende aktiviteter for de valgte medarbejdere</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivityWarning" xml:space="preserve">
+    <value>Flytning af overlappende aktiviteter for {0} medarbejder(e), {1} er lykkedes og {2} er fejlet</value>
+  </data>
+  <data name="InternalNote" xml:space="preserve">
+    <value>Intern note</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Fuld</value>
+  </data>
+  <data name="MatchColon" xml:space="preserve">
+    <value>Match:</value>
+  </data>
+  <data name="FullOrPartial" xml:space="preserve">
+    <value>Fuld eller delvis</value>
+  </data>
+  <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
+    <value>Du har ikke tilladelse til at se denne side.</value>
+  </data>
+  <data name="IntradayWithShrinkage" xml:space="preserve">
+    <value>Intra dag med svind</value>
+  </data>
+  <data name="ValidateRequestsBasedOnExpiration" xml:space="preserve">
+    <value>Valideret med minimum godkendelsestid gränsevärdi</value>
+  </data>
+  <data name="StaffingInformationMissing" xml:space="preserve">
+    <value>Bemandingsinformation mangler på skill {0}</value>
+  </data>
+  <data name="TeamsModule" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="RequiredStaff" xml:space="preserve">
+    <value>Påkrävede medarbejdere</value>
+  </data>
+  <data name="RequestDenyReasonRequestExpired" xml:space="preserve">
+    <value>Din frvärsforespörgsel er blevet automatisk afvist. Starttiden for denen forespörgsel er {0}, den skal mindst väre {1} minutter senere end nuvärende tid</value>
+  </data>
+  <data name="TheFollowingAgentsPersonAccountsWillBeAffected" xml:space="preserve">
+    <value>De fölgende medarbejderes personlige konti vil blive berörte</value>
+  </data>
+  <data name="ThisAbsenceWillExceedPersonAccountLimits" xml:space="preserve">
+    <value>Dette fravär vil overstige den personlige kontos gränse</value>
+  </data>
+  <data name="RecipientHasNoShiftTradePermission" xml:space="preserve">
+    <value>Modtager har ikke tilladelse til at handle med vagter</value>
+  </data>
+  <data name="AgentHistoricalAdherence" xml:space="preserve">
+    <value>Historisk adherence</value>
+  </data>
+  <data name="TooManySelectedAgents" xml:space="preserve">
+    <value>Du har valgt for mange medarbejdere. Vär venlig at välge mindre end 55</value>
+  </data>
+  <data name="UnsupportedSkill" xml:space="preserve">
+    <value>Usupporteret skill</value>
+  </data>
+  <data name="UnsupportedSkillMsg" xml:space="preserve">
+    <value>Dette skill er ikke supporteret</value>
+  </data>
+  <data name="UnsupportedSkills" xml:space="preserve">
+    <value>{0} usupporteret skills</value>
+  </data>
+  <data name="AllRequests" xml:space="preserve">
+    <value>Alle forespörgsler</value>
+  </data>
+  <data name="CurrentRequests" xml:space="preserve">
+    <value>Nuvärende forespörgsler</value>
+  </data>
+  <data name="EmploymentNumber" xml:space="preserve">
+    <value>Medarbejder nummer</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organisation</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="SortByStartDate" xml:space="preserve">
+    <value>Start dato</value>
+  </data>
+  <data name="SortByUpdateDate" xml:space="preserve">
+    <value>Opdater dato</value>
+  </data>
+  <data name="SkillAreaColon" xml:space="preserve">
+    <value>Skill område:</value>
+  </data>
+  <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
+    <value>Kan ikke anvende ändring på medarbejdere i andre tidszoner</value>
+  </data>
+  <data name="ArchiveSchedule" xml:space="preserve">
+    <value>Arkiver vagtplan</value>
+  </data>
+  <data name="TheActivityCanNotBeAddedTo" xml:space="preserve">
+    <value>Aktiviteten kan ikke blive tildelt til</value>
+  </data>
+  <data name="NoPermissionRemoveAgentAbsence" xml:space="preserve">
+    <value>Ingen tilladelse til at fjerne fravär fra medarbejder</value>
+  </data>
+  <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
+    <value>Fraväret kan ikke blive tildelt til</value>
+  </data>
+  <data name="ImportSchedule" xml:space="preserve">
+    <value>Importer vagtplan</value>
+  </data>
+  <data name="ValidatingPersons2" xml:space="preserve">
+    <value>Validerer {0} person(er) ud af {1}</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Fortsät</value>
+  </data>
+  <data name="MoveShift" xml:space="preserve">
+    <value>Flyt vagt</value>
+  </data>
+  <data name="ArchiveScheduleDescription" xml:space="preserve">
+    <value>Arkiver vagtplan fra standard scenarie til et andet scenarie, overskriv alle tidligere vagtplaner i mål scenariet for den givne periode</value>
+  </data>
+  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+    <value>Du er ved at overskrive alle eksisterende vagtplaner for scenarie '{0} for perioden {1} - {2} og de valgte teams.</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Er du sikker?</value>
+  </data>
+  <data name="DoneArchivingForXPeopleDot" xml:space="preserve">
+    <value>Arkivering for {0} personer er fuldfört</value>
+  </data>
+  <data name="FromScenarioColon" xml:space="preserve">
+    <value>Fra scenarie:</value>
+  </data>
+  <data name="PickASmallerDatePeriodDot" xml:space="preserve">
+    <value>Välg en mindre datoperiode</value>
+  </data>
+  <data name="PickAtleastOneTeamDot" xml:space="preserve">
+    <value>Välg mindst et team.</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Kör</value>
+  </data>
+  <data name="RunArchiving" xml:space="preserve">
+    <value>Kör arkivering</value>
+  </data>
+  <data name="TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>Scenariet du arkiverer fra skal väre et standard scenarie</value>
+  </data>
+  <data name="TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot" xml:space="preserve">
+    <value>Scenariet du arkiverer fra må ikke väre et standard scenarie</value>
+  </data>
+  <data name="ToScenarioColon" xml:space="preserve">
+    <value>Til scenarie:</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveFromDot" xml:space="preserve">
+    <value>Du skal välge et scenarie at arkivere fra</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToArchiveToDot" xml:space="preserve">
+    <value>Du skal välge et scenarie at arkivere til</value>
+  </data>
+  <data name="YourSelectionResultedInZeroPeopleDot" xml:space="preserve">
+    <value>Din markering resulterede i 0 personer</value>
+  </data>
+  <data name="LoadingRequestsTreeDots" xml:space="preserve">
+    <value>Indläser forespörgsler</value>
+  </data>
+  <data name="NotificationTimeToStay" xml:space="preserve">
+    <value>Meddelelsesvarighed (sekunder)</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingShift" xml:space="preserve">
+    <value>Flytter vagt for {0} medarbejder(e), {1} lykkedes og {2} fejlede.</value>
+  </data>
+  <data name="SuccessfulMessageForMovingShift" xml:space="preserve">
+    <value>Det er lykkedes at flytte vagter for de valgte medarbejdere</value>
+  </data>
+  <data name="NoSitesFound" xml:space="preserve">
+    <value>Ingen lokation for de valgte skills er fundet</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingOvertime" xml:space="preserve">
+    <value>Tilföjelse af overtid for {0} medarbejer(e), {1} lykkedes og {2} fejlede.</value>
+  </data>
+  <data name="SelectAMultiplicatorDefinitionSet" xml:space="preserve">
+    <value>Välg et multiplikationsdefinitions sät</value>
+  </data>
+  <data name="SuccessfulMessageForAddingOvertime" xml:space="preserve">
+    <value>Det er lykkedes at tilföje overtid på de(n) valgte medarbejder(e)</value>
+  </data>
+  <data name="AddOvertimeActivity" xml:space="preserve">
+    <value>Tilföj overtidsaktivitet</value>
+  </data>
+  <data name="RequestedPeriodIsTooLong" xml:space="preserve">
+    <value>Den forespurgte periode er for lang</value>
+  </data>
+  <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
+    <value>Ingen tilladelse til at tilföje overtidsaktivitet for medarbejder {0}.</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Niveau</value>
+  </data>
+  <data name="YouNeedToSelectADateInTheFutureDot" xml:space="preserve">
+    <value>Du skal välge en dato i fremtiden</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>Primär</value>
+  </data>
+  <data name="DoneImportingForXPeopleDot" xml:space="preserve">
+    <value>Import af {0} medarbejdere er fuldfört</value>
+  </data>
+  <data name="ImportingConfirmationWithParameters" xml:space="preserve">
+    <value>Du er ved at sammenlägge vagtplanen i scenarie '{0}' med den eksisterende vagtplan i standard scenarie i perioden {1} - {2} og de valgte teams.</value>
+  </data>
+  <data name="ImportScheduleDescription" xml:space="preserve">
+    <value>Importer vagtplan fra et andet scenarie til stadard scenarie, sammenlägges med vagtplanen i standard scenariet for den givne periode.</value>
+  </data>
+  <data name="RunImporting" xml:space="preserve">
+    <value>Kör import</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToImportFromDot" xml:space="preserve">
+    <value>Du skal välge et scenarie at importere fra </value>
+  </data>
+  <data name="SendToAdministrator" xml:space="preserve">
+    <value>Send til administrator</value>
+  </data>
+  <data name="WhenValidationFails" xml:space="preserve">
+    <value>Når valideringen fejler</value>
+  </data>
+  <data name="ResetRules" xml:space="preserve">
+    <value>Nulstil regler</value>
+  </data>
+  <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
+    <value>Validerings regler</value>
+  </data>
+  <data name="DescriptionOfDataPartOfAgentDay" xml:space="preserve">
+    <value>Vil flytte en vagt til en anden dag</value>
+  </data>
+  <data name="DescriptionOfNewShiftCategoryLimitationRule" xml:space="preserve">
+    <value>Vagtkategori begränsning for periode</value>
+  </data>
+  <data name="DescriptionOfWeekShiftCategoryLimitationRule" xml:space="preserve">
+    <value>Vagtkategori begränsning for uge</value>
+  </data>
+  <data name="DescriptionOfNewNightlyRestRule" xml:space="preserve">
+    <value>Natlig hvile</value>
+  </data>
+  <data name="DescriptionOfNewMaxWeekWorkTimeRule" xml:space="preserve">
+    <value>Maksimum ugentlig arbejdstid</value>
+  </data>
+  <data name="DescriptionOfMinWeeklyRestRule" xml:space="preserve">
+    <value>Mimimum ugentlig hvile</value>
+  </data>
+  <data name="DescriptionOfMinWeekWorkTimeRule" xml:space="preserve">
+    <value>Minimum ugentlig arbejdstid</value>
+  </data>
+  <data name="DescriptionOfNewDayOffRule" xml:space="preserve">
+    <value>Fridage konflikter med aktivitet</value>
+  </data>
+  <data name="DescriptionOfNotOverwriteLayerRule" xml:space="preserve">
+    <value>Uoverskrivelig aktivitet på vagt</value>
+  </data>
+  <data name="DescriptionOfNonMainShiftActivityRule" xml:space="preserve">
+    <value>Mäde, personlig aktivitet eller overtid på vagt</value>
+  </data>
+  <data name="DescriptionOfNewPersonAccountRule" xml:space="preserve">
+    <value>Personlig konto</value>
+  </data>
+  <data name="DescriptionOfSiteOpenHoursRule" xml:space="preserve">
+    <value>Lokation åbningstider</value>
+  </data>
+  <data name="DescriptionOfOpenHoursRule" xml:space="preserve">
+    <value>Skill åbningstider</value>
+  </data>
+  <data name="SearchAnOrganization" xml:space="preserve">
+    <value>Sög på organisation</value>
+  </data>
+  <data name="DenyDueToTechnicalProblems" xml:space="preserve">
+    <value>Bemandingsinformation er ikke opdateret i systemet. Vär venlig at kontakte system administratoren</value>
+  </data>
+  <data name="SearchASiteOrTeam" xml:space="preserve">
+    <value>Sög lokation eller team</value>
+  </data>
+  <data name="SeveralTeamsSelected" xml:space="preserve">
+    <value>{0} tems er valgt</value>
+  </data>
+  <data name="ServiceLevel" xml:space="preserve">
+    <value>Service level</value>
+  </data>
+  <data name="UseSkillsColon" xml:space="preserve">
+    <value>Brug skills:</value>
+  </data>
+  <data name="AgentsInAlarm" xml:space="preserve">
+    <value>Medarbejdere i alarm: </value>
+  </data>
+  <data name="IncludeAgentsInStatesColon" xml:space="preserve">
+    <value>Inkluder medarbejdere i status: </value>
+  </data>
+  <data name="FilterThreeDots" xml:space="preserve">
+    <value>Filter....</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>Gem filter</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>Vis filter</value>
+  </data>
+  <data name="UpdateResourceCalculations" xml:space="preserve">
+    <value>Opdater ressouceberegnnger</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>Performance</value>
+  </data>
+  <data name="Staffing" xml:space="preserve">
+    <value>Bemanding</value>
+  </data>
+  <data name="UsedTotal" xml:space="preserve">
+    <value>Brugt total</value>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>Brugt af {0}</value>
+  </data>
+  <data name="NoBudgetGroupFound" xml:space="preserve">
+    <value>Ingen budget gruppe fundet</value>
+  </data>
+  <data name="SelectABudgetGroupThreeDots" xml:space="preserve">
+    <value>Välg en budget gruppe</value>
+  </data>
+  <data name="DescriptionOfShiftTradeTargetTimeSpecification" xml:space="preserve">
+    <value>Kontraktstid tolerance</value>
+  </data>
+  <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">
+    <value>"{0}" eksisterer allerede. Er du sikker på, at den skal ersrattes?</value>
+  </data>
+  <data name="UpdateConfirmation" xml:space="preserve">
+    <value>Opdater bekräftelse</value>
+  </data>
+  <data name="RemoveDefault" xml:space="preserve">
+    <value>Fjern standard</value>
+  </data>
+  <data name="SetAsDefault" xml:space="preserve">
+    <value>Sät til standard</value>
+  </data>
+  <data name="MyBusinessUnit" xml:space="preserve">
+    <value>Min forretnnigsenhed</value>
+  </data>
+  <data name="MyOwn" xml:space="preserve">
+    <value>Min egen</value>
+  </data>
+  <data name="MySite" xml:space="preserve">
+    <value>Min lokation</value>
+  </data>
+  <data name="NeedToSelectARoleFirst" xml:space="preserve">
+    <value>Välg en rolle först</value>
+  </data>
+  <data name="WebStaffing" xml:space="preserve">
+    <value>Bemanding</value>
+  </data>
+  <data name="RemoveOvertime" xml:space="preserve">
+    <value>Fjern overtid</value>
+  </data>
+  <data name="SaveFavoriteSearch" xml:space="preserve">
+    <value>Gem favorit sögning</value>
+  </data>
+  <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
+    <value>Ingen tilladelse til at fjerne aktiviteter for medarbejder(e)</value>
+  </data>
+  <data name="PleaseChooseADate" xml:space="preserve">
+    <value>Vär venlig at välge en dato</value>
+  </data>
+  <data name="PleaseInputStartTime" xml:space="preserve">
+    <value>Vär venlig at indtaste en start tid</value>
+  </data>
+  <data name="PleaseInputEndTime" xml:space="preserve">
+    <value>Vär venlig at indtaste en slut tid</value>
+  </data>
+  <data name="ShiftTradeTargetTimePendingReason" xml:space="preserve">
+    <value>Tolerancen for vagtplanens kontrakttid blev overskredet</value>
+  </data>
+  <data name="SignInWithNoColon" xml:space="preserve">
+    <value>Log på med</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>Välg organisation</value>
+  </data>
+  <data name="TimeOOA" xml:space="preserve">
+    <value>Tid OOA</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Ryd alt</value>
+  </data>
+  <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
+    <value>Det er muligt at se maksimum {0} medarbejdere. Kontakten med "I alarm" er aktiveret hvis antallet af medarbejdere ikke overstiger {1}</value>
+  </data>
+  <data name="FavoriteSearch" xml:space="preserve">
+    <value>Favorit sögning</value>
+  </data>
+  <data name="ConfigureSkillPriorities" xml:space="preserve">
+    <value>Konfigurer skill prioriteter</value>
+  </data>
+  <data name="NoSkillAreasFound" xml:space="preserve">
+    <value>Intet skill område er fundet</value>
+  </data>
+  <data name="NoSkillFound" xml:space="preserve">
+    <value>Intet skill er fundet</value>
+  </data>
+  <data name="MultipleSites" xml:space="preserve">
+    <value>Multiple lokaltioner</value>
+  </data>
+  <data name="MultipleTeams" xml:space="preserve">
+    <value>Multiple teams</value>
+  </data>
+  <data name="AvailableForALimitedTimeOnly" xml:space="preserve">
+    <value>Kun tilgängelig i en begränset periode!</value>
+  </data>
+  <data name="OldIntraday" xml:space="preserve">
+    <value>Gammelt intradag</value>
+  </data>
+  <data name="TryingToResolveShiftCategoryLimitationsDotDotDot" xml:space="preserve">
+    <value>Pröver at löse vagtkategori begränsninger</value>
+  </data>
+  <data name="OptimizingMaxSeats" xml:space="preserve">
+    <value>Optimerer max pladser</value>
+  </data>
+  <data name="ViewStaffingInfo" xml:space="preserve">
+    <value>Se bemandingsinformation</value>
+  </data>
+  <data name="ShowAbsenceProbability" xml:space="preserve">
+    <value>Vis fravärsmulighed</value>
+  </data>
+  <data name="ShowOvertimeProbability" xml:space="preserve">
+    <value>Vis overtidsmulighed</value>
+  </data>
+  <data name="ProbabilityToGetAbsenceColon" xml:space="preserve">
+    <value>Sandsynlighed for at få fravär:</value>
+  </data>
+  <data name="ProbabilityToGetOvertimeColon" xml:space="preserve">
+    <value>Sandsynlighed for at få overtid:</value>
+  </data>
+  <data name="DoNotBreakMaxSeatDotDotDot" xml:space="preserve">
+    <value>Overskrid ikke maks pladser...</value>
+  </data>
+  <data name="AskMeLater" xml:space="preserve">
+    <value>Spörg mig senere</value>
+  </data>
+  <data name="DataProtectionQuestion" xml:space="preserve">
+    <value>Vär venlig at deltage på Teleopti Kunde Web. Du vil få adgang til tips og tricks, blogindläg, selstudier og anden brugbar information. Til dette formål vil Teleopti gerne bede om disse data fra dig, så du kan tilgå Teleopti Kunde Web.&lt;b&gt;&lt;br&gt;                                                                                      Email:&lt;b&gt;{0}&lt;b&gt;&lt;br&gt;                                                                                     Fornavn: &lt;b&gt;{1}&lt;b&gt;&lt;br&gt;                                                                               Efternavn:&lt;b&gt;{2}&lt;b&gt;&lt;br&gt;                                                                              Sprog: &lt;b&gt;{3}&lt;b&gt;&lt;br&gt;                                                                                     Firma:&lt;b&gt;{4}&lt;r&gt;&lt;br&gt;&lt;br&gt;                                                                                Disse oplysninger vil sikre at du bliver automatisk logget på Teleopti Kunde Web og får adgang til det relevante materiale. &lt;br&gt;&lt;br&gt;                                 Vil du deltage?</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Nej tak</value>
+  </data>
+  <data name="TeleoptiCustomerWeb" xml:space="preserve">
+    <value>Teleopti Kunde Web</value>
+  </data>
+  <data name="DenyReasonTechnicalIssues" xml:space="preserve">
+    <value>Din forespörgsel er blevet afvist på grund af tekniske problemer. Pröv igen senere</value>
+  </data>
+  <data name="TeleoptiMobileApp" xml:space="preserve">
+    <value>Teleopti Mobil App</value>
+  </data>
+  <data name="UseTeleoptiMobileAppToScanThisQRCode" xml:space="preserve">
+    <value>Brug Teleopti Mobil App for at canne denne QR kode</value>
+  </data>
+  <data name="ViewQRCodeForConfiguration" xml:space="preserve">
+    <value>Se QR kode for at kongigurere</value>
+  </data>
+  <data name="MonitorUpToXAgents" xml:space="preserve">
+    <value>Overvåg up til 50 medarbejdere</value>
+  </data>
+  <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>Kan ikke tilföje medarbejder i en anden tidszone</value>
+  </data>
+  <data name="InvalidColumn" xml:space="preserve">
+    <value>Ugyldig {0} : {1}</value>
+  </data>
+  <data name="LatestScheduleResult" xml:space="preserve">
+    <value>Seneste vagtplans resultat</value>
+  </data>
+  <data name="SchedulePeriodType" xml:space="preserve">
+    <value>Vagtplansperiode type</value>
+  </data>
+  <data name="MissingColumn" xml:space="preserve">
+    <value>Manglende kolonne</value>
+  </data>
+  <data name="AdherenceFor" xml:space="preserve">
+    <value>Adherence for</value>
+  </data>
+  <data name="AfterShiftEnd" xml:space="preserve">
+    <value>Efter vagtens slutning</value>
+  </data>
+  <data name="BeforeShiftStart" xml:space="preserve">
+    <value>För vagtens start</value>
+  </data>
+  <data name="NoShift" xml:space="preserve">
+    <value>Ingen vagt</value>
+  </data>
+  <data name="Rule" xml:space="preserve">
+    <value>Regel</value>
+  </data>
+  <data name="ImportAgents" xml:space="preserve">
+    <value>Importer medarbejdere</value>
+  </data>
+  <data name="RequireXCellFormat" xml:space="preserve">
+    <value>Cellen kan ikke opdeles, der kräves {0} formateret värdi</value>
+  </data>
+  <data name="DownloadTemplate" xml:space="preserve">
+    <value>Download skabelon</value>
+  </data>
+  <data name="SetFallbackValuesToReplaceInvalidOnes" xml:space="preserve">
+    <value>Angiv de tidligere värdier for at erstatte de ugyldige värdier</value>
+  </data>
+  <data name="EnterANumber" xml:space="preserve">
+    <value>Indtast et tal</value>
+  </data>
+  <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
+    <value>{0} repareret med tildligere värdi</value>
+  </data>
+  <data name="NewImport" xml:space="preserve">
+    <value>Ny import</value>
+  </data>
+  <data name="ShiftBag" xml:space="preserve">
+    <value>Vagt samling</value>
+  </data>
+  <data name="FailedToCreateSchedulingJobForSelectedPlanningPeriod" xml:space="preserve">
+    <value>Det er ikke lykkeds at skabe en vagtplan for den valgte vagtplanlägningsperiode</value>
+  </data>
+  <data name="FailedToLoadDayoffRules" xml:space="preserve">
+    <value>Det er ikke lykkedes at indläse fridags regler.</value>
+  </data>
+  <data name="FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Det er ikke lykkedes at optimere fridage for den valgte planlägningsperiode på grund af tekniske problemer. Vär venlig at pröve igen.</value>
+  </data>
+  <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Det er ikke lykkedes at planlägge for den valgte planlägningsperiode på grund af tekniske problemer. Vär venlig at pröve igen</value>
+  </data>
+  <data name="OnlySupport" xml:space="preserve">
+    <value>Kun support: {0}</value>
+  </data>
+  <data name="FailedToImportAgents" xml:space="preserve">
+    <value>Kunne ikke importere [0} medarbejder(e)</value>
+  </data>
+  <data name="SuccessfullyImportedAgents" xml:space="preserve">
+    <value>Det er lykkedes at importere {0} medarbejder(e)</value>
+  </data>
+  <data name="AvailableAsGroupPage" xml:space="preserve">
+    <value>Tilgängelig Som Gruppeside</value>
+  </data>
+  <data name="Maximum5OptionalColumns" xml:space="preserve">
+    <value>Maximalt 5 valgfrie kolonner kan väre tilgängelige som gruppesider</value>
+  </data>
+  <data name="OptionalColumnCreateGroupPageQuestion" xml:space="preserve">
+    <value>Dette vil skabe en gruppeside for den valgfrie kolonne således at du kan träkke en rapport baseret på dette. Vil du fortsätte?</value>
+  </data>
+  <data name="OptionalColumnRemoveGroupPageQuestion" xml:space="preserve">
+    <value>Dette vil fjerne den valgfrie kolonne gruppeside og stoppe din träkning af rapporten baseret på dette. Vil du fortsätte?</value>
+  </data>
+  <data name="WarnImportedAgents" xml:space="preserve">
+    <value>Importeret {0} medarbejder(e) som indeholder advarsler</value>
+  </data>
+  <data name="HideStaffingInfo" xml:space="preserve">
+    <value>Skjul bemandingsinformation</value>
+  </data>
+  <data name="StaffingInfo" xml:space="preserve">
+    <value>Bemandingsinformation</value>
   </data>
 </root>

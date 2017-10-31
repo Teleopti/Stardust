@@ -1272,4 +1272,34 @@
   <data name="ResUtilization" xml:space="preserve">
     <value>Udnyttelse</value>
   </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Forbindelsen til databasen er gået tabt, pröv at afgränse din sögning</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Kun aktive skills</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Medarbejder skills</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Kun aktive skills</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Tid i tilstand per medarbejder</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Tilstandsgrupper</value>
+  </data>
+  <data name="ResIncludeDetails" xml:space="preserve">
+    <value>Inkluder detaljer</value>
+  </data>
+  <data name="ResRequestStatusCancelled" xml:space="preserve">
+    <value>Afbrudt</value>
+  </data>
+  <data name="ResRequestStatusWaitlisted" xml:space="preserve">
+    <value>Sat på venteliste</value>
+  </data>
+  <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
+    <value>Flere aktiviteter/fravär</value>
+  </data>
 </root>
