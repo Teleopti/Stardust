@@ -29,13 +29,10 @@ SET NOCOUNT ON
 IF @search_string = '' RETURN
 
 --declare
-DECLARE @leave_after_ISO nvarchar(10)
 DECLARE @dynamicSQL nvarchar(4000)
 DECLARE @eternityDate datetime
-DECLARE @cursorString nvarchar(50)
-DECLARE @cursorCount int
-DECLARE @countWords int
 DECLARE @totalRows int
+DECLARE @countWords int
 DECLARE @collation nvarchar(50)
 
 --Set collation
@@ -50,7 +47,6 @@ SELECT @collation = ISNULL(@collation,'database_default')
 
 --create needed temp tables
 CREATE TABLE #strings (SearchWord nvarchar(200) COLLATE database_default  NOT NULL  )
-CREATE TABLE #PersonId (PersonId  uniqueidentifier)
 
 CREATE TABLE #result(
 	[PersonId] [uniqueidentifier] NOT NULL,
@@ -64,9 +60,6 @@ CREATE TABLE #result(
 	[BusinessUnitId] [uniqueidentifier]  NULL
 	)
 
---re-init @dynamicSQL
-SELECT @dynamicSQL=''
-
 -- Get searchString into temptable
 SELECT @search_string = REPLACE(@search_string,' ', ',') --separated by space from client
 SELECT @search_string = REPLACE(@search_string,'%', '[%]') --make '%' valuable search value
@@ -77,44 +70,29 @@ SELECT * FROM dbo.SplitStringString(@search_string)
 SELECT @countWords = COUNT(SearchWord)
 FROM #strings
 
---convert @leave_after to ISO-format string
-SELECT @leave_after_ISO   = CONVERT(NVARCHAR(10), @leave_after,120)
-
-------------
---cursor for adding "AND" or "OR" conditions for each search string
-------------
-DECLARE SearchWordCursor CURSOR FOR
-SELECT SearchWord, ROW_NUMBER() OVER(ORDER BY SearchWord DESC) as RowNum FROM #strings;
-OPEN SearchWordCursor;
-
-FETCH NEXT FROM SearchWordCursor INTO @cursorString, @cursorCount
-
-WHILE @@FETCH_STATUS = 0
- BEGIN
-	
-	SELECT @dynamicSQL = @dynamicSQL + 'SELECT DISTINCT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId FROM ReadModel.FindPerson with (nolock) WHERE ISNULL(TerminalDate, ''2100-01-01'') >= '''+ @leave_after_ISO + ''' AND SearchValue like N''%' + @cursorString + '%'''
-
-	--If 'All' set searchtype as a separate AND condition
-	IF @search_type <> 'All'
-	SELECT @dynamicSQL = @dynamicSQL + ' AND (SearchType = '''' OR SearchType = '''+ @search_type + ''')'
-
-	--add INTERSECT between each result set
-	IF @cursorCount <> @countWords --But NOT on last condition, the syntax is different
-	SELECT @dynamicSQL = @dynamicSQL + ' INTERSECT '
-      
-	--fectch next
-	FETCH NEXT FROM SearchWordCursor INTO @cursorString, @cursorCount
- END
- 
-CLOSE SearchWordCursor;
-DEALLOCATE SearchWordCursor;
-
---debug
---print @dynamicSQL
-
---insert into #Result directly instead of having a second query that opens up for duplicate results and deadlocks
-INSERT INTO #Result
-EXEC sp_executesql @dynamicSQL
+IF @search_type <> 'All'
+	BEGIN
+		INSERT INTO #Result 
+		SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId 
+		FROM ReadModel.FindPerson with (nolock) 
+		CROSS JOIN #strings s 
+		WHERE ISNULL(TerminalDate, '2100-01-01') >= @leave_after 
+			AND SearchType=@search_type 
+			AND SearchValue like N'%' + s.SearchWord + '%'
+		GROUP BY PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId 
+		HAVING COUNT(*) >= @countWords --AND => Must have hit on all words
+	END
+ELSE
+	BEGIN
+		INSERT INTO #Result 
+		SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId 
+		FROM ReadModel.FindPerson with (nolock) 
+		CROSS JOIN #strings s 
+		WHERE ISNULL(TerminalDate, '2100-01-01') >= @leave_after 
+			AND SearchValue like N'%' + s.SearchWord + '%'
+		GROUP BY PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId 
+		HAVING COUNT(*) >= @countWords --AND => Must have hit on all words
+	END
 
 --get total count
 DECLARE @total int 
