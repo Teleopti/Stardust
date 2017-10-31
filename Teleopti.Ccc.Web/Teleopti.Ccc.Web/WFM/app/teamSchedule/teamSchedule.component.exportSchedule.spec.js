@@ -1,13 +1,17 @@
 ﻿(function() {
 	describe('exportSchedule controller tests',
 		function() {
-			var $componentController;
+			var $componentController, groupPageService;
 			beforeEach(function () {
 				module("wfm.teamSchedule");
 				module(function ($provide) {
 					$provide.service('exportScheduleService', function() {
 						return new fakeExportScheduleService();
 					});
+					$provide.service('groupPageService', function () {
+						groupPageService = new fakeGroupPageService();
+						return groupPageService;
+					})
 				});
 			});
 			
@@ -22,6 +26,16 @@
 
 					expect(ctrl.isOptionalColDisabled('opt4')).toEqual(true);
 					expect(ctrl.isOptionalColDisabled('opt1')).toEqual(false);
+				});
+			
+			it('should get available groups with correct dates',
+				function() {
+					var ctrl = $componentController('teamsExportSchedule', null, {});
+					ctrl.configuration.period = {startDate: new Date('2017-01-01'), endDate: new Date('2017-01-10')};
+					ctrl.onPeriodChanged();
+					var currentInputPeriod = groupPageService.currentPeriod();
+					expect(currentInputPeriod.startDate).toEqual('2017-01-01');
+					expect(currentInputPeriod.endDate).toEqual('2017-01-10');
 				});
 
 			function fakeExportScheduleService() {
@@ -50,6 +64,19 @@
 						}
 					}
 				};
+			}
+			function fakeGroupPageService() {
+				var currentPeriod;
+				this.currentPeriod = function () {
+					return currentPeriod;
+				}
+				this.fetchAvailableGroupPages = function (startDate, endDate) {
+					currentPeriod = {startDate:startDate, endDate:endDate};
+					return {
+						then:function (cb) {
+					}
+					}
+				}
 			}
 		});
 })();
