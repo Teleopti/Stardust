@@ -1,0 +1,11 @@
+.gamification-wrapper {
+	gamification, gamification-settings, gamification-targets {
+		display: block;
+	}
+
+	gamification {
+		.panel.material-depth-1 {
+			height: 100%;
+		}
+	}
+}
