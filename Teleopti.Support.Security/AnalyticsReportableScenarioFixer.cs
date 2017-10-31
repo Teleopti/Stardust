@@ -30,13 +30,15 @@ namespace Teleopti.Support.Security
 				
 				var applicationScenarios = loadApplicationScenarios(appConnection);
 				var nonReportableScenarios = string.Join(",", applicationScenarios.Where(x => !x.EnableReporting).Select(x => $"'{x.Id}'"));
-				if (string.IsNullOrEmpty(nonReportableScenarios))
-					return 0;
-				
-				log.Debug("Updating dim_scenario...");
 				var transaction = analyticsConnection.BeginTransaction(IsolationLevel.ReadCommitted);
-				executeNonQuery(analyticsConnection, transaction,
-					$"update mart.dim_scenario set is_deleted = 1 where scenario_code in ({nonReportableScenarios})");
+
+				if (!string.IsNullOrEmpty(nonReportableScenarios))
+				{
+					log.Debug("Updating dim_scenario...");
+					executeNonQuery(analyticsConnection, transaction,
+						$"update mart.dim_scenario set is_deleted = 1 where scenario_code in ({nonReportableScenarios})");
+				}
+				
 				setApplied(analyticsConnection, transaction);
 				
 				log.Debug("Committing transaction...");
