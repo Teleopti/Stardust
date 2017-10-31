@@ -155,8 +155,12 @@
 			var footer = document.querySelector('.teamschedule-footer');
 			var tableHeight = d.height - footer.offsetHeight;
 			var chartHeight = container.offsetHeight - 62 - viewHeader.offsetHeight - header.offsetHeight - d.height - 50;
-			if (tableHeight <= 100 || chartHeight <= 100) {
-				SizeStorageService.setSize(100, 100);
+			if (tableHeight <= 100) {
+				SizeStorageService.setSize(100, chartHeight);
+				return;
+			}
+			if (chartHeight <= 100) {
+				SizeStorageService.setSize(tableHeight, 100);
 				return;
 			}
 			SizeStorageService.setSize(tableHeight, chartHeight);
