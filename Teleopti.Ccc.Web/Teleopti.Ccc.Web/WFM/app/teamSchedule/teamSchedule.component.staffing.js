@@ -25,9 +25,11 @@
 		vm.useShrinkage = false;
 		var selectedSkill = null;
 		var selectedSkillGroup = null;
-		
+		var chart = null;
 		vm.$onChanges = function (changeObj) {
-			
+			if (staffingDataAvailable && changeObj.chartHeight.currentValue !== changeObj.chartHeight.previousValue){
+				chart.resize({height: changeObj.chartHeight.currentValue});
+			}
 		};
 
 		vm.useShrinkageForStaffing = function () {
@@ -96,7 +98,7 @@
 			$timeout(function () {
 				vm.config = ChartService.staffingChartConfig(data);
 				vm.config.size = {height:vm.chartHeight};
-				c3.generate(vm.config);
+				chart = c3.generate(vm.config);
 			});
 		}
 	}

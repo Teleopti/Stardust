@@ -25,7 +25,9 @@
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
-		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
+		vm.scheduleDateMoment = function () {
+			return moment(vm.scheduleDate);
+		};
 		vm.availableTimezones = [];
 		vm.sitesAndTeams = undefined;
 		vm.staffingEnabled = false;
@@ -59,16 +61,21 @@
 			var viewHeader = document.querySelector('.view-header');
 			var header = document.querySelector('.team-schedule .teamschedule-header');
 			var footer = document.querySelector('.teamschedule-footer');
+
 			var defaultHeight = container.offsetHeight - 62 - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
-			if(vm.staffingEnabled){
-				vm.scheduleTableWrapperStyle = {'height':defaultHeight * 0.6 + 'px',
-					'overflow-y': 'auto'};
+			if (vm.staffingEnabled) {
+				vm.scheduleTableWrapperStyle = {
+					'height': defaultHeight * 0.6 + 'px',
+					'overflow-y': 'auto'
+				};
 				vm.chartHeight = defaultHeight * 0.3;
 			}
-			else{
-				vm.scheduleTableWrapperStyle = {'height':defaultHeight + 'px','overflow-y': 'hidden'};
+			else {
+				vm.scheduleTableWrapperStyle = {'height': defaultHeight + 'px', 'overflow-y': 'hidden'};
 			}
 		};
+
+
 		vm.paginationOptions = {
 			pageSize: 20,
 			pageNumber: 1,
@@ -77,7 +84,6 @@
 
 		vm.hasSelectedAllPeopleInEveryPage = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
-
 
 
 		var commandContainerId = 'teamschedule-command-container';
@@ -130,7 +136,25 @@
 					break;
 			}
 		});
-		
+
+		$scope.$on('angular-resizable.resizeEnd', function (e, d) {
+			var container = document.querySelector('#materialcontainer');
+			var viewHeader = document.querySelector('.view-header');
+			var header = document.querySelector('.team-schedule .teamschedule-header');
+			var footer = document.querySelector('.teamschedule-footer');
+			var tableHeight = d.height - footer.offsetHeight;
+			var chartHeight = container.offsetHeight - 62 - viewHeader.offsetHeight - header.offsetHeight - d.height - 50;
+			if (tableHeight <= 50 || chartHeight <= 100) {
+				return;
+			}
+			vm.scheduleTableWrapperStyle = {
+				'height': tableHeight + 'px',
+				'overflow-y': 'auto'
+			};
+			vm.chartHeight = container.offsetHeight - 62 - viewHeader.offsetHeight - header.offsetHeight - d.height - 50;
+
+		});
+
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 
 		vm.teamNameMap = $stateParams.teamNameMap || {};
@@ -151,7 +175,7 @@
 			$state.go('teams.exportSchedule');
 		}
 
-		vm.commonCommandCallback = function(trackId, personIds) {
+		vm.commonCommandCallback = function (trackId, personIds) {
 			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
 
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
@@ -161,7 +185,7 @@
 				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
 			}
 		};
-		
+
 
 		function openSidePanel() {
 			if (!$mdSidenav(commandContainerId).isOpen()) {
@@ -190,7 +214,7 @@
 		}
 
 		vm.onPageSizeSelectorChange = function () {
-			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.paginationOptions.pageSize }).$promise.then(function () {
+			teamScheduleSvc.updateAgentsPerPageSetting.post({agents: vm.paginationOptions.pageSize}).$promise.then(function () {
 				vm.resetSchedulePage();
 			});
 		};
@@ -335,7 +359,7 @@
 			}
 		};
 
-		vm.toggleShowAbsenceOnly = function() {
+		vm.toggleShowAbsenceOnly = function () {
 			vm.paginationOptions.pageNumber = 1;
 			vm.loadSchedules();
 		};
@@ -420,7 +444,7 @@
 
 		vm.applyFavorite = function (currentFavorite) {
 			vm.selectedFavorite = currentFavorite;
-			vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds: [], groupPageId: '' };
+			vm.selectedGroups = {mode: 'BusinessHierarchy', groupIds: [], groupPageId: ''};
 			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
 			vm.searchOptions.keyword = currentFavorite.SearchTerm;
 			vm.resetSchedulePage();
@@ -550,6 +574,8 @@
 
 	function replaceArrayValues(from, to) {
 		to.splice(0);
-		from.forEach(function (x) { to.push(x); });
+		from.forEach(function (x) {
+			to.push(x);
+		});
 	}
 }());
