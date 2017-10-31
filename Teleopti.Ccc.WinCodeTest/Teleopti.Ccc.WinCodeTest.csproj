@@ -317,7 +317,9 @@
     <Compile Include="Configuration\TeamGamificationSettingModelTest.cs" />
     <Compile Include="Configuration\TeamScorecardModelTest.cs" />
     <Compile Include="Configuration\WorkflowControlSetModelMockedDomainTest.cs" />
+    <Compile Include="Configuration\WorkflowControlSetModelOvertimeTest.cs" />
     <Compile Include="Configuration\WorkflowControlSetModelTest.cs" />
+    <Compile Include="Configuration\WorkflowControlSetPresenterOvertimeTest.cs" />
     <Compile Include="Configuration\WorkflowControlSetPresenterTest.cs" />
     <Compile Include="Configuration\WorkflowControlSetPresenterUnitTest.cs" />
     <Compile Include="Converters\CustomSorterBlankAlwaysLastTest.cs" />

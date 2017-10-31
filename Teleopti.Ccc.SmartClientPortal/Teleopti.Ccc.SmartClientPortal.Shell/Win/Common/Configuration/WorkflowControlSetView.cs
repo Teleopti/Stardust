@@ -108,10 +108,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			foreach (var value in Enum.GetValues(typeof(OvertimeRequestAutoGrantType)))
 			{
-				var autoGrantTypeView = new OvertimeRequestAutoGrantTypeAdapter((OvertimeRequestAutoGrantType) value)
-				{
-					DisplayName = LanguageResourceHelper.Translate(Enum.GetName(typeof(OvertimeRequestAutoGrantType), value))
-				};
+				var autoGrantTypeView = new OvertimeRequestAutoGrantTypeAdapter((OvertimeRequestAutoGrantType) value);
 				_overtimeRequestAutoGrantTypeAdapterCollection.Add(autoGrantTypeView);
 			}
 		}
@@ -519,6 +516,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			var selectedItem = (WorkflowControlSetModel)comboBoxAdvWorkflowControlSet.SelectedItem;
 			_gridHelper.SetSourceList(selectedItem.AbsenceRequestPeriodModels);
+			_overtimeRequestOpenPeriodGridHelper.SetSourceList(selectedItem.OvertimeRequestPeriodModels);
 		}
 
 		public void Unload()

@@ -397,6 +397,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			var endDate = CultureInfo.CurrentCulture.Calendar.AddMonths(ProjectionPeriod.EndDate.Date, 1);
 			ProjectionPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 			_view.RefreshOpenPeriodsGrid();
+			_view.RefreshOvertimeOpenPeriodsGrid();
 		}
 
 		public void PreviousProjectionPeriod()
@@ -405,6 +406,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			var endDate = CultureInfo.CurrentCulture.Calendar.AddMonths(ProjectionPeriod.EndDate.Date, -1);
 			ProjectionPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 			_view.RefreshOpenPeriodsGrid();
+			_view.RefreshOvertimeOpenPeriodsGrid();
 		}
 
 		public void MoveUp(AbsenceRequestPeriodModel absenceRequestPeriodModel)

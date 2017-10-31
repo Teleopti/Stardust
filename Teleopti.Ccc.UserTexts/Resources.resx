@@ -16670,4 +16670,16 @@ Do you want to participate?</value>
     <value>Request was denied because all your skills are closed for the requested period</value>
     <comment>Message to agent when all person skills are closed, when agent asks for absence then the request should be denied</comment>
   </data>
+  <data name="OvertimeRequestAutoGrantTypeNo" xml:space="preserve">
+    <value>No</value>
+    <comment>enum : OvertimeRequestAutoGrantType</comment>
+  </data>
+  <data name="OvertimeRequestAutoGrantTypeYes" xml:space="preserve">
+    <value>Yes</value>
+    <comment>enum : OvertimeRequestAutoGrantType</comment>
+  </data>
+  <data name="OvertimeRequestAutoGrantTypeDeny" xml:space="preserve">
+    <value>Deny</value>
+    <comment>enum : OvertimeRequestAutoGrantType</comment>
+  </data>
 </root>

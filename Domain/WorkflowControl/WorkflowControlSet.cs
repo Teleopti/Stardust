@@ -172,20 +172,29 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual IWorkflowControlSet NoneEntityClone()
 		{
-			var clone = entityCloneInternal(p => p.NoneEntityClone());
+			var clone = entityCloneInternal(absenceOpenPeriod => absenceOpenPeriod.NoneEntityClone(),
+				overtimeOpenPeriod => overtimeOpenPeriod.NoneEntityClone());
 			clone.SetId(null);
 			return clone;
 		}
 
-		private IWorkflowControlSet entityCloneInternal(Func<IAbsenceRequestOpenPeriod, IAbsenceRequestOpenPeriod> periodCreator)
+		private IWorkflowControlSet entityCloneInternal(Func<IAbsenceRequestOpenPeriod, IAbsenceRequestOpenPeriod> absenceOpenPeriodCreator,
+			Func<IOvertimeRequestOpenPeriod, IOvertimeRequestOpenPeriod> overtimeOpenPeriodCreator)
 		{
 			var clone = (WorkflowControlSet)MemberwiseClone();
 			clone._absenceRequestOpenPeriods = new List<IAbsenceRequestOpenPeriod>();
 			foreach (var openPeriod in _absenceRequestOpenPeriods)
 			{
-				var periodClone = periodCreator(openPeriod);
+				var periodClone = absenceOpenPeriodCreator(openPeriod);
 				periodClone.SetParent(clone);
 				clone._absenceRequestOpenPeriods.Add(periodClone);
+			}
+			clone._overtimeRequestOpenPeriods = new List<IOvertimeRequestOpenPeriod>();
+			foreach (var openPeriod in _overtimeRequestOpenPeriods)
+			{
+				var periodClone = overtimeOpenPeriodCreator(openPeriod);
+				periodClone.SetParent(clone);
+				clone._overtimeRequestOpenPeriods.Add(periodClone);
 			}
 			clone._allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>(_allowedPreferenceDayOffs);
 			clone._allowedPreferenceShiftCategories = new HashSet<IShiftCategory>(_allowedPreferenceShiftCategories);
@@ -197,7 +206,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual IWorkflowControlSet EntityClone()
 		{
-			return entityCloneInternal(p => p.EntityClone());
+			return entityCloneInternal(absenceOpenPeriod => absenceOpenPeriod.NoneEntityClone(),
+				overtimeOpenPeriod => overtimeOpenPeriod.NoneEntityClone());
 		}
 
 		public virtual DateTime? SchedulePublishedToDate
