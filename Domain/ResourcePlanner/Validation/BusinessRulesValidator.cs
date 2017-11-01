@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			if (schedules == null) return;
 			foreach (var item in schedules)
 			{
+				if (!agents.Contains(item.Key)) continue;
 				if (validationResult.InvalidResources.Any(x => item.Key.Id != null && x.ResourceId == item.Key.Id.Value)) continue;
 				if (!_dayOffBusinessRuleValidation.Validate(item.Value, period))
 				{
@@ -33,7 +35,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 						ValidationError = string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage,
 							item.Value.CalculatedTargetScheduleDaysOff(period))
 					}, GetType());
-				}else if (!isAgentFulfillingContractTime(item.Value, period))
+				}
+				else if (!isAgentFulfillingContractTime(item.Value, period))
 				{
 					validationResult.Add(new PersonValidationError()
 					{
