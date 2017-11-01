@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
         public DayPresenterNew(IScheduleViewBase view, ISchedulerStateHolder schedulerState, IGridlockManager lockManager, 
             ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IDayPresenterScaleCalculator scaleCalculator, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedo)
-            : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedo)
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IDayPresenterScaleCalculator scaleCalculator, IScheduleTag defaultScheduleTag)
+            : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag)
         {
             _schedulerState = schedulerState;
             _lockManager = lockManager;

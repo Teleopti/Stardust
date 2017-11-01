@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
     {
         public PeriodPresenter(IScheduleViewBase view, ISchedulerStateHolder schedulerState, IGridlockManager lockManager, ClipHandler<IScheduleDay> clipHandler, 
             SchedulePartFilter schedulePartFilter, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IScheduleDayChangeCallback scheduleDayChangeCallback,
-            IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedo)
+            IScheduleTag defaultScheduleTag)
             : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder,scheduleDayChangeCallback,
-            defaultScheduleTag, undoRedo)
+            defaultScheduleTag)
         {
         }
 
