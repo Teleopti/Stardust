@@ -166,7 +166,6 @@ describe('Requests - Refactor(remove later) controller controllers',
 			var controller = target.controller;
 
 			controller.onFavoriteSearchInitDefer.resolve();
-			controller.activeShiftTradeTab();
 			controller.agentSearchOptions.keyword = 'keyword';
 			target.scope.$digest();
 			expect(getParamsFn().agentSearchTerm).toEqual('keyword');
@@ -175,8 +174,6 @@ describe('Requests - Refactor(remove later) controller controllers',
 				startDate: '2017-11-10',
 				endDate: '2017-11-25'
 			};
-			controller.activeShiftTradeTab();
-			controller.activeAbsenceAndTextTab();
 			target.scope.$digest();
 			expect(getParamsFn().agentSearchTerm).toEqual('keyword');
 		});
@@ -188,6 +185,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 				focusingSearch: false
 			};
 
+			controller.activeShiftTradeTab();
 			requestCommandParamsHolder.setSelectedRequestIds(['selectedIds'], true);
 			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(1);
 
@@ -233,6 +231,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 				focusingSearch: false
 			};
 
+			controller.activeShiftTradeTab();
 			requestCommandParamsHolder.setSelectedRequestIds(['selectedIds'], true);
 			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(1);
 
@@ -243,6 +242,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 		it('should clear the selection after applying favorite', function () {
 			var controller = setUpTarget().controller;
 
+			controller.activeShiftTradeTab();
 			requestCommandParamsHolder.setSelectedRequestIds(['selectedIds'], true);
 			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(1);
 
