@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeWriteSideRepository<IActivity> ActivityRepository;
 		public FakeActivityRepository ActivityRepository2;
 		public FakeSkillRepository SkillRepository;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public FakeScenarioRepository CurrentScenario;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<AddPersonalActivityCommandHandler>().For<IHandleCommand<AddPersonalActivityCommand>>();
@@ -71,12 +70,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaisePersonalActivityAddedEvent()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(_mainActivity);
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(),_date);
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario,_date);
 			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
 			PersonAssignmentRepository.Add(personAssignment);
 				
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 
 			Target.Handle(command);
-			var ass = (PersonAssignment) PersonAssignmentRepository.LoadAll().Single();
+			var ass = PersonAssignmentRepository.LoadAll().Single();
 			var theEvent = ass.PopAllEvents().OfType<PersonalActivityAddedEvent>()
 				.Single(e => e.ActivityId == command.PersonalActivityId);
 
@@ -103,14 +103,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			theEvent.PersonId.Should().Be.EqualTo(command.PersonId);
 			theEvent.StartDateTime.Should().Be.EqualTo(command.StartTime);
 			theEvent.EndDateTime.Should().Be.EqualTo(command.EndTime);
-			theEvent.ScenarioId.Should().Be.EqualTo(CurrentScenario.Current().Id.GetValueOrDefault());
-			theEvent.LogOnBusinessUnitId.Should().Be(CurrentScenario.Current().BusinessUnit.Id.GetValueOrDefault());
+			theEvent.ScenarioId.Should().Be.EqualTo(scenario.Id.GetValueOrDefault());
+			theEvent.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
 
 		}
 
 		[Test]
 		public void ShouldPersistDeltasOfChange()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			SkillRepository.Add(_skill);
 			SkillRepository.Add(_skill2);
 
@@ -126,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository2.Add(activity);
 			ActivityRepository.Add(_mainActivity);
 			ActivityRepository2.Add(_mainActivity);
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), _date);
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, _date);
 			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
 			PersonAssignmentRepository.Add(personAssignment);
 
@@ -155,6 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReportErrorIfActivityConflictsWithOvernightShiftsFromPreviousDay()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(_mainActivity);
@@ -163,10 +165,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			PersonRepository.Add(person);
 
 			var yesterdayActivityPeriod = new DateTimePeriod(new DateTime(2016, 05, 16, 19, 0, 0, DateTimeKind.Utc), new DateTime(2016, 05, 17, 09, 0, 0, DateTimeKind.Utc));
-			var personAssignmentYesterday = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), _date.AddDays(-1));
+			var personAssignmentYesterday = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, _date.AddDays(-1));
 			personAssignmentYesterday.AddActivity(_mainActivity, yesterdayActivityPeriod);
 			
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), _date);
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, _date);
 			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
 			PersonAssignmentRepository.Add(personAssignment);
 			PersonAssignmentRepository.Add(personAssignmentYesterday);
@@ -208,11 +210,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[SetUp]
 		public void SetUp()
 		{
+			var storage = new FakeStorage();
+
 			_scenario = new Scenario("scenario");
-			_personRepository = new FakeWriteSideRepository<IPerson>(new FakeStorage()) { PersonFactory.CreatePersonWithId() };
+			_personRepository = new FakeWriteSideRepository<IPerson>(storage) { PersonFactory.CreatePersonWithId() };
 			_personalActivity = ActivityFactory.CreateActivity("personalActivity");
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
-			_activityRepository = new FakeWriteSideRepository<IActivity>(new FakeStorage()) { _mainActivity, _personalActivity};
+			_activityRepository = new FakeWriteSideRepository<IActivity>(storage) { _mainActivity, _personalActivity};
 			_date = new DateOnly(2016, 05,17);
 			_startTime = new DateTime(2016, 05, 17, 10, 0, 0, DateTimeKind.Utc);
 			_endTime = new DateTime(2016, 05, 17, 12, 0, 0, DateTimeKind.Utc);

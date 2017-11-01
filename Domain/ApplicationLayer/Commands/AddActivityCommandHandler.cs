@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -51,12 +50,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(AddActivityCommand command)
 		{
-
 			var activity = _activityForId.Load(command.ActivityId);
 			var person = _personForId.Load(command.PersonId);
 			var timeZone = _timeZone.TimeZone();
 			var scenario = _currentScenario.Current();
-			var periodForPerson = new DateTimePeriod(command.Date.AddDays(-1).Date.Utc(), command.Date.AddDays(1).Date.Utc());
+			var periodForPerson = command.Date.ToDateOnlyPeriod().Inflate(1).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), periodForPerson, new[] { person }, false);
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);

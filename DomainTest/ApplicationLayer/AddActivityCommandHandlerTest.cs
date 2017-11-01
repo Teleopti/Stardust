@@ -7,11 +7,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
@@ -30,10 +29,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class AddActivityCommandHandlerTest : ISetup
 	{
 		public AddActivityCommandHandler Target;
-		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonRepository PersonRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeActivityRepository ActivityRepository;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
@@ -45,9 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<AddActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 		}
 
 		[Test]
@@ -79,13 +76,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			//to make the event list empty
 			personAssignment.PopAllEvents();
-			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScenarioRepository.Has(personAssignment.Scenario);
 			PersonAssignmentRepository.Add(personAssignment);
 
 			Target.Handle(command);
-
+			
 			personAssignment = PersonAssignmentRepository.LoadAll().Single();
-		
+
 			var @event = personAssignment.PopAllEvents().OfType<ActivityAddedEvent>().Single();
 			@event.PersonId.Should().Be(person.Id.GetValueOrDefault());
 			@event.Date.Should().Be(new DateTime(2013, 11, 14));
@@ -102,9 +99,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			var scenario = CurrentScenario.Current();
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = ScenarioRepository.Has("Default");
 			UserTimeZone.IsHawaii();
+			ShiftCategoryRepository.Add(ShiftCategoryFactory.CreateShiftCategory());
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			ActivityRepository.Add(mainActivity);
@@ -112,11 +109,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity,
 					new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), ShiftCategoryFactory.CreateShiftCategory("regularShift"))
 				.WithId();
-
-
+			
 			PersonAssignmentRepository.Add(pa);
-
-
+			
 			var command = new AddActivityCommand
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -127,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var personAssignment = PersonAssignmentRepository.Get(pa.Id.GetValueOrDefault());
+			var personAssignment = PersonAssignmentRepository.LoadAll().Single();
 
 			var addedLayer = personAssignment.ShiftLayers.Last();
 			addedLayer.Period.StartDateTime.Should().Be(TimeZoneHelper.ConvertToUtc(command.StartTime, TimeZoneInfoFactory.HawaiiTimeZoneInfo()));
@@ -139,8 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			var scenario = CurrentScenario.Current();
-			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has("Default");
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			ActivityRepository.Add(addedActivity);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
@@ -169,17 +163,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var date = new DateOnly(2013, 11, 14);
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			var scenario = CurrentScenario.Current();
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = ScenarioRepository.Has("Default");
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			ActivityRepository.Add(addedActivity);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
-			var template = new DayOffTemplate();
-			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, date, template);
+			
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, date, new DayOffTemplate());
 			PersonAssignmentRepository.Add(dayOff);
 			
-
 			var command = new AddActivityCommand
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -190,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var personAssignment = PersonAssignmentRepository.LoadAll().Single(x => !x.AssignedWithDayOff(template));
+			var personAssignment = PersonAssignmentRepository.LoadAll().Single();
 
 			personAssignment.MainActivities().Single().Payload.Name.Should().Be("Added activity");
 			personAssignment.ShiftCategory.Should().Be.SameInstanceAs(shiftCategory);
@@ -202,18 +194,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var date = new DateOnly(2016, 7, 26);
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			var scenario = CurrentScenario.Current();
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = ScenarioRepository.Has("Default");
 			var activity = ActivityFactory.CreateActivity("an activity");
 			ActivityRepository.Add(activity);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
-			var dayOffWithPersonalActivity = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, date, new DayOffTemplate()).WithId();
+			var dayOffWithPersonalActivity = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, date, new DayOffTemplate());
 
 			var personalActivity = ActivityFactory.CreateActivity("a personal activity");
 			dayOffWithPersonalActivity.AddPersonalActivity(personalActivity, new DateTimePeriod(2016, 7, 26, 8, 2016, 7, 26, 9), true, null);
 			PersonAssignmentRepository.Add(dayOffWithPersonalActivity);
-			
 			
 			var command = new AddActivityCommand
 			{
@@ -226,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 
-			var personAssignment = PersonAssignmentRepository.Get(dayOffWithPersonalActivity.Id.GetValueOrDefault());
+			var personAssignment = PersonAssignmentRepository.LoadAll().Single();
 
 			personAssignment.MainActivities().Single().Payload.Name.Should().Be(activity.Name);
 			personAssignment.ShiftCategory.Should().Be.SameInstanceAs(shiftCategory);
@@ -237,8 +227,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			var scenario = CurrentScenario.Current();
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = ScenarioRepository.Has("Default");
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
 
@@ -248,8 +237,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(mainActivity);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 13, 23, 2013, 11, 14, 8), shiftCategory);
 			PersonAssignmentRepository.Add(pa);
-
-
+			
 			var command = new AddActivityCommand
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -266,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldMoveConflictNonoverwritableLayerWhenItsFixable()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 
@@ -280,12 +268,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(addedActivity);
 			ActivityRepository.Add(mainActivity);
 			ActivityRepository.Add(lunchActivity);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory).WithId();
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 13));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepository.Add(pa);
-
-
+			
 			var command = new AddActivityCommand
 			{
 				PersonId = person.Id.Value,
@@ -297,7 +284,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var personAssignment = PersonAssignmentRepository.Get(pa.Id.GetValueOrDefault());
+			var personAssignment = PersonAssignmentRepository.LoadAll().Single();
 
 			var addedLayer = personAssignment.ShiftLayers.Last();
 			addedLayer.Payload.Should().Be(addedActivity);
@@ -311,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseOneActivityAddedEventWithFixableConflictNonoverwritableLayer()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 
@@ -326,7 +313,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(mainActivity);
 			ActivityRepository.Add(lunchActivity);
 			
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory).WithId();
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 13));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			pa.PopAllEvents();
@@ -342,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var personAssignment = PersonAssignmentRepository.Get(pa.Id.GetValueOrDefault());
+			var personAssignment = PersonAssignmentRepository.LoadAll().Single();
 
 			var allEves = personAssignment.PopAllEvents();
 			allEves.Count().Should().Be(1);
@@ -353,7 +340,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReturnWarningForConflictNonoverwritableLayerWhenItsNotFixable()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 
@@ -368,12 +355,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(mainActivity);
 			ActivityRepository.Add(lunchActivity);
 			
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 15), shiftCategory).WithId();
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 15), shiftCategory);
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepository.Add(pa);
-
-
+			
 			var command = new AddActivityCommand
 			{
 				PersonId =  person.Id.GetValueOrDefault(),
@@ -385,7 +371,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var personAssignment = PersonAssignmentRepository.Get(pa.Id.GetValueOrDefault());
+			var personAssignment = PersonAssignmentRepository.LoadAll().Single();
+
 			var addedLayer = personAssignment.ShiftLayers.Last();
 			addedLayer.Payload.Should().Be(addedActivity);
 			addedLayer.Period.StartDateTime.Should().Be(command.StartTime);
@@ -433,7 +420,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					TrackId = trackId
 				}
 			};
-			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScenarioRepository.Has(personAssignment.Scenario);
 			PersonAssignmentRepository.Add(personAssignment);
 
 			Target.Handle(command);
@@ -481,7 +468,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					TrackId = trackId
 				}
 			};
-			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScenarioRepository.Has(personAssignment.Scenario);
 			PersonAssignmentRepository.Add(personAssignment);
 
 			Target.Handle(command);

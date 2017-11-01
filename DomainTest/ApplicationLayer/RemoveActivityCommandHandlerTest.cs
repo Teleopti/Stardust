@@ -30,10 +30,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class RemoveActivityCommandHandlerTest  :ISetup
 	{
 		public RemoveActivityCommandHandler Target;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public IScheduleStorage ScheduleStorage;
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public MutableNow Now;
@@ -45,9 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<RemoveActivityCommandHandler>().For<IHandleCommand<RemoveActivityCommand>>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
 		}
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScenarioRepository.Has(personAssignment.Scenario);
 			ScheduleStorage.Add(personAssignment);
 			personAssignment.PopAllEvents();
 			Target.Handle(command);
@@ -117,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScenarioRepository.Has(personAssignment.Scenario);
 			ScheduleStorage.Add(personAssignment);
 
 			Target.Handle(command);
@@ -153,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScenarioRepository.Has(personAssignment.Scenario);
 			ScheduleStorage.Add(personAssignment);
 
 			Target.Handle(command);
@@ -201,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScenarioRepository.Has(personAssignment.Scenario);
 			ScheduleStorage.Add(personAssignment);
 			
 			Target.Handle(command);
@@ -250,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScenarioRepository.Has(personAssignment.Scenario);
 			ScheduleStorage.Add(personAssignment);
 
 			Target.Handle(command);

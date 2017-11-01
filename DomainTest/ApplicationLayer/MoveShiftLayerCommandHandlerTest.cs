@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
@@ -28,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class MoveShiftLayerCommandHandlerTest : ISetup
 	{
 		public MoveShiftLayerCommandHandler Target;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public FakeScenarioRepository ScenarioRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
 		public FakePersonRepository PersonRepository;
 		public MutableNow Now;
@@ -40,8 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<MoveShiftLayerCommandHandler>().For<IHandleCommand<MoveShiftLayerCommand>>();
@@ -50,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReturnPersonAssignmentIsNotValidDotErrorIfPersonAssignmentNotExists()
 		{
+			ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 
@@ -71,9 +69,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var agent = new Person().WithId();
 			PersonRepository.Add(agent);
 			var activity = new Activity("act").WithId();
+			var scenario = ScenarioRepository.Has("Default");
 
-			var personAss = createPersonAssignmentWithOneLayer(activity, agent, CurrentScenario.Current(), new DateTime(2013, 11, 14, 8,0,0), new DateTime(2013, 11, 14, 16,0,0), TimeZoneInfo.Utc);
-			ScheduleStorage.Add(personAss);
+			var personAss = createPersonAssignmentWithOneLayer(activity, agent, scenario, new DateTime(2013, 11, 14, 8,0,0), new DateTime(2013, 11, 14, 16,0,0), TimeZoneInfo.Utc);
+			PersonAssignmentRepository.Add(personAss);
 			
 			var cmd = new MoveShiftLayerCommand
 			{
@@ -91,15 +90,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldMoveShiftLayer()
 		{
+			var scenario = ScenarioRepository.Has("Default");
 			var agent = new Person().WithId();
 			PersonRepository.Add(agent);
 			var activity = new Activity("act").WithId();
 			var orgStart = createDateTimeUtc(6);
 			var orgEnd = createDateTimeUtc(11);
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			var personAss = createPersonAssignmentWithOneLayer(activity, agent,CurrentScenario.Current(), orgStart, orgEnd, TimeZoneInfo.Utc);
+			var personAss = createPersonAssignmentWithOneLayer(activity, agent,scenario, orgStart, orgEnd, TimeZoneInfo.Utc);
 
-			ScheduleStorage.Add(personAss);
+			PersonAssignmentRepository.Add(personAss);
 			
 			var shiftLayer = personAss.ShiftLayers.Single();
 			shiftLayer.WithId();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Target.Handle(cmd);
 
 			var expectedStart = cmd.NewStartTimeInUtc;
-			var loadedPersonAss = ScheduleStorage.LoadAll().Single() as PersonAssignment;
+			var loadedPersonAss = PersonAssignmentRepository.LoadAll().Single();
 			var modifiedLayer = loadedPersonAss.ShiftLayers.Single();
 			modifiedLayer.Payload.Should().Be(activity);
 			modifiedLayer.Period.StartDateTime.Should().Be(expectedStart);
@@ -126,14 +126,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseActivityMovedEvent()
 		{
+			var scenario = ScenarioRepository.Has("Default");
 			var agent = new Person().WithId();
 			PersonRepository.Add(agent);
 			var activity = new Activity("act").WithId();
 			var orgStart = createDateTimeUtc(6);
 			var orgEnd = createDateTimeUtc(11);
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			var personAss = createPersonAssignmentWithOneLayer(activity, agent,CurrentScenario.Current(), orgStart, orgEnd, TimeZoneInfo.Utc);
-			ScheduleStorage.Add(personAss);
+			var personAss = createPersonAssignmentWithOneLayer(activity, agent, scenario, orgStart, orgEnd, TimeZoneInfo.Utc);
+			PersonAssignmentRepository.Add(personAss);
 			var shiftLayer = personAss.ShiftLayers.Single();
 			shiftLayer.WithId();
 			var operatedPersonId = Guid.NewGuid();
@@ -153,19 +154,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 			var expectedStartInUtc = command.NewStartTimeInUtc;
-			var loadedPersonAss = ScheduleStorage.LoadAll().Single() as PersonAssignment;
+			var loadedPersonAss = PersonAssignmentRepository.LoadAll().Single();
 			var @event = loadedPersonAss.PopAllEvents().OfType<ActivityMovedEvent>().Single();
 			@event.PersonId.Should().Be(agent.Id.Value);
 			@event.StartDateTime.Should().Be(expectedStartInUtc);
 			@event.ScenarioId.Should().Be(loadedPersonAss.Scenario.Id.Value);
 			@event.InitiatorId.Should().Be(operatedPersonId);
 			@event.CommandId.Should().Be(trackId);
-			@event.LogOnBusinessUnitId.Should().Be(CurrentScenario.Current().BusinessUnit.Id.GetValueOrDefault());
+			@event.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
 		}
 
 		[Test]
 		public void ShouldPersistDeltas()
 		{
+			var scenario = ScenarioRepository.Has("Default");
 			IntervalLengthFetcher.Has(15);
 			Now.Is(new DateTime(2013, 11, 14, 0, 0, 0, DateTimeKind.Utc));
 			var skill = SkillFactory.CreateSkillWithId("skill", 15);
@@ -180,9 +182,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var orgStart = createDateTimeUtc(6);
 			var orgEnd = createDateTimeUtc(11);
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			var personAss = createPersonAssignmentWithOneLayer(activity, agent, CurrentScenario.Current(), orgStart, orgEnd, TimeZoneInfo.Utc);
+			var personAss = createPersonAssignmentWithOneLayer(activity, agent, scenario, orgStart, orgEnd, TimeZoneInfo.Utc);
 
-			ScheduleStorage.Add(personAss);
+			PersonAssignmentRepository.Add(personAss);
 
 			var shiftLayer = personAss.ShiftLayers.Single();
 			shiftLayer.WithId();
