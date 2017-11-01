@@ -80,7 +80,7 @@
 			 ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>
 		</div>
 	</div>
-	<wfm-right-panel ng-if="vm.showInAlarm && !vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
+	<wfm-right-panel ng-if="!vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
 		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
 		<div ng-repeat="state in vm.states">
 			<div class="wfm-checkbox">
