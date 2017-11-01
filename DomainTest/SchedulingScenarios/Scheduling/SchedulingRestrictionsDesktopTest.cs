@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -51,6 +53,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				);
 
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.False();
+		}
+		
+		[Test]
+		[Ignore("#46500 to be fixed")]
+		public void ShouldScheduleAbsencePreferences()
+		{
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var date = new DateOnly(2017, 1, 10);
+			var activity = new Activity("_").WithId();
+			var scenario = new Scenario("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 100);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date);
+			var absenceRestriction = new PreferenceRestriction() {Absence = new Absence()};
+			var preferenceDay = new PreferenceDay(agent, date, absenceRestriction);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent }, new List<IPersistableScheduleData>(){preferenceDay}, new[] { skillDay });
+			var schedulingOptions = new SchedulingOptions { UsePreferences = true };
+
+			Target.Execute(new NoSchedulingCallback(),
+				schedulingOptions,
+				new NoSchedulingProgress(),
+				schedulerStateHolder.SchedulingResultState.LoadedAgents.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
+			);
+
+			schedulerStateHolder.Schedules[agent].ScheduledDay(date).PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
 		}
 
 		public SchedulingRestrictionsDesktopTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155)
