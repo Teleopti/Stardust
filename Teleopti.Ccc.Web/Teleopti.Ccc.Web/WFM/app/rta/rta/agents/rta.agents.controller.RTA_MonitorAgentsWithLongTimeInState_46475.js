@@ -99,6 +99,10 @@
 			return vm.agentStates.length == 0;
 		};
 		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
+		
+		vm.orderBy = null;
+		vm.direction = null;
+		vm.showArrow = 'Name';
 
 		var toggles = {};
 		Toggle.togglesLoaded.then(function() {
@@ -230,7 +234,9 @@
 				excludedStateIds: excludedStateIds().map(function(s) {
 					return s === nullStateId ? null : s;
 				}),
-				textFilter: vm.filterText
+				textFilter: vm.filterText,
+				orderBy: vm.orderBy,
+				direction: vm.direction
 			});
 		}
 
@@ -321,6 +327,14 @@
 				if (!poller)
 					return;
 				if (newValue !== oldValue) {
+					if (newValue) {
+						vm.orderBy = null;
+						vm.direction = null;
+					} 
+					else {
+						vm.orderBy = "Name";
+						vm.direction = "asc";
+					}
 					poller.force();
 					filterData();
 					if (newValue && vm.pause) {
@@ -411,6 +425,20 @@
 				return state.Name;
 			});
 		};
+		
+		vm.sort = function (column) {
+			vm.showArrow = column;
+			column =  (column === "SiteAndTeamName" ) ? ["SiteName" , "TeamName"] : column;
+			
+			if (JSON.stringify(column) != JSON.stringify(vm.orderBy)) {
+				vm.direction = 'asc';
+			}
+			else
+				vm.direction = vm.direction === 'desc' ? 'asc' : 'desc';
+
+			vm.orderBy = column;
+			poller.force();
+		}
 
 	};
 })();

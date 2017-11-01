@@ -144,4 +144,170 @@ describe('RtaAgentsController46475', function() {
 		expect(vm.agentStates[0].Name).toEqual("Ashley Andeen");
 	});
 
+	it('should default sort by name', function() {
+		stateParams.siteIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		$fakeBackend
+			.withAgentState({
+				Name: "Charley Caper",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withAgentState({
+				Name: "Ashley Andeen",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+
+		expect(vm.agentStates.length).toEqual(2);
+		expect(vm.agentStates[0].Name).toEqual("Ashley Andeen");
+		expect(vm.agentStates[1].Name).toEqual("Charley Caper");
+	});
+
+	it('should sort by name', function() {
+		stateParams.siteIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		$fakeBackend
+			.withAgentState({
+				Name: "Ashley Andeen",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withAgentState({
+				Name: "Charley Caper",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("Name");
+		});
+
+		expect(vm.agentStates.length).toEqual(2);
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[1].Name).toEqual("Ashley Andeen");
+	});
+
+	it('should sort by site name', function() {
+		$fakeBackend
+			.withAgentState({
+				Name: "Ashley Andeen",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				SiteName: "B"
+			})
+			.withAgentState({
+				Name: "Charley Caper",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab498",
+				SiteName: "A"
+			});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("SiteAndTeamName");
+		});
+
+		expect(vm.agentStates.length).toEqual(2);
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[1].Name).toEqual("Ashley Andeen");
+	});
+
+	it('should sort by team name', function() {
+		$fakeBackend
+			.withAgentState({
+				Name: "Ashley Andeen",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				SiteName: "C",
+				TeamName: "B"
+			})
+			.withAgentState({
+				Name: "Charley Caper",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab498",
+				SiteName: "C",
+				TeamName: "A"
+			});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("SiteAndTeamName");
+		});
+
+		expect(vm.agentStates.length).toEqual(2);
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[1].Name).toEqual("Ashley Andeen");
+	});
+
+	it('should not default sort on name when viewing agents in alarm', function() {
+		$fakeBackend
+			.withAgentState({
+				Name: "Charley Caper",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab498",
+				TimeInAlarm: 60
+			})
+			.withAgentState({
+				Name: "Ashley Andeen",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				TimeInAlarm: 20
+			});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = true);
+
+		expect(vm.agentStates.length).toEqual(2);
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[1].Name).toEqual("Ashley Andeen");
+	});
+
+	it('should switch direction', function() {
+		$fakeBackend
+			.withAgentState({
+				Name: "Ashley Andeen",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withAgentState({
+				Name: "Charley Caper",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab498"
+			});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("Name");
+		});
+
+		expect(vm.direction).toEqual('desc');
+	});
+	
+	it('should switch direction for site sort', function() {
+		$fakeBackend
+			.withAgentState({
+				Name: "Ashley Andeen",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				SiteName: "B"
+			})
+			.withAgentState({
+				Name: "Charley Caper",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab498",
+				SiteName: "A"
+			});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("SiteAndTeamName");
+		});
+		c.apply(function() {
+			vm.sort("SiteAndTeamName");
+		});
+
+		expect(vm.direction).toEqual('desc');
+	});
+
 });

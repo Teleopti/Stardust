@@ -34,6 +34,7 @@
 				+ '<label ng-repeat="row in grid.appScope.vm.timeline" class="label label-info"'
 				+ 'ng-attr-style="position: absolute; left: {{row.Offset}}; top:5px;">{{row.Time}}</label></div>';
 
+
 			var cellHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div role="columnheader" ng-class="{ \'sortable\': sortable }" ui-grid-one-bind-aria-labelledby-grid="col.uid + \'-header-text \' + col.uid + \'-sortdir-text\'"'
 				+ 'aria-sort="{{col.sort.direction == asc ? \'ascending\' : ( col.sort.direction == desc ? \'descending\' : (!col.sort.direction ? \'none\' : \'other\'))}}">'
 				+ '<div role="button" tabindex="0" class="ui-grid-cell-contents ui-grid-header-cell-primary-focus" col-index="renderIndex" title="TOOLTIP" style="width: 84%">'
@@ -46,6 +47,15 @@
 				+ 'ng-click="toggleMenu($event)" ng-class=" {\'ui-grid-column-menu-button-last-col\': isLastCol}" ui-grid-one-bind-aria-label="i18n.headerCell.aria.columnMenuButtonLabel" aria-haspopup="true">'
 				+ '<i class="ui-grid-icon-angle-down" aria-hidden="true">&nbsp;</i></div><div ui-grid-filter></div></div></div>';
 
+			if (toggleService.RTA_MonitorAgentsWithLongTimeInState_46475 && !alarmOnly)
+				cellHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div role="columnheader">'
+					+ '<div ng-click="grid.appScope.vm.sort(col.colDef.field)" role="button" tabindex="0" class="ui-grid-cell-contents ui-grid-header-cell-primary-focus" col-index="renderIndex" title="TOOLTIP" style="width: 84%">'
+					+ '<span class="ui-grid-header-cell-label" ui-grid-one-bind-id-grid="col.uid + \'-header-text\'">{{ col.colDef.displayName }}</span>'
+					+ '<i ng-show ="col.colDef.field == grid.appScope.vm.showArrow" ng-class="{\'ui-grid-icon-up-dir\': grid.appScope.vm.direction === \'asc\', \'ui-grid-icon-down-dir\': grid.appScope.vm.direction === \'desc\'}" aria-hidden="false"></i>'
+					+ '<div role="button" tabindex="0" ui-grid-one-bind-id-grid="col.uid + \'-menu-button\'" class="ui-grid-column-menu-button" ng-if="grid.options.enableColumnMenus && !col.isRowHeader  && col.colDef.enableColumnMenu !== false"'
+					+ 'ng-click="toggleMenu($event)" ng-class=" {\'ui-grid-column-menu-button-last-col\': isLastCol}" ui-grid-one-bind-aria-label="i18n.headerCell.aria.columnMenuButtonLabel" aria-haspopup="true">'
+					+ '<i class="ui-grid-icon-angle-down" aria-hidden="true">&nbsp;</i></div><div ui-grid-filter></div></div></div>';
+
 			var columnDefs = [];
 
 			var name = {
@@ -53,11 +63,14 @@
 				field: 'Name',
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate,
-				sort: alarmOnly ? null : {
-					direction: 'asc'
-				},
 				sortingAlgorithm: localeLanguageSortingService.sort
 			};
+
+			if (!toggleService.RTA_MonitorAgentsWithLongTimeInState_46475)
+				name.sort = alarmOnly ? null : {
+					direction: 'asc'
+			};
+
 			var siteAndTeam = {
 				displayName: $translate.instant('SiteTeam'),
 				field: 'SiteAndTeamName',
@@ -143,11 +156,15 @@
 				enableGridMenu: true,
 				enableColumnMenus: true,
 				enableColumnResizing: true,
-				enableSorting: !alarmOnly,
+				enableSorting: !alarmOnly && !toggleService.RTA_MonitorAgentsWithLongTimeInState_46475,
 				onRegisterApi: function (gridApi) {
+					if (toggleService.RTA_MonitorAgentsWithLongTimeInState_46475)
+						return;
 					if (!alarmOnly)
 						gridApi.core.on.sortChanged(null, function (grid, sortColumns) {
-							var sortColumnsFilteredByPriority = sortColumns.filter(function (col) { return angular.isDefined(col.sort) && angular.isDefined(col.sort.priority); })
+							var sortColumnsFilteredByPriority = sortColumns.filter(function (col) {
+								return angular.isDefined(col.sort) && angular.isDefined(col.sort.priority);
+							})
 							updateSortPriority(sortColumnsFilteredByPriority, false);
 							var priority = findMinPriorityForRereprioritize(sortColumnsFilteredByPriority);
 							if (priority > 0)
@@ -158,7 +175,9 @@
 		};
 
 		function updateSortPriority(columns, setIfExceedsMinPriority, minPriority) {
-			var priorityArray = columns.map(function (col) { return col.sort.priority; });
+			var priorityArray = columns.map(function (col) {
+				return col.sort.priority;
+			});
 			minPriority = minPriority || Math.min.apply(Math, priorityArray);
 
 			columns.forEach(function (col) {
@@ -175,7 +194,9 @@
 			if (columns.length < 2)
 				return 0;
 			var i = 0;
-			var priorityArray = columns.map(function (col) { return col.sort.priority; }).sort();
+			var priorityArray = columns.map(function (col) {
+				return col.sort.priority;
+			}).sort();
 			while (i <= priorityArray.length - 0) {
 				if (priorityArray[i + 1] - priorityArray[i] > 1)
 					return i + 1;

@@ -50,6 +50,22 @@
 				var result = agentStates;
 				// shouldnt it include both sites and teams if both are given?
 				// keeping the possibly wrong behavior for now...
+				if (params.orderBy && params.direction) {
+					
+					result = result.sort(function (a, b) {
+						if (params.direction === "asc"){
+							if (!angular.isArray(params.orderBy))
+								return a[params.orderBy].localeCompare(b[params.orderBy]);
+							return a[params.orderBy[0]].localeCompare(b[params.orderBy[0]]) || a[params.orderBy[1]].localeCompare(b[params.orderBy[1]]);
+						}
+						else {
+							if (!angular.isArray(params.orderBy))
+								return b[params.orderBy].localeCompare(a[params.orderBy]);
+							return b[params.orderBy[0]].localeCompare(a[params.orderBy[0]]) || b[params.orderBy[1]].localeCompare(a[params.orderBy[1]]);
+						}
+					})
+				}
+
 				if (params.textFilter){
 					result = result.filter(function (a) {
 						var filterString ;
