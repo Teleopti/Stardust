@@ -3,22 +3,17 @@
 ::Get path to this batchfile
 SET ROOTDIR=%~dp0
 
-SET /A ERRORLEV=0
 call "%~dp0CheckMsbuildPath.bat"
-SET /A ERRORLEV=%ERRORLEVEL%
-IF %ERRORLEV% NEQ 0 GOTO :error
+IF %ERRORLEVEL% NEQ 0 GOTO :error
 
 COLOR A
 cls
-if "%~1"=="" (
-ECHO Welcome ...) ELSE (
 SET DefaultDB=%1
 SET configuration=%2
 SET /A Silent=%3
 SET Branch=%4
 SET SqlInstanceName=%5
 SET CustomPath=%~6
-)
 
 :: Map network share, needed for Sikuli smoke/scheduler 
 net use "\\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines" /USER:toptinet\tfsintegration m8kemew0rk /PERSISTENT:NO
@@ -33,6 +28,8 @@ IF "%DefaultDB%"=="" SET DefaultDB=DemoSales
 
 ::Default values
 IF "%configuration%"=="" SET configuration=Debug
+SET /A ERRORLEV=0
+
 SET Customer=%DefaultDB%
 SET AppRar=%DefaultDB%App.rar
 SET StatRar=%DefaultDB%Stat.rar
@@ -86,7 +83,7 @@ IF EXIST DBManager*.log DEL DBManager*.log /Q
 SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%\DBManager.exe"
 IF NOT EXIST DBMANAGER (
 	ECHO Building "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
-	IF EXIST "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" "%MSBUILD%" "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%LogFolder%\build.log"
+	IF EXIST "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%LogFolder%\build.log"
 	IF %ERRORLEVEL% EQU 0 (
 	SET DATABASEPATH="%ROOTDIR%\..\Database"
 	SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%"
@@ -301,7 +298,7 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
 SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\DemoDatabase\SetTenantActive.sql"
 
-IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" "%MSBUILD%" "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%LogFolder%\build.log"
+IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%LogFolder%\build.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
 ECHO create or patch Analytics
@@ -416,10 +413,6 @@ IF %ERRORLEV% EQU 18 ECHO You dont have permisson or file missing: "%DBPath%"
 IF %ERRORLEV% EQU 19 ECHO %UsERDOMAIN%\%USERNAME% ^(teamcity agent^) lack permission to read directory "%Tfiles%" & exit /b %ERRORLEV%
 IF %ERRORLEV% EQU 20 ECHO Database restore failed! & MORE "%ROOTDIR%\restoreDB.log" & exit /b %ERRORLEV%
 IF %ERRORLEV% EQU 21 ECHO Create SQL login and drop users failed! & MORE "%ROOTDIR%\CreateLoginDropUsers.log" & exit /b %ERRORLEV%
-IF %ERRORLEV% EQU 999 (
-	ECHO No valid msbuild.exe found, please install Microsoft Build Tools for Visual Studio 2017. ) ELSE (
-	ECHO Unknown ERRORLEV: %ERRORLEV%
-)
 
 ECHO.
 ECHO --------
