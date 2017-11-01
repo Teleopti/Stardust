@@ -1179,7 +1179,6 @@
     <Compile Include="WinCode\Settings\AbsenceView.cs" />
     <Compile Include="WinCode\Settings\AvailabilityRestrictionView.cs" />
     <Compile Include="WinCode\Settings\ContractScheduleWeekAdapter.cs" />
-    <Compile Include="WinCode\Settings\GamificationSettingView.cs" />
     <Compile Include="WinCode\Settings\PageHelper.cs" />
     <Compile Include="WinCode\Settings\RotationRestrictionView.cs" />
     <Compile Include="WinCode\Settings\RtaMapModel.cs" />

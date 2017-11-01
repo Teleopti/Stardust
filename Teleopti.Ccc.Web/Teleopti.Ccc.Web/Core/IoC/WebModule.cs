@@ -19,6 +19,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
+using Teleopti.Ccc.Web.Areas.Gamification.core.IoC;
 using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
@@ -113,6 +114,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<RequestsAreaModule>();
 			builder.RegisterModule<ReportsAreaModule>();
 			builder.RegisterModule<OptionsAreaModule>();
+			builder.RegisterModule<GamificationAreaModel>();
 
 			//remove me when #36904 is done!
 			builder.RegisterType<TranslatedTexts>().SingleInstance();

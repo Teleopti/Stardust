@@ -178,6 +178,7 @@
     <Compile Include="FakeData\ContractWithMaximumTolerance.cs" />
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeBusinessRuleProvider.cs" />
+    <Compile Include="FakeData\FakeGamificationSettingRepository.cs" />
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
     <Compile Include="FakeData\FakeLatestStatisticsIntervalIdLoader.cs" />
     <Compile Include="FakeData\FakeNewBusinessRuleCollection.cs" />

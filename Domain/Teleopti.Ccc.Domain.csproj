@@ -298,6 +298,7 @@
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteWithOpenHourProvider.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHourViewModels.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteWithOpenHourProvider.cs" />
+    <Compile Include="Common\GamificationSettingView.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
     <Compile Include="Common\TimeSpanExtensions.cs" />
