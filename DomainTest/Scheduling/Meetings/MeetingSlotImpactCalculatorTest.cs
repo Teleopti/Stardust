@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		private IPersonAssignment _personAssignment;
 		private ScheduleDictionaryForTest _scheduleDictionaryWithPersonAssignment;
 		private IAllLayersAreInWorkTimeSpecification _allLayersAreInWorkTimeSpecification;
-		private FakeSchedulingResultStateHolder_DoNotUse _schedulingResultState;
+		private ISchedulingResultStateHolder _schedulingResultState;
 		private MeetingSlotImpactCalculator _calculator;
 			
 		private void setup()
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			_scheduleDictionaryWithPersonAssignment = new ScheduleDictionaryForTest(_scenario, new DateTimePeriod(2016, 1, 1, 2016, 1, 10));
 			_scheduleDictionaryWithPersonAssignment.AddPersonAssignment(_personAssignment);
 			_allLayersAreInWorkTimeSpecification = new AllLayersAreInWorkTimeSpecification();
-			_schedulingResultState = new FakeSchedulingResultStateHolder_DoNotUse();
+			_schedulingResultState = new SchedulingResultStateHolder();
 			_schedulingResultState.Schedules = _scheduleDictionaryWithPersonAssignment;
 			_calculator = new MeetingSlotImpactCalculator(_schedulingResultState, _allLayersAreInWorkTimeSpecification);
 		}
