@@ -27,6 +27,14 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return new GamificationSettingViewModel(gamificationSetting) {Id = gamificationSetting.Id.GetValueOrDefault()};
 		}
 
+		public GamificationDescriptionViewMode PersistDescription(GamificationDescriptionViewMode input)
+		{
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting.Description != input.Value) gamificationSetting.Description = input.Value;
+
+			return new GamificationDescriptionViewMode(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.Description};
+		}
+
 		private IGamificationSetting getGamificationSetting(Guid? id)
 		{
 			return id == null ? new GamificationSetting(Resources.NewGamificationSetting) : _gamificationSettingRepository.Load((Guid)id);

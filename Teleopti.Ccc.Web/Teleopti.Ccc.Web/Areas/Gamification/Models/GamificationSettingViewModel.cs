@@ -7,7 +7,7 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage)]
-
+	
 	public class GamificationSettingViewModel: GamificationSettingView
 	{
 		public GamificationSettingViewModel(IGamificationSetting setting) : base(setting)
@@ -15,5 +15,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		}
 
 		public Guid Id { get; set; }
+	}
+	
+	public class GamificationDescriptionViewMode
+	{
+		public Guid GamificationSettingId { get; set; }
+		public Description Value { get; set; }
 	}
 }
