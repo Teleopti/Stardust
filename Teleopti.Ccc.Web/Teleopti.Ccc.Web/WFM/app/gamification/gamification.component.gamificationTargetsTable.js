@@ -14,13 +14,15 @@
 		var ctrl = this;
 
 		function setHeightToFillAvailableSpace() {
-			var top = element.getBoundingClientRect().top || element.getBoundingClientRect().y;
+			var rows = $element.find('rows')[0];
 
-			var bottomMargin = 23;
+			var top = rows.getBoundingClientRect().top || rows.getBoundingClientRect().y;
+
+			var bottomMargin = 18;
 
 			var height = 'calc(100vh - ' + (top + bottomMargin) + 'px)';
 
-			element.style.height = height;
+			rows.style.height = height;
 		}
 
 		function teams(n) {
@@ -37,7 +39,7 @@
 
 		ctrl.title = 'Gamification Targets Table';
 
-		ctrl.teams = teams(5);
+		ctrl.teams = teams(100);
 
 		$scope.$on('gamification.selectTargetsTab', function (event, args) {
 			setHeightToFillAvailableSpace();

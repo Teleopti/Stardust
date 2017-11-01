@@ -1,12 +1,7 @@
 <div>
 	<div class="header">
 		<div class="selection">
-			<div class="wfm-checkbox">
-				<input type="checkbox" checked="true" />
-				<label>
-					<span class="wfm-checkbox-toggle"></span>
-				</label>
-			</div>
+			<md-checkbox></md-checkbox>
 		</div>
 		<div class="team">
 			Team
@@ -14,18 +9,9 @@
 		</div>
 		<div class="setting">Applied Setting</div>
 	</div>
-	<div>
-		<div ng-repeat="team in $ctrl.teams" class="row">
-			<div class="selection">
-				<div class="wfm-checkbox">
-					<input type="checkbox" checked="false" />
-					<label>
-						<span class="wfm-checkbox-toggle"></span>
-					</label>
-				</div>
-			</div>
-			<div class="team">{{team.name}}</div>
-			<div class="setting">{{team.appliedSetting}}</div>
-		</div>
-	</div>
+	<rows>
+		<gamification-target-row ng-repeat="team in $ctrl.teams" class="row" row="team" selected="" on-select="" on-setting-change=""></gamification-target-row>
+
+		<div class="footer"></div>
+	</rows>
 </div>

@@ -1,8 +1,11 @@
 .gamification-wrapper {
+	$SEPARATOR_COLOR: 1px solid rgba(0, 0, 0, .06);
+
 	gamification,
 	gamification-settings,
 	gamification-targets,
-	gamification-targets-table {
+	gamification-targets-table,
+	gamification-target-row, {
 		display: block;
 	}
 
@@ -13,6 +16,8 @@
 	}
 
 	gamification-targets-table {
+		margin: 0 -5px;
+
 		.header, .row {
 			display: flex;
 			padding: .8em;
@@ -23,10 +28,27 @@
 			line-height: 18px;
 		}
 
+		rows {
+			display: block;
+			overflow: auto;
+		}
+
+		.row + .row {
+			border-top: $SEPARATOR_COLOR;
+		}
+
+		.footer {
+			border-top: $SEPARATOR_COLOR;
+			height: 100px;
+		}
+
 		.selection {
-			flex: 0 0 30px;
+			flex: 0 0 50px;
 			.wfm-checkbox {
 				padding: 0;
+			}
+			md-checkbox {
+				margin-bottom: 0;
 			}
 		}
 
