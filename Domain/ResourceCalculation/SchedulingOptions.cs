@@ -254,9 +254,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    return !UseTeam && !UseBlock;
 	    }
 
-	    public object Clone()
+	    public SchedulingOptions Clone()
         {
-            return MemberwiseClone();
+            return (SchedulingOptions) MemberwiseClone();
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public SchedulingOptions Fetch(IDayOffTemplate defaultDayOffTemplate)
 		{
-			return ((desktopSchedulingContextData) _desktopContext.CurrentContext()).SchedulingOptions;
+			return ((desktopSchedulingContextData) _desktopContext.CurrentContext()).SchedulingOptions.Clone();
 		}
 
 		public ISchedulingCallback Current()

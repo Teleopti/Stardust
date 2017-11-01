@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 
 		private void dataOffline()
 		{
-			_localSchedulingOptions = (SchedulingOptions) _schedulingOptions.Clone();
+			_localSchedulingOptions = _schedulingOptions.Clone();
 		}
 
 		private void dataOnline()

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public SchedulingOptions Fetch(IDayOffTemplate defaultDayOffTemplate)
 		{
 			if (_setFromTest != null)
-				return _setFromTest;
+				return _setFromTest.Clone();
 
 			return new SchedulingOptions
 			{
