@@ -1,7 +1,7 @@
 <div>
 	<div class="header">
 		<div class="selection">
-			<md-checkbox></md-checkbox>
+			<md-checkbox aria-label="Checkbox"></md-checkbox>
 		</div>
 		<div class="team">
 			Team
@@ -9,9 +9,7 @@
 		</div>
 		<div class="setting">Applied Setting</div>
 	</div>
-	<rows>
-		<gamification-target-row ng-repeat="team in $ctrl.teams" class="row" row="team" selected="" on-select="" on-setting-change=""></gamification-target-row>
-
-		<div class="footer"></div>
-	</rows>
+	<md-virtual-repeat-container>
+		<gamification-target-row md-virtual-repeat="row in $ctrl.rows" md-on-demand row="row" selected="" on-select="" on-setting-change=""></gamification-target-row>
+	</md-virtual-repeat-container>
 </div>

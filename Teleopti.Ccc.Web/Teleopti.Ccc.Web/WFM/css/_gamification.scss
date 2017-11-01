@@ -18,7 +18,7 @@
 	gamification-targets-table {
 		margin: 0 -5px;
 
-		.header, .row {
+		.header, gamification-target-row {
 			display: flex;
 			padding: .8em;
 		}
@@ -28,13 +28,20 @@
 			line-height: 18px;
 		}
 
-		rows {
+		md-virtual-repeat-container {
 			display: block;
 			overflow: auto;
 		}
 
-		.row + .row {
-			border-top: $SEPARATOR_COLOR;
+		md-virtual-repeat-container {
+			gamification-target-row {
+				box-sizing: border-box;
+				height: 44px;
+			}
+
+			gamification-target-row + gamification-target-row {
+				border-top: $SEPARATOR_COLOR;
+			}
 		}
 
 		.footer {
