@@ -35,9 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeActivityRepository ActivityRepository2;
 		public FakeSkillRepository SkillRepository;
 		public FakeCurrentScenario_DoNotUse CurrentScenario;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
-		public FakeWriteSideRepository<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetRepository;
-		//public FakeLoggedOnUser LoggedOnUser;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakePersonSkillProvider_DoNotUse PersonSkillProvider;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
@@ -56,11 +54,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<AddPersonalActivityCommandHandler>().For<IHandleCommand<AddPersonalActivityCommand>>();
-			//system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
 			system.UseTestDouble<FakePersonSkillProvider_DoNotUse>().For<IPersonSkillProvider>();
 			
@@ -85,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(_mainActivity);
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(),_date);
 			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 				
 			var command = new AddPersonalActivityCommand
 			{
@@ -102,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 
 			Target.Handle(command);
-			var ass = (PersonAssignment) ScheduleStorage.LoadAll().Single();
+			var ass = (PersonAssignment) PersonAssignmentRepository.LoadAll().Single();
 			var theEvent = ass.PopAllEvents().OfType<PersonalActivityAddedEvent>()
 				.Single(e => e.ActivityId == command.PersonalActivityId);
 
@@ -136,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository2.Add(_mainActivity);
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), _date);
 			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 
 			var command = new AddPersonalActivityCommand
 			{
@@ -176,8 +172,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), _date);
 			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
-			ScheduleStorage.Add(personAssignmentYesterday);
+			PersonAssignmentRepository.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignmentYesterday);
 
 			var command = new AddPersonalActivityCommand
 			{

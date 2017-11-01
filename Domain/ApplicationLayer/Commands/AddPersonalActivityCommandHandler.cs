@@ -42,9 +42,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var person = _personForId.Load(command.PersonId);
 			var scenario = _currentScenario.Current();
 			
+			var loadPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime.AddDays(-1), _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
 
-			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), period, new[] { person }, false);
+			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), loadPeriod, new[] { person }, false);
 			
 			var scheduleRange = dic[person];
 			
