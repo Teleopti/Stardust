@@ -100,5 +100,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				period.ValidToDateLocal = maxDate.DateDate;
 			}
 		}
+
+		public void UpdateTeamName(Guid teamCode, string teamName)
+		{
+			var personPeriods = fakePersonPeriods
+				.Where(x => x.TeamCode == teamCode)
+				.ToList();
+			foreach (var personPeriod in personPeriods)
+			{
+				personPeriod.TeamName = teamName;
+			}
+		}
 	}
 }

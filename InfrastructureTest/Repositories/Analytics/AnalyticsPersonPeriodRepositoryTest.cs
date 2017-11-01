@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		private BusinessUnit businessUnit;
 		private Guid personPeriodCode1;
 		private IPerson _personWithGuid;
+		private AnalyticTeam _analyticTeam;
 
 		[SetUp]
 		public void SetUp()
@@ -48,8 +49,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			personId = _personWithGuid.Id.GetValueOrDefault();
 			personId2 = personWithGuid2.Id.GetValueOrDefault();
+			_analyticTeam = new AnalyticTeam
+			{
+				TeamCode = Guid.NewGuid(),
+				Name = "team",
+				TeamId = 1
+			};
 
-			
 			analyticsDataFactory.Setup(new Person(_personWithGuid, datasource, 0, validFrom,
 				AnalyticsDate.Eternity.DateDate, 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
 				false, timeZones.UtcTimeZoneId));
@@ -116,7 +122,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			result.Should().Not.Be.Null();
 			result.Email.Should().Be.EqualTo(personPeriod.Email);
 		}
-		
+
+		[Test]
+		public void ShouldUpdateTeamName()
+		{
+			setUpData();
+			var personToUpdate = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1));
+			var teamCodeToUpdate = _analyticTeam.TeamCode.GetValueOrDefault();
+			personPeriodCode1 = Guid.NewGuid();
+			_analyticTeam.TeamCode = Guid.NewGuid();
+			setUpData();
+			
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateTeamName(teamCodeToUpdate, "NewTeamName"));
+
+			var personAfterUpdate = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personToUpdate.PersonPeriodCode));
+			var personWithNoUpdate = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1));
+			personAfterUpdate.TeamName.Should().Be.EqualTo("NewTeamName");
+			personWithNoUpdate.TeamName.Should().Be.EqualTo(personToUpdate.TeamName);
+		}
+
 		[Test, TestCaseSource(typeof(CommonNameDescriptionSettingsTestData), nameof(CommonNameDescriptionSettingsTestData.TestCasesIntegration))]
 		public void UpdateNamesTest(string commonNameDescriptionSetting)
 		{
@@ -167,9 +191,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				PersonCode = _personWithGuid.Id.GetValueOrDefault(),
 				PersonName = _personWithGuid.Name.ToString(),
 				ToBeDeleted = false,
-				TeamId = 1,
-				TeamCode = Guid.NewGuid(),
-				TeamName = "team",
+				TeamId = _analyticTeam.TeamId,
+				TeamCode = _analyticTeam.TeamCode.GetValueOrDefault(),
+				TeamName = _analyticTeam.Name,
 				SiteId = 1,
 				SiteCode = Guid.NewGuid(),
 				SiteName = "site",

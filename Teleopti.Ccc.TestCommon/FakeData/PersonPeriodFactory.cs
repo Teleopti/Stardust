@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             IPersonContract personContract =
                 new PersonContract(new Contract("my first contract"), new PartTimePercentage("Testing"),
                                    new ContractSchedule("Test1"));
-            ITeam team = new Team();
+	        ITeam team = new Team();
             IPersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
 
             return personPeriod;

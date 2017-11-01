@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		IList<AnalyticTeam> GetTeams();
 		int GetOrCreate(Guid teamCode, int siteId, string teamName, int businessUnitId);
+		void UpdateName(Guid teamId, string name);
 	}
 }

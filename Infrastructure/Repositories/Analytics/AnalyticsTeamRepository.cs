@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IList<AnalyticTeam> GetTeams()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"select 
-					team_id {nameof(AnalyticTeam.TeamId)}
-					,team_code {nameof(AnalyticTeam.TeamCode)}
+					team_name {nameof(AnalyticTeam.Name)},
+					team_id {nameof(AnalyticTeam.TeamId)},
+					team_code {nameof(AnalyticTeam.TeamCode)}
 					from mart.dim_team WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean<AnalyticTeam>())
 				.List<AnalyticTeam>();
@@ -39,6 +40,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetInt32(nameof(siteId), siteId)
 					.SetInt32(nameof(businessUnitId), businessUnitId)
 					.UniqueResult<int>();
+		}
+
+		public void UpdateName(Guid teamId, string name)
+		{
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"UPDATE mart.dim_team SET team_name=:{nameof(name)} WHERE team_code='{teamId}'")
+				.SetString(nameof(name), name)
+				.ExecuteUpdate();
 		}
 	}
 }

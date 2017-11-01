@@ -25,5 +25,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void UpdatePersonNames(CommonNameDescriptionSetting commonNameDescriptionSetting, Guid businessUnitCode);
 		IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode);
 		void UpdateValidToLocalDateIds(IAnalyticsDate maxDate);
+		void UpdateTeamName(Guid teamCode, string teamName);
 	}
 }

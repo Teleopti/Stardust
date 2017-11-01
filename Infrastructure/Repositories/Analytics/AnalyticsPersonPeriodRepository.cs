@@ -456,5 +456,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetParameter(nameof(maxDate.DateId), maxDate.DateId)
 				.ExecuteUpdate();
 		}
+
+		public void UpdateTeamName(Guid teamCode, string teamName)
+		{
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+					$@"update dp
+						set 
+						  dp.team_name = :{nameof(teamName)}					  
+						from mart.dim_person dp
+						  where dp.team_code='{teamCode}'")
+				.SetString(nameof(teamName), teamName)
+				.ExecuteUpdate();
+		}
 	}
 }

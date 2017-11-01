@@ -26,6 +26,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return team.TeamId;
 		}
 
+		public void UpdateName(Guid teamId, string name)
+		{
+			var team = _analyticTeams.FirstOrDefault(x => x.TeamCode == teamId);
+			team.Name = name;
+		}
+
 		public void Has(AnalyticTeam team)
 		{
 			_analyticTeams.Add(team);

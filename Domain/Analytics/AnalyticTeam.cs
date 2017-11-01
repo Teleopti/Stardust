@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.Analytics
 	{
 		public int TeamId { get; set; }
 		public Guid? TeamCode { get; set; }
+		public string Name { get; set; }
 	}
 }

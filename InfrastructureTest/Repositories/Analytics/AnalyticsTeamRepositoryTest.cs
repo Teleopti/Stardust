@@ -46,6 +46,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
+		public void ShouldUpdateTeamName()
+		{
+			siteId = WithAnalyticsUnitOfWork.Get(() => AnalyticsPersonPeriodRepository.GetOrCreateSite(Guid.NewGuid(), "Site name 1", businessUnit.BusinessUnitId));
+
+			WithAnalyticsUnitOfWork.Get(() => Target.GetOrCreate(Guid.NewGuid(), siteId, "Team Name", businessUnit.BusinessUnitId));
+			var team = WithAnalyticsUnitOfWork.Get(() => Target.GetTeams().First());
+
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateName(team.TeamCode.Value, "NewTeamName"));
+
+			var updatedTeam = WithAnalyticsUnitOfWork.Get(() => Target.GetTeams().First());
+
+			updatedTeam.Name.Should().Be.EqualTo("NewTeamName");
+		}
+
+		[Test]
 		public void GetAll_ShouldReturnAllTeams()
 		{
 			var teamGuid1 = Guid.NewGuid();
