@@ -156,7 +156,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 				startDate: moment().startOf('week')._d,
 				endDate: moment().endOf('week')._d
 			};
-			
+
 			target.scope.$digest();
 			expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
 		});
@@ -164,16 +164,16 @@ describe('Requests - Refactor(remove later) controller controllers',
 		it('should keep search tearms in params after selected period changed', function () {
 			var target = setUpTarget();
 			var controller = target.controller;
-
+			
 			controller.onFavoriteSearchInitDefer.resolve();
+
 			controller.agentSearchOptions.keyword = 'keyword';
 			target.scope.$digest();
 			expect(getParamsFn().agentSearchTerm).toEqual('keyword');
 
-			controller.period = {
-				startDate: '2017-11-10',
-				endDate: '2017-11-25'
-			};
+			controller.period.startDate = new Date('2017-11-10');
+			controller.period.endDate = new Date('2017-11-30');
+			
 			target.scope.$digest();
 			expect(getParamsFn().agentSearchTerm).toEqual('keyword');
 		});
@@ -395,7 +395,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 			expect(requestCommandParamsHolder.getOvertimeSelectedRequestIds().length).toEqual(0);
 		});
 
-		it('should reset pageNumber after chaning tab', function() {
+		it('should reset pageNumber after chaning tab', function () {
 			var target = setUpTarget();
 			var controller = target.controller;
 			controller.init();
