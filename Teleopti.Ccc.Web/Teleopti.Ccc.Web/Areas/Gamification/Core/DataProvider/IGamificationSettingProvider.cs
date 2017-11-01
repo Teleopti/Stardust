@@ -3,8 +3,8 @@ using Teleopti.Ccc.Web.Areas.Gamification.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 {
-	public interface IGamificationSettingPersister
+	public interface IGamificationSettingProvider
 	{
-		GamificationViewModel Persist();
+		GamificationViewModel GetGamificationSetting(Guid id);
 	}
 }

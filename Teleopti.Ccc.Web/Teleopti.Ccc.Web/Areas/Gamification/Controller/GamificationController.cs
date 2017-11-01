@@ -1,6 +1,7 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Web.Areas.Gamification.core.DataProvider;
+using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
@@ -8,16 +9,24 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 	public class GamificationController : ApiController
 	{
 		private readonly IGamificationSettingPersister _gamificationSettingPersister;
+		private readonly IGamificationSettingProvider _gamificationSettingProvider;
 
-		public GamificationController(IGamificationSettingPersister gamificationSettingPersister)
+		public GamificationController(IGamificationSettingPersister gamificationSettingPersister, IGamificationSettingProvider gamificationSettingProvider)
 		{
 			_gamificationSettingPersister = gamificationSettingPersister;
+			_gamificationSettingProvider = gamificationSettingProvider;
 		}
 
 		[HttpPost, Route("api/Gamification/Create"), UnitOfWork]
 		public virtual GamificationViewModel CreateGamification()
 		{
 			return _gamificationSettingPersister.Persist();
+		}
+
+		[HttpPost, Route("api/Gamification/Load"), UnitOfWork]
+		public virtual GamificationViewModel LoadGamification(Guid id)
+		{
+			return _gamificationSettingProvider.GetGamificationSetting(id);
 		}
 	}
 }

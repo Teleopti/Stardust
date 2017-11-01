@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.Gamification.core.DataProvider;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 {

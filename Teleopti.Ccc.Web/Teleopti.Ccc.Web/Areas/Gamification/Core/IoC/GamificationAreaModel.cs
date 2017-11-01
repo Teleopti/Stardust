@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Web.Areas.Gamification.core.DataProvider;
+using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.core.IoC
 {
@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<GamificationSettingPersister>().As<IGamificationSettingPersister>().SingleInstance();
+			builder.RegisterType<GamificationSettingProvider>().As<IGamificationSettingProvider>().SingleInstance();
 		}
 	}
 }

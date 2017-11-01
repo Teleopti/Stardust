@@ -219,6 +219,7 @@
     </Compile>
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingPersisterTest.cs" />
+    <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingProviderTest.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\ReportsControllerTest.cs" />

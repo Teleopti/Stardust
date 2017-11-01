@@ -394,7 +394,9 @@
     <Compile Include="Areas\Forecasting\Core\ForecastExportToExcel.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationController.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingPersister.cs" />
+    <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingProvider.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\IGamificationSettingPersister.cs" />
+    <Compile Include="Areas\Gamification\Core\DataProvider\IGamificationSettingProvider.cs" />
     <Compile Include="Areas\Gamification\Core\IoC\GamificationAreaModel.cs" />
     <Compile Include="Areas\Gamification\Models\GamificationViewModel.cs" />
     <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
