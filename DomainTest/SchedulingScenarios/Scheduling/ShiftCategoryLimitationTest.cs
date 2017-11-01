@@ -30,29 +30,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		[Test]
-		[Ignore("#46389 - not red yet. Maybe issue something totally different than we thought?")]
-		public void ShouldNotBreakShiftCategoryLimitationOf0()
+		[TestCase(1, true)]
+		[TestCase(0, false)]
+		[Ignore("#46389 - 2 be fixed")]
+		public void ShouldNotBreakShiftCategoryLimitationOf0WhenMultipleIslandsExist(int maxNumberOfShiftCategories, bool agentShouldBeScheduled)
 		{
 			var date = new DateOnly(2017, 1, 22);
 			var shiftCat = new ShiftCategory("_").WithId();
-			var scenario = new Scenario("_");
-			var activity = new Activity("_");
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen().WithId();
-			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 1);
+			var scenario = new Scenario();
+			var activity = new Activity();
+			var skill1 = new Skill("1").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen().WithId();
+			var skill2 = new Skill("2").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen().WithId();
+			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, date, 1);
+			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, date, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCat));
-			var agent = new Person().WithSchedulePeriodOneDay(date).WithPersonPeriod(ruleSet, skill).InTimeZone(TimeZoneInfo.Utc).WithId();
-			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat) { MaxNumberOf = 1 });
-			var stateholder = SchedulerStateHolderFrom.Fill(scenario, date,  agent, skillDay);
+			var agent1 = new Person().WithSchedulePeriodOneDay(date).WithPersonPeriod(ruleSet, skill1).InTimeZone(TimeZoneInfo.Utc).WithId();
+			agent1.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat) { MaxNumberOf = maxNumberOfShiftCategories });
+			var agent2 = new Person().WithSchedulePeriodOneDay(date).WithPersonPeriod(ruleSet, skill2).InTimeZone(TimeZoneInfo.Utc).WithId();
+			agent2.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat) { MaxNumberOf = maxNumberOfShiftCategories });
+			var stateholder = SchedulerStateHolderFrom.Fill(scenario, date, new[] {agent1, agent2}, new[] {skillDay1, skillDay2});
 			var schedulingOptions = new SchedulingOptions
 			{ 
-				UseShiftCategoryLimitations = true,
+				UseShiftCategoryLimitations = true
 			};
 
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[]{ agent }, date.ToDateOnlyPeriod());
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[]{ agent1, agent2 }, date.ToDateOnlyPeriod());
 
-			stateholder.Schedules[agent].ScheduledDay(date).PersonAssignment().MainActivities().Any()
-				.Should().Be.False();
+			stateholder.Schedules[agent1].ScheduledDay(date).IsScheduled().Should().Be.EqualTo(agentShouldBeScheduled);
+			stateholder.Schedules[agent2].ScheduledDay(date).IsScheduled().Should().Be.EqualTo(agentShouldBeScheduled);
 		}
 		
 		[Test]
