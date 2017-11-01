@@ -1,5 +1,8 @@
 .gamification-wrapper {
-	gamification, gamification-settings, gamification-targets {
+	gamification,
+	gamification-settings,
+	gamification-targets,
+	gamification-targets-table {
 		display: block;
 	}
 
@@ -7,6 +10,29 @@
 		.panel.material-depth-1 {
 			height: 100%;
 		}
+	}
+
+	gamification-targets-table {
+		.header, .row {
+			display: flex;
+			padding: .8em;
+		}
+
+		.header {
+			background-color: $blue-100;
+			line-height: 18px;
+		}
+
+		.selection {
+			flex: 0 0 30px;
+			.wfm-checkbox {
+				padding: 0;
+			}
+		}
+
+		.team { flex: 1 1 300px; }
+
+		.setting { flex: 2 1 300px; }
 	}
 }
 

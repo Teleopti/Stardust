@@ -1,1 +1,10 @@
-<div>{{::$ctrl.title}}</div>
+<div>
+	<md-select ng-model="$ctrl.selectedSites" placeholder="{{ 'SelectSite'|translate }}" class="md-no-underline" style="width: fit-content;">
+		<md-option ng-repeat="site in $ctrl.sites" ng-value="site.id">
+			{{ site.name }}
+		</md-option>
+	</md-select>
+</div>
+<div>
+	<gamification-targets-table></gamification-targets-table>
+</div>
