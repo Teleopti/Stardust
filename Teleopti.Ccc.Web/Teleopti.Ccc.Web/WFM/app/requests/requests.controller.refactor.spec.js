@@ -161,6 +161,26 @@ describe('Requests - Refactor(remove later) controller controllers',
 			expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
 		});
 
+		it('should keep search tearms in params after selected period changed', function () {
+			var target = setUpTarget();
+			var controller = target.controller;
+
+			controller.onFavoriteSearchInitDefer.resolve();
+			controller.activeShiftTradeTab();
+			controller.agentSearchOptions.keyword = 'keyword';
+			target.scope.$digest();
+			expect(getParamsFn().agentSearchTerm).toEqual('keyword');
+
+			controller.period = {
+				startDate: '2017-11-10',
+				endDate: '2017-11-25'
+			};
+			controller.activeShiftTradeTab();
+			controller.activeAbsenceAndTextTab();
+			target.scope.$digest();
+			expect(getParamsFn().agentSearchTerm).toEqual('keyword');
+		});
+
 		it('should clear the selection after search term changed and enter press', function () {
 			var controller = setUpTarget().controller;
 

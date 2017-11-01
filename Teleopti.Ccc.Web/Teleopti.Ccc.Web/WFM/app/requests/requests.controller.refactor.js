@@ -323,9 +323,9 @@
 			return startDate + '-' + endDate;
 		}
 
-		function getParams(){
+		function getParams() {
 			return {
-				agentSearchTerm: '',
+				agentSearchTerm: vm.agentSearchOptions.keyword,
 				selectedGroupIds: vm.selectedGroups.groupIds,
 				filterEnabled: vm.filterEnabled,
 				onInitCallBack: vm.initFooter,
