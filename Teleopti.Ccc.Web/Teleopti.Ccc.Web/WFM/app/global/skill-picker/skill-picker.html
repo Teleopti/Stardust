@@ -1,11 +1,11 @@
 ﻿<div class="con-row">
     <div class="con-flex">
-        <md-autocomplete 
+        <md-autocomplete
         ng-attr-skillsLoaded="{{$ctrl.skillsLoaded}}"
         md-min-length="0"
-        md-selected-item="$ctrl.selectedSkill" 
-        md-selected-item-change="$ctrl.selectSkill(skill)" 
-        md-search-text="skillFilterText.Name" 
+        md-selected-item="$ctrl.selectedSkill"
+        md-selected-item-change="$ctrl.selectSkill(skill)"
+        md-search-text="skillFilterText.Name"
         md-items="skill in $ctrl.skills | filter:skillFilterText"
         md-item-text="skill.Name"
         placeholder="{{'SelectSkill' | translate}}">
@@ -19,15 +19,15 @@
     </div>
 
     <div class="con-flex">
-        <md-autocomplete 
+        <md-autocomplete
         ng-attr-skillAreasLoaded="{{$ctrl.skillAreasLoaded}}"
-        md-min-length="0" 
-        md-selected-item="$ctrl.selectedSkillArea" 
-        md-selected-item-change="$ctrl.selectSkillArea(skillArea)" 
-        md-search-text="skillAreaFilterText.Name" 
+        md-min-length="0"
+        md-selected-item="$ctrl.selectedSkillArea"
+        md-selected-item-change="$ctrl.selectSkillArea(skillArea)"
+        md-search-text="skillAreaFilterText.Name"
         md-items="skillArea in $ctrl.skillAreas | filter:skillAreaFilterText"
-        md-item-text="skillArea.Name" 
-        placeholder="{{'SelectSkillArea' | translate}}">
+        md-item-text="skillArea.Name"
+        placeholder="{{'SelectSkillGroup' | translate}}">
             <md-item-template>
                 <span ng-bind="skillArea.Name"></span>
             </md-item-template>
