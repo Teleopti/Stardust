@@ -88,20 +88,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 	    [Test]
 	    public void ShouldReturnPersonId()
 	    {
-		    IPerson person = new Person();
 		    Guid? personId = Guid.NewGuid();
             IIdentityLogon identityLogon = new FakeAuthenticator();
-		    person.SetId(personId);
+		    identityLogon.LogonIdentityUser().Person.SetId(personId);
 			 const string url = "http://my.url.com";
 			 const string applicationPath = "/TeleoptiCCC/Web/";
-		    System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-					 new TeleoptiIdentity("test", null, null, null, null), person );
 			 IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
              var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon, signatureCreator, new Now());
-		    target.AuthenticationDetails().Should().Be.Equals(personId);
+		    ((JsonResult)target.AuthenticationDetails()).Data.ToString().Should().Contain(personId.ToString());
 	    }
 
-		 [Test]
+		[Test]
+		public void ShouldHandleErrorWhenReturnPersonId()
+		{
+			const string url = "http://my.url.com";
+			const string applicationPath = "/TeleoptiCCC/Web/";
+			IIdentityLogon identityLogon = new FakeAuthenticator();
+			identityLogon.LogonIdentityUser().Person = null;
+			IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
+			var context = CurrentHttpContext(url, applicationPath);
+			var target = new UrlController(context, authenticationModule, identityLogon, signatureCreator, new Now());
+			((JsonResult)target.AuthenticationDetails()).Data.Should().Be.EqualTo("");
+			context.Current().Response.StatusCode.Should().Be.EqualTo(401);
+		}
+
+		[Test]
 		 public void ShouldRedirectToHomePage()
 		 {
 			 IPerson person = new Person();

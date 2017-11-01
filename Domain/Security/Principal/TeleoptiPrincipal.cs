@@ -44,12 +44,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			Organisation = OrganisationMembership.FromPerson(_person);
 		}
 
-		public override IIdentity Identity { get { return _identity ?? base.Identity; } }
+		public override IIdentity Identity => _identity ?? base.Identity;
 
 		public IRegional Regional { get; private set; }
 		public IOrganisationMembership Organisation { get; private set; }
 
-		public IEnumerable<ClaimSet> ClaimSets { get { return _claimSets; } }
+		public IEnumerable<ClaimSet> ClaimSets => _claimSets;
 
 		public void AddClaimSet(ClaimSet claimSet) { _claimSets.Add(claimSet); }
 
@@ -58,8 +58,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			return personRepository.Get(_person.Id.GetValueOrDefault());
 		}
 
-		IPerson IUnsafePerson.Person { get { return _person; } }
-
+		IPerson IUnsafePerson.Person => _person;
 	}
 
     public interface IUnsafePerson

@@ -81,9 +81,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpGet]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual JsonResult AuthenticationDetails()
+		public virtual ActionResult AuthenticationDetails()
 		{
-			var loggedOnPerson = _identityLogon.LogonIdentityUser().Person;
+			var loggedOnPerson = _identityLogon?.LogonIdentityUser()?.Person;
+			if (loggedOnPerson == null)
+			{
+				var response = _currentHttpContext.Current().Response;
+				response.TrySkipIisCustomErrors = true;
+				response.StatusCode = 401;
+				return Json("");
+			}
 			return Json(new {PersonId = loggedOnPerson.Id}, JsonRequestBehavior.AllowGet);
 		}
 	}
