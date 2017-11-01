@@ -13,9 +13,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -24,7 +22,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using EntityExtensions = Teleopti.Ccc.TestCommon.EntityExtensions;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
@@ -41,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
-		public FakePersonSkillProvider_DoNotUse PersonSkillProvider;
 		public MutableNow Now;
 		public FakeUserTimeZone UserTimeZone;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
@@ -51,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<AddActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.UseTestDouble<FakePersonSkillProvider_DoNotUse>().For<IPersonSkillProvider>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 		}
@@ -66,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
-			personAssignment.ShiftLayers.ForEach(sl => EntityExtensions.WithId<ShiftLayer>(sl));
+			personAssignment.ShiftLayers.ForEach(sl => sl.WithId());
 			personAssignment.SetId(Guid.NewGuid());
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -432,8 +427,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			Now.Is(new DateTime(2013, 11, 14, 0, 0, 0, DateTimeKind.Utc));
 			IntervalLengthFetcher.Has(15);
-			var person = PersonFactory.CreatePersonWithId();
-			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
 			var mainActivity = ActivityFactory.CreateActivity("mainActivity");
 			ActivityRepository.Add(activity);
@@ -444,11 +437,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			SkillRepository.Add(skill2);
 			skill1.Activity = activity;
 			skill2.Activity = mainActivity;
-			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill1,skill2 }, new DateOnlyPeriod(), null, new[] { skill1,skill2 });
+			var person = PersonRepository.Has(skill1, skill2);
 			activity.RequiresSkill = true;
 			mainActivity.RequiresSkill = true;
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
-			personAssignment.ShiftLayers.ForEach(sl => EntityExtensions.WithId<ShiftLayer>(sl));
+			personAssignment.ShiftLayers.ForEach(sl => sl.WithId());
 			personAssignment.SetId(Guid.NewGuid());
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -483,8 +476,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			Now.Is(new DateTime(2013, 11, 14, 0, 0, 0, DateTimeKind.Utc));
 			IntervalLengthFetcher.Has(15);
-			var person = PersonFactory.CreatePersonWithId();
-			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
 			var mainActivity = ActivityFactory.CreateActivity("mainActivity");
 			ActivityRepository.Add(activity);
@@ -495,10 +486,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			SkillRepository.Add(skill2);
 			skill1.Activity = activity;
 			skill2.Activity = mainActivity;
-			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill1, skill2 }, new DateOnlyPeriod(), null, new[] { skill1, skill2 });
+			var person = PersonRepository.Has(skill1, skill2);
 			activity.RequiresSkill = true;
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
-			personAssignment.ShiftLayers.ForEach(sl => EntityExtensions.WithId<ShiftLayer>(sl));
+			personAssignment.ShiftLayers.ForEach(sl => sl.WithId());
 			personAssignment.SetId(Guid.NewGuid());
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();

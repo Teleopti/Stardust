@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Staffing;
@@ -30,16 +29,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class AddPersonalActivityCommandHandlerTest : ISetup
 	{
 		public AddPersonalActivityCommandHandler Target;
-		public FakeWriteSideRepository<IPerson> PersonRepository;
+		public FakePersonRepository PersonRepository;
 		public FakeWriteSideRepository<IActivity> ActivityRepository;
 		public FakeActivityRepository ActivityRepository2;
 		public FakeSkillRepository SkillRepository;
 		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
-		public FakePersonSkillProvider_DoNotUse PersonSkillProvider;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public MutableNow Now;
+
 		private DateOnly _date;
 		private DateTime _startTime;
 		private DateTime _endTime;
@@ -52,13 +51,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
-			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<AddPersonalActivityCommandHandler>().For<IHandleCommand<AddPersonalActivityCommand>>();
 			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
-			system.UseTestDouble<FakePersonSkillProvider_DoNotUse>().For<IPersonSkillProvider>();
 			
 			_date = new DateOnly(2016, 05, 17);
 			_startTime = new DateTime(2016, 05, 17, 10, 0, 0, DateTimeKind.Utc);
@@ -119,12 +116,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Now.Is(new DateTime(2016, 5, 17, 0, 0, 0, DateTimeKind.Utc));
 			IntervalLengthFetcher.Has(15);
-			var person = PersonFactory.CreatePersonWithId();
-			PersonRepository.Add(person);
+			var person = PersonRepository.Has(_skill,_skill2);
 			var activity = ActivityFactory.CreateActivity("Phone");
 			activity.WithId();
 			_skill2.Activity = activity;
-			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { _skill, _skill2 }, new DateOnlyPeriod(), null, new[] { _skill, _skill2 });
+
 			activity.RequiresSkill = true;
 			ActivityRepository.Add(activity);
 			ActivityRepository2.Add(activity);
@@ -319,11 +315,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignment.AddPersonalActivity(_personalActivity, _personalActivityDateTimePeriod);
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(new FakeStorage())
 			{
-				personAssignmentYesterday
+				personAssignmentYesterday,
+				personAssignment
 			};
-
-			personAssignmentRepository.Add(personAssignment);
-
+			
 			var currentScenario = new ThisCurrentScenario(personAssignmentRepository.First().Scenario);
 
 			var command = new AddPersonalActivityCommand

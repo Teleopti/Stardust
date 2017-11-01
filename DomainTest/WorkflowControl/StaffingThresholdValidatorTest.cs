@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_schedulingResultStateHolder.Schedules = _dictionary;
 			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceCalculation>();
 			_personRequestFactory = new PersonRequestFactory();
-			_person = PersonFactory.CreatePersonWithId();
+			_person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2001,1,1));
 			_personRequestFactory.Person = _person;
 			_person.PermissionInformation.SetCulture(new CultureInfo(1033));
 			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
@@ -602,8 +602,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 																		});
 			stateHolder.Schedules = _dictionary;
 			_dictionary.AddTestItem(_person, GetExpectationForTwoDays(date, absence, requestedDateTimePeriod, new List<IVisualLayer> { existingLayerWithSameAbsence, existingLayerWithSameAbsence2 }));
+			
+			_person.AddSkill(_skill,date);
 
-			var personSkillProvider = new FakePersonSkillProvider_DoNotUse { SkillCombination = new SkillCombination(new[] { _skill }, new DateOnlyPeriod(), new[] { new SkillEffiencyResource(_skill.Id.GetValueOrDefault(), 1) }, new[] { _skill }) };
+			var personSkillProvider = new PersonSkillProvider();
 
 			var result = _target.GetUnderStaffingDays(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null), personSkillProvider);
 			result.UnderstaffingDays.Count().Should().Be.EqualTo(2);

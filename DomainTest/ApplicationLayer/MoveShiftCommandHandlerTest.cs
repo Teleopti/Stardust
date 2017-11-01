@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
@@ -33,8 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
-		public FakeWriteSideRepository<IPerson> PersonRepository;
-		public FakePersonSkillProvider_DoNotUse PersonSkillProvider;
+		public FakePersonRepository PersonRepository;
 		public MutableNow Now;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
@@ -43,13 +41,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<MoveShiftCommandHandler>().For<IHandleCommand<MoveShiftCommand>>();
-			system.UseTestDouble<FakePersonSkillProvider_DoNotUse>().For<IPersonSkillProvider>();
 		}
 
 		[Test]
@@ -273,10 +269,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			IntervalLengthFetcher.Has(15);
 			Now.Is(new DateTime(2013, 11, 14,0,0,0,DateTimeKind.Utc));
 			var skill = SkillFactory.CreateSkillWithId("skill", 15);
-			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill}, new DateOnlyPeriod(), null, new[] { skill });
 			SkillRepository.Add(skill);
-			var agent = new Person().WithId();
-			PersonRepository.Add(agent);
+			var agent = PersonRepository.Has(skill);
 			var activity = new Activity("act").WithId();
 			skill.Activity = activity;
 			activity.RequiresSkill = true;
