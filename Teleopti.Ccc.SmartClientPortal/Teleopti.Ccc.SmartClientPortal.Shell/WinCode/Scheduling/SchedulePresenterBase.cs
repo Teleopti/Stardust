@@ -36,12 +36,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         private readonly SchedulePartFilter _schedulePartFilter;
         private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IUndoRedoContainer _undoRedo;
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SchedulePresenterBase(IScheduleViewBase view, ISchedulerStateHolder schedulerState, IGridlockManager lockManager, 
             ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedo)
         {
             VisibleWeeks = 4;
             IsAscendingSort = true;
@@ -53,7 +54,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             _schedulePartFilter = schedulePartFilter;
             _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
-            DefaultScheduleTag = defaultScheduleTag;
+			_undoRedo = undoRedo;
+			DefaultScheduleTag = defaultScheduleTag;
             Now = DateTime.UtcNow;
             SelectedPeriod = SchedulerState.RequestedPeriod;
             SortCommand = new NoSortCommand(_schedulerState);
@@ -603,10 +605,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                 }
             }
 
-#pragma warning disable 618
-            var undoRedoContainer = _schedulerState.UndoRedoContainer ?? new NonExistentUndoRedoContainer();
-#pragma warning restore 618
-            undoRedoContainer.CreateBatch("Saving parts");
+			_undoRedo.CreateBatch("Saving parts");
             bool result;
             try
             {
@@ -614,11 +613,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             }
             catch (Exception)
             {
-                undoRedoContainer.RollbackBatch();
+				_undoRedo.RollbackBatch();
                 throw;
             }
             
-            undoRedoContainer.CommitBatch();
+			_undoRedo.CommitBatch();
             
             return result;
         }
@@ -688,14 +687,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             if (LastUnsavedSchedulePart == null) return;
             IList<IScheduleDay> theParts = new List<IScheduleDay> { LastUnsavedSchedulePart };
 
-#pragma warning disable 618
-            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new NonExistentUndoRedoContainer();
-#pragma warning restore 618
-            undoRedoContainer.CreateBatch("Saving note");
+			_undoRedo.CreateBatch("Saving note");
 
             _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(DefaultScheduleTag));
 
-            undoRedoContainer.CommitBatch();
+			_undoRedo.CommitBatch();
             LastUnsavedSchedulePart = null;
         }
 
@@ -704,14 +700,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             if (LastUnsavedSchedulePart == null) return;
             IList<IScheduleDay> theParts = new List<IScheduleDay> { LastUnsavedSchedulePart };
 
-#pragma warning disable 618
-            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new NonExistentUndoRedoContainer();
-#pragma warning restore 618
-            undoRedoContainer.CreateBatch("Saving public note");
+			_undoRedo.CreateBatch("Saving public note");
 
             _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(DefaultScheduleTag));
 
-            undoRedoContainer.CommitBatch();
+			_undoRedo.CommitBatch();
             LastUnsavedSchedulePart = null;
         }
 
@@ -819,60 +812,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         {
             AddPersonalShift(null, null);
         }
-
-	    private class NonExistentUndoRedoContainer : IUndoRedoContainer
-	    {
-		    public bool InUndoRedo { get; }
-		    public bool CanRedo()
-		    {
-				return false;
-			}
-
-		    public bool CanUndo()
-		    {
-			    return false;
-		    }
-
-		    public void Clear()
-		    {
-		    }
-
-		    public bool Redo()
-		    {
-				return false;
-			}
-
-		    public void SaveState<T>(IOriginator<T> state)
-		    {
-		    }
-
-		    public bool Undo()
-		    {
-				return false;
-			}
-
-		    public void CreateBatch(string description)
-		    {
-		    }
-
-		    public void CommitBatch()
-		    {
-		    }
-
-		    public void RollbackBatch()
-		    {
-		    }
-
-		    public event EventHandler ChangedHandler;
-		    public void UndoAll()
-		    {
-		    }
-
-		    protected virtual void OnChangedHandler()
-		    {
-			    ChangedHandler?.Invoke(this, EventArgs.Empty);
-		    }
-	    }
     }
 
 

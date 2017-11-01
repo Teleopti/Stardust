@@ -419,9 +419,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_schedulerState.SetRequestedScenario(loadScenario);
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-#pragma warning disable 618
-			_schedulerState.UndoRedoContainer = _undoRedo;
-#pragma warning restore 618
 			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState, _container.Resolve<IResourceCalculation>(), _container.Resolve<ISkillPriorityProvider>(), _container.Resolve<IScheduleStorageFactory>());
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 
@@ -4554,7 +4551,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new DayViewNew(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
 					_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
@@ -4563,7 +4560,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new WeekView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
 					break;
@@ -4571,7 +4568,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new PeriodView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
 					break;
@@ -4579,14 +4576,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new OverviewView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
 					break;
 				case ZoomLevel.RequestView:
 					restrictionViewMode(false);
 					_scheduleView = new PeriodView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
 					_elementHostRequests.BringToFront();
 					_elementHostRequests.ContextMenuStrip = contextMenuStripRequests;
 					enableRibbonForRequests(true);
@@ -4598,7 +4595,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_grid.BringToFront();
 					_scheduleView = new AgentRestrictionsDetailView(schedulerSplitters1.AgentRestrictionGrid, _grid, SchedulerState,
 						_gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback,
-						_defaultScheduleTag, _workShiftWorkTime);
+						_defaultScheduleTag, _workShiftWorkTime, _undoRedo);
 					_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
 					prepareAgentRestrictionView(selectedPart, _scheduleView, selectedPersons);
 					if (scheduleParts != null)

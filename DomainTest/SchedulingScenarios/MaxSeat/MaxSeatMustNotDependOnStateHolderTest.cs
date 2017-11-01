@@ -341,12 +341,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				throw new NotImplementedException();
 			}
 
-			public IUndoRedoContainer UndoRedoContainer
-			{
-				get { throw new NotImplementedException(); }
-				set { throw new NotImplementedException(); }
-			}
-
 			public CommonNameDescriptionSetting CommonNameDescription
 			{
 				get { throw new NotImplementedException(); }

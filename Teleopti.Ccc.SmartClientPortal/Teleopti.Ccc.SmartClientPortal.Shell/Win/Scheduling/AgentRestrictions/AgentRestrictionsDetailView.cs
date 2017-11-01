@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 		public AgentRestrictionsDetailView(AgentRestrictionGrid agentRestrictionGrid, GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
-			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IWorkShiftWorkTime workShiftWorkTime)
+			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IWorkShiftWorkTime workShiftWorkTime, IUndoRedoContainer undoRedo)
 			: base(grid)
 		{
 			if(schedulerState == null) throw new ArgumentNullException("schedulerState");
 
 			_model = new AgentRestrictionsDetailModel(schedulerState.RequestedPeriod.Period());
-			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag);
+			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedo);
 
 			_agentRestrictionGrid = agentRestrictionGrid;
 			_workShiftWorkTime = workShiftWorkTime;

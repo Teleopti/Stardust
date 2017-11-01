@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public IntradayScheduleView(GridControl gridControl, IIntradayView intradayView, ISchedulerStateHolder schedulerState,
             GridlockManager lockManager, SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedo)
             : base(null)
 		{
 			_gridControl = gridControl;
             _intradayView = intradayView;
-            Presenter = new DayPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag);
+            Presenter = new DayPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedo);
         }
 
         public bool IsOverviewColumnsHidden { get; set; }

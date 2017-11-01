@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
+		private readonly IUndoRedoContainer _undoRedo;
 
 		private DateNavigateControl _timeNavigationControl;
 		private GridRowInChartSettingButtons _gridrowInChartSetting;
@@ -61,7 +62,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			IResourceOptimizationHelperExtended resourceOptimizationHelperExtended, IEventPublisher publisher,
 			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			IScheduleDayChangeCallback scheduleDayChangeCallback, ISkillPriorityProvider skillPriorityProvider)
+			IScheduleDayChangeCallback scheduleDayChangeCallback, ISkillPriorityProvider skillPriorityProvider,
+			IUndoRedoContainer undoRedo)
 		{
 			_eventAggregator = eventAggregator;
 			_overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
@@ -71,6 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_skillPriorityProvider = skillPriorityProvider;
+			_undoRedo = undoRedo;
 
 			var authorization = PrincipalAuthorization.Current();
 
@@ -564,7 +567,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 
 			_intradayViewContent = new IntradayViewContent(Presenter, this, _eventAggregator, Presenter.SchedulerStateHolder,
 				_settingManager, _overriddenBusinessRulesHolder, _resourceOptimizationHelperExtended,
-				_resourceCalculationContextFactory, _scheduleDayChangeCallback, _skillPriorityProvider);
+				_resourceCalculationContextFactory, _scheduleDayChangeCallback, _skillPriorityProvider, _undoRedo);
 			_intradayViewContent.RightToLeft = RightToLeft; //To solve error with wrong dock labels running RTL
 			_timeNavigationControl.SetSelectedDate(Presenter.IntradayDate);
 			Presenter.ExternalAgentStateReceived += presenterExternalAgentStateReceived;

@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
         public DayViewNew(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
             SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedo)
             : base(grid)
         {
             if (grid == null) throw new ArgumentNullException(nameof(grid));
 
             _presenter = new DayPresenterNew(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder,
-                scheduleDayChangeCallback, new DayPresenterScaleCalculator(), defaultScheduleTag);
+                scheduleDayChangeCallback, new DayPresenterScaleCalculator(), defaultScheduleTag, undoRedo);
             Presenter = _presenter;
             grid.Name = "DayView";
         }

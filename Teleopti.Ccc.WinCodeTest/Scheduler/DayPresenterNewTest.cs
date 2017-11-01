@@ -15,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
             _scaleCalculator = mocks.StrictMock<IDayPresenterScaleCalculator>();
             target = new DayPresenterNew(viewBase, schedulerState, gridlockManager, clipHandlerSchedulePart,
-                                      SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, _scaleCalculator, NullScheduleTag.Instance);
+                                      SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, _scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer());
         }
 
         [Test]
@@ -141,7 +142,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	    public void ShouldSelectDayAndDayAfter()
 	    {
 			var scaleCalculator = new DayPresenterScaleCalculator();
-		    var presenter = new DayPresenterNew(null, schedulerState, null,null, SchedulePartFilter.None, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance);
+		    var presenter = new DayPresenterNew(null, schedulerState, null,null, SchedulePartFilter.None, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer());
 			presenter.SelectDate(DateOnly.Today);
 			Assert.AreEqual(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)), presenter.SelectedPeriod.DateOnlyPeriod);
 	    }
@@ -150,7 +151,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             internal DayPresenterNewTestClass(IScheduleViewBase view, ISchedulerStateHolder schedulerState, GridlockManager lockManager,
                 ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter, IDayPresenterScaleCalculator scaleCalculator)
-                : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance)
+                : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer())
             {
             }
 

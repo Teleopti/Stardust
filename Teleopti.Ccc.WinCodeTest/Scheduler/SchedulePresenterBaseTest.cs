@@ -74,12 +74,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
             _period = new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1);
 			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZoneInfo), new List<IPerson>(), _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new FakeTimeZoneGuard(_timeZoneInfo));
-			_schedulerState.UndoRedoContainer = new UndoRedoContainer();
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
 
             createMockObjects();
 
-            _target = new SchedulePresenterBase(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart, SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);
+            _target = new SchedulePresenterBase(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart, SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer());
 			_grid = new GridControl();
             _person = PersonFactory.CreatePerson("person");
 
@@ -340,7 +339,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(GridMergeCellDirection.None, eventArgs.Style.MergeCell);
 
             _target = new SchedulePresenterBase(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart, SchedulePartFilter.Meetings, _overriddenBusinessRulesHolder,
-                _scheduleDayChangeCallback, NullScheduleTag.Instance);
+                _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer());
             _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
             eventArgs = new GridQueryCellInfoEventArgs(2, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());

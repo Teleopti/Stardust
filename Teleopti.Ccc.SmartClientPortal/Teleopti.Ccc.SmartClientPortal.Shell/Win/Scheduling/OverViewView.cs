@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	
         public OverviewView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
             SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedo)
             : base(grid)
         {
-            Presenter = new OverviewPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag);
+            Presenter = new OverviewPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedo);
             grid.Name = "SummaryView";
 			_drawAbsenceDayOff = new OverviewDrawAbsenceDayOff(CellFontSmall);
 			_drawAbsence = new OverviewDrawAbsence(CellFontSmall);

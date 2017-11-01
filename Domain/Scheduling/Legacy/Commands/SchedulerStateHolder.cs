@@ -364,9 +364,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			return currentRequest;
 		}
-
-		public IUndoRedoContainer UndoRedoContainer { get; set; }
-
+		
 		public CommonNameDescriptionSetting CommonNameDescription => _commonNameDescription;
 
 		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport => _commonNameDescriptionScheduleExport;
