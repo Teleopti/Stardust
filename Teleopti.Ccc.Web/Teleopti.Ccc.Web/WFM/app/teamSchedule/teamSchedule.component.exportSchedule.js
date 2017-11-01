@@ -51,17 +51,19 @@
 		};
 
 		vm.getGroupPagesAsync = function () {
-			var startDate = moment(vm.configuration.period.startDate).format('YYYY-MM-DD');
-			var endDate = moment(vm.configuration.period.endDate).format('YYYY-MM-DD');
-			groupPageService.fetchAvailableGroupPages(startDate, endDate).then(function (data) {
-				vm.availableGroups = data;
-				if (data.LogonUserTeamId) {
-					vm.configuration.selectedGroups = {
-						mode: 'BusinessHierarchy',
-						groupIds: [vm.availableGroups.LogonUserTeamId]
-					};
-				}
-			});
+			if (vm.configuration.period) {
+				var startDate = moment(vm.configuration.period.startDate).format('YYYY-MM-DD');
+				var endDate = moment(vm.configuration.period.endDate).format('YYYY-MM-DD');
+				groupPageService.fetchAvailableGroupPages(startDate, endDate).then(function (data) {
+					vm.availableGroups = data;
+					if (data.LogonUserTeamId) {
+						vm.configuration.selectedGroups = {
+							mode: 'BusinessHierarchy',
+							groupIds: [vm.availableGroups.LogonUserTeamId]
+						};
+					}
+				});
+			}
 		};
 
 		vm.getScenariosAsync = function () {

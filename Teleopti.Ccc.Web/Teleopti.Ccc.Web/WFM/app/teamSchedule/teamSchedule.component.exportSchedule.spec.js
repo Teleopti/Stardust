@@ -37,6 +37,14 @@
 					expect(currentInputPeriod.startDate).toEqual('2017-01-01');
 					expect(currentInputPeriod.endDate).toEqual('2017-01-10');
 				});
+			it('should not load available groups with incorrect dates',
+				function () {
+					var ctrl = $componentController('teamsExportSchedule', null, {});
+					ctrl.configuration.period = null;
+					ctrl.onPeriodChanged();
+					var currentInputPeriod = groupPageService.currentPeriod();
+					expect(currentInputPeriod).toEqual(undefined);
+				});
 
 			function fakeExportScheduleService() {
 				this.getOptionalColumnsData = function() {
