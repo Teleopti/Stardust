@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	public class AgentsToSkillSetsTest : ISetup
+	public class AgentsToSkillSetsTest
 	{
 		public AgentsToSkillSets Target;
 		public SkillSetContext Context;
@@ -59,11 +59,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Target.ToSkillSets().Single()
 					.Should().Have.SameValuesAs(agent1, agent2);
 			}
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<FakeSchedulingResultStateHolder_DoNotUse>().For<ISchedulingResultStateHolder>();
 		}
 	}
 }
