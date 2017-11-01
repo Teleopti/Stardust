@@ -105,6 +105,14 @@
 				cellTemplate: coloredCellTemplate,
 			};
 
+			var timeInState = {
+				displayName: $translate.instant('TimeInState'),
+				field: 'TimeInState',
+				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
+				cellTemplate: coloredCellTemplate
+			};
+
+
 			var shift = {
 				displayName: $translate.instant('Shift'),
 				field: 'Shift',
@@ -124,6 +132,8 @@
 			columnDefs.push(rule);
 			columnDefs.push(timeOutOfAdherence);
 			columnDefs.push(timeInAlarm);
+			if (toggleService.RTA_MonitorAgentsWithLongTimeInState_46475)
+				columnDefs.push(timeInState);
 			columnDefs.push(state);
 			return {
 				rowTemplate: rowTemplate,

@@ -52,7 +52,7 @@ describe('RtaAgentsController', function () {
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Rule: "In Adherence",
 			Color: "#00FF00",
-			TimeInState: 15473
+			TimeInState: 60
 		});
 
 		var c = $controllerBuilder.createController();
@@ -68,7 +68,7 @@ describe('RtaAgentsController', function () {
 		expect(vm.agentStates[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(vm.agentStates[0].Rule).toEqual("In Adherence");
 		expect(vm.agentStates[0].Color).toEqual("#00FF00");
-		expect(vm.agentStates[0].TimeInState).toEqual(15473);
+		expect(vm.agentStates[0].TimeInState).toEqual("0:01:00");
 	});
 
 	it('should update agent state', function () {
@@ -95,34 +95,6 @@ describe('RtaAgentsController', function () {
 		c.wait(5000);
 
 		expect(vm.agentStates[0].State).toEqual("In Call");
-	});
-
-	it('should set state to agent', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-
-		$fakeBackend.withAgentState({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			State: "Ready",
-			Activity: "Phone",
-			NextActivity: "Short break",
-			NextActivityStartTime: "\/Date(1432109700000)\/",
-			Rule: "In Adherence",
-			Color: "#00FF00",
-			TimeInState: 15473
-		});
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = false);
-
-		expect(vm.agentStates[0].State).toEqual("Ready");
-		expect(vm.agentStates[0].Activity).toEqual("Phone");
-		expect(vm.agentStates[0].NextActivity).toEqual("Short break");
-		expect(vm.agentStates[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
-		expect(vm.agentStates[0].Rule).toEqual("In Adherence");
-		expect(vm.agentStates[0].Color).toEqual("#00FF00");
-		expect(vm.agentStates[0].TimeInState).toEqual(15473);
 	});
 
 	it('should display in the same order as states received', function () {

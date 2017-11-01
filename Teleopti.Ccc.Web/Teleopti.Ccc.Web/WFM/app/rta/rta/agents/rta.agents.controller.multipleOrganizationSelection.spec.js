@@ -130,7 +130,7 @@ describe('RtaAgentsController', function () {
 					NextActivityStartTime: "\/Date(1432109700000)\/",
 					Rule: "In Adherence",
 					Color: "#00FF00",
-					TimeInState: 15473
+					TimeInState: 60
 				}, selection.ids[0]))
 				.withAgentState(selection.createAgent2({
 					PersonId: "JohnGuid",
@@ -140,7 +140,7 @@ describe('RtaAgentsController', function () {
 					NextActivityStartTime: "\/Date(1432109700000)\/",
 					Rule: "Out of Adherence",
 					Color: "#FF0000",
-					TimeInState: 15473
+					TimeInState: 60
 				}, selection.ids[1]));
 
 			var c = $controllerBuilder.createController();
@@ -153,7 +153,7 @@ describe('RtaAgentsController', function () {
 			expect(vm.agentStates[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 			expect(vm.agentStates[0].Rule).toEqual("In Adherence");
 			expect(vm.agentStates[0].Color).toEqual("#00FF00");
-			expect(vm.agentStates[0].TimeInState).toEqual(15473);
+			expect(vm.agentStates[0].TimeInState).toEqual("0:01:00");
 
 			expect(vm.agentStates[1].State).toEqual("In Call");
 			expect(vm.agentStates[1].Activity).toEqual("Short break");
@@ -161,7 +161,7 @@ describe('RtaAgentsController', function () {
 			expect(vm.agentStates[1].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 			expect(vm.agentStates[1].Rule).toEqual("Out of Adherence");
 			expect(vm.agentStates[1].Color).toEqual("#FF0000");
-			expect(vm.agentStates[1].TimeInState).toEqual(15473);
+			expect(vm.agentStates[1].TimeInState).toEqual("0:01:00");
 		});
 
 		it('should stop polling when page is about to destroy for ' + selection.name, function () {

@@ -37,8 +37,8 @@
 				NextActivityStartTime: state.NextActivityStartTime,
 				Rule: state.Rule,
 				Color: state.Color,
-				TimeInState: state.TimeInState,
-				TimeInAlarm: getTimeInAlarm(state),
+				TimeInState: rtaFormatService.formatDuration(state.TimeInState),
+				TimeInAlarm: rtaFormatService.formatDuration(state.TimeInAlarm),
 				TimeInAlarmSeconds: state.TimeInAlarm,
 				TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
 				TimeOutOfAdherence: getTimeOutOfAdherence(state, timeInfo),
@@ -46,11 +46,6 @@
 				ShiftTimeBar: getShiftTimeBar(state),
 				Shift: getShift(state, timeInfo)
 			};
-		}
-
-		function getTimeInAlarm(state) {
-			if (state.TimeInAlarm !== null)
-				return rtaFormatService.formatDuration(state.TimeInAlarm);
 		}
 
 		function getTimeOutOfAdherence(state, timeInfo) {

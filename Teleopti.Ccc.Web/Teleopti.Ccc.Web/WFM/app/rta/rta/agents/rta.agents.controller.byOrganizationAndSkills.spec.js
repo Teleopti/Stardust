@@ -109,7 +109,7 @@ describe('RtaAgentsController', function() {
 				NextActivityStartTime: "\/Date(1432109700000)\/",
 				Rule: "In Adherence",
 				Color: "#00FF00",
-				TimeInState: 15473
+				TimeInState: 60
 			});
 
 		var c = $controllerBuilder.createController();
@@ -124,7 +124,7 @@ describe('RtaAgentsController', function() {
 		expect(vm.agentStates[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(vm.agentStates[0].Rule).toEqual("In Adherence");
 		expect(vm.agentStates[0].Color).toEqual("#00FF00");
-		expect(vm.agentStates[0].TimeInState).toEqual(15473);
+		expect(vm.agentStates[0].TimeInState).toEqual("0:01:00");
 	});
 
 	it('should get agent states for sites and skills', function() {
@@ -143,7 +143,7 @@ describe('RtaAgentsController', function() {
 				NextActivityStartTime: "\/Date(1432109700000)\/",
 				Rule: "In Adherence",
 				Color: "#00FF00",
-				TimeInState: 15473
+				TimeInState: 60
 			});
 
 		var c = $controllerBuilder.createController();
@@ -158,7 +158,7 @@ describe('RtaAgentsController', function() {
 		expect(vm.agentStates[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(vm.agentStates[0].Rule).toEqual("In Adherence");
 		expect(vm.agentStates[0].Color).toEqual("#00FF00");
-		expect(vm.agentStates[0].TimeInState).toEqual(15473);
+		expect(vm.agentStates[0].TimeInState).toEqual("0:01:00");
 	});
 
 	it('should display states in alarm for skill and team', function() {

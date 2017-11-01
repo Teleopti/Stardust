@@ -46,7 +46,7 @@ RTA_AsyncOptimization_43924 = true
 RTA_RememberMyPartOfTheBusiness_39082 = true
 RTA_RtaTracer_45597 = true
 RTA_UnifiedSkillGroupManagement_45417 = RC
-RTA_MonitorAgentsWithLongTimeInState_46475 = false
+RTA_MonitorAgentsWithLongTimeInState_46475 = DEV
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true
