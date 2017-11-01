@@ -3,85 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
-using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
-using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
+using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
 	[TestFixture]
-	public class GetStaffingUsingReadModelTest
+	[DomainTest]
+	public class GetStaffingUsingReadModelTest : ISetup
 	{
-		private GetStaffingUsingReadModel target;
-		private IPersonRepository personRepository;
-		private ICurrentScenario currentScenario;
-		private ISkillRepository skillRepository;
-		private IResourceCalculation resourceOptimizationHelper;
-		private FakeSkillDayRepository skillDayRepository;
-		private FakeMultisiteDayRepository multisiteDayRepository;
-		private FakeSkillCombinationResourceRepository skillCombinationResourceRepository;
-		private SkillStaffingIntervalProvider skillStaffingIntervalProvider;
-		private ScheduledStaffingProvider scheduledStaffingProvider;
-
-
-		[SetUp]
-		public void Setup()
-		{
-			var userNow = new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc);
-			skillCombinationResourceRepository = new FakeSkillCombinationResourceRepository(new ThisIsNow(userNow));
-			personRepository = new FakePersonRepositoryLegacy();
-			currentScenario = new FakeCurrentScenario_DoNotUse();
-			skillRepository = new FakeSkillRepository();
-			resourceOptimizationHelper =
-				new CascadingResourceCalculation(
-					new ResourceOptimizationHelper(new OccupiedSeatCalculator(), new NonBlendSkillCalculator(),
-						new PersonSkillProvider(), new PeriodDistributionService(),
-						new IntraIntervalFinderService(new SkillDayIntraIntervalFinder(new IntraIntervalFinder(),
-							new SkillActivityCountCollector(new SkillActivityCounter()), new FullIntervalFinder())), new FakeTimeZoneGuard(),
-						new CascadingResourceCalculationContextFactory(new CascadingPersonSkillProvider(), new FakeTimeZoneGuard())),
-					new ShovelResources(new ReducePrimarySkillResources(), new AddResourcesToSubSkills(),
-						new SkillSetPerActivityProvider(), new PrimarySkillOverstaff(), new FakeTimeZoneGuard()));
-			skillDayRepository = new FakeSkillDayRepository();
-			multisiteDayRepository = new FakeMultisiteDayRepository();
-			var skillLoadHelper = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository);
-			skillStaffingIntervalProvider = new SkillStaffingIntervalProvider(null, skillCombinationResourceRepository, 
-				skillRepository, resourceOptimizationHelper, new ExtractSkillForecastIntervals(skillDayRepository, currentScenario), new FakeActivityRepository());
-			scheduledStaffingProvider = new ScheduledStaffingProvider(new Now() , new FakeUserTimeZone(), skillStaffingIntervalProvider);
-			target = new GetStaffingUsingReadModel(new FakeCurrentUnitOfWorkFactory(new FakeStorage()), skillRepository, currentScenario, skillLoadHelper, new FakeActivityRepository(),
-				scheduledStaffingProvider);
-		}
-
+		public GetStaffingUsingReadModel Target;
+		public FakePersonRepository PersonRepository;
+		public FakeScenarioRepository ScenarioRepository;
+		public FakeSkillRepository SkillRepository;
+		public FakeSkillDayRepository SkillDayRepository;
+		public FakeMultisiteDayRepository MultisiteDayRepository;
+		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
+		public MutableNow Now;
+		
 		[Test]
 		public void ShouldReturnSkillDaysForGivenPeriod()
 		{
+			Now.Is(new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc));
 			var skill = SkillFactory.CreateSkill("skill").WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 
-			skillRepository.Add(skill);
-			skillDayRepository.Add(skill.CreateSkillDayWithDemand(currentScenario.Current(), new DateOnly(2014, 4, 1), 1));
-			skillDayRepository.Add(skill.CreateSkillDayWithDemand(currentScenario.Current(), new DateOnly(2014, 4, 2), 1));
+			var scenario = ScenarioRepository.Has("Default");
 
-			personRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2014, 4, 1), 1));
+			SkillDayRepository.Add(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2014, 4, 2), 1));
 
-			target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
+			PersonRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
+
+			Target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
 			{
 				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 4, 2) },
 				TimeZoneId = TimeZoneInfo.Utc.Id
@@ -91,17 +60,20 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldReturnCorrectForecastedDemand()
 		{
+			Now.Is(new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc));
 			var skill = SkillFactory.CreateSkill("skill").WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 
-			skillRepository.Add(skill);
-			skillDayRepository.Add(skill.CreateSkillDayWithDemand(currentScenario.Current(), new DateOnly(2014, 4, 1), 1));
-			var userNow = new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc);
-			personRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
-			int minutesPerInterval = 15;
-			PopulateStaffingReadModels(skill, userNow, userNow.AddMinutes(minutesPerInterval), 5.7, skillCombinationResourceRepository, minutesPerInterval);
+			var scenario = ScenarioRepository.Has("Default");
 
-			var vm = target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2014, 4, 1), 1));
+			var userNow = new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc);
+			PersonRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
+			int minutesPerInterval = 15;
+			PopulateStaffingReadModels(skill, userNow, userNow.AddMinutes(minutesPerInterval), 5.7, SkillCombinationResourceRepository, minutesPerInterval);
+
+			var vm = Target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
 				{
 					Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 4, 1) },
 					TimeZoneId = TimeZoneInfo.Utc.Id,
@@ -114,17 +86,20 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldReturnCorrectScheduleStaffing()
 		{
+			Now.Is(new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc));
 			var skill = SkillFactory.CreateSkill("skill").WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 
-			skillRepository.Add(skill);
-			skillDayRepository.Add(skill.CreateSkillDayWithDemand(currentScenario.Current(), new DateOnly(2014, 4, 1), 1));
-			var userNow = new DateTime(2014, 4, 1, 0, 0, 0, DateTimeKind.Utc);
-			personRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
-			int minutesPerInterval = 15;
-			PopulateStaffingReadModels(skill, userNow, userNow.AddMinutes(minutesPerInterval), 5.7, skillCombinationResourceRepository, minutesPerInterval);
+			var scenario = ScenarioRepository.Has("Default");
 
-			var vm = target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2014, 4, 1), 1));
+			var userNow = new DateTime(2014, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+			PersonRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
+			int minutesPerInterval = 15;
+			PopulateStaffingReadModels(skill, userNow, userNow.AddMinutes(minutesPerInterval), 5.7, SkillCombinationResourceRepository, minutesPerInterval);
+
+			var vm = Target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
 			{
 				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 4, 1) },
 				TimeZoneId = TimeZoneInfo.Utc.Id,
@@ -138,17 +113,20 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldReturnCorrectEsl()
 		{
+			Now.Is(new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc));
 			var skill = SkillFactory.CreateSkill("skill").WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 
-			skillRepository.Add(skill);
-			skillDayRepository.Add(skill.CreateSkillDayWithDemand(currentScenario.Current(), new DateOnly(2014, 4, 1), 1));
-			var userNow = new DateTime(2014, 4, 1, 0, 0, 0, DateTimeKind.Utc);
-			personRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
-			int minutesPerInterval = 15;
-			PopulateStaffingReadModels(skill, userNow, userNow.AddMinutes(minutesPerInterval), 5.7, skillCombinationResourceRepository, minutesPerInterval);
+			var scenario = ScenarioRepository.Has("Default");
 
-			var vm = target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2014, 4, 1), 1));
+			var userNow = new DateTime(2014, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+			PersonRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
+			int minutesPerInterval = 15;
+			PopulateStaffingReadModels(skill, userNow, userNow.AddMinutes(minutesPerInterval), 5.7, SkillCombinationResourceRepository, minutesPerInterval);
+
+			var vm = Target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
 			{
 				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 4, 1) },
 				TimeZoneId = TimeZoneInfo.Utc.Id,
@@ -160,84 +138,63 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldReturnCorrectForecastedDemandForEmailSkill()
 		{
+			Now.Is(new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc));
 			var skill = SkillFactory.CreateSkill("skill", SkillTypeFactory.CreateSkillTypeEmail(), 15).WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-			var userNow = new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc);
-			skillRepository.Add(skill);
-			var skillDayWithDemand = skill.CreateSkillDayWithDemand(currentScenario.Current(), new DateOnly(2014, 4, 1), 1);
+
+			var scenario = ScenarioRepository.Has("Default");
+			
+			SkillRepository.Add(skill);
+			var skillDayWithDemand = skill.CreateSkillDayWithDemand(scenario, new DateOnly(2014, 4, 1), 1);
 			foreach (var skillDataPeriod in skillDayWithDemand.SkillDataPeriodCollection)
 			{
 				skillDataPeriod.ServiceAgreement = ServiceAgreement.DefaultValuesEmail();
 			}
-			skillDayRepository.Add(skillDayWithDemand);
+			SkillDayRepository.Add(skillDayWithDemand);
 
-			personRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
-			PopulateStaffingReadModels(skill, userNow, userNow.AddMinutes(60), 5.7, skillCombinationResourceRepository, 60);
+			PersonRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
+			PopulateStaffingReadModels(skill, Now.UtcDateTime(), Now.UtcDateTime().AddMinutes(60), 5.7, SkillCombinationResourceRepository, 60);
 
-			target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
+			Target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
 			{
 				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 4, 1) },
 				TimeZoneId = TimeZoneInfo.Utc.Id,
 			}).First().SkillDataCollection.First().ForecastedAgents.Should().Be.EqualTo(0.125);
 		}
-
-		[Test]
-		public void ShouldInitializeAllSkills()
-		{
-			var skill = SkillFactory.CreateSkill("skill").WithId();
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-
-			var skills = new List<ISkill> { skill };
-			var period = new DateOnlyPeriod(2014, 3, 31, 2014, 4, 3);
-
-			skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-			skillDayRepository.Add(skill.CreateSkillDayWithDemand(currentScenario.Current(), new DateOnly(2014, 4, 1), 1));
-
-			personRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), skill));
-			skillRepository.Stub(x => x.LoadAll()).Return(skills);
-			skillRepository.Stub(x => x.FindAllWithSkillDays(period)).Return(skills);
-
-			var skillLoadHelper = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository);
-			target = new GetStaffingUsingReadModel(new FakeCurrentUnitOfWorkFactory(new FakeStorage()), skillRepository, currentScenario, skillLoadHelper, new FakeActivityRepository(), scheduledStaffingProvider);
-
-			target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
-			{
-				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 4, 2) },
-				TimeZoneId = TimeZoneInfo.Utc.Id
-			});
-
-			skillRepository.AssertWasCalled(x => x.LoadAll());
-		}
-
+		
 		[Test]
 		public void ShouldOnlyIncludeSubSkillForMultisiteSkills()
 		{
+			Now.Is(new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc));
+
+			var scenario = ScenarioRepository.Has("Default");
+
 			var multisiteSkill = SkillFactory.CreateMultisiteSkill("multi").WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(multisiteSkill);
 			var childSkill = SkillFactory.CreateChildSkill("S1", multisiteSkill).WithId();
 
-			skillRepository.Add(multisiteSkill);
-			skillRepository.Add(childSkill);
+			SkillRepository.Add(multisiteSkill);
+			SkillRepository.Add(childSkill);
 
-			skillDayRepository.Add(multisiteSkill.CreateSkillDayWithDemand(currentScenario.Current(), new DateOnly(2014, 4, 1), 1));
-			skillDayRepository.Add(new SkillDay(new DateOnly(2014, 4, 1), childSkill, currentScenario.Current(),
+			SkillDayRepository.Add(multisiteSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2014, 4, 1), 1));
+			SkillDayRepository.Add(new SkillDay(new DateOnly(2014, 4, 1), childSkill, scenario,
 				new IWorkloadDay[0],
 				new ISkillDataPeriod[]
 				{
 					new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(),
 						new DateOnly(2014, 4, 1).ToDateTimePeriod(childSkill.TimeZone))
 				}));
-			var multisiteDay = new MultisiteDay(new DateOnly(2014, 4, 1), multisiteSkill, currentScenario.Current());
+			var multisiteDay = new MultisiteDay(new DateOnly(2014, 4, 1), multisiteSkill, scenario);
 			multisiteDay.SetMultisitePeriodCollection(new List<IMultisitePeriod>
 			{
 				new MultisitePeriod(new DateOnly(2014, 4, 1).ToDateTimePeriod(multisiteSkill.TimeZone),
 					new Dictionary<IChildSkill, Percent> {{childSkill, new Percent(1)}})
 			});
-			multisiteDayRepository.Has(multisiteDay);
+			MultisiteDayRepository.Has(multisiteDay);
 
-			personRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), childSkill));
+			PersonRepository.Add(new Person().WithId().WithPersonPeriod(TeamFactory.CreateTeam("Team 1", "Paris"), childSkill));
 
-			target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
+			Target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
 			{
 				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 4, 1) },
 				TimeZoneId = TimeZoneInfo.Utc.Id
@@ -247,7 +204,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldNotAllowLoadingMoreThan31Days()
 		{
-			Assert.Throws<FaultException>(() => target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
+			Now.Is(new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc));
+			Assert.Throws<FaultException>(() => Target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
 			{
 				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 5, 2) },
 				TimeZoneId = TimeZoneInfo.Utc.Id
@@ -273,6 +231,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				});
 			}
 			skillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<GetStaffingUsingReadModel>();
+			system.AddModule(new AssemblerModule());
 		}
 	}
 }
