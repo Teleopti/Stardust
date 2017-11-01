@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakeCurrentScenario_DoNotUse CurrentScenario;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeWriteSideRepository<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 
@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
 			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<AddOvertimeActivityCommandHandler>().For<IHandleCommand<AddOvertimeActivityCommand>>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var addedPersonAssignment = (PersonAssignment)ScheduleStorage.LoadAll().Single();
+			var addedPersonAssignment = PersonAssignmentRepository.LoadAll().Single();
 
 			addedPersonAssignment.Date.Should().Be.EqualTo(command.Date);
 			addedPersonAssignment.Period.Should().Be.EqualTo(command.Period);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
 			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 14, 9));
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 
 			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("double pay", MultiplicatorType.Overtime);
 			mds.WithId();
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var ass = (PersonAssignment) ScheduleStorage.LoadAll().Single();
+			var ass = PersonAssignmentRepository.LoadAll().Single();
 
 			var addOvertimeEvent = ass.PopAllEvents().OfType<ActivityAddedEvent>()
 				.Single(e => e.ActivityId == command.ActivityId);

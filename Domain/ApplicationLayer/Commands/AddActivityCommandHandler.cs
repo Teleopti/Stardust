@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var person = _personForId.Load(command.PersonId);
 			var timeZone = _timeZone.TimeZone();
 			var scenario = _currentScenario.Current();
-			var periodForPerson = new DateTimePeriod(command.Date.AddDays(-1).Date.Utc(), command.Date.Date.Utc());
+			var periodForPerson = new DateTimePeriod(command.Date.AddDays(-1).Date.Utc(), command.Date.AddDays(1).Date.Utc());
 			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), periodForPerson, new[] { person }, false);
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
