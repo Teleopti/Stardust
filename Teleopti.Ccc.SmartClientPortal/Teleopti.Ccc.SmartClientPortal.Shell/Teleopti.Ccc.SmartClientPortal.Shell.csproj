@@ -1648,6 +1648,9 @@
     </Compile>
     <Compile Include="Win\Common\Configuration\TimeLimitCellValidatorBase.cs" />
     <Compile Include="Win\Common\Configuration\TreeFamily.cs" />
+    <Compile Include="Win\Common\Configuration\WorkflowControlSetOvertimeRequestView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Win\Common\Configuration\WorkflowControlSetView.cs">
       <SubType>UserControl</SubType>
     </Compile>
