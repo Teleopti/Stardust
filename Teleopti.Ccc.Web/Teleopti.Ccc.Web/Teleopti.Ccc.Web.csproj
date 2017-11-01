@@ -398,7 +398,7 @@
     <Compile Include="Areas\Gamification\Core\DataProvider\IGamificationSettingPersister.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\IGamificationSettingProvider.cs" />
     <Compile Include="Areas\Gamification\Core\IoC\GamificationAreaModel.cs" />
-    <Compile Include="Areas\Gamification\Models\GamificationViewModel.cs" />
+    <Compile Include="Areas\Gamification\Models\GamificationSettingViewModel.cs" />
     <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
     <Compile Include="Areas\Global\Models\GroupPagesViewModel.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />

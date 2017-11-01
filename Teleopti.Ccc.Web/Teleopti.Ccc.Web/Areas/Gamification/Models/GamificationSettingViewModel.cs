@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage)]
 
-	public class GamificationViewModel: GamificationSettingView
+	public class GamificationSettingViewModel: GamificationSettingView
 	{
-		public GamificationViewModel(IGamificationSetting setting) : base(setting)
+		public GamificationSettingViewModel(IGamificationSetting setting) : base(setting)
 		{
 		}
 

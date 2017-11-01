@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 {
 	public interface IGamificationSettingPersister
 	{
-		GamificationViewModel Persist();
+		GamificationSettingViewModel Persist();
 	}
 }

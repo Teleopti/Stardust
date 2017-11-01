@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 {
 	public interface IGamificationSettingProvider
 	{
-		GamificationViewModel GetGamificationSetting(Guid id);
+		GamificationSettingViewModel GetGamificationSetting(Guid id);
 	}
 }

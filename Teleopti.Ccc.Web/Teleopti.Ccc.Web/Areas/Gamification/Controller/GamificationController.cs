@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		}
 
 		[HttpPost, Route("api/Gamification/Create"), UnitOfWork]
-		public virtual GamificationViewModel CreateGamification()
+		public virtual GamificationSettingViewModel CreateGamification()
 		{
 			return _gamificationSettingPersister.Persist();
 		}
 
 		[HttpPost, Route("api/Gamification/Load"), UnitOfWork]
-		public virtual GamificationViewModel LoadGamification(Guid id)
+		public virtual GamificationSettingViewModel LoadGamification(Guid id)
 		{
 			return _gamificationSettingProvider.GetGamificationSetting(id);
 		}
