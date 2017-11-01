@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -12,5 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public GamificationViewModel(IGamificationSetting setting) : base(setting)
 		{
 		}
+
+		public Guid Id { get; set; }
 	}
 }

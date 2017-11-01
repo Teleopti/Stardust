@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 				_gamificationSettingRepository.Add(gamificationSetting);
 			}
 
-			return new GamificationViewModel(gamificationSetting);
+			return new GamificationViewModel(gamificationSetting) {Id = gamificationSetting.Id.GetValueOrDefault()};
 		}
 
 		private IGamificationSetting getGamificationSetting(Guid? id)
