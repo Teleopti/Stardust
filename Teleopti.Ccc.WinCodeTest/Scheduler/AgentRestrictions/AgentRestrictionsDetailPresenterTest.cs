@@ -13,6 +13,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestrictions;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_dateTime = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			_dateTimePeriod = new DateTimePeriod(_dateTime, _dateTime.AddDays(30));
 			_model = new AgentRestrictionsDetailModel(_dateTimePeriod);
-			_schedulingResultStateHolder = new FakeSchedulingResultStateHolder_DoNotUse {LoadedAgents = new[] { _person } };
+			_schedulingResultStateHolder = new SchedulingResultStateHolder();
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario,
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2012, 1, 1, 2012, 1, 1), TimeZoneInfo.Utc), new[] {_person},
 				MockRepository.GenerateMock<IDisableDeletedFilter>(), _schedulingResultStateHolder,
