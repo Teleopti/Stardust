@@ -170,7 +170,6 @@
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestPeriodSetting_46417,
 		Reporting_Optional_Columns_42066,
-		Staffing_ReadModel_Keep8DaysHistoricalData_44652,
 		ETL_SpeedUpNightlyDayOff_38213,
 		Wfm_Intraday_SupportSkillTypeWebChat_42591,
 		MyTimeWeb_MobileResponsive_43826,

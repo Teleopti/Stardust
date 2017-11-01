@@ -191,7 +191,6 @@ WfmStaffing_AddOvertime_42524 = RC
 OvertimeRequestPeriodSetting_46417 = DEV
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = true
 Staffing_ReadModel_BetterAccuracy_Step4_43389 = true
-Staffing_ReadModel_Keep8DaysHistoricalData_44652 = true
 Staffing_BPOExchangeImport_45202 = true
 
 WFM_Forecaster_Refact_44480 = true

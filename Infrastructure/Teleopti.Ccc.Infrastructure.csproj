@@ -261,7 +261,6 @@
     <Compile Include="Repositories\Stardust\WorkerNode.cs" />
     <Compile Include="Repositories\UserDeviceRepository.cs" />
     <Compile Include="Repositories\RequeueHangfireRepository.cs" />
-    <Compile Include="Repositories\SkillCombinationResourceRepositoryOld.cs" />
     <Compile Include="Rta\Persisters\OrganizationReader.cs" />
     <Compile Include="Rta\Persisters\RtaTracerConfigPersister.cs" />
     <Compile Include="Rta\RtaTracerReader.cs" />

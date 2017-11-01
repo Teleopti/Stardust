@@ -16,22 +16,6 @@
 		}
 	}
 
-	public class StaffingSettingsReaderNoHistorical : IStaffingSettingsReader
-	{
-		public int GetIntSetting(string setting, int defaultValue)
-		{
-			switch (setting)
-			{
-				case "StaffingReadModelNumberOfDays":
-					return 14;
-				case "StaffingReadModelHistoricalHours":
-					return 25;
-			}
-
-			return defaultValue;
-		}
-	}
-
 	public class StaffingSettingsReader28Days : IStaffingSettingsReader
 	{
 		public int GetIntSetting(string setting, int defaultValue)
