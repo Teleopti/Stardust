@@ -92,6 +92,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldReturnErrorIfCalendarLinkPersonNotFound()
+		{
+			var calendarLinkId = new CalendarLinkId();
+			_calendarLinkIdGenerator.Stub(x => x.Parse(calendarlinkid)).Return(calendarLinkId);
+			var calendarLinkGenerator = MockRepository.GenerateMock<ICalendarLinkGenerator>();
+			calendarLinkGenerator.Stub(x => x.Generate(calendarLinkId)).Throw(new NullReferenceException());
+			var target = new ShareCalendarController(_calendarLinkIdGenerator, calendarLinkGenerator);
+			target.ControllerContext = new ControllerContext(_context, new RouteData(), target);
+
+			var result = (ContentResult)target.iCal(calendarlinkid);
+			result.Content.Should().Contain("Invalid url");
+		}
+
+		[Test]
 		public void ShouldReturnBadRequestIfIdIsNull()
 		{
 			var calendarLinkGenerator = MockRepository.GenerateMock<ICalendarLinkGenerator>();

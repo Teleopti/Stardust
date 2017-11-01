@@ -35,6 +35,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			{
 				return sharingError();
 			}
+			catch (NullReferenceException)
+			{
+				return sharingError();
+			}
 			catch (CryptographicException)
 			{
 				return sharingError();
