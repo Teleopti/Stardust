@@ -208,7 +208,7 @@ BEGIN
 		SELECT SearchType, SearchValue FROM #DirectSearchCriteria;
 		OPEN DirectSearchCriteriaCursor;
 
-		SELECT @directDynamicSQL = 'SELECT p.Id FROM dbo.Person p WHERE ' 
+		SELECT @directDynamicSQL = 'SELECT p.Id FROM dbo.Person p with (nolock) WHERE ' 
 								 + 'ISNULL(p.TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' '
 
 		FETCH NEXT FROM DirectSearchCriteriaCursor INTO @searchType, @searchValue
@@ -233,7 +233,7 @@ BEGIN
 		SELECT @directDynamicSQL = 'INSERT INTO #IntermediatePersonId ' + @directDynamicSQL
 	
 		EXEC sp_executesql @directDynamicSQL
-		SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #IntermediatePersonId t with (nolock) INNER JOIN ReadModel.FindPerson fp with (nolock) ON t.PersonId = fp.PersonId WHERE '					
+		SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #IntermediatePersonId t INNER JOIN ReadModel.FindPerson fp with (nolock) ON t.PersonId = fp.PersonId WHERE '					
 	END
 	ELSE
 	BEGIN
