@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period, new PersistableScheduleDataPermissionChecker());
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
-				moveSchedules(stateHolderFrom.Schedules, scheduleDictionary, agents,
-					stateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(stateHolderFrom.TimeZoneInfo));
+				moveSchedules(stateHolderFrom, scheduleDictionary, agents);
 			}
 			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
 			scheduleDictionary.TakeSnapshot();
@@ -68,30 +67,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.ConsiderShortBreaks = false; //TODO check if this is the wanted behaviour in other cases than intraday optimization
 		}
 
-		private static void moveSchedules(IScheduleDictionary fromDic,
+		private readonly object moveSchedulesInOneThreadOnly = new object(); //fix smaller lock if this makes things to slow
+		private void moveSchedules(ISchedulerStateHolder schedulerStateHolderFrom,
 			IScheduleDictionary toDic,
-			IEnumerable<IPerson> agents,
-			DateOnlyPeriod period)
+			IEnumerable<IPerson> agents)
 		{
-			var toScheduleDays = new List<IScheduleDay>();
-			foreach (var agent in agents)
+			lock (moveSchedulesInOneThreadOnly)
 			{
-				var fromScheduleDaysAgent = fromDic[agent].ScheduledDayCollection(period);
-				foreach (var fromScheduleDay in fromScheduleDaysAgent)
+				var fromDic = schedulerStateHolderFrom.Schedules;
+				var period = schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(schedulerStateHolderFrom.TimeZoneInfo);
+				var toScheduleDays = new List<IScheduleDay>();
+				foreach (var agent in agents)
 				{
-					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly, true);
-					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAssignment>().ForEach(x => toScheduleDay.Add(x));
-					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
-					fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
-					fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
-					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
-					fromScheduleDay.PersistableScheduleDataCollection().OfType<IAgentDayScheduleTag>().ForEach(x => toScheduleDay.Add(x));
-					toScheduleDays.Add(toScheduleDay);
+					var fromScheduleDaysAgent = fromDic[agent].ScheduledDayCollection(period);
+					foreach (var fromScheduleDay in fromScheduleDaysAgent)
+					{
+						var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly, true);
+						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAssignment>().ForEach(x => toScheduleDay.Add(x));
+						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
+						fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
+						fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
+						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
+						fromScheduleDay.PersistableScheduleDataCollection().OfType<IAgentDayScheduleTag>().ForEach(x => toScheduleDay.Add(x));
+						toScheduleDays.Add(toScheduleDay);
+					}
 				}
+				//Maybe this should be done per agent instead? So far, testing has shown that fastest is to this with as many schedule days as possible though
+				//Could it cause OOM ex in REALLY big dbs?
+				toDic.Modify(ScheduleModifier.Scheduler, toScheduleDays, NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter(), true);	
 			}
-			//Maybe this should be done per agent instead? So far, testing has shown that fastest is to this with as many schedule days as possible though
-			//Could it cause OOM ex in REALLY big dbs?
-			toDic.Modify(ScheduleModifier.Scheduler, toScheduleDays, NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter(), true);
 		}
 	}
 }
