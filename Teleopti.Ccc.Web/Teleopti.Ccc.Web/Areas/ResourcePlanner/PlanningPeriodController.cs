@@ -191,8 +191,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (planningPeriod.PlanningGroup != null)
 			{
 
-				validationResult = _basicSchedulingValidator.Validate(null, _planningGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.PlanningGroup).AllPeople.ToList(),
-					planningPeriod.Range);
+				validationResult = _basicSchedulingValidator.Validate(
+					new PreValidationInput(_planningGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.PlanningGroup).AllPeople.ToList(),
+						planningPeriod.Range));
 			}
 			return Ok(validationResult);
 		}
@@ -357,4 +358,5 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return allPlanningPeriods.Any(p => p.Range.StartDate >= dateOnly);
 		}
 	}
+
 }

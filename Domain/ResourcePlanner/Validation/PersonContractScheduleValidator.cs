@@ -9,8 +9,10 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonContractScheduleValidator : IScheduleValidator
 	{
-		public void FillResult(ValidationResult validationResult, IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillResult(ValidationResult validationResult, ValidationInput input)
 		{
+			var people = input.People;
+			var range = input.Period;
 			foreach (var person in people)
 			{
 				var periods = person.PersonPeriods(range);

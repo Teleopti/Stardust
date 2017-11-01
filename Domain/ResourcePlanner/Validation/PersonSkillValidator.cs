@@ -8,8 +8,10 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
 	public class PersonSkillValidator : IScheduleValidator
 	{
-		public void FillResult(ValidationResult validationResult, IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod range)
+		public void FillResult(ValidationResult validationResult, ValidationInput input)
 		{
+			var people = input.People;
+			var range = input.Period;
 			var validationErrors = from person in people
 				let periods = person.PersonPeriods(range)
 				where periods.Any(period => !period.PersonSkillCollection.Any())

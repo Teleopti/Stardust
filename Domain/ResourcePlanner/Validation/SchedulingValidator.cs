@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
@@ -13,12 +11,12 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			_validators = validators;
 		}
 
-		public ValidationResult Validate(IScheduleDictionary schedules, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		public ValidationResult Validate(ValidationInput validationInput)
 		{
 			var result = new ValidationResult();
 			foreach (var validator in _validators)
 			{
-				validator.FillResult(result, schedules, agents, period);
+				validator.FillResult(result, validationInput);
 			}
 			return result;
 		}

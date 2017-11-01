@@ -10,8 +10,11 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 	{
 		public static string ErrorOutput = Resources.ShiftStartsDayBeforeOrAfter;
 		
-		public void FillResult(ValidationResult validationResult, IScheduleDictionary schedules, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		public void FillResult(ValidationResult validationResult, ValidationInput input)
 		{
+			var agents = input.People;
+			var period = input.Period;
+			var schedules = input.Schedules;
 			if (schedules == null)
 				return;
 			

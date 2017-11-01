@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -18,9 +15,11 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 		}
 
-		public void FillResult(ValidationResult validationResult, IScheduleDictionary schedules, IEnumerable<IPerson> agents,
-			DateOnlyPeriod period)
+		public void FillResult(ValidationResult validationResult, ValidationInput input)
 		{
+			var schedules = input.Schedules;
+			var agents = input.People;
+			var period = input.Period;
 			if (schedules == null) return;
 			foreach (var item in schedules)
 			{
