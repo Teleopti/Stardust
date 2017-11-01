@@ -129,3 +129,10 @@ wfm-card > md-card{
 #pulse-element {
 	top: 0.5em;
 }
+
+.big-table-wrapper table tbody tr {
+	border-bottom: 1px solid $gray012!important;
+}
+.table>tbody>tr>td{
+	border-top:none;
+}
