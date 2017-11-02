@@ -52,14 +52,10 @@
 			return this.numRows;
 		};
 
-		ctrl.title = 'Gamification Targets Table';
-
-		ctrl.teams = teams(1000);
-
-		ctrl.rows = new Rows(ctrl.teams);
-
 		$scope.$on('gamification.selectTargetsTab', function (event, args) {
 			setHeightToFillAvailableSpace();
+			ctrl.teams = teams(1000);
+			ctrl.rows = new Rows(ctrl.teams);
 		});
 	}
 
