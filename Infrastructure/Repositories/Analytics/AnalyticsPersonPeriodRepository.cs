@@ -468,5 +468,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetString(nameof(teamName), teamName)
 				.ExecuteUpdate();
 		}
+
+		public void UpdateSiteName(Guid siteCode, string siteName)
+		{
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+					$@"update dp
+						set 
+						  dp.site_name = :{nameof(siteName)}					  
+						from mart.dim_person dp
+						  where dp.site_code='{siteCode}'")
+				.SetString(nameof(siteName), siteName)
+				.ExecuteUpdate();
+		}
 	}
 }

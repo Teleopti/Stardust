@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class Site : VersionedAggregateRootWithBusinessUnit, ISite, IDeleteTag
+	public class Site : VersionedAggregateRootWithBusinessUnit, ISite, IDeleteTag, IAggregateRootWithEvents
 	{
 		private readonly IList<ITeam> _teamCollection;
 		private Description _description;

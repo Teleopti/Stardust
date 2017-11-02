@@ -141,6 +141,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			personWithNoUpdate.TeamName.Should().Be.EqualTo(personToUpdate.TeamName);
 		}
 
+		[Test]
+		public void ShouldUpdateSiteName()
+		{
+			setUpData();
+			var personToUpdate = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1));
+			var siteCodeToUpdate = personToUpdate.SiteCode;
+
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateSiteName(siteCodeToUpdate, "NewSiteName"));
+
+			var personAfterUpdate = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personToUpdate.PersonPeriodCode));
+			personAfterUpdate.SiteName.Should().Be.EqualTo("NewSiteName");
+		}
+
 		[Test, TestCaseSource(typeof(CommonNameDescriptionSettingsTestData), nameof(CommonNameDescriptionSettingsTestData.TestCasesIntegration))]
 		public void UpdateNamesTest(string commonNameDescriptionSetting)
 		{

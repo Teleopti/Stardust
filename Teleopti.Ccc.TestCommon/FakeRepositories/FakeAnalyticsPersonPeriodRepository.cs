@@ -111,5 +111,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				personPeriod.TeamName = teamName;
 			}
 		}
+
+		public void UpdateSiteName(Guid siteCode, string siteName)
+		{
+			var personPeriods = fakePersonPeriods
+				.Where(x => x.SiteCode == siteCode)
+				.ToList();
+			foreach (var personPeriod in personPeriods)
+			{
+				personPeriod.SiteName = siteName;
+			}
+		}
 	}
 }

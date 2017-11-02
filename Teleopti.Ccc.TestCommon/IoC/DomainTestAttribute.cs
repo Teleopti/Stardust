@@ -226,6 +226,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeAnalyticsShiftCategoryRepository>().For<IAnalyticsShiftCategoryRepository>();
 				system.UseTestDouble<FakeAnalyticsSkillRepository>().For<IAnalyticsSkillRepository>();
 				system.UseTestDouble<FakeAnalyticsTeamRepository>().For<IAnalyticsTeamRepository>();
+				system.UseTestDouble<FakeAnalyticsSiteRepository>().For<IAnalyticsSiteRepository>();
 				system.UseTestDouble<FakeAnalyticsTimeZoneRepository>().For<IAnalyticsTimeZoneRepository>();
 				system.UseTestDouble<FakeAnalyticsWorkloadRepository>().For<IAnalyticsWorkloadRepository>();
 				system.UseTestDouble<FakeUserDeviceRepository>().For<IUserDeviceRepository>();
