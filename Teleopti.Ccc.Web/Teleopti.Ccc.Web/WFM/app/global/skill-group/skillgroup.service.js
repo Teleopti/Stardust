@@ -34,6 +34,9 @@
     function modifySkillGroup(data) {
       if (data.currentSkillGroup) {
         return $http.put('../api/skillgroup/update', data.currentSkillGroup);
+    function modifySkillGroup(data) {
+      if (data.currentSkillGroup) {
+        return $http.put('../api/skillgroup/update', data.currentSkillGroup);
       }
     };
   }
