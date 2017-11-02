@@ -25,9 +25,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeSkillRepository SkillRepository;
 
-		public SchedulingPersistTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155)
-		{
-		}
 
 		[TestCase("UTC")]
 		[TestCase("W. Europe Standard Time")]
@@ -53,6 +50,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 						
 			PersonAssignmentRepository.LoadAll().Count
 				.Should().Be.EqualTo(30);
+		}
+
+		public SchedulingPersistTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
+		{
 		}
 	}
 }

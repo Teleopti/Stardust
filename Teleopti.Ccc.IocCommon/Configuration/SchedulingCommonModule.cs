@@ -131,7 +131,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<BackToLegalShiftModule>();
 			builder.RegisterModule(new ScheduleOvertimeModule(_configuration));
 			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
-			builder.RegisterType<RemoveShiftCategoryToBeInLegalState>().InstancePerLifetimeScope();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_RemoveClassicShiftCat_46582))
+			{
+				builder.RegisterType<RemoveShiftCategoryToBeInLegalStateAlwaysTeamBlock>().As<RemoveShiftCategoryToBeInLegalState>().InstancePerLifetimeScope();				
+			}
+			else
+			{
+				builder.RegisterType<RemoveShiftCategoryToBeInLegalState>().InstancePerLifetimeScope();
+			}
 			builder.RegisterType<ScheduleHourlyStaffExecutor>().InstancePerLifetimeScope();
 		
 			builder.RegisterType<ScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();

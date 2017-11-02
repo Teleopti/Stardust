@@ -42,9 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 		private IBusinessUnit businessUnit;
 
-		public WebScheduleStardustHandlerEventPublishTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155)
-		{
-		}
 
 		public void SetUp()
 		{
@@ -90,6 +87,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+		}
+
+		public WebScheduleStardustHandlerEventPublishTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
+		{
 		}
 	}
 }

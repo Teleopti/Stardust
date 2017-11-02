@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -7,6 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveClassicShiftCat_46582)]
 	public class SchedulePeriodListShiftCategoryBackToLegalStateService : ISchedulePeriodListShiftCategoryBackToLegalStateService
 	{
 		private readonly Func<ISchedulingResultStateHolder> _stateHolder;
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
-		public virtual ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder CreateSchedulePeriodBackToLegalStateServiceBuilder(
+		private ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder CreateSchedulePeriodBackToLegalStateServiceBuilder(
 			IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator)
 		{
 			return new SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder(
@@ -57,8 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 									() => _scheduleDayService);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public virtual IScheduleMatrixValueCalculatorPro BuildScheduleMatrixValueCalculator
+		private IScheduleMatrixValueCalculatorPro BuildScheduleMatrixValueCalculator
 			(IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
 			IEnumerable<IScheduleMatrixPro> scheduleMatrixList,
 			SchedulingOptions schedulingOptions,

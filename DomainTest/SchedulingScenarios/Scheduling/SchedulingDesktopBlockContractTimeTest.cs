@@ -25,11 +25,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 
 		private readonly TimeSpan _expectedContractTime;
-
-		public SchedulingDesktopBlockContractTimeTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155)
-		{
-			_expectedContractTime = TimeSpan.FromHours(resourcePlannerEasierBlockScheduling46155 ? 176 : 160);
-		}
 		
 		[TestCase(true, false)]
 		[TestCase(false, true)]
@@ -61,6 +56,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			stateHolder.Schedules[agent].CalculatedCurrentScheduleSummary(new DateOnlyPeriod(2017, 10, 1, 2017, 10, 31))
 				.ContractTime.Should().Be.EqualTo(_expectedContractTime);
+		}
+
+		public SchedulingDesktopBlockContractTimeTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
+		{
+			_expectedContractTime = TimeSpan.FromHours(resourcePlannerEasierBlockScheduling46155 ? 176 : 160);
 		}
 	}
 }

@@ -46,9 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 		private IBusinessUnit businessUnit;
 
-		public WebScheduleStardustHandlerTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155)
-		{
-		}
 
 		public void SetUp()
 		{
@@ -150,6 +147,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			var personAssignments = PersonAssignmentRepository.Find(new[] { agent }, period, scenario);
 			personAssignments.All(x => x.Source == ScheduleSource.WebScheduling).Should().Be.True();
+		}
+
+		public WebScheduleStardustHandlerTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
+		{
 		}
 	}
 }
