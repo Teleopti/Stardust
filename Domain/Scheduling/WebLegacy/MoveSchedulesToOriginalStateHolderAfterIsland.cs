@@ -1,3 +1,4 @@
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -19,22 +20,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
 			var schedulerScheduleDictionary = _desktopContext.CurrentContext().SchedulerStateHolderFrom.Schedules;
-			foreach (var diff in modifiedScheduleDictionary.DifferenceSinceSnapshot())
+			foreach (var diff in modifiedScheduleDictionary.DifferenceSinceSnapshot()
+				.Where(x => x.CurrentItem is IPersonAssignment || x.CurrentItem is IPersonAbsence))
 			{
-				var modifiedAssignment = diff.CurrentItem as IPersonAssignment;
-				var modifiedAbsence = diff.CurrentItem as IPersonAbsence;
-				if (modifiedAssignment == null && modifiedAbsence == null) continue;
 				var dateOnly = new DateOnly(diff.CurrentItem.Period.StartDateTimeLocal(diff.CurrentItem.Person.PermissionInformation.DefaultTimeZone()).Date);
 				var toScheduleDay = schedulerScheduleDictionary[diff.CurrentItem.Person].ScheduledDay(dateOnly);
 				var fromScheduleDay = modifiedScheduleDictionary[diff.CurrentItem.Person].ScheduledDay(dateOnly);
-				if (modifiedAssignment != null)
-				{
-					toScheduleDay.Replace(modifiedAssignment);
-				}
-				if (modifiedAbsence != null)
-				{
-					toScheduleDay.Add(modifiedAbsence);
-				}
+				toScheduleDay.Replace(diff.CurrentItem);
 				schedulerScheduleDictionary.Modify(
 					ScheduleModifier.Scheduler, 
 					toScheduleDay, 

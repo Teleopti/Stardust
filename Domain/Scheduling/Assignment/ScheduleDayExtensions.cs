@@ -4,10 +4,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public static class ScheduleDayExtensions
 	{
-		public static void Replace(this IScheduleDay scheduleDay, IPersonAssignment personAssignment)
+		public static void Replace(this IScheduleDay scheduleDay, IPersistableScheduleData peristableScheduleData)
 		{
-			scheduleDay.Remove(personAssignment);
-			scheduleDay.Add(personAssignment);
+			scheduleDay.Remove(peristableScheduleData);
+			scheduleDay.Add(peristableScheduleData);
 		}
 	}
 }
