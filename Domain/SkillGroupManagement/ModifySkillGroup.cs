@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 			InParameter.ListCannotBeEmpty(nameof(input.Skills), input.Skills);
 			InParameter.NotStringEmptyOrWhiteSpace(nameof(input.Name), input.Name);
 
-			var skillGroup = _skillGroupRepository.Get(input.Id);
+			var skillGroup = _skillGroupRepository.Get(Guid.Parse(input.Id));
 			if (skillGroup == null)
 				throw new ArgumentNullException($"skillGroup - {input.Id} don't exist in skill group repository.");
 
 			skillGroup.Name = input.Name;
-			skillGroup.Skills = input.Skills.Select(x => new SkillInIntraday { Id = x }).ToList();
+			skillGroup.Skills = input.Skills.Select(x => new SkillInIntraday { Id = x.Id }).ToList();
 		}
-		
+
 	}
 }

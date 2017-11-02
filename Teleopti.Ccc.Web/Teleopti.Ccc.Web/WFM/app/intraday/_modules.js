@@ -11,8 +11,8 @@
       'angularMoment',
       'wfm.dateOffset',
       'wfm.utilities',
-      'skillGroupService',
-      'wfm.skillGroup'
+      'wfm.skillGroup',
+      'skillGroupService'
     ])
     .run(['$rootScope', '$state', '$location', intradayModule]);
 

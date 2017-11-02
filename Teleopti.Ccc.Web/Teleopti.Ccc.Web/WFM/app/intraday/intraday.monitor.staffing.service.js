@@ -5,11 +5,12 @@
     .service('intradayMonitorStaffingService', [
       '$filter',
       'intradayService',
+      'SkillGroupSvc',
       '$translate',
       intradayMonitorStaffingService
     ]);
 
-  function intradayMonitorStaffingService($filter, intradayService, $translate) {
+  function intradayMonitorStaffingService($filter, intradayService, SkillGroupSvc, $translate) {
     var service = {
       staffingChart: {}
     };

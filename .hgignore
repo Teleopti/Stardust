@@ -97,6 +97,7 @@ Cube/build/*Xmla*
 */dist/main.min.js
 */dist/main.min.js.map
 */npm-shrinkwrap.json
+*/npm-debug*
 */css/main.css
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/dist
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/style.css
@@ -116,6 +117,7 @@ Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.ServiceBusTest/PayrollTestDlls/Settings.Telias
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.ServiceBusTest/PayrollTestDlls/Config.RelesayTeliaSonera.xml
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.ServiceBusTest/PayrollTestDlls/ReadMe.txt
 .idea
+.vscode
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/.node/NodeHash.txt
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/.node/WfmFileHash.txt
 .axoCover/settings.json

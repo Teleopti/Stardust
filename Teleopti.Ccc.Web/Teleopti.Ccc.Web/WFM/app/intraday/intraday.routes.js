@@ -22,6 +22,11 @@
         url: "/skill-area-config",
         templateUrl: "app/global/skill-group/skillgroup.html",
         controller: "SkillGroupController as vm"
+      })
+      .state("intraday.skill-area-manager", {
+        url: "/skill-area-manager",
+        templateUrl: "app/global/skill-group/skill-group-manager.html",
+        controller: "SkillGroupManagerController as vm"
       });
   }
 })();

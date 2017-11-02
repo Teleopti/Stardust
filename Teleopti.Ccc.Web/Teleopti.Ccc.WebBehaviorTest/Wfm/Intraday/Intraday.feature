@@ -23,6 +23,7 @@ Scenario: Create Skill Area
 	And I should monitor 'my Area'
 
 @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
+@OnlyRunIfDisabled('WFM_Modify_Skill_Groups_45727')
 Scenario: Create Skill Group
 	Given I am viewing intraday page
 	And I select to create a new Skill Group
@@ -32,6 +33,7 @@ Scenario: Create Skill Group
 	Then I select to monitor skill area 'my Area'
 	And I should monitor 'my Area'
 
+@OnlyRunIfDisabled('WFM_Modify_Skill_Groups_45727')
 Scenario: Remove Skill Area
 	Given there is a Skill Area called 'Area A' that monitors skill 'Skill A'
 	And I am viewing intraday page

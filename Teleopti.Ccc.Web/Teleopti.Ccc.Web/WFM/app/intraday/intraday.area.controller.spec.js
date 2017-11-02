@@ -470,13 +470,15 @@ describe('IntradayAreaController', function () {
 		expect(vm.skills[0].Name).toEqual("skill x");
 	});
 
-	it('should delete selected skill area', function () {
+	it('should delete selected skill area when toggle is disabled', function () {
 		createController(false);
 
+		vm.toggles.modifySkillGroups = false;
 		vm.deleteSkillArea(vm.skillAreas[1]);
 
 		expect(vm.skillAreas.length).toEqual(3);
 		$httpBackend.flush();
+
 		expect(vm.selectedItem).toEqual(null);
 		expect(vm.skillAreas.length).toEqual(2);
 	});

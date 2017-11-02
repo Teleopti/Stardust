@@ -77,7 +77,7 @@
       NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
     };
 
-    intradayService.getSkills.query().$promise.then(function(skills) {
+    SkillGroupSvc.getSkills().then(function(skills) {
       vm.skills = skills;
     });
   }

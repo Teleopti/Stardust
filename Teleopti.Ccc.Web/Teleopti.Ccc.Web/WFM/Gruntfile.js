@@ -142,7 +142,7 @@ module.exports = function (grunt) {
                     'node_modules/jquery/dist/jquery.min.js',
                     'node_modules/hammerjs/hammer.min.js',
                     'node_modules/angular-material/angular-material.min.js',
-                    'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
+					'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
                     'vendor/fabricjs/fabric.min.js',
                     'vendor/fabricjs/fabricjs_viewport.js',
                     'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
@@ -156,7 +156,8 @@ module.exports = function (grunt) {
                     'vendor/angular-bootstrap-persian-datepicker-master/persiandate.js',
                     'vendor/angular-bootstrap-persian-datepicker-master/persian-datepicker-tpls.js',
                     '../Content/signalr/jquery.signalR-2.2.2.js',
-                    '../Content/signalr/broker-hubs.js'
+                    '../Content/signalr/broker-hubs.js',
+					'node_modules/lodash/lodash.min.js'
                 ],
                 dest: 'dist/resources/modules.js'
             },
@@ -199,7 +200,7 @@ module.exports = function (grunt) {
                     'node_modules/jquery/dist/jquery.min.js',
                     'node_modules/hammerjs/hammer.min.js',
                     'node_modules/angular-material/angular-material.min.js',
-                    'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
+					'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
                     'vendor/fabricjs/fabric.min.js',
                     'vendor/fabricjs/fabricjs_viewport.js',
                     'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
@@ -213,7 +214,8 @@ module.exports = function (grunt) {
                     'vendor/angular-bootstrap-persian-datepicker-master/persiandate.js',
                     'vendor/angular-bootstrap-persian-datepicker-master/persian-datepicker-tpls.js',
                     '../Content/signalr/jquery.signalR-2.2.2.js',
-                    '../Content/signalr/broker-hubs.js'
+                    '../Content/signalr/broker-hubs.js',
+					'node_modules/lodash/lodash.min.js'
                 ],
                 dest: 'dist/modulesForDesktop.js'
             },
@@ -450,7 +452,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-processhtml');
     grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-eslint');
-    grunt.loadNpmTasks("grunt-image-embed");
+    grunt.loadNpmTasks('grunt-image-embed');
 
     // Default task(s).
     grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes

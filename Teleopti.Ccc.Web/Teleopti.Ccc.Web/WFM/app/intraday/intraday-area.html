@@ -83,7 +83,10 @@
 						<i class="mdi mdi-clock"></i>
 						<md-tooltip>{{'LatestActualInterval'|translate}}</md-tooltip>
 					</div>
-					<div ng-if="vm.toggles.unifiedSkillGroupManagement && vm.HasPermissionToModifySkillArea">
+					<div ng-if="vm.toggles.modifySkillGroups && vm.HasPermissionToModifySkillArea">
+						<skill-group-manager-button on-click="vm.openSkillGroupManager()" />
+					</div>
+					<div ng-if="vm.toggles.unifiedSkillGroupManagement && !vm.toggles.modifySkillGroups && vm.HasPermissionToModifySkillArea">
 						<skill-group-button on-click="vm.configMode()" />
 					</div>
 				</div>
@@ -97,7 +100,6 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="con-row intraday-monitor-item" ng-if="vm.selectedSkillArea.Name">
 		<div class="con-flex">
 			<div class="panel material-depth-1">
@@ -116,7 +118,7 @@
 									<i ng-show="vm.showIncluded" class="mdi mdi-eye-off"></i>
 									{{'IncludedSkills'|translate}}
 								</li>
-								<li ng-click='vm.toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
+								<li ng-show="!vm.toggles.modifySkillGroups" ng-click='vm.toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
 							</ul>
 						</span>
 						</div>

@@ -54,7 +54,8 @@
       showOtherDay: [],
       exportToExcel: [],
       otherSkillsLikeEmail: [],
-      unifiedSkillGroupManagement: []
+      unifiedSkillGroupManagement: [],
+      modifySkillGroups: []
     };
     var message = $translate
       .instant('WFMReleaseNotificationWithoutOldModuleLink')
@@ -65,7 +66,9 @@
     vm.currentInterval = [];
     vm.format = intradayService.formatDateTime;
     vm.viewObj;
-    vm.chosenOffset = { value: 0 };
+    vm.chosenOffset = {
+      value: 0
+    };
     NoticeService.info(message, null, true);
     toggleSvc.togglesLoaded.then(function() {
       vm.toggles.showOptimalStaffing = toggleSvc.Wfm_Intraday_OptimalStaffing_40921;
@@ -76,6 +79,7 @@
       vm.toggles.exportToExcel = toggleSvc.WFM_Intraday_Export_To_Excel_44892;
       vm.toggles.otherSkillsLikeEmail = toggleSvc.WFM_Intraday_SupportOtherSkillsLikeEmail_44026;
       vm.toggles.unifiedSkillGroupManagement = toggleSvc.WFM_Unified_Skill_Group_Management_45417;
+      vm.toggles.modifySkillGroups = toggleSvc.WFM_Modify_Skill_Groups_45727;
     });
 
     var getAutoCompleteControls = function() {
@@ -112,12 +116,10 @@
     };
 
     vm.deleteSkillArea = function(skillArea) {
-      cancelTimeout();
-      SkillGroupSvc.deleteSkillGroup
-        .remove({
+			cancelTimeout();
+      SkillGroupSvc.deleteSkillGroup({
           id: skillArea.Id
-        })
-        .$promise.then(function(result) {
+        }).then(function() {
           vm.skillAreas.splice(vm.skillAreas.indexOf(skillArea), 1);
           vm.selectedItem = null;
           vm.hasMonitorData = false;
@@ -185,19 +187,19 @@
     }
 
     var reloadSkillAreas = function(isNew) {
-      SkillGroupSvc.getSkillGroups.query().$promise.then(function(result) {
+      SkillGroupSvc.getSkillGroups().then(function(result) {
         getAutoCompleteControls();
-        vm.skillAreas = $filter('orderBy')(result.SkillAreas, 'Name');
+        vm.skillAreas = $filter('orderBy')(result.data.SkillAreas, 'Name');
         if (isNew) {
-          vm.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
-          vm.latest = $filter('orderBy')(result.SkillAreas, 'Name');
+          vm.latest = $filter('orderBy')(result.data.SkillAreas, 'created_at', true);
+          vm.latest = $filter('orderBy')(result.data.SkillAreas, 'Name');
           //TO DO: get a date to filter by
-          // vm.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
+          // vm.latest = $filter('orderBy')(result.data.SkillAreas, 'created_at', true);
         }
-        vm.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
+        vm.HasPermissionToModifySkillArea = result.data.HasPermissionToModifySkillArea;
 
-        intradayService.getSkills.query().$promise.then(function(result) {
-          vm.skills = result;
+        SkillGroupSvc.getSkills().then(function(result) {
+          vm.skills = result.data;
           if (vm.skillAreas.length === 0) {
             vm.selectedItem = vm.selectedItem = vm.skills.find(isSupported);
             if (autocompleteSkill) {
@@ -243,6 +245,11 @@
       clearSkillAreaSelection();
     };
 
+    vm.querySearch = function(query, myArray) {
+      var results = query ? myArray.filter(createFilterFor(query)) : myArray,
+        deferred;
+      return results;
+    };
     function clearSkillSelection() {
       if (!autocompleteSkill) return;
       vm.selectedSkill = null;
@@ -255,12 +262,6 @@
       vm.selectedSkillArea = null;
       vm.searchSkillAreaText = '';
     }
-
-    vm.querySearch = function(query, myArray) {
-      var results = query ? myArray.filter(createFilterFor(query)) : myArray,
-        deferred;
-      return results;
-    };
 
     function createFilterFor(query) {
       var lowercaseQuery = angular.lowercase(query);
@@ -357,6 +358,12 @@
     $scope.$on('$locationChangeStart', function() {
       cancelTimeout();
     });
+
+    vm.openSkillGroupManager = function() {
+      $state.go('intraday.skill-area-manager', {
+        isNewSkillArea: false
+      });
+    };
 
     vm.configMode = function() {
       $state.go('intraday.skill-area-config', {

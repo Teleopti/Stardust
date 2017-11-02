@@ -1,73 +1,43 @@
-(function () {
-	'use strict';
-	angular.module('skillGroupService', ['ngResource'])
-		.factory('SkillGroupSvc', SkillGroupSvc);
+(function() {
+  'use strict';
 
-	SkillGroupSvc.$inject = ['$resource'];
+  angular
+    .module('skillGroupService', ['ngResource'])
+    .service('SkillGroupSvc', SkillGroupSvc);
 
-	function SkillGroupSvc($resource) {
-		return {
-			getSkills: $resource(
-				'../api/intraday/skills',
-				{},
-				{
-					query: {
-						method: 'GET',
-						params: {},
-						isArray: true,
-                        cancellable: true
-					}
-				}
-			),
-			createSkillGroup: $resource(
-				'../api/skillgroup/create',
-				{},
-				{
-					query: {
-						method: 'POST',
-						params: {},
-						isArray: false
-					}
-				}
-			),
+	SkillGroupSvc.$inject = ['$http'];
+	
+  function SkillGroupSvc($http) {
+    var self = this;
+    self.getSkills        = getSkills;
+    self.createSkillGroup = createSkillGroup;
+    self.getSkillGroups   = getSkillGroups;
+    self.deleteSkillGroup = deleteSkillGroup;
+    self.modifySkillGroup = modifySkillGroup;
+    
+    function getSkills() {
+      return $http.get('../api/intraday/skills');
+    };
 
-			getSkillGroups: $resource(
-				'../api/skillgroup/skillgroups',
-				{},
-				{
-					query: {
-						method: 'GET',
-						params: {},
-						isArray: false,
-						cancellable: true
-					}
-				}
-			),
+    function createSkillGroup(name, skills) {
+      return $http.post('../api/skillgroup/create', {
+        Name: name,
+        Skills: skills
+      });
+    };
 
-			deleteSkillGroup: $resource(
-				'../api/skillgroup/delete/:id',
-				{id: '@id'},
-				{
-					remove: {
-						method: 'DELETE',
-						params: {},
-						isArray: false
-					}
-				}
-			),
+    function getSkillGroups() {
+      return $http.get('../api/skillgroup/skillgroups');
+    };
 
-			getSkillGroupMonitorStatistics: $resource(
-				'../api/intraday/monitorskillareastatistics/:id',
-				{id: '@id'},
-				{
-					query: {
-						method: 'GET',
-						params: {},
-						isArray: false,
-						cancellable: true
-					}
-				}
-			)
-		}
-	}
+    function deleteSkillGroup(skillArea) {
+      return $http.delete('../api/skillgroup/delete/' + skillArea.id);
+    };
+
+    function modifySkillGroup(data) {
+      if (data.currentSkillGroup) {
+        return $http.put('../api/skillgroup/update', data.currentSkillGroup);
+      }
+    };
+  }
 })();
