@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void Add(IGamificationSetting gamificationSetting)
 		{
+			gamificationSetting.SetId(Guid.NewGuid());
 			_gamificationSettings.Add(gamificationSetting);
 		}
 
