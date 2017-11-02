@@ -13,8 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public GamificationSettingViewModel(IGamificationSetting setting) : base(setting)
 		{
 		}
-
-		public Guid Id { get; set; }
 	}
 	
 	public class GamificationDescriptionViewMode
