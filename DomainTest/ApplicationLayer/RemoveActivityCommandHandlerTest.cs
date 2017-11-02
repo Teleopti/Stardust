@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<RemoveActivityCommandHandler>().For<IHandleCommand<RemoveActivityCommand>>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
 		}

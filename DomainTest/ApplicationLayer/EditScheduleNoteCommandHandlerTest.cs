@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 		}
 
 		[Test]

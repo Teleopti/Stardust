@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
 			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<AddOvertimeActivityCommandHandler>().For<IHandleCommand<AddOvertimeActivityCommand>>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();

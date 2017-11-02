@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeCommonAgentNameProvider CommonAgentNameProvider;
 		public FakeUserCulture UserCulture;
-		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
+		public FakeScheduleDifferenceSaver_DoNotUse ScheduleDifferenceSaver;
 		public FakeGlobalSettingDataRepository GlobalSetting;
 		public INow Now;
 		public FullPermission FullPermission;
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<WriteProtectedScheduleCommandValidator>().For<IWriteProtectedScheduleCommandValidator>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<FakeEventHandler>().For<FakeEventHandler>();
 			var userCulture = new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture());
 			system.UseTestDouble(userCulture).For<IUserCulture>();			

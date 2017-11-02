@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private FakePersonRequestRepository _personRequestRepository;
 		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private FakeScheduleStorage_DoNotUse _fakeScheduleStorage;
-		private FakeScheduleDifferenceSaver _scheduleDifferenceSaver;
+		private FakeScheduleDifferenceSaver_DoNotUse _scheduleDifferenceSaver;
 		private RequestApprovalServiceFactory _requestApprovalServiceFactory;
 		private ApproveRequestCommandHandler _approveRequestCommandHandler;
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
 			_fakeScheduleStorage = new FakeScheduleStorage_DoNotUse();
-			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_fakeScheduleStorage, new EmptyScheduleDayDifferenceSaver());
+			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver_DoNotUse(_fakeScheduleStorage, new EmptyScheduleDayDifferenceSaver());
 
 			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, new SchedulingResultStateHolder());
 

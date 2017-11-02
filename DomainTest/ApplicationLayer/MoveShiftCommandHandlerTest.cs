@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public MoveShiftCommandHandler Target;
 		public IScheduleStorage ScheduleStorage;
 		public FakeScenarioRepository ScenarioRepository;
-		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
+		public FakeScheduleDifferenceSaver_DoNotUse ScheduleDifferenceSaver;
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public MutableNow Now;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<MoveShiftCommandHandler>().For<IHandleCommand<MoveShiftCommand>>();
 		}

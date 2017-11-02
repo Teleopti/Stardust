@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			system.UseTestDouble<FixNotOverwriteLayerCommandHandler>()
 				.For<IHandleCommand<FixNotOverwriteLayerCommand>>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();

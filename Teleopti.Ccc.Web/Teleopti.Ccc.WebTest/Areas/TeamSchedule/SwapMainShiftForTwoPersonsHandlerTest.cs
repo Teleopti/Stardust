@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			_swapAndModifyServiceNew = MockRepository.GenerateMock<ISwapAndModifyServiceNew>();
 
-			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_scheduleStorage, new EmptyScheduleDayDifferenceSaver());
+			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver_DoNotUse(_scheduleStorage, new EmptyScheduleDayDifferenceSaver());
 			_differenceService = new DifferenceEntityCollectionService<IPersistableScheduleData>();
 		}
 

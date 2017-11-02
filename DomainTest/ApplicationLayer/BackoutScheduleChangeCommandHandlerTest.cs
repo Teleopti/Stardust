@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<FakeAggregateRootInitializer>().For<IAggregateRootInitializer>();
 			system.UseTestDouble<FakeAuditSettingRepository>().For<IAuditSettingRepository>();
 			system.AddService<BackoutScheduleChangeCommandHandler>();

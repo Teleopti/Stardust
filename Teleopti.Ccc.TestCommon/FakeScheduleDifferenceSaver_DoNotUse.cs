@@ -4,18 +4,18 @@ using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeScheduleDifferenceSaver : IScheduleDifferenceSaver
+	public class FakeScheduleDifferenceSaver_DoNotUse : IScheduleDifferenceSaver
 	{
 		private IScheduleStorage _scheduleStorage;
 		private readonly IScheduleDayDifferenceSaver _scheduleDayDifferenceSaver;
 
-		public FakeScheduleDifferenceSaver(IScheduleStorage scheduleStorage, IScheduleDayDifferenceSaver scheduleDayDifferenceSaver)
+		public FakeScheduleDifferenceSaver_DoNotUse(IScheduleStorage scheduleStorage, IScheduleDayDifferenceSaver scheduleDayDifferenceSaver)
 		{
 			_scheduleStorage = scheduleStorage;
 			_scheduleDayDifferenceSaver = scheduleDayDifferenceSaver;
 		}
 
-		public FakeScheduleDifferenceSaver()
+		public FakeScheduleDifferenceSaver_DoNotUse()
 		{			
 		}
 
