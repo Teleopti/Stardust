@@ -8,7 +8,7 @@
 	function TeamScheduleSkillService($http, $q) {
 		var urlMap = {
 			skill: "../api/TeamScheduleData/skills",
-			skillGroups: "../api/skillgroup/skillgroups"
+			skillGroups: "../api/TeamScheduleData/skillgroups"
 		};
 
 		this.getAllSkills = getAllSkills;

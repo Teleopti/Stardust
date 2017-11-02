@@ -10,8 +10,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SkillGroupManagement;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
+using Teleopti.Ccc.Web.Areas.SkillGroup;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
@@ -30,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly SkillViewModelBuilder _skillBuilder;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
+		private readonly FetchSkillGroup _fetchSkillGroup;
 
 		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider,
 			IScheduleValidationProvider validationProvider,
@@ -38,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			IToggleManager toggleManager,
 			SkillViewModelBuilder skillBuilder,
 			IScenarioRepository scenarioRepository,
-			IOptionalColumnRepository optionalColumnRepository)
+			IOptionalColumnRepository optionalColumnRepository, FetchSkillGroup fetchSkillGroup)
 		{
 			_teamScheduleDataProvider = teamScheduleDataProvider;
 			_validationProvider = validationProvider;
@@ -48,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_skillBuilder = skillBuilder;
 			_scenarioRepository = scenarioRepository;
 			_optionalColumnRepository = optionalColumnRepository;
+			_fetchSkillGroup = fetchSkillGroup;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchActivities")]
@@ -138,6 +142,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual IHttpActionResult GetAllSkills()
 		{
 			return Ok(_skillBuilder.BuildSkillsConnectedWithQueue());
+		}
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/skillgroups")]
+		public virtual IHttpActionResult GetSkillGroups()
+		{
+			return Ok(new SkillGroupInfo
+			{
+				SkillAreas = _fetchSkillGroup.GetAll()
+			});
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/Scenarios")]
