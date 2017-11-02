@@ -40,9 +40,7 @@ namespace Teleopti.Ccc.Web.Core
 	    {
 		    if (windowsZoneId.Equals("UTC", StringComparison.OrdinalIgnoreCase))
 			    return "Etc/UTC";
-			var tzid = _tzdbSource.WindowsMapping.PrimaryMapping[windowsZoneId];
-			if (tzid == null) return String.Empty;
-			return _tzdbSource.CanonicalIdMap[tzid];
-	    }
+			return !_tzdbSource.WindowsMapping.PrimaryMapping.TryGetValue(windowsZoneId, out var tzid) ? string.Empty : _tzdbSource.CanonicalIdMap[tzid];
+		}
     }
 }
