@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return new GamificationDescriptionViewMode(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.Description};
 		}
 
-		public GamificationAnsweredCallsEnabledViewModel PersistAnsweredCallsEnabled(GamificationAnsweredCallsEnabledViewModel input)
+		public GamificationThresholdEnabledViewModel PersistAnsweredCallsEnabled(GamificationThresholdEnabledViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
 			if (gamificationSetting.AnsweredCallsBadgeEnabled != input.Value) gamificationSetting.AnsweredCallsBadgeEnabled = input.Value;
 
-			return new GamificationAnsweredCallsEnabledViewModel(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AnsweredCallsBadgeEnabled};
+			return new GamificationThresholdEnabledViewModel(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AnsweredCallsBadgeEnabled};
 		}
 
 		public GamificationAnsweredCallsThresholdViewModel PersistAnsweredCallsGoldThreshold(GamificationAnsweredCallsThresholdViewModel input)
@@ -65,6 +65,38 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (gamificationSetting.AnsweredCallsBronzeThreshold != input.Value) gamificationSetting.AnsweredCallsBronzeThreshold = input.Value;
 
 			return new GamificationAnsweredCallsThresholdViewModel(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AnsweredCallsBronzeThreshold};
+		}
+
+		public GamificationThresholdEnabledViewModel PersistAHTEnabled(GamificationThresholdEnabledViewModel input)
+		{
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting.AHTBadgeEnabled != input.Value) gamificationSetting.AHTBadgeEnabled = input.Value;
+
+			return new GamificationThresholdEnabledViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AHTBadgeEnabled };
+		}
+
+		public GamificationAHTThresholdViewModel PersistAHTGoldThreshold(GamificationAHTThresholdViewModel input)
+		{
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting.AHTGoldThreshold != input.Value) gamificationSetting.AHTGoldThreshold = input.Value;
+
+			return new GamificationAHTThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AHTGoldThreshold };
+		}
+
+		public GamificationAHTThresholdViewModel PersistAHTSilverThreshold(GamificationAHTThresholdViewModel input)
+		{
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting.AHTSilverThreshold != input.Value) gamificationSetting.AHTSilverThreshold = input.Value;
+
+			return new GamificationAHTThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AHTSilverThreshold };
+		}
+
+		public GamificationAHTThresholdViewModel PersistAHTBronzeThreshold(GamificationAHTThresholdViewModel input)
+		{
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting.AHTBronzeThreshold != input.Value) gamificationSetting.AHTBronzeThreshold = input.Value;
+
+			return new GamificationAHTThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AHTBronzeThreshold };
 		}
 
 		private IGamificationSetting getGamificationSetting(Guid? id)

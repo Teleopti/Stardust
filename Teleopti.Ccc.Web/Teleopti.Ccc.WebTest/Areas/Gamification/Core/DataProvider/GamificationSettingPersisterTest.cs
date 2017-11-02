@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var target = new GamificationSettingPersister(_gamificationSettingRepository);
 			_gamificationSetting.AnsweredCallsBadgeEnabled.Should().Be.False();
 
-			var result = target.PersistAnsweredCallsEnabled(new GamificationAnsweredCallsEnabledViewModel()
+			var result = target.PersistAnsweredCallsEnabled(new GamificationThresholdEnabledViewModel()
 			{
 				GamificationSettingId = _gamificationSetting.Id.Value,
 				Value = expactedResult
@@ -123,5 +124,74 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
 			result.Value.Should().Be.EqualTo(expactedResult);
 		}
+
+		[Test]
+		public void ShouldPersistGamificationAHTEnabled()
+		{
+			var expactedResult = true;
+			var target = new GamificationSettingPersister(_gamificationSettingRepository);
+			_gamificationSetting.AHTBadgeEnabled.Should().Be.False();
+
+			var result = target.PersistAHTEnabled(new GamificationThresholdEnabledViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
+		[Test]
+		public void ShouldPersistGamificationAHTGoldThreshold()
+		{
+			TimeSpan expactedResult = new TimeSpan(0,2,30);
+			var target = new GamificationSettingPersister(_gamificationSettingRepository);
+			_gamificationSetting.AHTGoldThreshold.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistAHTGoldThreshold(new GamificationAHTThresholdViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
+		[Test]
+		public void ShouldPersistGamificationAHTSilverThreshold()
+		{
+			TimeSpan expactedResult = new TimeSpan(0,3,30);
+			var target = new GamificationSettingPersister(_gamificationSettingRepository);
+			_gamificationSetting.AHTSilverThreshold.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistAHTSilverThreshold(new GamificationAHTThresholdViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
+		[Test]
+		public void ShouldPersistGamificationAHTBronzeThreshold()
+		{
+			TimeSpan expactedResult = new TimeSpan(0,4,30);
+			var target = new GamificationSettingPersister(_gamificationSettingRepository);
+			_gamificationSetting.AHTBronzeThreshold.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistAHTBronzeThreshold(new GamificationAHTThresholdViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
 	}
 }

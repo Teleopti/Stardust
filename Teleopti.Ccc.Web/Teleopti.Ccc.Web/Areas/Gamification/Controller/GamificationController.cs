@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		}
 
 		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
-		public virtual GamificationAnsweredCallsEnabledViewModel  GamificationAnsweredCallsEnabled([FromBody]GamificationAnsweredCallsEnabledViewModel input)
+		public virtual GamificationThresholdEnabledViewModel  GamificationAnsweredCallsEnabled([FromBody]GamificationThresholdEnabledViewModel input)
 		{
 			return _gamificationSettingPersister.PersistAnsweredCallsEnabled(input);
 		}
@@ -57,6 +57,30 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		public virtual GamificationAnsweredCallsThresholdViewModel GamificationAnsweredCallsForBronze([FromBody]GamificationAnsweredCallsThresholdViewModel input)
 		{
 			return _gamificationSettingPersister.PersistAnsweredCallsGoldThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationThresholdEnabledViewModel GamificationAHTEnabled([FromBody]GamificationThresholdEnabledViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAHTEnabled(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationAHTThresholdViewModel GamificationAHTForGold([FromBody]GamificationAHTThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAHTGoldThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationAHTThresholdViewModel GamificationAHTForSilver([FromBody]GamificationAHTThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAHTSilverThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationAHTThresholdViewModel GamificationAHTForBronze([FromBody]GamificationAHTThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAHTBronzeThreshold(input);
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public Description Value { get; set; }
 	}
 
-	public class GamificationAnsweredCallsEnabledViewModel
+	public class GamificationThresholdEnabledViewModel
 	{
 		public Guid GamificationSettingId { get; set; }
 		public bool Value { get; set; }
@@ -31,5 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 	{
 		public Guid GamificationSettingId { get; set; }
 		public int Value { get; set; }
+	}
+
+	public class GamificationAHTThresholdViewModel
+	{
+		public Guid GamificationSettingId { get; set; }
+		public TimeSpan Value { get; set; }
 	}
 }
