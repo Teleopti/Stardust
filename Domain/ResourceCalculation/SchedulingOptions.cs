@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -12,8 +13,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class SchedulingOptions
 	{
-		private readonly IList<IShiftCategory> _notAllowedShiftCategories = new List<IShiftCategory>();
-		private readonly IList<ShiftProjectionCache> _notAllowedShiftProjectionCaches = new List<ShiftProjectionCache>(); 
+		private IList<IShiftCategory> _notAllowedShiftCategories = new List<IShiftCategory>();
+		private IList<ShiftProjectionCache> _notAllowedShiftProjectionCaches = new List<ShiftProjectionCache>(); 
 
 		private bool _usePreferencesMustHaveOnly;
 	    private bool _useRotations;
@@ -255,8 +256,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    }
 
 	    public SchedulingOptions Clone()
-        {
-            return (SchedulingOptions) MemberwiseClone();
+		{
+			var ret = (SchedulingOptions) MemberwiseClone();
+			ret._notAllowedShiftCategories = _notAllowedShiftCategories.ToList();
+			ret._notAllowedShiftProjectionCaches = _notAllowedShiftProjectionCaches.ToList();
+            return ret;
         }
     }
 }

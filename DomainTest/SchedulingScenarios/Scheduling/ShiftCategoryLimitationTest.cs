@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(1, true)]
 		[TestCase(0, false)]
-		[Repeat(50)] //remove me when stable
-		[Ignore("Flaky test- needs to be fixed before #46389 is set to readyfortest")]
 		public void ShouldNotBreakShiftCategoryLimitationOf0WhenMultipleIslandsExist(int maxNumberOfShiftCategories, bool agentShouldBeScheduled)
 		{
 			var date = new DateOnly(2017, 1, 22);
