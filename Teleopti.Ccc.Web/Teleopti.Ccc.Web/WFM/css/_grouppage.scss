@@ -209,6 +209,10 @@ group-page-picker {
 		display: flex;
 		align-items: center;
 	}
+  
+	md-tab-item{
+	  padding: 6px 24px;
+	}
 }
 
 .group-page-picker-menu .shadow-group-toggle:focus + .group-toggle {
