@@ -3,8 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -18,25 +20,30 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		private IPerson _person;
 		private Absence _absence;
 		private ISkill _skill;
-
+		private IScheduleRange _scheduleRange;
+		
 		[SetUp]
 		public void Setup()
 		{
 			_skill = SkillFactory.CreateSkill("Phone");
 			var timePeriods = Enumerable.Repeat(new TimePeriod(8, 18), 5).ToArray();
 			WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(_skill, timePeriods);
-			//skill.WorkloadCollection.First().TemplateWeekCollection[0].OpenHourList[0].
 			var date = new DateOnly(2016, 4, 1);
 			_person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(date);
 			_person.AddSkill(_skill, date);
 			_absence = new Absence();
+
+			var scenario = new Scenario();
+			var parameters = new ScheduleParameters(scenario, _person, new DateTimePeriod(2017, 10, 19, 0, 2017, 10, 24, 23));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, DateTime.Now);
+			_scheduleRange = new FakeScheduleRange(scheduleDictionary, parameters);
 		}
 		
 		[Test]
 		public void ShouldDenyRequestIfAllPersonSkillsClosed()
 		{
 			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,22,8,2017,10,22,18))).WithId();
-			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.DenyOption.Should().Be.EqualTo(PersonRequestDenyOption.AllPersonSkillsClosed);
 			validatedRequest.IsValid.Should().Be.False();
 		}
@@ -45,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void ShouldApproveRequestIfAnyPersonSkillIsOpen()
 		{
 			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,23,8,2017,10,23,18))).WithId();
-			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.IsValid.Should().Be.True();
 		}
 		
@@ -53,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void ShouldApproveRequestIfAnyPersonSkillIsOpenOnSomeHours()
 		{
 			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,23,6,2017,10,23,9))).WithId();
-			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.IsValid.Should().Be.True();
 		}
 		
@@ -61,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void ShouldDenyRequestIfAllPersonSkillsIsClosedInEvening()
 		{
 			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,23,19,2017,10,23,20))).WithId();
-			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.IsValid.Should().Be.False();
 		}
 		
@@ -69,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void ShouldHandleMultiDayRequest()
 		{
 			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,23,9))).WithId();
-			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.IsValid.Should().Be.True();
 		}
 		
@@ -79,8 +86,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,23,13))).WithId();
 			var request2 = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,23,12))).WithId();
-			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
-			var validatedRequest2 = _target.Validate(request2.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
+			var validatedRequest2 = _target.Validate(request2.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.IsValid.Should().Be.True();
 			validatedRequest2.IsValid.Should().Be.False();
 		}
@@ -93,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var timePeriods = Enumerable.Repeat(new TimePeriod(8, 18), 7).ToArray();
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill2, timePeriods);
 			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,22,9))).WithId();
-			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.IsValid.Should().Be.True();
 		}		
 		
@@ -103,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var timePeriods = Enumerable.Repeat(new TimePeriod(8, 18), 7).ToArray();
 			WorkloadFactory.CreateWorkloadWithOpenHours(_skill, timePeriods);
 			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,22,9))).WithId();
-			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection);
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.IsValid.Should().Be.True();
 		}
 	}

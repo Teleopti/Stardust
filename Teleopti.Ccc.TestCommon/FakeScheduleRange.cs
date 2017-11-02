@@ -114,6 +114,9 @@ namespace Teleopti.Ccc.TestCommon
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
 			var scheduleDay = base.Owner.SchedulesForDay(dateOnlyPeriod.StartDate).FirstOrDefault(s => s.Person == Person);
+
+			if (scheduleDay == null) return new List<IScheduleDay>();
+
 			var scheduleDatas = base.ScheduleDataInternalCollection();
 			foreach (var scheduleData in scheduleDatas)
 			{

@@ -612,6 +612,32 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			request.IsWaitlisted.Should().Be.False();
 		}
 
+		[Test]
+		public void ShouldNotDenyRequestWhenPeriodIsOutsideSkillOpenHoursAndOnSkillessActivity()
+		{
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			_absence = createAbsence();
+
+			setWorkflowControlSet(usePersonAccountValidator: true);
+
+			setupPersonSkills();
+			
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(6)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(7))
+			});
+
+			var personRequest = Persister.Persist(form);
+
+			personRequest.Should().Not.Be.Null();
+			personRequest.IsDenied.Should().Be.False();
+			personRequest.DenyReason.Should().Be.Empty();
+		}
+
 
 		private void tryPersist()
 		{

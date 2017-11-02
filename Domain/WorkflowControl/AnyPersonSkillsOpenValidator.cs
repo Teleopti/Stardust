@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
@@ -11,12 +12,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public interface IAnyPersonSkillsOpenValidator
 	{
-		IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills);
+		IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills, IScheduleRange scheduleRange);
 	}
 
 	public class AnyPersonSkillOpenTrueValidator : IAnyPersonSkillsOpenValidator
 	{
-		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills)
+		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills, IScheduleRange scheduleRange)
 		{
 			return new ValidatedRequest(){IsValid = true};
 		}
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 	public class AnyPersonSkillsOpenValidator : IAnyPersonSkillsOpenValidator
 	{
-		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills)
+		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills, IScheduleRange scheduleRange)
 		{
 			var requestPeriod = absenceRequest.Period;
 			foreach (var personSkill in personSkills)
@@ -32,7 +33,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				var skill = personSkill.Skill;
 				
 				var dateOnlyPeriod = requestPeriod.ToDateOnlyPeriod(skill.TimeZone);
-				var weekDaysInvolved = dateOnlyPeriod.DayCollection().Select(d => d.DayOfWeek).Distinct();
 
 				foreach (var requestDay in dateOnlyPeriod.DayCollection())
 				{
@@ -52,7 +52,22 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					}
 				}
 			}
-			
+
+			var activities = new HashSet<IActivity>();
+			foreach (var scheduleDay in scheduleRange.ScheduledDayCollection(requestPeriod.ToDateOnlyPeriod(scheduleRange.Person.PermissionInformation.DefaultTimeZone())))
+			{
+				var projection = scheduleDay.ProjectionService().CreateProjection();
+				var activityLayers = projection.FilterLayers(requestPeriod).FilterLayers<IActivity>();
+
+				var dayActivities = activityLayers.Select(x => x.Payload as IActivity).Distinct();
+				dayActivities.ForEach(x => activities.Add(x));
+			}
+
+			if (activities.Any() && !activities.Any(x => x.RequiresSkill))
+			{
+				return new ValidatedRequest { IsValid = true };
+			}
+
 			return new ValidatedRequest()
 			{
 				IsValid = false, 
