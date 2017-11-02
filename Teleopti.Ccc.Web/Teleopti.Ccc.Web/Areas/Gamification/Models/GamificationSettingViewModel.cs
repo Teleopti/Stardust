@@ -22,4 +22,10 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public Guid GamificationSettingId { get; set; }
 		public Description Value { get; set; }
 	}
+
+	public class GamificationAnsweredCallsEnabledViewModel
+	{
+		public Guid GamificationSettingId { get; set; }
+		public bool Value { get; set; }
+	}
 }

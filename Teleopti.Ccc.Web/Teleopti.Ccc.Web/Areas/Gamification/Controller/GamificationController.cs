@@ -34,5 +34,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		{
 			return _gamificationSettingPersister.PersistDescription(input);
 		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationAnsweredCallsEnabledViewModel  GamificationAnsweredCallsEnabled([FromBody]GamificationAnsweredCallsEnabledViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAnsweredCallsEnabled(input);
+		}
 	}
 }

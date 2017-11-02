@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -14,6 +15,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 	[TestFixture]
 	class GamificationSettingPersisterTest
 	{
+		private IGamificationSettingRepository _gamificationSettingRepository;
+		private Guid _gamificationSettingId;
+
+		[SetUp]
+		public void Setup()
+		{
+			IGamificationSetting gamificationSetting = new GamificationSetting("newGamification");
+			gamificationSetting.WithId();
+			_gamificationSettingId = gamificationSetting.Id.Value;
+			_gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
+			_gamificationSettingRepository.Stub(x => x.Load(_gamificationSettingId)).Return(gamificationSetting);
+		}
+
 		[Test]
 		public void ShouldPersistNewGamification()
 		{
@@ -30,21 +44,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		public void ShouldPersistGamificationDescription()
 		{
 			var expactedDescription = new Description("modifiedDescription");
-			IGamificationSetting gamificationSetting  = new GamificationSetting("newGamification");
-			gamificationSetting.WithId();
-			var gamificationId = gamificationSetting.Id.Value;
-			var gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
-			gamificationSettingRepository.Stub(x => x.Load(gamificationId)).Return(gamificationSetting);
 
-			var target = new GamificationSettingPersister(gamificationSettingRepository);
+			var target = new GamificationSettingPersister(_gamificationSettingRepository);
 			var result = target.PersistDescription(new GamificationDescriptionViewMode()
 			{
-				GamificationSettingId = gamificationId,
+				GamificationSettingId = _gamificationSettingId,
 				Value = expactedDescription
 			});
 
-			result.GamificationSettingId.Should().Be.EqualTo(gamificationId);
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSettingId);
 			result.Value.Name.Should().Be.EqualTo(expactedDescription.Name);
+		}
+
+		[Test]
+		public void ShouldPersistGamificationAnsweredCallsEnabled()
+		{
+			var expactedResult = true;
+
+			var target = new GamificationSettingPersister(_gamificationSettingRepository);
+			var result = target.PersistAnsweredCallsEnabled(new GamificationAnsweredCallsEnabledViewModel()
+			{
+				GamificationSettingId = _gamificationSettingId,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSettingId);
+			result.Value.Should().Be.EqualTo(expactedResult);
 		}
 	}
 }

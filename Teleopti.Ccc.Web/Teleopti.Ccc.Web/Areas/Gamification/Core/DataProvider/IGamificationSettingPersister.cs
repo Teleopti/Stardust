@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 	{
 		GamificationSettingViewModel Persist();
 		GamificationDescriptionViewMode PersistDescription(GamificationDescriptionViewMode input);
+		GamificationAnsweredCallsEnabledViewModel PersistAnsweredCallsEnabled(GamificationAnsweredCallsEnabledViewModel input);
 	}
 }
