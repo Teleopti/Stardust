@@ -10,6 +10,6 @@
 		<div class="setting">Applied Setting</div>
 	</div>
 	<md-virtual-repeat-container>
-		<gamification-target-row md-virtual-repeat="row in $ctrl.rows" md-on-demand row="row" selected="" on-select="" on-setting-change=""></gamification-target-row>
+		<gamification-target-row md-virtual-repeat="row in $ctrl.rows" md-on-demand id="row.teamId" name="row.teamName" applied-setting-value="row.appliedSettingValue" selected="$ctrl.selectedTeamIds[row.teamId]" on-select="$ctrl.selectRow(teamId)" on-setting-change="$ctrl.changeAppliedSetting(teamId, newSettingValue)" ng-class="{'selected': $ctrl.selectedTeamIds[row.teamId]}"></gamification-target-row>
 	</md-virtual-repeat-container>
 </div>

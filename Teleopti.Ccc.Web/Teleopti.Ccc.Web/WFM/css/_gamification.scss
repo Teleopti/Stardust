@@ -45,11 +45,18 @@
 	}
 
 	gamification-targets-table {
+		$PADDING: .8em;
 		margin: 0 -5px;
 
 		.header, gamification-target-row {
+			box-sizing: border-box;
+			height: 54px;
 			display: flex;
-			padding: .8em;
+			padding: 0 $PADDING;
+
+			& > * {
+				padding: $PADDING 0;
+			}
 		}
 
 		.header {
@@ -64,8 +71,9 @@
 
 		md-virtual-repeat-container {
 			gamification-target-row {
-				box-sizing: border-box;
-				height: 44px;
+				&.selected {
+					background-color: $green-100;
+				}
 			}
 
 			gamification-target-row + gamification-target-row {
@@ -78,8 +86,14 @@
 			height: 100px;
 		}
 
+		.selection, .team, .setting {
+			display: flex;
+			align-items: center;
+		}
+
 		.selection {
 			flex: 0 0 50px;
+			// display: flex;
 			.wfm-checkbox {
 				padding: 0;
 			}
@@ -88,9 +102,21 @@
 			}
 		}
 
-		.team { flex: 1 1 300px; }
+		.team {
+			flex: 1 1 300px;
+			// display: flex;
+			// align-items: center;
+		}
 
-		.setting { flex: 2 1 300px; }
+		.setting {
+			flex: 2 1 300px;
+			// display: flex;
+			// align-items: center;
+
+			md-select md-select-value {
+				background-image: none;
+			}
+		}
 	}
 }
 

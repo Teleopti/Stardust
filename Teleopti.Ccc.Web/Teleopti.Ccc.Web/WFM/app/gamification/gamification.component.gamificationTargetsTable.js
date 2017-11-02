@@ -13,6 +13,30 @@
 
 		var ctrl = this;
 
+		ctrl.selectedTeamIds = {};
+
+		ctrl.settings = [
+			{ value: 'default', name: 'Default' },
+			{ value: 'setting1', name: 'Setting 1' },
+			{ value: 'setting2', name: 'Setting 2' }
+		];
+
+		ctrl.selectRow = function (teamId) {
+			// console.log('select row: ' + teamId)
+			ctrl.selectedTeamIds[teamId] = !ctrl.selectedTeamIds[teamId];
+		};
+
+		ctrl.changeAppliedSetting = function (teamId, newSettingValue) {
+			// console.log(teamId, newSettingValue)
+			Object.keys(ctrl.selectedTeamIds)
+				.filter(function (id) { return ctrl.selectedTeamIds[id]; })
+				.forEach(function (id) {
+					ctrl.teams[id].appliedSettingValue = newSettingValue;
+				});
+		};
+
+		function refresh() { $scope.$broadcast('$md-resize'); }
+
 		function setHeightToFillAvailableSpace() {
 			var tag = 'md-virtual-repeat-container';
 			var rows = $element.find(tag)[0];
@@ -24,16 +48,18 @@
 			var height = 'calc(100vh - ' + (top + bottomMargin) + 'px)';
 
 			rows.style.height = height;
-			$scope.$broadcast('$md-resize');
+
+			refresh();
 		}
 
 		function teams(n) {
 			var teams = [];
 			for (var i = 0; i < n; i++) {
 				teams.push({
-					id: i,
-					name: 'Team ' + (i + 1),
-					appliedSetting: 'Default'
+					teamId: i,
+					teamName: 'Team ' + (i + 1),
+					// appliedSettingValue: ctrl.settings[i % ctrl.settings.length].value
+					appliedSettingValue: i === 0 ? ctrl.settings[0].value : ctrl.settings[1].value
 				});
 			}
 			return teams;

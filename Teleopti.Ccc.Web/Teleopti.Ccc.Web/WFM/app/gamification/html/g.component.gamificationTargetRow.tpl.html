@@ -1,5 +1,13 @@
 <div class="selection">
-	<md-checkbox aria-label="Checkbox"></md-checkbox>
+	<md-checkbox ng-model="$ctrl.selected" ng-change="$ctrl.rowSelected()" aria-label="Checkbox"></md-checkbox>
 </div>
-<div class="team">{{$ctrl.row.name}}</div>
-<div class="setting">{{$ctrl.row.appliedSetting}}</div>
+<div class="team" ng-click="$ctrl.rowSelected()">
+	<span>{{$ctrl.name}}</span>
+</div>
+<div class="setting" ng-click="$ctrl.rowSelected()">
+	<div ng-click="$event.stopPropagation()">
+		<md-select ng-disabled="!$ctrl.selected" ng-model="$ctrl.appliedSettingValue" ng-change="$ctrl.appliedSettingChanged()" class="md-no-underline" placeholder="SelectGamificationSetting">
+				<md-option ng-repeat="option in $ctrl.settingOptions" value="{{option.value}}">{{option.name}}</md-option>
+		</md-select>
+	</div>
+</div>
