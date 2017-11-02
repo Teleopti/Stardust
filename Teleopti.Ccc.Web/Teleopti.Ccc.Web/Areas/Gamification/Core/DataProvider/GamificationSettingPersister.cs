@@ -99,6 +99,38 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return new GamificationAHTThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AHTBronzeThreshold };
 		}
 
+		public GamificationThresholdEnabledViewModel PersistAdherenceEnabled(GamificationThresholdEnabledViewModel input)
+		{
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting.AdherenceBadgeEnabled != input.Value) gamificationSetting.AdherenceBadgeEnabled = input.Value;
+
+			return new GamificationThresholdEnabledViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceBadgeEnabled };
+		}
+
+		public GamificationAdherenceThresholdViewModel PersistAdherenceGoldThreshold(GamificationAdherenceThresholdViewModel input)
+		{
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting.AdherenceGoldThreshold != input.Value) gamificationSetting.AdherenceGoldThreshold = input.Value;
+
+			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceGoldThreshold };
+		}
+
+		public GamificationAdherenceThresholdViewModel PersistAdherenceSilverThreshold(GamificationAdherenceThresholdViewModel input)
+		{
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting.AdherenceSilverThreshold != input.Value) gamificationSetting.AdherenceSilverThreshold = input.Value;
+
+			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceSilverThreshold };
+		}
+
+		public GamificationAdherenceThresholdViewModel PersistAdherenceBronzeThreshold(GamificationAdherenceThresholdViewModel input)
+		{
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting.AdherenceBronzeThreshold != input.Value) gamificationSetting.AdherenceBronzeThreshold = input.Value;
+
+			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceBronzeThreshold};
+		}
+
 		private IGamificationSetting getGamificationSetting(Guid? id)
 		{
 			return id == null ? new GamificationSetting(Resources.NewGamificationSetting) : _gamificationSettingRepository.Load((Guid)id);

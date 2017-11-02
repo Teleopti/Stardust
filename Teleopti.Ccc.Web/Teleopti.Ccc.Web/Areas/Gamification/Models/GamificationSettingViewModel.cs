@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 {
@@ -37,5 +38,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 	{
 		public Guid GamificationSettingId { get; set; }
 		public TimeSpan Value { get; set; }
+	}
+
+	public class GamificationAdherenceThresholdViewModel
+	{
+		public Guid GamificationSettingId { get; set; }
+		public Percent Value { get; set; }
 	}
 }

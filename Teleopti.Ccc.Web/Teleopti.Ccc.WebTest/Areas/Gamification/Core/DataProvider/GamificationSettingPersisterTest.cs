@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 {
@@ -184,6 +185,75 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			_gamificationSetting.AHTBronzeThreshold.Should().Not.Be.EqualTo(expactedResult);
 
 			var result = target.PersistAHTBronzeThreshold(new GamificationAHTThresholdViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
+		[Test]
+		public void ShouldPersistGamificationAdherenceEnabled()
+		{
+			var expactedResult = true;
+			var target = new GamificationSettingPersister(_gamificationSettingRepository);
+			_gamificationSetting.AdherenceBadgeEnabled.Should().Be.False();
+
+			var result = target.PersistAdherenceEnabled(new GamificationThresholdEnabledViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
+
+		[Test]
+		public void ShouldPersistGamificationAdherenceGoldThreshold()
+		{
+			Percent expactedResult = new Percent(90);
+			var target = new GamificationSettingPersister(_gamificationSettingRepository);
+			_gamificationSetting.AdherenceGoldThreshold.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistAdherenceGoldThreshold(new GamificationAdherenceThresholdViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
+		[Test]
+		public void ShouldPersistGamificationAdherenceSilverThreshold()
+		{
+			Percent expactedResult = new Percent(85);
+			var target = new GamificationSettingPersister(_gamificationSettingRepository);
+			_gamificationSetting.AdherenceSilverThreshold.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistAdherenceSilverThreshold(new GamificationAdherenceThresholdViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
+		[Test]
+		public void ShouldPersistGamificationAdherenceBronzeThreshold()
+		{
+			Percent expactedResult = new Percent(70);
+			var target = new GamificationSettingPersister(_gamificationSettingRepository);
+			_gamificationSetting.AdherenceBronzeThreshold.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistAdherenceBronzeThreshold(new GamificationAdherenceThresholdViewModel()
 			{
 				GamificationSettingId = _gamificationSetting.Id.Value,
 				Value = expactedResult

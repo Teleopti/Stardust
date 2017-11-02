@@ -82,5 +82,29 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		{
 			return _gamificationSettingPersister.PersistAHTBronzeThreshold(input);
 		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationThresholdEnabledViewModel GamificationAdherenceEnabled([FromBody]GamificationThresholdEnabledViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAdherenceEnabled(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationAdherenceThresholdViewModel GamificationAdherenceForGold([FromBody]GamificationAdherenceThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAdherenceGoldThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationAdherenceThresholdViewModel GamificationAHTForSilver([FromBody]GamificationAdherenceThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAdherenceSilverThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationAdherenceThresholdViewModel GamificationAHTForBronze([FromBody]GamificationAdherenceThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAdherenceBronzeThreshold(input);
+		}
 	}
 }
