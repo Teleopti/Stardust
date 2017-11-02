@@ -8,24 +8,30 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeStorage
 	{
+		//maybe these needs to be thread safe coll types as well? let's see....
 		private readonly List<IAggregateRoot> _legacy = new List<IAggregateRoot>();
-
 		private readonly List<IAggregateRoot> _added = new List<IAggregateRoot>();
 		private readonly List<IAggregateRoot> _removed = new List<IAggregateRoot>();
 		private readonly List<IAggregateRoot> _comitted = new List<IAggregateRoot>();
 
-		private static readonly object CommitLock = new object();
+		private static readonly object transactionLock = new object();
 
 		public void Add(IAggregateRoot entity)
 		{
-			_legacy.Add(entity);
-			_added.Add(entity);
+			lock (transactionLock)
+			{
+				_legacy.Add(entity);
+				_added.Add(entity);
+			}
 		}
 
 		public void Remove(IAggregateRoot entity)
 		{
-			_legacy.Remove(entity);
-			_removed.Add(entity);
+			lock (transactionLock)
+			{
+				_legacy.Remove(entity);
+				_removed.Add(entity);	
+			}
 		}
 
 		public T Get<T>(Guid id) where T : IAggregateRoot
@@ -47,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			RootChangeInfo[] updates;
 			RootChangeInfo[] removals;
 			RootChangeInfo[] adds;
-			lock (CommitLock)
+			lock (transactionLock)
 			{
 				adds = _added
 					.Select(x => new RootChangeInfo(x, DomainUpdateType.Insert))
