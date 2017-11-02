@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly IToggleManager _toggleManager;
 
 		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWork currentUnitOfWork,
-												  ICurrentBusinessUnit currentBusinessUnit, IStardustJobFeedback stardustJobFeedback, IToggleManager toggleManager)
+			ICurrentBusinessUnit currentBusinessUnit, IStardustJobFeedback stardustJobFeedback, IToggleManager toggleManager)
 		{
 			_now = now;
 			_currentUnitOfWork = currentUnitOfWork;
@@ -548,7 +548,8 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 				.CreateSQLQuery("SELECT top(1) InsertedOn from [ReadModel].SkillCombinationResource Where BusinessUnit = :bu order by InsertedOn desc ")
 				.SetParameter("bu", bu)
 				.UniqueResult<DateTime>();
-
+			_stardustJobFeedback.SendProgress($"Loading latest calculated time with connectionstring: {_currentUnitOfWork.Current().Session().Connection.ConnectionString}");
+			_stardustJobFeedback.SendProgress($"Loading latest calculated time on BusinessUnit {bu}");
 			return latest;
 		}		
 	}
