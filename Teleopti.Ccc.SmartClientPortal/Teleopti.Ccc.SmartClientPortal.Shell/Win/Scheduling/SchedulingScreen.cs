@@ -332,6 +332,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void updateLifeTimeScopeWith2ThingsWithFullDependencyChain()
 		{
+			//SHOULD NOT BE HERE. If we need special registrations for scheduler, use _configuration.Args().IsFatClient instead!
 			var updater = new ContainerBuilder();
 
 			updater.RegisterType<SchedulingScreenPersister>().As<ISchedulingScreenPersister>().InstancePerLifetimeScope();
