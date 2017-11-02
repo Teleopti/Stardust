@@ -97,10 +97,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			columnList.Add(autoGrantColumn);
 
-			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodStartDate", Resources.Start, Resources.Period));
-			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodEndDate", Resources.End, Resources.Period));
-			columnList.Add(new SFGridIntegerCellWithIgnoreColumn<OvertimeRequestPeriodModel>("RollingStart", Resources.Start, Resources.Rolling));
-			columnList.Add(new SFGridIntegerCellWithIgnoreColumn<OvertimeRequestPeriodModel>("RollingEnd", Resources.End, Resources.Rolling));
+			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodStartDate", Resources.Start, Resources.Period)
+			{
+				CellValidator = new OvertimeRequestDatePeriodStartCellValidator(_toggleManager)
+			});
+			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodEndDate", Resources.End, Resources.Period)
+			{
+				CellValidator = new OvertimeRequestDatePeriodEndCellValidator(_toggleManager)
+			});
+			columnList.Add(new SFGridIntegerCellWithIgnoreColumn<OvertimeRequestPeriodModel>("RollingStart", Resources.Start, Resources.Rolling)
+			{
+				CellValidator = new OvertimeRequestRollingPeriodStartCellValidator(_toggleManager)
+			});
+			columnList.Add(new SFGridIntegerCellWithIgnoreColumn<OvertimeRequestPeriodModel>("RollingEnd", Resources.End, Resources.Rolling)
+			{
+				CellValidator = new OvertimeRequestRollingPeriodEndCellValidator(_toggleManager)
+			});
 
 			gridControlOvertimeRequestOpenPeriods.Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation | GridMergeCellsMode.MergeColumnsInRow;
 			gridControlOvertimeRequestOpenPeriods.Rows.HeaderCount = 1;

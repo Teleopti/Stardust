@@ -16682,4 +16682,12 @@ Do you want to participate?</value>
     <value>Deny</value>
     <comment>enum : OvertimeRequestAutoGrantType</comment>
   </data>
+  <data name="OvertimeRequestDatePeriodError">
+    <value>valid range of date is {0} - {1}</value>
+    <comment>error message for invalid overtime request date,{0} is start date,{1} is end date</comment>
+  </data>
+  <data name="OvertimeRequestRollingPeriodError">
+    <value>valid range is 0 - {0}</value>
+    <comment>error message for invalid overtime request rolling period, {0} is maximum</comment>
+  </data>
 </root>

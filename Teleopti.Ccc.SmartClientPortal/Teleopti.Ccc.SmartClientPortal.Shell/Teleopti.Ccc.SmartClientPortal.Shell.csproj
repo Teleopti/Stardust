@@ -1553,6 +1553,9 @@
     <Compile Include="Win\Common\Configuration\OrganizationTreeControl.Designer.cs">
       <DependentUpon>OrganizationTreeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win\Common\Configuration\OvertimeRequestPeriodCellValidatorBase.cs" />
+    <Compile Include="Win\Common\Configuration\OvertimeRequestPeriodEndCellValidator.cs" />
+    <Compile Include="Win\Common\Configuration\OvertimeRequestPeriodStartCellValidator.cs" />
     <Compile Include="Win\Common\Configuration\PartTimePercentageControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

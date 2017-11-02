@@ -22455,6 +22455,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to valid range of date is {0} - {1}.
+        /// </summary>
+        public static string OvertimeRequestDatePeriodError {
+            get {
+                return ResourceManager.GetString("OvertimeRequestDatePeriodError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your overtime request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time.
         /// </summary>
         public static string OvertimeRequestDenyReasonExpired {
@@ -22496,6 +22505,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OvertimeRequestHasBeenApprovedDot {
             get {
                 return ResourceManager.GetString("OvertimeRequestHasBeenApprovedDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to valid range is 0 - {0}.
+        /// </summary>
+        public static string OvertimeRequestRollingPeriodError {
+            get {
+                return ResourceManager.GetString("OvertimeRequestRollingPeriodError", resourceCulture);
             }
         }
         
