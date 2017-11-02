@@ -1,1 +1,62 @@
-<div>{{::$ctrl.title}}</div>
+<!-- <div>{{::$ctrl.title}}</div> -->
+<div>
+    <div>
+        <div class="inline-block">
+            <span>{{::$ctrl.title}}:</span>
+        </div>
+        <div class="inline-block setting-name">
+            <md-select ng-model='$ctrl.currentSettingId'>
+                <md-option ng-repeat="setting in $ctrl.settings" value="{{setting.id}}">{{setting.name}}</md-option>
+            </md-select>
+        </div>
+
+        <div class="icon-button">
+            <i class="mdi mdi-plus-circle"></i>
+        </div>
+
+        <div class="icon-button">
+            <i class="mdi mdi-close-circle"></i>
+        </div>
+        <div class="inline-block">
+            <md-button class="md-raised md-primary md-button md-ink-ripple">Reset Badgets</md-button>
+        </div>
+    </div>
+
+    <md-divider></md-divider>
+    <!-- Setting panel -->
+    <div class="setting-container">
+        <div class="input-container">
+            <div class="inline-block">
+                <label>Description:</label>
+            </div>
+            <div class="inline-block">
+                <input type="text" value="{{$ctrl.settings[$ctrl.currentSettingId].name}}">
+            </div>
+        </div>
+        <div class="input-container">
+            <div class="inline-block">
+                <label>Change Info:</label>
+            </div>
+            <div class="inline-block">
+                <label>Updated by Admin on xx/xx/xxxx xx:xx</label>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <div class="inline-block">
+                <label>Rule:</label>
+            </div>
+            <div class="inline-block">
+                <md-select id="gamificationSettingType" ng-model='$ctrl.currentRuleId'>
+                    <md-option ng-repeat="rule in $ctrl.rules" value="{{rule.id}}">{{rule.name}}</md-option>
+                </md-select>
+            </div>
+        </div>
+
+        <div>
+            <div class="inline-block" ng-repeat="settingInfo in $ctrl.settingInfos">
+                <gamification-setting-info setting-info="settingInfo"></gamification-setting-info>
+            </div>
+        </div>
+    </div>
+</div>

@@ -15,6 +15,35 @@
 		}
 	}
 
+	gamification-settings{
+		.setting-container{
+			
+			margin-top: 10px;
+		}
+
+		.setting-name {
+			width: 250px;
+		}
+
+		.input-container{
+			margin-top: 10px;
+		}
+
+		.icon-button{
+			display: inline-block;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+
+		.setting-item-panel{
+			border: 1px solid rgb(124, 122, 122);
+			margin: 3px;
+			input{
+				width:auto;
+			}
+		}
+	}
+
 	gamification-targets-table {
 		margin: 0 -5px;
 

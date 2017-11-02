@@ -1,0 +1,20 @@
+<div flex class="setting-item-panel">
+    <section class=".md-whiteframe-z1">
+        <md-toolbar class="md-primary">
+            <div class="md-toolbar-tools">
+                <md-checkbox ng-model="$ctrl.settingInfo.is_checked"></md-checkbox>
+                <h3>{{$ctrl.settingInfo.name}}</h3>
+                <i class="mdi mdi-lead-pencil" ng-show="$ctrl.settingInfo.is_external"></i>
+                <span flex class="flex"></span>
+                <i class="mdi mdi-{{$ctrl.iconName}}" ng-click="$ctrl.onCollapsed()"></i>
+            </div>
+        </md-toolbar>
+        <div ng-show="!$ctrl.collapsed">
+            <div ng-repeat="item in $ctrl.settingInfo.items">
+                <span>{{item.name}}</span>
+
+                <input type="text" value="{{item.value}}">
+            </div>
+        </div>
+    </section>
+</div>
