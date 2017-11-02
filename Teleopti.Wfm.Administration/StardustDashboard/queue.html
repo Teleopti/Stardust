@@ -1,42 +1,83 @@
 ﻿<div class="container body-content" ng-controller="jobQueueController as vm">
-<div class="row">
-	<div class="col-md-12"><div class="col-md-12">
+	<div class="row">
+		<div class="col-md-12">
 			<a style="float: left; padding-top: 25px; padding-right: 50px"><img alt="back" src="Content/images/left_round.png" ng-click="vm.back()" /></a>
-			<h3>Job Queue</h3>
-			<div style="margin-bottom: 10px">
-				<button ng-disabled="vm.selected.length === 0" ng-click="vm.deleteQueuedJobs()" class="btn-warning">Delete</button>
-			</div>
-			<div>
-				<table>
-					<thead>
-					<tr>
-						<th>
-							<md-checkbox style="margin-bottom: 0" aria-label="check all" ng-checked="vm.isChecked()"
-										 md-indeterminate="vm.isIndeterminate()"
-										 ng-click="vm.toggleAll()">
-							</md-checkbox>
-						</th>
-						<th>Tenant</th>
-						<th>Type</th>
-						<th>Created (UTC)</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr ng-repeat="job in vm.Jobs">
-						<td><md-checkbox aria-label="check to delete" style="margin-bottom: 0" type="checkbox" ng-checked="vm.exists(job.JobId, vm.selected)" ng-click="vm.toggle(job.JobId, vm.selected)" /></td>
-						<td>{{job.DataSource}}</td>
-						<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
-						<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-			<div style="margin-top: 10px">
-				<button ng-disabled="vm.noMoreJobs" ng-click="vm.getNewFreshData()" class="btn-primary col-md-2"> load {{vm.limit}} more</button>
+			<h2>Job Queue</h2>
+			<div class="row">
+				<div class="col-md-3">
+					<div class="panel panel-default">
+						<div class="panel-heading">Filter</div>
+						<div class="panel-body">
+							<div class="dropdown" style="padding-bottom: 10px">
+								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+									<span ng-show="!vm.selectedDataSource">All Tenants</span>
+									<span ng-show="vm.selectedDataSource">{{vm.selectedDataSource}}</span>
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+									<li ng-click="vm.selectTenant('All Tenants')"><a>All Tenants</a></li>
+									<li ng-repeat="tenant in vm.Tenants" ng-click="vm.selectTenant(tenant.Name)"><a>{{tenant.Name}}</a></li>
+								</ul>
+							</div>
+							
+							<div class="dropdown" style="padding-bottom: 10px">
+								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+									<span ng-show="!vm.selectedJobType">All Types</span>
+									<span ng-show="vm.selectedJobType">{{vm.selectedJobType}}</span>
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+									<li ng-click="vm.selectJobType('All Types')"><a>All Types</a></li>
+									<li ng-repeat="type in vm.types" ng-click="vm.selectJobType(type)"><a>{{type}}</a></li>
+								</ul>
+							</div>
+
+							<button class="btn btn-primary" style="float: right;" ng-click="vm.search()">
+								<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_search_white_24px.svg"></md-icon>
+							</button>
+						</div>					
+					</div>
+				</div>
+				<div class="col-md-9">
+					<div class="panel panel-default ">
+						<div class="panel-heading">History</div>
+						<div class="panel-body">
+							<div style="margin-bottom: 10px">
+								<button ng-disabled="vm.selected.length === 0" ng-click="vm.deleteQueuedJobs()" class="btn-warning">Delete</button>
+							</div>
+							<table>
+								<thead>
+								<tr>
+									<th>
+										<md-checkbox style="margin-bottom: 0" aria-label="check all" ng-checked="vm.isChecked()"
+													 md-indeterminate="vm.isIndeterminate()"
+													 ng-click="vm.toggleAll()">
+										</md-checkbox>
+									</th>
+									<th>Tenant</th>
+									<th>Type</th>
+									<th>Created (UTC)</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr ng-repeat="job in vm.Jobs">
+									<td><md-checkbox aria-label="check to delete" style="margin-bottom: 0" type="checkbox" ng-checked="vm.exists(job.JobId, vm.selected)" ng-click="vm.toggle(job.JobId, vm.selected)"/></td>
+									<td>{{job.DataSource}}</td>
+									<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
+									<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+						<div style="margin-top: 10px">
+							<button ng-disabled="vm.noMoreJobs" ng-click="vm.getNewFreshData()" class="btn-primary col-md-2"> load {{vm.limit}} more</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		
 	</div>
 </div>
-</div>
+
+
 

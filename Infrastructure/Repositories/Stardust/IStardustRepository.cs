@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		IList<Job> GetAllJobs(int from, int to);
 		IList<Job> GetAllJobs(JobFilterModel filter);
 		List<Job> GetAllQueuedJobs(int from, int to);
+		IList<Job> GetAllQueuedJobs(JobFilterModel filter);
 		List<WorkerNode> GetAllWorkerNodes();
 		Job GetJobByJobId(Guid jobId);
 		IList<JobDetail> GetJobDetailsByJobId(Guid jobId);

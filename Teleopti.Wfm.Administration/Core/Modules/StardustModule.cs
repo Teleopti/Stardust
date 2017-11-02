@@ -1,8 +1,9 @@
-﻿using System.Configuration;
-using Autofac;
-using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
+﻿using Autofac;
+using Autofac.Integration.WebApi;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.Stardust;
 
 namespace Teleopti.Wfm.Administration.Core.Modules
