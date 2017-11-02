@@ -203,21 +203,26 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		public static IEnumerable<HandlerInfo> HandleInterfaces(this Type t)
 		{
-			return
-				from i in t.GetInterfaces()
-				let isPackageHandler = i == typeof(IHandleEvents)
-				let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)
-
-				where isHandler || isPackageHandler
-
-				let interfaceHandleMethod = i.GetMethods().Single(x => x.Name == "Handle")
-				let eventType = interfaceHandleMethod.GetParameters().SingleOrDefault()?.ParameterType ?? null
-				let handleMethod = eventType == null ? null : t.GetMethod("Handle", new[] {eventType})
-				select new HandlerInfo
+			foreach (var i in t.GetInterfaces())
+			{
+				if (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>))
 				{
-					Type = i,
-					Method = handleMethod
-				};
+					var eventType = i.GetMethods().Single().GetParameters().Single().ParameterType;
+					yield return new HandlerInfo
+					{
+						Type = i,
+						Method = t.GetMethod("Handle", new[] { eventType })
+					};
+				}
+				if (i == typeof(IHandleEvents))
+				{
+					yield return new HandlerInfo
+					{
+						Type = i,
+						Method = t.GetMethod("Handle")
+					};
+				}
+			}
 		}
 
 		public class HandlerInfo
