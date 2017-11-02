@@ -77,7 +77,8 @@
 			if (vm.staffingEnabled) {
 				vm.scheduleTableWrapperStyle = {
 					'height': size.tableHeight + 'px',
-					'overflow-y': 'auto'
+					'overflow-y': 'auto',
+					'min-height':'initial'
 				};
 				vm.chartHeight = size.chartHeight;
 			}
@@ -166,7 +167,8 @@
 			SizeStorageService.setSize(tableHeight, chartHeight);
 			vm.scheduleTableWrapperStyle = {
 				'height': tableHeight + 'px',
-				'overflow-y': 'auto'
+				'overflow-y': 'auto',
+				'min-height':'initial'
 			};
 			vm.chartHeight = chartHeight;
 
