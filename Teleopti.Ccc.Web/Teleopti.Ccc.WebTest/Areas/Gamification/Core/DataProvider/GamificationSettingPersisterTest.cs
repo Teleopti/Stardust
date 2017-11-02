@@ -42,6 +42,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
+		public void ShouldDeleteGamificationSuccessfully()
+		{
+			var gamificationSettingRepository = new FakeGamificationSettingRepository();
+			gamificationSettingRepository.Add(_gamificationSetting);
+			var target = new GamificationSettingPersister(gamificationSettingRepository);
+
+			var result = target.RemoveGamificationSetting(_gamificationSetting.Id.Value);
+			result.Should().Be.True();
+			gamificationSettingRepository.LoadAll().Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldReturnFalseWhenCannotFindGamificationForDelete()
+		{
+			var gamificationSettingRepository = new FakeGamificationSettingRepository();
+			var target = new GamificationSettingPersister(gamificationSettingRepository);
+
+			var result = target.RemoveGamificationSetting(_gamificationSetting.Id.Value);
+			result.Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldPersistGamificationDescription()
 		{
 			var expactedDescription = new Description("modifiedDescription");

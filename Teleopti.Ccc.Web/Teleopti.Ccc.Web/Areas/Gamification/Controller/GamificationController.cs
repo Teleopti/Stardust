@@ -23,6 +23,15 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			return _gamificationSettingPersister.Persist();
 		}
 
+		[HttpDelete, Route("api/Gamification/Delete/{Id}"), UnitOfWork]
+		public virtual IHttpActionResult RemoveGamification(Guid Id)
+		{
+			var isSuccess = _gamificationSettingPersister.RemoveGamificationSetting(Id);
+
+			if (isSuccess) return Ok();
+			return NotFound();
+		}
+
 		[HttpPost, Route("api/Gamification/Load"), UnitOfWork]
 		public virtual GamificationSettingViewModel LoadGamification(Guid id)
 		{

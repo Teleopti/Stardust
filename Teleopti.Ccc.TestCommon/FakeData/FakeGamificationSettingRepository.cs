@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IGamificationSetting Get(Guid id)
 		{
-			return _gamificationSettings.First(x => x.Id == id);
+			return _gamificationSettings.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IGamificationSetting Load(Guid id)
