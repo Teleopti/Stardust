@@ -4,6 +4,8 @@ using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.TestCommon
 {
+	//don't use. to start using real impl, you need to set Id on your assignments in the repository 
+	//(which makes sense anyway)
 	public class FakeScheduleDifferenceSaver_DoNotUse : IScheduleDifferenceSaver
 	{
 		private IScheduleStorage _scheduleStorage;
