@@ -1492,9 +1492,6 @@
     <Content Include="WFM\app\global\skill-group\skillgroup.html" />
     <Content Include="WFM\app\global\skill-group\skillgroup.service.js" />
     <Content Include="WFM\app\global\skill-group\_modules.js" />
-    <Content Include="WFM\app\global\skill-picker\skill-picker.html" />
-    <Content Include="WFM\app\global\skill-picker\skill.picker.component.js" />
-    <Content Include="WFM\app\global\skill-picker\skill.picker.component.spec.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
     <Content Include="WFM\app\intraday\components\intradayDateOffset.component.js" />
