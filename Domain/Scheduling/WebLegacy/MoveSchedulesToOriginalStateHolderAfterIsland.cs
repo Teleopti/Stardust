@@ -22,14 +22,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			foreach (var diff in modifiedScheduleDictionary.DifferenceSinceSnapshot())
 			{
 				var modifiedAssignment = diff.CurrentItem as IPersonAssignment;
+				var modifiedAbsence = diff.CurrentItem as IPersonAbsence;
+				if (modifiedAssignment == null && modifiedAbsence == null) continue;
+				var dateOnly = new DateOnly(diff.CurrentItem.Period.StartDateTimeLocal(diff.CurrentItem.Person.PermissionInformation.DefaultTimeZone()).Date);
+				var toScheduleDay = schedulerScheduleDictionary[diff.CurrentItem.Person].ScheduledDay(dateOnly);
+				var fromScheduleDay = modifiedScheduleDictionary[diff.CurrentItem.Person].ScheduledDay(dateOnly);
 				if (modifiedAssignment != null)
 				{
-					var toScheduleDay = schedulerScheduleDictionary[modifiedAssignment.Person].ScheduledDay(modifiedAssignment.Date);
-					var fromScheduleDay = modifiedScheduleDictionary[modifiedAssignment.Person].ScheduledDay(modifiedAssignment.Date);
 					toScheduleDay.Replace(modifiedAssignment);
-					schedulerScheduleDictionary.Modify(ScheduleModifier.Scheduler, toScheduleDay, NewBusinessRuleCollection.Minimum(),
-						new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(fromScheduleDay.ScheduleTag()));
 				}
+				if (modifiedAbsence != null)
+				{
+					toScheduleDay.Add(modifiedAbsence);
+				}
+				schedulerScheduleDictionary.Modify(
+					ScheduleModifier.Scheduler, 
+					toScheduleDay, 
+					NewBusinessRuleCollection.Minimum(),
+					new DoNothingScheduleDayChangeCallBack(), 
+					new ScheduleTagSetter(fromScheduleDay.ScheduleTag()));
 			}
 		}
 	}
