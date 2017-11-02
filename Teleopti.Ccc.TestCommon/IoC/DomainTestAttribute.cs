@@ -118,9 +118,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeRtaTracerConfigPersister>().For<IRtaTracerConfigPersister>();
 			//
 
-			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();
+			system.UseTestDouble<NoScheduleRangeConflictCollector>().For<IScheduleRangeConflictCollector>();
 			
-
 			// readmodels
 			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
 			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();

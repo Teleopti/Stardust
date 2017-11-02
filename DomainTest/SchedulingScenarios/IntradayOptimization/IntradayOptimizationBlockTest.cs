@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 							new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(180)))
 				);
 
-				var ass = new PersonAssignment(agent1, scenario, dateOnly.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 0, 17, 0));
+				var ass = new PersonAssignment(agent1, scenario, dateOnly.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 0, 17, 0)).WithId();
 				PersonAssignmentRepository.Has(ass);
 			}
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 							new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(180)))
 				);
 
-				var ass = new PersonAssignment(agent1, scenario, dateOnly.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 0, 17, 0));
+				var ass = new PersonAssignment(agent1, scenario, dateOnly.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 0, 17, 0)).WithId();
 				PersonAssignmentRepository.Has(ass);
 			}
 

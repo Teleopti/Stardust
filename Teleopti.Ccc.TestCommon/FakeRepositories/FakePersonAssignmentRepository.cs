@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			foreach (var date in period.DayCollection())
 			{
-				var ass = new PersonAssignment(agent, scenario, date);
+				var ass = new PersonAssignment(agent, scenario, date).WithId();
 				ass.AddActivity(activity, timePeriod);
 				ass.SetShiftCategory(shiftCategory);
 				ass.Source = source;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Has(IPerson agent, IScenario scenario, IDayOffTemplate dayOffTemplate, DateOnly date)
 		{
-			var ass = new PersonAssignment(agent, scenario, date);
+			var ass = new PersonAssignment(agent, scenario, date).WithId();
 			ass.SetDayOff(dayOffTemplate);
 			_storage.Add(ass);
 		}
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
 		{
-			throw new NotImplementedException();
+			return new[] {new DateScenarioPersonId(Guid.NewGuid(), period.StartDate.Date, scenario.Id.Value, person.Id.Value, 1)};
 		}
 
 		public DateTime GetScheduleLoadedTime()

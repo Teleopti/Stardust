@@ -49,12 +49,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<IRootChangeInfo> PersistAll()
 		{
-			return null;
+			yield break;
 		}
 
 		public IEnumerable<IRootChangeInfo> PersistAll(IInitiatorIdentifier initiator)
 		{
-			return null;
+			yield break;
 		}
 
 		public void Reassociate(IAggregateRoot root)

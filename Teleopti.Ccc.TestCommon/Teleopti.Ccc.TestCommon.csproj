@@ -187,7 +187,6 @@
     <Compile Include="FakeData\FakePossibleShiftTradePersonsProvider.cs" />
     <Compile Include="FakeData\FakePushMessageDialogueRepository.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
-    <Compile Include="FakeData\FakeScheduleRangePersister.cs" />
     <Compile Include="FakeData\FakePermissions.cs" />
     <Compile Include="FakeData\FakeIntradayQueueStatisticsLoader.cs" />
     <Compile Include="FakeData\FakeSkillCombinationResourceRepository.cs" />
