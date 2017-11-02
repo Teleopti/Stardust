@@ -8,9 +8,9 @@
 			controller: GamificationSettingsController
 		});
 
-	GamificationSettingsController.$inject = ['$mdSelect', '$element', '$scope', '$translate',];
+	GamificationSettingsController.$inject = ['$mdSelect', '$element', '$scope', '$translate'];
 
-	function GamificationSettingsController($mdSelect, $element, $scope, $translate, ) {
+	function GamificationSettingsController($mdSelect, $element, $scope, $translate) {
 		var ctrl = this;
 		ctrl.title = 'Gamification Settings';
 		ctrl.settings = [{
@@ -27,10 +27,10 @@
 		];
 
 		ctrl.rules = [{
-			id: '0',
+			id: 'rule-id1',
 			name: 'Use Different Thresholds'
 		}, {
-			id: '1',
+			id: 'rule-id2',
 			name: 'Use Ratio Conversion'
 		}]
 
