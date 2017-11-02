@@ -296,7 +296,6 @@
     <Compile Include="FakeRepositories\Rta\FakeAgentStateReadModelPersister.cs" />
     <Compile Include="FakeAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="FakeCurrentBusinessUnit.cs" />
-    <Compile Include="FakeCurrentTransactionHooks.cs" />
     <Compile Include="FakeDataSourcesFactory.cs" />
     <Compile Include="FakeData\FakeActivityRepository.cs" />
     <Compile Include="FakeData\FakeCampaignRepository.cs" />
