@@ -173,14 +173,19 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 			if (_orderbys.Any())
 			{
 				builder.Append(" ORDER BY ");
-				_orderbys.ForEach(s => { builder.Append(s); });
+				builder.Append(string.Join(", ", _orderbys));
 			}
-
 			return new Selection
 			{
 				Query = builder.ToString(),
 				ParameterFuncs = _parameters
 			};
+		}
+
+		public AgentStateReadModelQueryBuilder WithSorting(IEnumerable<string> orderBy, string direction)
+		{
+			orderBy.ForEach(x => _orderbys.Add($"{x} {direction} "));
+			return this;
 		}
 	}
 }

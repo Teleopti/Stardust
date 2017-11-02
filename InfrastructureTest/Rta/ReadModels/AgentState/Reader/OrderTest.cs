@@ -54,7 +54,105 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			result.First().PersonId.Should().Be(personId2);
 			result.Second().PersonId.Should().Be(personId1);
 		}
+		
+		[Test]
+		public void ShouldOrderByName()
+		{
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var person3 = Guid.NewGuid();
+			
+			Persister.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = person1,
+				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
+			});
+			
+			Persister.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = person2,
+				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
+			});
+			
+			Persister.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = person3,
+				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
+			});
+			
+			Persister.UpsertName(person1, "Ashley", "Andeen");
+			Persister.UpsertName(person2, "Alina", "Andeen");
+			Persister.UpsertName(person3, "Pierre", "Baldi");
 
+			var result = Target.Read(new AgentStateFilter
+			{
+				OrderBy = new[]{"FirstName", "LastName"},
+				Direction = "desc"
+			});
+
+			result.First().PersonId.Should().Be(person3);
+			result.Second().PersonId.Should().Be(person1);
+			result.Last().PersonId.Should().Be(person2);
+		}
+
+		[Test]
+		public void ShouldOrderByTeamName()
+		{
+			
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				SiteName = "aSite",
+				TeamName = "aTeam",
+				PersonId = Guid.NewGuid()
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				SiteName = "aSite",
+				TeamName = "cTeam",
+				PersonId = Guid.NewGuid()
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				SiteName = "aSite",
+				TeamName = "bTeam",
+				PersonId = Guid.NewGuid()
+			});
+	
+			var result = Target.Read(new AgentStateFilter()
+			{
+				OrderBy = new[]{"SiteName", "TeamName"},
+				Direction = "desc"
+			});
+
+			result.First().TeamName.Should().Be("cTeam");
+			result.Second().TeamName.Should().Be("bTeam");
+			result.Last().TeamName.Should().Be("aTeam");
+		}
+		
+		[Test]
+		public void ShouldOrderByStateName()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				StateName = "Lunch"
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId2,
+				StateName = "Phone"
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				OrderBy = new[]{"StateName"},
+				Direction = "desc"
+			});
+
+			result.First().PersonId.Should().Be(personId2);
+		}
 
 	}
 }
