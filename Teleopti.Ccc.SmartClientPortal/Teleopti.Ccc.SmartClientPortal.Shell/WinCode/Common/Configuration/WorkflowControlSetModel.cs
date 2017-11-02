@@ -4,6 +4,8 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -149,7 +151,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			get
 			{
-				setDefaultPeriodIfMissing();
+				setDefaultAbsencePeriodIfMissing();
 				return _defaultAbsenceRequestPeriodAdapters;
 			}
 		}
@@ -158,7 +160,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			get
 			{
-				setDefaultPeriodIfMissing();
+				setDefaultOvertimePeriodIfMissing();
 				return _defaultOvertimeRequestPeriodAdapters;
 			}
 		}
@@ -307,7 +309,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			IsDirty = true;
 		}
 
-		private static void setDefaultPeriodIfMissing()
+		private static void setDefaultAbsencePeriodIfMissing()
 		{
 			if (_defaultAbsenceRequestPeriodAdapters != null) return;
 
@@ -330,10 +332,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				OpenForRequestsPeriod = openPeriod
 			};
 
+			_defaultAbsenceRequestPeriodAdapters = new List<AbsenceRequestPeriodTypeModel>
+			{
+				new AbsenceRequestPeriodTypeModel(openDatePeriod, Resources.FromTo),
+				new AbsenceRequestPeriodTypeModel(openRollingPeriod, Resources.Rolling)
+			};
+		}
+
+		private static void setDefaultOvertimePeriodIfMissing()
+		{
+			if (_defaultOvertimeRequestPeriodAdapters != null) return;
+
 			var overtimeOpenDatePeriod = new OvertimeRequestOpenDatePeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = period,
+				Period = getCurrentMonthPeriod(new DateOnly(DateOnly.Today.Date.AddMonths(1)))
 			};
 
 			var overtimeOpenRollingPeriod = new OvertimeRequestOpenRollingPeriod
@@ -341,13 +354,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				BetweenDays = new MinMax<int>(2, 15),
 			};
-
-			_defaultAbsenceRequestPeriodAdapters = new List<AbsenceRequestPeriodTypeModel>
-			{
-				new AbsenceRequestPeriodTypeModel(openDatePeriod, Resources.FromTo),
-				new AbsenceRequestPeriodTypeModel(openRollingPeriod, Resources.Rolling)
-			};
-
+			
 			_defaultOvertimeRequestPeriodAdapters = new List<OvertimeRequestPeriodTypeModel>
 			{
 				new OvertimeRequestPeriodTypeModel(overtimeOpenDatePeriod, Resources.FromTo),

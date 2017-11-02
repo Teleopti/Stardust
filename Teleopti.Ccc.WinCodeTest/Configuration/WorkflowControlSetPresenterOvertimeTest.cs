@@ -6,13 +6,17 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
@@ -31,12 +35,22 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		private IList<IDayOffTemplate> _dayOffTemplates;
 		private WorkflowControlSetModel _workflowControlSetModel;
 		private IWorkflowControlSet _workflowControlSet;
-		private readonly CultureInfo _culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+		private CultureInfo _culture;
 		private List<ISkill> _skillList;
+		private FakeToggleManager _fakeToggleManager;
+
+		[DatapointSource]
+		public Toggles[] ToggleList =
+		{
+			Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109,
+			Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109,
+			Toggles.OvertimeRequestPeriodSetting_46417
+		};
 
 		[SetUp]
 		public void Setup()
 		{
+			_culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			_mocks = new MockRepository();
 			_mocks.StrictMock<IWorkflowControlSetRepository>();
 			_repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
@@ -51,12 +65,14 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			_workflowControlSet = new WorkflowControlSet("My Workflow Control Set");
 			_workflowControlSet.SetId(Guid.NewGuid());
 			_workflowControlSetModel = new WorkflowControlSetModel(_workflowControlSet);
-			_target = new WorkflowControlSetPresenter(_view, _unitOfWorkFactory, _repositoryFactory);
+			_fakeToggleManager = new FakeToggleManager();
+			_target = new WorkflowControlSetPresenter(_view, _unitOfWorkFactory, _repositoryFactory, _fakeToggleManager);
 		}
 
-		[Test]
-		public void VerifyAddNewDateOpenPeriod()
+		[Theory]
+		public void VerifyAddNewDateOpenPeriod(Toggles toggles)
 		{
+			_fakeToggleManager.Enable(toggles);
 			IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
 
 			using (_mocks.Record())
@@ -75,13 +91,18 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 				Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
 				_target.AddOvertimeRequestOpenDatePeriod();
+
+				var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_fakeToggleManager);
 				Assert.AreEqual(1, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
+				Assert.AreEqual(DateOnly.Today, _target.SelectedModel.OvertimeRequestPeriodModels[0].PeriodStartDate);
+				Assert.AreEqual(DateOnly.Today.AddDays(staffingInfoAvailableDays), _target.SelectedModel.OvertimeRequestPeriodModels[0].PeriodEndDate);
 			}
 		}
 
-		[Test]
-		public void VerifyAddNewRollingOpenPeriod()
+		[Theory]
+		public void VerifyAddNewRollingOpenPeriod(Toggles toggles)
 		{
+			_fakeToggleManager.Enable(toggles);
 			IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
 
 			using (_mocks.Record())
@@ -99,8 +120,12 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 
 				Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
-				_target.AddOvertimeRequestOpenDatePeriod();
+				_target.AddOvertimeRequestOpenRollingPeriod();
+
+				var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_fakeToggleManager);
 				Assert.AreEqual(1, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
+				Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels[0].RollingStart);
+				Assert.AreEqual(staffingInfoAvailableDays, _target.SelectedModel.OvertimeRequestPeriodModels[0].RollingEnd);
 			}
 		}
 

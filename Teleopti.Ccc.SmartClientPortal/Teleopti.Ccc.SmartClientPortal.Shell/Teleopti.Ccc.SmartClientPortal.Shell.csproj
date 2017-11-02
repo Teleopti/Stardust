@@ -1637,6 +1637,7 @@
     <Compile Include="Win\Common\Configuration\SmsSettingsControl.Designer.cs">
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win\Common\Configuration\StaffingInfoAvailableDaysProvider.cs" />
     <Compile Include="Win\Common\Configuration\StateGroupControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

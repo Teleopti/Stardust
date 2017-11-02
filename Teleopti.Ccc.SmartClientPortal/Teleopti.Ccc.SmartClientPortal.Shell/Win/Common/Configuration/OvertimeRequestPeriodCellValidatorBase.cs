@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
@@ -25,14 +24,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		protected DateOnlyPeriod getAvailablePeriod()
 		{
-			int staffingAvailableDays;
-
-			if (_toggleManager.IsEnabled(Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109))
-				staffingAvailableDays = 48;
-			else if (_toggleManager.IsEnabled(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109))
-				staffingAvailableDays = 27;
-			else
-				staffingAvailableDays = 13;
+			int staffingAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager);
 
 			return new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(staffingAvailableDays));
 		}

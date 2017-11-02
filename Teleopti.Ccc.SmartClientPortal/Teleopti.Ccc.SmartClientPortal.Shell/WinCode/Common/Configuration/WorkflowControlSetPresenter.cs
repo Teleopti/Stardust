@@ -9,7 +9,9 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -25,14 +27,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		private IList<IShiftCategory> _shiftCategories;
 		private IList<IAbsence> _absences;
 		private IList<IDayOffTemplate> _dayOffTemplates;
+		private IToggleManager _toggleManager;
 
 		public WorkflowControlSetPresenter(IWorkflowControlSetView view,
 			IUnitOfWorkFactory unitOfWorkFactory,
-			IRepositoryFactory repositoryFactory)
+			IRepositoryFactory repositoryFactory, IToggleManager toggleManager)
 		{
 			_view = view;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
+			_toggleManager = toggleManager;
 			_workflowControlSetModelCollection = new List<IWorkflowControlSetModel>();
 
 			var startDate = DateHelper.GetFirstDateInMonth(DateTime.Today, CultureInfo.CurrentCulture);
@@ -313,6 +317,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_selectedModel.DomainEntity.RemoveOpenOvertimeRequestPeriod(overtimeRequestPeriodModel.DomainEntity);
 
 			var newOvertimeRequestOpenPeriod = periodTypeModel.Item;
+			resetOvertimeRequestDefaultPeriod(newOvertimeRequestOpenPeriod);
+
 			_selectedModel.DomainEntity.InsertOvertimePeriod(newOvertimeRequestOpenPeriod, currentIndex);
 			overtimeRequestPeriodModel.SetDomainEntity(newOvertimeRequestOpenPeriod);
 
@@ -356,11 +362,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		private void addNewOvertimeRequestOpenPeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
 		{
+			resetOvertimeRequestDefaultPeriod(overtimeRequestOpenPeriod);
 			_selectedModel.DomainEntity.AddOpenOvertimeRequestPeriod(overtimeRequestOpenPeriod);
 			_selectedModel.IsDirty = true;
 
 			_view.SetOvertimeOpenPeriodsGridRowCount(_selectedModel.OvertimeRequestPeriodModels.Count);
 			_view.RefreshOvertimeOpenPeriodsGrid();
+		}
+
+		private void resetOvertimeRequestDefaultPeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		{
+			var availableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager);
+			if (overtimeRequestOpenPeriod is OvertimeRequestOpenDatePeriod)
+			{
+				((OvertimeRequestOpenDatePeriod)overtimeRequestOpenPeriod).Period =
+					new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(availableDays));
+			}
+			else
+			{
+				((OvertimeRequestOpenRollingPeriod)overtimeRequestOpenPeriod).BetweenDays = new MinMax<int>(0, availableDays);
+			}
 		}
 
 		public void DeleteAbsenceRequestPeriod(IList<AbsenceRequestPeriodModel> absenceRequestPeriodModels)

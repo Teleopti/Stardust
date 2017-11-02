@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			_toggleManager = toggleManager;
 			if (DesignMode) return;
-			_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory());
+			_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory(), _toggleManager);
 			GridStyleInfoStore.CellValueProperty.IsCloneable = false;
 			dateTimePickerAdvPublishedTo.NullString = Resources.NotPublished;
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;

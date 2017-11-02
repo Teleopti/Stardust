@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
 				PeriodStartDate = DateOnly.Today,
-				PeriodEndDate = DateOnly.Today.AddDays(getStaffingAvailableDays(toggles))
+				PeriodEndDate = DateOnly.Today.AddDays(getStaffingAvailableDays())
 			};
 
 			Assert.AreEqual(true, _datePeriodStartCellValidator.ValidateCell(model), _datePeriodStartCellValidator.Message);
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void ShouldReturnFalseWhenDatePeriodTotallyExceedsAvailableDays(Toggles toggles)
 		{
 			_fakeToggleManager.Enable(toggles);
-			var staffingAvailableDays = getStaffingAvailableDays(toggles);
+			var staffingAvailableDays = getStaffingAvailableDays();
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenDatePeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
 				PeriodStartDate = DateOnly.Today.AddDays(-1),
-				PeriodEndDate = DateOnly.Today.AddDays(getStaffingAvailableDays(toggles))
+				PeriodEndDate = DateOnly.Today.AddDays(getStaffingAvailableDays())
 			};
 
 			Assert.AreEqual(false, _datePeriodStartCellValidator.ValidateCell(model));
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
 				PeriodStartDate = DateOnly.Today,
-				PeriodEndDate = DateOnly.Today.AddDays(getStaffingAvailableDays(toggles) + 1)
+				PeriodEndDate = DateOnly.Today.AddDays(getStaffingAvailableDays() + 1)
 			};
 
 			Assert.AreEqual(false, _datePeriodEndCellValidator.ValidateCell(model));
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
 				RollingStart = 0,
-				RollingEnd = getStaffingAvailableDays(toggles)
+				RollingEnd = getStaffingAvailableDays()
 			};
 
 			Assert.AreEqual(true, _rollingPeriodStartCellValidator.ValidateCell(model), _rollingPeriodStartCellValidator.Message);
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
 				RollingStart = 0,
-				RollingEnd = getStaffingAvailableDays(toggles) + 1
+				RollingEnd = getStaffingAvailableDays() + 1
 			};
 
 			Assert.AreEqual(false, _rollingPeriodEndCellValidator.ValidateCell(model));
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void ShouldReturnFalseWhenRollingPeriodIsTotallyOutsideAvailableDaysRange(Toggles toggles)
 		{
 			_fakeToggleManager.Enable(toggles);
-			var staffingAvailableDays = getStaffingAvailableDays(toggles);
+			var staffingAvailableDays = getStaffingAvailableDays();
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenRollingPeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void ShouldReturnErrorMessageWhenDateOpenPeriodIsOutOfRange(Toggles toggles)
 		{
 			_fakeToggleManager.Enable(toggles);
-			var staffingAvailableDays = getStaffingAvailableDays(toggles);
+			var staffingAvailableDays = getStaffingAvailableDays();
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenDatePeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void ShouldReturnErrorMessageWhenRollingOpenPeriodIsOutOfRange(Toggles toggles)
 		{
 			_fakeToggleManager.Enable(toggles);
-			var staffingAvailableDays = getStaffingAvailableDays(toggles);
+			var staffingAvailableDays = getStaffingAvailableDays();
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenRollingPeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
@@ -192,13 +192,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 
-		private int getStaffingAvailableDays(Toggles toggles)
+		private int getStaffingAvailableDays()
 		{
-			if (toggles == Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109)
-				return 48;
-			if (toggles == Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109)
-				return 27;
-			return 13;
+			return StaffingInfoAvailableDaysProvider.GetDays(_fakeToggleManager);
 		}
 	}
 }

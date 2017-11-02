@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		private IWorkflowControlSet _workflowControlSet;
 		private readonly CultureInfo _culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 		private List<ISkill> _skillList;
+		private FakeToggleManager _fakeToggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -58,7 +60,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			_workflowControlSet = new WorkflowControlSet("My Workflow Control Set");
 			_workflowControlSet.SetId(Guid.NewGuid());
 			_workflowControlSetModel = new WorkflowControlSetModel(_workflowControlSet);
-			_target = new WorkflowControlSetPresenter(_view, _unitOfWorkFactory, _repositoryFactory);
+			_fakeToggleManager = new FakeToggleManager();
+			_target = new WorkflowControlSetPresenter(_view, _unitOfWorkFactory, _repositoryFactory, _fakeToggleManager);
 		}
 
 		[Test]
