@@ -26,9 +26,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			var bulkExecutionSetting = _requestStrategySettingReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
 			var buStartTime = _skillCombinationResourceRepository.GetLastCalculatedTime();
-			_stardustJobFeedback.SendProgress($"Fetched latest time of inserted readmodel: {buStartTime}");
-			_stardustJobFeedback.SendProgress($"Utc now is: {_now.UtcDateTime()}");
-			_stardustJobFeedback.SendProgress($"bulkExecutionSetting is: {bulkExecutionSetting}");
 			return _now.UtcDateTime() <= buStartTime.AddMinutes(bulkExecutionSetting*2);
 		}
 	}
