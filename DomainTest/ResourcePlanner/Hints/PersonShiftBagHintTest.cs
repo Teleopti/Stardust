@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -11,12 +11,12 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
+namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	public class PersonShiftBagValidatorTest : ISetup
+	public class PersonShiftBagHintTest : ISetup
 	{
-		public SchedulingValidator Target;
+		public CheckScheduleHints Target;
 
 		[Test]
 		public void PersonWithSkillsShouldNotReturnValidationError()
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			personPeriod.RuleSetBag = new RuleSetBag();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Validate(new ValidationInput(null, new[] { person }, planningPeriod)).InvalidResources
-				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagValidator)));
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod)).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagHint)));
 
 			result.Should().Be.Empty();
 		}
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 
-			var result = Target.Validate(new ValidationInput(null, new[] { person }, planningPeriod)).InvalidResources
-				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagValidator)));
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod)).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagHint)));
 
 			result.Should().Not.Be.Empty();
 			var validationError = result.SingleOrDefault();
@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			personPeriod.RuleSetBag = new RuleSetBag();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Validate(new ValidationInput(null, new[] { person }, planningPeriod)).InvalidResources
-				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagValidator)));
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod)).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagHint)));
 
 			result.Should().Not.Be.Empty();
 			var validationError = result.SingleOrDefault();

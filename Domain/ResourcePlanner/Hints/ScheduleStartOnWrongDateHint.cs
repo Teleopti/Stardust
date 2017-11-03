@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System.Linq;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class ScheduleStartOnWrongDateValidator : IScheduleValidator
+	public class ScheduleStartOnWrongDateHint : IScheduleHint
 	{
 		public static string ErrorOutput = Resources.ShiftStartsDayBeforeOrAfter;
 		
-		public void FillResult(ValidationResult validationResult, ValidationInput input)
+		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var agents = input.People;
 			var period = input.Period;
@@ -26,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				var dateOfScheduleDay = scheduleDay.DateOnlyAsPeriod.DateOnly.Date; 
 				if (startLocal < dateOfScheduleDay || startLocal >= dateOfScheduleDay.AddDays(1))
 				{
-					validationResult.Add(new PersonValidationError(scheduleDay.Person)
+					hintResult.Add(new PersonHintError(scheduleDay.Person)
 					{
 						ValidationError = string.Format(ErrorOutput, dateOfScheduleDay)
 					}, GetType());

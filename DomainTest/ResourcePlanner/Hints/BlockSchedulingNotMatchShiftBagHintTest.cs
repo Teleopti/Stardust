@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -18,13 +18,13 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
+namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_BlockSchedulingValidation_46092)]
-	public class BlockSchedulingNotMatchShiftBagValidatorTest
+	public class BlockSchedulingNotMatchShiftBagHintTest
 	{
-		public SchedulingValidator Target;
+		public CheckScheduleHints Target;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeActivityRepository ActivityRepository;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var personAssignment = new PersonAssignment(agent, scenario, startDate.AddDays(1)).WithLayer(activity, new TimePeriod(8, 16));
 			scheduleDictionary.AddPersonAssignment(personAssignment);
 			
-			var result = Target.Validate(new ValidationInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			}).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
-			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagValidator));
+			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));
 			result.First().ValidationErrors.First().Should().Be.EqualTo(string.Format(Resources.StartTimeNotMatchingShiftBag, personAssignment.Date,
 				agent.PersonPeriodCollection.First().RuleSetBag.Description.Name));
 		}
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var personAssignment = new PersonAssignment(agent, scenario, startDate.AddDays(1)).WithLayer(activity, new TimePeriod(8, 17)).ShiftCategory(shiftCategory);
 			scheduleDictionary.AddPersonAssignment(personAssignment);
 			
-			var result = Target.Validate(new ValidationInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			}).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
-			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagValidator));
+			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));
 			result.First().ValidationErrors.First().Should().Be.EqualTo(string.Format(Resources.ShiftNotMatchingShiftBag, personAssignment.Date,
 				agent.PersonPeriodCollection.First().RuleSetBag.Description.Name));
 		}

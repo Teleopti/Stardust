@@ -3,9 +3,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class ValidationInput
+	public class HintInput
 	{
 		public IScheduleDictionary Schedules { get; set; }
 		public IEnumerable<IPerson> People { get; set; }
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 		public IBlockPreferenceProvider BlockPreferenceProvider { get; set; }
 		public IScheduleDictionary CurrentSchedule { get; set; }
 
-		public ValidationInput(IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod period)
+		public HintInput(IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod period)
 		{
 			Schedules = schedules;
 			People = people;

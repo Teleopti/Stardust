@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IPlanningGroupStaffLoader _planningGroupStaffLoader;
 		private readonly INow _now;
-		private readonly SchedulingValidator _basicSchedulingValidator;
+		private readonly CheckScheduleHints _basicCheckScheduleHints;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
 			IPlanningPeriodRepository planningPeriodRepository, IPlanningGroupStaffLoader planningGroupStaffLoader, INow now,
-			SchedulingValidator basicSchedulingValidator, IPlanningGroupRepository planningGroupRepository, 
+			CheckScheduleHints basicCheckScheduleHints, IPlanningGroupRepository planningGroupRepository, 
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, IFindSchedulesForPersons findSchedulesForPersons,
 			ICurrentScenario currentScenario, IUserTimeZone userTimeZone)
 		{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_planningPeriodRepository = planningPeriodRepository;
 			_planningGroupStaffLoader = planningGroupStaffLoader;
 			_now = now;
-			_basicSchedulingValidator = basicSchedulingValidator;
+			_basicCheckScheduleHints = basicCheckScheduleHints;
 			_planningGroupRepository = planningGroupRepository;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
 			_findSchedulesForPersons = findSchedulesForPersons;
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetValidation(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
-			var validationResult = new ValidationResult();
+			var validationResult = new HintResult();
 
 			if (planningPeriod.PlanningGroup != null)
 			{
@@ -208,8 +208,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				var schedules = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), personsProvider,
 					new ScheduleDictionaryLoadOptions(false, false, false),
 					planningPeriod.Range.ToDateTimePeriod(_userTimeZone.TimeZone()), people, true);
-				validationResult = _basicSchedulingValidator.Validate(
-					new ValidationInput(null, people, planningPeriod.Range)
+				validationResult = _basicCheckScheduleHints.Execute(
+					new HintInput(null, people, planningPeriod.Range)
 					{
 						BlockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create(planningPeriod.PlanningGroup),
 						CurrentSchedule = schedules

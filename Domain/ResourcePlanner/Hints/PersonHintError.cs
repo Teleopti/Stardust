@@ -1,15 +1,15 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class PersonValidationError
+	public class PersonHintError
 	{
-		public PersonValidationError()
+		public PersonHintError()
 		{
 		}
 
-		public PersonValidationError(IPerson person)
+		public PersonHintError(IPerson person)
 		{
 			PersonId = person.Id.GetValueOrDefault();
 			PersonName = person.Name.ToString();

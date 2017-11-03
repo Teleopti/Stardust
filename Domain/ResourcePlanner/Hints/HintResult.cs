@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class ValidationResult
+	public class HintResult
 	{
-		public ICollection<SchedulingValidationError> InvalidResources { get; set; }
+		public ICollection<SchedulingHintError> InvalidResources { get; set; }
 
-		public ValidationResult()
+		public HintResult()
 		{
-			InvalidResources = new List<SchedulingValidationError>();
+			InvalidResources = new List<SchedulingHintError>();
 		}
 
-		public void Add(PersonValidationError error, Type validationType)
+		public void Add(PersonHintError error, Type validationType)
 		{
 			if (InvalidResources.Any(x => x.ResourceId == error.PersonId))
 			{
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				schedulingValidationError.ValidationTypes.Add(validationType);
 			}
 			else
-				InvalidResources.Add(new SchedulingValidationError
+				InvalidResources.Add(new SchedulingHintError
 				{
 					ResourceId = error.PersonId,
 					ResourceName = error.PersonName,
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			}
 			else
 			{
-				InvalidResources.Add(new SchedulingValidationError
+				InvalidResources.Add(new SchedulingHintError
 				{
 					ResourceName = error.SkillName,
 					ValidationErrors = error.MissingRanges.Select(x => $"{Resources.MissingForecastFrom} {x.StartDate:d} {Resources.ToText} {x.EndDate:d}").ToList(),

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class SchedulingValidationError
+	public class SchedulingHintError
 	{
 		public Guid ResourceId { get; set; }
 		public string ResourceName { get; set; }

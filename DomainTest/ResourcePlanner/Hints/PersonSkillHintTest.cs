@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -10,12 +10,12 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
+namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	public class PersonSkillValidatorTest : ISetup
+	public class PersonSkillHintTest : ISetup
 	{
-		public SchedulingValidator Target;
+		public CheckScheduleHints Target;
 
 		[Test]
 		public void PersonWithSkillsShouldNotReturnValidationError()
@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var person = PersonFactory.CreatePerson().WithId();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2017, 01, 20), SkillFactory.CreateSkill("Juggling")));
 
-			var result = Target.Validate(new ValidationInput(null, new[] { person }, planningPeriod)).InvalidResources
-				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillValidator)));
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod)).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillHint)));
 
 			result.Should().Be.Empty();
 		}
@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 
-			var result = Target.Validate(new ValidationInput(null, new[] { person }, planningPeriod)).InvalidResources
-				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillValidator)));
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod)).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillHint)));
 
 			result.Should().Not.Be.Empty();
 			var validationError = result.SingleOrDefault();
@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 01, 20)));
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2017, 01, 25), SkillFactory.CreateSkill("Juggling")));
 
-			var result = Target.Validate(new ValidationInput(null, new[] { person }, planningPeriod)).InvalidResources
-				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillValidator)));
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod)).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonSkillHint)));
 
 			result.Should().Not.Be.Empty();
 			var validationError = result.SingleOrDefault();

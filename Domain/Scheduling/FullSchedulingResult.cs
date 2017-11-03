@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -11,17 +11,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly SchedulingValidator _schedulingValidator;
+		private readonly CheckScheduleHints _checkScheduleHints;
 		private readonly SuccessfulScheduledAgents _successfulScheduledAgents;
 
 		public FullSchedulingResult(IFindSchedulesForPersons findSchedulesForPersons, 
-			ICurrentScenario currentScenario, IUserTimeZone userTimeZone, SchedulingValidator schedulingValidator,
+			ICurrentScenario currentScenario, IUserTimeZone userTimeZone, CheckScheduleHints checkScheduleHints,
 			SuccessfulScheduledAgents successfulScheduledAgents)
 		{
 			_findSchedulesForPersons = findSchedulesForPersons;
 			_currentScenario = currentScenario;
 			_userTimeZone = userTimeZone;
-			_schedulingValidator = schedulingValidator;
+			_checkScheduleHints = checkScheduleHints;
 			_successfulScheduledAgents = successfulScheduledAgents;
 		}
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return new SchedulingResultModel
 			{
 				ScheduledAgentsCount = _successfulScheduledAgents.Execute(scheduleOfSelectedPeople, period),
-				BusinessRulesValidationResults = _schedulingValidator.Validate(new ValidationInput(scheduleOfSelectedPeople, fixedStaffPeople, period)).InvalidResources
+				BusinessRulesValidationResults = _checkScheduleHints.Execute(new HintInput(scheduleOfSelectedPeople, fixedStaffPeople, period)).InvalidResources
 			};
 		}
 	}

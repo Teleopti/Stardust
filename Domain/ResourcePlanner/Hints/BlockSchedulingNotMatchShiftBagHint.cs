@@ -5,19 +5,19 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class BlockSchedulingNotMatchShiftBagValidator : IScheduleValidator
+	public class BlockSchedulingNotMatchShiftBagHint : IScheduleHint
 	{
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IShiftCreatorService _shiftCreatorService;
 
-		public BlockSchedulingNotMatchShiftBagValidator(IScheduleDayEquator scheduleDayEquator, IShiftCreatorService shiftCreatorService)
+		public BlockSchedulingNotMatchShiftBagHint(IScheduleDayEquator scheduleDayEquator, IShiftCreatorService shiftCreatorService)
 		{
 			_scheduleDayEquator = scheduleDayEquator;
 			_shiftCreatorService = shiftCreatorService;
 		}
-		public void FillResult(ValidationResult validationResult, ValidationInput input)
+		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var people = input.People;
 			var period = input.Period;
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 						var timeOfDay = scheduleDay.PersonAssignment().Period.StartDateTimeLocal(timezone).TimeOfDay;
 						if (allStartTime.All(x=> x.TimeOfDay != timeOfDay))
 						{
-							validationResult.Add(new PersonValidationError
+							hintResult.Add(new PersonHintError
 							{
 								PersonName = person.Name.ToString(),
 								PersonId = person.Id.Value,
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 							}
 							if (!found)
 							{
-								validationResult.Add(new PersonValidationError
+								hintResult.Add(new PersonHintError
 								{
 									PersonName = person.Name.ToString(),
 									PersonId = person.Id.Value,

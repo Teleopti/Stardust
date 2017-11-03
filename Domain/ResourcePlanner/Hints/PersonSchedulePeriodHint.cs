@@ -5,11 +5,11 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class PersonSchedulePeriodValidator : IScheduleValidator
+	public class PersonSchedulePeriodHint : IScheduleHint
 	{
-		public void FillResult(ValidationResult validationResult, ValidationInput input)
+		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var people = input.People;
 			var range = input.Period;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				
 				if (!schedulePeriods.Any())
 				{
-					validationResult.Add(new PersonValidationError(person)
+					hintResult.Add(new PersonHintError(person)
 					{
 						ValidationError = Resources.MissingSchedulePeriodForPeriod
 					}, GetType());
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 					if (containedPeriods.All(x => x.StartDate != range.StartDate) ||
 						containedPeriods.All(x => x.EndDate != (person.TerminalDate ?? range.EndDate)))
 					{
-						validationResult.Add(new PersonValidationError(person)
+						hintResult.Add(new PersonHintError(person)
 						{
 							ValidationError = Resources.NoMatchingSchedulePeriod
 						}, GetType());

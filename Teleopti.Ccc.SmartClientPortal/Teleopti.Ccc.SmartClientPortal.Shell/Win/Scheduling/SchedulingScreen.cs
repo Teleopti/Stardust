@@ -36,7 +36,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
@@ -2226,8 +2226,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					var startDay = scheduleDays.First();
 					var endDay = scheduleDays.Last();
 					var selectedPeriod = new DateOnlyPeriod(startDay.DateOnlyAsPeriod.DateOnly, endDay.DateOnlyAsPeriod.DateOnly);
-					var validationResult = _container.Resolve<SchedulingValidator>()
-						.Validate(new ValidationInput(_schedulerState.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), 
+					var validationResult = _container.Resolve<CheckScheduleHints>()
+						.Execute(new HintInput(_schedulerState.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), 
 							selectedPeriod)
 						{
 							BlockPreferenceProvider = new FixedBlockPreferenceProvider(_schedulingOptions)

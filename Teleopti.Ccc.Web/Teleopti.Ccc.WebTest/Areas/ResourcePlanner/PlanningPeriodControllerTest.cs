@@ -13,7 +13,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			PersonRepository.Has(person);
 			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
 
-			var result = (OkNegotiatedContentResult<ValidationResult>)Target.GetValidation(planningPeriod.Id.GetValueOrDefault());
+			var result = (OkNegotiatedContentResult<HintResult>)Target.GetValidation(planningPeriod.Id.GetValueOrDefault());
 
 			result.Content.InvalidResources.Should().Be.Empty();
 		}
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				}
 			};
 
-			var result = (OkNegotiatedContentResult<ValidationResult>)Target.GetValidation(planningPeriod.Id.GetValueOrDefault());
+			var result = (OkNegotiatedContentResult<HintResult>)Target.GetValidation(planningPeriod.Id.GetValueOrDefault());
 
 			result.Content.InvalidResources.Should().Not.Be.Empty();
 		}

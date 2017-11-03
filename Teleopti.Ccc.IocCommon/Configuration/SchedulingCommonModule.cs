@@ -34,7 +34,7 @@ using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
@@ -527,22 +527,22 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private void registerValidators(ContainerBuilder builder)
 		{
 			builder.RegisterType<NextPlanningPeriodProvider>().SingleInstance().As<INextPlanningPeriodProvider>();
-			builder.RegisterType<SchedulingValidator>().SingleInstance();
+			builder.RegisterType<CheckScheduleHints>().SingleInstance();
 			if (!_configuration.Args().IsFatClient)
 			{
-				builder.RegisterType<MissingForecastValidator>().AsSelf().As<IScheduleValidator>().SingleInstance();
-				builder.RegisterType<PersonSchedulePeriodValidator>().As<IScheduleValidator>().SingleInstance();				
+				builder.RegisterType<MissingForecastHint>().AsSelf().As<IScheduleHint>().SingleInstance();
+				builder.RegisterType<PersonSchedulePeriodHint>().As<IScheduleHint>().SingleInstance();				
 			}
 			if (_configuration.Toggle(Toggles.ResourcePlanner_ShowSwitchedTimeZone_46303))
 			{
-				builder.RegisterType<ScheduleStartOnWrongDateValidator>().As<IScheduleValidator>().SingleInstance();
+				builder.RegisterType<ScheduleStartOnWrongDateHint>().As<IScheduleHint>().SingleInstance();
 			}
-			builder.RegisterType<PersonSkillValidator>().As<IScheduleValidator>().SingleInstance();
-			builder.RegisterType<PersonPeriodValidator>().As<IScheduleValidator>().SingleInstance();
-			builder.RegisterType<PersonShiftBagValidator>().As<IScheduleValidator>().SingleInstance();
-			builder.RegisterType<PersonPartTimePercentageValidator>().As<IScheduleValidator>().SingleInstance();
-			builder.RegisterType<PersonContractValidator>().As<IScheduleValidator>().SingleInstance();
-			builder.RegisterType<PersonContractScheduleValidator>().As<IScheduleValidator>().SingleInstance();
+			builder.RegisterType<PersonSkillHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonPeriodHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonShiftBagHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonPartTimePercentageHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonContractHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonContractScheduleHint>().As<IScheduleHint>().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)

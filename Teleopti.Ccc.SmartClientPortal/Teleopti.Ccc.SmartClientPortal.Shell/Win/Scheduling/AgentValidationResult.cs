@@ -4,18 +4,18 @@ using System.Globalization;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Grid.Grouping;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class AgentValidationResult : BaseDialogForm
 	{
-		private readonly ValidationResult _validationResult;
+		private readonly HintResult _hintResult;
 
-		public AgentValidationResult(ValidationResult validationResult)
+		public AgentValidationResult(HintResult hintResult)
 		{
-			_validationResult = validationResult;
+			_hintResult = hintResult;
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
 		}
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			dataTable.Columns.Add(new DataColumn("Name"));
 			dataTable.Columns.Add(new DataColumn("Message"));
 
-			foreach (var validationResultInvalidResource in _validationResult.InvalidResources)
+			foreach (var validationResultInvalidResource in _hintResult.InvalidResources)
 			{
 				foreach (var validationError in validationResultInvalidResource.ValidationErrors)
 				{

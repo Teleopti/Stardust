@@ -5,14 +5,14 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class MissingForecastValidator : IScheduleValidator
+	public class MissingForecastHint : IScheduleHint
 	{
 		private readonly IExistingForecastRepository _existingForecastRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 
-		public MissingForecastValidator(IExistingForecastRepository existingForecastRepository, IScenarioRepository scenarioRepository)
+		public MissingForecastHint(IExistingForecastRepository existingForecastRepository, IScenarioRepository scenarioRepository)
 		{
 			_existingForecastRepository = existingForecastRepository;
 			_scenarioRepository = scenarioRepository;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			return result;
 		}
 
-		public void FillResult(ValidationResult validationResult, ValidationInput input)
+		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var people = input.People;
 			var range = input.Period;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 						skills.Add(personSkill.Skill);
 			foreach (var missingForecast in missingForecasts.Where(missingForecast => skills.Any(skill => skill.Id == missingForecast.SkillId)))
 			{
-				validationResult.Add(missingForecast, GetType());
+				hintResult.Add(missingForecast, GetType());
 			}
 		}
 	}

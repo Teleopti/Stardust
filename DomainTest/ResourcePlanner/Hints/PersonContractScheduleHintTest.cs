@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -11,15 +11,15 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
+namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	public class PersonPartTimePercentageValidatorTest : ISetup
+	public class PersonContractScheduleHintTest : ISetup
 	{
-		public SchedulingValidator Target;
+		public CheckScheduleHints Target;
 
 		[Test]
-		public void PersonHasPartTimePercentageShouldNotReturnValidationError()
+		public void PersonHasContractScheduleShouldNotReturnValidationError()
 		{
 			var startDate = new DateOnly(2017, 01, 23);
 			var endDate = new DateOnly(2017, 01, 29);
@@ -28,14 +28,14 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var person = PersonFactory.CreatePerson().WithId();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(startDate));
 
-			var result = Target.Validate(new ValidationInput(null, new[] { person }, planningPeriod)).InvalidResources
-				.Where(x => x.ValidationTypes.Contains(typeof(PersonPartTimePercentageValidator)));
+			var result = Target.Execute(new HintInput(null, new[] {person}, planningPeriod)).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractScheduleHint)));
 
 			result.Should().Be.Empty();
 		}
 
 		[Test]
-		public void PersonHasDeletedPartTimePercentageShouldReturnValidationError()
+		public void PersonHasDeletedContractScheduleShouldReturnValidationError()
 		{
 			var startDate = new DateOnly(2017, 01, 23);
 			var endDate = new DateOnly(2017, 01, 29);
@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			var person = PersonFactory.CreatePerson().WithId();
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(startDate);
-			((IDeleteTag)personPeriod.PersonContract.PartTimePercentage).SetDeleted();
+			((IDeleteTag)personPeriod.PersonContract.ContractSchedule).SetDeleted();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Validate(new ValidationInput(null, new[] { person }, planningPeriod)).InvalidResources
-				.Where(x => x.ValidationTypes.Contains(typeof(PersonPartTimePercentageValidator)));
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod)).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractScheduleHint)));
 
 			result.Should().Not.Be.Empty();
 			var validationError = result.SingleOrDefault();

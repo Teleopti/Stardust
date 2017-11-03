@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class OptimizationResult
 	{
-		private readonly SchedulingValidator _schedulingValidator;
+		private readonly CheckScheduleHints _checkScheduleHints;
 		private readonly SuccessfulScheduledAgents _successfulScheduledAgents;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public OptimizationResult(Func<ISchedulerStateHolder> schedulerStateHolder, IFindSchedulesForPersons findSchedulesForPersons, 
 			IUserTimeZone userTimeZone, ICurrentScenario currentScenario,  
-			SchedulingValidator schedulingValidator, SuccessfulScheduledAgents successfulScheduledAgents)
+			CheckScheduleHints checkScheduleHints, SuccessfulScheduledAgents successfulScheduledAgents)
 		{
-			_schedulingValidator = schedulingValidator;
+			_checkScheduleHints = checkScheduleHints;
 			_successfulScheduledAgents = successfulScheduledAgents;
 			_schedulerStateHolder = schedulerStateHolder;
 			_findSchedulesForPersons = findSchedulesForPersons;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				new ScheduleDictionaryLoadOptions(false, false, false), period.ToDateTimePeriod(_userTimeZone.TimeZone()), fixedStaffPeople, true);
 
 
-			var validationResults = _schedulingValidator.Validate(new ValidationInput(scheduleOfSelectedPeople, fixedStaffPeople, period)).InvalidResources;
+			var validationResults = _checkScheduleHints.Execute(new HintInput(scheduleOfSelectedPeople, fixedStaffPeople, period)).InvalidResources;
 
 			var result = new OptimizationResultModel
 			{

@@ -4,7 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -12,12 +12,12 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
+namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	public class MissingForecastValidatorTest : ISetup
+	public class MissingForecastHintTest : ISetup
 	{
-		public MissingForecastValidator Target;
+		public MissingForecastHint Target;
 		public FakeExistingForecastRepository ExistingForecastRepository;
 
 		[Test]
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			person.AddPersonPeriod(personPeriod);
 			var skill = SkillFactory.CreateSkill("A skill").WithId();
 			person.AddSkill(skill, new DateOnly(2015, 5, 1));
-			var validationResult = new ValidationResult();
+			var validationResult = new HintResult();
 			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>
 			{
 				new SkillMissingForecast
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 					Periods = new DateOnlyPeriod[] {}
 				}
 			};
-			Target.FillResult(validationResult,new ValidationInput( null, new[]{person}, range));
+			Target.FillResult(validationResult,new HintInput( null, new[]{person}, range));
 
 			validationResult.InvalidResources.Single().ResourceName.Should().Be(skill.Name);
 		}

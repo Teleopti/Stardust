@@ -1,27 +1,24 @@
-using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class PersonSkillValidator : IScheduleValidator
+	public class PersonSkillHint : IScheduleHint
 	{
-		public void FillResult(ValidationResult validationResult, ValidationInput input)
+		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var people = input.People;
 			var range = input.Period;
 			var validationErrors = from person in people
 				let periods = person.PersonPeriods(range)
 				where periods.Any(period => !period.PersonSkillCollection.Any())
-				select new PersonValidationError(person)
+				select new PersonHintError(person)
 				{
 					ValidationError = Resources.MissingSkillsForPeriod
 				};
 			foreach (var validationError in validationErrors)
 			{
-				validationResult.Add(validationError, GetType());
+				hintResult.Add(validationError, GetType());
 			}
 		}
 	}

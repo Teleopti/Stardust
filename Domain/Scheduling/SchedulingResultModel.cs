@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class SchedulingResultModel
 	{
 		public int ScheduledAgentsCount { get; set; }
-		public IEnumerable<SchedulingValidationError> BusinessRulesValidationResults { get; set; }
+		public IEnumerable<SchedulingHintError> BusinessRulesValidationResults { get; set; }
 	}
 
 	public struct BusinessRulesValidationResult
