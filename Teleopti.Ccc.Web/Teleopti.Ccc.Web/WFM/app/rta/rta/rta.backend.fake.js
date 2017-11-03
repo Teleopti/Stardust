@@ -51,7 +51,11 @@
 				// shouldnt it include both sites and teams if both are given?
 				// keeping the possibly wrong behavior for now...
 				if (params.orderBy && params.direction) {
-					
+					result.forEach(function (r) {
+						var names = r.Name.split(' ');
+						r.FirstName = names[0];
+						r.LastName = names[1];
+					});
 					result = result.sort(function (a, b) {
 						if (params.direction === "asc"){
 							if (!angular.isArray(params.orderBy))

@@ -165,6 +165,32 @@ describe('RtaAgentsController46475', function() {
 		expect(vm.agentStates[1].Name).toEqual("Charley Caper");
 	});
 
+	it('should send first name and last name', function() {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("Name");
+		});
+
+		expect(vm.orderBy.length).toEqual(2);
+		expect(vm.orderBy[0]).toEqual("FirstName");
+		expect(vm.orderBy[1]).toEqual("LastName");
+	});
+
+	it('should send site name and team name', function() {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("SiteAndTeamName");
+		});
+
+		expect(vm.orderBy.length).toEqual(2);
+		expect(vm.orderBy[0]).toEqual("SiteName");
+		expect(vm.orderBy[1]).toEqual("TeamName");
+	});
+
 	it('should sort by name', function() {
 		stateParams.siteIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend

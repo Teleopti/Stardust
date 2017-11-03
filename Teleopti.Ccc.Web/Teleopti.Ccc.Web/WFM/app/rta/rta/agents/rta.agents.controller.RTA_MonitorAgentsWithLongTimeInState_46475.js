@@ -100,8 +100,7 @@
 		};
 		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
 		
-		vm.orderBy = null;
-		vm.direction = null;
+		vm.orderBy, vm.direction;
 		vm.showArrow = 'Name';
 
 		var toggles = {};
@@ -327,14 +326,7 @@
 				if (!poller)
 					return;
 				if (newValue !== oldValue) {
-					if (newValue) {
-						vm.orderBy = null;
-						vm.direction = null;
-					} 
-					else {
-						vm.orderBy = "Name";
-						vm.direction = "asc";
-					}
+					resetSortingParams(newValue);
 					poller.force();
 					filterData();
 					if (newValue && vm.pause) {
@@ -344,6 +336,17 @@
 					}
 				}
 			});
+		
+		function resetSortingParams (inAlarm) {
+			if (inAlarm) {
+				vm.orderBy = null;
+				vm.direction = null;
+			}
+			else {
+				vm.orderBy = ["FirstName", "LastName"];
+				vm.direction = "asc";
+			}
+		}
 
 		$scope.$watch(
 			function() {
@@ -428,7 +431,11 @@
 		
 		vm.sort = function (column) {
 			vm.showArrow = column;
-			column =  (column === "SiteAndTeamName" ) ? ["SiteName" , "TeamName"] : column;
+			if (column === "SiteAndTeamName")
+				column = ["SiteName" , "TeamName"];
+			if (column === "Name")
+				column = ["FirstName" , "LastName"];
+			
 			
 			if (JSON.stringify(column) != JSON.stringify(vm.orderBy)) {
 				vm.direction = 'asc';
