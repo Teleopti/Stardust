@@ -2,7 +2,7 @@
 <md-virtual-repeat-container>
 	<header class="header">
 		<div class="selection">
-			<md-checkbox aria-label="Checkbox"></md-checkbox>
+			<md-checkbox ng-checked="$ctrl.allRowsSelected()" md-indeterminate="$ctrl.isIndeterminate()" ng-click="$ctrl.toggleAllRows()" aria-label="Checkbox"></md-checkbox>
 		</div>
 		<div class="team">Team</div>
 		<div class="setting">Applied Setting</div>

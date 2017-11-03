@@ -21,6 +21,25 @@
 			{ value: 'setting2', name: 'Setting 2' }
 		];
 
+		ctrl.isIndeterminate = function () {
+			var numSelected = Object.keys(ctrl.selectedTeamIds)
+			.filter(function (id) { return ctrl.selectedTeamIds[id] }).length;
+			return numSelected !== 0 && numSelected !== ctrl.teams.length;
+		};
+
+		ctrl.allRowsSelected = function () {
+			var numSelected = Object.keys(ctrl.selectedTeamIds)
+				.filter(function (id) { return ctrl.selectedTeamIds[id] }).length;
+			return numSelected === ctrl.teams.length;
+		};
+
+		ctrl.toggleAllRows = function () {
+			var allSelected = ctrl.allRowsSelected();
+			ctrl.teams.forEach(function (team) {
+				ctrl.selectedTeamIds[team.teamId] = !allSelected;
+			});
+		};
+
 		ctrl.selectRow = function (teamId) {
 			// console.log('select row: ' + teamId)
 			ctrl.selectedTeamIds[teamId] = !ctrl.selectedTeamIds[teamId];
