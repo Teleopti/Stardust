@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				new ScheduleDictionaryLoadOptions(false, false, false), period.ToDateTimePeriod(_userTimeZone.TimeZone()), fixedStaffPeople, true);
 
 
-			var validationResults = _schedulingValidator.Validate(new FullValidationInput(scheduleOfSelectedPeople, fixedStaffPeople, period)).InvalidResources;
+			var validationResults = _schedulingValidator.Validate(new ValidationInput(scheduleOfSelectedPeople, fixedStaffPeople, period)).InvalidResources;
 
 			var result = new OptimizationResultModel
 			{

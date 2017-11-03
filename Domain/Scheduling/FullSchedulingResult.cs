@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return new SchedulingResultModel
 			{
 				ScheduledAgentsCount = _successfulScheduledAgents.Execute(scheduleOfSelectedPeople, period),
-				BusinessRulesValidationResults = _schedulingValidator.Validate(new FullValidationInput(scheduleOfSelectedPeople, fixedStaffPeople, period)).InvalidResources
+				BusinessRulesValidationResults = _schedulingValidator.Validate(new ValidationInput(scheduleOfSelectedPeople, fixedStaffPeople, period)).InvalidResources
 			};
 		}
 	}

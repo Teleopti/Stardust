@@ -7,15 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 {
-	public class BlockSchedulingNotMatchShiftBagValidator : IScheduleValidator
-	{
-		
-		public void FillResult(ValidationResult validationResult, ValidationInput input)
-		{
-			throw new NotImplementedException();
-		}
-	}
-
 	public class MissingForecastValidator : IScheduleValidator
 	{
 		private readonly IExistingForecastRepository _existingForecastRepository;
@@ -80,32 +71,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			{
 				validationResult.Add(missingForecast, GetType());
 			}
-		}
-	}
-
-	public abstract class ValidationInput
-	{
-		public IScheduleDictionary Schedules { get; set; }
-		public IEnumerable<IPerson> People { get; set; }
-		public DateOnlyPeriod Period { get; set; }
-	}
-	
-	public class FullValidationInput : ValidationInput
-	{
-		public FullValidationInput(IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod period)
-		{
-			Schedules = schedules;
-			People = people;
-			Period = period;
-		}
-	}
-	
-	public class PreValidationInput : ValidationInput
-	{
-		public PreValidationInput(List<IPerson> people, DateOnlyPeriod period)
-		{
-			People = people;
-			Period = period;
 		}
 	}
 

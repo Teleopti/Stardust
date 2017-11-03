@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -28,10 +29,17 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly INow _now;
 		private readonly SchedulingValidator _basicSchedulingValidator;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
+		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
+		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
+		private readonly ICurrentScenario _currentScenario;
+		private readonly IUserTimeZone _userTimeZone;
+		
 
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
 			IPlanningPeriodRepository planningPeriodRepository, IPlanningGroupStaffLoader planningGroupStaffLoader, INow now,
-			SchedulingValidator basicSchedulingValidator, IPlanningGroupRepository planningGroupRepository)
+			SchedulingValidator basicSchedulingValidator, IPlanningGroupRepository planningGroupRepository, 
+			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, IFindSchedulesForPersons findSchedulesForPersons,
+			ICurrentScenario currentScenario, IUserTimeZone userTimeZone)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_planningPeriodRepository = planningPeriodRepository;
@@ -39,6 +47,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_now = now;
 			_basicSchedulingValidator = basicSchedulingValidator;
 			_planningGroupRepository = planningGroupRepository;
+			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
+			_findSchedulesForPersons = findSchedulesForPersons;
+			_currentScenario = currentScenario;
+			_userTimeZone = userTimeZone;
 		}
 
 		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/result")]
@@ -188,12 +200,20 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var validationResult = new ValidationResult();
+
 			if (planningPeriod.PlanningGroup != null)
 			{
-
+				var people = _planningGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.PlanningGroup).AllPeople.ToList();
+				var personsProvider = new PersonProvider(people) {DoLoadByPerson = true};
+				var schedules = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), personsProvider,
+					new ScheduleDictionaryLoadOptions(false, false, false),
+					planningPeriod.Range.ToDateTimePeriod(_userTimeZone.TimeZone()), people, true);
 				validationResult = _basicSchedulingValidator.Validate(
-					new PreValidationInput(_planningGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.PlanningGroup).AllPeople.ToList(),
-						planningPeriod.Range));
+					new ValidationInput(null, people, planningPeriod.Range)
+					{
+						BlockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create(planningPeriod.PlanningGroup),
+						CurrentSchedule = schedules
+					});
 			}
 			return Ok(validationResult);
 		}

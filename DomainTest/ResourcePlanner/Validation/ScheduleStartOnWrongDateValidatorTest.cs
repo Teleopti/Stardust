@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 		{
 			Assert.DoesNotThrow(() =>
 			{			
-				Target.Validate(new FullValidationInput(null, new[]{new Person(), }, DateOnly.Today.ToDateOnlyPeriod()));
+				Target.Validate(new ValidationInput(null, new[]{new Person(), }, DateOnly.Today.ToDateOnlyPeriod()));
 			});
 		}
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById(newTimezoneForAgent));
 			
-			return Target.Validate(new FullValidationInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod()))
+			return Target.Validate(new ValidationInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod()))
 				.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateValidator)));
 		}
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timezoneForAgent));
 			var state = StateHolder.Fill(scenario, date, agent);
 			
-			Target.Validate(new FullValidationInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod()))
+			Target.Validate(new ValidationInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod()))
 				.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateValidator)))
 				.Should().Be.False();
 		}
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			var state = StateHolder.Fill(scenario, date, agent, ass);
 			
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
-			var result = Target.Validate(new FullValidationInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod()))
+			var result = Target.Validate(new ValidationInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod()))
 				.InvalidResources.Single();
 
 			result.ResourceId.Should().Be.EqualTo(agent.Id.Value);

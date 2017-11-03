@@ -260,6 +260,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProviderTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisProviderTest.cs" />
+    <Compile Include="ResourcePlanner\Validation\BlockSchedulingNotMatchShiftBagValidatorTest.cs" />
     <Compile Include="ResourcePlanner\Validation\BusinessRulesValidationTest.cs" />
     <Compile Include="ResourcePlanner\Validation\ScheduleStartOnWrongDateValidatorTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
