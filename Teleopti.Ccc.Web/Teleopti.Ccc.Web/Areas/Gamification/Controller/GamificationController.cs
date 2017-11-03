@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
@@ -36,6 +37,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		public virtual GamificationSettingViewModel LoadGamification(Guid id)
 		{
 			return _gamificationSettingProvider.GetGamificationSetting(id);
+		}
+
+		[HttpGet, Route("api/Gamification/Load"), UnitOfWork]
+		public virtual IList<GamificationDescriptionViewModel> LoadGamificationList()
+		{
+			return _gamificationSettingProvider.GetGamificationList();
 		}
 
 		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
