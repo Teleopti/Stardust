@@ -2223,12 +2223,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var scheduleDays = _scheduleView.SelectedSchedules();
 				if (scheduleDays.Any())
 				{
-					var startDay = scheduleDays.First();
-					var endDay = scheduleDays.Last();
-					var selectedPeriod = new DateOnlyPeriod(startDay.DateOnlyAsPeriod.DateOnly, endDay.DateOnlyAsPeriod.DateOnly);
-
 					var validationResult = _container.Resolve<SchedulingValidator>()
-						.Validate(new ValidationInput(_schedulerState.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), selectedPeriod)
+						.Validate(new ValidationInput(_schedulerState.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), 
+							_schedulerState.RequestedPeriod.DateOnlyPeriod)
 						{
 							BlockPreferenceProvider = new FixedBlockPreferenceProvider(_schedulingOptions)
 						});
