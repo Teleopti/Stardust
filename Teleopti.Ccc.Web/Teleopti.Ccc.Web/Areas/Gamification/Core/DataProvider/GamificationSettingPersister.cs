@@ -2,6 +2,8 @@
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 
@@ -33,6 +35,27 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (gamificationSetting == null) return false;
 
 			_gamificationSettingRepository.Remove(gamificationSetting);
+			return true;
+		}
+
+		public bool ResetGamificationSetting()
+		{
+			try
+			{
+				using (var myUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					var agentBadgeTransactionRepository = new AgentBadgeTransactionRepository(myUow);
+					var agentBadgeWithRankTransactionRepository = new AgentBadgeWithRankTransactionRepository(myUow);
+					agentBadgeTransactionRepository.ResetAgentBadges();
+					agentBadgeWithRankTransactionRepository.ResetAgentBadges();
+					myUow.PersistAll();
+				}
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+
 			return true;
 		}
 

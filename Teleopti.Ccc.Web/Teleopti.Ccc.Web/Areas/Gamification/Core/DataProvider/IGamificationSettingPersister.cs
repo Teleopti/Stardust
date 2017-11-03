@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 	{
 		GamificationSettingViewModel Persist();
 		bool RemoveGamificationSetting(Guid id);
+		bool ResetGamificationSetting();
 		GamificationDescriptionViewMode PersistDescription(GamificationDescriptionViewMode input);
 		GamificationThresholdEnabledViewModel PersistAnsweredCallsEnabled(GamificationThresholdEnabledViewModel input);
 		GamificationAnsweredCallsThresholdViewModel PersistAnsweredCallsGoldThreshold(GamificationAnsweredCallsThresholdViewModel input);
