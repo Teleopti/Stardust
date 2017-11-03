@@ -63,4 +63,10 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public Guid GamificationSettingId { get; set; }
 		public Percent Value { get; set; }
 	}
+
+	public class GamificationChangeRuleForm
+	{
+		public Guid GamificationSettingId;
+		public GamificationSettingRuleSet Rule;
+	}
 }

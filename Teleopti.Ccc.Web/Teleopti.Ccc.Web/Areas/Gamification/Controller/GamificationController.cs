@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Web.Http;
-using Microsoft.ServiceBus;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
-using WebGrease.Css.ImageAssemblyAnalysis.LogModel;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 {
@@ -122,6 +120,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		public virtual bool ResetGamification()
 		{
 			return _gamificationSettingPersister.ResetGamificationSetting();
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationSettingViewModel ChangeRule([FromBody]GamificationChangeRuleForm input)
+		{
+			return _gamificationSettingPersister.PersistRuleChange(input);
 		}
 	}
 }

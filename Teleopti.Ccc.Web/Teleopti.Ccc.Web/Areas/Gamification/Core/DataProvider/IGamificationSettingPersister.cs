@@ -21,5 +21,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		GamificationAdherenceThresholdViewModel PersistAdherenceGoldThreshold(GamificationAdherenceThresholdViewModel input);
 		GamificationAdherenceThresholdViewModel PersistAdherenceSilverThreshold(GamificationAdherenceThresholdViewModel input);
 		GamificationAdherenceThresholdViewModel PersistAdherenceBronzeThreshold(GamificationAdherenceThresholdViewModel input);
+		GamificationSettingViewModel PersistRuleChange(GamificationChangeRuleForm input);
 	}
 }

@@ -166,6 +166,13 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceBronzeThreshold};
 		}
 
+		public GamificationSettingViewModel PersistRuleChange(GamificationChangeRuleForm input)
+		{
+			var gamificationSetting = _gamificationSettingRepository.Load(input.GamificationSettingId);
+			gamificationSetting.GamificationSettingRuleSet = input.Rule;
+			return _mapper.Map(gamificationSetting);
+		}
+
 		private IGamificationSetting getGamificationSetting(Guid? id)
 		{
 			return id == null ? new GamificationSetting(Resources.NewGamificationSetting) : _gamificationSettingRepository.Load((Guid)id);

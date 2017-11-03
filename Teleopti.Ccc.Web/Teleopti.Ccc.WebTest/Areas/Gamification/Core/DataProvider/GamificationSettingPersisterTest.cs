@@ -288,5 +288,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			result.Value.Should().Be.EqualTo(expactedResult);
 		}
 
+		[Test]
+		public void ShouldPersistGamificationRuleChange()
+		{
+			GamificationSettingRuleSet expactedResult = GamificationSettingRuleSet.RuleWithRatioConvertor;
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
+			_gamificationSetting.GamificationSettingRuleSet.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistRuleChange(new GamificationChangeRuleForm()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Rule = expactedResult
+			});
+
+			result.Id.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.GamificationSettingRuleSet.Should().Be.EqualTo(expactedResult);
+		}
+
 	}
 }
