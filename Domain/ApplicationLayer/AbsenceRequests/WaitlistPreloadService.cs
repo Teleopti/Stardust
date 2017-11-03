@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IBusinessRulesForPersonalAccountUpdate _personalAccountUpdate;
-		
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+
 		public WaitlistPreloadService(ISkillCombinationResourceRepository skillCombinationResourceRepository,
 		IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 		ISkillRepository skillRepository,
@@ -72,7 +73,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		IGlobalSettingDataRepository globalSettingDataRepository,
 		ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider,
 		IScheduleDayChangeCallback scheduleDayChangeCallback,
-		IBusinessRulesForPersonalAccountUpdate personalAccountUpdate)
+		IBusinessRulesForPersonalAccountUpdate personalAccountUpdate,
+		ICurrentBusinessUnit currentBusinessUnit	)
 		{
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_scheduleStorage = scheduleStorage;
@@ -95,6 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_personalAccountUpdate = personalAccountUpdate;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 		
 		public WaitlistDataHolder PreloadData()
@@ -109,13 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		
 			_stardustJobFeedback.SendProgress("Done preloading the data");
 
-			if (!_skillCombinationResourceReadModelValidator.Validate())
-			{
-				logger.Error("Read model is not up to date");
-				_stardustJobFeedback.SendProgress("Read model is not up to date");
-				dataHolder.InitSuccess = false;
-				return dataHolder;
-			}
+			
 			var validPeriod = new DateTimePeriod(_now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 			dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts = validPeriod;
 			var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts).ToList();
@@ -132,13 +129,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			if (!dataHolder.AllRequests.Any())
 			{
 				dataHolder.InitSuccess = false;
-				var mesg = "No waitlisted request found within the period from " +
-						   dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts.StartDateTime + " to " +
-						   dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts.EndDateTime;
+				var mesg =
+					$"No waitlisted request found within the period from {dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts.StartDateTime} to {dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts.EndDateTime}";
 				logger.Info(mesg);
 				_stardustJobFeedback.SendProgress(mesg);
 				return dataHolder;
 			}
+			
+			if (!_skillCombinationResourceReadModelValidator.Validate())
+			{
+				logger.Error($"Read model is not up to date on Business Unit {_currentBusinessUnit.Current().Name}.");
+				_stardustJobFeedback.SendProgress($"Read model is not up to date on Business Unit {_currentBusinessUnit.Current().Name}.");
+				dataHolder.InitSuccess = false;
+				return dataHolder;
+			}
+			
 			_personRepository.FindPeople(dataHolder.AllRequests.Select(x => x.Person.Id.GetValueOrDefault()).ToList());
 
 			var inflatedPeriod = new DateTimePeriod(dataHolder.AllRequests.Min(x => x.Request.Period.StartDateTime), 
