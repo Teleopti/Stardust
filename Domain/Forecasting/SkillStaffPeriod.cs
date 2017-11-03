@@ -707,15 +707,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ISkillStaffPeriod ourPeriod = sortedPeriods[currentIndex];
 	        TimeSpan sa = TimeSpan.FromSeconds(Payload.ServiceAgreementData.ServiceLevel.Seconds);
 
-            while (sa.TotalSeconds > 0.1 && currentIndex < sortedPeriods.Count)
-            {
-                ISkillStaffPeriod currentPeriod = sortedPeriods[currentIndex];
-                TimeSpan currentLength = currentPeriod.Period.ElapsedTime();
-                AddToLists(0, currentPeriod, ourPeriod);
+			for (; currentIndex < sortedPeriods.Count; currentIndex++)
+			{
+				ISkillStaffPeriod currentPeriod = sortedPeriods[currentIndex];
+				TimeSpan currentLength = currentPeriod.Period.ElapsedTime();
+				AddToLists(0, currentPeriod, ourPeriod);
 
-                currentIndex++;
-                sa = sa.Add(-currentLength);
-            }
+				sa = sa.Add(-currentLength);
+
+				if (sa<=TimeSpan.Zero) break;
+			}
         }
 
         public void Reset()

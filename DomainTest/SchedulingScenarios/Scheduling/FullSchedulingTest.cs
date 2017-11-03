@@ -214,7 +214,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[TestCase(0)]
 		[TestCase(1)]
 		[TestCase(20)]
-		[Ignore("bug #46275")]
 		public void ShouldNotCareAboutServiceLevelSecondsIfManualAgentsIsSet(int serviceLevelInSeconds)
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
