@@ -9,14 +9,15 @@ namespace Teleopti.Ccc.Web.Core
     {
         private readonly TzdbDateTimeZoneSource _tzdbSource;
 
-        public IanaTimeZoneProvider()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var tzdbStream = assembly.GetManifestResourceStream("Teleopti.Ccc.Web.tzdb2016c.nzd");
-            _tzdbSource = tzdbStream == null ? TzdbDateTimeZoneSource.Default : TzdbDateTimeZoneSource.FromStream(tzdbStream);
-        }
+		public IanaTimeZoneProvider()
+		{
+			var assembly = Assembly.GetExecutingAssembly();
+			var tzdbStream = assembly.GetManifestResourceStream("Teleopti.Ccc.Web.tzdb2016g.nzd");
+			
+			_tzdbSource = tzdbStream == null ? TzdbDateTimeZoneSource.Default : TzdbDateTimeZoneSource.FromStream(tzdbStream);
+		}
 
-        // This will return the Windows zone that matches the IANA zone, if one exists.
+		// This will return the Windows zone that matches the IANA zone, if one exists.
         public string IanaToWindows(string ianaZoneId)
         {
             var utcZones = new[] { "Etc/UTC", "Etc/UCT" };
@@ -40,9 +41,7 @@ namespace Teleopti.Ccc.Web.Core
 	    {
 		    if (windowsZoneId.Equals("UTC", StringComparison.OrdinalIgnoreCase))
 			    return "Etc/UTC";
-			var tzid = _tzdbSource.WindowsMapping.PrimaryMapping[windowsZoneId];
-			if (tzid == null) return String.Empty;
-			return _tzdbSource.CanonicalIdMap[tzid];
+			return !_tzdbSource.WindowsMapping.PrimaryMapping.TryGetValue(windowsZoneId, out var tzid) ? string.Empty : _tzdbSource.CanonicalIdMap[tzid];
 	    }
     }
 }
