@@ -101,7 +101,7 @@
 		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
 		
 		vm.orderBy, vm.direction;
-		vm.showArrow = 'Name';
+		vm.showArrow = JSON.stringify(['FirstName', 'LastName']);
 
 		var toggles = {};
 		Toggle.togglesLoaded.then(function() {
@@ -430,12 +430,7 @@
 		};
 		
 		vm.sort = function (column) {
-			vm.showArrow = column;
-			if (column === "SiteAndTeamName")
-				column = ["SiteName" , "TeamName"];
-			if (column === "Name")
-				column = ["FirstName" , "LastName"];
-			
+			vm.showArrow = JSON.stringify(column);
 			
 			if (JSON.stringify(column) != JSON.stringify(vm.orderBy)) {
 				vm.direction = 'asc';

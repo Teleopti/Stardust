@@ -170,7 +170,7 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort("Name");
+			vm.sort(["FirstName", "LastName"]);
 		});
 
 		expect(vm.orderBy.length).toEqual(2);
@@ -183,7 +183,7 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort("SiteAndTeamName");
+			vm.sort(["SiteName", "TeamName"]);
 		});
 
 		expect(vm.orderBy.length).toEqual(2);
@@ -207,7 +207,7 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort("Name");
+			vm.sort(["FirstName", "LastName"]);
 		});
 
 		expect(vm.agentStates.length).toEqual(2);
@@ -232,7 +232,7 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort("SiteAndTeamName");
+			vm.sort(["SiteName", "TeamName"]);
 		});
 
 		expect(vm.agentStates.length).toEqual(2);
@@ -259,7 +259,30 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort("SiteAndTeamName");
+			vm.sort(["SiteName", "TeamName"]);
+		});
+
+		expect(vm.agentStates.length).toEqual(2);
+		expect(vm.agentStates[0].Name).toEqual("Charley Caper");
+		expect(vm.agentStates[1].Name).toEqual("Ashley Andeen");
+	});
+
+	it('should sort by state name', function() {
+		$fakeBackend
+			.withAgentState({
+				Name: "Ashley Andeen",
+				State: "Ready"
+			})
+			.withAgentState({
+				Name: "Charley Caper",
+				State: "InCall"
+			});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("StateName");
 		});
 
 		expect(vm.agentStates.length).toEqual(2);
@@ -304,7 +327,7 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort("Name");
+			vm.sort(["FirstName", "LastName"]);
 		});
 
 		expect(vm.direction).toEqual('desc');
@@ -327,10 +350,10 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort("SiteAndTeamName");
+			vm.sort(["SiteName", "TeamName"]);
 		});
 		c.apply(function() {
-			vm.sort("SiteAndTeamName");
+			vm.sort(["SiteName", "TeamName"]);
 		});
 
 		expect(vm.direction).toEqual('desc');

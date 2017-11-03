@@ -51,10 +51,13 @@
 				// shouldnt it include both sites and teams if both are given?
 				// keeping the possibly wrong behavior for now...
 				if (params.orderBy && params.direction) {
+					//mapping for fake response .....
 					result.forEach(function (r) {
 						var names = r.Name.split(' ');
 						r.FirstName = names[0];
 						r.LastName = names[1];
+						if (angular.isDefined(r.State))
+							r.StateName = r.State;
 					});
 					result = result.sort(function (a, b) {
 						if (params.direction === "asc"){
