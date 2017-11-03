@@ -1,6 +1,86 @@
 ##===========
 ## Functions
 ##===========
+function Check-VirginDB {
+    param ($conStr) 
+    if (!$conStr) 
+    { 
+        write-Host "Check-VirginDB function called with no connection string" 
+    }
+    $ds = ExecQuery -conStr $conStr -cmdText "select count(*) as'TableCount' from sys.sysobjects where [type]='U'"
+    $TableCount = $ds.Tables[0].Rows[0].TableCount
+
+    if ($TableCount -eq 0)
+    {
+        return $True
+    }
+    else 
+    {
+        return $False
+    }
+}
+
+function InitDatabase
+{
+    param ($con, $cmdText)
+        try 
+        { 
+            write-Host "Creating SQL Command..." 
+            $Command = New-Object System.Data.SQLClient.SQLCommand 
+            $Command.Connection = $con 
+            $Command.CommandText = $cmdText
+             
+            write-Host "Executing SQL Command..." 
+            $Command.ExecuteNonQuery() 
+        } 
+
+        finally { 
+            $Command = $null
+        } 
+}
+
+function ExecQuery 
+{ 
+    param ($conStr, $cmdText) 
+    if (!$conStr -or !$cmdText) 
+    { 
+        write-Host "ExecQuery function called with no connection string and/or command text." 
+    } 
+    else 
+    { 
+        write-Host "Creating SQL Connection..." 
+        # Instantiate new SqlConnection object. 
+        $Connection = New-Object System.Data.SQLClient.SQLConnection 
+         
+        # Set the SqlConnection object's connection string to the passed value. 
+        $Connection.ConnectionString = $conStr 
+         
+        # Perform database operations in try-catch-finally block since database operations often fail. 
+        try 
+        { 
+            $Connection.Open() 
+            $Command = New-Object System.Data.SQLClient.SQLCommand 
+            $Command.Connection = $Connection 
+            $Command.CommandText = $cmdText
+             
+            $adapter = New-Object System.Data.sqlclient.sqlDataAdapter $command
+            $dataset = New-Object System.Data.DataSet
+            $adapter.Fill($dataSet) | Out-Null
+
+            $connection.Close()
+            return $dataSet
+        } 
+
+        finally { 
+            # Determine if the connection was opened. 
+            if ($Connection.State -eq "Open") 
+            { 
+                $Connection.Close() 
+            } 
+        } 
+    } 
+}
+
 function Get-ScriptDirectory
 {
     $Invocation = (Get-Variable MyInvocation -Scope 1).Value;
@@ -299,6 +379,44 @@ Try
     #Remove-Item "$PatchDBPath\PatchDBs.bat"
 	#Add-Content "$PatchDBPath\PatchDBs.bat" "$PatchDBTool $SQLServer $CCC7DB $AnalyticsDB $PATCHUSER $PATCHPWD $SQLUser $SQLPwd"
     #&"$PatchDBPath\PatchDBs.bat"
+
+    #find out if this master tenant is a fresh deployement from CloudOps
+    #If so - patch the database once so that the Sercurity.exe can do it's thing on required tables
+    $VirginConnApp = "Data Source=$SQLServer;Initial Catalog=$CCC7DB;User Id=$PATCHUSER;Password=$PATCHPWD;Current Language=us_english;Encrypt=True;trustServerCertificate=false"
+    $VirginConnAnal = "Data Source=$SQLServer;Initial Catalog=$AnalyticsDB;User Id=$PATCHUSER;Password=$PATCHPWD;Current Language=us_english;Encrypt=True;trustServerCertificate=false"
+    $command = $PatchDBPath + "\DBManager.exe"
+    $CreateDatabaseVersion = (Get-Content "$scriptPath\..\Tools\Database\Create\CreateDatabaseVersion.sql") -join "`n"
+
+    $DBMSQLServer="-S"+$SQLServer
+    $DBMPATCHUSER = "-U"+$PATCHUSER
+    $DBMPATCHPWD= "-P"+$PATCHPWD
+    $DBMappDb = "-D"+$CCC7DB
+    $DBManalDb =  "-D"+$AnalyticsDB
+
+    if (Check-VirginDB -conStr $VirginConnAnal)
+    {
+        $con = New-Object System.Data.SqlClient.SqlConnection
+        $con.ConnectionString = $VirginConnAnal
+        $con.open()
+        GetAppLock -Connection $con -LockResource "VirginUpgrade"
+        InitDatabase -con $con -cmdText $CreateDatabaseVersion
+        $command = $PatchDBPath + "\DBManager.exe"
+        &"$command" $DBMSQLServer $DBManalDb "-OTeleoptiAnalytics" $DBMPATCHUSER $DBMPATCHPWD "-T" "-R" $SQLUserPwd
+        ReleaseAppLock -Connection $con -LockResource "VirginUpgrade"
+        $con.Close()
+    }
+    if (Check-VirginDB -conStr $VirginConnApp)
+    {
+        $con = New-Object System.Data.SqlClient.SqlConnection
+        $con.ConnectionString = $VirginConnApp
+        $con.open()
+        GetAppLock -Connection $con -LockResource "VirginUpgrade"
+        InitDatabase -con $con -cmdText $CreateDatabaseVersion
+        $command = $PatchDBPath + "\DBManager.exe"
+        &"$command" $DBMSQLServer $DBMappDb "-OTeleoptiCCC7" $DBMPATCHUSER $DBMPATCHPWD "-T" "-R" $SQLUserPwd
+        ReleaseAppLock -Connection $con -LockResource "VirginUpgrade"
+        $con.Close()
+    }
 
     #log-info "Check so one tenant points to itself"
     $CCC7DB = $CCC7DB.Trim()
