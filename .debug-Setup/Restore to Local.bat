@@ -24,7 +24,7 @@ IF "%INSTANCE%"=="" SET INSTANCE=.
 
 IF "%Silent%"=="" SET /A Silent=0
 IF NOT "%DefaultDB%"=="" SET IFFLOW=y
-IF "%DefaultDB%"=="" SET DefaultDB=DemoSales
+IF "%DefaultDB%"=="" SET DefaultDB=DemoSales2017
 
 ::Default values
 IF "%configuration%"=="" SET configuration=Debug
