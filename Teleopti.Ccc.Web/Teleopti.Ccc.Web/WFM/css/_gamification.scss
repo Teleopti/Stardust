@@ -1,5 +1,6 @@
 .gamification-wrapper {
-	$SEPARATOR_COLOR: 1px solid rgba(0, 0, 0, .06);
+	$SEPARATOR: 1px solid $gray-300;
+	$PADDING: 24px;
 
 	gamification,
 	gamification-settings,
@@ -44,13 +45,27 @@
 		}
 	}
 
+	gamification-targets {
+		.filter {
+			padding: 0 $PADDING;
+			display: flex;
+			height: 64px + 1px;
+			margin: 0 -5px;
+			border-bottom: $SEPARATOR;
+			align-items: center;
+
+			* + * {
+				margin: 0 56px;
+			}
+		}
+	}
+
 	gamification-targets-table {
-		$PADDING: .8em;
+		$HEADER_HEIGHT: 54px;
 		margin: 0 -5px;
 
 		.header, gamification-target-row {
 			box-sizing: border-box;
-			height: 54px;
 			display: flex;
 			padding: 0 $PADDING;
 
@@ -60,8 +75,11 @@
 		}
 
 		.header {
-			background-color: $blue-100;
+			height: $HEADER_HEIGHT + 1px;
 			line-height: 18px;
+			border-bottom: $SEPARATOR;
+			font-weight: bold;
+			color: $gray054;
 		}
 
 		md-virtual-repeat-container {
@@ -71,18 +89,28 @@
 
 		md-virtual-repeat-container {
 			gamification-target-row {
+				height: 48px + 1px;
+
+				&:hover {
+					background-color: $gray026;
+				}
+
 				&.selected {
-					background-color: $green-100;
+					background-color: $gray012;
+
+					&:hover {
+						background-color: $gray026;
+					}
 				}
 			}
 
 			gamification-target-row + gamification-target-row {
-				border-top: $SEPARATOR_COLOR;
+				border-top: $SEPARATOR;
 			}
 		}
 
 		.footer {
-			border-top: $SEPARATOR_COLOR;
+			border-top: $SEPARATOR;
 			height: 100px;
 		}
 
@@ -99,6 +127,7 @@
 			}
 			md-checkbox {
 				margin-bottom: 0;
+				transform: scale(.9);
 			}
 		}
 
@@ -110,11 +139,20 @@
 
 		.setting {
 			flex: 2 1 300px;
-			// display: flex;
-			// align-items: center;
+			position: relative;
+			display: flex;
+			align-items: center;
 
-			md-select md-select-value {
-				background-image: none;
+			.mask {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+
+				&.selected {
+					display: none;
+				}
 			}
 		}
 	}
