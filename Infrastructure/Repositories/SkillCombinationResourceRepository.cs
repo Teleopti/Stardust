@@ -515,7 +515,8 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 				var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 				var lastUpdated = GetLastCalculatedTime();
-
+				if(lastUpdated == DateTime.MinValue)
+					lastUpdated = DateTime.UtcNow;
 				_currentUnitOfWork.Current().Session()
 					.CreateSQLQuery(@"
 					               		INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
