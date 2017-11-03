@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			if (filter.ExcludedStates.EmptyIfNull().Any())
 				builder.Exclude(filter.ExcludedStates);
 			if (filter.OrderBy.EmptyIfNull().Any())
-				builder.WithSorting(filter.OrderBy, filter.Direction);
+				builder.WithSorting(_now,filter.OrderBy, filter.Direction);
 			return load(builder);
 		}
 

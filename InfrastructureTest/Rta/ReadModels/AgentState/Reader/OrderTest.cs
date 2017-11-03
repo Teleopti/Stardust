@@ -153,6 +153,80 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 
 			result.First().PersonId.Should().Be(personId2);
 		}
+		
+		[Test]
+		public void ShouldOrderByStateStartTime()
+		{
+			Now.Is("2017-11-03 12:00");
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId2,
+				StateName = "Email",
+				StateStartTime = "2017-11-03 11:30".Utc(),
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				StateName = "Lunch",
+				StateStartTime = "2017-11-03 11:15".Utc(),
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId3,
+				StateName = "Phone",
+				StateStartTime = "2017-11-03 11:45".Utc(),
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				OrderBy = new[]{"StateStartTime"},
+				Direction = "asc"
+			});
+
+			result.First().PersonId.Should().Be(personId1);
+			result.Second().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId3);
+		}	
+		
+		[Test]
+		public void ShouldOrderByAlarmStartTime()
+		{
+			Now.Is("2017-11-03 12:00");
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId2,
+				StateName = "Email",
+				AlarmStartTime = "2017-11-03 11:30".Utc(),
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				StateName = "Lunch",
+				AlarmStartTime = "2017-11-03 11:15".Utc(),
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId3,
+				StateName = "Phone",
+				AlarmStartTime = "2017-11-03 11:45".Utc(),
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				OrderBy = new[]{"AlarmStartTime"},
+				Direction = "desc"
+			});
+
+			result.First().PersonId.Should().Be(personId3);
+			result.Second().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId1);
+		}
 
 	}
 }

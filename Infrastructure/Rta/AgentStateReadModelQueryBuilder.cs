@@ -182,8 +182,21 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 			};
 		}
 
-		public AgentStateReadModelQueryBuilder WithSorting(IEnumerable<string> orderBy, string direction)
+		public AgentStateReadModelQueryBuilder WithSorting(INow now, IEnumerable<string> orderBy, string direction)
 		{
+			
+			if (orderBy.Contains("StateStartTime"))
+			{
+				_wheres.Add("StateStartTime <= :now ");
+				_parameters.Add(s => s.SetParameter("now", now.UtcDateTime()));
+			}
+
+			if (orderBy.Contains("AlarmStartTime"))
+			{
+				_wheres.Add("AlarmStartTime <= :now ");
+				_parameters.Add(s => s.SetParameter("now", now.UtcDateTime()));
+			}
+						
 			orderBy.ForEach(x => _orderbys.Add($"{x} {direction} "));
 			return this;
 		}
