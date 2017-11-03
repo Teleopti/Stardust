@@ -36,7 +36,7 @@
 		</div>
 		<button id="applyOvertime" class="wfm-btn form-submit"
 				ng-class="{'wfm-btn-primary': newOvertimeActivityForm.$valid && $ctrl.timeRangeIsValid && $ctrl.anyValidAgent(), 'wfm-btn-primary-disabled': !(newOvertimeActivityForm.$valid && $ctrl.timeRangeIsValid && $ctrl.anyValidAgent())}"
-				ng-disabled="newOvertimeActivityForm.$valid && $ctrl.timeRangeIsValid && $ctrl.anyValidAgent() ?'':'disabled'"
+				ng-disabled="newOvertimeActivityForm.$valid && $ctrl.timeRangeIsValid && $ctrl.anyValidAgent() && !$ctrl.processingCommand ?'':'disabled'"
 				ng-click="$ctrl.addOvertime()">
 			{{'Apply' | translate}}
 		</button>
