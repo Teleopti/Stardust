@@ -165,7 +165,7 @@ $(document).ready(function () {
 		responseData.DateFromDayOfMonth = moment().date();
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url === "Requests/PersistOvertimeRequest") {
+				if (options.url === "OvertimeRequests/Save") {
 					options.success(responseData);
 				}
 			}

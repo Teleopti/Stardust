@@ -62,7 +62,7 @@
 		self.IsPostingData(true);
 
 		ajax.Ajax({
-			url: 'Requests/PersistOvertimeRequest',
+			url: 'OvertimeRequests/Save',
 			data: _buildPostData(),
 			dataType: 'json',
 			type: 'POST',

@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IToggleManager _toggleManager;
 		private readonly IRequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
 		private readonly ICancelAbsenceRequestCommandProvider _cancelAbsenceRequestCommandProvider;
-		private readonly IOvertimeRequestPersister _overtimeRequestPersister;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			ITextRequestPersister textRequestPersister,
@@ -49,8 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			IToggleManager toggleManager,
 			IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
 			IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory,
-			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider,
-			IOvertimeRequestPersister overtimeRequestPersister)
+			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider)
 		{
 			AbsenceRequestDetailViewModelFactory = absenceRequestDetailViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
@@ -63,7 +61,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_toggleManager = toggleManager;
 			_shiftTradeScheduleViewModelFactory = shiftTradeScheduleViewModelFactory;
 			_cancelAbsenceRequestCommandProvider = cancelAbsenceRequestCommandProvider;
-			_overtimeRequestPersister = overtimeRequestPersister;
 		}
 
 		[EnsureInPortal]
@@ -287,27 +284,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(AbsenceRequestDetailViewModelFactory.CreateAbsenceRequestDetailViewModel(id),
 				JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWork, HttpPost]
-		public virtual JsonResult PersistOvertimeRequest(OvertimeRequestForm input)
-		{
-			if (!ModelState.IsValid)
-			{
-				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 400;
-				return ModelState.ToJson();
-			}
-			try
-			{
-				return Json(_overtimeRequestPersister.Persist(input));
-			}
-			catch (InvalidOperationException e)
-			{
-				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 400;
-				return e.ExceptionToJson(Resources.RequestCannotUpdateDelete);
-			}
 		}
 	}
 }

@@ -45,7 +45,7 @@ $(document).ready(function() {
 	function setupAjax() {
 		ajax = {
 			Ajax: function(options) {
-				if (options.url === 'Requests/PersistOvertimeRequest') {
+				if (options.url === 'OvertimeRequests/Save') {
 					sentData = actualRequestData || options.data;
 					if (sentData.Subject === '') {
 						options.error({ responseJSON: { Errors: [requestsMessagesUserTexts.MISSING_SUBJECT] } });

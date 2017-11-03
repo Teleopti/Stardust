@@ -1,9 +1,9 @@
 ﻿using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
-namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
+namespace Teleopti.Ccc.Infrastructure.Requests
 {
-	public class StaffingInfoAvailableDaysProvider
+	public static class StaffingInfoAvailableDaysProvider
 	{
 		public static int GetDays(IToggleManager toggleManager)
 		{
