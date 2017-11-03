@@ -211,9 +211,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(blockedByAccessibility ? 10 : 8);
 		}
 
-		[Test]
+		[TestCase(0)]
+		[TestCase(1)]
+		[TestCase(20)]
 		[Ignore("bug #46275")]
-		public void ShouldNotCareAboutServiceLevelSecondsIfManualAgentsIsSet()
+		public void ShouldNotCareAboutServiceLevelSecondsIfManualAgentsIsSet(int serviceLevelInSeconds)
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2017, 8, 21);
@@ -225,12 +227,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet10 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
 			var bag = new RuleSetBag(ruleSet8, ruleSet10);
 			var agent = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), bag, skill);
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2));
+			const int manualAgentsDefault = 1;
+			const int manualAgentsAt8OClock = 2;
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, manualAgentsDefault, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), manualAgentsAt8OClock));
 			foreach (var skillDataPeriod in skillDay.SkillDataPeriodCollection)
 			{
 				if (skillDataPeriod.Period.StartDateTime.Hour == 8)
 				{
-					skillDataPeriod.ServiceLevelSeconds = 0;
+					skillDataPeriod.ServiceLevelSeconds = serviceLevelInSeconds;
 				}
 			}
 			SkillDayRepository.Has(skillDay);
