@@ -115,6 +115,8 @@
 		ResourcePlanner_ShowSwitchedTimeZone_46303,
 		ResourcePlanner_FasterLoading_46307,
 		ResourcePlanner_RemoveClassicShiftCat_46582,
+		ResourcePlanner_BlockSchedulingValidation_46092,
+
 
 		Wfm_DisplayOnlineHelp_39402,
 

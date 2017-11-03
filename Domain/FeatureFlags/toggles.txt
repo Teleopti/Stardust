@@ -137,6 +137,7 @@ ResourcePlanner_EasierBlockScheduling_46155 = true
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_FasterLoading_46307 = true
 ResourcePlanner_ShowSwitchedTimeZone_46303 = true
+ResourcePlanner_BlockSchedulingValidation_46092 = DEV
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
 Wfm_DisplayOnlineHelp_39402 = true
