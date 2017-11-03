@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
 			_gamificationSetting.Description.Should().Not.Be.EqualTo(expactedDescription);
 
-			var result = target.PersistDescription(new GamificationDescriptionViewMode()
+			var result = target.PersistDescription(new GamificationDescriptionViewModel()
 			{
 				GamificationSettingId = _gamificationSetting.Id.Value,
 				Value = expactedDescription

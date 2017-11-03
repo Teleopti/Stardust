@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public int GoldToSilverBadgeRate { get; set; }
 	}
 
-	public class GamificationDescriptionViewMode
+	public class GamificationDescriptionViewModel
 	{
 		public Guid GamificationSettingId { get; set; }
 		public Description Value { get; set; }

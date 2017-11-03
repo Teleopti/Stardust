@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		}
 
 		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
-		public virtual GamificationDescriptionViewMode GamificationDescription([FromBody]GamificationDescriptionViewMode input)
+		public virtual GamificationDescriptionViewModel GamificationDescription([FromBody]GamificationDescriptionViewModel input)
 		{
 			return _gamificationSettingPersister.PersistDescription(input);
 		}
