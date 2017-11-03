@@ -18,7 +18,7 @@
 
 	gamification-settings{
 		.setting-container{
-			
+
 			margin-top: 10px;
 		}
 
@@ -54,7 +54,7 @@
 			border-bottom: $SEPARATOR;
 			align-items: center;
 
-			* + * {
+			& > * + * {
 				margin: 0 56px;
 			}
 		}

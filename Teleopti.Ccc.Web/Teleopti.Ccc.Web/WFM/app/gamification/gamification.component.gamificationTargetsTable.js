@@ -97,10 +97,15 @@
 			return this.numRows;
 		};
 
-		$scope.$on('gamification.selectTargetsTab', function (event, args) {
-			setHeightToFillAvailableSpace();
+		function initTable() {
 			ctrl.teams = teams(1000);
 			ctrl.rows = new Rows(ctrl.teams);
+			ctrl.tableIsReady = true;
+			$scope.$evalAsync(setHeightToFillAvailableSpace);
+		}
+
+		$scope.$on('gamification.selectTargetsTab', function (event, args) {
+			initTable();
 		});
 	}
 

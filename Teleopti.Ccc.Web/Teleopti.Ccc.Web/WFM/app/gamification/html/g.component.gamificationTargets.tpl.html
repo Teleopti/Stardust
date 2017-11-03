@@ -1,11 +1,11 @@
 <div class="filter">
-	<md-select ng-model="$ctrl.selectedSites" placeholder="{{ 'SelectOneOrMoreSites'|translate }}" class="md-no-underline">
-		<md-option ng-repeat="site in $ctrl.sites" ng-value="site.id">
+	<md-select multiple="true" ng-model="$ctrl.selectedSites" md-selected-text="$ctrl.sitePickerSelectedText()" class="md-no-underline">
+		<md-option ng-repeat="site in $ctrl.sites" ng-value="site">
 			{{ site.name }}
 		</md-option>
 	</md-select>
 	<div>
-		<input type="text" placeholder="Filter teams"  />
+		<input type="text" placeholder="Filter teams" />
 	</div>
 </div>
 <div>

@@ -1,5 +1,5 @@
 
-<md-virtual-repeat-container>
+<md-virtual-repeat-container ng-if="$ctrl.tableIsReady">
 	<header class="header">
 		<div class="selection">
 			<md-checkbox ng-checked="$ctrl.allRowsSelected()" md-indeterminate="$ctrl.isIndeterminate()" ng-click="$ctrl.toggleAllRows()" aria-label="Checkbox"></md-checkbox>
