@@ -8,5 +8,9 @@
     /// </remarks>
     public class Ignore
     {
-    }
+		public override string ToString()
+		{
+			return string.Empty;
+		}
+	}
 }
