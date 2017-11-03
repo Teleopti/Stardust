@@ -102,6 +102,7 @@
 		
 		vm.orderBy, vm.direction;
 		vm.showArrow = JSON.stringify(['FirstName', 'LastName']);
+		vm.arrowUp = true;
 
 		var toggles = {};
 		Toggle.togglesLoaded.then(function() {
@@ -431,13 +432,16 @@
 		
 		vm.sort = function (column) {
 			vm.showArrow = JSON.stringify(column);
-			
-			if (JSON.stringify(column) != JSON.stringify(vm.orderBy)) {
-				vm.direction = 'asc';
-			}
+			if (JSON.stringify(column) != JSON.stringify(vm.orderBy)) 
+				vm.direction = (column === "StateStartTime" || column === "AlarmStartTime" || column === "OutOfAdherences") ? 'desc' : 'asc';
 			else
 				vm.direction = vm.direction === 'desc' ? 'asc' : 'desc';
 
+			if (column === "StateStartTime" || column === "AlarmStartTime" || column === "OutOfAdherences") 
+				vm.arrowUp = vm.direction === "desc";
+			else 
+				vm.arrowUp = vm.direction === "asc";
+			
 			vm.orderBy = column;
 			poller.force();
 		}

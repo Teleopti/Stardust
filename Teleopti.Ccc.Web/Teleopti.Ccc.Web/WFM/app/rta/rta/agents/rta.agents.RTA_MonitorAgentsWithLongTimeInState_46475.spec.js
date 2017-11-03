@@ -359,4 +359,34 @@ describe('RtaAgentsController46475', function() {
 		expect(vm.direction).toEqual('desc');
 	});
 
+	it('should display arrow up for state', function() {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("StateName");
+		});
+		expect(vm.arrowUp).toBe(true);
+	});
+	
+	it('should send opposite direction for time in state', function() {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("StateStartTime");
+		});
+		expect(vm.direction).toEqual('desc');
+	});
+
+	it('should display arrow up for time in state', function() {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("StateStartTime");
+		});
+		expect(vm.arrowUp).toBe(true);
+	});
+	
 });
