@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
@@ -123,6 +124,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date)
 		{
 			return _intradayStat;
+		}
+
+		public IEnumerable<QualityInfo> LoadAllQualityInfo()
+		{
+			throw new NotImplementedException();
 		}
 
 		private readonly List<IIntradayStatistics> _intradayStat = new List<IIntradayStatistics>();

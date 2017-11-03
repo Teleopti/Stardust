@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -42,5 +43,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources);
 
 		ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date);
+
+		IEnumerable<QualityInfo> LoadAllQualityInfo();
 	}
 }

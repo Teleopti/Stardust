@@ -302,6 +302,7 @@
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdater.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdater.cs" />
     <Compile Include="Common\ExternalBadgeSetting.cs" />
+    <Compile Include="Common\QualityInfo.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
     <Compile Include="Common\TimeSpanExtensions.cs" />

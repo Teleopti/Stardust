@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
@@ -11,11 +11,20 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 	{
 		private readonly IGamificationSettingPersister _gamificationSettingPersister;
 		private readonly IGamificationSettingProvider _gamificationSettingProvider;
+		private readonly IQualityInfoProvider _quatiliInfoProvider;
 
-		public GamificationController(IGamificationSettingPersister gamificationSettingPersister, IGamificationSettingProvider gamificationSettingProvider)
+		public GamificationController(IGamificationSettingPersister gamificationSettingPersister,
+			IGamificationSettingProvider gamificationSettingProvider, IQualityInfoProvider quatiliInfoProvider)
 		{
 			_gamificationSettingPersister = gamificationSettingPersister;
 			_gamificationSettingProvider = gamificationSettingProvider;
+			_quatiliInfoProvider = quatiliInfoProvider;
+		}
+
+		[HttpGet, Route("api/Gamification/AllQualityInfo"), UnitOfWork]
+		public virtual IEnumerable<QualityInfoViewModel> LoadAllQualityInfo()
+		{
+			return _quatiliInfoProvider.GetAllQualityInfo();
 		}
 
 		[HttpPost, Route("api/Gamification/Create"), UnitOfWork]
@@ -25,9 +34,9 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		}
 
 		[HttpDelete, Route("api/Gamification/Delete/{Id}"), UnitOfWork]
-		public virtual IHttpActionResult RemoveGamification(Guid Id)
+		public virtual IHttpActionResult RemoveGamification(Guid id)
 		{
-			var isSuccess = _gamificationSettingPersister.RemoveGamificationSetting(Id);
+			var isSuccess = _gamificationSettingPersister.RemoveGamificationSetting(id);
 
 			if (isSuccess) return Ok();
 			return NotFound();
