@@ -131,7 +131,7 @@ ECHO Note: Database will be restored from "%Tfiles%". Feel free to change this p
 ECHO.
 
 ::Un-zip exe
-SET UNRAR="%Zip7Folder%\7za.exe" x -y -o"%RarFolder%"
+SET UNRAR="%Zip7Folder%\7z.exe" x -y -o"%RarFolder%"
 ECHO un-rar Exe-file is: %UNRAR%
 
 ::Get 7-zip exe
