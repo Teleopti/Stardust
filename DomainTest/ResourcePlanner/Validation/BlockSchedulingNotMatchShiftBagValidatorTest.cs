@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 		public FakeActivityRepository ActivityRepository;
 		public FakeScenarioRepository ScenarioRepository;
 
-		[Test]
+		[Test, Ignore("will see if we need it")]
 		public void ShouldReturnShiftStartTimeNotMatchingShiftBag()
 		{
 			var startDate = new DateOnly(2017, 01, 23);
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 				agent.PersonPeriodCollection.First().RuleSetBag.Description.Name));
 		}
 
-		[Test]
+		[Test, Ignore("will see if we need it")]
 		public void ShouldReturnShiftNotMatchingShiftBag()
 		{
 			var startDate = new DateOnly(2017, 01, 23);

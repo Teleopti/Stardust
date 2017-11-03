@@ -544,10 +544,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonPartTimePercentageValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonContractValidator>().As<IScheduleValidator>().SingleInstance();
 			builder.RegisterType<PersonContractScheduleValidator>().As<IScheduleValidator>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_BlockSchedulingValidation_46092))
-			{
-				builder.RegisterType<BlockSchedulingNotMatchShiftBagValidator>().As<IScheduleValidator>().SingleInstance();
-			}
+
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
