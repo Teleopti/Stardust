@@ -211,6 +211,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(blockedByAccessibility ? 10 : 8);
 		}
 
+		[Test]
+		[Ignore("bug #46275")]
+		public void ShouldNotCareAboutServiceLevelSecondsIfManualAgentsIsSet()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var date = new DateOnly(2017, 8, 21);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet8 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSet10 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
+			var bag = new RuleSetBag(ruleSet8, ruleSet10);
+			var agent = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), bag, skill);
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2));
+			foreach (var skillDataPeriod in skillDay.SkillDataPeriodCollection)
+			{
+				if (skillDataPeriod.Period.StartDateTime.Hour == 8)
+				{
+					skillDataPeriod.ServiceLevelSeconds = 0;
+				}
+			}
+			SkillDayRepository.Has(skillDay);
+			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
+
+			AssignmentRepository.GetSingle(date, agent).Period.StartDateTime.Hour
+				.Should().Be.EqualTo(8);
+		}
+
 		public FullSchedulingTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
 		{
 		}
