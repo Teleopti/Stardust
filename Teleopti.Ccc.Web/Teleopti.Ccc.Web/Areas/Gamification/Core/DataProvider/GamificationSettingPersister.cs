@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
@@ -12,10 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 	public class GamificationSettingPersister : IGamificationSettingPersister
 	{
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
+		private readonly IGamificationSettingMapper _mapper;
 
-		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository)
+		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper)
 		{
 			_gamificationSettingRepository = gamificationSettingRepository;
+			_mapper = mapper;
 		}
 
 		public GamificationSettingViewModel Persist()
@@ -26,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 				_gamificationSettingRepository.Add(gamificationSetting);
 			}
 
-			return new GamificationSettingViewModel(gamificationSetting);
+			return _mapper.Map(gamificationSetting);
 		}
 
 		public bool RemoveGamificationSetting(Guid id)

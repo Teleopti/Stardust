@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
@@ -7,15 +8,18 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 	public class GamificationSettingProvider : IGamificationSettingProvider
 	{
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
+		private readonly IGamificationSettingMapper _mapper;
 
-		public GamificationSettingProvider(IGamificationSettingRepository gamificationSettingRepository)
+		public GamificationSettingProvider(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper)
 		{
 			_gamificationSettingRepository = gamificationSettingRepository;
+			_mapper = mapper;
 		}
 
 		public GamificationSettingViewModel GetGamificationSetting(Guid id)
 		{
-			return new GamificationSettingViewModel(_gamificationSettingRepository.Load(id));
+			var setting = _gamificationSettingRepository.Load(id);
+			return _mapper.Map(setting);
 		}
 	}
 }
