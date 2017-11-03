@@ -77,13 +77,12 @@
 			if (vm.staffingEnabled) {
 				vm.scheduleTableWrapperStyle = {
 					'height': size.tableHeight + 'px',
-					'overflow-y': 'auto',
 					'min-height':'initial'
 				};
 				vm.chartHeight = size.chartHeight;
 			}
 			else {
-				vm.scheduleTableWrapperStyle = {'height': defaultHeight + 'px', 'overflow-y': 'hidden'};
+				vm.scheduleTableWrapperStyle = {'height': defaultHeight + 'px'};
 			}
 		};
 
@@ -167,7 +166,6 @@
 			SizeStorageService.setSize(tableHeight, chartHeight);
 			vm.scheduleTableWrapperStyle = {
 				'height': tableHeight + 'px',
-				'overflow-y': 'auto',
 				'min-height':'initial'
 			};
 			vm.chartHeight = chartHeight;
