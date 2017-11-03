@@ -123,7 +123,6 @@
     <Compile Include="ControllerActions\DeleteUserTest.cs" />
     <Compile Include="ControllerActions\StardustHealthCheckTest.cs" />
     <Compile Include="ControllerActions\StardustControllerTest.cs" />
-    <Compile Include="ControllerActions\StardustRepositoryTestHelper.cs" />
     <Compile Include="ControllerActions\UpgradeDatabase.cs" />
     <Compile Include="Core\CreateBusinessUnitTest.cs" />
     <Compile Include="Core\FakeRunWithUnitOfWork.cs" />
@@ -151,10 +150,6 @@
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.csproj">
-      <Project>{9BF4E24B-6110-4B87-841D-48580164BBF9}</Project>
-      <Name>Teleopti.Ccc.InfrastructureTest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
@@ -166,10 +161,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.Infrastructure.Security\Teleopti.Ccc.Infrastructure.Security.csproj">
       <Project>{50B5A39C-88B6-469E-84F1-D42A5DAEAC6E}</Project>
       <Name>Teleopti.Ccc.Infrastructure.Security</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.IocCommonTest\Teleopti.Ccc.IocCommonTest.csproj">
-      <Project>{7c21747a-d594-4e53-b43c-e1576f1d3c76}</Project>
-      <Name>Teleopti.Ccc.IocCommonTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>

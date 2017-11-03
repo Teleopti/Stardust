@@ -1,89 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http.Results;
-using Newtonsoft.Json;
+using System.Configuration;
 using NUnit.Framework;
-using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Wfm.Administration.Controllers;
-using Teleopti.Wfm.Administration.Core.Modules;
+using Teleopti.Wfm.Administration.Core.Stardust;
+using StardustRepository = Teleopti.Ccc.Infrastructure.Repositories.Stardust.StardustRepository;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
-	[IoCTest]
-	public class StardustControllerTest : ISetup
+	[TestFixture]
+	public class StardustControllerTest
 	{
 		public StardustController Target;
-		public IStardustRepository StardustRepository;
+		public StardustRepository StardustRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		[OneTimeSetUp]
+		public void TestFixtureSetUp()
 		{
-			system.AddModule(new WfmAdminModule());
+			//TODO refactor to ioc
+			StardustRepository = new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			Target = new StardustController(StardustRepository, new FakeStardustSender(), new FakeTenants(), new StaffingSettingsReader(), new FakePigNode());
 		}
 
-		[SetUp]
-		public void Setup()
-		{
-			StardustRepositoryTestHelper.ClearQueue();
-			StardustRepositoryTestHelper.ClearJobs();
-		}
-
-		[Test]
-		public void JobQueueShouldFilterOnDataSource()
-		{
-			const string testTenant = "test Tenant";
-			var testEvent = new TestEvent1{LogOnDatasource = testTenant };
-			var testEventOtherTenant = new TestEvent1{LogOnDatasource = "Another tenant" };
-
-			var job1 = new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEvent),
-				Type = "Type"
-			};
-
-			StardustRepositoryTestHelper.AddJobToQueue(job1);
-			StardustRepositoryTestHelper.AddJobToQueue(new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEventOtherTenant),
-				Type = "Type"
-			});
-			var response = Target.JobQueueFiltered(1, 50, testTenant) as OkNegotiatedContentResult<IList<Job>>;
-			response.Content.Count.Should().Be.EqualTo(1);
-			response.Content.FirstOrDefault().JobId.Should().Be.EqualTo(job1.JobId);
-		}
-
-		[Test]
-		public void JobShouldFilterOnDataSource()
-		{
-			const string testTenant = "test Tenant";
-			var testEvent = new TestEvent1 { LogOnDatasource = testTenant };
-			var testEventOtherTenant = new TestEvent1 { LogOnDatasource = "Another tenant" };
-
-			var job1 = new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEvent),
-				Type = "Type"
-			};
-
-			StardustRepositoryTestHelper.AddJob(job1);
-			StardustRepositoryTestHelper.AddJob(new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEventOtherTenant),
-				Type = "Type"
-			});
-			var what = Target.JobHistoryFiltered(1, 50, testTenant);
-			var response = what as OkNegotiatedContentResult<IList<Job>>;
-			response.Content.Count.Should().Be.EqualTo(1);
-			response.Content.FirstOrDefault().JobId.Should().Be.EqualTo(job1.JobId);
-		}
 
 		[Test]
 		public void JobHistoryDetailsShouldNotCrash()
@@ -148,13 +88,5 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			Target.FailedJobHistoryList(1, 10);
 		}
-	}
-
-	public class TestEvent1 : StardustJobInfo
-	{
-	}
-
-	public class TestEvent2 : StardustJobInfo
-	{
 	}
 }
