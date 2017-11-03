@@ -31,6 +31,7 @@
 		var refreshInterval = 3000;
 		vm.selectTenant = selectTenant;
 		vm.dataSourceFilter = allTenantsString;
+		vm.selectJobType = selectJobType;
 		
 		vm.search = search;
 
@@ -41,6 +42,11 @@
 		$scope.$on("$destroy",
 			function () {
 				$interval.cancel(refreshPromise);
+			});
+
+		$http.get("./Stardust/QueueTypes", tokenHeaderService.getHeaders())
+			.success(function (data) {
+				vm.types = data;
 			});
 
 		$http.get("./AllTenants", tokenHeaderService.getHeaders())
@@ -174,9 +180,13 @@
 			vm.selectedDataSource = name;
 		}
 
+		function selectJobType(name) {
+			vm.selectedJobType = name;
+		}
+
 		function search() {
 			vm.dataSourceFilter = vm.selectedDataSource;
-			//vm.jobTypeFilter = vm.selectedJobType;
+			vm.jobTypeFilter = vm.selectedJobType;
 			pollNewData();
 		}
 	}
