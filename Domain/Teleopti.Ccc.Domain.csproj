@@ -342,7 +342,6 @@
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisProvider.cs" />
     <Compile Include="ResourcePlanner\Validation\BlockSchedulingNotMatchShiftBagValidator.cs" />
-    <Compile Include="ResourcePlanner\Validation\BusinessRulesValidator.cs" />
     <Compile Include="ResourcePlanner\Validation\ScheduleStartOnWrongDateValidator.cs" />
     <Compile Include="ResourcePlanner\Validation\ValidationInput.cs" />
     <Compile Include="Scheduling\SuccessfulScheduledAgents.cs" />
