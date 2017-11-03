@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public OvertimeRequestAutoGrantTypeAdapter(OvertimeRequestAutoGrantType autoGrantType)
 		{
-			DisplayName = LanguageResourceHelper.TranslateEnumValue(autoGrantType);
+			DisplayName = UserTexts.Resources.ResourceManager.GetString(autoGrantType.ToString());
 			AutoGrantType = autoGrantType;
 		}
 	}

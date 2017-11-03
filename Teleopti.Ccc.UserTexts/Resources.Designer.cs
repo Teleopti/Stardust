@@ -22410,33 +22410,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deny.
-        /// </summary>
-        public static string OvertimeRequestAutoGrantTypeDeny {
-            get {
-                return ResourceManager.GetString("OvertimeRequestAutoGrantTypeDeny", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No.
-        /// </summary>
-        public static string OvertimeRequestAutoGrantTypeNo {
-            get {
-                return ResourceManager.GetString("OvertimeRequestAutoGrantTypeNo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Yes.
-        /// </summary>
-        public static string OvertimeRequestAutoGrantTypeYes {
-            get {
-                return ResourceManager.GetString("OvertimeRequestAutoGrantTypeYes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The request date is more than 14 days from now..
         /// </summary>
         public static string OvertimeRequestDateExceeds14Days {
