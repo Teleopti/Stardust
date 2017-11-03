@@ -5,12 +5,15 @@
 	self.Id = ko.observable();
 	self.Template = "add-overtime-request-template";
 	self.IsPostingData = ko.observable(false);
+	self.IsLoading = ko.observable(false);
 	self.IsEditable = ko.observable(true);
 
 	self.Subject = ko.observable();
 	self.Message = ko.observable();
 
-	self.Today = ko.observable(moment());
+	self.PeriodStartDate = ko.observable(moment());
+	self.PeriodEndDate = ko.observable(null);
+
 	self.DateFrom = ko.observable();
 	self.StartTime = ko.observable();
 	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
@@ -119,6 +122,32 @@
 		}
 	};
 
+	function setAvailableDays(){
+		self.IsLoading(true);
+		ajax.Ajax({
+			url: 'OvertimeRequests/GetAvailableDays',
+			dataType: 'json',
+			type: 'GET',
+			async: false,
+			success: function (days) {
+				self.PeriodEndDate(moment().add(days, 'days'));
+				self.IsLoading(false);
+			},
+			error: function (response, textStatus) {
+				if (response.responseJSON) {
+					var errors = response.responseJSON.Errors;
+					if (errors && errors.length > 0) {
+						self.ErrorMessage(errors[0]);
+						self.ShowError(true);
+					} else {
+						Teleopti.MyTimeWeb.Common.AjaxFailed(response, null, textStatus);
+					}
+				}
+				self.IsLoading(false);
+			}
+		});
+	}
+
 	function _createTimeList() {
 		var timeList = [];
 		for (var i = 1; i < 24; i++) {
@@ -142,10 +171,7 @@
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_DURATION);
 		} else if (_isDateFromPast()) {
 			self.ErrorMessage(requestsMessagesUserTexts.OVERTIME_REQUEST_DATE_IS_PAST);
-		} else if (_isDateFromExceeds14Days()) {
-			self.ErrorMessage(requestsMessagesUserTexts.OVERTIME_REQUEST_DATE_EXCEEDS_14DAYS);
-		}
-		else {
+		} else {
 			dataValid = true;
 			self.ErrorMessage('');
 		}
@@ -180,7 +206,7 @@
 		return days < 0;
 	}
 
-	function _isDateFromExceeds14Days() {
+	function _isDateFromExceedsAvailableDays() {
 		var dateFromMoment = self.DateFrom();
 		if (!moment.isMoment(dateFromMoment))
 			dateFromMoment = moment(dateFromMoment, dateTimeFormats.dateOnly);
@@ -223,6 +249,9 @@
 		self.TimeList = _createTimeList();
 		self.RequestDuration(self.TimeList[0]);
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('OvertimeRequestPeriodSetting_46417')) {
+			setAvailableDays();
+		}
 	}
 
 	_initializeViewModel();
