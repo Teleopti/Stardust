@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test]
+		[Ignore("#46606")]
 		public void ShouldShowAgentWithMissingShiftAsNotScheduled()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -127,6 +128,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			result.SkillResultList.Count().Should().Be.EqualTo(1);
 			result.SkillResultList.First().SkillName.Should().Be.EqualTo("relevant skill");
 		}
+		
 		[Test]
 		public void ShouldReturnSkillsForRelevantPersonPeriod()
 		{
