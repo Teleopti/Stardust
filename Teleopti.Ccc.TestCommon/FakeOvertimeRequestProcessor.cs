@@ -9,6 +9,10 @@ namespace Teleopti.Ccc.TestCommon
 			personRequest.Pending();
 		}
 
+		public void Process(IPersonRequest personRequest)
+		{
+		}
+
 		public void CheckAndProcessDeny(IPersonRequest personRequest)
 		{
 		}

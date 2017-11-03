@@ -16678,6 +16678,9 @@ Do you want to participate?</value>
     <value>valid range is 0 - {0}</value>
     <comment>error message for invalid overtime request rolling period, {0} is maximum</comment>
   </data>
+  <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
+    <value>Your overtime request cannot be granted. Some dates are not open for requests at this time.</value>
+  </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
     <value>The start time of the shift for date {0} doesn't exist in the shift bag {1}</value>
     <comment>Pre-scheduleing validation message in web scheduling and client.</comment>

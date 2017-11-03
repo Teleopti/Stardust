@@ -51,14 +51,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 				personRequest = _mapper.Map(form, null);
 				_personRequestRepository.Add(personRequest);
 
-				var isAutoGrant= getIsAutoGrant();
-				_overtimeRequestProcessor.Process(personRequest, isAutoGrant);
+				if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSetting_46417))
+					_overtimeRequestProcessor.Process(personRequest);
+				else
+					_overtimeRequestProcessor.Process(personRequest, getGlobalIsAutoGrant());
 			}
 
 			return _requestsMapper.Map(personRequest);
 		}
 
-		private bool getIsAutoGrant()
+		private bool getGlobalIsAutoGrant()
 		{
 			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_OvertimeRequestHandling_45177)) return true;
 			var currentUser = _logonUser.CurrentUser();

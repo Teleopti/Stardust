@@ -451,10 +451,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual IAbsenceRequestOpenPeriod GetMergedAbsenceRequestOpenPeriod(IAbsenceRequest absenceRequest)
 		{
-			var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
-			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
+			return getMergedOpenPeriods(absenceRequest, getRequestPeriod(absenceRequest));
+		}
 
-			return getMergedOpenPeriods(absenceRequest, dateOnlyPeriod);
+		public virtual IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest)
+		{
+			return getMergedOvertimeRequestOpenPeriods(getRequestPeriod(overtimeRequest));
 		}
 
 		public virtual bool IsAbsenceRequestValidatorEnabled<T>(TimeZoneInfo timeZone)
@@ -498,6 +500,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				   && openPeriod.StaffingThresholdValidator.GetType() != typeof(AbsenceRequestNoneValidator);
 		}
 
+		private DateOnlyPeriod getRequestPeriod(IRequest request)
+		{
+			var agentTimeZone = request.Person.PermissionInformation.DefaultTimeZone();
+			return request.Period.ToDateOnlyPeriod(agentTimeZone);
+		}
+
 		private IAbsenceRequestOpenPeriod getMergedOpenPeriods(IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)
 		{
 			var extractor = GetExtractorForAbsence(absenceRequest.Absence);
@@ -506,6 +514,14 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod,
 				absenceRequest.Person.PermissionInformation.Culture(), absenceRequest.Person.PermissionInformation.UICulture());
 			return new AbsenceRequestOpenPeriodMerger().Merge(openPeriods);
+		}
+
+		private IOvertimeRequestOpenPeriod getMergedOvertimeRequestOpenPeriods(DateOnlyPeriod dateOnlyPeriod)
+		{
+			var overtimePeriodProjection = new OvertimeRequestPeriodProjection();
+
+			var openPeriods = overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(this, dateOnlyPeriod);
+			return new OvertimeRequestOpenPeriodMerger().Merge(openPeriods);
 		}
 	}
 }

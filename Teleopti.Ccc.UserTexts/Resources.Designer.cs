@@ -22437,6 +22437,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your overtime request cannot be granted. Some dates are not open for requests at this time..
+        /// </summary>
+        public static string OvertimeRequestDenyReasonClosedPeriod {
+            get {
+                return ResourceManager.GetString("OvertimeRequestDenyReasonClosedPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your overtime request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time.
         /// </summary>
         public static string OvertimeRequestDenyReasonExpired {

@@ -3478,6 +3478,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestNoneValidator.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriod.cs" />
+    <Compile Include="WorkflowControl\OvertimeRequestOpenPeriodMerger.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMerger.cs" />
     <Compile Include="WorkflowControl\AnyPersonSkillsOpenValidator.cs" />
     <Compile Include="WorkflowControl\CheckAbsenceRequestOpenPeriodResult.cs" />
@@ -3492,6 +3493,7 @@
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidator.cs" />
     <Compile Include="WorkflowControl\ExpiredRequestValidator.cs" />
+    <Compile Include="WorkflowControl\OvertimeRequestPeriodProjection.cs" />
     <Compile Include="WorkflowControl\OvertimeRequestOpenPeriod.cs" />
     <Compile Include="WorkflowControl\RequestExpirationValidator.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecificationForAbsence.cs" />

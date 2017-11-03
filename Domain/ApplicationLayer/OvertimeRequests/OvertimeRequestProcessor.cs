@@ -45,8 +45,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			if(skills == null) return;
 
 			personRequest.Pending();
+
 			if (!isAutoGrant) return;
 
+			executeApproveCommand(personRequest, skills);
+		}
+
+		public void Process(IPersonRequest personRequest)
+		{
+			var overtimeOpenPeriod = getOvertimeRequestOpenPeriod(personRequest);
+
+			if (overtimeOpenPeriod == null || overtimeOpenPeriod.AutoGrantType == WorkflowControl.OvertimeRequestAutoGrantType.Deny)
+			{
+				denyRequest(personRequest, UserTexts.Resources.ResourceManager.GetString("OvertimeRequestDenyReasonClosedPeriod",
+					personRequest.Person.PermissionInformation.UICulture()));
+				return;
+			}
+
+			if (isNotValid(personRequest)) return;
+
+			var skills = validateSkills(personRequest);
+			if (skills == null) return;
+
+			personRequest.Pending();
+
+			if (overtimeOpenPeriod.AutoGrantType == WorkflowControl.OvertimeRequestAutoGrantType.No)
+				return;
+
+			executeApproveCommand(personRequest, skills);
+		}
+
+		private void executeApproveCommand(IPersonRequest personRequest, ISkill[] skills)
+		{
 			var command = new ApproveRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
@@ -100,6 +130,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			}
 
 			return resultOfAvailableSkillsValidator.Skills;
+		}
+
+		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriod(IPersonRequest personRequest)
+		{
+			return personRequest.Person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(personRequest.Request as IOvertimeRequest);
 		}
 	}
 }
