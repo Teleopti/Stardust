@@ -101,6 +101,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
+		public void ShouldPersistGamificationAnsweredCallsThreshold()
+		{
+			var expactedResult = 150;
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
+			_gamificationSetting.AnsweredCallsThreshold.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistAnsweredCallsThreshold(new GamificationAnsweredCallsThresholdViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
+		[Test]
 		public void ShouldPersistGamificationAnsweredCallsGoldThreshold()
 		{
 			var expactedResult = 150;
@@ -159,6 +176,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			_gamificationSetting.AHTBadgeEnabled.Should().Be.False();
 
 			var result = target.PersistAHTEnabled(new GamificationThresholdEnabledViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
+		[Test]
+		public void ShouldPersistGamificationAHTThreshold()
+		{
+			TimeSpan expactedResult = new TimeSpan(0,2,30);
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
+			_gamificationSetting.AHTThreshold.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistAHTThreshold(new GamificationAHTThresholdViewModel()
 			{
 				GamificationSettingId = _gamificationSetting.Id.Value,
 				Value = expactedResult
@@ -238,6 +272,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 
 
 		[Test]
+		public void ShouldPersistGamificationAdherenceThreshold()
+		{
+			Percent expactedResult = new Percent(90);
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
+			_gamificationSetting.AdherenceThreshold.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistAdherenceThreshold(new GamificationAdherenceThresholdViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Value = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Value.Should().Be.EqualTo(expactedResult);
+		}
+
+		[Test]
 		public void ShouldPersistGamificationAdherenceGoldThreshold()
 		{
 			Percent expactedResult = new Percent(90);
@@ -305,5 +356,38 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			result.GamificationSettingRuleSet.Should().Be.EqualTo(expactedResult);
 		}
 
+		[Test]
+		public void ShouldPersistGamificationGoldToSilverRateChange()
+		{
+			int expactedResult = 6;
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
+			_gamificationSetting.GoldToSilverBadgeRate.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistGoldToSilverRate(new GamificationBadgeConversRateViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Rate = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Rate.Should().Be.EqualTo(expactedResult);
+		}
+
+		[Test]
+		public void ShouldPersistGamificationSilverToBronzeRateChange()
+		{
+			int expactedResult = 6;
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
+			_gamificationSetting.SilverToBronzeBadgeRate.Should().Not.Be.EqualTo(expactedResult);
+
+			var result = target.PersistSilverToBronzeRate(new GamificationBadgeConversRateViewModel()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				Rate = expactedResult
+			});
+
+			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result.Rate.Should().Be.EqualTo(expactedResult);
+		}
 	}
 }

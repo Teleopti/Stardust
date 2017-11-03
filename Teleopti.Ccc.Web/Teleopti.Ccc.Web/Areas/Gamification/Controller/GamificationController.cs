@@ -105,13 +105,13 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		}
 
 		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
-		public virtual GamificationAdherenceThresholdViewModel GamificationAHTForSilver([FromBody]GamificationAdherenceThresholdViewModel input)
+		public virtual GamificationAdherenceThresholdViewModel GamificationAdherenceForSilver([FromBody]GamificationAdherenceThresholdViewModel input)
 		{
 			return _gamificationSettingPersister.PersistAdherenceSilverThreshold(input);
 		}
 
 		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
-		public virtual GamificationAdherenceThresholdViewModel GamificationAHTForBronze([FromBody]GamificationAdherenceThresholdViewModel input)
+		public virtual GamificationAdherenceThresholdViewModel GamificationAdherenceForBronze([FromBody]GamificationAdherenceThresholdViewModel input)
 		{
 			return _gamificationSettingPersister.PersistAdherenceBronzeThreshold(input);
 		}
@@ -123,9 +123,39 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		}
 
 		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
-		public virtual GamificationSettingViewModel ChangeRule([FromBody]GamificationChangeRuleForm input)
+		public virtual GamificationSettingViewModel GamificationChangeRule([FromBody]GamificationChangeRuleForm input)
 		{
 			return _gamificationSettingPersister.PersistRuleChange(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationAnsweredCallsThresholdViewModel GamificationAnsweredCalls([FromBody]GamificationAnsweredCallsThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAnsweredCallsThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationAHTThresholdViewModel GamificationAHTThreshold([FromBody]GamificationAHTThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAHTThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationAdherenceThresholdViewModel GamificationAdherenceFor([FromBody]GamificationAdherenceThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistAdherenceThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationBadgeConversRateViewModel GamificationGoldToSilverRate([FromBody]GamificationBadgeConversRateViewModel input)
+		{
+			return _gamificationSettingPersister.PersistGoldToSilverRate(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Modify"), UnitOfWork]
+		public virtual GamificationBadgeConversRateViewModel GamificationSilverToBronzeRate([FromBody]GamificationBadgeConversRateViewModel input)
+		{
+			return _gamificationSettingPersister.PersistSilverToBronzeRate(input);
 		}
 	}
 }
