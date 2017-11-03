@@ -8,7 +8,7 @@
     <!--IEntity-->
     <id name="Id"
             type="guid"
-		  				access="nosetter.camelcase-underscore"
+            access="nosetter.camelcase-underscore"
             unsaved-value="null">
       <generator class="guid.comb" />
     </id>
@@ -20,7 +20,7 @@
               type="UtcDateTime"
               not-null="true"/>
     <!--IEntity-->
-    
+
     <component name="Description" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Description">
 		  <property name="Name"
 					not-null="true"
@@ -31,8 +31,8 @@
 					type="string"
 					length="25"/>
 	  </component>
-						 
-	<property name="GamificationSettingRuleSet"	
+						
+	<property name="GamificationSettingRuleSet"
 				not-null="true" />
 
 	<property name="AnsweredCallsBadgeEnabled"
@@ -44,7 +44,7 @@
 	<property name="AdherenceBadgeEnabled"
           type="boolean"
           not-null="true"/>
-	
+
 	<property name="AnsweredCallsThreshold"
           type="int"
           not-null="true"/>
@@ -74,40 +74,44 @@
 	<component name="AdherenceThreshold"
 	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
 	  <property name="Value"
-				not-null="true" 
-				type="double" 
+				not-null="true"
+				type="double"
 				column="AdherenceThreshold" />
 	</component>
 	<component name="AdherenceBronzeThreshold"
 	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
 	  <property name="Value"
-				not-null="true" 
-				type="double" 
+				not-null="true"
+				type="double"
 				column="AdherenceBronzeThreshold" />
 	</component>
 	<component name="AdherenceSilverThreshold"
 	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
 	  <property name="Value"
-				not-null="true" 
-				type="double" 
+				not-null="true"
+				type="double"
 				column="AdherenceSilverThreshold" />
 	</component>
 	<component name="AdherenceGoldThreshold"
 	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
 	  <property name="Value"
-				not-null="true" 
-				type="double" 
+				not-null="true"
+				type="double"
 				column="AdherenceGoldThreshold" />
 	</component>
-	
+
+        <bag name="ExternalBadgeSettings" table="ExternalBadgeSetting" cascade="all-delete-orphan" inverse="true">
+             <key column="Parent" foreign-key="FK_ExternalBadgeSetting_GamificationSetting"/>
+             <one-to-many  class="Teleopti.Ccc.Domain.Common.ExternalBadgeSetting"/>
+        </bag>
+
 	<property name="SilverToBronzeBadgeRate"
           type="int"
           not-null="true"/>
 	<property name="GoldToSilverBadgeRate"
           type="int"
           not-null="true"/>
-	
-	
+
     <many-to-one name="BusinessUnit"
       class="Teleopti.Ccc.Domain.Common.BusinessUnit"
       access="nosetter.camelcase-underscore"

@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 
@@ -37,6 +39,27 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 				SilverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate,
 				GoldToSilverBadgeRate = setting.GoldToSilverBadgeRate
 			};
+
+			if (setting.ExternalBadgeSettings != null && setting.ExternalBadgeSettings.Any())
+			{
+				vm.ExternalBadgeSettings = setting.ExternalBadgeSettings.Select(x => new ExternalBadgeSettingViewModel
+				{
+					Id = x.Id ?? Guid.Empty,
+					Name = x.Name,
+					QualityId = x.QualityId,
+					LargerIsBetter = x.LargerIsBetter,
+
+					Enabled = x.Enabled,
+
+					Threshold = x.Threshold,
+					BronzeThreshold = x.BronzeThreshold,
+					SilverThreshold = x.SilverThreshold,
+					GoldThreshold = x.GoldThreshold,
+
+					UnitType = x.UnitType
+				}).ToList();
+			}
+
 			return vm;
 		}
 	}

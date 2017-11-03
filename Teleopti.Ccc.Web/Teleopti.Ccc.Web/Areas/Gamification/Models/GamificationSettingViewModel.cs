@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public Percent AdherenceBronzeThreshold { get; set; }
 		public Percent AdherenceSilverThreshold { get; set; }
 		public Percent AdherenceGoldThreshold { get; set; }
+		public List<ExternalBadgeSettingViewModel> ExternalBadgeSettings { get; set; }
 		public int SilverToBronzeBadgeRate { get; set; }
 		public int GoldToSilverBadgeRate { get; set; }
 	}

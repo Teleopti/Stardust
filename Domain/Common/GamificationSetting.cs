@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -12,9 +13,9 @@ namespace Teleopti.Ccc.Domain.Common
 		private Description _description;
 		private GamificationSettingRuleSet _gamificationSettingRuleSet;
 
-		private bool _answeredCallsBadgeEnabled = false;
-		private bool _aHTBadgeEnabled = false;
-		private bool _adherenceBadgeEnabled = false;
+		private bool _answeredCallsBadgeEnabled;
+		private bool _aHTBadgeEnabled;
+		private bool _adherenceBadgeEnabled;
 
 		private int _answeredCallsThreshold = 100;
 		private int _answeredCallsBronzeThreshold = 100;
@@ -31,19 +32,22 @@ namespace Teleopti.Ccc.Domain.Common
 		private Percent _adherenceSilverThreshold = new Percent(0.80);
 		private Percent _adherenceGoldThreshold = new Percent(0.85);
 
+		private IEnumerable<IExternalBadgeSetting> _externalBadgeSettings; 
+
 		private int _silverToBronzeBadgeRate = 5;
 		private int _goldToSilverBadgeRate = 5;
 		private bool _isDeleted;
 
+		/// <inheritdoc />
 		/// <summary>
-        /// Creates a new instance of badge setting
-        /// </summary>
+		/// Creates a new instance of badge setting
+		/// </summary>
 		/// <param name="name">Name of badge setting</param>
         public GamificationSetting(string name) : this()
         {
 			_gamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold;
             _description = new Description(name);
-        }
+		}
 
         /// <summary>
         /// Constructor for NHibernate
@@ -57,122 +61,126 @@ namespace Teleopti.Ccc.Domain.Common
         /// </summary>
         public virtual Description Description
         {
-            get { return _description; }
-            set { _description = value; }
-        }
+            get => _description;
+			set => _description = value;
+		}
 
         /// <summary>
 		/// Type of AgentBadgeSettingRuleSet
         /// </summary>
 		public virtual GamificationSettingRuleSet GamificationSettingRuleSet
         {
-			get { return _gamificationSettingRuleSet; }
-			set { _gamificationSettingRuleSet = value; }
-        }
-
-		public virtual bool IsDeleted
-		{
-			get { return _isDeleted; }
+			get => _gamificationSettingRuleSet;
+			set => _gamificationSettingRuleSet = value;
 		}
+
+		public virtual bool IsDeleted => _isDeleted;
+
 		public virtual int AnsweredCallsThreshold
 		{
-			get { return _answeredCallsThreshold; }
-			set { _answeredCallsThreshold = value; }
+			get => _answeredCallsThreshold;
+			set => _answeredCallsThreshold = value;
 		}
 
 		public virtual int AnsweredCallsBronzeThreshold
 		{
-			get { return _answeredCallsBronzeThreshold; }
-			set { _answeredCallsBronzeThreshold = value; }
+			get => _answeredCallsBronzeThreshold;
+			set => _answeredCallsBronzeThreshold = value;
 		}
 
 		public virtual int AnsweredCallsSilverThreshold
 		{
-			get { return _answeredCallsSilverThreshold; }
-			set { _answeredCallsSilverThreshold = value; }
+			get => _answeredCallsSilverThreshold;
+			set => _answeredCallsSilverThreshold = value;
 		}
 
 		public virtual int AnsweredCallsGoldThreshold
 		{
-			get { return _answeredCallsGoldThreshold; }
-			set { _answeredCallsGoldThreshold = value; }
+			get => _answeredCallsGoldThreshold;
+			set => _answeredCallsGoldThreshold = value;
 		}
 
 		public virtual TimeSpan AHTThreshold
 		{
-			get { return _aHTThreshold; }
-			set { _aHTThreshold = value; }
+			get => _aHTThreshold;
+			set => _aHTThreshold = value;
 		}
 		public virtual TimeSpan AHTBronzeThreshold
 		{
-			get { return _aHTBronzeThreshold; }
-			set { _aHTBronzeThreshold = value; }
+			get => _aHTBronzeThreshold;
+			set => _aHTBronzeThreshold = value;
 		}
 
 		public virtual TimeSpan AHTSilverThreshold
 		{
-			get { return _aHTSilverThreshold; }
-			set { _aHTSilverThreshold = value; }
+			get => _aHTSilverThreshold;
+			set => _aHTSilverThreshold = value;
 		}
 
 		public virtual TimeSpan AHTGoldThreshold
 		{
-			get { return _aHTGoldThreshold; }
-			set { _aHTGoldThreshold = value; }
+			get => _aHTGoldThreshold;
+			set => _aHTGoldThreshold = value;
 		}
 
 		public virtual Percent AdherenceThreshold
 		{
-			get { return _adherenceThreshold; }
-			set { _adherenceThreshold = value; }
+			get => _adherenceThreshold;
+			set => _adherenceThreshold = value;
 		}
 
 		public virtual Percent AdherenceBronzeThreshold
 		{
-			get { return _adherenceBronzeThreshold; }
-			set { _adherenceBronzeThreshold = value; }
+			get => _adherenceBronzeThreshold;
+			set => _adherenceBronzeThreshold = value;
 		}
 
 		public virtual Percent AdherenceSilverThreshold
 		{
-			get { return _adherenceSilverThreshold; }
-			set { _adherenceSilverThreshold = value; }
+			get => _adherenceSilverThreshold;
+			set => _adherenceSilverThreshold = value;
 		}
 
 		public virtual Percent AdherenceGoldThreshold
 		{
-			get { return _adherenceGoldThreshold; }
-			set { _adherenceGoldThreshold = value; }
+			get => _adherenceGoldThreshold;
+			set => _adherenceGoldThreshold = value;
 		}
 
 		public virtual int SilverToBronzeBadgeRate
 		{
-			get { return _silverToBronzeBadgeRate; }
-			set { _silverToBronzeBadgeRate = value; }
+			get => _silverToBronzeBadgeRate;
+			set => _silverToBronzeBadgeRate = value;
 		}
 
 		public virtual int GoldToSilverBadgeRate
 		{
-			get { return _goldToSilverBadgeRate; }
-			set { _goldToSilverBadgeRate = value; }
+			get => _goldToSilverBadgeRate;
+			set => _goldToSilverBadgeRate = value;
 		}
 
 		public virtual bool AnsweredCallsBadgeEnabled
 		{
-			get { return _answeredCallsBadgeEnabled; }
-			set { _answeredCallsBadgeEnabled = value; }
+			get => _answeredCallsBadgeEnabled;
+			set => _answeredCallsBadgeEnabled = value;
 		}
 
 		public virtual bool AHTBadgeEnabled
 		{
-			get { return _aHTBadgeEnabled; }
-			set { _aHTBadgeEnabled = value; }
+			get => _aHTBadgeEnabled;
+			set => _aHTBadgeEnabled = value;
 		}
 
-		public virtual bool AdherenceBadgeEnabled 
+		public virtual bool AdherenceBadgeEnabled
 		{
-			get { return _adherenceBadgeEnabled; }
-			set { _adherenceBadgeEnabled = value; }
+			get => _adherenceBadgeEnabled;
+			set => _adherenceBadgeEnabled = value;
+		}
+
+		public virtual IEnumerable<IExternalBadgeSetting> ExternalBadgeSettings
+		{
+			get => _externalBadgeSettings;
+			set => _externalBadgeSettings = value;
 		}
 
 		public virtual void SetDeleted()

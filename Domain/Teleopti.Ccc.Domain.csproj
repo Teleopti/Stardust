@@ -301,6 +301,7 @@
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteWithOpenHourProvider.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdater.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdater.cs" />
+    <Compile Include="Common\ExternalBadgeSetting.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
     <Compile Include="Common\TimeSpanExtensions.cs" />
@@ -322,6 +323,8 @@
     <Compile Include="Infrastructure\Events\RequeueHangfireEvent.cs" />
     <Compile Include="Infrastructure\PublishInitializeReadModelEventHandler.cs" />
     <Compile Include="Infrastructure\RequeueHangfireEventHandler.cs" />
+    <Compile Include="InterfaceLegacy\Domain\BadgeUnitType.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IExternalBadgeSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestOpenPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestProcessor.cs" />
@@ -4020,6 +4023,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\JobResultArtifact.hbm.xml" />
     <EmbeddedResource Include="AgentInfo\Requests\OvertimeRequest.hbm.xml" />
+    <EmbeddedResource Include="Common\ExternalBadgeSetting.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />
