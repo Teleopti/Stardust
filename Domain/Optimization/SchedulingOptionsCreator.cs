@@ -98,25 +98,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			schedulingOptions.UseStudentAvailability = use && value == 1d;
 		}
-
-		//public static void SetTeamBlockOptions(IOptimizationPreferences optimizationPreferences,
-		//	SchedulingOptions schedulingOptions)
-		//{
-		//	schedulingOptions.BlockFinderTypeForAdvanceScheduling = optimizationPreferences.Extra.BlockTypeValue;
-		//	schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeamSameDaysOff;
-
-		//	schedulingOptions.UseBlock = optimizationPreferences.Extra.UseTeamBlockOption;
-		//	schedulingOptions.BlockSameEndTime = optimizationPreferences.Extra.UseBlockSameEndTime;
-		//	schedulingOptions.BlockSameStartTime = optimizationPreferences.Extra.UseBlockSameStartTime;
-		//	schedulingOptions.BlockSameShift = optimizationPreferences.Extra.UseBlockSameShift;
-		//	schedulingOptions.BlockSameShiftCategory = optimizationPreferences.Extra.UseBlockSameShiftCategory;
-
-		//	if (!optimizationPreferences.Extra.UseTeams)
-		//		schedulingOptions.GroupOnGroupPageForTeamBlockPer = GroupPageLight.SingleAgentGroup(Resources.SingleAgentTeam);
-
-		//	if (!optimizationPreferences.Extra.UseTeamBlockOption)
-		//		schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-
-		//}
 	}
 }
