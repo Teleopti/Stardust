@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -11,6 +12,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private readonly List<IStudentAvailabilityDay> Storage = new List<IStudentAvailabilityDay>();
 
+		public void Has(IPerson agent, DateOnly date, IStudentAvailabilityRestriction studentAvailabilityRestriction)
+		{
+			var studentAvailabilityDay = new StudentAvailabilityDay(agent, date, new [] { studentAvailabilityRestriction }).WithId();
+			Add(studentAvailabilityDay);
+		}
+		
 		public void Add(IStudentAvailabilityDay root)
 		{
 			Storage.Add(root);
@@ -48,8 +55,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IStudentAvailabilityDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
 		{
-			//impl when needed
-			return new List<IStudentAvailabilityDay>();
+			return Storage.Where(x => period.Contains(x.RestrictionDate) && persons.Contains(x.Person)).ToList();
 		}
 
 		public IList<IStudentAvailabilityDay> Find(DateOnly dateOnly, IPerson person)

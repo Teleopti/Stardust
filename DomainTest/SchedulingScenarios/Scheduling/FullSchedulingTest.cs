@@ -251,7 +251,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 		[Test]
-		[Ignore("#46505 - to be fixed")]
 		public void ShouldScheduleFixedStaffWhenUsingHourlyAvailability()
 		{
 			var dayOff = DayOffFactory.CreateDayOff();
@@ -268,9 +267,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(monday, monday.AddDays(6)));
 			for (var i = 0; i < 4; i++)
 			{
-				var studentAvailabilityRestriction = new StudentAvailabilityRestriction{StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), null),EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(21 ,0, 0))};
-				var studentAvailabilityDay = new StudentAvailabilityDay(agent, monday.AddDays(i), new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
-				StudentAvailabilityDayRepository.Add(studentAvailabilityDay);
+				StudentAvailabilityDayRepository.Has(agent, monday.AddDays(i), new StudentAvailabilityRestriction
+				{
+					StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), null),
+					EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(21, 0, 0))
+				});
 			}
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions {UseStudentAvailability = true});
 			
@@ -279,9 +280,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			for (var i = 0; i < 7; i++)
 			{
 				if (i < 4)
-					AssignmentRepository.GetSingle(monday.AddDays(i), agent).ShiftLayers.Should().Not.Be.Empty();
+					AssignmentRepository.GetSingle(monday.AddDays(i), agent).ShiftLayers
+						.Should().Not.Be.Empty();
 				else
-					AssignmentRepository.GetSingle(monday.AddDays(i), agent).AssignedWithDayOff(dayOff);
+					AssignmentRepository.GetSingle(monday.AddDays(i), agent).AssignedWithDayOff(dayOff)
+						.Should().Be.True();
 			}		
 		}
 
