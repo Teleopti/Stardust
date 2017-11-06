@@ -24,13 +24,19 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 				}
 			});
 		};
-		conn = $.connection.hub.start();
+		_startConnection();
 	}
-
+	function _startConnection() {
+		if ($.connection.hub.state === $.signalR.connectionState.disconnected) {
+			conn = $.connection.hub.start();
+		}
+	}
 	function _addSubscription(options) {
 		if (hub == null) {
 			_oneTime(options);
 		}
+
+		_startConnection();
 
 		conn
 			.done(function () {
