@@ -14,11 +14,11 @@
 	<title>@ViewBag.LayoutBase.Title</title>
 	<meta name="description" content="" />
 	<meta name="author" content="" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<link href="@Url.Content("~/favicon.ico")?v=2" rel="shortcut icon" type="image/x-icon" />
 	@RenderSection("head", required: false)
 </head>
-<body @Html.LayoutBase().FullDirClass() @Html.LayoutBase().FullDirAttribute()>
+<body ontouchstart="" @Html.LayoutBase().FullDirClass() @Html.LayoutBase().FullDirAttribute()>
 	@RenderSection("header", required: false)
 	@RenderBody()
 	<footer>
