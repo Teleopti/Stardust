@@ -9,11 +9,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	{
 		public IOvertimeRequestOpenPeriod Merge(IEnumerable<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriods)
 		{
+			if (overtimeRequestOpenPeriods.IsNullOrEmpty())
+				return null;
+
 			var mergedPeriod = new OvertimeRequestOpenDatePeriod
 			{
-				AutoGrantType = overtimeRequestOpenPeriods.IsNullOrEmpty()
-					? OvertimeRequestAutoGrantType.Deny
-					: OvertimeRequestAutoGrantType.Yes
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes
 			};
 
 			foreach (var overtimeRequestOpenPeriod in overtimeRequestOpenPeriods)

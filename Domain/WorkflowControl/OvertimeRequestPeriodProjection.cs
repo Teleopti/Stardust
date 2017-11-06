@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				}
 			}
 
-			return results;
+			return results.Where(w => w.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse()).Intersection(requestPeriod).HasValue).ToList();
 		}
 
 		private DateOnly findLayerEndTime(IList<DateOnlyOvertimeRequestOpenPeriod> filteredPeriodsList,
