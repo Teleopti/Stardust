@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using Autofac;
-using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Config;
@@ -75,8 +74,6 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.Register<Func<ICurrentUnitOfWork, IKpiRepository>>(context => uow => new KpiRepository(uow));
 			builder.Register<Func<ICurrentUnitOfWork, ISkillTypeRepository>>(context => uow => new SkillTypeRepository(uow));
 			builder.Register<Func<ICurrentUnitOfWork, IRtaStateGroupRepository>>(context => uow => new RtaStateGroupRepository(uow));
-			// OPTIONAL: Enable property injection into action filters.
-			builder.RegisterFilterProvider();
 		}
 	}
 }

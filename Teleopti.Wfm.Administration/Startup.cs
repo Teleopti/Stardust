@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.WebApi;
 using log4net.Config;
@@ -10,7 +9,7 @@ using Owin;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Modules;
-using GlobalConfiguration = System.Web.Http.GlobalConfiguration;
+using System.Web.Http;
 
 namespace Teleopti.Wfm.Administration
 {
@@ -23,7 +22,6 @@ namespace Teleopti.Wfm.Administration
 
 			var config = GlobalConfiguration.Configuration;
 			config.Filters.Add(new NoCacheFilterHttp());
-			GlobalFilters.Filters.Add(new NoCacheFilterMvc());
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<WfmAdminModule>();

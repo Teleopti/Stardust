@@ -1,12 +1,10 @@
 using System;
 using System.Net.Http.Headers;
-using System.Web;
 using System.Web.Http.Filters;
-using System.Web.Mvc;
 
 namespace Teleopti.Wfm.Administration.Core
 {
-	public class NoCacheFilterHttp : System.Web.Http.Filters.ActionFilterAttribute
+	public class NoCacheFilterHttp : ActionFilterAttribute
 	{
 		public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
 		{
@@ -26,21 +24,6 @@ namespace Teleopti.Wfm.Administration.Core
 				}
 			}
 			base.OnActionExecuted(actionExecutedContext);
-		}
-	}
-
-	public class NoCacheFilterMvc : System.Web.Mvc.ActionFilterAttribute
-	{
-		public override void OnActionExecuted(ActionExecutedContext filterContext)
-		{
-			var cache = filterContext.HttpContext.Response.Cache;
-			cache.SetCacheability(HttpCacheability.NoCache);
-			cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
-			cache.SetExpires(DateTime.UtcNow);
-			cache.AppendCacheExtension("private, no-store");
-			cache.SetProxyMaxAge(TimeSpan.Zero);
-
-			base.OnActionExecuted(filterContext);
 		}
 	}
 }

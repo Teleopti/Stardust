@@ -11,13 +11,7 @@ namespace Teleopti.Wfm.Administration.Core
 {
 	public class TenantTokenAuthenticationAttribute : Attribute, IAuthenticationFilter
 	{
-		public virtual bool AllowMultiple
-		{
-			get
-			{
-				return false;
-			} 
-		}
+		public virtual bool AllowMultiple => false;
 
 		public Task AuthenticateAsync(HttpAuthenticationContext context, CancellationToken cancellationToken)
 		{
@@ -32,7 +26,7 @@ namespace Teleopti.Wfm.Administration.Core
 			
 				if (valid)
 				{
-					var claims = new List<Claim>()
+					var claims = new List<Claim>
 				{
 					new Claim(ClaimTypes.Name, "Admin")
 				};
