@@ -11,8 +11,8 @@
             },
         });
 
-    GamificationSettingInfoController.$inject = ['$element', '$scope'];
-    function GamificationSettingInfoController($element, $scope) {
+    GamificationSettingInfoController.$inject = ['$element', '$scope', '$document'];
+    function GamificationSettingInfoController($element, $scope, $document) {
         var ctrl = this;
         ctrl.collapsed = true;
         ctrl.iconName = "chevron-up";
@@ -24,9 +24,35 @@
                 ctrl.iconName = "chevron-down";
             }
         }
+        ctrl.nameEditModel = false;
+
+        ctrl.onEditNameClicked = function (event, id) {
+            ctrl.nameEditModel = true;
+            var element = document.getElementById("setting-name-id-" + id);
+            element.focus();
+        }
+
+        ctrl.changeName = function (event) {
+            ctrl.nameEditModel = false;
+        }
+
         ctrl.$onInit = function () {
 
         };
+
+        ctrl.nameClicked = function (event) {
+            event.stopPropagation();
+        }
+
+        ctrl.$postLink = function () {
+            $document.bind('click', function () {
+                var nameInputs = document.getElementsByClassName("setting-name-input");
+                for (var i = 0; i < nameInputs.length; i++) {
+                    var input = nameInputs[i];
+                    input.blur();
+                }
+            })
+        }
         ctrl.$onChanges = function (changesObj) { };
         ctrl.$onDestroy = function () { };
     }

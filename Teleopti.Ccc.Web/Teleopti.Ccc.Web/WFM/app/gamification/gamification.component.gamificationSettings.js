@@ -12,81 +12,324 @@
 
 	function GamificationSettingsController($mdSelect, $element, $scope, $translate) {
 		var ctrl = this;
-		ctrl.title = 'Gamification Settings';
-		ctrl.settings = [{
-			id: '0',
-			name: 'Default'
-		}, {
-			id: '1',
-			name: 'Custom name1'
-		},
-		{
-			id: '2',
-			name: 'Custom name2'
+
+		ctrl.$onInit = function () {
+			ctrl.title = 'Gamification Settings';
+
+			ctrl.rules = [{
+				id: 'rule-id0',
+				name: 'Use Different Thresholds'
+			}, {
+				id: 'rule-id1',
+				name: 'Use Ratio Conversion'
+			}];
+
+			ctrl.allSettings = [
+				{
+					setting_id: 'setting_id_0',
+					name: 'Default',
+					info: 'Last updated by Admin at xxxx-xx-xx xx:xx:xx',
+					rule_settings: [
+						{
+							rule_id: 'rule-id0',
+							rule_name: 'Use Different Thresholds',
+							settings: [
+								{
+									id: 'fgdfgdfg-dfgdfgdfg-dfgdfgdf-dfgdfgdfgdf',
+									name: 'Use badge for Answered Calls',
+									is_checked: true,
+									is_external: false,
+									items: [
+										{
+											id: 'thresholdforgold-item1',
+											name: 'threshold for gold',
+											value: '160',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforsilver-item1',
+											name: 'threshold for silver',
+											value: '120',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforbronze-item1',
+											name: 'threshold for bronze',
+											value: '100',
+											value_type: 'num'
+										}
+									]
+								},
+								{
+									id: 'fgdfgdfg-dfgdfgdfg-dfgdfgdf',
+									name: 'Use badge for Adherence',
+									is_checked: false,
+									is_external: true,
+									items: [
+										{
+											id: 'thresholdforgold-item2',
+											name: 'threshold for gold',
+											value: '80',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforsilver-item2',
+											name: 'threshold for silver',
+											value: '70',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforbronze-item2',
+											name: 'threshold for bronze',
+											value: '60',
+											value_type: 'num'
+										}
+									]
+								},
+								{
+									id: 'fgdfgdfg-dfgdffdgdfggdfg-sdfsdfdsfsdff',
+									name: 'Use badge for AHT',
+									is_checked: false,
+									is_external: true,
+									items: [
+										{
+											id: 'thresholdforgold-item3',
+											name: 'threshold for gold',
+											value: '60',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforsilver-item3',
+											name: 'threshold for silver',
+											value: '50',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforbronze-item3',
+											name: 'threshold for bronze',
+											value: '30',
+											value_type: 'num'
+										}
+									]
+								}
+							]
+						},
+						{
+							rule_id: 'rule-id1',
+							rule_name: 'Use Ratio Conversion',
+							settings: [
+								{
+									id: 'fgdfgdfg-dfgdfgdfg-ddfgsdfgsdfgfgdfgdf-dfgdfgdfgdf',
+									name: 'Use badge for Answered Calls',
+									is_checked: true,
+									is_external: false,
+									items: [
+										{
+											id: 'thresholdforgold-item1',
+											name: 'Use badge for Answered Calls',
+											value: '80',
+											value_type: 'num'
+										}
+									]
+								},
+								{
+									id: 'fgdfgsdfgsdfgdfg-dfgdfgdfg-dfgdfgdf',
+									name: 'Use badge for Adherence',
+									is_checked: false,
+									is_external: true,
+									items: [
+										{
+											id: 'thresholdforgold-item2',
+											name: 'Use badge for Adherence',
+											value: '80',
+											value_type: 'num'
+										}
+									]
+								},
+								{
+									id: 'fgdfgdfg-dsdfgsdfgsdfgsdfgfgdfgdfg-sdfsdfdsfsdff',
+									name: 'Use badge for AHT',
+									is_checked: false,
+									is_external: true,
+									items: [
+										{
+											id: 'thresholdforgold-item3',
+											name: 'Use badge for AHT',
+											value: '60',
+											value_type: 'num'
+										}
+									]
+								}
+							]
+						}
+					]
+				}, {
+					setting_id: 'setting_id_1',
+					name: 'Setting 1',
+					info: 'Last updated by Admin at 2017-11-03 xx:xx:xx',
+					rule_settings: [
+						{
+							rule_id: 'rule-id0',
+							rule_name: 'Use Different Thresholds',
+							settings: [
+								{
+									id: 'fgdfgddfgdfgdffg-dfgdfgdfg-dfgdfgdf-dfgdfgdfgdf',
+									name: 'Use badge for Answered Calls',
+									is_checked: true,
+									is_external: false,
+									items: [
+										{
+											id: 'thresholdforgold-item1',
+											name: 'threshold for gold',
+											value: '300',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforsilver-item1',
+											name: 'threshold for silver',
+											value: '200',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforbronze-item1',
+											name: 'threshold for bronze',
+											value: '100',
+											value_type: 'num'
+										}
+									]
+								},
+								{
+									id: 'fgdfgdertwerttrefg-dfgdfgdfg-dfgdfgdf',
+									name: 'Use badge for Adherence',
+									is_checked: false,
+									is_external: true,
+									items: [
+										{
+											id: 'thresholdforgold-item2',
+											name: 'threshold for gold',
+											value: '80',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforsilver-item2',
+											name: 'threshold for silver',
+											value: '70',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforbronze-item2',
+											name: 'threshold for bronze',
+											value: '60',
+											value_type: 'num'
+										}
+									]
+								},
+								{
+									id: 'fgdfgdfg-drtyrtyrtyrtfgdfgdfg-sdfsdfdsfsdff',
+									name: 'Use badge for AHT',
+									is_checked: false,
+									is_external: true,
+									items: [
+										{
+											id: 'thresholdforgold-item3',
+											name: 'threshold for gold',
+											value: '60',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforsilver-item3',
+											name: 'threshold for silver',
+											value: '50',
+											value_type: 'num'
+										},
+										{
+											id: 'thresholdforbronze-item3',
+											name: 'threshold for bronze',
+											value: '30',
+											value_type: 'num'
+										}
+									]
+								}
+							]
+						},
+						{
+							rule_id: 'rule-id1',
+							rule_name: 'Use Ratio Conversion',
+							settings: [
+								{
+									id: 'fgdfgdfg-d456456456fgdfgdfg-dfgdfgdf-dfgdfgdfgdf',
+									name: 'Use badge for Answered Calls',
+									is_checked: true,
+									is_external: false,
+									items: [
+										{
+											id: 'thresholdforgold-item1',
+											name: 'Use badge for Answered Calls',
+											value: '80',
+											value_type: 'num'
+										}
+									]
+								},
+								{
+									id: 'fgdfgdfg-d678678678fgdfgdfg-dfgdfgdf',
+									name: 'Use badge for Adherence',
+									is_checked: false,
+									is_external: true,
+									items: [
+										{
+											id: 'thresholdforgold-item2',
+											name: 'Use badge for Adherence',
+											value: '80',
+											value_type: 'num'
+										}
+									]
+								},
+								{
+									id: 'fgdfgdfg-dfgdfgd78978978978fg-sdfsdfdsfsdff',
+									name: 'Use badge for AHT',
+									is_checked: false,
+									is_external: true,
+									items: [
+										{
+											id: 'thresholdforgold-item3',
+											name: 'Use badge for AHT',
+											value: '60',
+											value_type: 'num'
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			];
+
+			ctrl.currentRuleIndex = 0;
+			ctrl.currentRule = ctrl.rules[ctrl.currentRuleIndex];
+
+			ctrl.selectedSettingIndex = 0;
+			ctrl.currentSetting = ctrl.allSettings[ctrl.selectedSettingIndex];
 		}
-		];
 
-		ctrl.rules = [{
-			id: 'rule-id1',
-			name: 'Use Different Thresholds'
-		}, {
-			id: 'rule-id2',
-			name: 'Use Ratio Conversion'
-		}]
+		ctrl.settingChanged = function () {
+			ctrl.currentSetting = ctrl.allSettings[ctrl.selectedSettingIndex]
+			ctrl.currentRuleIndex = 0;
+		}
 
-		ctrl.settingInfos = [{
-			id: 'fgdfgdfg-dfgdfgdfg-dfgdfgdf-dfgdfgdfgdf',
-			name: 'Use badge for Answered Calls',
-			rule_id: 'rule-id1',
-			is_checked: true,
-			is_external: false,
-			items: [{
-				id: 'thresholdforgold-item1',
-				name: 'threshold for gold',
-				value: '160',
-				value_type: 'num'
-			}, {
-				id: 'thresholdforsilver-item1',
-				name: 'threshold for silver',
-				value: '120',
-				value_type: 'num'
-			},
-			{
-				id: 'thresholdforbronze-item1',
-				name: 'threshold for bronze',
-				value: '100',
-				value_type: 'num'
-			}]
-		},
-		{
-			id: 'fgdfgdfg-dfgdfgdfg-dfgdfgdf',
-			name: 'Use badge for Adherence',
-			rule_id: 'rule-id1',
-			is_checked: false,
-			is_external: true,
-			items: [{
-				id: 'thresholdforgold-item2',
-				name: 'threshold for gold',
-				value: '80',
-				value_type: 'num'
-			}, {
-				id: 'thresholdforsilver-item2',
-				name: 'threshold for silver',
-				value: '70',
-				value_type: 'num'
-			},
-			{
-				id: 'thresholdforbronze-item2',
-				name: 'threshold for bronze',
-				value: '60',
-				value_type: 'num'
-			}]
-		}];
+		ctrl.ruleChanged = function () {
+			ctrl.currentRule = ctrl.rules[ctrl.currentRuleIndex];
+		}
 
-		ctrl.currentRuleId = ctrl.rules[0].id;
+		ctrl.getViewSetting = function () {
+			var result;
+			ctrl.currentSetting.rule_settings.forEach(function (ruleSetting) {
+				if (ruleSetting.rule_id == ctrl.currentRule.id) {
+					result = ruleSetting.settings;
+				}
+			}, this);
 
-		ctrl.currentSettingId = ctrl.settings[0].id;
-
+			return result;
+		}
 	}
 
 })(angular);

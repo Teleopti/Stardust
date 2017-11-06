@@ -5,8 +5,8 @@
             <span>{{::$ctrl.title}}:</span>
         </div>
         <div class="inline-block setting-name">
-            <md-select ng-model='$ctrl.currentSettingId'>
-                <md-option ng-repeat="setting in $ctrl.settings" value="{{setting.id}}">{{setting.name}}</md-option>
+            <md-select ng-model='$ctrl.selectedSettingIndex' ng-change="$ctrl.settingChanged()">
+                <md-option ng-repeat="setting in $ctrl.allSettings" value="{{$ctrl.allSettings.indexOf(setting)}}">{{setting.name}}</md-option>
             </md-select>
         </div>
 
@@ -30,7 +30,7 @@
                 <label>Description:</label>
             </div>
             <div class="inline-block">
-                <input type="text" value="{{$ctrl.settings[$ctrl.currentSettingId].name}}">
+                <input type="text" value="{{$ctrl.currentSetting.name}}">
             </div>
         </div>
         <div class="input-container">
@@ -38,7 +38,7 @@
                 <label>Change Info:</label>
             </div>
             <div class="inline-block">
-                <label>Updated by Admin on xx/xx/xxxx xx:xx</label>
+                <label>{{$ctrl.currentSetting.info}}</label>
             </div>
         </div>
 
@@ -47,14 +47,14 @@
                 <label>Rule:</label>
             </div>
             <div class="inline-block">
-                <md-select id="gamificationSettingType" ng-model='$ctrl.currentRuleId'>
-                    <md-option ng-repeat="rule in $ctrl.rules" value="{{rule.id}}">{{rule.name}}</md-option>
+                <md-select id="gamificationSettingType" ng-change="$ctrl.ruleChanged()" ng-model='$ctrl.currentRuleIndex'>
+                    <md-option ng-repeat="rule in $ctrl.rules" value="{{$ctrl.rules.indexOf(rule)}}">{{rule.name}}</md-option>
                 </md-select>
             </div>
         </div>
 
         <div>
-            <div class="inline-block" ng-repeat="settingInfo in $ctrl.settingInfos">
+            <div class="inline-block" ng-repeat="settingInfo in $ctrl.getViewSetting()">
                 <gamification-setting-info setting-info="settingInfo"></gamification-setting-info>
             </div>
         </div>

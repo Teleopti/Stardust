@@ -3,8 +3,11 @@
         <md-toolbar class="md-primary">
             <div class="md-toolbar-tools">
                 <md-checkbox ng-model="$ctrl.settingInfo.is_checked"></md-checkbox>
-                <h3>{{$ctrl.settingInfo.name}}</h3>
-                <i class="mdi mdi-lead-pencil" ng-show="$ctrl.settingInfo.is_external"></i>
+                <h3 ng-show="!$ctrl.nameEditModel">{{$ctrl.settingInfo.name}}</h3>
+                <input class="setting-name-input" id="setting-name-id-{{$ctrl.settingInfo.id}}" ng-blur="$ctrl.changeName($ctrl.settingInfo.id)"
+                    ng-click="$ctrl.nameClicked($event)" ng-show="$ctrl.nameEditModel" type="text" ng-model="$ctrl.settingInfo.name"
+                />
+                <i class="mdi mdi-lead-pencil" ng-show="$ctrl.settingInfo.is_external" ng-click="$ctrl.onEditNameClicked($event, $ctrl.settingInfo.id)"></i>
                 <span flex class="flex"></span>
                 <i class="mdi mdi-{{$ctrl.iconName}}" ng-click="$ctrl.onCollapsed()"></i>
             </div>
