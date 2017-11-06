@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			return jobsFor<T>(events);
 		}
 
-		public IEnumerable<IJobInfo> MinutelyRecurringJobsFor<T>(IEvent @event)
+		public IEnumerable<IJobInfo> RecurringJobsFor<T>(IEvent @event)
 		{
 			var jobs = jobsFor<T>(new[] { @event });
 
@@ -107,6 +109,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var attemptsAttribute = getAttemptsAttribute(handleMethod);
 			var allowFailuresAttribute = getAllowFailuresAttribute(handleMethod);
 
+			var runInterval = getRunIntervalForHandler(handler);
+
 			return new jobInfo
 			{
 				HandlerType = handler,
@@ -116,8 +120,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				Attempts = attemptsAttribute?.Attempts ?? 3,
 				AttemptsAttribute = attemptsAttribute,
 				AllowFailures = allowFailuresAttribute?.Failures ?? 0,
-				AllowFailuresAttribute = allowFailuresAttribute
+				AllowFailuresAttribute = allowFailuresAttribute,
+				RunInterval = runInterval
 			};
+		}
+
+		private int getRunIntervalForHandler(Type handler)
+		{
+			var runIntervalAttribute = handler.GetCustomAttribute<RunIntervalAttribute>(false);
+			if (runIntervalAttribute == null) return 1;
+			var runIntervalValue = runIntervalAttribute.RunInterval;
+			if (runIntervalValue < 1) return 1;
+			return runIntervalValue;
 		}
 
 		private string queueTo(Type handler, IEvent @event)
@@ -158,6 +172,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 			public int Attempts { get; set; }
 			public int AllowFailures { get; set; }
+			public int RunInterval { get; set; }
 
 			public AttemptsAttribute AttemptsAttribute { get; set; }
 			public AllowFailuresAttribute AllowFailuresAttribute { get; set; }
@@ -175,6 +190,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		int Attempts { get; }
 		int AllowFailures { get; }
+		int RunInterval { get; }
 	}
 
 }

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void PublishMinutely(IEvent @event)
 		{
-			var jobs = _resolver.MinutelyRecurringJobsFor<IRunOnHangfire>(@event);
+			var jobs = _resolver.RecurringJobsFor<IRunOnHangfire>(@event);
 			jobsFor(jobs).ForEach(x => _client.AddOrUpdateMinutely(x));
 		}
 
@@ -73,7 +73,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 							HandlerTypeName = $"{x.HandlerType.FullName}, {x.HandlerType.Assembly.GetName().Name}",
 							QueueName = x.QueueName,
 							Attempts = x.Attempts,
-							AllowFailures = x.AllowFailures
+							AllowFailures = x.AllowFailures,
+							RunInterval = x.RunInterval
 						};
 					}
 				);

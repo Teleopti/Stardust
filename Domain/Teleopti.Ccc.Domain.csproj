@@ -296,6 +296,7 @@
     <Compile Include="ApplicationLayer\Rta\Tracer\SafeRtaTracer.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\RtaTracerViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\RunIntervalAttribute.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteWithOpenHourProvider.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHourViewModels.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteWithOpenHourProvider.cs" />

@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public IEvent Event; // this means its a single event job to a single event handler method, but we'r keeping the name to not break compatibility
 		public IEnumerable<IEvent> Package;
 		public string HandlerTypeName;
+		public int RunInterval;
 
 		public static string TenantPrefixForTenant(string tenant)
 		{
