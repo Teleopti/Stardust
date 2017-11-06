@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var expactedName = "Default";
 			var gamificationSetting = new GamificationSetting(expactedName);
 			var gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
-			gamificationSettingRepository.Stub(x => x.Load(id)).Return(gamificationSetting);
+			gamificationSettingRepository.Stub(x => x.Get(id)).Return(gamificationSetting);
 			var mapper = new GamificationSettingMapper();
 
 			var target = new GamificationSettingProvider(gamificationSettingRepository, mapper);
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		{
 			var id = Guid.NewGuid();
 			var gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
-			gamificationSettingRepository.Stub(x => x.Load(id)).Return(null);
+			gamificationSettingRepository.Stub(x => x.Get(id)).Return(null);
 			var mapper = new GamificationSettingMapper();
 
 			var target = new GamificationSettingProvider(gamificationSettingRepository, mapper);
