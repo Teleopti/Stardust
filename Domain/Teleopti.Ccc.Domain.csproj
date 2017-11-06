@@ -347,6 +347,7 @@
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisProvider.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingNotMatchShiftBagHint.cs" />
+    <Compile Include="ResourcePlanner\Validation\BlockSchedulingExistingShiftNotMatchingEachOtherValidator.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHint.cs" />
     <Compile Include="ResourcePlanner\Validation\BlockSchedulingPreviousShiftNotMatchingEachOtherValidator.cs" />
     <Compile Include="ResourcePlanner\Hints\HintInput.cs" />

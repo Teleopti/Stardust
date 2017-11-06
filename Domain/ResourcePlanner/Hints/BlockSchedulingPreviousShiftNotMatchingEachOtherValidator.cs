@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			var people = input.People;
 			var period = input.Period;
 			var blockPreferenceProvider = input.BlockPreferenceProvider;
-			var scheduleDictionary = input.Schedules;
+			var scheduleDictionary = input.Schedules ?? input.CurrentSchedule;
 			foreach (var schedule in scheduleDictionary)
 			{
 				var person = schedule.Key;

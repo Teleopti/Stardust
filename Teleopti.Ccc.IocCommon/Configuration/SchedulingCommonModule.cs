@@ -546,6 +546,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_BlockSchedulingValidation_46092))
 			{
 				builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherValidator>().As<IScheduleValidator>().SingleInstance();
+				builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherValidator>().As<IScheduleValidator>().SingleInstance();
 			}
 		}
 
