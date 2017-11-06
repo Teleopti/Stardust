@@ -21,7 +21,17 @@
 				name: 'Use Different Thresholds'
 			}, {
 				id: 'rule-id1',
-				name: 'Use Ratio Conversion'
+				name: 'Use Ratio Conversion',
+				items: [{
+					id: 'rule_item_id1',
+					name: 'A silver badge eaquals bronze badage count',
+					value: 5
+				}, {
+					id: 'rule_item_id2',
+					name: 'A gold badge eaquals silver badage count',
+					value: 5
+				}]
+
 			}];
 
 			ctrl.allSettings = [
@@ -314,6 +324,7 @@
 		ctrl.settingSelectionChanged = function () {
 			ctrl.currentSetting = ctrl.allSettings[ctrl.selectedSettingIndex]
 			ctrl.currentRuleIndex = 0;
+			ctrl.ruleSelectionChanged();
 		}
 
 		ctrl.ruleSelectionChanged = function () {

@@ -53,6 +53,14 @@
         </div>
 
         <div>
+            <div ng-show="$ctrl.currentRule.items">
+                <div ng-repeat="item in $ctrl.currentRule.items">
+                    <span>{{item.name}}:</span>
+                    <input type="text" value="{{item.value}}">
+                </div>
+                <md-divider></md-divider>
+            </div>
+
             <div class="inline-block" ng-repeat="settingInfo in $ctrl.viewedSetting">
                 <gamification-setting-info setting-info="settingInfo" select-item-callback="$ctrl.itemSelected"></gamification-setting-info>
             </div>
