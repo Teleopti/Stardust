@@ -1,13 +1,16 @@
 <div class="filter">
-	<md-select multiple="true" ng-model="$ctrl.selectedSites" md-selected-text="$ctrl.sitePickerSelectedText()" class="md-no-underline">
+	<md-select multiple="true" ng-model="$ctrl.selectedSites" md-selected-text="$ctrl.sitePickerSelectedText()" md-on-close="$ctrl.selectClosed()" class="md-no-underline">
 		<md-option ng-repeat="site in $ctrl.sites" ng-value="site">
 			{{ site.name }}
 		</md-option>
 	</md-select>
 	<div>
-		<input type="text" placeholder="Filter teams" />
+		<input type="text" placeholder="{{'FilterTeams'|translate}}" />
 	</div>
 </div>
-<div>
-	<gamification-targets-table></gamification-targets-table>
+<div class="table-wrapper">
+	<gamification-targets-table teams="$ctrl.teams" available-settings="" on-setting-change="$ctrl.onAppliedSettingChange(teamIds, newValue)"></gamification-targets-table>
+	<div ng-if="$ctrl.isBusy" class="mask">
+			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+	</div>
 </div>

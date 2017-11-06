@@ -4,6 +4,13 @@
 	angular.module('wfm.gamification')
 		.component('gamificationTargetsTable', {
 			templateUrl: 'app/gamification/html/g.component.gamificationTargetsTable.tpl.html',
+
+			bindings: {
+				availableSettings: '<',
+				teams: '<',
+				onSettingChange: '&'
+			},
+
 			controller: ['$element', '$scope', GamificationTargetsTableController]
 		});
 
@@ -13,6 +20,12 @@
 
 		var ctrl = this;
 
+		ctrl.$onChanges = function (changesObj) {
+			if (changesObj.teams && !changesObj.teams.isFirstChange()) {
+				loadDataIntoTable();
+			}
+		};
+
 		ctrl.selectedTeamIds = {};
 
 		ctrl.settings = [
@@ -20,6 +33,8 @@
 			{ value: 'setting1', name: 'Setting 1' },
 			{ value: 'setting2', name: 'Setting 2' }
 		];
+
+		ctrl.tableHasData = function () { return angular.isArray(ctrl.teams); };
 
 		ctrl.isIndeterminate = function () {
 			var numSelected = Object.keys(ctrl.selectedTeamIds)
@@ -47,11 +62,18 @@
 
 		ctrl.changeAppliedSetting = function (teamId, newSettingValue) {
 			// console.log(teamId, newSettingValue)
+
 			Object.keys(ctrl.selectedTeamIds)
 				.filter(function (id) { return ctrl.selectedTeamIds[id]; })
 				.forEach(function (id) {
-					ctrl.teams[id].appliedSettingValue = newSettingValue;
+					var index = ctrl._teamsIndexMap[id].index;
+					ctrl.teams[index].appliedSettingValue = newSettingValue;
 				});
+
+			ctrl.onSettingChange && ctrl.onSettingChange({
+				teamIds: Object.keys(ctrl.selectedTeamIds),
+				newValue: newSettingValue
+			});
 		};
 
 		function refresh() { $scope.$broadcast('$md-resize'); }
@@ -71,19 +93,6 @@
 			refresh();
 		}
 
-		function teams(n) {
-			var teams = [];
-			for (var i = 0; i < n; i++) {
-				teams.push({
-					teamId: i,
-					teamName: 'Team ' + (i + 1),
-					// appliedSettingValue: ctrl.settings[i % ctrl.settings.length].value
-					appliedSettingValue: i === 0 ? ctrl.settings[0].value : ctrl.settings[1].value
-				});
-			}
-			return teams;
-		}
-
 		function Rows(rows) {
 			this.rows = rows || [];
 			this.numRows = this.rows.length;
@@ -97,9 +106,27 @@
 			return this.numRows;
 		};
 
-		function initTable() {
-			ctrl.teams = teams(1000);
+		function convertToIndexMap(arr) {
+			var map = {};
+			arr.forEach(function (team, index) {
+				map[team.teamId] = {
+					index: index
+				};
+			});
+			return map;
+		}
+
+		function loadDataIntoTable() {
+			resetRowSelection();
+			ctrl._teamsIndexMap = convertToIndexMap(ctrl.teams);
 			ctrl.rows = new Rows(ctrl.teams);
+		}
+
+		function resetRowSelection() {
+			ctrl.selectedTeamIds = {};
+		}
+
+		function initTable() {
 			ctrl.tableIsReady = true;
 			$scope.$evalAsync(setHeightToFillAvailableSpace);
 		}

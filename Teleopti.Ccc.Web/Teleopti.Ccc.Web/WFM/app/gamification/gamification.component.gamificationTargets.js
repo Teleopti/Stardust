@@ -5,11 +5,27 @@
 	angular.module('wfm.gamification')
 		.component('gamificationTargets', {
 			templateUrl: 'app/gamification/html/g.component.gamificationTargets.tpl.html',
-			controller: ['$translate', GamificationTargetsController]
+			controller: ['$translate', '$timeout', GamificationTargetsController]
 		});
 
-	function GamificationTargetsController($translate) {
+	function GamificationTargetsController($translate, $timeout) {
 		var ctrl = this;
+
+		var selectedText = '';
+
+		ctrl.settings = [
+			{ value: 'default', name: 'Default' },
+			{ value: 'setting1', name: 'Setting 1' },
+			{ value: 'setting2', name: 'Setting 2' }
+		];
+
+		ctrl.selectClosed = function () {
+			var newText = ctrl.sitePickerSelectedText();
+			if (newText !== selectedText) {
+				selectedText = newText;
+				loadTeams();
+			}
+		};
 
 		ctrl.sitePickerSelectedText = function () {
 			if (ctrl.selectedSites.length === 0) {
@@ -25,7 +41,29 @@
 			.join(', ');
 		};
 
+		ctrl.onAppliedSettingChange = function (teamIds, newValue) {
+			console.log(teamIds, newValue);
+		}
+
 		ctrl.selectedSites = [];
+
+		function loadTeams() {
+			ctrl.isBusy = true;
+			$timeout(function () {
+				var teams = [];
+				ctrl.selectedSites.forEach(function (site) {
+					for (var i = 0; i < site.position; i++) {
+						teams.push({
+							teamId: site.id * 10 + i,
+							teamName: 'Site ' + (site.position + 1) + '/Team ' + (i + 1),
+							appliedSettingValue: i === 0 ? ctrl.settings[0].value : ctrl.settings[1].value
+						});
+					}
+				});
+				ctrl.teams = teams;
+				ctrl.isBusy = false;
+			}, 3000);
+		}
 
 		function sites(n) {
 			var sites = [];
