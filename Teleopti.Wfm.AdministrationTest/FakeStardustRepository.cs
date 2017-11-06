@@ -44,7 +44,12 @@ namespace Teleopti.Wfm.AdministrationTest
 			throw new NotImplementedException();
 		}
 
-		public object GetAllFailedJobs(int @from, int to)
+		public IList<Job> GetAllFailedJobs(int @from, int to)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<Job> GetAllFailedJobs(JobFilterModel filter)
 		{
 			throw new NotImplementedException();
 		}

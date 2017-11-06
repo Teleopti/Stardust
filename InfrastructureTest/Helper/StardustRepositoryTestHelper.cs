@@ -46,6 +46,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 			}
 		}
 
+		public static void AddFailedJob(Job job)
+		{
+			const string insertJobCommandText = @"insert into [Stardust].[Job] 
+											(JobId, Name, CreatedBy, Created, Started, Ended, Serialized, Type, SentToWorkerNodeUri, Result, Policy) 
+											Values (@jobId, 'Test', 'Test', GETDATE(), GETDATE(), GETDATE(), @serialized, @type , '123456' , 'Failed' ,null)";
+
+			using (var connection = new SqlConnection(connectionString()))
+			{
+				connection.Open();
+				using (var comm = new SqlCommand(insertJobCommandText, connection))
+				{
+					comm.Parameters.AddWithValue("@jobId", job.JobId);
+					comm.Parameters.AddWithValue("@serialized", job.Serialized);
+					comm.Parameters.AddWithValue("@type", job.Type);
+
+					comm.ExecuteNonQuery();
+				}
+			}
+		}
+
 		public static void ClearQueue()
 		{
 			using (var connection = new SqlConnection(connectionString()))

@@ -2,38 +2,73 @@
 <div class="container body-content" ng-controller="jobFailedController as vm">
 	<div class="row">
 		<div class="col-md-12"><a style="float: left; padding-top: 25px; padding-right: 50px"><img alt="back" src="Content/images/left_round.png" ng-click="vm.back()" /></a>
-			<h3>Failed Jobs</h3>
+			<h2>Job History</h2>
 			<div class="row">
-				<div class="col-md-7">
-					<p>Click the Type of a job to see details.</p>
+				<div class="col-md-3">
+					<div class="panel panel-default">
+						<div class="panel-heading">Filter</div>
+						<div class="panel-body">
+							<div class="dropdown" style="padding-bottom: 10px">
+								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+									<span ng-show="!vm.selectedDataSource">All Tenants</span>
+									<span ng-show="vm.selectedDataSource">{{vm.selectedDataSource}}</span>
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+									<li ng-click="vm.selectTenant('All Tenants')"><a>All Tenants</a></li>
+									<li ng-repeat="tenant in vm.Tenants" ng-click="vm.selectTenant(tenant.Name)"><a>{{tenant.Name}}</a></li>
+								</ul>
+							</div>
+
+							<div class="dropdown" style="padding-bottom: 10px">
+								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+									<span ng-show="!vm.selectedJobType">All Types</span>
+									<span ng-show="vm.selectedJobType">{{vm.selectedJobType}}</span>
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+									<li ng-click="vm.selectJobType('All Types')"><a>All Types</a></li>
+									<li ng-repeat="type in vm.types" ng-click="vm.selectJobType(type)"><a>{{type}}</a></li>
+								</ul>
+							</div>
+
+							<button class="btn btn-primary" style="float: right;" ng-click="vm.search()">
+								<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_search_white_24px.svg"></md-icon>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<div class="panel panel-default ">
+						<div class="panel-heading">History</div>
+						<div class="panel-body">
+							<table>
+								<thead>
+									<tr>
+										<th>Tenant</th>
+										<th>Type</th>
+										<th>Finished (UTC)</th>
+										<th>Total Duration</th>
+										<th>Sent to</th>
+										<th>Result</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="job in vm.Jobs">
+										<td>{{job.DataSource}}</td>
+										<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
+										<td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+										<td>{{job.TotalDuration}}</td>
+										<td>{{job.SentToWorkerNodeUri}}</td>
+										<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
+									</tr>
+								</tbody>
+							</table>
+							<a class="button" ng-show="vm.moreJobs" style="cursor:pointer" ng-click="vm.getMoreData()">See more results &raquo;</a>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div style="font-size: 14px; font-weight: bold; color: tomato">{{vm.JobError}}</div>
-			<div>
-				<table>
-					<thead>
-					<tr>
-						<th>Tenant</th>
-						<th>Type</th>
-						<th>Finished (UTC)</th>
-						<th>Total Duration</th>
-						<th>Sent to</th>
-						<th>Result</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr ng-repeat="job in vm.Jobs">
-						<td>{{job.DataSource}}</td>
-						<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Name}}</a></td>
-						<td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-						<td>{{job.TotalDuration}}</td>
-						<td>{{job.SentToWorkerNodeUri}}</td>
-						<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-			<button ng-disabled="vm.noMoreJobs" ng-click="vm.getNewFreshData()" class="btn-primary col-md-2"> load {{vm.limit}} more</button>
 		</div>
 	</div>
 </div>

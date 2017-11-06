@@ -168,6 +168,41 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			return jobs;
 		}
 
+		public IList<Job> GetAllFailedJobs(JobFilterModel filter)
+		{
+			var jobs = new List<Job>();
+			
+				var selectCommandText = @"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
+											FROM Stardust.Job WITH(NOLOCK) WHERE Result LIKE '%Failed%' ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to ";
+
+			if (filter.DataSource != null)
+				selectCommandText = selectCommandText + $@"AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
+
+			if (filter.Type != null)
+				selectCommandText = selectCommandText + $@"AND Type = 'Teleopti.Ccc.Domain.ApplicationLayer.Events.{filter.Type}' ";
+
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					getAllJobsCommand.Parameters.AddWithValue("@from", filter.From);
+					getAllJobsCommand.Parameters.AddWithValue("@to", filter.To);
+					using (var reader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (!reader.HasRows) return jobs;
+						while (reader.Read())
+						{
+							var job = createJobFromSqlDataReader(reader);
+							setTotalDuration(job);
+							jobs.Add(job);
+						}
+					}
+				}
+			}
+			return jobs;
+		}
+
 		public IList<Job> GetAllQueuedJobs(JobFilterModel filter)
 		{
 			var jobs = new List<Job>();
@@ -433,7 +468,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			return ids;
 		}
 
-		public object GetAllFailedJobs(int from, int to)
+		public IList<Job> GetAllFailedJobs(int from, int to)
 		{
 			var jobs = new List<Job>();
 

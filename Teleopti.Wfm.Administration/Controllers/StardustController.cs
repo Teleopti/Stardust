@@ -53,6 +53,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(_stardustRepository.GetAllFailedJobs(from, to));
 		}
 
+		[HttpGet, Route("Stardust/FailedJobs")]
+		public IHttpActionResult FailedJobHistoryFiltered(int from, int to, string dataSource = null, string type = null)
+		{
+			return Ok(_stardustRepository.GetAllFailedJobs(new JobFilterModel { DataSource = dataSource, Type = type, From = from, To = to }));
+		}
+
 		[HttpGet, Route("Stardust/JobsByNode/{nodeId}/{from}/{to}")]
 		public IHttpActionResult JobHistoryList(Guid nodeId, int from, int to)
 		{

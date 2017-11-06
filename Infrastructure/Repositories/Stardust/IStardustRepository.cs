@@ -6,7 +6,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 	public interface IStardustRepository
 	{
 		void DeleteQueuedJobs(Guid[] jobIds);
-		object GetAllFailedJobs(int from, int to);
+		IList<Job> GetAllFailedJobs(int from, int to);
+		IList<Job> GetAllFailedJobs(JobFilterModel filter);
 		IList<Job> GetAllJobs(int from, int to);
 		IList<Job> GetAllJobs(JobFilterModel filter);
 		List<Job> GetAllQueuedJobs(int from, int to);
