@@ -176,10 +176,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             PermissionState permissionState = PermissionState.None;
 
-            IEnumerable<IStudentAvailabilityDay> dataRestrictions =
-				(from r in schedulePart.PersistableScheduleDataCollection() where r is IStudentAvailabilityDay select (IStudentAvailabilityDay)r);
-
-            IStudentAvailabilityDay studentAvailabilityDay = dataRestrictions.FirstOrDefault();
+            var dataRestrictions = schedulePart.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>();
+            var studentAvailabilityDay = dataRestrictions.FirstOrDefault();
 
             if (studentAvailabilityDay != null
                 && studentAvailabilityDay.RestrictionCollection.Count > 0)

@@ -47,19 +47,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			_endTime = _startTime.Add(TimeSpan.FromTicks(workLengthTicks));
 		}
 
-		public IAgentOvertimeAvailabilityView View
-		{
-			get { return _view; }
-		}
+		public IAgentOvertimeAvailabilityView View => _view;
 
-		public IScheduleDay ScheduleDay
-		{
-			get { return _scheduleDay; }
-		}
+		public IScheduleDay ScheduleDay => _scheduleDay;
 
 		public void RunCommand(IExecutableCommand command)
 		{
-			if(command == null) throw new ArgumentNullException("command");
+			if(command == null) throw new ArgumentNullException(nameof(command));
 
 			command.Execute();
 		}
@@ -87,12 +81,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public IExecutableCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IOvertimeAvailabilityCreator dayCreator)
 		{
-			if(dayCreator == null) throw new ArgumentNullException("dayCreator");
+			if(dayCreator == null) throw new ArgumentNullException(nameof(dayCreator));
 
 			var overtimeAvailabilityday = _scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().FirstOrDefault();
-			bool startError;
-			bool endError;
-			var canCreate = dayCreator.CanCreate(startTime, endTime, out startError, out endError);
+			var canCreate = dayCreator.CanCreate(startTime, endTime, out var startError, out var endError);
 			
 			if (overtimeAvailabilityday != null && !canCreate && startError && endError)
 				return new AgentOvertimeAvailabilityRemoveCommand(_scheduleDay, _schedulingResultStateHolder.Schedules, _scheduleDayChangeCallback);
