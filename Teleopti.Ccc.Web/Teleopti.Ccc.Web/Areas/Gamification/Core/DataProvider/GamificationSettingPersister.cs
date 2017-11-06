@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 
 		public bool RemoveGamificationSetting(Guid id)
 		{
-			var gamificationSetting = _gamificationSettingRepository.Get(id);
+			var gamificationSetting = getGamificationSetting(id);
 			if (gamificationSetting == null) return false;
 
 			_gamificationSettingRepository.Remove(gamificationSetting);
@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationDescriptionViewModel PersistDescription(GamificationDescriptionViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.Description != input.Value) gamificationSetting.Description = input.Value;
 
 			return new GamificationDescriptionViewModel(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.Description};
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationThresholdEnabledViewModel PersistAnsweredCallsEnabled(GamificationThresholdEnabledViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AnsweredCallsBadgeEnabled != input.Value) gamificationSetting.AnsweredCallsBadgeEnabled = input.Value;
 
 			return new GamificationThresholdEnabledViewModel(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AnsweredCallsBadgeEnabled};
@@ -81,6 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAnsweredCallsThresholdViewModel PersistAnsweredCallsGoldThreshold(GamificationAnsweredCallsThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AnsweredCallsGoldThreshold != input.Value) gamificationSetting.AnsweredCallsGoldThreshold = input.Value;
 
 			return new GamificationAnsweredCallsThresholdViewModel(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AnsweredCallsGoldThreshold};
@@ -89,6 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAnsweredCallsThresholdViewModel PersistAnsweredCallsSilverThreshold(GamificationAnsweredCallsThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AnsweredCallsSilverThreshold != input.Value) gamificationSetting.AnsweredCallsSilverThreshold = input.Value;
 
 			return new GamificationAnsweredCallsThresholdViewModel(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AnsweredCallsSilverThreshold};
@@ -97,6 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAnsweredCallsThresholdViewModel PersistAnsweredCallsBronzeThreshold(GamificationAnsweredCallsThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AnsweredCallsBronzeThreshold != input.Value) gamificationSetting.AnsweredCallsBronzeThreshold = input.Value;
 
 			return new GamificationAnsweredCallsThresholdViewModel(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AnsweredCallsBronzeThreshold};
@@ -105,6 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAnsweredCallsThresholdViewModel PersistAnsweredCallsThreshold(GamificationAnsweredCallsThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AnsweredCallsThreshold != input.Value) gamificationSetting.AnsweredCallsThreshold = input.Value;
 
 			return new GamificationAnsweredCallsThresholdViewModel(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AnsweredCallsThreshold};
@@ -113,6 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationThresholdEnabledViewModel PersistAHTEnabled(GamificationThresholdEnabledViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AHTBadgeEnabled != input.Value) gamificationSetting.AHTBadgeEnabled = input.Value;
 
 			return new GamificationThresholdEnabledViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AHTBadgeEnabled };
@@ -121,6 +128,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAHTThresholdViewModel PersistAHTGoldThreshold(GamificationAHTThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AHTGoldThreshold != input.Value) gamificationSetting.AHTGoldThreshold = input.Value;
 
 			return new GamificationAHTThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AHTGoldThreshold };
@@ -129,6 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAHTThresholdViewModel PersistAHTSilverThreshold(GamificationAHTThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AHTSilverThreshold != input.Value) gamificationSetting.AHTSilverThreshold = input.Value;
 
 			return new GamificationAHTThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AHTSilverThreshold };
@@ -137,6 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAHTThresholdViewModel PersistAHTBronzeThreshold(GamificationAHTThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AHTBronzeThreshold != input.Value) gamificationSetting.AHTBronzeThreshold = input.Value;
 
 			return new GamificationAHTThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AHTBronzeThreshold };
@@ -145,6 +155,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAHTThresholdViewModel PersistAHTThreshold(GamificationAHTThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AHTThreshold != input.Value) gamificationSetting.AHTThreshold = input.Value;
 
 			return new GamificationAHTThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AHTThreshold };
@@ -153,6 +164,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationThresholdEnabledViewModel PersistAdherenceEnabled(GamificationThresholdEnabledViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AdherenceBadgeEnabled != input.Value) gamificationSetting.AdherenceBadgeEnabled = input.Value;
 
 			return new GamificationThresholdEnabledViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceBadgeEnabled };
@@ -161,6 +173,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAdherenceThresholdViewModel PersistAdherenceThreshold(GamificationAdherenceThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AdherenceThreshold != input.Value) gamificationSetting.AdherenceThreshold = input.Value;
 
 			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceThreshold };
@@ -169,6 +182,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAdherenceThresholdViewModel PersistAdherenceGoldThreshold(GamificationAdherenceThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AdherenceGoldThreshold != input.Value) gamificationSetting.AdherenceGoldThreshold = input.Value;
 
 			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceGoldThreshold };
@@ -177,6 +191,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAdherenceThresholdViewModel PersistAdherenceSilverThreshold(GamificationAdherenceThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AdherenceSilverThreshold != input.Value) gamificationSetting.AdherenceSilverThreshold = input.Value;
 
 			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceSilverThreshold };
@@ -185,6 +200,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationAdherenceThresholdViewModel PersistAdherenceBronzeThreshold(GamificationAdherenceThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.AdherenceBronzeThreshold != input.Value) gamificationSetting.AdherenceBronzeThreshold = input.Value;
 
 			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceBronzeThreshold};
@@ -192,7 +208,8 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 
 		public GamificationSettingViewModel PersistRuleChange(GamificationChangeRuleForm input)
 		{
-			var gamificationSetting = _gamificationSettingRepository.Load(input.GamificationSettingId);
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			gamificationSetting.GamificationSettingRuleSet = input.Rule;
 			return _mapper.Map(gamificationSetting);
 		}
@@ -200,6 +217,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationBadgeConversRateViewModel PersistGoldToSilverRate(GamificationBadgeConversRateViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.GoldToSilverBadgeRate != input.Rate) gamificationSetting.GoldToSilverBadgeRate = input.Rate;
 
 			return new GamificationBadgeConversRateViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Rate = gamificationSetting.GoldToSilverBadgeRate };
@@ -208,6 +226,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public GamificationBadgeConversRateViewModel PersistSilverToBronzeRate(GamificationBadgeConversRateViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
 			if (gamificationSetting.SilverToBronzeBadgeRate != input.Rate) gamificationSetting.SilverToBronzeBadgeRate = input.Rate;
 
 			return new GamificationBadgeConversRateViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Rate = gamificationSetting.SilverToBronzeBadgeRate };
@@ -215,7 +234,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 
 		private IGamificationSetting getGamificationSetting(Guid? id)
 		{
-			return id == null ? new GamificationSetting(Resources.NewGamificationSetting) : _gamificationSettingRepository.Load((Guid)id);
+			return id == null ? new GamificationSetting(Resources.NewGamificationSetting) : _gamificationSettingRepository.Get((Guid)id);
 		}
 	}
 }

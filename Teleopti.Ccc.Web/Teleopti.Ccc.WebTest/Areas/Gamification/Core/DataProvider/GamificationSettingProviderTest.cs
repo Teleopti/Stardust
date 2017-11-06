@@ -26,10 +26,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var mapper = new GamificationSettingMapper();
 
 			var target = new GamificationSettingProvider(gamificationSettingRepository, mapper);
-
 			var result = target.GetGamificationSetting(id);
 
 			result.Description.Name.Should().Be.EqualTo(expactedName);
+		}
+
+		[Test]
+		public void ShouldReturnNUllWhenCannotFindGamificationSetting()
+		{
+			var id = Guid.NewGuid();
+			var gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
+			gamificationSettingRepository.Stub(x => x.Load(id)).Return(null);
+			var mapper = new GamificationSettingMapper();
+
+			var target = new GamificationSettingProvider(gamificationSettingRepository, mapper);
+			var result = target.GetGamificationSetting(id);
+
+			result.Should().Be.Null();
 		}
 
 		[Test]

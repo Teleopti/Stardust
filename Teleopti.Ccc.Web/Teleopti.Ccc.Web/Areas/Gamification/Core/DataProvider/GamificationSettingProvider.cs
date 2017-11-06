@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 
 		public GamificationSettingViewModel GetGamificationSetting(Guid id)
 		{
-			var setting = _gamificationSettingRepository.Load(id);
-			return _mapper.Map(setting);
+			var setting = _gamificationSettingRepository.Get(id);
+			return setting == null ? null : _mapper.Map(setting);
 		}
 
 		public IList<GamificationDescriptionViewModel> GetGamificationList()

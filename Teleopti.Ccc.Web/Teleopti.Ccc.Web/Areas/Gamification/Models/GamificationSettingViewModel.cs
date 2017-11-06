@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
@@ -14,7 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public Description Description { get; set; }
 		public string UpdatedBy { get; set; }
 		public DateTime? UpdatedOn { get; set; }
-		public Guid BusinessUnit { get; set; }
 		public GamificationSettingRuleSet GamificationSettingRuleSet { get; set; }
 		public bool AnsweredCallsBadgeEnabled { get; set; }
 		public bool AHTBadgeEnabled { get; set; }
