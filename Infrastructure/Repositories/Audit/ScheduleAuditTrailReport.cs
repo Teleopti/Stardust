@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Criterion;
 using NHibernate.Envers;
 using NHibernate.Envers.Query;
 //using NHibernate.Envers;

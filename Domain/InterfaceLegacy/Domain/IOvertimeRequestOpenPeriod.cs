@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;

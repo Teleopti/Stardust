@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using Autofac;
-using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
+﻿using Autofac;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Wfm.Administration.Core.Stardust;

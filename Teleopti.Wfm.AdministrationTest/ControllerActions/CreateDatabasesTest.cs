@@ -2,7 +2,6 @@
 using System.Data.SqlClient;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;

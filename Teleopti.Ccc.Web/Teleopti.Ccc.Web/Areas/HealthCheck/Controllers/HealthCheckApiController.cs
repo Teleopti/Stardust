@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
 using System.ServiceProcess;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;

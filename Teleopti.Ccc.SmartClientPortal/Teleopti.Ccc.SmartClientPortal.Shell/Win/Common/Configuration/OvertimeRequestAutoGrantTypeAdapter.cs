@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {

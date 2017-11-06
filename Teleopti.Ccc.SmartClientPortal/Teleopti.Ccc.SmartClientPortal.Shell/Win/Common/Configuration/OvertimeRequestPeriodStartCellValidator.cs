@@ -1,9 +1,5 @@
-﻿using System.Globalization;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.WorkflowControl;
+﻿using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;

@@ -1,17 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Web.Http.Results;
+﻿using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.Stardust;
-using Teleopti.Wfm.Administration.Models.Stardust;
 using WorkerNode = Teleopti.Ccc.Infrastructure.Repositories.Stardust.WorkerNode;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions

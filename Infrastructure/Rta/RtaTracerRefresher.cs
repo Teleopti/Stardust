@@ -1,7 +1,6 @@
 using System;
 using Hangfire.Server;
 using log4net;
-using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
