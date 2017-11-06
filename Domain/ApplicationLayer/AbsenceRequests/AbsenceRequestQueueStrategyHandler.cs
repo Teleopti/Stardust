@@ -14,6 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
+	[RunInterval(5)]
 	public class AbsenceRequestQueueStrategyHandler : IHandleEvent<TenantMinuteTickEvent>, IRunOnHangfire
 	{
 		private readonly IAbsenceRequestStrategyProcessor _absenceRequestStrategyProcessor;
@@ -52,57 +53,61 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			const int windowSize = 2;
 			int absenceRequestBulkFrequencyMinutes;
 			IDictionary<Guid, int> reqWithVersion = new Dictionary<Guid, int>();
-			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				businessUnits = _businessUnitRepository.LoadAll();
 				var person = _personRepository.Get(SystemUser.Id);
 				_updatedByScope.OnThisThreadUse(person);
 				
 				absenceRequestBulkFrequencyMinutes = _requestStrategySettingsReader.GetIntSetting("AbsenceRequestBulkFrequencyMinutes", 10);
-				var bulkRequestTimeoutMinutes = _requestStrategySettingsReader.GetIntSetting("BulkRequestTimeoutMinutes", 60);
+				//var bulkRequestTimeoutMinutes = _requestStrategySettingsReader.GetIntSetting("BulkRequestTimeoutMinutes", 60);
 
-				_queuedAbsenceRequestRepository.CheckAndUpdateSent(bulkRequestTimeoutMinutes);
-				uow.PersistAll();
+				//_queuedAbsenceRequestRepository.CheckAndUpdateSent(bulkRequestTimeoutMinutes);
+				//uow.PersistAll();
 			}
 
 			businessUnits.ForEach(businessUnit =>
 			{
 			    using (_businessUnitScope.OnThisThreadUse(businessUnit))
 			    {
-			        using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			        var now = _now.UtcDateTime();
+			        var thresholdTime = now.AddMinutes(-absenceRequestBulkFrequencyMinutes);
+			        var pastThresholdTime = now;
+
+			        //include yesterday to deal with timezones
+			        var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)),
+			            new DateOnly(now.AddDays(windowSize)));
+				    var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(thresholdTime,  //same value for near and far - pbi #44752
+																						thresholdTime,
+																						pastThresholdTime, initialPeriod, windowSize);
+			        if (!listOfAbsenceRequests.Any()) return;
+
+			        listOfAbsenceRequests = _filterRequestsWithDifferentVersion.Filter(reqWithVersion, listOfAbsenceRequests);
+
+			        var sent = _now.UtcDateTime();
+
+					var multiAbsenceRequestsEvents = new List<NewMultiAbsenceRequestsCreatedEvent>();
+
+					listOfAbsenceRequests.ForEach(absenceRequests =>
 			        {
-			            var now = _now.UtcDateTime();
-			            var thresholdTime = now.AddMinutes(-absenceRequestBulkFrequencyMinutes);
-			            var pastThresholdTime = now;
-
-			            //include yesterday to deal with timezones
-			            var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)),
-			                new DateOnly(now.AddDays(windowSize)));
-				        var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(thresholdTime,  //same value for near and far - pbi #44752
-																						 thresholdTime,
-																						 pastThresholdTime, initialPeriod, windowSize);
-
-			            if (!listOfAbsenceRequests.Any()) return;
-
-			            listOfAbsenceRequests = _filterRequestsWithDifferentVersion.Filter(reqWithVersion, listOfAbsenceRequests);
-
-			            var sent = _now.UtcDateTime();
-			            listOfAbsenceRequests.ForEach(absenceRequests =>
-			            {
-			                var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent
-			                {
-								PersonRequestIds = absenceRequests.Select(x => x.PersonRequest).ToList(),
-								Sent = sent
-			                };
-			                _publisher.Publish(multiAbsenceRequestsEvent);
+						using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+						{
 							_queuedAbsenceRequestRepository.Send(absenceRequests.Select(x => x.Id.GetValueOrDefault()).ToList(), sent);
+							uow.PersistAll();
+						}
 
-							sent = sent.AddSeconds(1);
-			            });
+						var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent
+			            {
+							PersonRequestIds = absenceRequests.Select(x => x.PersonRequest).ToList(),
+							Sent = sent
+			            };
+						multiAbsenceRequestsEvents.Add(multiAbsenceRequestsEvent);
+						
+						sent = sent.AddSeconds(1);
+			        });
 
-			            uow.PersistAll();
-			        }
-			    }
+					multiAbsenceRequestsEvents.ForEach(multiAbsenceRequestsEvent => _publisher.Publish(multiAbsenceRequestsEvent));
+				}
 			});
 		}
 	}

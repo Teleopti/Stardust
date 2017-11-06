@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -20,19 +21,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepo;
 		private readonly DenyLongQueuedAbsenceRequests _denyLongQueuedAbsenceRequests;
 		private readonly IConfigReader _configReader;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly INow _now;
 
-		public AbsenceRequestStrategyProcessor(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepo, DenyLongQueuedAbsenceRequests denyLongQueuedAbsenceRequests, IConfigReader configReader)
+		public AbsenceRequestStrategyProcessor(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepo, 
+			DenyLongQueuedAbsenceRequests denyLongQueuedAbsenceRequests, 
+			IConfigReader configReader,
+			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
+			INow now)
 		{
 			_queuedAbsenceRequestRepo = queuedAbsenceRequestRepo;
 			_denyLongQueuedAbsenceRequests = denyLongQueuedAbsenceRequests;
 			_configReader = configReader;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_now = now;
 		}
 
 		public IList<IEnumerable<IQueuedAbsenceRequest>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime,
 											DateOnlyPeriod initialPeriod, int windowSize)
 		{
-			var maxDaysForAbsenceRequest = _configReader.ReadValue("MaximumDayLengthForAbsenceRequest", 60);
-			var allRequestsRaw = _queuedAbsenceRequestRepo.LoadAll();
+			int maxDaysForAbsenceRequest = 60;
+			IList<IQueuedAbsenceRequest> allRequestsRaw;
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{ 
+				maxDaysForAbsenceRequest = _configReader.ReadValue("MaximumDayLengthForAbsenceRequest", 60);
+				allRequestsRaw = _queuedAbsenceRequestRepo.LoadAll();	
+			}
+
 			var longRequests = new List<IQueuedAbsenceRequest>(); 
 			longRequests.AddRange(allRequestsRaw.Where(x => x.EndDateTime.Subtract(x.StartDateTime).TotalDays >= maxDaysForAbsenceRequest));
 			if (longRequests.Any())
@@ -40,12 +55,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				_denyLongQueuedAbsenceRequests.DenyAndRemoveLongRunningRequests(longRequests);
 				allRequestsRaw = allRequestsRaw.Except(longRequests).ToList();
 			}
-			
+
+			var timedOutRequestsTime = _now.UtcDateTime().AddMinutes(-60);
 			var allNewRequests = new List<IQueuedAbsenceRequest>();
-			allNewRequests.AddRange(allRequestsRaw.Where(x => x.EndDateTime.Subtract(x.StartDateTime).TotalDays < maxDaysForAbsenceRequest && x.Sent == null));
+			allNewRequests.AddRange(allRequestsRaw.Where(x => x.EndDateTime.Subtract(x.StartDateTime).TotalDays < maxDaysForAbsenceRequest && 
+				(x.Sent == null || x.Sent < timedOutRequestsTime)));
 
 			//filter out requests that is not in a period that is already beeing processed
-			var processingPeriods = getProcessingPeriods(allRequestsRaw.Where(x => x.Sent != null));
+			var processingPeriods = getProcessingPeriods(allRequestsRaw.Where(x => x.Sent != null && x.Sent >= timedOutRequestsTime));
 			var notConflictingRequests = getNotConflictingRequests(allNewRequests, processingPeriods);
 			if (!notConflictingRequests.Any()) return new List<IEnumerable<IQueuedAbsenceRequest>>();
 

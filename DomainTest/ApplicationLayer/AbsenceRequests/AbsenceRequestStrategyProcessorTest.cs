@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
 			_pastThreshold = _now;
 			_nearFutureThreshold = _now.AddMinutes(-10);
-			_farFutureThreshold = _now.AddMinutes(-20);
+			_farFutureThreshold = _now.AddMinutes(-10);
 			_initialPeriod = new DateOnlyPeriod(new DateOnly(_now.AddDays(-1)), new DateOnly(_now.AddDays(_windowSize)));
 			system.UseTestDouble<FilterRequestsWithDifferentVersion41930ToggleOff>().For<IFilterRequestsWithDifferentVersion>();
 		}
@@ -120,13 +120,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldFetchAllFarFutureIfOneIsOlderThan20Minutes()
+		public void ShouldFetchAllFarFutureIfOneIsOlderThan10Minutes()
 		{
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
 				StartDateTime = _now.AddDays(4),
 				EndDateTime = _now.AddDays(4).AddHours(1),
-				Created = _now.AddMinutes(-22),
+				Created = _now.AddMinutes(-12),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -454,7 +454,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			});
 
 			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			queuedAbsenceRequests.Count.Should().Be.EqualTo(0);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
