@@ -24539,6 +24539,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Previous shift on date {0} not match shift on date {1}.
+        /// </summary>
+        public static string PreviousShiftNotMatchShift {
+            get {
+                return ResourceManager.GetString("PreviousShiftNotMatchShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous shift on date {0} not match shift category {1}.
+        /// </summary>
+        public static string PreviousShiftNotMatchShiftCategory {
+            get {
+                return ResourceManager.GetString("PreviousShiftNotMatchShiftCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous shift on date {0} not match shift start time {1}.
+        /// </summary>
+        public static string PreviousShiftNotMatchStartTime {
+            get {
+                return ResourceManager.GetString("PreviousShiftNotMatchStartTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Primary.
         /// </summary>
         public static string Primary {

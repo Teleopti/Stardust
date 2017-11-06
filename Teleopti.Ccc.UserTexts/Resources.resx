@@ -16670,11 +16670,11 @@ Do you want to participate?</value>
     <value>Request was denied because all your skills are closed for the requested period</value>
     <comment>Message to agent when all person skills are closed, when agent asks for absence then the request should be denied</comment>
   </data>
-  <data name="OvertimeRequestDatePeriodError">
+  <data name="OvertimeRequestDatePeriodError" xml:space="preserve">
     <value>valid range of date is {0} - {1}</value>
     <comment>error message for invalid overtime request date,{0} is start date,{1} is end date</comment>
   </data>
-  <data name="OvertimeRequestRollingPeriodError">
+  <data name="OvertimeRequestRollingPeriodError" xml:space="preserve">
     <value>valid range is 0 - {0}</value>
     <comment>error message for invalid overtime request rolling period, {0} is maximum</comment>
   </data>
@@ -16695,5 +16695,17 @@ Do you want to participate?</value>
   <data name="OpenForOvertimeRequests" xml:space="preserve">
     <value>Open for overtime requests</value>
     <comment>Open for overtime requests</comment>
+  </data>
+  <data name="PreviousShiftNotMatchShift" xml:space="preserve">
+    <value>Previous shift on date {0} not match shift on date {1}</value>
+    <comment>Scheduleing validation message in web scheduling and client.</comment>
+  </data>
+  <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
+    <value>Previous shift on date {0} not match shift category {1}</value>
+    <comment>Scheduleing validation message in web scheduling and client.</comment>
+  </data>
+  <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
+    <value>Previous shift on date {0} not match shift start time {1}</value>
+    <comment>Scheduleing validation message in web scheduling and client.</comment>
   </data>
 </root>
