@@ -12,7 +12,8 @@
 				selectedTimezone: '<',
 				selectedSortOption: '<',
 				showWarnings: '=?',				
-				paginationOptions: '<?'
+				paginationOptions: '<?',
+				tableStyle: '='
 			},
 			restrict: 'E',
 			controllerAs: 'vm',

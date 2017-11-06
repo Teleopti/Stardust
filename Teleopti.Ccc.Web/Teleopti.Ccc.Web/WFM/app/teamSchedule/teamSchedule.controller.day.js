@@ -65,12 +65,14 @@
 			var container = document.querySelector('#materialcontainer');
 			var viewHeader = document.querySelector('.view-header');
 			var header = document.querySelector('.team-schedule .teamschedule-header');
+			var tHeader = document.querySelector('.teamschedule-body .big-table-wrapper table thead')
 			var footer = document.querySelector('.teamschedule-footer');
 
-			var defaultHeight = container.offsetHeight - 62 - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
-
+			var defaultHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
+			var defaultTableBodyHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - tHeader.offsetHeight - footer.offsetHeight;
 			var size = storageSize || {
 				tableHeight: defaultHeight * 0.64,
+				tableBodyHeight: defaultTableBodyHeight * 0.62,
 				chartHeight: defaultHeight * 0.3
 			};
 			
@@ -79,10 +81,15 @@
 					'height': size.tableHeight + 'px',
 					'min-height':'initial'
 				};
+				vm.scheduleTableBodyStyle = {
+					'max-height': size.tableBodyHeight + 'px',
+					'min-height':'initial'
+				};
 				vm.chartHeight = size.chartHeight;
 			}
 			else {
 				vm.scheduleTableWrapperStyle = {'height': defaultHeight + 'px'};
+				vm.scheduleTableBodyStyle = {'max-height': defaultTableBodyHeight + 'px'};
 			}
 		};
 
@@ -152,22 +159,28 @@
 			var container = document.querySelector('#materialcontainer');
 			var viewHeader = document.querySelector('.view-header');
 			var header = document.querySelector('.team-schedule .teamschedule-header');
+			var tHeader = document.querySelector('.teamschedule-body .big-table-wrapper table thead');
 			var footer = document.querySelector('.teamschedule-footer');
 			var tableHeight = d.height - footer.offsetHeight;
-			var chartHeight = container.offsetHeight - 62 - viewHeader.offsetHeight - header.offsetHeight - d.height - 50;
+			var tBodyHeight = tableHeight - tHeader.offsetHeight;
+			var chartHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - d.height - 50;
 			if (tableHeight <= 100) {
-				SizeStorageService.setSize(100, chartHeight);
+				SizeStorageService.setSize(100, 100-tHeader.offsetHeight, chartHeight);
 				return;
 			}
 			if (chartHeight <= 100) {
-				SizeStorageService.setSize(tableHeight, 100);
+				SizeStorageService.setSize(tableHeight, tBodyHeight, 100);
 				return;
 			}
-			SizeStorageService.setSize(tableHeight, chartHeight);
+			SizeStorageService.setSize(tableHeight,tBodyHeight, chartHeight);
 			vm.scheduleTableWrapperStyle = {
 				'height': tableHeight + 'px',
 				'min-height':'initial'
 			};
+			vm.scheduleTableBodyStyle = {
+				'max-height': tBodyHeight + 'px',
+				'min-height':'initial'
+			}
 			vm.chartHeight = chartHeight;
 
 		});

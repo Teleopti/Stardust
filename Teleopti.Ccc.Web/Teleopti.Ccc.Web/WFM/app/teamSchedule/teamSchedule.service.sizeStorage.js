@@ -9,8 +9,8 @@
 		this.setSize = setSize;
 		this.getSize = getSize;
 		
-		function setSize(tableHeight, chartHeight){
-			localStorage.setItem(key, JSON.stringify({tableHeight: tableHeight, chartHeight: chartHeight}));
+		function setSize(tableHeight, tableBodyHeight, chartHeight){
+			localStorage.setItem(key, JSON.stringify({tableHeight: tableHeight, tableBodyHeight:tableBodyHeight, chartHeight: chartHeight}));
 		}
 		
 		function getSize(){

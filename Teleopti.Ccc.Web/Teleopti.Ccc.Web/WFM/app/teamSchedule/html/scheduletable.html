@@ -22,7 +22,7 @@
 			<th class="contract-time-header contract-time-column">{{'ContractTime' | translate}}</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody ng-style="vm.tableStyle">
 		<tr ng-repeat="personSchedule in vm.scheduleVm.Schedules" ng-click="vm.togglePerson(personSchedule, $event)">
 			<td class="person-name-column">
 				<div class="wfm-checkbox" ng-show="::vm.selectMode">
