@@ -118,5 +118,10 @@ namespace Teleopti.Wfm.AdministrationTest
 		{
 			throw new NotImplementedException();
 		}
+
+		public List<string> GetAllTypesInQueue()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

@@ -20,5 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		List<Guid> SelectAllTenants();
 		WorkerNode WorkerNode(Guid nodeId);
 		List<string> GetAllTypes();
+		List<string> GetAllTypesInQueue();
 	}
 }

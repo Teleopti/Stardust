@@ -37,8 +37,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void JobQueueShouldFilterOnDataSource()
 		{
 			const string testTenant = "test Tenant";
-			var testEvent = new TestEvent1{LogOnDatasource = testTenant };
-			var testEventOtherTenant = new TestEvent1{LogOnDatasource = "Another tenant" };
+			var testEvent = new UpdateStaffingLevelReadModelEvent{LogOnDatasource = testTenant};
+			var testEventOtherTenant = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = "Another tenant" };
 
 			var job1 = new Job
 			{
@@ -63,8 +63,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void JobShouldFilterOnDataSource()
 		{
 			const string testTenant = "test Tenant";
-			var testEvent = new TestEvent1 { LogOnDatasource = testTenant };
-			var testEventOtherTenant = new TestEvent1 { LogOnDatasource = "Another tenant" };
+			var testEvent = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = testTenant };
+			var testEventOtherTenant = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = "Another tenant" };
 
 			var job1 = new Job
 			{
@@ -80,8 +80,61 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				Serialized = JsonConvert.SerializeObject(testEventOtherTenant),
 				Type = "Type"
 			});
-			var what = Target.JobHistoryFiltered(1, 50, testTenant);
-			var response = what as OkNegotiatedContentResult<IList<Job>>;
+			var response = Target.JobHistoryFiltered(1, 50, testTenant) as OkNegotiatedContentResult<IList<Job>>;
+			response.Content.Count.Should().Be.EqualTo(1);
+			response.Content.FirstOrDefault().JobId.Should().Be.EqualTo(job1.JobId);
+		}
+
+		[Test]
+		public void JobShouldFilterOnType()
+		{
+			var testEvent = new UpdateStaffingLevelReadModelEvent();
+			var anotherEvent = new ExportMultisiteSkillsToSkillEvent(); 
+
+			var job1 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = testEvent.GetType().ToString()
+			};
+			var job2 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(anotherEvent),
+				Type = anotherEvent.GetType().ToString()
+			};
+
+			StardustRepositoryTestHelper.AddJob(job1);
+			StardustRepositoryTestHelper.AddJob(job2);
+
+			var response = Target.JobHistoryFiltered(1, 50, null, "UpdateStaffingLevelReadModelEvent") as OkNegotiatedContentResult<IList<Job>>;
+			response.Content.Count.Should().Be.EqualTo(1);
+			response.Content.FirstOrDefault().JobId.Should().Be.EqualTo(job1.JobId);
+		}
+
+		[Test]
+		public void JobQueueShouldFilterOnType()
+		{
+			var testEvent = new UpdateStaffingLevelReadModelEvent();
+			var anotherEvent = new ExportMultisiteSkillsToSkillEvent();
+
+			var job1 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = testEvent.GetType().ToString()
+			};
+			var job2 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(anotherEvent),
+				Type = anotherEvent.GetType().ToString()
+			};
+
+			StardustRepositoryTestHelper.AddJobToQueue(job1);
+			StardustRepositoryTestHelper.AddJobToQueue(job2);
+
+			var response = Target.JobQueueFiltered(1, 50, null, "UpdateStaffingLevelReadModelEvent") as OkNegotiatedContentResult<IList<Job>>;
 			response.Content.Count.Should().Be.EqualTo(1);
 			response.Content.FirstOrDefault().JobId.Should().Be.EqualTo(job1.JobId);
 		}
@@ -150,12 +203,5 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			Target.FailedJobHistoryList(1, 10);
 		}
 	}
-
-	public class TestEvent1 : StardustJobInfo
-	{
-	}
-
-	public class TestEvent2 : StardustJobInfo
-	{
-	}
 }
+ 

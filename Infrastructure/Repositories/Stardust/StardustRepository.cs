@@ -110,6 +110,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			return types;
 		}
 
+		public List<string> GetAllTypesInQueue()
+		{
+			const string selectCommandText = "SELECT DISTINCT Type FROM Stardust.JobQueue WITH(NOLOCK)";
+			var types = new List<string>();
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				using (var selectTypesCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var sqlDataReader = selectTypesCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (!sqlDataReader.HasRows) return types;
+						while (sqlDataReader.Read())
+						{
+							types.Add(sqlDataReader.GetString(0).Substring(44));
+						}
+					}
+				}
+			}
+			return types;
+		}
+
 		public IList<Job> GetAllJobs(JobFilterModel filter)
 		{
 			var jobs = new List<Job>();
