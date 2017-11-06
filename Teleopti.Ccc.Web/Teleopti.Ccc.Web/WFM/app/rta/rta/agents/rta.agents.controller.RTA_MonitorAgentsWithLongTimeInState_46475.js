@@ -101,7 +101,7 @@
 		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
 
 		vm.orderBy = 'Name';
-		var direction = 'asc';
+		vm.direction = 'asc';
 
 		var toggles = {};
 		Toggle.togglesLoaded.then(function () {
@@ -235,7 +235,7 @@
 				}),
 				textFilter: vm.filterText,
 				orderBy: vm.orderBy,
-				direction: direction
+				direction: vm.direction
 			});
 		}
 
@@ -340,11 +340,11 @@
 		function resetSortingParams(inAlarm) {
 			if (inAlarm) {
 				vm.orderBy = null;
-				direction = null;
+				vm.direction = null;
 			}
 			else {
 				vm.orderBy = "Name";
-				direction = "asc";
+				vm.direction = "asc";
 			}
 		}
 
@@ -431,9 +431,9 @@
 
 		vm.sort = function (column) {
 			if (vm.orderBy != column) 
-				direction = 'asc';
+				vm.direction = 'asc';
 			else 
-				direction = direction === 'asc' ? 'desc' : 'asc';
+				vm.direction = vm.direction === 'asc' ? 'desc' : 'asc';
 			
 			vm.orderBy = column;
 			poller.force();

@@ -51,7 +51,7 @@
 				cellHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div role="columnheader">'
 					+ '<div ng-click="grid.appScope.vm.sort(col.colDef.field)" role="button" tabindex="0" class="ui-grid-cell-contents ui-grid-header-cell-primary-focus" col-index="renderIndex" title="TOOLTIP" style="width: 84%">'
 					+ '<span class="ui-grid-header-cell-label" ui-grid-one-bind-id-grid="col.uid + \'-header-text\'">{{ col.colDef.displayName }}</span>'
-					+ '<i ng-show ="col.colDef.showArrow == grid.appScope.vm.showArrow" ng-class="{\'ui-grid-icon-up-dir\': grid.appScope.vm.direction === \'asc\', \'ui-grid-icon-down-dir\': grid.appScope.vm.direction === \'desc\'}" aria-hidden="false"></i>'
+					+ '<i ng-show ="col.colDef.field == grid.appScope.vm.orderBy" ng-class="{\'ui-grid-icon-up-dir\': grid.appScope.vm.direction === \'asc\', \'ui-grid-icon-down-dir\': grid.appScope.vm.direction === \'desc\'}" aria-hidden="false"></i>'
 					+ '<div role="button" tabindex="0" ui-grid-one-bind-id-grid="col.uid + \'-menu-button\'" class="ui-grid-column-menu-button" ng-if="grid.options.enableColumnMenus && !col.isRowHeader  && col.colDef.enableColumnMenu !== false"'
 					+ 'ng-click="toggleMenu($event)" ng-class=" {\'ui-grid-column-menu-button-last-col\': isLastCol}" ui-grid-one-bind-aria-label="i18n.headerCell.aria.columnMenuButtonLabel" aria-haspopup="true">'
 					+ '<i class="ui-grid-icon-angle-down" aria-hidden="true">&nbsp;</i></div><div ui-grid-filter></div></div></div>';

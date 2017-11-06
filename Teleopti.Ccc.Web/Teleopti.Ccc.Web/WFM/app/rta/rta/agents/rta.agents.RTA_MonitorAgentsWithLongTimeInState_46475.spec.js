@@ -310,5 +310,29 @@ describe('RtaAgentsController46475', function() {
 		expect(vm.agentStates[0].Name).toEqual("Ashley Andeen");
 		expect(vm.agentStates[1].Name).toEqual("Charley Caper");
 	});
-	
+
+	it('should switch direction', function() {
+		$fakeBackend
+			.withAgentState({
+				Name: "Ashley Andeen",
+				State: "Ready"
+			})
+			.withAgentState({
+				Name: "Charley Caper",
+				State: "InCall"
+			});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(vm.showInAlarm = false);
+		c.apply(function() {
+			vm.sort("State");
+		});
+		c.apply(function() {
+			vm.sort("State");
+		});
+
+		expect(vm.direction).toEqual('desc');
+	});
+
 });
