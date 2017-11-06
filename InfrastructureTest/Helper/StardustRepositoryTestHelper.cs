@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 
-namespace Teleopti.Wfm.AdministrationTest.ControllerActions
+namespace Teleopti.Ccc.InfrastructureTest.Helper
 {
 	public static class StardustRepositoryTestHelper
 	{
