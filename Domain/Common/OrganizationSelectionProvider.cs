@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Common
 			_siteRepository = siteRepository;
 		}
 		
-		public OrganizationModel Provide(bool provideDynamicOptions)
+		public OrganizationModel Provide()
 		{
 			IBusinessUnit businessUnit = _currentBusinessUnit.Current();
 			var ret = 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Common
 									})
 							.ToArray()
 					},
-					DynamicOptions = provideDynamicOptions? GetDynamicOptions() : new DynamicOptions[0]
+					DynamicOptions = GetDynamicOptions()
 
 				};
 			return ret;

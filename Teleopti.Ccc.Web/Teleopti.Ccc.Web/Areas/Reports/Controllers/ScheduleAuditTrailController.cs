@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.Global.Models;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 		[UnitOfWork, HttpGet, Route("api/Reports/OrganizationSelectionAuditTrail")]
 		public virtual object OrganizationSelectionAuditTrail()
 		{
-			return _organizationSelectionProvider.Provide(false);
+			return _organizationSelectionProvider.Provide();
 		}
 	}
 }

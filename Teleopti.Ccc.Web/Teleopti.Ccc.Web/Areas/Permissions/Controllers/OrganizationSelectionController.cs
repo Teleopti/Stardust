@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		[UnitOfWork, HttpGet, Route("api/Permissions/OrganizationSelection")]
 		public virtual object GetOrganizationSelection()
 		{
-			return _organizationSelectionProvider.Provide(true);
+			return _organizationSelectionProvider.Provide();
 		}
 	}
 }

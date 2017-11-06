@@ -29,26 +29,17 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldReturnDynamicOptions()
 		{
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
-			var result = Target.Provide(true);
+			var result = Target.Provide();
 			result.DynamicOptions.Length.Should()
 				.Be.EqualTo(Enum.GetNames(typeof(AvailableDataRangeOption)).Length);
 		}
-
-		[Test]
-		public void ShouldNotReturnDynamicOptions()
-		{
-			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
-			var result = Target.Provide(false);
-			result.DynamicOptions.Length.Should()
-				.Be.EqualTo(0);
-		}
-
+		
 		[Test]
 		public void ShouldReturnOrganizationStructureForCurrentBusinessUnit()
 		{
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
 			SiteRepository.Add(SiteFactory.CreateSiteWithOneTeam("Team 1"));
-			var result = Target.Provide(false);
+			var result = Target.Provide();
 			((Guid)result.BusinessUnit.Id).Should().Be.EqualTo(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
 			result.BusinessUnit.ChildNodes.Length.Should().Be.EqualTo(1);
 			result.BusinessUnit.ChildNodes.First().ChildNodes.Length.Should().Be.EqualTo(1);
@@ -62,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			((IDeleteTag)siteWithOneTeam.TeamCollection[0]).SetDeleted();
 			SiteRepository.Add(siteWithOneTeam);
-			var result = Target.Provide(false);
+			var result = Target.Provide();
 			result.BusinessUnit.ChildNodes.First().ChildNodes.Length.Should().Be.EqualTo(0);
 		}
 	}
