@@ -129,11 +129,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[Given(@"I name the Skill Group '(.*)'")]
+		[When(@"I name the Skill Group '(.*)'")]
 		public void GivenINameTheSkillGroup(string skillGroupName)
 		{
 			Browser.Interactions.FillWith("#skillGroupNameBox", skillGroupName);
 		}
 
+		[Given(@"I select the Skill Group '(.*)'")]
+		public void GivenISelectTheSkillGroup(string skillGroupName)
+		{
+			Browser.Interactions.ClickContaining("#available_skill_groups_list", skillGroupName);
+		}
 
 		[Given(@"I select to manage Skill Groups")]
 		public void GivenISelectToManageSkillGroups()
@@ -180,8 +186,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click(".skill-area-save");
 		}
 
-		[When(@"I am done managing Skill Groups")]
-		public void WhenIAmDoneManagingSkillGroups()
+		[When(@"I save the Skill Groups")]
+		[Given(@"I save the Skill Groups")]
+		public void WhenISaveTheSkillGroups()
 		{
 			Browser.Interactions.Click("#save_all");
 		}
