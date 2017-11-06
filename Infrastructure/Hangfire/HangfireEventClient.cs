@@ -39,9 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public void AddOrUpdateMinutely(HangfireEventJob job)
 		{
 			Expression<Action<HangfireEventServer>> f = x => x.Process(job.DisplayName, job);
-			if (job.RunInterval < 1)
-				job.RunInterval = 1;
-			_recurringJob.Value.AddOrUpdate(job.RecurringId(), Job.FromExpression(f), Cron.MinuteInterval(job.RunInterval));
+			_recurringJob.Value.AddOrUpdate(job.RecurringId(), Job.FromExpression(f), job.RunInterval <= 1 ? Cron.Minutely() : Cron.MinuteInterval(job.RunInterval));
 		}
 
 		public void AddOrUpdateDaily(HangfireEventJob job)
