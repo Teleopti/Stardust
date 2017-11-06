@@ -8,7 +8,7 @@ describe('Iframe azure', function() {
 	
 	it('should be able to iframe asmwidget', function () {
 		browser.deleteCookie();
-		browser.url('http://tritonweb/iframeAzureTest.html');
+		browser.url('http://tcbuildmonitor:8000/iframeAzureTest.html');
 		browser.waitForExist('iframe');
 		var my_frame = browser.element('iframe').value;
 		browser.frame(my_frame);
