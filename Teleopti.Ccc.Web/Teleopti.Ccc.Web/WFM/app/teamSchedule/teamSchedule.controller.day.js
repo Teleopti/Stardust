@@ -65,11 +65,12 @@
 			var container = document.querySelector('#materialcontainer');
 			var viewHeader = document.querySelector('.view-header');
 			var header = document.querySelector('.team-schedule .teamschedule-header');
-			var tHeader = document.querySelector('.teamschedule-body .big-table-wrapper table thead')
+			var tHeader = document.querySelector('.teamschedule-body .big-table-wrapper table thead');
 			var footer = document.querySelector('.teamschedule-footer');
+			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 
 			var defaultHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
-			var defaultTableBodyHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - tHeader.offsetHeight - footer.offsetHeight;
+			var defaultTableBodyHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - tHeaderHeight - footer.offsetHeight;
 			var size = storageSize || {
 				tableHeight: defaultHeight * 0.64,
 				tableBodyHeight: defaultTableBodyHeight * 0.62,
@@ -161,11 +162,12 @@
 			var header = document.querySelector('.team-schedule .teamschedule-header');
 			var tHeader = document.querySelector('.teamschedule-body .big-table-wrapper table thead');
 			var footer = document.querySelector('.teamschedule-footer');
+			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 			var tableHeight = d.height - footer.offsetHeight;
-			var tBodyHeight = tableHeight - tHeader.offsetHeight;
+			var tBodyHeight = tableHeight - tHeaderHeight;
 			var chartHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - d.height - 50;
 			if (tableHeight <= 100) {
-				SizeStorageService.setSize(100, 100-tHeader.offsetHeight, chartHeight);
+				SizeStorageService.setSize(100, 100 - tHeaderHeight, chartHeight);
 				return;
 			}
 			if (chartHeight <= 100) {
