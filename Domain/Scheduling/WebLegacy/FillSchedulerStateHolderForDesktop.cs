@@ -80,18 +80,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				foreach (var agent in agents)
 				{
 					var fromScheduleDaysAgent = fromDic[agent].ScheduledDayCollection(period);
-					foreach (var fromScheduleDay in fromScheduleDaysAgent)
+					toScheduleDays.AddRange(fromScheduleDaysAgent.Select(fromScheduleDay =>
 					{
-						var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly, true);
-						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAssignment>().ForEach(x => toScheduleDay.Add(x));
-						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
-						fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
-						fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
-						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
-						fromScheduleDay.PersistableScheduleDataCollection().OfType<IAgentDayScheduleTag>().ForEach(x => toScheduleDay.Add(x));
-						fromScheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().ForEach(x => toScheduleDay.Add(x));
-						toScheduleDays.Add(toScheduleDay);
-					}
+						var range = (ScheduleRange)toDic[agent];
+						var toScheduleDay = range.ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly, true);
+						var persistableScheduleDataCollection = fromScheduleDay.PersistableScheduleDataCollection();
+						persistableScheduleDataCollection.OfType<IPersonAssignment>().ForEach(x => toScheduleDay.Add(x));
+						persistableScheduleDataCollection.OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
+						fromScheduleDay.PersonMeetingCollection().ForEach(x => range.Add(x));
+						fromScheduleDay.PersonRestrictionCollection().ForEach(x => range.Add(x));
+						persistableScheduleDataCollection.OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
+						persistableScheduleDataCollection.OfType<IAgentDayScheduleTag>().ForEach(x => toScheduleDay.Add(x));
+						persistableScheduleDataCollection.OfType<IStudentAvailabilityDay>().ForEach(x => toScheduleDay.Add(x));
+						return toScheduleDay;
+					}));
 				}
 				//Maybe this should be done per agent instead? So far, testing has shown that fastest is to this with as many schedule days as possible though
 				//Could it cause OOM ex in REALLY big dbs?
