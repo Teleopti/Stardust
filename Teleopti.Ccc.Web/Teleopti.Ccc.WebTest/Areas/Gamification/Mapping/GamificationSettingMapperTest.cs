@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 using Teleopti.Interfaces.Domain;
@@ -14,12 +16,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 	[TestFixture]
 	public class GamificationSettingMapperTest
 	{
+		private IStatisticRepository statisticRepository;
 		private GamificationSettingMapper mapper;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mapper = new GamificationSettingMapper();
+			statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			statisticRepository.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>());
+			mapper = new GamificationSettingMapper(statisticRepository);
 		}
 
 		[Test]
@@ -29,7 +34,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 
 			var vm = mapper.Map(rawSetting);
 			checkRawSettingAndVm(rawSetting, vm);
-			Assert.IsNull(vm.ExternalBadgeSettings);
+			Assert.IsNotNull(vm.ExternalBadgeSettings);
+			Assert.IsFalse(vm.ExternalBadgeSettings.Any());
 		}
 
 		[Test]
@@ -39,7 +45,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 			rawSetting.ExternalBadgeSettings = new List<IExternalBadgeSetting>(); 
 
 			var vm = mapper.Map(rawSetting);
-			Assert.IsNull(vm.ExternalBadgeSettings);
+			Assert.IsNotNull(vm.ExternalBadgeSettings);
+			Assert.IsFalse(vm.ExternalBadgeSettings.Any());
 		}
 
 		[Test]
@@ -80,6 +87,80 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 
 			checkRawBadgeSettingAndVm(externalBadgeSetting1, vm.ExternalBadgeSettings.First());
 			checkRawBadgeSettingAndVm(externalBadgeSetting2, vm.ExternalBadgeSettings.Second());
+		}
+
+		[Test]
+		public void ShouldMapNewQualityInfoIntoExternalBadgeSettings()
+		{
+			var rawSetting = createRawGamificationSetting();
+			var externalBadgeSetting1 = new ExternalBadgeSetting()
+			{
+				Name = "ExternalBadge 1",
+				QualityId = 5,
+				LargerIsBetter = true,
+				Enabled = true,
+				Threshold = 100,
+				BronzeThreshold = 100,
+				SilverThreshold = 125,
+				GoldThreshold = 150,
+				UnitType = BadgeUnitType.Timespan
+			};
+			var externalBadgeSetting2 = new ExternalBadgeSetting()
+			{
+				Name = "ExternalBadge 2",
+				QualityId = 8,
+				LargerIsBetter = false,
+				Enabled = false,
+				Threshold = 90,
+				BronzeThreshold = 90,
+				SilverThreshold = 75,
+				GoldThreshold = 50,
+				UnitType = BadgeUnitType.Percentage
+			};
+			var externalBadgeSettings = new List<IExternalBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};
+			rawSetting.ExternalBadgeSettings = externalBadgeSettings;
+
+			var alreadySetQualityInfo = new QualityInfo
+			{
+				QualityId = 8,
+				QualityName = "Exist Quality Info",
+				QualityType = "PERCENT",
+				ScoreWeight = 1
+			};
+			var newQualityInfo = new QualityInfo
+			{
+				QualityId = 9,
+				QualityName = "New Quality Info",
+				QualityType = "GRADE",
+				ScoreWeight = 1
+			};
+
+			var statisticRepositoryWithQualityInfo = MockRepository.GenerateMock<IStatisticRepository>();
+			statisticRepositoryWithQualityInfo.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>
+			{
+				alreadySetQualityInfo,
+				newQualityInfo
+			});
+			var targetMapper = new GamificationSettingMapper(statisticRepositoryWithQualityInfo);
+			var vm = targetMapper.Map(rawSetting);
+
+			checkRawSettingAndVm(rawSetting, vm);
+			Assert.AreEqual(externalBadgeSettings.Count + 1, vm.ExternalBadgeSettings.Count);
+
+			checkRawBadgeSettingAndVm(externalBadgeSetting1, vm.ExternalBadgeSettings.First());
+			checkRawBadgeSettingAndVm(externalBadgeSetting2, vm.ExternalBadgeSettings.Second());
+			checkRawBadgeSettingAndVm(new ExternalBadgeSetting
+			{
+				Name = "New Quality Info",
+				QualityId = 9,
+				LargerIsBetter = true,
+				Enabled = false,
+				Threshold = 0,
+				BronzeThreshold = 0,
+				SilverThreshold = 0,
+				GoldThreshold = 0,
+				UnitType = BadgeUnitType.Count
+			}, vm.ExternalBadgeSettings.ElementAt(2));
 		}
 
 		private GamificationSetting createRawGamificationSetting()

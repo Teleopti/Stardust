@@ -397,14 +397,11 @@
     <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingProvider.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\IGamificationSettingPersister.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\IGamificationSettingProvider.cs" />
-    <Compile Include="Areas\Gamification\Core\DataProvider\IQualityInfoProvider.cs" />
-    <Compile Include="Areas\Gamification\Core\DataProvider\QualityInfoProvider.cs" />
     <Compile Include="Areas\Gamification\Core\IoC\GamificationAreaModel.cs" />
     <Compile Include="Areas\Gamification\Mapping\GamificationSettingMapper.cs" />
     <Compile Include="Areas\Gamification\Models\ExternalBadgeSettingViewModel.cs" />
     <Compile Include="Areas\Gamification\Models\GamificationSettingViewModel.cs" />
     <Compile Include="Areas\Gamification\Mapping\IGamificationsettingMapper.cs" />
-    <Compile Include="Areas\Gamification\Models\QualityInfoViewModel.cs" />
     <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
     <Compile Include="Areas\Global\Models\GroupPagesViewModel.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />

@@ -148,14 +148,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.AddScalar("score_weight", NHibernateUtil.Double)
 					.SetReadOnly(true)
 					.List<object[]>()
-					.Select(x =>
-						new QualityInfo
-						{
-							QualityId = (int) x[0],
-							QualityName = (string) x[1],
-							QualityType = (string) x[2],
-							ScoreWeight = (double) x[3]
-						});
+					.Select(x => new QualityInfo
+					{
+						QualityId = (int) x[0],
+						QualityName = (string) x[1],
+						QualityType = (string) x[2],
+						ScoreWeight = (double) x[3]
+					});
 			});
 		}
 

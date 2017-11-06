@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -30,7 +31,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			_gamificationSetting.WithId();
 			_gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
 			_gamificationSettingRepository.Stub(x => x.Get(_gamificationSetting.Id.Value)).Return(_gamificationSetting);
-			_mapper = new GamificationSettingMapper();
+
+			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			statisticRepository.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>());
+			_mapper = new GamificationSettingMapper(statisticRepository);
+
 			_FakegamificationSettingRepository = new FakeGamificationSettingRepository();
 		}
 

@@ -19,16 +19,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		public void ShouldGetGamificationSetting()
 		{
 			var id = Guid.NewGuid();
-			var expactedName = "Default";
-			var gamificationSetting = new GamificationSetting(expactedName);
+			const string expectedName = "Default";
+			var gamificationSetting = new GamificationSetting(expectedName);
 			var gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
 			gamificationSettingRepository.Stub(x => x.Get(id)).Return(gamificationSetting);
-			var mapper = new GamificationSettingMapper();
+
+			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			statisticRepository.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>());
+			var mapper = new GamificationSettingMapper(statisticRepository);
 
 			var target = new GamificationSettingProvider(gamificationSettingRepository, mapper);
 			var result = target.GetGamificationSetting(id);
 
-			result.Description.Name.Should().Be.EqualTo(expactedName);
+			result.Description.Name.Should().Be.EqualTo(expectedName);
 		}
 
 		[Test]
@@ -37,7 +40,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var id = Guid.NewGuid();
 			var gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
 			gamificationSettingRepository.Stub(x => x.Get(id)).Return(null);
-			var mapper = new GamificationSettingMapper();
+
+			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			statisticRepository.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>());
+			var mapper = new GamificationSettingMapper(statisticRepository);
 
 			var target = new GamificationSettingProvider(gamificationSettingRepository, mapper);
 			var result = target.GetGamificationSetting(id);
@@ -55,7 +61,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var gamificationSettings = new List<IGamificationSetting>() { gs1, gs2};
 			var gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
 			gamificationSettingRepository.Stub(x => x.LoadAll()).Return(gamificationSettings);
-			var mapper = new GamificationSettingMapper();
+
+			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			statisticRepository.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>());
+			var mapper = new GamificationSettingMapper(statisticRepository);
 
 			var target = new GamificationSettingProvider(gamificationSettingRepository, mapper);
 			var result = target.GetGamificationList();

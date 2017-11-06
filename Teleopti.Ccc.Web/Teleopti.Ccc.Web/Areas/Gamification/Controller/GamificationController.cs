@@ -2,29 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage)]
 	public class GamificationController : ApiController
 	{
 		private readonly IGamificationSettingPersister _gamificationSettingPersister;
 		private readonly IGamificationSettingProvider _gamificationSettingProvider;
-		private readonly IQualityInfoProvider _quatiliInfoProvider;
 
 		public GamificationController(IGamificationSettingPersister gamificationSettingPersister,
-			IGamificationSettingProvider gamificationSettingProvider, IQualityInfoProvider quatiliInfoProvider)
+			IGamificationSettingProvider gamificationSettingProvider)
 		{
 			_gamificationSettingPersister = gamificationSettingPersister;
 			_gamificationSettingProvider = gamificationSettingProvider;
-			_quatiliInfoProvider = quatiliInfoProvider;
-		}
-
-		[HttpGet, Route("api/Gamification/AllQualityInfo"), UnitOfWork]
-		public virtual IEnumerable<QualityInfoViewModel> LoadAllQualityInfo()
-		{
-			return _quatiliInfoProvider.GetAllQualityInfo();
 		}
 
 		[HttpPost, Route("api/Gamification/Create"), UnitOfWork]
