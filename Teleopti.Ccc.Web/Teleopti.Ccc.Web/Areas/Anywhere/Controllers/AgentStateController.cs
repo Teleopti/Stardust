@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			public IEnumerable<Guid?> ExcludedStateIds { get; set; } // filter
 			public string TextFilter { get; set; }
 			public bool InAlarm { get; set; } // filter
-			public IEnumerable<string> OrderBy { get; set; }
+			public string OrderBy { get; set; }
 			public string Direction { get; set; }
 		}
 	}

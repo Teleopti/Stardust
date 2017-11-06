@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 
 			var result = Target.Read(new AgentStateFilter
 			{
-				OrderBy = new[]{"FirstName", "LastName"},
+				OrderBy = "Name",
 				Direction = "desc"
 			});
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 	
 			var result = Target.Read(new AgentStateFilter()
 			{
-				OrderBy = new[]{"SiteName", "TeamName"},
+				OrderBy = "SiteAndTeamName",
 				Direction = "desc"
 			});
 
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 
 			var result = Target.Read(new AgentStateFilter
 			{
-				OrderBy = new[]{"StateName"},
+				OrderBy = "State",
 				Direction = "desc"
 			});
 
@@ -182,13 +182,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 
 			var result = Target.Read(new AgentStateFilter
 			{
-				OrderBy = new[]{"StateStartTime"},
+				OrderBy = "TimeInState",
 				Direction = "asc"
 			});
 
-			result.First().PersonId.Should().Be(personId1);
+			result.First().PersonId.Should().Be(personId3);
 			result.Second().PersonId.Should().Be(personId2);
-			result.Last().PersonId.Should().Be(personId3);
+			result.Last().PersonId.Should().Be(personId1);
 		}	
 		
 		[Test]
@@ -219,13 +219,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 
 			var result = Target.Read(new AgentStateFilter
 			{
-				OrderBy = new[]{"AlarmStartTime"},
+				OrderBy = "TimeInAlarm",
 				Direction = "desc"
 			});
 
-			result.First().PersonId.Should().Be(personId3);
+			result.First().PersonId.Should().Be(personId1);
 			result.Second().PersonId.Should().Be(personId2);
-			result.Last().PersonId.Should().Be(personId1);
+			result.Last().PersonId.Should().Be(personId3);
 		}
 
 	}
