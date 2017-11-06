@@ -28,6 +28,16 @@
 		vm.disableButton = disableButton;
 		vm.setColor = setColor;
 
+		vm.color = { 
+			// render: 'class',
+			// className: 'teal' //=> 'border-color': '$teal-100';
+			// render: 'condition', 
+			// condition: {'dd':'teal', 'e':'orange', 'rrrr':'purple'}
+			//use this in html: color="vm.color" color-condition="setting.Name" 
+			render: 'linear',
+			rgba: 'rgba(156, 39, 176, 1)'
+		}
+
 		getBlockSchedulingSetting();
 
 		function getBlockSchedulingSetting() {
@@ -92,16 +102,16 @@
 		function setHigherPriority(setting, index) {
 			if (setting.Priority == vm.schedulingSetting[0].Priority)
 				return;
-			addAnimate(index)
-			switchPrio(setting, vm.schedulingSetting[index - 1])
+			addAnimate(index);
+			switchPrio(setting, vm.schedulingSetting[index - 1]);
 			return resortDisplayOrder(vm.schedulingSetting);
 		}
 
 		function setLowerPriority(setting, index) {
 			if (setting.Priority < 2)
 				return;
-			addAnimate(index)
-			switchPrio(setting, vm.schedulingSetting[index + 1])
+			addAnimate(index);
+			switchPrio(setting, vm.schedulingSetting[index + 1]);
 			return resortDisplayOrder(vm.schedulingSetting);
 		}
 
@@ -111,13 +121,13 @@
 			item2.Priority = temp;
 			persist(item1);
 			persist(item2);
-			return;
+			return resortDisplayOrder(vm.schedulingSetting);
 		}
 
-		function addAnimate(id) {
+		function addAnimate(id) { 
 			if (id == null || vm.test)
 				return;
-			var item = document.getElementById(id).getElementsByTagName("md-card")[0];
+			var item = document.getElementById(id).parentElement.parentElement;
 			item.classList.remove("pg-list-card-animate");
 			item.classList.add("pg-list-card-animate");
 			return $timeout(function () { item.classList.remove("pg-list-card-animate"); }, 2005);

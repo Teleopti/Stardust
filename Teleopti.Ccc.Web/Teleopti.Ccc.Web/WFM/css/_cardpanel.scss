@@ -1,0 +1,27 @@
+card-panel {
+    display: block;
+}
+
+.close {
+    display: none;
+}
+
+.card-panel-header-wrapper {
+    min-height: 40px;
+    line-height: 40px;
+    padding: 0 15px 0 5px;
+    border-left: 10px solid rgba(255, 255, 255, 0);
+}
+
+.card-panel-header-wrapper>card-panel-header {
+    display: flex;
+    margin: 0 10px;
+}
+
+card-panel-header div:nth-child(n) {
+    flex: 1;
+}
+
+.card-panel-content-wrapper {
+    border-top: 1px $gray012 solid;
+}

@@ -57,6 +57,7 @@ var wfm = angular.module('wfm', [
 	'wfm.badge',
 	'wfm.skillPicker',
 	'wfm.treePicker',
+	'wfm.card-panel',
 	'wfm.skillGroup',
 	'wfm.popup',
 	'wfm.gamification'
