@@ -47,6 +47,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
+		public void ShouldGiveDifferentDefaultNameWhenPersistNewGamification()
+		{
+			var gamificationSettingRepository = new FakeGamificationSettingRepository();
+			var target = new GamificationSettingPersister(gamificationSettingRepository, _mapper);
+
+			target.Persist();
+			target.Persist();
+
+			var result = gamificationSettingRepository.LoadAll();
+			result.Count.Should().Be.EqualTo(2);
+			result[0].Description.Name.Should().Be.EqualTo("New gamification setting");
+			result[1].Description.Name.Should().Be.EqualTo("New gamification setting1");
+		}
+
+		[Test]
 		public void ShouldDeleteGamificationSuccessfully()
 		{
 			var gamificationSettingRepository = new FakeGamificationSettingRepository();
