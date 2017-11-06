@@ -19,11 +19,8 @@
       return $http.get('../api/intraday/skills');
     };
 
-    function createSkillGroup(name, skills) {
-      return $http.post('../api/skillgroup/create', {
-        Name: name,
-        Skills: skills
-      });
+    function createSkillGroup(skillgroup) {
+      return $http.post('../api/skillgroup/create', skillgroup);
     };
 
     function getSkillGroups() {
