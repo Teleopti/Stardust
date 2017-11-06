@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
@@ -74,6 +75,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date).PersonAbsenceCollection().Count
 				.Should().Be.EqualTo(1);
+		}
+		
+		[Test]
+		[Ignore("#46505 - to be fixed")]
+		public void ShouldScheduleFixedStaffWhenUsingHourlyAvailability()
+		{
+			var firstDay = new DateOnly(2017, 5, 15);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var contract = new ContractWithMaximumTolerance(){EmploymentType = EmploymentType.FixedStaffNormalWorkTime};
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodOneWeek(firstDay);
+			agent.Period(firstDay).PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			var hourlyAvailabilityDays = new List<IStudentAvailabilityDay>();
+			for (var i = 0; i < 4; i++)
+			{
+				var studentAvailabilityRestriction = new StudentAvailabilityRestriction{StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), null),EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(21 ,0, 0))};
+				var studentAvailabilityDay = new StudentAvailabilityDay(agent, firstDay.AddDays(i), new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
+				hourlyAvailabilityDays.Add(studentAvailabilityDay);
+			}
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 10, 10);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, hourlyAvailabilityDays, skillDays);
+			var schedulingOptions = new SchedulingOptions { ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff, UseStudentAvailability = true};
+			
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
+
+			for (var i = 0; i < 7; i++)
+			{
+				if (i < 4)
+					schedulerStateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(i)).PersonAssignment(true).ShiftLayers.Should().Not.Be.Empty();
+				else
+					schedulerStateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(i)).HasDayOff().Should().Be.True();
+			}	
 		}
 
 		public SchedulingRestrictionsDesktopTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
