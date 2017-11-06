@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
@@ -57,8 +58,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 
 			var result = gamificationSettingRepository.LoadAll();
 			result.Count.Should().Be.EqualTo(2);
-			result[0].Description.Name.Should().Be.EqualTo("New gamification setting");
-			result[1].Description.Name.Should().Be.EqualTo("New gamification setting1");
+			result[0].Description.Name.Should().Be.EqualTo(Resources.NewGamificationSetting);
+			result[1].Description.Name.Should().Be.EqualTo(Resources.NewGamificationSetting+"1");
 		}
 
 		[Test]
