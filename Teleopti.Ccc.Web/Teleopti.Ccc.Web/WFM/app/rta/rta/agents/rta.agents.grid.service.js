@@ -49,9 +49,9 @@
 
 			if (toggleService.RTA_MonitorAgentsWithLongTimeInState_46475 && !alarmOnly)
 				cellHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div role="columnheader">'
-					+ '<div ng-click="grid.appScope.vm.sort(col.colDef.nameForSorting)" role="button" tabindex="0" class="ui-grid-cell-contents ui-grid-header-cell-primary-focus" col-index="renderIndex" title="TOOLTIP" style="width: 84%">'
+					+ '<div ng-click="grid.appScope.vm.sort(col.colDef.field)" role="button" tabindex="0" class="ui-grid-cell-contents ui-grid-header-cell-primary-focus" col-index="renderIndex" title="TOOLTIP" style="width: 84%">'
 					+ '<span class="ui-grid-header-cell-label" ui-grid-one-bind-id-grid="col.uid + \'-header-text\'">{{ col.colDef.displayName }}</span>'
-					+ '<i ng-show ="col.colDef.showArrow == grid.appScope.vm.showArrow" ng-class="{\'ui-grid-icon-up-dir\': grid.appScope.vm.arrowUp, \'ui-grid-icon-down-dir\': !grid.appScope.vm.arrowUp}" aria-hidden="false"></i>'
+					+ '<i ng-show ="col.colDef.showArrow == grid.appScope.vm.showArrow" ng-class="{\'ui-grid-icon-up-dir\': grid.appScope.vm.direction === \'asc\', \'ui-grid-icon-down-dir\': grid.appScope.vm.direction === \'desc\'}" aria-hidden="false"></i>'
 					+ '<div role="button" tabindex="0" ui-grid-one-bind-id-grid="col.uid + \'-menu-button\'" class="ui-grid-column-menu-button" ng-if="grid.options.enableColumnMenus && !col.isRowHeader  && col.colDef.enableColumnMenu !== false"'
 					+ 'ng-click="toggleMenu($event)" ng-class=" {\'ui-grid-column-menu-button-last-col\': isLastCol}" ui-grid-one-bind-aria-label="i18n.headerCell.aria.columnMenuButtonLabel" aria-haspopup="true">'
 					+ '<i class="ui-grid-icon-angle-down" aria-hidden="true">&nbsp;</i></div><div ui-grid-filter></div></div></div>';
@@ -61,8 +61,6 @@
 			var name = {
 				displayName: $translate.instant('Name'),
 				field: 'Name',
-				nameForSorting: ['FirstName', 'LastName'],
-				showArrow: JSON.stringify(['FirstName', 'LastName']),
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate,
 				sortingAlgorithm: localeLanguageSortingService.sort
@@ -76,8 +74,6 @@
 			var siteAndTeam = {
 				displayName: $translate.instant('SiteTeam'),
 				field: 'SiteAndTeamName',
-				nameForSorting: ['SiteName', 'TeamName'],
-				showArrow: JSON.stringify(['SiteName', 'TeamName']),
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate,
 				sortingAlgorithm: localeLanguageSortingService.sort
@@ -86,17 +82,13 @@
 			var state = {
 				displayName: $translate.instant('State'),
 				field: 'State',
-				nameForSorting: 'StateName',
-				showArrow: JSON.stringify('StateName'),
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
-				cellTemplate: coloredCellTemplate,
+				cellTemplate: coloredCellTemplate
 			};
 
 			var rule = {
 				displayName: $translate.instant('Rule'),
 				field: 'Rule',
-				nameForSorting: 'RuleName',
-				showArrow: JSON.stringify('RuleName'),
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: alarmCellTemplate,
 			};
@@ -104,8 +96,6 @@
 			var timeOutOfAdherence = {
 				displayName: $translate.instant('TimeOOA'),
 				field: 'TimeOutOfAdherence',
-				nameForSorting: 'OutOfAdherences',
-				showArrow: JSON.stringify('OutOfAdherences'),
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate,
 			};
@@ -113,8 +103,6 @@
 			var timeInAlarm = {
 				displayName: $translate.instant('TimeInAlarm'),
 				field: 'TimeInAlarm',
-				nameForSorting: 'AlarmStartTime',
-				showArrow: JSON.stringify('AlarmStartTime'),
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				sortingAlgorithm: function (a, b, rowA, rowB) {
 					a = rowA.entity.TimeInAlarmSeconds;
@@ -133,8 +121,6 @@
 			var timeInState = {
 				displayName: $translate.instant('TimeInState'),
 				field: 'TimeInState',
-				nameForSorting: 'StateStartTime',
-				showArrow: JSON.stringify('StateStartTime'),
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate
 			};

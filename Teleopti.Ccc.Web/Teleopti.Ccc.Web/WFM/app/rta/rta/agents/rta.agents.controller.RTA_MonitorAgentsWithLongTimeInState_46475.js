@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
@@ -30,26 +30,26 @@
 	];
 
 	function RtaAgentsController($scope,
-		$filter,
-		$state,
-		$stateParams,
-		$interval,
-		$sessionStorage,
-		$q,
-		$translate,
-		$location,
-		$timeout,
-		rtaService,
-		rtaPollingService,
-		rtaGridService,
-		rtaFormatService,
-		rtaAgentsBuildService,
-		rtaRouteService,
-		rtaStateService,
-		fakeTimeService,
-		localeLanguageSortingService,
-		Toggle,
-		NoticeService) {
+								 $filter,
+								 $state,
+								 $stateParams,
+								 $interval,
+								 $sessionStorage,
+								 $q,
+								 $translate,
+								 $location,
+								 $timeout,
+								 rtaService,
+								 rtaPollingService,
+								 rtaGridService,
+								 rtaFormatService,
+								 rtaAgentsBuildService,
+								 rtaRouteService,
+								 rtaStateService,
+								 fakeTimeService,
+								 localeLanguageSortingService,
+								 Toggle,
+								 NoticeService) {
 
 		var vm = this;
 
@@ -67,7 +67,7 @@
 		var teamIds = $stateParams.teamIds || [];
 		var skillIds = $stateParams.skillIds || [];
 		var skillAreaId = $stateParams.skillAreaId || undefined;
-		var excludedStatesFromUrl = function() {
+		var excludedStatesFromUrl = function () {
 			return $stateParams.es || []
 		};
 		var propertiesForFiltering = ["Name", "State", "Activity", "Rule", "SiteAndTeamName"];
@@ -95,21 +95,20 @@
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
 
-		vm.displayNoAgentsMessage = function() {
+		vm.displayNoAgentsMessage = function () {
 			return vm.agentStates.length == 0;
 		};
 		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
-		
-		vm.orderBy, vm.direction;
-		vm.showArrow = JSON.stringify(['FirstName', 'LastName']);
-		vm.arrowUp = true;
+
+		vm.orderBy = 'Name';
+		var direction = 'asc';
 
 		var toggles = {};
-		Toggle.togglesLoaded.then(function() {
+		Toggle.togglesLoaded.then(function () {
 			toggles = Toggle;
 		});
 
-		vm.getTableHeight = function() {
+		vm.getTableHeight = function () {
 			var rowHeight = 30;
 			var headerHeight = 30;
 			var agentMenuHeight = 45;
@@ -118,13 +117,13 @@
 			};
 		};
 
-		vm.getAdherenceForAgent = function(personId) {
+		vm.getAdherenceForAgent = function (personId) {
 			if (!vm.isSelected(personId)) {
 				rtaService
 					.forToday({
 						personId: personId
 					})
-					.then(function(data) {
+					.then(function (data) {
 						vm.adherence = data;
 						vm.adherencePercent = data.AdherencePercent;
 						vm.timestamp = data.LastTimestamp;
@@ -132,23 +131,23 @@
 			}
 		};
 
-		vm.selectAgent = function(personId) {
+		vm.selectAgent = function (personId) {
 			selectedPersonId = vm.isSelected(personId) ? '' : personId;
 		};
-		vm.isSelected = function(personId) {
+		vm.isSelected = function (personId) {
 			return selectedPersonId === personId;
 		};
-		vm.showAdherenceUpdates = function() {
+		vm.showAdherenceUpdates = function () {
 			return vm.adherencePercent !== null;
 		};
-		vm.changeScheduleUrl = function(personId) {
+		vm.changeScheduleUrl = function (personId) {
 			return rtaRouteService.urlForChangingSchedule(personId);
 		};
-		vm.historicalAdherenceUrl = function(personId) {
+		vm.historicalAdherenceUrl = function (personId) {
 			return rtaRouteService.urlForHistoricalAdherence(personId);
 		};
 		vm.goToOverview = rtaRouteService.goToOverview;
-		vm.goToSelectItem = function() {
+		vm.goToSelectItem = function () {
 			rtaRouteService.goToSelectSkill();
 		}
 
@@ -166,10 +165,10 @@
 		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
 
 		$scope.$watch(
-			function() {
+			function () {
 				return vm.pause;
 			},
-			function() {
+			function () {
 				if (vm.pause) {
 					vm.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
 					var template = $translate.instant('RtaPauseEnabledNotice');
@@ -188,7 +187,7 @@
 				}
 			});
 
-		$scope.$on('$destroy', function() {
+		$scope.$on('$destroy', function () {
 			if (poller)
 				poller.destroy();
 		});
@@ -206,7 +205,7 @@
 			if (skillAreaId) {
 				rtaService.getSkillArea(skillAreaId)
 					.then(getSkillIdsFromSkillArea)
-					.then(function() {
+					.then(function () {
 						deferred.resolve(rtaService.agentStatesFor);
 					});
 			} else {
@@ -218,7 +217,7 @@
 		function getSkillIdsFromSkillArea(skillArea) {
 			if (skillArea.Skills != null) {
 				vm.skillArea = true;
-				skillIds = skillArea.Skills.map(function(skill) {
+				skillIds = skillArea.Skills.map(function (skill) {
 					return skill.Id;
 				});
 			}
@@ -231,18 +230,18 @@
 				skillIds: skillIds,
 				skillAreaId: skillAreaId,
 				inAlarm: vm.showInAlarm,
-				excludedStateIds: excludedStateIds().map(function(s) {
+				excludedStateIds: excludedStateIds().map(function (s) {
 					return s === nullStateId ? null : s;
 				}),
 				textFilter: vm.filterText,
 				orderBy: vm.orderBy,
-				direction: vm.direction
+				direction: direction
 			});
 		}
 
 		function updateStuff(data) {
 			$scope.$watchCollection(
-				function() {
+				function () {
 					return allAgentStates;
 				},
 				filterData);
@@ -277,7 +276,7 @@
 
 		function fillAgentState(states) {
 			var now = moment(states.Time);
-			states.States.forEach(function(state, i) {
+			states.States.forEach(function (state, i) {
 				allAgentStates.push(rtaAgentsBuildService.buildAgentState(now, state));
 				if (stateIsNotAdded(vm.states, state))
 					vm.states.push(mapState(state));
@@ -293,7 +292,7 @@
 
 		function addNoStateIfNeeded(stateIds) {
 			if (stateIds.indexOf(nullStateId) > -1 &&
-				vm.states.filter(function(s) {
+				vm.states.filter(function (s) {
 					return s.Id === nullStateId;
 				}).length === 0) {
 				vm.states.push({
@@ -306,12 +305,12 @@
 		}
 
 		function getStateNamesForAnyExcludedStates(stateIds) {
-			var stateIdsWithoutNull = stateIds.filter(function(s) {
+			var stateIdsWithoutNull = stateIds.filter(function (s) {
 				return s !== nullStateId;
 			})
 			if (stateIdsWithoutNull.length !== 0) {
 				rtaService.getPhoneStates(stateIdsWithoutNull)
-					.then(function(states) {
+					.then(function (states) {
 						vm.states = vm.states.concat(states.PhoneStates);
 						sortPhoneStatesByName();
 					});
@@ -320,10 +319,10 @@
 
 
 		$scope.$watch(
-			function() {
+			function () {
 				return vm.showInAlarm;
 			},
-			function(newValue, oldValue) {
+			function (newValue, oldValue) {
 				if (!poller)
 					return;
 				if (newValue !== oldValue) {
@@ -331,29 +330,29 @@
 					poller.force();
 					filterData();
 					if (newValue && vm.pause) {
-						vm.agentStates.sort(function(a, b) {
+						vm.agentStates.sort(function (a, b) {
 							return vm.formatToSeconds(b.TimeInAlarm) - vm.formatToSeconds(a.TimeInAlarm);
 						});
 					}
 				}
 			});
-		
-		function resetSortingParams (inAlarm) {
+
+		function resetSortingParams(inAlarm) {
 			if (inAlarm) {
 				vm.orderBy = null;
-				vm.direction = null;
+				direction = null;
 			}
 			else {
-				vm.orderBy = ["FirstName", "LastName"];
-				vm.direction = "asc";
+				vm.orderBy = "Name";
+				direction = "asc";
 			}
 		}
 
 		$scope.$watch(
-			function() {
+			function () {
 				return vm.filterText;
 			},
-			function(newValue, oldValue) {
+			function (newValue, oldValue) {
 				if (!poller)
 					return;
 				if (newValue !== oldValue)
@@ -361,10 +360,10 @@
 			});
 
 		$scope.$watch(
-			function() {
+			function () {
 				return $sessionStorage.buid;
 			},
-			function(newValue, oldValue) {
+			function (newValue, oldValue) {
 				if (angular.isDefined(oldValue) && newValue !== oldValue) {
 					rtaRouteService.goToOverview();
 				}
@@ -374,25 +373,25 @@
 
 		function excludedStateIds() {
 			var included = vm.states
-				.filter(function(s) {
+				.filter(function (s) {
 					return s.Selected === true;
 				})
-				.map(function(s) {
+				.map(function (s) {
 					return s.Id;
 				});
 			var excludedViaUrlAndNotManuallyIncluded = excludedStatesFromUrl()
-				.filter(function(s) {
+				.filter(function (s) {
 					return included.indexOf(s) === -1;
 				});
 			var excluded = vm.states
-				.filter(function(s) {
+				.filter(function (s) {
 					return s.Selected === false;
 				})
-				.map(function(s) {
+				.map(function (s) {
 					return s.Id;
 				});
 			var excludedUnique = excludedViaUrlAndNotManuallyIncluded
-				.filter(function(s) {
+				.filter(function (s) {
 					return excluded.indexOf(s) === -1;
 				});
 			return excludedUnique.concat(excluded);
@@ -402,7 +401,7 @@
 			state.StateId = state.StateId || nullStateId;
 			state.State = state.State || nullState;
 			return (existingStates
-				.map(function(s) {
+				.map(function (s) {
 					return s.Id;
 				})
 				.indexOf(state.StateId) === -1)
@@ -425,26 +424,19 @@
 		};
 
 		function sortPhoneStatesByName() {
-			vm.states = $filter('orderBy')(vm.states, function(state) {
+			vm.states = $filter('orderBy')(vm.states, function (state) {
 				return state.Name;
 			});
 		};
-		
-		vm.sort = function (column) {
-			vm.showArrow = JSON.stringify(column);
-			if (JSON.stringify(column) != JSON.stringify(vm.orderBy)) 
-				vm.direction = (column === "StateStartTime" || column === "AlarmStartTime" || column === "OutOfAdherences") ? 'desc' : 'asc';
-			else
-				vm.direction = vm.direction === 'desc' ? 'asc' : 'desc';
 
-			if (column === "StateStartTime" || column === "AlarmStartTime" || column === "OutOfAdherences") 
-				vm.arrowUp = vm.direction === "desc";
+		vm.sort = function (column) {
+			if (vm.orderBy != column) 
+				direction = 'asc';
 			else 
-				vm.arrowUp = vm.direction === "asc";
+				direction = direction === 'asc' ? 'desc' : 'asc';
 			
 			vm.orderBy = column;
 			poller.force();
 		}
-
 	};
 })();

@@ -48,29 +48,36 @@
 		faker.fake(/\.\.\/api\/AgentStates\/For(.*)/,
 			function (params) {
 				var result = agentStates;
+				var now = Date.now();
 				// shouldnt it include both sites and teams if both are given?
 				// keeping the possibly wrong behavior for now...
 				if (params.orderBy && params.direction) {
-					//mapping for fake response .....
+					// mapping for fake response .....
 					result.forEach(function (r) {
 						var names = r.Name.split(' ');
 						r.FirstName = names[0];
 						r.LastName = names[1];
 						if (angular.isDefined(r.State))
 							r.StateName = r.State;
+						if (angular.isDefined(r.TimeInState)) {
+							r.StateStartTime = JSON.stringify(now - r.TimeInState);
+						}
 					});
-					result = result.sort(function (a, b) {
-						if (params.direction === "asc"){
-							if (!angular.isArray(params.orderBy))
-								return a[params.orderBy].localeCompare(b[params.orderBy]);
-							return a[params.orderBy[0]].localeCompare(b[params.orderBy[0]]) || a[params.orderBy[1]].localeCompare(b[params.orderBy[1]]);
-						}
-						else {
-							if (!angular.isArray(params.orderBy))
-								return b[params.orderBy].localeCompare(a[params.orderBy]);
-							return b[params.orderBy[0]].localeCompare(a[params.orderBy[0]]) || b[params.orderBy[1]].localeCompare(a[params.orderBy[1]]);
-						}
-					})
+					var translatedParams = translateParams(params.orderBy, params.direction);
+					if (translatedParams !== null) {
+						result = result.sort(function (a, b) {
+							if (translatedParams.direction === "asc") {
+								if (!angular.isArray(translatedParams.orderBy))
+									return a[translatedParams.orderBy].localeCompare(b[translatedParams.orderBy]);
+								return a[translatedParams.orderBy[0]].localeCompare(b[translatedParams.orderBy[0]]) || a[translatedParams.orderBy[1]].localeCompare(b[translatedParams.orderBy[1]]);
+							}
+							else {
+								if (!angular.isArray(translatedParams.orderBy))
+									return b[translatedParams.orderBy].localeCompare(a[translatedParams.orderBy]);
+								return b[translatedParams.orderBy[0]].localeCompare(a[translatedParams.orderBy[0]]) || b[translatedParams.orderBy[1]].localeCompare(a[translatedParams.orderBy[1]]);
+							}
+						})
+					}
 				}
 
 				if (params.textFilter){
@@ -255,7 +262,25 @@
 				return [200, result];
 			});
 
-
+		function translateParams(orderBy, direction){
+			switch (orderBy){
+				case 'Name':
+					return { orderBy : ['FirstName', 'LastName'], direction: direction};
+					break;
+				case 'SiteAndTeamName':
+					return { orderBy : ['SiteName', 'TeamName'], direction: direction};
+					break;
+				case 'State':
+					return { orderBy : 'StateName', direction: direction};
+					break;
+				case 'TimeInState':
+					return { orderBy : 'StateStartTime', direction: direction === "asc" ? "desc" : "asc"};
+					break;
+				default:
+					return null;
+			}
+		}
+		
 		function clear() {
 			serverTime = null;
 			adherenceForToday = [];

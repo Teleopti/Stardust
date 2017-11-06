@@ -164,33 +164,7 @@ describe('RtaAgentsController46475', function() {
 		expect(vm.agentStates[0].Name).toEqual("Ashley Andeen");
 		expect(vm.agentStates[1].Name).toEqual("Charley Caper");
 	});
-
-	it('should send first name and last name', function() {
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
-		c.apply(vm.showInAlarm = false);
-		c.apply(function() {
-			vm.sort(["FirstName", "LastName"]);
-		});
-
-		expect(vm.orderBy.length).toEqual(2);
-		expect(vm.orderBy[0]).toEqual("FirstName");
-		expect(vm.orderBy[1]).toEqual("LastName");
-	});
-
-	it('should send site name and team name', function() {
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
-		c.apply(vm.showInAlarm = false);
-		c.apply(function() {
-			vm.sort(["SiteName", "TeamName"]);
-		});
-
-		expect(vm.orderBy.length).toEqual(2);
-		expect(vm.orderBy[0]).toEqual("SiteName");
-		expect(vm.orderBy[1]).toEqual("TeamName");
-	});
-
+	
 	it('should sort by name', function() {
 		stateParams.siteIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
@@ -207,7 +181,7 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort(["FirstName", "LastName"]);
+			vm.sort("Name");
 		});
 
 		expect(vm.agentStates.length).toEqual(2);
@@ -232,7 +206,7 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort(["SiteName", "TeamName"]);
+			vm.sort("SiteAndTeamName");
 		});
 
 		expect(vm.agentStates.length).toEqual(2);
@@ -259,7 +233,7 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort(["SiteName", "TeamName"]);
+			vm.sort("SiteAndTeamName");
 		});
 
 		expect(vm.agentStates.length).toEqual(2);
@@ -282,7 +256,7 @@ describe('RtaAgentsController46475', function() {
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort("StateName");
+			vm.sort("State");
 		});
 
 		expect(vm.agentStates.length).toEqual(2);
@@ -312,81 +286,29 @@ describe('RtaAgentsController46475', function() {
 		expect(vm.agentStates[1].Name).toEqual("Ashley Andeen");
 	});
 
-	it('should switch direction', function() {
+	it('should sort by time in state', function() {
 		$fakeBackend
-			.withAgentState({
-				Name: "Ashley Andeen",
-				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withAgentState({
-				Name: "Charley Caper",
-				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab498"
-			});
-
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
-		c.apply(vm.showInAlarm = false);
-		c.apply(function() {
-			vm.sort(["FirstName", "LastName"]);
-		});
-
-		expect(vm.direction).toEqual('desc');
-	});
-	
-	it('should switch direction for site sort', function() {
-		$fakeBackend
-			.withAgentState({
-				Name: "Ashley Andeen",
-				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-				SiteName: "B"
-			})
 			.withAgentState({
 				Name: "Charley Caper",
 				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab498",
-				SiteName: "A"
+				TimeInState: 60
+			})
+			.withAgentState({
+				Name: "Ashley Andeen",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				TimeInState: 20
 			});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 		c.apply(vm.showInAlarm = false);
 		c.apply(function() {
-			vm.sort(["SiteName", "TeamName"]);
-		});
-		c.apply(function() {
-			vm.sort(["SiteName", "TeamName"]);
+			vm.sort("TimeInState");
 		});
 
-		expect(vm.direction).toEqual('desc');
-	});
-
-	it('should display arrow up for state', function() {
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
-		c.apply(vm.showInAlarm = false);
-		c.apply(function() {
-			vm.sort("StateName");
-		});
-		expect(vm.arrowUp).toBe(true);
-	});
-	
-	it('should send opposite direction for time in state', function() {
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
-		c.apply(vm.showInAlarm = false);
-		c.apply(function() {
-			vm.sort("StateStartTime");
-		});
-		expect(vm.direction).toEqual('desc');
-	});
-
-	it('should display arrow up for time in state', function() {
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
-		c.apply(vm.showInAlarm = false);
-		c.apply(function() {
-			vm.sort("StateStartTime");
-		});
-		expect(vm.arrowUp).toBe(true);
+		expect(vm.agentStates.length).toEqual(2);
+		expect(vm.agentStates[0].Name).toEqual("Ashley Andeen");
+		expect(vm.agentStates[1].Name).toEqual("Charley Caper");
 	});
 	
 });
