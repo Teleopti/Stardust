@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 		[Test]
-		[Ignore("#46505 - to be fixed")]
 		public void ShouldScheduleFixedStaffWhenUsingHourlyAvailability()
 		{
 			var firstDay = new DateOnly(2017, 5, 15);

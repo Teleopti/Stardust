@@ -89,6 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 						fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
 						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
 						fromScheduleDay.PersistableScheduleDataCollection().OfType<IAgentDayScheduleTag>().ForEach(x => toScheduleDay.Add(x));
+						fromScheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().ForEach(x => toScheduleDay.Add(x));
 						toScheduleDays.Add(toScheduleDay);
 					}
 				}
