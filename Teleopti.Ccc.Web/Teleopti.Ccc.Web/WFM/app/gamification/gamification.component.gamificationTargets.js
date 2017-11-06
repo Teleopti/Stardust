@@ -5,10 +5,10 @@
 	angular.module('wfm.gamification')
 		.component('gamificationTargets', {
 			templateUrl: 'app/gamification/html/g.component.gamificationTargets.tpl.html',
-			controller: ['$translate', '$timeout', GamificationTargetsController]
+			controller: ['$translate', '$timeout', 'GamificationDataService', GamificationTargetsController]
 		});
 
-	function GamificationTargetsController($translate, $timeout) {
+	function GamificationTargetsController($translate, $timeout, dataService) {
 		var ctrl = this;
 
 		var selectedText = '';
@@ -65,15 +65,9 @@
 			}, 3000);
 		}
 
-		function sites(n) {
-			var sites = [];
-			for (var i = 0; i < n; i++) {
-				sites.push({ position: i, id: i, name: 'Site ' + i });
-			}
-			return sites;
-		}
-
-		ctrl.sites = sites(50);
+		dataService.fetchSites().then(function (sites) {
+			ctrl.sites = sites;
+		});
 	}
 
 })(angular);
