@@ -582,6 +582,76 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsApproved.Should().Be.True();
 		}
 
+		[Test]
+		[SetCulture("en-US")]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		public void ShouldDenyWhenRequestPeriodIsWithinRollingOpenPeriodWithLargerOrderIndexAndAutoGrantIsDeny()
+		{
+			setupPerson(8, 21);
+			var now = new DateOnly(Now.UtcDateTime());
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+				Period = new DateOnlyPeriod(now, now.AddDays(8)),
+				OrderIndex = 0
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(now.AddDays(5), now.AddDays(9)),
+				OrderIndex = 1
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+				BetweenDays = new MinMax<int>(6, 10),
+				OrderIndex = 2
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 19, 9, 0, 0, DateTimeKind.Utc), 1);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be.EqualTo(Resources.OvertimeRequestDenyReasonAutodeny);
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		public void ShouldApproveWhenRequestPeriodIsWithinRollingOpenPeriodWithLargerOrderIndexAndAutoGrantIsYes()
+		{
+			setupPerson(8, 21);
+			var now = new DateOnly(Now.UtcDateTime());
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+				Period = new DateOnlyPeriod(now, now.AddDays(8)),
+				OrderIndex = 0
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(6, 10),
+				OrderIndex = 2
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(5, 9),
+				OrderIndex = 2
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 19, 9, 0, 0, DateTimeKind.Utc), 1);
+			Target.Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
 		private void mockRequestApprovalServiceApproved(IPersonRequest personRequest)
 		{
 			var requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
