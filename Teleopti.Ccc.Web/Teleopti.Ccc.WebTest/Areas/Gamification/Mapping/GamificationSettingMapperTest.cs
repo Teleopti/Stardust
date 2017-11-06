@@ -71,10 +71,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				QualityId = 8,
 				LargerIsBetter = false,
 				Enabled = false,
-				Threshold = 90,
-				BronzeThreshold = 90,
-				SilverThreshold = 75,
-				GoldThreshold = 50,
+				Threshold = 9000,
+				BronzeThreshold = 9000,
+				SilverThreshold = 7500,
+				GoldThreshold = 5000,
 				UnitType = BadgeUnitType.Percentage
 			};
 			var externalBadgeSettings = new List<IExternalBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};
@@ -111,10 +111,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				QualityId = 8,
 				LargerIsBetter = false,
 				Enabled = false,
-				Threshold = 90,
-				BronzeThreshold = 90,
-				SilverThreshold = 75,
-				GoldThreshold = 50,
+				Threshold = 9000,
+				BronzeThreshold = 9000,
+				SilverThreshold = 7500,
+				GoldThreshold = 5000,
 				UnitType = BadgeUnitType.Percentage
 			};
 			var externalBadgeSettings = new List<IExternalBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};

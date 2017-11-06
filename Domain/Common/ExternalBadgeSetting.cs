@@ -5,6 +5,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
+	/// <summary>
+	/// A class for ExternalBadgeSetting.
+	/// It's designed to apply different threshold value types (cound, percent, Timespan, etc.),
+	/// A BadgeUnitType property indicates what data type it applied.
+	/// All threshold values are converted into int to stored in this class.
+	///   - For count, the value will be keep as it's original value
+	///   - For percent, the value will be original value times with 10000 and round into int
+	///   - For Timespan, the value will be seconds of the Timespan
+	/// So when use the threshold value, you need check the UnitType property, and convert the value
+	/// into original value with the static methods.
+	/// 
+	/// -- This is really not a good design, but I did not find a better solution :-(
+	/// </summary>
 	public class ExternalBadgeSetting : AggregateEntity, IExternalBadgeSetting
 	{
 		private string _name;
@@ -80,8 +93,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public static Percent GetPercentValue(int originalValue)
 		{
-			InParameter.MustBeTrue(nameof(originalValue), originalValue > 0 && originalValue <= 100);
-			return new Percent(originalValue / 100d);
+			InParameter.MustBeTrue(nameof(originalValue), originalValue > 0 && originalValue <= 10000);
+			return new Percent(originalValue / 10000d);
 		}
 
 		public static TimeSpan GetTimeSpanValue(int originalValue)
