@@ -8,13 +8,10 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-//using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
+using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Stardust;
 using Teleopti.Wfm.Administration.Models.Stardust;
-using JobFilterModel = Teleopti.Ccc.Infrastructure.Repositories.Stardust.JobFilterModel;
-using IStardustRepository = Teleopti.Ccc.Infrastructure.Repositories.Stardust.IStardustRepository;
-using Job = Teleopti.Ccc.Infrastructure.Repositories.Stardust.Job;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
@@ -78,6 +75,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public IHttpActionResult JobQueueList(int from, int to)
 		{
 			return Ok(_stardustRepository.GetAllQueuedJobs(from, to));
+		}
+
+		[HttpGet, Route("Stardust/QueuedJobs")]
+		public IHttpActionResult JobQueueFiltered(int from, int to, string dataSource = null, string type = null)
+		{
+			return Ok(_stardustRepository.GetAllQueuedJobs(new JobFilterModel { DataSource = dataSource, Type = type, From = from, To = to }));
 		}
 
 		[HttpGet, Route("Stardust/QueuedJobs/{jobId}")]

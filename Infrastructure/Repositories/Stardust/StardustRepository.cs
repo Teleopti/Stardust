@@ -126,10 +126,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-	//			 var selectCommandText =
-	//				$@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
-	//										FROM Stardust.Job WITH(NOLOCK) ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to
- //AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
@@ -142,6 +138,41 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 						{
 							var job = createJobFromSqlDataReader(reader);
 							setTotalDuration(job);
+							jobs.Add(job);
+						}
+					}
+				}
+			}
+			return jobs;
+		}
+
+		public IList<Job> GetAllQueuedJobs(JobFilterModel filter)
+		{
+			var jobs = new List<Job>();
+
+			var selectCommandText =
+				@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
+				FROM Stardust.JobQueue WITH(NOLOCK) ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to ";
+
+			if (filter.DataSource != null)
+				selectCommandText = selectCommandText + $@"AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
+
+			if (filter.Type != null)
+				selectCommandText = selectCommandText + $@"AND Type = 'Teleopti.Ccc.Domain.ApplicationLayer.Events.{filter.Type}' ";
+
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				using (var getQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					getQueuedJobsCommand.Parameters.AddWithValue("@from", filter.From);
+					getQueuedJobsCommand.Parameters.AddWithValue("@to", filter.To);
+					using (var reader = getQueuedJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (!reader.HasRows) return jobs;
+						while (reader.Read())
+						{
+							var job = createQueuedJobFromSqlDataReader(reader);
 							jobs.Add(job);
 						}
 					}
@@ -228,6 +259,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			}
 			return node;
 		}
+
 
 		public List<WorkerNode> GetAllWorkerNodes()
 		{
