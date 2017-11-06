@@ -7,7 +7,8 @@
             templateUrl: 'app/gamification/html/g.component.gamificationSettingInfo.tpl.html',
             controller: GamificationSettingInfoController,
             bindings: {
-                settingInfo: '<'
+                settingInfo: '<',
+                selectItemCallback: '<'
             },
         });
 
@@ -42,6 +43,16 @@
 
         ctrl.nameClicked = function (event) {
             event.stopPropagation();
+        }
+
+        ctrl.onSelected = function () {
+
+            if (ctrl.selectItemCallback) {
+                var result = ctrl.selectItemCallback();
+                if (result) {
+                    ctrl.settingInfo.is_checked = false;
+                }
+            }
         }
 
         ctrl.$postLink = function () {

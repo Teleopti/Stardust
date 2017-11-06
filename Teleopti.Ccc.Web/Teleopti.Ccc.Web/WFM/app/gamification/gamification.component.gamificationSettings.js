@@ -311,14 +311,53 @@
 			ctrl.currentSetting = ctrl.allSettings[ctrl.selectedSettingIndex];
 		}
 
-		ctrl.settingChanged = function () {
+		ctrl.settingSelectionChanged = function () {
 			ctrl.currentSetting = ctrl.allSettings[ctrl.selectedSettingIndex]
 			ctrl.currentRuleIndex = 0;
 		}
 
-		ctrl.ruleChanged = function () {
+		ctrl.ruleSelectionChanged = function () {
 			ctrl.currentRule = ctrl.rules[ctrl.currentRuleIndex];
 		}
+
+		ctrl.addSetting = function () {
+
+		}
+
+		ctrl.deleteSetting = function () {
+
+		}
+
+		ctrl.resetBadges = function name() {
+
+		}
+
+		ctrl.itemSelected = function () {
+			if (ctrl.getCurentSelectedCount() > 3) {
+				return true;
+			}
+
+			return false;
+		}
+
+		ctrl.getCurentSelectedCount = function () {
+			var result = 0;
+			var viewedItems = ctrl.viewedSetting;
+			for (var index = 0; index < viewedItems.length; index++) {
+				var element = viewedItems[index];
+				if (element.is_checked) {
+					result++;
+				}
+			}
+
+			return result;
+		}
+
+		Object.defineProperty(ctrl, 'viewedSetting', {
+			get: function () {
+				return ctrl.getViewSetting();
+			}
+		})
 
 		ctrl.getViewSetting = function () {
 			var result;

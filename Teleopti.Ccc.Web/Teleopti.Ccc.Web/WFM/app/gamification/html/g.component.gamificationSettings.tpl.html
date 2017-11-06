@@ -1,24 +1,23 @@
-<!-- <div>{{::$ctrl.title}}</div> -->
 <div>
     <div>
         <div class="inline-block">
             <span>{{::$ctrl.title}}:</span>
         </div>
         <div class="inline-block setting-name">
-            <md-select ng-model='$ctrl.selectedSettingIndex' ng-change="$ctrl.settingChanged()">
+            <md-select ng-model='$ctrl.selectedSettingIndex' ng-change="$ctrl.settingSelectionChanged()">
                 <md-option ng-repeat="setting in $ctrl.allSettings" value="{{$ctrl.allSettings.indexOf(setting)}}">{{setting.name}}</md-option>
             </md-select>
         </div>
 
         <div class="icon-button">
-            <i class="mdi mdi-plus-circle"></i>
+            <i class="mdi mdi-plus-circle" ng-click="$ctrl.addSetting()"></i>
         </div>
 
         <div class="icon-button">
-            <i class="mdi mdi-close-circle"></i>
+            <i class="mdi mdi-close-circle" ng-click="$ctrl.deleteSetting()"></i>
         </div>
         <div class="inline-block">
-            <md-button class="md-raised md-primary md-button md-ink-ripple">Reset Badgets</md-button>
+            <md-button class="md-raised md-primary md-button md-ink-ripple" ng-click="$ctrl.resetBadges()">Reset Badges</md-button>
         </div>
     </div>
 
@@ -47,15 +46,15 @@
                 <label>Rule:</label>
             </div>
             <div class="inline-block">
-                <md-select id="gamificationSettingType" ng-change="$ctrl.ruleChanged()" ng-model='$ctrl.currentRuleIndex'>
+                <md-select id="gamificationSettingType" ng-change="$ctrl.ruleSelectionChanged()" ng-model='$ctrl.currentRuleIndex'>
                     <md-option ng-repeat="rule in $ctrl.rules" value="{{$ctrl.rules.indexOf(rule)}}">{{rule.name}}</md-option>
                 </md-select>
             </div>
         </div>
 
         <div>
-            <div class="inline-block" ng-repeat="settingInfo in $ctrl.getViewSetting()">
-                <gamification-setting-info setting-info="settingInfo"></gamification-setting-info>
+            <div class="inline-block" ng-repeat="settingInfo in $ctrl.viewedSetting">
+                <gamification-setting-info setting-info="settingInfo" select-item-callback="$ctrl.itemSelected"></gamification-setting-info>
             </div>
         </div>
     </div>
