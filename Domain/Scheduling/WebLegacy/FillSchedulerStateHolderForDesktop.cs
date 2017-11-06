@@ -76,13 +76,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			{
 				var fromDic = schedulerStateHolderFrom.Schedules;
 				var period = schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(schedulerStateHolderFrom.TimeZoneInfo);
-				var toScheduleDays = new List<IScheduleDay>();
-				foreach (var agent in agents)
+				var toScheduleDays = agents.SelectMany(agent =>
 				{
 					var fromScheduleDaysAgent = fromDic[agent].ScheduledDayCollection(period);
-					toScheduleDays.AddRange(fromScheduleDaysAgent.Select(fromScheduleDay =>
+					return fromScheduleDaysAgent.Select(fromScheduleDay =>
 					{
-						var range = (ScheduleRange)toDic[agent];
+						var range = (ScheduleRange) toDic[agent];
 						var toScheduleDay = range.ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly, true);
 						var persistableScheduleDataCollection = fromScheduleDay.PersistableScheduleDataCollection();
 						persistableScheduleDataCollection.OfType<IPersonAssignment>().ForEach(x => toScheduleDay.Add(x));
@@ -93,8 +92,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 						persistableScheduleDataCollection.OfType<IAgentDayScheduleTag>().ForEach(x => toScheduleDay.Add(x));
 						persistableScheduleDataCollection.OfType<IStudentAvailabilityDay>().ForEach(x => toScheduleDay.Add(x));
 						return toScheduleDay;
-					}));
-				}
+					});
+				}).ToArray();
 				//Maybe this should be done per agent instead? So far, testing has shown that fastest is to this with as many schedule days as possible though
 				//Could it cause OOM ex in REALLY big dbs?
 				toDic.Modify(ScheduleModifier.Scheduler, toScheduleDays, NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter(), true);	
