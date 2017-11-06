@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -7,8 +8,10 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -32,6 +35,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeMultisiteDayRepository MultisiteDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public FakeStudentAvailabilityDayRepository StudentAvailabilityDayRepository;
+		public SchedulingOptionsProvider SchedulingOptionsProvider;
 
 		[Test]
 		public void ShouldNotCreateTags()
@@ -243,6 +248,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			AssignmentRepository.GetSingle(date, agent).Period.StartDateTime.Hour
 				.Should().Be.EqualTo(8);
+		}
+		
+		[Test]
+		[Ignore("#46505 - to be fixed")]
+		public void ShouldScheduleFixedStaffWhenUsingHourlyAvailability()
+		{
+			var dayOff = DayOffFactory.CreateDayOff();
+			DayOffTemplateRepository.Has(dayOff);
+			var monday = new DateOnly(2017, 5, 15);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var bag = new RuleSetBag(ruleSet);
+			var agent = PersonRepository.Has(new SchedulePeriod(monday, SchedulePeriodType.Week, 1), bag, skill);
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, monday, 10, 10, 10, 10, 10, 10, 10));
+			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(monday, monday.AddDays(6)));
+			for (var i = 0; i < 4; i++)
+			{
+				var studentAvailabilityRestriction = new StudentAvailabilityRestriction{StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), null),EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(21 ,0, 0))};
+				var studentAvailabilityDay = new StudentAvailabilityDay(agent, monday.AddDays(i), new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
+				StudentAvailabilityDayRepository.Add(studentAvailabilityDay);
+			}
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions {UseStudentAvailability = true});
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
+
+			for (var i = 0; i < 7; i++)
+			{
+				if (i < 4)
+					AssignmentRepository.GetSingle(monday.AddDays(i), agent).ShiftLayers.Should().Not.Be.Empty();
+				else
+					AssignmentRepository.GetSingle(monday.AddDays(i), agent).AssignedWithDayOff(dayOff);
+			}		
 		}
 
 		public FullSchedulingTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
