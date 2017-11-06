@@ -6,7 +6,8 @@ using System;
 using System.Collections;
 using System.Runtime.Caching;
 using System.Collections.Generic;
-
+using System.Threading;
+using System.Threading.Tasks;
 
 
 /* Manually copy/pasted from here - https://github.com/diegose/NHibernate.Diegose/tree/master/Caches/RtMemoryCache
@@ -223,6 +224,37 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		private string GetCacheKey(object key)
 		{
 			return String.Concat(CacheKeyPrefix, regionPrefix, region, ":", key.ToString(), "@", key.GetHashCode());
+		}
+
+		
+		public Task<object> GetAsync(object key, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task PutAsync(object key, object value, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task RemoveAsync(object key, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task ClearAsync(CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task LockAsync(object key, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task UnlockAsync(object key, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
 		}
 
 		public object Get(object key)

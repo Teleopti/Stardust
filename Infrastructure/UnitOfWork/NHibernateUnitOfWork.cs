@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_context = context;
 			_context.Set(this);
 			_session = session;
-			_session.FlushMode = FlushMode.Never;
+			_session.FlushMode = FlushMode.Manual;
 			_isolationLevel = isolationLevel;
 			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
 			_filterManager = new NHibernateFilterManager(session);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using NHibernate;
 using NHibernate.Engine;
 using NHibernate.SqlTypes;
@@ -71,20 +72,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			return hashCode;
 		}
 
-		/// <summary>
-		/// Nulls the safe get.
-		/// </summary>
-		/// <param name="rs">The rs.</param>
-		/// <param name="names">The names.</param>
-		/// <param name="owner">The owner.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: HenryG
-		/// Created date: 2008-11-20
-		/// </remarks>
-		public object NullSafeGet(IDataReader rs, string[] names, object owner)
+		public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
 		{
-			object value = NHibernateUtil.DateTime.NullSafeGet(rs, names);
+			object value = NHibernateUtil.DateTime.NullSafeGet(rs, names, session);
 			if (value == null || value == DBNull.Value)
 			{
 				return null;
@@ -93,17 +83,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			return new DateOnly((DateTime)value);
 		}
 
-		/// <summary>
-		/// Nulls the safe set.
-		/// </summary>
-		/// <param name="cmd">The CMD.</param>
-		/// <param name="value">The value.</param>
-		/// <param name="index">The index.</param>
-		/// <remarks>
-		/// Created by: HenryG
-		/// Created date: 2008-11-20
-		/// </remarks>
-		public void NullSafeSet(IDbCommand cmd, object value, int index)
+		public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
 		{
 			object date = value;
 			if (date != null)
@@ -111,7 +91,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				if (date is DateOnly)
 					date = ((DateOnly)value).Date;
 			}
-			NHibernateUtil.DateTime.NullSafeSet(cmd, date, index);
+			NHibernateUtil.DateTime.NullSafeSet(cmd, date, index, session);
 		}
 
 		/// <summary>
@@ -239,18 +219,17 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			get { return false; }
 		}
 
-		public object NullSafeGet(IDataReader dr, string[] names, ISessionImplementor session, object owner)
+		public object NullSafeGet(DbDataReader dr, string[] names, ISessionImplementor session, object owner)
 		{
-			object obj0 = NHibernateUtil.UtcDateTime.NullSafeGet(dr, names[0]);
-			object obj1 = NHibernateUtil.UtcDateTime.NullSafeGet(dr, names[1]);
+			object obj0 = NHibernateUtil.UtcDateTime.NullSafeGet(dr, names[0], session);
+			object obj1 = NHibernateUtil.UtcDateTime.NullSafeGet(dr, names[1], session);
 			if (obj0 == null || obj1 == null) return null;
 			var start = (DateTime) obj0;
 			var end = (DateTime) obj1;
 			return new DateTimePeriod(start, end);
 		}
 
-		public void NullSafeSet(IDbCommand cmd, object obj, int index, bool[] settable,
-			ISessionImplementor session)
+		public void NullSafeSet(DbCommand cmd, object obj, int index, bool[] settable, ISessionImplementor session)
 		{
 			var period = (DateTimePeriod?) obj;
 			if (!period.HasValue)

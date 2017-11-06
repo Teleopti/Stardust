@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Globalization;
 using System.Threading;
 using NHibernate.Driver;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 		}
 
-		public override IDbCommand CreateCommand()
+		public override DbCommand CreateCommand()
 		{
 			Thread.Sleep(Latency);
 			return base.CreateCommand();

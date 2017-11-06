@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using NHibernate;
+using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -26,9 +28,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
             return returnvalue;
         }
 
-        public object NullSafeGet(IDataReader rs, string[] names, object owner)
+        public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
         {
-            var b = NHibernateUtil.Byte.NullSafeGet(rs, names[0]) as byte?;
+            var b = NHibernateUtil.Byte.NullSafeGet(rs, names[0], session) as byte?;
             if (b.HasValue)
                 if (b.Value < _trackers.Count)
                     return _trackers[b.Value];
@@ -36,10 +38,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
             return null;   
         }
 
-        public void NullSafeSet(IDbCommand cmd, object value, int index)
+        public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
         {
             int indexOfTrackerInstance = _trackers.IndexOf((ITracker) value);
-            NHibernateUtil.Byte.NullSafeSet(cmd, (byte)indexOfTrackerInstance, index);
+            NHibernateUtil.Byte.NullSafeSet(cmd, (byte)indexOfTrackerInstance, index, session);
         }
 
         public object DeepCopy(object value)

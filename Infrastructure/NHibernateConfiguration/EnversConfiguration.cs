@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			IAuditSetting AuditSettingDel(ISession s)
 			{
+			
 				var auditSetting = s.Get<AuditSetting>(AuditSettingDefault.TheId);
 				if (auditSetting == null)
 					throw new DataSourceException(AuditSettingRepository.MissingAuditSetting);

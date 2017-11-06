@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using NHibernate;
+using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using Teleopti.Ccc.Infrastructure.Util;
@@ -40,25 +42,25 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public bool IsMutable => true;
 
-		public object NullSafeGet(IDataReader rs, string[] names, object owner)
+		public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
 		{
 			if (names.Length != 1)
 				throw new InvalidOperationException("names array has more than one element. can't handle this!");
 
-			var valueToGet = (string)NHibernateUtil.String.NullSafeGet(rs, names[0]);
+			var valueToGet = (string)NHibernateUtil.String.NullSafeGet(rs, names[0], session);
 			return valueToGet?.ToUncompressedString();
 		}
 
-		public void NullSafeSet(IDbCommand cmd, object value, int index)
+		public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
 		{
 			if (value == null)
 			{
-				NHibernateUtil.String.NullSafeSet(cmd, null, index);
+				NHibernateUtil.String.NullSafeSet(cmd, null, index, session);
 				return;
 			}
 
 			var valueToSet = (string)value;
-			NHibernateUtil.String.NullSafeSet(cmd, valueToSet.ToCompressedBase64String(), index);
+			NHibernateUtil.String.NullSafeSet(cmd, valueToSet.ToCompressedBase64String(), index, session);
 		}
 
 		public object Replace(object original, object target, object owner)

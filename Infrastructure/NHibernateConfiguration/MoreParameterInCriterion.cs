@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Engine;
@@ -18,13 +17,13 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			_values = values;
 		}
 
-		public override SqlString ToSqlString(ICriteria criteria, ICriteriaQuery criteriaQuery, IDictionary<string, IFilter> enabledFilters)
+		public override SqlString ToSqlString(ICriteria criteria, ICriteriaQuery criteriaQuery)
 		{
 			if (_values.Length == 0)
 				return new SqlString("1=0");
 
 			var result = new SqlStringBuilder();
-			var columnNames = CriterionUtil.GetColumnNames(null, _projection, criteriaQuery, criteria, enabledFilters);
+			var columnNames = CriterionUtil.GetColumnNames(null, _projection, criteriaQuery, criteria);
 
 			for (int columnIndex = 0; columnIndex < columnNames.Length; columnIndex++)
 			{

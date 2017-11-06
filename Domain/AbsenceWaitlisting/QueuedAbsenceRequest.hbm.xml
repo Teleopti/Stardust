@@ -30,7 +30,7 @@
                   not-null="true" />
 
         <property name="Sent"
-                  type="DateTime"
+                  type="DateTimeNoMs"
                   not-null="false" />
 
         <property name="MandatoryValidators"

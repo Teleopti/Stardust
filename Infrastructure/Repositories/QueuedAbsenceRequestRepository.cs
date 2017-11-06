@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				return;
 			var hql = @"DELETE FROM QueuedAbsenceRequest WHERE Sent = :sent";
 			var sqlQuery = Session.CreateSQLQuery(hql);
-			sqlQuery.SetDateTime("sent", sentTimeStamp);
+			sqlQuery.SetDateTimeNoMs("sent", sentTimeStamp);
 			sqlQuery.ExecuteUpdate();
 		}
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var hql = @"update [dbo].[QueuedAbsenceRequest] set [Sent] = null where Sent = :sent";
 			var sqlQuery = Session.CreateSQLQuery(hql);
-			sqlQuery.SetDateTime("sent", eventSent);
+			sqlQuery.SetDateTimeNoMs("sent", eventSent);
 			sqlQuery.ExecuteUpdate();
 		}
 	}

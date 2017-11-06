@@ -3,7 +3,6 @@ using System.Data;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 
@@ -14,13 +13,11 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 	public class DateOnlyMappingTypeTest
 	{
 		private DateOnlyMappingType _target;
-		private MockRepository mocks;
 
 		[SetUp]
 		public void Setup()
 		{
 			_target = new DateOnlyMappingType();
-			mocks = new MockRepository();
 		}
 
 		/// <summary>
@@ -91,81 +88,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			Assert.IsTrue(iUserType.Equals(null, null));
 			Assert.IsFalse(iUserType.Equals(firstDateOnly, null));
 
-		}
-
-		/// <summary>
-		/// Determines whether this instance [can null safe get].
-		/// </summary>
-		/// <remarks>
-		/// Created by: HenryG
-		/// Created date: 2008-11-24
-		/// </remarks>
-		[Test]
-		public void CanNullSafeGet()
-		{
-			IDataReader dataReader = mocks.StrictMock<IDataReader>();
-			Expect.Call(dataReader.IsDBNull(0)).Return(false);
-			Expect.Call(dataReader.GetOrdinal("Kalle")).Return(0);
-			Expect.Call(dataReader[0]).Return(DateTime.MinValue);
-
-			Expect.Call(dataReader.IsDBNull(0)).Return(true);
-			Expect.Call(dataReader.GetOrdinal("Kalle")).Return(0);
-
-			mocks.ReplayAll();
-
-			object gotObject = _target.NullSafeGet(dataReader, new[] { "Kalle" }, null);
-			Assert.IsNotNull(gotObject);
-
-			DateOnly gotDateOnly = (DateOnly)gotObject;
-			Assert.IsTrue(gotDateOnly.Equals(new DateOnly(DateTime.MinValue)));
-
-			Assert.IsNull(_target.NullSafeGet(dataReader, new[] { "Kalle" }, null));
-
-			mocks.VerifyAll();
-		}
-
-		/// <summary>
-		/// Determines whether this instance [can null safe set].
-		/// </summary>
-		/// <remarks>
-		/// Created by: HenryG
-		/// Created date: 2008-11-24
-		/// </remarks>
-		[Test]
-		public void CanNullSafeSet()
-		{
-			var minDate = new DateOnly(DateTime.MinValue);
-
-			IDbCommand dbCommand = mocks.StrictMock<IDbCommand>();
-			IDataParameter dataParameter = mocks.StrictMock<IDataParameter>();
-			IDataParameterCollection dataParameterCollection = mocks.StrictMock<IDataParameterCollection>();
-			using (mocks.Record())
-			{
-				Expect.Call(dataParameterCollection[0]).Return(dataParameter);
-				Expect.Call(dbCommand.Parameters)
-					.Return(dataParameterCollection);
-				Expect.Call(dataParameter.Value).PropertyBehavior();
-			}
-
-			_target.NullSafeSet(dbCommand, minDate, 0);
-
-			Assert.IsNotNull(_target);
-			Assert.AreEqual(minDate.Date, dataParameter.Value);
-
-			dbCommand = mocks.StrictMock<IDbCommand>();
-			dataParameter = mocks.StrictMock<IDataParameter>();
-			dataParameterCollection = mocks.StrictMock<IDataParameterCollection>();
-			using (mocks.Record())
-			{
-				Expect.Call(dataParameterCollection[0]).Return(dataParameter);
-				Expect.Call(dbCommand.Parameters)
-					.Return(dataParameterCollection);
-				Expect.Call(dataParameter.Value).PropertyBehavior();
-			}
-			_target.NullSafeSet(dbCommand, null, 0);
-			Assert.AreEqual(DBNull.Value, dataParameter.Value);
-
-			mocks.VerifyAll();
 		}
 
 		/// <summary>

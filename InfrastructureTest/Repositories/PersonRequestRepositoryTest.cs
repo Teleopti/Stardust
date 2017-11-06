@@ -1276,7 +1276,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(offerRequest);
 			PersistAndRemoveFromUnitOfWork(overtimeRequest);
 
-			var period = new DateTimePeriod(startDateTime.AddMinutes(-5), startDateTime);
+			var period = new DateTimePeriod(startDateTime.AddMinutes(-5), startDateTime.AddMinutes(1));
 			var result = new PersonRequestRepository(UnitOfWork).GetRequestPeriodsForAgent(_person, period);
 
 			result.Count().Should().Be(4);
@@ -1757,14 +1757,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotReturnRequestsOverlapOnStartDate()
 		{
+			var nu = DateTime.UtcNow;
 			var filter = new RequestFilter
 			{
-				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)),
+				Period = new DateTimePeriod(nu, nu.AddDays(1)),
 				ExcludeRequestsOnFilterPeriodEdge = true,
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(nu.AddDays(-1), nu), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(0);
 		}
@@ -2210,7 +2211,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var site = new Site("sajt");
 			PersistAndRemoveFromUnitOfWork(site);
 			var team = new Team(){Site = site};
-			team.SetDescription(new Description("fånigt sätt"));
+			team.SetDescription(new Description("fï¿½nigt sï¿½tt"));
 			PersistAndRemoveFromUnitOfWork(team);
 			var contract = new Contract("con");
 			PersistAndRemoveFromUnitOfWork(contract);
@@ -2306,7 +2307,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var site = new Site("sajt");
 			PersistAndRemoveFromUnitOfWork(site);
 			var team = new Team() { Site = site };
-			team.SetDescription(new Description("fånigt sätt"));
+			team.SetDescription(new Description("fï¿½nigt sï¿½tt"));
 			PersistAndRemoveFromUnitOfWork(team);
 			var contract = new Contract("con");
 			PersistAndRemoveFromUnitOfWork(contract);

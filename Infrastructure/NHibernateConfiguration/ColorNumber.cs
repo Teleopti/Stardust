@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using NHibernate;
+using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 
@@ -19,16 +21,16 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
             return x.GetHashCode();
         }
 
-        public object NullSafeGet(IDataReader rs, string[] names, object owner)
+        public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
         {
-            object dbValue = NHibernateUtil.Int32.NullSafeGet(rs, names);
+            object dbValue = NHibernateUtil.Int32.NullSafeGet(rs, names, session);
             if(dbValue==null) return null;
             return Color.FromArgb((int)dbValue);
         }
 
-        public void NullSafeSet(IDbCommand cmd, object value, int index)
+        public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
         {
-            NHibernateUtil.Int32.NullSafeSet(cmd, ((Color)value).ToArgb(), index);
+            NHibernateUtil.Int32.NullSafeSet(cmd, ((Color)value).ToArgb(), index, session);
         }
 
         public object DeepCopy(object value)

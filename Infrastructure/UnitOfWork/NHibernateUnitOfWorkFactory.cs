@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy.Strategize(_context);
 
-			var session = _factory.OpenSession(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy, _currentPreCommitHooks));
+			var session = _factory.WithOptions().Interceptor(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy, _currentPreCommitHooks)).OpenSession();
 
 			businessUnitFilter.Enable(session, businessUnitId());
 			QueryFilter.Deleted.Enable(session, null);
