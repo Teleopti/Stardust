@@ -7,11 +7,11 @@
 </div>
 <div class="con-row">
 	<div class="con-flex">
-		<button class="wfm-fab material-depth-1 pull-right" ng-show="vm.canSave" ng-click="vm.saveAll()">
+		<button class="wfm-fab material-depth-1 pull-right" id="save_all" ng-show="vm.canSave" ng-click="vm.saveAll()">
 			<i class="mdi mdi-content-save"></i>
 			<md-tooltip>{{'Save'|translate}}</md-tooltip>
 		</button>
-		<button class="wfm-fab material-depth-1 pull-right" ng-click="vm.exitConfigMode()">
+		<button class="wfm-fab material-depth-1 pull-right" id="exit_sgm" ng-click="vm.exitConfigMode()">
 			<i class="mdi mdi-close"></i>
 			<md-tooltip>{{'Close'|translate}}</md-tooltip>
 		</button>
@@ -26,7 +26,7 @@
 						<h2>{{'AllSkillAreas'|translate}}</h2>
 					</div>
 					<div class="con-flex">
-						<button type="button" tabindex=0 class="wfm-fab mini mini-active pull-right" ng-click="vm.createSkillGroup()">
+						<button type="button" tabindex=0 class="wfm-fab mini mini-active pull-right" id="create-skill-group-button" ng-click="vm.createSkillGroup()">
 							<i class="mdi mdi-plus"></i>
 							<md-tooltip>{{'CreateNewSkillGroup'|translate}}</md-tooltip>
 						</button>
@@ -73,7 +73,7 @@
 							<input type="text" ng-model="skillFilter" />
 						</div>
 						<div class="con-row">
-							<ul class="wfm-list">
+							<ul class="wfm-list" id="available_skills_list">
 								<li ng-repeat="skill in vm.skills | filter:skillFilter" ng-click="vm.selectSkill(skill)">
 									<i ng-class="vm.getSkillIcon(skill)"></i>
 									<span class="list-item-container">
@@ -87,11 +87,11 @@
 						</div>
 					</div>
 					<div>
-						<button type="button" tabindex=0 class="wfm-fab mini mini-active" style="display:block" ng-click="vm.addSkills()">
+						<button type="button" tabindex=0 class="wfm-fab mini mini-active" id="move_to_group" style="display:block" ng-click="vm.addSkills()">
 							<i class="mdi mdi-arrow-right"></i>
 							<md-tooltip>{{'MoveToGroup'|translate}}</md-tooltip>
 						</button>
-						<button type="button" tabindex=0 class="wfm-fab mini mini-active" ng-click="vm.removeSkills()">
+						<button type="button" tabindex=0 class="wfm-fab mini mini-active" id="move_from_group" ng-click="vm.removeSkills()">
 							<i class="mdi mdi-arrow-left"></i>
 							<md-tooltip>{{'MoveFromGroup'|translate}}</md-tooltip>
 						</button>

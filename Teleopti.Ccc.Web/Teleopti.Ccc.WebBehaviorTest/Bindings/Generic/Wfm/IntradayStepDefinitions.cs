@@ -114,11 +114,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click("#manage_skill_group_button");
 		}
 
+		[Given(@"I select to create a new Skill Group in SGM")]
+		public void GivenISelectToCreateANewSkillGroupInSGM()
+		{
+			Browser.Interactions.Click("#create-skill-group-button");
+		}
+
+
 
 		[Given(@"I name the Skill Area '(.*)'")]
 		public void GivenINameTheSkillArea(string skillAreaName)
 		{
 			Browser.Interactions.FillWith("#skillAreaName", skillAreaName);
+		}
+
+		[Given(@"I name the Skill Group '(.*)'")]
+		public void GivenINameTheSkillGroup(string skillGroupName)
+		{
+			Browser.Interactions.FillWith("#skillGroupNameBox", skillGroupName);
+		}
+
+
+		[Given(@"I select to manage Skill Groups")]
+		public void GivenISelectToManageSkillGroups()
+		{
+			Browser.Interactions.Click("#manage_skill_group_button");
 		}
 
 		[Given(@"I pick the skill '(.*)'")]
@@ -141,10 +161,35 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.ClickContaining(".skill-area-list", skillName);
 		}
 
+		[Given(@"I select the skill '(.*)' in SGM")]
+		public void GivenISelectTheSkillInSGM(string skillName)
+		{
+			Browser.Interactions.ClickContaining("#available_skills_list", skillName);
+		}
+
+		[Given(@"I move the skill to the group")]
+		public void GivenIMoveTheSkillToTheGroup()
+		{
+			Browser.Interactions.Click("#move_to_group");
+		}
+
+
 		[When(@"I am done creating Skill Area")]
 		public void WhenIAmDoneCreatingSkillArea()
 		{
 			Browser.Interactions.Click(".skill-area-save");
+		}
+
+		[When(@"I am done managing Skill Groups")]
+		public void WhenIAmDoneManagingSkillGroups()
+		{
+			Browser.Interactions.Click("#save_all");
+		}
+
+		[When(@"I close the Skill Manager")]
+		public void WhenICloseTheSkillManager()
+		{
+			Browser.Interactions.Click("#exit_sgm");
 		}
 
 		[Then(@"I select to monitor skill area '(.*)'")]
