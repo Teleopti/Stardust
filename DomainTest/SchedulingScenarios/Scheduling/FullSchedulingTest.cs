@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var bag = new RuleSetBag(ruleSet);
 			var agent = PersonRepository.Has(new SchedulePeriod(monday, SchedulePeriodType.Week, 1), bag, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, monday, 10, 10, 10, 10, 10, 10, 10));
-			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(monday, monday.AddDays(6)));
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnlyPeriod.CreateWithNumberOfWeeks(monday, 1));
 			for (var i = 0; i < 4; i++)
 			{
 				StudentAvailabilityDayRepository.Has(agent, monday.AddDays(i), new StudentAvailabilityRestriction
