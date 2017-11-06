@@ -34,16 +34,22 @@ namespace Teleopti.Ccc.Domain.Intraday
 				TimeZoneHelper.ConvertToUtc(endTimeLocal, sourceTimeZone));
 			var scheduledStaffing = _skillStaffingIntervalProvider.StaffingForSkills(skillIdArray, period, TimeSpan.FromMinutes(minutesPerInterval), useShrinkage);
 
-			return scheduledStaffing
+			var staffingPerSkill = scheduledStaffing.GroupBy(x => new
+				{
+					x.Id,
+					StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, sourceTimeZone)
+				})
 				.Select(x => new SkillStaffingIntervalLightModel
 				{
-					Id = x.Id,
-					StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, sourceTimeZone),
-					EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, sourceTimeZone),
-					StaffingLevel = x.StaffingLevel
+					Id = x.Key.Id,
+					StartDateTime = x.Key.StartDateTime,
+					EndDateTime = x.Key.StartDateTime.AddMinutes(minutesPerInterval),
+					StaffingLevel = x.Sum(y => y.StaffingLevel)
 				})
 				.OrderBy(o => o.StartDateTime)
 				.ToList();
+
+			return staffingPerSkill;
 		}
 
 		public IList<SkillStaffingInterval> StaffingPerSkill(IList<ISkill> skills, DateTimePeriod period, bool useShrinkage = false,bool useBpoStaffing = true)

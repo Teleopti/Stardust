@@ -776,6 +776,32 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.Summary.AbandonRate.Should().Be.EqualTo(-99);
 		}
 
+		[Test]
+		public void ShouldHandleDstTimeChange()
+		{
+			TimeZone.IsSweden();
+			var userNow = new DateTime(2017, 10, 29, 7, 0, 0, DateTimeKind.Local);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTimeLocal = new DateTime(2017, 10, 29, 7, 0, 0, DateTimeKind.Local);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 24, 0), false);
+			createSkillDaysYesterdayTodayTomorrow(skill, userNow);
+
+			createStatistics(latestStatsTimeLocal.Date, latestStatsTimeLocal.Date.AddDays(1), latestStatsTimeLocal);
+
+			SkillRepository.Has(skill);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value });
+
+			result.DataSeries.Time.Length.Should().Be.EqualTo(96);
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(96);
+
+			var latestStatsIntervalPosition = new IntervalBase(latestStatsTimeLocal, (60 / minutesPerInterval) * 24).Id;
+			result.DataSeries.EstimatedServiceLevels.First().Should().Be.GreaterThan(0);
+			result.DataSeries.EstimatedServiceLevels[latestStatsIntervalPosition].Should().Be.GreaterThan(0);
+			result.DataSeries.EstimatedServiceLevels[latestStatsIntervalPosition + 1].Should().Be.EqualTo(null);
+		}
+
 		private double calculateEsl(IList<SkillCombinationResource> scheduledStaffingList, ISkillDay skillDay, double forecastedCallsSkill, int intervalPosition)
 		{
 			return _staffingCalculatorService.ServiceLevelAchievedOcc(
