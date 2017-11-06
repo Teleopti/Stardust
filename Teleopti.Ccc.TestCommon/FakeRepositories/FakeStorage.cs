@@ -38,14 +38,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			// mimic a real get would be nice
 			// getting transient too, not removed, and throwing if it doesnt exist, right?
-			return _legacy.OfType<T>().ToArray().SingleOrDefault(x => x.Id.Equals(id));
+			lock (transactionLock)
+			{
+				return _legacy.OfType<T>().ToArray().SingleOrDefault(x => x.Id.Equals(id));
+			}
 		}
 
 		public IEnumerable<T> LoadAll<T>()
 		{
 			// mimic a real load would be nice
 			// getting only from db, right?
-			return _legacy.OfType<T>().ToArray();
+			lock (transactionLock)
+			{
+				return _legacy.OfType<T>().ToArray();
+			}
 		}
 
 		public IEnumerable<IRootChangeInfo> Commit()
