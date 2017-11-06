@@ -48,7 +48,6 @@
                 NoticeService.error($translate.instant('SkillAreaNoSkillSelected'), 5000, false);
                 return;
             }
-            console.log('selectedSkills', selectedSkills);
             SkillGroupSvc.createSkillGroup({
                 Name: vm.skillAreaName,
                 Skills: selectedSkills.map(function(item) {
