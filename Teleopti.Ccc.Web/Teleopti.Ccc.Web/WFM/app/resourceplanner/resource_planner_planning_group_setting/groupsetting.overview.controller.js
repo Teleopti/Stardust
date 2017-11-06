@@ -28,7 +28,7 @@
 		vm.disableButton = disableButton;
 		vm.setColor = setColor;
 
-		vm.color = { 
+		vm.color = {
 			// render: 'class',
 			// className: 'teal' //=> 'border-color': '$teal-100';
 			// render: 'condition', 
@@ -124,7 +124,7 @@
 			return resortDisplayOrder(vm.schedulingSetting);
 		}
 
-		function addAnimate(id) { 
+		function addAnimate(id) {
 			if (id == null || vm.test)
 				return;
 			var item = document.getElementById(id).parentElement.parentElement;
@@ -176,7 +176,10 @@
 		vm.schedulingSetting = [];
 		vm.textManageSchedulingSetting = $translate.instant("ManagePlanningGroupSchedulingSetting").replace("{0}", vm.planningGroup.Name);
 		vm.textOfAppliedFilter = $translate.instant("PlanGroupSchedulingSettingAppliedFilters").replace("{0}", vm.planningGroup.Name);
-		vm.setColor = setColor;
+		vm.color = {
+			render: 'linear',
+			rgba: 'rgba(156, 39, 176, 1)'
+		}
 
 		getDayOffRules();
 
@@ -185,16 +188,6 @@
 				vm.schedulingSetting = data.sort(localeLanguageSortingService.localeSort('-Priority', '-Default', '+Name'));
 				return getBlockSchedulingSetting();
 			});
-		}
-
-		function setColor(index) {
-			if (index == 0) {
-				var opacity = 0.05;
-			}
-			var opacity = 1 - index / vm.schedulingSetting.length;
-			return {
-				'border-left': '10px solid rgba(156, 39, 176,' + opacity.toFixed(2) + ')'
-			}
 		}
 
 		function getBlockSchedulingSetting() {

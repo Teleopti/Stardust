@@ -1,101 +1,107 @@
-<wfm-card-list multi-select class="pp-validation-wfm-list" ng-if="vm.hasValidations()">
-    <wfm-card class="pp-validation-card" ng-show="vm.valData.preValidation.length > 0" ng-click="vm.validationFilter = ''">
-        <card-header tabindex="-1">
-            <div ng-if="vm.valLoading" class="pp-validation-progress">
-                <md-progress-linear md-mode="indeterminate"></md-progress-linear>
-            </div>
-            <div tabindex="0">
-                <b>{{'PreSchedulingValidationIssues' | translate}} </b>
-                <span class="pp-validation-number">{{vm.valData.totalPreValNum}} {{'IssuesText' | translate}}</span>
-                <div tabindex=0 class="context-menu card-context" ng-disabled="vm.valLoading" ng-click="vm.getValidationByPpId();$event.stopPropagation();">
-                    <i class="mdi mdi-refresh"></i>
-                    <md-tooltip> {{'RefreshPreSchedulingValidationIssues' | translate}}</md-tooltip>
+<div class="con-row" ng-if="vm.hasValidations()">
+    <div class="con-flex">
+        <card-panel color="vm.color" ng-show="vm.valData.preValidation.length > 0">
+            <card-panel-header>
+                <md-progress-linear ng-if="vm.valLoading" class="pp-validation-progress" md-mode="indeterminate"></md-progress-linear>
+                <div class="header-flex">
+                    <b>{{'PreSchedulingValidationIssues' | translate}} </b>
                 </div>
-                <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
-            </div>
-        </card-header>
-        <card-body class="panel">
-            <div class="con-row demo-outline">
-                <div class="con-flex">
-                    <div class="con-row">
-                        <div class="con-flex ">
-                            <label for="filter" class="input-icon">
-                                <i class="mdi mdi-filter-outline">
-                                <input type="text" id="filter" ng-model="vm.validationFilter" placeholder="{{'FilterValidationIssues' | translate}}">
-                                <md-tooltip>{{'FilterValidationIssues' | translate}}</md-tooltip> 
-                                </i>
-                            </label>
+                <div class="header-flex">
+                    <span class="pp-validation-number">{{vm.valData.totalPreValNum}} {{'IssuesText' | translate}}
+                        <span class="pp-validation-button">
+                            <div tabindex=0 class="context-menu card-context" ng-disabled="vm.valLoading" ng-click="vm.getValidationByPpId();$event.stopPropagation();">
+                                <i class="mdi mdi-refresh"></i>
+                                <md-tooltip> {{'RefreshPreSchedulingValidationIssues' | translate}}</md-tooltip>
+                            </div>
+                        </span>
+                    </span>
+                </div>
+            </card-panel-header>
+            <card-panel-content>
+                <div class="con-row">
+                    <div class="con-flex">
+                        <div class="con-row">
+                            <div class="con-flex ">
+                                <label for="filter" class="input-icon">
+                                    <i class="mdi mdi-filter-outline">
+                                        <input type="text" id="filter" ng-model="vm.validationFilter" placeholder="{{'FilterValidationIssues' | translate}}">
+                                        <md-tooltip>{{'FilterValidationIssues' | translate}}</md-tooltip>
+                                    </i>
+                                </label>
+                            </div>
+                            <div class="con-flex"></div>
                         </div>
-                        <div class="con-flex"></div>
+                        <table class="wfm-table">
+                            <thead>
+                                <tr>
+                                    <th>{{'Issue' | translate}}</th>
+                                    <th>{{'Description' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="msg in vm.valData.preValidation | filter: vm.validationFilter">
+                                    <td>{{msg.ResourceType | translate }}: {{msg.ResourceName}}</td>
+                                    <td>
+                                        <div ng-repeat="item in msg.ValidationErrors">{{item}}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <table class="wfm-table">
-                        <thead>
-                            <tr>
-                                <th>{{'Issue' | translate}}</th>
-                                <th>{{'Description' | translate}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="msg in vm.valData.preValidation | filter: vm.validationFilter">
-                                <td>{{msg.ResourceType | translate }}: {{msg.ResourceName}}</td>
-                                <td>
-                                    <div ng-repeat="item in msg.ValidationErrors">{{item}}</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
-            </div>
-        </card-body>
-    </wfm-card>
-    <wfm-card class="pp-validation-card" ng-show="vm.valData.scheduleIssues.length > 0">
-        <card-header tabindex="-1" ng-click="vm.scheduleIssuesFilter = ''">
-            <div tabindex="0">
-                <b>{{'ScheduledIssues' | translate}}</b>
-                <span class="pp-validation-number">{{vm.valData.scheduleIssues.length}} {{'IssuesText' | translate}}</span>
-                <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
-            </div>
-        </card-header>
-        <card-body class="panel">
-            <div class="con-row demo-outline">
-                <div class="con-flex">
-                    <div class="con-row">
-                        <div class="con-flex ">
-                            <label for="filter" class="input-icon">
-                                <i class="mdi mdi-filter-outline">
-                                <input type="text" id="filter" ng-model="vm.scheduleIssuesFilter" placeholder="{{'FilterValidationIssues' | translate}}">
-                                <md-tooltip>{{'FilterValidationIssues' | translate}}</md-tooltip>
-                                </i>
-                            </label>
+            </card-panel-content>
+        </card-panel>
+        <card-panel color="vm.color" ng-show="vm.valData.scheduleIssues.length > 0">
+            <card-panel-header>
+                <div class="header-flex">
+                    <b>{{'ScheduledIssues' | translate}}</b>
+                </div>
+                <div class="header-flex">
+                    <span class="pp-validation-number">{{vm.valData.totalLastValNum}} {{'IssuesText' | translate}}</span>
+                </div>
+            </card-panel-header>
+            <card-panel-content>
+                <div class="con-row">
+                    <div class="con-flex">
+                        <div class="con-row">
+                            <div class="con-flex ">
+                                <label for="filter" class="input-icon">
+                                    <i class="mdi mdi-filter-outline">
+                                        <input type="text" id="filter" ng-model="vm.scheduleIssuesFilter" placeholder="{{'FilterValidationIssues' | translate}}">
+                                        <md-tooltip>{{'FilterValidationIssues' | translate}}</md-tooltip>
+                                    </i>
+                                </label>
+                            </div>
+                            <div class="con-flex"></div>
                         </div>
-                        <div class="con-flex"></div>
+                        <table class="wfm-table">
+                            <thead>
+                                <tr>
+                                    <th>{{'Issue' | translate}}</th>
+                                    <th>{{'Description' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="msg in vm.valData.scheduleIssues | filter: vm.scheduleIssuesFilter">
+                                    <td>{{msg.ResourceType | translate}}: {{msg.ResourceName}}</td>
+                                    <td>
+                                        <div ng-repeat="item in msg.ValidationErrors">{{item}}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <table class="wfm-table">
-                        <thead>
-                            <tr>
-                                <th>{{'Issue' | translate}}</th>
-                                <th>{{'Description' | translate}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="msg in vm.valData.scheduleIssues | filter: vm.scheduleIssuesFilter">
-                                <td>{{msg.ResourceType | translate}}: {{msg.ResourceName}}</td>
-                                <td>
-                                    <div ng-repeat="item in msg.ValidationErrors">{{item}}</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
-            </div>
-        </card-body>
-    </wfm-card>
-</wfm-card-list>
+            </card-panel-content>
+        </card-panel>
+    </div>
+</div>
 <div class="con-row" ng-if="!vm.hasValidations()">
     <div class="con-flex">
         <div class="con-row panel material-depth-1">
             <div class="con-flex">
-                <span ng-if="!vm.valLoading"><i class="mdi mdi-information-outline"></i>{{'NoValidIssuesForPp' | translate}}</span>
+                <span ng-if="!vm.valLoading">
+                    <i class="mdi mdi-information-outline"></i>{{'NoValidIssuesForPp' | translate}}</span>
                 <span ng-if="vm.valLoading" class="text-warning">
                     <i class="mdi mdi-alert"></i>
                     Loading validation issues...

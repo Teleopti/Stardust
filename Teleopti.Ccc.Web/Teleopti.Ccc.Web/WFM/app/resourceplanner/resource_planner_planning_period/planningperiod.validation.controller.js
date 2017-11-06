@@ -14,6 +14,10 @@
         vm.valLoading = false;
         vm.getValidationByPpId = getValidationByPpId;
         vm.hasValidations = hasValidations;
+        vm.color = {
+            render: 'class',
+			className: 'pp-validation-color'
+        }
 
         getValidationByPpId();
 

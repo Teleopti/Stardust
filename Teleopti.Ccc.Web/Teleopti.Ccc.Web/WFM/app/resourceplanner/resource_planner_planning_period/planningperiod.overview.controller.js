@@ -30,6 +30,7 @@
     vm.valData = {
       totalValNum: 0,
       totalPreValNum: 0,
+      totalLastValNum: 0,
       scheduleIssues: [],
       preValidation: []
     };
@@ -213,7 +214,7 @@
                   .replace('{1}', moment(vm.selectedPp.EndDate).format('L')));
               return loadLastResult();
             }
-            if (result.Failed ) {
+            if (result.Failed) {
               vm.optimizeRunning = false;
               vm.status = '';
               return handleScheduleOrOptimizeError(
@@ -267,17 +268,22 @@
     function getTotalValidationErrorsNumber() {
       vm.valData.totalValNum = 0;
       vm.valData.totalPreValNum = 0;
+      vm.valData.totalLastValNum = 0;
       var pre = vm.valData.preValidation;
       var after = vm.valData.scheduleIssues;
       if (pre.length > 0) {
         angular.forEach(pre, function (item) {
-          vm.valData.totalPreValNum += item.ValidationErrors.length;
+          if (item.ValidationErrors !== null)
+            vm.valData.totalPreValNum += item.ValidationErrors.length;
         });
       }
       if (after.length > 0) {
-        vm.valData.totalValNum += after.length;
+        angular.forEach(after, function (item) {
+          if (item.ValidationErrors !== null)
+            vm.valData.totalLastValNum += item.ValidationErrors.length;
+        });
       }
-      return vm.valData.totalValNum += vm.valData.totalPreValNum;
+      return vm.valData.totalValNum = vm.valData.totalPreValNum + vm.valData.totalLastValNum;
     }
 
     function initResult(interResult) {

@@ -370,17 +370,25 @@ wfm-card.pp-validation-card > md-card {
 	margin: -10px 0px -30px -2px;
 }
 
-.pp-validation-number {
-	padding: 5px;
-    margin-left: 10px;
-    background-color: $red-600;
-    border-radius: 15px;
+.pp-validation-color { //new-red
+	border-color: $red-600 !important;
 }
 
-.pp-validation-progress {
-    margin-bottom: -5px;
-    margin-left: -15px;
-    margin-right: -15px;
+.pp-validation-number {
+	padding: 9px;
+    background-color: $red-600;
+	border-radius: 20px;
+}
+
+.pp-validation-button {
+	margin: -13px;
+	padding-left: 9px;
+}
+
+card-panel-header > .pp-validation-progress {
+	position: absolute;
+	top:0;
+	left:0;
 }
 
 .pg-setting-info {
@@ -419,52 +427,6 @@ wfm-card.pp-validation-card > md-card {
 	margin: -22px 0px -30px -2px;
 }
 
-.pg-prio-buttoms-wrapper {
-	border: $gray012  2px solid;
-    display: inline-block;
-    border-radius: 25px;
-}
-
-.pg-prio-buttoms-wrapper > .ng-hide.ng-hide-animate{
-	display: none !important;
-}
-
-//for new setting overview design
-wfm-card-list.pg-setting-list > md-content {
-	margin: -10px 0px 0 -3px;
-}
-
-md-card > .wfm-card-content {
-	padding:0px;
-}
-
-md-card > .wfm-card-title {
-	margin-left: 10px ;
-}
-
-.pg-setting-card-priority-color {
-	margin-left: -25px;
-}
-
-.pg-setting-card-header-wrapper {
-	display: flex;
-}
-
-.pg-setting-card-title {
-	flex: 3;
-	margin-left: 20px;
-}
-
-.pg-setting-card-main {
-	flex: 3;
-}
-
-.pg-setting-card-action {
-	flex: 1;
-	text-align: end;
-	margin-right: 10px;
-}
-
 .pg-setting-card-content {
 	background-color: $gray012;
 }
@@ -500,6 +462,11 @@ md-card > .wfm-card-title {
 	20%, 60%, 80% {
 		transform: perspective(1px) scale(1.01);
 	}
+}
+
+.pg-setting-chip-list {
+	text-align: left;
+	padding: 0 5px;
 }
 
 //for then new card panel design

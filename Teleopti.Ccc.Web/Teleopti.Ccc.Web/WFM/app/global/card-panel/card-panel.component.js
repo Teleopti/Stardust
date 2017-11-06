@@ -98,7 +98,7 @@
                     preOpen();
                 }
                 switch (attrs.cardAnimate) {
-                    case '' || 'multi':
+                    default:
                         multipleOpen();
                         break;
                     case 'single':
@@ -109,8 +109,8 @@
             }
 
             function preOpen() {
-                if (attrs.preOpen == "true" && allCards[attrs.id].classList.contains("close")) {
-                    return allCards[attrs.id].classList.remove("close");
+                if (attrs.preOpen == "true" && allCards[attrs.id].classList.contains("hidden")) {
+                    return allCards[attrs.id].classList.remove("hidden");
                 }
             }
 
@@ -120,7 +120,7 @@
                     function () {
                         for (var i = 0; i < allCards.length; i++) {
                             if (allCards[i].id !== selectedCardContent.id) {
-                                allCards[i].classList.add("close");
+                                allCards[i].classList.add("hidden");
                             } else {
                                 toggleCard();
                             }
@@ -140,10 +140,10 @@
 
             function toggleCard() {
                 var style = selectedCardContent.classList;
-                if (style.contains("close")) {
-                    return style.remove("close");
+                if (style.contains("hidden")) {
+                    return style.remove("hidden");
                 } else {
-                    return style.add("close");
+                    return style.add("hidden");
                 }
             }
 
