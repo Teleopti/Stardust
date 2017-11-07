@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -47,15 +48,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				AgentsToSchedule = stateHolder.ChoosenAgents,
 				PlanningPeriodId = planningPeriodId
 			});
-			return CreateResult(stateHolder.ChoosenAgents, schedulingInformation.Period);
+			return CreateResult(stateHolder.ChoosenAgents, schedulingInformation.Period, schedulingInformation.PlanningGroup);
 		}
 
 		[TestLog]
 		[UnitOfWork]
-		protected virtual SchedulingResultModel CreateResult(IEnumerable<IPerson> fixedStaffPeople, DateOnlyPeriod period)
+		protected virtual SchedulingResultModel CreateResult(IEnumerable<IPerson> fixedStaffPeople, DateOnlyPeriod period, IPlanningGroup planningGroup)
 		{
 			_currentUnitOfWork.Current().Reassociate(fixedStaffPeople);
-			return _fullSchedulingResult.Execute(period, fixedStaffPeople);
+			return _fullSchedulingResult.Execute(period, fixedStaffPeople, planningGroup);
 		}
 
 		[TestLog]

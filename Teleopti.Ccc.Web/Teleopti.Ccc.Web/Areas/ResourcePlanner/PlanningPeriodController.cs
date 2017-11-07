@@ -209,9 +209,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					new ScheduleDictionaryLoadOptions(false, false, false),
 					planningPeriod.Range.ToDateTimePeriod(_userTimeZone.TimeZone()), people, true);
 				validationResult = _basicCheckScheduleHints.Execute(
-					new HintInput(null, people, planningPeriod.Range)
+					new HintInput(null, people, planningPeriod.Range, _blockPreferenceProviderUsingFiltersFactory.Create(planningPeriod.PlanningGroup))
 					{
-						BlockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create(planningPeriod.PlanningGroup),
 						CurrentSchedule = schedules
 					});
 			}

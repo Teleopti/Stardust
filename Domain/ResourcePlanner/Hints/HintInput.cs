@@ -13,11 +13,12 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		public IBlockPreferenceProvider BlockPreferenceProvider { get; set; }
 		public IScheduleDictionary CurrentSchedule { get; set; }
 
-		public HintInput(IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod period)
+		public HintInput(IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod period, IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			Schedules = schedules;
 			People = people;
 			Period = period;
+			BlockPreferenceProvider = blockPreferenceProvider;
 		}
 	}
 }

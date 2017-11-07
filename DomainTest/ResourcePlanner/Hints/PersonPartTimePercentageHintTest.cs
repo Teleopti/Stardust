@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var person = PersonFactory.CreatePerson().WithId();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(startDate));
 
-			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod)).InvalidResources
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPartTimePercentageHint)));
 
 			result.Should().Be.Empty();
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			((IDeleteTag)personPeriod.PersonContract.PartTimePercentage).SetDeleted();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod)).InvalidResources
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPartTimePercentageHint)));
 
 			result.Should().Not.Be.Empty();

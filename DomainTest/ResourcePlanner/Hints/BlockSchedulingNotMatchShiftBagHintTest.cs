@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var personAssignment = new PersonAssignment(agent, scenario, startDate.AddDays(1)).WithLayer(activity, new TimePeriod(8, 16));
 			scheduleDictionary.AddPersonAssignment(personAssignment);
 			
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var personAssignment = new PersonAssignment(agent, scenario, startDate.AddDays(1)).WithLayer(activity, new TimePeriod(8, 17)).ShiftCategory(shiftCategory);
 			scheduleDictionary.AddPersonAssignment(personAssignment);
 			
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{

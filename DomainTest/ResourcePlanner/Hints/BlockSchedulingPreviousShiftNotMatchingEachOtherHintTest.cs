@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment);
 			currentSchedule.AddPersonAssignment(personAssignment2);
 			
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment);
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment);
 			currentSchedule.AddPersonAssignment(personAssignment2);
 			
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment);
 			currentSchedule.AddPersonAssignment(personAssignment2);
 			
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment);
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment);
 			currentSchedule.AddPersonAssignment(personAssignment2);
 			
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var personAssignment = new PersonAssignment(agent, scenario, startDate).WithDayOff();
 			currentSchedule.AddPersonAssignment(personAssignment);
 			
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod)
+			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
 			{
 				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{

@@ -2228,10 +2228,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					var selectedPeriod = new DateOnlyPeriod(startDay.DateOnlyAsPeriod.DateOnly, endDay.DateOnlyAsPeriod.DateOnly);
 					var validationResult = _container.Resolve<CheckScheduleHints>()
 						.Execute(new HintInput(_schedulerState.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), 
-							selectedPeriod)
-						{
-							BlockPreferenceProvider = new FixedBlockPreferenceProvider(_schedulingOptions)
-						});
+							selectedPeriod, new FixedBlockPreferenceProvider(_schedulingOptions)));
 					if (validationResult.InvalidResources.Any())
 						new AgentValidationResult(validationResult).Show(this);
 				}
