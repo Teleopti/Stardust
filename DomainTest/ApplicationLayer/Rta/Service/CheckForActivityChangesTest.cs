@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public RtaTestAttribute Context;
 
 		[Test]
-		public void ShouldKeepPreviousStateCodeWhenNotifiedOfActivityChange()
+		public void ShouldKeepPreviousStateWhenNotifiedOfActivityChange1()
 		{
 			var personId = Guid.NewGuid();
 			Database
@@ -35,13 +36,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
+			Publisher.Clear();
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
-			Database.PersistedReadModel.StateName.Should().Be("phone");
+			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Be.Empty();
 		}
 
 		[Test]
-		public void ShouldKeepPreviousStateWhenNotifiedOfActivityChange()
+		public void ShouldKeepPreviousStateWhenNotifiedOfActivityChange2()
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
@@ -56,9 +58,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
+			Publisher.Clear();
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
-			Database.PersistedReadModel.StateName.Should().Be("alarm");
+			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Be.Empty();
 		}
 
 		[Test]
@@ -241,9 +244,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, phone, "2015-09-21 09:00", "2015-09-21 12:00")
 				.WithSchedule(personId, lunch, "2015-09-21 12:00", "2015-09-21 13:00")
 				;
+			Publisher.Clear();
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
+			Publisher.PublishedEvents.OfType<AgentStateChangedEvent>().Single()
+				.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
 		}
 		
 		[Test]
