@@ -5,9 +5,9 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class BlockSchedulingPreviousShiftNotMatchingEachOtherValidator : IScheduleValidator
+	public class BlockSchedulingPreviousShiftNotMatchingEachOtherValidator : IScheduleHint
 	{
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			_scheduleDayEquator = scheduleDayEquator;
 		}
 
-		public void FillResult(ValidationResult validationResult, ValidationInput input)
+		public void FillResult(HintResult validationResult, HintInput input)
 		{
 			var people = input.People;
 			var period = input.Period;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			}
 		}
 
-		private void checkIfPreivousDaysMatchEachOther(ValidationResult validationResult, IScheduleDay firstDayAfterPeriod, IEnumerable<IScheduleDay> period, IPerson person, IExtraPreferences blockOption)
+		private void checkIfPreivousDaysMatchEachOther(HintResult validationResult, IScheduleDay firstDayAfterPeriod, IEnumerable<IScheduleDay> period, IPerson person, IExtraPreferences blockOption)
 		{
 			var personAssignment = firstDayAfterPeriod.PersonAssignment();
 			var shiftCategory = personAssignment.ShiftCategory;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				}
 				if (blockOption.UseBlockSameShiftCategory && scheduleDay.PersonAssignment().ShiftCategory != shiftCategory)
 				{
-					validationResult.Add(new PersonValidationError
+					validationResult.Add(new PersonHintError
 					{
 						PersonName = person.Name.ToString(),
 						PersonId = person.Id.Value,
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				}
 				if (blockOption.UseBlockSameStartTime && scheduleDay.PersonAssignment().Period.StartDateTime.TimeOfDay != startTime)
 				{
-					validationResult.Add(new PersonValidationError
+					validationResult.Add(new PersonHintError
 					{
 						PersonName = person.Name.ToString(),
 						PersonId = person.Id.Value,
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				}
 				if (blockOption.UseBlockSameShift && !_scheduleDayEquator.MainShiftEquals(scheduleDay, firstDayAfterPeriod))
 				{
-					validationResult.Add(new PersonValidationError
+					validationResult.Add(new PersonHintError
 					{
 						PersonName = person.Name.ToString(),
 						PersonId = person.Id.Value,

@@ -545,8 +545,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonContractScheduleHint>().As<IScheduleHint>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_BlockSchedulingValidation_46092))
 			{
-				builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherValidator>().As<IScheduleValidator>().SingleInstance();
-				builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherValidator>().As<IScheduleValidator>().SingleInstance();
+				builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherValidator>().As<IScheduleHint>().SingleInstance();
+				builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherValidator>().As<IScheduleHint>().SingleInstance();
 			}
 		}
 

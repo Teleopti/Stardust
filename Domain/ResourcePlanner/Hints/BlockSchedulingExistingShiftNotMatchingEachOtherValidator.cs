@@ -4,9 +4,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class BlockSchedulingExistingShiftNotMatchingEachOtherValidator : IScheduleValidator
+	public class BlockSchedulingExistingShiftNotMatchingEachOtherValidator : IScheduleHint
 	{
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			_scheduleDayEquator = scheduleDayEquator;
 		}
 
-		public void FillResult(ValidationResult validationResult, ValidationInput input)
+		public void FillResult(HintResult validationResult, HintInput input)
 		{
 			var people = input.People;
 			var period = input.Period;
@@ -174,9 +174,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 			}
 		}
 
-		private void addValidationResult(ValidationResult validationResult, IPerson person, string message)
+		private void addValidationResult(HintResult validationResult, IPerson person, string message)
 		{
-			validationResult.Add(new PersonValidationError
+			validationResult.Add(new PersonHintError
 			{
 				PersonName = person.Name.ToString(),
 				PersonId = person.Id.Value,
