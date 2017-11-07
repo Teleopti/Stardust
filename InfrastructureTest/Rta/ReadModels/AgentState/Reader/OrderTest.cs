@@ -61,7 +61,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		{
 			var person1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
 			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
-			var person3 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53fa");
 			
 			Persister.UpsertAssociation(new AssociationInfo
 			{
@@ -75,15 +74,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
 			});
 			
+			Persister.UpsertName(person1, "Pierre", "Baldi");
+			Persister.UpsertName(person2, "Ashley", "Andeen");
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				OrderBy = "Name",
+				Direction = "asc"
+			});
+
+			result.First().PersonId.Should().Be(person2);
+			result.Last().PersonId.Should().Be(person1);
+		}
+		
+		[Test]
+		public void ShouldOrderDescendantly()
+		{
+			var person1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
+			
 			Persister.UpsertAssociation(new AssociationInfo
 			{
-				PersonId = person3,
+				PersonId = person1,
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
 			});
 			
-			Persister.UpsertName(person1, "Ashley", "Andeen");
-			Persister.UpsertName(person2, "Alina", "Andeen");
-			Persister.UpsertName(person3, "Pierre", "Baldi");
+			Persister.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = person2,
+				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
+			});
+			
+			Persister.UpsertName(person1, "Pierre", "Baldi");
+			Persister.UpsertName(person2, "Ashley", "Andeen");
 
 			var result = Target.Read(new AgentStateFilter
 			{
@@ -91,8 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				Direction = "desc"
 			});
 
-			result.First().PersonId.Should().Be(person3);
-			result.Second().PersonId.Should().Be(person1);
+			result.First().PersonId.Should().Be(person1);
 			result.Last().PersonId.Should().Be(person2);
 		}
 
@@ -101,35 +123,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		{
 			var person1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
 			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
-			var person3 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53fa");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				SiteName = "aSite",
-				TeamName = "aTeam",
+				TeamName = "bTeam",
 				PersonId = person1
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				SiteName = "aSite",
-				TeamName = "cTeam",
+				TeamName = "aTeam",
 				PersonId = person2
-			});
-			Persister.Upsert(new AgentStateReadModelForTest
-			{
-				SiteName = "aSite",
-				TeamName = "bTeam",
-				PersonId = person3
 			});
 	
 			var result = Target.Read(new AgentStateFilter()
 			{
 				OrderBy = "SiteAndTeamName",
-				Direction = "desc"
+				Direction = "asc"
 			});
 
-			result.First().TeamName.Should().Be("cTeam");
-			result.Second().TeamName.Should().Be("bTeam");
-			result.Last().TeamName.Should().Be("aTeam");
+			result.First().TeamName.Should().Be("aTeam");
+			result.Last().TeamName.Should().Be("bTeam");
 		}
 		
 		[Test]
@@ -140,21 +154,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,
-				StateName = "Lunch"
+				StateName = "Phone"
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId2,
-				StateName = "Phone"
+				StateName = "Lunch"
 			});
 
 			var result = Target.Read(new AgentStateFilter
 			{
 				OrderBy = "State",
-				Direction = "desc"
+				Direction = "asc"
 			});
 
 			result.First().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId1);
 		}
 		
 		[Test]
@@ -163,13 +178,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			Now.Is("2017-11-03 12:00");
 			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
-			var personId3 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53fa");
-			Persister.Upsert(new AgentStateReadModelForTest
-			{
-				PersonId = personId2,
-				StateName = "Email",
-				StateStartTime = "2017-11-03 11:30".Utc(),
-			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,
@@ -178,9 +186,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
-				PersonId = personId3,
-				StateName = "Phone",
-				StateStartTime = "2017-11-03 11:45".Utc(),
+				PersonId = personId2,
+				StateName = "Email",
+				StateStartTime = "2017-11-03 11:30".Utc(),
 			});
 
 			var result = Target.Read(new AgentStateFilter
@@ -189,8 +197,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				Direction = "asc"
 			});
 
-			result.First().PersonId.Should().Be(personId3);
-			result.Second().PersonId.Should().Be(personId2);
+			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
 		}	
 		
@@ -200,13 +207,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			Now.Is("2017-11-03 12:00");
 			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
-			var personId3 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53fa");
-			Persister.Upsert(new AgentStateReadModelForTest
-			{
-				PersonId = personId2,
-				StateName = "Email",
-				AlarmStartTime = "2017-11-03 11:30".Utc(),
-			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,
@@ -215,20 +215,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
-				PersonId = personId3,
-				StateName = "Phone",
-				AlarmStartTime = "2017-11-03 11:45".Utc(),
+				PersonId = personId2,
+				StateName = "Email",
+				AlarmStartTime = "2017-11-03 11:30".Utc(),
 			});
 
 			var result = Target.Read(new AgentStateFilter
 			{
 				OrderBy = "TimeInAlarm",
-				Direction = "desc"
+				Direction = "asc"
 			});
 
-			result.First().PersonId.Should().Be(personId1);
-			result.Second().PersonId.Should().Be(personId2);
-			result.Last().PersonId.Should().Be(personId3);
+			result.First().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId1);
 		}
 		
 		[Test]
@@ -237,13 +236,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			Now.Is("2017-11-03 12:00");
 			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
-			var personId3 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53fa");
-			Persister.Upsert(new AgentStateReadModelForTest
-			{
-				PersonId = personId2,
-				StateName = "Email",
-				OutOfAdherenceStartTime = "2017-11-03 11:30".Utc(),
-			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,
@@ -252,9 +244,67 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
-				PersonId = personId3,
-				StateName = "Phone",
-				OutOfAdherenceStartTime = "2017-11-03 11:45".Utc(),
+				PersonId = personId2,
+				StateName = "Email",
+				OutOfAdherenceStartTime = "2017-11-03 11:30".Utc(),
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				OrderBy = "TimeOutOfAdherence",
+				Direction = "asc"
+			});
+
+			result.First().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId1);
+		}
+		
+		[Test]
+		public void ShouldOrderByOutOfAdherenceStartTimeWhenNull()
+		{
+			Now.Is("2017-11-03 12:00");
+			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				StateName = "Lunch",
+				OutOfAdherenceStartTime = "2017-11-03 11:30".Utc(),
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId2,
+				StateName = "Email",
+				OutOfAdherenceStartTime = null,
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				OrderBy = "TimeOutOfAdherence",
+				Direction = "asc"
+			});
+
+			result.First().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId1);
+		}
+		
+		[Test]
+		public void ShouldInvertDirection()
+		{
+			Now.Is("2017-11-03 12:00");
+			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				StateName = "Lunch",
+				OutOfAdherenceStartTime = "2017-11-03 11:15".Utc(),
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId2,
+				StateName = "Email",
+				OutOfAdherenceStartTime = "2017-11-03 11:30".Utc(),
 			});
 
 			var result = Target.Read(new AgentStateFilter
@@ -264,8 +314,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 
 			result.First().PersonId.Should().Be(personId1);
-			result.Second().PersonId.Should().Be(personId2);
-			result.Last().PersonId.Should().Be(personId3);
+			result.Last().PersonId.Should().Be(personId2);
 		}
 		
 		[Test]
@@ -291,6 +340,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 
 			result.First().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId1);
 		}
 
 	}
