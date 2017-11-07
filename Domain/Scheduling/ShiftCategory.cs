@@ -28,15 +28,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
         /// Creates a shiftCategory with a name
         /// </summary>
         /// <param name="name"></param>
-        public ShiftCategory(string name) :this()
+        public ShiftCategory(string name)
         {
             _description = new Description(name);
         }
 
-        /// <summary>
-        /// For NHibernate
-        /// </summary>
-        protected ShiftCategory()
+		public ShiftCategory() : this("_")
         {
             
         }
