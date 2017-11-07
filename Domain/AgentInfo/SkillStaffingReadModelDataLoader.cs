@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var resolution = skills.Min(s => s.DefaultResolution);
 			var skillDictionary = skills.Distinct().ToDictionary(s => s.Id.GetValueOrDefault());
 			var skillIds = skillDictionary.Keys.ToArray();
-			var skillStaffingIntervals = _skillStaffingIntervalProvider.StaffingIntervalsForSkills(skillIds, period,false);
+			var skillStaffingIntervals = _skillStaffingIntervalProvider.StaffingIntervalsForSkills(skillIds, period, true);
 
 			var skillStaffingDatas = new List<SkillStaffingData>();
 			var skillStaffingIntervalGroups = skillStaffingIntervals.GroupBy(s => s.SkillId);

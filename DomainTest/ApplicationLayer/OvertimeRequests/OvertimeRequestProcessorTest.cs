@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -64,15 +65,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		public void ShouldApprove()
+		public void ShouldApproveUseIntradyShrinkage()
 		{
 			setupPerson(8, 21);
-			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
 			var personRequest = createOvertimeRequest(18, 1);
 			Target.Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldDenyWhenThereIsNoUnderStaffingSkillWithShrinkage()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 15d);
+
+			var personRequest = createOvertimeRequest(18, 1);
+			Target.Process(personRequest, true);
+
+			personRequest.IsDenied.Should().Be.True();
 		}
 
 		[Test]
@@ -183,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldDenyForEditWhenThereIsNoUnderStaffingSkill()
 		{
 			setupPerson(8, 21);
-			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 11d);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 15d);
 
 			var personRequest = createOvertimeRequest(18, 1);
 			Target.Process(personRequest, true);
@@ -199,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldDenyWhenThereIsNoUnderStaffingSkill()
 		{
 			setupPerson(8, 21);
-			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 11d);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 15d);
 
 			var personRequest = createOvertimeRequest(18, 1);
 			Target.Process(personRequest, true);
@@ -224,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var personSkill1 = createPersonSkill(activity1, notUnderStaffingSkill);
 			var personSkill2 = createPersonSkill(activity2, criticalUnderStaffingSkill);
 
-			setupIntradayStaffingForSkill(notUnderStaffingSkill, 10d, 10d);
+			setupIntradayStaffingForSkill(notUnderStaffingSkill, 10d, 15d);
 			setupIntradayStaffingForSkill(criticalUnderStaffingSkill, 10d, 6d);
 
 			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
@@ -242,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldDenyWhenOnlyUnderStaffingButNoCriticalSkill()
 		{
 			setupPerson();
-			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 9d);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 15d);
 
 			var personRequest = createOvertimeRequest(11, 1);
 			mockRequestApprovalServiceApproved(personRequest);
@@ -783,8 +796,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 						new TimePeriod(_intervals[i], _intervals[i].Add(TimeSpan.FromMinutes(15))),
 						forecastedStaffing));
 				}
-				SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(Scenario.Current(), day, 0,
-					timePeriodTuples.ToArray()));
+				var skillDay = skill.CreateSkillDayWithDemandOnInterval(Scenario.Current(), day, 0,
+					timePeriodTuples.ToArray());
+				skillDay.SkillDataPeriodCollection.ForEach(s => { s.Shrinkage = new Percent(0.5); });
+				SkillDayRepository.Has(skillDay);
 			});
 		}
 

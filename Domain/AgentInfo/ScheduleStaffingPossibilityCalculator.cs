@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
 			var skills = getSupportedPersonSkills(period).Select(s => s.Skill).ToArray();
-			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, isCheckingIntradayStaffing);
+			var useShrinkage = isShrinkageValidatorEnabled();
+			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, useShrinkage, isCheckingIntradayStaffing);
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => new IntervalHasUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
 			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary, true);
@@ -51,11 +53,23 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
 			var skills = _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(period)).Select(s => s.Skill).ToArray();
-			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, isSiteOpened);
+			var useShrinkage = true;
+			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, useShrinkage, isSiteOpened);
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => !new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
 			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary);
 		}
+
+		private bool isShrinkageValidatorEnabled()
+		{
+			var person = _loggedOnUser.CurrentUser();
+			if (person.WorkflowControlSet?.AbsenceRequestOpenPeriods == null)
+				return false;
+
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
+			return person.WorkflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(timeZone);
+		}
+
 		private bool isSiteOpened(DateOnly date)
 		{
 			var siteOpenHour = _loggedOnUser.CurrentUser().SiteOpenHour(date);
