@@ -260,11 +260,11 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProviderTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisProviderTest.cs" />
+    <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHintForBetweenDayoffsTest.cs" />
+    <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHintForSchedulePeriodTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingNotMatchShiftBagHintTest.cs" />
-    <Compile Include="ResourcePlanner\Validation\BlockSchedulingExistingShiftNotMatchingEachOtherValidatorForBetweenDayoffsTest.cs" />
-    <Compile Include="ResourcePlanner\Validation\BlockSchedulingExistingShiftNotMatchingEachOtherValidatorForSchedulePeriodTest.cs" />
+    <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHintTest.cs" />
-    <Compile Include="ResourcePlanner\Validation\BlockSchedulingPreviousShiftNotMatchingEachOtherValidatorTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockContractTimeTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCheckerTest.cs" />

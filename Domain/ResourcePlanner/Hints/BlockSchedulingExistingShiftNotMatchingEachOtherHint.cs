@@ -6,11 +6,11 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class BlockSchedulingExistingShiftNotMatchingEachOtherValidator : IScheduleHint
+	public class BlockSchedulingExistingShiftNotMatchingEachOtherHint : IScheduleHint
 	{
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 
-		public BlockSchedulingExistingShiftNotMatchingEachOtherValidator(IScheduleDayEquator scheduleDayEquator)
+		public BlockSchedulingExistingShiftNotMatchingEachOtherHint(IScheduleDayEquator scheduleDayEquator)
 		{
 			_scheduleDayEquator = scheduleDayEquator;
 		}
