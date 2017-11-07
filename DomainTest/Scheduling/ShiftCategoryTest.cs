@@ -27,15 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         }
 
         /// <summary>
-        /// Protected constructor works.
-        /// </summary>
-        [Test]
-        public void ProtectedConstructorWorks()
-        {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));
-        }
-
-        /// <summary>
         /// Verifies that properties work
         /// </summary>
         [Test]
