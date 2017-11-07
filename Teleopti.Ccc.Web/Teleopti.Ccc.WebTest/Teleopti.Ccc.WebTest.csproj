@@ -278,6 +278,7 @@
     <Compile Include="Areas\People\MultipartHttpContentExtractorTest.cs" />
     <Compile Include="Areas\People\PeopleAreaModuleTest.cs" />
     <Compile Include="Areas\People\Providers\ImportAgentDataProviderTest.cs" />
+    <Compile Include="Areas\Reporting\Controller\ScheduleAuditTrailControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningGroupControllerTest.cs" />
     <Compile Include="Areas\Start\Core\IanaTimeZoneProviderTest.cs" />
