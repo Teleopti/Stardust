@@ -11144,7 +11144,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The existing shifts are not matching each other within the schedule period..
+        ///   Looks up a localized string similar to The existing shifts are not matching each other..
         /// </summary>
         public static string ExistingShiftNotMatchShift {
             get {
@@ -11153,7 +11153,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift categories for existing shifts are not matching each other within the schedule period..
+        ///   Looks up a localized string similar to The shift categories for existing shifts are not matching each other..
         /// </summary>
         public static string ExistingShiftNotMatchShiftCategory {
             get {
@@ -11162,7 +11162,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The start time for existing shifts are not matching each other within the schedule period..
+        ///   Looks up a localized string similar to The start time for existing shifts are not matching each other..
         /// </summary>
         public static string ExistingShiftNotMatchStartTime {
             get {

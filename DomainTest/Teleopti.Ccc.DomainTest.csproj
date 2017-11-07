@@ -261,7 +261,8 @@
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProviderTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisProviderTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingNotMatchShiftBagHintTest.cs" />
-    <Compile Include="ResourcePlanner\Validation\BlockSchedulingExistingShiftNotMatchingEachOtherValidatorTest.cs" />
+    <Compile Include="ResourcePlanner\Validation\BlockSchedulingExistingShiftNotMatchingEachOtherValidatorForBetweenDayoffsTest.cs" />
+    <Compile Include="ResourcePlanner\Validation\BlockSchedulingExistingShiftNotMatchingEachOtherValidatorForSchedulePeriodTest.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHintTest.cs" />
     <Compile Include="ResourcePlanner\Validation\BlockSchedulingPreviousShiftNotMatchingEachOtherValidatorTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
