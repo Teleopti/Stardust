@@ -7,6 +7,7 @@ CREATE TABLE [Tenant].[AdminAccessToken](
 	[AdminUserId] ASC,
 	[AccessToken] ASC
 ))
+GO
 
 ALTER TABLE [Tenant].[AdminAccessToken]  WITH CHECK ADD  CONSTRAINT [FK_AdminAccessToken_AdminUser] FOREIGN KEY([AdminUserId])
 REFERENCES [Tenant].[AdminUser] ([Id])
@@ -15,5 +16,3 @@ GO
 
 ALTER TABLE [Tenant].[AdminAccessToken] CHECK CONSTRAINT [FK_AdminAccessToken_AdminUser]
 GO
-
-

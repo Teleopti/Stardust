@@ -133,5 +133,24 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			result.Success.Should().Be.False();
 			result.Message.Should().Be.EqualTo("Both user name and password must be provided.");
 		}
+		
+//		[Test]
+//		public void ShouldReturnAccessTokenAfterSucessfulLogon()
+//		{
+//			//new fresh
+//			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+//			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+//			{
+//				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
+//				Target.AddUser(addUserModel);
+//			}
+//			var model = new LoginModel { GrantType = "password", Password = "passadej", UserName = "ola@teleopti.com" };
+//			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+//			{
+//				var result = Target.Login(model).Content;
+//				result.Success.Should().Be.True();
+//				result.AccessToken.Should().Not.Be.NullOrEmpty();
+//			}
+//		}
 	}
 }
