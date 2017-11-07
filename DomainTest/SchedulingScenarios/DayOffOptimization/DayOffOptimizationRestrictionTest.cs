@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -76,5 +77,47 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()
 				.Should().Be.True();//tuesday
 		}
+
+		[TestCase(1d, true)]
+		[TestCase(0.99d, true)]
+		[TestCase(0d, false)]
+		[Ignore("46505 - to be fixed")]
+		public void ShouldCareAboutHourlyAvailabilityRestrictions(double studentAvailabilityValue, bool agentShouldHaveDayOff)
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = new Activity();
+			var skill = new Skill().For(activity).IsOpen();
+			var scenario = new Scenario();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneWeek(firstDay);
+			agent.SchedulePeriod(firstDay).SetDaysOff(1);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 5, 1, 5, 5, 5, 25, 5);
+			var asses = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(8, 16))).ToArray();
+			asses[5].SetDayOff(new DayOffTemplate());
+			var assesAndRestrictions = new List<IScheduleData>(asses);
+			for (var i = 0; i < 7; i++)
+			{
+				if(i == 5) continue;
+				assesAndRestrictions.Add(new StudentAvailabilityDay(agent, firstDay.AddDays(i), new IStudentAvailabilityRestriction[]
+				{
+					new StudentAvailabilityRestriction {StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), null),
+						EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(21, 0, 0))
+					}
+				}));
+			}
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new []{agent}, assesAndRestrictions, skillDays);
+			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag(), UseStudentAvailabilities = true, StudentAvailabilitiesValue =  studentAvailabilityValue}};
+
+			Target.Execute(period, new[] {agent}, new NoSchedulingProgress(), optPrefs,
+				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()),
+				new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()
+				.Should().Be.EqualTo(agentShouldHaveDayOff);
+		}	
 	}
 }
