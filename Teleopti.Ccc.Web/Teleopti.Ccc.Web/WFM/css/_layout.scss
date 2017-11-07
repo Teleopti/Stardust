@@ -136,3 +136,7 @@ wfm-card > md-card{
 .table>tbody>tr>td{
 	border-top:none;
 }
+
+.md-ink-ripple:before{
+	background-color:transparent!important;
+}
