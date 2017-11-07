@@ -13,6 +13,29 @@
 
 		var selectedText = '';
 
+		function TeamsResult(result) {
+			Object.defineProperty(this, '_result', { value: result });
+			this.current = result;
+		}
+
+		TeamsResult.prototype.filterByName = function (text) {
+			// console.log('TeamsResult.filterByName: ' + text);
+			var query = new RegExp(text, 'i');
+			this.current = this._result.filter(function (team) {
+				return team.teamName.search(query) != -1;
+			});
+		};
+
+		var filter = '';
+
+		Object.defineProperty(ctrl, 'filter', {
+			get: function () { return filter; },
+			set: function (newValue) {
+				filter = newValue;
+				ctrl.teamsResult.filterByName(filter);
+			}
+		})
+
 		ctrl.settings = [
 			{ value: 'default', name: 'Default' },
 			{ value: 'setting1', name: 'Setting 1' },
@@ -48,13 +71,17 @@
 		ctrl.selectedSites = [];
 
 		function loadTeams() {
-			ctrl.isBusy = true;
+			startSpinner();
 			var siteIds = ctrl.selectedSites.map(function (site) { return site.id; });
 			dataService.fetchTeams(siteIds).then(function (teams) {
-				ctrl.teams = teams;
-				ctrl.isBusy = false;
+				ctrl.teamsResult = new TeamsResult(teams);
+				stopSpinner();
 			});
 		}
+
+		function startSpinner() { ctrl.isBusy = true; }
+
+		function stopSpinner() { ctrl.isBusy = false; }
 
 		dataService.fetchSites().then(function (sites) {
 			ctrl.sites = sites;

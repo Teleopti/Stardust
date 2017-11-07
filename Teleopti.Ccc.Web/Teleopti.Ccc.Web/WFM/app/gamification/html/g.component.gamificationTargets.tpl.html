@@ -5,11 +5,11 @@
 		</md-option>
 	</md-select>
 	<div>
-		<input type="text" placeholder="{{'FilterTeams'|translate}}" />
+		<input ng-model="$ctrl.filter" ng-model-options="{debounce: 200}" type="text" placeholder="{{'FilterTeams'|translate}}" />
 	</div>
 </div>
 <div class="table-wrapper">
-	<gamification-targets-table teams="$ctrl.teams" available-settings="" on-setting-change="$ctrl.onAppliedSettingChange(teamIds, newValue)"></gamification-targets-table>
+	<gamification-targets-table teams="$ctrl.teamsResult.current" available-settings="" on-setting-change="$ctrl.onAppliedSettingChange(teamIds, newValue)"></gamification-targets-table>
 	<div ng-if="$ctrl.isBusy" class="mask">
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
