@@ -221,6 +221,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModel\CheckForActivityChangesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModel\StartTime\AlarmStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModel\StartTime\IsAlarmTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModel\StartTime\OutOfAdherenceStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModel\StartTime\ProperAlarmStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModel\StartTime\RuleStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModel\StartTime\StateStartTimeTest.cs" />

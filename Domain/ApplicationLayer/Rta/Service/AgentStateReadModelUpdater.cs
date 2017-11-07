@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -107,31 +108,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			model.StateStartTime = @event.Timestamp;
 		}
 
-		private static void handle(AgentStateReadModel model, PersonNeutralAdherenceEvent @event)
-		{
-			var last = model.OutOfAdherences.EmptyIfNull().LastOrDefault();
-			if (last != null && last.EndTime == null)
-				last.EndTime = @event.Timestamp;
-		}
-
-		private static void handle(AgentStateReadModel model, PersonInAdherenceEvent @event)
-		{
-			var last = model.OutOfAdherences.EmptyIfNull().LastOrDefault();
-			if (last != null && last.EndTime == null)
-				last.EndTime = @event.Timestamp;
-		}
-
 		private static void handle(AgentStateReadModel model, PersonOutOfAdherenceEvent @event)
 		{
 			var outOfAdherences = model.OutOfAdherences.EmptyIfNull();
 			var last = outOfAdherences.LastOrDefault();
-			if (last == null || last.EndTime != null)
-				model.OutOfAdherences = outOfAdherences
-					.Append(new AgentStateOutOfAdherenceReadModel
-					{
-						StartTime = @event.Timestamp,
-						EndTime = null
-					}).ToArray();
+			if (last != null && last.EndTime == null)
+				return;
+			model.OutOfAdherences = outOfAdherences
+				.Append(new AgentStateOutOfAdherenceReadModel
+				{
+					StartTime = @event.Timestamp,
+					EndTime = null
+				}).ToArray();
+			model.OutOfAdherenceStartTime = @event.Timestamp;
+		}
+
+		private static void handle(AgentStateReadModel model, PersonNeutralAdherenceEvent @event) => endOutOfAdherence(model, @event.Timestamp);
+		private static void handle(AgentStateReadModel model, PersonInAdherenceEvent @event) => endOutOfAdherence(model, @event.Timestamp);
+
+		private static void endOutOfAdherence(AgentStateReadModel model, DateTime time)
+		{
+			var last = model.OutOfAdherences.EmptyIfNull().LastOrDefault();
+			if (last != null && last.EndTime == null)
+				last.EndTime = time;
+			model.OutOfAdherenceStartTime = null;
 		}
 	}
 }

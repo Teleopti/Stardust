@@ -154,6 +154,7 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 					[AlarmColor], 
 					[Shift], 
 					[OutOfAdherences], 
+					[OutOfAdherenceStartTime],
 					[StateGroupId], 
 					[IsDeleted], 
 					a.[FirstName], 

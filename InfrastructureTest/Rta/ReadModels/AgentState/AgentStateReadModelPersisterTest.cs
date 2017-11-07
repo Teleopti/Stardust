@@ -55,6 +55,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		}
 
 		[Test]
+		public void ShouldPersistWithOutOfAdherenceStartTime()
+		{
+			var personId = Guid.NewGuid();
+			var state = new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				OutOfAdherenceStartTime = "2017-11-07 08:00".Utc(),
+			};
+
+			Target.Upsert(state);
+
+			var model = Target.Load(personId);
+			model.OutOfAdherenceStartTime.Should().Be("2017-11-07 08:00".Utc());
+		}
+
+		[Test]
 		public void ShouldPersistShift()
 		{
 			var personId = Guid.NewGuid();
@@ -162,9 +178,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 
 				RuleName = null,
 				RuleStartTime = null,
-				AlarmStartTime = null,
-				StaffingEffect = null,
 				RuleColor = null,
+				StaffingEffect = null,
+				
+				OutOfAdherenceStartTime = null,
+				
+				AlarmStartTime = null,
 			});
 
 			Target.Load(personId)

@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						AlarmColor = :AlarmColor,
 						Shift = :Shift,
 						OutOfAdherences = :OutOfAdherences,
+						OutOfAdherenceStartTime = :OutOfAdherenceStartTime,
 						StateGroupId = :StateGroupId
 					WHERE 
 						PersonId = :PersonId
@@ -67,6 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("AlarmColor", model.AlarmColor)
 				.SetParameter("Shift", model.Shift != null ? _serializer.SerializeObject(model.Shift) : null, NHibernateUtil.StringClob)
 				.SetParameter("OutOfAdherences", model.OutOfAdherences != null ? _serializer.SerializeObject(model.OutOfAdherences) : null, NHibernateUtil.StringClob)
+				.SetParameter("OutOfAdherenceStartTime", model.OutOfAdherenceStartTime)
 				.SetParameter("StateGroupId", model.StateGroupId)
 				.ExecuteUpdate();
 		}
@@ -103,7 +105,8 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.ExecuteUpdate();
 		}
 
-		public AgentStateReadModel Load(Guid personId)
+		public AgentStateReadModel 
+			Load(Guid personId)
 		{
 			var builder = new AgentStateReadModelQueryBuilder()
 				.WithPersons(new[] {personId})

@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public int? RuleColor { get; set; }
 		public double? StaffingEffect { get; set; }
 
+		public DateTime? OutOfAdherenceStartTime { get; set; }
+
 		public bool IsRuleAlarm { get; set; }
 		public DateTime? AlarmStartTime { get; set; }
 		public int? AlarmColor { get; set; }
