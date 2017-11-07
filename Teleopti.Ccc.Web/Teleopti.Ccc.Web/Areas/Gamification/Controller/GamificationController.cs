@@ -20,10 +20,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		private readonly ISiteViewModelFactory _siteViewModelFactory;
 
 		public GamificationController(IGamificationSettingPersister gamificationSettingPersister,
-			IGamificationSettingProvider gamificationSettingProvider)
+			IGamificationSettingProvider gamificationSettingProvider, ISiteViewModelFactory siteViewModelFactory)
 		{
 			_gamificationSettingPersister = gamificationSettingPersister;
 			_gamificationSettingProvider = gamificationSettingProvider;
+			_siteViewModelFactory = siteViewModelFactory;
 		}
 
 		[HttpPost, Route("api/Gamification/Create"), UnitOfWork]
