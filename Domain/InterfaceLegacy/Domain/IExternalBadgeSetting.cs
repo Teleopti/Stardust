@@ -1,6 +1,5 @@
 ﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-
 	public interface IExternalBadgeSetting : IAggregateEntity
 	{
 		string Name { get; set; }

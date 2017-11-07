@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 			var vm = new GamificationSettingViewModel
 			{
 				Id = setting.Id,
-				Description = setting.Description,
+				Name = setting.Description.Name,
 				UpdatedBy = setting.UpdatedBy?.Name.ToString() ?? string.Empty,
 				UpdatedOn = setting.UpdatedOn,
 				GamificationSettingRuleSet = setting.GamificationSettingRuleSet,

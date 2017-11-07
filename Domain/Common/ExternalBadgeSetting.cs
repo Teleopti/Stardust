@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	/// <summary>
 	/// A class for ExternalBadgeSetting.
-	/// It's designed to apply different threshold value types (cound, percent, Timespan, etc.),
+	/// It's designed to apply different threshold value types (count, percent, Timespan, etc.),
 	/// A BadgeUnitType property indicates what data type it applied.
 	/// All threshold values are converted into int to stored in this class.
 	///   - For count, the value will be keep as it's original value

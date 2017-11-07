@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 	public class GamificationSettingViewModel
 	{
 		public Guid? Id { get; set; }
-		public Description Description { get; set; }
+		public string Name { get; set; }
 		public string UpdatedBy { get; set; }
 		public DateTime? UpdatedOn { get; set; }
 		public GamificationSettingRuleSet GamificationSettingRuleSet { get; set; }

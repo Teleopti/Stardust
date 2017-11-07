@@ -13,7 +13,7 @@ using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 {
 	[TestFixture]
-	class GamificationSettingProviderTest
+	public class GamificationSettingProviderTest
 	{
 		[Test]
 		public void ShouldGetGamificationSetting()
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var target = new GamificationSettingProvider(gamificationSettingRepository, mapper);
 			var result = target.GetGamificationSetting(id);
 
-			result.Description.Name.Should().Be.EqualTo(expectedName);
+			result.Name.Should().Be.EqualTo(expectedName);
 		}
 
 		[Test]

@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 
 		private void checkRawSettingAndVm(IGamificationSetting rawSetting, GamificationSettingViewModel vm)
 		{
-			Assert.AreEqual(rawSetting.Description, vm.Description);
+			Assert.AreEqual(rawSetting.Description.Name, vm.Name);
 			Assert.AreEqual(rawSetting.GamificationSettingRuleSet, vm.GamificationSettingRuleSet);
 			Assert.AreEqual(rawSetting.AnsweredCallsBadgeEnabled, vm.AnsweredCallsBadgeEnabled);
 			Assert.AreEqual(rawSetting.AHTBadgeEnabled, vm.AHTBadgeEnabled);
