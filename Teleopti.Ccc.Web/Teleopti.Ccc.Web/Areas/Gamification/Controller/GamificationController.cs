@@ -5,7 +5,10 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 {
@@ -14,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 	{
 		private readonly IGamificationSettingPersister _gamificationSettingPersister;
 		private readonly IGamificationSettingProvider _gamificationSettingProvider;
+		private readonly ISiteViewModelFactory _siteViewModelFactory;
 
 		public GamificationController(IGamificationSettingPersister gamificationSettingPersister,
 			IGamificationSettingProvider gamificationSettingProvider)
@@ -167,6 +171,18 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		public virtual GamificationBadgeConversRateViewModel GamificationSilverToBronzeRate([FromBody]GamificationBadgeConversRateViewModel input)
 		{
 			return _gamificationSettingPersister.PersistSilverToBronzeRate(input);
+		}
+
+		[HttpPost, Route("api/Gamification/LoadSites"), UnitOfWork]
+		public virtual IEnumerable<SelectOptionItem> GetAllSites()
+		{
+			return _siteViewModelFactory.CreateSiteOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+		}
+
+		[HttpPost, Route("api/Gamification/LoadTeams"), UnitOfWork]
+		public virtual IEnumerable<SelectOptionItem> GetAllTeams(Guid siteId)
+		{
+			return _siteViewModelFactory.GetTeams(new List<Guid>(){siteId}, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 		}
 	}
 }
