@@ -7,7 +7,8 @@
 		bindings: {
 			selectedDate: '<',
 			preselectedSkills: '<',
-			chartHeight: '<'
+			chartHeight: '<',
+			onSelectedSkillChanged: '&'
 		}
 	});
 
@@ -57,6 +58,7 @@
 				selectedSkill = selectedItem;
 			}
 			generateChart();
+			vm.onSelectedSkillChanged && vm.onSelectedSkillChanged()(selectedSkill, selectedSkillGroup);
 		}
 
 		SkillService.getAllSkills().then(function (data) {

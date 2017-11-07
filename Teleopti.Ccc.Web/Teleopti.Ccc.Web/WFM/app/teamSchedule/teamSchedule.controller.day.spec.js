@@ -1,21 +1,22 @@
 ﻿'use strict';
 
-describe("teamschedule controller tests", function() {
+describe("teamschedule controller tests", function () {
 	var $q,
 		rootScope,
 		controller,
 		searchScheduleCalledTimes,
 		personSelection,
 		scheduleMgmt,
-		teamScheduleService;
+		teamScheduleService,
+		staffingConfigStorageService;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		module('externalModules');
 		module('wfm.notice');
 		module('shortcutsService');
 		module('wfm.teamSchedule');
 
-		module(function($provide) {
+		module(function ($provide) {
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
 			$provide.service('$locale', setupMockLocale);
 			$provide.service('Toggle', setupMockAllTrueToggleService);
@@ -23,7 +24,8 @@ describe("teamschedule controller tests", function() {
 		});
 	});
 
-	beforeEach(inject(function(_$q_, _$rootScope_, _$controller_, _TeamSchedule_, _PersonSelection_, _ScheduleManagement_) {
+	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _TeamSchedule_, _PersonSelection_,
+		_ScheduleManagement_, _TeamsStaffingConfigurationStorageService_) {
 		$q = _$q_;
 		rootScope = _$rootScope_.$new();
 		personSelection = _PersonSelection_;
@@ -31,7 +33,7 @@ describe("teamschedule controller tests", function() {
 		setupMockTeamScheduleService(_TeamSchedule_);
 		teamScheduleService = _TeamSchedule_;
 		controller = setUpController(_$controller_);
-		
+		staffingConfigStorageService = _TeamsStaffingConfigurationStorageService_;
 	}));
 
 	it("can display person selection status correctly when turning pages", inject(function () {
@@ -54,11 +56,11 @@ describe("teamschedule controller tests", function() {
 		rootScope.$digest();
 		personSelection.personInfo['221B-Baker-SomeoneElse'] = {
 			SelectedActivities: [
-			{
-				shiftLayerId: "activity1",
-				date: "2015-10-26"
-			} ],
-			SelectedAbsences:[]
+				{
+					shiftLayerId: "activity1",
+					date: "2015-10-26"
+				}],
+			SelectedAbsences: []
 		}
 
 		controller.loadSchedules();
@@ -77,7 +79,7 @@ describe("teamschedule controller tests", function() {
 		var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
 		expect(personSchedule1.IsSelected).toEqual(true);
 
-		
+
 		controller.searchOptions.searchKeywordChanged = true;
 		controller.onKeyWordInSearchInputChanged();
 
@@ -122,7 +124,7 @@ describe("teamschedule controller tests", function() {
 		expect(Object.keys(personSelection.personInfo).length).toEqual(0);
 	});
 
-	it("should clear person selection after click search button", function() {
+	it("should clear person selection after click search button", function () {
 		controller.scheduleDate = new Date("2015-10-26");
 
 		controller.loadSchedules();
@@ -191,7 +193,7 @@ describe("teamschedule controller tests", function() {
 		expect(controller.searchOptions.focusingSearch).toEqual(false);
 	});
 
-	it("should  set show only absence value correctly when click showOnlyAbsence", function() {
+	it("should  set show only absence value correctly when click showOnlyAbsence", function () {
 		controller.scheduleDate = new Date("2015-10-26");
 		controller.searchOptions = {
 			focusingSearch: true
@@ -205,6 +207,68 @@ describe("teamschedule controller tests", function() {
 		expect(teamScheduleService.currentInput().IsOnlyAbsences).toEqual(false);
 	});
 
+	it("should remember skill selection when skill changed",
+		function () {
+			controller.scheduleDate = new Date("2015-10-26");
+			controller.staffingEnabled = true;
+
+			controller.onSelectedSkillChanged({ Id: 'XYZ' });
+
+			var config = staffingConfigStorageService.getConfig();
+			expect(!!config).toEqual(true);
+			expect(config.skillId).toEqual('XYZ');
+			expect(!!config.skillGroupId).toEqual(false);
+		});
+
+	it("should read preselect skill when show staffing is enabled",
+		function () {
+			controller.scheduleDate = new Date("2015-10-26");
+			staffingConfigStorageService.setSkill('mySkill');
+			controller.staffingEnabled = true;
+
+			controller.showStaffing();
+			expect(!!controller.preselectedSkills).toEqual(true);
+			expect(controller.preselectedSkills.skillIds.length).toEqual(1);
+			expect(controller.preselectedSkills.skillIds[0]).toEqual('mySkill');
+			expect(!!controller.preselectedSkills.skillAreaId).toEqual(false);
+		});
+
+	it("should remember skill group selection when skill group changed",
+		function () {
+			controller.scheduleDate = new Date("2015-10-26");
+			controller.staffingEnabled = true;
+
+			controller.onSelectedSkillChanged(null, { Id: 'skillGroup' });
+
+			var config = staffingConfigStorageService.getConfig();
+			expect(!!config).toEqual(true);
+			expect(config.skillGroupId).toEqual('skillGroup');
+			expect(!!config.skillId).toEqual(false);
+		});
+
+	it("should read preselect skill group when show staffing is enabled and there is valid config",
+		function () {
+			controller.scheduleDate = new Date("2015-10-26");
+			staffingConfigStorageService.setSkill(null, 'skillGroup');
+			controller.staffingEnabled = true;
+
+			controller.showStaffing();
+			expect(!!controller.preselectedSkills).toEqual(true);
+			expect(!!controller.preselectedSkills.skillIds).toEqual(false);
+			expect(controller.preselectedSkills.skillAreaId).toEqual('skillGroup');
+		});
+
+	it("should read preselect skill group when show staffing is enabled and there is invalid config",
+		function () {
+			staffingConfigStorageService.clearConfig();
+			controller.scheduleDate = new Date("2015-10-26");
+			controller.staffingEnabled = true;
+			controller.showStaffing();
+
+			expect(!!controller.preselectedSkills.skillIds).toEqual(false);
+			expect(!!controller.preselectedSkills.skillAreaId).toEqual(false);
+		});
+
 	function setUpController($controller) {
 		return $controller("TeamScheduleController", {
 			$scope: rootScope,
@@ -215,12 +279,12 @@ describe("teamschedule controller tests", function() {
 	function setupMockTeamScheduleService(teamScheduleService) {
 		var currentInput;
 
-		teamScheduleService.currentInput = function() {
+		teamScheduleService.currentInput = function () {
 			return currentInput;
 		}
 
 		teamScheduleService.loadAbsences = {
-			query: function() {
+			query: function () {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({});
 				return {
@@ -229,7 +293,7 @@ describe("teamschedule controller tests", function() {
 			}
 		};
 		teamScheduleService.getPermissions = {
-			query: function() {
+			query: function () {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({
 
@@ -272,7 +336,7 @@ describe("teamschedule controller tests", function() {
 							}
 						],
 						"IsFullDayAbsence": false,
-						"IsSelected":false,
+						"IsSelected": false,
 						"DayOff": null,
 						"Timezone": {
 							"IanaId": "Europe/Berlin",
@@ -293,7 +357,7 @@ describe("teamschedule controller tests", function() {
 							}
 						],
 						"IsFullDayAbsence": false,
-						"IsSelected":false,
+						"IsSelected": false,
 						"DayOff": null,
 						"Timezone": {
 							"IanaId": "Europe/Berlin",
@@ -306,7 +370,7 @@ describe("teamschedule controller tests", function() {
 						"Date": today,
 						"Projection": [],
 						"IsFullDayAbsence": false,
-						"IsSelected":false,
+						"IsSelected": false,
 						"DayOff": null,
 						"Timezone": {
 							"IanaId": "Asia/Shanghai",
@@ -319,23 +383,23 @@ describe("teamschedule controller tests", function() {
 			};
 			var response = { data: scheduleData };
 			return {
-				then:function(callback) {
+				then: function (callback) {
 					callback(response);
 				}
 			}
 		}
 
 
-		teamScheduleService.getSchedules = function(date, agents) {
+		teamScheduleService.getSchedules = function (date, agents) {
 			return {
-				then: function(cb) {
+				then: function (cb) {
 					searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
 				}
 			}
 		}
 
 		teamScheduleService.getAgentsPerPageSetting = {
-			post: function() {
+			post: function () {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({ Agents: 50 });
 				return { $promise: queryDeferred.promise };
@@ -352,17 +416,17 @@ describe("teamschedule controller tests", function() {
 	}
 
 	function setupMockAllTrueToggleService() {
-		return { };
+		return {};
 	}
 
 	function setUpMockGroupPagesService() {
 		return {
-			fetchAvailableGroupPages: function() {
+			fetchAvailableGroupPages: function () {
 				return {
-					then: function() {
+					then: function () {
 
 					}
-			};
+				};
 			}
 
 		};
@@ -371,7 +435,7 @@ describe("teamschedule controller tests", function() {
 
 	function setupMockCurrentUserInfoService() {
 		return {
-			CurrentUserInfo: function() {
+			CurrentUserInfo: function () {
 				return {
 					DefaultTimeZone: "Etc/UTC",
 					DefaultTimeZoneName: "Etc/UTC",

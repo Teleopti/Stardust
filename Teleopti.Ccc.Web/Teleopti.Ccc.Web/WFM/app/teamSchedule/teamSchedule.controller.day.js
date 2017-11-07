@@ -18,13 +18,13 @@
 		'teamsToggles',
 		'bootstrapCommon',
 		'groupPageService',
-		'SizeStorageService',
+		'TeamsStaffingConfigurationStorageService',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry,
-									teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, 
-									CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, groupPageService,
-									SizeStorageService) {
+		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
+		CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, groupPageService,
+		StaffingConfigStorageService) {
 		var vm = this;
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
@@ -59,40 +59,55 @@
 				SearchTerm: vm.searchOptions.keyword
 			};
 		};
-		vm.initTeamsSize = function () {
-			var storageSize = SizeStorageService.getSize();
+		vm.showStaffing = function () {
+			initTeamSize();
+			if (vm.staffingEnabled) {
+				vm.preselectedSkills = { };
+				var preference = StaffingConfigStorageService.getConfig();
+				if (preference) {
+					vm.preselectedSkills.skillIds = !!preference.skillId ? [preference.skillId] : undefined;
+					vm.preselectedSkills.skillAreaId = preference.skillGroupId;
+				}
+				
+			}
 
+		}
+
+		function initTeamSize() {
 			var container = document.querySelector('#materialcontainer');
+			if (!container) return;
 			var viewHeader = document.querySelector('.view-header');
 			var header = document.querySelector('.team-schedule .teamschedule-header');
 			var tHeader = document.querySelector('.teamschedule-body .big-table-wrapper table thead');
 			var footer = document.querySelector('.teamschedule-footer');
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
-
 			var defaultHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
 			var defaultTableBodyHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - tHeaderHeight - footer.offsetHeight;
+
+			var storageSize = StaffingConfigStorageService.getConfig();
 			var size = storageSize || {
 				tableHeight: defaultHeight * 0.64,
 				tableBodyHeight: defaultTableBodyHeight * 0.62,
 				chartHeight: defaultHeight * 0.3
 			};
-			
+
 			if (vm.staffingEnabled) {
 				vm.scheduleTableWrapperStyle = {
 					'height': size.tableHeight + 'px',
-					'min-height':'initial'
+					'min-height': 'initial'
 				};
 				vm.scheduleTableBodyStyle = {
 					'max-height': size.tableBodyHeight + 'px',
-					'min-height':'initial'
+					'min-height': 'initial'
 				};
 				vm.chartHeight = size.chartHeight;
 			}
 			else {
-				vm.scheduleTableWrapperStyle = {'height': defaultHeight + 'px'};
-				vm.scheduleTableBodyStyle = {'max-height': defaultTableBodyHeight + 'px'};
+				vm.scheduleTableWrapperStyle = { 'height': defaultHeight + 'px' };
+				vm.scheduleTableBodyStyle = { 'max-height': defaultTableBodyHeight + 'px' };
 			}
 		};
+
 
 
 		vm.paginationOptions = {
@@ -167,21 +182,21 @@
 			var tBodyHeight = tableHeight - tHeaderHeight;
 			var chartHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - d.height - 50;
 			if (tableHeight <= 100) {
-				SizeStorageService.setSize(100, 100 - tHeaderHeight, chartHeight);
+				StaffingConfigStorageService.setSize(100, 100 - tHeaderHeight, chartHeight);
 				return;
 			}
 			if (chartHeight <= 100) {
-				SizeStorageService.setSize(tableHeight, tBodyHeight, 100);
+				StaffingConfigStorageService.setSize(tableHeight, tBodyHeight, 100);
 				return;
 			}
-			SizeStorageService.setSize(tableHeight,tBodyHeight, chartHeight);
+			StaffingConfigStorageService.setSize(tableHeight, tBodyHeight, chartHeight);
 			vm.scheduleTableWrapperStyle = {
 				'height': tableHeight + 'px',
-				'min-height':'initial'
+				'min-height': 'initial'
 			};
 			vm.scheduleTableBodyStyle = {
 				'max-height': tBodyHeight + 'px',
-				'min-height':'initial'
+				'min-height': 'initial'
 			}
 			vm.chartHeight = chartHeight;
 
@@ -219,6 +234,7 @@
 		};
 
 
+
 		function openSidePanel() {
 			if (!$mdSidenav(commandContainerId).isOpen()) {
 				$mdSidenav(commandContainerId).open().then(function () {
@@ -246,7 +262,7 @@
 		}
 
 		vm.onPageSizeSelectorChange = function () {
-			teamScheduleSvc.updateAgentsPerPageSetting.post({agents: vm.paginationOptions.pageSize}).$promise.then(function () {
+			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.paginationOptions.pageSize }).$promise.then(function () {
 				vm.resetSchedulePage();
 			});
 		};
@@ -465,7 +481,9 @@
 		vm.scheduleTableSelectMode = true;
 
 		vm.searchEnabled = $state.current.name !== 'teams.for';
-
+		vm.onSelectedSkillChanged = function (skill, skillGroup) {
+			StaffingConfigStorageService.setSkill((skill || {}).Id, (skillGroup || {}).Id);
+		};
 
 		vm.onSelectedTeamsChanged = function () {
 			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
@@ -476,7 +494,7 @@
 
 		vm.applyFavorite = function (currentFavorite) {
 			vm.selectedFavorite = currentFavorite;
-			vm.selectedGroups = {mode: 'BusinessHierarchy', groupIds: [], groupPageId: ''};
+			vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds: [], groupPageId: '' };
 			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
 			vm.searchOptions.keyword = currentFavorite.SearchTerm;
 			vm.resetSchedulePage();

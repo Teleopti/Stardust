@@ -54,7 +54,7 @@
 							 on-pick="vm.changeTimezone(timezone)"></timezone-picker>
 
 			<div class="wfm-switch" ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
-				<input type="checkbox" id="switchStaffing" ng-model="vm.staffingEnabled" ng-change="vm.initTeamsSize()"/>
+				<input type="checkbox" id="switchStaffing" ng-model="vm.staffingEnabled" ng-change="vm.showStaffing()"/>
 				<label for="switchStaffing">
 					<span class="wfm-switch-label" translate>ShowStaffing</span>
 					<span class="wfm-switch-toggle"></span>
@@ -153,7 +153,8 @@
 	</div>
 
 	<staffing-info ng-if="vm.staffingEnabled" selected-date="vm.scheduleDate"
-				   chart-height="vm.chartHeight" preselected-skills="vm.preselectedSkills"></staffing-info>
+				   chart-height="vm.chartHeight" preselected-skills="vm.preselectedSkills"
+				   on-selected-skill-changed="vm.onSelectedSkillChanged"></staffing-info>
 	
 	<schedule-change-notifier on-notification="vm.onPersonScheduleChanged"
 							  schedule-date="vm.scheduleDate"
