@@ -30,7 +30,8 @@
 						</div>
 					</div>
 					<button class="wfm-btn wfm-btn-invis-disabled" ng-click="">
-						<i class="mdi mdi-information-outline"></i> {{'HelpLabel' | translate}}</button>
+						<i class="mdi mdi-information-outline"></i> {{'HelpLabel' | translate}}
+					</button>
 				</div>
 			</div>
 		</div>
@@ -68,7 +69,7 @@
 						<div class="con-row">
 							<div class="con-flex" ng-show="!setting.Default">
 								<div class="pg-setting-mini-card-wrapper">
-									<div class="pg-setting-mini-card-title">
+									<div class="pg-setting-mini-card-title line-center">
 										<b>{{'SelectedFilters' | translate}}</b>
 									</div>
 									<div class="pg-setting-chip-list inline-left">
@@ -85,7 +86,7 @@
 							</div>
 							<div class="con-flex">
 								<div class="pg-setting-mini-card-wrapper">
-									<div class="pg-setting-mini-card-title">
+									<div class="pg-setting-mini-card-title line-center">
 										<b>{{'DayOffRules' | translate}}</b>
 									</div>
 									<div class="con-row">
@@ -132,10 +133,12 @@
 							</div>
 							<div class="con-flex">
 								<div class="pg-setting-mini-card-wrapper">
-									<div class="pg-setting-mini-card-title">
+									<div class="pg-setting-mini-card-title line-center">
 										<b>{{'BlockScheduling' | translate}}</b>
 									</div>
-									<span class="pg-setting-card">{{setting.BlockSchedulingSetting}}</span>
+									<div class="line-center">
+										<span class="pg-setting-card">{{setting.BlockSchedulingSetting}}</span>
+									</div>
 								</div>
 							</div>
 						</div>

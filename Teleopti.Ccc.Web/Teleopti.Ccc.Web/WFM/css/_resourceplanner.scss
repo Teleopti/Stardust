@@ -393,7 +393,6 @@ card-panel-header > .pp-validation-progress {
 
 .pg-setting-info {
 	padding: 5px;
-    margin-left: 10px;
     background-color: $blue-100 ;
     border-radius: 15px;
 }
@@ -409,7 +408,6 @@ card-panel-header > .pp-validation-progress {
 }
 
 .pg-setting-mini-card-wrapper {
-	text-align: center;
 	background: $white ;
 	width: 100%;
 	height: 100%;
@@ -467,6 +465,17 @@ card-panel-header > .pp-validation-progress {
 .pg-setting-chip-list {
 	text-align: left;
 	padding: 0 5px;
+}
+
+.pg-setting-valid-text {
+	position: relative;
+	height: 15px;
+	padding: 5px;
+}
+
+.pg-setting-valid-text > span {
+	position: absolute;
+	top:0;
 }
 
 //for then new card panel design

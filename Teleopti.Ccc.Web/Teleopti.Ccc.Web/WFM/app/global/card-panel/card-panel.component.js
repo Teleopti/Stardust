@@ -95,8 +95,8 @@
             function init() {
                 if (attrs.cardAnimate == "single" || attrs.preOpen == "true") {
                     allCards = document.getElementsByClassName('card-panel-content-wrapper');
-                    preOpen();
                 }
+                preOpen();
                 switch (attrs.cardAnimate) {
                     default:
                         multipleOpen();
@@ -109,9 +109,13 @@
             }
 
             function preOpen() {
-                if (attrs.preOpen == "true" && allCards[attrs.id].classList.contains("hidden")) {
-                    return allCards[attrs.id].classList.remove("hidden");
+                if (attrs.preOpen == "true") {
+                    if (attrs.id !== '' && allCards[attrs.id].classList.contains("hidden")) {
+                        return allCards[attrs.id].classList.remove("hidden");
+                    }
+                    return toggleCard();
                 }
+                return;
             }
 
             function singleOpen() {

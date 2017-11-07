@@ -35,10 +35,6 @@
             Name: $stateParams.isDefault ? $translate.instant("Default") : "",
             PlanningGroupId: $stateParams.groupId
         };
-        vm.requestSent = false;
-        vm.selectedItem = undefined;
-        vm.selectedType = undefined;
-        vm.searchString = '';
         vm.schedulingSettings = [
             { Id: "IndividualFlexible", Selected: true, Name: $translate.instant("IndividualFlexible") + " (" + $translate.instant("Default") + ")" },
             { Id: "BlockScheduling", Selected: false, Name: $translate.instant("BlockScheduling") }
@@ -48,11 +44,16 @@
             { Id: "BlockFinderTypeSchedulePeriod", Selected: false, Code: 2, Name: $translate.instant("BlockFinderTypeSchedulePeriod") }
         ];
         vm.blockSchedulingOptions = [
-            { Id: "BlockSameShiftCategory", Selected: false },
+            { Id: "BlockSameShiftCategory", Selected: true },
             { Id: "BlockSameStartTime", Selected: false },
             { Id: "BlockSameShift", Selected: false },
         ];
-        vm.blockSchedulingName = vm.schedulingSettings[0].Name;
+        vm.requestSent = false;
+        vm.selectedItem = undefined;
+        vm.selectedType = vm.blockSchedulingTypes[0];
+        vm.selectedOptionName = vm.blockSchedulingOptions[0].Id;
+        vm.searchString = '';
+        vm.blockScheduling = vm.schedulingSettings[0];
         vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
         vm.clearInput = clearInput;
         vm.isValid = isValid;
@@ -95,7 +96,7 @@
                     vm.settingInfo.MinFullWeekendsOff = result.MinFullWeekendsOff;
                     vm.settingInfo.MaxFullWeekendsOff = result.MaxFullWeekendsOff;
                     vm.settingInfo.MinWeekendDaysOff = result.MinWeekendDaysOff;
-                    vm.settingInfo.MaxWeekendDaysOff = result.MaxWeekendDaysOff;  
+                    vm.settingInfo.MaxWeekendDaysOff = result.MaxWeekendDaysOff;
                     if (result.BlockFinderType > 0) {
                         vm.blockSchedulingOptions = [
                             { Id: "BlockSameShiftCategory", Selected: result.BlockSameShiftCategory },
@@ -108,6 +109,9 @@
         }
 
         function setBlockSchedulingIsSelected(typeId) {
+            vm.schedulingSettings[0].Selected = false;
+            vm.schedulingSettings[1].Selected = true;
+            vm.blockScheduling = vm.schedulingSettings[1];
             vm.blockSchedulingTypes.forEach(function (item) {
                 if (item.Code == typeId)
                     vm.selectedType = item;
@@ -116,9 +120,13 @@
         }
 
         function setBlockSchedulingDetail() {
-            vm.schedulingSettings[0].Selected = false;
-            vm.schedulingSettings[1].Selected = true;
-            vm.blockSchedulingName = $translate.instant("BlockScheduling");
+            for (var index = 0; index < vm.blockSchedulingOptions.length; index++) {
+                var option = vm.blockSchedulingOptions[index];
+                if(option.Selected == true){
+                    vm.selectedOptionName = option.Id;
+                    break;
+                }
+            }
         }
 
         function setBlockSchedulingType(type) {
@@ -127,29 +135,43 @@
             return vm.settingInfo.BlockFinderType = type.Code;
         }
 
-        function setBlockSchedulingOption(option) {
-            if (option == null)
+        function setBlockSchedulingOption(index) {
+            if (index == null)
                 return;
-            option.Selected = !option.Selected;
-            vm.settingInfo[option.Id] = option.Selected;
+            vm.blockSchedulingOptions.forEach(function (option, id) {
+                if (id == index) {
+                    option.Selected = true;
+                    return vm.settingInfo[option.Id] = true;
+                } else {
+                    option.Selected = false;
+                    return vm.settingInfo[option.Id] = false;
+                }
+            });
         }
 
-        function selectSchedulingSetting(index) {
-            if (index == 0)
+        function selectSchedulingSetting() {
+            if (vm.schedulingSettings[1].Selected == true) {
+                vm.blockScheduling = vm.schedulingSettings[1];
+                vm.schedulingSettings[0].Selected = false;
+                setBlockSchedulingSettingDataToDefault();
+            } else {
+                vm.blockScheduling = vm.schedulingSettings[0];
+                vm.schedulingSettings[0].Selected = true;
                 clearBlockSchedulingSettingData();
-            var item = vm.schedulingSettings[index];
-            item.Selected = true;
-            vm.blockSchedulingName = item.Name;
-            vm.schedulingSettings.forEach(function (item, id) {
-                if (id != index)
-                    item.Selected = false;
-            });
+            }
         }
 
         function clearBlockSchedulingSettingData() {
             vm.settingInfo.BlockFinderType = 0;
             vm.settingInfo.BlockSameShift = false;
             vm.settingInfo.BlockSameShiftCategory = false;
+            vm.settingInfo.BlockSameStartTime = false;
+        }
+
+        function setBlockSchedulingSettingDataToDefault() {
+            vm.settingInfo.BlockFinderType = 1;
+            vm.settingInfo.BlockSameShift = false;
+            vm.settingInfo.BlockSameShiftCategory = true;
             vm.settingInfo.BlockSameStartTime = false;
         }
 
