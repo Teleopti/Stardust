@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonRequestRepository CreatePersonRequestRepository(IUnitOfWork unitOfWork)
 		{
-			throw new System.NotImplementedException();
+			return new FakePersonRequestRepository();
 		}
 
 		public IShiftCategoryRepository CreateShiftCategoryRepository(IUnitOfWork unitOfWork)

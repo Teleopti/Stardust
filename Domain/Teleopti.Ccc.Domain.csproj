@@ -146,6 +146,7 @@
     <Compile Include="AgentInfo\Requests\AbsenceRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequest.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestSkillProvider.cs" />
+    <Compile Include="AgentInfo\Requests\NotOvertimeRequestSpecification.cs" />
     <Compile Include="AgentInfo\Requests\SkillOpenHourFilter.cs" />
     <Compile Include="AgentInfo\ScheduleStaffingPossibilityConsts.cs" />
     <Compile Include="AgentInfo\SkillStaffingData.cs" />

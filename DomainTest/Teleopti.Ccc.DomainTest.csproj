@@ -284,6 +284,7 @@
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithBpoTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockContractTimeTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCheckerTest.cs" />
+    <Compile Include="Scheduling\SchedulerStateHolderLoadRequestsTest.cs" />
     <Compile Include="SkillGroups\ModifySkillGroupTest.cs" />
     <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
     <Compile Include="Common\PublishPersoEmploymentNumberChangedEventTest.cs" />

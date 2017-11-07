@@ -174,6 +174,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				personRequestRepository = repositoryFactory.CreatePersonRequestRepository(unitOfWork);
 			var referredSpecification = new ShiftTradeRequestReferredSpecification(_shiftTradeRequestStatusChecker);
 			var okByMeSpecification = new ShiftTradeRequestOkByMeSpecification(_shiftTradeRequestStatusChecker);
+			var notOvertimeRequestSpecification = new NotOvertimeRequestSpecification();
 			var afterLoadedPeriodSpecification = new ShiftTradeRequestIsAfterLoadedPeriodSpecification(SchedulingResultState.Schedules.Period.VisiblePeriod);
 			_workingPersonRequests.Clear();
 
@@ -186,9 +187,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					personRequests = personRequestRepository.FindAllRequestModifiedWithinPeriodOrPending(ChoosenAgents, period);
 			
 			var requests = personRequests.FilterBySpecification(new All<IPersonRequest>()
-				                                                .And(afterLoadedPeriodSpecification).Or(
-					                                                new All<IPersonRequest>().AndNot(referredSpecification)
-					                                                                         .AndNot(okByMeSpecification)));
+																.And(afterLoadedPeriodSpecification)
+																.Or(new All<IPersonRequest>().AndNot(referredSpecification).AndNot(okByMeSpecification))
+																.And(notOvertimeRequestSpecification));
 
 			
 			foreach (var personRequest in requests)

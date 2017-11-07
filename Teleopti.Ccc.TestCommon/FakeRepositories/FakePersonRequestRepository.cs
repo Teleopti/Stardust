@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(ICollection<IPerson> persons,
 			DateTimePeriod period)
 		{
-			throw new NotImplementedException();
+			return RequestRepository.Where(s => s.Request.Period.Intersection(period).HasValue).ToList();
 		}
 
 		public IPersonRequest Find(Guid id)
