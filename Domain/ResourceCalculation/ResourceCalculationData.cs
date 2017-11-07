@@ -9,15 +9,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public ResourceCalculationData(ISchedulingResultStateHolder schedulingResultStateHolder, 
 																bool considerShortBreaks, 
 																bool doIntraIntervalCalculation)
+			: this(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.Skills, schedulingResultStateHolder.SkillDays, considerShortBreaks, doIntraIntervalCalculation)
 		{
-			ConsiderShortBreaks = considerShortBreaks;
-			DoIntraIntervalCalculation = doIntraIntervalCalculation;
-			Schedules = schedulingResultStateHolder.Schedules;
-			Skills = schedulingResultStateHolder.Skills;
-			SkillDays = schedulingResultStateHolder.SkillDays;
 			SkipResourceCalculation = schedulingResultStateHolder.TeamLeaderMode || schedulingResultStateHolder.SkipResourceCalculation;
-			SkillResourceCalculationPeriodDictionary =
-				new SkillResourceCalculationPeriodWrapper(schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary);
 		}
 
 		public ResourceCalculationData(IScheduleDictionary scheduleDictionary, 
@@ -43,7 +37,26 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			Skills = skills;
 			SkillResourceCalculationPeriodDictionary = skillResourceCalculationPeriodDictionary;
 		}
+		
+		public ResourceCalculationData(IScheduleDictionary scheduleDictionary, 
+			IEnumerable<ISkill> skills, 
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
+			IEnumerable<BpoResource> bpos,
+			bool considerShortBreaks, 
+			bool doIntraIntervalCalculation)
+		{
+			ConsiderShortBreaks = considerShortBreaks;
+			DoIntraIntervalCalculation = doIntraIntervalCalculation;
+			Schedules = scheduleDictionary;
+			Skills = skills;
+			SkillCombinationHolder = new SkillCombinationHolder();
+			SkillDays = skillDays;
+			SkillResourceCalculationPeriodDictionary =
+				new SkillResourceCalculationPeriodWrapper(new SkillStaffPeriodHolder(skillDays).SkillSkillStaffPeriodDictionary);
+			Bpos = bpos;
+		}
 
+		public IEnumerable<BpoResource> Bpos { get; }
 		public IScheduleDictionary Schedules { get; }
 		public bool ConsiderShortBreaks { get; }
 		public bool DoIntraIntervalCalculation { get; }

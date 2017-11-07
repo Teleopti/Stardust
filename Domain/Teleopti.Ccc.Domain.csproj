@@ -346,6 +346,7 @@
     <Compile Include="Reports\IScheduleAnalysisProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisProvider.cs" />
+    <Compile Include="ResourceCalculation\BpoResource.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHint.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingNotMatchShiftBagHint.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHint.cs" />
