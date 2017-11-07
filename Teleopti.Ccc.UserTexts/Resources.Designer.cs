@@ -21473,6 +21473,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open for overtime requests.
+        /// </summary>
+        public static string OpenForOvertimeRequests {
+            get {
+                return ResourceManager.GetString("OpenForOvertimeRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open for shift trade requests.
         /// </summary>
         public static string OpenForShiftTradeRequests {
