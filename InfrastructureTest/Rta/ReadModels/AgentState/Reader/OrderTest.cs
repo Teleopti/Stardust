@@ -232,6 +232,43 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		}
 		
 		[Test]
+		public void ShouldOrderByOutOfAdherenceStartTime()
+		{
+			Now.Is("2017-11-03 12:00");
+			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
+			var personId3 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53fa");
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId2,
+				StateName = "Email",
+				OutOfAdherenceStartTime = "2017-11-03 11:30".Utc(),
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				StateName = "Lunch",
+				OutOfAdherenceStartTime = "2017-11-03 11:15".Utc(),
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId3,
+				StateName = "Phone",
+				OutOfAdherenceStartTime = "2017-11-03 11:45".Utc(),
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				OrderBy = "TimeOutOfAdherence",
+				Direction = "desc"
+			});
+
+			result.First().PersonId.Should().Be(personId1);
+			result.Second().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId3);
+		}
+		
+		[Test]
 		public void ShouldOrderByRuleName()
 		{
 			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");

@@ -227,6 +227,7 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 			{"Rule", new Sorting(new[] {"RuleName"})},
 			{"TimeInAlarm", new SortingInverted(new[] {"AlarmStartTime"})},
 			{"TimeInState", new SortingInverted(new[] {"StateStartTime"})},
+			{"TimeOutOfAdherence", new SortingInverted(new[] {"OutOfAdherenceStartTime"})},
 		};
 	}
 }
