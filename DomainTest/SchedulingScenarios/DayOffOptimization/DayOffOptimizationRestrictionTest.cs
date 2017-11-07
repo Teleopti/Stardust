@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[TestCase(1d, true)]
 		[TestCase(0.99d, true)]
 		[TestCase(0d, false)]
-		[Ignore("46505 - to be fixed")]
 		public void ShouldCareAboutHourlyAvailabilityRestrictions(double studentAvailabilityValue, bool agentShouldHaveDayOff)
 		{
 			var date = new DateOnly(2015, 10, 12);

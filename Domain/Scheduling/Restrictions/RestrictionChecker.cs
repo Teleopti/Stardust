@@ -174,10 +174,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (schedulePart == null)
                 return PermissionState.None;
 
-            PermissionState permissionState = PermissionState.None;
-
             var dataRestrictions = schedulePart.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>();
             var studentAvailabilityDay = dataRestrictions.FirstOrDefault();
+			
+			if(studentAvailabilityDay == null && !schedulePart.PersonAssignment(true).ShiftLayers.IsEmpty())
+				return PermissionState.Broken;
+			
+			var permissionState = PermissionState.None;
 
             if (studentAvailabilityDay != null
                 && studentAvailabilityDay.RestrictionCollection.Count > 0)
