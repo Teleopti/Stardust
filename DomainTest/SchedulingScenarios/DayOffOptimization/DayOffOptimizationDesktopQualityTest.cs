@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 						UseDaysOffPerWeek = false,
 						UseConsecutiveWorkdays = false,
 						UseFullWeekendsOff = false,
-					}), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+					}), (o, args) => { });
 
 				var standardDeviation = getResultingStandardDeviation(period, stateHolder);
 				if (standardDeviation <= targetStandardDeviation)
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 						ConsecutiveWorkdaysValue = new MinMax<int>(1, 6),
 						UseFullWeekendsOff = true,
 						FullWeekendsOffValue = new MinMax<int>(1, 2)
-					}), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+					}), (o, args) => { });
 
 				var standardDeviation = getResultingStandardDeviation(period, stateHolder);
 				if (standardDeviation <= targetStandardDeviation)

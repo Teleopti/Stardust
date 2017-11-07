@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new []{agent}, assesAndRestrictions, skillDays);
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag(), UseAvailabilities = true, AvailabilitiesValue = 1} };
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()
 				.Should().Be.False();//saturday
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			Target.Execute(period, new[] {agent}, new NoSchedulingProgress(), optPrefs,
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()),
-				new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+				(o, args) => { });
 
 			stateHolder.Schedules[agent].ScheduledDay(date.AddDays(6)).HasDayOff()
 				.Should().Be.EqualTo(agentShouldHaveDayOff);

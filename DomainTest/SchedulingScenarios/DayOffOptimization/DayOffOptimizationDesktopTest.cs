@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] {agent}, asses, skillDays);
 			var optPrefs = new OptimizationPreferences {General = {ScheduleTag = new ScheduleTag()}};
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => {});
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {});
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()
 				.Should().Be.False();//saturday
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				Advanced = {UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak}
 			};
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff().Should().Be.False();//saturday
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff().Should().Be.True();//tuesday
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				Extra = extra
 			};
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			var wasModified = !stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
 			if (teamBlockType == TeamBlockType.Classic)
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				Extra = extra
 			};
 
-			Target.Execute(period, new[] { agent1, agent2 }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+			Target.Execute(period, new[] { agent1, agent2 }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			var wasModified1 = !stateHolder.Schedules[agent1].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
 			var wasModified2 = !stateHolder.Schedules[agent2].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				FullWeekendsOffValue = new MinMax<int>(1, 1)
 			};
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), (o, args) => { });
 
 			var wasModified1 = stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
 			var wasModified2 = stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff();
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				FullWeekendsOffValue = new MinMax<int>(1, 1)
 			};
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), (o, args) => { });
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2)).IsScheduled().Should().Be.True();
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(3)).IsScheduled().Should().Be.True();
@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				Extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false }
 			};
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay)
 					.PersonAssignment()
@@ -451,7 +451,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, scheduleDatas, skillDays);
 			var optPrefs = new OptimizationPreferences { General = {ScheduleTag = new ScheduleTag(), UseRotations = true, RotationsValue = 0.9}};
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()
 				.Should().Be.True();//saturday
@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var optPrefs = new OptimizationPreferences { General = {ScheduleTag = new ScheduleTag(), UsePreferences= true, PreferencesValue = 1.0d}};
 			var dayOffPreferences = new DaysOffPreferences {UseConsecutiveWorkdays = true, ConsecutiveWorkdaysValue = new MinMax<int>(1, 3)};
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences), new GroupPageLight("_", GroupPageType.SingleAgent), (o, args) => { });
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences), (o, args) => { });
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(4)).HasDayOff().Should().Be.True();
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();

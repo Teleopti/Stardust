@@ -67,11 +67,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var optPrefs = new OptimizationPreferences
 			{
 				General = {ScheduleTag = new ScheduleTag()},
-				Extra = {UseTeamSameDaysOff = true, UseTeams = true}
+				Extra = {UseTeamSameDaysOff = true, UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag)}
 			};
-			var groupPageLight = new GroupPageLight("_", GroupPageType.RuleSetBag);
 
-			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), groupPageLight, (o, args) => { });
+			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			var dayOffs = stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()).Where(x => x.HasDayOff()).Select(x => x.PersonAssignment());
 			var dayOffsAgent1 = dayOffs.Where(x => x.Person.Equals(agents.First())).Select(x => x.Date);
@@ -123,15 +122,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				}
 			}
 			SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDays);
-			var groupPageLight = new GroupPageLight("Contract", GroupPageType.Contract, "Contract");
-
 			var optPrefs = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag() },
-				Extra = { UseTeamSameDaysOff = true, UseTeams = true, TeamGroupPage = groupPageLight}
+				Extra = { UseTeamSameDaysOff = true, UseTeams = true, TeamGroupPage = new GroupPageLight("Contract", GroupPageType.Contract, "Contract")}
 			};
 
-			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), groupPageLight, (o, args) => { });
+			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 		}
 
 		[Test]
@@ -170,9 +167,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				General = { ScheduleTag = new ScheduleTag(), OptimizationStepDaysOff = true },
 				Extra = { UseBlockSameShift = true, UseTeamBlockOption = true, BlockTypeValue = BlockFinderType.BetweenDayOff}
 			};
-			var groupPageLight = new GroupPageLight("_", GroupPageType.SingleAgent);
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), groupPageLight, (o, args) => { });
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			stateHolder.Schedules[agent].ScheduledDay(skillDays1[5].CurrentDate).PersonAssignment().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
 			stateHolder.Schedules[agent].ScheduledDay(skillDays1[6].CurrentDate).PersonAssignment().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
@@ -253,13 +249,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 																													707.35, 693.22, 641.34, 629.57, 649.46, 422.20, 194.16,
 																													707.35, 693.22, 641.34, 629.57, 649.46, 422.20, 194.16);
 
-
-			var groupPageLight = new GroupPageLight("_", GroupPageType.RuleSetBag);	
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDaysChannelSales.Union(skillDaysDirectSales) );
 			var optPrefs = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag(), OptimizationStepDaysOff = true},
-				Extra = { UseBlockSameShiftCategory = true, UseTeamBlockOption = true}
+				Extra = { UseBlockSameShiftCategory = true, UseTeamBlockOption = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag)}
 			};
 			var dayOffsPreferences = new DaysOffPreferences
 			{
@@ -271,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				ConsecutiveWorkdaysValue = new MinMax<int>(2, 6)
 			};
 
-			Target.Execute(period, new[] { agents[0] }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), groupPageLight, (o, args) => { });
+			Target.Execute(period, new[] { agents[0] }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), (o, args) => { });
 
 			var consecutiveDaysOff = 0;
 			for (var day = 0; day < 21; day ++)
