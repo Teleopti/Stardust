@@ -1713,13 +1713,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnRequestsOverlapOnEndDate()
 		{
+			var now = DateTime.UtcNow;
 			var filter = new RequestFilter
 			{
-				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow),
+				Period = new DateTimePeriod(now.AddDays(-1), now),
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), filter);
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(now, now.AddDays(1)), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(1);
 		}
