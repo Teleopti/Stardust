@@ -95,19 +95,6 @@
 			refresh();
 		}
 
-		function Rows(rows) {
-			this.rows = rows || [];
-			this.numRows = this.rows.length;
-		}
-
-		Rows.prototype.getItemAtIndex = function (index) {
-			return this.rows[index];
-		};
-
-		Rows.prototype.getLength = function () {
-			return this.numRows;
-		};
-
 		function convertToIndexMap(arr) {
 			var map = {};
 			arr.forEach(function (team, index) {
@@ -121,7 +108,6 @@
 		function loadDataIntoTable() {
 			resetRowSelection();
 			ctrl._teamsIndexMap = convertToIndexMap(ctrl.teams);
-			ctrl.rows = new Rows(ctrl.teams);
 		}
 
 		function resetRowSelection() {
