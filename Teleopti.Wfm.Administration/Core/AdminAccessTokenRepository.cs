@@ -1,9 +1,11 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
+using System.Web.UI.WebControls.WebParts;
 
 namespace Teleopti.Wfm.Administration.Core
 {
-	public class TokenQuerier
+	public class AdminAccessTokenRepository
 	{
 		public static bool TokenIsValid(string token)
 		{
@@ -21,6 +23,16 @@ namespace Teleopti.Wfm.Administration.Core
 				sqlConn.Close();
 			}
 			return cnt > 0;
+		}
+
+		public static void CreateNewToken()
+		{
+			throw new NotImplementedException();
+		}
+
+		public static bool CheckAndRenewToken()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

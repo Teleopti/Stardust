@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Administration.Core
 			{
 				var auth = req.Headers.Authorization.Parameter;
 				//Tenant: todo look up so key exists in user db
-				var valid = TokenQuerier.TokenIsValid(auth);
+				var valid = AdminAccessTokenRepository.TokenIsValid(auth);
 			
 				if (valid)
 				{
