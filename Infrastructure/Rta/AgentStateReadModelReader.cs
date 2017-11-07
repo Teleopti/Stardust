@@ -39,10 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			if (filter.ExcludedStates.EmptyIfNull().Any())
 				builder.Exclude(filter.ExcludedStates);
 			if (!filter.OrderBy.IsNullOrEmpty())
-			{
-				var translatedFilter = AgentStateReadModelReader.translatedFilter(filter);
-				builder.WithSorting(_now, translatedFilter.OrderBy, translatedFilter.Direction);
-			}
+				builder.WithSorting(builder.SortingFor(filter.OrderBy), filter.Direction);
 
 			return load(builder);
 		}
@@ -73,50 +70,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>();
 		}
 
-		private static SortingFilter translatedFilter(AgentStateFilter filter)
-		{
-			var sortingFilter = new SortingFilter {Direction = filter.Direction};
-			switch (filter.OrderBy)
-			{
-				case "TimeInAlarm":
-					sortingFilter.OrderBy = new [] {"AlarmStartTime"};
-					sortingFilter.Direction = switchDirection(sortingFilter);
-					break;
-				case "TimeInState":
-					sortingFilter.OrderBy = new[] {"StateStartTime"};
-					sortingFilter.Direction = switchDirection(sortingFilter);
-					break;
-				case "TimeOutOfAdherence":
-					sortingFilter.OrderBy = new[] {"OutOfAdherences"};
-					sortingFilter.Direction = switchDirection(sortingFilter);
-					break;
-				case "Rule":
-					sortingFilter.OrderBy = new[] {"RuleName"};
-					break;
-				case "State":
-					sortingFilter.OrderBy = new[] {"StateName"};
-					break;
-				case "SiteAndTeamName":
-					sortingFilter.OrderBy = new[] {"SiteName", "TeamName"};
-					break;
-				case "Name":
-					sortingFilter.OrderBy =  new[]{"FirstName", "LastName"};
-					break;
-			}
-			return sortingFilter;
-		}
-
-		private static string switchDirection(SortingFilter filter)
-		{
-			return filter.Direction == "asc" ? "desc" : "asc";
-		}
-
-		internal class SortingFilter
-		{
-			public IEnumerable<string> OrderBy { get; set; }
-			public string Direction { get; set; }
-		}
-		
 		private class internalModel : AgentStateReadModel
 		{
 			public new string Shift
@@ -130,5 +83,4 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 	}
-
 }

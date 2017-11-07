@@ -106,8 +106,8 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 		public AgentStateReadModelQueryBuilder InAlarm(INow now)
 		{
 			_wheres.Add("AlarmStartTime <= :now ");
-			_orderbys.Add("AlarmStartTime ASC");
 			_parameters.Add(s => s.SetParameter("now", now.UtcDateTime()));
+			_orderbys.Add("AlarmStartTime ASC");
 			return this;
 		}
 
@@ -175,6 +175,7 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 				builder.Append(" ORDER BY ");
 				builder.Append(string.Join(", ", _orderbys));
 			}
+
 			return new Selection
 			{
 				Query = builder.ToString(),
@@ -182,23 +183,49 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 			};
 		}
 
-		public AgentStateReadModelQueryBuilder WithSorting(INow now, IEnumerable<string> orderBy, string direction)
+		public AgentStateReadModelQueryBuilder WithSorting(ISorting sorting, string direction)
 		{
-			
-			if (orderBy.Contains("StateStartTime"))
-			{
-				_wheres.Add("StateStartTime <= :now ");
-				_parameters.Add(s => s.SetParameter("now", now.UtcDateTime()));
-			}
-
-			if (orderBy.Contains("AlarmStartTime"))
-			{
-				_wheres.Add("AlarmStartTime <= :now ");
-				_parameters.Add(s => s.SetParameter("now", now.UtcDateTime()));
-			}
-						
-			orderBy.ForEach(x => _orderbys.Add($"{x} {direction} "));
+			var ascending = sorting.AscendingFor(direction);
+			sorting?.ColumnNames.ForEach(c => _orderbys.Add($"{c} {(ascending ? "" : "DESC")}"));
 			return this;
 		}
+
+		public ISorting SortingFor(string orderBy) => _sortingByOrderBy[orderBy];
+
+		public interface ISorting
+		{
+			IEnumerable<string> ColumnNames { get; }
+			bool AscendingFor(string direction);
+		}
+
+		public class Sorting : ISorting
+		{
+			public Sorting(IEnumerable<string> columnNames)
+			{
+				ColumnNames = columnNames;
+			}
+
+			public IEnumerable<string> ColumnNames { get; }
+			public virtual bool AscendingFor(string direction) => direction == "asc";
+		}
+
+		public class SortingInverted : Sorting
+		{
+			public SortingInverted(IEnumerable<string> columnNames) : base(columnNames)
+			{
+			}
+
+			public override bool AscendingFor(string direction) => !base.AscendingFor(direction);
+		}
+
+		private readonly IDictionary<string, ISorting> _sortingByOrderBy = new Dictionary<string, ISorting>()
+		{
+			{"Name", new Sorting(new[] {"FirstName", "LastName"})},
+			{"SiteAndTeamName", new Sorting(new[] {"SiteName", "TeamName"})},
+			{"State", new Sorting(new[] {"StateName"})},
+			{"Rule", new Sorting(new[] {"RuleName"})},
+			{"TimeInAlarm", new SortingInverted(new[] {"AlarmStartTime"})},
+			{"TimeInState", new SortingInverted(new[] {"StateStartTime"})},
+		};
 	}
 }

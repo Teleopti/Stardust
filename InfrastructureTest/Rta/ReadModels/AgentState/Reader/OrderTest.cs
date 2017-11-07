@@ -1,4 +1,5 @@
 using System;
+using System.Data.SqlTypes;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -58,9 +59,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		[Test]
 		public void ShouldOrderByName()
 		{
-			var person1 = Guid.NewGuid();
-			var person2 = Guid.NewGuid();
-			var person3 = Guid.NewGuid();
+			var person1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
+			var person3 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53fa");
 			
 			Persister.UpsertAssociation(new AssociationInfo
 			{
@@ -98,24 +99,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		[Test]
 		public void ShouldOrderByTeamName()
 		{
-			
+			var person1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
+			var person3 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53fa");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				SiteName = "aSite",
 				TeamName = "aTeam",
-				PersonId = Guid.NewGuid()
+				PersonId = person1
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				SiteName = "aSite",
 				TeamName = "cTeam",
-				PersonId = Guid.NewGuid()
+				PersonId = person2
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				SiteName = "aSite",
 				TeamName = "bTeam",
-				PersonId = Guid.NewGuid()
+				PersonId = person3
 			});
 	
 			var result = Target.Read(new AgentStateFilter()
@@ -132,8 +135,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		[Test]
 		public void ShouldOrderByStateName()
 		{
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
+			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,
@@ -158,9 +161,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		public void ShouldOrderByStateStartTime()
 		{
 			Now.Is("2017-11-03 12:00");
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			var personId3 = Guid.NewGuid();
+			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
+			var personId3 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53fa");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId2,
@@ -195,9 +198,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		public void ShouldOrderByAlarmStartTime()
 		{
 			Now.Is("2017-11-03 12:00");
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			var personId3 = Guid.NewGuid();
+			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
+			var personId3 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53fa");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId2,
@@ -226,6 +229,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			result.First().PersonId.Should().Be(personId1);
 			result.Second().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId3);
+		}
+		
+		[Test]
+		public void ShouldOrderByRuleName()
+		{
+			var personId1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				RuleName = "In Adherence"
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				PersonId = personId2,
+				RuleName = "Positive"
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				OrderBy = "Rule",
+				Direction = "desc"
+			});
+
+			result.First().PersonId.Should().Be(personId2);
 		}
 
 	}
