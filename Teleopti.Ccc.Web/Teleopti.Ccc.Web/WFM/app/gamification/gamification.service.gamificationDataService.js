@@ -14,5 +14,21 @@
 				resolve(sites);
 			});
 		};
+
+		svc.fetchTeams = function (siteIds) {
+			return $q(function (resolve, reject) {
+				var teams = [];
+				siteIds.forEach(function (siteId) {
+					var n = parseInt(siteId[siteId.length - 1]);
+					for (var i = 0; i < n + 1; i++) {
+						teams.push({
+							teamId: siteId + 'team' + (i + 1),
+							teamName: 'Site ' + n + '/Team ' + (i + 1)
+						});
+					}
+				});
+				resolve(teams);
+			});
+		};
 	}
 })(angular);

@@ -49,20 +49,11 @@
 
 		function loadTeams() {
 			ctrl.isBusy = true;
-			$timeout(function () {
-				var teams = [];
-				ctrl.selectedSites.forEach(function (site) {
-					for (var i = 0; i < site.position; i++) {
-						teams.push({
-							teamId: site.id * 10 + i,
-							teamName: 'Site ' + (site.position + 1) + '/Team ' + (i + 1),
-							appliedSettingValue: i === 0 ? ctrl.settings[0].value : ctrl.settings[1].value
-						});
-					}
-				});
+			var siteIds = ctrl.selectedSites.map(function (site) { return site.id; });
+			dataService.fetchTeams(siteIds).then(function (teams) {
 				ctrl.teams = teams;
 				ctrl.isBusy = false;
-			}, 3000);
+			});
 		}
 
 		dataService.fetchSites().then(function (sites) {

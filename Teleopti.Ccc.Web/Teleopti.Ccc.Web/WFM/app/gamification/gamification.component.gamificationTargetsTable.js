@@ -34,7 +34,9 @@
 			{ value: 'setting2', name: 'Setting 2' }
 		];
 
-		ctrl.tableHasData = function () { return angular.isArray(ctrl.teams); };
+		ctrl.tableHasData = function () {
+			return angular.isArray(ctrl.teams) && ctrl.teams.length > 0;
+		};
 
 		ctrl.isIndeterminate = function () {
 			var numSelected = Object.keys(ctrl.selectedTeamIds)
