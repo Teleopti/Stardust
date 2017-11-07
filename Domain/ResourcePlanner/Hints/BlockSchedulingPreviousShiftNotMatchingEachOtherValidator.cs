@@ -41,13 +41,13 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 					}
 					else
 					{
-						var contractScheduleWeek = person.PersonPeriods(period).First().PersonContract.ContractSchedule.ContractScheduleWeeks.FirstOrDefault();
-						if (contractScheduleWeek != null && contractScheduleWeek.IsWorkday(period.StartDate.DayOfWeek))
+						var personPeriod = person.PersonPeriods(period).First();
+						if (personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, period.StartDate, person.FirstDayOfWeek))
 						{
 							var firstPreviousDay = reversedScheduleDays.Skip(1).First();
 							if (firstPreviousDay.HasDayOff())
 							{
-								break;
+								continue;
 							}
 							if (firstPreviousDay.PersonAssignment() != null)
 							{
