@@ -153,7 +153,7 @@
 	</div>
 
 	<staffing-info ng-if="vm.staffingEnabled" selected-date="vm.scheduleDate"
-				   chart-height="vm.chartHeight"></staffing-info>
+				   chart-height="vm.chartHeight" preselected-skills="vm.preselectedSkills"></staffing-info>
 	
 	<schedule-change-notifier on-notification="vm.onPersonScheduleChanged"
 							  schedule-date="vm.scheduleDate"

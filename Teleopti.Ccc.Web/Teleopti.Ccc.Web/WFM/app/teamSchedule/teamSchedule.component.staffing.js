@@ -15,7 +15,7 @@
 
 	function StaffingInfoController($scope, $timeout, SkillService, StaffingInfoService, ChartService) {
 		var vm = this;
-		vm.preselectedSkills = {};
+
 		vm.skills = [];
 		vm.skillGroups = [];
 
@@ -26,9 +26,14 @@
 		var selectedSkill = null;
 		var selectedSkillGroup = null;
 		var chart = null;
+		vm.$onInit = function () {
+			vm.preselectedSkills = vm.preselectedSkills || {};
+			loadChartForPreselection();
+		}
+
 		vm.$onChanges = function (changeObj) {
-			if (staffingDataAvailable && changeObj.chartHeight.currentValue !== changeObj.chartHeight.previousValue){
-				chart.resize({height: changeObj.chartHeight.currentValue});
+			if (staffingDataAvailable && changeObj.chartHeight.currentValue !== changeObj.chartHeight.previousValue) {
+				chart.resize({ height: changeObj.chartHeight.currentValue });
 			}
 		};
 
@@ -71,6 +76,14 @@
 				generateChart();
 			});
 
+		function loadChartForPreselection() {
+			if (!vm.preselectedSkills) return;
+			var skillId = (vm.preselectedSkills.skillIds || [])[0];
+			selectedSkill = !!skillId ? { Id: skillId } : undefined;
+			selectedSkillGroup = !!vm.preselectedSkills.skillAreaId ? { Id: vm.preselectedSkills.skillAreaId } : undefined;
+			generateChart();
+		}
+
 		function generateChart() {
 			if (!selectedSkill && !selectedSkillGroup) return;
 			vm.isLoading = true;
@@ -97,7 +110,7 @@
 		function generateChartForView(data) {
 			$timeout(function () {
 				vm.config = ChartService.staffingChartConfig(data);
-				vm.config.size = {height:vm.chartHeight};
+				vm.config.size = { height: vm.chartHeight };
 				chart = c3.generate(vm.config);
 			});
 		}
