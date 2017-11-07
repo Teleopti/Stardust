@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var startDate = new DateOnly(2017, 01, 23);
 			var endDate = new DateOnly(2017, 01, 29);
 			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
-			var scenario = new Scenario {DefaultScenario = true};
+			var scenario = new Scenario { DefaultScenario = true };
 			ScenarioRepository.Has(scenario);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var activity = ActivityRepository.Has("_");
@@ -49,17 +49,18 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			var personAssignment = new PersonAssignment(agent, scenario, startDate.AddDays(1)).WithLayer(activity, new TimePeriod(8, 16));
 			scheduleDictionary.AddPersonAssignment(personAssignment);
-			
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
-			{
-				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
+
+			var result =
+				Target.Execute(new HintInput(null, new[] { agent }, planningPeriod,
+					new FixedBlockPreferenceProvider(new ExtraPreferences
+					{
+						UseTeamBlockOption = true,
+						BlockTypeValue = BlockFinderType.BetweenDayOff,
+						UseBlockSameStartTime = true
+					}))
 				{
-					UseTeamBlockOption = true,
-					BlockTypeValue = BlockFinderType.BetweenDayOff,
-					UseBlockSameStartTime = true
-				}),
-				Schedules = scheduleDictionary
-			}).InvalidResources;
+					CurrentSchedule = scheduleDictionary
+				}).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var startDate = new DateOnly(2017, 01, 23);
 			var endDate = new DateOnly(2017, 01, 29);
 			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
-			var scenario = new Scenario {DefaultScenario = true};
+			var scenario = new Scenario { DefaultScenario = true };
 			ScenarioRepository.Has(scenario);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var activity = ActivityRepository.Has("_");
@@ -86,17 +87,18 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			var personAssignment = new PersonAssignment(agent, scenario, startDate.AddDays(1)).WithLayer(activity, new TimePeriod(8, 17)).ShiftCategory(shiftCategory);
 			scheduleDictionary.AddPersonAssignment(personAssignment);
-			
-			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null)
-			{
-				BlockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
+
+			var result =
+				Target.Execute(new HintInput(null, new[] { agent }, planningPeriod,
+					new FixedBlockPreferenceProvider(new ExtraPreferences
+					{
+						UseTeamBlockOption = true,
+						BlockTypeValue = BlockFinderType.BetweenDayOff,
+						UseBlockSameShift = true
+					}))
 				{
-					UseTeamBlockOption = true,
-					BlockTypeValue = BlockFinderType.BetweenDayOff,
-					UseBlockSameShift = true
-				}),
-				Schedules = scheduleDictionary
-			}).InvalidResources;
+					CurrentSchedule = scheduleDictionary
+				}).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));

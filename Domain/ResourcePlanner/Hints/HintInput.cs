@@ -7,10 +7,10 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
 	public class HintInput
 	{
-		public IScheduleDictionary Schedules { get; set; }
-		public IEnumerable<IPerson> People { get; set; }
-		public DateOnlyPeriod Period { get; set; }
-		public IBlockPreferenceProvider BlockPreferenceProvider { get; set; }
+		public IScheduleDictionary Schedules { get; }
+		public IEnumerable<IPerson> People { get; }
+		public DateOnlyPeriod Period { get; }
+		public IBlockPreferenceProvider BlockPreferenceProvider { get; }
 		public IScheduleDictionary CurrentSchedule { get; set; }
 
 		public HintInput(IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod period, IBlockPreferenceProvider blockPreferenceProvider)
