@@ -55,5 +55,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillDay2.SkillStaffPeriodCollection.First().CalculatedResource
 				.Should().Be.EqualTo(0.5); 
 		}
+		
+		[Test]
+		[Ignore("46265 - to be fixed")]
+		public void ShouldHandleMultiskilledWithDifferentActivitiesBpos()
+		{
+			var scenario = new Scenario();
+			var activity1 = new Activity().WithId();
+			var activity2 = new Activity().WithId();
+			var dateOnly = DateOnly.Today;
+			var skill1 = new Skill().For(activity1).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
+			var skill2 = new Skill().For(activity2).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
+			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var bpo = new BpoResource(1, new[] {skillDay1.Skill, skillDay2.Skill},
+				skillDay1.SkillStaffPeriodCollection.First().Period);
+			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[]{skillDay1, skillDay2}, bpo);
+			
+			Target.ResourceCalculate(dateOnly, resCalcData);
+
+			skillDay1.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(0.5); 
+			skillDay2.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(0.5); 
+		}
 	}
 }
