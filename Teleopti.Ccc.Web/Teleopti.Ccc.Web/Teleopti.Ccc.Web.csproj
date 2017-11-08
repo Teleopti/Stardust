@@ -397,6 +397,8 @@
     <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingProvider.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\IGamificationSettingPersister.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\IGamificationSettingProvider.cs" />
+    <Compile Include="Areas\Gamification\Core\DataProvider\ITeamGamificationSettingProviderAndPersister.cs" />
+    <Compile Include="Areas\Gamification\Core\DataProvider\TeamGamificationSettingProviderAndPersister.cs" />
     <Compile Include="Areas\Gamification\Core\IoC\GamificationAreaModel.cs" />
     <Compile Include="Areas\Gamification\Mapping\GamificationSettingMapper.cs" />
     <Compile Include="Areas\Gamification\Models\ExternalBadgeSettingViewModel.cs" />

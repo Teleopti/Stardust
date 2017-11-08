@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.core.IoC
 			builder.RegisterType<GamificationSettingMapper>().As<IGamificationSettingMapper>().SingleInstance();
 			builder.RegisterType<GamificationSettingPersister>().As<IGamificationSettingPersister>().SingleInstance();
 			builder.RegisterType<GamificationSettingProvider>().As<IGamificationSettingProvider>().SingleInstance();
+			builder.RegisterType<TeamGamificationSettingProviderAndPersister>().As<ITeamGamificationSettingProviderAndPersister>().SingleInstance();
 		}
 	}
 }

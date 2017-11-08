@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Models
@@ -72,6 +73,18 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 	{
 		public Guid GamificationSettingId;
 		public GamificationSettingRuleSet Rule;
+	}
+
+	public class TeamGamificationSettingViewModel
+	{
+		public SelectOptionItem Team {get; set;}
+		public Guid GamificationSettingId { get; set; }
+	}
+
+	public class TeamGamificationSettingForm
+	{
+		public Guid TeamId { get; set; }
+		public Guid GamificationSettingId { get; set; }
 	}
 
 	public class UpdateExternalBadgeSettingViewModel
