@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -24,22 +21,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			
 			foreach (var bpoResource in bpoResources)
 			{
-				var tempAgent = new Person();
-				var personPeriod = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
-				bpoResource.Skills.ForEach(x => personPeriod.AddPersonSkill(new PersonSkill(x, new Percent(1))));
-				tempAgent.AddPersonPeriod(personPeriod);
-				var uniqueActivities = bpoResource.Skills.Select(x => x.Activity).Distinct();
-				var numberOfActivities = uniqueActivities.Count();
-				foreach (var activity in uniqueActivities)
+				var tempAgent = bpoResource.CreateTempAgent();
+				foreach (var resourceLayer in bpoResource.CreateResourceLayers())
 				{
-					var resLayer = new ResourceLayer
-					{
-						PayloadId = activity.Id.Value,
-						Period = bpoResource.Period,
-						Resource = bpoResource.Resources / numberOfActivities
-					};
-
-					resourceCalculationDataContatiner.AddResources(tempAgent, DateOnly.Today, resLayer);
+					resourceCalculationDataContatiner.AddResources(tempAgent, DateOnly.Today, resourceLayer);
 				}
 			}
 		}
