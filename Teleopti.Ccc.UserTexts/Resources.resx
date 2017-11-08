@@ -16697,15 +16697,15 @@ Do you want to participate?</value>
     <comment>Open for overtime requests</comment>
   </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
-    <value>The existing shifts are not matching each other.</value>
+    <value>The shift for {0} is not matching the shift for {1}.</value>
     <comment>Scheduleing validation message in web scheduling and client.</comment>
   </data>
   <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>The shift categories for existing shifts are not matching each other.</value>
+    <value>The shift category ({0}) for {1} is not matching the shift category ({2}) for {3}.</value>
     <comment>Scheduleing validation message in web scheduling and client.</comment>
   </data>
   <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
-    <value>The start time for existing shifts are not matching each other.</value>
+    <value>The start time ({0}) for {1} is not matching the start time ({2}) for {3}.</value>
     <comment>Scheduleing validation message in web scheduling and client.</comment>
   </data>
   <data name="PreviousShiftNotMatchShift" xml:space="preserve">

@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
@@ -28,8 +29,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				if (!people.Contains(person)) continue;
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
 
-				
-
 				if (blockOption.BlockTypeValue == BlockFinderType.SchedulePeriod)
 				{
 					var personSchedulePeriods = person.PersonSchedulePeriods(period);
@@ -43,38 +42,67 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						{
 							var scheduleDays = schedule.Value.ScheduledDayCollection(realSchedulePeriod.Value);
 
+							var scheduleDaysArray = scheduleDays.ToArray();
+							var length = scheduleDaysArray.Length;
+
 							if (blockOption.UseBlockSameShiftCategory)
 							{
-								var allShiftCategory =
-									scheduleDays.Where(x => x.PersonAssignment() != null && x.PersonAssignment().ShiftCategory != null)
-										.Select(x => x.PersonAssignment().ShiftCategory.Id.GetValueOrDefault())
-										.Distinct();
-
-								if (allShiftCategory.Count() > 1)
+								var flag = false;
+								for (var i = 0; i < length - 1; i++)
 								{
-									addValidationResult(validationResult, person, Resources.ExistingShiftNotMatchShiftCategory);
-									break;
+									for (var j = i; j < length; j++)
+									{
+										var assignmenti = scheduleDaysArray[i].PersonAssignment();
+										var assignmentj = scheduleDaysArray[j].PersonAssignment();
+										if (assignmenti != null &&
+											assignmentj != null &&
+											assignmenti.ShiftCategory != null &&
+											assignmentj.ShiftCategory != null &&
+											assignmenti.ShiftCategory != assignmentj.ShiftCategory)
+										{
+											addValidationResult(validationResult, person,
+												string.Format(Resources.ExistingShiftNotMatchShiftCategory,
+													assignmenti.ShiftCategory.Description.ShortName, scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly,
+													assignmentj.ShiftCategory.Description.ShortName, scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly));
+											flag = true;
+											break;
+										}
+									}
+									if (flag)
+										break;
 								}
 							}
 
 							if (blockOption.UseBlockSameStartTime)
 							{
-								var allStartTimes =
-									scheduleDays.Where(x => x.PersonAssignment() != null)
-										.Select(x => x.PersonAssignment().Period.StartDateTime.TimeOfDay)
-										.Distinct();
-
-								if (allStartTimes.Count() > 1)
+								var flag = false;
+								for (var i = 0; i < length - 1; i++)
 								{
-									addValidationResult(validationResult, person, Resources.ExistingShiftNotMatchStartTime);
-									break;
+									for (var j = i; j < length; j++)
+									{
+										var assignmenti = scheduleDaysArray[i].PersonAssignment();
+										var assignmentj = scheduleDaysArray[j].PersonAssignment();
+										if (assignmenti != null &&
+											assignmentj != null &&
+											assignmenti.ShiftLayers.Count() != 0 &&
+											assignmentj.ShiftLayers.Count() != 0 &&
+											assignmenti.Period.StartDateTime.TimeOfDay != assignmentj.Period.StartDateTime.TimeOfDay)
+										{
+											addValidationResult(validationResult, person,
+												string.Format(Resources.ExistingShiftNotMatchStartTime,
+													assignmenti.Period.StartDateTime.TimeOfDay, scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly,
+													assignmentj.Period.StartDateTime.TimeOfDay, scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly));
+											flag = true;
+											break;
+										}
+									}
+									if (flag)
+										break;
 								}
 							}
 
 							if (blockOption.UseBlockSameShift)
 							{
-								var scheduleDaysArray = scheduleDays.ToArray();
-								var length = scheduleDaysArray.Length;
 								var flag = false;
 								for (var i = 0; i < length - 1; i++)
 								{
@@ -82,7 +110,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 									{
 										if (!_scheduleDayEquator.MainShiftEquals(scheduleDaysArray[i], scheduleDaysArray[j]))
 										{
-											addValidationResult(validationResult, person, Resources.ExistingShiftNotMatchShift);
+											addValidationResult(validationResult, person, string.Format(Resources.ExistingShiftNotMatchShift, scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly, scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly));
 											flag = true;
 											break;
 										}
@@ -114,11 +142,12 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					IShiftCategory firstShiftCategory = null;
 					TimeSpan? firstStartTime = null;
 					IScheduleDay firstScheduleDay = null;
+					DateOnly? firstDate = null;
 					foreach (var scheduleDay in scheduleDays)
 					{
-
+						var personAssignment = scheduleDay.PersonAssignment();
 						var isDayoff = scheduleDay.HasDayOff() ||
-									   (scheduleDay.PersonAssignment() == null &&
+									   (personAssignment == null &&
 										!personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate,
 											scheduleDay.DateOnlyAsPeriod.DateOnly, person.FirstDayOfWeek));
 						if (isDayoff)
@@ -126,23 +155,25 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 							firstShiftCategory = null;
 							firstStartTime = null;
 							firstScheduleDay = null;
+							firstDate = null;
 							continue;
 						}
-						if (scheduleDay.PersonAssignment() != null)
+						if (personAssignment != null && personAssignment.ShiftLayers.Count() != 0)
 						{
-							var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
-							var startTime = scheduleDay.PersonAssignment().Period.StartDateTime.TimeOfDay;
+							var shiftCategory = personAssignment.ShiftCategory;
+							var startTime = personAssignment.Period.StartDateTime.TimeOfDay;
 							if (blockOption.UseBlockSameShiftCategory)
 							{
 								if (firstShiftCategory == null)
 								{
 									firstShiftCategory = shiftCategory;
+									firstDate = personAssignment.Date;
 								}
 								else
 								{
 									if (firstShiftCategory != shiftCategory)
 									{
-										addValidationResult(validationResult, person, Resources.ExistingShiftNotMatchShiftCategory);
+										addValidationResult(validationResult, person, string.Format(Resources.ExistingShiftNotMatchShiftCategory, firstShiftCategory.Description.ShortName, firstDate.Value, shiftCategory.Description.ShortName, personAssignment.Date));
 										break;
 									}
 								}
@@ -153,12 +184,13 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								if (firstStartTime == null)
 								{
 									firstStartTime = startTime;
+									firstDate = personAssignment.Date;
 								}
 								else
 								{
 									if (firstStartTime.Value != startTime)
 									{
-										addValidationResult(validationResult, person, Resources.ExistingShiftNotMatchStartTime);
+										addValidationResult(validationResult, person, string.Format(Resources.ExistingShiftNotMatchStartTime, firstStartTime.Value, firstDate.Value, startTime, personAssignment.Date));
 										break;
 									}
 								}
@@ -169,17 +201,17 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								if (firstScheduleDay == null)
 								{
 									firstScheduleDay = scheduleDay;
+									firstDate = personAssignment.Date;
 								}
 								else
 								{
 									if (!_scheduleDayEquator.MainShiftEquals(firstScheduleDay, scheduleDay))
 									{
-										addValidationResult(validationResult, person, Resources.ExistingShiftNotMatchShift);
+										addValidationResult(validationResult, person, string.Format(Resources.ExistingShiftNotMatchShift, firstDate.Value, personAssignment.Date));
 										break;
 									}
 								}
 							}
-
 						}
 					}
 				}

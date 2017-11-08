@@ -71,17 +71,17 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				}
 				if (blockOption.UseBlockSameShiftCategory && scheduleDay.PersonAssignment().ShiftCategory != shiftCategory)
 				{
-					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShiftCategory, scheduleDay.PersonAssignment().Date, shiftCategory.Description.Name));
+					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShiftCategory, scheduleDay.DateOnlyAsPeriod.DateOnly, shiftCategory.Description.Name));
 					break;
 				}
 				if (blockOption.UseBlockSameStartTime && scheduleDay.PersonAssignment().Period.StartDateTime.TimeOfDay != startTime)
 				{
-					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchStartTime, scheduleDay.PersonAssignment().Date, startTime));
+					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchStartTime, scheduleDay.DateOnlyAsPeriod.DateOnly, startTime));
 					break;
 				}
 				if (blockOption.UseBlockSameShift && !_scheduleDayEquator.MainShiftEquals(scheduleDay, firstDayAfterPeriod))
 				{
-					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShift, scheduleDay.PersonAssignment().Date, personAssignment.Date));
+					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShift, scheduleDay.DateOnlyAsPeriod.DateOnly, personAssignment.Date));
 					break;
 				}
 			}
