@@ -44,7 +44,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 					throw new ApplicationException($"Person request with Id \"{form.Id}\" is not an overtime request.");
 				}
 				personRequest = _mapper.Map(form, personRequest);
-				_overtimeRequestProcessor.CheckAndProcessDeny(personRequest);
+
+				if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSetting_46417))
+					_overtimeRequestProcessor.Process(personRequest);
+				else
+					_overtimeRequestProcessor.CheckAndProcessDeny(personRequest);
 			}
 			else
 			{
