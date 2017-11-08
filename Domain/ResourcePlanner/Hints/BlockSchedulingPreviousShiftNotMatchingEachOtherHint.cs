@@ -72,41 +72,30 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				}
 				if (blockOption.UseBlockSameShiftCategory && scheduleDay.PersonAssignment().ShiftCategory != shiftCategory)
 				{
-					validationResult.Add(new PersonHintError
-					{
-						PersonName = person.Name.ToString(),
-						PersonId = person.Id.Value,
-						ValidationError =
-							string.Format(Resources.PreviousShiftNotMatchShiftCategory, scheduleDay.PersonAssignment().Date,
-								shiftCategory.Description.Name)
-					}, GetType());
+					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShiftCategory, scheduleDay.PersonAssignment().Date, shiftCategory.Description.Name));
 					break;
 				}
 				if (blockOption.UseBlockSameStartTime && scheduleDay.PersonAssignment().Period.StartDateTime.TimeOfDay != startTime)
 				{
-					validationResult.Add(new PersonHintError
-					{
-						PersonName = person.Name.ToString(),
-						PersonId = person.Id.Value,
-						ValidationError =
-							string.Format(Resources.PreviousShiftNotMatchStartTime, scheduleDay.PersonAssignment().Date,
-								startTime)
-					}, GetType());
+					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchStartTime, scheduleDay.PersonAssignment().Date, startTime));
 					break;
 				}
 				if (blockOption.UseBlockSameShift && !_scheduleDayEquator.MainShiftEquals(scheduleDay, firstDayAfterPeriod))
 				{
-					validationResult.Add(new PersonHintError
-					{
-						PersonName = person.Name.ToString(),
-						PersonId = person.Id.Value,
-						ValidationError =
-							string.Format(Resources.PreviousShiftNotMatchShift, scheduleDay.PersonAssignment().Date,
-								personAssignment.Date)
-					}, GetType());
+					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShift, scheduleDay.PersonAssignment().Date, personAssignment.Date));
 					break;
 				}
 			}
+		}
+
+		private void addValidationError(HintResult validationResult, IPerson person, string message)
+		{
+			validationResult.Add(new PersonHintError
+			{
+				PersonName = person.Name.ToString(),
+				PersonId = person.Id.Value,
+				ValidationError = message
+			}, GetType());
 		}
 	}
 }
