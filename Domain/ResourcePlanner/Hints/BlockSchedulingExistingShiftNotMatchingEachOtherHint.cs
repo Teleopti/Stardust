@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				if (!people.Contains(person)) continue;
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
 
+				
+
 				if (blockOption.BlockTypeValue == BlockFinderType.SchedulePeriod)
 				{
 					var personSchedulePeriods = person.PersonSchedulePeriods(period);
@@ -99,6 +101,16 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				{
 					var scheduleDays = schedule.Value.ScheduledDayCollection(period);
 					var personPeriod = person.PersonPeriods(period).First();
+					var shiftsOnNonworkingDays = scheduleDays.Any(scheduleDay =>
+					{
+						var personAssignment = scheduleDay.PersonAssignment();
+						return personAssignment != null && personAssignment.ShiftLayers.Count() != 0 &&
+							   !personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate,
+								   scheduleDay.DateOnlyAsPeriod.DateOnly, person.FirstDayOfWeek);
+					});
+					if (shiftsOnNonworkingDays)
+						continue;
+
 					IShiftCategory firstShiftCategory = null;
 					TimeSpan? firstStartTime = null;
 					IScheduleDay firstScheduleDay = null;
