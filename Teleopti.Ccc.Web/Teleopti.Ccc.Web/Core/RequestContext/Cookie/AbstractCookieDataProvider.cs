@@ -190,11 +190,19 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			{
 				ticket = FormsAuthentication.Decrypt(cookie.Value);
 			}
-			catch(HttpException)
+			catch (HttpException)
 			{
 				ticket = null;
 			}
 			catch (CryptographicException)
+			{
+				ticket = null;
+			}
+			catch (FormatException)
+			{
+				ticket = null;
+			}
+			catch (ArgumentException)
 			{
 				ticket = null;
 			}

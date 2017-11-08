@@ -216,6 +216,38 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			target.GrabFromCookie().Should().Be.Null();
 		}
+
+		[Test]
+		public void ShouldReturnNullWhenCookieValueIsNotAValidValue()
+		{
+			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
+			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
+
+			httpContext.Response.Cookies[_sessionSpecificCookieSettingsForWfm.AuthenticationCookieName]
+				.Value += "X";
+
+			var result = target.GrabFromCookie();
+
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnNullWhenCookieValueIsNotAValidBase64String()
+		{
+			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
+			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
+
+			var cookieValue = httpContext.Response.Cookies[_sessionSpecificCookieSettingsForWfm.AuthenticationCookieName]
+				.Value;
+
+			var invalidCookieValue = cookieValue.Substring(0, cookieValue.Length - 2) + "=" + cookieValue.Substring(cookieValue.Length - 1);
+			httpContext.Response.Cookies[_sessionSpecificCookieSettingsForWfm.AuthenticationCookieName]
+				.Value = invalidCookieValue;
+
+			var result = target.GrabFromCookie();
+
+			result.Should().Be.Null();
+		}
 	}
 
 	internal class SessionSpecificWfmCookieProviderForTest : SessionSpecificWfmCookieProvider
