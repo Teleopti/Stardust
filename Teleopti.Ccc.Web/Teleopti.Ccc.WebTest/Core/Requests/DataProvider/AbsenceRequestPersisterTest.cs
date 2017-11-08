@@ -638,6 +638,75 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			personRequest.DenyReason.Should().Be.Empty();
 		}
 
+		[Test]
+		public void ShouldDenyWhenRemainingHourIsNotEnoughOnEmptyDay()
+		{
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(), 
+				_today.AddDays(1).ToDateTimePeriod(UserTimeZone.TimeZone())));
+
+			_absence = createAbsence("Time Off In Lieu");
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true);
+
+			var accountTime = new AccountTime(_today.AddDays(-1))
+			{
+				BalanceIn = TimeSpan.FromMinutes(0),
+				Accrued = TimeSpan.FromMinutes(60),
+				Extra = TimeSpan.FromMinutes(0),
+				LatestCalculatedBalance = TimeSpan.Zero
+			};
+			createPersonAbsenceAccount(_person, _absence, accountTime);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today.AddDays(1),
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+			setupPersonSkills();
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be(true);
+			request.DenyReason.Should().Be(Resources.RequestDenyReasonPersonAccount);
+		}
+
+		[Test]
+		public void ShouldApproveWhenRemainingHourIsEnoughOnEmptyDay()
+		{
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+				_today.AddDays(1).ToDateTimePeriod(UserTimeZone.TimeZone())));
+
+			_absence = createAbsence("Time Off In Lieu");
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true);
+
+			var accountTime = new AccountTime(_today.AddDays(-1))
+			{
+				BalanceIn = TimeSpan.FromMinutes(0),
+				Accrued = TimeSpan.FromMinutes(60),
+				Extra = TimeSpan.FromMinutes(0),
+				LatestCalculatedBalance = TimeSpan.Zero
+			};
+			createPersonAbsenceAccount(_person, _absence, accountTime);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today.AddDays(1),
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromMinutes(480)),
+				EndTime = new TimeOfDay(TimeSpan.FromMinutes(510))
+			});
+			setupPersonSkills();
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be(false);
+			request.DenyReason.Should().Be(string.Empty);
+		}
 
 		private void tryPersist()
 		{

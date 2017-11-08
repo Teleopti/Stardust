@@ -119,9 +119,31 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		private static double calculateMinutes(IPersonRequest personRequest, IScheduleDay day, double numberMinutes)
 		{
-			var contractTime = day.ProjectionService().CreateProjection()
-				.FilterLayers(personRequest.Request.Period).ContractTime();
-			numberMinutes += contractTime.TotalMinutes;
+			var visualLayerCollection = day.ProjectionService().CreateProjection();
+			var visualLayerCollectionPeriod = visualLayerCollection.Period();
+			if (day.IsScheduled() && visualLayerCollectionPeriod.HasValue)
+			{
+				var contractTime = day.ProjectionService().CreateProjection()
+					.FilterLayers(personRequest.Request.Period).ContractTime();
+				numberMinutes += contractTime.TotalMinutes;
+			}
+			else
+			{
+				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
+				var requestedPeriod = personRequest.Request.Period;
+				var personPeriod = personRequest.Person.PersonPeriods(requestedPeriod.ToDateOnlyPeriod(timeZone)).FirstOrDefault();
+				var personContract = personPeriod.PersonContract;
+				var averageWorktimePerDayInMinutes = personContract.Contract.WorkTime.AvgWorkTimePerDay.TotalMinutes;
+				var partTimePercentage = personContract.PartTimePercentage.Percentage.Value;
+				var averageContractTimeSpan = TimeSpan.FromMinutes(averageWorktimePerDayInMinutes * partTimePercentage);
+
+				var requestedTime = TimeSpan.Zero;
+				requestedTime += requestedPeriod.ElapsedTime() < averageContractTimeSpan
+					? requestedPeriod.ElapsedTime()
+					: averageContractTimeSpan;
+				numberMinutes = requestedTime.TotalMinutes;
+			}
+			
 			return numberMinutes;
 		}
 
