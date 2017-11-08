@@ -81,16 +81,13 @@
 		function refresh() { $scope.$broadcast('$md-resize'); }
 
 		function setHeightToFillAvailableSpace() {
-			var tag = 'md-virtual-repeat-container';
-			var rows = $element.find(tag)[0];
-
-			var top = rows.getBoundingClientRect().top || rows.getBoundingClientRect().y;
+			var top = element.getBoundingClientRect().top || element.getBoundingClientRect().y;
 
 			var bottomMargin = 18;
 
 			var height = 'calc(100vh - ' + (top + bottomMargin) + 'px)';
 
-			rows.style.height = height;
+			element.style.height = height;
 
 			refresh();
 		}

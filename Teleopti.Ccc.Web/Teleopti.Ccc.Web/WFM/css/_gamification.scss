@@ -112,6 +112,7 @@
 		md-virtual-repeat-container {
 			display: block;
 			overflow: auto;
+			height: 100%;
 		}
 
 		md-virtual-repeat-container {
@@ -153,7 +154,6 @@
 				padding: 0;
 			}
 			md-checkbox {
-				margin-bottom: 0;
 				transform: scale(.9);
 			}
 		}
