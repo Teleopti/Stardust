@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -8,16 +7,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class AddBpoResourcesToContext
 	{
 		private readonly ISkillCombinationResourceBpoReader _skillCombinationResourceBpoReader;
+		private readonly SkillCombinationToBpoResourceMapper _skillCombinationToBpoResourceMapper;
 
-		public AddBpoResourcesToContext(ISkillCombinationResourceBpoReader skillCombinationResourceBpoReader)
+		public AddBpoResourcesToContext(ISkillCombinationResourceBpoReader skillCombinationResourceBpoReader, SkillCombinationToBpoResourceMapper skillCombinationToBpoResourceMapper)
 		{
 			_skillCombinationResourceBpoReader = skillCombinationResourceBpoReader;
+			_skillCombinationToBpoResourceMapper = skillCombinationToBpoResourceMapper;
 		}
 		
 		public void Execute(ResourceCalculationDataContainer resourceCalculationDataContatiner, IEnumerable<ISkill> skills, DateTimePeriod period)
 		{
 			var skillCombinationResources = _skillCombinationResourceBpoReader.Execute(period);
-			var bpoResources = map_makeSeparateType(skillCombinationResources, skills);
+			var bpoResources = _skillCombinationToBpoResourceMapper.Execute(skillCombinationResources, skills);
 			
 			foreach (var bpoResource in bpoResources)
 			{
@@ -27,13 +28,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					resourceCalculationDataContatiner.AddResources(tempAgent, DateOnly.Today, resourceLayer);
 				}
 			}
-		}
-
-		private IEnumerable<BpoResource> map_makeSeparateType(IEnumerable<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> skills)
-		{
-			return skillCombinationResources.Select(skillCombinationResource => new BpoResource(skillCombinationResource.Resource,
-				skills.Where(x => skillCombinationResource.SkillCombination.Contains(x.Id.Value)),
-				skillCombinationResource.Period()));
 		}
 	}
 }
