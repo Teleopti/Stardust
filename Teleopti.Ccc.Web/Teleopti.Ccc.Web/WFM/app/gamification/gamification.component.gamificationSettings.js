@@ -15,10 +15,12 @@
 
 		ctrl.$onInit = function () {
 			ctrl.title = 'Gamification Settings';
+				console.log(data);
 
 			ctrl.rules = [{
 				id: 'rule-id0',
 				name: 'Use Different Thresholds'
+			result.name = setting.Name;
 			}, {
 				id: 'rule-id1',
 				name: 'Use Ratio Conversion',
