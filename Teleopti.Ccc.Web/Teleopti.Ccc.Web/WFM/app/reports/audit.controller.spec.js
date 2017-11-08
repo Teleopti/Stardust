@@ -27,8 +27,20 @@ describe('AuditTrailCtrl', function () {
     $httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
       return [200, true]
     });
-	$httpBackend.whenGET('../api/Reports/OrganizationSelectionAuditTrail').respond(function (method, url, data, headers) {
-      return [200, true]
+    $httpBackend.whenPOST('../api/Reports/OrganizationSelectionAuditTrail').respond(function (method, url, data, headers) {
+      return [200,
+        [
+          {
+            Children:[
+              {
+                Name: "BTS", Id: "9d013613-7c79-4621-b166-a39a00b9d634"
+              }
+            ],
+            Id:"7a6c0754-4de8-48fb-8aee-a39a00b9d1c3",
+            Name:"BTS"
+          }
+        ]
+      ];
     });
 
     $httpBackend.whenPOST('../api/Reports/ScheduleAuditTrailReport').respond(function (method, url, data, headers) {
@@ -70,7 +82,7 @@ describe('AuditTrailCtrl', function () {
         Id:"321",
         Name:"London",
         Type:"Site",
-        ChildNodes: [
+        Children: [
           {
             Id:"abc",
             Name:"Team1",
@@ -83,7 +95,7 @@ describe('AuditTrailCtrl', function () {
         Name:"Paris",
         Type:"Site",
         selected: true,
-        ChildNodes: [
+        Children: [
           {
             Id:"abc",
             Name:"Team1",

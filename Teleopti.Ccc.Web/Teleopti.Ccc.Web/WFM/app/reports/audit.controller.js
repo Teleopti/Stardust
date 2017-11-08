@@ -27,16 +27,17 @@
 		vm.changesData = [];
 
 		vm.filteredOrgData = [];
-		vm.orgData = [];
+		vm.orgData = {};
 		vm.option = {
 			NodeDisplayName: "Name",
-			NodeChildrenName: "ChildNodes",
+			NodeChildrenName: "Children",
 			NodeSelectedMark: "selected"
 		}
 
 		vm.sendForm = sendForm;
 		vm.refreshData = refreshData;
 		vm.calculateOrgSelection = calculateOrgSelection;
+		vm.getOrgData = getOrgData;
 		vm.maxResults = 10000;
 
 		vm.label = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.filteredOrgData.length )
@@ -59,15 +60,27 @@
 		}
 
 		function getOrgData() {
-			// var postObj = {
-			// 	startDate: moment(vm.dateModifyRange.startDate).format("YYYY-MM-DD"),
-			// 	endDate: moment(vm.dateModifyRange.endDate).format("YYYY-MM-DD"),
-			// }
-			// ReportsService.getOrganization.org(postObj).$promise.then(function (response) {
-			// 	console.log(moment(vm.dateModifyRange.startDate).format("YYYY-MM-DD"), ' - ',
-			// 	moment(vm.dateModifyRange.endDate).format("YYYY-MM-DD"));
-			// 	console.log(response);
-			// });
+			if (angular.isUndefined(vm.dateModifyRange)) {
+				return;
+			}
+			var postObj = {
+				startDate: moment(vm.dateModifyRange.startDate).format("YYYY-MM-DD"),
+				endDate: moment(vm.dateModifyRange.endDate).format("YYYY-MM-DD"),
+			}
+			ReportsService.getOrganization.org(postObj).$promise.then(function (response) {
+				vm.orgData = {
+					Children: []
+				};
+
+				if (response.length > 0) {
+					for (var i = 0; i < response.length; i++) {
+						vm.orgData.Children.push(response[i]);
+					}
+				}
+				else {
+					NoticeService.error($translate.instant('ImportBpoWrongDateFormat'), 5000, true);
+				}
+			});
 		}
 
 		function sendForm(form) {
@@ -125,7 +138,7 @@
 
 		function calculateOrgSelection(nodes) {
 			for (var i = 0; i < nodes.length; i++) {
-				if (nodes[i].Type === 'Team') {
+				if (angular.isUndefined(nodes[i].Children)) {
 					if (vm.filteredOrgData.indexOf(nodes[i].Id) == -1 && nodes[i].selected === true) {
 						vm.filteredOrgData.push(nodes[i].Id)
 					}
@@ -133,11 +146,11 @@
 						vm.filteredOrgData.splice(vm.filteredOrgData.indexOf(nodes[i].Id), 1)
 					}
 				}
-				else if (nodes[i].ChildNodes && nodes[i].Type==='Site'){
-					calculateOrgSelection(nodes[i].ChildNodes);
+				else if (nodes[i].Children){
+					calculateOrgSelection(nodes[i].Children);
 				}
 			}
-					vm.label = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.filteredOrgData.length )
+			vm.label = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.filteredOrgData.length )
 		}
 
 		function refreshData(keyword) {

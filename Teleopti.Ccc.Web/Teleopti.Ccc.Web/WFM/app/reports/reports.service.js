@@ -9,7 +9,7 @@
     var auditTrailChangedByPerson = $resource('../api/Reports/PersonsWhoChangedSchedules');
 
 	var organization = $resource('../api/Reports/OrganizationSelectionAuditTrail', {}, {
-        org: { method: 'POST', params: {}, isArray: false }
+        org: { method: 'POST', params: {}, isArray: true }
     });
 
     var auditTrailResult = $resource('../api/Reports/ScheduleAuditTrailReport', {}, {

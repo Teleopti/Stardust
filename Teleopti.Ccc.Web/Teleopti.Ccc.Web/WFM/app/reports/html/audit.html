@@ -36,7 +36,7 @@
 							<wfm-popup show="showOrgPicker">
 								<div class="con-row">
 									<div class="con-flex">
-										<tree-data-two data="vm.orgData" option="vm.option" ng-click="vm.calculateOrgSelection(vm.orgData.ChildNodes)"></tree-data-two>
+										<tree-data-two data="vm.orgData" option="vm.option" ng-click="vm.calculateOrgSelection(vm.orgData.Children)"></tree-data-two>
 									</div>
 								</div>
 							</wfm-popup>
@@ -47,7 +47,7 @@
 						</div>
 						<div class="form-input-wrap">
 							<label>{{'ScheduleDateColon'|translate}}</label></br>
-							<date-range-picker ng-model="vm.dateModifyRange" template-type="'popup'" custom-validators=""></date-range-picker>
+							<date-range-picker ng-model="vm.dateModifyRange" ng-change="vm.getOrgData()" template-type="'popup'" custom-validators=""></date-range-picker>
 						</div>
 					</div>
 					<div class="con-flex">
