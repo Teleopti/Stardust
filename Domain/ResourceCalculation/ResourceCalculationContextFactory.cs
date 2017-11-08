@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -13,11 +11,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly ITimeZoneGuard _timeZoneGuard;
+		private readonly AddBpoResourcesToContext _addBpoResourcesToContext;
 
-		public ResourceCalculationContextFactory(IPersonSkillProvider personSkillProvider, ITimeZoneGuard timeZoneGuard)
+		public ResourceCalculationContextFactory(IPersonSkillProvider personSkillProvider, ITimeZoneGuard timeZoneGuard, AddBpoResourcesToContext addBpoResourcesToContext)
 		{
 			_personSkillProvider = personSkillProvider;
 			_timeZoneGuard = timeZoneGuard;
+			_addBpoResourcesToContext = addBpoResourcesToContext;
 		}
 
 		public IDisposable Create(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, IEnumerable<BpoResource> bpoResources, bool primarySkillMode, DateOnlyPeriod period)
@@ -34,31 +34,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					: 15;
 				var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval, primarySkillMode);
 				var ret = extractor.CreateRelevantProjectionList(scheduleDictionary, period.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()));
-				tempFix(ret, bpoResources);
+				_addBpoResourcesToContext.Execute(ret, bpoResources);
 				return ret;
 			});
 			return createResources;
-		}
-
-		private void tempFix(ResourceCalculationDataContainer ret, IEnumerable<BpoResource> bpoResources)
-		{
-			if (bpoResources == null)
-				return;
-
-			foreach (var bpoResource in bpoResources)
-			{
-				var tempAgent = new Person();
-				var period = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
-				period.AddPersonSkill(new PersonSkill(bpoResource.Skills.Single(), new Percent(1)));
-				tempAgent.AddPersonPeriod(period);
-				var resLayer = new ResourceLayer
-				{
-					PayloadId = bpoResource.Skills.Single().Activity.Id.Value,
-					Period = bpoResource.Period,
-					Resource = bpoResource.Resources
-				};
-				ret.AddResources(tempAgent, DateOnly.Today, resLayer);
-			}
 		}
 	}
 }

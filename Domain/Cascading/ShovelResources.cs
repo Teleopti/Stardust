@@ -15,18 +15,21 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private readonly SkillSetPerActivityProvider _skillSetPerActivityProvider;
 		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
 		private readonly ITimeZoneGuard _timeZoneGuard;
+		private readonly AddBpoResourcesToContext _addBpoResourcesToContext;
 
 		public ShovelResources(ReducePrimarySkillResources reducePrimarySkillResources,
 			AddResourcesToSubSkills addResourcesToSubSkills,
 			SkillSetPerActivityProvider skillSetPerActivityProvider,
 			PrimarySkillOverstaff primarySkillOverstaff,
-			ITimeZoneGuard timeZoneGuard)
+			ITimeZoneGuard timeZoneGuard,
+			AddBpoResourcesToContext addBpoResourcesToContext)
 		{
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_addResourcesToSubSkills = addResourcesToSubSkills;
 			_skillSetPerActivityProvider = skillSetPerActivityProvider;
 			_primarySkillOverstaff = primarySkillOverstaff;
 			_timeZoneGuard = timeZoneGuard;
+			_addBpoResourcesToContext = addBpoResourcesToContext;
 		}
 
 		public void Execute(IShovelResourceData shovelResourceData, IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period, IShovelingCallback shovelingCallback, Func<IDisposable> getResourceCalculationContext)
@@ -66,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		private IDisposable getDefaultContext(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period)
 		{
-			var rcf = new ResourceCalculationContextFactory(new PersonSkillProvider(), _timeZoneGuard);
+			var rcf = new ResourceCalculationContextFactory(new PersonSkillProvider(), _timeZoneGuard, _addBpoResourcesToContext);
 			return rcf.Create(scheduleDictionary, allSkills, null, false, period);
 		}
 

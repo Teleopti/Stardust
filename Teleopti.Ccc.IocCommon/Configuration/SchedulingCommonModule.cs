@@ -93,7 +93,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.AsSelf()
 					.SingleInstance();
 			}
-
+			builder.RegisterType<AddBpoResourcesToContext>().SingleInstance();
+			
 			builder.RegisterType<MaxSeatPeak>().SingleInstance();
 			builder.RegisterType<IsOverMaxSeat>().SingleInstance();
 			builder.RegisterType<LockDaysOnTeamBlockInfos>().SingleInstance();
