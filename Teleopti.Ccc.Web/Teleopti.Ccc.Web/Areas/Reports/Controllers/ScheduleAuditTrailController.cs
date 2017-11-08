@@ -63,8 +63,9 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Reports/OrganizationSelectionWithPermissionAuditTrail")]
-		public virtual SiteViewModelWithTeams[] OrganizationSelectionWithPermissionAuditTrail(DateOnlyPeriod period)
+		public virtual SiteViewModelWithTeams[] OrganizationSelectionWithPermissionAuditTrail(DateTime startDate, DateTime endDate)
 		{
+			var period = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 			var stringComparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
 			var mainGroupPage =
 				_groupingReadOnlyRepository.AvailableGroups(period, Group.PageMainId)

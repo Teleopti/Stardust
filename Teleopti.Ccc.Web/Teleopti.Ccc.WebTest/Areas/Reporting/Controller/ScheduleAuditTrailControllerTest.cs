@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 				BusinessUnitId = businessUnitId
 			});
 
-			var result = Target.OrganizationSelectionWithPermissionAuditTrail(new DateOnlyPeriod(2017,02,01,2017,02,02));
+			var result = Target.OrganizationSelectionWithPermissionAuditTrail(new DateTime(2017,11,01), new DateTime(2017, 11, 01));
 
 			result.Length.Should().Be.EqualTo(1);
 			result.First().Name.Should().Be.EqualTo("Site");
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 				groupDetails);
 			PermissionProvider.Enable();
 
-			var result = Target.OrganizationSelectionWithPermissionAuditTrail(new DateOnlyPeriod(2017, 02, 01, 2017, 02, 02));
+			var result = Target.OrganizationSelectionWithPermissionAuditTrail(new DateTime(2017, 11, 01), new DateTime(2017, 11, 01));
 
 			result.Length.Should().Be.EqualTo(0);
 		}
