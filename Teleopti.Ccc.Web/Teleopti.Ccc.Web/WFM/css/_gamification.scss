@@ -113,6 +113,11 @@
 			display: block;
 			overflow: auto;
 			height: 100%;
+			opacity: 0;
+
+			&.show {
+				opacity: 1;
+			}
 		}
 
 		md-virtual-repeat-container {
