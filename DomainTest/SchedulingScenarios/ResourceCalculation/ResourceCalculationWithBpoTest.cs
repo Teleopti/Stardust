@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 		
 		[Test]
-		[Ignore("46265 - to be fixed")]
 		public void ShouldHandleMultiskilledWithDifferentActivitiesBpos()
 		{
 			var scenario = new Scenario();

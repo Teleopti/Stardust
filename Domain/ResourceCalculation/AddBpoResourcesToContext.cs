@@ -20,16 +20,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var tempAgent = new Person();
 				var period = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
 				bpoResource.Skills.ForEach(x => period.AddPersonSkill(new PersonSkill(x, new Percent(1))));
-				tempAgent.AddPersonPeriod(period);		
-				var resLayer = new ResourceLayer
+				tempAgent.AddPersonPeriod(period);
+				var uniqueActivities = bpoResource.Skills.Select(x => x.Activity).Distinct();
+				var numberOfActivities = uniqueActivities.Count();
+				foreach (var activity in uniqueActivities)
 				{
-					PayloadId = bpoResource.Skills.First().Activity.Id.Value,
-					Period = bpoResource.Period,
-					Resource = bpoResource.Resources
-				};
+					var resLayer = new ResourceLayer
+					{
+						PayloadId = activity.Id.Value,
+						Period = bpoResource.Period,
+						Resource = bpoResource.Resources / numberOfActivities
+					};
 
-				resourceCalculationDataContatiner.AddResources(tempAgent, DateOnly.Today, resLayer);
-				
+					resourceCalculationDataContatiner.AddResources(tempAgent, DateOnly.Today, resLayer);
+				}
 			}
 		}
 	}
