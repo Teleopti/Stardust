@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IScenario scenario;
 		private ICustomShrinkage customShrinkage;
 		private ICustomEfficiencyShrinkage customEfficiencyShrinkage;
+		private DateOnly budgetDayDate;
 
 		protected override void ConcreteSetup()
 		{
@@ -37,35 +38,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			scenario = ScenarioFactory.CreateScenarioAggregate();
 			PersistAndRemoveFromUnitOfWork(scenario);
+			budgetDayDate = new DateOnly(2010, 9, 30);
 		}
 
 		protected override IBudgetDay CreateAggregateWithCorrectBusinessUnit()
 		{
-			IBudgetDay budgetDay = new BudgetDay(budgetGroup, scenario, new DateOnly(2010, 9, 30));
-			budgetDay.AttritionRate = new Percent(0.1);
-			budgetDay.Contractors = 1.5d;
-			budgetDay.DaysOffPerWeek = 2d;
-			budgetDay.ForecastedHours = 3d;
-			budgetDay.FulltimeEquivalentHours = 7.6d;
-			budgetDay.OvertimeHours = 3;
-			budgetDay.Recruitment = 3.25;
-			budgetDay.StaffEmployed = 50d;
-			budgetDay.StudentHours = 4;
-			budgetDay.IsClosed = true;
-			budgetDay.AbsenceThreshold = new Percent(0.8);
-			budgetDay.AbsenceExtra = 2d;
-			budgetDay.AbsenceOverride = 10d;
-			budgetDay.FullAllowance = 10d;
-			budgetDay.ShrinkedAllowance = 8d;
+			budgetDayDate = budgetDayDate.AddDays(1);
+			IBudgetDay budgetDay = new BudgetDay(budgetGroup, scenario, budgetDayDate)
+			{
+				AttritionRate = new Percent(0.1),
+				Contractors = 1.5d,
+				DaysOffPerWeek = 2d,
+				ForecastedHours = 3d,
+				FulltimeEquivalentHours = 7.6d,
+				OvertimeHours = 3,
+				Recruitment = 3.25,
+				StaffEmployed = 50d,
+				StudentHours = 4,
+				IsClosed = true,
+				AbsenceThreshold = new Percent(0.8),
+				AbsenceExtra = 2d,
+				AbsenceOverride = 10d,
+				FullAllowance = 10d,
+				ShrinkedAllowance = 8d
+			};
 			budgetDay.CustomShrinkages.SetShrinkage(customShrinkage.Id.GetValueOrDefault(Guid.Empty), new Percent(0.07d));
 			budgetDay.CustomEfficiencyShrinkages.SetEfficiencyShrinkage(
 				customEfficiencyShrinkage.Id.GetValueOrDefault(Guid.Empty), new Percent(0.08d));
-			//customShrinkage.AddAbsence(AbsenceFactory.CreateAbsence("Holiday"));
 			return budgetDay;
 		}
 
 		protected override void VerifyAggregateGraphProperties(IBudgetDay loadedAggregateFromDatabase)
 		{
+			budgetDayDate = loadedAggregateFromDatabase.Day.AddDays(-1);
 			var budgetDay = CreateAggregateWithCorrectBusinessUnit();
 			Assert.AreEqual(budgetDay.AttritionRate, loadedAggregateFromDatabase.AttritionRate);
 			Assert.AreEqual(budgetDay.BudgetGroup, loadedAggregateFromDatabase.BudgetGroup);
