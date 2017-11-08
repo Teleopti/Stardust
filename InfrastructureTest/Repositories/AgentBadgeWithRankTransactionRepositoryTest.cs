@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				BadgeType = BadgeType.AverageHandlingTime,
 				CalculatedDate = new DateOnly(2014, 9, 9),
 				Description = "test",
-				InsertedOn = new DateTime(2014, 9, 10),
+				InsertedOn = DateTime.SpecifyKind(new DateTime(2014, 9, 10), DateTimeKind.Utc),
 				Person = person
 			};
 		}
@@ -66,32 +66,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
 			target.ResetAgentBadges();
 
-			var result = target.Find(person,badgeTransaction.BadgeType,badgeTransaction.CalculatedDate);
+			var result = target.Find(person, badgeTransaction.BadgeType, badgeTransaction.CalculatedDate);
 			result.Should().Be.Null();
 		}
-
 
 		[Test]
 		public void ShouldGetBadgeWithinGivenDatePeriod()
 		{
 			var badge1 = CreateAggregateWithCorrectBusinessUnit();
-			badge1.CalculatedDate = new DateOnly(2014,9,9);
+			badge1.CalculatedDate = new DateOnly(2014, 9, 9);
 			PersistAndRemoveFromUnitOfWork(badge1);
 			var badge2 = CreateAggregateWithCorrectBusinessUnit();
-			badge2.CalculatedDate = new DateOnly(2014,9,15);
+			badge2.CalculatedDate = new DateOnly(2014, 9, 15);
 			PersistAndRemoveFromUnitOfWork(badge2);
 
 			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
 
-
-			var badges = target.Find(new List<IPerson> { badge1.Person,badge2.Person },new DateOnlyPeriod(2014,9,8,2014,9,10));
+			var badges = target.Find(new List<IPerson>
+				{
+					badge1.Person,
+					badge2.Person
+				},
+				new DateOnlyPeriod(2014, 9, 8, 2014, 9, 10));
 
 			badges.Count.Should().Be.EqualTo(1);
 
-			badges = target.Find(new List<IPerson> { badge1.Person,badge2.Person },new DateOnlyPeriod(2014,9,8,2014,9,16));
+			badges = target.Find(new List<IPerson>
+			{
+				badge1.Person,
+				badge2.Person
+			}, new DateOnlyPeriod(2014, 9, 8, 2014, 9, 16));
 
 			badges.Count.Should().Be.EqualTo(2);
-
 		}
 	}
 }

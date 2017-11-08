@@ -12,33 +12,33 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
-    [Category("BucketB")]
+	[Category("BucketB")]
 	public class AgentBadgeTransactionRepositoryTest : RepositoryTest<IAgentBadgeTransaction>
-    {
-	    private IPerson person;
+	{
+		private IPerson person;
 
-	    protected override void ConcreteSetup()
-	    {
+		protected override void ConcreteSetup()
+		{
 			person = PersonFactory.CreatePerson();
 			PersistAndRemoveFromUnitOfWork(person);
 		}
 
-	    protected override IAgentBadgeTransaction CreateAggregateWithCorrectBusinessUnit()
-	    {
-		    return new AgentBadgeTransaction
-		    {
-			    Amount = 1,
-			    BadgeType = BadgeType.AverageHandlingTime,
-			    CalculatedDate = new DateOnly(2014, 9, 9),
-			    Description = "test",
-			    InsertedOn = new DateTime(2014, 9, 10),
-			    Person = person
-		    };
-	    }
+		protected override IAgentBadgeTransaction CreateAggregateWithCorrectBusinessUnit()
+		{
+			return new AgentBadgeTransaction
+			{
+				Amount = 1,
+				BadgeType = BadgeType.AverageHandlingTime,
+				CalculatedDate = new DateOnly(2014, 9, 9),
+				Description = "test",
+				InsertedOn = DateTime.SpecifyKind(new DateTime(2014, 9, 10), DateTimeKind.Utc),
+				Person = person
+			};
+		}
 
-	    protected override void VerifyAggregateGraphProperties(IAgentBadgeTransaction loadedAggregateFromDatabase)
-	    {
-		    var newBadgeTran = CreateAggregateWithCorrectBusinessUnit();
+		protected override void VerifyAggregateGraphProperties(IAgentBadgeTransaction loadedAggregateFromDatabase)
+		{
+			var newBadgeTran = CreateAggregateWithCorrectBusinessUnit();
 
 			Assert.AreEqual(newBadgeTran.Person.Name, loadedAggregateFromDatabase.Person.Name);
 			Assert.AreEqual(newBadgeTran.BadgeType, loadedAggregateFromDatabase.BadgeType);
@@ -46,25 +46,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(newBadgeTran.CalculatedDate, loadedAggregateFromDatabase.CalculatedDate);
 			Assert.AreEqual(newBadgeTran.Description, loadedAggregateFromDatabase.Description);
 			Assert.AreEqual(newBadgeTran.InsertedOn, loadedAggregateFromDatabase.InsertedOn);
-	    }
+		}
 
-	    protected override Repository<IAgentBadgeTransaction> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
-	    {
+		protected override Repository<IAgentBadgeTransaction> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		{
 			return new AgentBadgeTransactionRepository(currentUnitOfWork);
-	    }
+		}
 
-	    [Test]
-	    public void ShouldResetBadges()
-	    {
-		    var badge = CreateAggregateWithCorrectBusinessUnit();
+		[Test]
+		public void ShouldResetBadges()
+		{
+			var badge = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(badge);
 
-		    var target = new AgentBadgeTransactionRepository(UnitOfWork);
-		    target.ResetAgentBadges();
-			
-		    var result = target.Find(badge.Person,badge.BadgeType,badge.CalculatedDate);
-		    result.Should().Be.Null();
-	    }
+			var target = new AgentBadgeTransactionRepository(UnitOfWork);
+			target.ResetAgentBadges();
+
+			var result = target.Find(badge.Person, badge.BadgeType, badge.CalculatedDate);
+			result.Should().Be.Null();
+		}
 
 		[Test]
 		public void ShouldGetBadgeWithinGivenDatePeriod()
@@ -77,16 +77,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(badge2);
 
 			var target = new AgentBadgeTransactionRepository(UnitOfWork);
-
-
-			var badges = target.Find(new List<IPerson> {badge1.Person, badge2.Person}, new DateOnlyPeriod(2014, 9, 8, 2014, 9, 10));
+			var badges = target.Find(new List<IPerson>
+				{
+					badge1.Person,
+					badge2.Person
+				},
+				new DateOnlyPeriod(2014, 9, 8, 2014, 9, 10));
 
 			badges.Count.Should().Be.EqualTo(1);
 
-			badges = target.Find(new List<IPerson> { badge1.Person,badge2.Person },new DateOnlyPeriod(2014,9,8,2014,9,16));
+			badges = target.Find(new List<IPerson>
+			{
+				badge1.Person,
+				badge2.Person
+			}, new DateOnlyPeriod(2014, 9, 8, 2014, 9, 16));
 
 			badges.Count.Should().Be.EqualTo(2);
-
 		}
-    }
+	}
 }
