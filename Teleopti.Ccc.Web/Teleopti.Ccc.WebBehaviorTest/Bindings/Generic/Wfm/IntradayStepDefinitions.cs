@@ -199,6 +199,45 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click("#exit_sgm");
 		}
 
+		[Then(@"I should see '(.*)' as included skill")]
+		public void ThenIShouldSeeAsIncludedSkill(string skill)
+		{
+			Browser.Interactions.AssertAnyContains(".chip-text", skill);
+		}
+
+		[Given(@"I select '(.*)' from SkillsInThisGroup")]
+		public void GivenISelectFromSkillsInThisGroup(string skill)
+		{
+			var elementSelector = $"$(\"span:contains('{skill}')\").parent(\"div.wfm-chip-wrap\")";
+			Browser.Interactions.Javascript($"{elementSelector}.click();");
+		}
+
+		[When(@"I remove selected skill from skill group")]
+		public void WhenIRemoveSelectedSkillFromSkillGroup()
+		{
+			Browser.Interactions.Click("#move_from_group");
+		}
+
+		[Then(@"I should not see '(.*)' as included skill")]
+		public void ThenIShouldNotSeeAsIncludedSkill(string skill)
+		{
+			Browser.Interactions.AssertFirstNotContains(".chip-text", skill);
+		}
+
+		[Given(@"I select '(.*)' from available skill")]
+		public void GivenISelectFromAvailableSkill(string skill)
+		{
+			var elementSelector = $"$(\"span:contains('{skill}')\").parent()";
+			Browser.Interactions.Javascript($"{elementSelector}.click();");
+		}
+
+		[When(@"I add selected skill to skill group")]
+		[Given(@"I add selected skill to skill group")]
+		public void GivenIAddSelectedSkillToSkillGroup()
+		{
+			Browser.Interactions.Click("#move_to_group");
+		}
+
 		[Then(@"I select to monitor skill area '(.*)'")]
 		public void ThenISelectToMonitorSkillArea(string skillArea)
 		{

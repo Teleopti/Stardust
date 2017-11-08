@@ -64,6 +64,35 @@ Scenario: Rename Skill Group in SGM
 	Then I select to monitor skill area 'my Area 2'
 	And I should monitor 'my Area 2'
 
+@OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
+@OnlyRunIfEnabled('WFM_Modify_Skill_Groups_45727')
+	Scenario: Add Skill to Skill Group in SGM
+	Given there is a Skill Area called 'SkillArea A' that monitors skills 'Skill B'
+	And I am viewing intraday page
+	And I select to manage Skill Groups
+	And I select the Skill Group 'SkillArea A'
+	And I select 'Skill A' from available skill
+	When I add selected skill to skill group
+	And I save the Skill Groups
+	And I close the Skill Manager
+	Then I select to monitor skill area 'SkillArea A'
+	And I should see 'Skill A' as included skill
+
+@OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
+@OnlyRunIfEnabled('WFM_Modify_Skill_Groups_45727')
+Scenario: Remove Skill from Skill Group in SGM
+	Given there is a Skill Area called 'SkillArea A' that monitors skills 'Skill A, Skill B'
+	And I am viewing intraday page
+	And I select to manage Skill Groups
+	And I select the Skill Group 'SkillArea A'
+	And I select 'Skill A' from SkillsInThisGroup
+	When I remove selected skill from skill group
+	And I save the Skill Groups
+	And I close the Skill Manager
+	Then I select to monitor skill area 'SkillArea A'
+	And I should monitor 'SkillArea A'
+	And I should not see 'Skill A' as included skill
+
 @OnlyRunIfDisabled('WFM_Modify_Skill_Groups_45727')
 Scenario: Remove Skill Area
 	Given there is a Skill Area called 'Area A' that monitors skill 'Skill A'
