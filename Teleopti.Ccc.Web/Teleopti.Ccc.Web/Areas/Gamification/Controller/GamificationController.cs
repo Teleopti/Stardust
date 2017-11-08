@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		private readonly ISiteViewModelFactory _siteViewModelFactory;
 		private readonly ITeamGamificationSettingProviderAndPersister _gamificationSettingProviderAndPersister;
 
-		public GamificationController(IGamificationSettingPersister gamificationSettingPersister,
-			IGamificationSettingProvider gamificationSettingProvider, ISiteViewModelFactory siteViewModelFactory, ITeamGamificationSettingProviderAndPersister gamificationSettingProviderAndPersister)
+		public GamificationController(IGamificationSettingPersister gamificationSettingPersister, IGamificationSettingProvider gamificationSettingProvider, 
+			ISiteViewModelFactory siteViewModelFactory, ITeamGamificationSettingProviderAndPersister gamificationSettingProviderAndPersister)
 		{
 			_gamificationSettingPersister = gamificationSettingPersister;
 			_gamificationSettingProvider = gamificationSettingProvider;

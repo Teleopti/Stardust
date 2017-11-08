@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 
@@ -15,28 +18,86 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 	[TestFixture]
 	class TeamGamificationSettingProviderAndPersisterTest
 	{
+		private IGamificationSettingRepository _gamificationSettingRepository;
+		private IGamificationSetting _gamificationSetting;
+		private ITeamGamificationSettingRepository _teamGamificationSettingRepository;
+		private ITeamRepository _teamRepository;
+		private ITeam _team;
+		private TeamGamificationSettingForm _teamGamificationSettingForm;
+
+		[SetUp]
+		public void Setup()
+		{
+			var teamId = Guid.NewGuid();
+			_team = new Team();
+			_team.WithId(teamId);
+			var gamificationSettingId = Guid.NewGuid();
+			_gamificationSetting = new GamificationSetting("bla");
+			_gamificationSetting.WithId(gamificationSettingId);
+
+			_teamRepository = new FakeTeamRepository();
+			_teamRepository.Add(_team);
+			_gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
+			_gamificationSettingRepository.Stub(x => x.Get(gamificationSettingId)).Return(_gamificationSetting);
+			_teamGamificationSettingRepository = new FakeTeamGamificationSettingRepository();
+			_teamGamificationSettingForm = new TeamGamificationSettingForm()
+			{
+				GamificationSettingId = _gamificationSetting.Id.Value,
+				TeamId = _team.Id.Value
+			};
+		}
+
 		[Test]
 		public void ShouldAddNewTeamGamificationSettingIfItDoNotExist()
 		{
-			var teamId = Guid.NewGuid();
-			var team = new Team();
-			team.WithId(teamId);
-			var gamificationSettingId = Guid.NewGuid();
-			var gamificationSetting = new GamificationSetting("bla");
-			gamificationSetting.WithId(gamificationSettingId);
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
 
-			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
-			teamRepository.Stub(x => x.Get(teamId)).Return(team);
-			var gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
-			gamificationSettingRepository.Stub(x => x.Get(gamificationSettingId)).Return(gamificationSetting);
+			target.SetTeamGamificationSetting(_teamGamificationSettingForm);
 
-			var teamGamificationSettingRepository = new FakeTeamGamificationSettingRepository();
-			
-			var target = new TeamGamificationSettingProviderAndPersister(teamGamificationSettingRepository, teamRepository, gamificationSettingRepository);
+			_teamGamificationSettingRepository.FindTeamGamificationSettingsByTeam(_team).Should().Not.Be.Null();
+		}
 
-			target.SetTeamGamificationSetting(new TeamGamificationSettingForm(){GamificationSettingId = gamificationSettingId, TeamId = teamId });
+		[Test]
+		public void ShouldModifyGamificationSetting()
+		{
+			_teamGamificationSettingRepository.Add(new TeamGamificationSetting(){GamificationSetting = new GamificationSetting("old"), Team = _team});
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
 
-			teamGamificationSettingRepository.FindTeamGamificationSettingsByTeam(team).Should().Not.Be.Null();
+			var result = target.SetTeamGamificationSetting(_teamGamificationSettingForm);
+
+			result.GamificationSettingId.Should().Be.EqualTo(_teamGamificationSettingForm.GamificationSettingId);
+		}
+
+		[Test]
+		public void ShouldReturnNullWhenHasNoSuchTeam()
+		{
+			var teamRepository = new FakeTeamRepository();
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, teamRepository, _gamificationSettingRepository);
+
+			var result = target.SetTeamGamificationSetting(_teamGamificationSettingForm);
+
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnEmptyListWhenThereIsNoTeam()
+		{
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
+			var result = target.GetTeamGamificationSettingViewModels(new List<Guid>());
+			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldGetTeamGamificationSettings()
+		{
+			_teamGamificationSettingRepository.Add(new TeamGamificationSetting() { GamificationSetting = _gamificationSetting, Team = _team });
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
+
+			var result = target.GetTeamGamificationSettingViewModels(new List<Guid>(){_team.Id.Value});
+
+			result.Count.Should().Be.EqualTo(1);
+			result[0].GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result[0].Team.id.Should().Be.EqualTo(_team.Id.ToString());
 		}
 	}
 }
