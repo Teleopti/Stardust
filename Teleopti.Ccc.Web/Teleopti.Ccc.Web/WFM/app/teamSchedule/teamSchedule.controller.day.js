@@ -94,11 +94,11 @@
 			if (vm.staffingEnabled) {
 				vm.scheduleTableWrapperStyle = {
 					'height': size.tableHeight + 'px',
-					'min-height': 'initial'
+					'min-height': '0'
 				};
 				vm.scheduleTableBodyStyle = {
 					'max-height': size.tableBodyHeight + 'px',
-					'min-height': 'initial'
+					'min-height': '0'
 				};
 				vm.chartHeight = size.chartHeight;
 			}
@@ -192,11 +192,11 @@
 			StaffingConfigStorageService.setSize(tableHeight, tBodyHeight, chartHeight);
 			vm.scheduleTableWrapperStyle = {
 				'height': tableHeight + 'px',
-				'min-height': 'initial'
+				'min-height': '0'
 			};
 			vm.scheduleTableBodyStyle = {
 				'max-height': tBodyHeight + 'px',
-				'min-height': 'initial'
+				'min-height': '0'
 			}
 			vm.chartHeight = chartHeight;
 
