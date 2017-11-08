@@ -1522,7 +1522,6 @@
     <Compile Include="ResourceCalculation\NoShovelingCallback.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromSkillCombinations.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationExtensions.cs" />
-    <Compile Include="ResourceCalculation\SharedResourceContextOldSchedulingScreenBehaviorWithoutShoveling.cs" />
     <Compile Include="ResourceCalculation\SkillCombinationHolder.cs" />
     <Compile Include="ResourceCalculation\SkillCombinationResource.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingInterval.cs" />
