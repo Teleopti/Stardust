@@ -34,10 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		    ((ScheduleRange) dic[pAbs.Person]).Add(pAbs);
 
 			var target = new ScheduleProjectionExtractor(new PersonSkillProvider(), 15, false);
-			var retList = target.CreateRelevantProjectionList(dic);
-		    Assert.IsTrue(retList.HasItems());
-
-		    retList = target.CreateRelevantProjectionList(dic, period);
+		    var retList = target.CreateRelevantProjectionList(dic, period);
 		    Assert.IsTrue(retList.HasItems());
 	    }
     }

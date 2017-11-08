@@ -58,17 +58,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Extracts all schedule data.
         /// </summary>
         /// <param name="extractor">The extractor.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-05-19
-        /// </remarks>
-        [Obsolete("Depricated. Always specify a period!")]
-        void ExtractAllScheduleData(IScheduleExtractor extractor);
-
-        /// <summary>
-        /// Extracts all schedule data.
-        /// </summary>
-        /// <param name="extractor">The extractor.</param>
         /// <param name="period">The period.</param>
         /// <remarks>
         /// Created by: rogerkr

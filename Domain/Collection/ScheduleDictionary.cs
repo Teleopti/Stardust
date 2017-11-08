@@ -186,19 +186,6 @@ namespace Teleopti.Ccc.Domain.Collection
             return ret;
         }
 
-        /// <summary>
-        /// Extracts all schedule data.
-        /// </summary>
-        /// <param name="extractor">The extractor.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-05-19
-        /// </remarks>
-        public void ExtractAllScheduleData(IScheduleExtractor extractor)
-        {
-			_dictionary.Values.ForEach(scheduleRange => scheduleRange.ExtractAllScheduleData(extractor, scheduleRange.Period));
-        }
-
         public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
         {
             _dictionary.Values.ForEach(scheduleRange => scheduleRange.ExtractAllScheduleData(extractor, period));

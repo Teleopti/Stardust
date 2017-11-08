@@ -18,31 +18,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    _minResolution = minResolution;
 	    }
 
-	    /// <summary>
-        /// Creates the relevant projection list.
-        /// </summary>
-        /// <param name="scheduleDictionary">The schedule dictionary.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-05-27
-        /// </remarks>
-        public ResourceCalculationDataContainer CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary)
-        {
-		    using (PerformanceOutput.ForOperation("Creating projection"))
-		    {
-#pragma warning disable 618
-
-				retList.Clear();
-
-				scheduleDictionary.ExtractAllScheduleData(this);
-
-				return retList;
-
-#pragma warning restore 618
-		    }
-        }
-
         /// <summary>
         /// Creates the relevant projection list.
         /// </summary>

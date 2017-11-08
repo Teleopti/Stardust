@@ -49,9 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDisposable contextDisposal = null;
 			if (!ResourceCalculationContext.InContext)
 			{
-#pragma warning disable 618
-				contextDisposal = _resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, false);
-#pragma warning restore 618
+				contextDisposal = _resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, false, selectedPeriod.Inflate(1));
 			}
 			
 				EventHandler<ResourceOptimizerProgressEventArgs> onResolvingWeek = (sender, e) =>
