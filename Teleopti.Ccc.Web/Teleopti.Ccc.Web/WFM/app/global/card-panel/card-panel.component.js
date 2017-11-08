@@ -22,9 +22,9 @@
         .directive('cardAnimate', cardAnimate)
         .controller('CardPanelController', CardPanelController);
 
-    CardPanelController.$inject = [];
+    CardPanelController.$inject = ['$element'];
 
-    function CardPanelController() {
+    function CardPanelController($element) {
         var vm = this;
 
         vm.$onInit = setColorRender();
@@ -49,8 +49,9 @@
         }
 
         function linearColor() {
+            var length = $element[0].parentNode.getElementsByTagName('card-panel').length;
             if (angular.isDefined(vm.id) && angular.isDefined(vm.color.rgba)) {
-                var opacity = 1 - vm.id / document.getElementsByTagName('card-panel').length;
+                var opacity = 1 - vm.id / length;
                 vm.color.rgba = vm.color.rgba.replace(/[\d\.]+\)$/g, opacity.toFixed(2) + ')');
                 return {
                     'border-color': vm.color.rgba,
@@ -94,7 +95,7 @@
 
             function init() {
                 if (attrs.cardAnimate == "single" || attrs.preOpen == "true") {
-                    allCards = document.getElementsByClassName('card-panel-content-wrapper');
+                    allCards = el.parentNode.parentNode.parentNode.getElementsByClassName('card-panel-content-wrapper');
                 }
                 preOpen();
                 switch (attrs.cardAnimate) {

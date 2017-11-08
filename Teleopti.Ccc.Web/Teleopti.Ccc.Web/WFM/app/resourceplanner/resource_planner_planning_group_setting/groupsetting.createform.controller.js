@@ -5,9 +5,9 @@
         .module('wfm.resourceplanner')
         .controller('planningGroupSettingEditController', Controller);
 
-    Controller.$inject = ['$state', '$stateParams', '$translate', 'NoticeService', 'PlanGroupSettingService', 'debounceService'];
+    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService'];
 
-    function Controller($state, $stateParams, $translate, NoticeService, PlanGroupSettingService, debounceService) {
+    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService) {
         var vm = this;
 
         var filterId = $stateParams.filterId ? $stateParams.filterId : null;
@@ -52,7 +52,7 @@
         vm.selectedItem = undefined;
         vm.selectedType = vm.blockSchedulingTypes[0];
         vm.selectedOptionName = vm.blockSchedulingOptions[0].Id;
-        vm.searchString = '';
+        vm.searchString = undefined;
         vm.blockScheduling = vm.schedulingSettings[0];
         vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
         vm.clearInput = clearInput;
@@ -72,11 +72,12 @@
         vm.setBlockSchedulingType = setBlockSchedulingType;
         vm.setBlockSchedulingOption = setBlockSchedulingOption;
         vm.persist = persist;
+        vm.filterOptions = filterOptions;
 
         checkIfEditDefaultRule();
 
         function checkIfEditDefaultRule() {
-            if (filterId == null)
+            if (!filterId)
                 return vm.settingInfo;
             return PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
                 .$promise.then(function (result) {
@@ -122,7 +123,7 @@
         function setBlockSchedulingDetail() {
             for (var index = 0; index < vm.blockSchedulingOptions.length; index++) {
                 var option = vm.blockSchedulingOptions[index];
-                if(option.Selected == true){
+                if (option.Selected == true) {
                     vm.selectedOptionName = option.Id;
                     break;
                 }
@@ -130,13 +131,13 @@
         }
 
         function setBlockSchedulingType(type) {
-            if (type == null)
+            if (!type)
                 return;
             return vm.settingInfo.BlockFinderType = type.Code;
         }
 
         function setBlockSchedulingOption(index) {
-            if (index == null)
+            if (!index)
                 return;
             vm.blockSchedulingOptions.forEach(function (option, id) {
                 if (id == index) {
@@ -175,18 +176,24 @@
             vm.settingInfo.BlockSameStartTime = false;
         }
 
+        function filterOptions(text) {
+            if (!!text)
+                return $filter('filter')(vm.blockSchedulingTypes, text);
+            return vm.blockSchedulingTypes;
+        }
+
         function inputFilterData() {
-            if (vm.searchString == '')
-                return [];
-            return PlanGroupSettingService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
-                return vm.filterResults = removeSelectedFiltersInList(data, vm.settingInfo.Filters);
-            });
+            if (!!vm.searchString)
+                return PlanGroupSettingService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
+                    return vm.filterResults = removeSelectedFiltersInList(data, vm.settingInfo.Filters);
+                });
+            return [];
         }
 
         function removeSelectedFiltersInList(filters, selectedFilters) {
-            var result = angular.copy(filters);
             if (selectedFilters.length == 0 || filters.length == 0)
                 return filters;
+            var result = angular.copy(filters);
             for (var i = filters.length - 1; i >= 0; i--) {
                 angular.forEach(selectedFilters, function (selectedItem) {
                     if (filters[i].Id == selectedItem.Id) {
@@ -198,7 +205,7 @@
         }
 
         function clearInput() {
-            vm.searchString = '';
+            vm.searchString = undefined;
         }
 
         function isValid() {
@@ -258,7 +265,7 @@
         }
 
         function selectResultItem(item) {
-            if (item === null)
+            if (!item)
                 return;
             if (isValidUnit(item)) {
                 vm.settingInfo.Filters.push(item);
@@ -277,7 +284,7 @@
         function isValidBlockScheduling() {
             if (vm.schedulingSettings[0].Selected == true)
                 return true;
-            return vm.selectedType !== null &&
+            return !!vm.selectedType &&
                 vm.blockSchedulingOptions.some(
                     function (option) {
                         return option.Selected == true;

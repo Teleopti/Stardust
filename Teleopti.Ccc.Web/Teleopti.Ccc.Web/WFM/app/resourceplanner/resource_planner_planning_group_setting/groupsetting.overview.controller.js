@@ -27,13 +27,7 @@
 		vm.setLowerPriority = setLowerPriority;
 		vm.disableButton = disableButton;
 		vm.setColor = setColor;
-
 		vm.color = {
-			// render: 'class',
-			// className: 'teal' //=> 'border-color': '$teal-100';
-			// render: 'condition', 
-			// condition: {'dd':'teal', 'e':'orange', 'rrrr':'purple'}
-			//use this in html: color="vm.color" color-condition="setting.Name" 
 			render: 'linear',
 			rgba: 'rgba(156, 39, 176, 1)'
 		}

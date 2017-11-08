@@ -141,6 +141,10 @@
 			url: '/tree',
 			templateUrl: 'app/resourceplanner/tree_data/main.html',
 			controller: 'TreeMainController as vm'
+		}).state('resourceplanner.card', { // forcardpanel
+			url: '/card',
+			templateUrl: 'app/resourceplanner/tree_data/demo.html',
+			controller: 'DemoMainController as vm'
 		});
 	}
 })();

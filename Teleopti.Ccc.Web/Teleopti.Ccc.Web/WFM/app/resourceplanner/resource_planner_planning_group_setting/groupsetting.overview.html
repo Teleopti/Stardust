@@ -39,129 +39,131 @@
 </div>
 <div class="con-row">
 	<div class="con-flex">
-		<card-panel ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" open="single" pre-open="setting.Name"
-		 id="$index">
-			<card-panel-header>
-				<div class="title header-flex">
-					<b>{{setting.Name}}</b>
-				</div>
-				<div class="header-flex" ng-show="!setting.Default" ng-class="{'line-center': !vm.isDisable}">
-					<span>{{'SelectedFilters' | translate}}: {{setting.Filters.length}}</span>
-				</div>
-				<div class="line-right header-flex" ng-hide="vm.isDisable">
-					<div tabindex=0 class="context-menu card-context" ng-click="vm.setHigherPriority(setting, $index);$event.stopPropagation();"
-					 ng-hide="$last || $first">
-						<i class=" mdi mdi-arrow-up-bold pointer">
-							<md-tooltip>{{'Set priority higher' | translate }}</md-tooltip>
-						</i>
+		<card-panel-list>
+			<card-panel ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" open="single" pre-open="setting.Name"
+			 id="$index">
+				<card-panel-header>
+					<div class="title header-flex">
+						<b>{{setting.Name}}</b>
 					</div>
-					<div tabindex=0 class="context-menu card-context" ng-click="vm.setLowerPriority(setting, $index);$event.stopPropagation();"
-					 ng-hide="vm.disableButton($index)">
-						<i class=" mdi mdi-arrow-down-bold pointer">
-							<md-tooltip>{{'Set priority lower' | translate }}</md-tooltip>
-						</i>
+					<div class="header-flex" ng-show="!setting.Default" ng-class="{'line-center': !vm.isDisable}">
+						<span>{{'SelectedFilters' | translate}}: {{setting.Filters.length}}</span>
 					</div>
-				</div>
-			</card-panel-header>
-			<card-panel-content>
-				<div class="con-row demo-outline pg-setting-card-content">
-					<div class="con-flex">
-						<div class="con-row">
-							<div class="con-flex" ng-show="!setting.Default">
-								<div class="pg-setting-mini-card-wrapper">
-									<div class="pg-setting-mini-card-title line-center">
-										<b>{{'SelectedFilters' | translate}}</b>
-									</div>
-									<div class="pg-setting-chip-list inline-left">
-										<div class="wfm-chip-wrap" ng-repeat="filter in setting.Filters">
-											<span class="wfm-chip">
-												<span class="chip-handle">
-													{{filter.FilterType}}
+					<div class="line-right header-flex" ng-hide="vm.isDisable">
+						<div tabindex=0 class="context-menu card-context" ng-click="vm.setHigherPriority(setting, $index);$event.stopPropagation();"
+						 ng-hide="$last || $first">
+							<i class=" mdi mdi-arrow-up-bold pointer">
+								<md-tooltip>{{'Set priority higher' | translate }}</md-tooltip>
+							</i>
+						</div>
+						<div tabindex=0 class="context-menu card-context" ng-click="vm.setLowerPriority(setting, $index);$event.stopPropagation();"
+						 ng-hide="vm.disableButton($index)">
+							<i class=" mdi mdi-arrow-down-bold pointer">
+								<md-tooltip>{{'Set priority lower' | translate }}</md-tooltip>
+							</i>
+						</div>
+					</div>
+				</card-panel-header>
+				<card-panel-content>
+					<div class="con-row demo-outline pg-setting-card-content">
+						<div class="con-flex">
+							<div class="con-row">
+								<div class="con-flex" ng-show="!setting.Default">
+									<div class="pg-setting-mini-card-wrapper">
+										<div class="pg-setting-mini-card-title line-center">
+											<b>{{'SelectedFilters' | translate}}</b>
+										</div>
+										<div class="pg-setting-chip-list inline-left">
+											<div class="wfm-chip-wrap" ng-repeat="filter in setting.Filters">
+												<span class="wfm-chip">
+													<span class="chip-handle">
+														{{filter.FilterType}}
+													</span>
+													<span class="chip-text">{{filter.Name}}</span>
 												</span>
-												<span class="chip-text">{{filter.Name}}</span>
-											</span>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="con-flex">
-								<div class="pg-setting-mini-card-wrapper">
-									<div class="pg-setting-mini-card-title line-center">
-										<b>{{'DayOffRules' | translate}}</b>
-									</div>
-									<div class="con-row">
-										<div class="con-flex">
-											<table class="wfm-table">
-												<thead>
-													<tr>
-														<th>{{'Settings'|translate}}</th>
-														<th>{{'Min'|translate}}</th>
-														<th>{{'Max'|translate}}</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td translate>DaysOffPerWeek</td>
-														<td>{{setting.MinDayOffsPerWeek}}</td>
-														<td>{{setting.MaxDayOffsPerWeek}}</td>
-													</tr>
-													<tr>
-														<td translate>ConsecutiveWorkDays</td>
-														<td>{{setting.MinConsecutiveWorkdays}}</td>
-														<td>{{setting.MaxConsecutiveWorkdays}}</td>
-													</tr>
-													<tr>
-														<td translate>ConsecutiveDaysOff</td>
-														<td>{{setting.MinConsecutiveDayOffs}}</td>
-														<td>{{setting.MaxConsecutiveDayOffs}}</td>
-													</tr>
-													<tr>
-														<td translate>FullWeekEndsOff</td>
-														<td>{{setting.MinFullWeekendsOff}}</td>
-														<td>{{setting.MaxFullWeekendsOff}}</td>
-													</tr>
-													<tr>
-														<td translate>FullWeekEndDaysOff</td>
-														<td>{{setting.MinWeekendDaysOff}}</td>
-														<td>{{setting.MaxWeekendDaysOff}}</td>
-													</tr>
-												</tbody>
-											</table>
+								<div class="con-flex">
+									<div class="pg-setting-mini-card-wrapper">
+										<div class="pg-setting-mini-card-title line-center">
+											<b>{{'DayOffRules' | translate}}</b>
+										</div>
+										<div class="con-row">
+											<div class="con-flex">
+												<table class="wfm-table">
+													<thead>
+														<tr>
+															<th>{{'Settings'|translate}}</th>
+															<th>{{'Min'|translate}}</th>
+															<th>{{'Max'|translate}}</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td translate>DaysOffPerWeek</td>
+															<td>{{setting.MinDayOffsPerWeek}}</td>
+															<td>{{setting.MaxDayOffsPerWeek}}</td>
+														</tr>
+														<tr>
+															<td translate>ConsecutiveWorkDays</td>
+															<td>{{setting.MinConsecutiveWorkdays}}</td>
+															<td>{{setting.MaxConsecutiveWorkdays}}</td>
+														</tr>
+														<tr>
+															<td translate>ConsecutiveDaysOff</td>
+															<td>{{setting.MinConsecutiveDayOffs}}</td>
+															<td>{{setting.MaxConsecutiveDayOffs}}</td>
+														</tr>
+														<tr>
+															<td translate>FullWeekEndsOff</td>
+															<td>{{setting.MinFullWeekendsOff}}</td>
+															<td>{{setting.MaxFullWeekendsOff}}</td>
+														</tr>
+														<tr>
+															<td translate>FullWeekEndDaysOff</td>
+															<td>{{setting.MinWeekendDaysOff}}</td>
+															<td>{{setting.MaxWeekendDaysOff}}</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="con-flex">
-								<div class="pg-setting-mini-card-wrapper">
-									<div class="pg-setting-mini-card-title line-center">
-										<b>{{'BlockScheduling' | translate}}</b>
-									</div>
-									<div class="line-center">
-										<span class="pg-setting-card">{{setting.BlockSchedulingSetting}}</span>
+								<div class="con-flex">
+									<div class="pg-setting-mini-card-wrapper">
+										<div class="pg-setting-mini-card-title line-center">
+											<b>{{'BlockScheduling' | translate}}</b>
+										</div>
+										<div class="line-center">
+											<span class="pg-setting-card">{{setting.BlockSchedulingSetting}}</span>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="con-row" ng-hide="vm.isDisable">
-					<div class="con-flex">
-						<div class="line-right">
-							<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditSchedulingSetting(setting)">
-								<i class=" mdi mdi-pencil pointer">
-									<md-tooltip>{{'EditFilter' | translate }}</md-tooltip>
-								</i>
-							</div>
-							<div tabindex=0 class="context-menu card-context" ng-click="vm.getSchedulingSettingInfo(setting)" ng-show="!setting.Default">
-								<i class=" mdi mdi-delete pointer">
-									<md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip>
-								</i>
+					<div class="con-row" ng-hide="vm.isDisable">
+						<div class="con-flex">
+							<div class="line-right">
+								<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditSchedulingSetting(setting)">
+									<i class=" mdi mdi-pencil pointer">
+										<md-tooltip>{{'EditFilter' | translate }}</md-tooltip>
+									</i>
+								</div>
+								<div tabindex=0 class="context-menu card-context" ng-click="vm.getSchedulingSettingInfo(setting)" ng-show="!setting.Default">
+									<i class=" mdi mdi-delete pointer">
+										<md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip>
+									</i>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</card-panel-content>
-		</card-panel>
+				</card-panel-content>
+			</card-panel>
+		</card-panel-list>
 	</div>
 </div>
 <div ng-cloak class="modal-box">

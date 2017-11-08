@@ -1560,6 +1560,8 @@
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.hierarchy.controller.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.hierarchy.service.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.service.js" />
+    <Content Include="WFM\app\resourceplanner\tree_data\cardPanel.demo.controller.js" />
+    <Content Include="WFM\app\resourceplanner\tree_data\demo.html" />
     <Content Include="WFM\app\resourceplanner\tree_data\main.controller.js" />
     <Content Include="WFM\app\resourceplanner\tree_data\main.html" />
     <Content Include="WFM\app\resourceplanner\web_performance_tests\planningperiods.service.js" />
