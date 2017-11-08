@@ -18,21 +18,20 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		public IResourceCalculation Target;
 
 		[Test]
-		[Ignore("#46265 A first test")]
 		public void ShouldConsiderBpoResourceWhenResourceCalculate()
 		{
 			var scenario = new Scenario();
-			var activity = new Activity();
+			var activity = new Activity().WithId();
 			var dateOnly = DateOnly.Today;
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9);
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var bpo = new BpoResource(1, new[]{skillDay.Skill}, skillDay.SkillStaffPeriodCollection.First().Period);
+			var bpo = new BpoResource(5, new[]{skillDay.Skill}, skillDay.SkillStaffPeriodCollection.First().Period);
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, skillDay, bpo);
 			
 			Target.ResourceCalculate(dateOnly, resCalcData);
 
 			skillDay.SkillStaffPeriodCollection.First().CalculatedResource
-				.Should().Be.EqualTo(1); 
+				.Should().Be.EqualTo(5); 
 		}
 	}
 }

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private IDisposable getDefaultContext(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period)
 		{
 			var rcf = new ResourceCalculationContextFactory(new PersonSkillProvider(), _timeZoneGuard);
-			return rcf.Create(scheduleDictionary, allSkills, false, period);
+			return rcf.Create(scheduleDictionary, allSkills, null, false, period);
 		}
 
 	}

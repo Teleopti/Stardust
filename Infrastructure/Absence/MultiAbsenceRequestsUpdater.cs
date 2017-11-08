@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					stopwatch.Restart();
 					using (
 						_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules,
-							_schedulingResultStateHolder.Skills, false, _schedulingResultStateHolder.Schedules.Period.LongVisibleDateOnlyPeriod()))
+							_schedulingResultStateHolder.Skills, null, false, _schedulingResultStateHolder.Schedules.Period.LongVisibleDateOnlyPeriod()))
 					{
 						stopwatch.Stop();
 						_feedback.SendProgress($"Done _resourceCalculationContextFactory.Create(..)! It took {stopwatch.Elapsed}");

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			var stateHolder = _schedulerStateHolder();
-			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true, selectedPeriod.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, null, true, selectedPeriod.Inflate(1)))
 			{
 				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, filterAgentsWithEmptyDaysIfClassic(optimizationPreferences, selectedAgents, selectedPeriod), selectedPeriod);
 				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);

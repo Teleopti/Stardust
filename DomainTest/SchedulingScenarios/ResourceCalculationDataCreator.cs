@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 
 			return new ResourceCalculationData(
 				ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData),
-				skillDaysDic.Keys, skillDaysDic, considerShortbreaks, doIntraIntervalCalculation);
+				skillDaysDic.Keys, skillDaysDic, bpoResources, considerShortbreaks, doIntraIntervalCalculation);
 		}
 		
 		public static ResourceCalculationData WithData(IScenario scenario,

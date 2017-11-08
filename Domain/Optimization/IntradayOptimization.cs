@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().ChoosenAgents,_schedulerStateHolder().Schedules, optimizationPreferences.Extra.TeamGroupPage);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _blockPreferencesMapper);
 
-			using ( _resourceCalculationContext.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true, period))
+			using ( _resourceCalculationContext.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, null, true, period))
 			{
 				_resourceCalculation.ResourceCalculate(period, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 				_teamBlockIntradayOptimizationService.Optimize(allMatrixes,

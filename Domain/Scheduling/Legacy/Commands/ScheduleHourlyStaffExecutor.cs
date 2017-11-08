@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
 			schedulingOptions.UseShiftCategoryLimitations = false;
 
-			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true, selectedPeriod.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, null, true, selectedPeriod.Inflate(1)))
 			{
 				var selectedScheduleDays = schedulerStateHolder.Schedules.SchedulesForPeriod(selectedPeriod, selectedAgents.ToArray());
 				_requiredScheduleOptimizerHelper.ScheduleSelectedStudents(selectedScheduleDays, backgroundWorker, schedulingOptions);
