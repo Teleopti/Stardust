@@ -58,7 +58,8 @@
 				selectedSkill = selectedItem;
 			}
 			generateChart();
-			vm.onSelectedSkillChanged && vm.onSelectedSkillChanged()(selectedSkill, selectedSkillGroup);
+			var skillChanged;
+			vm.onSelectedSkillChanged && (skillChanged = vm.onSelectedSkillChanged()) && skillChanged(selectedSkill, selectedSkillGroup);
 		}
 
 		SkillService.getAllSkills().then(function (data) {
