@@ -41,7 +41,7 @@
 		ctrl.convertSettingToModel = function (setting) {
 			var result = {};
 			result.id = setting.Id;
-			result.name = setting.Description.Name;
+			result.name = setting.Name;
 			result.updated_by = setting.UpdatedBy;
 			result.updated_on = setting.UpdatedOn;
 			result.rules = [{
