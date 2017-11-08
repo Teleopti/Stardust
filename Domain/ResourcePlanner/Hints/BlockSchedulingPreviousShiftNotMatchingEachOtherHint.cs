@@ -65,23 +65,23 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			var startTime = personAssignment.Period.StartDateTime.TimeOfDay;
 			foreach (var scheduleDay in period)
 			{
-				if (scheduleDay.HasDayOff() || !scheduleDay.IsScheduled())
+				if (scheduleDay.HasDayOff() || scheduleDay.PersonAssignment() == null || !scheduleDay.PersonAssignment().ShiftLayers.Any())
 				{
 					break;
 				}
 				if (blockOption.UseBlockSameShiftCategory && scheduleDay.PersonAssignment().ShiftCategory != shiftCategory)
 				{
-					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShiftCategory, scheduleDay.DateOnlyAsPeriod.DateOnly, shiftCategory.Description.Name));
+					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShiftCategory, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftCategory.Description.Name));
 					break;
 				}
 				if (blockOption.UseBlockSameStartTime && scheduleDay.PersonAssignment().Period.StartDateTime.TimeOfDay != startTime)
 				{
-					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchStartTime, scheduleDay.DateOnlyAsPeriod.DateOnly, startTime));
+					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchStartTime, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), startTime));
 					break;
 				}
 				if (blockOption.UseBlockSameShift && !_scheduleDayEquator.MainShiftEquals(scheduleDay, firstDayAfterPeriod))
 				{
-					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShift, scheduleDay.DateOnlyAsPeriod.DateOnly, personAssignment.Date));
+					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShift, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), personAssignment.Date.ToShortDateString()));
 					break;
 				}
 			}
