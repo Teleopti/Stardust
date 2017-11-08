@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences); 
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 
-			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, null, true, period.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true, period.Inflate(1)))
 			{
 				_resourceCalculation.ResourceCalculate(period.Inflate(1), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, false));
 				_teamBlockDayOffOptimizer.OptimizeDaysOff(

@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				continuedStep = true;
 			}
 
-			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills, null, false, selectedPeriod.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills, false, selectedPeriod.Inflate(1)))
 			{
 				var matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
 
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 #pragma warning disable 618
-			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills, null, false, selectedPeriod.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills, false, selectedPeriod.Inflate(1)))
 #pragma warning restore 618
 			{
 				if (optimizationPreferences.General.OptimizationStepFairness)

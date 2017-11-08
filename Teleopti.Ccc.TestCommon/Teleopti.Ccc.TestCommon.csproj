@@ -262,6 +262,7 @@
     <Compile Include="FakeRepositories\FakeScheduleProjectionReadOnlyActivityProvider.cs" />
     <Compile Include="FakeRepositories\FakeSiteOpenHourRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
+    <Compile Include="FakeRepositories\FakeSkillCombinationResourceBpoReader.cs" />
     <Compile Include="FakeRepositories\FakeSkillTypeRepository.cs" />
     <Compile Include="FakeRepositories\FakeStorage.cs" />
     <Compile Include="FakeRepositories\FakeUserDeviceRepository.cs" />

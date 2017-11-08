@@ -19,23 +19,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		{
 			return WithData(scenario, date.ToDateOnlyPeriod(), persistableScheduleData, skillDays, considerShortbreaks, doIntraIntervalCalculation);
 		}
-
-		public static ResourceCalculationData WithData(IScenario scenario,
-									DateOnlyPeriod period,
-									IEnumerable<IPersistableScheduleData> persistableScheduleData,
-									IEnumerable<ISkillDay> skillDays,
-									bool considerShortbreaks,
-									bool doIntraIntervalCalculation)
-		{
-			return WithData(scenario, period, persistableScheduleData, skillDays, Enumerable.Empty<BpoResource>(),
-				considerShortbreaks, doIntraIntervalCalculation);
-		}
 		
 		public static ResourceCalculationData WithData(IScenario scenario,
 			DateOnlyPeriod period,
 			IEnumerable<IPersistableScheduleData> persistableScheduleData,
 			IEnumerable<ISkillDay> skillDays,
-			IEnumerable<BpoResource> bpoResources,
 			bool considerShortbreaks,
 			bool doIntraIntervalCalculation)
 		{
@@ -43,25 +31,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 
 			return new ResourceCalculationData(
 				ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData),
-				skillDaysDic.Keys, skillDaysDic, bpoResources, considerShortbreaks, doIntraIntervalCalculation);
+				skillDaysDic.Keys, skillDaysDic, considerShortbreaks, doIntraIntervalCalculation);
 		}
 		
 		public static ResourceCalculationData WithData(IScenario scenario,
 			DateOnly date,
-			ISkillDay skillDay,
-			BpoResource bpoResource)
+			ISkillDay skillDay)
 		{
 			return WithData(scenario, date.ToDateOnlyPeriod(), Enumerable.Empty<IPersistableScheduleData>(), new[] {skillDay},
-				new[] {bpoResource}, false, false);
+				false, false);
 		}
-		
+				
 		public static ResourceCalculationData WithData(IScenario scenario,
 			DateOnly date,
-			IEnumerable<ISkillDay> skillDays,
-			BpoResource bpoResource)
+			IEnumerable<ISkillDay> skillDays)
 		{
-			return WithData(scenario, date.ToDateOnlyPeriod(), Enumerable.Empty<IPersistableScheduleData>(), skillDays,
-				new[] {bpoResource}, false, false);
+			return WithData(scenario, date.ToDateOnlyPeriod(), Enumerable.Empty<IPersistableScheduleData>(), skillDays, false, false);
 		}
 
 		public static ResourceCalculationData WithData(IShovelingCallback shovelingCallback,

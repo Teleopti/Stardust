@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class SkillCombinationResourceRepository : ISkillCombinationResourceRepository
+	public class SkillCombinationResourceRepository : ISkillCombinationResourceRepository, ISkillCombinationResourceBpoReader
 	{
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		private IList<SkillCombinationResourceWithCombinationId> loadSkillCombinationResourcesBpo(DateTimePeriod period)
+		public IEnumerable<SkillCombinationResource> Execute(DateTimePeriod period)
 		{
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var result = _currentUnitOfWork.Current().Session()
@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private IEnumerable<SkillCombinationResource> skillCombinationResourcesWithBpo(DateTimePeriod period)
 		{
 			var combinationResources = skillCombinationResourcesWithoutBpo(period).ToList();
-			combinationResources.AddRange(loadSkillCombinationResourcesBpo(period));
+			combinationResources.AddRange(Execute(period));
 		
 			var newList = new List<SkillCombinationResourceWithCombinationId>();
 			newList.AddRange(combinationResources.Select(x=> new SkillCombinationResourceWithCombinationId

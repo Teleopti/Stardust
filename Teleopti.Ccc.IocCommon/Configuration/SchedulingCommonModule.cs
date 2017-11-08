@@ -106,10 +106,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillSetPerActivityProvider>().SingleInstance();
 			builder.RegisterType<PrimarySkillOverstaff>().SingleInstance();
 			builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();
-			
-			//	builder.RegisterType<PrimarySkillOverstaffOLD>().As<PrimarySkillOverstaff>().SingleInstance();
-			//	builder.RegisterType<AddResourcesToSubSkillsOLD>().As<AddResourcesToSubSkills>().SingleInstance();
-			
+
+			if (_configuration.Toggle(Toggles.ResourcePlanner_BpoScheduling_46265))
+			{
+				builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceBpoReader>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<NoSkillCombinationResourceBpoReader>().As<ISkillCombinationResourceBpoReader>().SingleInstance();				
+			}
 			builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();

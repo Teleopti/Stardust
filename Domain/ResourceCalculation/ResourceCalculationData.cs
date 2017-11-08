@@ -38,25 +38,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SkillResourceCalculationPeriodDictionary = skillResourceCalculationPeriodDictionary;
 		}
 		
-		public ResourceCalculationData(IScheduleDictionary scheduleDictionary, 
-			IEnumerable<ISkill> skills, 
-			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
-			IEnumerable<BpoResource> bpos,
-			bool considerShortBreaks, 
-			bool doIntraIntervalCalculation)
-		{
-			ConsiderShortBreaks = considerShortBreaks;
-			DoIntraIntervalCalculation = doIntraIntervalCalculation;
-			Schedules = scheduleDictionary;
-			Skills = skills;
-			SkillCombinationHolder = new SkillCombinationHolder();
-			SkillDays = skillDays;
-			SkillResourceCalculationPeriodDictionary =
-				new SkillResourceCalculationPeriodWrapper(new SkillStaffPeriodHolder(skillDays).SkillSkillStaffPeriodDictionary);
-			Bpos = bpos;
-		}
-
-		public IEnumerable<BpoResource> Bpos { get; }
 		public IScheduleDictionary Schedules { get; }
 		public bool ConsiderShortBreaks { get; }
 		public bool DoIntraIntervalCalculation { get; }

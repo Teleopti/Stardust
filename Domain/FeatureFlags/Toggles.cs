@@ -116,7 +116,7 @@
 		ResourcePlanner_FasterLoading_46307,
 		ResourcePlanner_RemoveClassicShiftCat_46582,
 		ResourcePlanner_BlockSchedulingValidation_46092,
-
+		ResourcePlanner_BpoScheduling_46265,
 
 		Wfm_DisplayOnlineHelp_39402,
 

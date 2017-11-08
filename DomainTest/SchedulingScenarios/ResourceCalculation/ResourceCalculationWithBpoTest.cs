@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class ResourceCalculationWithBpoTest
 	{
 		public IResourceCalculation Target;
+		public FakeSkillCombinationResourceBpoReader SkillCombinationResourceBpoReader;
 
 		[Test]
 		public void ShouldConsiderBpoResourceWhenResourceCalculate()
@@ -25,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var dateOnly = DateOnly.Today;
 			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 10);
-			var bpo = new BpoResource(5, new[]{skillDay.Skill}, skillDay.SkillStaffPeriodCollection.First().Period);
-			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, skillDay, bpo);
+			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, skillDay);
+			SkillCombinationResourceBpoReader.Has(5, skillDay.SkillStaffPeriodCollection.First().Period, skillDay.Skill);
 			
 			Target.ResourceCalculate(dateOnly, resCalcData);
 
@@ -44,9 +46,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skill2 = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
 			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, dateOnly, 10);
 			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, dateOnly, 10);
-			var bpo = new BpoResource(1, new[] {skillDay1.Skill, skillDay2.Skill},
-				skillDay1.SkillStaffPeriodCollection.First().Period);
-			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[]{skillDay1, skillDay2}, bpo);
+			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[]{skillDay1, skillDay2});
+			SkillCombinationResourceBpoReader.Has(1, skillDay1.SkillStaffPeriodCollection.First().Period, skillDay1.Skill, skillDay2.Skill);
 			
 			Target.ResourceCalculate(dateOnly, resCalcData);
 
@@ -67,9 +68,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skill2 = new Skill().For(activity2).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
 			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, dateOnly, 10);
 			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, dateOnly, 10);
-			var bpo = new BpoResource(1, new[] {skillDay1.Skill, skillDay2.Skill},
-				skillDay1.SkillStaffPeriodCollection.First().Period);
-			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[]{skillDay1, skillDay2}, bpo);
+			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[]{skillDay1, skillDay2});
+			SkillCombinationResourceBpoReader.Has(1, skillDay1.SkillStaffPeriodCollection.First().Period, skillDay1.Skill, skillDay2.Skill);
 			
 			Target.ResourceCalculate(dateOnly, resCalcData);
 

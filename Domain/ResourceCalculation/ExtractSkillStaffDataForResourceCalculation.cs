@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		[TestLog]
 		public virtual void DoCalculation(DateOnlyPeriod period, ResourceCalculationData resCalcData)
 		{
-			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, null, false, period))
+			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, false, period))
 			{
 				_resourceOptimizationHelper.ResourceCalculate(period, resCalcData);
 			}

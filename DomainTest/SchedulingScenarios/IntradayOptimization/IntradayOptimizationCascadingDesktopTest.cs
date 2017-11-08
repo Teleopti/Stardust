@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var assB = new PersonAssignment(agentB, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentB }, new[] { assAB, assB }, new[] { skillDayA, skillDayB });
 
-			using (ResourceCalculationContextFactory.Create(schedulerStateHolderFrom.Schedules, schedulerStateHolderFrom.SchedulingResultState.Skills, null, false, date.ToDateOnlyPeriod()))
+			using (ResourceCalculationContextFactory.Create(schedulerStateHolderFrom.Schedules, schedulerStateHolderFrom.SchedulingResultState.Skills, false, date.ToDateOnlyPeriod()))
 			{
 				var stateHolder = SchedulerStateHolderFrom();
 				ResourceCalculation.ResourceCalculate(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.ToResourceOptimizationData(stateHolder.ConsiderShortBreaks, false));
