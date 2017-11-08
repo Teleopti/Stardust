@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			return NotFound();
 		}
 
-		[HttpPost, Route("api/Gamification/LoadGamification"), UnitOfWork]
+		[HttpGet, Route("api/Gamification/Load/{id}"), UnitOfWork]
 		public virtual GamificationSettingViewModel LoadGamification(Guid id)
 		{
 			return _gamificationSettingProvider.GetGamificationSetting(id);

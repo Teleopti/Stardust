@@ -8,7 +8,8 @@
             controller: GamificationSettingInfoController,
             bindings: {
                 settingInfo: '<',
-                selectItemCallback: '<'
+                selectItemCallback: '<',
+                currentRuleId: '<'
             },
         });
 
@@ -50,7 +51,7 @@
             if (ctrl.selectItemCallback) {
                 var result = ctrl.selectItemCallback();
                 if (result) {
-                    ctrl.settingInfo.is_checked = false;
+                    ctrl.settingInfo.enabled = false;
                 }
             }
         }
@@ -64,6 +65,16 @@
                 }
             })
         }
+
+        ctrl.getSettingItems = function () {
+            for (var index = 0; index < ctrl.settingInfo.rule_settings.length; index++) {
+                var setting = ctrl.settingInfo.rule_settings[index];
+                if (setting.rule_id == ctrl.currentRuleId.toString()) {
+                    return setting.items;
+                }
+            }
+        }
+
         ctrl.$onChanges = function (changesObj) { };
         ctrl.$onDestroy = function () { };
     }

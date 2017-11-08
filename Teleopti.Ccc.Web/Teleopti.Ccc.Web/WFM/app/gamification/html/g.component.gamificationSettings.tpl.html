@@ -1,68 +1,84 @@
-<div>
+<div class="container content">
     <div>
         <div class="inline-block">
             <span>{{::$ctrl.title}}:</span>
         </div>
         <div class="inline-block setting-name">
             <md-select ng-model='$ctrl.selectedSettingIndex' ng-change="$ctrl.settingSelectionChanged()">
-                <md-option ng-repeat="setting in $ctrl.allSettings" value="{{$ctrl.allSettings.indexOf(setting)}}">{{setting.name}}</md-option>
+                <md-option ng-repeat="setting in $ctrl.settingDescriptors" value="{{$ctrl.settingDescriptors.indexOf(setting)}}">
+                    <span ng-bind="setting.Value.Name"></span>
+                </md-option>
             </md-select>
         </div>
 
         <div class="icon-button">
-            <i class="mdi mdi-plus-circle" ng-click="$ctrl.addSetting()"></i>
+            <button class="wfm-fab  material-depth-1" aria-label="Add setting" ng-click="$ctrl.addSetting()" md-labeled-by-tooltip=" md-tooltip-1
+                ">
+                <i class="mdi mdi-plus "></i>
+
+            </button>
+
         </div>
 
-        <div class="icon-button">
-            <i class="mdi mdi-close-circle" ng-click="$ctrl.deleteSetting()"></i>
+        <div class="icon-button ">
+            <button class="wfm-fab  material-depth-1" aria-label="Delete setting" ng-click="$ctrl.deleteSetting()" md-labeled-by-tooltip=" md-tooltip-1
+                ">
+                <i class="mdi mdi-close "></i>
+
+            </button>
+
+
+            <!-- <i class="mdi mdi-close-circle " ng-click="$ctrl.deleteSetting() "></i> -->
         </div>
-        <div class="inline-block">
-            <md-button class="md-raised md-primary md-button md-ink-ripple" ng-click="$ctrl.resetBadges()">Reset Badges</md-button>
+        <div class="inline-block ">
+            <md-button class="wfm-btn wfm-btn-primary" ng-click="$ctrl.resetBadges() ">Reset Badges</md-button>
         </div>
     </div>
 
     <md-divider></md-divider>
     <!-- Setting panel -->
-    <div class="setting-container">
-        <div class="input-container">
-            <div class="inline-block">
+    <div class="setting-container ">
+        <div class="input-container ">
+            <div class="inline-block ">
                 <label>Description:</label>
             </div>
-            <div class="inline-block">
-                <input type="text" value="{{$ctrl.currentSetting.name}}">
+            <div class="inline-block ">
+                <input type="text " value="{{$ctrl.currentSetting.name}} ">
             </div>
         </div>
-        <div class="input-container">
-            <div class="inline-block">
+        <div class="input-container ">
+            <div class="inline-block ">
                 <label>Change Info:</label>
             </div>
-            <div class="inline-block">
-                <label>{{$ctrl.currentSetting.info}}</label>
+            <div class="inline-block ">
+                <label>Updated by {{$ctrl.currentSetting.updated_by}} on {{$ctrl.currentSetting.updated_on}}</label>
             </div>
         </div>
 
-        <div class="input-container">
-            <div class="inline-block">
+        <div class="input-container ">
+            <div class="inline-block ">
                 <label>Rule:</label>
             </div>
-            <div class="inline-block">
-                <md-select id="gamificationSettingType" ng-change="$ctrl.ruleSelectionChanged()" ng-model='$ctrl.currentRuleIndex'>
-                    <md-option ng-repeat="rule in $ctrl.rules" value="{{$ctrl.rules.indexOf(rule)}}">{{rule.name}}</md-option>
+            <div class="inline-block ">
+                <md-select id="gamificationSettingType " ng-change="$ctrl.ruleSelectionChanged()" ng-model='$ctrl.currentRuleIndex'>
+                    <md-option ng-repeat="rule in $ctrl.currentSetting.rules " value="{{$ctrl.currentSetting.rules.indexOf(rule)}} ">
+                        <span ng-bind="rule.name "></span>
+                    </md-option>
                 </md-select>
             </div>
         </div>
 
         <div>
-            <div ng-show="$ctrl.currentRule.items">
-                <div ng-repeat="item in $ctrl.currentRule.items">
+            <div ng-show="$ctrl.currentRule.items ">
+                <div ng-repeat="item in $ctrl.currentRule.items ">
                     <span>{{item.name}}:</span>
-                    <input type="text" value="{{item.value}}">
+                    <input type="text " value="{{item.value}} ">
                 </div>
                 <md-divider></md-divider>
             </div>
 
-            <div class="inline-block" ng-repeat="settingInfo in $ctrl.viewedSetting">
-                <gamification-setting-info setting-info="settingInfo" select-item-callback="$ctrl.itemSelected"></gamification-setting-info>
+            <div class="inline-block " ng-repeat="settingInfo in $ctrl.currentSetting.settings">
+                <gamification-setting-info setting-info="settingInfo" current-rule-id="$ctrl.currentRuleIndex" select-item-callback="$ctrl.itemSelected "></gamification-setting-info>
             </div>
         </div>
     </div>
