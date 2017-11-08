@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				continuedStep = true;
 			}
 
-			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills, false, selectedPeriod.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder(), false, selectedPeriod.Inflate(1)))
 			{
 				var matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
 

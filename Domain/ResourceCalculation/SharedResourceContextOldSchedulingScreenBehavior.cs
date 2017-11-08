@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IDisposable disposableContext = null;
 			if (!ResourceCalculationContext.InContext) //TODO: this if probably never returns false... would be nice to get rid of it! (just kept old behavior for now)
 			{
-				disposableContext = _resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, false, period);
+				disposableContext = _resourceCalculationContextFactory.Create(stateHolder, false, period);
 			}
 			return new GenericDisposable(() =>
 			{

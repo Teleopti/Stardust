@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_dayOffOptimizationDesktopTeamBlock.Execute(selectedPeriod, selectedPersons, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, null);
 			}
 
-			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills, false, selectedPeriod.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder(), false, selectedPeriod.Inflate(1)))
 			{
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().ChoosenAgents, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _blockPreferencesMapper);

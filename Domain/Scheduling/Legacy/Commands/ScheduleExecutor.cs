@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
 			schedulingOptions.UseShiftCategoryLimitations = false;
 
-			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true, selectedPeriod.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(schedulerStateHolder, true, selectedPeriod.Inflate(1)))
 			{
 				_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, schedulerStateHolder.ConsiderShortBreaks, false));
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
