@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class AgentBadgeWithRank : SimpleAggregateRoot, IAgentBadgeWithRank
 	{
-		static public IList<IAgentBadgeWithRank> FromAgentBadgeWithRanksTransaction(
+		public static IList<IAgentBadgeWithRank> FromAgentBadgeWithRanksTransaction(
 			ICollection<IAgentBadgeWithRankTransaction> agentBadgeWithRankTransactions)
 		{
 			return agentBadgeWithRankTransactions.GroupBy(x => new
@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Common
 			}).Cast<IAgentBadgeWithRank>().ToList();
 		}
 
-
 		private bool _bronzeBadgeInitialized;
 		private bool _silverBadgeInitialized;
 		private bool _goldBadgeInitialized;
@@ -38,23 +37,22 @@ namespace Teleopti.Ccc.Domain.Common
 		private int _bronzeBadgeAmount;
 		private int _silverBadgeAmount;
 		private int _goldBadgeAmount;
-		private DateTime _lastCalculatedDate;
 
 		public virtual Guid Person
 		{
-			get { return _person; }
-			set { _person = value; }
+			get => _person;
+			set => _person = value;
 		}
 
 		public virtual BadgeType BadgeType
 		{
-			get { return _badgeType; }
-			set { _badgeType = value; }
+			get => _badgeType;
+			set => _badgeType = value;
 		}
 
 		public virtual int BronzeBadgeAmount
 		{
-			get { return _bronzeBadgeAmount; }
+			get => _bronzeBadgeAmount;
 			set
 			{
 				if (!_bronzeBadgeInitialized)
@@ -72,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual int SilverBadgeAmount
 		{
-			get { return _silverBadgeAmount; }
+			get => _silverBadgeAmount;
 			set
 			{
 				if (!_silverBadgeInitialized)
@@ -90,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual int GoldBadgeAmount
 		{
-			get { return _goldBadgeAmount; }
+			get => _goldBadgeAmount;
 			set
 			{
 				if (!_goldBadgeInitialized)
@@ -106,25 +104,13 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-		public virtual DateTime LastCalculatedDate
-		{
-			get { return _lastCalculatedDate; }
-			set { _lastCalculatedDate = value; }
-		}
+		public virtual bool IsBronzeBadgeAdded =>
+			_bronzeBadgeInitialized && (_bronzeBadgeAmount > _previousBronzeBadgeAmount);
 
-		public virtual bool IsBronzeBadgeAdded
-		{
-			get { return _bronzeBadgeInitialized && (_bronzeBadgeAmount > _previousBronzeBadgeAmount); }
-		}
+		public virtual bool IsSilverBadgeAdded =>
+			_silverBadgeInitialized && (_silverBadgeAmount > _previousSilverBadgeAmount);
 
-		public virtual bool IsSilverBadgeAdded
-		{
-			get { return _silverBadgeInitialized && (_silverBadgeAmount > _previousSilverBadgeAmount); }
-		}
-
-		public virtual bool IsGoldBadgeAdded
-		{
-			get { return _goldBadgeInitialized && (_goldBadgeAmount > _previousGoldBadgeAmount); }
-		}
+		public virtual bool IsGoldBadgeAdded =>
+			_goldBadgeInitialized && (_goldBadgeAmount > _previousGoldBadgeAmount);
 	}
 }

@@ -626,7 +626,6 @@
     <Compile Include="InterfaceLegacy\Domain\IActivityRestriction.cs" />
     <Compile Include="InterfaceLegacy\Domain\IActivityRestrictionTemplate.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAffectedPersonSkillService.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IAgentBadgeInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAgentBadgeTransaction.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAgentBadgeTransactionRepository.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAgentBadgeWithRank.cs" />
@@ -1932,7 +1931,6 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
-    <Compile Include="Common\AgentBadgeInfo.cs" />
     <Compile Include="Common\AgentBadge.cs" />
     <Compile Include="Common\BlockToken.cs" />
     <Compile Include="Common\Clip.cs" />

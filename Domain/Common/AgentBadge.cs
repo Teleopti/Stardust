@@ -7,17 +7,18 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class AgentBadge
 	{
-		static public IList<AgentBadge> FromAgentBadgeTransaction(ICollection<IAgentBadgeTransaction> agentBadgeTransaction)
+		public static IList<AgentBadge> FromAgentBadgeTransaction(ICollection<IAgentBadgeTransaction> agentBadgeTransaction)
 		{
 			return agentBadgeTransaction.GroupBy(x => new
 			{
-				PersonId = x.Person.Id.GetValueOrDefault(), x.BadgeType
+				PersonId = x.Person.Id.GetValueOrDefault(),
+				x.BadgeType
 			}).Select(g => new AgentBadge
 			{
 				Person = g.Key.PersonId,
 				BadgeType = g.Key.BadgeType,
 				TotalAmount = g.Sum(x => x.Amount)
-			}).ToList();		
+			}).ToList();
 		}
 
 		private bool _initialized;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public int TotalAmount
 		{
-			get { return _totalAmount; }
+			get => _totalAmount;
 			set
 			{
 				if (!_initialized)
@@ -50,8 +51,6 @@ namespace Teleopti.Ccc.Domain.Common
 				}
 			}
 		}
-
-		public virtual DateTime LastCalculatedDate { get; set; }
 
 		public virtual int GetBronzeBadge(int silverToBronzeRate, int goldToSilverRate)
 		{
@@ -107,30 +106,23 @@ namespace Teleopti.Ccc.Domain.Common
 		#region Calculate badge count
 		private static int getGoldBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
 		{
-			if (silverToBronzeRate == 0 || goldToSilverRate == 0)
-			{
-				return 0;
-			}
-			return amount / (silverToBronzeRate * goldToSilverRate);
+			return silverToBronzeRate != 0 && goldToSilverRate != 0
+				? amount / (silverToBronzeRate * goldToSilverRate)
+				: 0;
 		}
 
 		private static int getSilverBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
 		{
-			if (silverToBronzeRate == 0 || goldToSilverRate == 0)
-			{
-				return 0;
-			}
-			return (amount / silverToBronzeRate) % goldToSilverRate;
+			return silverToBronzeRate != 0 && goldToSilverRate != 0
+				? (amount / silverToBronzeRate) % goldToSilverRate
+				: 0;
 		}
 
 		private static int getBronzeBadgeCount(int amount, int silverToBronzeRate)
 		{
-			if (silverToBronzeRate == 0)
-			{
-				return amount;
-			}
-			return amount % silverToBronzeRate;
+			return silverToBronzeRate != 0 ? amount % silverToBronzeRate : amount;
 		}
+
 		#endregion
 	}
 }
