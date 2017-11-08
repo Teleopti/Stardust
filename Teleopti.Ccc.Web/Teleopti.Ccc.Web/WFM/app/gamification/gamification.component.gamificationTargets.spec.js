@@ -67,6 +67,29 @@ describe('gamification, ', function () {
 			expect(numRows).toBe(3);
 		});
 
+		it('should check the main checkbox when all the table rows are selected', function () {
+			var cmp = setupComponent();
+
+			openSitePickerFor(cmp);
+			selectSite(0);
+			selectSite(1);
+			closeSitePicker();
+
+			var numRows = cmp.find('gamification-target-row').length;
+			var expected = 3;
+			expect(numRows).toBe(expected);
+
+			for (var i = 0; i < expected; i++) {
+				selectRow(cmp, i);
+			}
+
+			var header = cmp.find('header');
+			var criterion1 = header.find('md-checkbox').hasClass('md-checked');
+			var criterion2 = header.find('md-checkbox').attr('aria-checked') === 'true';
+			expect(criterion1).toBe(true);
+			expect(criterion2).toBe(true);
+		});
+
 		function insertStyle(parentNode) {
 			var node = $document[0].createElement('style');
 			node.type = 'text/css';
@@ -143,6 +166,14 @@ describe('gamification, ', function () {
 				target: angular.element(opt),
 				currentTarget: openMenu[0]
 			});
+		}
+
+		function selectRow(component, index) {
+			var row = component.find('gamification-target-row')[index];
+			if (!row) throw Error('Could not find row at index: ' + index);
+			var div = row.querySelector('.team');
+			if (!div) throw Error('Could not find element of `team` class');
+			angular.element(div).triggerHandler('click');
 		}
 
 		function increaseRepeatContainerHeight(el) {
