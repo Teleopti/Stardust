@@ -59,12 +59,15 @@
 		}
 
 		function getOrgData() {
-			ReportsService.getOrganization.get().$promise.then(function (data) {
-				if (data.BusinessUnit && data.BusinessUnit.ChildNodes) {
-					data.BusinessUnit.ChildNodes = localeLanguageSortingService.loopSort(data.BusinessUnit.ChildNodes, 'ChildNodes', '+Name');
-				}
-				vm.orgData = data.BusinessUnit;
-			});
+			// var postObj = {
+			// 	startDate: moment(vm.dateModifyRange.startDate).format("YYYY-MM-DD"),
+			// 	endDate: moment(vm.dateModifyRange.endDate).format("YYYY-MM-DD"),
+			// }
+			// ReportsService.getOrganization.org(postObj).$promise.then(function (response) {
+			// 	console.log(moment(vm.dateModifyRange.startDate).format("YYYY-MM-DD"), ' - ',
+			// 	moment(vm.dateModifyRange.endDate).format("YYYY-MM-DD"));
+			// 	console.log(response);
+			// });
 		}
 
 		function sendForm(form) {
