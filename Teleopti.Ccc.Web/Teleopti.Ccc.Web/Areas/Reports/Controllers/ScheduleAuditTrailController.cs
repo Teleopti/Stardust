@@ -55,17 +55,11 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 			return Ok(_scheduleAuditTrailReportViewModelProvider.Provide(value));
 		}
 
-
-		[UnitOfWork, HttpGet, Route("api/Reports/OrganizationSelectionAuditTrail")]
-		public virtual object OrganizationSelectionAuditTrail()
+		
+		[UnitOfWork, HttpPost, Route("api/Reports/OrganizationSelectionAuditTrail")]
+		public virtual SiteViewModelWithTeams[] OrganizationSelectionAuditTrail([FromBody] ValidPeriod validRange)
 		{
-			return _organizationSelectionProvider.Provide();
-		}
-
-		[UnitOfWork, HttpPost, Route("api/Reports/OrganizationSelectionWithPermissionAuditTrail")]
-		public virtual SiteViewModelWithTeams[] OrganizationSelectionWithPermissionAuditTrail(DateTime startDate, DateTime endDate)
-		{
-			var period = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
+			var period = new DateOnlyPeriod(new DateOnly(validRange.StartDate), new DateOnly(validRange.EndDate));
 			var stringComparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
 			var mainGroupPage =
 				_groupingReadOnlyRepository.AvailableGroups(period, Group.PageMainId)
@@ -93,5 +87,11 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 			}
 			return ret.ToArray();
 		}
+	}
+
+	public class ValidPeriod
+	{
+		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
 	}
 }

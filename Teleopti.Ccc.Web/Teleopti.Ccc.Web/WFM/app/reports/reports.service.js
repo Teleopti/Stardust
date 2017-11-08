@@ -8,7 +8,7 @@
     var categorizedReports = $resource('../api/Reports/NavigationsCategorized');
     var auditTrailChangedByPerson = $resource('../api/Reports/PersonsWhoChangedSchedules');
 
-    var organization = $resource('../api/Reports/OrganizationSelectionWithPermissionAuditTrail', {}, {
+	var organization = $resource('../api/Reports/OrganizationSelectionAuditTrail', {}, {
         org: { method: 'POST', params: {}, isArray: false }
     });
 
