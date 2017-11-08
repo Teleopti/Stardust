@@ -154,7 +154,7 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 					[AlarmColor], 
 					[Shift], 
 					[OutOfAdherences], 
-					[OutOfAdherenceStartTime],
+					CASE WHEN OutOfAdherenceStartTime IS NULL THEN '{DateTime.MaxValue}' ELSE OutOfAdherenceStartTime END AS OutOfAdherenceStartTime,
 					[StateGroupId], 
 					[IsDeleted], 
 					a.[FirstName], 

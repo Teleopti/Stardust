@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("AlarmColor", model.AlarmColor)
 				.SetParameter("Shift", model.Shift != null ? _serializer.SerializeObject(model.Shift) : null, NHibernateUtil.StringClob)
 				.SetParameter("OutOfAdherences", model.OutOfAdherences != null ? _serializer.SerializeObject(model.OutOfAdherences) : null, NHibernateUtil.StringClob)
-				.SetParameter("OutOfAdherenceStartTime", model.OutOfAdherenceStartTime == null ? DateTime.MaxValue :  model.OutOfAdherenceStartTime)
+				.SetParameter("OutOfAdherenceStartTime", model.OutOfAdherenceStartTime)
 				.SetParameter("StateGroupId", model.StateGroupId)
 				.ExecuteUpdate();
 		}
