@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					[AlarmColor], 
 					[Shift], 
 					[OutOfAdherences], 
-					CASE WHEN OutOfAdherenceStartTime IS NULL THEN '{DateTime.MaxValue}' ELSE OutOfAdherenceStartTime END AS OutOfAdherenceStartTime,
+					[OutOfAdherenceStartTime],
 					[StateGroupId], 
 					[IsDeleted], 
 					a.[FirstName], 
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{"Rule", new Sorting(new[] {"RuleName"})},
 			{"TimeInAlarm", new SortingInverted(new[] {"AlarmStartTime"})},
 			{"TimeInState", new SortingInverted(new[] {"StateStartTime"})},
-			{"TimeOutOfAdherence", new SortingInverted(new[] {"OutOfAdherenceStartTime"})},
+			{"TimeOutOfAdherence", new SortingInverted(new[] {"ISNULL(OutOfAdherenceStartTime, '9999-12-31 23:59:59')"})},
 		};
 	}
 }
