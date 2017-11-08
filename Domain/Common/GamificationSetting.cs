@@ -192,7 +192,11 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			InParameter.NotNull(nameof(newBadgeSetting), newBadgeSetting);
 			newBadgeSetting.SetParent(this);
-			
+
+			if (_externalBadgeSettings == null)
+			{
+				_externalBadgeSettings = new List<IExternalBadgeSetting>();
+			}
 			_externalBadgeSettings.Add(newBadgeSetting);
 		}
 

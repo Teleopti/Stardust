@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
@@ -17,26 +17,28 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 {
 	[TestFixture]
-	class GamificationSettingPersisterTest
+	public class GamificationSettingPersisterTest
 	{
+		private Guid _settingId;
 		private IGamificationSettingRepository _gamificationSettingRepository;
-		private IGamificationSettingRepository _FakegamificationSettingRepository;
+		private IGamificationSettingRepository _fakegamificationSettingRepository;
 		private IGamificationSetting _gamificationSetting;
 		private IGamificationSettingMapper _mapper;
 
 		[SetUp]
 		public void Setup()
 		{
+			_settingId = new Guid();
 			_gamificationSetting = new GamificationSetting("newGamification");
-			_gamificationSetting.WithId();
+			_gamificationSetting.SetId(_settingId);
 			_gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
-			_gamificationSettingRepository.Stub(x => x.Get(_gamificationSetting.Id.Value)).Return(_gamificationSetting);
+			_gamificationSettingRepository.Stub(x => x.Get(_settingId)).Return(_gamificationSetting);
 
 			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 			statisticRepository.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>());
 			_mapper = new GamificationSettingMapper(statisticRepository);
 
-			_FakegamificationSettingRepository = new FakeGamificationSettingRepository();
+			_fakegamificationSettingRepository = new FakeGamificationSettingRepository();
 		}
 
 		[Test]
@@ -74,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			gamificationSettingRepository.Add(_gamificationSetting);
 			var target = new GamificationSettingPersister(gamificationSettingRepository, _mapper);
 
-			var result = target.RemoveGamificationSetting(_gamificationSetting.Id.Value);
+			var result = target.RemoveGamificationSetting(_settingId);
 			result.Should().Be.True();
 			gamificationSettingRepository.LoadAll().Count.Should().Be.EqualTo(0);
 		}
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var gamificationSettingRepository = new FakeGamificationSettingRepository();
 			var target = new GamificationSettingPersister(gamificationSettingRepository, _mapper);
 
-			var result = target.RemoveGamificationSetting(_gamificationSetting.Id.Value);
+			var result = target.RemoveGamificationSetting(_settingId);
 			result.Should().Be.False();
 		}
 
@@ -98,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 
 			var result = target.PersistDescription(new GamificationDescriptionViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = expactedDescription
 			});
 
@@ -109,11 +111,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldReturnNUllWhenCannotFindGamificationSettingForPersistDescription()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistDescription(new GamificationDescriptionViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = new Description("bla")
 			});
 
@@ -123,28 +125,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationAnsweredCallsEnabled()
 		{
-			var expactedResult = true;
+			const bool expectedResult = true;
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
 			_gamificationSetting.AnsweredCallsBadgeEnabled.Should().Be.False();
 
 			var result = target.PersistAnsweredCallsEnabled(new GamificationThresholdEnabledViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAnsweredCallsEnabled()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAnsweredCallsEnabled(new GamificationThresholdEnabledViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = true
 			});
 
@@ -154,28 +156,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationAnsweredCallsThreshold()
 		{
-			var expactedResult = 150;
+			var expectedResult = 150;
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AnsweredCallsThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AnsweredCallsThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAnsweredCallsThreshold(new GamificationAnsweredCallsThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAnsweredCallsThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAnsweredCallsThreshold(new GamificationAnsweredCallsThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = 100
 			});
 
@@ -185,28 +187,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationAnsweredCallsGoldThreshold()
 		{
-			var expactedResult = 150;
+			var expectedResult = 150;
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AnsweredCallsGoldThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AnsweredCallsGoldThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAnsweredCallsGoldThreshold(new GamificationAnsweredCallsThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAnsweredCallsGoldThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAnsweredCallsGoldThreshold(new GamificationAnsweredCallsThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = 100
 			});
 
@@ -216,28 +218,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationAnsweredCallsSilverThreshold()
 		{
-			var expactedResult = 110;
+			var expectedResult = 110;
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AnsweredCallsSilverThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AnsweredCallsSilverThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAnsweredCallsSilverThreshold(new GamificationAnsweredCallsThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAnsweredCallsSilverThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAnsweredCallsSilverThreshold(new GamificationAnsweredCallsThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = 100
 			});
 
@@ -247,28 +249,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationAnsweredCallsBronzeThreshold()
 		{
-			var expactedResult = 90;
+			var expectedResult = 90;
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AnsweredCallsBronzeThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AnsweredCallsBronzeThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAnsweredCallsBronzeThreshold(new GamificationAnsweredCallsThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAnsweredCallsBronzeThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAnsweredCallsBronzeThreshold(new GamificationAnsweredCallsThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = 100
 			});
 
@@ -276,30 +278,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
-		public void ShouldPersistGamificationAHTEnabled()
+		public void ShouldPersistGamificationAhtEnabled()
 		{
-			var expactedResult = true;
+			const bool expectedResult = true;
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
 			_gamificationSetting.AHTBadgeEnabled.Should().Be.False();
 
 			var result = target.PersistAHTEnabled(new GamificationThresholdEnabledViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
-		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAHTEnabled()
+		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAhtEnabled()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAHTEnabled(new GamificationThresholdEnabledViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = false
 			});
 
@@ -307,30 +309,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
-		public void ShouldPersistGamificationAHTThreshold()
+		public void ShouldPersistGamificationAhtThreshold()
 		{
-			TimeSpan expactedResult = new TimeSpan(0,2,30);
+			var expectedResult = new TimeSpan(0,2,30);
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AHTThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AHTThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAHTThreshold(new GamificationAHTThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
-		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAHTThreshold()
+		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAhtThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAHTThreshold(new GamificationAHTThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = new TimeSpan(0,2,30)
 			});
 
@@ -338,30 +340,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
-		public void ShouldPersistGamificationAHTGoldThreshold()
+		public void ShouldPersistGamificationAhtGoldThreshold()
 		{
-			TimeSpan expactedResult = new TimeSpan(0,2,30);
+			var expectedResult = new TimeSpan(0,2,30);
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AHTGoldThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AHTGoldThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAHTGoldThreshold(new GamificationAHTThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
-		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAHTGoldThreshold()
+		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAhtGoldThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAHTGoldThreshold(new GamificationAHTThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = new TimeSpan(0, 2, 30)
 			});
 
@@ -369,30 +371,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
-		public void ShouldPersistGamificationAHTSilverThreshold()
+		public void ShouldPersistGamificationAhtSilverThreshold()
 		{
-			TimeSpan expactedResult = new TimeSpan(0,3,30);
+			var expectedResult = new TimeSpan(0,3,30);
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AHTSilverThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AHTSilverThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAHTSilverThreshold(new GamificationAHTThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
-		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAHTSilverThreshold()
+		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAhtSilverThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAHTSilverThreshold(new GamificationAHTThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = new TimeSpan(0, 2, 30)
 			});
 
@@ -400,30 +402,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
-		public void ShouldPersistGamificationAHTBronzeThreshold()
+		public void ShouldPersistGamificationAhtBronzeThreshold()
 		{
-			TimeSpan expactedResult = new TimeSpan(0,4,30);
+			var expectedResult = new TimeSpan(0,4,30);
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AHTBronzeThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AHTBronzeThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAHTBronzeThreshold(new GamificationAHTThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
-		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAHTBronzeThreshold()
+		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAhtBronzeThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAHTBronzeThreshold(new GamificationAHTThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = new TimeSpan(0, 2, 30)
 			});
 
@@ -433,28 +435,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationAdherenceEnabled()
 		{
-			var expactedResult = true;
+			const bool expectedResult = true;
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
 			_gamificationSetting.AdherenceBadgeEnabled.Should().Be.False();
 
 			var result = target.PersistAdherenceEnabled(new GamificationThresholdEnabledViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAdherenceEnabled()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAdherenceEnabled(new GamificationThresholdEnabledViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = false
 			});
 
@@ -464,28 +466,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationAdherenceThreshold()
 		{
-			Percent expactedResult = new Percent(90);
+			var expectedResult = new Percent(90);
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AdherenceThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AdherenceThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAdherenceThreshold(new GamificationAdherenceThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAdherenceThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAdherenceThreshold(new GamificationAdherenceThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = new Percent(80)
 			});
 
@@ -495,28 +497,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationAdherenceGoldThreshold()
 		{
-			Percent expactedResult = new Percent(90);
+			var expectedResult = new Percent(90);
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AdherenceGoldThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AdherenceGoldThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAdherenceGoldThreshold(new GamificationAdherenceThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAdherenceGoldThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAdherenceGoldThreshold(new GamificationAdherenceThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = new Percent(80)
 			});
 
@@ -526,28 +528,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationAdherenceSilverThreshold()
 		{
-			Percent expactedResult = new Percent(85);
+			var expectedResult = new Percent(85);
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AdherenceSilverThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AdherenceSilverThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAdherenceSilverThreshold(new GamificationAdherenceThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAdherenceSilverThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAdherenceSilverThreshold(new GamificationAdherenceThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = new Percent(80)
 			});
 
@@ -557,28 +559,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationAdherenceBronzeThreshold()
 		{
-			Percent expactedResult = new Percent(70);
+			var expectedResult = new Percent(70);
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.AdherenceBronzeThreshold.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.AdherenceBronzeThreshold.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistAdherenceBronzeThreshold(new GamificationAdherenceThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Value = expactedResult
+				GamificationSettingId = _settingId,
+				Value = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Value.Should().Be.EqualTo(expactedResult);
+			result.Value.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistAdherenceBronzeThreshold()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistAdherenceBronzeThreshold(new GamificationAdherenceThresholdViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Value = new Percent(80)
 			});
 
@@ -588,28 +590,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationRuleChange()
 		{
-			GamificationSettingRuleSet expactedResult = GamificationSettingRuleSet.RuleWithRatioConvertor;
+			var expectedResult = GamificationSettingRuleSet.RuleWithRatioConvertor;
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.GamificationSettingRuleSet.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.GamificationSettingRuleSet.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistRuleChange(new GamificationChangeRuleForm()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Rule = expactedResult
+				GamificationSettingId = _settingId,
+				Rule = expectedResult
 			});
 
 			result.Id.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.GamificationSettingRuleSet.Should().Be.EqualTo(expactedResult);
+			result.GamificationSettingRuleSet.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistRuleChange()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistRuleChange(new GamificationChangeRuleForm()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Rule = GamificationSettingRuleSet.RuleWithDifferentThreshold
 			});
 
@@ -619,28 +621,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationGoldToSilverRateChange()
 		{
-			int expactedResult = 6;
+			var expectedResult = 6;
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.GoldToSilverBadgeRate.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.GoldToSilverBadgeRate.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistGoldToSilverRate(new GamificationBadgeConversRateViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Rate = expactedResult
+				GamificationSettingId = _settingId,
+				Rate = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Rate.Should().Be.EqualTo(expactedResult);
+			result.Rate.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistGoldToSilverRateChange()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistGoldToSilverRate(new GamificationBadgeConversRateViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Rate = 5
 			});
 
@@ -650,32 +652,143 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldPersistGamificationSilverToBronzeRateChange()
 		{
-			int expactedResult = 6;
+			const int expectedResult = 6;
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
-			_gamificationSetting.SilverToBronzeBadgeRate.Should().Not.Be.EqualTo(expactedResult);
+			_gamificationSetting.SilverToBronzeBadgeRate.Should().Not.Be.EqualTo(expectedResult);
 
 			var result = target.PersistSilverToBronzeRate(new GamificationBadgeConversRateViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
-				Rate = expactedResult
+				GamificationSettingId = _settingId,
+				Rate = expectedResult
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
-			result.Rate.Should().Be.EqualTo(expactedResult);
+			result.Rate.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistSilverToBronzeRateChange()
 		{
-			var target = new GamificationSettingPersister(_FakegamificationSettingRepository, _mapper);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
 			var result = target.PersistSilverToBronzeRate(new GamificationBadgeConversRateViewModel()
 			{
-				GamificationSettingId = _gamificationSetting.Id.Value,
+				GamificationSettingId = _settingId,
 				Rate = 5
 			});
 
 			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldCreateNewBadgeSettingForExternalQualityInfoNotSet()
+		{
+			_fakegamificationSettingRepository.Add(_gamificationSetting);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
+			var input = new UpdateExternalBadgeSettingViewModel
+			{
+				Id = _settingId,
+				ExternalBadgeSettingId = null,
+				Name = "New External Badge",
+				Enabled = true,
+				QualityId = 5,
+				LargerIsBetter = false,
+				Threshold = 100,
+				BronzeThreshold = 100,
+				SilverThreshold = 120,
+				GoldThreshold = 140,
+				UnitType = BadgeUnitType.Count
+			};
+			var result = target.PersistExternalBadgeSetting(input);
+			
+			Assert.AreEqual(1, _gamificationSetting.ExternalBadgeSettings.Count);
+
+			var newBadgeSetting = _gamificationSetting.ExternalBadgeSettings.First();
+			// Check new created badge settting
+			Assert.AreEqual(input.Name, newBadgeSetting.Name);
+			Assert.AreEqual(input.QualityId, newBadgeSetting.QualityId);
+			Assert.AreEqual(input.Enabled, newBadgeSetting.Enabled);
+			Assert.AreEqual(input.Threshold, newBadgeSetting.Threshold);
+			Assert.AreEqual(input.BronzeThreshold, newBadgeSetting.BronzeThreshold);
+			Assert.AreEqual(input.SilverThreshold, newBadgeSetting.SilverThreshold);
+			Assert.AreEqual(input.GoldThreshold, newBadgeSetting.GoldThreshold);
+			Assert.AreEqual(input.LargerIsBetter, newBadgeSetting.LargerIsBetter);
+			Assert.AreEqual(input.UnitType, newBadgeSetting.UnitType);
+			
+			// Check returned viewmodel
+			Assert.AreEqual(input.Name, result.Name);
+			Assert.AreEqual(input.QualityId, result.QualityId);
+			Assert.AreEqual(input.Enabled, result.Enabled);
+			Assert.AreEqual(input.Threshold, result.Threshold);
+			Assert.AreEqual(input.BronzeThreshold, result.BronzeThreshold);
+			Assert.AreEqual(input.SilverThreshold, result.SilverThreshold);
+			Assert.AreEqual(input.GoldThreshold, result.GoldThreshold);
+			Assert.AreEqual(input.LargerIsBetter, result.LargerIsBetter);
+			Assert.AreEqual(input.UnitType, result.UnitType);
+		}
+
+		[Test]
+		public void ShouldUpdateExistingBadgeSetting()
+		{
+			var badgeSetting = new ExternalBadgeSetting
+			{
+				Name = "Existing External Badge",
+				Enabled = false,
+				QualityId = 5,
+				LargerIsBetter = false,
+				Threshold = 110,
+				BronzeThreshold = 110,
+				SilverThreshold = 130,
+				GoldThreshold = 150,
+				UnitType = BadgeUnitType.Count
+			};
+			badgeSetting.SetId(new Guid());
+			_gamificationSetting.AddExternalBadgeSetting(badgeSetting);
+			
+			_fakegamificationSettingRepository.Add(_gamificationSetting);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
+			var input = new UpdateExternalBadgeSettingViewModel
+			{
+				Id = _settingId,
+				ExternalBadgeSettingId = null,
+				Name = "New External Badge",
+				Enabled = true,
+				QualityId = 5,
+				LargerIsBetter = true,
+				Threshold = 100,
+				BronzeThreshold = 100,
+				SilverThreshold = 120,
+				GoldThreshold = 140,
+				UnitType = BadgeUnitType.Percentage
+			};
+			var result = target.PersistExternalBadgeSetting(input);
+			
+			Assert.AreEqual(1, _gamificationSetting.ExternalBadgeSettings.Count);
+
+			var newBadgeSetting = _gamificationSetting.ExternalBadgeSettings.First();
+			// Check updated badge setting
+			Assert.AreEqual(badgeSetting.QualityId, newBadgeSetting.QualityId);
+			Assert.AreEqual(badgeSetting.LargerIsBetter, newBadgeSetting.LargerIsBetter);
+			Assert.AreEqual(badgeSetting.UnitType, newBadgeSetting.UnitType);
+
+			Assert.AreEqual(input.Name, newBadgeSetting.Name);
+			Assert.AreEqual(input.Enabled, newBadgeSetting.Enabled);
+			Assert.AreEqual(input.Threshold, newBadgeSetting.Threshold);
+			Assert.AreEqual(input.BronzeThreshold, newBadgeSetting.BronzeThreshold);
+			Assert.AreEqual(input.SilverThreshold, newBadgeSetting.SilverThreshold);
+			Assert.AreEqual(input.GoldThreshold, newBadgeSetting.GoldThreshold);
+			
+			// Check returned viewmodel
+			Assert.AreEqual(badgeSetting.QualityId, result.QualityId);
+			Assert.AreEqual(badgeSetting.LargerIsBetter, result.LargerIsBetter);
+			Assert.AreEqual(badgeSetting.UnitType, result.UnitType);
+			
+			Assert.AreEqual(input.Name, result.Name);
+			Assert.AreEqual(input.Enabled, result.Enabled);
+			Assert.AreEqual(input.Threshold, result.Threshold);
+			Assert.AreEqual(input.BronzeThreshold, result.BronzeThreshold);
+			Assert.AreEqual(input.SilverThreshold, result.SilverThreshold);
+			Assert.AreEqual(input.GoldThreshold, result.GoldThreshold);
 		}
 	}
 }

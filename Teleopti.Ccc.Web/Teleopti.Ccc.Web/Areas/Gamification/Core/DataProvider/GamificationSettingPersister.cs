@@ -245,16 +245,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			}
 
 			var externalBadgeSetting = setting.ExternalBadgeSettings.FirstOrDefault(x => x.QualityId == input.QualityId);
-			if (externalBadgeSetting != null)
-			{
-				externalBadgeSetting.Name = input.Name;
-				externalBadgeSetting.Enabled = input.Enabled;
-				externalBadgeSetting.Threshold = input.Threshold;
-				externalBadgeSetting.BronzeThreshold = input.BronzeThreshold;
-				externalBadgeSetting.SilverThreshold = input.SilverThreshold;
-				externalBadgeSetting.GoldThreshold = input.GoldThreshold;
-			}
-			else
+			if (externalBadgeSetting == null)
 			{
 				externalBadgeSetting = new ExternalBadgeSetting
 				{
@@ -268,22 +259,31 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 					GoldThreshold = input.GoldThreshold,
 					UnitType = input.UnitType // TODO: Should get from quality_info
 				};
-				
+
 				setting.AddExternalBadgeSetting(externalBadgeSetting);
+			}
+			else
+			{
+				externalBadgeSetting.Name = input.Name;
+				externalBadgeSetting.Enabled = input.Enabled;
+				externalBadgeSetting.Threshold = input.Threshold;
+				externalBadgeSetting.BronzeThreshold = input.BronzeThreshold;
+				externalBadgeSetting.SilverThreshold = input.SilverThreshold;
+				externalBadgeSetting.GoldThreshold = input.GoldThreshold;
 			}
 
 			return new ExternalBadgeSettingViewModel
 			{
 				Id = externalBadgeSetting.Id ?? Guid.Empty, // How to get Id of the new created badge setting?
-				Name = input.Name,
-				QualityId = input.QualityId,
-				LargerIsBetter = input.LargerIsBetter,
-				Enabled = input.Enabled,
-				Threshold = input.Threshold,
-				BronzeThreshold = input.BronzeThreshold,
-				SilverThreshold = input.SilverThreshold,
-				GoldThreshold = input.GoldThreshold,
-				UnitType = input.UnitType
+				Name = externalBadgeSetting.Name,
+				QualityId = externalBadgeSetting.QualityId,
+				LargerIsBetter = externalBadgeSetting.LargerIsBetter,
+				Enabled = externalBadgeSetting.Enabled,
+				Threshold = externalBadgeSetting.Threshold,
+				BronzeThreshold = externalBadgeSetting.BronzeThreshold,
+				SilverThreshold = externalBadgeSetting.SilverThreshold,
+				GoldThreshold = externalBadgeSetting.GoldThreshold,
+				UnitType = externalBadgeSetting.UnitType
 			};
 		}
 

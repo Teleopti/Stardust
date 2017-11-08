@@ -8,27 +8,31 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeGamificationSettingRepository : IGamificationSettingRepository
 	{
-		private readonly IList<IGamificationSetting> _gamificationSettings;
+		private readonly Dictionary<Guid, IGamificationSetting> _gamificationSettings;
 
 		public FakeGamificationSettingRepository()
 		{
-			_gamificationSettings = new List<IGamificationSetting>();
+			_gamificationSettings = new Dictionary<Guid, IGamificationSetting>();
 		}
 
 		public void Add(IGamificationSetting gamificationSetting)
 		{
-			gamificationSetting.SetId(Guid.NewGuid());
-			_gamificationSettings.Add(gamificationSetting);
+			if (!gamificationSetting.Id.HasValue)
+			{
+				gamificationSetting.SetId(Guid.NewGuid());
+			}
+
+			_gamificationSettings[gamificationSetting.Id.Value] = gamificationSetting;
 		}
 
 		public void Remove(IGamificationSetting gamificationSetting)
 		{
-			_gamificationSettings.Remove(_gamificationSettings.First(x => x.Id == gamificationSetting.Id));
+			_gamificationSettings.Remove(gamificationSetting.Id.Value);
 		}
 
 		public IGamificationSetting Get(Guid id)
 		{
-			return _gamificationSettings.FirstOrDefault(x => x.Id == id);
+			return _gamificationSettings.ContainsKey(id) ? _gamificationSettings[id] : null;
 		}
 
 		public IGamificationSetting Load(Guid id)
@@ -38,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IList<IGamificationSetting> LoadAll()
 		{
-			return _gamificationSettings;
+			return _gamificationSettings.Values.ToList();
 		}
 
 		public IEnumerable<IGamificationSetting> FindAllGamificationSettingsSortedByDescription()
