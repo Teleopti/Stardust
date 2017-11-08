@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario();
 			var activity = new Activity().WithId();
 			var dateOnly = DateOnly.Today;
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var bpo = new BpoResource(5, new[]{skillDay.Skill}, skillDay.SkillStaffPeriodCollection.First().Period);
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, skillDay, bpo);
@@ -32,6 +32,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			skillDay.SkillStaffPeriodCollection.First().CalculatedResource
 				.Should().Be.EqualTo(5); 
+		}
+
+		[Test]
+		[Ignore("#46265 2 be fixed")]
+		public void ShouldHandleMultiskilledBpos()
+		{
+			var scenario = new Scenario();
+			var activity = new Activity().WithId();
+			var dateOnly = DateOnly.Today;
+			var skill1 = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
+			var skill2 = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
+			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var bpo = new BpoResource(1, new[] {skillDay1.Skill, skillDay2.Skill},
+				skillDay1.SkillStaffPeriodCollection.First().Period);
+			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[]{skillDay1, skillDay2}, bpo);
+			
+			Target.ResourceCalculate(dateOnly, resCalcData);
+
+			skillDay1.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(0.5); 
+			skillDay2.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(0.5); 
 		}
 	}
 }

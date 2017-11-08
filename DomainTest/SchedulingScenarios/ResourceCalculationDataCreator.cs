@@ -55,6 +55,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				new[] {bpoResource}, false, false);
 		}
 		
+		public static ResourceCalculationData WithData(IScenario scenario,
+			DateOnly date,
+			IEnumerable<ISkillDay> skillDays,
+			BpoResource bpoResource)
+		{
+			return WithData(scenario, date.ToDateOnlyPeriod(), Enumerable.Empty<IPersistableScheduleData>(), skillDays,
+				new[] {bpoResource}, false, false);
+		}
 
 		public static ResourceCalculationData WithData(IShovelingCallback shovelingCallback,
 									IScenario scenario,
