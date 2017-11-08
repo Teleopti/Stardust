@@ -25,14 +25,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var activity = new Activity();
 			var dateOnly = DateOnly.Today;
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9);
-			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 2);
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var bpo = new BpoResource(1, new[]{skillDay.Skill}, skillDay.SkillStaffPeriodCollection.First().Period);
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, skillDay, bpo);
 			
 			Target.ResourceCalculate(dateOnly, resCalcData);
 
-			skillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
-				.Should().Be.EqualTo(-1); 
+			skillDay.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(1); 
 		}
 	}
 }
