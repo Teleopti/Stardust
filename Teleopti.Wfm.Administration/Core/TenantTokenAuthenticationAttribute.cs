@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Filters;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Administration.Core
 {
@@ -22,7 +23,7 @@ namespace Teleopti.Wfm.Administration.Core
 			{
 				var auth = req.Headers.Authorization.Parameter;
 				//Tenant: todo look up so key exists in user db
-				var valid = AdminAccessTokenRepository.TokenIsValid(auth);
+				var valid = AdminAccessTokenRepository.TokenIsValid(auth, new Now());
 			
 				if (valid)
 				{

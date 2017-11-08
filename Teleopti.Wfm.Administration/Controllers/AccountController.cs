@@ -23,13 +23,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IHangfireCookie _hangfireCookie;
 		private readonly IHashFunction _currentHashFunction;
 		private readonly IEnumerable<IHashFunction> _hashFunctions;
+		private readonly AdminAccessTokenRepository _adminAccessTokenRepository;
 
-		public AccountController(ICurrentTenantSession currentTenantSession, IHangfireCookie hangfireCookie, IHashFunction currentHashFunction, IEnumerable<IHashFunction> hashFunctions)
+		public AccountController(ICurrentTenantSession currentTenantSession, IHangfireCookie hangfireCookie, 
+			IHashFunction currentHashFunction, IEnumerable<IHashFunction> hashFunctions, AdminAccessTokenRepository adminAccessTokenRepository)
 		{
 			_currentTenantSession = currentTenantSession;
 			_hangfireCookie = hangfireCookie;
 			_currentHashFunction = currentHashFunction;
 			_hashFunctions = hashFunctions;
+			_adminAccessTokenRepository = adminAccessTokenRepository;
 		}
 
 		[OverrideAuthentication]
@@ -38,11 +41,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("Login")]
 		public virtual JsonResult<LoginResult> Login(LoginModel model)
 		{
-
 			if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
 				return Json(new LoginResult { Success = false, Message = "Both user name and password must be provided." });
 
-			string sql = "SELECT Id, Name, Password, AccessToken FROM Tenant.AdminUser WHERE Email=@email";
+			string sql = "SELECT Id, Name, Password FROM Tenant.AdminUser WHERE Email=@email";
 			using (var sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString))
 			{
 				sqlConnection.Open();
@@ -57,7 +59,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 							var id = reader.GetInt32(0);
 							var userName = reader.GetString(1);
 							var passwordHash = reader.GetString(2);
-							var accessToken = reader.GetString(3);
+							
 							var hashFunction = _hashFunctions.FirstOrDefault(x => x.IsGeneratedByThisFunction(passwordHash));
 							if (hashFunction == null)
 								break;
@@ -71,6 +73,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 								user.Password = _currentHashFunction.CreateHash(model.Password);
 								_currentTenantSession.CurrentSession().Save(user);
 							}
+							
+							reader.Close();
+							var accessToken = _adminAccessTokenRepository.CreateNewToken(id, sqlConnection);
 
 							_hangfireCookie.SetHangfireAdminCookie(userName, model.UserName);
 							return Json(new LoginResult { Success = true, Id = id, UserName = userName, AccessToken = accessToken });
@@ -181,7 +186,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return new UpdateUserResultModel
 				{
 					Success = false,
-					Message = "Email must be at least 6 characters."
+					Message = "Password must be at least 6 characters."
 				};
 			if (string.IsNullOrEmpty(model.Email))
 				return new UpdateUserResultModel
@@ -213,13 +218,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 			try
 			{
 				var encryptedPassword = _currentHashFunction.CreateHash(model.Password);
-				var token = _currentHashFunction.CreateHash(model.Email);
+				//var token = _currentHashFunction.CreateHash(model.Email);
 				var user = new TenantAdminUser
 				{
 					Email = model.Email,
 					Name = model.Name,
 					Password = encryptedPassword,
-					AccessToken = token
+					AccessToken = ""
 				};
 
 				_currentTenantSession.CurrentSession().Save(user);

@@ -74,6 +74,8 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.Register<Func<ICurrentUnitOfWork, IKpiRepository>>(context => uow => new KpiRepository(uow));
 			builder.Register<Func<ICurrentUnitOfWork, ISkillTypeRepository>>(context => uow => new SkillTypeRepository(uow));
 			builder.Register<Func<ICurrentUnitOfWork, IRtaStateGroupRepository>>(context => uow => new RtaStateGroupRepository(uow));
+
+			builder.RegisterType<AdminAccessTokenRepository>().AsSelf();
 		}
 	}
 }

@@ -11,8 +11,6 @@
 		<property name="Name" />
 		<property name="Email" />
 		<property name="Password" />
-		<property name="AccessToken" />
-
 	</class>
 
 	<query name="loadAllTenantUsers">

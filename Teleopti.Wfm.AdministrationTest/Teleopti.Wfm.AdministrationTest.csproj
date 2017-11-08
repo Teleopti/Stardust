@@ -124,6 +124,7 @@
     <Compile Include="ControllerActions\StardustHealthCheckTest.cs" />
     <Compile Include="ControllerActions\StardustControllerTest.cs" />
     <Compile Include="ControllerActions\UpgradeDatabase.cs" />
+    <Compile Include="Core\AdminAccessTokenRepositoryTest.cs" />
     <Compile Include="Core\CreateBusinessUnitTest.cs" />
     <Compile Include="Core\FakeRunWithUnitOfWork.cs" />
     <Compile Include="FakeAbsenceRepository.cs" />
