@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				if (!firstDayInPeriod.HasDayOff())
 				{
 					var reversedScheduleDays = scheduleDays.Reverse();
-					if (firstDayInPeriod.PersonAssignment() != null)
+					if (firstDayInPeriod.PersonAssignment() != null && firstDayInPeriod.PersonAssignment().ShiftLayers.Count() != 0)
 					{
 						checkIfPreivousDaysMatchEachOther(validationResult, firstDayInPeriod, reversedScheduleDays.Skip(1), person, blockOption);
 					}
@@ -44,14 +44,13 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						var personPeriod = person.PersonPeriods(period).First();
 						if (personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, period.StartDate, person.FirstDayOfWeek))
 						{
-							var firstPreviousDay = reversedScheduleDays.Skip(1).First();
-							if (firstPreviousDay.HasDayOff())
+							var lastDayInPreviousPeriod = reversedScheduleDays.Skip(1).First();
+							if (!lastDayInPreviousPeriod.HasDayOff())
 							{
-								continue;
-							}
-							if (firstPreviousDay.PersonAssignment() != null)
-							{
-								checkIfPreivousDaysMatchEachOther(validationResult, firstPreviousDay, reversedScheduleDays.Skip(2), person, blockOption);
+								if (lastDayInPreviousPeriod.PersonAssignment() != null && lastDayInPreviousPeriod.PersonAssignment().ShiftLayers.Count() != 0)
+								{
+									checkIfPreivousDaysMatchEachOther(validationResult, lastDayInPreviousPeriod, reversedScheduleDays.Skip(2), person, blockOption);
+								}
 							}
 						}
 					}
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			var startTime = personAssignment.Period.StartDateTime.TimeOfDay;
 			foreach (var scheduleDay in period)
 			{
-				if (scheduleDay.HasDayOff() || !scheduleDay.HasProjection())
+				if (scheduleDay.HasDayOff() || !scheduleDay.IsScheduled())
 				{
 					break;
 				}
