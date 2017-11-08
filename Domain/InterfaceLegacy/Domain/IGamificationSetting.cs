@@ -29,9 +29,11 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		Percent AdherenceSilverThreshold { get; set; }
 		Percent AdherenceGoldThreshold { get; set; }
 
-		IEnumerable<IExternalBadgeSetting> ExternalBadgeSettings { get; set; }
+		IList<IExternalBadgeSetting> ExternalBadgeSettings { get; set; }
 
 		int SilverToBronzeBadgeRate { get; set; }
 		int GoldToSilverBadgeRate { get; set; }
+
+		void AddExternalBadgeSetting(IExternalBadgeSetting newBadgeSetting);
 	}
 }

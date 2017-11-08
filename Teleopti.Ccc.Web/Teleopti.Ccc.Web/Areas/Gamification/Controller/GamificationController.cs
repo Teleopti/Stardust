@@ -185,5 +185,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		{
 			return _siteViewModelFactory.GetTeams(new List<Guid>(){siteId}, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 		}
+
+		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSetting"), UnitOfWork]
+		public virtual ExternalBadgeSettingViewModel UpdateExternalBadgeSetting(
+			[FromBody] UpdateExternalBadgeSettingViewModel input)
+		{
+			return _gamificationSettingPersister.PersistExternalBadgeSetting(input);
+		}
 	}
 }

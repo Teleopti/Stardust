@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private Percent _adherenceSilverThreshold = new Percent(0.80);
 		private Percent _adherenceGoldThreshold = new Percent(0.85);
 
-		private IEnumerable<IExternalBadgeSetting> _externalBadgeSettings; 
+		private IList<IExternalBadgeSetting> _externalBadgeSettings; 
 
 		private int _silverToBronzeBadgeRate = 5;
 		private int _goldToSilverBadgeRate = 5;
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Domain.Common
 			set => _adherenceBadgeEnabled = value;
 		}
 
-		public virtual IEnumerable<IExternalBadgeSetting> ExternalBadgeSettings
+		public virtual IList<IExternalBadgeSetting> ExternalBadgeSettings
 		{
 			get => _externalBadgeSettings;
 			set => _externalBadgeSettings = value;
@@ -186,6 +186,14 @@ namespace Teleopti.Ccc.Domain.Common
 		public virtual void SetDeleted()
 		{
 			_isDeleted = true;
+		}
+
+		public virtual void AddExternalBadgeSetting(IExternalBadgeSetting newBadgeSetting)
+		{
+			InParameter.NotNull(nameof(newBadgeSetting), newBadgeSetting);
+			newBadgeSetting.SetParent(this);
+			
+			_externalBadgeSettings.Add(newBadgeSetting);
 		}
 
 		public virtual object Clone()

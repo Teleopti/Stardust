@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 	{
 		public Guid Id { get; set; }
 		public string Name { get; set; }
-		public bool IsBuildIn { get; set; }
 		public int QualityId { get; set; }
 		public bool LargerIsBetter { get; set; }
 
