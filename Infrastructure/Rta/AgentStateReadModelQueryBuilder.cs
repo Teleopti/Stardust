@@ -90,10 +90,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 			if (skillIds != null)
 			{
-				_froms.Add("INNER JOIN ReadModel.GroupingReadOnly AS g ON a.PersonId = g.PersonId");
-				_wheres.Add(@"g.PageId = :skillGroupingPageId	
-AND g.GroupId IN (:SkillIds)
-AND :today BETWEEN g.StartDate and g.EndDate");
+				_wheres.Add(@"
+					EXISTS(
+						SELECT * FROM ReadModel.GroupingReadOnly AS g 
+						WHERE 
+							g.PageId = :skillGroupingPageId AND :today BETWEEN g.StartDate and g.EndDate AND
+							a.PersonId = g.PersonId AND
+							g.GroupId IN (:SkillIds)
+					)
+					");
 				_parameters.Add(s => s
 					.SetParameterList("SkillIds", skillIds)
 					.SetParameter("today", now.UtcDateTime().Date)
@@ -134,7 +139,7 @@ AND :today BETWEEN g.StartDate and g.EndDate");
 		public Selection Build()
 		{
 			var builder = new StringBuilder($@"
-				SELECT DISTINCT TOP {_topCount} 
+				SELECT TOP {_topCount} 
 					a.[PersonId], 
 					a.[BusinessUnitId], 
 					a.[SiteId], 
