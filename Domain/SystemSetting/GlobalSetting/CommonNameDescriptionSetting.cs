@@ -13,6 +13,9 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 		public const string FirstName = "{FirstName}";
 		public const string LastName = "{LastName}";
 		public const string EmployeeNumber = "{EmployeeNumber}";
+
+		private string _value;
+
 		private const string defaultCommonNameDescription = "{FirstName} {LastName}";
 
 		public CommonNameDescriptionSetting()
@@ -25,7 +28,12 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 			AliasFormat = aliasFormat;
 		}
 
-		public virtual string AliasFormat { get; set; }
+		// keep the backing field with the old name because there are seralized values
+		public virtual string AliasFormat
+		{
+			get => _value;
+			set => _value = value;
+		}
 
 		public virtual string BuildFor(IPerson person)
 		{
