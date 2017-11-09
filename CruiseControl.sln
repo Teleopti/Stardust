@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		BuildArtifacts\Web.Start.Web.config = BuildArtifacts\Web.Start.Web.config
 		BuildArtifacts\Web.WindowsIdentityProvider.Web.config = BuildArtifacts\Web.WindowsIdentityProvider.Web.config
 		BuildArtifacts\WebApplicationInsights.config = BuildArtifacts\WebApplicationInsights.config
+		.debug-Setup\Restore to Local.bat = .debug-Setup\Restore to Local.bat
 	EndProjectSection
 	ProjectSection(FolderStartupServices) = postProject
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
