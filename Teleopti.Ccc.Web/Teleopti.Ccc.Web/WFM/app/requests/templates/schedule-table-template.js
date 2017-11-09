@@ -13,7 +13,7 @@ function requestsScheduleTableTemplate($templateCache) {
 	  "\n" +
 	  "\t\t\t<th class=\"person-name person-name-column\">\r" +
 	  "\n" +
-	  "\t\t\t\t<div class=\"wfm-checkbox-label person-name nowrap\">{{'AgentName' | translate}}</div>\r" +
+	  "\t\t\t\t<div class=\"person-name nowrap\">{{'AgentName' | translate}}</div>\r" +
 	  "\n" +
 	  "\t\t\t</th>\r" +
 	  "\n" +

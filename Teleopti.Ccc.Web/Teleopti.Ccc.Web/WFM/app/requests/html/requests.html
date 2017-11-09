@@ -36,14 +36,11 @@
 				template-type="vm.dateRangeTemplateType"
 				custom-validators="vm.dateRangeCustomValidators"></date-range-picker>
 
-			<div class="wfm-switch filter-switch">
-				<input type="checkbox" id="filter-switch" ng-model="vm.filterEnabled" />
-				<label for="filter-switch">
-					<span class="wfm-switch-toggle"></span>
-					<span style="width: 55px; display: inline-block;"></span>
-					<span class="wfm-switch-label" ng-show="vm.filterEnabled !== true"><span translate>ShowFilter</span></span>
-					<span class="wfm-switch-label" ng-show="vm.filterEnabled === true" translate>HideFilter</span>
-				</label>
+			<div class="filter-switch">
+				<md-switch ng-model="vm.filterEnabled" aria-label="Switch">
+					<span ng-if="!vm.filterEnabled" translate>ShowFilter</span>
+					<span ng-if="vm.filterEnabled" translate>HideFilter</span>
+				</md-switch>
 			</div>
 		</div>
 

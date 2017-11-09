@@ -1,23 +1,11 @@
 ﻿<div class="request-footer full-padding clearfix">
 	<div class="pull-left time-zone-switch">
-		<span class="wfm-radio">
-			<input type="radio" name="groupTimezoneSetting" id="radioUserTimezone"
-				   ng-checked="!requestsFooter.isUsingRequestSubmitterTimeZone"
-				   ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = false"/>
-			<label for="radioUserTimezone">
-				<span class="wfm-radio-toggle"></span>
-				<span class="wfm-radio-label" translate>LogonUserTimeZone</span>
-			</label>
-		</span>
-		<span class="wfm-radio">
-			<input type="radio" name="groupTimezoneSetting" id="radioRequestTimezone"
-				   ng-checked="requestsFooter.isUsingRequestSubmitterTimeZone"
-				   ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = true"/>
-			<label for="radioRequestTimezone">
-				<span class="wfm-radio-toggle"></span>
-				<span class="wfm-radio-label" translate>RequestSubmitterTimeZone</span>
-			</label>
-		</span>
+		<form>
+			<md-radio-group ng-model="requestsFooter.isUsingRequestSubmitterTimeZone">
+				<md-radio-button ng-value="false" aria-label="radio">{{'LogonUserTimeZone' | translate}}</md-radio-button>
+				<md-radio-button ng-value="true" aria-label="radio">{{'RequestSubmitterTimeZone' | translate}}</md-radio-button>
+			</md-radio-group>
+		</form>
 	</div>
 
 	<div class="pull-right">

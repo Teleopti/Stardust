@@ -129,7 +129,7 @@
 				var footer = test.target.isolateScope().requestsFooter;
 				expect(footer.isUsingRequestSubmitterTimeZone).toEqual(false);
 
-				var selectedRadioButtons = test.target[0].querySelectorAll("#radioUserTimezone[checked='checked']");
+				var selectedRadioButtons = test.target[0].querySelectorAll(".time-zone-switch md-radio-button[aria-checked='true']");
 				expect(selectedRadioButtons.length).toEqual(1);
 			});
 

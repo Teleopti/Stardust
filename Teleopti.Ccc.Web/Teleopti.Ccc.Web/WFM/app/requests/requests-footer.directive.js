@@ -68,7 +68,6 @@
 		}
 	}
 
-
 	function requestsFooterDirective() {
 		return {
 			controller: 'requestsFooterController',
@@ -81,11 +80,7 @@
 				isUsingRequestSubmitterTimeZone: '=?'
 			},
 			restrict: 'E',
-			templateUrl: 'app/requests/html/requests-footer.tpl.html',
-			link: postlink
+			templateUrl: 'app/requests/html/requests-footer.tpl.html'
 		};
-
-		function postlink(scope, elem, attrs, ctrl) {
-		}
 	}
 })();

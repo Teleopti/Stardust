@@ -369,9 +369,8 @@
 
 			$scope.$watch(function() {
 				return vm.isUsingRequestSubmitterTimeZone;
-			}, function() {
-				$scope.$broadcast('requests.isUsingRequestSubmitterTimeZone.changed',
-					vm.isUsingRequestSubmitterTimeZone);
+			}, function(newVal, oldVal) {
+				$scope.$broadcast('requests.isUsingRequestSubmitterTimeZone.changed', newVal);
 			});
 		}
 

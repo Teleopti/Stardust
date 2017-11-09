@@ -10,6 +10,11 @@
 
 		.time-zone-switch {
 			padding: 5px 0;
+
+			md-radio-button{
+				float: left;
+				margin-right: 10px;
+			}
 		}
 
 		.pagination {
@@ -28,14 +33,6 @@
 
 	.requests-uigrid-table-container, .requests-uigrid-table {
 		height: 60vh;
-	}
-
-	.wfm-checkbox-toggle {
-		position: relative;
-	}
-
-	md-tab-content.md-active {
-		transform: inherit !important; //why transform nothing? what about all the position fixed element inside
 	}
 
 	.show-replay {
@@ -79,14 +76,6 @@
 
 	.message-reply-label {
 		min-width: 50px;
-	}
-
-	schedule-table .wfm-checkbox-toggle {
-		display: none;
-	}
-
-	.is-close-day input[type=checkbox]:checked ~ .wfm-checkbox-toggle:after, .is-close-day input[type=checkbox]:checked ~ label .wfm-checkbox-toggle:after {
-		content: 'X';
 	}
 
 	.schedule-container {
@@ -154,6 +143,10 @@
 	.filter-switch {
 		display: inline-block;
 		padding-left: 3px;
+
+		md-switch{
+			margin: 10px 0;
+		}
 	}
 
 	.operation-container {
@@ -167,10 +160,6 @@
 			flex-wrap: wrap;
 			justify-content: flex-start;
 			padding-top: 5px;
-
-			& > .people-search-container, & > .wfm-switch {
-				margin: 10px 10px 10px 0;
-			}
 
 			wfm-multiple-search-input {
 				margin: 0;
@@ -275,51 +264,6 @@
 		text-overflow: ellipsis;
 	}
 
-	.multiSelect {
-		overflow: hidden;
-		display: block;
-
-		> button {
-			width: 100%;
-			max-height: 22px;
-			font-weight: 400;
-			min-height: 20px !important;
-			background-image: none;
-			background-color: #fff;
-			border-radius: 0px;
-			margin-top: 0;
-			white-space: nowrap;
-		}
-
-		.buttonLabel {
-			padding: 0;
-		}
-
-		.checkboxLayer {
-			width: 90%;
-			min-width: 150px;
-			margin-left: 5px;
-		}
-
-		.checkBoxContainer {
-			text-align: left;
-		}
-
-		.multiSelectItem {
-			min-width: 120px;
-		}
-
-		.multiSelectGroup:hover,
-		.multiSelectItem:hover {
-			background-image: none;
-			background: #E0E0E0 !important;
-			color: #000000 !important;
-		}
-	}
-
-	[role="tabpanel"], md-tabs {
-		transition: none;
-	}
 	/* Fix angular material issue where tabs are not displayed correctly on occasion
         https://github.com/angular/material/issues/9660
         https://github.com/angular/material/issues/9644 seem to be related.
@@ -541,21 +485,6 @@
 		.ui-grid-pinned-container-left .ui-grid-header-viewport,
 		.ui-grid-pinned-container-right .ui-grid-header-viewport {
 			overflow: visible;
-		}
-	}
-
-	.wfm-switch {
-		vertical-align: top;
-		margin-top: 15px;
-		margin-left: 10px;
-
-		label {
-			position: relative;
-		}
-
-		.wfm-switch-toggle {
-			margin: 0;
-			top: 0;
 		}
 	}
 
