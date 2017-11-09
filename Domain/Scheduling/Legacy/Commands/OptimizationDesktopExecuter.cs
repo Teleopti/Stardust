@@ -14,12 +14,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 	public class OptimizationDesktopExecuterNew : OptimizationDesktopExecuter
 	{
-		public OptimizationDesktopExecuterNew(IGroupPageCreator groupPageCreator, IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider, IResourceCalculation resourceOptimizationHelper, IScheduleDayChangeCallback scheduleDayChangeCallback, TeamBlockDesktopOptimizationOLD teamBlockOptimization, Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IUserTimeZone userTimeZone, IGroupPagePerDateHolder groupPagePerDateHolder, ScheduleOptimizerHelper scheduleOptimizerHelper, DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime) : base(groupPageCreator, groupScheduleGroupPageDataProvider, resourceOptimizationHelper, scheduleDayChangeCallback, teamBlockOptimization, resourceOptimizationHelperExtended, userTimeZone, groupPagePerDateHolder, scheduleOptimizerHelper, doFullResourceOptimizationOneTime)
+		private readonly ResourceCalculateWithNewContext _resourceCalculateWithNewContext;
+
+		public OptimizationDesktopExecuterNew(ResourceCalculateWithNewContext resourceCalculateWithNewContext, IGroupPageCreator groupPageCreator, IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider, IResourceCalculation resourceOptimizationHelper, IScheduleDayChangeCallback scheduleDayChangeCallback, TeamBlockDesktopOptimizationOLD teamBlockOptimization, Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IUserTimeZone userTimeZone, IGroupPagePerDateHolder groupPagePerDateHolder, ScheduleOptimizerHelper scheduleOptimizerHelper, DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime) 
+			: base(groupPageCreator, groupScheduleGroupPageDataProvider, resourceOptimizationHelper, scheduleDayChangeCallback, teamBlockOptimization, resourceOptimizationHelperExtended, userTimeZone, groupPagePerDateHolder, scheduleOptimizerHelper, doFullResourceOptimizationOneTime)
 		{
+			_resourceCalculateWithNewContext = resourceCalculateWithNewContext;
 		}
 
-		protected override void PreOptimize(ISchedulingProgress backgroundWorker, bool lastCalculationState)
+		protected override void PreOptimize(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, bool lastCalculationState)
 		{
+			if (!schedulerStateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade())
+			{
+				_resourceCalculateWithNewContext.ResourceCalculate(selectedPeriod, new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, false));				
+			}
 		}
 	}
 	
@@ -38,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ScheduleOptimizerHelper _scheduleOptimizerHelper;
 		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
+		[RemoveMeWithToggle("Remove unnecessary params", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 		public OptimizationDesktopExecuter(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 			IResourceCalculation resourceOptimizationHelper,
@@ -71,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 
-			PreOptimize(backgroundWorker, lastCalculationState);
+			PreOptimize(schedulerStateHolder, selectedPeriod, backgroundWorker, lastCalculationState);
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper,
@@ -98,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
-		protected virtual void PreOptimize(ISchedulingProgress backgroundWorker, bool lastCalculationState)
+		protected virtual void PreOptimize(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, bool lastCalculationState)
 		{
 			if (lastCalculationState)
 			{
