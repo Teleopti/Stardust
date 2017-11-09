@@ -11,7 +11,7 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		private readonly IHashFunction _hashFunction;
 		private readonly INow _now;
-		private static readonly TimeSpan tokenTimeToLive = TimeSpan.FromMinutes(1); 
+		private static readonly TimeSpan tokenTimeToLive = TimeSpan.FromMinutes(40); 
 
 		public AdminAccessTokenRepository(IHashFunction hashFunction, INow now)
 		{

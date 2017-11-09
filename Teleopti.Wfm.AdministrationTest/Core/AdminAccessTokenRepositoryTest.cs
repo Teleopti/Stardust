@@ -51,7 +51,7 @@ namespace Teleopti.Wfm.AdministrationTest.Core
 			}
 		}
 		
-		[Test, Ignore("Temp Ignored")]
+		[Test]
 		public void AccessTokenShouldStayValidOnActivity()
 		{
 			var currentTime = new DateTime(2017, 08, 26, 12, 0, 0, DateTimeKind.Utc);
@@ -77,7 +77,7 @@ namespace Teleopti.Wfm.AdministrationTest.Core
 			}
 		}
 		
-		[Test, Ignore("temp ignored")]
+		[Test]
 		public void ShouldBePossibleWithMultipleLoginsWithSameUser()
 		{
 			var currentTime = new DateTime(2017, 08, 26, 12, 0, 0, DateTimeKind.Utc);
