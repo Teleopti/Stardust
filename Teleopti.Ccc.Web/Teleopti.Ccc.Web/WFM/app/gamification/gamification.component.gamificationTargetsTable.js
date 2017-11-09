@@ -28,12 +28,6 @@
 
 		ctrl.selectedTeamIds = {};
 
-		ctrl.settings = [
-			{ value: 'default', name: 'Default' },
-			{ value: 'setting1', name: 'Setting 1' },
-			{ value: 'setting2', name: 'Setting 2' }
-		];
-
 		ctrl.tableHasData = function () {
 			return angular.isArray(ctrl.teams) && ctrl.teams.length > 0;
 		};

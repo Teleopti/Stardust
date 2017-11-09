@@ -86,6 +86,10 @@
 		dataService.fetchSites().then(function (sites) {
 			ctrl.sites = sites;
 		});
+
+		dataService.fetchSettingList().then(function (list) {
+			ctrl.settings = list;
+		});
 	}
 
 })(angular);

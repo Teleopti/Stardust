@@ -30,5 +30,17 @@
 				resolve(teams);
 			});
 		};
+
+		svc.fetchSettingList = function () {
+			return $q(function (resolve, reject) {
+				var list = [
+					{ id: 'default', name: 'Default' },
+					{ id: 'setting1', name: 'Setting 1' },
+					{ id: 'setting2', name: 'Setting 2' },
+					{ id: 'setting3', name: 'Setting 3' }
+				];
+				resolve(list);
+			});
+		};
 	}
 })(angular);

@@ -1,5 +1,4 @@
-(function (angular) {
-	'use strict';
+(function (angular) { 'use strict';
 
 	angular.module('wfm.gamification')
 		.component('gamificationTargetRow', {
@@ -7,7 +6,7 @@
 			templateUrl: 'app/gamification/html/g.component.gamificationTargetRow.tpl.html',
 
 			require: {
-				tableController: '^gamificationTargetsTable'
+				rootController: '^gamificationTargets'
 			},
 
 			bindings: {
@@ -19,10 +18,13 @@
 				onSettingChange: '&'
 			},
 
-			controller: [GamificationTargetRowController]
+			controller: [
+				'$element',
+				GamificationTargetRowController
+			]
 		});
 
-	function GamificationTargetRowController() {
+	function GamificationTargetRowController($element) {
 		var ctrl = this;
 
 		ctrl.appliedSettingChanged = function () {
@@ -33,8 +35,14 @@
 			});
 		};
 
+		ctrl.$onChanges = function (changesObj) {
+			if (changesObj.selected) {
+				$element.attr('is-selected', changesObj.selected.currentValue ? 'true' : 'false');
+			}
+		}
+
 		ctrl.$onInit = function () {
-			ctrl.settingOptions = ctrl.tableController.settings;
+			ctrl.settingOptions = ctrl.rootController.settings;
 		};
 
 		ctrl.isSelected = function () {

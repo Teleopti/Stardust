@@ -44,6 +44,8 @@ describe('gamification, ', function () {
 	});
 
 	describe('in the "set gamification targets" view, ', function () {
+		var TAG = 'gamificationTargets';
+
 		it('should render', function () {
 			var target = setupComponent();
 			expect(target.find('gamification-targets-table').length).toBe(1);
@@ -58,10 +60,10 @@ describe('gamification, ', function () {
 		it('should fetch teams on the selected sites', function () {
 			var cmp = setupComponent();
 
-			openSitePickerFor(cmp);
-			selectSite(0);
-			selectSite(1);
-			closeSitePicker();
+			openSelectFor(cmp);
+			selectOption(0);
+			selectOption(1);
+			closeSelect();
 
 			var numRows = cmp.find('gamification-target-row').length;
 			expect(numRows).toBe(3);
@@ -70,10 +72,10 @@ describe('gamification, ', function () {
 		it('should check the main checkbox when all the table rows are selected', function () {
 			var cmp = setupComponent();
 
-			openSitePickerFor(cmp);
-			selectSite(0);
-			selectSite(1);
-			closeSitePicker();
+			openSelectFor(cmp);
+			selectOption(0);
+			selectOption(1);
+			closeSelect();
 
 			var numRows = cmp.find('gamification-target-row').length;
 			var expected = 3;
@@ -83,11 +85,58 @@ describe('gamification, ', function () {
 				selectRow(cmp, i);
 			}
 
-			var header = cmp.find('header');
-			var criterion1 = header.find('md-checkbox').hasClass('md-checked');
-			var criterion2 = header.find('md-checkbox').attr('aria-checked') === 'true';
+			var mainCheckbox = cmp.find('header').find('md-checkbox');
+			var criterion1 = mainCheckbox.hasClass('md-checked');
+			var criterion2 = mainCheckbox.attr('aria-checked') === 'true';
 			expect(criterion1).toBe(true);
 			expect(criterion2).toBe(true);
+		});
+
+		describe('when some rows are selected and their applied settings are changed, ', function () {
+			var cmp, ctrl;
+			var n, ids, settingValue;
+
+			beforeEach(function () {
+				cmp = setupComponent();
+				ctrl = cmp.controller(TAG);
+
+				ctrl.onAppliedSettingChange = function (teamIds, newValue) {
+					ids = teamIds;
+					settingValue = newValue;
+				}
+
+				openSelectFor(cmp);
+				selectOption(0);
+				selectOption(1);
+				selectOption(2);
+				closeSelect();
+
+				var numRows = cmp.find('gamification-target-row').length;
+				var expected = 6;
+				expect(numRows).toBe(expected);
+
+				n = 3;
+				for (var i = 0; i < n; i++) { selectRow(cmp, i); }
+
+				var selectedRows = cmp[0].querySelectorAll('gamification-target-row[is-selected="true"]');
+				expect(selectedRows.length).toBe(n);
+
+				var row = angular.element(selectedRows[0]);
+				removeAllSelectMenusInDom();
+				openSelectFor(row);
+				selectOption(2);
+				expectSelectClosed();
+			});
+
+			it('should be called with the changed data', function () {
+				expect(ids.length).toBe(n);
+				expect(ids[0]).toBe('site1team1');
+				expect(ids[1]).toBe('site2team1');
+				expect(ids[2]).toBe('site2team2');
+				expect(settingValue).toBe('setting2');
+			});
+
+			// it('should update the applied settings in the table', function () {});
 		});
 
 		function insertStyle(parentNode) {
@@ -96,6 +145,14 @@ describe('gamification, ', function () {
 			var css = 'gamification-target-row { display: block; min-height: 50px; }';
 			node.appendChild($document[0].createTextNode(css));
 			parentNode.appendChild(node);
+		}
+
+		function removeAllSelectMenusInDom() {
+			var body = $document[0].body;
+			var children = $document[0].querySelectorAll('body > .md-select-menu-container');
+			for (var i = 0; i < children.length; i++) {
+				angular.element(children[i]).remove();
+			}
 		}
 
 		function setupComponent(attrs, scope) {
@@ -119,7 +176,7 @@ describe('gamification, ', function () {
 			return el;
 		}
 
-		function openSitePickerFor(el) {
+		function openSelectFor(el) {
 			el = el.find('md-select');
 			try {
 				el.triggerHandler('click');
@@ -128,23 +185,23 @@ describe('gamification, ', function () {
 			} catch (e) { }
 		}
 
-		function closeSitePicker() {
+		function closeSelect() {
 			var backdrop = $document.find('md-backdrop');
-			if (!backdrop.length) throw Error('Attempted to close site picker with no backdrop present');
+			if (!backdrop.length) throw Error('Attempted to close select with no backdrop present');
 			$document.find('md-backdrop').triggerHandler('click');
 			$material.flushInterimElement();
-			expectSitePickerClosed();
+			expectSelectClosed();
 		}
 
-		function expectSitePickerOpen() {
-			var menu = angular.element($document[0].querySelector('.md-select-menu-container'));
+		function expectSelectOpen() {
+			var menu = angular.element($document[0].querySelector('body > .md-select-menu-container'));
 
 			if (!(menu.hasClass('md-active') && menu.attr('aria-hidden') == 'false')) {
-				throw Error('Expected site picker to be open');
+				throw Error('Expected select to be open');
 			}
 		}
 
-		function expectSitePickerClosed() {
+		function expectSelectClosed() {
 			var menu = angular.element($document[0].querySelector('.md-select-menu-container'));
 
 			if (menu.length) {
@@ -154,12 +211,12 @@ describe('gamification, ', function () {
 			}
 		}
 
-		function selectSite(index) {
-			expectSitePickerOpen();
+		function selectOption(index) {
+			expectSelectOpen();
 			var openMenu = $document.find('md-select-menu');
 			var opt = openMenu.find('md-option')[index].querySelector('div');
 
-			if (!opt) throw Error('Could not find site at index: ' + index);
+			if (!opt) throw Error('Could not find option at index: ' + index);
 
 			angular.element(openMenu).triggerHandler({
 				type: 'click',
@@ -213,6 +270,18 @@ describe('gamification, ', function () {
 					}
 				});
 				resolve(teams);
+			});
+		};
+
+		this.fetchSettingList = function () {
+			return $q(function (resolve, reject) {
+				var list = [
+					{ id: 'default', name: 'Default' },
+					{ id: 'setting1', name: 'Setting 1' },
+					{ id: 'setting2', name: 'Setting 2' },
+					{ id: 'setting3', name: 'Setting 3' }
+				];
+				resolve(list);
 			});
 		};
 	}
