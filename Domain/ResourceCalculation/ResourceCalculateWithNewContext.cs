@@ -1,7 +1,6 @@
-﻿using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
+namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class ResourceCalculateWithNewContext
 	{

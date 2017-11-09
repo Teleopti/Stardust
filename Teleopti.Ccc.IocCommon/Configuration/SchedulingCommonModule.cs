@@ -131,6 +131,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 				builder.RegisterType<OptimizeIntradayIslandsDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope(); //TODO: scope?
 			}
+			builder.RegisterType<ResourceCalculateWithNewContext>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PersonalSkillsProvider>().SingleInstance();
