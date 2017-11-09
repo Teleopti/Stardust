@@ -6,8 +6,6 @@ SET ROOTDIR=%~dp0
 call "%~dp0CheckMsbuildPath.bat"
 IF %ERRORLEVEL% NEQ 0 GOTO :error
 
-
-
 COLOR A
 cls
 SET DefaultDB=%1
@@ -83,26 +81,22 @@ IF EXIST DBManager*.log DEL DBManager*.log /Q
 
 ::Build DbManager, include double quotes for IF to work?!
 SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%\DBManager.exe"
-IF NOT EXIST %DBMANAGER% (
+IF NOT EXIST DBMANAGER (
 	ECHO Building "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
 	IF EXIST "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%LogFolder%\build.log"
 	IF %ERRORLEVEL% EQU 0 (
-		SET DATABASEPATH="%ROOTDIR%\..\Database"
-		SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%"
-	) else (
-		SET /A ERRORLEV=6
-		GOTO :error
-	)
-) else (
 	SET DATABASEPATH="%ROOTDIR%\..\Database"
 	SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%"
+	) else (
+	SET /A ERRORLEV=6
+	GOTO :error
+	)
 )
 
 ::remove double quotes
 SET DATABASEPATH=%DATABASEPATH:"=%
 SET DBMANAGER=%DBMANAGER:"=%
 SET DBMANAGERPATH=%DBMANAGERPATH:"=%
-
 
 ::checkAccess
 :checkAccess
