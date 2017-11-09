@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameStartTime = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShift = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShiftCategory = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShiftCategory = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShift = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameStartTime = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShiftCategory = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;

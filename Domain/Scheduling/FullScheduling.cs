@@ -19,13 +19,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly FullSchedulingResult _fullSchedulingResult;
 		private readonly SchedulingInformationProvider _schedulingInformationProvider;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 
 		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, 
 			FillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<ISchedulerStateHolder> schedulerStateHolder, 
 			FullSchedulingResult fullSchedulingResult,
 			SchedulingInformationProvider schedulingInformationProvider,
-			ICurrentUnitOfWork currentUnitOfWork)
+			ICurrentUnitOfWork currentUnitOfWork,
+			ISchedulingOptionsProvider schedulingOptionsProvider)
 		{
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -33,12 +35,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_fullSchedulingResult = fullSchedulingResult;
 			_schedulingInformationProvider = schedulingInformationProvider;
 			_currentUnitOfWork = currentUnitOfWork;
+			_schedulingOptionsProvider = schedulingOptionsProvider;
 		}
 
 		public virtual SchedulingResultModel DoScheduling(Guid planningPeriodId)
 		{
 			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);
 			var stateHolder = _schedulerStateHolder();
+			var schedulingOptions = _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate);
 			Setup(schedulingInformation.Period, schedulingInformation.PersonIds);
 			_schedulingCommandHandler.Execute(new SchedulingCommand
 			{
@@ -48,15 +52,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				AgentsToSchedule = stateHolder.ChoosenAgents,
 				PlanningPeriodId = planningPeriodId
 			});
-			return CreateResult(stateHolder.ChoosenAgents, schedulingInformation.Period, schedulingInformation.PlanningGroup);
+			return CreateResult(stateHolder.ChoosenAgents, schedulingInformation.Period, schedulingInformation.PlanningGroup, schedulingOptions.UsePreferences);
 		}
 
 		[TestLog]
 		[UnitOfWork]
-		protected virtual SchedulingResultModel CreateResult(IEnumerable<IPerson> fixedStaffPeople, DateOnlyPeriod period, IPlanningGroup planningGroup)
+		protected virtual SchedulingResultModel CreateResult(IEnumerable<IPerson> fixedStaffPeople, DateOnlyPeriod period, IPlanningGroup planningGroup, bool usePreferences)
 		{
 			_currentUnitOfWork.Current().Reassociate(fixedStaffPeople);
-			return _fullSchedulingResult.Execute(period, fixedStaffPeople, planningGroup);
+			return _fullSchedulingResult.Execute(period, fixedStaffPeople, planningGroup, usePreferences);
 		}
 
 		[TestLog]

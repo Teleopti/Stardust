@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.SchedulePeriod,
 						UseBlockSameShiftCategory = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.SchedulePeriod,
 						UseBlockSameShiftCategory = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.SchedulePeriod,
 						UseBlockSameStartTime = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.SchedulePeriod,
 						UseBlockSameShift = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = currentSchedule
 				}).InvalidResources;

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			_scheduleDayEquator = scheduleDayEquator;
 		}
 
-		public void FillResult(HintResult validationResult, HintInput input)
+		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var people = input.People;
 			var period = input.Period;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					var reversedScheduleDays = scheduleDays.Reverse();
 					if (firstDayInPeriod.PersonAssignment() != null && firstDayInPeriod.PersonAssignment().ShiftLayers.Count() != 0)
 					{
-						checkIfPreivousDaysMatchEachOther(validationResult, firstDayInPeriod, reversedScheduleDays.Skip(1), person, blockOption);
+						checkIfPreivousDaysMatchEachOther(hintResult, firstDayInPeriod, reversedScheduleDays.Skip(1), person, blockOption);
 					}
 					else
 					{
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 							{
 								if (lastDayInPreviousPeriod.PersonAssignment() != null && lastDayInPreviousPeriod.PersonAssignment().ShiftLayers.Count() != 0)
 								{
-									checkIfPreivousDaysMatchEachOther(validationResult, lastDayInPreviousPeriod, reversedScheduleDays.Skip(2), person, blockOption);
+									checkIfPreivousDaysMatchEachOther(hintResult, lastDayInPreviousPeriod, reversedScheduleDays.Skip(2), person, blockOption);
 								}
 							}
 						}

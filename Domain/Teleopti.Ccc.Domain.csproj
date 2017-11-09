@@ -357,6 +357,7 @@
     <Compile Include="ResourceCalculation\SkillCombinationToBpoResourceMapper.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHint.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingNotMatchShiftBagHint.cs" />
+    <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreferenceHint.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHint.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHint.cs" />
     <Compile Include="ResourcePlanner\Hints\HintInput.cs" />

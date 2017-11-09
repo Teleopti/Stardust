@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameStartTime = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = scheduleDictionary
 				}).InvalidResources;
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShift = true
-					}))
+					}), false)
 				{
 					CurrentSchedule = scheduleDictionary
 				}).InvalidResources;

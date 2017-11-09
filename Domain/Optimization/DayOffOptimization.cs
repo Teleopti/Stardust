@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var optiData = SetupAndOptimize(planningPeriodId);
 			_persister.Persist(_schedulerStateHolder().Schedules);
-			return _optimizationResult.Create(optiData.DateOnlyPeriod, optiData.Persons, optiData.PlanningGroup);
+			return _optimizationResult.Create(optiData.DateOnlyPeriod, optiData.Persons, optiData.PlanningGroup, optiData.UsePreferences);
 		}
 
 		[UnitOfWork]
@@ -146,7 +146,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				DateOnlyPeriod = period,
 				Persons = agents,
-				PlanningGroup = planningGroup
+				PlanningGroup = planningGroup,
+				UsePreferences = schedulingOptions.UsePreferences
 			};
 		}
 	}

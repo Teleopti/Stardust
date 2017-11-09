@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		{
 			Assert.DoesNotThrow(() =>
 			{			
-				Target.Execute(new HintInput(null, new[]{new Person(), }, DateOnly.Today.ToDateOnlyPeriod(), null));
+				Target.Execute(new HintInput(null, new[]{new Person(), }, DateOnly.Today.ToDateOnlyPeriod(), null, false));
 			});
 		}
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById(newTimezoneForAgent));
 			
-			return Target.Execute(new HintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null))
+			return Target.Execute(new HintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null, false))
 				.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateHint)));
 		}
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timezoneForAgent));
 			var state = StateHolder.Fill(scenario, date, agent);
 			
-			Target.Execute(new HintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null))
+			Target.Execute(new HintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null, false))
 				.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateHint)))
 				.Should().Be.False();
 		}
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var state = StateHolder.Fill(scenario, date, agent, ass);
 			
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
-			var result = Target.Execute(new HintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null))
+			var result = Target.Execute(new HintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null, false))
 				.InvalidResources.Single();
 
 			result.ResourceId.Should().Be.EqualTo(agent.Id.Value);

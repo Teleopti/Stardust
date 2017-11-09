@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
 			var person = PersonFactory.CreatePerson().WithId();
 
-			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null)).InvalidResources
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null, false)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodHint)));
 
 			result.Should().Not.Be.Empty();
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 
-			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null)).InvalidResources
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null, false)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodHint)));
 
 			result.Should().Be.Empty();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 31)).WithId();
 
-			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null)).InvalidResources
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null, false)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodHint)));
 
 			result.Should().Not.Be.Empty();
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 25)).WithId();
 
-			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null)).InvalidResources
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null, false)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodHint)));
 
 			result.Should().Not.Be.Empty();
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 01, 20)));
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 01, 25)));
 
-			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null)).InvalidResources
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null, false)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodHint)));
 
 			result.Should().Be.Empty();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 			person.TerminatePerson(new DateOnly(2017, 01, 25), new PersonAccountUpdaterDummy());
 
-			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null)).InvalidResources
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null, false)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonPeriodHint)));
 
 			result.Should().Be.Empty();
