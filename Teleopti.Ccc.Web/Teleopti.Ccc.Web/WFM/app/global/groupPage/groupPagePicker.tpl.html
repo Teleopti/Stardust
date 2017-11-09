@@ -19,31 +19,27 @@
 							<md-virtual-repeat-container class="virtual-repeat">
 								<div md-virtual-repeat="o in $ctrl.groupsInView[tab.title]" class="repeated-item" flex>
 									<div ng-if="o.origin.isParent" ng-class="{focused: o.isFocused}" class="group md-button-toggle md-button md-ink-ripple">
-										<label class="clickable-area" tabindex="-1" for="group-{{o.id}}">
+										<label class="clickable-area" tabindex="-1">
 											<div flex layout="row">
-												<div class="wfm-checkbox" ng-class="{'indeterminate': o.isIndeterminate()}">
-													<input type="checkbox" id="group-{{o.id}}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()" ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"/>
-													<span class="wfm-checkbox-toggle"></span>
-													<span class="wfm-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText"></span>
-												</div>
+												<md-checkbox id="group-{{o.id}}" aria-label="Checkbox" ng-class="{'indeterminate': o.isIndeterminate()}"  ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()" 
+															 ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"></md-checkbox>
+												<span class="md-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText"></span>
 												<span flex></span>
-												<input type="checkbox" id="toggle-{{o.id}}" class="shadow-group-toggle" ng-click="$ctrl.collapseGroup(o)" ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)" />
-												<div tabindex="-1" class="group-toggle">
-													<label for="toggle-{{o.id}}">
-														<span class="md-toggle-icon" tabindex="-1">
-															<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
-														</span>
-													</label>
+												<div id="toggle-{{o.id}}" class="group-toggle" 
+													 ng-click="$ctrl.collapseGroup(o)" ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)">
+													<span class="md-toggle-icon">
+														<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
+													</span>
 												</div>
 											</div>
 										</label>
 									</div>
 									<div ng-if=" !o.origin.isParent " ng-class="{focused: o.isFocused}" class="child md-button md-ink-ripple">
-										<label class="clickable-area" tabindex="-1" id="group-{{o.id}}">
-											<div class="wfm-checkbox">
-												<input type="checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()" ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"/>
-												<span class="wfm-checkbox-toggle"></span>
-												<span class="wfm-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText"></span>
+										<label class="clickable-area" tabindex="-1">
+											<div flex layout="row">
+												<md-checkbox id="group-{{o.id}}" aria-label="Checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()"
+															 ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"></md-checkbox>
+												<span class="md-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText"></span>
 											</div>
 										</label>
 									</div>
