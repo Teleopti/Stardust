@@ -4,8 +4,8 @@
             <span>{{::$ctrl.title}}:</span>
         </div>
         <div class="inline-block setting-name">
-            <md-select ng-model='$ctrl.selectedSettingIndex' ng-change="$ctrl.settingSelectionChanged()">
-                <md-option ng-repeat="setting in $ctrl.settingDescriptors" value="{{$ctrl.settingDescriptors.indexOf(setting)}}">
+            <md-select ng-model='$ctrl.currentSettingId' ng-change="$ctrl.settingSelectionChanged()">
+                <md-option ng-repeat="setting in $ctrl.settingDescriptors" value="{{setting.GamificationSettingId}}">
                     <span ng-bind="setting.Value.Name"></span>
                 </md-option>
             </md-select>
@@ -60,8 +60,8 @@
                 <label>Rule:</label>
             </div>
             <div class="inline-block ">
-                <md-select id="gamificationSettingType " ng-change="$ctrl.ruleSelectionChanged()" ng-model='$ctrl.currentRuleIndex'>
-                    <md-option ng-repeat="rule in $ctrl.currentSetting.rules " value="{{$ctrl.currentSetting.rules.indexOf(rule)}} ">
+                <md-select id="gamificationSettingType " ng-change="$ctrl.ruleSelectionChanged()" ng-model='$ctrl.currentRuleId'>
+                    <md-option ng-repeat="rule in $ctrl.currentSetting.rules " value="{{rule.id}}">
                         <span ng-bind="rule.name "></span>
                     </md-option>
                 </md-select>
@@ -78,7 +78,7 @@
             </div>
 
             <div class="inline-block " ng-repeat="settingInfo in $ctrl.currentSetting.settings">
-                <gamification-setting-info setting-info="settingInfo" current-rule-id="$ctrl.currentRuleIndex" select-item-callback="$ctrl.itemSelected "></gamification-setting-info>
+                <gamification-setting-info setting-info="settingInfo" current-rule-id="$ctrl.currentRuleId" select-item-callback="$ctrl.itemSelected "></gamification-setting-info>
             </div>
         </div>
     </div>

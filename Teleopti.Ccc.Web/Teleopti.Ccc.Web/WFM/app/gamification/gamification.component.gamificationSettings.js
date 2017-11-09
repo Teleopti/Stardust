@@ -8,32 +8,31 @@
 			controller: GamificationSettingsController
 		});
 
-	GamificationSettingsController.$inject = ['$mdSelect', '$element', '$scope', '$translate', 'gamificationSettingService'];
+	GamificationSettingsController.$inject = ['$mdSelect', '$element', '$scope', '$translate', '$q', 'gamificationSettingService',];
 
-	function GamificationSettingsController($mdSelect, $element, $scope, $translate, gamificationSettingService) {
+	function GamificationSettingsController($mdSelect, $element, $scope, $translate, $q, gamificationSettingService) {
 		var ctrl = this;
 
 		ctrl.getGamificationSettingsDescriptors = function () {
 			gamificationSettingService.getSettingsDescriptor().then(function (data) {
 				ctrl.settingDescriptors = data;
-				if (ctrl.settingDescriptors != null && ctrl.settingDescriptors.length > 0) {
-					var aSetting = ctrl.getSettingById(ctrl.settingDescriptors[0].GamificationSettingId);
+				console.log(data);
+				if (ctrl.settingDescriptors && ctrl.settingDescriptors.length > 0) {
+					ctrl.getSettingById(ctrl.settingDescriptors[0].GamificationSettingId);
 				}
 			});
 		};
 
 		ctrl.getSettingById = function (id) {
-			console.log('getting data for setting:' + id);
 			gamificationSettingService.getSettingById(id).then(function (data) {
-				console.log('raw setting data for' + id + ' is:');
-				console.log(data);
 				var settingData = ctrl.convertSettingToModel(data);
-				console.log('data after convert is:');
-				console.log(settingData);
+				if (ctrl.findElementInArray(ctrl.allSettings, settingData.id)) {
+					ctrl.addSetting.push(settingData);
+				}
 
-				ctrl.allSettings.push(settingData);
-				ctrl.settingSelectionChanged();
-				console.log(ctrl.allSettings);
+				ctrl.currentSetting = settingData;
+				ctrl.currentSettingId = settingData.id;
+				ctrl.resetRuleSelection();
 			});
 		}
 
@@ -193,24 +192,54 @@
 			ctrl.getGamificationSettingsDescriptors();
 			ctrl.title = 'Gamification Settings';
 
-			ctrl.currentRuleIndex = 0;
+			ctrl.currentRuleId = 0;
 			//ctrl.currentRule = ctrl.rules[ctrl.currentRuleIndex];
 
-			ctrl.selectedSettingIndex = 0;
+			ctrl.currentSettingId = 0;
 			ctrl.currentSetting = ctrl.allSettings[ctrl.selectedSettingIndex];
 		}
 
 		ctrl.settingSelectionChanged = function () {
-			ctrl.currentSetting = ctrl.allSettings[ctrl.selectedSettingIndex]
-			ctrl.currentRuleIndex = 0;
-			ctrl.ruleSelectionChanged();
+			console.log('setting changed.');
+			console.log(ctrl.currentSettingId);
+			if (ctrl.currentSettingId) {
+				var setting = ctrl.findElementInArray(ctrl.allSettings, ctrl.currentSettingId);
+
+				if (!setting) {
+					ctrl.getSettingById(ctrl.currentSettingId);
+				} else {
+					ctrl.currentSetting = setting;
+					ctrl.resetRuleSelection();
+				}
+
+				// ctrl.currentSetting = ctrl.findElementInArray(ctrl.allSettings, ctrl.currentSettingId);
+				// ctrl.currentRuleId = ctrl.currentSetting.rules[0].id;
+				// ctrl.ruleSelectionChanged();
+			}
+
+
+		}
+
+		ctrl.resetRuleSelection = function () {
+			ctrl.currentRuleId = ctrl.currentSetting.rules[0].id;
+			ctrl.currentRule = ctrl.currentSetting.rules[0];
 		}
 
 		ctrl.ruleSelectionChanged = function () {
-			if (ctrl.currentSetting) {
-				ctrl.currentRule = ctrl.currentSetting.rules[ctrl.currentRuleIndex];
+			if (ctrl.currentRuleId && ctrl.currentSetting) {
+				ctrl.currentRule = ctrl.findElementInArray(ctrl.currentSetting.rules, ctrl.currentRuleId);
 			}
+		}
 
+		ctrl.findElementInArray = function (target, id) {
+			if (target && target.length > 0) {
+				for (var index = 0; index < target.length; index++) {
+					var item = target[index];
+					if (item.id == id) {
+						return item;
+					}
+				}
+			}
 		}
 
 		ctrl.addSetting = function () {
@@ -235,22 +264,16 @@
 
 		ctrl.getCurentSelectedCount = function () {
 			var result = 0;
-			var viewedItems = ctrl.viewedSetting;
+			var viewedItems = ctrl.currentSetting;
 			for (var index = 0; index < viewedItems.length; index++) {
 				var element = viewedItems[index];
-				if (element.is_checked) {
+				if (element.enabled) {
 					result++;
 				}
 			}
 
 			return result;
 		}
-
-		Object.defineProperty(ctrl, 'viewedSetting', {
-			get: function () {
-				return ctrl.getViewSetting();
-			}
-		})
 
 		ctrl.getViewSetting = function () {
 			var result;
