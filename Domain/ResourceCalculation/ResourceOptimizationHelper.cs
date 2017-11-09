@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
@@ -10,6 +11,34 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
+	public class ResourceOptimizationHelperNew : ResourceOptimizationHelper
+	{
+		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
+
+		public ResourceOptimizationHelperNew(IOccupiedSeatCalculator occupiedSeatCalculator, INonBlendSkillCalculator nonBlendSkillCalculator, IPersonSkillProvider personSkillProvider, IPeriodDistributionService periodDistributionService, IIntraIntervalFinderService intraIntervalFinderService, ITimeZoneGuard timeZoneGuard, CascadingResourceCalculationContextFactory resourceCalculationContextFactory) : base(occupiedSeatCalculator, nonBlendSkillCalculator, personSkillProvider, periodDistributionService, intraIntervalFinderService, timeZoneGuard, resourceCalculationContextFactory)
+		{
+			_intraIntervalFinderService = intraIntervalFinderService;
+		}
+
+		public override void ResourceCalculate(DateOnly localDate, ResourceCalculationData resourceCalculationData)
+		{
+			if (resourceCalculationData.SkipResourceCalculation)
+				return;
+
+			if (!resourceCalculationData.Skills.Any())
+				return;
+
+			var relevantProjections = ResourceCalculationContext.Fetch();
+			resourceCalculateDate(resourceCalculationData, relevantProjections, localDate, resourceCalculationData.ConsiderShortBreaks);
+
+			if (resourceCalculationData.DoIntraIntervalCalculation)
+			{
+				_intraIntervalFinderService.Execute(resourceCalculationData.SkillDays, localDate, relevantProjections);
+			}
+		}
+	}
+	
 	public class ResourceOptimizationHelper
 	{
 		private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
@@ -37,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
-		public void ResourceCalculate(DateOnly localDate, ResourceCalculationData resourceCalculationData)
+		public virtual void ResourceCalculate(DateOnly localDate, ResourceCalculationData resourceCalculationData)
 		{
 			if (resourceCalculationData.SkipResourceCalculation)
 				return;
@@ -69,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return localDate.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()); 
 		}
 
-		private void resourceCalculateDate(ResourceCalculationData resourceCalculationData, IResourceCalculationDataContainer relevantProjections, DateOnly localDate, bool considerShortBreaks)
+		protected void resourceCalculateDate(ResourceCalculationData resourceCalculationData, IResourceCalculationDataContainer relevantProjections, DateOnly localDate, bool considerShortBreaks)
 		{
 			var timePeriod = getPeriod(localDate);
 			var ordinarySkills = new List<ISkill>();

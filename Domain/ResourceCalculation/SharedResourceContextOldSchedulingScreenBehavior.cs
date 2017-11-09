@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_stateHolder = stateHolder;
 		}
 
+		//TODO: remove me?
 		public IDisposable MakeSureExists(DateOnlyPeriod period)
 		{
 			var stateHolder = _stateHolder();

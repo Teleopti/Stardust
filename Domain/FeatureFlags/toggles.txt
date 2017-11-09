@@ -139,6 +139,7 @@ ResourcePlanner_ShowSwitchedTimeZone_46303 = true
 ResourcePlanner_BlockSchedulingValidation_46092 = DEV
 ResourcePlanner_RemoveClassicShiftCat_46582 = RC
 ResourcePlanner_BpoScheduling_46265 = false # won't work in scheduler yet
+ResourcePlanner_RemoveImplicitResCalcContext_46680 = false
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
 Wfm_DisplayOnlineHelp_39402 = true

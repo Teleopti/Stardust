@@ -115,8 +115,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<NoSkillCombinationResourceBpoReader>().As<ISkillCombinationResourceBpoReader>().SingleInstance();				
 			}
-			builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
-			builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680))
+			{
+				builder.RegisterType<CascadingResourceCalculationNew>().As<IResourceCalculation>().SingleInstance();
+				builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects(); //TODO: scope?
+				builder.RegisterType<ResourceOptimizationHelperNew>().As<ResourceOptimizationHelper>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();		
+				builder.RegisterType<WeeklyRestSolverCommandOld>().As<IWeeklyRestSolverCommand>().ApplyAspects(); //TODO: scope?
+				builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
+			}
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PersonalSkillsProvider>().SingleInstance();
@@ -174,7 +184,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MatrixListFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockIntradayOptimizationService>();				
 			builder.RegisterType<TeamBlockDaysOffSameDaysOffLockSyncronizer>().SingleInstance();
-			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects();
 			builder.RegisterType<BackToLegalShiftCommand>();
 			builder.RegisterType<IntraIntervalOptimizationCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPersonBuilderWrapper>().As<IGroupPersonBuilderWrapper>().InstancePerLifetimeScope();
