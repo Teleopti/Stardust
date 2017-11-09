@@ -174,7 +174,6 @@
 		OvertimeRequestPeriodSetting_46417,
 		Reporting_Optional_Columns_42066,
 		ETL_SpeedUpNightlyDayOff_38213,
-		Wfm_Intraday_SupportSkillTypeWebChat_42591,
 		MyTimeWeb_MobileResponsive_43826,
 		Staffing_ReadModel_BetterAccuracy_Step3_44331,
 		Staffing_ReadModel_BetterAccuracy_Step4_43389,
