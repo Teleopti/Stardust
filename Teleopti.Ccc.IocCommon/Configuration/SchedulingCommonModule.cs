@@ -122,6 +122,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ResourceOptimizationHelperNew>().As<ResourceOptimizationHelper>().SingleInstance();
 				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehaviorNew>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 				builder.RegisterType<OptimizeIntradayDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope(); //TODO: scope?
+				builder.RegisterType<OptimizationDesktopExecuterNew>().As<OptimizationDesktopExecuter>().InstancePerLifetimeScope(); //TODO: scope?
 			}
 			else
 			{
@@ -130,6 +131,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
 				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 				builder.RegisterType<OptimizeIntradayIslandsDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope(); //TODO: scope?
+				builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope(); //TODO: scope?
 			}
 			builder.RegisterType<ResourceCalculateWithNewContext>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
@@ -175,7 +177,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ExtendSelectedPeriodForMonthlyScheduling>().SingleInstance();
 			builder.RegisterType<LowThreadPriorityScope>().As<ILowThreadPriorityScope>().SingleInstance();
-			builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();
 			builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().SingleInstance();

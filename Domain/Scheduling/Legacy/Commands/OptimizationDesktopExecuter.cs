@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -10,6 +11,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
+	public class OptimizationDesktopExecuterNew : OptimizationDesktopExecuter
+	{
+		public OptimizationDesktopExecuterNew(IGroupPageCreator groupPageCreator, IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider, IResourceCalculation resourceOptimizationHelper, IScheduleDayChangeCallback scheduleDayChangeCallback, TeamBlockDesktopOptimizationOLD teamBlockOptimization, Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IUserTimeZone userTimeZone, IGroupPagePerDateHolder groupPagePerDateHolder, ScheduleOptimizerHelper scheduleOptimizerHelper, DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime) : base(groupPageCreator, groupScheduleGroupPageDataProvider, resourceOptimizationHelper, scheduleDayChangeCallback, teamBlockOptimization, resourceOptimizationHelperExtended, userTimeZone, groupPagePerDateHolder, scheduleOptimizerHelper, doFullResourceOptimizationOneTime)
+		{
+		}
+
+		protected override void PreOptimize(ISchedulingProgress backgroundWorker, bool lastCalculationState)
+		{
+		}
+	}
+	
+	
 	//legacy class - to be used from fat client only
 	public class OptimizationDesktopExecuter
 	{
@@ -57,13 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 
-			if (lastCalculationState)
-			{
-				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
-			}
-#pragma warning disable 618
-			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
-#pragma warning restore 618
+			PreOptimize(backgroundWorker, lastCalculationState);
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper,
@@ -87,6 +95,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
+		protected virtual void PreOptimize(ISchedulingProgress backgroundWorker, bool lastCalculationState)
+		{
+			if (lastCalculationState)
+			{
+				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
+			}
+#pragma warning disable 618
+			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
+#pragma warning restore 618
 		}
 	}
 }
