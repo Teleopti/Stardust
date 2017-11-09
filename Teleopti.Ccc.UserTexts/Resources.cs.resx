@@ -12196,9 +12196,6 @@ Jsou aktivovány tyto volby:
   <data name="ForecastedAverageHandleTime" xml:space="preserve">
     <value>Předpovězená průměrná doba vyřizování</value>
   </data>
-  <data name="IntradayIntroText" xml:space="preserve">
-    <value>Zde můžete sledovat hodnoty kratší než den. Začněte výběrem kvalifikace nebo oblasti.</value>
-  </data>
   <data name="SelectSkillArea" xml:space="preserve">
     <value>Vybrat oblast kvalifikací</value>
   </data>

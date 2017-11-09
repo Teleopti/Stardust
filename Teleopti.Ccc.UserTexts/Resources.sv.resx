@@ -13186,7 +13186,7 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
     <value>Prognostiserad genomsnittlig behandlingstid</value>
   </data>
   <data name="IntradayIntroText" xml:space="preserve">
-    <value>Här kan du kontrollera dina värden inom dagen. Börja genom att välja antingen en kompetens eller din kompetensarea. </value>
+    <value>Här kan du kontrollera dina värden inom dagen. Börja genom att välja antingen en kompetens eller din kompetensgrupp. </value>
   </data>
   <data name="SelectSkillArea" xml:space="preserve">
     <value>Välj kompetensarea</value>
@@ -13821,7 +13821,7 @@ Dessa val är aktiverade:
     <value>{0} kompetenser som ej stöds</value>
   </data>
   <data name="SkillAreaColon" xml:space="preserve">
-    <value>Kompetensarea: </value>
+    <value>Kompetensgrupp: </value>
   </data>
   <data name="ArchiveSchedule" xml:space="preserve">
     <value>Arkivera schema</value>

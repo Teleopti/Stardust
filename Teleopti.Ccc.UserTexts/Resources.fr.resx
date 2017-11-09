@@ -11024,9 +11024,6 @@ Aidez-nous à améliorer votre expérience en envoyant un rapport d'erreur.</val
   <data name="IncomingTraffic" xml:space="preserve">
     <value>Traffic entrant</value>
   </data>
-  <data name="IntradayIntroText" xml:space="preserve">
-    <value>Vous pouvez ici surveiller les indicateurs d'intra-journalier, commencez par sélectionner une compétence ou une zone</value>
-  </data>
   <data name="OfferedAverageHandleTime" xml:space="preserve">
     <value>Temps de traitement moyen offert</value>
   </data>
@@ -11765,9 +11762,6 @@ Le schéma de clé d'activation produit est "{3}". Ces options sont activées: {
   </data>
   <data name="SortByUpdateDate" xml:space="preserve">
     <value>Date de mise à jour</value>
-  </data>
-  <data name="SkillAreaColon" xml:space="preserve">
-    <value>Groupe de compétences:</value>
   </data>
   <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
     <value>Ne peut pas appliquer le changement aux agents dans des fuseaux horaires différents</value>

@@ -12434,9 +12434,6 @@ Pyydä IT-osastoltasi apua, että he käynnistävät Teleopti WFM uudelleen Tele
   <data name="ForecastedAverageHandleTime" xml:space="preserve">
     <value>Ennustettu keskimääräinen käsittelyaika</value>
   </data>
-  <data name="IntradayIntroText" xml:space="preserve">
-    <value>Valvot päivänsisäisiä arvoja täällä, aloita valitsemalla taito tai taitoalue</value>
-  </data>
   <data name="SelectSkillArea" xml:space="preserve">
     <value>Valitse taitoalue</value>
   </data>
@@ -13524,9 +13521,6 @@ Seuraavat ominaisuudet ovat aktivoitu:
   </data>
   <data name="ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping" xml:space="preserve">
     <value>Tämä aktiviteetti on lisätty olemassa olevan aktiviteetin päälle, joka ei salli päällekkäisyyttä. </value>
-  </data>
-  <data name="SkillAreaColon" xml:space="preserve">
-    <value>Taitoalue: </value>
   </data>
   <data name="OverrideForTheseAgents" xml:space="preserve">
     <value>Ylitä näille agenteille</value>

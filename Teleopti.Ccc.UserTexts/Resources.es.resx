@@ -10812,9 +10812,6 @@ Estas opciones están activadas:
   <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
     <value>No se pueden aplicar cambio para agentes en otras zonas horarias</value>
   </data>
-  <data name="SkillAreaColon" xml:space="preserve">
-    <value>Area de skill</value>
-  </data>
   <data name="SortByUpdateDate" xml:space="preserve">
     <value>Actualizar Fecha</value>
   </data>

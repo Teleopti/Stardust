@@ -12695,9 +12695,6 @@ Teleopti R&amp;D</value>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>Входящий трафик</value>
   </data>
-  <data name="IntradayIntroText" xml:space="preserve">
-    <value>Здесь вы отслеживаете текущую ситуацию, выберите навык или сводку</value>
-  </data>
   <data name="SelectSkillArea" xml:space="preserve">
     <value>Выбор сводки</value>
   </data>
@@ -13304,9 +13301,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="SortByUpdateDate" xml:space="preserve">
     <value>Дата обновления</value>
-  </data>
-  <data name="SkillAreaColon" xml:space="preserve">
-    <value>Сводка навыка:</value>
   </data>
   <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
     <value>Невозможно применить изменения к операторам в других часовых поясах</value>

@@ -12059,9 +12059,6 @@ Teleopti R&amp;D</value>
   <data name="OfferedAverageHandleTime" xml:space="preserve">
     <value>平均處理時間</value>
   </data>
-  <data name="IntradayIntroText" xml:space="preserve">
-    <value>在此您可以監控當日數值，通過選擇一個技能或技能區域開始</value>
-  </data>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>進線量</value>
   </data>
@@ -12993,9 +12990,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="SortByUpdateDate" xml:space="preserve">
     <value>更新日期</value>
-  </data>
-  <data name="SkillAreaColon" xml:space="preserve">
-    <value>技能區：</value>
   </data>
   <data name="TheActivityCanNotBeAddedTo" xml:space="preserve">
     <value>該活動無法被添加到</value>

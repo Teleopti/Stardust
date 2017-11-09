@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Skjult tekstredigeringsboks</value>
@@ -11010,9 +11010,6 @@ Sjekk din internettforbindelse eller kontakt administratoren.</value>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>innkommende trafikk</value>
   </data>
-  <data name="IntradayIntroText" xml:space="preserve">
-    <value>Her kan dere overvåke intradag verdier, start ved å velge enten en ferdighet eller ditt område</value>
-  </data>
   <data name="OfferedAverageHandleTime" xml:space="preserve">
     <value>Tilbudt gjennomsnittlig behandlingstid</value>
   </data>
@@ -11620,9 +11617,6 @@ Lokasjon(er) åpningstider</value>
   </data>
   <data name="SortByUpdateDate" xml:space="preserve">
     <value>Oppdatert dato</value>
-  </data>
-  <data name="SkillAreaColon" xml:space="preserve">
-    <value>Ferdighetsområde:</value>
   </data>
   <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
     <value>Kan ikke legge til endringer for agenter i andre tidssoner </value>

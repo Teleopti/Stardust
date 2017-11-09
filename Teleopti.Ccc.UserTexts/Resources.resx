@@ -14339,7 +14339,7 @@ Check your internet connection or contact your administrator.</value>
     <value>Incoming Traffic</value>
   </data>
   <data name="IntradayIntroText" xml:space="preserve">
-    <value>Here you monitor intraday values, start by selecting either a skill or your area</value>
+    <value>Here you monitor intraday values, start by selecting either a skill or a skill group</value>
   </data>
   <data name="OfferedAverageHandleTime" xml:space="preserve">
     <value>Offered average handle time</value>
@@ -15146,8 +15146,8 @@ These options are activated:
     <comment>use in MyTime Request, the radio button text that sort the requests by Update Date</comment>
   </data>
   <data name="SkillAreaColon" xml:space="preserve">
-    <value>Skill area:</value>
-    <comment>skill area</comment>
+    <value>Skill group:</value>
+    <comment>Skill group</comment>
   </data>
   <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
     <value>Cannot apply change to agents in other time zones</value>

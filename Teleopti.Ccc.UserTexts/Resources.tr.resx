@@ -11094,9 +11094,6 @@ Lütfen İnternet bağlantınızı kontrol edip tekrar deneyin.</value>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>Gelen trafik</value>
   </data>
-  <data name="IntradayIntroText" xml:space="preserve">
-    <value>Güniçi değerlerini buradan gözlemleyebilirsiniz. Herhangi bir yetenek ya da yetenek alanı seçerek başlayın.</value>
-  </data>
   <data name="OfferedAverageHandleTime" xml:space="preserve">
     <value>Önerilen ortalama karşılama süresi</value>
   </data>

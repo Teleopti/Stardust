@@ -14863,7 +14863,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Here you monitor intraday values, start by selecting either a skill or your area.
+        ///   Looks up a localized string similar to Here you monitor intraday values, start by selecting either a skill or a skill group.
         /// </summary>
         public static string IntradayIntroText {
             get {
@@ -31577,7 +31577,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skill area:.
+        ///   Looks up a localized string similar to Skill group:.
         /// </summary>
         public static string SkillAreaColon {
             get {

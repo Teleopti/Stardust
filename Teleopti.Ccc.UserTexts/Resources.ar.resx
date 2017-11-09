@@ -12246,9 +12246,6 @@
   <data name="IncomingTraffic" xml:space="preserve">
     <value>حركة المرور الواردة </value>
   </data>
-  <data name="IntradayIntroText" xml:space="preserve">
-    <value>هل قمت بمراقبة قيم الأداء داخل اليوم، ابدا باختيار أى من المهارة أو منطقتك</value>
-  </data>
   <data name="OfferedAverageHandleTime" xml:space="preserve">
     <value>متوسط  مدة المكالمة المعروضة </value>
   </data>
@@ -12841,9 +12838,6 @@
   </data>
   <data name="SortByUpdateDate" xml:space="preserve">
     <value>تحديث التاريخ</value>
-  </data>
-  <data name="SkillAreaColon" xml:space="preserve">
-    <value>منطقة المهارات: </value>
   </data>
   <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
     <value>لا يمكن تطبيق التغييرات للممثلين فى مناطق زمنية اخرى</value>

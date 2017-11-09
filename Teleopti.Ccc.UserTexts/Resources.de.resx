@@ -12374,9 +12374,6 @@ Folgende Optionen und Module sind aktiviert:
   <data name="SortByUpdateDate" xml:space="preserve">
     <value>Updatedatum</value>
   </data>
-  <data name="SkillAreaColon" xml:space="preserve">
-    <value>Skillbereich</value>
-  </data>
   <data name="ArchiveSchedule" xml:space="preserve">
     <value>Plan archivieren</value>
   </data>
