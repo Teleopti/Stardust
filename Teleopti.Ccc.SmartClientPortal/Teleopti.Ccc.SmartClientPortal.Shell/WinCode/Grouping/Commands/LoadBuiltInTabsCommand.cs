@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
 	            toNodes = _personSelectorReadOnlyRepository.GetBuiltIn(selectedPeriod, _loadType, _optionalColumnId);    
             }
             
-            // r‰ttigheter
+            // r√§ttigheter
             var auth = PrincipalAuthorization.Current();
             var toRemove = new List<IPersonSelectorBuiltIn>();
 			if (_personSelectorView.VisiblePersonIds != null)
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
             {
                 toNodes.Remove(personSelector);
             }
-            //skapa treeviewnoder av det vi fÂtt kvar
+            //skapa treeviewnoder av det vi f√•tt kvar
             var nodes = new List<TreeNodeAdv>();
             var root = new TreeNodeAdv(_rootNodeName) { LeftImageIndices = new[] { 1 }, Expanded = true, Tag =new List<Guid>() };
             nodes.Add(root);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
                     root.Nodes.Add(currNode);
                 }
                     // and here have a list with one guid
-                    var personNode = new TreeNodeAdv(_commonAgentNameSettings.BuildCommonNameDescription(personSelectorBuiltin)) { Tag = new List<Guid> { personSelectorBuiltin.PersonId }, LeftImageIndices = new[] { 3 } };
+                    var personNode = new TreeNodeAdv(_commonAgentNameSettings.BuildFor(personSelectorBuiltin)) { Tag = new List<Guid> { personSelectorBuiltin.PersonId }, LeftImageIndices = new[] { 3 } };
                     // how should we display and how should we sort ?? 
                     // we have a setting for the display of person
                     currNode.Nodes.Add(personNode);

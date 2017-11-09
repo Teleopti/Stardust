@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			
 			var result = target.CreateViewModel(person.Id.GetValueOrDefault(), DateTime.Today);
 
-			result.Name.Should().Be.EqualTo(_commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person));
+			result.Name.Should().Be.EqualTo(_commonAgentNameProvider.CommonAgentNameSettings.BuildFor(person));
 		}
 
 		[Test]

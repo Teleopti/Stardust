@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
                     if (authorization.IsPermitted(functionPath, period.StartDate, person) || authorization.IsPermitted(functionPath, period.EndDate, person))
                     {
                         TreeNodeAdv personNode =
-                            new TreeNodeAdv(_commonNameDescription.BuildCommonNameDescription(person));
+                            new TreeNodeAdv(_commonNameDescription.BuildFor(person));
                         personNode.TagObject = person;
                         personNode.Tag = GroupingConstants.NodeTypePerson;
                         personNode.LeftImageIndices = new[] {3};
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
             string functionPath = applicationFunction.FunctionPath;
 
             //add persons to corresponding node
-            foreach (var person in personCollection.Select(p=>new {Person = p, Description = _commonNameDescription.BuildCommonNameDescription(p)}).OrderBy(p => p.Description))
+            foreach (var person in personCollection.Select(p=>new {Person = p, Description = _commonNameDescription.BuildFor(p)}).OrderBy(p => p.Description))
             {
                 IDeleteTag maybeDeletedPerson = (IDeleteTag) person.Person;
                 if (maybeDeletedPerson.IsDeleted)

@@ -518,7 +518,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var culture = UserCulture.GetCulture();
 
 			return string.Format(Resources.ScheduleIsWriteProtected,
-				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+				CommonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
 				TimeZoneHelper.ConvertFromUtc(date, timeZone).ToString(culture.DateTimeFormat.ShortDatePattern, culture));
 		}
 

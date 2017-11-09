@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
             {
                 ICollection<IRequestPerson> persons = filteredPersons.Select(person => (IRequestPerson)new RequestPerson
                 {
-                    Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+                    Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
                     Id = person.Id.GetValueOrDefault()
                 }).ToList();
                 _requestHistoryView.FillPersonCombo(persons, preselectedPerson);

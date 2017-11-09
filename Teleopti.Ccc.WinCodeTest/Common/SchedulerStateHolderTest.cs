@@ -130,10 +130,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             mocks.ReplayAll();
             IPerson person = PersonFactory.CreatePerson("first", "last");
             target.LoadSettings(unitOfWork,repositoryFactory);
-            Assert.AreEqual(nameDescriptionSetting.BuildCommonNameDescription(person), target.CommonAgentName(person));
+            Assert.AreEqual(nameDescriptionSetting.BuildFor(person), target.CommonAgentName(person));
             Assert.AreEqual(nameDescriptionSetting,target.CommonNameDescription);
 
-            Assert.AreEqual(nameDescriptionSettingScheduleExport.BuildCommonNameDescription(person), target.CommonAgentNameScheduleExport(person));
+            Assert.AreEqual(nameDescriptionSettingScheduleExport.BuildFor(person), target.CommonAgentNameScheduleExport(person));
             Assert.AreEqual(nameDescriptionSettingScheduleExport, target.CommonNameDescriptionScheduleExport);
 
             Assert.AreEqual(42, target.DefaultSegmentLength);

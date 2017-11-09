@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
             if (selectedItem != null)
             {
                 //TODO:Check whethere this need to be duplicated
-                WorksheetStateHolder.CurrentRotationChildName =FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription( selectedItem.Person);   //.Name.ToString(); // FilteredStateHolder.ParentPersonAvailabilityCollection[rowIndex].Person.Name.ToString();
+                WorksheetStateHolder.CurrentRotationChildName =FilteredStateHolder.CommonNameDescription.BuildFor( selectedItem.Person);   //.Name.ToString(); // FilteredStateHolder.ParentPersonAvailabilityCollection[rowIndex].Person.Name.ToString();
 
                 _childrenPersonAvailabilityCollection =
                     FilteredStateHolder.AllPersonAvailabilityCollection.Where(a => a.Person.Id == selectedItem.Person.Id).ToList();
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
                     if (isFirstItem)
                     {
-                        personAvailabilityAdapter.PersonFullName =FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription( pAvailability.Person);
+                        personAvailabilityAdapter.PersonFullName =FilteredStateHolder.CommonNameDescription.BuildFor( pAvailability.Person);
                         isFirstItem = false;
                     }
                     else
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
             if (selectedItem != null)
             {
                 //TODO:Check whethere this need to be duplicated
-                WorksheetStateHolder.CurrentRotationChildName = FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription(selectedItem.Person); // FilteredStateHolder.ParentPersonAvailabilityCollection[rowIndex].Person.Name.ToString();
+                WorksheetStateHolder.CurrentRotationChildName = FilteredStateHolder.CommonNameDescription.BuildFor(selectedItem.Person); // FilteredStateHolder.ParentPersonAvailabilityCollection[rowIndex].Person.Name.ToString();
 
                 _childrenPersonAvailabilityCollection =
                     FilteredStateHolder.AllPersonAvailabilityCollection.Where(a => a.Person.Id == selectedItem.Person.Id).ToList();
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
                     if (isFirstItem)
                     {
-                        personAvailabilityAdapter.PersonFullName = FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription(pAvailability.Person);
+                        personAvailabilityAdapter.PersonFullName = FilteredStateHolder.CommonNameDescription.BuildFor(pAvailability.Person);
                         isFirstItem = false;
                     }
                     else

@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				   select new AgentStateViewModel
 				   {
 					   PersonId = state.PersonId,
-					   Name = nameDisplayedAs.BuildCommonNameDescription(state.FirstName, state.LastName, state.EmploymentNumber),
+					   Name = nameDisplayedAs.BuildFor(state.FirstName, state.LastName, state.EmploymentNumber),
 					   SiteId = state.SiteId.ToString(),
 					   SiteName = state.SiteName,
 					   TeamId = state.TeamId.ToString(),

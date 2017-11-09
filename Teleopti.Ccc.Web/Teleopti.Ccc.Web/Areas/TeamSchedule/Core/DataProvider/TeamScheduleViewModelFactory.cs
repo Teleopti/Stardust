@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				result.Add(new PersonWeekScheduleViewModel
 				{
 					PersonId = person.Id.GetValueOrDefault(),
-					Name = nameDescriptionSetting.BuildCommonNameDescription(person),
+					Name = nameDescriptionSetting.BuildFor(person),
 					DaySchedules = daySchedules,
 					ContractTimeMinutes = daySchedules.Sum(s => s.ContractTimeMinutes)
 				});

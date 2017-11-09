@@ -51,14 +51,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
                 {
                     var person = meeting.Organizer;
                     uow.Reassociate(person);
-                    text = _commonNameDescription.BuildCommonNameDescription(person) + "\r\n";
+                    text = _commonNameDescription.BuildFor(person) + "\r\n";
                     text = text + meeting.GetSubject(new NoFormatting()) + "\r\n";
                     text = text + meeting.GetLocation(new NoFormatting()) + "\r\n\r\n";
                     var persons = meeting.MeetingPersons.Select(meetingPerson => meetingPerson.Person).ToList();
                     foreach (var p in persons)
                     {
                         uow.Reassociate(p);
-                        text = text + _commonNameDescription.BuildCommonNameDescription(p) + "\r\n";
+                        text = text + _commonNameDescription.BuildFor(p) + "\r\n";
                     }
                     text = text + "\r\n" + meeting.GetDescription(new NoFormatting()) + "\r\n\r\n";
 

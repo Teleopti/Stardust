@@ -56,7 +56,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				row["person_period_code"] = personPeriod.Id;
 			}
 
-			row["person_name"] = commonNameDescriptionSetting.BuildCommonNameDescription(person);
+			row["person_name"] = commonNameDescriptionSetting.BuildFor(person);
 			row["person_first_name"] = person.Name.FirstName;
 			row["person_last_name"] = person.Name.LastName;
 			row["team_code"] = personPeriod.Team.Id;

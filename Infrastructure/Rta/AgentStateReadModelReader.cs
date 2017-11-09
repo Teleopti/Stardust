@@ -9,6 +9,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
@@ -18,18 +20,20 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
 		private readonly ICurrentBusinessUnit _businessUnit;
+		private readonly AgentStateReadModelQueryBuilderConfiguration _configuration;
 
-		public AgentStateReadModelReader(ICurrentUnitOfWork unitOfWork, INow now, ICurrentBusinessUnit businessUnit)
+		public AgentStateReadModelReader(ICurrentUnitOfWork unitOfWork, INow now, ICurrentBusinessUnit businessUnit, AgentStateReadModelQueryBuilderConfiguration configuration)
 		{
 			_unitOfWork = unitOfWork;
 			_now = now;
 			_businessUnit = businessUnit;
+			_configuration = configuration;
 		}
 
 		public IEnumerable<AgentStateReadModel> Read(AgentStateFilter filter)
 		{
 			var builder =
-				new AgentStateReadModelQueryBuilder()
+				new AgentStateReadModelQueryBuilder(_configuration)
 					.WithoutDeleted()
 					.WithBusinessUnit(_businessUnit.Current().Id.Value)
 					.WithSelection(filter.SiteIds, filter.TeamIds, filter.SkillIds, _now)
@@ -48,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			return personIds.Batch(400).SelectMany(personIdsInBatch =>
 					load(
-						new AgentStateReadModelQueryBuilder()
+						new AgentStateReadModelQueryBuilder(_configuration)
 							.WithoutDeleted()
 							.WithBusinessUnit(_businessUnit.Current().Id.Value)
 							.WithMax(400)

@@ -47,13 +47,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (_type == CommonAgentNameDescriptionType.Common)
 			{
 				_commonNameDescriptionSetting.AliasFormat = getDescriptionToSave(textFomat);
-				textBoxExample.Text = _commonNameDescriptionSetting.BuildCommonNameDescription(_johnSmithPerson);
+				textBoxExample.Text = _commonNameDescriptionSetting.BuildFor(_johnSmithPerson);
 			}
 
 			if (_type == CommonAgentNameDescriptionType.ScheduleExport)
 			{
 				_commonNameDescriptionSettingScheduleExport.AliasFormat = getDescriptionToSave(textFomat);
-				textBoxExample.Text = _commonNameDescriptionSettingScheduleExport.BuildCommonNameDescription(_johnSmithPerson);
+				textBoxExample.Text = _commonNameDescriptionSettingScheduleExport.BuildFor(_johnSmithPerson);
 			}
 
 

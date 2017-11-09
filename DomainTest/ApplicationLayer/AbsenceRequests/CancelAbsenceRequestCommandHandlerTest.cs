@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
 			Assert.AreEqual(string.Format(Resources.CouldNotCancelRequestNoAbsence,
-				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+				CommonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
 				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
 				cancelRequestCommand.ErrorMessages[0]);
 		}
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
 			Assert.AreEqual(string.Format(Resources.CouldNotCancelRequestNoAbsence,
-				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+				CommonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
 				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d",UserCulture.GetCulture())),
 				cancelRequestCommand.ErrorMessages[0]);
 		}
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
 			Assert.AreEqual(string.Format(Resources.CanOnlyCancelApprovedAbsenceRequest,
-				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+				CommonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
 				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
 				cancelRequestCommand.ErrorMessages[0]);
 		}

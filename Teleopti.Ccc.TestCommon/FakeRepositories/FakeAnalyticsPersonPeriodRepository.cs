@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			fakePersonPeriods
 				.Where(a => a.BusinessUnitCode == businessUnitCode)
-				.ForEach(a => a.PersonName = commonNameDescriptionSetting.BuildCommonNameDescription(a.FirstName, a.LastName, a.EmploymentNumber));
+				.ForEach(a => a.PersonName = commonNameDescriptionSetting.BuildFor(a.FirstName, a.LastName, a.EmploymentNumber));
 		}
 
 		public IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)

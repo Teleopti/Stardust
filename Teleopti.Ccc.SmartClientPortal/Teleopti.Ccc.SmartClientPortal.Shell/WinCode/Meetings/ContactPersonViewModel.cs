@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 
         public string FullName
         {
-            get { return _commonNameDescriptionSetting.BuildCommonNameDescription(ContainedEntity); }
+            get { return _commonNameDescriptionSetting.BuildFor(ContainedEntity); }
         }
 
         public string EmploymentNumber

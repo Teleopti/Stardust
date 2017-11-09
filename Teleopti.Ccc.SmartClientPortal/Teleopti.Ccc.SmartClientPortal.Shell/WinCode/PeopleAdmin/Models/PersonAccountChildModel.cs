@@ -69,10 +69,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         {
             get
             {
-                //fel h‰r, men gˆr som tyskarna
+                //fel h√§r, men g√∂r som tyskarna
                 if (_commonNameDescription == null)
                     return Parent.Person.ToString();
-                return _commonNameDescription.BuildCommonNameDescription(Parent.Person);
+                return _commonNameDescription.BuildFor(Parent.Person);
             }
         }
 
@@ -326,8 +326,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             {
                  if (_currentAccount != null)
                  {
-                     //fixa sen. Om du inte vet hur, frÂga brasilianarna
-                     throw new ArgumentException("Kan inte s‰tta absence ‰nnu");
+                     //fixa sen. Om du inte vet hur, fr√•ga brasilianarna
+                     throw new ArgumentException("Kan inte s√§tta absence √§nnu");
                  }
             }
         }

@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			var personPeriodCollection = new List<IPersonPeriod>(filteredPerson.PersonPeriodCollection);
 
 			_personPeriodGridViewChildCollection = new List<PersonPeriodChildModel>();
-			CurrentChildName = filteredPeopleHolder.CommonNameDescription.BuildCommonNameDescription(filteredPerson); //.Name.ToString();
+			CurrentChildName = filteredPeopleHolder.CommonNameDescription.BuildFor(filteredPerson); //.Name.ToString();
 
 			foreach (IPersonPeriod personPeriod in personPeriodCollection)
 			{
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 				model.SetPersonExternalLogOnCollection(filteredPeopleHolder.ExternalLogOnCollection);
 				model.SetSiteTeamAdapterCollection(filteredPeopleHolder.SiteTeamAdapterCollection);
 
-				model.FullName = filteredPeopleHolder.CommonNameDescription.BuildCommonNameDescription(filteredPerson); // .Name.ToString();
+				model.FullName = filteredPeopleHolder.CommonNameDescription.BuildFor(filteredPerson); // .Name.ToString();
 				_personPeriodGridViewChildCollection.Add(model);
 			}
 		}
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			var personPeriodCollection = new List<IPersonPeriod>(filteredPerson.PersonPeriodCollection);
 
 			_personPeriodGridViewChildCollection = new List<PersonPeriodChildModel>();
-			CurrentChildName = filteredPeopleHolder.CommonNameDescription.BuildCommonNameDescription(filteredPerson); //.Name.ToString();
+			CurrentChildName = filteredPeopleHolder.CommonNameDescription.BuildFor(filteredPerson); //.Name.ToString();
 
 			foreach (IPersonPeriod personPeriod in personPeriodCollection)
 			{
@@ -612,7 +612,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			var currentSchedulePeriod = schedulePeriodGridView.SchedulePeriod;
 
 			_schedulePeriodGridViewChildCollection = new List<SchedulePeriodChildModel>();
-			CurrentChildName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridView.Parent);
+			CurrentChildName = commonNameDescription.BuildFor(schedulePeriodGridView.Parent);
 
 			foreach (ISchedulePeriod schedulePeriod in schedulePeriodCollection)
 			{
@@ -624,7 +624,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 					model.CanBold = true;
 				}
 
-				model.FullName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridView.Parent);
+				model.FullName = commonNameDescription.BuildFor(schedulePeriodGridView.Parent);
 				_schedulePeriodGridViewChildCollection.Add(model);
 			}
 		}
@@ -639,7 +639,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			var currentSchedulePeriod = schedulePeriodGridView.SchedulePeriod;
 
 			_schedulePeriodGridViewChildCollection = new List<SchedulePeriodChildModel>();
-			CurrentChildName = commonNameDescription.BuildCommonNameDescription(schedulePeriodGridView.Parent);
+			CurrentChildName = commonNameDescription.BuildFor(schedulePeriodGridView.Parent);
 
 			foreach (ISchedulePeriod schedulePeriod in schedulePeriodCollection)
 			{
@@ -1024,7 +1024,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			_personaccountGridViewChildCollection = new List<IPersonAccountChildModel>();
 			CommonNameDescriptionSetting commonNameDescription = filteredPeopleHolder.CommonNameDescription;
-			CurrentChildName = commonNameDescription.BuildCommonNameDescription(personFiltered);
+			CurrentChildName = commonNameDescription.BuildFor(personFiltered);
 
 			foreach (var account in personAcccountCollection.AllPersonAccounts())
 			{
@@ -1062,7 +1062,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			_personaccountGridViewChildCollection = new List<IPersonAccountChildModel>();
 
 			CommonNameDescriptionSetting commonNameDescription = filteredPeopleHolder.CommonNameDescription;
-			CurrentChildName = commonNameDescription.BuildCommonNameDescription(personFiltered);
+			CurrentChildName = commonNameDescription.BuildFor(personFiltered);
 
 			foreach (var account in accountCollection.AllPersonAccounts())
 			{

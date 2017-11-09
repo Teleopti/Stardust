@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private string createNotApprovedRequestErrorMessage (IAbsenceRequest absenceRequest, TimeZoneInfo timeZone, CultureInfo culture)
 		{
 	
-			var personName = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(absenceRequest.Person);
+			var personName = _commonAgentNameProvider.CommonAgentNameSettings.BuildFor(absenceRequest.Person);
 	
 			string errorMessage;
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private string createNoAbsenceErrorMessage(IAbsenceRequest absenceRequest, TimeZoneInfo timeZone, CultureInfo culture)
 		{
 
-			var personName = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(absenceRequest.Person);
+			var personName = _commonAgentNameProvider.CommonAgentNameSettings.BuildFor(absenceRequest.Person);
 
 			string errorMessage;
 

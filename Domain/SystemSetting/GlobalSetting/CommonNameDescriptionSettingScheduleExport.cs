@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
         /// Created by: henryg
         /// Created date: 2008-07-07
         /// </remarks>
-        public virtual string BuildCommonNameDescription(IPerson person)
+        public virtual string BuildFor(IPerson person)
         {
             if(person == null)
                 throw new ArgumentNullException(nameof(person));
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
             return builded;
         }
 
-        public string BuildCommonNameDescription(ILightPerson lightPerson)
+        public string BuildFor(ILightPerson lightPerson)
         {
             if (lightPerson == null)
                 throw new ArgumentNullException(nameof(lightPerson));
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
             return builded;
         }
 
-        public string BuildCommonNameDescription(string firstName, string lastName, string employmentNumber)
+        public string BuildFor(string firstName, string lastName, string employmentNumber)
         {
             var builded = AliasFormat;
             builded = builded.Replace(FirstName, firstName);

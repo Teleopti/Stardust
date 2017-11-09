@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		public string GetPersonName(IPerson person)
 		{
 			return _globalSettingDataRepository.FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting())
-				.BuildCommonNameDescription(person);
+				.BuildFor(person);
 		}
 
 		public AnalyticsPersonPeriod FixDatesAndInterval(AnalyticsPersonPeriod analyticsPersonPeriod,

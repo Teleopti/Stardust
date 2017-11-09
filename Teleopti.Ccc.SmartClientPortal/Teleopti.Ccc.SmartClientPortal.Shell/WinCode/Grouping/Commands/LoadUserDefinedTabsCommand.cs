@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
                 toNodes = _personSelectorReadOnlyRepository.GetUserDefinedTab(date, _value);
             }
             
-            // r‰ttigheter
+            // r√§ttigheter
             var auth = PrincipalAuthorization.Current();
             var toRemove = new List<IPersonSelectorUserDefined>();
 			if (_personSelectorView.VisiblePersonIds != null)
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
                 if (personSelectorUserDefined.Show && !personSelectorUserDefined.PersonId.Equals(Guid.Empty))
                 {
                     //always show persons in these grouping
-                        var personNode = new TreeNodeAdv(_commonAgentNameSettings.BuildCommonNameDescription(personSelectorUserDefined))
+                        var personNode = new TreeNodeAdv(_commonAgentNameSettings.BuildFor(personSelectorUserDefined))
                         {
                             Tag = new List<Guid> { personSelectorUserDefined.PersonId },
                             LeftImageIndices = new[] { 3 }

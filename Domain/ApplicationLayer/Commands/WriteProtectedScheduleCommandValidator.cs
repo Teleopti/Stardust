@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private void createWriteProtectedScheduleErrorMessage(IErrorAttachedCommand command, IPerson person, DateTime date, CultureInfo cultureInfo)
 		{
 			var writeProtectErrorMessage = string.Format(Resources.ScheduleIsWriteProtected,
-				_commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+				_commonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
 				date.ToString(cultureInfo.DateTimeFormat.ShortDatePattern, cultureInfo));
 
 			command.ErrorMessages = new List<string> { writeProtectErrorMessage };

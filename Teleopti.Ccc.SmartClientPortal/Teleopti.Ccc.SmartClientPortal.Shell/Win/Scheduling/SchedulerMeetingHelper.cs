@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             {
                 if (numberOfMeetings > 1)
                 {
-                    using (MeetingPicker meetingPicker = new MeetingPicker(_schedulerStateHolder.CommonNameDescription.BuildCommonNameDescription(person) + " " +
+                    using (MeetingPicker meetingPicker = new MeetingPicker(_schedulerStateHolder.CommonNameDescription.BuildFor(person) + " " +
                         theDate.ToShortDateString(), personMeetings))
                     {
                         meetingPicker.ShowDialog();

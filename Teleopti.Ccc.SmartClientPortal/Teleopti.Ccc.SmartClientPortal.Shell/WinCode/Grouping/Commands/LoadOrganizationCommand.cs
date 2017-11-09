@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
                 // and here have a list with one guid
                 if(_showPersons)
                 {
-                    personNode = new TreeNodeAdv(_commonAgentNameSettings.BuildCommonNameDescription(personSelectorOrganization)) 
+                    personNode = new TreeNodeAdv(_commonAgentNameSettings.BuildFor(personSelectorOrganization)) 
                     { Tag = new List<Guid> { personSelectorOrganization.PersonId }, LeftImageIndices = new[] { 3 } };
                     if (_view.PreselectedPersonIds.Contains(personSelectorOrganization.PersonId))
                     {

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var vm = new GroupScheduleShiftViewModel
 			{
 				PersonId = person.Id.GetValueOrDefault().ToString(),
-				Name = agentNameSetting.BuildCommonNameDescription(person),
+				Name = agentNameSetting.BuildFor(person),
 				Date = date.Date.ToGregorianDateTimeString().Remove(10),
 				Projection = new List<GroupScheduleProjectionViewModel>(),
 				MultiplicatorDefinitionSetIds =
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var scheduleVm = new GroupScheduleShiftViewModel
 			{
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString(),
-				Name = agentNameSetting.BuildCommonNameDescription(scheduleDay.Person),
+				Name = agentNameSetting.BuildFor(scheduleDay.Person),
 				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToGregorianDateTimeString().Remove(10),
 				IsFullDayAbsence = IsFullDayAbsence(scheduleDay),
 				ShiftCategory = getShiftCategoryDescription(scheduleDay),

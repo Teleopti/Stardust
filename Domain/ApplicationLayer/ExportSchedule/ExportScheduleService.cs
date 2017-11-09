@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 		{
 			var p = personScheduleGroup.Key;
 			var scheduleDays = personScheduleGroup;
-			var name = nameDescriptionSetting.BuildCommonNameDescription(p);
+			var name = nameDescriptionSetting.BuildFor(p);
 			var optionalColumns = new List<string>();
 
 			optionalColIds.ForEach(o =>

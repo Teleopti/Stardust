@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 			var commonNameDescription = new CommonNameDescriptionSetting();
 			foreach (var person in _personFinderService.Find(_view.FindText, new DateOnlyPeriod(_model.FromDate, _model.ToDate)))
 			{
-				var personNode = new TreeNodeAdv(commonNameDescription.BuildCommonNameDescription(person));
+				var personNode = new TreeNodeAdv(commonNameDescription.BuildFor(person));
 				personNode.TagObject = person;
 				personNode.Tag = GroupingConstants.NodeTypePerson;
 				personNode.LeftImageIndices = new[] { 0 };

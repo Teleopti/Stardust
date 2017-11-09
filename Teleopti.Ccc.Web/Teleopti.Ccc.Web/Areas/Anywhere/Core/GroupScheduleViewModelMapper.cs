@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				ContractTimeMinutes = shift.ContractTimeMinutes,
 				PersonId = person.Id.ToString(),
 				Date = readModel == null ? "" : readModel.Date.ToFixedDateFormat(),
-				Name = commonNameDescriptionSetting.BuildCommonNameDescription(person),
+				Name = commonNameDescriptionSetting.BuildFor(person),
 				Projection = layers,
 				IsFullDayAbsence = model.Shift != null && model.Shift.IsFullDayAbsence,
 				DayOff = dayOff

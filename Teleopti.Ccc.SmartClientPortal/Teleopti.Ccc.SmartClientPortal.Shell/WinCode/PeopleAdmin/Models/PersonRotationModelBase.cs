@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (_commonNameDescription == null)
                     return _person.Name.ToString();
                 
-                return _commonNameDescription.BuildCommonNameDescription(_person);
+                return _commonNameDescription.BuildFor(_person);
             }
             set { }
         }

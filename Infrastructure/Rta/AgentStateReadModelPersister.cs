@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
@@ -16,13 +17,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
+		private readonly AgentStateReadModelQueryBuilderConfiguration _configuration;
 
 		public AgentStateReadModelPersister(
 			ICurrentUnitOfWork unitOfWork,
-			IJsonSerializer serializer)
+			IJsonSerializer serializer,
+			AgentStateReadModelQueryBuilderConfiguration configuration)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
+			_configuration = configuration;
 		}
 
 		[LogInfo]
@@ -105,10 +109,9 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.ExecuteUpdate();
 		}
 
-		public AgentStateReadModel 
-			Load(Guid personId)
+		public AgentStateReadModel Load(Guid personId)
 		{
-			var builder = new AgentStateReadModelQueryBuilder()
+			var builder = new AgentStateReadModelQueryBuilder(_configuration)
 				.WithPersons(new[] {personId})
 				.Build();
 			var sqlQuery = _unitOfWork.Current().Session()

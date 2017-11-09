@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             IPerson person = (IPerson)value;
-            return Setting.BuildCommonNameDescription(person);
+            return Setting.BuildFor(person);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

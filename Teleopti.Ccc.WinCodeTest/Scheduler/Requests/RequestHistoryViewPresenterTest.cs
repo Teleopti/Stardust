@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             
             Expect.Call(_commonAgentNameProvider.CommonAgentNameSettings).Return(_commonAgentNameSettings).Repeat.
                 AtLeastOnce();
-            Expect.Call(_commonAgentNameSettings.BuildCommonNameDescription(person)).Return("");
+            Expect.Call(_commonAgentNameSettings.BuildFor(person)).Return("");
             Expect.Call(person.Id).Return(guid);
             Expect.Call(() => _requestHistoryView.FillPersonCombo(new List<IRequestPerson>(), guid)).IgnoreArguments();
         	Expect.Call(_requestHistoryView.PageSize).Return(50);

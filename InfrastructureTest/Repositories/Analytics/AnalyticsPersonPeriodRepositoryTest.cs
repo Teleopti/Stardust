@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			setUpData();
 			var commonNameDescription = new CommonNameDescriptionSetting(commonNameDescriptionSetting);
 			WithAnalyticsUnitOfWork.Do(() => Target.UpdatePersonNames(commonNameDescription, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()));
-			var correctName = commonNameDescription.BuildCommonNameDescription(personPeriod1.FirstName, personPeriod1.LastName, personPeriod1.EmploymentNumber);
+			var correctName = commonNameDescription.BuildFor(personPeriod1.FirstName, personPeriod1.LastName, personPeriod1.EmploymentNumber);
 			var updatedName = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1).PersonName);
 			updatedName.Should().Be.EqualTo(correctName);
 		}
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			setUpData();
 			var commonNameDescription = new CommonNameDescriptionSetting("#123 {FirstName}");
 			WithAnalyticsUnitOfWork.Do(() => Target.UpdatePersonNames(commonNameDescription, Guid.NewGuid()));
-			var newName = commonNameDescription.BuildCommonNameDescription(personPeriod1.FirstName, personPeriod1.LastName, personPeriod1.EmploymentNumber);
+			var newName = commonNameDescription.BuildFor(personPeriod1.FirstName, personPeriod1.LastName, personPeriod1.EmploymentNumber);
 			var personName = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1).PersonName);
 			personName.Should().Not.Be.EqualTo(newName);
 		}

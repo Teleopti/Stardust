@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			return new PersonScheduleViewModel
 			{
-				Name = s.CommonAgentNameSetting.BuildCommonNameDescription(s.Person),
+				Name = s.CommonAgentNameSetting.BuildFor(s.Person),
 				PersonAbsences = from p in s.PersonAbsences ?? new IPersonAbsence[] {}
 					select map(s, p),
 				DefaultIntradayAbsenceData = s.Model?.Shift == null ? null : map(s.Model.Shift.Projection),

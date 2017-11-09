@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		/// <returns></returns>
 		public string CommonAgentName(IPerson person)
 		{
-			return _commonNameDescription.BuildCommonNameDescription(person);
+			return _commonNameDescription.BuildFor(person);
 		}
 
 		/// <summary>
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		/// <returns></returns>
 		public string CommonAgentNameScheduleExport(IPerson person)
 		{
-			return _commonNameDescriptionScheduleExport.BuildCommonNameDescription(person);
+			return _commonNameDescriptionScheduleExport.BuildFor(person);
 		}
 
 		/// <summary>

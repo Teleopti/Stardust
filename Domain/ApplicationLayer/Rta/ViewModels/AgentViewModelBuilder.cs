@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						new AgentViewModel
 						{
 							PersonId = x.Id.GetValueOrDefault(),
-							Name = commonAgentNameSettings.BuildCommonNameDescription(x),
+							Name = commonAgentNameSettings.BuildFor(x),
 							SiteId = team.Site.Id.ToString(),
 							SiteName = team.Site.Description.Name,
 							TeamId = team.Id.ToString(),
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					from person in _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
 					select new AgentViewModel
 					{
-						Name = commonAgentNameSettings.BuildCommonNameDescription(person),
+						Name = commonAgentNameSettings.BuildFor(person),
 						PersonId = person.Id.Value,
 						TeamName = team.Description.Name,
 						TeamId = team.Id.Value.ToString(),
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					from person in _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
 					select new AgentViewModel
 					{
-						Name = commonAgentNameSettings.BuildCommonNameDescription(person),
+						Name = commonAgentNameSettings.BuildFor(person),
 						PersonId = person.Id.Value,
 						TeamName = team.Description.Name,
 						TeamId = team.Id.Value.ToString(),
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					select new AgentViewModel
 					{
 						Name =
-							commonAgentNameSettings.BuildCommonNameDescription(grouping.FirstName, grouping.LastName,
+							commonAgentNameSettings.BuildFor(grouping.FirstName, grouping.LastName,
 								grouping.EmploymentNumber),
 						PersonId = grouping.PersonId,
 						SiteId = grouping.SiteId.ToString(),
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					{
 						PersonId = grouping.PersonId,
 						Name =
-							commonAgentNameSettings.BuildCommonNameDescription(grouping.FirstName, grouping.LastName,
+							commonAgentNameSettings.BuildFor(grouping.FirstName, grouping.LastName,
 								grouping.EmploymentNumber),
 						SiteId = grouping.SiteId.ToString(),
 						SiteName = _siteRepository.Load(grouping.SiteId.Value).Description.Name,
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					select new AgentViewModel
 					{
 						Name =
-							commonAgentNameSettings.BuildCommonNameDescription(grouping.FirstName, grouping.LastName,
+							commonAgentNameSettings.BuildFor(grouping.FirstName, grouping.LastName,
 								grouping.EmploymentNumber),
 						PersonId = grouping.PersonId,
 						SiteId = grouping.SiteId.ToString(),
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				{
 					PersonId = grouping.PersonId,
 					Name =
-						commonAgentNameSettings.BuildCommonNameDescription(grouping.FirstName, grouping.LastName,
+						commonAgentNameSettings.BuildFor(grouping.FirstName, grouping.LastName,
 							grouping.EmploymentNumber),
 					SiteId = grouping.SiteId.ToString(),
 					SiteName = allSites[grouping.SiteId.Value].FirstOrDefault(),

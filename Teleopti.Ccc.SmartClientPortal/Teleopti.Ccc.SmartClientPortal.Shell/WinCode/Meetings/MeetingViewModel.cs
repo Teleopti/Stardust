@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 
         public string Organizer
         {
-            get { return _commonNameSetting.BuildCommonNameDescription(_meeting.Organizer); }
+            get { return _commonNameSetting.BuildFor(_meeting.Organizer); }
         }
 
         public DateOnly StartDate

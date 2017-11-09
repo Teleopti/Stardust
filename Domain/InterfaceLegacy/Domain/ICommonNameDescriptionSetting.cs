@@ -14,13 +14,13 @@
         /// Created by: henryg
         /// Created date: 2008-07-07
         /// </remarks>
-        string BuildCommonNameDescription(IPerson person);
+        string BuildFor(IPerson person);
 
         ///<summary>
         ///</summary>
         ///<param name="lightPerson"></param>
         ///<returns></returns>
-        string BuildCommonNameDescription(ILightPerson lightPerson);
+        string BuildFor(ILightPerson lightPerson);
 
 	    /// <summary>
 	    /// </summary>
@@ -28,6 +28,6 @@
 	    /// <param name="lastName"></param>
 	    /// <param name="employmentNumber"></param>
 	    /// <returns></returns>
-	    string BuildCommonNameDescription(string firstName, string lastName, string employmentNumber);
+	    string BuildFor(string firstName, string lastName, string employmentNumber);
     }
 }

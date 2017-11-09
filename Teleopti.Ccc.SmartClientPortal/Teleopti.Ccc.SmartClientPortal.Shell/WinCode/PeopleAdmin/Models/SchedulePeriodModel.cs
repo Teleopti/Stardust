@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 
 		public IPerson Parent => _containedEntity;
 
-		public string FullName => _commonNameDescription == null ? _containedEntity.Name.ToString() : _commonNameDescription.BuildCommonNameDescription(_containedEntity);
+		public string FullName => _commonNameDescription == null ? _containedEntity.Name.ToString() : _commonNameDescription.BuildFor(_containedEntity);
 
 		public int Number
         {

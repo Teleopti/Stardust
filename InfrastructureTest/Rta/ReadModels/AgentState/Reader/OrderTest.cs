@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 
@@ -18,11 +19,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 	[TestFixture]
 	public class OrderTest
 	{
-		public Database Database;
 		public IAgentStateReadModelPersister Persister;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IAgentStateReadModelReader Target;
+		public ICurrentBusinessUnit BusinessUnit;
 
 		[Test]
 		public void ShouldOrderByAlarmStartTimeForStatesInAlarm()
@@ -55,56 +56,73 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			result.First().PersonId.Should().Be(personId2);
 			result.Second().PersonId.Should().Be(personId1);
 		}
-		
+
 		[Test]
 		public void ShouldOrderByName()
 		{
 			var person1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
 			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
-			
 			Persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = person1,
-				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
+				BusinessUnitId = BusinessUnit.Current().Id.Value
 			});
-			
 			Persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = person2,
-				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
+				BusinessUnitId = BusinessUnit.Current().Id.Value
 			});
-			
 			Persister.UpsertName(person1, "Pierre", "Baldi");
 			Persister.UpsertName(person2, "Ashley", "Andeen");
 
-			var result = Target.Read(new AgentStateFilter
-			{
-				OrderBy = "Name",
-				Direction = "asc"
-			});
+			var result = Target.Read(new AgentStateFilter {OrderBy = "Name"});
 
 			result.First().PersonId.Should().Be(person2);
 			result.Last().PersonId.Should().Be(person1);
 		}
-		
+
+		[Test]
+		public void ShouldOrderByAscendingByDefault()
+		{
+			var person1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
+			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
+			Persister.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = person1,
+				BusinessUnitId = BusinessUnit.Current().Id.Value
+			});
+			Persister.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = person2,
+				BusinessUnitId = BusinessUnit.Current().Id.Value
+			});
+			Persister.UpsertName(person1, "Pierre", "Baldi");
+			Persister.UpsertName(person2, "Ashley", "Andeen");
+
+			var result = Target.Read(new AgentStateFilter {OrderBy = "Name", Direction = "hellooou"});
+
+			result.First().PersonId.Should().Be(person2);
+			result.Last().PersonId.Should().Be(person1);
+		}
+
 		[Test]
 		public void ShouldOrderDescendantly()
 		{
 			var person1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
 			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
-			
+
 			Persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = person1,
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
 			});
-			
+
 			Persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = person2,
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
 			});
-			
+
 			Persister.UpsertName(person1, "Pierre", "Baldi");
 			Persister.UpsertName(person2, "Ashley", "Andeen");
 
@@ -135,7 +153,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				TeamName = "aTeam",
 				PersonId = person2
 			});
-	
+
 			var result = Target.Read(new AgentStateFilter()
 			{
 				OrderBy = "SiteAndTeamName",
@@ -145,7 +163,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			result.First().TeamName.Should().Be("aTeam");
 			result.Last().TeamName.Should().Be("bTeam");
 		}
-		
+
 		[Test]
 		public void ShouldOrderByStateName()
 		{
@@ -171,7 +189,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
 		}
-		
+
 		[Test]
 		public void ShouldOrderByStateStartTime()
 		{
@@ -199,8 +217,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
-		}	
-		
+		}
+
 		[Test]
 		public void ShouldOrderByAlarmStartTime()
 		{
@@ -229,7 +247,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
 		}
-		
+
 		[Test]
 		public void ShouldOrderByOutOfAdherenceStartTime()
 		{
@@ -258,7 +276,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
 		}
-		
+
 		[Test]
 		public void ShouldOrderByOutOfAdherenceStartTimeWhenNull()
 		{
@@ -287,7 +305,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
 		}
-		
+
 		[Test]
 		public void ShouldInvertDirection()
 		{
@@ -316,7 +334,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			result.First().PersonId.Should().Be(personId1);
 			result.Last().PersonId.Should().Be(personId2);
 		}
-		
+
 		[Test]
 		public void ShouldOrderByRuleName()
 		{
@@ -342,6 +360,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
 		}
-
 	}
 }

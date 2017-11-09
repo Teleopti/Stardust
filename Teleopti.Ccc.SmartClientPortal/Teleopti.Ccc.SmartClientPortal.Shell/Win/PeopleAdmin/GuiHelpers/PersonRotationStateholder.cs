@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
             //there is no PersonRotation associated with the person
             if (selectedItem != null)
             {
-                WorksheetStateHolder.CurrentRotationChildName = FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription(person);
+                WorksheetStateHolder.CurrentRotationChildName = FilteredStateHolder.CommonNameDescription.BuildFor(person);
 
                 _childrenPersonRotationCollection =
                     FilteredStateHolder.AllPersonRotationCollection.Where(a => a.Person.Equals(selectedItem.Person)).ToList();
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
                     if (isFirstItem)
                     {
-                        personRotationModel.PersonFullName =FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription( pRotation.Person);
+                        personRotationModel.PersonFullName =FilteredStateHolder.CommonNameDescription.BuildFor( pRotation.Person);
                         isFirstItem = false;
                     }
                     else
@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
                     if (isFirstItem)
                     {
-                        personRotationModel.PersonFullName = FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription(pRotation.Person);
+                        personRotationModel.PersonFullName = FilteredStateHolder.CommonNameDescription.BuildFor(pRotation.Person);
                         isFirstItem = false;
                     }
                     else

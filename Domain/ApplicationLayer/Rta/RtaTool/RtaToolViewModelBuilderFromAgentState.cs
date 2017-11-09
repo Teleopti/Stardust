@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
 					let dataSource = dataSources[externalLogOn.DataSourceId.GetValueOrDefault()].FirstOrDefault()
 					select new RtaToolViewModel
 					{
-						Name = nameDisplayedAs.BuildCommonNameDescription(
+						Name = nameDisplayedAs.BuildFor(
 							state?.FirstName,
 							state?.LastName,
 							state?.EmploymentNumber),
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
 					let dataSource = dataSources[externalLogOn.DataSourceId.GetValueOrDefault()].FirstOrDefault()
 					select new 
 					{
-						Name = nameDisplayedAs.BuildCommonNameDescription(
+						Name = nameDisplayedAs.BuildFor(
 							state?.FirstName,
 							state?.LastName,
 							state?.EmploymentNumber),

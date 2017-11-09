@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 			Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new HashSet<Guid> { olaPersonId }).Repeat.Times(3);
 			Expect.Call(_personSelectorView.ExpandSelected).Return(true).Repeat.AtLeastOnce();
 			Expect.Call(() => _unitOfWork.Dispose());
-			Expect.Call(_commonNameSetting.BuildCommonNameDescription(lightPerson)).Repeat.Times(3).IgnoreArguments().Return("");
+			Expect.Call(_commonNameSetting.BuildFor(lightPerson)).Repeat.Times(3).IgnoreArguments().Return("");
 			Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).IgnoreArguments();
 			_mocks.ReplayAll();
 			_target.Execute();

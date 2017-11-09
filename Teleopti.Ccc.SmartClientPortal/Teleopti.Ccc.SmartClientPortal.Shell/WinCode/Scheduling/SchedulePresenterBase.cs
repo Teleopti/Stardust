@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                 switch (columnType)
                 {
                     case ColumnType.RowHeaderColumn:
-                        return SchedulerState.CommonNameDescription.BuildCommonNameDescription(person);
+                        return SchedulerState.CommonNameDescription.BuildFor(person);
                     default:
                         {
                             if (styleInfo.CellValue == null || styleInfo.CellValue.ToString() == "N/A")

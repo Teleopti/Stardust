@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 //fel här, men gör som ukrairnarna
                 if (_commonNameDescription == null)
                     return Parent.Person.ToString();
-                return _commonNameDescription.BuildCommonNameDescription(Parent.Person);
+                return _commonNameDescription.BuildFor(Parent.Person);
             }
         }
 

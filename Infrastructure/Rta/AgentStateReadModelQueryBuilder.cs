@@ -5,6 +5,8 @@ using System.Text;
 using NHibernate;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -14,16 +16,58 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public IEnumerable<Func<ISQLQuery, IQuery>> ParameterFuncs { get; set; }
 	}
 
+	public class AgentStateReadModelQueryBuilderConfiguration
+	{
+		private readonly Lazy<IDictionary<string, Sorting>> _sortingByOrderBy;
+
+		public AgentStateReadModelQueryBuilderConfiguration(IGlobalSettingDataRepository settings)
+		{
+			_sortingByOrderBy = new Lazy<IDictionary<string, Sorting>>(() =>
+			{
+				var format = settings
+						.FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting())
+						.BuildNamesFor("FirstName", "LastName", "EmploymentNumber")
+					;
+
+				return new Dictionary<string, Sorting>
+				{
+					{"Name", new Sorting {Columns = format}},
+					{"SiteAndTeamName", new Sorting {Columns = new[] {"SiteName", "TeamName"}}},
+					{"State", new Sorting {Columns = new[] {"StateName"}}},
+					{"Rule", new Sorting {Columns = new[] {"RuleName"}}},
+					{"TimeInAlarm", new SortingInverted {Columns = new[] {"AlarmStartTime"}}},
+					{"TimeInState", new SortingInverted {Columns = new[] {"StateStartTime"}}},
+					{"TimeOutOfAdherence", new SortingInverted {Columns = new[] {"ISNULL(OutOfAdherenceStartTime, '9999-12-31 23:59:59')"}}},
+				};
+			});
+		}
+
+		public Sorting SortingFor(string orderBy) => _sortingByOrderBy.Value[orderBy];
+
+		public class Sorting
+		{
+			public IEnumerable<string> Columns { get; set; }
+			public virtual bool AscendingFor(string direction) => direction != "desc";
+		}
+
+		public class SortingInverted : Sorting
+		{
+			public override bool AscendingFor(string direction) => !base.AscendingFor(direction);
+		}
+	}
+
 	public class AgentStateReadModelQueryBuilder
 	{
+		private readonly AgentStateReadModelQueryBuilderConfiguration _configuration;
 		private readonly IList<string> _froms = new List<string>();
 		private readonly IList<string> _wheres = new List<string>();
 		private readonly IList<string> _orderbys = new List<string>();
 		private readonly IList<Func<ISQLQuery, IQuery>> _parameters = new List<Func<ISQLQuery, IQuery>>();
 		private int _topCount;
 
-		public AgentStateReadModelQueryBuilder()
+		public AgentStateReadModelQueryBuilder(AgentStateReadModelQueryBuilderConfiguration configuration)
 		{
+			_configuration = configuration;
 			_topCount = 50;
 		}
 
@@ -189,50 +233,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			};
 		}
 
-		public AgentStateReadModelQueryBuilder WithSorting(ISorting sorting, string direction)
+		public AgentStateReadModelQueryBuilderConfiguration.Sorting SortingFor(string orderBy) => _configuration.SortingFor(orderBy);
+
+		public AgentStateReadModelQueryBuilder WithSorting(AgentStateReadModelQueryBuilderConfiguration.Sorting sorting, string direction)
 		{
 			var ascending = sorting.AscendingFor(direction);
-			sorting?.ColumnNames.ForEach(c => _orderbys.Add($"{c} {(ascending ? "" : "DESC")}"));
+			sorting?.Columns.ForEach(c => _orderbys.Add($"{c} {(ascending ? "" : "DESC")}"));
 			return this;
 		}
-
-		public ISorting SortingFor(string orderBy) => _sortingByOrderBy[orderBy];
-
-		public interface ISorting
-		{
-			IEnumerable<string> ColumnNames { get; }
-			bool AscendingFor(string direction);
-		}
-
-		public class Sorting : ISorting
-		{
-			public Sorting(IEnumerable<string> columnNames)
-			{
-				ColumnNames = columnNames;
-			}
-
-			public IEnumerable<string> ColumnNames { get; }
-			public virtual bool AscendingFor(string direction) => direction == "asc";
-		}
-
-		public class SortingInverted : Sorting
-		{
-			public SortingInverted(IEnumerable<string> columnNames) : base(columnNames)
-			{
-			}
-
-			public override bool AscendingFor(string direction) => !base.AscendingFor(direction);
-		}
-
-		private readonly IDictionary<string, ISorting> _sortingByOrderBy = new Dictionary<string, ISorting>()
-		{
-			{"Name", new Sorting(new[] {"FirstName", "LastName"})},
-			{"SiteAndTeamName", new Sorting(new[] {"SiteName", "TeamName"})},
-			{"State", new Sorting(new[] {"StateName"})},
-			{"Rule", new Sorting(new[] {"RuleName"})},
-			{"TimeInAlarm", new SortingInverted(new[] {"AlarmStartTime"})},
-			{"TimeInState", new SortingInverted(new[] {"StateStartTime"})},
-			{"TimeOutOfAdherence", new SortingInverted(new[] {"ISNULL(OutOfAdherenceStartTime, '9999-12-31 23:59:59')"})},
-		};
 	}
 }

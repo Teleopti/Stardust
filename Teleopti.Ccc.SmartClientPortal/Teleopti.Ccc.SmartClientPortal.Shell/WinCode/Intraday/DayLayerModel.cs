@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 
 	    public string CommonNameDescription
         {
-            get { return _commonNameDescriptionSetting.BuildCommonNameDescription(_person); }
+            get { return _commonNameDescriptionSetting.BuildFor(_person); }
         }
 
         public bool IsPinned

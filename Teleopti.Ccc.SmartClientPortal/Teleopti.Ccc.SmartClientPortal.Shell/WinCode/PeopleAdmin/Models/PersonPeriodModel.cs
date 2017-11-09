@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         {
             get
             {
-	            return _commonNameDescription == null ? _containedEntity.Name.ToString() : _commonNameDescription.BuildCommonNameDescription(_containedEntity);
+	            return _commonNameDescription == null ? _containedEntity.Name.ToString() : _commonNameDescription.BuildFor(_containedEntity);
             }
         }
 
