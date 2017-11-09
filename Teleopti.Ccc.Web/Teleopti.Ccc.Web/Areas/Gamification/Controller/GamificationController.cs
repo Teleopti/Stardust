@@ -135,9 +135,9 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		}
 
 		[HttpPost, Route("api/Gamification/Reset"), UnitOfWork]
-		public virtual bool ResetGamification()
+		public virtual bool ResetBadge()
 		{
-			return _gamificationSettingPersister.ResetGamificationSetting();
+			return _gamificationSettingPersister.ResetBadge();
 		}
 
 		[HttpPost, Route("api/Gamification/ModifyChangeRule"), UnitOfWork]

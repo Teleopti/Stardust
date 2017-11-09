@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return true;
 		}
 
-		public bool ResetGamificationSetting()
+		public bool ResetBadge()
 		{
 			try
 			{
