@@ -120,12 +120,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CascadingResourceCalculationNew>().As<IResourceCalculation>().SingleInstance();
 				builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects(); //TODO: scope?
 				builder.RegisterType<ResourceOptimizationHelperNew>().As<ResourceOptimizationHelper>().SingleInstance();
+				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehaviorNew>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 			}
 			else
 			{
 				builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();		
 				builder.RegisterType<WeeklyRestSolverCommandOld>().As<IWeeklyRestSolverCommand>().ApplyAspects(); //TODO: scope?
 				builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
+				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
@@ -138,7 +140,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<DaysOffInPeriodValidatorForBlockOLD>().As<IDaysOffInPeriodValidatorForBlock>().SingleInstance();
 			}
-			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
 			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();

@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 				_stateHolder.MarkDateToBeRecalculated(dateOnly);
 			}
 
-			using (_container.Resolve<SharedResourceContextOldSchedulingScreenBehavior>().MakeSureExists(period))
+			using (_container.Resolve<ISharedResourceContextOldSchedulingScreenBehavior>().MakeSureExists(period))
 			{
 				_optimizationHelperExtended.ResourceCalculateMarkedDays(new NoSchedulingProgress(),
 					_stateHolder.ConsiderShortBreaks, true);
