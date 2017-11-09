@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		DateOnlyPeriod GetPeriod(DateOnly viewpointDateOnly);
 		OvertimeRequestAutoGrantType AutoGrantType { get; set; }
 		int OrderIndex { get; }
+		string DenyReason { get; set; }
 	}
 }

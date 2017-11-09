@@ -55,17 +55,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		{
 			var overtimeOpenPeriod = getOvertimeRequestOpenPeriod(personRequest);
 
-			if (overtimeOpenPeriod == null)
-			{
-				denyRequest(personRequest, UserTexts.Resources.ResourceManager.GetString("OvertimeRequestDenyReasonClosedPeriod",
-					personRequest.Person.PermissionInformation.UICulture()));
-				return;
-			}
-
 			if (overtimeOpenPeriod.AutoGrantType == WorkflowControl.OvertimeRequestAutoGrantType.Deny)
 			{
-				denyRequest(personRequest, UserTexts.Resources.ResourceManager.GetString("OvertimeRequestDenyReasonAutodeny",
-					personRequest.Person.PermissionInformation.UICulture()));
+				denyRequest(personRequest, overtimeOpenPeriod.DenyReason);
 				return;
 			}
 

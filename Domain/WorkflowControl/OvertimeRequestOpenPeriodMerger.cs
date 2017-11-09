@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					prioritizedAutoGrantTypes.IndexOf(mergedPeriod.AutoGrantType))
 				{
 					mergedPeriod.AutoGrantType = overtimeRequestOpenPeriod.AutoGrantType;
+					mergedPeriod.DenyReason = overtimeRequestOpenPeriod.DenyReason;
 				}
 			}
 			return mergedPeriod;

@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest)
 		{
-			return getMergedOvertimeRequestOpenPeriods(getRequestPeriod(overtimeRequest));
+			return getMergedOvertimeRequestOpenPeriods(overtimeRequest);
 		}
 
 		public virtual bool IsAbsenceRequestValidatorEnabled<T>(TimeZoneInfo timeZone)
@@ -516,11 +516,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return new AbsenceRequestOpenPeriodMerger().Merge(openPeriods);
 		}
 
-		private IOvertimeRequestOpenPeriod getMergedOvertimeRequestOpenPeriods(DateOnlyPeriod dateOnlyPeriod)
+		private IOvertimeRequestOpenPeriod getMergedOvertimeRequestOpenPeriods(IOvertimeRequest overtimeRequest)
 		{
-			var overtimePeriodProjection = new OvertimeRequestPeriodProjection();
-
-			var openPeriods = overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(this, dateOnlyPeriod);
+			var overtimePeriodProjection = new OvertimeRequestPeriodProjection(OvertimeRequestOpenPeriods,overtimeRequest.Person.PermissionInformation.Culture(), overtimeRequest.Person.PermissionInformation.UICulture());
+			var dateOnlyPeriod = getRequestPeriod(overtimeRequest);
+			var openPeriods = overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(dateOnlyPeriod);
 			return new OvertimeRequestOpenPeriodMerger().Merge(openPeriods);
 		}
 	}

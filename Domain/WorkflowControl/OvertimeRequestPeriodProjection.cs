@@ -1,27 +1,43 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public class OvertimeRequestPeriodProjection : IOvertimeRequestPeriodProjection
 	{
-		public IList<IOvertimeRequestOpenPeriod> GetProjectedOvertimeRequestsOpenPeriods(IWorkflowControlSet workflowControlSet, DateOnlyPeriod requestPeriod)
+		private readonly IList<IOvertimeRequestOpenPeriod> _overtimeRequestOpenPeriodList;
+		private readonly CultureInfo _dateCulture;
+		private readonly CultureInfo _languageCulture;
+
+		public OvertimeRequestPeriodProjection(IList<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriodList, CultureInfo dateCulture, CultureInfo languageCulture)
+		{
+			_overtimeRequestOpenPeriodList = overtimeRequestOpenPeriodList;
+			_dateCulture = dateCulture;
+			_languageCulture = languageCulture;
+		}
+
+		public IList<IOvertimeRequestOpenPeriod> GetProjectedOvertimeRequestsOpenPeriods(DateOnlyPeriod requestPeriod)
 		{
 			var results = new List<IOvertimeRequestOpenPeriod>();
-			var filteredPeriods = workflowControlSet.OvertimeRequestOpenPeriods.Select(p => new DateOnlyOvertimeRequestOpenPeriod
+			var filteredPeriods = _overtimeRequestOpenPeriodList.Select(p => new DateOnlyOvertimeRequestOpenPeriod
 			{
 				AutoGrantType = p.AutoGrantType,
 				Period = p.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse())
 			}
 			).Where(p => p.Period.Contains(requestPeriod)).ToList();
 
-			if (filteredPeriods.IsEmpty())
-				return results;
+			var autoDenyPeriod =
+				createAutoDenyPeriod(_overtimeRequestOpenPeriodList, filteredPeriods);
+			autoDenyPeriod.Period = requestPeriod;
+			filteredPeriods.Insert(0, autoDenyPeriod);
 
 			var startTime = filteredPeriods.Min(p => p.Period.StartDate);
 			var endTime = filteredPeriods.Max(d => d.Period.EndDate);
@@ -38,7 +54,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 						results.Add(new OvertimeRequestOpenDatePeriod
 						{
 							AutoGrantType = currentPeriod.AutoGrantType,
-							Period = new DateOnlyPeriod(currentTime, layerEndTime)
+							Period = new DateOnlyPeriod(currentTime, layerEndTime),
+							DenyReason = currentPeriod.DenyReason
 						});
 
 						if (inverseLoopIndex < filteredPeriods.Count - 1 &&
@@ -52,6 +69,91 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 
 			return results.Where(w => w.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse()).Intersection(requestPeriod).HasValue).ToList();
+		}
+
+		private DateOnlyOvertimeRequestOpenPeriod createAutoDenyPeriod(IList<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriodList, IList<DateOnlyOvertimeRequestOpenPeriod> filteredOvertimeRequestOpenPeriodList)
+		{
+			string denyReason = null;
+			if (overtimeRequestOpenPeriodList.Count == 0)
+			{
+				denyReason = Resources.ResourceManager.GetString("OvertimeRequestDenyReasonClosedPeriod", _languageCulture);
+			}
+
+			if (filteredOvertimeRequestOpenPeriodList.Count == 0)
+			{
+				var denyDays = getDenyDays(overtimeRequestOpenPeriodList);
+				foreach (var overtimeRequestOpenPeriod in overtimeRequestOpenPeriodList)
+				{
+					if (overtimeRequestOpenPeriod.AutoGrantType != OvertimeRequestAutoGrantType.Deny)
+					{
+						denyReason = string.Format(_languageCulture,
+							Resources.ResourceManager.GetString("OvertimeRequestDenyReasonNoPeriod", _languageCulture),
+							getSuggestedPeriodDateString(overtimeRequestOpenPeriod.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse()), denyDays));
+					}
+				}
+			}
+			else
+			{
+				foreach (var filteredOvertimeRequestOpenPeriod in filteredOvertimeRequestOpenPeriodList)
+				{
+					if (filteredOvertimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.Deny)
+					{
+						denyReason = Resources.ResourceManager.GetString("OvertimeRequestDenyReasonAutodeny", _languageCulture);
+						filteredOvertimeRequestOpenPeriod.DenyReason = denyReason;
+					}
+				}
+			}
+
+			return new DateOnlyOvertimeRequestOpenPeriod
+			{
+				DenyReason = denyReason,
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny
+			};
+		}
+
+		private IList<DateOnly> getDenyDays(IList<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriodList)
+		{
+			var denyDayCollection = new List<DateOnly>();
+			overtimeRequestOpenPeriodList.Where(isOvertimeRequestOpenPeriodAutoDeny)
+				.ToList()
+				.ForEach(
+					p => denyDayCollection.AddRange(p.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse()).DayCollection()));
+			return denyDayCollection;
+		}
+
+		private string getSuggestedPeriodDateString(DateOnlyPeriod suggestedPeriod, IList<DateOnly> denyDays)
+		{
+			var dayCollection = suggestedPeriod.DayCollection();
+			foreach (var denyDay in denyDays)
+			{
+				dayCollection.Remove(denyDay);
+			}
+			var periods = splitToContinuousPeriods(dayCollection);
+			return string.Join(",", periods.Select(p => p.ToShortDateString(_dateCulture)));
+		}
+
+		private IList<DateOnlyPeriod> splitToContinuousPeriods(IList<DateOnly> dayCollection)
+		{
+			var periodList = new List<DateOnlyPeriod>();
+			DateOnly? startDate = null;
+			for (var i = 0; i < dayCollection.Count; i++)
+			{
+				if (!startDate.HasValue)
+				{
+					startDate = dayCollection[i];
+				}
+				var nextDate = dayCollection[i].AddDays(1);
+				if (dayCollection.Contains(nextDate)) continue;
+				periodList.Add(new DateOnlyPeriod(startDate.Value, nextDate.AddDays(-1)));
+				startDate = null;
+			}
+			return periodList;
+		}
+
+
+		private bool isOvertimeRequestOpenPeriodAutoDeny(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		{
+			return overtimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.Deny;
 		}
 
 		private DateOnly findLayerEndTime(IList<DateOnlyOvertimeRequestOpenPeriod> filteredPeriodsList,
@@ -77,6 +179,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		private class DateOnlyOvertimeRequestOpenPeriod
 		{
+			public string DenyReason { get; set; }
 			public OvertimeRequestAutoGrantType AutoGrantType { get; set; }
 			public DateOnlyPeriod Period { get; set; }
 		}
@@ -84,7 +187,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 	public interface IOvertimeRequestPeriodProjection
 	{
-		IList<IOvertimeRequestOpenPeriod> GetProjectedOvertimeRequestsOpenPeriods(
-			IWorkflowControlSet workflowControlSet, DateOnlyPeriod requestPeriod);
+		IList<IOvertimeRequestOpenPeriod> GetProjectedOvertimeRequestsOpenPeriods(DateOnlyPeriod requestPeriod);
 	}
 }

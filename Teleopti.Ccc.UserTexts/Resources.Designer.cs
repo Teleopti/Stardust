@@ -22500,6 +22500,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}..
+        /// </summary>
+        public static string OvertimeRequestDenyReasonNoPeriod {
+            get {
+                return ResourceManager.GetString("OvertimeRequestDenyReasonNoPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your overtime request has been denied automatically. The period of this request is {0}, but site open hour is {1}.
         /// </summary>
         public static string OvertimeRequestDenyReasonOutOfSiteOpenHour {

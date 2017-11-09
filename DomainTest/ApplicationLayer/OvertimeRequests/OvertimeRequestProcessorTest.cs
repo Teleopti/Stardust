@@ -153,7 +153,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		public void ShouldDenyWhenOutofSiteOpenHour()
 		{
 			setupPerson();
@@ -173,7 +172,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		public void ShouldDenyWhenSiteOpenHourIsClosed()
 		{
 			setupPerson(8, 17, true);
@@ -192,7 +190,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		public void ShouldDenyForEditWhenThereIsNoUnderStaffingSkill()
 		{
 			setupPerson(8, 21);
@@ -208,7 +205,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		public void ShouldDenyWhenThereIsNoUnderStaffingSkill()
 		{
 			setupPerson(8, 21);
@@ -286,7 +282,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		public void ShouldDenyOvertimeRequestWhenUserHasNoSkill()
 		{
 			setupPerson(8, 21);
@@ -301,7 +296,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		public void ShouldDenyForEditOvertimeRequestWhenOutOfSkillOpenHour()
 		{
 			setupPerson(8, 23);
@@ -317,7 +311,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		public void ShouldDenyOvertimeRequestWhenOutOfSkillOpenHour()
 		{
 			setupPerson(8, 23);
@@ -409,6 +402,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Target.Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be(Resources.OvertimeRequestDenyReasonClosedPeriod);
 		}
 
 		[Test]
@@ -478,7 +472,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldDenyWhenRequestPeriodIsOutsideAnOpenPeriod()
 		{
@@ -496,7 +489,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Target.Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be.EqualTo(Resources.OvertimeRequestDenyReasonClosedPeriod);
+			personRequest.DenyReason.Should().Be.EqualTo("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/25/2017.");
 		}
 
 		[Test]
@@ -526,7 +519,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldDenyWhenRequestPeriodIsWithinOpenPeriodWithLargerOrderIndexAndAutoGrantIsDeny()
 		{
@@ -596,7 +588,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldDenyWhenRequestPeriodIsWithinRollingOpenPeriodWithLargerOrderIndexAndAutoGrantIsDeny()
 		{
@@ -683,7 +674,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Target.Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be(Resources.OvertimeRequestDenyReasonClosedPeriod);
+			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/13/2017.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		public void ShouldSuggestMultiplePeriodsExcludeDenyPeriods()
+		{
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod()
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(4)))
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod()
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(1), new DateOnly(Now.UtcDateTime().AddDays(1)))
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 17, 21, 0, 0, DateTimeKind.Utc), 6);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/12/2017,7/14/2017 - 7/16/2017.");
 		}
 
 		private void mockRequestApprovalServiceApproved(IPersonRequest personRequest)
@@ -845,6 +862,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			//var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			var person = createPersonWithSiteOpenHours(siteOpenStartHour, siteOpenEndHour, isOpenHoursClosed);
+			person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateUsCulture());
+			person.PermissionInformation.SetCulture(CultureInfoFactory.CreateUsCulture());
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });

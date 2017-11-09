@@ -16720,4 +16720,8 @@ Do you want to participate?</value>
     <value>Previous shift on date {0} not match shift start time {1}</value>
     <comment>Scheduleing validation message in web scheduling and client.</comment>
   </data>
+  <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>
+    <comment>Overtime request has been denied. Some days in the requested period are not open for requests.</comment>
+  </data>
 </root>

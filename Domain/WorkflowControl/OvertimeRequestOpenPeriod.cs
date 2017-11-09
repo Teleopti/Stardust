@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			set => _orderIndex = value;
 		}
 
+		public virtual string DenyReason { get; set; }
+
 		public virtual object Clone()
 		{
 			return NoneEntityClone();
