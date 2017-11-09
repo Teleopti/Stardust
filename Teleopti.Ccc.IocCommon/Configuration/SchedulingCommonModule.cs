@@ -128,7 +128,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<DaysOffInPeriodValidatorForBlockOLD>().As<IDaysOffInPeriodValidatorForBlock>().SingleInstance();
 			}
-			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehaviorWithoutShoveling>().InstancePerLifetimeScope();
 			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
 			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
