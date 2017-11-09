@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			Assert.AreEqual(result.IsPending, true);
 
-			var newRequestStartDateTime = currentDateTime.AddDays(2);
+			var newRequestStartDateTime = currentDateTime.AddDays(1);
 			overtimeRequestForm.Id = Guid.Parse(result.Id);
 			overtimeRequestForm.Period = new DateTimePeriodForm
 			{
