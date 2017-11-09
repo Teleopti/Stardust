@@ -15172,4 +15172,43 @@ Vill du registrera dig?</value>
   <data name="RequestDenyReasonNoPersonSkillOpen" xml:space="preserve">
     <value>Ansökan nekas på grund av att dina kompetenser är stängda för den valda perioden</value>
   </data>
+  <data name="PriorityHigher" xml:space="preserve">
+    <value>Hög prioritet</value>
+  </data>
+  <data name="PriorityLower" xml:space="preserve">
+    <value>Låg prioritet</value>
+  </data>
+  <data name="MaxResultsReached" xml:space="preserve">
+    <value>Sökresultatet på nyckelorden kommer att överskrida {0}, justera din sökning. </value>
+  </data>
+  <data name="OvertimeRequestDatePeriodError" xml:space="preserve">
+    <value>giltigt datumintervall är {0} - {1}</value>
+  </data>
+  <data name="OvertimeRequestRollingPeriodError" xml:space="preserve">
+    <value>giltigt intervall är 0 - {0}</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
+    <value>Din övertidsförfrågan kan inte godkännas. Vissa datum är för närvarande inte öppna för förfrågningar. </value>
+  </data>
+  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
+    <value>Din övertidsförfrågan har avslagits automatiskt, pga. en regel som administratören satt upp. </value>
+  </data>
+  <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
+    <value>Starttiden för skiftet {0} finns inte i skiftpåsen {1}</value>
+  </data>
+  <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
+    <value>Skiftet {0} finns inte i skiftpåsen {1}</value>
+  </data>
+  <data name="OpenForOvertimeRequests" xml:space="preserve">
+    <value>Öppen för övertidsförfrågningar</value>
+  </data>
+  <data name="ExistingShiftNotMatchShift" xml:space="preserve">
+    <value>Skiftet för {0} matchar inte skiftet för {1}</value>
+  </data>
+  <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
+    <value>Skiftkategorin ({0}) för {1} matchar inte skiftkategorin ({2}) för {3}. </value>
+  </data>
+  <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
+    <value>Starttiden ({0}) för {1} matchar inte starttiden ({2}) för {3}.</value>
+  </data>
 </root>

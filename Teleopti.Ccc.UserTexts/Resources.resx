@@ -16655,12 +16655,12 @@ Do you want to participate?</value>
     <comment>Selected groups</comment>
   </data>
   <data name="PriorityHigher" xml:space="preserve">
-    <value>Priority Higher</value>
-    <comment>text for pririty higher on web plan moudule</comment>
+    <value>High Priority</value>
+    <comment>High priority higher in web plan module</comment>
   </data>
   <data name="PriorityLower" xml:space="preserve">
-    <value>Priority Lower	</value>
-    <comment>text for pririty lower on web plan moudule</comment>
+    <value>Low Priority</value>
+    <comment>Low priority in web plan module</comment>
   </data>
   <data name="MaxResultsReached" xml:space="preserve">
     <value>Search result of the keyword(s) will exceed {0}, please refine your search.</value>
