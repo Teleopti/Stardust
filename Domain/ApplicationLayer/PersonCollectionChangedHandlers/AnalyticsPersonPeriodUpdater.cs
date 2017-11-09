@@ -173,9 +173,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			}
 
 
-			_analyticsTimeZoneUpdater.SetUtcInUse();
-			_analyticsTimeZoneUpdater.SetTimeZonesTobeDeleted();
-
+			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
+			{
+				_analyticsTimeZoneUpdater.SetUtcInUse();
+				_analyticsTimeZoneUpdater.SetTimeZonesTobeDeleted();
+			});
+			
 			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
 				if (!changedPeople.Any()) return;
