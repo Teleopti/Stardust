@@ -4,14 +4,47 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
+	[TestFixture, DomainTest]
+	public class PermissionCheckerTestNoMock : ISetup
+	{
+		public IPermissionChecker Target;
+		public Global.FakePermissionProvider PermissionProvider;
+		
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<PermissionChecker>().For<IPermissionChecker>();
+			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
+		}
+			
+		[Test]
+		public void ShouldReturnErrorMessageWhenHasNoModifyWriteProtectedSchedulePermission()
+		{
+			var date = DateOnly.Today;
+			var person = new Person();
+			var wfc = WorkflowControlSetFactory.CreateWorkFlowControlSet(AbsenceFactory.CreateAbsence("absence"),
+				new ApproveAbsenceRequestWithValidators(), false);
+			wfc.WriteProtection = -5;
+			person.WorkflowControlSet = wfc;
+			PermissionProvider.Enable();
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, person, date );
+
+			var result = Target.CheckAddFullDayAbsenceForPerson(person, date);
+
+			result.Should().Be.EqualTo(Resources.WriteProtectSchedule);
+		}
+	}
 	[TestFixture]
-	class PermissionCheckerTest
+	public class PermissionCheckerTest
 	{
 		private IPermissionProvider _permissionProvider;
 
@@ -46,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var result = target.CheckAddFullDayAbsenceForPerson(person, date);
 
 			result.Should().Be.EqualTo(expectedError);
-		}		
+		}
 		
 		[Test]
 		public void ShouldReturnNullWhenHasIntradayPermission()
@@ -75,4 +108,5 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.Should().Be.EqualTo(expectedError);
 		}
 	}
+	
 }

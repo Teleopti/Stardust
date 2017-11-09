@@ -16,9 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule
 
 		public string CheckAddFullDayAbsenceForPerson(IPerson person, DateOnly date)
 		{
-			if (_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, date, person)) return null;
-			var ret = string.Format(Resources.NoPermissionAddFullDayAbsenceForAgent, person.Name);
-			return ret;
+			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, date, person))
+				return string.Format(Resources.NoPermissionAddFullDayAbsenceForAgent, person.Name);
+			
+			if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths
+					.ModifyWriteProtectedSchedule) && person.PersonWriteProtection.IsWriteProtected(date))
+				return Resources.WriteProtectSchedule;
+			return null;
 		}
 
 		public string CheckAddIntradayAbsenceForPerson(IPerson person, DateOnly date)
