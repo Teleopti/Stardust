@@ -665,6 +665,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsApproved.Should().Be.True();
 		}
 
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		public void ShouldDenyWhenRequestPeriodEndDateIsNotInOpenPeriod()
+		{
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod()
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(1)))
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero,TimeSpan.FromDays(1))), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 21, 0, 0, DateTimeKind.Utc),6);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be(Resources.OvertimeRequestDenyReasonClosedPeriod);
+		}
+
 		private void mockRequestApprovalServiceApproved(IPersonRequest personRequest)
 		{
 			var requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
@@ -746,25 +767,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
 		}
-		private ISkill createSkill(string name)
+		private ISkill createSkill(string name, TimePeriod? skillOpenHourPeriod = null)
 		{
 			var skill = SkillFactory.CreateSkill(name).WithId();
 			skill.SkillType.Description = new Description("SkillTypeInboundTelephony");
 			skill.StaffingThresholds = createStaffingThresholds();
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, _defaultOpenPeriod);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, skillOpenHourPeriod ?? _defaultOpenPeriod);
 			SkillRepository.Has(skill);
 			return skill;
 		}
 
-		private ISkill setupPersonSkill()
+		private ISkill setupPersonSkill(TimePeriod? skillOpenHourPeriod = null)
 		{
 			var activity1 = createActivity("activity1");
-			var skill1 = createSkill("skill1");
+			var skill1 = createSkill("skill1", skillOpenHourPeriod);
 			var personSkill1 = createPersonSkill(activity1, skill1);
 			addPersonSkillsToPersonPeriod(personSkill1);
 			return skill1;
 		}
-
+		
 		private void setupIntradayStaffingForSkill(ISkill skill, double forecastedStaffing,
 	double scheduledStaffing)
 		{

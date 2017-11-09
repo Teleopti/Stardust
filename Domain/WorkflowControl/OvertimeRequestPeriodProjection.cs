@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				AutoGrantType = p.AutoGrantType,
 				Period = p.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse())
 			}
-			).Where(p => p.Period.Intersection(requestPeriod).HasValue).ToList();
+			).Where(p => p.Period.Contains(requestPeriod)).ToList();
 
 			if (filteredPeriods.IsEmpty())
 				return results;
