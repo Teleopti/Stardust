@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		}
 	}
 
-	[Toggle(Domain.FeatureFlags.Toggles.No_UnitOfWork_Nesting_42175)]
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
 		public ITransactionHooksScope TransactionHooksScope;

@@ -29,10 +29,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<ICurrentUnitOfWork>()
 				.SingleInstance();
 			builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
-			if(_configuration.Toggle(Toggles.No_UnitOfWork_Nesting_42175))
-				builder.RegisterType<ThrowOnNestedUnitOfWork>().As<INestedUnitOfWorkStrategy>().SingleInstance();
-			else
-				builder.RegisterType<SirLeakAlot>().As<INestedUnitOfWorkStrategy>().SingleInstance();
+			builder.RegisterType<ThrowOnNestedUnitOfWork>().As<INestedUnitOfWorkStrategy>().SingleInstance();
 
 			builder.RegisterType<WithUnitOfWork>().SingleInstance();
 

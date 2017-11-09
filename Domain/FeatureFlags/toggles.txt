@@ -122,7 +122,6 @@ WfmGlobalLayout_personalOptions_37114 = true
 Wfm_ArchiveSchedule_41498 = true
 Wfm_ImportSchedule_41247 = true
 Mailbox_Optimization_41900 = true
-No_UnitOfWork_Nesting_42175 = true
 Landing_Page_Data_Protection_Question_35721 = true
 Reporting_Optional_Columns_42066 = true
 WFM_WebScheduling_LowPriority_44320 = RC

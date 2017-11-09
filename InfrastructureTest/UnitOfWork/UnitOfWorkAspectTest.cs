@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	[Toggle(Toggles.No_UnitOfWork_Nesting_42175)]
 	public class UnitOfWorkAspectTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)

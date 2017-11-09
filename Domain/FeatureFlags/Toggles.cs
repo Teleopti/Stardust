@@ -163,7 +163,6 @@
 		SchedulingScreen_BatchAgentValidation_41552,
 		Wfm_Intraday_ScheduledStaffing_41476,
 		Mailbox_Optimization_41900,
-		No_UnitOfWork_Nesting_42175,
 		Wfm_Intraday_ESL_41827,
 		Wfm_Web_Intraday_Rta_As_first_Choice_42206,
 		Landing_Page_Data_Protection_Question_35721,
