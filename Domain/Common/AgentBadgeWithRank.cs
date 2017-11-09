@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private int _bronzeBadgeAmount;
 		private int _silverBadgeAmount;
 		private int _goldBadgeAmount;
+		private DateTime _lastCalculatedDate;
 
 		public virtual Guid Person
 		{
@@ -102,6 +103,12 @@ namespace Teleopti.Ccc.Domain.Common
 				}
 				_goldBadgeAmount = value;
 			}
+		}
+
+		public virtual DateTime LastCalculatedDate
+		{
+			get => _lastCalculatedDate;
+			set => _lastCalculatedDate = value;
 		}
 
 		public virtual bool IsBronzeBadgeAdded =>

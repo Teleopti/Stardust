@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
+		public virtual DateTime LastCalculatedDate { get; set; }
+
 		public virtual int GetBronzeBadge(int silverToBronzeRate, int goldToSilverRate)
 		{
 			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);

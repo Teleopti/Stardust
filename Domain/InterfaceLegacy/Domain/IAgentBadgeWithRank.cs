@@ -30,6 +30,11 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		int GoldBadgeAmount { get; set; }
 
 		/// <summary>
+		/// Last badge calculate date
+		/// </summary>
+		DateTime LastCalculatedDate { get; set; }
+
+		/// <summary>
 		/// Indicate if bronze badge added.
 		/// </summary>
 		/// <returns></returns>
