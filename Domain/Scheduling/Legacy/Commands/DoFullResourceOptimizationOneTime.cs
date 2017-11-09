@@ -1,8 +1,10 @@
 using System;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 	public class DoFullResourceOptimizationOneTime
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
