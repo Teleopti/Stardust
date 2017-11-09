@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseIocForFatClient]
 	public class IntradayOptimizationCallbackDesktopTest : IntradayOptimizationScenarioTest
 	{
-		public OptimizeIntradayIslandsDesktop Target;
+		public IOptimizeIntradayDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]

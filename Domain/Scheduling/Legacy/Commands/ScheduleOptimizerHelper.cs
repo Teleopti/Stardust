@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly MoveTimeOptimizerCreator _moveTimeOptimizerCreator;
 		private readonly RuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairnessService;
-		private readonly OptimizeIntradayIslandsDesktop _optimizeIntradayDesktop;
+		private readonly IOptimizeIntradayDesktop _optimizeIntradayDesktop;
 		private readonly ExtendReduceTimeHelper _extendReduceTimeHelper;
 		private readonly ExtendReduceDaysOffHelper _extendReduceDaysOffHelper;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				MoveTimeOptimizerCreator moveTimeOptimizerCreator,
 				RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak,
 				IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairnessService,
-				OptimizeIntradayIslandsDesktop optimizeIntradayIslandsDesktop,
+				IOptimizeIntradayDesktop optimizeIntradayIslandsDesktop,
 				ExtendReduceTimeHelper extendReduceTimeHelper,
 				ExtendReduceDaysOffHelper extendReduceDaysOffHelper,
 				Func<ISchedulerStateHolder> schedulerStateHolder,

@@ -121,6 +121,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects(); //TODO: scope?
 				builder.RegisterType<ResourceOptimizationHelperNew>().As<ResourceOptimizationHelper>().SingleInstance();
 				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehaviorNew>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
+				builder.RegisterType<OptimizeIntradayDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope(); //TODO: scope?
 			}
 			else
 			{
@@ -128,6 +129,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<WeeklyRestSolverCommandOld>().As<IWeeklyRestSolverCommand>().ApplyAspects(); //TODO: scope?
 				builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
 				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
+				builder.RegisterType<OptimizeIntradayIslandsDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope(); //TODO: scope?
 			}
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
@@ -452,7 +454,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<ClearPlanningPeriodSchedulingCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<IntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<OptimizeIntradayIslandsDesktop>().InstancePerLifetimeScope();
 			builder.RegisterType<CrossAgentsAndSkills>().SingleInstance();
 
 			if (_configuration.Args().IsFatClient)

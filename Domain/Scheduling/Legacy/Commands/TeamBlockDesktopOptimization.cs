@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 	public class TeamBlockDesktopOptimization : TeamBlockDesktopOptimizationOLD
 	{
-		private readonly OptimizeIntradayIslandsDesktop _optimizeIntradayIslandsDesktop;
+		private readonly IOptimizeIntradayDesktop _optimizeIntradayIslandsDesktop;
 
 		public TeamBlockDesktopOptimization(
-			OptimizeIntradayIslandsDesktop optimizeIntradayIslandsDesktop,
+			IOptimizeIntradayDesktop optimizeIntradayIslandsDesktop,
 			TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
