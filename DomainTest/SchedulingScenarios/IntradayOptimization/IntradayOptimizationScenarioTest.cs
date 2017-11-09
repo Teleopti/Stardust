@@ -6,19 +6,30 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	[TestFixture(OptimizationCodeBranch.TeamBlock, BreakPreferenceStartTimeByMax.ConsiderBreakPreferenceStartTimeByMax)]
-	[TestFixture(OptimizationCodeBranch.TeamBlock, BreakPreferenceStartTimeByMax.DoNotConsiderBreakPreferenceStartTimeByMax)]
-	[TestFixture(OptimizationCodeBranch.Classic, BreakPreferenceStartTimeByMax.ConsiderBreakPreferenceStartTimeByMax)]
-	[TestFixture(OptimizationCodeBranch.Classic, BreakPreferenceStartTimeByMax.DoNotConsiderBreakPreferenceStartTimeByMax)]
+	[TestFixture(OptimizationCodeBranch.TeamBlock, BreakPreferenceStartTimeByMax.ConsiderBreakPreferenceStartTimeByMax, true)]
+	[TestFixture(OptimizationCodeBranch.TeamBlock, BreakPreferenceStartTimeByMax.DoNotConsiderBreakPreferenceStartTimeByMax, true)]
+	[TestFixture(OptimizationCodeBranch.Classic, BreakPreferenceStartTimeByMax.ConsiderBreakPreferenceStartTimeByMax, true)]
+	[TestFixture(OptimizationCodeBranch.Classic, BreakPreferenceStartTimeByMax.DoNotConsiderBreakPreferenceStartTimeByMax, true)]
+	[TestFixture(OptimizationCodeBranch.TeamBlock, BreakPreferenceStartTimeByMax.ConsiderBreakPreferenceStartTimeByMax, false)]
+	[TestFixture(OptimizationCodeBranch.TeamBlock, BreakPreferenceStartTimeByMax.DoNotConsiderBreakPreferenceStartTimeByMax, false)]
+	[TestFixture(OptimizationCodeBranch.Classic, BreakPreferenceStartTimeByMax.ConsiderBreakPreferenceStartTimeByMax, false)]
+	[TestFixture(OptimizationCodeBranch.Classic, BreakPreferenceStartTimeByMax.DoNotConsiderBreakPreferenceStartTimeByMax, false)]
 	public abstract class IntradayOptimizationScenarioTest : IConfigureToggleManager
 	{
 		protected readonly OptimizationCodeBranch _resourcePlannerMergeTeamblockClassicIntraday45508;
 		protected readonly BreakPreferenceStartTimeByMax _resourcePlanner_BreakPreferenceStartTimeByMax_46002;
+		private readonly bool _resourcePlannerRemoveImplicitResCalcContext46680;
 
-		protected IntradayOptimizationScenarioTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002)
+		protected IntradayOptimizationScenarioTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, 
+							BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002,
+							bool resourcePlannerRemoveImplicitResCalcContext46680)
 		{
 			_resourcePlannerMergeTeamblockClassicIntraday45508 = resourcePlannerMergeTeamblockClassicIntraday45508;
 			_resourcePlanner_BreakPreferenceStartTimeByMax_46002 = resourcePlannerBreakPreferenceStartTimeByMax46002;
+			_resourcePlannerRemoveImplicitResCalcContext46680 = resourcePlannerRemoveImplicitResCalcContext46680;
+			
+			if(_resourcePlannerRemoveImplicitResCalcContext46680)
+				Assert.Ignore("Klagge & Rågge fixar snart");
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
@@ -28,6 +39,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			
 			if(_resourcePlanner_BreakPreferenceStartTimeByMax_46002 == BreakPreferenceStartTimeByMax.ConsiderBreakPreferenceStartTimeByMax)
 				toggleManager.Enable(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002);
+			
+			if(_resourcePlannerRemoveImplicitResCalcContext46680)
+				toggleManager.Enable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680);
+			else
+				toggleManager.Disable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680); //need to disable explicitly because toggle will be set to true default later
 		}
 	}
 
