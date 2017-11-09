@@ -50,6 +50,7 @@
 		MyTimeWeb_OvertimeRequest_44558,
 		MyTimeWeb_MonthlyScheduleMobileView_45004,
 		MyTimeWeb_WaitListPositionEnhancement_46301,
+		MyTimeWeb_PollToCheckScheduleChanges_46595,
 
 		Backlog_Module_23980,
 
