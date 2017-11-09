@@ -1,3 +1,4 @@
+//This is the SGM used in PBI #45727 (the new one as of november 2017)
 (function() {
     'use strict';
     angular.module('wfm.skillGroup').controller('SkillGroupManagerController', SkillGroupManagerController);
@@ -52,8 +53,8 @@
                         return item.Name;
                     }
                 );
-						}
-						vm.canSave = false;
+            }
+            vm.canSave = false;
             unselectAllSkills();
         };
 
@@ -76,7 +77,7 @@
                     return item.Name;
                 }
             );
-						vm.canSave = true;
+            vm.canSave = true;
             unselectAllSkills();
         };
 
@@ -97,7 +98,7 @@
                     return item.Name;
                 }
             );
-						vm.canSave = true;
+            vm.canSave = true;
             unselectAllSkills();
         };
 
@@ -168,8 +169,8 @@
 
         vm.saveAll = function() {
             SkillGroupSvc.modifySkillGroup(vm.managerData).then(function(result) {
-								getAllSkillGroups();
-								vm.canSave = false;
+                getAllSkillGroups();
+                vm.canSave = false;
             });
         };
 
@@ -177,6 +178,12 @@
             document.getElementById('skillGroupNameBox').focus();
             vm.managerData.currentSkillGroup = null;
             vm.canSave = false;
+        };
+
+        vm.deleteSkillGroup = function(skillGroup) {
+            SkillGroupSvc.deleteSkillGroup(skillGroup).then(function() {
+                getAllSkillGroups();
+            });
         };
 
         var notifySkillGroupCreation = function() {
@@ -188,11 +195,11 @@
             vm.allSkills = vm.skills.slice();
         });
 
-        var getAllSkillGroups = function() {
+        function getAllSkillGroups() {
             SkillGroupSvc.getSkillGroups().then(function(result) {
                 vm.skillGroups = result.data.SkillAreas;
             });
-        };
+        }
 
         getAllSkillGroups();
     }

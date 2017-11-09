@@ -27,8 +27,9 @@
       return $http.get('../api/skillgroup/skillgroups');
     };
 
-    function deleteSkillGroup(skillArea) {
-      return $http.delete('../api/skillgroup/delete/' + skillArea.id);
+    function deleteSkillGroup(skillGroup) {
+			console.log('Delete: skillGroup', skillGroup);
+      return $http.delete('../api/skillgroup/delete/' + skillGroup.Id);
     };
 
     function modifySkillGroup(data) {

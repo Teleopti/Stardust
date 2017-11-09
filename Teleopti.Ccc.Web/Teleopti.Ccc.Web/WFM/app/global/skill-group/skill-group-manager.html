@@ -42,6 +42,11 @@
 								<span ng-cloak ng-show="vm.managerData.currentSkillGroup.Id === skillGroup.Id" class="list-dot grow-out">
 									<b class="mdi mdi-check list-mark"></b>
 								</span>
+								<div class="wfm-leave-behind wfm-leave-behind-1" ng-click="vm.deleteSkillGroup(skillGroup); $event.stopPropagation();">
+									<span>
+										<i class="mdi mdi-delete"></i>
+									</span>
+								</div>
 							</li>
 						</ul>
 					</div>
