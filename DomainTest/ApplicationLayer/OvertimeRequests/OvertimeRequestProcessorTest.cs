@@ -153,6 +153,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
+		[SetCulture("en-US")]
 		public void ShouldDenyWhenOutofSiteOpenHour()
 		{
 			setupPerson();
