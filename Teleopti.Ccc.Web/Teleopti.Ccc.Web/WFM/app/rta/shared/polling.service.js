@@ -48,7 +48,14 @@
 				}
 
 				function callAndScheduleCall() {
-					call().finally(scheduleCall);
+					_scheduledCall = null;
+					call().finally(function () {
+						// dont reschedule if there's already one scheduled
+						// this can happen because cancelation doesnt always prevent the call from occurring
+						if (_scheduledCall) 
+							return;
+						scheduleCall();
+					});
 				}
 
 				function scheduleCall() {
