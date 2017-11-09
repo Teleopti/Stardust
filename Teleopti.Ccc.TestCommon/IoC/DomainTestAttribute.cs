@@ -45,6 +45,7 @@ using Teleopti.Ccc.TestCommon.Services;
 namespace Teleopti.Ccc.TestCommon.IoC
 {
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpreadTransactionLocksStrategy_41823)]
+	//[Toggle(Domain.FeatureFlags.Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)] turn on when PBI is done
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";

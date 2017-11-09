@@ -27,14 +27,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 					.Should().Be.SameInstanceAs(presentContext);
 			}
 		}
-
-		[Test]
-		public void ShouldNotReturnContextIfThereWasNone()
-		{
-			Target.ResourceCalculate(DateOnly.Today, new ResourceCalculationData(new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>()), false, false));
-
-			ResourceCalculationContext.InContext
-				.Should().Be.False();
-		}
 	}
 }

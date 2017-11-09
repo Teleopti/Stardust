@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
@@ -16,9 +15,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class CascadingResourceCalculationEvenRelativeDifferenceTest
+	public class CascadingResourceCalculationEvenRelativeDifferenceTest : ResourceCalculationScenario
 	{
-		public IResourceCalculation Target;
+		public ResourceCalculateWithNewContext Target;
 
 		[Test]
 		public void ShouldTryToMakeSubSkillHaveSameRelativeDifferenceAfterShoveling_BothSkillSameDiffAtStart([Values(2, 100)] double skillB2Demand, [Values(true, false)] bool primarySkillOpened)

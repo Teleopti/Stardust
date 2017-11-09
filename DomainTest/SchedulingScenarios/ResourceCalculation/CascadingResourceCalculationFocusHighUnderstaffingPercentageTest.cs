@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	//specific tests to ensure skills with high understaffing percentage are reduced quickly
 	[DomainTest]
-	public class CascadingResourceCalculationFocusHighUnderstaffingPercentageTest
+	public class CascadingResourceCalculationFocusHighUnderstaffingPercentageTest : ResourceCalculationScenario
 	{
-		public IResourceCalculation Target;
+		public ResourceCalculateWithNewContext Target;
 
 		[Test]
 		public void ShouldPutMoreResourcesOnSkillsWithHighestUnderstaffPercentage()

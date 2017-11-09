@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationOverstaffedParallellSkillsTest : ResourceCalculationScenario
 	{
-		public IResourceCalculation Target;
+		public ResourceCalculateWithNewContext Target;
 
 		[Test]
 		public void ShouldMoveResourceToTwoSkillsWithSameDemand()

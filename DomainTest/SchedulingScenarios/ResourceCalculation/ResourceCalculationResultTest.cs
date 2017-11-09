@@ -7,10 +7,12 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.DomainTest.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class ResourceCalculationResultTest : ResourceCalculationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public Func<IResourceOptimizationHelperExtended> ResourceOptimizationHelperExtended;
+		public ResourceCalculateWithNewContext Target;
 		public InitMaxSeatForStateHolder InitMaxSeatForStateHolder;
 
 		[TestCase(2000, 0, 2000)]
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date), agents, asses, skillDay);
 
-			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			Target.ResourceCalculate(date, new ResourceCalculationData(SchedulerStateHolder().SchedulingResultState,false, false));
 
 			skillDay.SkillStaffPeriodCollection.First().EstimatedServiceLevelShrinkage.Value
 				.Should().Be.IncludedIn(serviceLevel-0.01, serviceLevel+0.01);
@@ -73,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] {agent}, new[] {ass}, skillDay);
 
-			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			Target.ResourceCalculate(date, new ResourceCalculationData(SchedulerStateHolder().SchedulingResultState,false, false));
 
 			skillDay.SkillStaffPeriodCollection.First().EstimatedServiceLevelShrinkage.Value.Should().Be.EqualTo(0);
 		}
@@ -102,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			}
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), agents, asses, skillDay);
 
-			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			Target.ResourceCalculate(date, new ResourceCalculationData(SchedulerStateHolder().SchedulingResultState,false, false));
 
 			skillDay.SkillStaffPeriodCollection.First().EstimatedServiceLevelShrinkage.Value.Should().Be.IncludedIn(0.75, 0.8);
 		}
@@ -118,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
 			InitMaxSeatForStateHolder.Execute(15);
 
-			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			Target.ResourceCalculate(date, new ResourceCalculationData(SchedulerStateHolder().SchedulingResultState,false, false));
 
 			SchedulerStateHolder()
 				.SchedulingResultState.SkillDays.Single()
@@ -140,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
 			InitMaxSeatForStateHolder.Execute(intervalLength);
 
-			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			Target.ResourceCalculate(date, new ResourceCalculationData(SchedulerStateHolder().SchedulingResultState,false, false));
 
 			SchedulerStateHolder()
 				.SchedulingResultState.SkillDays.Single()
@@ -162,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
 			InitMaxSeatForStateHolder.Execute(15);
 
-			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			Target.ResourceCalculate(date, new ResourceCalculationData(SchedulerStateHolder().SchedulingResultState,false, false));
 
 			SchedulerStateHolder()
 				.SchedulingResultState.SkillDays.Single()
@@ -185,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date.AddDays(1)), new[] { agent }, new[] { ass }, Enumerable.Empty<ISkillDay>());
 			InitMaxSeatForStateHolder.Execute(15);
 
-			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			Target.ResourceCalculate(date.ToDateOnlyPeriod().Inflate(1), new ResourceCalculationData(SchedulerStateHolder().SchedulingResultState,false, false));
 
 			SchedulerStateHolder()
 				.SchedulingResultState.SkillDays.Single()

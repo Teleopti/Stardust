@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class GuessResourceCalculationHasBeenMadeTest : ResourceCalculationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public Func<IResourceOptimizationHelperExtended> ResourceOptimizationHelperExtended;
+		public ResourceCalculateWithNewContext Target;
 
 		[Test]
 		public void NoResourceCalculationHasBeenMade()
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent}, new[] {ass}, skillDay);
 
-			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			Target.ResourceCalculate(date, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 
 			stateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade()
 				.Should().Be.True();

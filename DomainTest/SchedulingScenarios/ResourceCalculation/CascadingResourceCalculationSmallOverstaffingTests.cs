@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	{
 		//tests are based on limit on 0.1 -> if that changes, tests need to be rewritten
 		//(don't know if it's better to fake the value, but ended up not doing so...)
-		public IResourceCalculation Target;
+		public ResourceCalculateWithNewContext Target;
 
 		[Test]
 		public void ShouldNotShovelIfTooSmallOverstaff()
