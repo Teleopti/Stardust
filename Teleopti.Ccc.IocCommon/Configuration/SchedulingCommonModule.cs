@@ -118,20 +118,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680))
 			{
 				builder.RegisterType<CascadingResourceCalculationNew>().As<IResourceCalculation>().SingleInstance();
-				builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects(); //TODO: scope?
+				builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects();
 				builder.RegisterType<ResourceOptimizationHelperNew>().As<ResourceOptimizationHelper>().SingleInstance();
 				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehaviorNew>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
-				builder.RegisterType<OptimizeIntradayDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope(); //TODO: scope?
-				builder.RegisterType<OptimizationDesktopExecuterNew>().As<OptimizationDesktopExecuter>().InstancePerLifetimeScope(); //TODO: scope?
+				builder.RegisterType<OptimizeIntradayDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
+				builder.RegisterType<OptimizationDesktopExecuterNew>().As<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
 			}
 			else
 			{
 				builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();		
-				builder.RegisterType<WeeklyRestSolverCommandOld>().As<IWeeklyRestSolverCommand>().ApplyAspects(); //TODO: scope?
+				builder.RegisterType<WeeklyRestSolverCommandOld>().As<IWeeklyRestSolverCommand>().ApplyAspects();
 				builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
 				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
-				builder.RegisterType<OptimizeIntradayIslandsDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope(); //TODO: scope?
-				builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope(); //TODO: scope?
+				builder.RegisterType<OptimizeIntradayIslandsDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
+				builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<ResourceCalculateWithNewContext>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();

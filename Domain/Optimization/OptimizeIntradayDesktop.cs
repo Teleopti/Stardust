@@ -15,19 +15,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly DesktopOptimizationContext _desktopOptimizationContext;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly ResourceCalculateWithNewContext _resourceCalculateWithNewContext;
 		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 
 		public OptimizeIntradayDesktop(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
 			DesktopOptimizationContext desktopOptimizationContext,
-			Func<ISchedulerStateHolder> schedulerStateHolder)
+			Func<ISchedulerStateHolder> schedulerStateHolder,
+			ResourceCalculateWithNewContext resourceCalculateWithNewContext)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
 			_desktopOptimizationContext = desktopOptimizationContext;
 			_schedulerStateHolder = schedulerStateHolder;
+			_resourceCalculateWithNewContext = resourceCalculateWithNewContext;
 		}
 		
 		public void Optimize(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizerPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
 		{
+			var stateHolder = _schedulerStateHolder();
 			var command = new IntradayOptimizationCommand
 			{
 				Period = selectedPeriod,
@@ -35,10 +39,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 				RunAsynchronously = false
 			};
 
-			using (_desktopOptimizationContext.Set(command, _schedulerStateHolder(), optimizerPreferences, intradayOptimizationCallback))
+			using (_desktopOptimizationContext.Set(command, stateHolder, optimizerPreferences, intradayOptimizationCallback))
 			{
 				_intradayOptimizationCommandHandler.Execute(command);
 			}
+			_resourceCalculateWithNewContext.ResourceCalculate(selectedPeriod, new ResourceCalculationData(stateHolder.SchedulingResultState, stateHolder.ConsiderShortBreaks, false));
 		}	
 	}
 	

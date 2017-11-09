@@ -27,9 +27,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			_resourcePlannerMergeTeamblockClassicIntraday45508 = resourcePlannerMergeTeamblockClassicIntraday45508;
 			_resourcePlanner_BreakPreferenceStartTimeByMax_46002 = resourcePlannerBreakPreferenceStartTimeByMax46002;
 			_resourcePlannerRemoveImplicitResCalcContext46680 = resourcePlannerRemoveImplicitResCalcContext46680;
-			
-			if(_resourcePlannerRemoveImplicitResCalcContext46680)
-				Assert.Ignore("Klagge & Rågge fixar snart");
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
