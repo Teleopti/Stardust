@@ -51,16 +51,13 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			scheduleDictionary.AddPersonAssignment(personAssignment);
 
 			var result =
-				Target.Execute(new HintInput(null, new[] { agent }, planningPeriod,
+				Target.Execute(new HintInput(scheduleDictionary, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameStartTime = true
-					}), false)
-				{
-					CurrentSchedule = scheduleDictionary
-				}).InvalidResources;
+					}), false)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));
@@ -90,16 +87,13 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			scheduleDictionary.AddPersonAssignment(personAssignment);
 
 			var result =
-				Target.Execute(new HintInput(null, new[] { agent }, planningPeriod,
+				Target.Execute(new HintInput(scheduleDictionary, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShiftCategory = true
-					}), false)
-				{
-					CurrentSchedule = scheduleDictionary
-				}).InvalidResources;
+					}), false)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));
@@ -128,16 +122,13 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			scheduleDictionary.AddPersonAssignment(personAssignment);
 
 			var result =
-				Target.Execute(new HintInput(null, new[] { agent }, planningPeriod,
+				Target.Execute(new HintInput(scheduleDictionary, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShift = true
-					}), false)
-				{
-					CurrentSchedule = scheduleDictionary
-				}).InvalidResources;
+					}), false)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));
