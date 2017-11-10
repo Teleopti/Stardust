@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				Amount = totalBadgeAmount,
 				CalculatedDate = new DateOnly(LastCalculatedDate),
 				Description = "test",
-				InsertedOn = new DateTime(2014, 8, 20)
+				InsertedOn = new DateTime(2014, 8, 20, 0, 0, 0, DateTimeKind.Utc)
 			};
 
 			var badgeRep = new AgentBadgeTransactionRepository(uow);
