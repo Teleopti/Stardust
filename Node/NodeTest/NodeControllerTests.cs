@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
 using NodeTest.Fakes;
@@ -25,8 +26,7 @@ namespace NodeTest
 		[SetUp]
 		public void SetUp()
 		{
-			var parameters = new TestJobParams("Test Job",
-			                                   TimeSpan.FromSeconds(1));
+			var parameters = new TestJobParams("Test Job", 20);
 
 			var ser = JsonConvert.SerializeObject(parameters);
 
@@ -160,11 +160,12 @@ namespace NodeTest
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
 			_nodeController.StartJob(_jobQueueItemEntity.JobId);
 
+			while (!_workerWrapper.IsWorking)
+			{
+				Thread.Sleep(200);
+			}
 			var actionResult = _nodeController.TryCancelJob(_jobQueueItemEntity.JobId);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.OK);
+			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken()).Result.StatusCode == HttpStatusCode.OK);
 		}
 
 		[Test]
@@ -241,7 +242,7 @@ namespace NodeTest
 			};
 
 			var parameters = new TestJobParams("Test Job",
-			                                   TimeSpan.FromSeconds(1));
+			                                  1);
 			var ser = JsonConvert.SerializeObject(parameters);
 
 			var jobToDo2 = new JobQueueItemEntity

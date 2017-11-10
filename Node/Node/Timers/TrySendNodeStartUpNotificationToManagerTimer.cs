@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 using Timer = System.Timers.Timer;
@@ -12,8 +11,14 @@ namespace Stardust.Node.Timers
 {
 	public class TrySendNodeStartUpNotificationToManagerTimer : Timer
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (TrySendNodeStartUpNotificationToManagerTimer));
+		private readonly TimerExceptionLoggerStrategyHandler _exceptionLoggerHandler;
+		private readonly string _whoAmI;
+		private readonly NodeConfiguration _nodeConfiguration;
+		private readonly Uri _callbackToManagerTemplateUri;
+		private readonly IHttpSender _httpSender;
+		private readonly CancellationTokenSource _cancellationTokenSource;
+
+		public Uri CallbackToManagerTemplateUri { get; private set; }
 
 		public TrySendNodeStartUpNotificationToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                                    IHttpSender httpSender,
@@ -26,18 +31,11 @@ namespace Stardust.Node.Timers
 			_callbackToManagerTemplateUri = callbackToManagerTemplateUri;
 			_httpSender = httpSender;
 			_whoAmI = _nodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			_exceptionLoggerHandler = new TimerExceptionLoggerStrategyHandler(TimerExceptionLoggerStrategyHandler.DefaultLogInterval, GetType());
 
 			Elapsed += OnTimedEvent;
 			AutoReset = autoReset;
 		}
-
-		private readonly string _whoAmI;
-		private readonly NodeConfiguration _nodeConfiguration;
-		private readonly Uri _callbackToManagerTemplateUri;
-		private readonly IHttpSender _httpSender;
-		private readonly CancellationTokenSource _cancellationTokenSource;
-
-		public Uri CallbackToManagerTemplateUri { get; private set; }
 
 		protected override void Dispose(bool disposing)
 		{
@@ -82,13 +80,17 @@ namespace Stardust.Node.Timers
 				}
 				else
 				{
-					Logger.WarningWithLineNumber(_whoAmI + ": Node start up notification to manager failed.");
+					var currentScopeMessage =
+						LoggerExtensions.GetFormattedLogMessage(_whoAmI + ": Node start up notification to manager failed.");
+					_exceptionLoggerHandler.LogWarning(currentScopeMessage);
 				}
 			}
 
-			catch
+			catch (Exception exception)
 			{
-				Logger.WarningWithLineNumber(_whoAmI + ": Node start up notification to manager failed.");
+				var currentScopeMessage =
+					LoggerExtensions.GetFormattedLogMessage(_whoAmI + ": Node start up notification to manager failed.");
+				_exceptionLoggerHandler.LogWarning(currentScopeMessage, exception);
 			}
 		}
 	}

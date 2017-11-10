@@ -12,24 +12,24 @@ namespace Stardust.Node.Timers
 {
 	public class PingToManagerTimer : Timer
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
+		//private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
+		private readonly string _whoAmI;
+		private readonly NodeConfiguration _nodeConfiguration;
+		private readonly IHttpSender _httpSender;
+		private readonly CancellationTokenSource _cancellationTokenSource;
+		private readonly TimerExceptionLoggerStrategyHandler _exceptionLoggerHandler;
 
 		public PingToManagerTimer(NodeConfiguration nodeConfiguration,
 		                          IHttpSender httpSender) : base(nodeConfiguration.PingToManagerSeconds*1000)
 		{
 			_cancellationTokenSource = new CancellationTokenSource();
-
+			_exceptionLoggerHandler = new TimerExceptionLoggerStrategyHandler(TimerExceptionLoggerStrategyHandler.DefaultLogInterval, GetType());
 			_nodeConfiguration = nodeConfiguration;
 			_httpSender = httpSender;
 			_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
 			Elapsed += OnTimedEvent;
 		}
-
-		private readonly string _whoAmI;
-		private readonly NodeConfiguration _nodeConfiguration;
-		private readonly IHttpSender _httpSender;
-		private readonly CancellationTokenSource _cancellationTokenSource;
 
 		protected override void Dispose(bool disposing)
 		{
@@ -59,10 +59,15 @@ namespace Stardust.Node.Timers
 				await SendPing(_nodeConfiguration.BaseAddress,
 							   _nodeConfiguration.GetManagerNodeHeartbeatUri(),
 				               _cancellationTokenSource.Token);
+				
+				_exceptionLoggerHandler.ResetLastLoggedTime("Successfully sent Heartbeat to manager again.");
 			}
-			catch
+			catch(Exception exception)
 			{
-				Logger.InfoWithLineNumber(_whoAmI + ": Heartbeat failed. Is the manager up and running?");
+				var currentScopeMessage =
+					LoggerExtensions.GetFormattedLogMessage(_whoAmI + ": Heartbeat failed. Is the manager up and running?");
+				_exceptionLoggerHandler.LogInfo(currentScopeMessage,exception);
+				//Logger.InfoWithLineNumber(_whoAmI + ": Heartbeat failed. Is the manager up and running?");
 			}
 		}
 	}

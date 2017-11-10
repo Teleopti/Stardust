@@ -32,7 +32,7 @@ namespace NodeTest
 		public void Setup()
 		{
 			var parameters = new TestJobParams("Test Job",
-			                                   TimeSpan.FromSeconds(1));
+			                                   1);
 
 			var ser = JsonConvert.SerializeObject(parameters);
 

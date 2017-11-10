@@ -119,6 +119,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Timers\TimerExceptionLoggerStrategyHandler.cs" />
     <Compile Include="Timers\TrySendJobDetailToManagerTimer.cs">
       <SubType>Component</SubType>
     </Compile>

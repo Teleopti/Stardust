@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading;
 using Autofac;
+using Newtonsoft.Json;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
+using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
 
@@ -31,8 +33,8 @@ namespace NodeTest
 		{
 			var invokehandler = Container.Resolve<InvokeHandler>();
 
-			invokehandler.Invoke(new TestJobParams("Test Job",
-			                                       TimeSpan.FromSeconds(1)),
+			var jobParams = new TestJobParams("Test Job", 1);
+			invokehandler.Invoke(jobParams,
 			                     new CancellationTokenSource(),
 			                     _=>{});
 		}

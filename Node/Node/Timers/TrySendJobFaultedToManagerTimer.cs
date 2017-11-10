@@ -12,7 +12,6 @@ namespace Stardust.Node.Timers
 {
 	public class TrySendJobFaultedToManagerTimer : TrySendStatusToManagerTimer
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendJobFaultedToManagerTimer));
 		private readonly IHttpSender _httpSender;
 
 		public TrySendJobFaultedToManagerTimer(NodeConfiguration nodeConfiguration,
@@ -51,9 +50,9 @@ namespace Stardust.Node.Timers
 				return response;
 			}
 
-			catch (Exception exp)
+			catch (Exception exception)
 			{
-				Logger.ErrorWithLineNumber("Error in TrySendJobFaultedTimer.", exp);
+				_exceptionLoggerHandler.LogError("Error in TrySendJobFaultedTimer.", exception);
 				throw;
 			}
 		}

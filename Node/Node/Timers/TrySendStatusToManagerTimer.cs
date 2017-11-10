@@ -15,8 +15,15 @@ namespace Stardust.Node.Timers
 {
 	public class TrySendStatusToManagerTimer : Timer
 	{
-		private static readonly ILog Logger =
-			LogManager.GetLogger(typeof (TrySendStatusToManagerTimer));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(TrySendStatusToManagerTimer));
+		private readonly CancellationTokenSource _cancellationTokenSource;
+		private readonly string _whoAmI;
+		private readonly JobDetailSender _jobDetailSender;
+		private readonly IHttpSender _httpSender;
+		public JobQueueItemEntity JobQueueItemEntity { get; set; }
+		public Uri CallbackTemplateUri { get; set; }
+		public event EventHandler TrySendStatusSucceded;
+		protected readonly TimerExceptionLoggerStrategyHandler _exceptionLoggerHandler;
 
 		public TrySendStatusToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                   Uri callbackTemplateUri,
@@ -28,19 +35,11 @@ namespace Stardust.Node.Timers
 			_jobDetailSender = jobDetailSender;
 			_httpSender = httpSender;
 			CallbackTemplateUri = callbackTemplateUri;
-
+			_exceptionLoggerHandler = new TimerExceptionLoggerStrategyHandler(TimerExceptionLoggerStrategyHandler.DefaultLogInterval, GetType());
+			
 			Elapsed += OnTimedEvent;
 			AutoReset = true;
 		}
-
-		private readonly CancellationTokenSource _cancellationTokenSource;
-		private readonly string _whoAmI;
-		private readonly JobDetailSender _jobDetailSender;
-		private readonly IHttpSender _httpSender;
-
-		public JobQueueItemEntity JobQueueItemEntity { get; set; }
-		public Uri CallbackTemplateUri { get; set; }
-		public event EventHandler TrySendStatusSucceded;
 
 		public void InvokeTriggerTrySendStatusSucceded()
 		{
@@ -64,7 +63,9 @@ namespace Stardust.Node.Timers
 
 			catch (Exception exp)
 			{
-				Logger.ErrorWithLineNumber("Error in TrySendStatus.", exp);
+				var currentScopeMessage =
+					LoggerExtensions.GetFormattedLogMessage("Error in TrySendStatus.");
+				_exceptionLoggerHandler.LogError(currentScopeMessage, exp);
 				throw;
 			}
 		}
@@ -105,24 +106,31 @@ namespace Stardust.Node.Timers
 
 				if (httpResponseMessage.IsSuccessStatusCode)
 				{
+					if(!Logger.IsDebugEnabled)
+					{
+						_exceptionLoggerHandler.ResetLastLoggedTime("Sent job status to manager again.");
+					}
+				
 					Logger.DebugWithLineNumber($"{_whoAmI} : Sent job status to manager ({httpResponseMessage.RequestMessage.RequestUri}) " +
-							  $"for job ( jobId, jobName ) : ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} )");
+											   $"for job ( jobId, jobName ) : ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} )");
 					
 					InvokeTriggerTrySendStatusSucceded();
 				}
 				else
 				{
 					Start();
-					Logger.InfoWithLineNumber($"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) : " +
-						$"( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} ). Reason : {httpResponseMessage.ReasonPhrase}");
+					var errorMessage = $"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) : " +
+					                   $"( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} ). Reason : {httpResponseMessage.ReasonPhrase}";
+					_exceptionLoggerHandler.LogError(LoggerExtensions.GetFormattedLogMessage(errorMessage));
 				}
 			}
 
 			catch (Exception exp)
 			{
 				Start();
-				Logger.ErrorWithLineNumber($"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) :" +
-					$" ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} )", exp);
+				var errorMessage = $"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) :" +
+				                   $" ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} )";
+				_exceptionLoggerHandler.LogError(LoggerExtensions.GetFormattedLogMessage(errorMessage), exp);
 			}
 		}
 	}

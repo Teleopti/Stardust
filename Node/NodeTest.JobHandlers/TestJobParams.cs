@@ -5,7 +5,7 @@ namespace NodeTest.JobHandlers
 	public class TestJobParams
 	{
 		public TestJobParams(string name, 
-								 TimeSpan duration)
+								 int duration)
 		{
 			Name = name;
 			Duration = duration;
@@ -13,6 +13,6 @@ namespace NodeTest.JobHandlers
 
 		public string Name { get; private set; }
 
-		public TimeSpan Duration { get; set; }
+		public int Duration { get; set; }
 	}
 }

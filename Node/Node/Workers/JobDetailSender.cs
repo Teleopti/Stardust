@@ -52,7 +52,6 @@ namespace Stardust.Node.Workers
 		public void Send(CancellationToken cancellationToken)
 		{
 			if (_jobDetails == null || _jobDetails.Count <= 0) return;
-
 			lock (_jobDetails)
 			{
 				try

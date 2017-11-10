@@ -21,7 +21,7 @@ namespace NodeTest.JobHandlers
 
 			jobProgress = new TestJobProgress
 			{
-				Text = "Will execute for : " + message.Duration.TotalSeconds + " seconds."
+				Text = "Will execute for : " + message.Duration + " seconds."
 			};
 			progress(jobProgress.Text);
 
@@ -30,7 +30,7 @@ namespace NodeTest.JobHandlers
 
 			var progressCounter = 0;
 
-			while (stopwatch.Elapsed <= message.Duration)
+			while (stopwatch.Elapsed <= TimeSpan.FromSeconds(message.Duration))
 			{
 				progressCounter++;
 

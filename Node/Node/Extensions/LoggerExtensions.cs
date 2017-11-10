@@ -21,6 +21,15 @@ namespace Stardust.Node.Extensions
 				throw new ArgumentNullException("logger");
 			}
 		}
+		
+		public static string GetFormattedLogMessage(
+			string info,
+			[CallerFilePath] string file = "",
+			[CallerMemberName] string member = "",
+			[CallerLineNumber] int line = 0)
+		{
+			return  $"{Path.GetFileName(file)}_{member}({line}): {info}";
+		}
 
 		public static void ErrorWithLineNumber(this ILog logger,
 		                                       string info,
