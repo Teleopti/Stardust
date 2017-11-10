@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
 	public class BlockSchedulingPreferenceHint : IScheduleHint
 	{
-
 		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var usePreferenes = input.UsePreferences;

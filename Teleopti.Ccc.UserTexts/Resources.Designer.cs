@@ -30476,6 +30476,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The shift category {0} on {1} doesn&apos;t exist in the shift bag {2}.
+        /// </summary>
+        public static string ShiftCategoryNotMatchingShiftBag {
+            get {
+                return ResourceManager.GetString("ShiftCategoryNotMatchingShiftBag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift Category Points:.
         /// </summary>
         public static string ShiftCategoryPoints {
@@ -32441,7 +32450,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The start time of the shift on {0} doesn&apos;t exist in the shift bag {1}.
+        ///   Looks up a localized string similar to The start time {0} on {1} doesn&apos;t exist in the shift bag {2}.
         /// </summary>
         public static string StartTimeNotMatchingShiftBag {
             get {

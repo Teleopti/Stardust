@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.UserTexts;
@@ -10,13 +10,14 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 	public class BlockSchedulingNotMatchShiftBagHint : IScheduleHint
 	{
 		private readonly IScheduleDayEquator _scheduleDayEquator;
-		private readonly IShiftCreatorService _shiftCreatorService;
+		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 
-		public BlockSchedulingNotMatchShiftBagHint(IScheduleDayEquator scheduleDayEquator, IShiftCreatorService shiftCreatorService)
+		public BlockSchedulingNotMatchShiftBagHint(IScheduleDayEquator scheduleDayEquator, IShiftProjectionCacheManager shiftProjectionCacheManager)
 		{
 			_scheduleDayEquator = scheduleDayEquator;
-			_shiftCreatorService = shiftCreatorService;
+			_shiftProjectionCacheManager = shiftProjectionCacheManager;
 		}
+
 		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var people = input.People;
@@ -30,38 +31,44 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
 				if (!blockOption.UseTeamBlockOption) continue;
 				var shiftBag = person.Period(period.StartDate).RuleSetBag;
-				var allStartTime =new List<DateTime>();
-				var allShifts = new List<IWorkShift>();
-				foreach (var workShiftRuleSet in shiftBag.RuleSetCollection)
-				{
-					var workShiftCollections = _shiftCreatorService.Generate(workShiftRuleSet, null);
-					foreach (var workShiftCollection in workShiftCollections)
-					{
-						allStartTime.AddRange(workShiftCollection.Select(x=>x.Projection.Period().Value.StartDateTime));
-						allShifts.AddRange(workShiftCollection);
-					}
-				}
-				allStartTime = allStartTime.Distinct().ToList();
-				allShifts = allShifts.Distinct().ToList();
+				var shiftProjectionCaches = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(period.StartDate, person.PermissionInformation.DefaultTimeZone()), shiftBag.RuleSetCollection, false);
+				var allStartTime = shiftProjectionCaches.Select(x => x.WorkShiftStartTime).Distinct().ToList();
+				var allShifts = shiftProjectionCaches.Select(x=>x.TheWorkShift).Distinct().ToList();
 				
 				var scheduleDays = schedule.Value.ScheduledDayCollection(period);
 				foreach (var scheduleDay in scheduleDays)
 				{
-					if (scheduleDay?.PersonAssignment() == null || scheduleDay.HasDayOff()) continue;
+					if (scheduleDay?.PersonAssignment() == null || scheduleDay.HasDayOff() || !scheduleDay.PersonAssignment().ShiftLayers.Any()) continue;
 					var timezone = scheduleDay.TimeZone;
-					if (blockOption.UseBlockSameStartTime)
+
+					if (blockOption.UseBlockSameShiftCategory)
 					{
-						var timeOfDay = scheduleDay.PersonAssignment().Period.StartDateTimeLocal(timezone).TimeOfDay;
-						if (allStartTime.All(x=> x.TimeOfDay != timeOfDay))
+						var allShiftCategories = shiftBag.ShiftCategoriesInBag();
+						var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
+						if (allShiftCategories.All(x => x.Id.GetValueOrDefault() != shiftCategory.Id.GetValueOrDefault()))
 						{
 							hintResult.Add(new PersonHintError
 							{
 								PersonName = person.Name.ToString(),
 								PersonId = person.Id.Value,
-								ValidationError =
-									string.Format(Resources.StartTimeNotMatchingShiftBag, scheduleDay.PersonAssignment().Date,
-										shiftBag.Description.Name)
+								ValidationError = string.Format(Resources.ShiftCategoryNotMatchingShiftBag, shiftCategory.Description.ShortName, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftBag.Description.Name)
 							}, GetType());
+							break;
+						}
+					}
+
+					if (blockOption.UseBlockSameStartTime)
+					{
+						var timeOfDay = scheduleDay.PersonAssignment().Period.StartDateTimeLocal(timezone).TimeOfDay;
+						if (allStartTime.All(x=> x != timeOfDay))
+						{
+							hintResult.Add(new PersonHintError
+							{
+								PersonName = person.Name.ToString(),
+								PersonId = person.Id.Value,
+								ValidationError = string.Format(Resources.StartTimeNotMatchingShiftBag, timeOfDay, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftBag.Description.Name)
+							}, GetType());
+							break;
 						}
 					}
 					
@@ -88,10 +95,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								{
 									PersonName = person.Name.ToString(),
 									PersonId = person.Id.Value,
-									ValidationError =
-										string.Format(Resources.ShiftNotMatchingShiftBag, scheduleDay.PersonAssignment().Date,
-											shiftBag.Description.Name)
+									ValidationError = string.Format(Resources.ShiftNotMatchingShiftBag, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftBag.Description.Name)
 								}, GetType());
+								break;
 							}
 						}
 					}

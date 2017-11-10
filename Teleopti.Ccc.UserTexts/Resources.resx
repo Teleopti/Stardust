@@ -16685,8 +16685,8 @@ Do you want to participate?</value>
     <value>Your overtime request has been denied automatically, due to a rule set up by the administrator.</value>
   </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
-    <value>The start time of the shift on {0} doesn't exist in the shift bag {1}</value>
-    <comment>Pre-scheduleing validation message in web scheduling and client. {0} is the date for the shift and {1} is the shift bag</comment>
+    <value>The start time {0} on {1} doesn't exist in the shift bag {2}</value>
+    <comment>Pre-scheduleing validation message in web scheduling and client. {0} is the start time, {1} is the date for the shift and {2} is the shift bag</comment>
   </data>
   <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
     <value>The shift on {0} doesn't exist in the shift bag {1}</value>
@@ -16723,5 +16723,9 @@ Do you want to participate?</value>
   <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>
     <comment>Overtime request has been denied. Some days in the requested period are not open for requests.</comment>
+  </data>
+  <data name="ShiftCategoryNotMatchingShiftBag" xml:space="preserve">
+    <value>The shift category {0} on {1} doesn't exist in the shift bag {2}</value>
+    <comment>Scheduleing validation message in web scheduling and client. {0} is the shift category, {1} is the date for the shift and {2} is the shift bag</comment>
   </data>
 </root>
