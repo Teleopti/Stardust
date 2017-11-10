@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public DayOffOptimizationDesktopTeamBlock Target;
-		public IResourceOptimizationHelperExtended ResourceCalculation;
+		public ResourceCalculateWithNewContext ResourceCalculation;
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDaysA.Union(skillDaysB));
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
 			if(beInResourceCalculatedStateAtStartup)
-				ResourceCalculation.ResourceCalculateAllDays(new SchedulingProgress(), false);
+				ResourceCalculation.ResourceCalculate(period, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 
 			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDaysA.Union(skillDaysB));
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
 			if (beInResourceCalculatedStateAtStartup)
-				ResourceCalculation.ResourceCalculateAllDays(new SchedulingProgress(), false);
+				ResourceCalculation.ResourceCalculate(period, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 
 			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 

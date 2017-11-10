@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		protected DayOffOptimizationScenario(RemoveImplicitResCalcContext removeImplicitResCalcContext)
 		{
 			_removeImplicitResCalcContext = removeImplicitResCalcContext;
-			if(removeImplicitResCalcContext==RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue)
-				Assert.Ignore("To be fixed 46680");
 		}
 		
 		public virtual void Setup(ISystem system, IIocConfiguration configuration)
