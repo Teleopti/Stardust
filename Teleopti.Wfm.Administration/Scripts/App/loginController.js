@@ -46,9 +46,9 @@
 		vm.loginPassword = "";
 		vm.Message = '';
 		vm.ErrorMessage = '';
-		vm.Id = cookie ? cookie.idKey : null;
-		vm.user = cookie ? cookie.userKey : null;
-
+		vm.user = sessionStorage.getItem(userKey);
+		vm.Id = sessionStorage.getItem(idKey);
+		
 		$scope.state = {
 			selected: 1
 		};
@@ -97,10 +97,13 @@
 			vm.Message = 'Successful log in...';
 			// Cache the username token in session storage.
 			sessionStorage.setItem(emailKey, vm.loginEmail);
+			vm.UserName = data.UserName;
+			sessionStorage.setItem(userKey, vm.UserName);
+			sessionStorage.setItem(idKey, vm.Id);
 			//lets do authentication in cookie
 			var today = new Date();
 			var expireDate = new Date(today.getTime() + 30 * 60000);
-			$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'userKey': data.UserName, 'idKey': data.Id }, { 'expires': expireDate });
+			$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken}, { 'expires': expireDate });
 		}
 
 		updateCookies();
