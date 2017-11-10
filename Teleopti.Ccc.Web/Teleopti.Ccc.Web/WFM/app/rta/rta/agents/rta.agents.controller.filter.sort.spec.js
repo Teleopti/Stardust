@@ -50,6 +50,26 @@ describe('RtaAgentsController', function() {
 		expect($fakeBackend.lastAgentStatesRequestParams.textFilter).toBe('Charley');
 	});
 
+	it('should not add textFilter to params when no filter', function() {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		expect($fakeBackend.lastAgentStatesRequestParams.textFilter).toBeUndefined();
+	});
+	
+	it('should not add textFilter to params when removing text filter', function() {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+		c.apply(function () {
+			vm.filterText = 'Charley';
+		});
+		c.apply(function () {
+			vm.filterText = '';
+		});
+
+		expect($fakeBackend.lastAgentStatesRequestParams.textFilter).toBeUndefined();
+	});
+
 	it('should default sort by name ascending', function() {
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;

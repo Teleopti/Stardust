@@ -79,7 +79,7 @@
 		var nullStateId = "noState";
 		vm.adherence = {};
 		vm.adherencePercent = null;
-		vm.filterText = "";
+		vm.filterText = null;
 		vm.timestamp = "";
 
 		vm.states = [];
@@ -226,7 +226,7 @@
 				excludedStateIds: excludedStateIds().map(function (s) {
 					return s === nullStateId ? null : s;
 				}),
-				textFilter: vm.filterText,
+				textFilter: vm.filterText || undefined,
 				orderBy: vm.orderBy,
 				direction: vm.direction
 			});
