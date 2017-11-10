@@ -25,16 +25,17 @@
         .controller('TreeDataTwoController', TreeDataTwoController)
         .directive('treeAnimate', treeAnimate);
 
-    TreeDataOneController.$inject = [];
+    TreeDataOneController.$inject = ['$element'];
     TreeDataTwoController.$inject = [];
 
-    function TreeDataOneController() {
+    function TreeDataOneController($element) {
         var vm = this;
 
         vm.node;
         vm.nodeDisplayName = "name";
         vm.nodeChildrenName = "children";
         vm.nodeSelectedMark = "mark";
+        vm.selectedState = "none";
         vm.selectNode = selectNode;
 
         vm.$onInit = fetchSetting;
@@ -48,15 +49,19 @@
             return;
         }
 
-        function selectNode(item) {
+        function selectNode(item, event) {
             vm.node = item;
             if (item.$parent.node[vm.nodeSelectedMark] == true) {
+                item.$parent.node[vm.nodeSelectedMark] = false;
                 if (item.$parent.node[vm.nodeChildrenName] && item.$parent.node[vm.nodeChildrenName].length !== 0) {
+                    removeSemiStateToAllChildren(event.target.parentNode.nextElementSibling);
                     setChildrenNodesToUnselect(item.$parent.node[vm.nodeChildrenName]);
                 }
-                return item.$parent.node[vm.nodeSelectedMark] = false;
+            } else {
+                setParentNodesSelectState(item.$parent, true);
             }
-            return setParentNodesSelectState(item.$parent, true);
+            removeSemiStateToNode(event.target);
+            return checkSemiStateToSelectedNodeParent(item.$parent, event.target.parentNode.parentNode.parentNode.parentNode);
         }
 
         function setChildrenNodesToUnselect(children) {
@@ -73,6 +78,41 @@
             if (data.$parent.$parent.node) {
                 return setParentNodesSelectState(data.$parent.$parent, state);
             }
+        }
+
+        function removeSemiStateToAllChildren(checkItem) {
+            var items = checkItem.getElementsByClassName("semi-select");
+            for (var index = 0; index < items.length; index++) {
+                removeSemiStateToNode(items[index]);
+            }
+        }
+
+        function addSemiStateToNode(checkItem) {
+            if (checkItem.classList.contains("tree-handle-wrapper")) {
+                checkItem.classList.add("semi-select");
+            }
+        }
+
+        function removeSemiStateToNode(checkItem) {
+            if (checkItem.classList.contains("semi-select")) {
+                checkItem.classList.remove("semi-select");
+            }
+        }
+
+        function checkAnyChildrenNodesSelectedState(parentSiblings, checkItem) {
+            var selectedSiblings = parentSiblings.filter(function (sib) { return sib[vm.nodeSelectedMark] == false; })
+            if (selectedSiblings.length == 0 || selectedSiblings.length == parentSiblings.length)
+                return removeSemiStateToNode(checkItem.childNodes[1].childNodes[3]);
+            if (selectedSiblings.length < parentSiblings.length)
+                return addSemiStateToNode(checkItem.childNodes[1].childNodes[3]);
+        }
+
+        function checkSemiStateToSelectedNodeParent(data, checkItem) {
+            if (data.$parent.$parent.node) {
+                checkAnyChildrenNodesSelectedState(data.$parent.$parent.node.nodes, checkItem);
+                return checkSemiStateToSelectedNodeParent(data.$parent.$parent, checkItem.parentNode.parentNode);
+            }
+            return removeSemiStateToNode(checkItem);
         }
     }
 
@@ -98,7 +138,7 @@
             return;
         }
 
-        function selectNode(item) {
+        function selectNode(item, event) {
             vm.node = item;
             var state = !item.$parent.node[vm.nodeSelectedMark];
             item.$parent.node[vm.nodeSelectedMark] = state;
@@ -110,9 +150,10 @@
                 setParentNodesSelectState(item.$parent.$parent.$parent);
             }
             if (item.$parent.node[vm.nodeChildrenName] && item.$parent.node[vm.nodeChildrenName].length !== 0) {
+                removeSemiStateToAllChildren(event.target.parentNode.nextElementSibling);
                 setChildrenNodesSelectState(item.$parent.node[vm.nodeChildrenName], state);
             }
-            return;
+            return checkSemiStateToSelectedNodeParent(item.$parent, event.target.parentNode.parentNode.parentNode.parentNode);
         }
 
         function siblingsHasSelected(siblings) {
@@ -157,6 +198,41 @@
                 }
             });
         }
+
+        function removeSemiStateToAllChildren(checkItem) {
+            var items = checkItem.getElementsByClassName("semi-select");
+            for (var index = 0; index < items.length; index++) {
+                removeSemiStateToNode(items[index]);
+            }
+        }
+
+        function addSemiStateToNode(checkItem) {
+            if (checkItem.classList.contains("tree-handle-wrapper")) {
+                checkItem.classList.add("semi-select");
+            }
+        }
+
+        function removeSemiStateToNode(checkItem) {
+            if (checkItem.classList.contains("semi-select")) {
+                checkItem.classList.remove("semi-select");
+            }
+        }
+
+        function checkAnyChildrenNodesSelectedState(parentSiblings, checkItem) {
+            var selectedSiblings = parentSiblings.filter(function (sib) { return sib[vm.nodeSelectedMark] == false; })
+            if (selectedSiblings.length == 0 || selectedSiblings.length == parentSiblings.length)
+                return removeSemiStateToNode(checkItem.childNodes[1].childNodes[3]);
+            if (selectedSiblings.length < parentSiblings.length)
+                return addSemiStateToNode(checkItem.childNodes[1].childNodes[3]);
+        }
+
+        function checkSemiStateToSelectedNodeParent(data, checkItem) {
+            if (data.$parent.$parent.node) {
+                checkAnyChildrenNodesSelectedState(data.$parent.$parent.node.nodes, checkItem);
+                return checkSemiStateToSelectedNodeParent(data.$parent.$parent, checkItem.parentNode.parentNode);
+            }
+            return;
+        }
     }
 
     function treeAnimate() {
@@ -189,8 +265,8 @@
             function CloseByRoot(el) {
                 var subTree = el.nextElementSibling.getElementsByTagName("li");
                 for (var i = 0; i < subTree.length; i++) {
-                    if (!subTree[i].classList.contains("close")) {
-                        subTree[i].classList.add("close");
+                    if (!subTree[i].classList.contains("hidden")) {
+                        subTree[i].classList.add("hidden");
                     }
                     var icon = subTree[i].getElementsByTagName("i")[0].classList;
                     if (icon.contains("mdi-chevron-down")) {
@@ -203,7 +279,7 @@
             function OpenByRoot(el) {
                 var children = el.nextElementSibling.children;
                 for (var i = 0; i < children.length; i++) {
-                    children[i].classList.remove("close");
+                    children[i].classList.remove("hidden");
                 }
             }
         }

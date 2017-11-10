@@ -145,6 +145,53 @@ wfm-card > md-card {
 	background-color: $white !important;
 }
 
+//new tree-picker
+.tree-toggle-group{
+	padding:5px;
+	align-items: center;
+	border: 1px dotted rgba(0,0,0,0.1);
+	border-top: none;
+  }
+  .tree-handle-wrapper{
+	cursor:pointer;
+	position:relative;
+	margin-left: 3rem;
+  }
+  
+  .selected-true{
+	background: transparent;
+  }
+  
+  .tree-handle-wrapper:before{
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	left:-3rem;
+	border-radius: 2px;
+	transition: background-color .2s ease-in-out;
+	cursor: pointer;
+	background-color: $gray026;
+	content: "";
+	text-align: center;
+	color: $white;
+  }
+  
+  .selected-true .tree-handle-wrapper:before{
+	background-color: $blue-500;
+	content: "✓";
+	text-align: center;
+  }
+
+  .semi-select:before{
+	background-color:$blue-100 !important;
+	content: "─" !important;
+	color: $text-color-standard;
+  }
+  
+  .tree li{
+	border:none;
+  }
+
 
 .md-select-menu-container {
 	z-index: 1000;
