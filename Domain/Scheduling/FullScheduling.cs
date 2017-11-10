@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);
 			var stateHolder = _schedulerStateHolder();
-			var schedulingOptions = _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate);
+			var schedulingOptions = _schedulingOptionsProvider.Fetch(null);
 			Setup(schedulingInformation.Period, schedulingInformation.PersonIds);
 			_schedulingCommandHandler.Execute(new SchedulingCommand
 			{
