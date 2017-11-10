@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			FakeSchedulingSourceScope.UsedToBe().Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 
-		public WebIntradayOptimizationStardustHandlerTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002, bool resourcePlannerRemoveImplicitResCalcContext46680) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerBreakPreferenceStartTimeByMax46002, resourcePlannerRemoveImplicitResCalcContext46680)
+		public WebIntradayOptimizationStardustHandlerTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002, RemoveImplicitResCalcContext resourcePlannerRemoveImplicitResCalcContext46680) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerBreakPreferenceStartTimeByMax46002, resourcePlannerRemoveImplicitResCalcContext46680)
 		{
 		}
 	}
