@@ -1418,6 +1418,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
     <Content Include=".node\package.json" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.PollScheduleUpdates.js" />
     <None Include="Areas\MyTime\Content\Scripts\_references.js" />
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
