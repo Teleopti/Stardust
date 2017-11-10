@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			SeatMapRepository.Add(seatMapLocation);
 			var seat = seatMapLocation.AddSeat("s1", 1);
 			SeatBookingRepository.Add(new SeatBooking(User.CurrentUser(), new DateOnly(2014, 12, 1),
-				new DateTime(2014, 12, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 12, 1, 9, 0, 0, DateTimeKind.Utc)){ Seat = seat });
+				new DateTime(2014, 12, 1, 8, 0, 0), new DateTime(2014, 12, 1, 9, 0, 0)){ Seat = seat });
 
 			var result = Target.FetchMobileMonthData(null).ScheduleDays.ElementAt(1);
 			result.SeatBookings.Should().Be.Null();
