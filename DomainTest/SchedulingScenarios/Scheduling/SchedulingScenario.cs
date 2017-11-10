@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				toggleManager.Enable(Toggles.ResourcePlanner_RemoveClassicShiftCat_46582);
 			if(RemoveImplicitResCalcContext46680 == RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue)
 				toggleManager.Enable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680);
+			else
+				toggleManager.Disable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680);
 		}
 
 		public void OnBefore()
