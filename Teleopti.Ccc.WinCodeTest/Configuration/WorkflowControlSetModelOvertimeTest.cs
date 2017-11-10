@@ -45,7 +45,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var endDateOnly = new DateOnly(startDateOnly.Date.AddMonths(1).AddDays(-1));
 			var requestPeriod = new DateOnlyPeriod(startDateOnly, endDateOnly);
 			Assert.AreEqual(requestPeriod, datePeriod.Period);
+			Assert.AreEqual(false, datePeriod.EnableWorkRuleValidation);
+			Assert.AreEqual(null, datePeriod.WorkRuleValidationHandleType);
 			Assert.AreEqual(new MinMax<int>(2, 15), rollingDatePeriod.BetweenDays);
+			Assert.AreEqual(null, rollingDatePeriod.WorkRuleValidationHandleType);
 		}
 
 		[Test]
@@ -106,6 +109,33 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			rollingPeriod.RollingEnd = 3;
 			Assert.AreEqual(3, rollingPeriod.RollingStart);
 			Assert.AreEqual(3, rollingPeriod.RollingEnd);
+		}
+
+		[Test]
+		public void VerifyCanGetAndSetWorkRuleValidationFromModel()
+		{
+			_target.DomainEntity.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(2010, 6, 1, 2010, 8, 31),
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny
+			});
+			_target.DomainEntity.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				BetweenDays = new MinMax<int>(2, 14),
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Pending
+			});
+
+			var OvertimeRequestPeriodList = _target.OvertimeRequestPeriodModels;
+			var datePeriod = OvertimeRequestPeriodList[0];
+			var rollingPeriod = OvertimeRequestPeriodList[1];
+
+			Assert.AreEqual(true, datePeriod.EnableWorkRuleValidation);
+			Assert.AreEqual(OvertimeWorkRuleValidationHandleType.Deny, datePeriod.WorkRuleValidationHandleType.WorkRuleValidationHandleType);
+
+			Assert.AreEqual(true, rollingPeriod.EnableWorkRuleValidation);
+			Assert.AreEqual(OvertimeWorkRuleValidationHandleType.Pending, rollingPeriod.WorkRuleValidationHandleType.WorkRuleValidationHandleType);
 		}
 	}
 }

@@ -7057,6 +7057,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contract work rule validation.
+        /// </summary>
+        public static string ContractWorkRuleValidation {
+            get {
+                return ResourceManager.GetString("ContractWorkRuleValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Conversation.
         /// </summary>
         public static string Conversation {

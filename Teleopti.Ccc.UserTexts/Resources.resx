@@ -16728,4 +16728,8 @@ Do you want to participate?</value>
     <value>The shift category {0} on {1} doesn't exist in the shift bag {2}</value>
     <comment>Scheduleing validation message in web scheduling and client. {0} is the shift category, {1} is the date for the shift and {2} is the shift bag</comment>
   </data>
+  <data name="ContractWorkRuleValidation" xml:space="preserve">
+    <value>Contract work rule validation</value>
+    <comment>header name for Contract work rule validation in overtime request open period setting</comment>
+  </data>
 </root>

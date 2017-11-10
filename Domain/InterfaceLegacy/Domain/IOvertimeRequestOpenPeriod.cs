@@ -11,6 +11,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		string DenyReason { get; set; }
 		bool EnableWorkRuleValidation { get; set; }
 
-		OvertimeWorkRuleValidationHandleType WorkRuleValidationHandleType { get; set; }
+		OvertimeWorkRuleValidationHandleType? WorkRuleValidationHandleType { get; set; }
 	}
 }

@@ -17,7 +17,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
             _preferredWidth = preferredWidth;
         }
 
-        public override int PreferredWidth
+	    public SFGridCheckBoxColumn(string bindingProperty, string headerText, string groupHeaderText) : this(bindingProperty, headerText)
+	    {
+		    GroupHeaderText = groupHeaderText;
+	    }
+
+		public override int PreferredWidth
         {
             get { return _preferredWidth; }
         }

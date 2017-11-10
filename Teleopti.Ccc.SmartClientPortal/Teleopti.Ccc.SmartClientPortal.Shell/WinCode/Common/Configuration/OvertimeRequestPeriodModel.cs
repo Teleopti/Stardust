@@ -1,6 +1,9 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
+using HandleOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopti.Ccc.Domain.WorkflowControl.OvertimeWorkRuleValidationHandleType, Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings.OvertimeRequestWorkRuleValidationHandleOptionView>;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
@@ -9,6 +12,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public WorkflowControlSetModel Owner { get; set; }
 		private IOvertimeRequestOpenPeriod _overtimeRequestOpenPeriod;
 		private OvertimeRequestPeriodTypeModel _periodType;
+		private OvertimeRequestWorkRuleValidationHandleOptionView _workRuleValidationHandleType;
+
+		internal static readonly HandleOptionViewDictionary
+			OvertimeRequestWorkRuleValidationHandleOptionViews
+				= new HandleOptionViewDictionary
+				{
+					{
+						OvertimeWorkRuleValidationHandleType.Pending,
+						new OvertimeRequestWorkRuleValidationHandleOptionView(OvertimeWorkRuleValidationHandleType.Pending,
+							Resources.SendToAdministrator)
+					},
+					{
+						OvertimeWorkRuleValidationHandleType.Deny,
+						new OvertimeRequestWorkRuleValidationHandleOptionView(OvertimeWorkRuleValidationHandleType.Deny, Resources.Deny)
+					}
+				};
 
 		public OvertimeRequestPeriodModel(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, WorkflowControlSetModel owner)
 		{
@@ -30,12 +49,32 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			}
 		}
 
+		public OvertimeRequestWorkRuleValidationHandleOptionView WorkRuleValidationHandleType
+		{
+			get => _workRuleValidationHandleType;
+			set
+			{
+				_workRuleValidationHandleType = value;
+				_overtimeRequestOpenPeriod.WorkRuleValidationHandleType = value?.WorkRuleValidationHandleType;
+				Owner.IsDirty = true;
+			}
+		}
+
+		public bool EnableWorkRuleValidation
+		{
+			get => _overtimeRequestOpenPeriod.EnableWorkRuleValidation;
+			set
+			{
+				_overtimeRequestOpenPeriod.EnableWorkRuleValidation = value;
+				Owner.IsDirty = true;
+			}
+		}
+
 		public int? RollingStart
 		{
 			get
 			{
-				var period = _overtimeRequestOpenPeriod as OvertimeRequestOpenRollingPeriod;
-				if (period == null) return null;
+				if (!(_overtimeRequestOpenPeriod is OvertimeRequestOpenRollingPeriod period)) return null;
 				return period.BetweenDays.Minimum;
 			}
 			set
@@ -58,8 +97,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			get
 			{
-				var period = _overtimeRequestOpenPeriod as OvertimeRequestOpenRollingPeriod;
-				if (period == null) return null;
+				if (!(_overtimeRequestOpenPeriod is OvertimeRequestOpenRollingPeriod period)) return null;
 				return period.BetweenDays.Maximum;
 			}
 			set
@@ -82,8 +120,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			get
 			{
-				var period = _overtimeRequestOpenPeriod as OvertimeRequestOpenDatePeriod;
-				if (period == null) return null;
+				if (!(_overtimeRequestOpenPeriod is OvertimeRequestOpenDatePeriod period)) return null;
 				return period.Period.StartDate;
 			}
 			set
@@ -106,8 +143,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			get
 			{
-				var period = _overtimeRequestOpenPeriod as OvertimeRequestOpenDatePeriod;
-				if (period == null) return null;
+				if (!(_overtimeRequestOpenPeriod is OvertimeRequestOpenDatePeriod period)) return null;
 				return period.Period.EndDate;
 			}
 			set
@@ -134,6 +170,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				if (_periodType.Equals(periodType))
 					_periodType.DisplayText = periodType.DisplayText;
+			}
+
+			if (overtimeRequestOpenPeriod.WorkRuleValidationHandleType.HasValue)
+			{
+				_workRuleValidationHandleType =
+					OvertimeRequestWorkRuleValidationHandleOptionViews[overtimeRequestOpenPeriod.WorkRuleValidationHandleType.Value];
 			}
 		}
 	}

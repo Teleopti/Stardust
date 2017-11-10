@@ -11,6 +11,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
@@ -18,6 +19,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 	public partial class WorkflowControlSetView
 	{
 		private List<OvertimeRequestAutoGrantTypeAdapter> _overtimeRequestAutoGrantTypeAdapterCollection;
+		private static readonly int _enableWorkRuleColumnIndex = 3;
+		private static readonly int _overtimeRequestOpenPeriodDataStartRowIndex = 2;
 
 		public void SetOvertimeOpenPeriodsGridRowCount(int rowCount)
 		{
@@ -97,6 +100,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			columnList.Add(autoGrantColumn);
 
+			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638))
+			{
+				columnList.Add(new SFGridCheckBoxColumn<OvertimeRequestPeriodModel>("EnableWorkRuleValidation", Resources.Enabled, Resources.ContractWorkRuleValidation));
+				columnList.Add(new SFGridDropDownColumn<OvertimeRequestPeriodModel, OvertimeRequestWorkRuleValidationHandleOptionView>("WorkRuleValidationHandleType",
+					Resources.WhenValidationFails, Resources.ContractWorkRuleValidation, OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description", typeof(OvertimeRequestWorkRuleValidationHandleOptionView)));
+			}
+
 			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodStartDate", Resources.Start, Resources.Period)
 			{
 				CellValidator = new OvertimeRequestDatePeriodStartCellValidator(_toggleManager)
@@ -118,12 +128,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridControlOvertimeRequestOpenPeriods.Rows.HeaderCount = 1;
 
 			var gridColumns = new ReadOnlyCollection<SFGridColumnBase<OvertimeRequestPeriodModel>>(columnList);
-			_overtimeRequestOpenPeriodGridHelper = new SFGridColumnGridHelper<OvertimeRequestPeriodModel>(gridControlOvertimeRequestOpenPeriods,
-																						gridColumns, new List<OvertimeRequestPeriodModel>());
+			_overtimeRequestOpenPeriodGridHelper = new SFGridColumnGridHelper<OvertimeRequestPeriodModel>(
+				gridControlOvertimeRequestOpenPeriods,
+				gridColumns, new List<OvertimeRequestPeriodModel>(), false);
 
 			gridControlOvertimeRequestOpenPeriods.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
 			gridControlOvertimeRequestOpenPeriods.Model.Options.ExcelLikeCurrentCell = true;
 
+
+			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638))
+			{
+				gridControlOvertimeRequestOpenPeriods.CheckBoxClick += gridControlOvertimeRequestOpenPeriodsCheckBoxClick;
+				gridControlOvertimeRequestOpenPeriods.QueryCellInfo += gridControlOvertimeRequestOpenPeriodsQueryCellInfo;
+			}
 			gridControlOvertimeRequestOpenPeriods.CurrentCellCloseDropDown += gridControlOvertimeRequestOpenPeriods_CurrentCellCloseDropDown;
 			gridControlOvertimeRequestOpenPeriods.KeyDown += gridControlOvertimeRequestOpenPeriods_KeyDown;
 		}
@@ -136,6 +153,38 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged(object sender, EventArgs e)
 		{
 			_presenter.SetAutoGrantOvertimeRequest(checkBoxAdvAutoGrantOvertimeRequest.Checked);
+		}
+
+		private void gridControlOvertimeRequestOpenPeriodsCheckBoxClick(object sender, GridCellClickEventArgs e)
+		{
+			if (e.ColIndex != _enableWorkRuleColumnIndex)
+				return;
+
+			if (!bool.TryParse(gridControlOvertimeRequestOpenPeriods[e.RowIndex, e.ColIndex].CellValue.ToString(), out bool oldCheckBoxValue))
+				return;
+
+			var workflowControlSetModel = (WorkflowControlSetModel)comboBoxAdvWorkflowControlSet.SelectedItem;
+			if (workflowControlSetModel == null)
+				return;
+
+			var overtimeRequestPeriodModel = workflowControlSetModel.OvertimeRequestPeriodModels.ElementAt(e.RowIndex - _overtimeRequestOpenPeriodDataStartRowIndex);
+
+			overtimeRequestPeriodModel.WorkRuleValidationHandleType = oldCheckBoxValue
+				? null
+				: OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews[
+					OvertimeWorkRuleValidationHandleType.Pending];
+
+			gridControlOvertimeRequestOpenPeriods.RefreshRange(GridRangeInfo.Cell(e.RowIndex, e.ColIndex + 1));
+		}
+
+		private void gridControlOvertimeRequestOpenPeriodsQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+		{
+			if (e.RowIndex < _overtimeRequestOpenPeriodDataStartRowIndex || e.ColIndex != _enableWorkRuleColumnIndex + 1)
+				return;
+
+			var workflowControlSetModel = (WorkflowControlSetModel)comboBoxAdvWorkflowControlSet.SelectedItem;
+			var overtimeRequestOpenPeriod = workflowControlSetModel.OvertimeRequestPeriodModels.ElementAt(e.RowIndex - _overtimeRequestOpenPeriodDataStartRowIndex);
+			e.Style.Enabled = overtimeRequestOpenPeriod.EnableWorkRuleValidation;
 		}
 
 		private void gridControlOvertimeRequestOpenPeriods_CurrentCellCloseDropDown(object sender, PopupClosedEventArgs e)
