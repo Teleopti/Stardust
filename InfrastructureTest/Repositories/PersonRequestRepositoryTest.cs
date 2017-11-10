@@ -1720,7 +1720,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = simpleRequestFilter(new DateTimePeriod(now, now.AddDays(1)), filter);
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(now.AddSeconds(-1), now.AddDays(1)), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(1);
 		}
@@ -1734,7 +1734,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddSeconds(1)), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(1);
 		}
@@ -1742,14 +1742,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotReturnRequestsOverlapOnEndDate()
 		{
+			var nu = DateTime.UtcNow;
 			var filter = new RequestFilter
 			{
-				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow),
+				Period = new DateTimePeriod(nu.AddDays(-1), nu),
 				ExcludeRequestsOnFilterPeriodEdge = true,
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), filter);
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(nu.AddSeconds(1), nu.AddDays(1)), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(0);
 		}
@@ -1765,7 +1766,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = simpleRequestFilter(new DateTimePeriod(nu.AddDays(-1), nu), filter);
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(nu.AddDays(-1), nu.AddSeconds(-1)), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(0);
 		}

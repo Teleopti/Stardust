@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISkillDay skillDay2 = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(skillDay2);
 
-			SetUpdatedOnForSkillDay(skillDay, -1);
+			SetUpdatedOnForSkillDay(skillDay, -2);
 
 			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
 
