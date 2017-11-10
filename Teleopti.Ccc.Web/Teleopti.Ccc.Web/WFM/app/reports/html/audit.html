@@ -28,11 +28,21 @@
 				<div class="con-row">
 					<div class="con-flex">
 						<div class="form-input-wrap">
+							<label>{{'ScheduleDateColon'|translate}}</label></br>
+							<date-range-picker ng-model="vm.dateModifyRange" ng-change="vm.getOrgData()" template-type="'popup'" custom-validators=""></date-range-picker>
+						</div>
+						<div class="form-input-wrap">
+							<label>{{'ChangeDateColon'|translate}}</label></br>
+							<date-range-picker ng-model="vm.dateChangeRange" template-type="'popup'" custom-validators=""></date-range-picker>
+						</div>
+						<div class="form-input-wrap" ng-class="{'non-pointer': vm.orgData.Children.length<1}">
 							<label>{{'OrganizationHierarchy'|translate}}:</label></br>
 							<div tabindex=0 class="context-menu card-context" ng-click="showOrgPicker =!showOrgPicker">
 								<i class="mdi mdi-file-tree"></i>
 								<md-tooltip>{{'BusinessHierarchy'|translate}}</md-tooltip>
-							</div> <span ng-click="showOrgPicker =!showOrgPicker">{{vm.label}}</span>
+							</div>
+							<span ng-click="showOrgPicker =!showOrgPicker" ng-class="{'text-warning': vm.filteredOrgData.length<1 }" ng-hide="vm.orgData.Children.length<1">{{vm.label}}</span>
+							<span class="text-danger" ng-show="vm.orgData.Children.length<1">{{'NoTeamsAvailable'|translate}}</span>
 							<wfm-popup show="showOrgPicker">
 								<div class="con-row">
 									<div class="con-flex">
@@ -40,14 +50,6 @@
 									</div>
 								</div>
 							</wfm-popup>
-						</div>
-						<div class="form-input-wrap">
-							<label>{{'ChangeDateColon'|translate}}</label></br>
-							<date-range-picker ng-model="vm.dateChangeRange" template-type="'popup'" custom-validators=""></date-range-picker>
-						</div>
-						<div class="form-input-wrap">
-							<label>{{'ScheduleDateColon'|translate}}</label></br>
-							<date-range-picker ng-model="vm.dateModifyRange" ng-change="vm.getOrgData()" template-type="'popup'" custom-validators=""></date-range-picker>
 						</div>
 					</div>
 					<div class="con-flex">
