@@ -11144,7 +11144,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift for {0} is not matching the shift for {1}..
+        ///   Looks up a localized string similar to The shift on {0} is not matching the shift on {1}..
         /// </summary>
         public static string ExistingShiftNotMatchShift {
             get {
@@ -11153,7 +11153,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift category ({0}) for {1} is not matching the shift category ({2}) for {3}..
+        ///   Looks up a localized string similar to The shift category ({0}) on {1} is not matching the shift category ({2}) on {3}..
         /// </summary>
         public static string ExistingShiftNotMatchShiftCategory {
             get {
@@ -11162,7 +11162,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The start time ({0}) for {1} is not matching the start time ({2}) for {3}..
+        ///   Looks up a localized string similar to The start time ({0}) on {1} is not matching the start time ({2}) on {3}..
         /// </summary>
         public static string ExistingShiftNotMatchStartTime {
             get {
@@ -24575,7 +24575,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Previous shift on date {0} not match shift on date {1}.
+        ///   Looks up a localized string similar to The shift on {0}  is not maching the shift on {1}.
         /// </summary>
         public static string PreviousShiftNotMatchShift {
             get {
@@ -24584,7 +24584,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Previous shift on date {0} not match shift category {1}.
+        ///   Looks up a localized string similar to The shift on {0}  is not maching the  shift category {1}.
         /// </summary>
         public static string PreviousShiftNotMatchShiftCategory {
             get {
@@ -24593,7 +24593,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Previous shift on date {0} not match shift start time {1}.
+        ///   Looks up a localized string similar to The shift on {0}  is not maching the start time {1}.
         /// </summary>
         public static string PreviousShiftNotMatchStartTime {
             get {
@@ -24656,7 +24656,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Priority Higher.
+        ///   Looks up a localized string similar to High Priority.
         /// </summary>
         public static string PriorityHigher {
             get {
@@ -24665,7 +24665,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Priority Lower	.
+        ///   Looks up a localized string similar to Low Priority.
         /// </summary>
         public static string PriorityLower {
             get {
@@ -30586,7 +30586,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift for date {0} doesn&apos;t exist in the shift bag {1}.
+        ///   Looks up a localized string similar to The shift on {0} doesn&apos;t exist in the shift bag {1}.
         /// </summary>
         public static string ShiftNotMatchingShiftBag {
             get {
@@ -32441,7 +32441,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The start time of the shift for date {0} doesn&apos;t exist in the shift bag {1}.
+        ///   Looks up a localized string similar to The start time of the shift on {0} doesn&apos;t exist in the shift bag {1}.
         /// </summary>
         public static string StartTimeNotMatchingShiftBag {
             get {
