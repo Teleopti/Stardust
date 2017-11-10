@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			if (createInAnalytics)
 			{
 				_analyticsPersonPeriod = new AnalyticsPersonPeriod { PersonCode = person.Id.GetValueOrDefault(), PersonPeriodCode = _personPeriodId, PersonId = 1, BusinessUnitCode = _businessUnitId};
-				AnalyticsPersonPeriodRepository.AddPersonPeriod(_analyticsPersonPeriod);
+				AnalyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(_analyticsPersonPeriod);
 			}
 		}
 

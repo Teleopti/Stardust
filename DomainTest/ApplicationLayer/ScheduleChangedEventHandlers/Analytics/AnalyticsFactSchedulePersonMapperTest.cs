@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public void ShouldGetDataFromRepository()
 		{
 			var personPeriodId = Guid.NewGuid();
-			AnalyticsPersonPeriods.AddPersonPeriod(new AnalyticsPersonPeriod {BusinessUnitId = 6, PersonId = 7, PersonPeriodCode = personPeriodId});
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod {BusinessUnitId = 6, PersonId = 7, PersonPeriodCode = personPeriodId});
 
 			var result = Target.Map(personPeriodId);
 			result.BusinessUnitId.Should().Be.EqualTo(6);

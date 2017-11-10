@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			
 			var personPeriod = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1));
 			personPeriod.Email = "fun@stuff.com";
-			WithAnalyticsUnitOfWork.Do(() => Target.UpdatePersonPeriod(personPeriod));
+			WithAnalyticsUnitOfWork.Do(() => Target.AddOrUpdatePersonPeriod(personPeriod));
 
 			var result = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1));
 			result.Should().Not.Be.Null();
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				ValidToDateId = 1
 			};
 
-			WithAnalyticsUnitOfWork.Do(() => Target.AddPersonPeriod(personPeriod1));
+			WithAnalyticsUnitOfWork.Do(() => Target.AddOrUpdatePersonPeriod(personPeriod1));
 		}
 
 		[Test]

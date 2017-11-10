@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			GlobalSettingDataRepository.PersistSettingValue(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting());
 			var personPeriodCode = Guid.NewGuid();
-			Repository.AddPersonPeriod(new AnalyticsPersonPeriod { PersonPeriodCode = personPeriodCode, FirstName = "Erik" });
+			Repository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod { PersonPeriodCode = personPeriodCode, FirstName = "Erik" });
 			Repository.PersonPeriod(personPeriodCode).PersonName.Should().Be.Null();
 			Target.Handle(new CommonNameDescriptionChangedEvent());
 			Repository.PersonPeriod(personPeriodCode).PersonName.Should().Not.Be.Null();

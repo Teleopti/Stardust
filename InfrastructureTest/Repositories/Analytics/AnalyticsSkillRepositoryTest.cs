@@ -115,11 +115,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				ValidToDateId = 1
 			};
 
-			AnalyticsPersonPeriodRepository.AddPersonPeriod(personPeriod1);
+			AnalyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(personPeriod1);
 
 			// Add another person period
 			personPeriod1.PersonPeriodCode = Guid.NewGuid();
-			AnalyticsPersonPeriodRepository.AddPersonPeriod(personPeriod1);
+			AnalyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(personPeriod1);
 		}
 
 		[Test]

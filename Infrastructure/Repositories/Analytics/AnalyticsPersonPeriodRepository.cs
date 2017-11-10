@@ -50,20 +50,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetParameter(nameof(businessUnitId), businessUnitId)
 					.UniqueResult<int>();
 		}
-
-		public void AddPersonPeriod(AnalyticsPersonPeriod personPeriod)
+		
+		public void AddOrUpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)
 		{
-			var insertAndUpdateDateTime = DateTime.Now;
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"exec mart.[etl_dim_person_insert]
-                     @person_code=:{nameof(AnalyticsPersonPeriod.PersonCode)}
-                    ,@valid_from_date=:{nameof(AnalyticsPersonPeriod.ValidFromDate)}
+				$@"exec mart.[etl_dim_person_add_or_update]
+					@person_code=:{nameof(AnalyticsPersonPeriod.PersonCode)}                    
+					,@valid_from_date=:{nameof(AnalyticsPersonPeriod.ValidFromDate)}
                     ,@valid_to_date=:{nameof(AnalyticsPersonPeriod.ValidToDate)}
                     ,@valid_from_date_id=:{nameof(AnalyticsPersonPeriod.ValidFromDateId)}
                     ,@valid_from_interval_id=:{nameof(AnalyticsPersonPeriod.ValidFromIntervalId)}
                     ,@valid_to_date_id=:{nameof(AnalyticsPersonPeriod.ValidToDateId)}
                     ,@valid_to_interval_id=:{nameof(AnalyticsPersonPeriod.ValidToIntervalId)}
-                    ,@person_period_code=:{nameof(AnalyticsPersonPeriod.PersonPeriodCode)}
+					,@person_period_code=:{nameof(AnalyticsPersonPeriod.PersonPeriodCode)}
                     ,@person_name=:{nameof(AnalyticsPersonPeriod.PersonName)}
                     ,@first_name=:{nameof(AnalyticsPersonPeriod.FirstName)}
                     ,@last_name=:{nameof(AnalyticsPersonPeriod.LastName)}
@@ -90,12 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
                     ,@employment_end_date=:{nameof(AnalyticsPersonPeriod.EmploymentEndDate)}
                     ,@time_zone_id=:{nameof(AnalyticsPersonPeriod.TimeZoneId)}
                     ,@is_agent=:{nameof(AnalyticsPersonPeriod.IsAgent)}
-                    ,@is_user=:{nameof(AnalyticsPersonPeriod.IsUser)}
-                    ,@datasource_id=:{nameof(AnalyticsPersonPeriod.DatasourceId)}
-                    ,@insert_date=:{nameof(AnalyticsPersonPeriod.InsertDate)}
-                    ,@update_date=:{nameof(AnalyticsPersonPeriod.UpdateDate)}
                     ,@datasource_update_date=:{nameof(AnalyticsPersonPeriod.DatasourceUpdateDate)}
-                    ,@to_be_deleted=:{nameof(AnalyticsPersonPeriod.ToBeDeleted)}
                     ,@windows_domain=:{nameof(AnalyticsPersonPeriod.WindowsDomain)}
                     ,@windows_username=:{nameof(AnalyticsPersonPeriod.WindowsUsername)}
                     ,@valid_to_date_id_maxDate=:{nameof(AnalyticsPersonPeriod.ValidToDateIdMaxDate)}
@@ -135,12 +129,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetDateTime(nameof(AnalyticsPersonPeriod.EmploymentStartDate), personPeriod.EmploymentStartDate)
 				.SetDateTime(nameof(AnalyticsPersonPeriod.EmploymentEndDate), personPeriod.EmploymentEndDate)
 				.SetBoolean(nameof(AnalyticsPersonPeriod.IsAgent), personPeriod.IsAgent)
-				.SetBoolean(nameof(AnalyticsPersonPeriod.IsUser), personPeriod.IsUser)
-				.SetInt32(nameof(AnalyticsPersonPeriod.DatasourceId), personPeriod.DatasourceId)
-				.SetDateTime(nameof(AnalyticsPersonPeriod.InsertDate), insertAndUpdateDateTime)
-				.SetDateTime(nameof(AnalyticsPersonPeriod.UpdateDate), insertAndUpdateDateTime)
 				.SetDateTime(nameof(AnalyticsPersonPeriod.DatasourceUpdateDate), personPeriod.DatasourceUpdateDate)
-				.SetBoolean(nameof(AnalyticsPersonPeriod.ToBeDeleted), personPeriod.ToBeDeleted)
 				.SetString(nameof(AnalyticsPersonPeriod.WindowsDomain), personPeriod.WindowsDomain)
 				.SetString(nameof(AnalyticsPersonPeriod.WindowsUsername), personPeriod.WindowsUsername)
 				.SetInt32(nameof(AnalyticsPersonPeriod.ValidToDateIdMaxDate), personPeriod.ValidToDateIdMaxDate)
@@ -151,6 +140,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetDateTime(nameof(AnalyticsPersonPeriod.ValidToDateLocal), personPeriod.ValidToDateLocal);
 
 			setNullableValues(personPeriod, query);
+
 			query.ExecuteUpdate();
 		}
 
@@ -243,107 +233,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.CreateSQLQuery(commonNameDescriptionSetting.BuildSqlUpdateForAnalytics())
 				.SetParameter("BusinessUnit", businessUnitCode)
 				.ExecuteUpdate();
-		}
-
-		public void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)
-		{
-			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"exec mart.[etl_dim_person_update]
-					 @person_id=:{nameof(AnalyticsPersonPeriod.PersonId)}
-                    ,@valid_from_date=:{nameof(AnalyticsPersonPeriod.ValidFromDate)}
-                    ,@valid_to_date=:{nameof(AnalyticsPersonPeriod.ValidToDate)}
-                    ,@valid_from_date_id=:{nameof(AnalyticsPersonPeriod.ValidFromDateId)}
-                    ,@valid_from_interval_id=:{nameof(AnalyticsPersonPeriod.ValidFromIntervalId)}
-                    ,@valid_to_date_id=:{nameof(AnalyticsPersonPeriod.ValidToDateId)}
-                    ,@valid_to_interval_id=:{nameof(AnalyticsPersonPeriod.ValidToIntervalId)}
-                    ,@person_name=:{nameof(AnalyticsPersonPeriod.PersonName)}
-                    ,@first_name=:{nameof(AnalyticsPersonPeriod.FirstName)}
-                    ,@last_name=:{nameof(AnalyticsPersonPeriod.LastName)}
-                    ,@employment_number=:{nameof(AnalyticsPersonPeriod.EmploymentNumber)}
-                    ,@employment_type_code=:{nameof(AnalyticsPersonPeriod.EmploymentTypeCode)}
-                    ,@employment_type_name=:{nameof(AnalyticsPersonPeriod.EmploymentTypeName)}
-                    ,@contract_code=:{nameof(AnalyticsPersonPeriod.ContractCode)}
-                    ,@contract_name=:{nameof(AnalyticsPersonPeriod.ContractName)}
-                    ,@parttime_code=:{nameof(AnalyticsPersonPeriod.ParttimeCode)}
-                    ,@parttime_percentage=:{nameof(AnalyticsPersonPeriod.ParttimePercentage)}
-                    ,@team_id=:{nameof(AnalyticsPersonPeriod.TeamId)}
-                    ,@team_code=:{nameof(AnalyticsPersonPeriod.TeamCode)}
-                    ,@team_name=:{nameof(AnalyticsPersonPeriod.TeamName)}
-                    ,@site_id=:{nameof(AnalyticsPersonPeriod.SiteId)}
-                    ,@site_code=:{nameof(AnalyticsPersonPeriod.SiteCode)}
-                    ,@site_name=:{nameof(AnalyticsPersonPeriod.SiteName)}
-                    ,@business_unit_id=:{nameof(AnalyticsPersonPeriod.BusinessUnitId)}
-                    ,@business_unit_code=:{nameof(AnalyticsPersonPeriod.BusinessUnitCode)}
-                    ,@business_unit_name=:{nameof(AnalyticsPersonPeriod.BusinessUnitName)}
-                    ,@skillset_id=:{nameof(AnalyticsPersonPeriod.SkillsetId)}
-                    ,@email=:{nameof(AnalyticsPersonPeriod.Email)}
-                    ,@note=:{nameof(AnalyticsPersonPeriod.Note)}
-                    ,@employment_start_date=:{nameof(AnalyticsPersonPeriod.EmploymentStartDate)}
-                    ,@employment_end_date=:{nameof(AnalyticsPersonPeriod.EmploymentEndDate)}
-                    ,@time_zone_id=:{nameof(AnalyticsPersonPeriod.TimeZoneId)}
-                    ,@is_agent=:{nameof(AnalyticsPersonPeriod.IsAgent)}
-                    ,@is_user=:{nameof(AnalyticsPersonPeriod.IsUser)}
-                    ,@datasource_id=:{nameof(AnalyticsPersonPeriod.DatasourceId)}
-                    ,@update_date=:{nameof(AnalyticsPersonPeriod.UpdateDate)}
-                    ,@datasource_update_date=:{nameof(AnalyticsPersonPeriod.DatasourceUpdateDate)}
-                    ,@to_be_deleted=:{nameof(AnalyticsPersonPeriod.ToBeDeleted)}
-                    ,@windows_domain=:{nameof(AnalyticsPersonPeriod.WindowsDomain)}
-                    ,@windows_username=:{nameof(AnalyticsPersonPeriod.WindowsUsername)}
-                    ,@valid_to_date_id_maxDate=:{nameof(AnalyticsPersonPeriod.ValidToDateIdMaxDate)}
-                    ,@valid_to_interval_id_maxDate=:{nameof(AnalyticsPersonPeriod.ValidToIntervalIdMaxDate)}
-                    ,@valid_from_date_id_local=:{nameof(AnalyticsPersonPeriod.ValidFromDateIdLocal)}
-                    ,@valid_to_date_id_local=:{nameof(AnalyticsPersonPeriod.ValidToDateIdLocal)}
-                    ,@valid_from_date_local=:{nameof(AnalyticsPersonPeriod.ValidFromDateLocal)}
-                    ,@valid_to_date_local=:{nameof(AnalyticsPersonPeriod.ValidToDateLocal)}")
-				.SetInt32(nameof(AnalyticsPersonPeriod.PersonId), personPeriod.PersonId)
-				.SetDateTime(nameof(AnalyticsPersonPeriod.ValidFromDate), personPeriod.ValidFromDate)
-				.SetDateTime(nameof(AnalyticsPersonPeriod.ValidToDate), personPeriod.ValidToDate)
-				.SetInt32(nameof(AnalyticsPersonPeriod.ValidFromDateId), personPeriod.ValidFromDateId)
-				.SetInt32(nameof(AnalyticsPersonPeriod.ValidFromIntervalId), personPeriod.ValidFromIntervalId)
-				.SetInt32(nameof(AnalyticsPersonPeriod.ValidToDateId), personPeriod.ValidToDateId)
-				.SetInt32(nameof(AnalyticsPersonPeriod.ValidToIntervalId), personPeriod.ValidToIntervalId)
-				.SetString(nameof(AnalyticsPersonPeriod.PersonName), personPeriod.PersonName)
-				.SetString(nameof(AnalyticsPersonPeriod.FirstName), personPeriod.FirstName)
-				.SetString(nameof(AnalyticsPersonPeriod.LastName), personPeriod.LastName)
-				.SetString(nameof(AnalyticsPersonPeriod.EmploymentNumber), personPeriod.EmploymentNumber)
-				.SetString(nameof(AnalyticsPersonPeriod.EmploymentTypeName), personPeriod.EmploymentTypeName)
-				.SetGuid(nameof(AnalyticsPersonPeriod.ContractCode), personPeriod.ContractCode)
-				.SetString(nameof(AnalyticsPersonPeriod.ContractName), personPeriod.ContractName)
-				.SetGuid(nameof(AnalyticsPersonPeriod.ParttimeCode), personPeriod.ParttimeCode)
-				.SetString(nameof(AnalyticsPersonPeriod.ParttimePercentage), personPeriod.ParttimePercentage)
-				.SetInt32(nameof(AnalyticsPersonPeriod.TeamId), personPeriod.TeamId)
-				.SetGuid(nameof(AnalyticsPersonPeriod.TeamCode), personPeriod.TeamCode)
-				.SetString(nameof(AnalyticsPersonPeriod.TeamName), personPeriod.TeamName)
-				.SetInt32(nameof(AnalyticsPersonPeriod.SiteId), personPeriod.SiteId)
-				.SetGuid(nameof(AnalyticsPersonPeriod.SiteCode), personPeriod.SiteCode)
-				.SetString(nameof(AnalyticsPersonPeriod.SiteName), personPeriod.SiteName)
-				.SetInt32(nameof(AnalyticsPersonPeriod.BusinessUnitId), personPeriod.BusinessUnitId)
-				.SetGuid(nameof(AnalyticsPersonPeriod.BusinessUnitCode), personPeriod.BusinessUnitCode)
-				.SetString(nameof(AnalyticsPersonPeriod.BusinessUnitName), personPeriod.BusinessUnitName)
-				.SetInt32(nameof(AnalyticsPersonPeriod.SkillsetId), personPeriod.SkillsetId.GetValueOrDefault())
-				.SetString(nameof(AnalyticsPersonPeriod.Email), personPeriod.Email)
-				.SetString(nameof(AnalyticsPersonPeriod.Note), personPeriod.Note)
-				.SetDateTime(nameof(AnalyticsPersonPeriod.EmploymentStartDate), personPeriod.EmploymentStartDate)
-				.SetDateTime(nameof(AnalyticsPersonPeriod.EmploymentEndDate), personPeriod.EmploymentEndDate)
-
-				.SetBoolean(nameof(AnalyticsPersonPeriod.IsAgent), personPeriod.IsAgent)
-				.SetBoolean(nameof(AnalyticsPersonPeriod.IsUser), personPeriod.IsUser)
-				.SetInt32(nameof(AnalyticsPersonPeriod.DatasourceId), personPeriod.DatasourceId)
-				.SetDateTime(nameof(AnalyticsPersonPeriod.UpdateDate), DateTime.Now)
-				.SetDateTime(nameof(AnalyticsPersonPeriod.DatasourceUpdateDate), personPeriod.DatasourceUpdateDate)
-				.SetBoolean(nameof(AnalyticsPersonPeriod.ToBeDeleted), personPeriod.ToBeDeleted)
-				.SetString(nameof(AnalyticsPersonPeriod.WindowsDomain), personPeriod.WindowsDomain)
-				.SetString(nameof(AnalyticsPersonPeriod.WindowsUsername), personPeriod.WindowsUsername)
-				.SetInt32(nameof(AnalyticsPersonPeriod.ValidToDateIdMaxDate), personPeriod.ValidToDateIdMaxDate)
-				.SetInt32(nameof(AnalyticsPersonPeriod.ValidToIntervalIdMaxDate), personPeriod.ValidToIntervalIdMaxDate)
-				.SetInt32(nameof(AnalyticsPersonPeriod.ValidFromDateIdLocal), personPeriod.ValidFromDateIdLocal)
-				.SetInt32(nameof(AnalyticsPersonPeriod.ValidToDateIdLocal), personPeriod.ValidToDateIdLocal)
-				.SetDateTime(nameof(AnalyticsPersonPeriod.ValidFromDateLocal), personPeriod.ValidFromDateLocal)
-				.SetDateTime(nameof(AnalyticsPersonPeriod.ValidToDateLocal), personPeriod.ValidToDateLocal);
-
-			setNullableValues(personPeriod, query);
-
-			query.ExecuteUpdate();
 		}
 
 		private static void setNullableValues(AnalyticsPersonPeriod personPeriod, IQuery query)

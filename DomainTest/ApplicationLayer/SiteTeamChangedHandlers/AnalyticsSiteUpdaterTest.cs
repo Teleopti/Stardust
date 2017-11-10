@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SiteTeamChangedHandlers
 				SiteName = site.Name
 			};
 			AnalyticsSiteRepository.Has(site);
-			AnalyticsPersonPeriodRepository.AddPersonPeriod(personPeriod);
+			AnalyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(personPeriod);
 
 			var changeEvent = new SiteNameChangedEvent()
 			{

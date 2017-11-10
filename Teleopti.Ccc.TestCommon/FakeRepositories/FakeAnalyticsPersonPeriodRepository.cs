@@ -25,22 +25,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return fakePersonPeriods.First(a => a.PersonPeriodCode == personPeriodCode);
 		}
-
-		public void AddPersonPeriod(AnalyticsPersonPeriod personPeriod)
+		
+		public void AddOrUpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)
 		{
-			if (personPeriod.PersonId == 0)
+			var existingPeriod = fakePersonPeriods.FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.PersonPeriodCode));
+
+			if (existingPeriod == null)
 			{
-				if (fakePersonPeriods.IsEmpty())
-					personPeriod.PersonId = 0;
-				else
-					personPeriod.PersonId = fakePersonPeriods.Max(a => a.PersonId) + 1;
+				if (personPeriod.PersonId == 0)
+				{
+					if (fakePersonPeriods.IsEmpty())
+						personPeriod.PersonId = 0;
+					else
+						personPeriod.PersonId = fakePersonPeriods.Max(a => a.PersonId) + 1;
+				}
 			}
-			fakePersonPeriods.Add(personPeriod);
-		}
+			else
+			{
+				fakePersonPeriods.RemoveAll(a => a.PersonPeriodCode.Equals(existingPeriod.PersonPeriodCode));
+			}
 
-		public void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)
-		{
-			fakePersonPeriods.RemoveAll(a => a.PersonId.Equals(personPeriod.PersonId));
 			fakePersonPeriods.Add(personPeriod);
 		}
 

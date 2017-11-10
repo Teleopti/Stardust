@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			basicSetup();
 
-			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod()
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod()
 			{
 				PersonId = 1,
 				PersonCode = testPerson1Id
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personPeriodId = Guid.NewGuid();
 			var startDate = new DateTime(2017, 12, 31);
 			person.AddPersonPeriod(newTestPersonPeriod(startDate, personPeriodId));
-			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonId = 1,
 				PersonCode = testPerson1Id,
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personPeriodId = Guid.NewGuid();
 			var startDate = new DateTime(2017, 12, 31);
 			person.AddPersonPeriod(newTestPersonPeriod(startDate, personPeriodId));
-			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonId = 1,
 				PersonCode = testPerson1Id,
@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			basicSetup();
 
-			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonId = 1,
 				PersonCode = testPerson1Id,

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			personRequest.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
 			PersonRequestRepository.Add(personRequest);
 
-			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonCode = person.Id.GetValueOrDefault(),
 				PersonId = 1,
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			personRequest.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
 			PersonRequestRepository.Add(personRequest);
 
-			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonCode = person.Id.GetValueOrDefault(),
 				PersonId = 1,
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			((FakeAnalyticsBusinessUnitRepository) AnalyticsBusinessUnitRepository).UseList = true;
 			AnalyticsBusinessUnitRepository.AddOrUpdate(analyticsBu);
 
-			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonCode = person.Id.GetValueOrDefault(),
 				PersonId = 1,
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			AnalyticsRequestRepository.AnalyticsRequestedDays.Add(new AnalyticsRequestedDay { RequestCode = personRequest.Id.GetValueOrDefault() });
 			AnalyticsRequestRepository.AnalyticsRequests.Add(new AnalyticsRequest { RequestCode = personRequest.Id.GetValueOrDefault() });
 
-			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonCode = person.Id.GetValueOrDefault(),
 				PersonId = 1,
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			AnalyticsRequestRepository.AnalyticsRequestedDays.Add(new AnalyticsRequestedDay { RequestCode = personRequest.Id.GetValueOrDefault() });
 			AnalyticsRequestRepository.AnalyticsRequests.Add(new AnalyticsRequest { RequestCode = personRequest.Id.GetValueOrDefault() });
 
-			PersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonCode = person.Id.GetValueOrDefault(),
 				PersonId = 1,

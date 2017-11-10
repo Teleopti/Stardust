@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SiteTeamChangedHandlers
 				TeamCode = team.TeamCode.Value,
 				TeamName = team.Name
 			} ;
-			AnalyticsPersonPeriodRepository.AddPersonPeriod(personPeriod);
+			AnalyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(personPeriod);
 
 			var changeEvent = new TeamNameChangedEvent
 			{

@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			var person = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
 			var personPeriodCode = Guid.NewGuid();
 			person.AddPersonPeriod(newTestPersonPeriod(date, personPeriodCode));
-			PersonPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
 			PersonRepository.Add(person);
 			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			PersonRepository.Add(person);
 			var personPeriodCode = Guid.NewGuid();
 			person.AddPersonPeriod(newTestPersonPeriod(date, personPeriodCode));
-			PersonPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
 
 			var scenario = new FakeCurrentScenario_DoNotUse().Current();
 			scenario.DefaultScenario = true;
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			PersonRepository.Add(person);
 			var personPeriodCode = Guid.NewGuid();
 			person.AddPersonPeriod(newTestPersonPeriod(date, personPeriodCode));
-			PersonPeriodRepository.AddPersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
 
 			scenario = new FakeCurrentScenario_DoNotUse().Current();
 			scenario.DefaultScenario = true;

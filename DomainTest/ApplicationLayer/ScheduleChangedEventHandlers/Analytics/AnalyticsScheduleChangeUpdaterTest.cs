@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			Schedules.Add(assignment);
 
 			AnalyticsScenarios.AddScenario(analyticsScenario);
-			AnalyticsPersonPeriods.AddPersonPeriod(analyticsPersonPeriod);
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(analyticsPersonPeriod);
 			AnalyticsSchedules.PersistFactScheduleBatch(new List<IFactScheduleRow> { existingSchedule });
 			AnalyticsDates.Clear();
 
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			AnalyticsScenarios.AddScenario(analyticsScenario);
 			AnalyticsShiftCategories.AddShiftCategory(cat);
-			AnalyticsPersonPeriods.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = 11, BusinessUnitId = 2, PersonPeriodCode = personPeriodId });
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod { PersonId = 11, BusinessUnitId = 2, PersonPeriodCode = personPeriodId });
 			IntervalLength.Has(15);
 
 			Target.Handle(new ProjectionChangedEvent
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			Scenarios.Add(scenario);
 			Persons.Add(person);
 
-			AnalyticsPersonPeriods.AddPersonPeriod(analyticsPersonPeriod);
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(analyticsPersonPeriod);
 			AnalyticsScenarios.AddScenario(analyticsScenario);
 			
 			AnalyticsSchedules.PersistFactScheduleDayCountRow(existingScheduleDayCount);
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			Schedules.Add(assignment);
 
 			AnalyticsScenarios.AddScenario(analyticsScenario);
-			AnalyticsPersonPeriods.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = 11, BusinessUnitId = 2, PersonPeriodCode = personPeriodId });
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod { PersonId = 11, BusinessUnitId = 2, PersonPeriodCode = personPeriodId });
 			IntervalLength.Has(15);
 
 			Target.Handle(new ProjectionChangedEvent
@@ -341,7 +341,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			AnalyticsAbsences.AddAbsence(analyticsAbsence);
 			AnalyticsScenarios.AddScenario(analyticsScenario);
-			AnalyticsPersonPeriods.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = 11, BusinessUnitId = 2, PersonPeriodCode = personPeriodId });
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod { PersonId = 11, BusinessUnitId = 2, PersonPeriodCode = personPeriodId });
 			IntervalLength.Has(15);
 
 			Target.Handle(new ProjectionChangedEvent
@@ -401,7 +401,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			Persons.Add(person);
 			Schedules.Add(assignment);
 
-			AnalyticsPersonPeriods.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = 11, BusinessUnitId = 2, PersonPeriodCode = personPeriodId });
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod { PersonId = 11, BusinessUnitId = 2, PersonPeriodCode = personPeriodId });
 			IntervalLength.Has(15);
 
 			Assert.Throws<ScenarioMissingInAnalyticsException>(() => Target.Handle(new ProjectionChangedEvent

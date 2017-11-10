@@ -12,9 +12,8 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode);
 		AnalyticsPersonPeriod PersonPeriod(Guid personPeriodCode);
-		void AddPersonPeriod(AnalyticsPersonPeriod personPeriod);
-		void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod);
-	
+		void AddOrUpdatePersonPeriod(AnalyticsPersonPeriod personPeriod);
+
 		void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod);
 
 		IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForPerson(int personId);

@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 							peopleWithUnlinkedPersonPeriod.Add(personCodeGuid);
 						}
 
-						_analyticsPersonPeriodRepository.UpdatePersonPeriod(updatedAnalyticsPersonPeriod);
+						_analyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(updatedAnalyticsPersonPeriod);
 					}
 					else
 					{
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 						// Insert
 						var newAnalyticsPersonPeriod = _personPeriodTransformer.Transform(person, personPeriod, out analyticsSkills);
-						_analyticsPersonPeriodRepository.AddPersonPeriod(newAnalyticsPersonPeriod);
+						_analyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(newAnalyticsPersonPeriod);
 						peopleWithUnlinkedPersonPeriod.Add(personCodeGuid);
 					}
 

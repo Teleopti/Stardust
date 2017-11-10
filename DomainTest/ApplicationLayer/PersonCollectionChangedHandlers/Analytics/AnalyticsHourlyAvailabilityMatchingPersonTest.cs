@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var personId = Guid.NewGuid();
 			var @event = new AnalyticsPersonPeriodRangeChangedEvent { LogOnBusinessUnitId = Guid.NewGuid(), PersonIdCollection = { personId } };
 			var personPeriodId = 21;
-			analyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			analyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonCode = personId,
 				PersonId = personPeriodId
