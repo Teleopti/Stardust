@@ -26,11 +26,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public IResourceOptimizationHelperExtended ResourceCalculation;
+		public ResourceCalculateWithNewContext ResourceCalculation;
 
-		[TestCase(true)]
-		[TestCase(false)]
-		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation(bool resourceCalculationHasBeenMade)
+		[Test]
+		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
 		{
 			const int numberOfAgents = 50;
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
@@ -53,8 +52,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 								.WithPersonPeriod(ruleSet, skillA, skillB)
 								.WithSchedulePeriodOneDay(date))
 					.ToArray();
-			if(resourceCalculationHasBeenMade)
-				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), agents, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
 			
 			Target.Execute(new NoSchedulingCallback(), 
@@ -94,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), agents, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
 			var options = new SchedulingOptions {UseTeam = true, UseBlock = true};
 			if (resourceCalculationHasBeenMade)
-				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+				ResourceCalculation.ResourceCalculate(date.ToDateOnlyPeriod(), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, false));
 
 			Target.Execute(new NoSchedulingCallback(), 
 				options,

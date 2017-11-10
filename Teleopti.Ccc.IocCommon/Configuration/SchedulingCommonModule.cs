@@ -123,6 +123,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehaviorNew>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 				builder.RegisterType<OptimizeIntradayDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
 				builder.RegisterType<OptimizationDesktopExecuterNew>().As<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
+				builder.RegisterType<DesktopSchedulingNew>().As<DesktopScheduling>().InstancePerLifetimeScope();
 			}
 			else
 			{
@@ -132,6 +133,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 				builder.RegisterType<OptimizeIntradayIslandsDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
 				builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
+				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<ResourceCalculateWithNewContext>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
@@ -173,7 +175,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftMinMaxCalculator>().As<IWorkShiftMinMaxCalculator>().InstancePerDependency();
 			builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ExtendSelectedPeriodForMonthlyScheduling>().SingleInstance();
 			builder.RegisterType<LowThreadPriorityScope>().As<ILowThreadPriorityScope>().SingleInstance();

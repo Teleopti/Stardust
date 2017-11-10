@@ -39,9 +39,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			ResourcePlannerEasierBlockScheduling46155 = resourcePlannerEasierBlockScheduling46155;
 			ResourcePlannerRemoveClassicShiftCat46582 = resourcePlannerRemoveClassicShiftCat46582;
 			RemoveImplicitResCalcContext46680 = removeImplicitResCalcContext46680;
-			
-			if(RemoveImplicitResCalcContext46680 == RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue)
-				Assert.Ignore("46680 - Toggle On");
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
