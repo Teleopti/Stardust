@@ -172,6 +172,7 @@
 		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestPeriodSetting_46417,
+		OvertimeRequestPeriodWorkRuleSetting_46638,
 		Reporting_Optional_Columns_42066,
 		ETL_SpeedUpNightlyDayOff_38213,
 		MyTimeWeb_MobileResponsive_43826,
