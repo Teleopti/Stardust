@@ -8,12 +8,12 @@
 		url: '../api/Gamification/ModifyDescription',
 		method: 'post'
 	}, {
-		id: '',
+		id: 'UseBadgeForAnsweredCalls',
 		url: '../api/Gamification/ModifyAnsweredCallsEnabled',
 		method: 'post'
 	}, {
 		id: 'AnsweredCallsGoldThreshold',
-		url: '../api/api/Gamification/ModifyAnsweredCallsForGold',
+		url: '../api/Gamification/ModifyAnsweredCallsForGold',
 		method: 'post'
 	}, {
 		id: 'AnsweredCallsSilverThreshold',
@@ -24,7 +24,7 @@
 		url: '../api/Gamification/ModifyAnsweredCallsForBronze',
 		method: 'post'
 	}, {
-		id: '',
+		id: 'UseBadgeForAHT',
 		url: '../api/Gamification/ModifyAHTEnabled',
 		method: 'post'
 	}, {
@@ -40,7 +40,7 @@
 		url: '../api/Gamification/ModifyAHTForBronze',
 		method: 'post'
 	}, {
-		id: '',
+		id: 'UseBadgeForAdherence',
 		url: '../api/Gamification/ModifyAdherenceEnabled',
 		method: 'post'
 	}, {
@@ -114,7 +114,4 @@
 			return $http.post(api.url, data, {});
 		}
 	}
-
-
-
 })();

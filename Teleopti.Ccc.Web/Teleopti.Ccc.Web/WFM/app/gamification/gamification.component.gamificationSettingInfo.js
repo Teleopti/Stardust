@@ -9,7 +9,10 @@
             bindings: {
                 settingInfo: '<',
                 selectItemCallback: '<',
-                currentRuleId: '<'
+                saveDatacallback: '<',
+                saveValueCallback: '<',
+                currentRuleId: '<',
+                currentSettingId: '<'
             },
         });
 
@@ -46,12 +49,30 @@
             event.stopPropagation();
         }
 
-        ctrl.onSelected = function () {
+        ctrl.onSelected = function (id) {
 
-            if (ctrl.selectItemCallback) {
-                var result = ctrl.selectItemCallback();
-                if (result) {
-                    ctrl.settingInfo.enabled = false;
+            // if (ctrl.selectItemCallback) {
+            //     var result = ctrl.selectItemCallback();
+            //     if (result) {
+            //         ctrl.settingInfo.enabled = false;
+            //     }
+            // }
+
+            //todo check if maximun selected items is bigger than 3
+
+            if (ctrl.settingInfo.is_buildin) {
+                if (ctrl.saveValueCallback) {
+                    ctrl.saveValueCallback(id, ctrl.settingInfo.enable);
+                }
+            }
+        }
+
+        ctrl.itemChanged = function (event, id) {
+            if (ctrl.settingInfo.is_buildin) {
+                if (ctrl.saveValueCallback) {
+                    console.log(event);
+                    var value = event.target.value;
+                    ctrl.saveValueCallback(id, value);
                 }
             }
         }

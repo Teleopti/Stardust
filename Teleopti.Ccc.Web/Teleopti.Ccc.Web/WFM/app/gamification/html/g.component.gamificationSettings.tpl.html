@@ -78,7 +78,8 @@
             </div>
 
             <div class="inline-block " ng-repeat="settingInfo in $ctrl.currentSetting.settings">
-                <gamification-setting-info setting-info="settingInfo" current-rule-id="$ctrl.currentSetting.rule_id" select-item-callback="$ctrl.itemSelected "></gamification-setting-info>
+                <gamification-setting-info setting-info="settingInfo" current-rule-id="$ctrl.currentSetting.rule_id" save-data-callback="$ctrl.saveData"
+                    current-setting-id="$ctrl.currentSettingId" save-value-callback="$ctrl.saveValue" select-item-callback="$ctrl.itemSelected "></gamification-setting-info>
             </div>
         </div>
     </div>

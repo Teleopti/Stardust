@@ -2,7 +2,7 @@
     <section class=".md-whiteframe-z1">
         <md-toolbar class="md-primary">
             <div class="md-toolbar-tools">
-                <md-checkbox ng-change="$ctrl.onSelected()" ng-model="$ctrl.settingInfo.enabled"></md-checkbox>
+                <md-checkbox ng-change="$ctrl.onSelected($ctrl.settingInfo.id)" ng-model="$ctrl.settingInfo.enable"></md-checkbox>
                 <h3 ng-show="!$ctrl.nameEditModel">{{$ctrl.settingInfo.name}}</h3>
                 <input class="setting-name-input" id="setting-name-id-{{$ctrl.settingInfo.id}}" ng-blur="$ctrl.changeName($ctrl.settingInfo.id)"
                     ng-click="$ctrl.nameClicked($event)" ng-show="$ctrl.nameEditModel" type="text" ng-model="$ctrl.settingInfo.name"
@@ -16,7 +16,7 @@
             <div ng-repeat="item in $ctrl.getSettingItems()">
                 <span>{{item.id}}</span>
 
-                <input type="text" value="{{item.value}}">
+                <input ng-disabled="!$ctrl.settingInfo.enable" ng-blur="$ctrl.itemChanged($event, item.id)" type="text" value="{{item.value}}">
             </div>
         </div>
     </section>
