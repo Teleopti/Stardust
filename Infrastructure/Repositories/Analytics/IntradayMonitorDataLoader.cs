@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						.AddScalar("AverageSpeedOfAnswer", NHibernateUtil.Double)
 						.SetString("TimeZone", timeZone.Id)
 						.SetString("Today", today.ToShortDateString(CultureInfo.InvariantCulture))
-						.SetString("SkillList", skillListString)
+						.SetParameter("SkillList", skillListString, NHibernateUtil.StringClob)
 						.SetResultTransformer(Transformers.AliasToBean(typeof(IncomingIntervalModel)))
 						.SetReadOnly(true)
 						.List<IncomingIntervalModel>();
