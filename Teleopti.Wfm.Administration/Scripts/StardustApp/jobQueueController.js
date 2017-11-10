@@ -28,7 +28,7 @@
 		vm.selected = [];
 		var allTenantsString = "All Tenants";
 		var allTypesString = "All Types";
-		var refreshInterval = 3000;
+		var refreshInterval = 5000;
 		vm.selectTenant = selectTenant;
 		vm.dataSourceFilter = allTenantsString;
 		vm.selectJobType = selectJobType;
@@ -54,28 +54,7 @@
 				vm.Tenants = data;
 			});
 
-		function getJobs(dataExists) {
-			$http.get("./Stardust/QueuedJobs/" + vm.resultsFrom + "/" + vm.resultsTo, tokenHeaderService.getHeaders())
-				.success(function (data) {
-					if (data.length < vm.limit) {
-						vm.noMoreJobs = true;
-					}
-					if (dataExists) {
-						vm.Jobs = vm.Jobs.concat(data);
-					} else {
-						vm.Jobs = data;
-					}
-				})
-				.error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
-					vm.JobError = ajaxOptions;
-					if (xhr !== "") {
-						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
-					}
-				});
-		};
-
-		function getJobsByFilter(dataExists) {
+		function getJobsByFilter() {
 			var dataSource = null;
 			if (vm.dataSourceFilter !== allTenantsString) {
 				dataSource = vm.dataSourceFilter;
@@ -89,14 +68,12 @@
 			var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType };
 			$http.get("./Stardust/QueuedJobs", tokenHeaderService.getHeadersAndParams(params))
 				.success(function (data) {
-					if (data.length < vm.limit) {
+					if (data.length < vm.resultsTo) {
 						vm.moreJobs = false;
-					}
-					if (dataExists) {
-						vm.Jobs = vm.Jobs.concat(data);
 					} else {
-						vm.Jobs = data;
+						vm.moreJobs = true;
 					}
+					vm.Jobs = data;
 				})
 				.error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
@@ -187,6 +164,7 @@
 		function search() {
 			vm.dataSourceFilter = vm.selectedDataSource;
 			vm.jobTypeFilter = vm.selectedJobType;
+			vm.resultsTo = vm.limit;
 			pollNewData();
 		}
 	}

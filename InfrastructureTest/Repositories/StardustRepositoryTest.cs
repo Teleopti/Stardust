@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 
@@ -27,7 +29,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Serialized = JsonConvert.SerializeObject(testEvent),
 				Type = "Type"
 			};
-
 			StardustRepositoryTestHelper.AddJobToQueue(job1);
 			StardustRepositoryTestHelper.AddJobToQueue(new Job
 			{
@@ -39,6 +40,53 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			queuedJobs.Count.Should().Be.EqualTo(1);
 			queuedJobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
 		}
+
+		[Test]
+		public void JobQueueShouldShowtopXOfFiltered()
+		{
+			const string testTenant = "test Tenant";
+			var testEvent = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = testTenant };
+			var testEventOtherTenant = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = "Another tenant" };
+
+			StardustRepositoryTestHelper.AddJobToQueue(new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type"
+			});
+			Thread.Sleep(1000); //make sure there is different timestamps
+
+			var job1 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type"
+			};
+
+			StardustRepositoryTestHelper.AddJobToQueue(job1);
+			StardustRepositoryTestHelper.AddJobToQueue(new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEventOtherTenant),
+				Type = "Type"
+			});
+			Thread.Sleep(1000); //make sure there is different timestamps
+
+			var job2 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type"
+			};
+
+			StardustRepositoryTestHelper.AddJobToQueue(job2);
+
+			var queuedJobs = Target.GetAllQueuedJobs(new JobFilterModel { From = 1, To = 2, DataSource = testTenant });
+			queuedJobs.Count.Should().Be.EqualTo(2);
+			queuedJobs.First().JobId.Should().Be.EqualTo(job2.JobId);
+			queuedJobs.Second().JobId.Should().Be.EqualTo(job1.JobId);
+		}
+
 
 		[Test]
 		public void JobShouldFilterOnDataSource()
@@ -65,6 +113,102 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			jobs.Count.Should().Be.EqualTo(1);
 			jobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
 		}
+
+		[Test]
+		public void JobFilterShouldShowTopXOfItsDataSource()
+		{
+			const string testTenant = "test Tenant";
+			var testEvent = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = testTenant };
+			var testEventOtherTenant = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = "Another tenant" };
+
+			var job1 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type"
+			};
+			var job2 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type"
+			};
+
+			StardustRepositoryTestHelper.AddJob(new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type"
+			});
+			Thread.Sleep(1000); //make sure there is different timestamps
+			StardustRepositoryTestHelper.AddJob(job1);
+			StardustRepositoryTestHelper.AddJob(new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEventOtherTenant),
+				Type = "Type"
+			});
+			Thread.Sleep(1000); //make sure there is different timestamps
+			StardustRepositoryTestHelper.AddJob(job2);
+			
+
+			var jobs = Target.GetAllJobs(new JobFilterModel { From = 1, To = 2, DataSource = testTenant });
+			jobs.Count.Should().Be.EqualTo(2);
+			jobs.First().JobId.Should().Be.EqualTo(job2.JobId);
+			jobs.Second().JobId.Should().Be.EqualTo(job1.JobId);
+		}
+
+		[Test]
+		public void FailedJobFilterShouldShowTopXOfItsDataSource()
+		{
+			const string testTenant = "test Tenant";
+			var testEvent = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = testTenant };
+			var testEventOtherTenant = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = "Another tenant" };
+
+			StardustRepositoryTestHelper.AddFailedJob(new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type"
+			});
+			Thread.Sleep(1000); //make sure there is different timestamps
+			var job1 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type"
+			};
+
+			StardustRepositoryTestHelper.AddFailedJob(job1);
+			StardustRepositoryTestHelper.AddFailedJob(new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEventOtherTenant),
+				Type = "Type"
+			});
+			Thread.Sleep(1000); //make sure there is different timestamps
+			StardustRepositoryTestHelper.AddJob(new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type"
+			});
+
+			var job2 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type"
+			};
+
+			StardustRepositoryTestHelper.AddFailedJob(job2);
+
+			var jobs = Target.GetAllFailedJobs(new JobFilterModel { From = 1, To = 2, DataSource = testTenant });
+			jobs.Count.Should().Be.EqualTo(2);
+			jobs.First().JobId.Should().Be.EqualTo(job2.JobId);
+			jobs.Second().JobId.Should().Be.EqualTo(job1.JobId);
+		}
+
 
 		[Test]
 		public void FailedJobShouldFilterOnDataSource()
@@ -97,6 +241,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			jobs.Count.Should().Be.EqualTo(1);
 			jobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
 		}
+
 
 		[Test]
 		public void JobShouldFilterOnType()

@@ -136,23 +136,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		{
 			var jobs = new List<Job>();
 
-			var selectCommandText =
-				@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
-				FROM Stardust.Job WITH(NOLOCK) ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to ";
+			var selectCommandText = $@"SELECT TOP {filter.To} * FROM Stardust.Job WHERE 1=1 ";
 
 			if (filter.DataSource != null)
 				selectCommandText = selectCommandText + $@"AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
 
-			if(filter.Type != null)
+			if (filter.Type != null)
 				selectCommandText = selectCommandText + $@"AND Type = 'Teleopti.Ccc.Domain.ApplicationLayer.Events.{filter.Type}' ";
+
+			selectCommandText = selectCommandText + "ORDER BY Created DESC";
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					getAllJobsCommand.Parameters.AddWithValue("@from", filter.From);
-					getAllJobsCommand.Parameters.AddWithValue("@to", filter.To);
 					using (var reader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
 						if (!reader.HasRows) return jobs;
@@ -171,9 +169,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		public IList<Job> GetAllFailedJobs(JobFilterModel filter)
 		{
 			var jobs = new List<Job>();
-			
-				var selectCommandText = @"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
-											FROM Stardust.Job WITH(NOLOCK) WHERE Result LIKE '%Failed%' ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to ";
+			var selectCommandText = $@"SELECT TOP {filter.To} * FROM Stardust.Job WHERE Result LIKE '%Fail%' ";
 
 			if (filter.DataSource != null)
 				selectCommandText = selectCommandText + $@"AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
@@ -181,13 +177,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			if (filter.Type != null)
 				selectCommandText = selectCommandText + $@"AND Type = 'Teleopti.Ccc.Domain.ApplicationLayer.Events.{filter.Type}' ";
 
+			selectCommandText = selectCommandText + "ORDER BY Created DESC";
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					getAllJobsCommand.Parameters.AddWithValue("@from", filter.From);
-					getAllJobsCommand.Parameters.AddWithValue("@to", filter.To);
 					using (var reader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
 						if (!reader.HasRows) return jobs;
@@ -207,9 +202,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		{
 			var jobs = new List<Job>();
 
-			var selectCommandText =
-				@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
-				FROM Stardust.JobQueue WITH(NOLOCK) ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to ";
+			var selectCommandText = $@"SELECT TOP {filter.To} * FROM Stardust.JobQueue WHERE 1=1 ";
 
 			if (filter.DataSource != null)
 				selectCommandText = selectCommandText + $@"AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
@@ -217,13 +210,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			if (filter.Type != null)
 				selectCommandText = selectCommandText + $@"AND Type = 'Teleopti.Ccc.Domain.ApplicationLayer.Events.{filter.Type}' ";
 
+			selectCommandText = selectCommandText + "ORDER BY Created DESC";
+
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var getQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					getQueuedJobsCommand.Parameters.AddWithValue("@from", filter.From);
-					getQueuedJobsCommand.Parameters.AddWithValue("@to", filter.To);
 					using (var reader = getQueuedJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
 						if (!reader.HasRows) return jobs;
