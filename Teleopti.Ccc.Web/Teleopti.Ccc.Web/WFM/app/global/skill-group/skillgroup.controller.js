@@ -1,4 +1,4 @@
-//This is the editor used in PBI #45714 (the old one)
+//This is the editor used in PBI #45714 (the old one) this can be removed when the #45727 is released
 (function() {
     'use strict';
     angular.module('wfm.skillGroup').controller('SkillGroupController', SkillGroupController);

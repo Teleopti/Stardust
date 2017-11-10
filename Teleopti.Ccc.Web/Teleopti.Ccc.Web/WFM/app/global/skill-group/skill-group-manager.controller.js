@@ -29,14 +29,14 @@
         };
 
         var _ = $rootScope._;
-        vm.selectedTabIndex = 0;
-        vm.skills = [];
-        vm.allSkills = [];
-        vm.selectedSkills = [];
+        vm.selectedTabIndex    = 0;
+        vm.skills              = [];
+        vm.allSkills           = [];
+        vm.selectedSkills      = [];
         vm.selectedGroupSkills = [];
-        vm.skillAreaName = '';
-        vm.getSkillIcon = skillIconService.get;
-        vm.canSave = false;
+        vm.skillAreaName       = '';
+        vm.getSkillIcon        = skillIconService.get;
+        vm.canSave             = false;
 
         vm.selectSkillGroup = function(skillGroup) {
             if (vm.managerData.currentSkillGroup === skillGroup) {
@@ -54,7 +54,7 @@
                     }
                 );
             }
-            vm.canSave = false;
+            setSaveableState();
             unselectAllSkills();
         };
 
@@ -77,7 +77,7 @@
                     return item.Name;
                 }
             );
-            vm.canSave = true;
+            setSaveableState();
             unselectAllSkills();
         };
 
@@ -98,13 +98,8 @@
                     return item.Name;
                 }
             );
-            vm.canSave = true;
+            setSaveableState();
             unselectAllSkills();
-        };
-
-        var unselectAllSkills = function() {
-            vm.selectedSkills = [];
-            vm.selectedGroupSkills = [];
         };
 
         vm.selectSkill = function(skill) {
@@ -177,7 +172,7 @@
         vm.createSkillGroup = function(e) {
             document.getElementById('skillGroupNameBox').focus();
             vm.managerData.currentSkillGroup = null;
-            vm.canSave = false;
+            setSaveableState();
         };
 
         vm.deleteSkillGroup = function(skillGroup) {
@@ -186,20 +181,39 @@
             });
         };
 
-        var notifySkillGroupCreation = function() {
-            NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
-        };
+        function unselectAllSkills() {
+            vm.selectedSkills = [];
+            vm.selectedGroupSkills = [];
+        }
 
-        SkillGroupSvc.getSkills().then(function(result) {
-            vm.skills = result.data;
-            vm.allSkills = vm.skills.slice();
-        });
+        function setSaveableState() {
+            if (
+                vm.managerData.currentSkillGroup !== null &&
+                vm.managerData.currentSkillGroup.Skills &&
+                vm.managerData.currentSkillGroup.Skills.length > 0 &&
+                vm.managerData.currentSkillGroup.Name &&
+                vm.managerData.currentSkillGroup.Name.length > 0
+            ) {
+                vm.canSave = true;
+            } else {
+                vm.canSave = false;
+            }
+        }
+
+        function notifySkillGroupCreation() {
+            NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
+        }
 
         function getAllSkillGroups() {
             SkillGroupSvc.getSkillGroups().then(function(result) {
                 vm.skillGroups = result.data.SkillAreas;
             });
         }
+
+        SkillGroupSvc.getSkills().then(function(result) {
+            vm.skills    = result.data;
+            vm.allSkills = vm.skills.slice();
+        });
 
         getAllSkillGroups();
     }
