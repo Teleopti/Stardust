@@ -1,0 +1,18 @@
+Here's a description how to use the PostMan tool to simulate a Manager that can Prepare and start jobs running on nodes.
+
+Prepare Job:
+- Choose POST as http action.
+- Write: http://localhost:14100/job as url
+- Click on Body, choose raw
+- Select JSON (application/json) as content type instead of text
+- An example of body to use:
+{"Serialized":"{\"Name\":\"TestJob\",\"Duration\":30}", "JobId": "dd8049ca-29d8-4675-ac32-00a54e502c91", "Name":"JobName", "Type":"NodeTest.JobHandlers.TestJobParams","CreatedBy":"Magnus"}
+- Press Send button
+
+Start Job:
+- Create a new tab by pressing the +
+- Choose PUT as http action.
+- Write: http://localhost:14100/job/dd8049ca-29d8-4675-ac32-00a54e502c91 as url
+- Click on Body, choose raw
+- Select JSON (application/json) as content type instead of text
+- Press Send button
