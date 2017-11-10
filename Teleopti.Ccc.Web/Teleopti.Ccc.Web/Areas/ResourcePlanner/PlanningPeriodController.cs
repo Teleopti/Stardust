@@ -62,6 +62,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var range = planningPeriod.Range;
 			var lastJobResult = planningPeriod.GetLastSchedulingJob();
 			if (lastJobResult != null && lastJobResult.FinishedOk)
+			{
+				var schedulingResult = JsonConvert.DeserializeObject<SchedulingResultModel>(lastJobResult.Details.First().Message);
+				var optimizationResult = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message);
+				mergeScheduleResultIntoOptimizationResult(schedulingResult, optimizationResult);
+
 				return Ok(new
 				{
 					PlanningPeriod = new
@@ -69,10 +74,39 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						StartDate = range.StartDate.Date,
 						EndDate = range.EndDate.Date
 					},
-					ScheduleResult = JsonConvert.DeserializeObject<SchedulingResultModel>(lastJobResult.Details.First().Message),
-					OptimizationResult = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message),
+					OptimizationResult = optimizationResult,
 				});
+			}
 			return Ok(new { });
+		}
+
+		private static void mergeScheduleResultIntoOptimizationResult(SchedulingResultModel schedulingResult, OptimizationResultModel optimizationResult)
+		{
+			foreach (var schedulingBusinessRulesValidationResult in schedulingResult.BusinessRulesValidationResults)
+			{
+				var found = false;
+				foreach (var optimizationResultBusinessRulesValidationResult in optimizationResult.BusinessRulesValidationResults)
+				{
+					if (optimizationResultBusinessRulesValidationResult.ResourceId == schedulingBusinessRulesValidationResult.ResourceId)
+					{
+						foreach (var error in schedulingBusinessRulesValidationResult.ValidationErrors)
+						{
+							if (!optimizationResultBusinessRulesValidationResult.ValidationErrors.Contains(error))
+							{
+								optimizationResultBusinessRulesValidationResult.ValidationErrors.Add(error);
+							}
+						}
+						found = true;
+						break;
+					}
+				}
+
+				if (!found)
+				{
+					optimizationResult.BusinessRulesValidationResults =
+						optimizationResult.BusinessRulesValidationResults.Append(schedulingBusinessRulesValidationResult);
+				}
+			}
 		}
 
 		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/status")]
