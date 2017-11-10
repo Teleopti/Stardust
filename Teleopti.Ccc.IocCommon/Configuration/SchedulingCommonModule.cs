@@ -37,6 +37,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
@@ -124,6 +125,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<OptimizeIntradayDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
 				builder.RegisterType<OptimizationDesktopExecuterNew>().As<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
 				builder.RegisterType<DesktopSchedulingNew>().As<DesktopScheduling>().InstancePerLifetimeScope();
+				builder.RegisterType<BackToLegalShiftService>().As<IBackToLegalShiftService>();
 			}
 			else
 			{
@@ -134,6 +136,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<OptimizeIntradayIslandsDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
 				builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
 				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
+				builder.RegisterType<BackToLegalShiftServiceOLD>().As<IBackToLegalShiftService>();
 			}
 			builder.RegisterType<ResourceCalculateWithNewContext>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
