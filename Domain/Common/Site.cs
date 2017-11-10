@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void SetDescription(Description value)
 		{
-			ReplaceEvent("SiteNameChangedEvent", () => new SiteNameChangedEvent
+			ReplaceEvent(nameof(SiteNameChangedEvent), () => new SiteNameChangedEvent
 			{
 				SiteId = Id.GetValueOrDefault(),
 				Name = value.Name

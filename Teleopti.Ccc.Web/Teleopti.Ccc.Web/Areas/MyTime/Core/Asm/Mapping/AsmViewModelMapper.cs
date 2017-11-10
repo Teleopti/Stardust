@@ -32,10 +32,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			}
 			var timeZone = _userTimeZoneInfo.TimeZone();
 			var dstJudgement = new DSTJudgement();
+			var culture = _userCulture.GetCulture();
 			return new AsmViewModel
 									{
-										Hours = createHours(asmZeroLocal, timeZone, _userCulture.GetCulture(), dstJudgement),
-										Layers = createAsmLayers(asmZeroLocal, timeZone, _userCulture.GetCulture(), layers, dstJudgement),
+										Hours = createHours(asmZeroLocal, timeZone, culture, dstJudgement),
+										Layers = createAsmLayers(asmZeroLocal, timeZone, culture, layers, dstJudgement),
 										UnreadMessageCount = unreadMessageCount,
 										UserTimeZoneMinuteOffset = (asmZeroLocal - TimeZoneHelper.ConvertToUtc(asmZeroLocal, timeZone)).TotalMinutes
 									};

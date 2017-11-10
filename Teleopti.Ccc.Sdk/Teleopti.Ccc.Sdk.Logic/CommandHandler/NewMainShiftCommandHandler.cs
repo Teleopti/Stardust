@@ -36,10 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
     		_scheduleSaveHandler = scheduleSaveHandler;
         }
-
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
-		  System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			  MessageId = "0")]
+		
 	    public void Handle(NewMainShiftCommandDto command)
 	    {
 		    using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())

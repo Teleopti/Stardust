@@ -65,21 +65,18 @@ namespace Teleopti.Ccc.Domain.Common
 			personAccountUpdater.Update(this);
 	    }
 
-	    public virtual DateOnly? TerminalDate
-        {
-            get { return _terminalDate; }
-        }
+	    public virtual DateOnly? TerminalDate => _terminalDate;
 
-	    private void terminate(DateOnly? value)
+		private void terminate(DateOnly? value)
 	    {
 		    DateOnly? valueToSet = null;
 		    if (value != null)
 			    valueToSet = value.Value > DefaultTerminalDate ? DefaultTerminalDate : value;
 		    if (_terminalDate != valueToSet)
 		    {
-			    var valueBefore = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
+			    var valueBefore = _terminalDate?.Date;
 			    _terminalDate = valueToSet;
-			    var valueAfter = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
+			    var valueAfter = _terminalDate?.Date;
 
 			    AddEvent(() =>
 				{
@@ -103,7 +100,6 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
 		{
-			
 			personPeriod.Team = team;
 			AddEvent(() =>
 			{
@@ -203,8 +199,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void AddExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
 		{
-			var modify = personPeriod as IPersonPeriodModifyExternalLogon;
-			if (modify == null) return;
+			if (!(personPeriod is IPersonPeriodModifyExternalLogon modify)) return;
 			modify.AddExternalLogOn(externalLogOn);
 
 			addPersonPeriodChangedEvent();
@@ -212,8 +207,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void ResetExternalLogOn(IPersonPeriod personPeriod)
 	    {
-		    var modify = personPeriod as IPersonPeriodModifyExternalLogon;
-		    if (modify == null) return;
+			if (!(personPeriod is IPersonPeriodModifyExternalLogon modify)) return;
 			modify.ResetExternalLogOn();
 
 			addPersonPeriodChangedEvent();
@@ -221,8 +215,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
 	    {
-		    var modify = personPeriod as IPersonPeriodModifyExternalLogon;
-		    if (modify == null) return;
+			if (!(personPeriod is IPersonPeriodModifyExternalLogon modify)) return;
 			modify.RemoveExternalLogOn(externalLogOn);
 
 			addPersonPeriodChangedEvent();
@@ -238,8 +231,7 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull(nameof(skill), skill);
 			InParameter.NotNull(nameof(personPeriod), personPeriod);
 
-			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill)) as IPersonSkillModify;
-			if (personSkill == null) return;
+			if (!(personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill)) is IPersonSkillModify personSkill)) return;
 			if (personSkill.Active) return;
 
 			personSkill.Active = true;
@@ -250,8 +242,7 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull(nameof(skill), skill);
 			InParameter.NotNull(nameof(personPeriod), personPeriod);
 
-			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill)) as IPersonSkillModify;
-			if (personSkill == null) return;
+			if (!(personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill)) is IPersonSkillModify personSkill)) return;
 
 			personSkill.Active = false;
 		}
@@ -274,14 +265,11 @@ namespace Teleopti.Ccc.Domain.Common
 				personSkill.SkillPercentage = proficiency;
 		}
 
-        public virtual Name Name
-        {
-            get { return _name; }
-        }
+        public virtual Name Name => _name;
 
 		public virtual void SetName(Name value)
 		{
-			ReplaceEvent("PersonNameChangedEvent", () => new PersonNameChangedEvent
+			ReplaceEvent(nameof(PersonNameChangedEvent), () => new PersonNameChangedEvent
 			{
 				PersonId = Id.GetValueOrDefault(),
 				FirstName = value.FirstName,
@@ -327,7 +315,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void SetEmploymentNumber(string value)
 	    {
-		    ReplaceEvent("PersonEmploymentNumberChangedEvent", () => new PersonEmploymentNumberChangedEvent
+		    ReplaceEvent(nameof(PersonEmploymentNumberChangedEvent), () => new PersonEmploymentNumberChangedEvent
 		    {
 			    PersonId = Id.GetValueOrDefault(),
 			    EmploymentNumber = _employmentNumber
@@ -336,12 +324,9 @@ namespace Teleopti.Ccc.Domain.Common
 		    _employmentNumber = value;
 	    }
 
-	    public virtual string EmploymentNumber
-	    {
-		    get { return _employmentNumber; }
-	    }
+	    public virtual string EmploymentNumber => _employmentNumber;
 
-	    public virtual void AddSchedulePeriod(ISchedulePeriod period)
+		public virtual void AddSchedulePeriod(ISchedulePeriod period)
 		{
 			InParameter.NotNull(nameof(period), period);
 
@@ -389,7 +374,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    private void addPersonPeriodChangedEvent()
 	    {
-		    AddEvent(() =>
+		    ReplaceEvent(nameof(PersonPeriodChangedEvent),() =>
 		    {
 				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
 				return new PersonPeriodChangedEvent

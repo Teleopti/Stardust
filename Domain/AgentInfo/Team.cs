@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public virtual void SetDescription(Description value)
 		{
-			ReplaceEvent("TeamNameChangedEvent", () => new TeamNameChangedEvent
+			ReplaceEvent(nameof(TeamNameChangedEvent), () => new TeamNameChangedEvent
 			{
 				TeamId = Id.GetValueOrDefault(),
 				Name = value.Name

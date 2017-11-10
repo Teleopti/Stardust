@@ -109,6 +109,21 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 		[Test]
+		public void ShouldOnlyPublishOneEventWhenResetExternalLogOnThenAddLogOn()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-01".Date());
+			person.AddPersonPeriod(personPeriod);
+			person.AddExternalLogOn(new ExternalLogOn(), personPeriod);
+			((Person)person).PopAllEvents();
+
+			person.ResetExternalLogOn(personPeriod);
+			person.AddExternalLogOn(new ExternalLogOn(), personPeriod);
+
+			((Person)person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldPublishWhenRemoveExternalLogOn()
 		{
 			var person = PersonFactory.CreatePersonWithId();
