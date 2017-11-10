@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 {
@@ -12,16 +16,21 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
+		private readonly ISiteProvider _siteProvider;
 
-		public TeamGamificationSettingProviderAndPersister(ITeamGamificationSettingRepository teamGamificationSettingRepository, ITeamRepository teamRepository, IGamificationSettingRepository gamificationSettingRepository)
+		public TeamGamificationSettingProviderAndPersister(ITeamGamificationSettingRepository teamGamificationSettingRepository, 
+			ITeamRepository teamRepository, IGamificationSettingRepository gamificationSettingRepository, ISiteProvider siteProvider)
 		{
 			_teamGamificationSettingRepository = teamGamificationSettingRepository;
 			_teamRepository = teamRepository;
 			_gamificationSettingRepository = gamificationSettingRepository;
+			_siteProvider = siteProvider;
 		}
 
-		public IList<TeamGamificationSettingViewModel> GetTeamGamificationSettingViewModels(List<Guid> teamIds)
+		public IList<TeamGamificationSettingViewModel> GetTeamGamificationSettingViewModels(List<Guid> siteIds)
 		{
+			var teamIds = getTeamIds(siteIds);
+
 			var VMList = new List<TeamGamificationSettingViewModel>();
 			var teams = _teamRepository.FindTeams(teamIds);
 
@@ -87,6 +96,18 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 				GamificationSettingId = gamificationSettingId,
 				Team = new SelectOptionItem() { id = team.Id.ToString(), text = team.Description.Name }
 			};
+		}
+
+		private IList<Guid> getTeamIds(List<Guid> siteIds)
+		{
+			var ids = new List<Guid>();
+			foreach (var siteId in siteIds)
+			{
+				var teams = _siteProvider.GetPermittedTeamsUnderSite(siteId, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage).ToList();
+				ids.AddRange(teams.Select(team => team.Id.Value));
+			}
+
+			return ids;
 		}
 	}
 }

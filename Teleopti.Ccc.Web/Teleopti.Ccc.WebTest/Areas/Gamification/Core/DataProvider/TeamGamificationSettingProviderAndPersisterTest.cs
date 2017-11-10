@@ -7,11 +7,14 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 {
@@ -24,6 +27,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		private ITeamRepository _teamRepository;
 		private ITeam _team;
 		private TeamGamificationSettingForm _teamGamificationSettingForm;
+		private ISiteProvider _siteProvider;
+		private ISite _site;
 
 		[SetUp]
 		public void Setup()
@@ -37,6 +42,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 
 			_teamRepository = new FakeTeamRepository();
 			_teamRepository.Add(_team);
+
+			var siteId = Guid.NewGuid();
+			_site = new Site("site");
+			_site.WithId(siteId);
+			_site.AddTeam(_team);
+			_siteProvider = MockRepository.GenerateMock<ISiteProvider>();
+			_siteProvider.Stub(x=>x.GetPermittedTeamsUnderSite(siteId, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage)).Return(new List<ITeam>{_team});
+
 			_gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
 			_gamificationSettingRepository.Stub(x => x.Get(gamificationSettingId)).Return(_gamificationSetting);
 			_teamGamificationSettingRepository = new FakeTeamGamificationSettingRepository();
@@ -50,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldAddNewTeamGamificationSettingIfItDoNotExist()
 		{
-			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository, _siteProvider);
 
 			target.SetTeamGamificationSetting(_teamGamificationSettingForm);
 
@@ -61,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		public void ShouldModifyGamificationSetting()
 		{
 			_teamGamificationSettingRepository.Add(new TeamGamificationSetting(){GamificationSetting = new GamificationSetting("old"), Team = _team});
-			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository, _siteProvider);
 
 			var result = target.SetTeamGamificationSetting(_teamGamificationSettingForm);
 
@@ -72,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		public void ShouldReturnNullWhenHasNoSuchTeam()
 		{
 			var teamRepository = new FakeTeamRepository();
-			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, teamRepository, _gamificationSettingRepository);
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, teamRepository, _gamificationSettingRepository, _siteProvider);
 
 			var result = target.SetTeamGamificationSetting(_teamGamificationSettingForm);
 
@@ -83,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		public void ShouldReturnNullWhenHasNoSuchGamificationSetting()
 		{
 			var gamificationSettingRepository = new FakeGamificationSettingRepository();
-			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, gamificationSettingRepository);
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, gamificationSettingRepository, _siteProvider);
 
 			var result = target.SetTeamGamificationSetting(_teamGamificationSettingForm);
 
@@ -94,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		public void ShouldRemoveExistTeamGamificationSettingWhenInputEmptyId()
 		{
 			_teamGamificationSettingRepository.Add(new TeamGamificationSetting() { GamificationSetting = _gamificationSetting, Team = _team });
-			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository, _siteProvider);
 
 			_teamGamificationSettingForm.GamificationSettingId = Guid.Empty;
 			target.SetTeamGamificationSetting(_teamGamificationSettingForm);
@@ -105,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldReturnEmptyListWhenThereIsNoTeam()
 		{
-			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository, _siteProvider);
 			var result = target.GetTeamGamificationSettingViewModels(new List<Guid>());
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -114,9 +127,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		public void ShouldGetTeamGamificationSettings()
 		{
 			_teamGamificationSettingRepository.Add(new TeamGamificationSetting() { GamificationSetting = _gamificationSetting, Team = _team });
-			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository, _siteProvider);
 
-			var result = target.GetTeamGamificationSettingViewModels(new List<Guid>(){_team.Id.Value});
+			var result = target.GetTeamGamificationSettingViewModels(new List<Guid>(){ _site.Id.Value});
 
 			result.Count.Should().Be.EqualTo(1);
 			result[0].GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
@@ -126,9 +139,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		[Test]
 		public void ShouldGetEmptyIdWhenThereIsNoTeamGamificationSetting()
 		{
-			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository, _siteProvider);
 
-			var result = target.GetTeamGamificationSettingViewModels(new List<Guid>() { _team.Id.Value });
+			var result = target.GetTeamGamificationSettingViewModels(new List<Guid>() { _site.Id.Value });
 
 			result.Count.Should().Be.EqualTo(1);
 			result[0].GamificationSettingId.Should().Be.EqualTo(Guid.Empty);

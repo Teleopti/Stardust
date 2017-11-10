@@ -182,16 +182,10 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			return _siteViewModelFactory.CreateSiteOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 		}
 
-		[HttpPost, Route("api/Gamification/LoadTeams"), UnitOfWork]
-		public virtual IEnumerable<SelectOptionItem> GetAllTeams(List<Guid> siteIds)
-		{
-			return _siteViewModelFactory.GetTeams(siteIds, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
-		}
-
 		[HttpPost, Route("api/Gamification/LoadTeamGamification"), UnitOfWork]
-		public virtual IEnumerable<TeamGamificationSettingViewModel> GetTeamGamificationSettings(List<Guid> teamIds)
+		public virtual IEnumerable<TeamGamificationSettingViewModel> GetTeamGamificationSettings(List<Guid> siteIds)
 		{
-			return _gamificationSettingProviderAndPersister.GetTeamGamificationSettingViewModels(teamIds);
+			return _gamificationSettingProviderAndPersister.GetTeamGamificationSettingViewModels(siteIds);
 		}
 
 		[HttpPost, Route("api/Gamification/SetTeamGamification"), UnitOfWork]
