@@ -104,7 +104,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="AbsenceRequests\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
