@@ -53,28 +53,30 @@
 
 		var vm = this;
 
-		var allAgentStates = [];
 		vm.agentStates = [];
+
+		// duplication of state
 		vm.showInAlarm = !$stateParams.showAllAgents;
 		vm.showAll = true;
+
 		vm.allGrid = rtaGridService.makeAllGrid();
 		vm.inAlarmGrid = rtaGridService.makeInAlarmGrid();
 		vm.allGrid.data = 'vm.agentStates';
 		vm.inAlarmGrid.data = 'vm.agentStates';
 
-		var selectedPersonId, lastUpdate, notice, selectedSiteId;
+		var selectedPersonId;
+
+		var lastUpdate, notice;
+
 		var siteIds = $stateParams.siteIds || [];
 		var teamIds = $stateParams.teamIds || [];
 		var skillIds = $stateParams.skillIds || [];
 		var skillAreaId = $stateParams.skillAreaId || undefined;
-		var excludedStatesFromUrl = function () {
-			return $stateParams.es || []
-		};
-		var propertiesForFiltering = ["Name", "State", "Activity", "Rule", "SiteAndTeamName"];
+		var excludedStatesFromUrl = $stateParams.es || [];
+
 		// because angular cant handle an array of null in stateparams
 		var nullState = "No State";
 		var nullStateId = "noState";
-		var enableWatchOnTeam = false;
 		vm.adherence = {};
 		vm.adherencePercent = null;
 		vm.filterText = "";
@@ -91,7 +93,6 @@
 		vm.showPath = false;
 		vm.notifySwitchDisabled = false;
 		vm.showBreadcrumb = siteIds.length > 0 || teamIds.length > 0 || skillIds === [];
-		vm.openedMaxNumberOfAgents = false;
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
 
@@ -147,9 +148,7 @@
 			return rtaRouteService.urlForHistoricalAdherence(personId);
 		};
 		vm.goToOverview = rtaRouteService.goToOverview;
-		vm.goToSelectItem = function () {
-			rtaRouteService.goToSelectSkill();
-		}
+		vm.goToSelectItem = rtaRouteService.goToSelectSkill;
 
 		vm.rightPanelOptions = {
 			panelState: false,
@@ -182,7 +181,7 @@
 						notice.destroy();
 					}
 					NoticeService.info($translate.instant('RtaPauseDisableNotice'), 5000, true);
-					poller = rtaPollingService.create(agentState);
+					poller = rtaPollingService.create(pollAgentStates);
 					poller.start();
 				}
 			});
@@ -192,29 +191,23 @@
 				poller.destroy();
 		});
 
-		function agentState() {
-			return getAgentStates()
-				.then(getAgentStatesByParams)
-				.then(updateStuff)
-				.then(updateAgentStates)
-				.then(updatePhoneStatesFromStateParams);
+		function pollAgentStates() {
+			if (skillAreaId) {
+				return rtaService.getSkillArea(skillAreaId)
+					.then(skillIdsForSkillArea)
+					.then(loadAgentStates)
+					.then(updateAgentStates)
+					.then(updateStatesFromAgentStates)
+					.then(loadExcludedStates);
+			} else {
+				return loadAgentStates()
+					.then(updateAgentStates)
+					.then(updateStatesFromAgentStates)
+					.then(loadExcludedStates);
+			}
 		}
 
-		function getAgentStates() {
-			var deferred = $q.defer();
-			if (skillAreaId) {
-				rtaService.getSkillArea(skillAreaId)
-					.then(getSkillIdsFromSkillArea)
-					.then(function () {
-						deferred.resolve(rtaService.agentStatesFor);
-					});
-			} else {
-				deferred.resolve(rtaService.agentStatesFor);
-			}
-			return deferred.promise;
-		};
-
-		function getSkillIdsFromSkillArea(skillArea) {
+		function skillIdsForSkillArea(skillArea) {
 			if (skillArea.Skills != null) {
 				vm.skillArea = true;
 				skillIds = skillArea.Skills.map(function (skill) {
@@ -223,8 +216,8 @@
 			}
 		}
 
-		function getAgentStatesByParams(fn) {
-			return fn({
+		function loadAgentStates() {
+			return rtaService.agentStatesFor({
 				siteIds: siteIds,
 				teamIds: teamIds,
 				skillIds: skillIds,
@@ -239,59 +232,41 @@
 			});
 		}
 
-		function updateStuff(data) {
-			$scope.$watchCollection(
-				function () {
-					return allAgentStates;
-				},
-				filterData);
-			return data;
-		}
-
-		function filterData() {
-			vm.agentStates = allAgentStates;
-			if (vm.showInAlarm) {
-				vm.agentStates = $filter('filter')(vm.agentStates, {
-					TimeInAlarm: ''
-				});
-				vm.openedMaxNumberOfAgents = (vm.agentStates.length === vm.maxNumberOfAgents);
-			}
-		}
-
-		function updateAgentStates(agentStates) {
-			if (!vm.pause) {
-				var excludedStates = excludedStateIds();
-				setStatesAndStuff(agentStates);
-				updateUrlWithExcludedStateIds(excludedStates);
-			}
-		}
-
-		function setStatesAndStuff(states) {
-			allAgentStates = [];
+		function updateAgentStates(states) {
+			vm.agentStates = [];
 			lastUpdate = states.Time;
-			fillAgentState(states);
+			var now = moment(states.Time);
+			states.States.forEach(function (state) {
+				vm.agentStates.push(rtaAgentsBuildService.buildAgentState(now, state));
+			});
 			vm.timeline = rtaFormatService.buildTimeline(states.Time);
 			vm.isLoading = false;
+			$state.go($state.current.name, {es: excludedStateIds()}, {notify: false});
+			return states;
 		}
 
-		function fillAgentState(states) {
-			var now = moment(states.Time);
-			states.States.forEach(function (state, i) {
-				allAgentStates.push(rtaAgentsBuildService.buildAgentState(now, state));
-				if (stateIsNotAdded(vm.states, state))
-					vm.states.push(mapState(state));
+		function updateStatesFromAgentStates(data) {
+			data.States.forEach(function (agentState) {
+				var stateId = agentState.StateId || nullStateId;
+				var addIt = (vm.states
+					.map(function (s) {
+						return s.Id;
+					})
+					.indexOf(stateId) === -1);
+				if (addIt) {
+					vm.states.push({
+						Id: stateId,
+						Name: agentState.State || nullState,
+						Selected: excludedStatesFromUrl.indexOf(agentState.StateId) == -1
+					});
+				}
 			});
+			addMissingNoState();
 			sortPhoneStatesByName();
 		}
 
-		function updatePhoneStatesFromStateParams() {
-			var stateIds = excludedStatesFromUrl();
-			addNoStateIfNeeded(stateIds);
-			getStateNamesForAnyExcludedStates(stateIds);
-		}
-
-		function addNoStateIfNeeded(stateIds) {
-			if (stateIds.indexOf(nullStateId) > -1 &&
+		function addMissingNoState() {
+			if (excludedStatesFromUrl.indexOf(nullStateId) > -1 &&
 				vm.states.filter(function (s) {
 					return s.Id === nullStateId;
 				}).length === 0) {
@@ -300,14 +275,13 @@
 					Name: nullState,
 					Selected: false
 				});
-				sortPhoneStatesByName();
 			}
 		}
 
-		function getStateNamesForAnyExcludedStates(stateIds) {
-			var stateIdsWithoutNull = stateIds.filter(function (s) {
+		function loadExcludedStates() {
+			var stateIdsWithoutNull = excludedStatesFromUrl.filter(function (s) {
 				return s !== nullStateId;
-			})
+			});
 			if (stateIdsWithoutNull.length !== 0) {
 				rtaService.getPhoneStates(stateIdsWithoutNull)
 					.then(function (states) {
@@ -317,6 +291,11 @@
 			}
 		}
 
+		function sortPhoneStatesByName() {
+			vm.states = $filter('orderBy')(vm.states, function (state) {
+				return state.Name;
+			});
+		}
 
 		$scope.$watch(
 			function () {
@@ -326,27 +305,17 @@
 				if (!poller)
 					return;
 				if (newValue !== oldValue) {
-					resetSortingParams(newValue);
-					poller.force();
-					filterData();
-					if (newValue && vm.pause) {
-						vm.agentStates.sort(function (a, b) {
-							return vm.formatToSeconds(b.TimeInAlarm) - vm.formatToSeconds(a.TimeInAlarm);
-						});
+					if (newValue) {
+						vm.orderBy = null;
+						vm.direction = null;
 					}
+					else {
+						vm.orderBy = "Name";
+						vm.direction = "asc";
+					}
+					poller.force();
 				}
 			});
-
-		function resetSortingParams(inAlarm) {
-			if (inAlarm) {
-				vm.orderBy = null;
-				vm.direction = null;
-			}
-			else {
-				vm.orderBy = "Name";
-				vm.direction = "asc";
-			}
-		}
 
 		$scope.$watch(
 			function () {
@@ -364,12 +333,10 @@
 				return $sessionStorage.buid;
 			},
 			function (newValue, oldValue) {
-				if (angular.isDefined(oldValue) && newValue !== oldValue) {
+				if (angular.isDefined(oldValue) && newValue !== oldValue)
 					rtaRouteService.goToOverview();
-				}
 			}
 		);
-
 
 		function excludedStateIds() {
 			var included = vm.states
@@ -379,7 +346,7 @@
 				.map(function (s) {
 					return s.Id;
 				});
-			var excludedViaUrlAndNotManuallyIncluded = excludedStatesFromUrl()
+			var excludedViaUrlAndNotManuallyIncluded = excludedStatesFromUrl
 				.filter(function (s) {
 					return included.indexOf(s) === -1;
 				});
@@ -397,44 +364,11 @@
 			return excludedUnique.concat(excluded);
 		}
 
-		function stateIsNotAdded(existingStates, state) {
-			state.StateId = state.StateId || nullStateId;
-			state.State = state.State || nullState;
-			return (existingStates
-				.map(function (s) {
-					return s.Id;
-				})
-				.indexOf(state.StateId) === -1)
-		}
-
-		function mapState(state) {
-			return {
-				Id: state.StateId,
-				Name: state.State,
-				Selected: excludedStatesFromUrl().indexOf(state.StateId) == -1
-			};
-		}
-
-		function updateUrlWithExcludedStateIds(excludedStates) {
-			$state.go($state.current.name, {
-				es: excludedStates
-			}, {
-				notify: false
-			});
-		};
-
-		function sortPhoneStatesByName() {
-			vm.states = $filter('orderBy')(vm.states, function (state) {
-				return state.Name;
-			});
-		};
-
 		vm.sort = function (column) {
-			if (vm.orderBy != column) 
+			if (vm.orderBy !== column)
 				vm.direction = 'asc';
-			else 
+			else
 				vm.direction = vm.direction === 'asc' ? 'desc' : 'asc';
-			
 			vm.orderBy = column;
 			poller.force();
 		}

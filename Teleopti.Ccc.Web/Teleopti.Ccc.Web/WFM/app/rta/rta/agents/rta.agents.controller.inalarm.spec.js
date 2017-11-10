@@ -135,36 +135,4 @@ describe('RtaAgentsController', function() {
 		expect(vm.showInAlarm).toEqual(false);
 	});
 
-	it('should set bool to indicate if user opened max number of agents', function() {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-
-		for (var i = 0; i < 50; i++) {
-			$fakeBackend.withAgentState({
-					PersonId: i,
-					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-					TimeInAlarm: 30
-				});
-		}
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = true);
-
-		expect(vm.openedMaxNumberOfAgents).toEqual(true);
-	});
-
-	it('should not set bool to indicate if user opened max number of agents', function() {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-
-		$fakeBackend.withAgentState({
-				PersonId: "1",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-				TimeInAlarm: 30
-			});
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = true);
-
-		expect(vm.openedMaxNumberOfAgents).toEqual(false);
-	});
 });
