@@ -1,18 +1,11 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -32,18 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private MockRepository _mocks;
         private IScheduleDictionary _dic;
 	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
-
-		public FullScheduling Target;
-		public FakeActivityRepository ActivityRepository;
-	    public FakeSkillRepository SkillRepository;
-	    public FakeScenarioRepository ScenarioRepository;
-	    public FakePersonRepository PersonRepository;
-	    public FakeSkillDayRepository SkillDayRepository;
-		public FakePersonAssignmentRepository AssignmentRepository;
-		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		public SchedulingOptionsProvider SchedulingOptionsProvider;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
         private void setup()
         {
@@ -83,62 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
         private DateTime _start, _end;
 
-		[Test, SetCulture("en-US"), SetUICulture("en-US")]
-		[Ignore("Doesnt work with classic toggle gone - Micke, fix or remove")]
-		public void ShouldBeAbleToScheduleWith36HourDayOffExposesBug38242()
-		{
-			setup();
-			var firstDay = new DateOnly(2016, 5, 22);
-			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
-			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
-			var site = new Site("site");
-			var team = new Team().WithDescription(new Description("team"));
-			site.AddTeam(team);
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var contract = new Contract("_");
-			var agent1 = PersonRepository.Has(contract, ContractScheduleFactory.CreateWorkingWeekContractSchedule(),
-				new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
-			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.NewYorkTimeZoneInfo());
-			agent1.PermissionInformation.SetCulture(CultureInfoFactory.CreateUsCulture());
-			agent1.FirstDayOfWeek = DayOfWeek.Sunday;
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var normalRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 30, 8, 30, 15), new TimePeriodWithSegment(16, 30, 16, 30, 15), shiftCategory));
-			var ruleSetBag = new RuleSetBag(normalRuleSet);
-			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
-
-			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				10,
-				10,
-				10,
-				10,
-				10,
-				10,
-				10)
-				);
-
-			var dayOffTemplate = new DayOffTemplate(new Description("_"));
-			dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(6));
-			dayOffTemplate.Anchor = TimeSpan.FromHours(12.5);
-			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(1));
-			AssignmentRepository.Add(new PersonAssignment(agent1, scenario, firstDay.AddDays(2))); //empty person assignment
-			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(3));
-			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
-			{
-				DayOffTemplate = dayOffTemplate
-			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
-			
-			Target.DoScheduling(planningPeriod.Id.Value);
-
-			var assignments = AssignmentRepository.Find(new[] { agent1 }, new DateOnlyPeriod(firstDay, firstDay), scenario);
-			assignments.Count.Should().Be.EqualTo(1);
-
-		}
-
-
+		
 		#region LatestStartTimeForAssignment Tests
 
 		[Test]
@@ -312,10 +238,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
         #endregion
 
-        //[TearDown]
-        //public void Teardown()
-        //{
-        //    _mocks.Verify(_dic);
-        //}
+        
 	}
 }
