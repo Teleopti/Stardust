@@ -116,8 +116,8 @@ DELETE FROM $(TELEOPTICCC).Tenant.AdminUser WHERE Name = 'FirstAdmin' AND [Passw
 -- demo as password
 IF NOT EXISTS (SELECT * FROM $(TELEOPTICCC).Tenant.AdminUser WHERE Name = 'FirstAdmin')
 BEGIN
-	INSERT INTO $(TELEOPTICCC).Tenant.AdminUser (Name, Email, Password, AccessToken)
-	VALUES ('FirstAdmin', 'first@admin.is', '###70D74A6BBA33B5972EADAD9DD449D273E1F4961D###', 'andaDummyToken')
+	INSERT INTO $(TELEOPTICCC).Tenant.AdminUser (Name, Email, Password)
+	VALUES ('FirstAdmin', 'first@admin.is', '###70D74A6BBA33B5972EADAD9DD449D273E1F4961D###')
 
 	UPDATE $(TELEOPTICCC).Tenant.Tenant SET Active = 1
 END
