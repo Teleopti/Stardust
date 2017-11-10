@@ -163,6 +163,8 @@
     <EmbeddedResource Include="Resources.zh-HK.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources.zh-SG.resx" />
+    <EmbeddedResource Include="Resources.zh-TW.resx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
