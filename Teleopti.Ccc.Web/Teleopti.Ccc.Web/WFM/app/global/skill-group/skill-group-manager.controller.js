@@ -37,6 +37,7 @@
         vm.skillAreaName       = '';
         vm.getSkillIcon        = skillIconService.get;
         vm.canSave             = false;
+		vm.deleteConfirmation  = false;
 
         vm.selectSkillGroup = function(skillGroup) {
             if (vm.managerData.currentSkillGroup === skillGroup) {
@@ -175,9 +176,11 @@
             setSaveableState();
         };
 
-        vm.deleteSkillGroup = function(skillGroup) {
-            SkillGroupSvc.deleteSkillGroup(skillGroup).then(function() {
-                getAllSkillGroups();
+        vm.deleteSkillGroup = function() {
+            SkillGroupSvc.deleteSkillGroup(vm.managerData.currentSkillGroup).then(function() {
+				getAllSkillGroups();
+				unselectAllSkills();
+				vm.managerData.currentSkillGroup = null;
             });
         };
 

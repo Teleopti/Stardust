@@ -42,7 +42,7 @@
 								<span ng-cloak ng-show="vm.managerData.currentSkillGroup.Id === skillGroup.Id" class="list-dot grow-out">
 									<b class="mdi mdi-check list-mark"></b>
 								</span>
-								<div class="wfm-leave-behind wfm-leave-behind-1" ng-click="vm.deleteSkillGroup(skillGroup); $event.stopPropagation();">
+								<div class="wfm-leave-behind wfm-leave-behind-1" ng-click="vm.managerData.currentSkillGroup = skillGroup; vm.deleteConfirmation=true; $event.stopPropagation();">
 									<span>
 										<i class="mdi mdi-delete"></i>
 									</span>
@@ -55,13 +55,13 @@
 			<div class="con-flex x3 panel form-panel material-depth-1" dropfromgroup="vm.optionDrop">
 				<div class="con-row">
 					{{'Name'|translate}}:
-					<input type="text" ng-model="vm.managerData.currentSkillGroup.Name" ng-maxlength="45" ng-change="vm.canSave=true" id="skillGroupNameBox" />
+					<input type="text" ng-model="vm.managerData.currentSkillGroup.Name" ng-maxlength="45" id="skillGroupNameBox"
+					/>
 					<div ng-cloak class="animate-show" ng-show="vm.managerData.currentSkillGroup.Name.length > 0">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">
 							{{'NameRequired'|translate}}
 						</div>
-						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}"
-							 translate>
+						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}" translate>
 							TextTooLong
 						</div>
 					</div>
@@ -135,6 +135,24 @@
 								</div>
 								<p ng-if="filtered.length < 1">{{'RepViewerNoMoreMatches'|translate}}</p>
 							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-cloak class="modal-box">
+			<div ng-cloak ng-show="vm.deleteConfirmation">
+				<div class="modalbg">
+					<div class="dialog-mini material-depth-1">
+						<div class="modal-inner-content">
+							<h3>{{'DoYouWantToDeleteSkillGroup'|translate}}</h3>
+							{{'AreYouSureYouWantToDeleteTheSkillGroup'|translate}} {{vm.managerData.currentSkillGroup.Name}}
+						</div>
+						<div class="modal-actions">
+							<aside>
+								<button type="button" ng-click="vm.deleteConfirmation=false; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+								<button type="button" ng-click="vm.deleteConfirmation=false; vm.deleteSkillGroup(); $event.stopPropagation();" class="wfm-btn wfm-btn-invis-primary">{{'OK'|translate}}</button>
+							</aside>
 						</div>
 					</div>
 				</div>
