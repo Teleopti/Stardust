@@ -94,7 +94,8 @@ describe('gamification, ', function () {
 
 		describe('when some rows are selected and their applied settings are changed, ', function () {
 			var cmp, ctrl;
-			var n, ids, settingValue;
+			var n, ids, settingId;
+			var selectedRows;
 
 			beforeEach(function () {
 				cmp = setupComponent();
@@ -102,7 +103,7 @@ describe('gamification, ', function () {
 
 				ctrl.onAppliedSettingChange = function (teamIds, newValue) {
 					ids = teamIds;
-					settingValue = newValue;
+					settingId = newValue;
 				}
 
 				openSelectFor(cmp);
@@ -118,7 +119,7 @@ describe('gamification, ', function () {
 				n = 3;
 				for (var i = 0; i < n; i++) { selectRow(cmp, i); }
 
-				var selectedRows = cmp[0].querySelectorAll('gamification-target-row[is-selected="true"]');
+				selectedRows = cmp[0].querySelectorAll('gamification-target-row[is-selected="true"]');
 				expect(selectedRows.length).toBe(n);
 
 				var row = angular.element(selectedRows[0]);
@@ -129,14 +130,21 @@ describe('gamification, ', function () {
 			});
 
 			it('should be called with the changed data', function () {
+				var expected = 'setting2';
 				expect(ids.length).toBe(n);
 				expect(ids[0]).toBe('site1team1');
 				expect(ids[1]).toBe('site2team1');
 				expect(ids[2]).toBe('site2team2');
-				expect(settingValue).toBe('setting2');
+				expect(settingId).toBe(expected);
 			});
 
-			// it('should update the applied settings in the table', function () {});
+			it('should update the applied settings in the table', function () {
+				var expected = 'Setting 2';
+				selectedRows.forEach(function (row) {
+					var selectedText = row.querySelector('md-select-value span div').innerText;
+					expect(selectedText).toBe(expected);
+				});
+			});
 		});
 
 		function insertStyle(parentNode) {
