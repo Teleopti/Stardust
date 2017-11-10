@@ -105,11 +105,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					{ return _navigationPanelProvider.CreateNavigationPanel<ShiftsNavigationPanel>(); }
 				case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
 					{
-						if (toggleManager.IsEnabled(Toggles.Wfm_Web_Intraday_Rta_As_first_Choice_42206))
-						{
-							return _navigationPanelProvider.CreateNavigationPanel<IntradayWebNavigator>();
-						}
-						return _navigationPanelProvider.CreateNavigationPanel<IntradayNavigator>();
+						return _navigationPanelProvider.CreateNavigationPanel<IntradayWebNavigator>();
 					}
 				case DefinedRaptorApplicationFunctionPaths.OpenBudgets:
 					{

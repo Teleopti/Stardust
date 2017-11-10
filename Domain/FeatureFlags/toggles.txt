@@ -176,7 +176,6 @@ Wfm_Intraday_38074 = true
 WfmIntraday_MonitorActualvsForecasted_35176 = true
 Wfm_Intraday_OptimalStaffing_40921 = true
 Wfm_Intraday_ScheduledStaffing_41476 = true
-Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
 Wfm_Intraday_ESL_41827 = true
 Wfm_Intraday_SupportSkillTypeEmail_44002 = true
 WFM_Intraday_Show_For_Other_Days_43504 = true
