@@ -18,6 +18,7 @@
 				var poller = {
 					start: start,
 					force: force,
+					forceSoon: forceSoon,
 					destroy: destroy
 				};
 
@@ -33,6 +34,12 @@
 				function force() {
 					stop();
 					start();
+				}
+
+				function forceSoon() {
+					stop();
+					scheduleCall(1000);
+					return poller;
 				}
 
 				function stop() {
@@ -58,9 +65,9 @@
 					});
 				}
 
-				function scheduleCall() {
+				function scheduleCall(timeout) {
 					if (!_destroyed)
-						_scheduledCall = $timeout(callAndScheduleCall, interval || 5000);
+						_scheduledCall = $timeout(callAndScheduleCall, timeout || interval || 5000);
 				}
 			}
 		};

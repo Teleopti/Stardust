@@ -317,7 +317,7 @@
 				if (!poller)
 					return;
 				if (newValue !== oldValue)
-					poller.force();
+					poller.forceSoon();
 			});
 
 		$scope.$watch(
