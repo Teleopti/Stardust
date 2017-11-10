@@ -77,9 +77,6 @@
 						vm.orgData.Children.push(response[i]);
 					}
 				}
-				else {
-					NoticeService.error($translate.instant('ImportBpoWrongDateFormat'), 5000, true);
-				}
 			});
 		}
 
