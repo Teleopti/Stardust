@@ -118,7 +118,7 @@
     vm.deleteSkillArea = function(skillArea) {
 			cancelTimeout();
       SkillGroupSvc.deleteSkillGroup({
-          id: skillArea.Id
+          Id: skillArea.Id
         }).then(function() {
           vm.skillAreas.splice(vm.skillAreas.indexOf(skillArea), 1);
           vm.selectedItem = null;
