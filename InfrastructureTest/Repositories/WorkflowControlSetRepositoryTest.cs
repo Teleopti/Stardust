@@ -185,7 +185,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(result[0].OvertimeRequestOpenPeriods[0].GetPeriod(DateOnly.Today), Is.EqualTo(new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.Today.AddDays(4))));
         }
 
-        protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		[Test]
+		public void ShouldSaveOvertimeRequestWorkRuleSettings()
+		{
+			var org = CreateAggregateWithCorrectBusinessUnit();
+			org.AddOpenOvertimeRequestPeriod(
+				new OvertimeRequestOpenDatePeriod { Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3)), AutoGrantType = OvertimeRequestAutoGrantType.Yes,EnableWorkRuleValidation = true, WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny });
+			PersistAndRemoveFromUnitOfWork(org);
+
+			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			var result = repository.LoadAllSortByName();
+
+			Assert.That(result.Count, Is.EqualTo(1));
+			Assert.That(result[0].OvertimeRequestOpenPeriods.Count, Is.EqualTo(1));
+			Assert.That(result[0].OvertimeRequestOpenPeriods[0].EnableWorkRuleValidation, Is.EqualTo(true));
+			Assert.That(result[0].OvertimeRequestOpenPeriods[0].WorkRuleValidationHandleType, Is.EqualTo(OvertimeWorkRuleValidationHandleType.Deny));
+		}
+
+		protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new WorkflowControlSetRepository(currentUnitOfWork);
         }

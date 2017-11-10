@@ -21,5 +21,7 @@
                      foreign-key="FK_OvertimeRequestOpenPeriod_WorkflowControlSet"/>
 
         <property name="AutoGrantType" not-null ="true" />
+        <property name="EnableWorkRuleValidation" not-null ="true" />
+        <property name="WorkRuleValidationHandleType"/>
     </class>
 </hibernate-mapping>

@@ -9,5 +9,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		OvertimeRequestAutoGrantType AutoGrantType { get; set; }
 		int OrderIndex { get; }
 		string DenyReason { get; set; }
+		bool EnableWorkRuleValidation { get; set; }
+
+		OvertimeWorkRuleValidationHandleType WorkRuleValidationHandleType { get; set; }
 	}
 }
