@@ -7,5 +7,5 @@
 		<div class="team">Team</div>
 		<div class="setting">Applied Setting</div>
 	</header>
-	<gamification-target-row md-virtual-repeat="team in $ctrl.teams" id="team.teamId" name="team.teamName" applied-setting-value="team.appliedSettingValue" selected="$ctrl.selectedTeamIds[team.teamId]" on-select="$ctrl.selectRow(teamId)" on-setting-change="$ctrl.changeAppliedSetting(teamId, newSettingValue)" ng-class="{'selected': $ctrl.selectedTeamIds[team.teamId]}"></gamification-target-row>
+	<gamification-target-row md-virtual-repeat="team in $ctrl.teams" id="team.id" name="team.name" applied-setting-id="team.appliedSettingId" selected="$ctrl.selectedTeamIds[team.id]" on-select="$ctrl.selectRow(teamId)" on-setting-change="$ctrl.changeAppliedSetting(teamId, newSettingValue)" ng-class="{'selected': $ctrl.selectedTeamIds[team.id]}"></gamification-target-row>
 </md-virtual-repeat-container>

@@ -47,12 +47,11 @@
 		ctrl.toggleAllRows = function () {
 			var allSelected = ctrl.allRowsSelected();
 			ctrl.teams.forEach(function (team) {
-				ctrl.selectedTeamIds[team.teamId] = !allSelected;
+				ctrl.selectedTeamIds[team.id] = !allSelected;
 			});
 		};
 
 		ctrl.selectRow = function (teamId) {
-			// console.log('select row: ' + teamId)
 			ctrl.selectedTeamIds[teamId] = !ctrl.selectedTeamIds[teamId];
 		};
 
@@ -63,7 +62,7 @@
 				.filter(function (id) { return ctrl.selectedTeamIds[id]; })
 				.forEach(function (id) {
 					var index = ctrl._teamsIndexMap[id].index;
-					ctrl.teams[index].appliedSettingValue = newSettingValue;
+					ctrl.teams[index].appliedSettingId = newSettingValue;
 				});
 
 			ctrl.onSettingChange && ctrl.onSettingChange({
@@ -89,7 +88,7 @@
 		function convertToIndexMap(arr) {
 			var map = {};
 			arr.forEach(function (team, index) {
-				map[team.teamId] = {
+				map[team.id] = {
 					index: index
 				};
 			});

@@ -22,7 +22,7 @@
 			// console.log('TeamsResult.filterByName: ' + text);
 			var query = new RegExp(text, 'i');
 			this.current = this._result.filter(function (team) {
-				return team.teamName.search(query) != -1;
+				return team.name.search(query) != -1;
 			});
 		};
 

@@ -272,8 +272,8 @@ describe('gamification, ', function () {
 					var n = parseInt(siteId[siteId.length - 1]);
 					for (var i = 0; i < n; i++) {
 						teams.push({
-							teamId: siteId + 'team' + (i + 1),
-							teamName: 'Site ' + n + '/Team ' + (i + 1)
+							id: siteId + 'team' + (i + 1),
+							name: 'Site ' + n + '/Team ' + (i + 1)
 						});
 					}
 				});

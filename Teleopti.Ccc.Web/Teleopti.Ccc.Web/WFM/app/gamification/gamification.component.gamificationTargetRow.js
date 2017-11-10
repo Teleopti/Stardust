@@ -12,7 +12,7 @@
 			bindings: {
 				id: '<',
 				name: '<',
-				appliedSettingValue: '<',
+				appliedSettingId: '<',
 				selected: '<',
 				onSelect: '&',
 				onSettingChange: '&'
@@ -28,10 +28,9 @@
 		var ctrl = this;
 
 		ctrl.appliedSettingChanged = function () {
-			// console.log(ctrl.appliedSettingValue);
 			ctrl.onSettingChange({
 				teamId: ctrl.id,
-				newSettingValue: ctrl.appliedSettingValue
+				newSettingValue: ctrl.appliedSettingId
 			});
 		};
 
