@@ -98,10 +98,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper);
 			_gamificationSetting.Description.Should().Not.Be.EqualTo(expactedDescription);
 
-			var result = target.PersistDescription(new GamificationDescriptionViewModel()
+			var result = target.PersistDescription(new GamificationDescriptionForm()
 			{
 				GamificationSettingId = _settingId,
-				Value = expactedDescription
+				Name = expactedDescription.Name
 			});
 
 			result.GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
@@ -113,10 +113,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		{
 			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper);
 
-			var result = target.PersistDescription(new GamificationDescriptionViewModel()
+			var result = target.PersistDescription(new GamificationDescriptionForm()
 			{
 				GamificationSettingId = _settingId,
-				Value = new Description("bla")
+				Name = "bla"
 			});
 
 			result.Should().Be.Null();

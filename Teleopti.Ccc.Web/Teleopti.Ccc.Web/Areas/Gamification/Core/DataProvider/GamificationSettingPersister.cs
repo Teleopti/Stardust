@@ -64,11 +64,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return true;
 		}
 
-		public GamificationDescriptionViewModel PersistDescription(GamificationDescriptionViewModel input)
+		public GamificationDescriptionViewModel PersistDescription(GamificationDescriptionForm input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
 			if (gamificationSetting == null) return null;
-			if (gamificationSetting.Description != input.Value) gamificationSetting.Description = input.Value;
+			if (gamificationSetting.Description.Name != input.Name) gamificationSetting.Description = new Description(input.Name);
 
 			return new GamificationDescriptionViewModel(){GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.Description};
 		}

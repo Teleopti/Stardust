@@ -101,4 +101,10 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public int GoldThreshold { get; set; }
 		public BadgeUnitType UnitType { get; set; }
 	}
+
+	public class GamificationDescriptionForm
+	{
+		public Guid GamificationSettingId { get; set; }
+		public string Name { get; set; }
+	}
 }
