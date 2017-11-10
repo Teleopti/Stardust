@@ -231,8 +231,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			if (_commandId.HasValue)
 				allEvents.ForEach(e =>
 				{
-					var trackableE = e as ICommandIdentifier;
-					if (trackableE != null)
+					if (e is ICommandIdentifier trackableE)
 					{
 						trackableE.CommandId = _commandId.Value;
 					}

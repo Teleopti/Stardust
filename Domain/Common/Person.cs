@@ -165,8 +165,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			AddSkill(new PersonSkill(skill, new Percent(1)), Period(personPeriodDate));
 		}
-
-
+		
 		public virtual void AddSkill(ISkill skill, IPersonPeriod personPeriod)
 		{
 			AddSkill(new PersonSkill(skill, new Percent(1)), personPeriod);
@@ -177,8 +176,7 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull(nameof(personSkill), personSkill);
 			InParameter.NotNull(nameof(personPeriod), personPeriod);
 
-			var modify = personPeriod.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill)) as IPersonSkillModify;
-			if (modify == null)
+			if (!(personPeriod.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill)) is IPersonSkillModify modify))
 			{
 				((IPersonPeriodModifySkills)personPeriod).AddPersonSkill(personSkill);
 			}

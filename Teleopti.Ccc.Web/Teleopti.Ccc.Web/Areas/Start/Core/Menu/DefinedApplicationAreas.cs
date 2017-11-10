@@ -38,12 +38,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 			return Resources.ResourceManager.GetString(rawResourceKey.Replace("xx", string.Empty));
 		}
 
-		public static IEnumerable<ApplicationArea> ApplicationAreas
-		{
-			get
-			{
-				return ApplicationApplicationAreas;
-			}
-		}
+		public static IEnumerable<ApplicationArea> ApplicationAreas => ApplicationApplicationAreas;
 	}
 }

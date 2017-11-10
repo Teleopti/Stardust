@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			var culture = absenceRequest.AbsenceRequest.Person.PermissionInformation.Culture();
 			var language = absenceRequest.AbsenceRequest.Person.PermissionInformation.UICulture();
 			var requestedPeriod = absenceRequest.AbsenceRequest.Period.ToDateOnlyPeriod(timeZone);
-			var personPeriod = absenceRequest.AbsenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
+			var personPeriod = absenceRequest.AbsenceRequest.Person.Period(requestedPeriod.StartDate);
 
-			if (personPeriod == null || personPeriod.BudgetGroup == null)
+			if (personPeriod?.BudgetGroup == null)
 			{
 				return AbsenceRequestBudgetGroupValidationHelper.PersonPeriodOrBudgetGroupIsNull(culture, absenceRequest.AbsenceRequest.Person.Id);
 			}

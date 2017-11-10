@@ -81,12 +81,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			var calendar = CultureInfo.CurrentCulture.Calendar;
 
+			var serverDateTimeDontUse = _now.ServerDateTime_DontUse();
 			return Json(
 				new
 				{
-					NowYear = calendar.GetYear(_now.ServerDateTime_DontUse()),
-					NowMonth = calendar.GetMonth(_now.ServerDateTime_DontUse()),
-					NowDay = calendar.GetDayOfMonth(_now.ServerDateTime_DontUse()),
+					NowYear = calendar.GetYear(serverDateTimeDontUse),
+					NowMonth = calendar.GetMonth(serverDateTimeDontUse),
+					NowDay = calendar.GetDayOfMonth(serverDateTimeDontUse),
 					DateTimeFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern
 				},
 				JsonRequestBehavior.AllowGet);

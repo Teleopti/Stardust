@@ -129,24 +129,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 		{
 			if (!enabled())
 				return null;
-			return (
-				from t in tracers()
-				where t.Tenant == _dataSource.CurrentName() &&
-					  t.UserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase)
-				select t
-			).FirstOrDefault();
+
+			var tenantName = _dataSource.CurrentName();
+			return tracers().FirstOrDefault(t => t.Tenant == tenantName && t.UserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase));
 		}
 
 		private tracer tracerFor(Guid personId)
 		{
 			if (!enabled())
 				return null;
-			return (
-				from t in tracers()
-				where t.Tenant == _dataSource.CurrentName() &&
-					  t.Persons.Any(p => p == personId)
-				select t
-			).FirstOrDefault();
+
+			var tenantName = _dataSource.CurrentName();
+			return tracers().FirstOrDefault(t => t.Tenant == tenantName && t.Persons.Any(p => p == personId));
 		}
 
 		private bool enabled() => tracers().Any();
