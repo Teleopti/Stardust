@@ -122,9 +122,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
-			WithUnitOfWork.Do(() =>
+			WaitlistRequestHandler.Handle(new ProcessWaitlistedRequestsEvent
 			{
-				WaitlistRequestHandler.Handle(new ProcessWaitlistedRequestsEvent{ LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"), LogOnDatasource = "Teleopti WFM"});
+				LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
+				LogOnDatasource = "Teleopti WFM"
 			});
 		}
 	}
