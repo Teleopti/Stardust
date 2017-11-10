@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Drawing;
+using System.Globalization;
+using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Requests;
@@ -12,6 +15,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 	public abstract class OvertimeRequestPeriodCellValidatorBase : SFGridCellValidatorBase<OvertimeRequestPeriodModel>
 	{
 		private readonly IToggleManager _toggleManager;
+
+		public override Color ErrorBackColor => Color.Yellow;
 
 		protected OvertimeRequestPeriodCellValidatorBase(IToggleManager toggleManager)
 		{
@@ -29,6 +34,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			int staffingAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager);
 
 			return new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(staffingAvailableDays));
+		}
+
+		protected override void setStyleError(GridStyleInfo style)
+		{
+			if (DateTime.TryParse(style.CellValue.ToString(), out DateTime date))
+			{
+				style.Error = date.ToShortDateString();
+				style.ResetError();
+			}
+			else
+			{
+				base.setStyleError(style);
+			}
+			
 		}
 	}
 }

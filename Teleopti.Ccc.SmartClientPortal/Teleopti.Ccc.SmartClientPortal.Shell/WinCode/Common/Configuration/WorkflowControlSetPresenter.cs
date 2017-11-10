@@ -253,8 +253,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				var repository = _repositoryFactory.CreateWorkflowControlSetRepository(uow);
 				foreach (var workflowControlSetModel in _workflowControlSetModelCollection)
 				{
-					checkOvertimeRequestOpenPeriods(workflowControlSetModel);
-
 					if (workflowControlSetModel.IsNew && workflowControlSetModel.ToBeDeleted)
 					{
 						toBeRemovedFromList.Add(workflowControlSetModel);
@@ -295,25 +293,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			foreach (var workflowControlSetModel in toBeUpdatedAfterPersist)
 			{
 				workflowControlSetModel.UpdateAfterMerge(workflowControlSetModel.OriginalDomainEntity);
-			}
-		}
-
-		private void checkOvertimeRequestOpenPeriods(IWorkflowControlSetModel workflowControlSetModel)
-		{
-			var availablePeriod = new DateOnlyPeriod(DateOnly.Today,
-				DateOnly.Today.AddDays(StaffingInfoAvailableDaysProvider.GetDays(_toggleManager)));
-			foreach (var overtimeRequestOpenPeriod in workflowControlSetModel.OvertimeRequestPeriodModels)
-			{
-				var requestOpenPeriod = overtimeRequestOpenPeriod.PeriodType.Item.GetPeriod(DateOnly.Today);
-				if (availablePeriod.Contains(requestOpenPeriod)) continue;
-
-				if (overtimeRequestOpenPeriod.PeriodType.Item is OvertimeRequestOpenDatePeriod)
-				{
-					throw new ValidationException(string.Format(Resources.OvertimeRequestDatePeriodError,
-						availablePeriod.StartDate.ToShortDateString(), availablePeriod.EndDate.ToShortDateString()));
-				}
-				throw new ValidationException(string.Format(Resources.OvertimeRequestRollingPeriodError,
-					availablePeriod.DayCount() - 1));
 			}
 		}
 
