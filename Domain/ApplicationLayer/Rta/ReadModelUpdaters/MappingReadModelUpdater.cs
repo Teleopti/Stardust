@@ -50,22 +50,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		{
 			var stateGroups = _stateGroups.LoadAll().ToLookup(g => g.BusinessUnit.Id.Value);
 
-			var existingStateGroup = (
-				from g in stateGroups[@event.BusinessUnitId]
-				from s in g.StateCollection
-				where s.StateCode == @event.StateCode
-				select g
-			).SingleOrDefault();
-
+			var existingStateGroup = stateGroups[@event.BusinessUnitId].SingleOrDefault(g => g.StateCollection.Any(s => s.StateCode == @event.StateCode));
 			if (existingStateGroup != null)
 				return;
 
-			var defaultStateGroup = (
-				from g in stateGroups[@event.BusinessUnitId]
-				where g.DefaultStateGroup
-				select g
-				).SingleOrDefault();
-
+			var defaultStateGroup = stateGroups[@event.BusinessUnitId].SingleOrDefault(g => g.DefaultStateGroup);
 			if (defaultStateGroup == null)
 				return;
 

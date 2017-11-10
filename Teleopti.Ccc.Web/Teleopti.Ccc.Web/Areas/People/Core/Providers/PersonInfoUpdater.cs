@@ -144,11 +144,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		private void updatePeriodWithSkill(IPerson person, IEnumerable<Guid> inputSkills, IPersonPeriod period,
 			IEnumerable<IPersonSkill> currentExistingSkills = null)
 		{
-			var currentSkills = currentExistingSkills != null ? currentExistingSkills.ToList() : new List<IPersonSkill>();
+			var currentSkills = currentExistingSkills?.ToList() ?? new List<IPersonSkill>();
 			foreach (var skillId in inputSkills)
 			{
 				var currentSkill = currentSkills.SingleOrDefault(s => s.Skill.Id == skillId);
-				var proficiency = currentSkill == null ? new Percent(1) : currentSkill.SkillPercentage;
+				var proficiency = currentSkill?.SkillPercentage ?? new Percent(1);
 
 				var skill = _skillRepository.Get(skillId);
 				var personSkill = new PersonSkill(skill, proficiency)

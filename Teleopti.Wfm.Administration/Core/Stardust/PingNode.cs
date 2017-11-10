@@ -29,12 +29,4 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return true;
 		}
 	}
-
-	public class FakePigNode : IPingNode
-	{
-		public bool Ping(WorkerNode node)
-		{
-			return true;
-		}
-	}
 }

@@ -129,6 +129,7 @@
     <Compile Include="ControllerActions\CreateTenantModelForTest.cs" />
     <Compile Include="ControllerActions\DeleteTenantTest.cs" />
     <Compile Include="ControllerActions\DeleteUserTest.cs" />
+    <Compile Include="ControllerActions\FakePingNode.cs" />
     <Compile Include="ControllerActions\StardustHealthCheckTest.cs" />
     <Compile Include="ControllerActions\StardustControllerTest.cs" />
     <Compile Include="ControllerActions\UpgradeDatabase.cs" />

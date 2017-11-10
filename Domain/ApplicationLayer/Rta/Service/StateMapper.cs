@@ -84,12 +84,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private MappedState readDefaultStateGroup(Guid businessUnitId)
 		{
 			var stateGroups = _stateGroups.LoadAll();
-			var defaultStateGroup = (
-				from g in stateGroups
-				where g.BusinessUnit.Id.Value == businessUnitId &&
-					  g.DefaultStateGroup
-				select g
-				).SingleOrDefault();
+			var defaultStateGroup =
+				stateGroups.SingleOrDefault(g => g.BusinessUnit.Id.Value == businessUnitId && g.DefaultStateGroup);
 			if (defaultStateGroup == null)
 				return null;
 			return new MappedState

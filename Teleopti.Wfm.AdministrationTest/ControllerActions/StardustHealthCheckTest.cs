@@ -4,7 +4,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Wfm.Administration.Controllers;
-using Teleopti.Wfm.Administration.Core.Stardust;
 using WorkerNode = Teleopti.Ccc.Infrastructure.Repositories.Stardust.WorkerNode;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
@@ -19,7 +18,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void TestFixtureSetUp()
 		{
 			StardustRepository = new FakeStardustRepository();
-			Target = new StardustController(StardustRepository, new AnotherTemporaryFakeStardustSender(StardustRepository), new FakeTenants(), new StaffingSettingsReader(), new FakePigNode());
+			Target = new StardustController(StardustRepository, new AnotherTemporaryFakeStardustSender(StardustRepository), new FakeTenants(), new StaffingSettingsReader(), new FakePingNode());
 		}
 
 		[SetUp]

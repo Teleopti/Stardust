@@ -9,22 +9,15 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         public static void SetConnectionString(string connectionString)
         {
             var logHierarchy = log4net.LogManager.GetRepository() as Hierarchy;
-            if (logHierarchy != null)
-            {
-                var appender = logHierarchy.GetAppenders()
-                                      .OfType<AdoNetAppender>()
-                                      .SingleOrDefault();
+			var appender = logHierarchy?.GetAppenders()
+				.OfType<AdoNetAppender>()
+				.SingleOrDefault();
 
-                if (appender != null)
-                {
-                    appender.ConnectionString = connectionString;
-                    appender.ActivateOptions();
-                }
-
-               
-            }
-
-           
-        }
+			if (appender != null)
+			{
+				appender.ConnectionString = connectionString;
+				appender.ActivateOptions();
+			}
+		}
     }
 }

@@ -128,7 +128,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private scheduleInfo getSchedule( DateTime now , IPerson person)
 		{
-
 			var timeZone = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
 			var timeZoneTime = TimeZoneInfo.ConvertTimeFromUtc(now, timeZone);
 			var date = new DateOnly(timeZoneTime);
@@ -158,19 +157,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						})
 					.ToArray();
 
-				var shift = (
-						from s in possibleShifts
-						from l in s.projection
-						where l.Period.Contains(now)
-						select s)
-					.SingleOrDefault();
-
-				if (shift == null)
-					shift = (
-							from s in possibleShifts
-							where s.scheduleDay.DateOnlyAsPeriod.DateOnly == date
-							select s)
-						.SingleOrDefault();
+				var shift = possibleShifts.SingleOrDefault(s => s.projection.Any(l => l.Period.Contains(now))) ?? possibleShifts.SingleOrDefault(s => s.scheduleDay.DateOnlyAsPeriod.DateOnly == date);
 
 				schedule = shift.projection;
 			}

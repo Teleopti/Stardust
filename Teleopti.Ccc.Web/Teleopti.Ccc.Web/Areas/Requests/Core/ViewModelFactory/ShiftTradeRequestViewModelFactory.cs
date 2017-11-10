@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 									 .SingleOrDefault();
 
 
-			var shiftTradeDayViewModel = new ShiftTradeDayViewModel()
+			var shiftTradeDayViewModel = new ShiftTradeDayViewModel
 			{
 				Date = shiftTradeSwapDetail.DateTo,
 				ToScheduleDayDetail = createScheduleDayDetail(schedulePartTo),

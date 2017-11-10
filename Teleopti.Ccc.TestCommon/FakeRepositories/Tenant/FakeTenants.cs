@@ -89,9 +89,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 		public string Find(string rtaKey)
 		{
 			var tenant = _data.SingleOrDefault(x => x.RtaKey == rtaKey);
-			if (tenant == null)
-				return null;
-			return tenant.Name;
+			return tenant?.Name;
 		}
 
 		public int Count()

@@ -51,15 +51,11 @@ namespace Teleopti.Ccc.Domain.Time
         {
             if (scheduleDays.Count() > 1) return false;
             var scheduleDay = scheduleDays.SingleOrDefault();
-            if (scheduleDay == null) return false;
 
-            var shift = scheduleDay.GetEditorShift();
+			var shift = scheduleDay?.GetEditorShift();
 			return shift != null;
         }
 
-        public DateTimePeriod Period
-        {
-            get { return _period; }
-        }
-    }
+        public DateTimePeriod Period => _period;
+	}
 }

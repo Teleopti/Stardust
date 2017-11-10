@@ -187,8 +187,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private IScheduleDay getCurrentScheduleDay(IScheduleDictionary scheduleDictionary, IPerson person, DateOnly date)
 		{
-			var period = new DateOnlyPeriod(date, date);		
-			return scheduleDictionary[person].ScheduledDayCollection(period).SingleOrDefault();
+			return scheduleDictionary[person].ScheduledDay(date);
 		}
 
 		private IScheduleDay toScheduleDay(IScheduleDay currentScheduleDay, IEnumerable<IPersistableScheduleData> data)
@@ -200,8 +199,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			foreach(var scheduleData in data)
 			{
-				var newAss = scheduleData as IPersonAssignment;
-				if(newAss != null)
+				if(scheduleData is IPersonAssignment newAss)
 				{
 					resultingAss.FillWithDataFrom(newAss, true);
 				}
