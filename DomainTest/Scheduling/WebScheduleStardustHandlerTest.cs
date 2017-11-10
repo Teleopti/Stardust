@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon;
@@ -149,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personAssignments.All(x => x.Source == ScheduleSource.WebScheduling).Should().Be.True();
 		}
 
-		public WebScheduleStardustHandlerTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
+		public WebScheduleStardustHandlerTest(SeperateWebRequest seperateWebRequest, EasierBlockScheduling resourcePlannerEasierBlockScheduling46155, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582) : base(seperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
 		{
 		}
 	}

@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
-		public TeamBlockPeriodSchedulingTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
+		public TeamBlockPeriodSchedulingTest(SeperateWebRequest seperateWebRequest, EasierBlockScheduling resourcePlannerEasierBlockScheduling46155, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582) : base(seperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
 		{
 		}
 	}

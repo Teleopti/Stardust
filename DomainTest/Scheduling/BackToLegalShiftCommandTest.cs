@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -226,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Should().Be.EqualTo(15);
 		}
 
-		public BackToLegalShiftCommandTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
+		public BackToLegalShiftCommandTest(SeperateWebRequest seperateWebRequest, EasierBlockScheduling resourcePlannerEasierBlockScheduling46155, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582) : base(seperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
 		{
 		}
 	}

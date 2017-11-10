@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			result.BusinessRulesValidationResults.Should().Be.Empty();
 		}
 
-		public FullSchedulingResultTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
+		public FullSchedulingResultTest(SeperateWebRequest seperateWebRequest, EasierBlockScheduling resourcePlannerEasierBlockScheduling46155, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582) : base(seperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
 		{
 		}
 	}

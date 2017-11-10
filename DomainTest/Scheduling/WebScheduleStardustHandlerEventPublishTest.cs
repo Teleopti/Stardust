@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
-		public WebScheduleStardustHandlerEventPublishTest(bool runInSeperateWebRequest, bool resourcePlannerEasierBlockScheduling46155, bool resourcePlannerRemoveClassicShiftCat46582) : base(runInSeperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
+		public WebScheduleStardustHandlerEventPublishTest(SeperateWebRequest seperateWebRequest, EasierBlockScheduling resourcePlannerEasierBlockScheduling46155, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582) : base(seperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582)
 		{
 		}
 	}
