@@ -183,9 +183,9 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		}
 
 		[HttpPost, Route("api/Gamification/LoadTeams"), UnitOfWork]
-		public virtual IEnumerable<SelectOptionItem> GetAllTeams(Guid siteId)
+		public virtual IEnumerable<SelectOptionItem> GetAllTeams(List<Guid> siteIds)
 		{
-			return _siteViewModelFactory.GetTeams(new List<Guid>(){siteId}, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+			return _siteViewModelFactory.GetTeams(siteIds, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 		}
 
 		[HttpPost, Route("api/Gamification/LoadTeamGamification"), UnitOfWork]
