@@ -51,14 +51,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			textBoxName.TextChanged += textBoxNameTextChanged;
 			buttonNew.Click += buttonNewClick;
 			buttonDelete.Click += buttonDeleteClick;
-
-			if (!toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
-			{
-				var rowIndex = tableLayoutPanel3.GetRow(checkBoxAdvAvailableAsGroupPage);
-				tableLayoutPanel3.RowStyles[rowIndex].Height = 0;
-				rowIndex = tableLayoutPanel3.GetRow(Max5GroupPages);
-				tableLayoutPanel3.RowStyles[rowIndex].Height = 0;
-			}
 		}
 		
 		void textBoxNameTextChanged(object sender, EventArgs e)

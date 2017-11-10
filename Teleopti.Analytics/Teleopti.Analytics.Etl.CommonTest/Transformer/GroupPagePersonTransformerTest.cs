@@ -101,21 +101,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		}
 
 		[Test]
-		public void ShouldReturnBuiltInGroupPages()
-		{
-
-			IList<IGroupPage> dynamicGroupPages = _target.BuiltInGroupPages;
-
-			Assert.IsNotNull(dynamicGroupPages);
-			Assert.AreEqual(6, dynamicGroupPages.Count);
-		}
-
-		[Test]
 		public void ShouldReturnBuiltInGroupPagesIncludingOptionalColumnsWithValues()
 		{
-			var toggleManager = new FakeToggleManager();
-			toggleManager.Enable(Toggles.Reporting_Optional_Columns_42066);
-			_target = new GroupPagePersonTransformer(() => _groupPageDataProvider, toggleManager);
+
 			IList<IGroupPage> dynamicGroupPages = _target.BuiltInGroupPages;
 
 			Assert.IsNotNull(dynamicGroupPages);
@@ -135,7 +123,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 				_target.Transform(builtInGroupings, userDefinedGroupings, dataTable);
 
 				Assert.IsNotNull(dataTable);
-				Assert.AreEqual(15, dataTable.Rows.Count);
+				Assert.AreEqual(16, dataTable.Rows.Count);
 			}
 		}
 
@@ -164,9 +152,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		[Test]
 		public void ShouldNotSetOptionalColumnGroupPageAsCustom()
 		{
-			var toggleManager = new FakeToggleManager();
-			toggleManager.Enable(Toggles.Reporting_Optional_Columns_42066);
-			_target = new GroupPagePersonTransformer(() => _groupPageDataProvider, toggleManager);
 			IList<IGroupPage> builtInGroupings = _target.BuiltInGroupPages;
 			var optionalColumn = _groupPageDataProvider.OptionalColumnCollectionAvailableAsGroupPage.First();
 

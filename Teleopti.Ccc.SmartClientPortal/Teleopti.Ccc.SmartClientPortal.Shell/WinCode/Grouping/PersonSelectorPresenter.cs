@@ -237,8 +237,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping
 
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				if(_toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
-					createOptionalColumnTabs(tabs);
+				createOptionalColumnTabs(tabs);
 				createUserDefinedTabs(tabs);
 			}
 

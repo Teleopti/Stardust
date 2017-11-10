@@ -83,9 +83,6 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 
 			_target.ShowUsers = true;
 
-			Expect.Call(_toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
-				.Return(true);
-
 			Expect.Call(_commandProvider.GetLoadOrganizationCommand(_myApplicationFunction, true, true))
 				.Return(new LoadOrganizationCommand(_unitOfWorkFactory, _repositoryFactory, _view, _commonNameSetting, _myApplicationFunction, true, true));
 			Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Contract, _view, Resources.Contract, _myApplicationFunction, Guid.Empty))
@@ -120,17 +117,17 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		}
 
 		[Test]
-		public void ShouldNotShowOptionalColumnTabsWhenToggleIsDisabled()
+		public void ShouldShowOptionalColumnTabs()
 		{
-			Expect.Call(_toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
-				.Return(false);
+			var optionalColumnId = Guid.NewGuid();
 			Expect.Call(_repositoryFactory.GetUserDefinedTabs())
-				.Return(new List<IUserDefinedTabLight>());
-			
+					.Return(new List<IUserDefinedTabLight>());
+			Expect.Call(_repositoryFactory.GetOptionalColumnTabs())
+				.Return(new List<IUserDefinedTabLight> { new UserDefinedTabLight { Id = optionalColumnId, Name = "OptionalColumnTab" } });
+
 			_mocks.ReplayAll();
 			_target.LoadTabs();
 			_mocks.VerifyAll();
-			_repositoryFactory.AssertWasNotCalled(x => x.GetOptionalColumnTabs());
 		}
 
 		[Test]

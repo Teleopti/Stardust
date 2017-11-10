@@ -45,11 +45,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			get
 			{
-				IGroupingsCreator groupingsCreator;
-				if (_toggleManager.IsEnabled(Toggles.Reporting_Optional_Columns_42066))
-					groupingsCreator = new GroupingsCreatorOptionalColumn(_getGroupPageDataProvider());
-				else
-					groupingsCreator = new GroupingsCreator(_getGroupPageDataProvider());
+				IGroupingsCreator groupingsCreator = new GroupingsCreatorOptionalColumn(_getGroupPageDataProvider());
 				return groupingsCreator.CreateBuiltInGroupPages(false);
 			}
 		}
