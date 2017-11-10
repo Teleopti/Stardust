@@ -29,7 +29,7 @@ describe('RtaAgentsController', function () {
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
 
-		scope = $controllerBuilder.setup('RtaAgentsController');
+		scope = $controllerBuilder.setup('RtaAgentsController46475');
 		
 		$fakeBackend.clear();
 		$fakeBackend.withToggle('RTA_SeeRecentOutOfAdherenceOccurancesToday_39145');	

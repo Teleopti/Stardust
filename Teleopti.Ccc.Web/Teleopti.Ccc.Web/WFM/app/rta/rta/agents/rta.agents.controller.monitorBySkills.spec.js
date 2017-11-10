@@ -31,7 +31,7 @@ describe('RtaAgentsController', function() {
 
 		$fakeBackend.clear();
 
-		scope = $controllerBuilder.setup('RtaAgentsController');
+		scope = $controllerBuilder.setup('RtaAgentsController46475');
 		spyOn($state, 'go');
 	}));
 

@@ -19,7 +19,7 @@
 		var skillAreas = [];
 		var phoneStates = [];
 		var timeline = {};
-
+		
 		var service = {
 			clear: clear,
 			withToggle: faker.withToggle,
@@ -41,54 +41,18 @@
 			withTimeline: withTimeline,
 
 			get skills() { return skills; },
-			get skillAreas() { return skillAreas; }
+			get skillAreas() { return skillAreas; },
+
+			lastAgentStatesRequestParams: undefined
 
 		};
 
 		faker.fake(/\.\.\/api\/AgentStates\/For(.*)/,
 			function (params) {
 				var result = agentStates;
-				var now = Date.now();
-				// shouldnt it include both sites and teams if both are given?
-				// keeping the possibly wrong behavior for now...
-				if (params.orderBy && params.direction) {
-					// mapping for fake response .....
-					result.forEach(function (r) {
-						var names = r.Name.split(' ');
-						r.FirstName = names[0];
-						r.LastName = names[1];
-						if (angular.isDefined(r.State))
-							r.StateName = r.State;
-						if (angular.isDefined(r.TimeInState)) {
-							r.StateStartTime = JSON.stringify(now - r.TimeInState);
-						}
-					});
-					var translatedParams = translateParams(params.orderBy, params.direction);
-					if (translatedParams !== null) {
-						result = result.sort(function (a, b) {
-							if (translatedParams.direction === "asc") {
-								if (!angular.isArray(translatedParams.orderBy))
-									return a[translatedParams.orderBy].localeCompare(b[translatedParams.orderBy]);
-								return a[translatedParams.orderBy[0]].localeCompare(b[translatedParams.orderBy[0]]) || a[translatedParams.orderBy[1]].localeCompare(b[translatedParams.orderBy[1]]);
-							}
-							else {
-								if (!angular.isArray(translatedParams.orderBy))
-									return b[translatedParams.orderBy].localeCompare(a[translatedParams.orderBy]);
-								return b[translatedParams.orderBy[0]].localeCompare(a[translatedParams.orderBy[0]]) || b[translatedParams.orderBy[1]].localeCompare(a[translatedParams.orderBy[1]]);
-							}
-						})
-					}
-				}
-
-				if (params.textFilter){
-					result = result.filter(function (a) {
-						var filterString ;
-						for (var key in a) {
-							filterString = filterString + a[key];
-						}
-					return params.textFilter.split(' ').every(function(txt){ return filterString.includes(txt.trim())});
-				})};
-
+				
+				service.lastAgentStatesRequestParams = params;
+				
 				if (params.siteIds)
 					result = result.filter(function (a) {
 						return params.siteIds.indexOf(a.SiteId) >= 0
@@ -262,24 +226,6 @@
 				return [200, result];
 			});
 
-		function translateParams(orderBy, direction){
-			switch (orderBy){
-				case 'Name':
-					return { orderBy : ['FirstName', 'LastName'], direction: direction};
-					break;
-				case 'SiteAndTeamName':
-					return { orderBy : ['SiteName', 'TeamName'], direction: direction};
-					break;
-				case 'State':
-					return { orderBy : 'StateName', direction: direction};
-					break;
-				case 'TimeInState':
-					return { orderBy : 'StateStartTime', direction: direction === "asc" ? "desc" : "asc"};
-					break;
-				default:
-					return null;
-			}
-		}
 		
 		function clear() {
 			serverTime = null;
