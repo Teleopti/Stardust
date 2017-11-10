@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[When(@"I select all the team")]
 		public void WhenISelectAllTheTeam()
 		{
-			Browser.Interactions.ClickUsingJQuery(".group-picker-wrapper input[type='checkbox']");
+			Browser.Interactions.ClickUsingJQuery(".group-page-picker-menu md-checkbox");
 		}
 
 		[When(@"I select to load requests from '(.*)' to '(.*)'")]
