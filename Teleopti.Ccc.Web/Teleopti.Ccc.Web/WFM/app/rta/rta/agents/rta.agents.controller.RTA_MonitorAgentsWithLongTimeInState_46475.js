@@ -101,8 +101,8 @@
 		};
 		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
 
-		vm.orderBy = 'Name';
-		vm.direction = 'asc';
+		vm.orderBy = vm.showInAlarm ? undefined : 'Name';
+		vm.direction = vm.showInAlarm ? undefined : 'asc';
 
 		var toggles = {};
 		Toggle.togglesLoaded.then(function () {
@@ -306,8 +306,8 @@
 					return;
 				if (newValue !== oldValue) {
 					if (newValue) {
-						vm.orderBy = null;
-						vm.direction = null;
+						vm.orderBy = undefined;
+						vm.direction = undefined;
 					}
 					else {
 						vm.orderBy = "Name";

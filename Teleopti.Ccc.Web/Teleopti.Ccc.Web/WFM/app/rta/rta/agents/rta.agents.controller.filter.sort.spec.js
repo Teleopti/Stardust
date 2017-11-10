@@ -54,6 +54,10 @@ describe('RtaAgentsController', function() {
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
+		c.apply(function() {
+			vm.showInAlarm = false;
+		});
+		
 		expect($fakeBackend.lastAgentStatesRequestParams.orderBy).toBe('Name');
 		expect($fakeBackend.lastAgentStatesRequestParams.direction).toBe('asc');
 	});
@@ -108,13 +112,21 @@ describe('RtaAgentsController', function() {
 	it('should not sort when viewing agents in alarm', function() {
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
+
+		expect($fakeBackend.lastAgentStatesRequestParams.orderBy).toBeUndefined();
+		expect($fakeBackend.lastAgentStatesRequestParams.direction).toBeUndefined();
+	});
+
+	it('should not sort when viewing agents in alarm after switching', function() {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
 		c.apply(function () {
 			vm.showInAlarm = false;
 		});
 		c.apply(function () {
 			vm.showInAlarm = true;
 		});
-
+		
 		expect($fakeBackend.lastAgentStatesRequestParams.orderBy).toBeUndefined();
 		expect($fakeBackend.lastAgentStatesRequestParams.direction).toBeUndefined();
 	});
