@@ -90,19 +90,19 @@
 		vm.hexToRgb = rtaFormatService.formatHexToRgb;
 		vm.pause = false;
 		vm.pausedAt = null;
-		vm.showPath = false;
-		vm.notifySwitchDisabled = false;
-		vm.showBreadcrumb = siteIds.length > 0 || teamIds.length > 0 || skillIds === [];
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
 
 		vm.displayNoAgentsMessage = function () {
-			return vm.agentStates.length == 0;
+			return vm.agentStates.length === 0;
 		};
 		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
 
-		vm.orderBy = vm.showInAlarm ? undefined : 'Name';
-		vm.direction = vm.showInAlarm ? undefined : 'asc';
+		var defaultSorting = function () {
+			vm.orderBy = vm.showInAlarm ? undefined : 'Name';
+			vm.direction = vm.showInAlarm ? undefined : 'asc';
+		};
+		defaultSorting();
 
 		var toggles = {};
 		Toggle.togglesLoaded.then(function () {
@@ -177,9 +177,8 @@
 					poller = null;
 				} else {
 					vm.pausedAt = null;
-					if (notice != null) {
+					if (notice)
 						notice.destroy();
-					}
 					NoticeService.info($translate.instant('RtaPauseDisableNotice'), 5000, true);
 					poller = rtaPollingService.create(pollAgentStates);
 					poller.start();
@@ -208,7 +207,7 @@
 		}
 
 		function skillIdsForSkillArea(skillArea) {
-			if (skillArea.Skills != null) {
+			if (skillArea.Skills) {
 				vm.skillArea = true;
 				skillIds = skillArea.Skills.map(function (skill) {
 					return skill.Id;
@@ -257,7 +256,7 @@
 					vm.states.push({
 						Id: stateId,
 						Name: agentState.State || nullState,
-						Selected: excludedStatesFromUrl.indexOf(agentState.StateId) == -1
+						Selected: excludedStatesFromUrl.indexOf(agentState.StateId) === -1
 					});
 				}
 			});
@@ -305,14 +304,7 @@
 				if (!poller)
 					return;
 				if (newValue !== oldValue) {
-					if (newValue) {
-						vm.orderBy = undefined;
-						vm.direction = undefined;
-					}
-					else {
-						vm.orderBy = "Name";
-						vm.direction = "asc";
-					}
+					defaultSorting();
 					poller.force();
 				}
 			});
@@ -372,5 +364,6 @@
 			vm.orderBy = column;
 			poller.force();
 		}
-	};
+
+	}
 })();
