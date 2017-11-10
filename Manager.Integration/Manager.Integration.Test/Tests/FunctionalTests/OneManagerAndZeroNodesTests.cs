@@ -33,7 +33,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			checkTablesInManagerDbTimer.JobQueueTimer.Start();
 			
 			var jobQueueItem =
-				JobHelper.GenerateTestJobRequests(1, TimeSpan.FromSeconds(5)).First();
+				JobHelper.GenerateTestJobRequests(1, 5).First();
 			HttpRequestManager.AddJob(jobQueueItem);
 
 			

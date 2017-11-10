@@ -38,7 +38,7 @@ namespace Manager.Integration.Test.WPF.Commands
 
 				for (var i = 0; i < NumberOfJobs; i++)
 				{
-					var testJobParams = new TestJobParams("Test job Data " + i, TimeSpan.FromSeconds(10));
+					var testJobParams = new TestJobParams("Test job Data " + i, 10);
 					var testJobParamsToJson = JsonConvert.SerializeObject(testJobParams);
 
 					var job = new JobQueueItem

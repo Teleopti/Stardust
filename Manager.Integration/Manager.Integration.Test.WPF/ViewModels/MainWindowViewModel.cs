@@ -946,8 +946,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 					_tasks.Add(new Task<HttpResponseMessage>(() =>
 						{
 							var testJobTimerParams =
-							new TestJobParams("Test job name " + i1, 
-													TimeSpan.FromSeconds(randomTimeSpan));
+							new TestJobParams("Test job name " + i1, randomTimeSpan);
 
 						var jobParamsToJson = 
 							JsonConvert.SerializeObject(testJobTimerParams);

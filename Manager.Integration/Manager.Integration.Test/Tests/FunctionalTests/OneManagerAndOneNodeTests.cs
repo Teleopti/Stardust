@@ -40,7 +40,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 
 
 			var jobQueueItem =
-				JobHelper.GenerateTestJobRequests(1, TimeSpan.FromSeconds(5)).First();
+				JobHelper.GenerateTestJobRequests(1, 5).First();
 			var jobId = HttpRequestManager.AddJob(jobQueueItem);
 			
 			manualResetEventSlim.Wait(TimeSpan.FromSeconds(20));
@@ -92,7 +92,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			
 
 			var jobQueueItem =
-				JobHelper.GenerateTestJobRequests(1, TimeSpan.FromMinutes(1)).First();
+				JobHelper.GenerateTestJobRequests(1, 60).First();
 			var jobId = HttpRequestManager.AddJob(jobQueueItem);
 
 
@@ -145,9 +145,9 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			WaitForNodeToFinishWorking();
 			var jobRepository = new ManagerDbRepository(ManagerDbConnectionString);
 
-			var jobQueueItemCancel = JobHelper.GenerateTestJobRequests(1, TimeSpan.FromMinutes(1)).First();
+			var jobQueueItemCancel = JobHelper.GenerateTestJobRequests(1,60).First();
 			var jobQueueItemFail = JobHelper.GenerateFailingJobParamsRequests(1).First();
-			var jobQueueItemSuccess = JobHelper.GenerateTestJobRequests(1, TimeSpan.FromSeconds(2)).First();
+			var jobQueueItemSuccess = JobHelper.GenerateTestJobRequests(1, 2).First();
 
 			var cancelId = HttpRequestManager.AddJob(jobQueueItemCancel);
 			WaitForNodeToStartWorking();
@@ -254,7 +254,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 
 
 			var jobQueueItem =
-				JobHelper.GenerateTestJobRequests(1, TimeSpan.FromSeconds(5)).First();
+				JobHelper.GenerateTestJobRequests(1, 5).First();
 			var jobId = HttpRequestManager.AddJob(jobQueueItem);
 			
 

@@ -50,7 +50,7 @@ namespace Manager.Integration.Test.Helpers
 		}
 
 		public static List<JobQueueItem> GenerateTestJobRequests(int numberOfJobRequests,
-		                                                              TimeSpan duration)
+		                                                              int duration)
 		{
 			List<JobQueueItem> jobQueueItems = new List<JobQueueItem>();
 

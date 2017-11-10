@@ -60,7 +60,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			});
 			taskShutDownNode.Start();
 			
-			var jobQueueItem = JobHelper.GenerateTestJobRequests(1, TimeSpan.FromSeconds(1)).First();
+			var jobQueueItem = JobHelper.GenerateTestJobRequests(1, 1).First();
 			var jobId = HttpRequestManager.AddJob(jobQueueItem);
 
 			//Should not take long time to assign job, if it takes more than some seconds 
