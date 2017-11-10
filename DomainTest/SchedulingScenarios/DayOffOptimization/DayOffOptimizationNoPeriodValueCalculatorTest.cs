@@ -60,5 +60,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			system.UseTestDouble<PeriodValueCalculatorProviderThatReturnsCalculatorThatReturnsWrongValue>().For<IPeriodValueCalculatorProvider>();
 			base.Setup(system, configuration);
 		}
+
+		public DayOffOptimizationNoPeriodValueCalculatorTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		{
+		}
 	}
 }

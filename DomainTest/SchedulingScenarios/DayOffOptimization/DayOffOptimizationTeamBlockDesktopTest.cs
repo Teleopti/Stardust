@@ -283,5 +283,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				}
 			}
 		}
+
+		public DayOffOptimizationTeamBlockDesktopTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		{
+		}
 	}
 }

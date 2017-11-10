@@ -55,5 +55,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, nonValidAgent)
 				.DayOff().Should().Not.Be.Null();
 		}
+
+		public DayOffOptimizationPlanningGroupTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		{
+		}
 	}
 }

@@ -65,5 +65,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			agents.Count(agent => PersonAssignmentRepository.GetSingle(firstDay.AddDays(5), agent).DayOff() != null).Should().Be.EqualTo(1);
 			agents.Count(agent => PersonAssignmentRepository.GetSingle(firstDay.AddDays(6), agent).DayOff() != null).Should().Be.EqualTo(1);
 		}
+
+		public DayOffOptimizationCascadingTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		{
+		}
 	}
 }

@@ -82,5 +82,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				return true;
 			}
 		}
+
+		public DayOffOptimizationFakeDecisionMakerTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		{
+		}
 	}
 }

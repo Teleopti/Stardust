@@ -115,6 +115,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			stateHolder.Schedules[agent].ScheduledDay(date.AddDays(6)).HasDayOff()
 				.Should().Be.EqualTo(agentShouldHaveDayOff);
-		}	
+		}
+
+		public DayOffOptimizationRestrictionTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		{
+		}
 	}
 }

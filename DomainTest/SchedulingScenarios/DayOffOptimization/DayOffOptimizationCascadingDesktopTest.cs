@@ -20,23 +20,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	public class DayOffOptimizationCascadingDesktopTest : DayOffOptimizationScenario
 	{
-		private readonly bool _beInResourceCalculatedStateAtStartup;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public DayOffOptimizationDesktopTeamBlock Target;
 		public IResourceOptimizationHelperExtended ResourceCalculation;
 
-		public DayOffOptimizationCascadingDesktopTest(bool beInResourceCalculatedStateAtStartup)
-		{
-			_beInResourceCalculatedStateAtStartup = beInResourceCalculatedStateAtStartup;
-		}
-
-		[Test]
-		public void ShouldBaseMoveOnNonShoveledResourceCalculation_BasedOnAndersCase()
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldBaseMoveOnNonShoveledResourceCalculation_BasedOnAndersCase(bool beInResourceCalculatedStateAtStartup)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
@@ -71,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDaysA.Union(skillDaysB));
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
-			if(_beInResourceCalculatedStateAtStartup)
+			if(beInResourceCalculatedStateAtStartup)
 				ResourceCalculation.ResourceCalculateAllDays(new SchedulingProgress(), false);
 
 			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
@@ -82,8 +75,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff()).Should().Be.EqualTo(1);
 		}
 
-		[Test]
-		public void ShouldBaseMoveOnNonShoveledResourceCalculation()
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldBaseMoveOnNonShoveledResourceCalculation(bool beInResourceCalculatedStateAtStartup)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
@@ -122,13 +116,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDaysA.Union(skillDaysB));
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
-			if (_beInResourceCalculatedStateAtStartup)
+			if (beInResourceCalculatedStateAtStartup)
 				ResourceCalculation.ResourceCalculateAllDays(new SchedulingProgress(), false);
 
 			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(0)).HasDayOff()).Should().Be.EqualTo(1); 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()).Should().Be.EqualTo(1);
+		}
+		
+		public DayOffOptimizationCascadingDesktopTest(RemoveImplicitResCalcContext removeImplicitResCalcContext)
+			: base(removeImplicitResCalcContext)
+		{
 		}
 	}
 }

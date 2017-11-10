@@ -63,5 +63,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(dayWithPersonalActivity)
 				.DayOff().Should().Be.Null();
 		}
+
+		public DayOffOptimizationLockDaysTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		{
+		}
 	}
 }

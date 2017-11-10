@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
-	public class DayOffOptimizationSameBitArrayTest : ISetup
+	public class DayOffOptimizationSameBitArrayTest : DayOffOptimizationScenario
 	{
 		public Domain.Optimization.DayOffOptimization Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[Timeout(10000)]
 		public void ShouldNotHang()
 		{
-			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
@@ -60,9 +59,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(planningPeriod.Id.Value);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<returnsBitarrayClone>().For<ITeamBlockDaysOffMoveFinder>();
+			base.Setup(system, configuration);
 		}
 
 		private class returnsBitarrayClone : ITeamBlockDaysOffMoveFinder
@@ -73,6 +73,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			{
 				return (ILockableBitArray) originalArray.Clone();
 			}
+		}
+
+		public DayOffOptimizationSameBitArrayTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		{
 		}
 	}
 }

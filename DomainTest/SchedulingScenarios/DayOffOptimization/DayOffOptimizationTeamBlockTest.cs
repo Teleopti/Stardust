@@ -83,5 +83,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Assert.Fail(
 				$"Tried optimize {numberOfAttempts} number of times but always moving DOs from same agent. Giving up...");
 		}
+
+		public DayOffOptimizationTeamBlockTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		{
+		}
 	}
 }
