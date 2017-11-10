@@ -80,6 +80,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
+		public void ShouldReturnNullWhenHasNoSuchGamificationSetting()
+		{
+			var gamificationSettingRepository = new FakeGamificationSettingRepository();
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, gamificationSettingRepository);
+
+			var result = target.SetTeamGamificationSetting(_teamGamificationSettingForm);
+
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldRemoveExistTeamGamificationSettingWhenInputEmptyId()
+		{
+			_teamGamificationSettingRepository.Add(new TeamGamificationSetting() { GamificationSetting = _gamificationSetting, Team = _team });
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
+
+			_teamGamificationSettingForm.GamificationSettingId = Guid.Empty;
+			target.SetTeamGamificationSetting(_teamGamificationSettingForm);
+
+			_teamGamificationSettingRepository.LoadAll().Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldReturnEmptyListWhenThereIsNoTeam()
 		{
 			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
@@ -97,6 +120,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 
 			result.Count.Should().Be.EqualTo(1);
 			result[0].GamificationSettingId.Should().Be.EqualTo(_gamificationSetting.Id);
+			result[0].Team.id.Should().Be.EqualTo(_team.Id.ToString());
+		}
+
+		[Test]
+		public void ShouldGetEmptyIdWhenThereIsNoTeamGamificationSetting()
+		{
+			var target = new TeamGamificationSettingProviderAndPersister(_teamGamificationSettingRepository, _teamRepository, _gamificationSettingRepository);
+
+			var result = target.GetTeamGamificationSettingViewModels(new List<Guid>() { _team.Id.Value });
+
+			result.Count.Should().Be.EqualTo(1);
+			result[0].GamificationSettingId.Should().Be.EqualTo(Guid.Empty);
 			result[0].Team.id.Should().Be.EqualTo(_team.Id.ToString());
 		}
 	}

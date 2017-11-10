@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
@@ -23,45 +22,70 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 
 		public IList<TeamGamificationSettingViewModel> GetTeamGamificationSettingViewModels(List<Guid> teamIds)
 		{
+			var VMList = new List<TeamGamificationSettingViewModel>();
 			var teams = _teamRepository.FindTeams(teamIds);
 
-			return teams.Select(team => _teamGamificationSettingRepository.FindTeamGamificationSettingsByTeam(team)).Select(teamGamificationSetting => new TeamGamificationSettingViewModel()
+			foreach (var team in teams)
 			{
-				Team = new SelectOptionItem()
+				var teamGamificationSetting = _teamGamificationSettingRepository.FindTeamGamificationSettingsByTeam(team);
+
+				var gamificationSettingId = Guid.Empty;
+				if (teamGamificationSetting != null) gamificationSettingId = teamGamificationSetting.GamificationSetting.Id.Value;
+
+				VMList.Add(new TeamGamificationSettingViewModel()
 				{
-					id = teamGamificationSetting.Team.Id.Value.ToString(),
-					text = teamGamificationSetting.Team.Description.Name
-				},
-				GamificationSettingId = teamGamificationSetting.GamificationSetting.Id.Value
-			}).ToList();
+					Team = new SelectOptionItem()
+					{
+						id = team.Id.Value.ToString(),
+						text = team.Description.Name
+					},
+					GamificationSettingId = gamificationSettingId
+				});
+			}
+
+			return VMList;
 		}
 
 		public TeamGamificationSettingViewModel SetTeamGamificationSetting(TeamGamificationSettingForm input)
 		{
 			var team = _teamRepository.Get(input.TeamId);
-			var gamificationSetting = _gamificationSettingRepository.Get(input.GamificationSettingId);
-			if (team == null || gamificationSetting == null) return null;
+			if (team == null ) return null;
 
+			var gamificationSettingId = Guid.Empty;
 			var teamGamificationSetting = _teamGamificationSettingRepository.FindTeamGamificationSettingsByTeam(team);
-			if (teamGamificationSetting == null)
+			if (input.GamificationSettingId == Guid.Empty)
 			{
-				
-				teamGamificationSetting = new TeamGamificationSetting
+				if (teamGamificationSetting != null)
 				{
-					GamificationSetting = gamificationSetting,
-					Team = team
-				};
-				_teamGamificationSettingRepository.Add(teamGamificationSetting);
+					_teamGamificationSettingRepository.Remove(teamGamificationSetting);
+				}
 			}
 			else
 			{
-				teamGamificationSetting.GamificationSetting = gamificationSetting;
+				var gamificationSetting = _gamificationSettingRepository.Get(input.GamificationSettingId);
+				if (gamificationSetting == null) return null;
+				
+				if (teamGamificationSetting == null)
+				{
+					teamGamificationSetting = new TeamGamificationSetting
+					{
+						GamificationSetting = gamificationSetting,
+						Team = team
+					};
+					_teamGamificationSettingRepository.Add(teamGamificationSetting);
+				}
+				else
+				{
+					teamGamificationSetting.GamificationSetting = gamificationSetting;
+				}
+
+				gamificationSettingId = teamGamificationSetting.GamificationSetting.Id.Value;
 			}
 
 			return new TeamGamificationSettingViewModel()
 			{
-				GamificationSettingId = teamGamificationSetting.GamificationSetting.Id.Value,
-				Team = new SelectOptionItem(){id = teamGamificationSetting.Team.Id.ToString(),text = teamGamificationSetting.Team.Description.Name}
+				GamificationSettingId = gamificationSettingId,
+				Team = new SelectOptionItem() { id = team.Id.ToString(), text = team.Description.Name }
 			};
 		}
 	}
