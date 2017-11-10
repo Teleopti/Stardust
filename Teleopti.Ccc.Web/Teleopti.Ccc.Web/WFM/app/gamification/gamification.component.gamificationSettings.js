@@ -37,6 +37,24 @@
 		}
 
 
+		ctrl.saveValue = function (apiKey, value) {
+			var data = { GamificationSettingId: ctrl.currentSettingId, Value: value };
+			gamificationSettingService.saveData(apiKey, data).then(function (response) {
+				//show message that says saved successfully
+			}, function (error) {
+				// show message that says save failed
+			});
+		}
+
+		ctrl.saveData = function (apiKey, data) {
+			gamificationSettingService.saveData(apiKey, data).then(function (response) {
+				console.log('Save data successfully', apiKey);
+			}, function (error) {
+				// show message that says save failed
+				console.log('Fail to save data', error);
+			});
+		}
+
 		ctrl.convertSettingToModel = function (setting) {
 			var result = {};
 			result.id = setting.Id;
@@ -44,10 +62,10 @@
 			result.updated_by = setting.UpdatedBy;
 			result.updated_on = setting.UpdatedOn;
 			result.rules = [{
-				id: '0',
+				id: 0,
 				name: 'Use Different Throsholds'
 			}, {
-				id: '1',
+				id: 1,
 				name: 'Use Ratio Conversion',
 				items: [{
 					id: 'SilverToBronzeBadgeRate',
@@ -59,13 +77,14 @@
 					value: setting.GoldToSilverBadgeRate
 				}]
 			}];
+			result.rule_id = setting.GamificationSettingRuleSet;
 			result.settings = [{
 				id: 'UseBadgeForAnsweredCalls',
 				name: 'Use Badge For Answered Calls',
 				enable: setting.AnsweredCallsBadgeEnabled,
 				is_buildin: true,
 				rule_settings: [{
-					rule_id: '0',
+					rule_id: 0,
 					items: [{
 						id: 'AnsweredCallsGoldThreshold',
 						value: setting.AnsweredCallsGoldThreshold,
@@ -80,7 +99,7 @@
 						type: 'number'
 					}]
 				}, {
-					rule_id: '1',
+					rule_id: 1,
 					items: [{
 						id: 'AnsweredCallsThreshold',
 						value: setting.AnsweredCallsThreshold,
@@ -93,7 +112,7 @@
 				enable: setting.AdherenceBadgeEnabled,
 				is_buildin: true,
 				rule_settings: [{
-					rule_id: '0',
+					rule_id: 0,
 					items: [{
 						id: 'AdherenceGoldThreshold',
 						value: setting.AdherenceGoldThreshold.Value,
@@ -108,7 +127,7 @@
 						type: 'percent'
 					}]
 				}, {
-					rule_id: '1',
+					rule_id: 1,
 					items: [{
 						id: 'AdherenceThreshold',
 						value: setting.AdherenceThreshold.Value,
@@ -121,7 +140,7 @@
 				enable: setting.AHTBadgeEnabled,
 				is_buildin: true,
 				rule_settings: [{
-					rule_id: '0',
+					rule_id: 0,
 					items: [{
 						id: 'AHTGoldThreshold',
 						value: setting.AHTGoldThreshold,
@@ -136,7 +155,7 @@
 						type: 'time'
 					}]
 				}, {
-					rule_id: '1',
+					rule_id: 1,
 					items: [{
 						id: 'AHTThreshold',
 						value: setting.AHTThreshold,
@@ -155,7 +174,7 @@
 						enable: item.Enabled,
 						is_buildin: false,
 						rule_settings: [{
-							rule_id: '0',
+							rule_id: 0,
 							items: [{
 								id: 'GoldThreshold',
 								value: item.GoldThreshold,
@@ -170,7 +189,7 @@
 								type: 'number'
 							}]
 						}, {
-							rule_id: '1',
+							rule_id: 1,
 							items: [{
 								id: 'Threshold',
 								value: item.Threshold,
@@ -192,11 +211,9 @@
 			ctrl.getGamificationSettingsDescriptors();
 			ctrl.title = 'Gamification Settings';
 
-			ctrl.currentRuleId = 0;
-			//ctrl.currentRule = ctrl.rules[ctrl.currentRuleIndex];
 
-			ctrl.currentSettingId = 0;
 			ctrl.currentSetting = ctrl.allSettings[ctrl.selectedSettingIndex];
+			ctrl
 		}
 
 		ctrl.settingSelectionChanged = function () {
@@ -211,23 +228,25 @@
 					ctrl.currentSetting = setting;
 					ctrl.resetRuleSelection();
 				}
-
-				// ctrl.currentSetting = ctrl.findElementInArray(ctrl.allSettings, ctrl.currentSettingId);
-				// ctrl.currentRuleId = ctrl.currentSetting.rules[0].id;
-				// ctrl.ruleSelectionChanged();
 			}
-
 
 		}
 
 		ctrl.resetRuleSelection = function () {
-			ctrl.currentRuleId = ctrl.currentSetting.rules[0].id;
-			ctrl.currentRule = ctrl.currentSetting.rules[0];
+			ctrl.currentRule = ctrl.currentSetting.rules.find(function (element) {
+				return element.id == ctrl.currentSetting.rule_id;
+			});
 		}
 
 		ctrl.ruleSelectionChanged = function () {
-			if (ctrl.currentRuleId && ctrl.currentSetting) {
-				ctrl.currentRule = ctrl.findElementInArray(ctrl.currentSetting.rules, ctrl.currentRuleId);
+			if (ctrl.currentSetting) {
+				ctrl.currentRule = ctrl.findElementInArray(ctrl.currentSetting.rules, ctrl.currentSetting.rule_id);
+				var data = {
+					GamificationSettingId: ctrl.currentSetting.id,
+					Rule: ctrl.currentSetting.rule_id
+				}
+
+				ctrl.saveData('ModifyChangeRule', data);
 			}
 		}
 
@@ -240,6 +259,18 @@
 					}
 				}
 			}
+		}
+
+		ctrl.changeSettingDescription = function () {
+			var data = {
+				GamificationSettingId: ctrl.currentSetting.id,
+				Value: {
+					Name: ctrl.currentSetting.name,
+					ShortName: ''
+				}
+			};
+
+			ctrl.saveData('ModifyDescription', data);
 		}
 
 		ctrl.addSetting = function () {

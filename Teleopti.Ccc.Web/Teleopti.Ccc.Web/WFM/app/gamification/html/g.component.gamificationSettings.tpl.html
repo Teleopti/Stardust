@@ -43,7 +43,7 @@
                 <label>Description:</label>
             </div>
             <div class="inline-block ">
-                <input type="text " value="{{$ctrl.currentSetting.name}} ">
+                <input type="text " value="{{$ctrl.currentSetting.name}}" ng-blur="$ctrl.changeSettingDescription()">
             </div>
         </div>
         <div class="input-container ">
@@ -60,7 +60,7 @@
                 <label>Rule:</label>
             </div>
             <div class="inline-block ">
-                <md-select id="gamificationSettingType " ng-change="$ctrl.ruleSelectionChanged()" ng-model='$ctrl.currentRuleId'>
+                <md-select id="gamificationSettingType " ng-change="$ctrl.ruleSelectionChanged()" ng-model='$ctrl.currentSetting.rule_id'>
                     <md-option ng-repeat="rule in $ctrl.currentSetting.rules " value="{{rule.id}}">
                         <span ng-bind="rule.name "></span>
                     </md-option>
@@ -78,7 +78,7 @@
             </div>
 
             <div class="inline-block " ng-repeat="settingInfo in $ctrl.currentSetting.settings">
-                <gamification-setting-info setting-info="settingInfo" current-rule-id="$ctrl.currentRuleId" select-item-callback="$ctrl.itemSelected "></gamification-setting-info>
+                <gamification-setting-info setting-info="settingInfo" current-rule-id="$ctrl.currentSetting.rule_id" select-item-callback="$ctrl.itemSelected "></gamification-setting-info>
             </div>
         </div>
     </div>

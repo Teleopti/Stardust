@@ -69,7 +69,7 @@
         ctrl.getSettingItems = function () {
             for (var index = 0; index < ctrl.settingInfo.rule_settings.length; index++) {
                 var setting = ctrl.settingInfo.rule_settings[index];
-                if (setting.rule_id == ctrl.currentRuleId.toString()) {
+                if (setting.rule_id == ctrl.currentRuleId) {
                     return setting.items;
                 }
             }
