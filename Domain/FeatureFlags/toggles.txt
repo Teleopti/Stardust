@@ -45,14 +45,14 @@ RTA_EventPackagesOptimization_43924 = true
 RTA_AsyncOptimization_43924 = true
 RTA_RememberMyPartOfTheBusiness_39082 = true
 RTA_RtaTracer_45597 = true
-RTA_UnifiedSkillGroupManagement_45417 = RC
+RTA_UnifiedSkillGroupManagement_45417 = true
 RTA_MonitorAgentsWithLongTimeInState_46475 = RC
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true
 WfmTeamSchedule_DisplayAndEditPublicNote_44783 = true
 WfmTeamSchedule_ShowStaffingInfo_45206 = RC
-WfmTeamSchedule_ExportSchedulesToExcel_45795 = RC
+WfmTeamSchedule_ExportSchedulesToExcel_45795 = true
 
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
@@ -69,7 +69,7 @@ Wfm_Requests_OvertimeRequestHandling_45177 = RC  # Only set to true if Wfm_Reque
 Wfm_Requests_Refactoring_45470 = true
 Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = true
 Wfm_Requests_HandleFourteenDaysFast_43390 = true
-Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = RC
+Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = true
 
 Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = RC
 
@@ -106,7 +106,7 @@ MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686 = true
 MyTimeWeb_OvertimeRequest_44558 = RC
 MyTimeWeb_MonthlyScheduleMobileView_45004 = true
 MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
-MyTimeWeb_WaitListPositionEnhancement_46301 = RC
+MyTimeWeb_WaitListPositionEnhancement_46301 = true
 MyTimeWeb_PollToCheckScheduleChanges_46595 = DEV
 
 QRCodeForMobileApps_42695 = true
