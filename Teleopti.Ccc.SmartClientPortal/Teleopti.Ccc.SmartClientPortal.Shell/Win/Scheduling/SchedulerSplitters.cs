@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         }
 
 	    public void InsertAgentInfoControl(AgentInfoControl agentInfoControl, ISchedulerStateHolder schedulerState,
-		    IEffectiveRestrictionCreator effectiveRestrictionCreator, int maxCalculatedMinMaxCacheEntries)
+		    IEffectiveRestrictionCreator effectiveRestrictionCreator, int? maxCalculatedMinMaxCacheEntries)
 	    {
 		    var schedulingOptions = new SchedulingOptions
 		    {
@@ -229,9 +229,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			    UseRotations = true,
 			    UseStudentAvailability = true
 		    };
-		    var calculateMinMaxCacheDecider = new CalculateMinMaxCacheDecider();
-		    agentInfoControl.MbCacheDisabled = calculateMinMaxCacheDecider.ShouldCacheBeDisabled(schedulerState, schedulingOptions,
-			    effectiveRestrictionCreator, maxCalculatedMinMaxCacheEntries);
+
+			if(maxCalculatedMinMaxCacheEntries.HasValue)
+			{
+				var calculateMinMaxCacheDecider = new CalculateMinMaxCacheDecider();
+				agentInfoControl.MbCacheDisabled = calculateMinMaxCacheDecider.ShouldCacheBeDisabled(schedulerState, schedulingOptions,
+					effectiveRestrictionCreator, maxCalculatedMinMaxCacheEntries.Value);
+			}
 		    tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
 		    agentInfoControl.Dock = DockStyle.Fill;
 		    tabInfoPanels.Refresh();

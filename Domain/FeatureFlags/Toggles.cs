@@ -119,6 +119,7 @@
 		ResourcePlanner_BlockSchedulingValidation_46092,
 		ResourcePlanner_BpoScheduling_46265,
 		ResourcePlanner_RemoveImplicitResCalcContext_46680,
+		ResourcePlanner_DoNotKillCache_46724,
 
 		Wfm_DisplayOnlineHelp_39402,
 

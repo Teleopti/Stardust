@@ -3214,6 +3214,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void turnOffCalculateMinMaxCacheIfNeeded(SchedulingOptions schedulingOptions)
 		{
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_DoNotKillCache_46724))
+			{
+				_container.Resolve<IMbCacheFactory>().EnableCache<IWorkShiftWorkTime>();
+				return;
+			}
 			var calculateMinMaxCacheDecider = new CalculateMinMaxCacheDecider();
 			bool turnOfCache = calculateMinMaxCacheDecider.ShouldCacheBeDisabled(_schedulerState, schedulingOptions,
 				_container.Resolve<IEffectiveRestrictionCreator>
@@ -4410,8 +4415,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			_agentInfoControl = new AgentInfoControl(_groupPagesProvider, _container, outerPeriod,
 				requestedPeriod, _restrictionExtractor, _schedulerState, _optionalColumns);
+
+			int? maxCacheEnries = maxCalculatMinMaxCacheEnries;
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_DoNotKillCache_46724))
+				maxCacheEnries = null;
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl, _schedulerState,
-				_container.Resolve<IEffectiveRestrictionCreator>(), maxCalculatMinMaxCacheEnries);
+				_container.Resolve<IEffectiveRestrictionCreator>(), maxCacheEnries);
 
 			//container can fix this to one row
 			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson =
