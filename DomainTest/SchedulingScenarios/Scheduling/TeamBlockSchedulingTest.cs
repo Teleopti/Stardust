@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
+		public FakePersonRotationRepository PersonRotationRepository;
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -817,6 +818,65 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Find(new[] { agent}, date.ToDateOnlyPeriod(), scenario).Any(x => x.ShiftLayers.Any()).Should().Be.True();
 		}
 		
+		
+		[Test]
+		[Ignore("#46680 fix FakePersonRotationRepository.LoadPersonRotationsWithHierarchyData")]
+		public void ShouldHandleBlockSamerStartTimeInCombinationWithRotationWithSpecifyedShiftCategoryOnBlockStartingDateBug41378()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var scenario = ScenarioRepository.Has("_");
+			var phoneActivity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("Open", phoneActivity, new TimePeriod(12, 0, 21, 0)).InTimeZone(TimeZoneInfo.Utc);
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,10, 10, 10, 10, 10, 10, 10));
+			var shiftCategory8H15M = new ShiftCategory("L").WithId();
+			var ruleSet8H15M = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 15, 20, 15, 15), shiftCategory8H15M));
+			var ruleSetBag = new RuleSetBag(ruleSet8H15M);
+			var shiftCategory7H = new ShiftCategory("S").WithId();
+			var ruleSet7H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(19, 0, 19, 0, 15), shiftCategory7H));
+			ruleSetBag.AddRuleSet(ruleSet7H);
+			var agent1 = PersonRepository.Has(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1),ruleSetBag, skill);
+			var schedulePeriod = agent1.SchedulePeriod(firstDay);
+			schedulePeriod.SetDaysOff(2);
+			var dayOffTemplate = new DayOffTemplate(new Description("DO", "DO"));
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay);
+			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(6));
+			var rotation = new Rotation("_", 7);
+			rotation.RotationDays[1].RestrictionCollection[0].ShiftCategory = shiftCategory7H;
+			var personRotation = new PersonRotation(agent1, rotation, firstDay, 0).WithId();
+			PersonRotationRepository.Add(personRotation);
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				UseAvailability = false,
+				UsePreferences = false,
+				UseRotations = true, //Set to true
+				UseStudentAvailability = false,
+				DayOffTemplate = dayOffTemplate,
+				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("SingleAgent", GroupPageType.SingleAgent),
+				UseTeam = false,
+				TeamSameShiftCategory = false,
+				TagToUseOnScheduling = NullScheduleTag.Instance,
+				UseBlock = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
+				BlockSameStartTime = true,
+				BlockSameShiftCategory = false,
+				UseAverageShiftLengths = true
+			});
+			
+			var planningPeriod = PlanningPeriodRepository.Has(period);
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
+			
+			AssignmentRepository.Find(new[] { agent1}, firstDay.ToDateOnlyPeriod(), scenario).Single().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
+			AssignmentRepository.Find(new[] {agent1}, firstDay.AddDays(1).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory7H);
+			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(2).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
+			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(3).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
+			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(4).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
+			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(5).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
+			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(6).ToDateOnlyPeriod(), scenario).Single().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
+		}
 		
 		public TeamBlockSchedulingTest(SeperateWebRequest seperateWebRequest, EasierBlockScheduling resourcePlannerEasierBlockScheduling46155, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(seperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680)
 		{
