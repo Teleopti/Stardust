@@ -40,12 +40,11 @@
 		vm.getOrgData = getOrgData;
 		vm.maxResults = 10000;
 
-		vm.label = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.filteredOrgData.length )
-
 		init();
 		function init() {
 			getChangedBy();
 			getOrgData();
+			updateLabel();
 		}
 
 		function getChangedBy() {
@@ -68,6 +67,8 @@
 				endDate: moment(vm.dateModifyRange.endDate).format("YYYY-MM-DD"),
 			}
 			ReportsService.getOrganization.org(postObj).$promise.then(function (response) {
+				vm.filteredOrgData = [];
+				updateLabel();
 				vm.orgData = {
 					Children: []
 				};
@@ -78,6 +79,10 @@
 					}
 				}
 			});
+		}
+
+		function updateLabel() {
+			vm.label = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.filteredOrgData.length );
 		}
 
 		function sendForm(form) {
@@ -147,7 +152,7 @@
 					calculateOrgSelection(nodes[i].Children);
 				}
 			}
-			vm.label = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.filteredOrgData.length )
+			updateLabel();
 		}
 
 		function refreshData(keyword) {
