@@ -51,6 +51,20 @@
 				}, function (response) { $log.error('Gamification: failted to fetch setting list'); });
 			});
 		};
+
+		svc.updateAppliedSetting = function (teamIds, settingId) {
+			return $q(function (resolve, reject) {
+				$http({
+					method: 'POST',
+					url: '../api/Gamification/SetTeamGamification'
+				}).then(function (response) {
+					resolve(response.data);
+				}, function (response) {
+					$log.error('Gamification: failed to update applied setting');
+					reject(response);
+				});
+			});
+		};
 	}
 
 	function Site(id, name) {

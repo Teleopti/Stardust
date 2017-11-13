@@ -1,6 +1,4 @@
-(function (angular) {
-
-	'use strict';
+(function (angular) { 'use strict';
 
 	angular.module('wfm.gamification')
 		.component('gamificationTargets', {
@@ -19,7 +17,6 @@
 		}
 
 		TeamsResult.prototype.filterByName = function (text) {
-			// console.log('TeamsResult.filterByName: ' + text);
 			var query = new RegExp(text, 'i');
 			this.current = this._result.filter(function (team) {
 				return team.name.search(query) != -1;
@@ -34,13 +31,7 @@
 				filter = newValue;
 				ctrl.teamsResult.filterByName(filter);
 			}
-		})
-
-		ctrl.settings = [
-			{ value: 'default', name: 'Default' },
-			{ value: 'setting1', name: 'Setting 1' },
-			{ value: 'setting2', name: 'Setting 2' }
-		];
+		});
 
 		ctrl.selectClosed = function () {
 			var newText = ctrl.sitePickerSelectedText();
