@@ -116,6 +116,7 @@
 		function generateTable() {
 			vm.gridOptions = {
 				exporterCsvFilename: 'audit-trail.csv',
+				exporterOlderExcelCompatibility: true,
 				exporterMenuPdf: false,
 				enableSelectAll: false,
 				enableFullRowSelection: true,
