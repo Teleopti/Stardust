@@ -4,8 +4,7 @@ namespace Teleopti.Ccc.Domain.Aop
 {
 	public class AllBusinessUnitsUnitOfWorkAttribute : AspectAttribute
 	{
-		public AllBusinessUnitsUnitOfWorkAttribute()
-			: base(typeof(IAllBusinessUnitsUnitOfWorkAspect))
+		public AllBusinessUnitsUnitOfWorkAttribute() : base(typeof(IAllBusinessUnitsUnitOfWorkAspect))
 		{
 		}
 	}

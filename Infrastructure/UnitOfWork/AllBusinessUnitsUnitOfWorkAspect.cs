@@ -8,7 +8,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class AllBusinessUnitsUnitOfWorkAspect : IAllBusinessUnitsUnitOfWorkAspect
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private IUnitOfWork _unitOfWork;
+		private readonly ICurrentUnitOfWork _unitOfWork;
+
+		public AllBusinessUnitsUnitOfWorkAspect(ICurrentUnitOfWork unitOfWork)
+		{
+			_unitOfWork = unitOfWork;
+		}
 
 		public AllBusinessUnitsUnitOfWorkAspect(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
@@ -17,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			_unitOfWork = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
+			_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
@@ -25,11 +30,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			try
 			{
 				if (exception == null)
-					_unitOfWork.PersistAll();
+					_unitOfWork.Current().PersistAll();
 			}
 			finally
 			{
-				_unitOfWork.Dispose();
+				_unitOfWork.Current().Dispose();
 			}
 		}
 	}

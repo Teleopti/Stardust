@@ -1,5 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -48,10 +49,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BusinessUnitFilterOverrider>().As<IBusinessUnitFilterOverrider>().SingleInstance();
 			builder.RegisterType<DisableBusinessUnitFilter>().As<IDisableBusinessUnitFilter>().SingleInstance();
 			builder.RegisterType<DatabaseVersion>().AsSelf().SingleInstance();
+			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>().As<IAspect>().As<IAllBusinessUnitsUnitOfWorkAspect>().SingleInstance();
 
 			// these keep scope state and cant be single instance
 			builder.RegisterType<UnitOfWorkAspect>().As<IUnitOfWorkAspect>().InstancePerDependency();
-			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>().As<IAllBusinessUnitsUnitOfWorkAspect>().InstancePerDependency();
 
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 		}
