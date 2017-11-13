@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			            .AddScalar("HandleTime", NHibernateUtil.Double)
 			            .SetString("TimeZone", timeZone.Id)
 			            .SetString("Today", today.ToShortDateString(CultureInfo.InvariantCulture))
-			            .SetString("SkillList", skillIdString)
+			            .SetParameter("SkillList", skillIdString, NHibernateUtil.StringClob)
 			            .SetResultTransformer(Transformers.AliasToBean(typeof(SkillIntervalStatistics)))
 			            .List<SkillIntervalStatistics>();
 

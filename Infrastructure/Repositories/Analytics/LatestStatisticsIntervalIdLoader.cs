@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using NHibernate;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				var intervalId = uow.Session().CreateSQLQuery(@"mart.web_intraday_latest_interval @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
 					.SetString("TimeZone", timeZone.Id)
 					.SetString("Today", today.ToShortDateString(CultureInfo.InvariantCulture))
-					.SetString("SkillList", skillListString)
+					.SetParameter("SkillList", skillListString, NHibernateUtil.StringClob)
 					.UniqueResult<int>();
 				if (intervalId == -1)
 					return null;
