@@ -59,5 +59,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var notificationsTimeToStay = _globalSettingDataRepository.FindValueByKey("NotificationDurationTime",new NotificationDurationTime());
 			return Json(notificationsTimeToStay, JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWork]
+		[HttpGet]
+		public virtual JsonResult CheckIfScheduleHasUpdates()
+		{
+			return Json(new {
+					HasUpdates = true,
+					StartDate = "2017-11-10",
+					EndDate = "2017-11-11"
+			}, JsonRequestBehavior.AllowGet);
+		}
 	}
 }

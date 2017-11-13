@@ -132,6 +132,11 @@
 			if (typeof envelopeNotification !== 'undefined') {
 				envelopeNotification(htmlDecode(notifyText));
 			}
+		},
+		ForTest:function () {
+			return {
+				webNotifications: webNotifications
+			}
 		}
 	};
 })(jQuery);
