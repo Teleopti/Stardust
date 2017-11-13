@@ -54,9 +54,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonNameChangedEvent @event)
 		{
-			if (@event.PersonId == Guid.Empty ||
-				string.IsNullOrWhiteSpace(@event.FirstName) ||
-				string.IsNullOrWhiteSpace(@event.LastName))
+			if (@event.PersonId == Guid.Empty)
+			{
+				Log.Error("PersonNameChangedEvent received was invalid " + _serializer.SerializeObject(@event));
+				return;
+			}
+			if (string.IsNullOrWhiteSpace(@event.FirstName) && string.IsNullOrWhiteSpace(@event.LastName))
 			{
 				Log.Error("PersonNameChangedEvent received was invalid " + _serializer.SerializeObject(@event));
 				return;
