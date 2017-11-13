@@ -107,6 +107,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 					Resources.WhenValidationFails, Resources.ContractWorkRuleValidation, OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description", typeof(OvertimeRequestWorkRuleValidationHandleOptionView)));
 			}
 
+			
+
 			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodStartDate", Resources.Start, Resources.Period)
 			{
 				CellValidator = new OvertimeRequestDatePeriodStartCellValidator(_toggleManager)
@@ -129,20 +131,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			var gridColumns = new ReadOnlyCollection<SFGridColumnBase<OvertimeRequestPeriodModel>>(columnList);
 			_overtimeRequestOpenPeriodGridHelper = new SFGridColumnGridHelper<OvertimeRequestPeriodModel>(
-				gridControlOvertimeRequestOpenPeriods,
-				gridColumns, new List<OvertimeRequestPeriodModel>(), false);
+				gridControlOvertimeRequestOpenPeriods, gridColumns, new List<OvertimeRequestPeriodModel>());
 
 			gridControlOvertimeRequestOpenPeriods.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
 			gridControlOvertimeRequestOpenPeriods.Model.Options.ExcelLikeCurrentCell = true;
 
-
 			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638))
 			{
-				gridControlOvertimeRequestOpenPeriods.CheckBoxClick += gridControlOvertimeRequestOpenPeriodsCheckBoxClick;
-				gridControlOvertimeRequestOpenPeriods.QueryCellInfo += gridControlOvertimeRequestOpenPeriodsQueryCellInfo;
+				gridControlOvertimeRequestOpenPeriods.CheckBoxClick += gridControlOvertimeRequestOpenPeriods_CheckBoxClick;
+				gridControlOvertimeRequestOpenPeriods.QueryCellInfo += gridControlOvertimeRequestOpenPeriods_QueryCellInfo;
 			}
 			gridControlOvertimeRequestOpenPeriods.CurrentCellCloseDropDown += gridControlOvertimeRequestOpenPeriods_CurrentCellCloseDropDown;
 			gridControlOvertimeRequestOpenPeriods.KeyDown += gridControlOvertimeRequestOpenPeriods_KeyDown;
+			gridControlOvertimeRequestOpenPeriods.ActivateToolTip += gridControlOvertimeRequestOpenPeriods_ActivateToolTip;
 		}
 
 		private void checkBoxAdvOvertimeProbability_CheckStateChanged(object sender, EventArgs e)
@@ -155,7 +156,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_presenter.SetAutoGrantOvertimeRequest(checkBoxAdvAutoGrantOvertimeRequest.Checked);
 		}
 
-		private void gridControlOvertimeRequestOpenPeriodsCheckBoxClick(object sender, GridCellClickEventArgs e)
+		private void gridControlOvertimeRequestOpenPeriods_CheckBoxClick(object sender, GridCellClickEventArgs e)
 		{
 			if (e.ColIndex != _enableWorkRuleColumnIndex)
 				return;
@@ -177,7 +178,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridControlOvertimeRequestOpenPeriods.RefreshRange(GridRangeInfo.Cell(e.RowIndex, e.ColIndex + 1));
 		}
 
-		private void gridControlOvertimeRequestOpenPeriodsQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+		private void gridControlOvertimeRequestOpenPeriods_QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
 			if (e.RowIndex < _overtimeRequestOpenPeriodDataStartRowIndex || e.ColIndex != _enableWorkRuleColumnIndex + 1)
 				return;
@@ -185,6 +186,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			var workflowControlSetModel = (WorkflowControlSetModel)comboBoxAdvWorkflowControlSet.SelectedItem;
 			var overtimeRequestOpenPeriod = workflowControlSetModel.OvertimeRequestPeriodModels.ElementAt(e.RowIndex - _overtimeRequestOpenPeriodDataStartRowIndex);
 			e.Style.Enabled = overtimeRequestOpenPeriod.EnableWorkRuleValidation;
+		}
+
+		private void gridControlOvertimeRequestOpenPeriods_ActivateToolTip(object sender, GridActivateToolTipEventArgs e)
+		{
+			if (e.RowIndex == 0 && (e.ColIndex == 3 || e.ColIndex == 4))
+			{
+				e.Style.CellTipText = " - " + Resources.NewMaxWeekWorkTimeRuleName + "\n" +
+									  " - "	+ Resources.NewNightlyRestRuleName + "\n" +
+									  " - " + Resources.MinWeeklyRestRuleName;
+			}
 		}
 
 		private void gridControlOvertimeRequestOpenPeriods_CurrentCellCloseDropDown(object sender, PopupClosedEventArgs e)
