@@ -40,13 +40,15 @@
 
 		svc.fetchSettingList = function () {
 			return $q(function (resolve, reject) {
-				var list = [
-					{ id: 'default', name: 'Default' },
-					{ id: 'setting1', name: 'Setting 1' },
-					{ id: 'setting2', name: 'Setting 2' },
-					{ id: 'setting3', name: 'Setting 3' }
-				];
-				resolve(list);
+				$http({
+					method: 'GET',
+					url: '../api/Gamification/LoadGamificationList'
+				}).then(function (response) {
+					var list = [];
+					if (!response.data.length) resolve(list);
+					response.data.forEach(function (item) { list.push(new Setting(item.GamificationSettingId, item.Value.Name)); });
+					resolve(list);
+				}, function (response) { $log.error('Gamification: failted to fetch setting list'); });
 			});
 		};
 	}
@@ -60,5 +62,10 @@
 		this.id = id;
 		this.name = name;
 		this.appliedSettingId = appliedSettingId;
+	}
+
+	function Setting(id, name) {
+		this.id = id;
+		this.name = name;
 	}
 })(angular);
