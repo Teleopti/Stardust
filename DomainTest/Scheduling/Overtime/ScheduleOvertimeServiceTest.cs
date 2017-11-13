@@ -61,44 +61,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		}
 
 		[Test]
-		public void ShouldSchedulePersonOnDay()
-		{
-			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			var skill = SkillRepository.Has("skill", phoneActivity);
-			skill.TimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
-			var dateOnly = new DateOnly(2016, 7, 12);
-			var scenario = ScenarioRepository.Has("some name");
-			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
-			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromHours(10));
-			SkillDayRepository.Has(new List<ISkillDay> { skillDay });
-			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(10, 0, 11, 0));
-			var ass = PersonAssignmentRepository.GetSingle(dateOnly);
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), new[] { agent }, new[] { ass }, new[] { skillDay });
-			var overtimePreference = new OvertimePreferences
-			{
-				OvertimeType = definitionSet,
-				ScheduleTag = new ScheduleTag(),
-				SelectedSpecificTimePeriod = new TimePeriod(TimeSpan.Zero, new TimeSpan(1, 6, 0, 0)),
-				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-				SkillActivity = phoneActivity
-			};
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, true, stateHolder.SchedulingResultState, UserTimeZone.Make());
-			TimeZoneGuard.SetTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
-			Target.SchedulePersonOnDay(stateHolder.Schedules[agent], overtimePreference,
-				resourceCalculateDelayer, dateOnly, scheduleTagSetter);
-
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
-		}
-
-		[Test]
 		public void ShouldOnlyScheduleOverTimeOnSelectedTimePeriodInViewPointTimeZoneBug39740()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
