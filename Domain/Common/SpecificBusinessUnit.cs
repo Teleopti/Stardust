@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -14,6 +15,11 @@ namespace Teleopti.Ccc.Domain.Common
 		public IBusinessUnit Current()
 		{
 			return _businessUnit;
+		}
+
+		public Guid? CurrentId()
+		{
+			return _businessUnit.Id;
 		}
 	}
 }

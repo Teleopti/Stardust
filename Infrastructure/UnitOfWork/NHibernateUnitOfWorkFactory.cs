@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		// can not inject here because the lifetime of the factory
 		// is longer than the container when running unit tests
 		protected internal NHibernateUnitOfWorkFactory(
-			ISessionFactory sessionFactory, 
-			IAuditSetter auditSettingProvider, 
-			string connectionString, 
+			ISessionFactory sessionFactory,
+			IAuditSetter auditSettingProvider,
+			string connectionString,
 			ICurrentTransactionHooks transactionHooks,
 			ICurrentPreCommitHooks currentPreCommitHooks,
 			string tenant)
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_currentPreCommitHooks = currentPreCommitHooks;
 		}
 
-		public string Name => ((ISessionFactoryImplementor)_factory).Settings.SessionFactoryName;
+		public string Name => ((ISessionFactoryImplementor) _factory).Settings.SessionFactoryName;
 
 		public ISessionFactory SessionFactory => _factory;
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			return createAndOpenUnitOfWork(isolationLevel, QueryFilter.BusinessUnit);
 		}
-		
+
 		public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
 		{
 			return createAndOpenUnitOfWork(TransactionIsolationLevel.Default, businessUnitFilter);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			var session = _factory.WithOptions().Interceptor(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy, _currentPreCommitHooks)).OpenSession();
 
-			businessUnitFilter.Enable(session, businessUnitId());
+			businessUnitFilter.Enable(session, ServiceLocatorForEntity.CurrentBusinessUnit.CurrentId().GetValueOrDefault());
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
 
@@ -115,13 +115,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_transactionHooks);
 
 			return CurrentUnitOfWork();
-		}
-
-		private static Guid businessUnitId()
-		{
-			return ServiceLocatorForEntity.CurrentBusinessUnit.Current() != null
-				? ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault()
-				: Guid.Empty;
 		}
 
 		public void Dispose()

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 			builder.RegisterType<ThrowOnNestedUnitOfWork>().As<INestedUnitOfWorkStrategy>().SingleInstance();
 
-			builder.RegisterType<WithUnitOfWork>().SingleInstance();
+			builder.RegisterType<WithUnitOfWork>().SingleInstance().ApplyAspects();
 
 			persistCallbacks(builder);
 
@@ -46,13 +47,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<ICurrentInitiatorIdentifier>()
 				.As<IInitiatorIdentifierScope>()
 				.SingleInstance();
-			builder.RegisterType<BusinessUnitFilterOverrider>().As<IBusinessUnitFilterOverrider>().SingleInstance();
 			builder.RegisterType<DisableBusinessUnitFilter>().As<IDisableBusinessUnitFilter>().SingleInstance();
 			builder.RegisterType<DatabaseVersion>().AsSelf().SingleInstance();
 			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>().As<IAspect>().As<IAllBusinessUnitsUnitOfWorkAspect>().SingleInstance();
-
-			// these keep scope state and cant be single instance
-			builder.RegisterType<UnitOfWorkAspect>().As<IUnitOfWorkAspect>().InstancePerDependency();
+			builder.RegisterType<UnitOfWorkAspect>().As<IAspect>().As<IUnitOfWorkAspect>().InstancePerDependency();
 
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 		}

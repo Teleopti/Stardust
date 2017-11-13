@@ -19,11 +19,16 @@ namespace Teleopti.Ccc.TestCommon
 			return _businessUnit;
 		}
 
+		public Guid? CurrentId()
+		{
+			return _businessUnit.Id;
+		}
+
 		public IDisposable OnThisThreadUse(IBusinessUnit businessUnit)
 		{
-		    var current = _businessUnit;
+			var current = _businessUnit;
 			_businessUnit = businessUnit;
-			return new GenericDisposable(()=> { _businessUnit = current; });
+			return new GenericDisposable(() => { _businessUnit = current; });
 		}
 	}
 }

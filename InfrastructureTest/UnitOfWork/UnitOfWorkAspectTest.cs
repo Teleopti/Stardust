@@ -192,28 +192,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 		[Test]
-		public void ShouldNotLeakUnitOfWorkAndConnectionOnResettingToInvalidBusinessUnit()
-		{
-			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
-			TheService.Does(uow =>
-			{
-				BusinessUnitRepository.Add(businessUnit);
-			});
-			var headers = new NameValueCollection { { "X-Business-Unit-Filter", businessUnit.Id.ToString() } };
-			HttpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
-
-			Assert.Throws<NullReferenceException>(() =>
-			{
-				TheService.Does(x =>
-				{
-					(Identity.Current() as TeleoptiIdentity).BusinessUnit = null;
-				});
-			});
-
-			UnitOfWork.HasCurrent().Should().Be.False();
-		}
-
-		[Test]
 		public void ShouldNotAllowNestedUnitOfWork()
 		{
 			var wasHere = false;

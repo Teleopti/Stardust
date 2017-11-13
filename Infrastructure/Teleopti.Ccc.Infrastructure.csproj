@@ -496,7 +496,6 @@
     <Compile Include="Repositories\AgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsScheduleRepository.cs" />
     <Compile Include="Repositories\Analytics\IntervalLengthFetcher.cs" />
-    <Compile Include="Repositories\BusinessUnitFilterOverrider.cs" />
     <Compile Include="Repositories\EtlJobStatusModel.cs" />
     <Compile Include="Repositories\EtlJobStatusRepository.cs" />
     <Compile Include="Repositories\EtlLogObjectRepository.cs" />

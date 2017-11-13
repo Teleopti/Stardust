@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Common
 		}
 
 		public CurrentBusinessUnit(
-			ICurrentIdentity identity, 
+			ICurrentIdentity identity,
 			IBusinessUnitIdForRequest businessUnitIdForRequest,
 			ICurrentUnitOfWorkFactory unitOfWork,
 			IBusinessUnitRepository businessUnitRepository)
@@ -38,31 +38,30 @@ namespace Teleopti.Ccc.Domain.Common
 			if (_threadBusinessUnit.Value != null)
 				return _threadBusinessUnit.Value;
 
-			var businessUnit = businessUnitForRequest();
+			var hasUnitOfWork = _unitOfWork?.Current()?.HasCurrentUnitOfWork() ?? false;
+			var id = _businessUnitIdForRequest?.Get();
+			if (id.HasValue && hasUnitOfWork && _businessUnitRepository != null)
+				return _businessUnitRepository.Load(id.Value);
+
+			return _identity.Current()?.BusinessUnit;
+		}
+
+		public Guid? CurrentId()
+		{
+			if (_threadBusinessUnit.Value != null)
+				return _threadBusinessUnit.Value.Id;
+
+			var businessUnit = _businessUnitIdForRequest?.Get();
 			if (businessUnit != null)
 				return businessUnit;
 
-			var identity = _identity.Current();
-			return identity?.BusinessUnit;
+			return _identity.Current()?.BusinessUnit?.Id;
 		}
 
 		public IDisposable OnThisThreadUse(IBusinessUnit businessUnit)
 		{
 			_threadBusinessUnit.Value = businessUnit;
-			return new GenericDisposable(()=> { _threadBusinessUnit.Value = null; });
+			return new GenericDisposable(() => { _threadBusinessUnit.Value = null; });
 		}
-
-		private IBusinessUnit businessUnitForRequest()
-		{
-			if (_unitOfWork == null || _businessUnitIdForRequest == null || _businessUnitRepository == null)
-				return null;
-			if (!_unitOfWork.Current()?.HasCurrentUnitOfWork() ?? false)
-				return null;
-			var buid = _businessUnitIdForRequest.Get();
-			if (!buid.HasValue)
-				return null;
-			return _businessUnitRepository.Load(buid.Value);
-		}
-
 	}
 }

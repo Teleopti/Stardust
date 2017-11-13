@@ -423,7 +423,6 @@
     <Compile Include="Rta\ReadModels\AgentState\AgentStateReadModelForTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStatePersisterGetTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStatePersisterTest.cs" />
-    <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Rta\Repositories\RtaStateGroupRepositoryNotSignedInTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />

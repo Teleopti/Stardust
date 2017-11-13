@@ -1,46 +1,40 @@
 using System;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.UnitOfWork
 {
 	public class WithUnitOfWork
 	{
-		private readonly ICurrentUnitOfWorkFactory _factory;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public WithUnitOfWork(ICurrentUnitOfWorkFactory factory)
+		public WithUnitOfWork(ICurrentUnitOfWork unitOfWork)
 		{
-			_factory = factory;
+			_unitOfWork = unitOfWork;
 		}
 
-		public void Do(Action action)
+		[UnitOfWork]
+		public virtual void Do(Action action)
 		{
-			using (var uow = _factory.Current().CreateAndOpenUnitOfWork())
-			{
-				action.Invoke();
-				uow.PersistAll();
-			}
+			action.Invoke();
 		}
 
-		public void Do(Action<ICurrentUnitOfWork> action)
+		[UnitOfWork]
+		public virtual void Do(Action<ICurrentUnitOfWork> action)
 		{
-			using (var uow = _factory.Current().CreateAndOpenUnitOfWork())
-			{
-				action.Invoke(new ThisUnitOfWork(uow));
-				uow.PersistAll();
-			}
+			action.Invoke(_unitOfWork);
 		}
 
-		public T Get<T>(Func<ICurrentUnitOfWork, T> func)
+		[UnitOfWork]
+		public virtual T Get<T>(Func<ICurrentUnitOfWork, T> func)
 		{
-			using (var uow = _factory.Current().CreateAndOpenUnitOfWork())
-			{
-				return func(new ThisUnitOfWork(uow));
-			}
+			return func(_unitOfWork);
 		}
 
-		public T Get<T>(Func<T> func)
+		[UnitOfWork]
+		public virtual T Get<T>(Func<T> func)
 		{
-			using (_factory.Current().CreateAndOpenUnitOfWork()) return func();
+			return func();
 		}
 	}
 }
