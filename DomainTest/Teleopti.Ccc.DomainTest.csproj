@@ -282,6 +282,7 @@
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHintTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
+    <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationScenarioTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeSchedulingScenario.cs" />
     <Compile Include="SchedulingScenarios\RemoveImplicitResCalcContext.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithBpoTest.cs" />
@@ -451,7 +452,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationStandardDeviationTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodJobCommandHandlerTest.cs" />
-    <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationTest.cs" />
+    <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandlerIncreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandExtendedModelTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelAfterReducingTest.cs" />

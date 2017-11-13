@@ -18,9 +18,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 {
-	[DomainTest]
 	[UseIocForFatClient]
-	public class IntraIntervalOptimizationTest
+	public class IntraIntervalOptimizationDesktopTest : IntraIntervalOptimizationScenarioTest
 	{
 		public OptimizationDesktopExecuter Target;
 		public Func<ISchedulerStateHolder> StateHolder;
@@ -78,6 +77,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 
 			stateHolder.Schedules[agent1].ScheduledDay(date).PersonAssignment().OvertimeActivities().Any()
 				.Should().Be.True();
+		}
+
+		public IntraIntervalOptimizationDesktopTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		{
 		}
 	}
 }

@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceCalculateWithNewContext = resourceCalculateWithNewContext;
 		}
 
-		protected override void PreOptimize(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, bool lastCalculationState)
+		protected override void PreOptimize(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, bool lastCalculationState, bool doIntraIntervalCalculation)
 		{
 			if (!schedulerStateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade())
 			{
-				_resourceCalculateWithNewContext.ResourceCalculate(selectedPeriod, new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, false));				
+				_resourceCalculateWithNewContext.ResourceCalculate(selectedPeriod, new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, doIntraIntervalCalculation));				
 			}
 		}
 	}
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 
-			PreOptimize(schedulerStateHolder, selectedPeriod, backgroundWorker, lastCalculationState);
+			PreOptimize(schedulerStateHolder, selectedPeriod, backgroundWorker, lastCalculationState, optimizationPreferences.General.OptimizationStepIntraInterval);
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper,
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
-		protected virtual void PreOptimize(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, bool lastCalculationState)
+		protected virtual void PreOptimize(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, bool lastCalculationState, bool doIntraIntervalCalculation)
 		{
 			if (lastCalculationState)
 			{
