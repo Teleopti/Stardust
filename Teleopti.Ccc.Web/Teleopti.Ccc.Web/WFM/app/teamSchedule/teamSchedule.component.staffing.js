@@ -33,7 +33,7 @@
 		}
 
 		vm.$onChanges = function (changeObj) {
-			if (staffingDataAvailable && changeObj.chartHeight.currentValue !== changeObj.chartHeight.previousValue) {
+			if (staffingDataAvailable && changeObj.chartHeight && changeObj.chartHeight.currentValue !== changeObj.chartHeight.previousValue) {
 				chart.resize({ height: changeObj.chartHeight.currentValue });
 			}
 		};
