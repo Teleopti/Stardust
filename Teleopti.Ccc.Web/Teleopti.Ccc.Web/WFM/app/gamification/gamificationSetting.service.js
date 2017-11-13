@@ -87,31 +87,50 @@
 
 
 	function GamificationSettingService($http, $q) {
-		var getSettingsUrlApi = { url: '../api/Gamification/LoadGamificationList', method: 'POST' };
+		var getSettingsUrl = '../api/Gamification/LoadGamificationList';
 
 		this.getSettingsDescriptor = function () {
 
 			return $q(function (resolve, reject) {
-				$http.get(getSettingsUrlApi.url).then(function (response) {
+				$http.get(getSettingsUrl).then(function (response) {
 					resolve(response.data);
 				});
 			});
 		}
 
-		var settingApi = { url: '../api/Gamification/Load/', method: 'get' };
+		var loadSettingUrl = '../api/Gamification/Load/';
 		this.getSettingById = function (id) {
 			return $q(function (resolve, reject) {
-				$http.get(settingApi.url + id).then(function (response) {
+				$http.get(loadSettingUrl + id).then(function (response) {
 					resolve(response.data);
 				});
 			});
 		}
 
-		this.saveData = function name(apikey, data) {
+		var createNewSettingUrl = '../api/Gamification/Create';
+		this.createNewSetting = function () {
+			return $q(function (resolve, reject) {
+				$http.post(createNewSettingUrl, {}, {}).then(function (response) {
+					resolve(response.data);
+				});
+			});
+		}
+
+		var deleteSettingUlr = '../api/Gamification/Delete/';
+		this.deleteSetting = function (id) {
+			return $http.delete(deleteSettingUlr + id);
+		}
+
+		this.saveData = function (apikey, data) {
 			var api = gamificationUrlMapping.find(function (element) {
 				return element.id == apikey;
 			})
 			return $http.post(api.url, data, {});
+		}
+
+		var resetbadgeUrl = '../api/Gamification/Reset';
+		this.resetBadge = function () {
+			return $http.post(resetbadgeUrl, {}, {});
 		}
 	}
 })();

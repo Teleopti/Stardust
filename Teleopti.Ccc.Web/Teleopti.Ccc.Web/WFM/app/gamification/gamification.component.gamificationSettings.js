@@ -27,8 +27,8 @@
 			gamificationSettingService.getSettingById(id).then(function (data) {
 				var settingData = ctrl.convertSettingToModel(data);
 				console.log(settingData);
-				if (ctrl.findElementInArray(ctrl.allSettings, settingData.id)) {
-					ctrl.addSetting.push(settingData);
+				if (!ctrl.findElementInArray(ctrl.allSettings, settingData.id)) {
+					ctrl.allSettings.push(settingData);
 				}
 
 				ctrl.currentSetting = settingData;
@@ -267,25 +267,99 @@
 		ctrl.changeSettingDescription = function () {
 			var data = {
 				GamificationSettingId: ctrl.currentSetting.id,
-				Value: {
-					Name: ctrl.currentSetting.name,
-					ShortName: ''
-				}
+				Name: ctrl.currentSetting.name
 			};
 
+
+			ctrl.updateName();
 			ctrl.saveData('ModifyDescription', data);
 		}
 
-		ctrl.addSetting = function () {
+		ctrl.updateName = function () {
+			var settingDescriptor = ctrl.settingDescriptors.find(function (item) {
+				return item.GamificationSettingId == ctrl.currentSetting.id;
+			})
 
+			settingDescriptor.Value.Name = ctrl.currentSetting.name;
+		}
+
+		ctrl.changeRuleValue = function (item) {
+			var data = {
+				GamificationSettingId: ctrl.currentSetting.id,
+				Rate: item.value
+			};
+
+			ctrl.saveData(item.id, data);
+		}
+
+		ctrl.addNewSetting = function () {
+			gamificationSettingService.createNewSetting().then(function (data) {
+				if (data) {
+					var newSetting = ctrl.convertSettingToModel(data);
+					ctrl.allSettings.push(newSetting);
+					ctrl.currentSetting = newSetting;
+
+					var newSettingDescriptor = {
+						GamificationSettingId: ctrl.currentSetting.id,
+						Value: {
+							Name: ctrl.currentSetting.name,
+							ShortName: ''
+						}
+					}
+
+					ctrl.settingDescriptors.push(newSettingDescriptor);
+					ctrl.currentSettingId = newSetting.id;
+				}
+			});
 		}
 
 		ctrl.deleteSetting = function () {
+			var deletedId = ctrl.currentSettingId;
+			gamificationSettingService.deleteSetting(deletedId).then(function (response) {
+				var settingDescriptor = ctrl.settingDescriptors.find(function (item) {
+					return item.GamificationSettingId == deletedId;
+				});
 
+				if (settingDescriptor) {
+					var index = ctrl.settingDescriptors.indexOf(settingDescriptor);
+					if (index > -1) {
+						ctrl.settingDescriptors.splice(index, 1);
+					}
+				}
+
+				var setting = ctrl.allSettings.find(function (item) {
+					return item.id == deletedId;
+				});
+
+				if (setting) {
+					var index = ctrl.allSettings.indexOf(setting);
+					if (index > -1) {
+						ctrl.allSettings.splice(index, 1);
+					}
+				}
+
+				if (ctrl.settingDescriptors.length > 0) {
+					ctrl.currentSettingId = ctrl.settingDescriptors[0].GamificationSettingId;
+					var curSetting = ctrl.allSettings.find(function (item) {
+						return item.id == ctrl.currentSettingId;
+					})
+
+					if (curSetting) {
+						ctrl.currentSetting = curSetting;
+					}
+				}
+
+				console.log('delete data successfully.');
+
+			}, function (error) {
+				console.log(error);
+			})
 		}
 
 		ctrl.resetBadges = function name() {
-
+			gamificationSettingService.resetBadge().then(function (response) {
+				console.log('reset badges successfully');
+			})
 		}
 
 		ctrl.itemSelected = function () {

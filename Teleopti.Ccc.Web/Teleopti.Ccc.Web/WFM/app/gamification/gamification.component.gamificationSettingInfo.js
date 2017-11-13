@@ -16,8 +16,8 @@
             },
         });
 
-    GamificationSettingInfoController.$inject = ['$element', '$scope', '$document'];
-    function GamificationSettingInfoController($element, $scope, $document) {
+    GamificationSettingInfoController.$inject = ['$element', '$scope', '$timeout', '$document'];
+    function GamificationSettingInfoController($element, $scope, $timeout, $document) {
         var ctrl = this;
         ctrl.collapsed = true;
         ctrl.iconName = "chevron-up";
@@ -33,8 +33,19 @@
 
         ctrl.onEditNameClicked = function (event, id) {
             ctrl.nameEditModel = true;
-            var element = document.getElementById("setting-name-id-" + id);
-            element.focus();
+            // var element = angular.element(document.getElementById("setting-name-id-" + id));
+            // event.preventDefault();
+            // event.stopPropagation();
+            // console.log(element.focus);
+            // element.focus();
+
+            $timeout(function () {
+                var element = angular.element(document.getElementById("setting-name-id-" + id));
+                console.log(element);
+                element.focus();
+            });
+
+
         }
 
         ctrl.changeName = function (event) {
@@ -46,7 +57,7 @@
         };
 
         ctrl.nameClicked = function (event) {
-            event.stopPropagation();
+            //event.stopPropagation();
         }
 
         ctrl.onSelected = function (id) {
@@ -70,7 +81,6 @@
         ctrl.itemChanged = function (event, id) {
             if (ctrl.settingInfo.is_buildin) {
                 if (ctrl.saveValueCallback) {
-                    console.log(event);
                     var value = event.target.value;
                     ctrl.saveValueCallback(id, value);
                 }
@@ -78,13 +88,19 @@
         }
 
         ctrl.$postLink = function () {
-            $document.bind('click', function () {
-                var nameInputs = document.getElementsByClassName("setting-name-input");
-                for (var i = 0; i < nameInputs.length; i++) {
-                    var input = nameInputs[i];
-                    input.blur();
+            $document.bind('click', function (event) {
+                if (event) {
+                    var activeElement = document.activeElement;
+                    var inputs = document.getElementsByClassName("setting-name-input");
+                    for (var i = 0; i < inputs.length; i++) {
+                        var input = inputs[i];
+                        if (input == activeElement) {
+                            console.log(input);
+                            input.blur();
+                        }
+                    }
                 }
-            })
+            });
         }
 
         ctrl.getSettingItems = function () {

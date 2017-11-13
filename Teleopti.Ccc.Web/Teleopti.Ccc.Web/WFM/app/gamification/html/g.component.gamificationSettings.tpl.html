@@ -12,7 +12,7 @@
         </div>
 
         <div class="icon-button">
-            <button class="wfm-fab  material-depth-1" aria-label="Add setting" ng-click="$ctrl.addSetting()" md-labeled-by-tooltip=" md-tooltip-1
+            <button class="wfm-fab  material-depth-1" aria-label="Add setting" ng-click="$ctrl.addNewSetting()" md-labeled-by-tooltip=" md-tooltip-1
                 ">
                 <i class="mdi mdi-plus "></i>
 
@@ -43,7 +43,7 @@
                 <label>Description:</label>
             </div>
             <div class="inline-block ">
-                <input type="text " value="{{$ctrl.currentSetting.name}}" ng-blur="$ctrl.changeSettingDescription()">
+                <input type="text " class="setting-name-input" ng-model="$ctrl.currentSetting.name" ng-blur="$ctrl.changeSettingDescription()">
             </div>
         </div>
         <div class="input-container ">
@@ -72,7 +72,7 @@
             <div ng-show="$ctrl.currentRule.items ">
                 <div ng-repeat="item in $ctrl.currentRule.items ">
                     <span>{{item.name}}:</span>
-                    <input type="text " value="{{item.value}} ">
+                    <input class="setting-name-input" ng-blur="$ctrl.changeRuleValue(item)" type="text " ng-model="item.value">
                 </div>
                 <md-divider></md-divider>
             </div>
