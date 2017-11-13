@@ -10,14 +10,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public AllBusinessUnitsUnitOfWorkAspect(ICurrentUnitOfWork unitOfWork)
-		{
-			_unitOfWork = unitOfWork;
-		}
-
-		public AllBusinessUnitsUnitOfWorkAspect(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public AllBusinessUnitsUnitOfWorkAspect(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentUnitOfWork unitOfWork)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_unitOfWork = unitOfWork;
 		}
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
