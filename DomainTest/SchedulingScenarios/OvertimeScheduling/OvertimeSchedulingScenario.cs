@@ -14,9 +14,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		protected OvertimeSchedulingScenario(RemoveImplicitResCalcContext removeImplicitResCalcContext)
 		{
 			_removeImplicitResCalcContext = removeImplicitResCalcContext;
-			
-			if(_removeImplicitResCalcContext == RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue)
-				Assert.Ignore("46680 - Toggle On");
 		}
 
 		public void Configure(FakeToggleManager toggleManager)

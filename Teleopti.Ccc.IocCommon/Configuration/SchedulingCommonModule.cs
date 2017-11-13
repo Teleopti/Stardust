@@ -126,6 +126,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<OptimizationDesktopExecuterNew>().As<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
 				builder.RegisterType<DesktopSchedulingNew>().As<DesktopScheduling>().InstancePerLifetimeScope();
 				builder.RegisterType<BackToLegalShiftService>().As<IBackToLegalShiftService>();
+				builder.RegisterType<ScheduleOvertimeNew>().As<IScheduleOvertime>();
 			}
 			else
 			{
@@ -137,6 +138,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
 				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 				builder.RegisterType<BackToLegalShiftServiceOLD>().As<IBackToLegalShiftService>();
+				builder.RegisterType<ScheduleOvertime>().As<IScheduleOvertime>();
 			}
 			builder.RegisterType<ResourceCalculateWithNewContext>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
@@ -188,7 +190,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>().SingleInstance();
 
 			//change to scope? 
-			builder.RegisterType<ScheduleOvertime>();
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
 			builder.RegisterType<MatrixListFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockIntradayOptimizationService>();				

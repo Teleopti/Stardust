@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 	[DomainTest]
 	public class OvertimeOnScheduleDaysTest : OvertimeSchedulingScenario
 	{
-		public ScheduleOvertime Target;
+		public IScheduleOvertime Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public IGridlockManager LockManager;
 		public FakeTimeZoneGuard TimeZoneGuard;
