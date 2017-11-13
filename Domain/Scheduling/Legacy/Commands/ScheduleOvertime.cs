@@ -18,28 +18,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		void Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules);
 	}
 	
-	//Rename when Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680 removed
+	[RemoveMeWithToggle("Rename without new", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 	public class ScheduleOvertimeNew : IScheduleOvertime
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly ScheduleOvertimeService _scheduleOvertimeService;
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 		private readonly IResourceCalculation _resourceCalculation;
-		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
 		
 		public ScheduleOvertimeNew(Func<ISchedulerStateHolder> schedulerStateHolder, 
 								ScheduleOvertimeService scheduleOvertimeService, 
 								ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays, 
-								IResourceCalculation resourceOptimizationHelper, 
 								IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation,
 								CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_userTimeZone = userTimeZone;
 			_resourceCalculation = resourceCalculation;
 			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
@@ -52,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			using (_cascadingResourceCalculationContextFactory.Create(stateholder.Schedules, stateholder.SchedulingResultState.Skills, false, stateholder.RequestedPeriod.DateOnlyPeriod))
 			{
 				_resourceCalculation.ResourceCalculate(stateholder.RequestedPeriod.DateOnlyPeriod, stateholder.SchedulingResultState.ToResourceOptimizationData(stateholder.ConsiderShortBreaks, false));
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, true, stateholder.SchedulingResultState, _userTimeZone);
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, true, stateholder.SchedulingResultState, _userTimeZone);
 				var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 				var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 				var cancel = false;
