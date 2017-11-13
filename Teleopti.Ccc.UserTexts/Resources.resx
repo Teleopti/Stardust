@@ -16732,4 +16732,16 @@ Do you want to participate?</value>
     <value>Contract work rule validation</value>
     <comment>header name for Contract work rule validation in overtime request open period setting</comment>
   </data>
+  <data name="GamificationSettings" xml:space="preserve">
+    <value>Gamification Settings</value>
+    <comment>A tab title in the Gamification module in WFM</comment>
+  </data>
+  <data name="SelectOneOrMoreSites" xml:space="preserve">
+    <value>Select one or more sites</value>
+    <comment>A prompt/placeholder in a site picker</comment>
+  </data>
+  <data name="SetGamificationTargets" xml:space="preserve">
+    <value>Set Gamification Targets</value>
+    <comment>A tab title in the Gamification module in WFM</comment>
+  </data>
 </root>

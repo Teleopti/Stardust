@@ -13206,6 +13206,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gamification Settings.
+        /// </summary>
+        public static string GamificationSettings {
+            get {
+                return ResourceManager.GetString("GamificationSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gap exists at {0}. All layers must be adjacent to, or intersecting, another layer..
         /// </summary>
         public static string GapExists {
@@ -29531,6 +29540,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select one or more sites.
+        /// </summary>
+        public static string SelectOneOrMoreSites {
+            get {
+                return ResourceManager.GetString("SelectOneOrMoreSites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt; Select optional column &gt;.
         /// </summary>
         public static string SelectOptionalColumn {
@@ -30184,6 +30202,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SetFallbackValuesToReplaceInvalidOnes {
             get {
                 return ResourceManager.GetString("SetFallbackValuesToReplaceInvalidOnes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Gamification Targets.
+        /// </summary>
+        public static string SetGamificationTargets {
+            get {
+                return ResourceManager.GetString("SetGamificationTargets", resourceCulture);
             }
         }
         
