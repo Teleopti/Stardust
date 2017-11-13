@@ -820,7 +820,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		
 		[Test]
-		[Ignore("#46680 fix FakePersonRotationRepository.LoadPersonRotationsWithHierarchyData")]
 		public void ShouldHandleBlockSamerStartTimeInCombinationWithRotationWithSpecifyedShiftCategoryOnBlockStartingDateBug41378()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
@@ -848,16 +847,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			PersonRotationRepository.Add(personRotation);
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 			{
-				UseAvailability = false,
-				UsePreferences = false,
-				UseRotations = true, //Set to true
-				UseStudentAvailability = false,
-				DayOffTemplate = dayOffTemplate,
-				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("SingleAgent", GroupPageType.SingleAgent),
-				UseTeam = false,
-				TeamSameShiftCategory = false,
-				TagToUseOnScheduling = NullScheduleTag.Instance,
+				UseRotations = true,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
 				BlockSameStartTime = true,

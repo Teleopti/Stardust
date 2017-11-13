@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IPersonRotation> LoadPersonRotationsWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
 		{
-			return _storage.Where(r => persons.Contains(r.Person) && r.StartDate == startDate).ToList();
+			return _storage.Where(r => persons.Contains(r.Person));
 		}
 	}
 }
