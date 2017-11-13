@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly ISkillRepository _skillRepository;
 		private readonly IResourceCalculationPrerequisitesLoader _resourceCalculationPrerequisitesLoader;
 		private readonly IDateTimePeriodAssembler _dateTimePeriodAssembler;
+		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
 		private readonly IAssembler<ISkillStaffPeriod, SkillDataDto> _skillDataAssembler;
 		private readonly IPersonRepository _personRepository;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IActivityRepository _activityRepository;
 
-		public GetStaffingUsingResourceCalculation(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentScenario scenarioRepository, ISkillRepository skillRepository, IActivityRepository activityRepository, IResourceCalculationPrerequisitesLoader resourceCalculationPrerequisitesLoader, IPersonRepository personRepository, IAssembler<ISkillStaffPeriod, SkillDataDto> skillDataAssembler, ISchedulingResultStateHolder schedulingResultStateHolder, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, IResourceCalculation resourceOptimizationHelper, IDateTimePeriodAssembler dateTimePeriodAssembler)
+		public GetStaffingUsingResourceCalculation(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentScenario scenarioRepository, ISkillRepository skillRepository, IActivityRepository activityRepository, IResourceCalculationPrerequisitesLoader resourceCalculationPrerequisitesLoader, IPersonRepository personRepository, IAssembler<ISkillStaffPeriod, SkillDataDto> skillDataAssembler, ISchedulingResultStateHolder schedulingResultStateHolder, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, IResourceCalculation resourceOptimizationHelper, IDateTimePeriodAssembler dateTimePeriodAssembler, CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_scenarioRepository = scenarioRepository;
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
+			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
 			_resourceCalculationPrerequisitesLoader = resourceCalculationPrerequisitesLoader;
 		}
 
@@ -74,10 +76,13 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				_loadSchedulingStateHolderForResourceCalculation.Execute(requestedScenario, periodForResourceCalc, allPeople,
 					_schedulingResultStateHolder, p => allPeople, true);
 
-				foreach (DateOnly dateTime in dateOnlyPeriodForResourceCalc.DayCollection())
+				using(_cascadingResourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, false, dateOnlyPeriodForResourceCalc))
 				{
-					_resourceOptimizationHelper.ResourceCalculate(dateTime,
-						_schedulingResultStateHolder.ToResourceOptimizationData(true, false));
+					foreach (var dateTime in dateOnlyPeriodForResourceCalc.DayCollection())
+					{
+						_resourceOptimizationHelper.ResourceCalculate(dateTime,
+							_schedulingResultStateHolder.ToResourceOptimizationData(true, false));
+					}					
 				}
 
 				var dayCollection = dateOnlyPeriod.DayCollection();
