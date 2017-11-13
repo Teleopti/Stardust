@@ -282,6 +282,7 @@
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHintTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
+    <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeSchedulingScenario.cs" />
     <Compile Include="SchedulingScenarios\RemoveImplicitResCalcContext.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithBpoTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithNoContextTest.cs" />

@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DomainTest]
-	public class OvertimeOnScheduleDaysTest
+	public class OvertimeOnScheduleDaysTest : OvertimeSchedulingScenario
 	{
 		public ScheduleOvertime Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -518,6 +518,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().OvertimeActivities().Single().Period.StartDateTime.Date
 				.Should().Be.EqualTo(date.Date.AddDays(1));
+		}
+
+		public OvertimeOnScheduleDaysTest(RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(removeImplicitResCalcContext46680)
+		{
+			
 		}
 	}
 }
