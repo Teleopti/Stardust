@@ -21,6 +21,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 {
+	/* Obsolute tests! Delete next time they are "ivägen"
+ 	 * When writing weeklyrest test, write tests against
+	 * something that real code execute, eg scheduling.
+	 * Don't write tests against inner service "IWeeklyRestSolverCommand"
+ 	*/
 	[DomainTestWithStaticDependenciesAvoidUse]
 	public class WeeklyRestSolverEarlierTest
 	{
@@ -28,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		public MatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
 		public IResourceCalculation CascadingResourceCalculation;
+		public CascadingResourceCalculationContextFactory CascadingResourceCalculationContextFactory;
 
 		private DateOnlyPeriod weekPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 04);
 		private readonly IScenario scenario = new Scenario("unimportant");
@@ -366,25 +372,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		{
 			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(schedules, agents, selectedPeriod);
 
-			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
-				optimizationPreferences,
-				agents,
-				new SchedulePartModifyAndRollbackService(
-					SchedulerStateHolder.SchedulingResultState,
-					new SchedulerStateScheduleDayChangedCallback(
-						new ScheduleChangesAffectedDates(new TimeZoneGuard()), 
-						() => SchedulerStateHolder
+			using(CascadingResourceCalculationContextFactory.Create(SchedulerStateHolder, false, selectedPeriod))
+			{
+				Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
+					optimizationPreferences,
+					agents,
+					new SchedulePartModifyAndRollbackService(
+						SchedulerStateHolder.SchedulingResultState,
+						new SchedulerStateScheduleDayChangedCallback(
+							new ScheduleChangesAffectedDates(new TimeZoneGuard()), 
+							() => SchedulerStateHolder
 						),
-					new ScheduleTagSetter(
-						new NullScheduleTag()
+						new ScheduleTagSetter(
+							new NullScheduleTag()
 						)
 					),
 					new ResourceCalculateDelayer(CascadingResourceCalculation, true, SchedulerStateHolder.SchedulingResultState, UserTimeZone.Make()),
-				selectedPeriod,
-				matrixlist,
-				new NoSchedulingProgress(),
-				dayOffOptimizationPreferenceProvider
+					selectedPeriod,
+					matrixlist,
+					new NoSchedulingProgress(),
+					dayOffOptimizationPreferenceProvider
 				);
+			}
 		}
 
 		private void executeTarget(IList<IPerson> agents, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
@@ -520,26 +529,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			var dayOffPreferences = new DaysOffPreferences();
 			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 			var optimizationPreferences = new OptimizationPreferences();
-
-			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
-				optimizationPreferences,
-				new List<IPerson> { agent },
-				new SchedulePartModifyAndRollbackService(
-					SchedulerStateHolder.SchedulingResultState,
-					new SchedulerStateScheduleDayChangedCallback(
-						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
-						() => SchedulerStateHolder
+			using(CascadingResourceCalculationContextFactory.Create(SchedulerStateHolder, false, selectedPeriod))
+			{
+				Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
+					optimizationPreferences,
+					new List<IPerson> { agent },
+					new SchedulePartModifyAndRollbackService(
+						SchedulerStateHolder.SchedulingResultState,
+						new SchedulerStateScheduleDayChangedCallback(
+							new ScheduleChangesAffectedDates(new TimeZoneGuard()),
+							() => SchedulerStateHolder
 						),
-					new ScheduleTagSetter(
-						new NullScheduleTag()
+						new ScheduleTagSetter(
+							new NullScheduleTag()
 						)
 					),
 					new ResourceCalculateDelayer(CascadingResourceCalculation, true, SchedulerStateHolder.SchedulingResultState, UserTimeZone.Make()),
-				selectedPeriod,
-				matrixlist,
-				new NoSchedulingProgress(),
-				dayOffOptimzationPreferenceProvider
+					selectedPeriod,
+					matrixlist,
+					new NoSchedulingProgress(),
+					dayOffOptimzationPreferenceProvider
 				);
+			}
 
 			var movedSchedule = scheduleDictionary[agent].ScheduledDay(new DateOnly(2016, 3, 22));
 			var newEndTime = movedSchedule.PersonAssignment().Period.EndDateTimeLocal(movedSchedule.TimeZone);
@@ -618,27 +629,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			var dayOffPreferences = new DaysOffPreferences();
 			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 			var optimizationPreferences = new OptimizationPreferences();
-
-			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
-				null,
-				new List<IPerson> { agent },
-				new SchedulePartModifyAndRollbackService(
-					SchedulerStateHolder.SchedulingResultState,
-					new SchedulerStateScheduleDayChangedCallback(
-						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
-						() => SchedulerStateHolder
+			using (CascadingResourceCalculationContextFactory.Create(SchedulerStateHolder, false, selectedPeriod))
+			{
+				Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
+					null,
+					new List<IPerson> { agent },
+					new SchedulePartModifyAndRollbackService(
+						SchedulerStateHolder.SchedulingResultState,
+						new SchedulerStateScheduleDayChangedCallback(
+							new ScheduleChangesAffectedDates(new TimeZoneGuard()),
+							() => SchedulerStateHolder
 						),
-					new ScheduleTagSetter(
-						new NullScheduleTag()
+						new ScheduleTagSetter(
+							new NullScheduleTag()
 						)
 					),
 					new ResourceCalculateDelayer(CascadingResourceCalculation, true, SchedulerStateHolder.SchedulingResultState, UserTimeZone.Make()),
-				selectedPeriod,
-				matrixlist,
-				new NoSchedulingProgress(),
-				dayOffOptimzationPreferenceProvider
+					selectedPeriod,
+					matrixlist,
+					new NoSchedulingProgress(),
+					dayOffOptimzationPreferenceProvider
 				);
-
+	
+			}
 			var movedSchedule = scheduleDictionary[agent].ScheduledDay(new DateOnly(2016, 3, 22));
 			var newEndTime = movedSchedule.PersonAssignment().Period.EndDateTimeLocal(movedSchedule.TimeZone);
 

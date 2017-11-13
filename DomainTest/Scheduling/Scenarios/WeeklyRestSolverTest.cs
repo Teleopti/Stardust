@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -19,11 +20,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 {
+	/* Obsolute tests! Delete next time they are "ivägen"
+	 * When writing weeklyrest test, write tests against
+	 * something that real code execute, eg scheduling.
+	 * Don't write tests against inner service "IWeeklyRestSolverCommand"
+	 */
 	[DomainTest]
 	public class WeeklyRestSolverTest
 	{
 		public WeeklyRestSolverExecuter Target;
 		public SchedulerStateHolder SchedulerStateHolder;
+		public CascadingResourceCalculationContextFactory CascadingResourceCalculationContextFactory;
 
 		[Test]
 		public void ShouldNotFailOnValueMustBePositive()
@@ -132,7 +139,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			var selectedPeriod = new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly);
 			var optimizationPref = new OptimizationPreferences();
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
-			Target.Resolve(optimizationPref, selectedPeriod, SchedulerStateHolder.SchedulingResultState.LoadedAgents.ToList(), dayOffOptimizationPreferenceProvider);
+			using (CascadingResourceCalculationContextFactory.Create(SchedulerStateHolder, false, selectedPeriod))
+			{
+				Target.Resolve(optimizationPref, selectedPeriod, SchedulerStateHolder.SchedulingResultState.LoadedAgents.ToList(), dayOffOptimizationPreferenceProvider);				
+			}
 
 			scheduleDictionary[agent1].ScheduledDay(dateOnly.AddDays(-1)).IsScheduled().Should().Be.False();
 			scheduleDictionary[agent2].ScheduledDay(dateOnly.AddDays(-1)).IsScheduled().Should().Be.False();
