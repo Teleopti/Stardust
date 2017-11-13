@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public OptimizationDesktopExecuter Target;
 		public ISchedulerStateHolder StateHolder;
 		public IOptimizationPreferences OptimizationPreferences;
-		public IResourceOptimizationHelperExtended ResourceCalculator;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
@@ -129,8 +128,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			var skillDays = Enumerable.Range(-7, 10).Select(i => createSkillDay(skill, date.AddDays(i), scenario)).ToArray();
 			StateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>> {{skill, skillDays}};
-
-			ResourceCalculator.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 
 			OptimizationPreferences.General = new GeneralPreferences
 			{
