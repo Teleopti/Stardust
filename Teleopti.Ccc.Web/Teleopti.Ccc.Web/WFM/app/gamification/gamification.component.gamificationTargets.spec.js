@@ -117,7 +117,11 @@ describe('gamification, ', function () {
 				expect(numRows).toBe(expected);
 
 				n = 3;
-				for (var i = 0; i < n; i++) { selectRow(cmp, i); }
+				for (var i = 0; i < n; i++) selectRow(cmp, i);
+
+				// Select a row, and then un-select it.
+				selectRow(cmp, n+1);
+				selectRow(cmp, n+1);
 
 				selectedRows = cmp[0].querySelectorAll('gamification-target-row[is-selected="true"]');
 				expect(selectedRows.length).toBe(n);
@@ -125,7 +129,10 @@ describe('gamification, ', function () {
 				var row = angular.element(selectedRows[0]);
 				removeAllSelectMenusInDom();
 				openSelectFor(row);
-				selectOption(2);
+
+				// Note that the first option is 'None'.
+				selectOption(3);
+
 				expectSelectClosed();
 			});
 

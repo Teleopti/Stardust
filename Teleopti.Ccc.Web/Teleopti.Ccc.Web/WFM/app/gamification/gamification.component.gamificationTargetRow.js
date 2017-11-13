@@ -27,6 +27,8 @@
 	function GamificationTargetRowController($element) {
 		var ctrl = this;
 
+		ctrl.EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
+
 		ctrl.appliedSettingChanged = function () {
 			ctrl.onSettingChange({
 				teamId: ctrl.id,

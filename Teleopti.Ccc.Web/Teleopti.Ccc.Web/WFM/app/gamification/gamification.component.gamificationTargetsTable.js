@@ -55,20 +55,16 @@
 			ctrl.selectedTeamIds[teamId] = !ctrl.selectedTeamIds[teamId];
 		};
 
-		ctrl.changeAppliedSetting = function (teamId, newSettingValue) {
-			// console.log(teamId, newSettingValue)
-
-			Object.keys(ctrl.selectedTeamIds)
+		ctrl.changeAppliedSetting = function (teamId, newSettingId) {
+			var trulySelected = Object.keys(ctrl.selectedTeamIds)
 				.filter(function (id) { return ctrl.selectedTeamIds[id]; })
-				.forEach(function (id) {
-					var index = ctrl._teamsIndexMap[id].index;
-					ctrl.teams[index].appliedSettingId = newSettingValue;
-				});
 
-			ctrl.onSettingChange && ctrl.onSettingChange({
-				teamIds: Object.keys(ctrl.selectedTeamIds),
-				newValue: newSettingValue
+			trulySelected.forEach(function (id) {
+				var index = ctrl._teamsIndexMap[id].index;
+				ctrl.teams[index].appliedSettingId = newSettingId;
 			});
+
+			ctrl.onSettingChange && ctrl.onSettingChange({ teamIds: trulySelected, newValue: newSettingId });
 		};
 
 		function refresh() { $scope.$broadcast('$md-resize'); }

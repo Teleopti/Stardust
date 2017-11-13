@@ -7,7 +7,8 @@
 <div tabindex="-1" class="setting" ng-click="$ctrl.rowSelected()">
 	<div tabindex="-1" ng-click="$ctrl.selected && $event.stopPropagation()">
 		<md-select ng-model="$ctrl.appliedSettingId" ng-change="$ctrl.appliedSettingChanged()" class="md-no-underline" placeholder="SelectGamificationSetting">
-				<md-option ng-repeat="option in $ctrl.settingOptions" value="{{option.id}}">{{option.name}}</md-option>
+			<md-option value="{{$ctrl.EMPTY_GUID}}">{{'None'|translate}}</md-option>
+			<md-option ng-repeat="option in $ctrl.settingOptions" value="{{option.id}}">{{option.name}}</md-option>
 		</md-select>
 		<div tabindex="-1" class="mask" ng-class="{'selected': $ctrl.selected}"></div>
 	</div>
