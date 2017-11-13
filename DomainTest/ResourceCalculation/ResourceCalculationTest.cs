@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[DomainTest]
 	public class ResourceCalculationTest
 	{
-		public IResourceCalculation ResourceOptimizationHelper;
+		public ResourceCalculateWithNewContext ResourceCalculateInContext;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeTimeZoneGuard TimeZoneGuard;
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] {agent},
 				new List<IScheduleData> { ass }, new List<ISkillDay> {skillDayA, skillDayB});
 
-			ResourceOptimizationHelper.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			ResourceCalculateInContext.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
 			var intervalA = stateHolder.SchedulingResultState.SkillDays[skillA].First().SkillStaffPeriodCollection.First();
 			var intervalB = stateHolder.SchedulingResultState.SkillDays[skillB].First().SkillStaffPeriodCollection.First();
 
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 },
 				new List<IScheduleData> { ass1, ass2 }, new List<ISkillDay> { skillDayA, skillDayB });
 
-			ResourceOptimizationHelper.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			ResourceCalculateInContext.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
 			var intervalA = stateHolder.SchedulingResultState.SkillDays[skillA].First().SkillStaffPeriodCollection.First();
 			var intervalB = stateHolder.SchedulingResultState.SkillDays[skillB].First().SkillStaffPeriodCollection.First();
 
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent },
 				new List<IScheduleData> { ass }, new List<ISkillDay> { skillDayA, skillDayB });
 
-			ResourceOptimizationHelper.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			ResourceCalculateInContext.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
 			var intervalA = stateHolder.SchedulingResultState.SkillDays[skillA].First().SkillStaffPeriodCollection.First();
 			var intervalB = stateHolder.SchedulingResultState.SkillDays[skillB].First().SkillStaffPeriodCollection.First();
 
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 },
 				new List<IScheduleData> { ass1, ass2 }, new List<ISkillDay> { skillDayA, skillDayB });
 
-			ResourceOptimizationHelper.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			ResourceCalculateInContext.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
 			var intervalA = stateHolder.SchedulingResultState.SkillDays[skillA].First().SkillStaffPeriodCollection.First();
 			var intervalB = stateHolder.SchedulingResultState.SkillDays[skillB].First().SkillStaffPeriodCollection.First();
 
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 },
 				new List<IScheduleData> { ass1, ass2 }, new List<ISkillDay> { skillDayA, skillDayB });
 
-			ResourceOptimizationHelper.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			ResourceCalculateInContext.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
 			var intervalA = stateHolder.SchedulingResultState.SkillDays[skillA].First().SkillStaffPeriodCollection.First();
 			var intervalB = stateHolder.SchedulingResultState.SkillDays[skillB].First().SkillStaffPeriodCollection.First();
 
