@@ -100,7 +100,7 @@
         }
 
         function checkAnyChildrenNodesSelectedState(parentSiblings, checkItem) {
-            var selectedSiblings = parentSiblings.filter(function (sib) { return sib[vm.nodeSelectedMark] == false; })
+            var selectedSiblings = parentSiblings.filter(function (sib) { return sib[vm.nodeSelectedMark] == false || !sib[vm.nodeSelectedMark]; })
             if (selectedSiblings.length == 0 || selectedSiblings.length == parentSiblings.length)
                 return removeSemiStateToNode(checkItem.childNodes[1].childNodes[3]);
             if (selectedSiblings.length < parentSiblings.length)
@@ -109,7 +109,7 @@
 
         function checkSemiStateToSelectedNodeParent(data, checkItem) {
             if (data.$parent.$parent.node) {
-                checkAnyChildrenNodesSelectedState(data.$parent.$parent.node.nodes, checkItem);
+                checkAnyChildrenNodesSelectedState(data.$parent.$parent.node[vm.nodeChildrenName], checkItem);
                 return checkSemiStateToSelectedNodeParent(data.$parent.$parent, checkItem.parentNode.parentNode);
             }
             return removeSemiStateToNode(checkItem);
@@ -219,7 +219,7 @@
         }
 
         function checkAnyChildrenNodesSelectedState(parentSiblings, checkItem) {
-            var selectedSiblings = parentSiblings.filter(function (sib) { return sib[vm.nodeSelectedMark] == false; })
+            var selectedSiblings = parentSiblings.filter(function (sib) { return sib[vm.nodeSelectedMark] == false || !sib[vm.nodeSelectedMark]; })
             if (selectedSiblings.length == 0 || selectedSiblings.length == parentSiblings.length)
                 return removeSemiStateToNode(checkItem.childNodes[1].childNodes[3]);
             if (selectedSiblings.length < parentSiblings.length)
@@ -227,8 +227,8 @@
         }
 
         function checkSemiStateToSelectedNodeParent(data, checkItem) {
-            if (data.$parent.$parent.node) {
-                checkAnyChildrenNodesSelectedState(data.$parent.$parent.node.nodes, checkItem);
+            if (!!data.$parent.$parent.node) {
+                checkAnyChildrenNodesSelectedState(data.$parent.$parent.node[vm.nodeChildrenName], checkItem);
                 return checkSemiStateToSelectedNodeParent(data.$parent.$parent, checkItem.parentNode.parentNode);
             }
             return;
