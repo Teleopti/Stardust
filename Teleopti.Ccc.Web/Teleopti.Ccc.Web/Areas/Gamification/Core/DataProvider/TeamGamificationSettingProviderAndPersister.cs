@@ -55,14 +55,19 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return VMList;
 		}
 
-		public TeamGamificationSettingViewModel SetTeamGamificationSetting(TeamGamificationSettingForm input)
+		public List<TeamGamificationSettingViewModel> SetTeamsGamificationSetting(TeamsGamificationSettingForm input)
 		{
-			var team = _teamRepository.Get(input.TeamId);
+			return input.TeamIds.Select(teamId => SetTeamGamificationSetting(teamId, input.GamificationSettingId)).ToList();
+		}
+
+		public TeamGamificationSettingViewModel SetTeamGamificationSetting(Guid teamId, Guid inputGamificationSettingId)
+		{
+			var team = _teamRepository.Get(teamId);
 			if (team == null ) return null;
 
 			var gamificationSettingId = Guid.Empty;
 			var teamGamificationSetting = _teamGamificationSettingRepository.FindTeamGamificationSettingsByTeam(team);
-			if (input.GamificationSettingId == Guid.Empty)
+			if (inputGamificationSettingId == Guid.Empty)
 			{
 				if (teamGamificationSetting != null)
 				{
@@ -71,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			}
 			else
 			{
-				var gamificationSetting = _gamificationSettingRepository.Get(input.GamificationSettingId);
+				var gamificationSetting = _gamificationSettingRepository.Get(inputGamificationSettingId);
 				if (gamificationSetting == null) return null;
 				
 				if (teamGamificationSetting == null)

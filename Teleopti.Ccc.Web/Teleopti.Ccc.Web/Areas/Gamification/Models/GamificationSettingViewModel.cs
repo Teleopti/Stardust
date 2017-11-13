@@ -81,9 +81,9 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public Guid GamificationSettingId { get; set; }
 	}
 
-	public class TeamGamificationSettingForm
+	public class TeamsGamificationSettingForm
 	{
-		public Guid TeamId { get; set; }
+		public List<Guid> TeamIds { get; set; }
 		public Guid GamificationSettingId { get; set; }
 	}
 

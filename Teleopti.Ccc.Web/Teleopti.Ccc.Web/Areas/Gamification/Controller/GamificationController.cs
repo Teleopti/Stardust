@@ -189,9 +189,9 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		}
 
 		[HttpPost, Route("api/Gamification/SetTeamGamification"), UnitOfWork]
-		public virtual TeamGamificationSettingViewModel SetTeamGamificationSetting(TeamGamificationSettingForm input)
+		public virtual IEnumerable<TeamGamificationSettingViewModel> SetTeamGamificationSetting(TeamsGamificationSettingForm input)
 		{
-			return _gamificationSettingProviderAndPersister.SetTeamGamificationSetting(input);
+			return _gamificationSettingProviderAndPersister.SetTeamsGamificationSetting(input);
 		}
 
 		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSetting"), UnitOfWork]

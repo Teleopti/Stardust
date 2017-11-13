@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 	public interface ITeamGamificationSettingProviderAndPersister
 	{
 		IList<TeamGamificationSettingViewModel> GetTeamGamificationSettingViewModels(List<Guid> siteIds);
-		TeamGamificationSettingViewModel SetTeamGamificationSetting(TeamGamificationSettingForm input);
+		List<TeamGamificationSettingViewModel> SetTeamsGamificationSetting(TeamsGamificationSettingForm input);
+		TeamGamificationSettingViewModel SetTeamGamificationSetting(Guid teamId, Guid inputGamificationSettingId);
 	}
 }
