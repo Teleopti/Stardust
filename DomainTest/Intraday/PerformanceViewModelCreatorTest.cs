@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
+		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldReturnEslFromStartOfOpenHour()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
@@ -742,6 +743,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		[Test]
 		[Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026)]
+		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldNotReturnAbandonRateForSkillNotSupportingIt()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);

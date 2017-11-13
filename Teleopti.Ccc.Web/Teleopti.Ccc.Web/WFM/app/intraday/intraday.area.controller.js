@@ -50,6 +50,7 @@
       showOptimalStaffing: [],
       showScheduledStaffing: [],
       showEsl: [],
+      showEmailSkill: [],
       showOtherDay: [],
       exportToExcel: [],
       otherSkillsLikeEmail: [],
@@ -73,6 +74,7 @@
       vm.toggles.showOptimalStaffing = toggleSvc.Wfm_Intraday_OptimalStaffing_40921;
       vm.toggles.showScheduledStaffing = toggleSvc.Wfm_Intraday_ScheduledStaffing_41476;
       vm.toggles.showEsl = toggleSvc.Wfm_Intraday_ESL_41827;
+      vm.toggles.showEmailSkill = toggleSvc.Wfm_Intraday_SupportSkillTypeEmail_44002;
       vm.toggles.showOtherDay = toggleSvc.WFM_Intraday_Show_For_Other_Days_43504;
       vm.toggles.exportToExcel = toggleSvc.WFM_Intraday_Export_To_Excel_44892;
       vm.toggles.otherSkillsLikeEmail = toggleSvc.WFM_Intraday_SupportOtherSkillsLikeEmail_44026;
