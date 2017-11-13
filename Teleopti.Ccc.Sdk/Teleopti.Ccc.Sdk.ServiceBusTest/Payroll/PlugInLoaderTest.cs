@@ -32,12 +32,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 		[Test]
 		public void VerifyPayrollDllDtosCanBeLoaded()
 		{
+			//If fail, fix assembly redirect in SDK and contact Anders so he let support guys know about new version. Custom payroll may be broken!
 			runWithExceptionHandling(() => target.LoadDtos());
 		}
 
 		[Test]
 		public void VerifyPayrollDllsCanBeLoaded()
 		{
+			//If fail, fix assembly redirect in SDK and contact Anders so he let support guys know about new version. Custom payroll may be broken!
 			runWithExceptionHandling(() => target.Load());
 		}
 
