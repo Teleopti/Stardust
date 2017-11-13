@@ -611,8 +611,6 @@
     <Compile Include="Repositories\TeamRepositoryTest.cs" />
     <Compile Include="Repositories\WorkflowControlSetRepositoryTest.cs" />
     <Compile Include="Repositories\WorkloadRepositoryTest.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\NumberOfAgentsInTeamReaderTest.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\NumberOfAgentsInSiteReaderTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\ExecuteTarget.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\FetchPersonIdAndTimeZoneTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterTest.cs" />

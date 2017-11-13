@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 	{
 		public FakeDatabase Database;
 		public TeamCardViewModelBuilder Target;
-		public FakeNumberOfAgentsInTeamReader AgentsInTeam;
 		public FakeSiteRepository Sites;
 		public MutableNow Now;
 

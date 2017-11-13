@@ -287,8 +287,6 @@
     <Compile Include="FakeRepositories\Rta\FakeKeyValueStorePersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNoRtaLicenseActivator.cs" />
     <Compile Include="FakeRepositories\Rta\FakeMappingReadModelPersister.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeNumberOfAgentsInSiteReader.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeNumberOfAgentsInTeamReader.cs" />
     <Compile Include="FakeData\FakeRequestFactory.cs" />
     <Compile Include="FakeRepositories\Rta\FakeHistoricalChangeReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeOrganizationReader.cs" />

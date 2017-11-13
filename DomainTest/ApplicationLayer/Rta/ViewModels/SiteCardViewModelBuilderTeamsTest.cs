@@ -11,7 +11,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public SiteCardViewModelBuilder Target;
 		public FakeDatabase Database;
 		public FakeSiteRepository Sites;
-		public FakeNumberOfAgentsInSiteReader AgentsInSite;
 		public MutableNow Now;
 		public FakeUserUiCulture UiCulture;
 

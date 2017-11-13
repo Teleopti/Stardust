@@ -86,17 +86,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
-		public void ShouldResolveNumberOfAgentsInTeamReader()
-		{
-			var builder = new ContainerConfiguration();
-			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
-			{
-				container.Resolve<INumberOfAgentsInTeamReader>()
-					.Should().Not.Be.Null();
-			}
-		}
-
-		[Test]
 		public void ResourceHandlerModuleHasBeenRegistered()
 		{
 			var builder = new ContainerConfiguration();
