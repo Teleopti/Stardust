@@ -11010,6 +11010,9 @@ Sjekk din internettforbindelse eller kontakt administratoren.</value>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>innkommende trafikk</value>
   </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>Her kan dere overvåke intradag verdier, start ved å velge enten en ferdighet eller ditt område</value>
+  </data>
   <data name="OfferedAverageHandleTime" xml:space="preserve">
     <value>Tilbudt gjennomsnittlig behandlingstid</value>
   </data>
@@ -11618,6 +11621,9 @@ Lokasjon(er) åpningstider</value>
   <data name="SortByUpdateDate" xml:space="preserve">
     <value>Oppdatert dato</value>
   </data>
+  <data name="SkillAreaColon" xml:space="preserve">
+    <value>Ferdighetsområde:</value>
+  </data>
   <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
     <value>Kan ikke legge til endringer for agenter i andre tidssoner </value>
   </data>
@@ -11972,5 +11978,899 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   </data>
   <data name="DenyReasonTechnicalIssues" xml:space="preserve">
     <value>Din forespørsel er blitt nektet på grunn av tekniske problemer. Vennligst prøv igjen senere.</value>
+  </data>
+  <data name="OpenForOvertimeRequests" xml:space="preserve">
+    <value>Åpen for overtidforespørsler</value>
+  </data>
+  <data name="OutOfIndexRange" xml:space="preserve">
+    <value>Utenfor indeksområde {0} - {1}</value>
+  </data>
+  <data name="ForecastedAverageHandlingTime" xml:space="preserve">
+    <value>Forventet gjennomsnittlig håndteringstid</value>
+  </data>
+  <data name="OnlySupport" xml:space="preserve">
+    <value>Støtter bare: {0}</value>
+  </data>
+  <data name="SelectedFilters" xml:space="preserve">
+    <value>Valgte filtre</value>
+  </data>
+  <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Kunne ikke planlegge for planperiode {0} - {1} på grunn av teknisk feil. Vær så snill, prøv på nytt.</value>
+  </data>
+  <data name="MissingOvertimeType" xml:space="preserve">
+    <value>Mangler overtidstype</value>
+  </data>
+  <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
+    <value>Skiftet for dato {0} finnes ikke i skiftposen {1}</value>
+  </data>
+  <data name="InternalErrorMsg" xml:space="preserve">
+    <value>En intern feil har oppstått.</value>
+  </data>
+  <data name="UnsupportedDataSeriesFound" xml:space="preserve">
+    <value>Inneholder blandede ferdighetsformer, visse dataserier kan være utilgjengelige</value>
+  </data>
+  <data name="PlansPageCreatePlanningGroup" xml:space="preserve">
+    <value>Fyll inn et navn og velg egnet filtre for å opprette en planleggingsgruppe</value>
+  </data>
+  <data name="ActualAverageHandlingTime" xml:space="preserve">
+    <value>Faktisk gjennomsnittlig håndteringstid</value>
+  </data>
+  <data name="MaxSearchPersonCountExceeded" xml:space="preserve">
+    <value>Dette søket gir resultater for mer enn {0} personer, vennligst begrens søket ved å legge til flere kriterier.</value>
+  </data>
+  <data name="FilterPlanningGroups" xml:space="preserve">
+    <value>Filter planleggingsgrupper</value>
+  </data>
+  <data name="FilterPlanningPeriods" xml:space="preserve">
+    <value>Filter planleggingsperioder</value>
+  </data>
+  <data name="SelectScheduleMethod" xml:space="preserve">
+    <value>Velg tidsplanmetode</value>
+  </data>
+  <data name="ETOTRequests" xml:space="preserve">
+    <value>Overtidssøknader</value>
+  </data>
+  <data name="UnavailableSeries" xml:space="preserve">
+    <value>Utvalget inneholder e-postkunnskap, visse dataserier er utilgjengelige.</value>
+  </data>
+  <data name="NotShowingReforcastedAgents" xml:space="preserve">
+    <value>Reprognostiserte agenter kan ikke vises for gjeldende utvalg.</value>
+  </data>
+  <data name="SchedulingFailed" xml:space="preserve">
+    <value>Planleggingen feilet</value>
+  </data>
+  <data name="FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Kunne ikke optimalisere fridager for planperiode {0} - {1} på grunn av teknisk feil. Vær så snill, prøv på nytt.</value>
+  </data>
+  <data name="SchedulePlanningGroup" xml:space="preserve">
+    <value>Schedule planleggingsgruppe</value>
+  </data>
+  <data name="FailedToLoadDayoffRules" xml:space="preserve">
+    <value>Kunne ikke laste inn regler for fridag.</value>
+  </data>
+  <data name="RefreshPreSchedulingValidationIssues" xml:space="preserve">
+    <value>Oppdater forhåndsplanlegging validering problemer</value>
+  </data>
+  <data name="FailedToCreateSchedulingJobForSelectedPlanningPeriod" xml:space="preserve">
+    <value>Kunne ikke opprette planleggingsjobb for valgt periode.</value>
+  </data>
+  <data name="PreSchedulingValidationIssues" xml:space="preserve">
+    <value>Pre-scheduling validering problemer</value>
+  </data>
+  <data name="PlanGroupScheduling" xml:space="preserve">
+    <value>Scheduling instillinger</value>
+  </data>
+  <data name="NewPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Ny planleggingsinnstilling</value>
+  </data>
+  <data name="NotShowingAbandonRate" xml:space="preserve">
+    <value>Overgiven hastighet kan ikke vises for nåværende valg.</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>Filtrer rapporter</value>
+  </data>
+  <data name="ShiftBag" xml:space="preserve">
+    <value>Skift pose</value>
+  </data>
+  <data name="NewImport" xml:space="preserve">
+    <value>Ny Import</value>
+  </data>
+  <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
+    <value>{0} festet med '{1}'</value>
+  </data>
+  <data name="EnterANumber" xml:space="preserve">
+    <value>Skriv inn et nummer</value>
+  </data>
+  <data name="SetFallbackValuesToReplaceInvalidOnes" xml:space="preserve">
+    <value>Angi alternative verdier for å erstatte de ugyldige</value>
+  </data>
+  <data name="CreatePlanningPeriod" xml:space="preserve">
+    <value>Lag planleggingsperiode</value>
+  </data>
+  <data name="DownloadTemplate" xml:space="preserve">
+    <value>Last ned maler</value>
+  </data>
+  <data name="FailedToImportAgents" xml:space="preserve">
+    <value>Kunne ikke importere {0} agent(er)</value>
+  </data>
+  <data name="SuccessfullyImportedAgents" xml:space="preserve">
+    <value>Vellykket importert {0} agent(er)</value>
+  </data>
+  <data name="RequireXCellFormat" xml:space="preserve">
+    <value>Celleb kan ikke analyseres, krever {0} formatert verdi</value>
+  </data>
+  <data name="ImportAgents" xml:space="preserve">
+    <value>Import agenter</value>
+  </data>
+  <data name="Maximum5OptionalColumns" xml:space="preserve">
+    <value>*Maksimalt 5 valgfrie kolonner kan være tilgjengelige som dynamiske gruppesider.</value>
+  </data>
+  <data name="Rule" xml:space="preserve">
+    <value>Regel</value>
+  </data>
+  <data name="NoShift" xml:space="preserve">
+    <value>Ingen skift</value>
+  </data>
+  <data name="SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot" xml:space="preserve">
+    <value>Velg en foreslått periode for å jobbe med eller velg startdato og sluttdato direkte.</value>
+  </data>
+  <data name="BeforeShiftStart" xml:space="preserve">
+    <value>Før skift start</value>
+  </data>
+  <data name="AfterShiftEnd" xml:space="preserve">
+    <value>Etter skift slutt</value>
+  </data>
+  <data name="AdherenceFor" xml:space="preserve">
+    <value>Etterlevelse for</value>
+  </data>
+  <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
+    <value>Du trenger en planperiode for å skjemalegge agenter. Vil du opprette en planperiode?</value>
+  </data>
+  <data name="MissingColumn" xml:space="preserve">
+    <value>Mangler en kolonne</value>
+  </data>
+  <data name="SchedulePeriodType" xml:space="preserve">
+    <value>Planleggingsperiode type</value>
+  </data>
+  <data name="LatestScheduleResult" xml:space="preserve">
+    <value>Siste planleggingsresultat</value>
+  </data>
+  <data name="ClearPlanningPeriod" xml:space="preserve">
+    <value>Fjern planlagte skift og fridager for planleggingsperioden</value>
+  </data>
+  <data name="OptionalColumnCreateGroupPageQuestion" xml:space="preserve">
+    <value>Dette vil opprette en gruppeside for den valgfrie kolonnen, slik at du kan opprette rapporter basert på det. Vil du fortsette?</value>
+  </data>
+  <data name="PublishingSchedule" xml:space="preserve">
+    <value>Publiserer planen</value>
+  </data>
+  <data name="OptionalColumnRemoveGroupPageQuestion" xml:space="preserve">
+    <value>Dette fjerner den valgfrie kolonnegruppesiden og det vil ikke være mulig å opprette rapporter basert på det. Vil du fortsette?</value>
+  </data>
+  <data name="InvalidColumn" xml:space="preserve">
+    <value>Ugyldig {0} : {1}</value>
+  </data>
+  <data name="WarnImportedAgents" xml:space="preserve">
+    <value>Importerte {0} agent(er) som inneholder advarsler</value>
+  </data>
+  <data name="HideStaffingInfo" xml:space="preserve">
+    <value>Skjul bemanning informasjon</value>
+  </data>
+  <data name="StaffingInfo" xml:space="preserve">
+    <value>Bemannings informasjon</value>
+  </data>
+  <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>Merk: For å legge fravær for en agent i en annen tidssone, velg først korrekt tidssone fra rullegardinmenyen for tidssonen.</value>
+  </data>
+  <data name="MonitorUpToXAgents" xml:space="preserve">
+    <value>Monitorer opptil 50 agenter</value>
+  </data>
+  <data name="EmptyFile" xml:space="preserve">
+    <value>Tom fil</value>
+  </data>
+  <data name="ViewQRCodeForConfiguration" xml:space="preserve">
+    <value>Vis veiledning for WFM App</value>
+  </data>
+  <data name="NoInput" xml:space="preserve">
+    <value>Ingen inndata</value>
+  </data>
+  <data name="PublishScheduleSuccess" xml:space="preserve">
+    <value>Tidsplan publisering suksess</value>
+  </data>
+  <data name="BreakPreferenceStartTimeByMaxColon" xml:space="preserve">
+    <value>Bryt starttid preferanser etter maks:</value>
+  </data>
+  <data name="InAlarmInSite" xml:space="preserve">
+    <value>I alarm på siden</value>
+  </data>
+  <data name="ColumnCanNotBeEmpty" xml:space="preserve">
+    <value>Kolonne '{0}' kan ikke være tom</value>
+  </data>
+  <data name="ANewImportJobHasBeenCreatedFor" xml:space="preserve">
+    <value>En ny importjobb er opprettet for '{0}'</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
+    <value>Øvertidsforespørselen din er automatisk nektet. Lokasjonen er stengt i forespørselsperioden {0}</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForFullSuccess" xml:space="preserve">
+    <value>{0} importert. Alle ble vellykket</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForNonfullSuccess" xml:space="preserve">
+    <value>{0} importert, {1} mislyktes.</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonOutOfSiteOpenHour" xml:space="preserve">
+    <value>Øvertidsforespørselen din er nektet automatisk. Periode for denne forespørselen er {0}, men åpningstiden for lokasjonen er {1}</value>
+  </data>
+  <data name="ImportJob" xml:space="preserve">
+    <value>Import oppgave</value>
+  </data>
+  <data name="UseTeleoptiMobileAppToScanThisQRCode" xml:space="preserve">
+    <value>Bruk Teleopti Mobile App for å skanne QR-koden</value>
+  </data>
+  <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
+    <value>Skift starttidspunktet for dato {0} finnes ikke i skiftposen {1}</value>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>Pågår</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>Filter lokasjoner</value>
+  </data>
+  <data name="TeleoptiMobileApp" xml:space="preserve">
+    <value>Teleopti Mobil App</value>
+  </data>
+  <data name="TimeStarted" xml:space="preserve">
+    <value>Start tidspunkt</value>
+  </data>
+  <data name="InvalidParameters" xml:space="preserve">
+    <value>Ugyldig parametere</value>
+  </data>
+  <data name="NumberOfRowsExceedsTheMaximum" xml:space="preserve">
+    <value>Antall rader overstiger maksimumet ({0}).</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
+    <value>Øvertidsforespørselen din er automatisk nektet på grunn av en regel som er opprettet av administratoren.</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonExpired" xml:space="preserve">
+    <value>Øvertidsforespørselen din er automatisk nektet. Starttiden for denne forespørselen er {0}, den må være minst {1} minutter senere enn nåværende tidspunkt</value>
+  </data>
+  <data name="DynamicGroupPageColon" xml:space="preserve">
+    <value>Dynamisk gruppe side *:</value>
+  </data>
+  <data name="UnderstaffingAfterOT" xml:space="preserve">
+    <value>Underbemanning etter OT</value>
+  </data>
+  <data name="ProbabilityToGetOvertimeColon" xml:space="preserve">
+    <value>Sannsynlighet for å få overtid:</value>
+  </data>
+  <data name="OvertimeRequestAlreadyHasScheduleInPeriod" xml:space="preserve">
+    <value>Det er allerede en aktivitet planlagt i perioden {0} - {1}</value>
+  </data>
+  <data name="ProbabilityToGetAbsenceColon" xml:space="preserve">
+    <value>Sannsynlighet for å få fri:</value>
+  </data>
+  <data name="ShowOvertimeProbability" xml:space="preserve">
+    <value>Vis overtidssannsynlighet</value>
+  </data>
+  <data name="ShowAbsenceProbability" xml:space="preserve">
+    <value>Vis sannsynlighet for å få fri</value>
+  </data>
+  <data name="ViewStaffingInfo" xml:space="preserve">
+    <value>Se bemanningsinformasjon</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Filtrer roller</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Filtrer funksjoner</value>
+  </data>
+  <data name="OvertimeRequestWasCancelled" xml:space="preserve">
+    <value>Overtidsforespørselen ble kansellert.</value>
+  </data>
+  <data name="TextOfNoBlockScheduling" xml:space="preserve">
+    <value>Ingen blokkplanlegging</value>
+  </data>
+  <data name="ForecastedVolume" xml:space="preserve">
+    <value>Prognostiserte volum</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
+    <value>Din overtidsforespørsel kan ikke innvilges. Noen datoer er ikke åpne for forespørsler ennå.</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volum</value>
+  </data>
+  <data name="ExceedsMaximumUploadFileSize" xml:space="preserve">
+    <value>Overstiger maksimal opplastingstørrelse</value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value> Filtrer lokasjon / team</value>
+  </data>
+  <data name="ActualVolume" xml:space="preserve">
+    <value>Faktisk volum</value>
+  </data>
+  <data name="TextOfEditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Endre informasjon for valgt planleggingsinnstilling</value>
+  </data>
+  <data name="ScheduledAgentsAfterOT" xml:space="preserve">
+    <value>Planlagte agenter etter OT</value>
+  </data>
+  <data name="ErrorOccurredWhenGeneratingQrcode" xml:space="preserve">
+    <value>En feil har oppstått ved generering av QR-kode</value>
+  </data>
+  <data name="FilterRtaFull" xml:space="preserve">
+    <value>Filter agent navn / lokasjon / team / regler / tilstand / nåværende aktiviteter</value>
+  </data>
+  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+    <value>Ugyldig feltnavn i overskrift: '{0}'. Gyldige feltnavn er: ({1})</value>
+  </data>
+  <data name="OverstaffingAfterOT" xml:space="preserve">
+    <value>Overkapasitet etter OT</value>
+  </data>
+  <data name="OvertimeRequestRollingPeriodError" xml:space="preserve">
+    <value>gyldige dataserie er 0 - {0}</value>
+  </data>
+  <data name="FilterRtaShort" xml:space="preserve">
+    <value>Filter agent navn / tilstand / ...</value>
+  </data>
+  <data name="OvertimeRequestDatePeriodError" xml:space="preserve">
+    <value>valid range of date is {0} - {1}</value>
+  </data>
+  <data name="FilterSites" xml:space="preserve">
+    <value>Filtrer lokasjoner</value>
+  </data>
+  <data name="FilterSkills" xml:space="preserve">
+    <value>Filtrer ferdigheter</value>
+  </data>
+  <data name="TextOFCreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Fyll inn informasjon for å opprette ny planleggingsinnstilling</value>
+  </data>
+  <data name="RequestDenyReasonNoPersonSkillOpen" xml:space="preserve">
+    <value>Forespørsel ble nektet fordi alle dine ferdigheter er stengt for den forespurte perioden</value>
+  </data>
+  <data name="ModifyEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Endre sluttdato for denne planeringsperioden.</value>
+  </data>
+  <data name="Purged" xml:space="preserve">
+    <value>Renset</value>
+  </data>
+  <data name="OvertimeType" xml:space="preserve">
+    <value>Overtidstype</value>
+  </data>
+  <data name="OvertimeRequest" xml:space="preserve">
+    <value>Overtid forespørsel </value>
+  </data>
+  <data name="DeletedContractAssigned" xml:space="preserve">
+    <value>Kontrakten {0} tilordnet denne agenten er slettet</value>
+  </data>
+  <data name="FilterTeams" xml:space="preserve">
+    <value>Filtrer team</value>
+  </data>
+  <data name="SuccessfullyScheduledPlanningPeriodFromTo" xml:space="preserve">
+    <value>Vellykket planlagt tidsplan for periode {0} - {1}</value>
+  </data>
+  <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>Overtidsforespørselen {0} ble nektet.</value>
+  </data>
+  <data name="DeletedContractScheduleAssigned" xml:space="preserve">
+    <value>Kontraktsplanen {0} tilordnet denne agenten er slettet</value>
+  </data>
+  <data name="DeletedPartTimePercentageAssigned" xml:space="preserve">
+    <value>Deltidprosent andelen {0} tilordnet denne agenten er slettet</value>
+  </data>
+  <data name="DeletedShiftBagAssigned" xml:space="preserve">
+    <value>Skiftposen {0} tilordnet denne agenten er slettet</value>
+  </data>
+  <data name="SkillsParenthesisS" xml:space="preserve">
+    <value>Ferdighet(er)</value>
+  </data>
+  <data name="MissingPersonPeriodForPeriod" xml:space="preserve">
+    <value>Agenten har ingen personperiode for hele eller deler av den valgte perioden</value>
+  </data>
+  <data name="MissingSchedulePeriodForPeriod" xml:space="preserve">
+    <value>Agenten har ingen tidsplan for den valgte perioden</value>
+  </data>
+  <data name="MissingShiftBagForPeriod" xml:space="preserve">
+    <value>Agenten har ikke en skiftpose for hele eller deler av den valgte perioden</value>
+  </data>
+  <data name="MissingSkillsForPeriod" xml:space="preserve">
+    <value>Agenten har ikke ferdigheter for hele eller deler av den valgte perioden</value>
+  </data>
+  <data name="MaxResultsReached" xml:space="preserve">
+    <value>Søkeresultatene av søkeordet(ene) vil overstige {0}, vennligst forbedre søket ditt.</value>
+  </data>
+  <data name="NoMatchingSchedulePeriod" xml:space="preserve">
+    <value>Planleggingsperioden samsvarer ikke med den valgte perioden</value>
+  </data>
+  <data name="RunningIntradayOptimization" xml:space="preserve">
+    <value>Kjører Intradag optimalisering</value>
+  </data>
+  <data name="SelectionTooLarge" xml:space="preserve">
+    <value>Utvalget er for stort</value>
+  </data>
+  <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
+    <value>Agent har {0} dager uten tidsplan.</value>
+  </data>
+  <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
+    <value>Kontraktens tidsmål ({0}) er ikke oppfylt</value>
+  </data>
+  <data name="EmailSkillSelected" xml:space="preserve">
+    <value>En e-postferdighet er for øyeblikket valgt. Derfor kan ikke antall pålagte vises.</value>
+  </data>
+  <data name="AgentsHaveScheduled" xml:space="preserve">
+    <value>agenter har blitt planlagt</value>
+  </data>
+  <data name="RequestTypeOvertime" xml:space="preserve">
+    <value>Overtid</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningGroup" xml:space="preserve">
+    <value>Er du sikker på at du vil slette planleggingsgruppen '{0}' og tilhørende innstillinger?</value>
+  </data>
+  <data name="ManagePlanningGroupSchedulingSetting" xml:space="preserve">
+    <value>Administrer planleggingsinnstilling for gruppen {0}</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
+    <value>Er du sikker på at du vil slette fridagsregel {0} og tilhørende innstillinger?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningPeriod" xml:space="preserve">
+    <value>Er du sikker på at du vil slette planperioden {0} - {1} og tilhørende innstillinger?</value>
+  </data>
+  <data name="InfoOfSchedulingSetting" xml:space="preserve">
+    <value>Planleggingsinnstillingen er tatt i bruk for gruppen</value>
+  </data>
+  <data name="ChangePlanningDuration" xml:space="preserve">
+    <value>Endre planleggingens varighet</value>
+  </data>
+  <data name="CreatePlanningGroup" xml:space="preserve">
+    <value>Opprett planleggingsgruppe</value>
+  </data>
+  <data name="PriorityLower" xml:space="preserve">
+    <value>Prioriter lavere</value>
+  </data>
+  <data name="CreateFirstPlanningPeriod" xml:space="preserve">
+    <value>Lag første planperiode</value>
+  </data>
+  <data name="CreateNextPp" xml:space="preserve">
+    <value>Opprett neste planperiode</value>
+  </data>
+  <data name="DayOffRule" xml:space="preserve">
+    <value>Fridagsregel</value>
+  </data>
+  <data name="PriorityHigher" xml:space="preserve">
+    <value>Prioritet høyere</value>
+  </data>
+  <data name="PlanGroupSchedulingSettingAppliedFilters" xml:space="preserve">
+    <value>Følgende innstillinger brukes til planleggingsgruppe {0}</value>
+  </data>
+  <data name="IndividualFlexible" xml:space="preserve">
+    <value>fleksibel</value>
+  </data>
+  <data name="DayOffRuleSetting" xml:space="preserve">
+    <value>Fridagsregler Innstilling</value>
+  </data>
+  <data name="SelectedGroups" xml:space="preserve">
+    <value>Valgte grupper</value>
+  </data>
+  <data name="DeletePlanningGroup" xml:space="preserve">
+    <value>Slett planleggingsgruppe</value>
+  </data>
+  <data name="DeleteDayOffRule" xml:space="preserve">
+    <value>Slett fridagregel</value>
+  </data>
+  <data name="MaximumAgentToExport" xml:space="preserve">
+    <value>Du kan kun eksportere maksimalt 1000 agenter per gang, du forsøker å eksportere {0}.</value>
+  </data>
+  <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
+    <value>{0}: Et skift begynner dagen før eller dagen etter, og det er ikke tillatt. Dette var sannsynligvis forårsaket av endring av agent tidssonen i People. Bytt til riktig tidssone, eller trykk på "slett denne dagen" for å korrigere den.</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>Brukerinnstillinger</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Forell oss hva du syntes</value>
+  </data>
+  <data name="ShowStaffing" xml:space="preserve">
+    <value>Vis bemanning</value>
+  </data>
+  <data name="ShiftTradeTargetTimeRuleName" xml:space="preserve">
+    <value>Kontraktstid tolleranse</value>
+  </data>
+  <data name="ExportSchedulesMaximumOptionalColumns" xml:space="preserve">
+    <value>Maksimalt 3 valgfrie kolonner kan velges</value>
+  </data>
+  <data name="DeletePlanningPeriod" xml:space="preserve">
+    <value>Slett planleggingsperioden</value>
+  </data>
+  <data name="EditPlanningGroup" xml:space="preserve">
+    <value>Rediger planleggingsgruppe</value>
+  </data>
+  <data name="FilterValidationIssues" xml:space="preserve">
+    <value>Filterkontroll problemer</value>
+  </data>
+  <data name="GeneralSettingOfPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Navn og filter</value>
+  </data>
+  <data name="FilterPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Filtrer planleggingInnstillinger</value>
+  </data>
+  <data name="HelpCreatePlanningGroup" xml:space="preserve">
+    <value>En planleggingsgruppe er nødvendig for å kunne planlegge agenter. Vil du opprette en planleggingsgruppe?</value>
+  </data>
+  <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
+    <value>Avregningsregler vil bli brukt for alle planeringsperioder</value>
+  </data>
+  <data name="Issue" xml:space="preserve">
+    <value>Problemer</value>
+  </data>
+  <data name="ExportSchedulesMaximumDays" xml:space="preserve">
+    <value>Maks 31 dager kan velges</value>
+  </data>
+  <data name="LoadingSkillGroups" xml:space="preserve">
+    <value>Laster ferdighetsgrupper ...</value>
+  </data>
+  <data name="EditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Rediger planleggings settingene</value>
+  </data>
+  <data name="ManageDayOffForPlanningGroup" xml:space="preserve">
+    <value>Behandle fridagregler for planleggingsgruppen {0}</value>
+  </data>
+  <data name="ExportSchedule" xml:space="preserve">
+    <value>Eksporter tidsplanen</value>
+  </data>
+  <data name="NoAgentsWithinPlanningGroup" xml:space="preserve">
+    <value>Det finnes ingen agenter som kan planlegges i denne gruppen</value>
+  </data>
+  <data name="NoPreviousScheduleResult" xml:space="preserve">
+    <value>Denne planperioden har ingen tidligere resultat</value>
+  </data>
+  <data name="NoValidIssuesForPp" xml:space="preserve">
+    <value>Det er ingen valideringsproblemer for denne planeringsperioden</value>
+  </data>
+  <data name="NoValidScheduleResult" xml:space="preserve">
+    <value>Denne planperioden har ingen gyldig tidsplan</value>
+  </data>
+  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+    <value>Parameter {0} kan ikke være tomt</value>
+  </data>
+  <data name="ScheduledIssues" xml:space="preserve">
+    <value>Problemer under siste planlegging</value>
+  </data>
+  <data name="SchedulingSucceeded" xml:space="preserve">
+    <value>Planlegging lyktes</value>
+  </data>
+  <data name="PlansPageSelectPlanningGroup" xml:space="preserve">
+    <value>Velg planleggingsgruppe for å planlegge agenter</value>
+  </data>
+  <data name="SearchForPlanningGroup" xml:space="preserve">
+    <value>Søke lokasjon / team / ferdighet / kontrakt</value>
+  </data>
+  <data name="DeletePlanGroupSchedullingSetting" xml:space="preserve">
+    <value>Slett planleggingsinnstilling</value>
+  </data>
+  <data name="NoSkillGroupsFound" xml:space="preserve">
+    <value>Ingen ferdighetsgrupper funnet</value>
+  </data>
+  <data name="SearchForDayOff" xml:space="preserve">
+    <value>Søk lokasjon / team / kontrakt</value>
+  </data>
+  <data name="NoOvertimeType" xml:space="preserve">
+    <value>Ingen overtidstype funnet i kontrakten din. Ta kontakt med administratoren.</value>
+  </data>
+  <data name="Interval" xml:space="preserve">
+    <value>Intervall</value>
+  </data>
+  <data name="SelectedPlanningPeriod" xml:space="preserve">
+    <value>Valgte planleggingsperiode</value>
+  </data>
+  <data name="SelectPpToSchedulePlanningGroup" xml:space="preserve">
+    <value>Velg periode for planleggingsgruppen</value>
+  </data>
+  <data name="UpdatedValidation" xml:space="preserve">
+    <value>Valideringsproblemene er oppdatert</value>
+  </data>
+  <data name="SelectSkillGroup" xml:space="preserve">
+    <value>Velg ferdighetsgruppe</value>
+  </data>
+  <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
+    <value>Er du sikker på at du vil slette planlagte skift og fridager for perioden {0} - {1}?</value>
+  </data>
+  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>Feil funnet på linjenummer {0} med innhold: {1} {2}</value>
+  </data>
+  <data name="CreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Opprett planleggingsinnstilling</value>
+  </data>
+  <data name="PageWillBeRedirected" xml:space="preserve">
+    <value>Denne siden omdirigeres automatisk til WFM på {0} sekunder ...</value>
+  </data>
+  <data name="AverageSpeedOfAnswersParenthesisSeconds" xml:space="preserve">
+    <value>Gjennomsnittlig hastighet for svar</value>
+  </data>
+  <data name="AbandonedRateParenthesisPercentSign" xml:space="preserve">
+    <value>Pålagt verdi (%)</value>
+  </data>
+  <data name="AuditType" xml:space="preserve">
+    <value>Revisjonstype</value>
+  </data>
+  <data name="ConfirmToggleAllData" xml:space="preserve">
+    <value>Dette vil bytte til dette elementet og alle elementene under det, er du sikker på at du vil fortsette?</value>
+  </data>
+  <data name="AnErrorOccurredPleaseTryAgain" xml:space="preserve">
+    <value>En feil oppstod. Vær så snill, prøv på nytt.</value>
+  </data>
+  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+    <value>Linjen har {0} parametere, men forventet {1} parametere.</value>
+  </data>
+  <data name="ChangePlanningPeriodDurationColon" xml:space="preserve">
+    <value>Endre planperiode varighet:</value>
+  </data>
+  <data name="ClearScheduleResultAndHistoryData" xml:space="preserve">
+    <value>Fjern planlagte skift og fridager</value>
+  </data>
+  <data name="BlockSameStartTime" xml:space="preserve">
+    <value>Samme starttidspunkt</value>
+  </data>
+  <data name="OpenPlansPage" xml:space="preserve">
+    <value>Planer</value>
+  </data>
+  <data name="ModifyStartAndEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Endre startdato og sluttdato for denne planeringsperioden.</value>
+  </data>
+  <data name="NoSuggestionsFound" xml:space="preserve">
+    <value>Det finnes ingen forslag i henhold til ekstra overtidinnstillinger</value>
+  </data>
+  <data name="SkillGroupColon" xml:space="preserve">
+    <value>Ferdighets gruppe:</value>
+  </data>
+  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+    <value>Ferdigheten med navn {0} er definert {1} ganger i systemet. Bare en gang er tillatt når du bruker denne funksjonen.</value>
+  </data>
+  <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
+    <value>Du er i ferd med å endre denne planeringsperioden til {0} - {1}.</value>
+  </data>
+  <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
+    <value>Du er i ferd med å opprette en planperiode fra {0} til {1}.</value>
+  </data>
+  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+    <value>Ferdigheten med navn {0} er ikke definert i systemet.</value>
+  </data>
+  <data name="Plans" xml:space="preserve">
+    <value>Planer</value>
+  </data>
+  <data name="ViewAgents" xml:space="preserve">
+    <value>Vis agenter</value>
+  </data>
+  <data name="ImportBpoDuplicateRecord" xml:space="preserve">
+    <value>Duplikater funnet. Samme informasjon er oppgitt på mer enn én linje i importfilen, dette er ikke tillatt.</value>
+  </data>
+  <data name="SeveralGroupsSelected" xml:space="preserve">
+    <value>{0} grupper valgt</value>
+  </data>
+  <data name="BlockSameShiftCategory" xml:space="preserve">
+    <value>Samme skiftkategori</value>
+  </data>
+  <data name="SuccessClearPlanningPeriodData" xml:space="preserve">
+    <value>Vellykket rydding av planlagte skift og fridager for planperioden {0} - {1}</value>
+  </data>
+  <data name="FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Kunne ikke optimalisere intradag for planperiode {0} - {1} på grunn av teknisk feil. Vær så snill, prøv på nytt.</value>
+  </data>
+  <data name="PublishingScheduleSuccess" xml:space="preserve">
+    <value>Publiseringsplan for planperiode {0} - {1}</value>
+  </data>
+  <data name="PublishScheduleSucessForSelectedPlanningPeriod" xml:space="preserve">
+    <value>Publiser publiseringsplan for perioden {0} - {1}</value>
+  </data>
+  <data name="ImportBpoWrongResourceFormat" xml:space="preserve">
+    <value>Resursparameteren (parameternummer {0} med verdi: {1}) er ugyldig. Parameteret må oppgis som desimaltall, for eksempel 14.2.</value>
+  </data>
+  <data name="ViewAgentsBySelection" xml:space="preserve">
+    <value>Vis agenter ved utvalg</value>
+  </data>
+  <data name="PlanningGroup" xml:space="preserve">
+    <value>Planleggingsgruppe</value>
+  </data>
+  <data name="SuccessfullyIntradayOptimizationPlanningPeriodFromTo" xml:space="preserve">
+    <value>Vellykket intradagoptimalisering for planperiode {0} - {1}</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>Ugyldig forespørsel</value>
+  </data>
+  <data name="OpenSite" xml:space="preserve">
+    <value>Åpne visningen</value>
+  </data>
+  <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
+    <value>Sluttidspunktet bør oppstå etter starttidspunktet.</value>
+  </data>
+  <data name="BlockSameShift" xml:space="preserve">
+    <value>Like skift</value>
+  </data>
+  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+    <value>Importfilen kan ikke være tom.</value>
+  </data>
+  <data name="ImportBpoWrongDateFormat" xml:space="preserve">
+    <value>Datoformatet er feil</value>
+  </data>
+  <data name="WFMAppGuideStep1" xml:space="preserve">
+    <value>Steg 1:</value>
+  </data>
+  <data name="WFMAppGuideStep1Description" xml:space="preserve">
+    <value>Last ned og installer Teleopti WFM-appen ved å klikke på en riktig knapp eller ved å skanne QR-koden nedenfor.</value>
+  </data>
+  <data name="WFMAppGuideStep2" xml:space="preserve">
+    <value>Steg 2:</value>
+  </data>
+  <data name="WFMAppGuideStep2Description" xml:space="preserve">
+    <value>Konfigurer Teleopti WFM-appen. Start appen og skann deretter QR-koden under eller tast inn verdiene. </value>
+  </data>
+  <data name="WFMAppGuideTitle" xml:space="preserve">
+    <value>Guide for Teleopti WFM App</value>
+  </data>
+  <data name="EnableMobileNotifications" xml:space="preserve">
+    <value>Aktiver mobilappvarsler</value>
+  </data>
+  <data name="DeleteSchedulingSetting" xml:space="preserve">
+    <value>Slett planleggingsinnstilling</value>
+  </data>
+  <data name="MobileNotificationSettings" xml:space="preserve">
+    <value>Innstillinger for mobilappvarsel</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteSchedulingSetting" xml:space="preserve">
+    <value>Er du sikker på at du vil slette planleggingsinnstillingen {0} og tilhørende innstillinger?</value>
+  </data>
+  <data name="CreateSkillGroup" xml:space="preserve">
+    <value>Opprett ferdighetsgruppe</value>
+  </data>
+  <data name="ScheduledAgent" xml:space="preserve">
+    <value>Planlagt agent</value>
+  </data>
+  <data name="ModifiedBy" xml:space="preserve">
+    <value>Endret av</value>
+  </data>
+  <data name="IgnoreSchedules" xml:space="preserve">
+    <value>Ignorer planen</value>
+  </data>
+  <data name="AnywhereMigrated" xml:space="preserve">
+    <value>"Overalt" har blitt migrert til {0} Teleopti WFM {1}!</value>
+  </data>
+  <data name="ModifiedAt" xml:space="preserve">
+    <value>Endret</value>
+  </data>
+  <data name="ShowAllSchedules" xml:space="preserve">
+    <value>Vis alle planene</value>
+  </data>
+  <data name="NoAgentsToBeDisplayed" xml:space="preserve">
+    <value>Ingen agenter å vise</value>
+  </data>
+  <data name="IgnoredScheduleHint" xml:space="preserve">
+    <value>Ignorer planen</value>
+  </data>
+  <data name="OvertimeRequestDateExceeds14Days" xml:space="preserve">
+    <value>Forespørselsdatoen er mer enn 14 dager fra nå.</value>
+  </data>
+  <data name="AbsenceRequestAlreadyInWaitlist" xml:space="preserve">
+    <value>Det er ventelisteforespørsler for denne perioden allerede, vennligst avvent.</value>
+  </data>
+  <data name="EnableAbsenceProbability" xml:space="preserve">
+    <value>Aktiver fravær sannsynlighet</value>
+  </data>
+  <data name="EnableOvertimeProbability" xml:space="preserve">
+    <value>Aktiver overtidssannsynlighet</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Filtrer roller</value>
+  </data>
+  <data name="OnlyAbsenceRequestCanBeCancelled" xml:space="preserve">
+    <value>Kun fraværsforespørsler kan kanselleres</value>
+  </data>
+  <data name="Compensations" xml:space="preserve">
+    <value>kompensasjoner</value>
+  </data>
+  <data name="ModifySkillGroup" xml:space="preserve">
+    <value>Endre ferdighetsgruppe</value>
+  </data>
+  <data name="ApplySuggestion" xml:space="preserve">
+    <value>Bruk forslag</value>
+  </data>
+  <data name="DragAndDropCSVFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Dra og slipp .CSV-filer her eller klikk for å laste opp</value>
+  </data>
+  <data name="ExportGap" xml:space="preserve">
+    <value>Eksportgap</value>
+  </data>
+  <data name="GetSuggestionsForOvertime" xml:space="preserve">
+    <value>Få forslag til overtid</value>
+  </data>
+  <data name="MoveOvertime" xml:space="preserve">
+    <value>Flytt overtid</value>
+  </data>
+  <data name="SuccessfullyImported" xml:space="preserve">
+    <value>Importen er vellykket</value>
+  </data>
+  <data name="OvertimeSettings" xml:space="preserve">
+    <value>Overtidssettinger</value>
+  </data>
+  <data name="PublicNote" xml:space="preserve">
+    <value>Offentlig notat</value>
+  </data>
+  <data name="DiscardSuggestionData" xml:space="preserve">
+    <value>Du har aktive forslagsdata. Hvis du fortsetter blir dette forkastet</value>
+  </data>
+  <data name="NoAccessToSites" xml:space="preserve">
+    <value>Du har ikke tilgang til noen lokasjoner eller team</value>
+  </data>
+  <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
+    <value>Ingen tillatelse til å flytte overtid for agent(er)</value>
+  </data>
+  <data name="ReportGeneratedTime" xml:space="preserve">
+    <value>Rapporten er generert</value>
+  </data>
+  <data name="TotalAgentsInAlarm" xml:space="preserve">
+    <value>Totale agenter i alarm</value>
+  </data>
+  <data name="ChooseDayOffset" xml:space="preserve">
+    <value>Velg dag</value>
+  </data>
+  <data name="CannotApplyThisToAgentsInADifferentTimeZone" xml:space="preserve">
+    <value>Kan ikke anvendes for agenter i andre tidssoner</value>
+  </data>
+  <data name="MissingDuration" xml:space="preserve">
+    <value>Manglende varighet</value>
+  </data>
+  <data name="MissingStartTime" xml:space="preserve">
+    <value>Manglende start tidspunkt</value>
+  </data>
+  <data name="BpoExchange" xml:space="preserve">
+    <value>BPO Utveksling</value>
+  </data>
+  <data name="OvertimeRequestDateIsPast" xml:space="preserve">
+    <value>Kan ikke legge til en overtidsforespørsel for en tidligere dato</value>
+  </data>
+  <data name="AllowedOvertime" xml:space="preserve">
+    <value>Tillatt overtid</value>
+  </data>
+  <data name="NoUnderStaffingSkill" xml:space="preserve">
+    <value>Det er ingen ferdigheter som er kritisk underbemannet for hele forespørselsperioden.</value>
+  </data>
+  <data name="CloseOvertimeSettings" xml:space="preserve">
+    <value>Lukk overtidsvisningen</value>
+  </data>
+  <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
+    <value>Forespørselsperioden er utenfor ferdighetens åpningstid</value>
+  </data>
+  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
+    <value>Agent har ingen tilgjengelig ferdighet for overtid</value>
+  </data>
+  <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
+    <value>Overtidsforespørselen {0} - {1} er godkjent.</value>
+  </data>
+  <data name="PressEscToClose" xml:space="preserve">
+    <value>Trykk på Esc for å lukke</value>
+  </data>
+  <data name="SkillAreaNoSkillSelected" xml:space="preserve">
+    <value>Du må velge minst én ferdighet.</value>
+  </data>
+  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+    <value>Første linje i fil (overskriftsraden) kan ikke være tom.</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Eksporter til Excel</value>
+  </data>
+  <data name="CreateDayOffRule" xml:space="preserve">
+    <value>Opprett fridagsregel</value>
+  </data>
+  <data name="EditDayOffRule" xml:space="preserve">
+    <value>Rediger fridagsregel</value>
+  </data>
+  <data name="FilterDayOffRules" xml:space="preserve">
+    <value>Filtrer fridagsregel</value>
+  </data>
+  <data name="ShiftCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>Merk: For å flytte et skifte for en agent i en annen tidssone, velg først agentens tidssone fra rullegardinmenyen for tidssone.</value>
+  </data>
+  <data name="PlansPageEditPlanningGroup" xml:space="preserve">
+    <value>Rediger navn og filtre for den valgte planleggingsgruppen</value>
+  </data>
+  <data name="ClassicIntraday" xml:space="preserve">
+    <value>Klassisk Intradag</value>
   </data>
 </root>
