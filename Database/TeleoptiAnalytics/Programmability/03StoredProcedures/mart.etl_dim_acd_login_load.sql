@@ -113,8 +113,6 @@ BEGIN
 	SET is_active=0
 	,acd_login_name = acd_login_name + '''+ @inactive +
 	'''
-	,acd_login_original_id = acd_login_original_id + '''+ @inactive +
-	'''
 	FROM mart.dim_acd_login d
 	INNER JOIN 
 		mart.sys_datasource sys
