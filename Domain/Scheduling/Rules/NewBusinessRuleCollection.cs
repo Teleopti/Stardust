@@ -120,6 +120,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return new NewBusinessRuleCollection();
 		}
 
+		public static INewBusinessRuleCollection WorkRules()
+		{
+			var rules = new NewBusinessRuleCollection();
+			rules.ClearItems();
+
+			rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+			return rules;
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static INewBusinessRuleCollection All(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{

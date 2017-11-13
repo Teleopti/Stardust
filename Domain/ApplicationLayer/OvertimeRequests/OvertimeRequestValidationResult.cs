@@ -4,6 +4,8 @@
 	{
 		public bool IsValid { get; set; }
 
+		public bool ShouldDenyIfInValid { get; set; } = true;
+
 		public string InvalidReason { get; set; }
 	}
 }

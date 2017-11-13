@@ -30,7 +30,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var filteredPeriods = _overtimeRequestOpenPeriodList.Select(p => new DateOnlyOvertimeRequestOpenPeriod
 			{
 				AutoGrantType = p.AutoGrantType,
-				Period = p.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse())
+				Period = p.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse()),
+				EnableWorkRuleValidation = p.EnableWorkRuleValidation,
+				WorkRuleValidationHandleType = p.WorkRuleValidationHandleType
 			}
 			).Where(p => p.Period.Contains(requestPeriod)).ToList();
 
@@ -55,7 +57,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 						{
 							AutoGrantType = currentPeriod.AutoGrantType,
 							Period = new DateOnlyPeriod(currentTime, layerEndTime),
-							DenyReason = currentPeriod.DenyReason
+							DenyReason = currentPeriod.DenyReason,
+							EnableWorkRuleValidation = currentPeriod.EnableWorkRuleValidation,
+							WorkRuleValidationHandleType = currentPeriod.WorkRuleValidationHandleType
 						});
 
 						if (inverseLoopIndex < filteredPeriods.Count - 1 &&
@@ -182,6 +186,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			public string DenyReason { get; set; }
 			public OvertimeRequestAutoGrantType AutoGrantType { get; set; }
 			public DateOnlyPeriod Period { get; set; }
+			public bool EnableWorkRuleValidation { get; set; }
+			public OvertimeWorkRuleValidationHandleType? WorkRuleValidationHandleType { get; set; }
 		}
 	}
 

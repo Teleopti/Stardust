@@ -266,6 +266,7 @@
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAvailableSkillsValidationResult.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAvailableSkillsValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessor.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestContractWorkRulesValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestSiteOpenHourValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAlreadyHasScheduleValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestStartTimeValidator.cs" />

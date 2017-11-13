@@ -113,7 +113,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				var resultOfBasicValidator = overtimeRequestValidator.Validate(personRequest);
 				if (resultOfBasicValidator.IsValid) continue;
-				denyRequest(personRequest, resultOfBasicValidator.InvalidReason);
+				if (resultOfBasicValidator.ShouldDenyIfInValid)
+					denyRequest(personRequest, resultOfBasicValidator.InvalidReason);
 				return true;
 			}
 			return false;
