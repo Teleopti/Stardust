@@ -55,7 +55,7 @@
 			<div class="con-flex x3 panel form-panel material-depth-1" dropfromgroup="vm.optionDrop">
 				<div class="con-row">
 					{{'Name'|translate}}:
-					<input type="text" ng-model="vm.managerData.currentSkillGroup.Name" ng-maxlength="45" id="skillGroupNameBox"
+					<input type="text" ng-model="vm.managerData.currentSkillGroup.Name" maxlength="50" ng-maxlength="50" id="skillGroupNameBox"
 					/>
 					<div ng-cloak class="animate-show" ng-show="vm.managerData.currentSkillGroup.Name.length > 0">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">
