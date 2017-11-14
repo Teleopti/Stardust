@@ -53,15 +53,15 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			var booking = SeatManagementProviderTestUtils.CreateSeatBooking(
 				_person,
 				bookingDate,
-				new DateTime(2015, 8, 7, 8, 0, 0),
-				new DateTime(2015, 8, 7, 12, 0, 0));
+				new DateTime(2015, 8, 7, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 8, 7, 12, 0, 0, DateTimeKind.Utc));
 
 
 			var bookingSeat2 = SeatManagementProviderTestUtils.CreateSeatBooking(
 				_person,
 				bookingDate,
-				new DateTime(2015, 8, 7, 13, 0, 0),
-				new DateTime(2015, 8, 7, 18, 0, 0));
+				new DateTime(2015, 8, 7, 13, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 8, 7, 18, 0, 0, DateTimeKind.Utc));
 
 			booking.Book(seat);
 			bookingSeat2.Book(seat2);
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		public void ShouldIncludeOccupancyOnTimeZoneBoundary()
 		{
 			var occupancyInformation = createBookingForDateTimeAndReturnBookingsForFullDay(
-				new DateTime (2015, 8, 6, 20, 0, 0),
-				new DateTime(2015, 8, 6, 22, 0, 0),  // 2015-08-06:22:0:0 utc = 2015-08-07:00:00:00 west so should include occupancy
+				new DateTime (2015, 8, 6, 20, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 8, 6, 22, 0, 0, DateTimeKind.Utc),  // 2015-08-06:22:0:0 utc = 2015-08-07:00:00:00 west so should include occupancy
 				new DateOnly (2015, 8, 7)
 			);
 
@@ -99,8 +99,8 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		public void ShouldExcludeOccupancyOnTimeZoneBoundary()
 		{
 			var occupancyInformation = createBookingForDateTimeAndReturnBookingsForFullDay( 
-				new DateTime(2015, 8, 6, 20, 0, 0),
-				new DateTime(2015, 8, 6, 21, 59, 59),  // 2015-08-06:21:59:59 utc = 2015-08-06:23:59:59 west so should exclude occupancy
+				new DateTime(2015, 8, 6, 20, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 8, 6, 21, 59, 59, DateTimeKind.Utc),  // 2015-08-06:21:59:59 utc = 2015-08-06:23:59:59 west so should exclude occupancy
 				new DateOnly(2015, 8, 7)
 			);
 
@@ -146,20 +146,20 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 
 			var bookingDate = new DateOnly(2015, 8, 7);
 			var booking = SeatManagementProviderTestUtils.CreateSeatBooking(_person, bookingDate,
-				new DateTime(2015, 8, 7, 8, 0, 0),
-				new DateTime(2015, 8, 7, 10, 0, 0));
+				new DateTime(2015, 8, 7, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 8, 7, 10, 0, 0, DateTimeKind.Utc));
 
 			var bookingSeat2 = SeatManagementProviderTestUtils.CreateSeatBooking(_person, bookingDate,
-				new DateTime(2015, 8, 7, 10, 0, 0),
-				new DateTime(2015, 8, 7, 13, 0, 0));
+				new DateTime(2015, 8, 7, 10, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 8, 7, 13, 0, 0, DateTimeKind.Utc));
 
 			var bookingSeat3 = SeatManagementProviderTestUtils.CreateSeatBooking(_person, bookingDate,
-				new DateTime(2015, 8, 7, 14, 0, 0),
-				new DateTime(2015, 8, 7, 16, 0, 0));
+				new DateTime(2015, 8, 7, 14, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 8, 7, 16, 0, 0, DateTimeKind.Utc));
 
 			var bookingPerson2 = SeatManagementProviderTestUtils.CreateSeatBooking(person2, bookingDate,
-				new DateTime(2015, 8, 7, 8, 0, 0),
-				new DateTime(2015, 8, 7, 18, 0, 0));
+				new DateTime(2015, 8, 7, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 8, 7, 18, 0, 0, DateTimeKind.Utc));
 			
 			booking.Book(seat);
 			bookingSeat2.Book(seat2);

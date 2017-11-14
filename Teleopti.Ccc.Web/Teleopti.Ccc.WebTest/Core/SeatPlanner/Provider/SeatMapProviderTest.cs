@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			var bookingDate = new DateOnly (2015, 8, 7);
 			var booking = SeatManagementProviderTestUtils.CreateSeatBooking (person,
 				bookingDate,
-				new DateTime (2015, 8, 7, 8, 0, 0),
-				new DateTime (2015, 8, 7, 18, 0, 0));
+				new DateTime (2015, 8, 7, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2015, 8, 7, 18, 0, 0, DateTimeKind.Utc));
 			
 			booking.Book (seat);
 			_seatBookingRepository.Add (booking);
