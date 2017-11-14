@@ -7,7 +7,7 @@
             templateUrl: 'app/gamification/html/g.component.gamificationSettingInfo.tpl.html',
             controller: GamificationSettingInfoController,
             bindings: {
-                settingInfo: '<',
+                settingInfo: '=',
                 selectItemCallback: '<',
                 saveDataCallback: '<',
                 saveValueCallback: '<',
@@ -68,12 +68,13 @@
 
         ctrl.onSelected = function (id) {
 
-            // if (ctrl.selectItemCallback) {
-            //     var result = ctrl.selectItemCallback();
-            //     if (result) {
-            //         ctrl.settingInfo.enabled = false;
-            //     }
-            // }
+            if (ctrl.selectItemCallback) {
+                var result = ctrl.selectItemCallback();
+                if (result) {
+                    ctrl.settingInfo.enable = false;
+                    return;
+                }
+            }
 
             //todo check if maximun selected items is bigger than 3
 

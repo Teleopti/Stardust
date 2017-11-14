@@ -367,7 +367,7 @@
 			})
 		}
 
-		ctrl.itemSelected = function () {
+		ctrl.reachedMaxSelectedItems = function () {
 			if (ctrl.getCurentSelectedCount() > 3) {
 				return true;
 			}
@@ -377,10 +377,10 @@
 
 		ctrl.getCurentSelectedCount = function () {
 			var result = 0;
-			var viewedItems = ctrl.currentSetting;
-			for (var index = 0; index < viewedItems.length; index++) {
-				var element = viewedItems[index];
-				if (element.enabled) {
+			var items = ctrl.currentSetting.settings;
+			for (var index = 0; index < items.length; index++) {
+				var element = items[index];
+				if (element.enable) {
 					result++;
 				}
 			}
