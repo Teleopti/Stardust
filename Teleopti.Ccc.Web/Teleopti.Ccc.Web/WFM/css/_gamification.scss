@@ -140,6 +140,10 @@
 			gamification-target-row + gamification-target-row {
 				border-top: $SEPARATOR;
 			}
+
+			gamification-target-row:last-child {
+				border-bottom: $SEPARATOR;
+			}
 		}
 
 		.footer {
