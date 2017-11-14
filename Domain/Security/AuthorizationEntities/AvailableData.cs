@@ -52,23 +52,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Gets the available business units.
         /// </summary>
         /// <value>The available business units.</value>
-        public virtual ReadOnlyCollection<IBusinessUnit> AvailableBusinessUnits
-        {
-            get
-            {
-                IList<IBusinessUnit> returnList = new List<IBusinessUnit>();
-                foreach (IBusinessUnit businessUnit in _availableBusinessUnits)
-                {
-                    if (businessUnit != null && !returnList.Contains(businessUnit))
-                    {
-                        returnList.Add(businessUnit);
-                    }
-                }
-                return new ReadOnlyCollection<IBusinessUnit>(returnList);
-            }
-        }
+        public virtual ReadOnlyCollection<IBusinessUnit> AvailableBusinessUnits => new ReadOnlyCollection<IBusinessUnit>(_availableBusinessUnits.Distinct().ToArray());
 
-        /// <summary>
+		/// <summary>
         /// Adds an available business unit.
         /// </summary>
         /// <param name="businessUnit">The business unit.</param>
@@ -83,23 +69,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Gets the available sites.
         /// </summary>
         /// <value>The available sites.</value>
-        public virtual ReadOnlyCollection<ISite> AvailableSites
-        {
-            get
-            {
-                IList<ISite> returnList = new List<ISite>();
-                foreach (ISite site in _availableSites)
-                {
-                    if (site != null && !returnList.Contains(site))
-                    {
-                        returnList.Add(site);
-                    }
-                }
-                return new ReadOnlyCollection<ISite>(returnList);
-            }
-        }
+        public virtual ReadOnlyCollection<ISite> AvailableSites => new ReadOnlyCollection<ISite>(_availableSites.Distinct().ToArray());
 
-        /// <summary>
+		/// <summary>
         /// Adds an available site.
         /// </summary>
         /// <param name="site">The site.</param>
@@ -114,23 +86,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Gets the available teams.
         /// </summary>
         /// <value>The available teams.</value>
-        public virtual ReadOnlyCollection<ITeam> AvailableTeams
-        {
-            get
-            {
-                IList<ITeam> returnList = new List<ITeam>();
-                foreach (ITeam team in _availableTeams)
-                {
-                    if (team != null && !returnList.Contains(team))
-                    {
-                        returnList.Add(team);
-                    }
-                }
-                return new ReadOnlyCollection<ITeam>(returnList);
-            }
-        }
+        public virtual ReadOnlyCollection<ITeam> AvailableTeams => new ReadOnlyCollection<ITeam>(_availableTeams.Distinct().ToArray());
 
-        /// <summary>
+		/// <summary>
         /// Adds an available team.
         /// </summary>
         /// <param name="team">The team.</param>
