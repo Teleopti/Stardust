@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 {
 	[DomainTest]
 	[TestFixture]
+	[SetCulture("en-US")]
+	[SetUICulture("en-US")]
 	public class OvertimeRequestProcessorTest : ISetup
 	{
 		public IOvertimeRequestProcessor Target;
@@ -153,7 +155,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[SetCulture("en-US")]
 		public void ShouldDenyWhenOutofSiteOpenHour()
 		{
 			setupPerson();
@@ -707,7 +708,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		[SetUICulture("en-US")]
 		public void ShouldDenyWhenVoilateMaxWeekWorkTimeRule()
 		{
 			setupPerson(8, 21);
@@ -745,7 +745,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		[SetUICulture("en-US")]
 		public void ShouldNotDenyWhenVoilateMaxWeekWorkTimeRuleAndHandleTypeIsPending()
 		{
 			setupPerson(8, 21);
@@ -818,7 +817,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		[SetUICulture("en-US")]
 		public void ShouldDenyWhenVoilateNightlyRestTimeRule()
 		{
 			setupPerson(8, 21);
@@ -856,7 +854,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		[SetUICulture("en-US")]
 		public void ShouldApproveWhenSatisfyNightlyRestTimeRule()
 		{
 			setupPerson(8, 21);
