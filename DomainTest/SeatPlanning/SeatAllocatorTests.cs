@@ -82,12 +82,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateTwoIntersectingBookingRequestsOverTwoLocations()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 12, 59, 59));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 12, 59, 59, DateTimeKind.Utc));
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1);
 
-			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 12, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 12, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 			var seatBookingRequest2 = new SeatBookingRequest (agentShift2);
 
 			var location1 = new SeatMapLocation() {IncludeInSeatPlan = true};
@@ -159,14 +159,14 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateAgentGroupsTogetherAcrossLocationsEvenIfFirstLocationHasMostSeats()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift3 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift4 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift3 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift4 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1, agentShift2);
 			var seatBookingRequest2 = new SeatBookingRequest (agentShift3, agentShift4);
@@ -189,10 +189,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateOnePersonInEachSeatEvenWhenGrouped()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1, agentShift2);
 
@@ -210,12 +210,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocatePeopleEvenWhenTheyCannotSeatInGroups()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift3 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift3 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1, agentShift2, agentShift3);
 
@@ -234,12 +234,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocatePeopleUsingPriorityEvenWhenTheyCannotSeatInGroups()
 		{
-			var agentShift1 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0),
-				new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift2 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0),
-				new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift3 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0),
-				new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift2 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift3 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3);
 
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			location1.AddSeat("L1 Seat5", 5);
 
 			var existingBooking = new SeatBooking(new Person(), new DateOnly(2014, 01, 01),
-				new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
+				new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 01, 12, 59, 59, DateTimeKind.Utc));
 			existingBooking.Book(location1.Seats[2]);
 
 
@@ -297,8 +297,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateChildLocationSeatFromParentLocation()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1);
 
@@ -317,8 +317,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateChildOfChildFromParentLocation()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1);
 
@@ -340,8 +340,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateChildLocationSeatFromParentLocationEvenWhenParentIsNotIncludedInSeatPlan()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1);
 
@@ -362,8 +362,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateDirectlyOnParentLocation()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1);
 			var building = new SeatMapLocation() {IncludeInSeatPlan = true};
 			var room1 = new SeatMapLocation() {IncludeInSeatPlan = true};
@@ -379,10 +379,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateGroupToParentLocationWithEnoughSeats()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1, agentShift2);
 
 			var building = new SeatMapLocation() {IncludeInSeatPlan = true};
@@ -404,16 +404,16 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateGroupToParentAndChildLocationWithEnoughSeats()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift3 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift4 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift5 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift3 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift4 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift5 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1, agentShift2);
 			var seatBookingRequest2 = new SeatBookingRequest (agentShift3, agentShift4);
@@ -448,10 +448,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAssignSplitGroupedAgentsToRoomAndToBuilding()
 		{
-			var agent1Shift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 12, 59, 59));
-			var agent2Shift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 12, 59, 59));
+			var agent1Shift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 12, 59, 59, DateTimeKind.Utc));
+			var agent2Shift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 12, 59, 59, DateTimeKind.Utc));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agent1Shift1, agent2Shift1);
 
@@ -474,11 +474,11 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var room1 = new SeatMapLocation() {IncludeInSeatPlan = true};
 			room1.AddSeat ("Room 1 Seat 1", 1);
 			var existingBooking = new SeatBooking (new Person(), new DateOnly (2014, 01, 01),
-				new DateTime (2014, 01, 01, 8, 0, 0), new DateTime (2014, 01, 01, 12, 59, 59));
+				new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime (2014, 01, 01, 12, 59, 59, DateTimeKind.Utc));
 			existingBooking.Book (room1.Seats.Single());
 
-			var agent2Shift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 12, 59, 59));
+			var agent2Shift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 12, 59, 59, DateTimeKind.Utc));
 			var seatBookingRequest1 = new SeatBookingRequest (agent2Shift1);
 			new SeatAllocator (room1).AllocateSeats (seatBookingRequest1);
 
@@ -489,14 +489,14 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateTeamGroupedBookingsOverMultiDaysWhileHonouringExistingBookings()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 00, 00));
-			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift1_Day2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01),
-				new DateTime (2014, 01, 02, 8, 0, 0), new DateTime (2014, 01, 02, 17, 00, 00));
-			var agentShift2_Day2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01),
-				new DateTime (2014, 01, 02, 8, 0, 0), new DateTime (2014, 01, 02, 17, 0, 0));
+			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 00, 00, DateTimeKind.Utc));
+			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime (2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
+			var agentShift1_Day2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 02, 8, 0, 0, DateTimeKind.Utc), 
+				new DateTime (2014, 01, 02, 17, 00, 00, DateTimeKind.Utc));
+			var agentShift2_Day2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 02, 8, 0, 0, DateTimeKind.Utc), 
+				new DateTime (2014, 01, 02, 17, 0, 0, DateTimeKind.Utc));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1, agentShift2, agentShift1_Day2, agentShift2_Day2);
 
@@ -508,7 +508,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			location2.AddSeat ("L2 Seat2", 2);
 
 			var existingBooking = new SeatBooking (new Person(), new DateOnly (2014, 01, 01),
-				new DateTime (2014, 01, 02, 8, 0, 0), new DateTime (2014, 01, 02, 17, 00, 00));
+				new DateTime (2014, 01, 02, 8, 0, 0, DateTimeKind.Utc), new DateTime (2014, 01, 02, 17, 00, 00, DateTimeKind.Utc));
 			existingBooking.Book (location2.Seats.First());
 
 
@@ -526,7 +526,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldConsiderRolesWhenDecidingIfCanAllocateTeamToLocation()
 		{
 
-			var dateOnly = new DateOnly (2014, 01, 01);
+			var dayOfBooking = new DateOnly (2014, 01, 01);
+			var bookingDateTime = DateTime.SpecifyKind(dayOfBooking.Date, DateTimeKind.Utc);
 
 			var outboundApplicationRole = ApplicationRoleFactory.CreateRole ("Outbound", "xxx");
 			var inboundApplicationRole = ApplicationRoleFactory.CreateRole ("Inbound", "xxx");
@@ -541,10 +542,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			agent4.PermissionInformation.AddApplicationRole (inboundApplicationRole);
 
-			var agentShift1 = new SeatBooking (agent1, dateOnly, dateOnly.Date.AddHours (8), dateOnly.Date.AddHours (17));
-			var agentShift2 = new SeatBooking (agent2, dateOnly, dateOnly.Date.AddHours (8), dateOnly.Date.AddHours (17));
-			var agentShift3 = new SeatBooking (agent3, dateOnly, dateOnly.Date.AddHours (8), dateOnly.Date.AddHours (17));
-			var agentShift4 = new SeatBooking (agent4, dateOnly, dateOnly.Date.AddHours (8), dateOnly.Date.AddHours (17));
+			var agentShift1 = new SeatBooking (agent1, dayOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17));
+			var agentShift2 = new SeatBooking (agent2, dayOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17));
+			var agentShift3 = new SeatBooking (agent3, dayOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17));
+			var agentShift4 = new SeatBooking (agent4, dayOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1, agentShift2, agentShift3);
 			var seatBookingRequest2 = new SeatBookingRequest (agentShift4);
@@ -587,7 +588,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldConsiderOverlappingBookingsWhenDecidingHowManySeatsShouldBeAllocatedToTeam()
 		{
 
-			var dateOnly = new DateOnly(2014, 01, 01);
+			var dayOfBooking = new DateOnly (2014, 01, 01);
+			var bookingDateTime = DateTime.SpecifyKind(dayOfBooking.Date, DateTimeKind.Utc);
 
 			var outboundApplicationRole = ApplicationRoleFactory.CreateRole("Outbound", "xxx");
 
@@ -596,9 +598,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var agent3 = PersonFactory.CreatePerson();
 
 			// agent shift 1 and 2(or 3) can overlap
-			var agentShift1 = new SeatBooking(agent1, dateOnly, dateOnly.Date.AddHours(9), dateOnly.Date.AddHours(17));
-			var agentShift2 = new SeatBooking(agent2, dateOnly, dateOnly.Date.AddHours(18), dateOnly.Date.AddHours(23));
-			var agentShift3 = new SeatBooking(agent3, dateOnly, dateOnly.Date.AddHours(9), dateOnly.Date.AddHours(17));
+			var agentShift2 = new SeatBooking(agent2, dayOfBooking, bookingDateTime.AddHours(18), bookingDateTime.AddHours(23));
+			var agentShift3 = new SeatBooking(agent3, dayOfBooking, bookingDateTime.AddHours(9),  bookingDateTime.AddHours(17));
+			var agentShift1 = new SeatBooking(agent1, dayOfBooking, bookingDateTime.AddHours(9), bookingDateTime.AddHours(17));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3);
 
@@ -630,7 +632,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldConsiderRolesAndThenNumberOfSeatsWhenChoosingLocationForTeam()
 		{
 
-			var dateOnly = new DateOnly (2014, 01, 01);
+			var dayOfBooking = new DateOnly (2014, 01, 01);
+			var bookingDateTime = DateTime.SpecifyKind(dayOfBooking.Date, DateTimeKind.Utc);
 
 			var outboundApplicationRole = ApplicationRoleFactory.CreateRole ("Outbound", "xxx");
 
@@ -640,8 +643,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			new[] {agent1, agent2}.ForEach ((agent) => agent.PermissionInformation.AddApplicationRole (outboundApplicationRole));
 
 
-			var agentShift1 = new SeatBooking (agent1, dateOnly, dateOnly.Date.AddHours (8), dateOnly.Date.AddHours (17));
-			var agentShift2 = new SeatBooking (agent2, dateOnly, dateOnly.Date.AddHours (8), dateOnly.Date.AddHours (17));
+			var agentShift1 = new SeatBooking (agent1, dayOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17));
+			var agentShift2 = new SeatBooking (agent2, dayOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1, agentShift2);
 
@@ -671,9 +674,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldConsiderRolesWhenChoosingLocationForTeam()
 		{
-
-			var dateOnly = new DateOnly (2014, 01, 01);
-
+			var dayOfBooking = new DateOnly (2014, 01, 01);
+			var bookingDateTime = DateTime.SpecifyKind(dayOfBooking.Date, DateTimeKind.Utc);
 			var outboundApplicationRole = ApplicationRoleFactory.CreateRole ("Outbound", "xxx");
 
 			var agent1 = PersonFactory.CreatePerson();
@@ -682,8 +684,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			new[] {agent1, agent2}.ForEach ((agent) => agent.PermissionInformation.AddApplicationRole (outboundApplicationRole));
 
 
-			var agentShift1 = new SeatBooking (agent1, dateOnly, dateOnly.Date.AddHours (8), dateOnly.Date.AddHours (17));
-			var agentShift2 = new SeatBooking (agent2, dateOnly, dateOnly.Date.AddHours (8), dateOnly.Date.AddHours (17));
+			var agentShift1 = new SeatBooking (agent1, dayOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17));
+			var agentShift2 = new SeatBooking (agent2, dayOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1, agentShift2);
 
@@ -714,14 +716,14 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldConsiderFrequencyWhenChoosingLocationForTeam()
 		{
-
-			var dateOnly = new DateOnly(2014, 01, 01);
+			var dayOfBooking = new DateOnly (2014, 01, 01);
+			var bookingDateTime = DateTime.SpecifyKind(dayOfBooking.Date, DateTimeKind.Utc);
 
 			var agent1 = PersonFactory.CreatePerson();
 			var agent2 = PersonFactory.CreatePerson();
 
-			var agentShift1 = new SeatBooking(agent1, dateOnly, dateOnly.Date.AddHours(8), dateOnly.Date.AddHours(17));
-			var agentShift2 = new SeatBooking(agent2, dateOnly, dateOnly.Date.AddHours(8), dateOnly.Date.AddHours(17));
+			var agentShift1 = new SeatBooking(agent1, dayOfBooking, bookingDateTime.AddHours(8), bookingDateTime.AddHours(17));
+			var agentShift2 = new SeatBooking(agent2, dayOfBooking, bookingDateTime.AddHours(8), bookingDateTime.AddHours(17));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
 
@@ -807,6 +809,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldGroupTeamsAroundSeatBookingWithRoleCount()
 		{
 			var dateOfBooking = new DateOnly(2014, 01, 01);
+			var bookingDateTime = DateTime.SpecifyKind(dateOfBooking.Date, DateTimeKind.Utc);
+			
+			
 			var outboundApplicationRole = ApplicationRoleFactory.CreateRole("outbound", "xxx");
 			var teamLeaderRole = ApplicationRoleFactory.CreateRole("teamLeader", "xxx");
 			var team1 = TeamFactory.CreateSimpleTeam("team1");
@@ -819,9 +824,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team1)
 			};
 			var seatBookingRequest1 = new SeatBookingRequest(
-				new SeatBooking(agentsInTeam1[0], dateOfBooking, dateOfBooking.Date.AddHours(8), dateOfBooking.Date.AddHours(17)),
-				new SeatBooking(agentsInTeam1[1], dateOfBooking, dateOfBooking.Date.AddHours(8), dateOfBooking.Date.AddHours(17)),
-				new SeatBooking(agentsInTeam1[2], dateOfBooking, dateOfBooking.Date.AddHours(8), dateOfBooking.Date.AddHours(17))
+				new SeatBooking(agentsInTeam1[0], dateOfBooking, bookingDateTime.AddHours(8), bookingDateTime.AddHours(17)),
+				new SeatBooking(agentsInTeam1[1], dateOfBooking, bookingDateTime.AddHours(8), bookingDateTime.AddHours(17)),
+				new SeatBooking(agentsInTeam1[2], dateOfBooking, bookingDateTime.AddHours(8), bookingDateTime.AddHours(17))
 			);
 			agentsInTeam1[2].PermissionInformation.AddApplicationRole (outboundApplicationRole);
 
@@ -834,9 +839,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team2)
 			};
 			var seatBookingRequest2 = new SeatBookingRequest (
-				new SeatBooking (agentsInTeam2[0], dateOfBooking, dateOfBooking.Date.AddHours (8), dateOfBooking.Date.AddHours (17)),
-				new SeatBooking (agentsInTeam2[1], dateOfBooking, dateOfBooking.Date.AddHours (8), dateOfBooking.Date.AddHours (17)),
-				new SeatBooking (agentsInTeam2[2], dateOfBooking, dateOfBooking.Date.AddHours (8), dateOfBooking.Date.AddHours (17))
+				new SeatBooking (agentsInTeam2[0], dateOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17)),
+				new SeatBooking (agentsInTeam2[1], dateOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17)),
+				new SeatBooking (agentsInTeam2[2], dateOfBooking, bookingDateTime.AddHours (8), bookingDateTime.AddHours (17))
 			);
 			agentsInTeam2[2].PermissionInformation.AddApplicationRole(outboundApplicationRole);
 			agentsInTeam2[1].PermissionInformation.AddApplicationRole(outboundApplicationRole);
@@ -888,7 +893,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				new List<SeatBookingRequest>(
 					Enumerable.Range(0, 10).Select(r => new SeatBookingRequest(Enumerable.Range(0, 8)
 						.Select(s =>
-							new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 00, 00)))
+							new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 01, 17, 00, 00, DateTimeKind.Utc)))
 						.ToArray())));
 
 			var allocator = new SeatAllocator(Enumerable.Range(0, 2).Select(i =>
@@ -958,8 +963,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldDetectPeriodsOverlap()
 		{
-			var booking1 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 1, 15, 0, 0));
-			var booking2 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 7, 59, 59), new DateTime(2014, 01, 1, 8, 0, 0));
+			var booking1 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 1, 15, 0, 0, DateTimeKind.Utc));
+			var booking2 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 7, 59, 59, DateTimeKind.Utc), new DateTime(2014, 01, 1, 8, 0, 0, DateTimeKind.Utc));
 
 			Assert.True(booking1.Intersects(booking2));
 		}
@@ -968,8 +973,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldDetectOvernightPeriodsOverlap()
 		{
-			var booking1 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 23, 0, 0), new DateTime(2014, 01, 2, 8, 0, 0));
-			var booking2 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 02, 7, 59, 59), new DateTime(2014, 01, 2, 15, 0, 0));
+			var booking1 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 23, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 2, 8, 0, 0, DateTimeKind.Utc));
+			var booking2 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 02, 7, 59, 59, DateTimeKind.Utc), new DateTime(2014, 01, 2, 15, 0, 0, DateTimeKind.Utc));
 
 			Assert.True(booking1.Intersects(booking2));
 		}
@@ -977,8 +982,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldDetectPeriodsDoNotOverlap()
 		{
-			var booking1 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 1, 15, 0, 0));
-			var booking2 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 7, 59, 58), new DateTime(2014, 01, 1, 7, 59, 59));
+			var booking1 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 1, 15, 0, 0, DateTimeKind.Utc));
+			var booking2 = new SeatBooking(null, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 7, 59, 58, DateTimeKind.Utc), new DateTime(2014, 01, 1, 7, 59, 59, DateTimeKind.Utc));
 
 			Assert.True(!booking1.Intersects(booking2));
 		}
