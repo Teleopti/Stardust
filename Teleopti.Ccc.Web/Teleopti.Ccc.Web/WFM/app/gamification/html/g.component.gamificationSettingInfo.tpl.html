@@ -4,19 +4,23 @@
             <div class="md-toolbar-tools">
                 <md-checkbox ng-change="$ctrl.onSelected($ctrl.settingInfo.id)" ng-model="$ctrl.settingInfo.enable"></md-checkbox>
                 <h3 ng-show="!$ctrl.nameEditModel">{{$ctrl.settingInfo.name}}</h3>
-                <input class="setting-name-input" id="setting-name-id-{{$ctrl.settingInfo.id}}" ng-blur="$ctrl.changeName($ctrl.settingInfo)"
-                    ng-click="$ctrl.nameClicked($event)" ng-show="$ctrl.nameEditModel" type="text" ng-model="$ctrl.settingInfo.name"
-                />
+                <input class="setting-name-input" id="setting-name-id-{{$ctrl.settingInfo.id}}" ng-blur="$ctrl.changeName()" ng-click="$ctrl.nameClicked($event)"
+                    ng-show="$ctrl.nameEditModel" type="text" ng-model="$ctrl.settingInfo.name" />
                 <i class="mdi mdi-lead-pencil" ng-show="!$ctrl.settingInfo.is_buildin" ng-click="$ctrl.onEditNameClicked($event, $ctrl.settingInfo.id)"></i>
                 <span flex class="flex"></span>
                 <i class="mdi mdi-{{$ctrl.iconName}}" ng-click="$ctrl.onCollapsed()"></i>
             </div>
         </md-toolbar>
         <div ng-show="!$ctrl.collapsed">
+            <!-- <div ng-show="!$ctrl.settingInfo.is_buildin">
+                <md-checkbox ng-change="$ctrl.largerChanged()" ng-model="$ctrl.settingInfo.larger_is_better">
+                    <span>Larger Is Better</span>
+                </md-checkbox>
+            </div> -->
             <div ng-repeat="item in $ctrl.getSettingItems()">
                 <span>{{item.id}}</span>
 
-                <input ng-disabled="!$ctrl.settingInfo.enable" ng-blur="$ctrl.itemChanged($event, item.id)" type="text" value="{{item.value}}">
+                <input class="setting-name-input" ng-disabled="!$ctrl.settingInfo.enable" ng-blur="$ctrl.itemChanged(item)" type="text" ng-model="item.value">
             </div>
         </div>
     </section>

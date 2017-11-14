@@ -83,6 +83,30 @@
 		id: 'SilverToBronzeBadgeRate',
 		url: '../api/Gamification/ModifySilverToBronzeRate',
 		method: 'post'
+	}, {
+		id: 'ExternalBadgeSettingDescription',
+		url: '../api/Gamification/Update/ExternalBadgeSettingDescription',
+		method: 'post'
+	}, {
+		id: 'ExternalBadgeSettingThreshold',
+		url: '../api/Gamification/Update/ExternalBadgeSettingThreshold',
+		method: 'post'
+	}, {
+		id: 'ExternalBadgeSettingGoldThreshold',
+		url: '../api/Gamification/Update/ExternalBadgeSettingGoldThreshold',
+		method: 'post'
+	}, {
+		id: 'ExternalBadgeSettingSilverThreshold',
+		url: '../api/Gamification/Update/ExternalBadgeSettingSilverThreshold',
+		method: 'post'
+	}, {
+		id: 'ExternalBadgeSettingBronzeThreshold',
+		url: '../api/Gamification/Update/ExternalBadgeSettingBronzeThreshold',
+		method: 'post'
+	}, {
+		id: 'ExternalBadgeSettingEnabled',
+		url: '../api/Gamification/Update/ExternalBadgeSettingEnabled',
+		method: 'post'
 	}];
 
 

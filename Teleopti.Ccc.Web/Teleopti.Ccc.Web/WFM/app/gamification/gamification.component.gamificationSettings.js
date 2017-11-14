@@ -176,27 +176,32 @@
 						name: item.Name,
 						enable: item.Enabled,
 						is_buildin: false,
+						larger_is_better: item.LargerIsBetter,
 						rule_settings: [{
 							rule_id: 0,
 							items: [{
-								id: 'GoldThreshold',
+								id: 'ExternalBadgeSettingGoldThreshold',
 								value: item.GoldThreshold,
-								type: 'number'
+								type: 'number',
+								unit_type: item.UnitType
 							}, {
-								id: 'SilverThreshold',
+								id: 'ExternalBadgeSettingSilverThreshold',
 								value: item.SilverThreshold,
-								type: 'number'
+								type: 'number',
+								unit_type: item.UnitType
 							}, {
-								id: 'BronzeThreshold',
+								id: 'ExternalBadgeSettingBronzeThreshold',
 								value: item.BronzeThreshold,
-								type: 'number'
+								type: 'number',
+								unit_type: item.UnitType
 							}]
 						}, {
 							rule_id: 1,
 							items: [{
-								id: 'Threshold',
+								id: 'ExternalBadgeSettingThreshold',
 								value: item.Threshold,
-								type: 'number'
+								type: 'number',
+								unit_type: item.UnitType
 							}]
 						}]
 

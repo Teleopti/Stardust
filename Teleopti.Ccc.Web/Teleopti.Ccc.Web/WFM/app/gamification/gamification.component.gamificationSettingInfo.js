@@ -9,7 +9,7 @@
             bindings: {
                 settingInfo: '<',
                 selectItemCallback: '<',
-                saveDatacallback: '<',
+                saveDataCallback: '<',
                 saveValueCallback: '<',
                 currentRuleId: '<',
                 currentSettingId: '<'
@@ -48,17 +48,23 @@
 
         }
 
-        ctrl.changeName = function (event) {
+        ctrl.changeName = function () {
             ctrl.nameEditModel = false;
+            var data = {
+                GamificationSettingId: ctrl.currentSettingId,
+                QualityId: ctrl.settingInfo.id,
+                Name: ctrl.settingInfo.name
+            };
+
+            if (ctrl.saveDataCallback) {
+
+                ctrl.saveDataCallback('ExternalBadgeSettingDescription', data);
+            }
         }
 
         ctrl.$onInit = function () {
 
         };
-
-        ctrl.nameClicked = function (event) {
-            //event.stopPropagation();
-        }
 
         ctrl.onSelected = function (id) {
 
@@ -76,15 +82,42 @@
                     ctrl.saveValueCallback(id, ctrl.settingInfo.enable);
                 }
             }
-        }
+            else {
+                var data = {
+                    GamificationSettingId: ctrl.currentSettingId,
+                    QualityId: ctrl.settingInfo.id,
+                    IsEnabled: ctrl.settingInfo.enable
+                }
 
-        ctrl.itemChanged = function (event, id) {
-            if (ctrl.settingInfo.is_buildin) {
-                if (ctrl.saveValueCallback) {
-                    var value = event.target.value;
-                    ctrl.saveValueCallback(id, value);
+                if (ctrl.saveDataCallback) {
+                    ctrl.saveDataCallback('ExternalBadgeSettingEnabled', data);
                 }
             }
+        }
+
+        ctrl.itemChanged = function (item) {
+            if (ctrl.settingInfo.is_buildin) {
+                if (ctrl.saveValueCallback) {
+                    var value = item.value;
+                    ctrl.saveValueCallback(item.id, value);
+                }
+            } else {
+                var data = {
+                    GamificationSettingId: ctrl.currentSettingId,
+                    QualityId: ctrl.settingInfo.id,
+                    UnitType: item.unit_type,
+                    ThresholdValue: item.value
+                };
+
+                if (ctrl.saveDataCallback) {
+                    ctrl.saveDataCallback(item.id, data);
+                }
+
+            }
+        }
+
+        ctrl.largerChanged = function () {
+
         }
 
         ctrl.$postLink = function () {
