@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolderOrg;
 	
 		[Test]
-		[Ignore("46680 - to be fixed")]
+		//[Ignore("46680 - to be fixed")]
 		public void ShouldWorkInCombinationWithFlexibleWorkTime()
 		{
 			var date = new DateOnly(2014, 4, 1);

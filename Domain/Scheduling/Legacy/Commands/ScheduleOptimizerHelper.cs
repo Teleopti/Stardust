@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -15,6 +16,39 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
+	[RemoveMeWithToggle("Replace base class OptimizationStepIntraday with this and remove this class", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
+	public class SchedulerOptimizerHelperNew : ScheduleOptimizerHelper
+	{
+		public SchedulerOptimizerHelperNew(MatrixListFactory matrixListFactory, MoveTimeOptimizerCreator moveTimeOptimizerCreator, RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairnessService, IOptimizeIntradayDesktop optimizeIntradayIslandsDesktop, ExtendReduceTimeHelper extendReduceTimeHelper, ExtendReduceDaysOffHelper extendReduceDaysOffHelper, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IResourceCalculation resourceOptimizationHelper, IOptimizerHelperHelper optimizerHelperHelper, CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory, DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktop, IUserTimeZone userTimeZone, ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationServiceFacade, IScheduleDayEquator scheduleDayEquator, ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService, IntraIntervalOptimizationCommand intraIntervalOptimizationCommand, MaxSeatOptimization maxSeatOptimization, IWeeklyRestSolverCommand weeklyRestSolverCommand) : base(matrixListFactory, moveTimeOptimizerCreator, ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, equalNumberOfCategoryFairnessService, optimizeIntradayIslandsDesktop, extendReduceTimeHelper, extendReduceDaysOffHelper, schedulerStateHolder, scheduleDayChangeCallback, resourceOptimizationHelper, optimizerHelperHelper, cascadingResourceCalculationContextFactory, dayOffOptimizationDesktop, userTimeZone, teamBlockDayOffFairnessOptimizationServiceFacade, scheduleDayEquator, teamBlockSeniorityFairnessOptimizationService, intraIntervalOptimizationCommand, maxSeatOptimization, weeklyRestSolverCommand)
+		{
+		}
+
+		protected override bool OptimizationStepIntraday(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents,
+			DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, bool continuedStep)
+		{
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder(), false, selectedPeriod.Inflate(1)))
+			{
+				if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
+				{
+					recalculateIfContinuedStep(continuedStep, selectedPeriod);
+
+					if (_progressEvent == null || !_progressEvent.Cancel)
+					{
+						runIntradayOptimization(
+							optimizationPreferences,
+							selectedAgents,
+							backgroundWorker,
+							selectedPeriod);
+						continuedStep = true;
+					}
+				}
+			}
+
+			return continuedStep;
+		}
+	}
+
+	[RemoveMeWithToggle("Replace proteced with private where appropriate", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 	public class ScheduleOptimizerHelper
 	{
 		private ISchedulingProgress _backgroundWorker;
@@ -27,10 +61,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ExtendReduceDaysOffHelper _extendReduceDaysOffHelper;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
+		protected readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		protected ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
-		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
+		protected readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktop;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationServiceFacade;
@@ -164,20 +198,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					dayOffOptimizationPreferenceProvider, _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod));
 			}
 
-			if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
-			{
-				recalculateIfContinuedStep(continuedStep, selectedPeriod);
-
-				if (_progressEvent == null || !_progressEvent.Cancel)
-				{
-					runIntradayOptimization(
-						optimizationPreferences,
-						selectedAgents,
-						backgroundWorker,
-						selectedPeriod);
-					continuedStep = true;
-				}
-			}
+			continuedStep = OptimizationStepIntraday(backgroundWorker, selectedAgents, selectedPeriod, optimizationPreferences, continuedStep);
 
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder(), false, selectedPeriod.Inflate(1)))
 			{
@@ -212,6 +233,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				_maxSeatOptimization.Optimize(backgroundWorker, selectedPeriod, selectedAgents, _schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.AllSkillDays(), optimizationPreferences, new DesktopMaxSeatCallback(_schedulerStateHolder()));
 			}
+		}
+
+		protected virtual bool OptimizationStepIntraday(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents,
+			DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, bool continuedStep)
+		{
+			if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
+			{
+				recalculateIfContinuedStep(continuedStep, selectedPeriod);
+
+				if (_progressEvent == null || !_progressEvent.Cancel)
+				{
+					runIntradayOptimization(
+						optimizationPreferences,
+						selectedAgents,
+						backgroundWorker,
+						selectedPeriod);
+					continuedStep = true;
+				}
+			}
+
+			return continuedStep;
 		}
 
 		private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
@@ -273,7 +315,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return runned;
 		}
 
-		private void recalculateIfContinuedStep(bool continuedStep, DateOnlyPeriod selectedPeriod)
+		protected void recalculateIfContinuedStep(bool continuedStep, DateOnlyPeriod selectedPeriod)
 		{
 			if (continuedStep)
 			{
@@ -340,7 +382,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return result;
 		}
 
-		private void runIntradayOptimization(
+		protected void runIntradayOptimization(
 			IOptimizationPreferences optimizerPreferences,
 			IEnumerable<IPerson> scheduleAgents,
 			ISchedulingProgress backgroundWorker,

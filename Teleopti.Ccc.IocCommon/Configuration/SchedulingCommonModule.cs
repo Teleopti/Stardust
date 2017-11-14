@@ -127,6 +127,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DesktopSchedulingNew>().As<DesktopScheduling>().InstancePerLifetimeScope();
 				builder.RegisterType<BackToLegalShiftService>().As<IBackToLegalShiftService>();
 				builder.RegisterType<ScheduleOvertimeNew>().As<IScheduleOvertime>();
+				builder.RegisterType<SchedulerOptimizerHelperNew>().As<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
 			}
 			else
 			{
@@ -139,6 +140,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 				builder.RegisterType<BackToLegalShiftServiceOLD>().As<IBackToLegalShiftService>();
 				builder.RegisterType<ScheduleOvertime>().As<IScheduleOvertime>();
+				builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<ResourceCalculateWithNewContext>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
@@ -184,7 +186,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExtendSelectedPeriodForMonthlyScheduling>().SingleInstance();
 			builder.RegisterType<LowThreadPriorityScope>().As<ILowThreadPriorityScope>().SingleInstance();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();
-			builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
+			
 			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().SingleInstance();
 			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>().SingleInstance();
