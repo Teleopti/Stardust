@@ -28,5 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		GamificationBadgeConversRateViewModel PersistGoldToSilverRate(GamificationBadgeConversRateViewModel input);
 		GamificationBadgeConversRateViewModel PersistSilverToBronzeRate(GamificationBadgeConversRateViewModel input);
 		ExternalBadgeSettingViewModel PersistExternalBadgeSetting(UpdateExternalBadgeSettingViewModel input);
+		ExternalBadgeSettingDescriptionViewModel PersistExternalBadgeDescription(ExternalBadgeSettingDescriptionViewModel input);
 	}
 }
