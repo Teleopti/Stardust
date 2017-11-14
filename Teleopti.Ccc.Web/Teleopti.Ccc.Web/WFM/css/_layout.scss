@@ -198,3 +198,126 @@ tree-data-one, tree-data-two {
 		z-index: 1000;
 	}
 }
+
+
+//new date-range-picker style 
+wfm-calendar-picker {
+	display: inline-block;
+	background-color: $white;
+	padding: 0;
+}
+
+wfm-calendar-picker-header {
+	min-height: 35px;
+	.notice-info {
+		background-color: $blue-100 !important;
+	}
+}
+
+wfm-calendar-picker-body > .date-info-wrapper {
+	min-height: 230px;
+	min-width: 230px;
+	padding: 0;
+	border: 1px $white solid;
+	overflow: hidden;
+
+	@media screen and (max-width:768px){
+		min-height: 0;
+		min-width: 0;
+	}
+
+	.disabled {
+		pointer-events: none;
+		background-color:rgba(0, 0, 0, 0.14) !important;
+	}
+
+	.single-select-mode {
+		height:100% !important;
+	}
+
+	.select-date-info-wrapper {
+		height: 50%;
+		background-color: $gray012;
+		border-bottom: 1px $white  solid;
+		padding: 10px;
+		position: relative;
+		@media screen and (max-width:768px){
+			min-height: 80px;
+		}
+	}
+	
+	.clear-select-date-grow-out{
+		display: table;
+		position: absolute;
+		height: 100%;
+		background-color: $gray026  ;
+		width: 20%;
+		top: 0;
+		right: 0;
+		transition: $transition-timing;
+		transform-origin: right center;
+		transform: translateX(103%);
+		cursor: pointer;
+		visibility: hidden;
+		opacity: 0;
+
+		i {
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+			margin: 45px auto;
+			color: $text-color-standard;
+		}
+	}
+	
+	.select-date-info-wrapper:hover .clear-select-date-grow-out{
+		transform: translateX(0);
+		visibility: visible;
+		opacity: 1;
+	}
+}
+
+wfm-calendar-picker-body > .date-info-calendar-wrapper{
+	background: $white;
+	z-index: 5;
+
+	b, strong {
+		font-size: x-large;
+	}
+
+	.in-date-range button{
+		background-color:$blue-100 !important;
+	}
+
+	.uib-datepicker {
+		min-height: 248px;
+		min-width:275px;
+
+		button.btn-default {
+			border:none;
+			box-shadow:none;
+			background-color: $white;
+			color: $text-color-standard;
+		}
+
+		tbody button.btn-info.active {
+			background-color: $blue-500 !important;
+			color: $white !important;
+		}
+
+		.uib-monthpicker, .uib-yearpicker {
+			table {
+				margin: 0 auto;	
+			}
+
+			tbody button.btn-default:hover, button.btn-default.active{
+				background-color: $blue-100 !important;
+				.text-info{
+					color: $text-color-standard;
+				}
+			}
+		}
+	}	
+}
+
+

@@ -1,0 +1,144 @@
+<h1>Date range picker</h1>
+
+<wfm-calendar-picker start-date="vm.startDate" end-date="vm.endDate"></wfm-calendar-picker>
+
+<h1>Example for wrapping date picker into pop up</h1>
+
+<button class="wfm-btn wfm-btn-default" ng-click="toggle =!toggle" style="min-width:246px; text-align:left">
+    <i class="mdi mdi-calendar"></i>
+    <span ng-if="vm.startDate">From: {{vm.startDate | amDateFormat:"YYYY/MM/DD"}}</span>
+    <span ng-if="vm.endDate">To: {{vm.endDate | amDateFormat:"YYYY/MM/DD"}}</span>
+    <span ng-if="!vm.endDate && !vm.startDate" class="text-warning"> No selected date</span>
+</button>
+<wfm-popup show="toggle">
+    <wfm-calendar-picker start-date="vm.startDate" end-date="vm.endDate"></wfm-calendar-picker>
+</wfm-popup>
+
+<h1>Date range picker with disable selection on endDate</h1>
+
+<wfm-calendar-picker start-date="vm.startDate" end-date="vm.endDate1" show-week="true" disable="end-date"></wfm-calendar-picker>
+
+<h1>Date range picker with disable selection on startDate</h1>
+
+<wfm-calendar-picker start-date="vm.startDate1" end-date="vm.endDate" show-week="true" disable="start-date"></wfm-calendar-picker>
+
+<h1>Single Date picker</h1>
+
+<wfm-calendar-picker date="vm.startDate" show-week="true" single-date-picker></wfm-calendar-picker>
+
+
+<h1>multi open</h1>
+<card-panel-list>
+    <card-panel ng-repeat="card in vm.cards" id="$index">
+        <card-panel-header>
+            <div>{{card.Name}}</div>
+        </card-panel-header>
+        <card-panel-content>
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type
+                specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem
+                Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
+                of Lorem Ipsum.
+            </div>
+        </card-panel-content>
+    </card-panel>
+</card-panel-list>
+
+<h1>single open with simple color bar</h1>
+<card-panel-list>
+    <card-panel ng-repeat="card in vm.cards" color="vm.color1" open="single" id="$index">
+        <card-panel-header>
+            <div>{{card.Name}}</div>
+        </card-panel-header>
+        <card-panel-content>
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type
+                specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem
+                Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
+                of Lorem Ipsum.
+            </div>
+        </card-panel-content>
+    </card-panel>
+</card-panel-list>
+
+<h1>multi open with simple color bar that depent on condition</h1>
+<card-panel-list>
+    <card-panel ng-repeat="card in vm.cards" color="vm.color2" color-condition="card.Name" id="$index">
+        <card-panel-header>
+            <div>{{card.Name}}</div>
+        </card-panel-header>
+        <card-panel-content>
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type
+                specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem
+                Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
+                of Lorem Ipsum.
+            </div>
+        </card-panel-content>
+    </card-panel>
+</card-panel-list>
+
+<h1>single open with linear color bar that depent on condition</h1>
+<card-panel-list>
+    <card-panel ng-repeat="card in vm.cards" color="vm.color3" open="single" id="$index">
+        <card-panel-header>
+            <div>{{card.Name}}</div>
+        </card-panel-header>
+        <card-panel-content>
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type
+                specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem
+                Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
+                of Lorem Ipsum.
+            </div>
+        </card-panel-content>
+    </card-panel>
+</card-panel-list>
+
+<h1>preselected open and single open with linear color bar that depent on condition</h1>
+<card-panel-list>
+    <card-panel ng-repeat="card in vm.cards" color="vm.color3" open="single" pre-open="card.Selected" id="$index">
+        <card-panel-header>
+            <div>{{card.Name}}</div>
+        </card-panel-header>
+        <card-panel-content>
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type
+                specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem
+                Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
+                of Lorem Ipsum.
+            </div>
+        </card-panel-content>
+    </card-panel>
+</card-panel-list>
+
+
+
+
+
+<style>
+    .brown {
+        border-color: #A1887F
+        /* $brown-100; */
+    }
+
+    .purple {
+        border-color: #BA68C8
+        /* $purple-300; */
+    }
+
+    .orange {
+        border-color: #FFC285
+        /* $orange-400; */
+    }
+</style>

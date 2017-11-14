@@ -1446,6 +1446,9 @@
     <Content Include="WFM\app\gamification\html\gamification.html" />
     <Content Include="WFM\app\gamification\gamificationSetting.service.js" />
     <Content Include="WFM\app\gamification\_modules.js" />
+    <Content Include="WFM\app\global\calendar-picker\calendar-picker.js" />
+    <Content Include="WFM\app\global\calendar-picker\calendar-picker.template.tpl.html" />
+    <Content Include="WFM\app\global\calendar-picker\_moudules.js" />
     <Content Include="WFM\app\global\card-panel\card-panel.component.js" />
     <Content Include="WFM\app\global\card-panel\card-panel.template.tpl.html" />
     <Content Include="WFM\app\global\card-panel\_moudules.js" />
