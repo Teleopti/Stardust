@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Reports
 				new DateOnly(searchParam.AffectedPeriodEndDate));
 			var changedByPerson = _personRepository.Get(searchParam.ChangedByPersonId);
 			var scheduledAgentIds =
-				_personFinderReadOnlyRepository.FindPersonIdsInTeamsBasedOnPersonPeriod(affectedPeriod, searchParam.TeamIds,
+				_personFinderReadOnlyRepository.FindPersonIdsInTeams(affectedPeriod.EndDate, searchParam.TeamIds,
 					new Dictionary<PersonFinderField, string>());
 			var scheduledAgents = scheduledAgentIds
 				.Select(scheduledAgentId => _personRepository.Get(scheduledAgentId))
