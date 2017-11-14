@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var forecastedCalls = _forecastedCallsProvider.Load(skillDays, queueStatistics.LatestActualIntervalStart, minutesPerInterval, currDate);
 			var forecastedStaffing = _forecastedStaffingProvider
 				.StaffingPerSkill(skillDays, minutesPerInterval, userDateOnly, false)
-				.Where(x => x.StartTime <= queueStatistics.LatestActualIntervalStart)
+				.Where(x => x.StartTime <= queueStatistics.LatestActualIntervalStart && x.StartTime >= queueStatistics.FirstIntervalStart)
 				.ToList();
 			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(skillDays.Keys.ToList(), minutesPerInterval, userDateOnly);
 
@@ -66,8 +66,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 						minutesPerInterval, interval, skill, scheduledStaffing, forecastedCalls, serviceCalculatorService));
 				}
 			}
-
-
+			
 			return eslIntervals
 				.GroupBy(g => g.StartTime)
 				.Select(s => new EslInterval

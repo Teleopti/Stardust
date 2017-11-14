@@ -802,6 +802,60 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.DataSeries.EstimatedServiceLevels[latestStatsIntervalPosition + 1].Should().Be.EqualTo(null);
 		}
 
+		[Test]
+		public void ShouldReturnEslForIntervalsCorrespondingToQueueStatistics()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 45, 0, DateTimeKind.Utc);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(7, 0, 8, 30), false);
+			var skillDay = createSkillDay(skill, Now.UtcDateTime(), new TimePeriod(7, 0, 8, 30), false);
+
+			var scheduledStaffingList = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource {
+					SkillCombination =  new [] {skill.Id.Value},
+					StartDateTime = userNow.AddMinutes(-(minutesPerInterval*3)),
+					EndDateTime = userNow.AddMinutes(-(minutesPerInterval*2)),
+					Resource = 3
+				},
+				new SkillCombinationResource {
+					SkillCombination =  new [] {skill.Id.Value},
+					StartDateTime = userNow.AddMinutes(-(minutesPerInterval*2)),
+					EndDateTime = userNow.AddMinutes(-minutesPerInterval),
+					Resource = 8
+				},
+				new SkillCombinationResource {
+					SkillCombination =  new [] {skill.Id.Value},
+					StartDateTime = userNow.AddMinutes(-minutesPerInterval),
+					EndDateTime = userNow,
+					Resource = 15
+				},
+				new SkillCombinationResource {
+					SkillCombination = new [] {skill.Id.Value},
+					StartDateTime = userNow,
+					EndDateTime = userNow.AddMinutes(minutesPerInterval),
+					Resource = 19
+				},
+				new SkillCombinationResource {
+					SkillCombination =  new [] {skill.Id.Value},
+					StartDateTime = userNow.AddMinutes(minutesPerInterval),
+					EndDateTime = userNow.AddMinutes(2*minutesPerInterval),
+					Resource = 14
+				},
+			};
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Has(skillDay);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
+
+			createStatistics(userNow.AddMinutes(-minutesPerInterval), userNow.AddMinutes(minutesPerInterval), latestStatsTime);
+
+			var result = Target.Load(new[] { skill.Id.Value });
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(2);
+		}
+
 		private double calculateEsl(IList<SkillCombinationResource> scheduledStaffingList, ISkillDay skillDay, double forecastedCallsSkill, int intervalPosition)
 		{
 			return _staffingCalculatorService.ServiceLevelAchievedOcc(

@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var averageSpeedOfAnswer = new List<double?>();
 			var abandonedRate = new List<double?>();
 			var serviceLevel = new List<double?>();
+			var firstQueueStatsInterval = intervals.Any() ? intervals[0] : null;
 
 			foreach (var interval in intervals)
 			{
@@ -125,6 +126,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			return new IntradayIncomingViewModel()
 			{
+				FirstIntervalStart = firstQueueStatsInterval?.IntervalDate.AddMinutes(firstQueueStatsInterval.IntervalId * intervalLength),
+				FirstIntervalEnd = firstQueueStatsInterval?.IntervalDate.AddMinutes(firstQueueStatsInterval.IntervalId * intervalLength + intervalLength),
 				LatestActualIntervalStart = latestQueueStatsIntervalId == -1
 					? null
 					: (DateTime?) latestQueueStatsIntervalDate.AddMinutes(latestQueueStatsIntervalId*intervalLength),
