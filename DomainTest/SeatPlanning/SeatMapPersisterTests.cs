@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seat = seatMapLocation.AddSeat("Seat1", 1);
 			_seatMapLocationRepository.Add(seatMapLocation);
 
-			var seatBooking = new SeatBooking(new Person(), new DateOnly(2015, 03, 02), new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 17, 0, 0));
+			var seatBooking = new SeatBooking(new Person(), new DateOnly(2015, 03, 02), new DateTime(2015, 03, 02, 8, 0, 0, DateTimeKind.Utc), new DateTime(2015, 03, 02, 17, 0, 0, DateTimeKind.Utc));
 			seatBooking.Book(seat);
 
 			_seatBookingRepository.Add(seatBooking);
@@ -404,7 +404,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seat = seatMapLocation.AddSeat("Seat1", 1);
 			_seatMapLocationRepository.Add(seatMapLocation);
 
-			var seatBooking = new SeatBooking(new Person(), belongsToDate, new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 17, 0, 0));
+			var seatBooking = new SeatBooking(new Person(), belongsToDate, new DateTime(2015, 03, 02, 8, 0, 0, DateTimeKind.Utc), new DateTime(2015, 03, 02, 17, 0, 0, DateTimeKind.Utc));
 			seatBooking.Book(seat);
 
 			_seatBookingRepository.Add(seatBooking);
@@ -444,10 +444,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			_seatMapLocationRepository.Add(seatMapLocation);
 
-			var seatBooking = new SeatBooking(new Person(), belongsToDate, new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 17, 0, 0));
+			var seatBooking = new SeatBooking(new Person(), belongsToDate, new DateTime(2015, 03, 02, 8, 0, 0, DateTimeKind.Utc), new DateTime(2015, 03, 02, 17, 0, 0, DateTimeKind.Utc));
 			seatBooking.Book(seat);
 
-			var seatBooking2 = new SeatBooking(new Person(), belongsToDate, new DateTime(2015, 03, 02, 17, 0, 1), new DateTime(2015, 03, 02, 22, 0, 0));
+			var seatBooking2 = new SeatBooking(new Person(), belongsToDate, new DateTime(2015, 03, 02, 17, 0, 1, DateTimeKind.Utc), new DateTime(2015, 03, 02, 22, 0, 0, DateTimeKind.Utc));
 			seatBooking2.Book(seat2);
 
 			_seatBookingRepository.Add(seatBooking);
@@ -493,7 +493,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			_seatMapLocationRepository.Add(childSeatMapLocation1);
 			_seatMapLocationRepository.Add(childSeatMapLocation2);
 
-			var seatBooking = new SeatBooking(new Person(), new DateOnly(2015, 03, 02), new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 17, 0, 0));
+			var seatBooking = new SeatBooking(new Person(), new DateOnly(2015, 03, 02), new DateTime(2015, 03, 02, 8, 0, 0, DateTimeKind.Utc), new DateTime(2015, 03, 02, 17, 0, 0, DateTimeKind.Utc));
 			seatBooking.Book(seat);
 
 			_seatBookingRepository.Add(seatBooking);

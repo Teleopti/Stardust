@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seat = new Seat("Seat One", 1);
 			var seatBookingId = Guid.NewGuid();
 
-			var startDateTime = new DateTime(2015, 03, 02, 08, 00, 00);
-			var endDateTime = new DateTime(2015, 03, 02, 17, 00, 00);
+			var startDateTime = new DateTime(2015, 03, 02, 08, 00, 00, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2015, 03, 02, 17, 00, 00, DateTimeKind.Utc);
 			addSeatBooking(new Person(), startDateTime, endDateTime, seat, seatBookingId);
 			return seatBookingId;
 		}
@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seat = new Seat("Seat One", 1);
 			var seatBookingId = Guid.NewGuid();
 
-			var startDateTime = new DateTime(2015, 03, 02, 08, 00, 00);
-			var endDateTime = new DateTime(2015, 03, 02, 17, 00, 00);
+			var startDateTime = new DateTime(2015, 03, 02, 08, 00, 00, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2015, 03, 02, 17, 00, 00, DateTimeKind.Utc);
 			addSeatBooking(new Person(), startDateTime, endDateTime, seat, seatBookingId);
 
 			_seatPlanRepository.Add(new SeatPlan() { Date = new DateOnly(startDateTime), Status = SeatPlanStatus.Ok });
