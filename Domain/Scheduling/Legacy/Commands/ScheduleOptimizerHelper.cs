@@ -26,22 +26,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		protected override bool OptimizationStepIntraday(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents,
 			DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, bool continuedStep)
 		{
+			if (!optimizationPreferences.General.OptimizationStepShiftsWithinDay) 
+				return continuedStep;
+			
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder(), false, selectedPeriod.Inflate(1)))
 			{
-				if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
-				{
-					recalculateIfContinuedStep(continuedStep, selectedPeriod);
-
-					if (_progressEvent == null || !_progressEvent.Cancel)
-					{
-						runIntradayOptimization(
-							optimizationPreferences,
-							selectedAgents,
-							backgroundWorker,
-							selectedPeriod);
-						continuedStep = true;
-					}
-				}
+				recalculateIfContinuedStep(continuedStep, selectedPeriod);
+			}
+			if (_progressEvent == null || !_progressEvent.Cancel)
+			{
+				runIntradayOptimization(
+					optimizationPreferences,
+					selectedAgents,
+					backgroundWorker,
+					selectedPeriod);
+				continuedStep = true;
 			}
 
 			return continuedStep;
