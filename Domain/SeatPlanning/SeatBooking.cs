@@ -20,6 +20,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		
 		public SeatBooking(IPerson person, DateOnly belongsToDate, DateTime startDateTime, DateTime endDateTime)
 		{
+			
+			validateDateTimeKind(startDateTime);
+			validateDateTimeKind(endDateTime);
+			
 			_startDateTime = startDateTime;
 			_endDateTime = endDateTime;
 			_belongsToDate = belongsToDate;
@@ -42,13 +46,21 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public virtual DateTime StartDateTime
 		{
 			get { return _startDateTime; }
-			set { _startDateTime = value; }
+			set
+			{
+				validateDateTimeKind(value);
+				_startDateTime = value;
+			}
 		}
 
 		public virtual  DateTime EndDateTime
 		{
 			get { return _endDateTime; }
-			set { _endDateTime = value; }
+			set
+			{
+				validateDateTimeKind(value);
+				_endDateTime = value;
+			}
 		}
 
 		public virtual void Book(ISeat seat)
@@ -75,6 +87,12 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public virtual bool Intersects (DateTimePeriod period)
 		{
 			return !((period.EndDateTime < StartDateTime) || (period.StartDateTime > EndDateTime));
+		}
+
+		private static void validateDateTimeKind(DateTime dateTime)
+		{
+			if (dateTime.Kind != DateTimeKind.Utc)
+				throw new ArgumentException("DateTime must be passed as UTC.");
 		}
 		
 	}

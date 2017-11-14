@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	class SeatBookingRepositoryTest : RepositoryTest<ISeatBooking>
 	{
 		private readonly DateOnly startDate = new DateOnly(2015, 10, 1);
+		
 		private ISeat seat1;
 		private ISeat seat2;
 		private IPerson person1;
@@ -74,8 +75,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var booking = new SeatBooking(person1,
 				new DateOnly(2015, 10, 1),
-				new DateTime(2015, 10, 1, 8, 0, 0),
-				new DateTime(2015, 10, 1, 17, 0, 0));
+				new DateTime(2015, 10, 1, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 1, 17, 0, 0, DateTimeKind.Utc));
 			booking.Book(seat1);
 
 			return booking;
@@ -93,8 +94,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyLoadGraphById()
 		{
-			var start = new DateTime(2015, 10, 1, 8, 0, 0);
-			var end = new DateTime(2015, 10, 1, 17, 0, 0);
+			var start = new DateTime(2015, 10, 1, 8, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2015, 10, 1, 17, 0, 0, DateTimeKind.Utc);
+			
 			var booking = new SeatBooking(person1, new DateOnly(2015, 10, 1), start, end);
 
 			booking.Book(seat1);
@@ -113,12 +115,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var booking = new SeatBooking(person1,
 				new DateOnly(2015, 10, 2),
-				new DateTime(2015, 10, 2, 8, 0, 0),
-				new DateTime(2015, 10, 2, 12, 0, 0));
+				new DateTime(2015, 10, 2, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 2, 12, 0, 0, DateTimeKind.Utc));
 			var booking2 = new SeatBooking(person2,
 				new DateOnly(2015, 10, 1),
-				new DateTime(2015, 10, 1, 13, 0, 0),
-				new DateTime(2015, 10, 1, 17, 0, 0));
+				new DateTime(2015, 10, 1, 13, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 1, 17, 0, 0, DateTimeKind.Utc));
 
 			booking.Book(seat1);
 			booking2.Book(seat1);
@@ -135,12 +137,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var booking = new SeatBooking(person1,
 				new DateOnly(2015, 10, 1),
-				new DateTime(2015, 10, 1, 8, 0, 0),
-				new DateTime(2015, 10, 1, 12, 0, 0));
+				new DateTime(2015, 10, 1, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 1, 12, 0, 0, DateTimeKind.Utc));
 			var booking2 = new SeatBooking(person2,
 				new DateOnly(2015, 10, 1),
-				new DateTime(2015, 10, 1, 13, 0, 0),
-				new DateTime(2015, 10, 1, 17, 0, 0));
+				new DateTime(2015, 10, 1, 13, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 1, 17, 0, 0, DateTimeKind.Utc));
 
 			booking.Book(seat1);
 			booking2.Book(seat1);
@@ -159,16 +161,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			
 			var bookingOnCurrentDay = new SeatBooking(person1,
 				new DateOnly(2015, 10, 2),
-				new DateTime(2015, 10, 2, 8, 0, 0),
-				new DateTime(2015, 10, 2, 12, 0, 0));
+				new DateTime(2015, 10, 2, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 2, 12, 0, 0, DateTimeKind.Utc));
 			var bookingOnPreviousDay = new SeatBooking(person1,
 				new DateOnly(2015, 10, 1),
-				new DateTime(2015, 10, 1, 23, 0, 0),
-				new DateTime(2015, 10, 2, 7, 0, 0));
+				new DateTime(2015, 10, 1, 23, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 2, 7, 0, 0, DateTimeKind.Utc));
 			var bookingOnNextDay = new SeatBooking(person1,
 				new DateOnly(2015, 10, 3),
-				new DateTime(2015, 10, 2, 23, 0, 0),
-				new DateTime(2015, 10, 3, 7, 0, 0));
+				new DateTime(2015, 10, 2, 23, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 3, 7, 0, 0, DateTimeKind.Utc));
 
 			bookingOnCurrentDay.Book(seat1);
 			bookingOnPreviousDay.Book(seat1);
@@ -191,12 +193,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			
 			var bookingOnCurrentDay = new SeatBooking(person1,
 				new DateOnly(2015, 10, 2),
-				new DateTime(2015, 10, 2, 8, 0, 0),
-				new DateTime(2015, 10, 2, 12, 0, 0));
+				new DateTime(2015, 10, 2, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 2, 12, 0, 0, DateTimeKind.Utc));
 			var bookingOnPreviousDay = new SeatBooking(person1,
 				new DateOnly(2015, 10, 1),
-				new DateTime(2015, 10, 1, 23, 0, 0),
-				new DateTime(2015, 10, 2, 7, 0, 0));
+				new DateTime(2015, 10, 1, 23, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 2, 7, 0, 0, DateTimeKind.Utc));
 
 
 			bookingOnCurrentDay.Book(seat2);
@@ -216,12 +218,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var booking = new SeatBooking(person1,
 				new DateOnly(2015, 10, 1),
-				new DateTime(2015, 10, 1, 8, 0, 0),
-				new DateTime(2015, 10, 1, 12, 0, 0));
+				new DateTime(2015, 10, 1, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 1, 12, 0, 0, DateTimeKind.Utc));
 			var booking2 = new SeatBooking(person2,
 				new DateOnly(2015, 10, 2),
-				new DateTime(2015, 10, 2, 13, 0, 0),
-				new DateTime(2015, 10, 2, 17, 0, 0));
+				new DateTime(2015, 10, 2, 13, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 2, 17, 0, 0, DateTimeKind.Utc));
 
 			booking.Book(seat1);
 			booking2.Book(seat1);
@@ -260,12 +262,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var booking = new SeatBooking(person1,
 				new DateOnly(2015, 10, 1),
-				new DateTime(2015, 10, 1, 8, 0, 0),
-				new DateTime(2015, 10, 1, 12, 0, 0));
+				new DateTime(2015, 10, 1, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 1, 12, 0, 0, DateTimeKind.Utc));
 			var booking2 = new SeatBooking(person2,
 				new DateOnly(2015, 10, 2),
-				new DateTime(2015, 10, 2, 13, 0, 0),
-				new DateTime(2015, 10, 2, 17, 0, 0));
+				new DateTime(2015, 10, 2, 13, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 2, 17, 0, 0, DateTimeKind.Utc));
 
 			booking.Book(seatLocation1);
 			booking2.Book(seatLocation2);
@@ -304,12 +306,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var booking = new SeatBooking(person1,
 				new DateOnly(2015, 10, 1),
-				new DateTime(2015, 10, 1, 8, 0, 0),
-				new DateTime(2015, 10, 1, 12, 0, 0));
+				new DateTime(2015, 10, 1, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 1, 12, 0, 0, DateTimeKind.Utc));
 			var booking2 = new SeatBooking(person2,
 				new DateOnly(2015, 10, 2),
-				new DateTime(2015, 10, 2, 13, 0, 0),
-				new DateTime(2015, 10, 2, 17, 0, 0));
+				new DateTime(2015, 10, 2, 13, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 10, 2, 17, 0, 0, DateTimeKind.Utc));
 
 			booking.Book(seat);
 			booking2.Book(seat);
@@ -336,17 +338,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void LoadSeatBookingReportForPeriodShouldPageCorrectly()
 		{
 			var dateOnly = startDate;
+			
 			Enumerable.Range(0, 20).ForEach(count =>
 			{
+
+				var startDateTime = DateTime.SpecifyKind(dateOnly.Date, DateTimeKind.Utc);
+				
 				var morningBooking = new SeatBooking(person1,
 					dateOnly,
-					dateOnly.Date.AddHours(8),
-					dateOnly.Date.AddHours(12));
+					startDateTime.AddHours(8),
+					startDateTime.AddHours(12));
 
 				var afternoonBooking = new SeatBooking(person2,
 					dateOnly,
-					dateOnly.Date.AddHours(13),
-					dateOnly.Date.AddHours(17));
+					startDateTime.AddHours(13),
+					startDateTime.AddHours(17));
 
 				morningBooking.Book(seat1);
 				afternoonBooking.Book(seat1);
@@ -399,10 +405,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private ISeatBookingReportModel doShowOnlyUnseatedCriteriaTest(bool showOnlyUnseated)
 		{
 			var dateOnly = startDate;
+			var startDateTime = DateTime.SpecifyKind(dateOnly.Date, DateTimeKind.Utc);
+			
 			var morningBooking = new SeatBooking (person1,
 				dateOnly,
-				dateOnly.Date.AddHours (8),
-				dateOnly.Date.AddHours (12));
+				startDateTime.AddHours (8),
+				startDateTime.AddHours (12));
 
 			morningBooking.Book (seat1);
 			PersistAndRemoveFromUnitOfWork (morningBooking);
@@ -425,13 +433,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadSeatBookingsForSeatIntersectingDayInOrder()
 		{
+			var startDateTime = DateTime.SpecifyKind(startDate.Date, DateTimeKind.Utc);
+			
 			var morningBooking = new SeatBooking(person1, startDate,
-					startDate.Date.AddHours(8),
-					startDate.Date.AddHours(12));
+					startDateTime.AddHours(8),
+					startDateTime.AddHours(12));
 
 			var afternoonBooking = new SeatBooking(person2, startDate,
-				startDate.Date.AddHours(13),
-				startDate.Date.AddHours(17));
+				startDateTime.AddHours(13),
+				startDateTime.AddHours(17));
 
 			morningBooking.Book(seat1);
 			afternoonBooking.Book(seat1);
@@ -461,20 +471,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var testSeat1 = seatMapLocation.AddSeat("Test Seat", 0);
 			var testSeat2 = seatMapLocation.AddSeat("Test Seat 2", 0);
 			var testSeat3 = seatMapLocation.AddSeat("Test Seat 3", 0);
+			
+			var startDateTime = DateTime.SpecifyKind(startDate.Date, DateTimeKind.Utc);
 
 			rep.Add(seatMapLocation);
 
 			var morningBooking = new SeatBooking(person1, startDate,
-					startDate.Date.AddHours(8),
-					startDate.Date.AddHours(12));
+					startDateTime.AddHours(8),
+					startDateTime.AddHours(12));
 
 			var afternoonBooking = new SeatBooking(person1, startDate,
-				startDate.Date.AddHours(13),
-				startDate.Date.AddHours(17));
+				startDateTime.AddHours(13),
+				startDateTime.AddHours(17));
 
 			var eveningBooking = new SeatBooking(person1, startDate,
-				startDate.Date.AddHours(18),
-				startDate.Date.AddHours(23));
+				startDateTime.AddHours(18),
+				startDateTime.AddHours(23));
 
 			morningBooking.Book(testSeat1);
 			afternoonBooking.Book(testSeat2);

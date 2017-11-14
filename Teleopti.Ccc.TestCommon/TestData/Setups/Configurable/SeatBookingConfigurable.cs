@@ -30,4 +30,5 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			repo.Add(seatBooking);
 		}
 	}
+	
 }
