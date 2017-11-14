@@ -660,8 +660,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(agentShifts[2].Seat.Name == "Seat3");
 		}
 		
-		[TestCase(true)]
-		[TestCase(false)]
+		
 		private SeatBooking[] groupAgentAroundSeatBookingTestSetup(bool useSeatLevelAllocator, IPerson[] agents, DateOnly dateOfBooking, SeatMapLocation location, Dictionary<Guid, List<ISeatOccupancyFrequency>> seatFrequencies = null)
 		{
 
