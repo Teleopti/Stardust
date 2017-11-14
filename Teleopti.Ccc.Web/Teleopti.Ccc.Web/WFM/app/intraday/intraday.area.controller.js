@@ -69,6 +69,7 @@
     vm.chosenOffset = {
       value: 0
     };
+    vm.filterSkills = [];
     NoticeService.info(message, null, true);
     toggleSvc.togglesLoaded.then(function() {
       vm.toggles.showOptimalStaffing = toggleSvc.Wfm_Intraday_OptimalStaffing_40921;
@@ -90,19 +91,40 @@
       autocompleteSkillArea = angular.element(autocompleteSkillAreaDOM).scope();
     };
 
-    vm.openSkillFromArea = function(item) {
-      if (item.DoDisplayData) {
-        prevSkill = item;
-        vm.selectedSkill = item;
-        vm.drillable = true;
+    vm.chipClass = function(skill){
+      if(!skill.DoDisplayData){
+        return 'chip-warning';
+      }
+
+      if(vm.filterSkills.indexOf(skill) !== -1){
+        return 'chip-success';
+      }
+
+      return;
+    };
+
+    vm.openSkillFromArea = function(skill) {
+      if (skill.DoDisplayData) {
+        var skillIndex = vm.filterSkills.indexOf(skill);
+        if(skillIndex === -1){
+          vm.filterSkills = [];
+          vm.filterSkills.push(skill);
+          vm.selectedItem = skill;
+          vm.selectedSkillInAreaChange(skill);
+        }else{
+          vm.selectedSkillAreaChange(vm.selectedSkillArea);
+          vm.filterSkills.splice(skillIndex, 1);
+        }
       } else {
         UnsupportedSkillNotice();
       }
     };
 
-    vm.openSkillAreaFromSkill = function() {
-      vm.selectedSkillArea = vm.prevArea;
-      vm.drillable = false;
+    vm.checkIfFilterSkill = function(skill){
+      if(vm.filterSkills.indexOf(skill) !== -1){
+        return 'mdi mdi-check';
+      }
+      return;
     };
 
     vm.skillSelected = function(item) {
@@ -111,7 +133,8 @@
     };
 
     vm.skillAreaSelected = function(item) {
-      vm.selectedItem = vm.selectedSkillArea = item;
+      vm.selectedItem = item;
+      vm.selectedSkillArea = item;
       clearSkillSelection();
     };
 
@@ -137,9 +160,19 @@
     };
 
     var clearPrev = function() {
-      vm.drillable = false;
       vm.prevArea = false;
       prevSkill = false;
+    };
+
+    vm.selectedSkillInAreaChange = function(skill){
+      if(skill){
+        if(skill.DoDisplayData){
+          pollActiveTabDataByDayOffset(vm.activeTab, vm.chosenOffset.value);
+        }else{
+          vm.selectedItem = vm.selectedSkillArea;
+          UnsupportedSkillNotice();
+        }
+      }
     };
 
     vm.selectedSkillChange = function(item) {
@@ -176,9 +209,6 @@
         checkUnsupported(item);
       } else if (vm.selectedSkill === null) {
         vm.selectedItem = null;
-      }
-      if (vm.drillable === true && vm.selectedItem && vm.selectedItem.skills) {
-        vm.drillable = false;
       }
     };
 
@@ -254,7 +284,6 @@
       if (!autocompleteSkill) return;
       vm.selectedSkill = null;
       vm.searchSkillText = '';
-      vm.drillable = false;
     }
 
     function clearSkillAreaSelection() {
