@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 {
 	[UnitOfWorkTest]
 	[TestFixture]
-	[Ignore("Disable to see performance impact")]
 	public class TextFilterTest
 	{
 		public IAgentStateReadModelPersister Persister;
