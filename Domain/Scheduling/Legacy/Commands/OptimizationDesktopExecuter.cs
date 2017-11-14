@@ -14,19 +14,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 	public class OptimizationDesktopExecuterNew : OptimizationDesktopExecuter
 	{
-		private readonly ResourceCalculateWithNewContext _resourceCalculateWithNewContext;
+		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
+		private readonly IResourceCalculation _resourceCalculation;
 
-		public OptimizationDesktopExecuterNew(ResourceCalculateWithNewContext resourceCalculateWithNewContext, IGroupPageCreator groupPageCreator, IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider, IResourceCalculation resourceOptimizationHelper, IScheduleDayChangeCallback scheduleDayChangeCallback, TeamBlockDesktopOptimizationOLD teamBlockOptimization, Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IUserTimeZone userTimeZone, IGroupPagePerDateHolder groupPagePerDateHolder, ScheduleOptimizerHelper scheduleOptimizerHelper, DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime) 
-			: base(groupPageCreator, groupScheduleGroupPageDataProvider, resourceOptimizationHelper, scheduleDayChangeCallback, teamBlockOptimization, resourceOptimizationHelperExtended, userTimeZone, groupPagePerDateHolder, scheduleOptimizerHelper, doFullResourceOptimizationOneTime)
+		public OptimizationDesktopExecuterNew(CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory, IGroupPageCreator groupPageCreator, IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider, IResourceCalculation resourceCalculation, IScheduleDayChangeCallback scheduleDayChangeCallback, TeamBlockDesktopOptimizationOLD teamBlockOptimization, Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IUserTimeZone userTimeZone, IGroupPagePerDateHolder groupPagePerDateHolder, ScheduleOptimizerHelper scheduleOptimizerHelper, DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime) 
+			: base(groupPageCreator, groupScheduleGroupPageDataProvider, resourceCalculation, scheduleDayChangeCallback, teamBlockOptimization, resourceOptimizationHelperExtended, userTimeZone, groupPagePerDateHolder, scheduleOptimizerHelper, doFullResourceOptimizationOneTime)
 		{
-			_resourceCalculateWithNewContext = resourceCalculateWithNewContext;
+			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
+			_resourceCalculation = resourceCalculation;
 		}
 
 		protected override void PreOptimize(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, bool lastCalculationState, bool doIntraIntervalCalculation)
 		{
 			if (!schedulerStateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade())
 			{
-				_resourceCalculateWithNewContext.ResourceCalculate(selectedPeriod, new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, doIntraIntervalCalculation));				
+				using (_cascadingResourceCalculationContextFactory.Create(schedulerStateHolder.SchedulingResultState, false, selectedPeriod))
+				{
+					_resourceCalculation.ResourceCalculate(selectedPeriod, new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, doIntraIntervalCalculation));
+				}			
 			}
 		}
 	}
@@ -37,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly IGroupPageCreator _groupPageCreator;
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
-		private readonly IResourceCalculation _resourceOptimizationHelper;
+		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly TeamBlockDesktopOptimizationOLD _teamBlockOptimization;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
@@ -49,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		[RemoveMeWithToggle("Remove unnecessary params", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 		public OptimizationDesktopExecuter(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
-			IResourceCalculation resourceOptimizationHelper,
+			IResourceCalculation resourceCalculation,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			TeamBlockDesktopOptimizationOLD teamBlockOptimization,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
@@ -60,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_resourceCalculation = resourceCalculation;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_teamBlockOptimization = teamBlockOptimization;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
@@ -83,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			PreOptimize(schedulerStateHolder, selectedPeriod, backgroundWorker, lastCalculationState, optimizationPreferences.General.OptimizationStepIntraInterval);
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper,
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation,
 				schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 			var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback, tagSetter);

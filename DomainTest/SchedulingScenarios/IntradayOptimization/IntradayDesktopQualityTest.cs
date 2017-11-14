@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IIntradayOptimization Target;
 		public IScheduleResultDataExtractorProvider ScheduleResultDataExtractorProvider;
-		public ResourceCalculateWithNewContext ResourceCalculation;
+		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest ResourceCalculation;
 
 		[Test]
 		public void ShouldProduceGoodResultWithNoLimitations()

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public ResourceCalculateWithNewContext ResourceCalculation;
+		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest ResourceCalculation;
 
 		[Test]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationTrackShovelingTest : ResourceCalculationScenario
 	{
-		public ResourceCalculateWithNewContext Target;
+		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest Target;
 
 		[Test]
 		public void ShouldTrackShoveledToSubskillResources()

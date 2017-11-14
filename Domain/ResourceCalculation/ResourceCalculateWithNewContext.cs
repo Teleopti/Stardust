@@ -2,12 +2,12 @@
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ResourceCalculateWithNewContext
+	public class ResourceCalculateWithNewContext_OnlyToBeUsedFromTest
 	{
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
 
-		public ResourceCalculateWithNewContext(IResourceCalculation resourceCalculation, CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)
+		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest(IResourceCalculation resourceCalculation, CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)
 		{
 			_resourceCalculation = resourceCalculation;
 			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;

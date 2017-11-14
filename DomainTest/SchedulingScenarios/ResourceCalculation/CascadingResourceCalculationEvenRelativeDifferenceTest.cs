@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationEvenRelativeDifferenceTest : ResourceCalculationScenario
 	{
-		public ResourceCalculateWithNewContext Target;
+		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest Target;
 
 		[Test]
 		public void ShouldTryToMakeSubSkillHaveSameRelativeDifferenceAfterShoveling_BothSkillSameDiffAtStart([Values(2, 100)] double skillB2Demand, [Values(true, false)] bool primarySkillOpened)

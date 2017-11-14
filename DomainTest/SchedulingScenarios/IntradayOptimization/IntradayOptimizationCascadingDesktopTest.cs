@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public CascadingResourceCalculationContextFactory ResourceCalculationContextFactory;
 		public IResourceCalculation ResourceCalculation;
-		public ResourceCalculateWithNewContext ResourceCalculateWithNewContext;
+		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest ResourceCalculateWithNewContext;
 
 		[Test]
 		public void ShouldShovelResources()

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[DomainTest]
 	public class ResourceCalculationTest
 	{
-		public ResourceCalculateWithNewContext ResourceCalculateInContext;
+		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest ResourceCalculateInContext;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeTimeZoneGuard TimeZoneGuard;
 

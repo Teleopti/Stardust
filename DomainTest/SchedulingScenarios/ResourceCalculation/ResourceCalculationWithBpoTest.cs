@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class ResourceCalculationWithBpoTest : ResourceCalculationScenario
 	{
-		public ResourceCalculateWithNewContext Target;
+		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest Target;
 		public FakeSkillCombinationResourceBpoReader SkillCombinationResourceBpoReader;
 
 		[Test]

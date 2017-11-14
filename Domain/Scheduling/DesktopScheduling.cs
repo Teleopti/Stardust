@@ -15,18 +15,24 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 	public class DesktopSchedulingNew : DesktopScheduling
 	{
-		private readonly ResourceCalculateWithNewContext _resourceCalculateWithNewContext;
+		private readonly IResourceCalculation _resourceCalculation;
+		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 
-		public DesktopSchedulingNew(ResourceCalculateWithNewContext resourceCalculateWithNewContext, SchedulingCommandHandler schedulingCommandHandler, Func<ISchedulerStateHolder> schedulerStateHolder, IResourceCalculation resouceResourceOptimizationHelper, ScheduleHourlyStaffExecutor scheduleHourlyStaffExecutor, DesktopSchedulingContext desktopSchedulingContext) : base(schedulingCommandHandler, schedulerStateHolder, resouceResourceOptimizationHelper, scheduleHourlyStaffExecutor, desktopSchedulingContext)
+		public DesktopSchedulingNew(CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory, SchedulingCommandHandler schedulingCommandHandler, Func<ISchedulerStateHolder> schedulerStateHolder, IResourceCalculation resourceCalculation, ScheduleHourlyStaffExecutor scheduleHourlyStaffExecutor, DesktopSchedulingContext desktopSchedulingContext) : base(schedulingCommandHandler, schedulerStateHolder, resourceCalculation, scheduleHourlyStaffExecutor, desktopSchedulingContext)
 		{
-			_resourceCalculateWithNewContext = resourceCalculateWithNewContext;
+			_resourceCalculation = resourceCalculation;
+			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
 			_schedulerStateHolder = schedulerStateHolder;
 		}
 
 		protected override void PostScheduling(DateOnlyPeriod selectedPeriod)
 		{
-			_resourceCalculateWithNewContext.ResourceCalculate(selectedPeriod, new ResourceCalculationData(_schedulerStateHolder().SchedulingResultState, false, false));
+			var stateHolder = _schedulerStateHolder().SchedulingResultState;
+			using (_cascadingResourceCalculationContextFactory.Create(stateHolder, false, selectedPeriod))
+			{
+				_resourceCalculation.ResourceCalculate(selectedPeriod, new ResourceCalculationData(stateHolder, false, false));
+			}
 		}
 	}
 	

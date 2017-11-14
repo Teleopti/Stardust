@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationOverstaffedSkillSetsTest : ResourceCalculationScenario
 	{
-		public ResourceCalculateWithNewContext Target;
+		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest Target;
 
 		[Test]
 		public void ShouldMoveResourceOnlyWithinSkillSet()

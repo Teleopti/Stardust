@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationOverstaffedTest : ResourceCalculationScenario
 	{
-		public ResourceCalculateWithNewContext Target;
+		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest Target;
 		public FakeTimeZoneGuard TimeZoneGuard;
 
 		[Test]

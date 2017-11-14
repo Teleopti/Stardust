@@ -15,18 +15,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly DesktopOptimizationContext _desktopOptimizationContext;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly ResourceCalculateWithNewContext _resourceCalculateWithNewContext;
+		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
+		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 
 		public OptimizeIntradayDesktop(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
 			DesktopOptimizationContext desktopOptimizationContext,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			ResourceCalculateWithNewContext resourceCalculateWithNewContext)
+			CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory, 
+			IResourceCalculation resourceCalculation)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
 			_desktopOptimizationContext = desktopOptimizationContext;
 			_schedulerStateHolder = schedulerStateHolder;
-			_resourceCalculateWithNewContext = resourceCalculateWithNewContext;
+			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
+			_resourceCalculation = resourceCalculation;
 		}
 		
 		public void Optimize(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizerPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
@@ -43,7 +46,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				_intradayOptimizationCommandHandler.Execute(command);
 			}
-			_resourceCalculateWithNewContext.ResourceCalculate(selectedPeriod, new ResourceCalculationData(stateHolder.SchedulingResultState, stateHolder.ConsiderShortBreaks, false));
+			using (_cascadingResourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, false, selectedPeriod))
+			{
+				_resourceCalculation.ResourceCalculate(selectedPeriod, new ResourceCalculationData(stateHolder.SchedulingResultState, stateHolder.ConsiderShortBreaks, false));
+			}
 		}	
 	}
 	
