@@ -713,8 +713,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson(8, 21);
 			var person = LoggedOnUser.CurrentUser();
 			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
-			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
-				TimeSpan.FromHours(41), TimeSpan.FromHours(10), TimeSpan.FromHours(10));
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(8),
+				TimeSpan.FromHours(9), TimeSpan.FromHours(10), TimeSpan.FromHours(10));
 
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
@@ -728,18 +728,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
-			for (int i = 0; i < 5; i++)
-			{
-				var day = 10 + i;
-				var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, day, 8, 2017, 7, day, 16));
-				ScheduleStorage.Add(pa);
-			}
+			var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 13, 8, 2017, 7, 13, 16));
+			ScheduleStorage.Add(pa);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 2);
 			Target.Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be("The week contains too much work time (42:00). Max is 41:00.");
+			personRequest.DenyReason.Should().Be("The week contains too much work time (10:00). Max is 09:00.");
 		}
 
 		[Test]
@@ -900,7 +896,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var main = ActivityFactory.CreateActivity("phone").WithId();
 			main.AllowOverwrite = true;
 			main.InWorkTime = true;
-			return PersonAssignmentFactory.CreateAssignmentWithMainShift(person, CurrentScenario.Current(), main, period, shiftCategory);
+			return PersonAssignmentFactory
+				.CreateAssignmentWithMainShift(person, CurrentScenario.Current(), main, period, shiftCategory).WithId();
+		}
+
+		private IPersonAssignment createAssignmentWithDayOff(IPerson person, DateOnly date)
+		{
+			return PersonAssignmentFactory.CreateAssignmentWithDayOff(person, CurrentScenario.Current(), date, TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
 		}
 
 		private IPersonRequest createOvertimeRequest(DateTimePeriod period)

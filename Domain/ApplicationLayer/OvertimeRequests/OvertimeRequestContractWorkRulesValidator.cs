@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			var person = personRequest.Person;
 
-			loadSchedules(getCurrentWeek(personRequest), person, _scenarioRepository.Current());
+			loadSchedules(personRequest.Request.Period, person, _scenarioRepository.Current());
 
 			var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 
@@ -67,15 +67,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				IsValid = true
 			};
-		}
-
-		private static DateTimePeriod getCurrentWeek(IPersonRequest personRequest)
-		{
-			var timezone = personRequest.Person.PermissionInformation.DefaultTimeZone();
-			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(new DateOnly(personRequest.Request.Period.StartDateTime),
-				CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
-			var week = new DateOnlyPeriod(firstDayOfWeek, firstDayOfWeek.AddDays(6));
-			return week.ToDateTimePeriod(timezone);
 		}
 
 		private void loadSchedules(DateTimePeriod period, IPerson person, IScenario scenario)
