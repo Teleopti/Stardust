@@ -9,11 +9,11 @@
 	
   function SkillGroupSvc($http) {
     var self = this;
-    self.getSkills        = getSkills;
-    self.createSkillGroup = createSkillGroup;
-    self.getSkillGroups   = getSkillGroups;
-    self.deleteSkillGroup = deleteSkillGroup;
-    self.modifySkillGroup = modifySkillGroup;
+    self.getSkills         = getSkills;
+    self.createSkillGroup  = createSkillGroup;
+    self.getSkillGroups    = getSkillGroups;
+    self.deleteSkillGroup  = deleteSkillGroup;
+    self.modifySkillGroups = modifySkillGroups;
     
     function getSkills() {
       return $http.get('../api/intraday/skills');
@@ -28,13 +28,13 @@
     };
 
     function deleteSkillGroup(skillGroup) {
-			console.log('Delete: skillGroup', skillGroup);
       return $http.delete('../api/skillgroup/delete/' + skillGroup.Id);
     };
 
-    function modifySkillGroup(data) {
-      if (data.currentSkillGroup) {
-        return $http.put('../api/skillgroup/update', data.currentSkillGroup);
+    function modifySkillGroups(skillGroups) {
+			console.log('skillGroups', skillGroups);
+      if (skillGroups) {
+        return $http.put('../api/skillgroup/update', {SkillGroups: skillGroups});
       }
     };
   }

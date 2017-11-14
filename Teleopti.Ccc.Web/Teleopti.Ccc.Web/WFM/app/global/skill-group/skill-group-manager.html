@@ -35,14 +35,14 @@
 				<div class="con-row">
 					<div class="con-flex">
 						<ul class="wfm-list" id="available_skill_groups_list">
-							<li ng-repeat="skillGroup in vm.skillGroups" ng-click="vm.selectSkillGroup(skillGroup)">
+							<li ng-repeat="skillGroup in vm.skillGroups" ng-click="vm.selectSkillGroup($index)">
 								<span class="list-item-container">
 									{{skillGroup.Name}}
 								</span>
-								<span ng-cloak ng-show="vm.managerData.currentSkillGroup.Id === skillGroup.Id" class="list-dot grow-out">
+								<span ng-cloak ng-show="vm.selectedSkillGroup.Id === skillGroup.Id" class="list-dot grow-out">
 									<b class="mdi mdi-check list-mark"></b>
 								</span>
-								<div class="wfm-leave-behind wfm-leave-behind-1" ng-click="vm.managerData.currentSkillGroup = skillGroup; vm.deleteConfirmation=true; $event.stopPropagation();">
+								<div class="wfm-leave-behind wfm-leave-behind-1" ng-click="vm.selectedSkillGroup = skillGroup; vm.deleteConfirmation=true; $event.stopPropagation();">
 									<span>
 										<i class="mdi mdi-delete"></i>
 									</span>
@@ -55,9 +55,9 @@
 			<div class="con-flex x3 panel form-panel material-depth-1" dropfromgroup="vm.optionDrop">
 				<div class="con-row">
 					{{'Name'|translate}}:
-					<input type="text" ng-model="vm.managerData.currentSkillGroup.Name" maxlength="50" ng-maxlength="50" id="skillGroupNameBox"
+					<input type="text" ng-model="vm.selectedSkillGroup.Name" maxlength="50" ng-maxlength="50" id="skillGroupNameBox"
 					/>
-					<div ng-cloak class="animate-show" ng-show="vm.managerData.currentSkillGroup.Name.length > 0">
+					<div ng-cloak class="animate-show" ng-show="vm.selectedSkillGroup.Name.length > 0">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">
 							{{'NameRequired'|translate}}
 						</div>
@@ -66,7 +66,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="con-row" ng-show="vm.managerData.currentSkillGroup">
+				<div class="con-row" ng-show="vm.selectedSkillGroup">
 					<div class="con-flex panel form-panel material-depth-1" style="margin: 5px">
 						<div class="con-row">
 							<div class="con-flex">
@@ -111,7 +111,7 @@
 						</div>
 						<div class="con-row">
 							<div class="con-flex">
-								<div class="wfm-chip-wrap" ng-repeat="skill in vm.managerData.currentSkillGroup.Skills | filter:areaFilter as filtered" ng-click="vm.selectGroupSkill(skill)"
+								<div class="wfm-chip-wrap" ng-repeat="skill in vm.selectedSkillGroup.Skills | filter:areaFilter as filtered" ng-click="vm.selectGroupSkill(skill)"
 								 ng-hide="(selectedFilter==true && !!vm.groupSkillIsSelected(skill)) || (supportedFilter==false && !skill.DoDisplayData)">
 									<span class="wfm-chip">
 										<span class="chip-handle chip-warning" ng-if="!skill.DoDisplayData && !vm.groupSkillIsSelected(skill)">
@@ -146,7 +146,7 @@
 					<div class="dialog-mini material-depth-1">
 						<div class="modal-inner-content">
 							<h3>{{'DoYouWantToDeleteSkillGroup'|translate}}</h3>
-							{{'AreYouSureYouWantToDeleteTheSkillGroup'|translate}} {{vm.managerData.currentSkillGroup.Name}}
+							{{'AreYouSureYouWantToDeleteTheSkillGroup'|translate}} {{vm.selectedSkillGroup.Name}}
 						</div>
 						<div class="modal-actions">
 							<aside>

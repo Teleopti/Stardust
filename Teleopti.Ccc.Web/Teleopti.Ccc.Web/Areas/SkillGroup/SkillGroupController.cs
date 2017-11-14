@@ -80,23 +80,27 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 		[UnitOfWork]
 		[HttpPut]
 		[Route("api/skillgroup/update")]
-		public virtual IHttpActionResult ModifySkillGroup([FromBody] ModifySkillGroupInput input)
+		public virtual IHttpActionResult ModifySkillGroup([FromBody] List<SGMGroup> input)
 		{
 			try
 			{
-				Guid id;
-				if (Guid.TryParse(input.Id, out id))
+				foreach (var inputSkillGroup in input)
 				{
-					var skillGroup = _skillGroupRepository.Get(id);
-					if (skillGroup != null)
+
+					Guid id;
+					if (Guid.TryParse(inputSkillGroup.Id, out id))
 					{
-						_modifySkillGroup.Do(input);
+						var skillGroup = _skillGroupRepository.Get(id);
+						if (skillGroup != null)
+						{
+							_modifySkillGroup.Do(inputSkillGroup);
+						}
 					}
-				}
-				else
-				{
-					var skillIds = input.Skills.Select(x => Guid.Parse(x.Id.ToString()));
-					_createSkillGroup.Create(input.Name, skillIds);
+					else
+					{
+						var skillIds = inputSkillGroup.Skills.Select(x => Guid.Parse(x.Id.ToString()));
+						_createSkillGroup.Create(inputSkillGroup.Name, skillIds);
+					}
 				}
 				return Ok(input);
 			}

@@ -49,7 +49,8 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 			updateSkills.Add(newSkill);
 			updateSkills.Add(newSkill2);
 
-			Target.Do(new ModifySkillGroupInput {
+			Target.Do(new SGMGroup
+			{
 				Id = skillGroup.Id.ToString(),
 				Name = "SkillGroup2",
 				Skills = updateSkills

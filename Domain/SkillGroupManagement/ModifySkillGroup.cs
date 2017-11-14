@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 			_skillGroupRepository = skillGroupRepository;
 		}
 
-		public void Do(ModifySkillGroupInput input)
+		public void Do(SGMGroup input)
 		{
 			InParameter.ListCannotBeEmpty(nameof(input.Skills), input.Skills);
 			InParameter.NotStringEmptyOrWhiteSpace(nameof(input.Name), input.Name);
