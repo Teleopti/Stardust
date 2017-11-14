@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerType<IBusinessRuleProvider, ConfigurableBusinessRuleProvider, BusinessRuleProvider>(builder,Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770);
 			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
 			builder.RegisterType<AlreadyAbsentSpecification>().As<IAlreadyAbsentSpecification>();
-			builder.RegisterType<AbsenceRequestUpdater>().As<IAbsenceRequestUpdater>().SingleInstance();
 			registerType<IAbsenceRequestWaitlistProvider, AbsenceRequestWaitlistProviderFor46301, AbsenceRequestWaitlistProvider>
 				(builder, Toggles.MyTimeWeb_WaitListPositionEnhancement_46301);
 			builder.RegisterType<WriteProtectedScheduleCommandValidator>().As<IWriteProtectedScheduleCommandValidator>().SingleInstance();
