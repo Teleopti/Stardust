@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return new TeamGamificationSettingViewModel()
 			{
 				GamificationSettingId = gamificationSettingId,
-				Team = new SelectOptionItem() { id = team.Id.ToString(), text = team.Description.Name }
+				Team = new SelectOptionItem() { id = team.Id.ToString(), text =  team.Site.Description.Name + "/" + team.Description.Name }
 			};
 		}
 
