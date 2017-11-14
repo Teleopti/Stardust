@@ -16,70 +16,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 	public class SeatAllocatorTests
 	{
 		[Test]
-		public void ShouldAllocateAnAgentToASeat()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateAnAgentToASeat (false);
-		}
-
-		[Test]
-		public void ShouldAllocateTwoAgentsToOneSeatEach()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateTwoAgentsToOneSeatEach (false);
-		}
-
-		[Test]
-		public void ShouldAllocateAccordingToPriority()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateAccordingToPriority (false);
-		}
-
-		[Test]
-		public void ShouldAllocateTwoAgentsSequentiallyToOneSeat()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateTwoAgentsSequentiallyToOneSeat (false);
-		}
-
-		[Test]
-		public void ShouldAllocateSeatsByEarliestFirst()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateSeatsByEarliestFirst (false);
-		}
-
-		[Test]
-		public void ShouldNotAllocateTwoAgentsSequentiallyToOneSeat()
-		{
-			CommonSeatAllocatorTests.ShouldNotAllocateTwoAgentsSequentiallyToOneSeat (false);
-		}
-
-		[Test]
-		public void ShouldAllocateAccordingToStartTime()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateAccordingToStartTime (false);
-		}
-
-
-		[Test]
-		public void ShouldAllocateToGroupFirst()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateToGroupFirst (false);
-
-		}
-
-		[Test]
-		public void ShouldNotAllocateAnAgentToAnAlreadyBookedSeat()
-		{
-			CommonSeatAllocatorTests.ShouldNotAllocateAnAgentToAnAlreadyBookedSeat (false);
-
-		}
-
-		[Test]
-		public void ShouldAllocateToAvailableSeat()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateToAvailableSeat (false);
-
-		}
-
-		[Test]
 		public void ShouldAllocateTwoIntersectingBookingRequestsOverTwoLocations()
 		{
 			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc),
@@ -755,57 +691,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		}
 
 		[Test]
-		public void ShouldNotAllocateAnAgentToASeatWhereRolesDoNotMatch()
-		{
-			CommonSeatAllocatorTests.ShouldNotAllocateAnAgentToASeatWhereRolesDoNotMatch (false);
-		}
-
-		[Test]
-		public void ShouldAllocateAnAgentToASeatWhereRolesMatch()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateAnAgentToASeatWhereRolesMatch (false);
-
-		}
-
-		[Test]
-		public void ShouldAllocateAnAgentToASeatWhereAllRolesMatch()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateAnAgentToASeatWhereAllRolesMatch (false);
-		}
-
-		[Test]
-		public void ShouldAllocateAnAgentToASeatWhereRolesMatchBySeatPriority()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateAnAgentToASeatWhereRolesMatchBySeatPriority (false);
-		}
-
-		[Test]
-		public void ShouldAllocateAgentToPreviouslyOccupiedSeat()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateAgentToMostPreviouslyOccupiedSeat (false);
-		}
-
-
-		[Test]
-		public void ShouldAllocateAgentToMostPreviouslyOccupiedSeatWhenRolesAreSame()
-		{
-			CommonSeatAllocatorTests.ShouldAllocateAgentToMostPreviouslyOccupiedSeatWhenRolesAreSame (false);
-		}
-
-		[Test]
-		public void ShouldGroupAgentsAroundSeatBookingWithHighestRoleMatchCount()
-		{
-			CommonSeatAllocatorTests.ShouldGroupAgentsAroundSeatBookingWithHighestRoleCount (false);
-		}
-
-
-		[Test]
-		public void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCountEvenWhenPriorityIsNotContiguous()
-		{
-			CommonSeatAllocatorTests.ShouldGroupAgentsAroundSeatBookingWithHighestRoleCountEvenWhenPriorityIsNotContiguous (false);
-		}
-
-		[Test]
 		public void ShouldGroupTeamsAroundSeatBookingWithRoleCount()
 		{
 			var dateOfBooking = new DateOnly(2014, 01, 01);
@@ -876,13 +761,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			seatBookingRequest2.SeatBookings.ElementAt (2).Seat.Name.Should().Be (location.Seats[4].Name);
 		}
 
-
-		[Test]
-		public void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCountConsideringFrequency()
-		{
-			CommonSeatAllocatorTests.ShouldGroupAgentsAroundSeatBookingWithHighestRoleCountConsideringFrequency (false);
-		}
-		
+	
 		#region Performance Benchmarks
 
 		[Test]

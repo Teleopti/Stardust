@@ -13,7 +13,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 {
 	public class CommonSeatAllocatorTests
 	{
-		public static void ShouldAllocateAnAgentToASeat(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateAnAgentToASeat(bool useSeatLevelAllocator)
 		{
 			var agentShift = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 			var seatBookingRequest = new SeatBookingRequest(agentShift);
@@ -32,8 +34,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			
 			Assert.That(agentShift.Seat.Name == "Seat1");
 		}
-
-		public static void ShouldAllocateTwoAgentsToOneSeatEach(bool useSeatLevelAllocator)
+		
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateTwoAgentsToOneSeatEach(bool useSeatLevelAllocator)
 		{
 			var agentShift1 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
@@ -59,7 +63,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(allocatedSeats.Contains("Seat1") && allocatedSeats.Contains("Seat2"));
 		}
 
-		public static void ShouldAllocateAccordingToPriority(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateAccordingToPriority(bool useSeatLevelAllocator)
 		{
 			var agentShift1 = new SeatBooking(PersonFactory.CreatePerson("Agent1"), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
@@ -83,8 +89,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(agentShift2.Seat.Name == "Seat1");
 			Assert.That(agentShift1.Seat.Name == "Seat2");
 		}
-
-		public static void ShouldAllocateTwoAgentsSequentiallyToOneSeat(bool useSeatLevelAllocator)
+		
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateTwoAgentsSequentiallyToOneSeat(bool useSeatLevelAllocator)
 		{
 			var agentShift1 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 01, 11, 59, 59, DateTimeKind.Utc));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
@@ -109,7 +117,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(allocatedSeats[0].Equals("Seat1") && allocatedSeats[1].Equals("Seat1"));
 		}
 
-		public static void ShouldAllocateSeatsByEarliestFirst(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateSeatsByEarliestFirst(bool useSeatLevelAllocator)
 		{
 			var agentShift1 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 1, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 01, 9, 30, 00, DateTimeKind.Utc));
 			var agentShift2 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 10, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 01, 18, 30, 0, DateTimeKind.Utc));
@@ -135,7 +145,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(seatBookingRequest2.SeatBookings.Count(booking => booking.Seat == null) == 1);
 		}
 
-		public static void ShouldNotAllocateTwoAgentsSequentiallyToOneSeat(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldNotAllocateTwoAgentsSequentiallyToOneSeat(bool useSeatLevelAllocator)
 		{
 			var agentShift1 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 01, 12, 59, 59, DateTimeKind.Utc));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
@@ -159,7 +171,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(agentShift2.Seat == null);
 		}
 
-		public static void ShouldAllocateAccordingToStartTime(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateAccordingToStartTime(bool useSeatLevelAllocator)
 		{
 			var bookingDay = DateOnly.Today;
 			var bookingDateTime = DateTime.SpecifyKind(bookingDay.Date, DateTimeKind.Utc);
@@ -186,8 +200,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(agentShift2.Seat.Name == "Seat1");
 
 		}
-
-		public static void ShouldAllocateToGroupFirst(bool useSeatLevelAllocator)
+		
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateToGroupFirst(bool useSeatLevelAllocator)
 		{
 			var dateOfBooking = new DateOnly (2014, 01, 01);
 			var bookingDateTime = DateTime.SpecifyKind(dateOfBooking.Date, DateTimeKind.Utc);
@@ -218,8 +234,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(agentShift1.Seat == null);
 
 		}
-
-		public static void ShouldNotAllocateAnAgentToAnAlreadyBookedSeat(bool useSeatLevelAllocator)
+		
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldNotAllocateAnAgentToAnAlreadyBookedSeat(bool useSeatLevelAllocator)
 		{
 			var bookingDate = new DateOnly(2014, 01, 01);
 			var bookingDateTime = DateTime.SpecifyKind(bookingDate.Date, DateTimeKind.Utc);
@@ -246,7 +264,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 		}
 
-		public static void ShouldAllocateToAvailableSeat(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateToAvailableSeat(bool useSeatLevelAllocator)
 		{
 			var dateOfBooking = new DateOnly (2014, 01, 01);
 			var bookingDateTime = DateTime.SpecifyKind(dateOfBooking.Date, DateTimeKind.Utc);
@@ -281,9 +301,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(agentShift1.Seat.Name == "Seat2");
 		}
 
-
-
-		public static void ShouldNotAllocateAnAgentToASeatWhereRolesDoNotMatch(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldNotAllocateAnAgentToASeatWhereRolesDoNotMatch(bool useSeatLevelAllocator)
 		{
 			var agentShift = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 			var seatBookingRequest = new SeatBookingRequest(agentShift);
@@ -311,7 +331,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.IsNull(agentShift.Seat);
 		}
 
-		public static void ShouldAllocateAnAgentToASeatWhereRolesMatch(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateAnAgentToASeatWhereRolesMatch(bool useSeatLevelAllocator)
 		{
 			var outboundRole = new ApplicationRole()
 			{
@@ -352,8 +374,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.AreEqual(location.Seats[2], outboundAgentShift.Seat);
 
 		}
-
-		public static void ShouldAllocateAnAgentToASeatWhereAllRolesMatch(bool useSeatLevelAllocator)
+		
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateAnAgentToASeatWhereAllRolesMatch(bool useSeatLevelAllocator)
 		{
 			var outboundRole = new ApplicationRole()
 			{
@@ -397,8 +421,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.AreEqual(location.Seats[1], teamLeaderShift.Seat);
 		}
 
-		
-		public static void ShouldAllocateAnAgentToASeatWhereRolesMatchBySeatPriority(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateAnAgentToASeatWhereRolesMatchBySeatPriority(bool useSeatLevelAllocator)
 		{
 			var outboundRole = new ApplicationRole()
 			{
@@ -432,7 +457,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.AreEqual (location.Seats[2], outboundAgentShift.Seat);
 		}
 
-		public static void ShouldAllocateAgentToMostPreviouslyOccupiedSeat(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateAgentToMostPreviouslyOccupiedSeat(bool useSeatLevelAllocator)
 		{
 			var dateOfBooking = new DateOnly (2014, 01, 01);
 			var bookingDateTime = DateTime.SpecifyKind(dateOfBooking.Date, DateTimeKind.Utc);
@@ -473,8 +500,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			Assert.That(agentShift.Seat.Name == "Seat2");
 		}
-
-		public static void ShouldAllocateAgentToMostPreviouslyOccupiedSeatWhenRolesAreSame(bool useSeatLevelAllocator)
+		
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldAllocateAgentToMostPreviouslyOccupiedSeatWhenRolesAreSame(bool useSeatLevelAllocator)
 		{
 			var dateOfBooking = new DateOnly(2014, 01, 01);
 			
@@ -522,9 +551,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(agentShift.Seat.Name == "Seat2");
 		}
 
-
-
-		public static void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCountEvenWhenPriorityIsNotContiguous(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCountEvenWhenPriorityIsNotContiguous(bool useSeatLevelAllocator)
 		{
 
 			var dateOfBooking = new DateOnly(2014, 01, 01);
@@ -551,9 +580,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 		}
 
-
-
-		public static void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCount(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCount(bool useSeatLevelAllocator)
 		{
 
 			var dateOfBooking = new DateOnly(2014, 01, 01);
@@ -582,7 +611,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 		}
 
-		public static void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCountConsideringFrequency(bool useSeatLevelAllocator)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCountConsideringFrequency(bool useSeatLevelAllocator)
 		{
 
 			var dateOfBooking = new DateOnly(2014, 01, 01);
@@ -628,8 +659,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That(agentShifts[1].Seat.Name == "Seat5"); // close to team and using priority?
 			Assert.That(agentShifts[2].Seat.Name == "Seat3");
 		}
-
-		private static SeatBooking[] groupAgentAroundSeatBookingTestSetup(bool useSeatLevelAllocator, IPerson[] agents, DateOnly dateOfBooking, SeatMapLocation location, Dictionary<Guid, List<ISeatOccupancyFrequency>> seatFrequencies = null)
+		
+		[TestCase(true)]
+		[TestCase(false)]
+		private SeatBooking[] groupAgentAroundSeatBookingTestSetup(bool useSeatLevelAllocator, IPerson[] agents, DateOnly dateOfBooking, SeatMapLocation location, Dictionary<Guid, List<ISeatOccupancyFrequency>> seatFrequencies = null)
 		{
 
 			var bookingDateTime = DateTime.SpecifyKind(dateOfBooking.Date, DateTimeKind.Utc);			
