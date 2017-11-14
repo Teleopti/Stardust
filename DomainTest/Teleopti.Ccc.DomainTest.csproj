@@ -286,6 +286,7 @@
     <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationScenarioTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeSchedulingScenario.cs" />
     <Compile Include="SchedulingScenarios\RemoveImplicitResCalcContext.cs" />
+    <Compile Include="SchedulingScenarios\ResourceCalculateWithNewContext.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithBpoTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithNoContextTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockContractTimeTest.cs" />

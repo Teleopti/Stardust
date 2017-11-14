@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -19,9 +21,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[DomainTest]
-	public class ResourceCalculationTest
+	public class ResourceCalculationTest : ISetup
 	{
-		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest ResourceCalculateInContext;
+		public ResourceCalculateWithNewContext ResourceCalculateInContext;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeTimeZoneGuard TimeZoneGuard;
 
@@ -209,6 +211,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Math.Round(intervalA.CalculatedResource, 2).Should().Be.EqualTo(1);
 			Math.Round(intervalB.CalculatedResource, 2).Should().Be.EqualTo(0.75);
 			// You can argue that intervalB should be higher than 0.75 as agent1 could spend almost all his time on A. In this case we have lost 0.25 resources in total
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<ResourceCalculateWithNewContext>();
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationClosedSkillsTest : ResourceCalculationScenario
 	{
-		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest Target;
+		public ResourceCalculateWithNewContext Target;
 
 		[Test]
 		public void ShouldNotConsiderSkillsWithoutOpenHours()

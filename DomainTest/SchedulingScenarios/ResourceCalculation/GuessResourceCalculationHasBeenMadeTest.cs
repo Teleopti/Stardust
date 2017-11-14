@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class GuessResourceCalculationHasBeenMadeTest : ResourceCalculationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest Target;
+		public ResourceCalculateWithNewContext Target;
 
 		[Test]
 		public void NoResourceCalculationHasBeenMade()

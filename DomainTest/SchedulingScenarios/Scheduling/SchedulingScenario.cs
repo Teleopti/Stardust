@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[TestFixture(SeperateWebRequest.DontSeperateWebRequest,  EasierBlockScheduling.DontEasierBlockScheduling, RemoveClassicShiftCategory.RemoveClassicShiftCategoryFalse, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public abstract class SchedulingScenario : IConfigureToggleManager, ITestInterceptor
+	public abstract class SchedulingScenario : IConfigureToggleManager, ITestInterceptor, ISetup
 	{
 		protected readonly SeperateWebRequest SeperateWebRequest;
 		protected readonly EasierBlockScheduling ResourcePlannerEasierBlockScheduling46155;
@@ -57,6 +58,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		{
 			if (SeperateWebRequest == SeperateWebRequest.DoSeperateWebRequest)
 				IoCTestContext.SimulateNewRequest();
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<ResourceCalculateWithNewContext>();
 		}
 	}
 	

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class ResourceCalculationResultTest : ResourceCalculationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest Target;
+		public ResourceCalculateWithNewContext Target;
 		public InitMaxSeatForStateHolder InitMaxSeatForStateHolder;
 
 		[TestCase(2000, 0, 2000)]

@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var withDefaultDayOff = new FakeDayOffTemplateRepository();
 			withDefaultDayOff.Has(DayOffFactory.CreateDayOff());
 			system.UseTestDouble(withDefaultDayOff).For<IDayOffTemplateRepository>();
+			system.AddService<ResourceCalculateWithNewContext>();
 		}
 
 		public void Configure(FakeToggleManager toggleManager)

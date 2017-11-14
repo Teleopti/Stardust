@@ -1,13 +1,15 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourceCalculation
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
-	public class ResourceCalculateWithNewContext_OnlyToBeUsedFromTest
+	//just a wrapper class for simpler testing. Not to be moved to domain!
+	public class ResourceCalculateWithNewContext
 	{
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
 
-		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest(IResourceCalculation resourceCalculation, CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)
+		public ResourceCalculateWithNewContext(IResourceCalculation resourceCalculation, CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)
 		{
 			_resourceCalculation = resourceCalculation;
 			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;

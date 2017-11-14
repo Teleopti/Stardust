@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationFocusHighUnderstaffingPercentageTest : ResourceCalculationScenario
 	{
-		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest Target;
+		public ResourceCalculateWithNewContext Target;
 
 		[Test]
 		public void ShouldPutMoreResourcesOnSkillsWithHighestUnderstaffPercentage()

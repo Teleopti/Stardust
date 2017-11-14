@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class CascadingResourceCalculationTest : ResourceCalculationScenario
 	{
-		public ResourceCalculateWithNewContext_OnlyToBeUsedFromTest Target;
+		public ResourceCalculateWithNewContext Target;
 		public IPersonSkillProvider PersonSkillProvider;
 		public CascadingResourceCalculationContextFactory ResourceCalculationContextFactory;
 

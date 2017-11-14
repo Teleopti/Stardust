@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[TestFixture(OptimizationCodeBranch.TeamBlock, BreakPreferenceStartTimeByMax.DoNotConsiderBreakPreferenceStartTimeByMax, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse)]
 	[TestFixture(OptimizationCodeBranch.Classic, BreakPreferenceStartTimeByMax.ConsiderBreakPreferenceStartTimeByMax, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse)]
 	[TestFixture(OptimizationCodeBranch.Classic, BreakPreferenceStartTimeByMax.DoNotConsiderBreakPreferenceStartTimeByMax, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse)]
-	public abstract class IntradayOptimizationScenarioTest : IConfigureToggleManager
+	public abstract class IntradayOptimizationScenarioTest : IConfigureToggleManager, ISetup
 	{
 		protected readonly OptimizationCodeBranch _resourcePlannerMergeTeamblockClassicIntraday45508;
 		protected readonly BreakPreferenceStartTimeByMax _resourcePlanner_BreakPreferenceStartTimeByMax_46002;
@@ -41,6 +42,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				toggleManager.Enable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680);
 			else
 				toggleManager.Disable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680); //need to disable explicitly because toggle will be set to true default later
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<ResourceCalculateWithNewContext>();
 		}
 	}
 

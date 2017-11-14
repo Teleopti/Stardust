@@ -142,7 +142,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ScheduleOvertime>().As<IScheduleOvertime>();
 				builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
 			}
-			builder.RegisterType<ResourceCalculateWithNewContext_OnlyToBeUsedFromTest>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PersonalSkillsProvider>().SingleInstance();
