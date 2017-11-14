@@ -119,5 +119,38 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			addPersonCommandDto.Result.AffectedId.Should().Be.EqualTo(null);
 		}
 
+
+		[Test]
+		public void ShouldThrowIfNotNullUsernameAndNullPassword()
+		{
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var tenantDataManager = MockRepository.GenerateMock<ITenantDataManager>();
+			var workflowControlSetRepository = MockRepository.GenerateMock<IWorkflowControlSetRepository>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
+			var target = new AddPersonCommandHandler(personRepository, currentUnitOfWorkFactory, tenantDataManager, workflowControlSetRepository);
+			var addPersonCommandDto = new AddPersonCommandDto
+			{
+				FirstName = "first",
+				LastName = "last",
+				Email = "test@teleopti.com",
+				EmploymentNumber = "employmentNumber",
+				Identity = "identity1",
+				ApplicationLogonName = "logonname",
+				ApplicationLogOnPassword = null,
+				Note = "note1",
+				WorkWeekStart = DayOfWeek.Sunday,
+				TimeZoneId = TimeZoneInfo.Utc.Id,
+				CultureLanguageId = CultureInfo.CurrentCulture.LCID,
+				UICultureLanguageId = CultureInfo.CurrentUICulture.LCID,
+				IsDeleted = true
+			};
+
+			Assert.Throws<ArgumentException>(() => target.Handle(addPersonCommandDto));
+		}
+
 	}
 }
