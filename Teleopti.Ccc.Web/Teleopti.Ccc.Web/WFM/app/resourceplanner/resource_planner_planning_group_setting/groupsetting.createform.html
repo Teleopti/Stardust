@@ -175,8 +175,8 @@
 			<card-panel>
 				<card-panel-header>
 					<div class="header-flex">
-						<b>{{vm.blockScheduling.Name}}</b>
-						<b ng-if="vm.blockScheduling.Id == 'BlockScheduling' "> + {{vm.selectedType.Id | translate}} + {{vm.selectedOptionName | translate}}</b>
+						<b>{{vm.selectedSchedulingMethod.Name}}</b>
+						<b ng-if="vm.selectedSchedulingMethod.Id == 'BlockScheduling' "> + {{vm.selectedType.Id | translate}} + {{vm.selectedOptionName | translate}}</b>
 					</div>
 				</card-panel-header>
 				<card-panel-content>
@@ -213,7 +213,7 @@
 												<div class="form-input-wrap">
 													<form>
 														<md-radio-group ng-model="vm.selectedOptionName">
-															<md-radio-button ng-repeat="option in vm.blockSchedulingOptions" ng-value="option.Id" ng-click="vm.setBlockSchedulingOption($index)">
+															<md-radio-button ng-repeat="option in vm.schedulingSettings[1].Options" ng-value="option.Id" ng-click="vm.setBlockSchedulingOption($index)">
 																<span>{{ option.Id | translate}}</span>
 															</md-radio-button>
 														</md-radio-group>

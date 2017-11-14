@@ -478,6 +478,50 @@ card-panel-header > .pp-validation-progress {
 	top:0;
 }
 
+// .fake-radio-button {
+// 	background: rgba(0,0,0,.26);
+//     border-radius: 50%;
+// }
+
+// div.fake-radio-button:before {
+// 	box-sizing: border-box;
+// 	position: absolute;
+// 	top: 0;
+// 	left: 0;
+// 	width: 20px;
+// 	height: 20px;
+// 	border-radius: 50%;
+// 	background-color: transparent;
+// }
+
+// div.fake-radio-button:before.check {
+// 	background-color: $blue-300!important;
+// }
+
+.fake-radio-button{ 
+	position: relative;
+	margin: 8px 0px;
+	i{
+		position: absolute;
+		top: -5px;
+		left: 0;	
+		color: $gray026 ;	
+	}
+	i.check {
+		color: $blue-300  ;
+	}
+	i:before {
+		font-size: 25px!important;
+		
+	}
+	span{
+		margin-left: 30px;
+	}
+		
+}
+
+
+
 
 
 
