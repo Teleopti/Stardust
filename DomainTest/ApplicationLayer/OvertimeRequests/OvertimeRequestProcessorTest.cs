@@ -815,6 +815,81 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsApproved.Should().Be.True();
 		}
 
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
+		[SetUICulture("en-US")]
+		public void ShouldDenyWhenVoilateNightlyRestTimeRule()
+		{
+			setupPerson(8, 21);
+			var person = LoggedOnUser.CurrentUser();
+			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(60), TimeSpan.FromHours(6), TimeSpan.FromHours(10));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero,TimeSpan.FromDays(1))), 10d, 8d);
+
+			for (int i = 0; i < 5; i++)
+			{
+				var day = 10 + i;
+				var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, day, 8, 2017, 7, day, 16));
+				ScheduleStorage.Add(pa);
+			}
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 11);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be("There must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
+		[SetUICulture("en-US")]
+		public void ShouldApproveWhenSatisfyNightlyRestTimeRule()
+		{
+			setupPerson(8, 21);
+			var person = LoggedOnUser.CurrentUser();
+			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(60), TimeSpan.FromHours(6), TimeSpan.FromHours(10));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
+
+			for (int i = 0; i < 5; i++)
+			{
+				var day = 10 + i;
+				var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, day, 8, 2017, 7, day, 16));
+				ScheduleStorage.Add(pa);
+			}
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 10);
+			Target.Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
 		private void mockRequestApprovalServiceApproved(IPersonRequest personRequest)
 		{
 			var requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();

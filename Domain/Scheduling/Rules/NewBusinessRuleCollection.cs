@@ -126,6 +126,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			rules.ClearItems();
 
 			rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+			rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
+
 			return rules;
 		}
 
