@@ -1,14 +1,42 @@
-﻿//Put those into StyleGuide later.
-wfm-multiple-search-input .wfm-multiple-search-wrapper {
-	height: auto;
-}
+﻿//Put those search input styles into StyleGuide later.
+wfm-multiple-search-input {
+	display: inline-block;
+	margin: 10px 10px 10px 0;
 
-wfm-multiple-search-input div.advanced-input-dropdown {
-	top: calc(100% -10px);
-}
+	.wfm-multiple-search-wrapper {
+		height: auto;
+	}
 
-wfm-multiple-search-input .advanced-input {
-	vertical-align: top;
+	.full-padding {
+		width: 50%;
+	}
+
+	div.advanced-input-dropdown {
+		top: calc(100% -10px);
+		width: 321px;
+	}
+
+	.advanced-input {
+		vertical-align: top;
+		width: 200px;
+	}
+
+	.expand-advanced-input {
+		max-width: 100%;
+		width: 200px !important;
+	}
+
+	.focusing-search {
+		color: $blue-500;
+	}
+
+	@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
+		.advanced-input-dropdown > .con-row {
+			display: block;
+		}
+
+	}
+
 }
 
 .wfm-date-range-picker {
@@ -341,32 +369,6 @@ wfm-multiple-search-input .advanced-input {
 	  
 	  	.timezone-picker{
 		  padding-top: 5px;
-		}
-	}
-
-	.people-search-container {
-		margin: 10px 10px 10px 0;
-
-		@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
-			.advanced-input-dropdown > .con-row {
-				display: block;
-			}
-		}
-
-		.advanced-input {
-			width: 150px;
-		}
-
-		wfm-multiple-search-input .expand-advanced-input {
-			width: 150px !important;
-		}
-
-		.expand-advanced-input {
-			max-width: 100%;
-		}
-
-		.focusing-search {
-			color: $blue-500;
 		}
 	}
 

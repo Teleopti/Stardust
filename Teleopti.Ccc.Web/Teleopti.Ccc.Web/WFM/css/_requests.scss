@@ -161,31 +161,6 @@
 			justify-content: flex-start;
 			padding-top: 5px;
 
-			wfm-multiple-search-input {
-				margin: 10px 10px 10px 0;
-
-				.full-padding {
-					width: 50%;
-				}
-
-				.advanced-input-dropdown {
-					width: 321px;
-				}
-
-				.advanced-input {
-					width: 150px;
-				}
-
-				.expand-advanced-input {
-					max-width: 100%;
-					width: 150px !important;
-				}
-			}
-
-			.focusing-search {
-				color: $blue-500;
-			}
-
 			.request-date-range-picker {
 				margin-right: 1em;
 			}
@@ -436,7 +411,6 @@
 			background-size: 11px 11px;
 		}
 
-
 		.shift-trade-header-container {
 			position: relative;
 		}
@@ -458,7 +432,6 @@
 			padding-left: 12px;
 			white-space: nowrap;
 		}
-
 
 		.shift-trade-cell-text {
 			margin-right: 5px;

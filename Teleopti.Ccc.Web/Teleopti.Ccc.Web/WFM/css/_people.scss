@@ -14,16 +14,7 @@
 	.people-header{
 		padding: 10px 10px 0 10px;
 	}
-	.people-search-container{
-		display: inline-block;
-	}
-	.people-search {
-		padding: 10px 0;
-
-		#simple-people-search {
-			width: 220px;
-		}
-	}
+	
 	.context-menu .context-menu-left {
 		z-index: 1000;
 		text-transform: none;
@@ -81,34 +72,6 @@
 	.input-prepend span {
 		display: inline-block;
 		width: 0;
-	}
-
-	.advanced-input {
-		font-size: 15px;
-		position: relative;
-		overflow: hidden;
-		margin-top: 8px;
-		margin-right: 10px;
-		margin-bottom: 8px;
-	}
-
-	.advanced-label {
-		font-size: 18px;
-		font-weight: normal;
-		position: absolute;
-		top: -22px;
-		left: 5px;
-		transition: .2s ease all;
-		pointer-events: none;
-		color: #999;
-	}
-
-	.advanced-input {
-		&:focus ~ label, &:valid ~ label {
-			font-size: 14px;
-			top: -25px;
-			color: $pink-500;
-		}
 	}
 
 	.md-sidenav-right md-content select{
@@ -233,62 +196,9 @@
 			}
 		}
 	}
-	.advanced-search-container {
-		top: 0;
-	}
+	
 	.pagination li.disabled a{
 		cursor:not-allowed;
-	}
-
-	wfm-multiple-search-input{
-		.advanced-input{
-			width: 316px;
-		}
-
-		.expand-advanced-input{
-			max-width:100%;
-		}
-    }
-}
-
-
-.people-search {
-	position: relative;
-}
-
-.simple-people-search {
-	display: inline-block;
-	height: 30px;
-}
-
-.people-search > .dropdown {
-	position: absolute;
-	top: 30px;
-	left: 0;
-}
-
-.advanced-search-container {
-	position: absolute;
-	background-color: $white;
-	z-index: 15;
-	top: -11px;
-	left: 18px;
-
-	input {
-		position: relative;
-		margin: 5px;
-	}
-	// CSS hack for IE10, IE11
-	@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
-		.con-row {
-			min-width: 316px;
-		}
-	}
-	// CSS hack for edge Browser 12+
-	@supports (-ms-accelerator:true) { 
-		.con-row {
-			min-width: 316px;
-		}
 	}
 }
 
