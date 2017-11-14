@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         private readonly IResourceCalculation _resourceOptimizationHelper;
         private readonly LoadScheduleByPersonSpecification _loadScheduleByPersonSpecification;
 	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
-	    private ILoaderDeciderResult _deciderResult;
+		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
+		private ILoaderDeciderResult _deciderResult;
 
 	    public ISchedulerStateHolder SchedulerState { get; private set; }
 
@@ -49,7 +50,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             ISkillDayLoadHelper skillDayLoadHelper,
             IResourceCalculation resourceOptimizationHelper,
             LoadScheduleByPersonSpecification loadScheduleByPersonSpecification,
-						IScheduleStorageFactory scheduleStorageFactory)
+						IScheduleStorageFactory scheduleStorageFactory,
+			CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)
         {
             SchedulerState = stateHolder;
 
@@ -62,7 +64,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             _resourceOptimizationHelper = resourceOptimizationHelper;
             _loadScheduleByPersonSpecification = loadScheduleByPersonSpecification;
 	        _scheduleStorageFactory = scheduleStorageFactory;
-        }
+			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
+		}
 
         public void LoadWithIntradayData(IUnitOfWork unitOfWork)
         {
@@ -196,10 +199,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         	splitAllWorkloadDaysWithMergedIntervals();
             var dateOnlyPeriod =
                 SchedulerState.RequestedPeriod.DateOnlyPeriod;
-            foreach (var dateOnly in dateOnlyPeriod.DayCollection())
-            {
-                _resourceOptimizationHelper.ResourceCalculate(dateOnly, SchedulerState.SchedulingResultState.ToResourceOptimizationData(true, true));
-            }
+			using (_cascadingResourceCalculationContextFactory.Create(SchedulerState, false, dateOnlyPeriod))
+			{
+				foreach (var dateOnly in dateOnlyPeriod.DayCollection())
+				{
+					_resourceOptimizationHelper.ResourceCalculate(dateOnly, SchedulerState.SchedulingResultState.ToResourceOptimizationData(true, true));
+				}				
+			}
         }
 
     	private void splitAllWorkloadDaysWithMergedIntervals()
