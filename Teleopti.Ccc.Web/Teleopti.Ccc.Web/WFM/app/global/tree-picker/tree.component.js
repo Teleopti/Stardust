@@ -153,6 +153,7 @@
                 removeSemiStateToAllChildren(event.target.parentNode.nextElementSibling);
                 setChildrenNodesSelectState(item.$parent.node[vm.nodeChildrenName], state);
             }
+            removeSemiStateToNode(event.target);
             return checkSemiStateToSelectedNodeParent(item.$parent, event.target.parentNode.parentNode.parentNode.parentNode);
         }
 
