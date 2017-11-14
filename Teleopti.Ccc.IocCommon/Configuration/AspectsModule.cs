@@ -1,5 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Infrastructure.Aop;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LogInfoAspect>().SingleInstance();
 			builder.RegisterType<LogManagerWrapper>().As<ILogManager>().SingleInstance();
 
+			
 			builder.RegisterType<TestLog>().SingleInstance();
 			builder.RegisterType<TestLogAspect>().InstancePerDependency();
 		}

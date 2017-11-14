@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<ICurrentReadModelUnitOfWork>()
 				.SingleInstance();
 			builder.RegisterType<ReadModelUnitOfWorkAspect>()
-				.As<IReadModelUnitOfWorkAspect>()
+				.As<IAspect>()
 				.SingleInstance();
 			builder.RegisterType<WithReadModelUnitOfWork>()
 				.SingleInstance()
