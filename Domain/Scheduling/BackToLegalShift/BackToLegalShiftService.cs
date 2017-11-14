@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			int processedBlocks = 0;
 			foreach (var selectedTeamBlock in selectedTeamBlocks.GetRandom(selectedTeamBlocks.Count, true))
 			{
-				using (_cascadingResourceCalculationContextFactory.Create(schedulingResultStateHolder.Schedules,
-					schedulingResultStateHolder.Skills, false, selectedTeamBlock.BlockInfo.BlockPeriod))
+				using (_cascadingResourceCalculationContextFactory.Create(schedulingResultStateHolder, false, selectedTeamBlock.BlockInfo.BlockPeriod))
 				{
 					isSingleTeamSingleDay(selectedTeamBlock);
 	

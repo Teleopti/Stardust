@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				_loadSchedulingStateHolderForResourceCalculation.Execute(requestedScenario, periodForResourceCalc, allPeople,
 					_schedulingResultStateHolder, p => allPeople, true);
 
-				using(_cascadingResourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, false, dateOnlyPeriodForResourceCalc))
+				using(_cascadingResourceCalculationContextFactory.Create(_schedulingResultStateHolder, false, dateOnlyPeriodForResourceCalc))
 				{
 					foreach (var dateTime in dateOnlyPeriodForResourceCalc.DayCollection())
 					{

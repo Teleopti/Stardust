@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var stateholder = _schedulerStateHolder();
 
-			using (_cascadingResourceCalculationContextFactory.Create(stateholder.Schedules, stateholder.SchedulingResultState.Skills, false, stateholder.RequestedPeriod.DateOnlyPeriod))
+			using (_cascadingResourceCalculationContextFactory.Create(stateholder.SchedulingResultState, false, stateholder.RequestedPeriod.DateOnlyPeriod))
 			{
 				_resourceCalculation.ResourceCalculate(stateholder.RequestedPeriod.DateOnlyPeriod, stateholder.SchedulingResultState.ToResourceOptimizationData(stateholder.ConsiderShortBreaks, false));
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, true, stateholder.SchedulingResultState, _userTimeZone);
