@@ -16744,4 +16744,8 @@ Do you want to participate?</value>
     <value>Set Gamification Targets</value>
     <comment>A tab title in the Gamification module in WFM</comment>
   </data>
+  <data name="AppliedSetting" xml:space="preserve">
+    <value>Applied Setting</value>
+    <comment>(Table header, etc.) The (gamification) setting applied to the team</comment>
+  </data>
 </root>

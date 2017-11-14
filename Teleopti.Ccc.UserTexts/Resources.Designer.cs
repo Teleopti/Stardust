@@ -2897,6 +2897,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applied Setting.
+        /// </summary>
+        public static string AppliedSetting {
+            get {
+                return ResourceManager.GetString("AppliedSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string Apply {
