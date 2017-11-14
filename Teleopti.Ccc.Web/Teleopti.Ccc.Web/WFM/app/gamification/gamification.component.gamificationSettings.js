@@ -8,7 +8,7 @@
 			controller: GamificationSettingsController
 		});
 
-	GamificationSettingsController.$inject = ['$mdSelect', '$element', '$scope', '$translate', '$q', 'gamificationSettingService',];
+	GamificationSettingsController.$inject = ['$mdSelect', '$element', '$scope', '$translate', '$q', 'gamificationSettingService'];
 
 	function GamificationSettingsController($mdSelect, $element, $scope, $translate, $q, gamificationSettingService) {
 		var ctrl = this;
@@ -172,7 +172,7 @@
 				for (var index = 0; index < setting.ExternalBadgeSettings.length; index++) {
 					var item = setting.ExternalBadgeSettings[index];
 					var aExternalSetting = {
-						id: item.Id,
+						id: item.QualityId,
 						name: item.Name,
 						enable: item.Enabled,
 						is_buildin: false,
