@@ -56,7 +56,11 @@
 			return $q(function (resolve, reject) {
 				$http({
 					method: 'POST',
-					url: '../api/Gamification/SetTeamGamification'
+					url: '../api/Gamification/SetTeamGamification',
+					data: {
+						TeamIds: teamIds,
+						GamificationSettingId: settingId
+					}
 				}).then(function (response) {
 					resolve(response.data);
 				}, function (response) {

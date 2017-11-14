@@ -3,10 +3,16 @@
 	angular.module('wfm.gamification')
 		.component('gamificationTargets', {
 			templateUrl: 'app/gamification/html/g.component.gamificationTargets.tpl.html',
-			controller: ['$translate', '$timeout', 'GamificationDataService', GamificationTargetsController]
+			controller: [
+				'$log',
+				'$translate',
+				'$timeout',
+				'GamificationDataService',
+				GamificationTargetsController
+			]
 		});
 
-	function GamificationTargetsController($translate, $timeout, dataService) {
+	function GamificationTargetsController($log, $translate, $timeout, dataService) {
 		var ctrl = this;
 
 		var selectedText = '';
@@ -56,8 +62,17 @@
 		};
 
 		ctrl.onAppliedSettingChange = function (teamIds, newValue) {
-			console.log(teamIds, newValue);
-		}
+			dataService.updateAppliedSetting(teamIds, newValue)
+				.then(onSuccess, onError);
+
+			function onSuccess(saved) {
+				$log.debug(saved)
+			}
+
+			function onError(response) {
+				$log.error(response)
+			}
+		};
 
 		ctrl.selectedSites = [];
 
