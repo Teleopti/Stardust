@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
@@ -31,17 +32,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<TenantScopeAspect>().SingleInstance();
+			builder.RegisterType<TenantScopeAspect>().As<IAspect>().SingleInstance();
 			builder.RegisterType<TenantFromArguments>().SingleInstance();
 
-			builder.RegisterType<AsSystemAspect>().SingleInstance();
+			builder.RegisterType<AsSystemAspect>().As<IAspect>().SingleInstance();
 			builder.RegisterType<AsSystem>().SingleInstance();
 
 			builder.RegisterType<FullPermissions>().SingleInstance();
-			builder.RegisterType<FullPermissionsAspect>().SingleInstance();
+			builder.RegisterType<FullPermissionsAspect>().As<IAspect>().SingleInstance();
 
 			builder.RegisterType<ImpersonateSystem>().SingleInstance();
-			builder.RegisterType<ImpersonateSystemAspect>().SingleInstance();
+			builder.RegisterType<ImpersonateSystemAspect>().As<IAspect>().SingleInstance();
 
 			builder.RegisterType<LogOnOff>().As<ILogOnOff>().SingleInstance();
 
