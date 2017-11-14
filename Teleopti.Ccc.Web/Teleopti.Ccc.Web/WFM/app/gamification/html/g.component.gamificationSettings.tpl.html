@@ -21,7 +21,8 @@
         </div>
 
         <div class="icon-button ">
-            <button class="wfm-fab  material-depth-1" aria-label="Delete setting" ng-click="$ctrl.deleteSetting()" md-labeled-by-tooltip=" md-tooltip-1
+            <button class="wfm-fab material-depth-1" ng-disabled="$ctrl.settingDescriptors.length==1" aria-label="Delete setting" ng-click="$ctrl.deleteSetting()"
+                md-labeled-by-tooltip=" md-tooltip-1
                 ">
                 <i class="mdi mdi-close "></i>
 
