@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			var dayOffPreferences = new DaysOffPreferences();
 			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 			var optimizationPreferences = new OptimizationPreferences();
-			using (CascadingResourceCalculationContextFactory.Create(SchedulerStateHolder, false, selectedPeriod))
+			using (CascadingResourceCalculationContextFactory.Create(SchedulerStateHolder.SchedulingResultState, false, selectedPeriod))
 			{
 				Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
 					optimizationPreferences,

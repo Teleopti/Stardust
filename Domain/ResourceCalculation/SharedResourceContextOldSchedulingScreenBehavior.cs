@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IDisposable MakeSureExists(DateOnlyPeriod period)
 		{
 			var stateHolder = _stateHolder();
-			var disposableContext = _resourceCalculationContextFactory.Create(stateHolder, false, period);
+			var disposableContext = _resourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, false, period);
 			return new GenericDisposable(() =>
 			{
 				disposableContext?.Dispose();
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IDisposable disposableContext = null;
 			if (!ResourceCalculationContext.InContext) //TODO: this if probably never returns false... would be nice to get rid of it! (just kept old behavior for now)
 			{
-				disposableContext = _resourceCalculationContextFactory.Create(stateHolder, false, period);
+				disposableContext = _resourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, false, period);
 			}
 			return new GenericDisposable(() =>
 			{

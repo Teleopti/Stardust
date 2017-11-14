@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var virtualSkillContext = _virtualSkillContext.Create(schedulerStateHolder.SchedulingResultState.LoadedAgents, period);
-			var resourceContext = _resourceCalculationContext.Create(schedulerStateHolder, true, period);
+			var resourceContext = _resourceCalculationContext.Create(schedulerStateHolder.SchedulingResultState, true, period);
 			return new GenericDisposable(() =>
 			{
 				resourceContext.Dispose();

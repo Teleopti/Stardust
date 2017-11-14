@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (!optimizationPreferences.General.OptimizationStepShiftsWithinDay) 
 				return continuedStep;
 			
-			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder(), false, selectedPeriod.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().SchedulingResultState, false, selectedPeriod.Inflate(1)))
 			{
 				recalculateIfContinuedStep(continuedStep, selectedPeriod);
 			}
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				continuedStep = true;
 			}
 
-			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder(), false, selectedPeriod.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().SchedulingResultState, false, selectedPeriod.Inflate(1)))
 			{
 				var matrixListForWorkShiftAndIntradayOptimization = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
 
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			continuedStep = OptimizationStepIntraday(backgroundWorker, selectedAgents, selectedPeriod, optimizationPreferences, continuedStep);
 
-			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder(), false, selectedPeriod.Inflate(1)))
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().SchedulingResultState, false, selectedPeriod.Inflate(1)))
 			{
 				if (optimizationPreferences.General.OptimizationStepFairness)
 				{

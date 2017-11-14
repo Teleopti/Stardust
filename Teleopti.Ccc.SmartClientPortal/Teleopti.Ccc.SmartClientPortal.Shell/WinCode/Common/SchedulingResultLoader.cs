@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         	splitAllWorkloadDaysWithMergedIntervals();
             var dateOnlyPeriod =
                 SchedulerState.RequestedPeriod.DateOnlyPeriod;
-			using (_cascadingResourceCalculationContextFactory.Create(SchedulerState, false, dateOnlyPeriod))
+			using (_cascadingResourceCalculationContextFactory.Create(SchedulerState.SchedulingResultState, false, dateOnlyPeriod))
 			{
 				foreach (var dateOnly in dateOnlyPeriod.DayCollection())
 				{
