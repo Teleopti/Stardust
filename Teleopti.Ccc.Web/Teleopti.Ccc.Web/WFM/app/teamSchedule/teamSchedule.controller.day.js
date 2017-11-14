@@ -88,7 +88,7 @@
 			var size = storageSize || {
 				tableHeight: defaultHeight * 0.64,
 				tableBodyHeight: defaultTableBodyHeight * 0.62,
-				chartHeight: defaultHeight * 0.3
+				chartHeight: defaultHeight * 0.3 - 40
 			};
 
 			if (vm.staffingEnabled) {
@@ -180,7 +180,8 @@
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 			var tableHeight = d.height - footer.offsetHeight;
 			var tBodyHeight = tableHeight - tHeaderHeight;
-			var chartHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - d.height - 50;
+			var staffingHeader = 50;
+			var chartHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - d.height - staffingHeader - 30;
 			if (tableHeight <= 100) {
 				StaffingConfigStorageService.setSize(100, 100 - tHeaderHeight, chartHeight);
 				return;
