@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Aop
 {
-	[IoCTest]
+	[DomainTest]
 	public class LogInfoAspectTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
