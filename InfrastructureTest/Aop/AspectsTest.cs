@@ -3,6 +3,7 @@ using System.IO;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop.Core;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			system.AddService<Aspect3Attribute.Aspect3>();
 		}
 
+		public IIoCTestContext Context;
 		public AspectedService Target;
 		public Aspect1Attribute.Aspect1 Aspect1;
 		public Aspect2Attribute.Aspect2 Aspect2;
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		public void ShouldInvokeAspectAfterMethodWithExceptionFromInvokation()
 		{
 			Exception expected = new FileNotFoundException();
-			Target.FailsWith  = expected;
+			Target.FailsWith = expected;
 
 			Assert.Throws<FileNotFoundException>(Target.AspectedMethod);
 
@@ -111,14 +113,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			Aspect1.AfterInvoked.Should().Be.True();
 			Aspect2.AfterInvoked.Should().Be.True();
 		}
-		
+
+		[Test]
+		public void ShouldResolveAspectServicesAfterShutdown()
+		{
+			Target.AspectedMethod();
+			Target.Reset();
+			Context.SimulateShutdown();
+
+			Target.AspectedMethod();
+
+			Target.Invoked.Should().Be.True();
+			Aspect1.AfterInvoked.Should().Be.True();
+			Aspect2.AfterInvoked.Should().Be.True();
+			Aspect3.AfterInvoked.Should().Be.True();
+		}
+
 		public class AspectedService
 		{
 			public bool Invoked;
 			public Exception FailsWith;
 
+			public void Reset()
+			{
+				Invoked = false;
+				FailsWith = null;
+			}
+
 			[An]
-			public virtual void AttributedMethod() { }
+			public virtual void AttributedMethod()
+			{
+			}
 
 			[Aspect1]
 			[Aspect2]
@@ -129,7 +154,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 				if (FailsWith != null)
 					throw FailsWith;
 			}
-
 		}
 
 		public class AnAttribute : Attribute
@@ -138,21 +162,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 
 		public class Aspect1Attribute : AspectAttribute
 		{
-			public Aspect1Attribute() : base(typeof(Aspect1)) { }
-			public class Aspect1 : FakeAspect { }
+			public Aspect1Attribute() : base(typeof(Aspect1))
+			{
+			}
+
+			public class Aspect1 : FakeAspect
+			{
+			}
 		}
 
 		public class Aspect2Attribute : AspectAttribute
 		{
-			public Aspect2Attribute() : base(typeof(Aspect2)) { }
-			public class Aspect2 : FakeAspect { }
+			public Aspect2Attribute() : base(typeof(Aspect2))
+			{
+			}
+
+			public class Aspect2 : FakeAspect
+			{
+			}
 		}
 
 
 		public class Aspect3Attribute : AspectAttribute
 		{
-			public Aspect3Attribute() : base(typeof(Aspect3)) { }
-			public class Aspect3 : FakeAspect { }
+			public Aspect3Attribute() : base(typeof(Aspect3))
+			{
+			}
+
+			public class Aspect3 : FakeAspect
+			{
+			}
 		}
 
 		public class FakeAspect : IAspect
@@ -178,7 +217,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 					throw AfterFailsWith;
 			}
 		}
-		
 	}
-
 }

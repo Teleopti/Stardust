@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			return _service.Config();
 		}
-		
+
 		protected virtual void Setup(ISystem system, IIocConfiguration configuration)
 		{
 		}
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			disposeContainer();
 			disposeTestDoubles();
 		}
-		
+
 		private void buildContainer()
 		{
 			var builder = new ContainerBuilder();
@@ -119,13 +119,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			Setup(system, configuration);
 			(_fixture as ISetup)?.Setup(system, configuration);
 		}
-		
+
 		private void disposeContainer()
 		{
 			_container?.Dispose();
 			_container = null;
 		}
-		
+
 		protected IEnumerable<T> QueryAllAttributes<T>()
 		{
 			return _service.QueryAllAttributes<T>();
@@ -139,6 +139,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected T Resolve<T>()
 		{
 			return _service.Resolve<T>();
+		}
+
+		public void SimulateShutdown()
+		{
+			disposeContainer();
 		}
 
 		public void SimulateRestart()
