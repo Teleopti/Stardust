@@ -194,10 +194,40 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			return _gamificationSettingProviderAndPersister.SetTeamsGamificationSetting(input);
 		}
 
-		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSetting"), UnitOfWork]
+		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSettingDescription"), UnitOfWork]
 		public virtual ExternalBadgeSettingDescriptionViewModel UpdateExternalBadgeSettingDescription([FromBody] ExternalBadgeSettingDescriptionViewModel input)
 		{
 			return _gamificationSettingPersister.PersistExternalBadgeDescription(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSettingThreshold"), UnitOfWork]
+		public virtual ExternalBadgeSettingThresholdViewModel UpdateExternalBadgeSettingThreshold([FromBody] ExternalBadgeSettingThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistExternalBadgeThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSettingGoldThreshold"), UnitOfWork]
+		public virtual ExternalBadgeSettingThresholdViewModel UpdateExternalBadgeSettingGoldThreshold([FromBody] ExternalBadgeSettingThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistExternalBadgeGoldThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSettingSilverThreshold"), UnitOfWork]
+		public virtual ExternalBadgeSettingThresholdViewModel UpdateExternalBadgeSettingSilverThreshold([FromBody] ExternalBadgeSettingThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistExternalBadgeSilverThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSettingBronzeThreshold"), UnitOfWork]
+		public virtual ExternalBadgeSettingThresholdViewModel UpdateExternalBadgeSettingBronzeThreshold([FromBody] ExternalBadgeSettingThresholdViewModel input)
+		{
+			return _gamificationSettingPersister.PersistExternalBadgeBronzeThreshold(input);
+		}
+
+		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSettingEnabled"), UnitOfWork]
+		public virtual ExternalBadgeSettingEnableViewModel UpdateExternalBadgeSettingEnabled([FromBody] ExternalBadgeSettingEnableViewModel input)
+		{
+			return _gamificationSettingPersister.PersistExternalBadgeEnabled(input);
 		}
 
 		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSetting"), UnitOfWork]

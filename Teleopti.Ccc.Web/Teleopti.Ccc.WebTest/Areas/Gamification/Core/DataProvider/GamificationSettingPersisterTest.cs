@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
@@ -24,6 +25,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		private IGamificationSettingRepository _fakegamificationSettingRepository;
 		private IGamificationSetting _gamificationSetting;
 		private IGamificationSettingMapper _mapper;
+		private IExternalBadgeSetting _externalBadgeSetting;
+		private IStatisticRepository _statisticRepository;
+		private QualityInfo _qualityInfo;
 
 		[SetUp]
 		public void Setup()
@@ -31,6 +35,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			_settingId = new Guid();
 			_gamificationSetting = new GamificationSetting("newGamification");
 			_gamificationSetting.SetId(_settingId);
+			_externalBadgeSetting = new ExternalBadgeSetting()
+			{
+				QualityId = 1,
+				UnitType = BadgeUnitType.Count
+			};
+			_gamificationSetting.ExternalBadgeSettings = new List<IExternalBadgeSetting>(){ _externalBadgeSetting };
 			_gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
 			_gamificationSettingRepository.Stub(x => x.Get(_settingId)).Return(_gamificationSetting);
 
@@ -39,6 +49,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			_mapper = new GamificationSettingMapper(statisticRepository);
 
 			_fakegamificationSettingRepository = new FakeGamificationSettingRepository();
+
+			var qualityInfo1 = new QualityInfo() { QualityId = 1, QualityName = "qi1", QualityType = "PERCENTAGE", ScoreWeight = 1 };
+			_qualityInfo = new QualityInfo() { QualityId = 2, QualityName = "qi2", QualityType = "PERCENTAGE", ScoreWeight = 1 };
+			_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			_statisticRepository.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>() { qualityInfo1, _qualityInfo });
 		}
 
 		[Test]
@@ -684,17 +699,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		public void ShouldPersistExternalBadgeSettingDescription()
 		{
 			var expactedName = "newName";
-			var qualityInfo = new QualityInfo(){QualityId = 1,QualityName = "bla", QualityType = "PERCENTAGE", ScoreWeight = 1};
-			var statisticsRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			statisticsRepository.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>() {qualityInfo});
-			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper, statisticsRepository);
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper, _statisticRepository);
 
 			var result = target.PersistExternalBadgeDescription(new ExternalBadgeSettingDescriptionViewModel()
 			{
 				GamificationSettingId = _settingId,
 				Name = expactedName,
-				QualityId = 1,
-				UnitType = BadgeUnitType.Count
+				QualityId = 1
 			});
 
 			result.QualityId.Should().Be.EqualTo(1);
@@ -702,114 +713,108 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
-		public void ShouldCreateNewBadgeSettingForExternalQualityInfoNotSet()
+		public void ShouldPersistExternalBadgeSettingThreshold()
 		{
-			_fakegamificationSettingRepository.Add(_gamificationSetting);
-			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper, null);
-			var input = new UpdateExternalBadgeSettingViewModel
-			{
-				Id = _settingId,
-				ExternalBadgeSettingId = null,
-				Name = "New External Badge",
-				Enabled = true,
-				QualityId = 5,
-				LargerIsBetter = false,
-				Threshold = 100,
-				BronzeThreshold = 100,
-				SilverThreshold = 120,
-				GoldThreshold = 140,
-				UnitType = BadgeUnitType.Count
-			};
-			var result = target.PersistExternalBadgeSetting(input);
-			
-			Assert.AreEqual(1, _gamificationSetting.ExternalBadgeSettings.Count);
+			var expactedThreshold = 20;
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper, _statisticRepository);
 
-			var newBadgeSetting = _gamificationSetting.ExternalBadgeSettings.First();
-			// Check new created badge settting
-			Assert.AreEqual(input.Name, newBadgeSetting.Name);
-			Assert.AreEqual(input.QualityId, newBadgeSetting.QualityId);
-			Assert.AreEqual(input.Enabled, newBadgeSetting.Enabled);
-			Assert.AreEqual(input.Threshold, newBadgeSetting.Threshold);
-			Assert.AreEqual(input.BronzeThreshold, newBadgeSetting.BronzeThreshold);
-			Assert.AreEqual(input.SilverThreshold, newBadgeSetting.SilverThreshold);
-			Assert.AreEqual(input.GoldThreshold, newBadgeSetting.GoldThreshold);
-			Assert.AreEqual(input.LargerIsBetter, newBadgeSetting.LargerIsBetter);
-			Assert.AreEqual(input.UnitType, newBadgeSetting.UnitType);
-			
-			// Check returned viewmodel
-			Assert.AreEqual(input.Name, result.Name);
-			Assert.AreEqual(input.QualityId, result.QualityId);
-			Assert.AreEqual(input.Enabled, result.Enabled);
-			Assert.AreEqual(input.Threshold, result.Threshold);
-			Assert.AreEqual(input.BronzeThreshold, result.BronzeThreshold);
-			Assert.AreEqual(input.SilverThreshold, result.SilverThreshold);
-			Assert.AreEqual(input.GoldThreshold, result.GoldThreshold);
-			Assert.AreEqual(input.LargerIsBetter, result.LargerIsBetter);
-			Assert.AreEqual(input.UnitType, result.UnitType);
+			var result = target.PersistExternalBadgeThreshold(new ExternalBadgeSettingThresholdViewModel()
+			{
+				GamificationSettingId = _settingId,
+				ThresholdValue = expactedThreshold,
+				QualityId = _externalBadgeSetting.QualityId,
+				UnitType = BadgeUnitType.Count
+			});
+
+			result.QualityId.Should().Be.EqualTo(1);
+			result.ThresholdValue.Should().Be.EqualTo(expactedThreshold);
 		}
 
 		[Test]
-		public void ShouldUpdateExistingBadgeSetting()
+		public void ShouldPersistExternalBadgeSettingGoldThreshold()
 		{
-			var badgeSetting = new ExternalBadgeSetting
+			var expactedThreshold = 20;
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper, _statisticRepository);
+
+			var result = target.PersistExternalBadgeGoldThreshold(new ExternalBadgeSettingThresholdViewModel()
 			{
-				Name = "Existing External Badge",
-				Enabled = false,
-				QualityId = 5,
-				LargerIsBetter = false,
-				Threshold = 110,
-				BronzeThreshold = 110,
-				SilverThreshold = 130,
-				GoldThreshold = 150,
+				GamificationSettingId = _settingId,
+				ThresholdValue = expactedThreshold,
+				QualityId = _externalBadgeSetting.QualityId,
 				UnitType = BadgeUnitType.Count
-			};
-			badgeSetting.SetId(new Guid());
-			_gamificationSetting.AddExternalBadgeSetting(badgeSetting);
-			
-			_fakegamificationSettingRepository.Add(_gamificationSetting);
-			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper, null);
-			var input = new UpdateExternalBadgeSettingViewModel
-			{
-				Id = _settingId,
-				ExternalBadgeSettingId = null,
-				Name = "New External Badge",
-				Enabled = true,
-				QualityId = 5,
-				LargerIsBetter = true,
-				Threshold = 100,
-				BronzeThreshold = 100,
-				SilverThreshold = 120,
-				GoldThreshold = 140,
-				UnitType = BadgeUnitType.Percentage
-			};
-			var result = target.PersistExternalBadgeSetting(input);
-			
-			Assert.AreEqual(1, _gamificationSetting.ExternalBadgeSettings.Count);
+			});
 
-			var newBadgeSetting = _gamificationSetting.ExternalBadgeSettings.First();
-			// Check updated badge setting
-			Assert.AreEqual(badgeSetting.QualityId, newBadgeSetting.QualityId);
-			Assert.AreEqual(badgeSetting.LargerIsBetter, newBadgeSetting.LargerIsBetter);
-			Assert.AreEqual(badgeSetting.UnitType, newBadgeSetting.UnitType);
-
-			Assert.AreEqual(input.Name, newBadgeSetting.Name);
-			Assert.AreEqual(input.Enabled, newBadgeSetting.Enabled);
-			Assert.AreEqual(input.Threshold, newBadgeSetting.Threshold);
-			Assert.AreEqual(input.BronzeThreshold, newBadgeSetting.BronzeThreshold);
-			Assert.AreEqual(input.SilverThreshold, newBadgeSetting.SilverThreshold);
-			Assert.AreEqual(input.GoldThreshold, newBadgeSetting.GoldThreshold);
-			
-			// Check returned viewmodel
-			Assert.AreEqual(badgeSetting.QualityId, result.QualityId);
-			Assert.AreEqual(badgeSetting.LargerIsBetter, result.LargerIsBetter);
-			Assert.AreEqual(badgeSetting.UnitType, result.UnitType);
-			
-			Assert.AreEqual(input.Name, result.Name);
-			Assert.AreEqual(input.Enabled, result.Enabled);
-			Assert.AreEqual(input.Threshold, result.Threshold);
-			Assert.AreEqual(input.BronzeThreshold, result.BronzeThreshold);
-			Assert.AreEqual(input.SilverThreshold, result.SilverThreshold);
-			Assert.AreEqual(input.GoldThreshold, result.GoldThreshold);
+			result.QualityId.Should().Be.EqualTo(1);
+			result.ThresholdValue.Should().Be.EqualTo(expactedThreshold);
 		}
+
+		[Test]
+		public void ShouldPersistExternalBadgeSettingSilverThreshold()
+		{
+			var expactedThreshold = 20;
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper, _statisticRepository);
+
+			var result = target.PersistExternalBadgeSilverThreshold(new ExternalBadgeSettingThresholdViewModel()
+			{
+				GamificationSettingId = _settingId,
+				ThresholdValue = expactedThreshold,
+				QualityId = _externalBadgeSetting.QualityId,
+				UnitType = BadgeUnitType.Count
+			});
+
+			result.QualityId.Should().Be.EqualTo(1);
+			result.ThresholdValue.Should().Be.EqualTo(expactedThreshold);
+		}
+
+		[Test]
+		public void ShouldPersistExternalBadgeSettingBronzeThreshold()
+		{
+			var expactedThreshold = 20;
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper, _statisticRepository);
+
+			var result = target.PersistExternalBadgeBronzeThreshold(new ExternalBadgeSettingThresholdViewModel()
+			{
+				GamificationSettingId = _settingId,
+				ThresholdValue = expactedThreshold,
+				QualityId = _externalBadgeSetting.QualityId,
+				UnitType = BadgeUnitType.Count
+			});
+
+			result.QualityId.Should().Be.EqualTo(1);
+			result.ThresholdValue.Should().Be.EqualTo(expactedThreshold);
+		}
+
+		[Test]
+		public void ShouldCreateNewBadgeSettingForExternalQualityInfoNotSet()
+		{
+			var settingId = Guid.NewGuid();
+			var gamificationSetting = new GamificationSetting("gamificationSetting");
+			gamificationSetting.WithId(settingId);
+			_fakegamificationSettingRepository.Add(gamificationSetting);
+			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper, _statisticRepository);
+			var input = new ExternalBadgeSettingEnableViewModel
+			{
+				GamificationSettingId = settingId,
+				IsEnabled = true,
+				QualityId = 2
+			};
+			var result = target.PersistExternalBadgeEnabled(input);
+
+			result.IsEnabled.Should().Be.True();
+			Assert.AreEqual(1, gamificationSetting.ExternalBadgeSettings.Count);
+
+			var newBadgeSetting = gamificationSetting.ExternalBadgeSettings.First();
+			// Check new created badge settting
+			Assert.AreEqual(_qualityInfo.QualityName, newBadgeSetting.Name);
+			Assert.AreEqual(_qualityInfo.QualityId, newBadgeSetting.QualityId);
+			Assert.AreEqual(true, newBadgeSetting.Enabled);
+			Assert.AreEqual(0, newBadgeSetting.Threshold);
+			Assert.AreEqual(0, newBadgeSetting.BronzeThreshold);
+			Assert.AreEqual(0, newBadgeSetting.SilverThreshold);
+			Assert.AreEqual(0, newBadgeSetting.GoldThreshold);
+			Assert.AreEqual(true, newBadgeSetting.LargerIsBetter);
+			Assert.AreEqual(_mapper.ConvertRawQualityType(_qualityInfo.QualityType), newBadgeSetting.UnitType);
+		}
+
 	}
 }

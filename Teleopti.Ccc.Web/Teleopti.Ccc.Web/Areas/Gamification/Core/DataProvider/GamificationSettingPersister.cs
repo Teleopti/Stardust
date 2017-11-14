@@ -246,10 +246,93 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 
 			return new ExternalBadgeSettingDescriptionViewModel()
 			{
-				GamificationSettingId = input.GamificationSettingId,
+				GamificationSettingId = setting.Id.Value,
 				Name = externalBadgeSetting.Name,
+				QualityId = externalBadgeSetting.QualityId
+			};
+		}
+
+		public ExternalBadgeSettingThresholdViewModel PersistExternalBadgeThreshold(ExternalBadgeSettingThresholdViewModel input)
+		{
+			var setting = getGamificationSetting(input.GamificationSettingId);
+			if (setting == null) return null;
+
+			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			externalBadgeSetting.Threshold = input.ThresholdValue;
+
+			return new ExternalBadgeSettingThresholdViewModel()
+			{
+				GamificationSettingId = setting.Id.Value,
 				QualityId = externalBadgeSetting.QualityId,
+				ThresholdValue = externalBadgeSetting.Threshold,
 				UnitType = externalBadgeSetting.UnitType
+			};
+		}
+
+		public ExternalBadgeSettingThresholdViewModel PersistExternalBadgeGoldThreshold(ExternalBadgeSettingThresholdViewModel input)
+		{
+			var setting = getGamificationSetting(input.GamificationSettingId);
+			if (setting == null) return null;
+
+			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			externalBadgeSetting.GoldThreshold = input.ThresholdValue;
+
+			return new ExternalBadgeSettingThresholdViewModel()
+			{
+				GamificationSettingId = setting.Id.Value,
+				QualityId = externalBadgeSetting.QualityId,
+				ThresholdValue = externalBadgeSetting.GoldThreshold,
+				UnitType = externalBadgeSetting.UnitType
+			};
+		}
+
+		public ExternalBadgeSettingThresholdViewModel PersistExternalBadgeSilverThreshold(ExternalBadgeSettingThresholdViewModel input)
+		{
+			var setting = getGamificationSetting(input.GamificationSettingId);
+			if (setting == null) return null;
+
+			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			externalBadgeSetting.SilverThreshold = input.ThresholdValue;
+
+			return new ExternalBadgeSettingThresholdViewModel()
+			{
+				GamificationSettingId = setting.Id.Value,
+				QualityId = externalBadgeSetting.QualityId,
+				ThresholdValue = externalBadgeSetting.SilverThreshold,
+				UnitType = externalBadgeSetting.UnitType
+			};
+		}
+
+		public ExternalBadgeSettingThresholdViewModel PersistExternalBadgeBronzeThreshold(ExternalBadgeSettingThresholdViewModel input)
+		{
+			var setting = getGamificationSetting(input.GamificationSettingId);
+			if (setting == null) return null;
+
+			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			externalBadgeSetting.BronzeThreshold = input.ThresholdValue;
+
+			return new ExternalBadgeSettingThresholdViewModel()
+			{
+				GamificationSettingId = setting.Id.Value,
+				QualityId = externalBadgeSetting.QualityId,
+				ThresholdValue = externalBadgeSetting.BronzeThreshold,
+				UnitType = externalBadgeSetting.UnitType
+			};
+		}
+
+		public ExternalBadgeSettingEnableViewModel PersistExternalBadgeEnabled(ExternalBadgeSettingEnableViewModel input)
+		{
+			var setting = getGamificationSetting(input.GamificationSettingId);
+			if (setting == null) return null;
+
+			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			externalBadgeSetting.Enabled = input.IsEnabled;
+
+			return new ExternalBadgeSettingEnableViewModel()
+			{
+				GamificationSettingId = setting.Id.Value,
+				QualityId = externalBadgeSetting.QualityId,
+				IsEnabled = externalBadgeSetting.Enabled
 			};
 		}
 
