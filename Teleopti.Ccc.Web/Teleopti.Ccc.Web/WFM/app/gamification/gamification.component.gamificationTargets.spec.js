@@ -2,9 +2,23 @@ describe('gamification, ', function () {
 	var attachedElements = [];
 	var $compile,
 	    $rootScope,
+	    $timeout,
 	    $q,
 	    $material,
 	    $document;
+
+	var mySites = [
+		{ position: 0, id: '1', name: 'Washington DC' },
+		{ position: 1, id: '2', name: 'Toronto' },
+		{ position: 2, id: '3', name: 'London' },
+		{ position: 3, id: '4', name: 'Paris' },
+		{ position: 4, id: '5', name: 'Berlin' },
+		{ position: 5, id: '6', name: 'Madrid' },
+		{ position: 6, id: '7', name: 'Amsterdam' },
+		{ position: 7, id: '8', name: 'Stockholm' },
+		{ position: 8, id: '9', name: 'Geneva' },
+		{ position: 9, id: '10', name: 'Rome' }
+	];
 
 	beforeEach(function () {
 		module('wfm.templates', 'externalModules', 'wfm.gamification', 'ngMaterial', 'ngMaterial-mock');
@@ -19,6 +33,7 @@ describe('gamification, ', function () {
 			$q = $injector.get('$q');
 			$material = $injector.get('$material');
 			$document = $injector.get('$document');
+			$timeout = $injector.get('$timeout');
 		});
 	});
 
@@ -57,6 +72,8 @@ describe('gamification, ', function () {
 			expect(numSites).toBe(10);
 		});
 
+		// it('should fetch settings', function () { });
+
 		it('should fetch teams on the selected sites', function () {
 			var cmp = setupComponent();
 
@@ -90,6 +107,42 @@ describe('gamification, ', function () {
 			var criterion2 = mainCheckbox.attr('aria-checked') === 'true';
 			expect(criterion1).toBe(true);
 			expect(criterion2).toBe(true);
+		});
+
+		it('should filter teams by name', function () {
+			var scope = $rootScope.$new();
+			var cmp = setupComponent(null, scope);
+
+			openSelectFor(cmp);
+			selectOption(0);
+			selectOption(1);
+			selectOption(2);
+			selectOption(3);
+			selectOption(4);
+			closeSelect();
+
+			var numRows = cmp.find('gamification-target-row').length;
+			expect(numRows).toBe(11);
+
+			var textInput = angular.element(cmp[0].querySelector('.filter > div > input'));
+
+			// Case 1
+			textInput.val('Berlin');
+			textInput.triggerHandler('input');
+
+			// so as to bypass the delay in ng-model-options
+			$timeout.flush();
+
+			numRows = cmp.find('gamification-target-row').length;
+			expect(numRows).toBe(5);
+
+			// Case 2
+			textInput.val('Berlin/Team 5');
+			textInput.triggerHandler('input');
+			$timeout.flush();
+
+			numRows = cmp.find('gamification-target-row').length;
+			expect(numRows).toBe(1);
 		});
 
 		describe('when some rows are selected and their applied settings are changed, ', function () {
@@ -261,26 +314,17 @@ describe('gamification, ', function () {
 	});
 
 	function FakeGDataSvc() {
-		this.fetchSites = function () {
-			return $q(function (resolve, reject) {
-				var n = 10;
-				var sites = [];
-				for (var i = 0; i < n; i++) {
-					sites.push({ position: i, id: 'site'+(i+1), name: 'Site '+(i+1) });
-				}
-				resolve(sites);
-			});
-		};
+		this.fetchSites = function () { return $q(function (resolve, reject) { resolve(mySites); }); };
 
 		this.fetchTeams = function (siteIds) {
 			return $q(function (resolve, reject) {
 				var teams = [];
 				siteIds.forEach(function (siteId) {
-					var n = parseInt(siteId[siteId.length - 1]);
+					var n = parseInt(siteId);
 					for (var i = 0; i < n; i++) {
 						teams.push({
-							id: siteId + 'team' + (i + 1),
-							name: 'Site ' + n + '/Team ' + (i + 1)
+							id: 'site' + siteId + 'team' + (i + 1),
+							name: mySites[n - 1].name + '/Team ' + (i + 1)
 						});
 					}
 				});
