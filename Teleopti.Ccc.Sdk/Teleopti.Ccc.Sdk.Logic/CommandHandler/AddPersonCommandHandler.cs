@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				throw new ArgumentException("Both first and last name cannot be empty");
 			if (string.IsNullOrEmpty(command.TimeZoneId))
 				throw new ArgumentException("Timezone cannot be empty");
+			if (!string.IsNullOrEmpty(command.ApplicationLogonName) && command.ApplicationLogOnPassword != null)
+				throw new ArgumentException("Password cannot be null");
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var person = new Person
