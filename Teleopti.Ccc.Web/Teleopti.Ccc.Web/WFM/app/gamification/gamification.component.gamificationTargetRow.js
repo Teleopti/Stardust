@@ -39,6 +39,11 @@
 		ctrl.$onChanges = function (changesObj) {
 			if (changesObj.selected) {
 				$element.attr('is-selected', changesObj.selected.currentValue ? 'true' : 'false');
+
+				if (changesObj.selected.currentValue)
+					$element.find('md-select').attr('tabindex', '0');
+				else
+					$element.find('md-select').attr('tabindex', '-1');
 			}
 		}
 
