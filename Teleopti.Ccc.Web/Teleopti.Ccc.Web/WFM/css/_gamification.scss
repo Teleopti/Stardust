@@ -62,6 +62,10 @@
 			& > * + * {
 				margin: 0 56px;
 			}
+
+			md-select .md-select-value.md-select-placeholder {
+				color: $gray054;
+			}
 		}
 
 		.table-wrapper {
