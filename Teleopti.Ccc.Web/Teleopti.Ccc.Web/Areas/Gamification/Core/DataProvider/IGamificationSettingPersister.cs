@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		ExternalBadgeSettingThresholdViewModel PersistExternalBadgeGoldThreshold(ExternalBadgeSettingThresholdViewModel input);
 		ExternalBadgeSettingThresholdViewModel PersistExternalBadgeSilverThreshold(ExternalBadgeSettingThresholdViewModel input);
 		ExternalBadgeSettingThresholdViewModel PersistExternalBadgeBronzeThreshold(ExternalBadgeSettingThresholdViewModel input);
-		ExternalBadgeSettingEnableViewModel PersistExternalBadgeEnabled(ExternalBadgeSettingEnableViewModel input);
+		ExternalBadgeSettingBooleanViewModel PersistExternalBadgeEnabled(ExternalBadgeSettingBooleanViewModel input);
+		ExternalBadgeSettingBooleanViewModel PersistExternalBadgeLargerIsBetter(ExternalBadgeSettingBooleanViewModel input);
 	}
 }

@@ -785,6 +785,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
+		public void ShouldPersistExternalBadgeSettingLargerIsBetterWhenThereIsNoBadgeData()
+		{
+			var target = new GamificationSettingPersister(_gamificationSettingRepository, _mapper, _statisticRepository);
+
+			var result = target.PersistExternalBadgeLargerIsBetter(new ExternalBadgeSettingBooleanViewModel()
+			{
+				GamificationSettingId = _settingId,
+				QualityId = _externalBadgeSetting.QualityId,
+				Value = true
+			});
+
+			result.QualityId.Should().Be.EqualTo(1);
+			result.Value.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldCreateNewBadgeSettingForExternalQualityInfoNotSet()
 		{
 			var settingId = Guid.NewGuid();
@@ -792,15 +808,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			gamificationSetting.WithId(settingId);
 			_fakegamificationSettingRepository.Add(gamificationSetting);
 			var target = new GamificationSettingPersister(_fakegamificationSettingRepository, _mapper, _statisticRepository);
-			var input = new ExternalBadgeSettingEnableViewModel
+			var input = new ExternalBadgeSettingBooleanViewModel
 			{
 				GamificationSettingId = settingId,
-				IsEnabled = true,
+				Value = true,
 				QualityId = 2
 			};
 			var result = target.PersistExternalBadgeEnabled(input);
 
-			result.IsEnabled.Should().Be.True();
+			result.Value.Should().Be.True();
 			Assert.AreEqual(1, gamificationSetting.ExternalBadgeSettings.Count);
 
 			var newBadgeSetting = gamificationSetting.ExternalBadgeSettings.First();

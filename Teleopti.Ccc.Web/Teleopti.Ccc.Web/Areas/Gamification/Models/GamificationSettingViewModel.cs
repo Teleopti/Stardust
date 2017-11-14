@@ -123,10 +123,10 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public int ThresholdValue { get; set; }
 	}
 
-	public class ExternalBadgeSettingEnableViewModel
+	public class ExternalBadgeSettingBooleanViewModel
 	{
 		public Guid GamificationSettingId { get; set; }
 		public int QualityId { get; set; }
-		public bool IsEnabled { get; set; }
+		public bool Value { get; set; }
 	}
 }

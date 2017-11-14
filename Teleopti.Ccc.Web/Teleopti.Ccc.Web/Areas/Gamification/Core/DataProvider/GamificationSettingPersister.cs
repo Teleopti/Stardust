@@ -320,19 +320,35 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			};
 		}
 
-		public ExternalBadgeSettingEnableViewModel PersistExternalBadgeEnabled(ExternalBadgeSettingEnableViewModel input)
+		public ExternalBadgeSettingBooleanViewModel PersistExternalBadgeEnabled(ExternalBadgeSettingBooleanViewModel input)
 		{
 			var setting = getGamificationSetting(input.GamificationSettingId);
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
-			externalBadgeSetting.Enabled = input.IsEnabled;
+			externalBadgeSetting.Enabled = input.Value;
 
-			return new ExternalBadgeSettingEnableViewModel()
+			return new ExternalBadgeSettingBooleanViewModel()
 			{
 				GamificationSettingId = setting.Id.Value,
 				QualityId = externalBadgeSetting.QualityId,
-				IsEnabled = externalBadgeSetting.Enabled
+				Value = externalBadgeSetting.Enabled
+			};
+		}
+
+		public ExternalBadgeSettingBooleanViewModel PersistExternalBadgeLargerIsBetter(ExternalBadgeSettingBooleanViewModel input)
+		{
+			var setting = getGamificationSetting(input.GamificationSettingId);
+			if (setting == null) return null;
+
+			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			externalBadgeSetting.LargerIsBetter = input.Value;
+
+			return new ExternalBadgeSettingBooleanViewModel()
+			{
+				GamificationSettingId = setting.Id.Value,
+				QualityId = externalBadgeSetting.QualityId,
+				Value = externalBadgeSetting.LargerIsBetter
 			};
 		}
 
