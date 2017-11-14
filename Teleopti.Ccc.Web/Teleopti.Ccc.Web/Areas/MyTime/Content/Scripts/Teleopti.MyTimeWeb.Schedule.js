@@ -651,7 +651,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
-			Teleopti.MyTimeWeb.PollScheduleUpdates.AddListener("WeekScheduleWeb",
+			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("WeekScheduleWeb",
 				function () { return { startDate: vm.minDate(), endDate: vm.maxDate() } },
 				function () {
 					_fetchData(vm.selectedProbabilityType);
