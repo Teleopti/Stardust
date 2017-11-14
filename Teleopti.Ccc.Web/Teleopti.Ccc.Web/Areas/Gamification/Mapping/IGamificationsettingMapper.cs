@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 	public interface IGamificationSettingMapper
 	{
 		GamificationSettingViewModel Map(IGamificationSetting setting);
+		BadgeUnitType ConvertRawQualityType(string qualityType);
 	}
 }

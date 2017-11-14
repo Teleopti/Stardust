@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 	{
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
 		private readonly IGamificationSettingMapper _mapper;
+		private readonly IStatisticRepository _statisticRepository;
 
-		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper)
+		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IStatisticRepository statisticRepository)
 		{
 			_gamificationSettingRepository = gamificationSettingRepository;
 			_mapper = mapper;
+			_statisticRepository = statisticRepository;
 		}
 
 		public GamificationSettingViewModel Persist()
@@ -234,6 +236,59 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return new GamificationBadgeConversRateViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Rate = gamificationSetting.SilverToBronzeBadgeRate };
 		}
 
+		public ExternalBadgeSettingDescriptionViewModel PersistExternalBadgeDescription(ExternalBadgeSettingDescriptionViewModel input)
+		{
+			var setting = getGamificationSetting(input.GamificationSettingId);
+			if (setting == null) return null;
+
+			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			externalBadgeSetting.Name = input.Name;
+
+			return new ExternalBadgeSettingDescriptionViewModel()
+			{
+				GamificationSettingId = input.GamificationSettingId,
+				Name = externalBadgeSetting.Name,
+				QualityId = externalBadgeSetting.QualityId,
+				UnitType = externalBadgeSetting.UnitType
+			};
+		}
+
+		private IExternalBadgeSetting getExternalBadgeSetting(IGamificationSetting setting , int qualityId)
+		{
+			if (setting.ExternalBadgeSettings == null)
+			{
+				setting.ExternalBadgeSettings = new List<IExternalBadgeSetting>();
+			}
+
+			var externalBadgeSetting = setting.ExternalBadgeSettings.FirstOrDefault(x => x.QualityId == qualityId);
+			if (externalBadgeSetting == null)
+			{
+				var qualityInfo = getQualityInfo(qualityId);
+				externalBadgeSetting = new ExternalBadgeSetting
+				{
+					Name = qualityInfo.QualityName,
+					QualityId = qualityId,
+					LargerIsBetter = true,
+					Enabled = false,
+					Threshold = 0,
+					BronzeThreshold = 0,
+					SilverThreshold = 0,
+					GoldThreshold = 0,
+					UnitType = _mapper.ConvertRawQualityType(qualityInfo.QualityType)
+				};
+
+				setting.AddExternalBadgeSetting(externalBadgeSetting);
+			}
+
+			return externalBadgeSetting;
+		}
+
+		private QualityInfo getQualityInfo(int inputQualityId)
+		{
+			var qualitiInfos = _statisticRepository.LoadAllQualityInfo();
+			return qualitiInfos.FirstOrDefault(qualitiInfo => qualitiInfo.QualityId == inputQualityId);
+		}
+
 		public ExternalBadgeSettingViewModel PersistExternalBadgeSetting(UpdateExternalBadgeSettingViewModel input)
 		{
 			var setting = getGamificationSetting(input.Id);
@@ -251,7 +306,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 				{
 					Name = input.Name,
 					QualityId = input.QualityId,
-					LargerIsBetter = input.LargerIsBetter, // TODO: Should get from quality_info
+					LargerIsBetter = input.LargerIsBetter,
 					Enabled = input.Enabled,
 					Threshold = input.Threshold,
 					BronzeThreshold = input.BronzeThreshold,

@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 				BadgeUnitType unitType;
 				try
 				{
-					unitType = convertRawQualityType(qualityInfo.QualityType);
+					unitType = ConvertRawQualityType(qualityInfo.QualityType);
 				}
 				catch (Exception ex)
 				{
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 		}
 
 		// TODO: Check quality type conversion in product environment
-		private BadgeUnitType convertRawQualityType(string qualityType)
+		public BadgeUnitType ConvertRawQualityType(string qualityType)
 		{
 			BadgeUnitType result;
 			switch (qualityType)
