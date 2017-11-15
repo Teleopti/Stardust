@@ -431,11 +431,20 @@ card-panel-header > .pp-validation-progress {
 
 .pg-setting-priority-scale {
 	margin-left: 5px;
-	background: linear-gradient(90deg, rgb(128, 0, 128), rgba(156, 39, 176, 0.05 ));
-	height: 20px;
-	width: 70px;
-	-webkit-clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);
-	clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);
+	width: 0;
+	height: 0;
+	position: relative;
+	border-bottom: 20px solid red;
+	border-image: linear-gradient(90deg, rgb(128, 0, 128), rgba(156, 39, 176, 0.05 ));
+	border-right: 70px solid transparent!important;
+}
+.pg-setting-priority-scale:after{
+	position: absolute;
+	content: "";
+	width: 0;
+	height: 0;
+	border-bottom: 20px solid transparent;
+	border-right: 70px solid  $gray-300 !important;
 }
 
 .pg-setting-priority-label {
@@ -477,26 +486,6 @@ card-panel-header > .pp-validation-progress {
 	position: absolute;
 	top:0;
 }
-
-// .fake-radio-button {
-// 	background: rgba(0,0,0,.26);
-//     border-radius: 50%;
-// }
-
-// div.fake-radio-button:before {
-// 	box-sizing: border-box;
-// 	position: absolute;
-// 	top: 0;
-// 	left: 0;
-// 	width: 20px;
-// 	height: 20px;
-// 	border-radius: 50%;
-// 	background-color: transparent;
-// }
-
-// div.fake-radio-button:before.check {
-// 	background-color: $blue-300!important;
-// }
 
 .fake-radio-button{ 
 	position: relative;
