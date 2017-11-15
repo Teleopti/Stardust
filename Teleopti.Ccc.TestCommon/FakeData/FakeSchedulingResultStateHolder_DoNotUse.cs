@@ -52,6 +52,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
+
+		public IEnumerable<BpoResource> BpoResources
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
+		}
+
 		public void AddSkills(params ISkill[] skills)
 		{
 			_skills.AddRange(skills);

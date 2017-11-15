@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool SkipResourceCalculation { get; set; }
 		public bool UseValidation { get; set; }
 		public IDictionary<IPerson, IPersonAccountCollection> AllPersonAccounts { get; set; }
-
+		public IEnumerable<BpoResource> BpoResources { get; set; }
 		public bool TeamLeaderMode { get; set; }
 		public bool UseMinWeekWorkTime { get; set; }
 

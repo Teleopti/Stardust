@@ -42,6 +42,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
 		}
 
+		protected override void FillBpos(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skills, DateOnlyPeriod period)
+		{
+		}
+
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
