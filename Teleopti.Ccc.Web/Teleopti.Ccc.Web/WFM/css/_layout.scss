@@ -280,6 +280,7 @@ wfm-calendar-picker-body > .date-info-wrapper {
 wfm-calendar-picker-body > .date-info-calendar-wrapper{
 	background: $white;
 	z-index: 5;
+	flex-basis: auto;
 
 	b, strong {
 		font-size: x-large;
@@ -289,9 +290,15 @@ wfm-calendar-picker-body > .date-info-calendar-wrapper{
 		background-color:$blue-100 !important;
 	}
 
+	.uib-daypicker:focus{
+		outline:none!important;
+	}
+
 	.uib-datepicker {
 		min-height: 248px;
-		min-width:275px;
+		max-width:250px;
+		overflow: hidden;
+		margin-right:20px;
 
 		button.btn-default {
 			border:none;
