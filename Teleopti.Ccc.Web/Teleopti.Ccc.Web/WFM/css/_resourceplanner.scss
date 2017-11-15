@@ -431,8 +431,11 @@ card-panel-header > .pp-validation-progress {
 
 .pg-setting-priority-scale {
 	margin-left: 5px;
+	background: linear-gradient(90deg, rgb(128, 0, 128), rgba(156, 39, 176, 0.05 ));
 	height: 20px;
 	width: 70px;
+	-webkit-clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);
+	clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%);
 }
 
 .pg-setting-priority-label {
@@ -494,8 +497,6 @@ card-panel-header > .pp-validation-progress {
 // div.fake-radio-button:before.check {
 // 	background-color: $blue-300!important;
 // }
-
-#priority {fill: url(#PriorityGradient);}
 
 .fake-radio-button{ 
 	position: relative;
