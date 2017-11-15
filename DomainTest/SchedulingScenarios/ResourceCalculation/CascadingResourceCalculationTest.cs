@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(-1);
 		}
 
-		[Test, Ignore("Claes - do you agree this test is wrong? Remove?")]
+		[Test]
 		public void ShouldWorkWithOuterContext()
 		{
 			var scenario = new Scenario("_");

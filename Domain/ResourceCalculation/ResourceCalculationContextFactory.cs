@@ -24,12 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IDisposable Create(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, IEnumerable<BpoResource> bpoResources, bool primarySkillMode, DateOnlyPeriod period)
 		{
-			BeforeCreatingContext();
 			return new ResourceCalculationContext(createResources(scheduleDictionary, allSkills, bpoResources, primarySkillMode, period));
-		}
-
-		protected virtual void BeforeCreatingContext()
-		{
 		}
 
 		private Lazy<IResourceCalculationDataContainerWithSingleOperation> createResources(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, IEnumerable<BpoResource> bpoResources, bool primarySkillMode, DateOnlyPeriod period)

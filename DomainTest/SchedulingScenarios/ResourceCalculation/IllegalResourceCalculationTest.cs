@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class IllegalResourceCalculationTest
 	{
 		public IResourceCalculation ResourceCalculation;
-		public CascadingResourceCalculationContextFactory CascadingResourceCalculationContextFactory;
 
 		[Test]
 		public void ShouldThrowIfNotInContext()
@@ -27,24 +26,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				new Dictionary<ISkill, IEnumerable<ISkillDay>>(), 
 				false, 
 				false)));
-		}
-
-		[Test]
-		public void ShouldThrowIfNestedContexts()
-		{
-			using (CascadingResourceCalculationContextFactory.Create(
-				ScheduleDictionaryCreator.WithData(new Scenario(), DateOnly.Today.ToDateOnlyPeriod()), Enumerable.Empty<ISkill>(),
-				Enumerable.Empty<BpoResource>(), false, DateOnly.Today.ToDateOnlyPeriod()))
-			{
-				Assert.Throws<NestedResourceCalculationContextException>(() =>
-				{
-					using (CascadingResourceCalculationContextFactory.Create(
-						ScheduleDictionaryCreator.WithData(new Scenario(), DateOnly.Today.ToDateOnlyPeriod()), Enumerable.Empty<ISkill>(),
-						Enumerable.Empty<BpoResource>(), false, DateOnly.Today.ToDateOnlyPeriod()))
-					{
-					}
-				});
-			}
 		}
 	}
 }
