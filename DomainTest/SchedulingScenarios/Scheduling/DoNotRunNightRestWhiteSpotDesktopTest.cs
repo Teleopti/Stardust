@@ -51,8 +51,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			base.Setup(system, configuration);
 			system.UseTestDouble<CountCallsToNightRestWhiteSpotSolverServiceFactory>().For<INightRestWhiteSpotSolverServiceFactory>();
 		}
 

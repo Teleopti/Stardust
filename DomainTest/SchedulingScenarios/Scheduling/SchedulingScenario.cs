@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				IoCTestContext.SimulateNewRequest();
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public virtual void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<ResourceCalculateWithNewContext>();
 		}

@@ -112,8 +112,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			maxSeatSkillDaysUsedOnCurrentDate.Count().Should().Be.EqualTo(1);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			base.Setup(system, configuration);
 			system.UseTestDouble<WorkShiftSelectorTrackWhatSkillDays>().For<WorkShiftSelectorForMaxSeat>();
 		}
 

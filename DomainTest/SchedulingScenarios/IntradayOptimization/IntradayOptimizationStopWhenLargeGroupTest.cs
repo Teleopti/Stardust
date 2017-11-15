@@ -240,8 +240,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Assert.Fail("Tried to optimize 2 agents {0} times. A limit is set to 50% and it's always the same agent that are optimized. Giving up.", retriesBeforeGivingUp);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			base.Setup(system, configuration);
 			system.UseTestDouble<TrackOptimizeDaysForAgents>().For<IIntradayOptimizeOneDayCallback>();
 			system.UseTestDouble<OptimizationPreferencesDefaultValueProvider>().For<IOptimizationPreferencesProvider>();
 		}

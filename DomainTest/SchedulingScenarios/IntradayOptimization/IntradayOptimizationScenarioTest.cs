@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				toggleManager.Disable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680); //need to disable explicitly because toggle will be set to true default later
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public virtual void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<ResourceCalculateWithNewContext>();
 		}

@@ -85,8 +85,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			webOptimizationStardustEvent.Policy.Should().Be.EqualTo(WebScheduleStardustBaseEvent.HalfNodesAffinity);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			base.Setup(system, configuration);
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
