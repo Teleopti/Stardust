@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[TestCase(0.9, ExpectedResult = 8)]
 		[TestCase(1.1, ExpectedResult = 10)]
 		[Ignore("#46265 - To be fixed")]
-		public int ShouldConsiderBpos(int extraBpoResources)
+		public int ShouldConsiderBpos(double extraBpoResources)
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2017, 8, 21);
