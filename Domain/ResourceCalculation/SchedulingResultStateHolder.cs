@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			LoadedAgents = new List<IPerson>();
 			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
+			BpoResources = new List<BpoResource>();
 		}
 
 		public SchedulingResultStateHolder(ICollection<IPerson> personsInOrganization, IScheduleDictionary schedules, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
