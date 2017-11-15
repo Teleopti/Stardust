@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
-				builder.RegisterType<NoSkillCombinationResourceBpoReader>().As<ISkillCombinationResourceBpoReader>().SingleInstance();				
+				builder.RegisterType<NoSkillCombinationResourceBpoReader>().As<ISkillCombinationResourceBpoReader>().SingleInstance();
 			}
 			if (_configuration.Toggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680))
 			{
