@@ -465,13 +465,13 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['msbuild:build']); // build the solution
     grunt.registerTask('buildWeb', ['msbuild:buildWeb']); // build the web project
     grunt.registerTask('rebuild', ['msbuild:rebuild']); // rebuild the solution
-    grunt.registerTask('generateIndex', ['processhtml:dist']);
-    grunt.registerTask('generateIndexDev', ['processhtml:dev']);
+    grunt.registerTask('generateIndex', ['processhtml:dist','cacheBust:dist']);
+    grunt.registerTask('generateIndexDev', ['processhtml:dev','cacheBust:dist']);
     grunt.registerTask('eslint-beta', ['eslint']);
     grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
-    grunt.registerTask('dist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:extras', 'copy:bootstrap', 'generateIndex', 'clean:dist']); // this task should only be used by the build. It's kind of packaging for production.
+    grunt.registerTask('dist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:extras', 'copy:bootstrap', 'generateIndex', 'clean:dist','cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
 
     // for desktop client
-    grunt.registerTask('buildForDesktop', ['copy:sourceMaps', 'processhtml:distForDesktop']);
+    grunt.registerTask('buildForDesktop', ['copy:sourceMaps', 'processhtml:distForDesktop','cacheBust:dist']);
 
 };
