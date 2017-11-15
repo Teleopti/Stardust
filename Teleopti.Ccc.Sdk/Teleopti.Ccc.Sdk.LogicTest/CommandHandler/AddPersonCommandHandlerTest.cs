@@ -1,38 +1,34 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.WcfHost.Ioc;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
 	[TestFixture]
-	public class AddPersonCommandHandlerTest
+	[DomainTest]
+	public class AddPersonCommandHandlerTest : ISetup
 	{
+		public FakePersonRepository PersonRepository;
+		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
+		public AddPersonCommandHandler Target;
+		public PostHttpRequestFake PostHttpRequest;
+
 		[Test]
 		public void PersonIsAddedSuccessfully()
 		{
-			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			var tenantDataManager = MockRepository.GenerateMock<ITenantDataManager>();
-			var workflowControlSetRepository = MockRepository.GenerateMock<IWorkflowControlSetRepository>();
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-			tenantDataManager.Stub(x => x.SaveTenantData(Arg<TenantAuthenticationData>.Is.Anything))
-				.Return(new SavePersonInfoResult
-				{
-					Success = true
-				});
-			var target = new AddPersonCommandHandler(personRepository, currentUnitOfWorkFactory, tenantDataManager, workflowControlSetRepository);
 			var addPersonCommandDto = new AddPersonCommandDto
 			{
 				FirstName = "first",
@@ -52,10 +48,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			};
 			var workflowControlSet = new WorkflowControlSet("wcs1");
 			workflowControlSet.SetId(addPersonCommandDto.WorkflowControlSetId.Value);
-			workflowControlSetRepository.Stub(x => x.Get(addPersonCommandDto.WorkflowControlSetId.Value)).Return(workflowControlSet);
-			target.Handle(addPersonCommandDto);
+			WorkflowControlSetRepository.Add(workflowControlSet);
 
-			personRepository.AssertWasCalled(x => x.Add(Arg<Person>.Matches(p =>
+			PostHttpRequest.SetReturnValue(new PersistPersonInfoResult{ApplicationLogonNameIsValid = true,IdentityIsValid = true,PasswordStrengthIsValid = true});
+			
+			Target.Handle(addPersonCommandDto);
+
+			PersonRepository.LoadAll().Single(p =>
 				p.Name.FirstName == addPersonCommandDto.FirstName &&
 				p.Name.LastName == addPersonCommandDto.LastName &&
 				p.Email == addPersonCommandDto.Email &&
@@ -66,36 +65,19 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				p.PermissionInformation.DefaultTimeZone().Id == addPersonCommandDto.TimeZoneId &&
 				p.PermissionInformation.CultureLCID() == addPersonCommandDto.CultureLanguageId &&
 				p.PermissionInformation.UICultureLCID() == addPersonCommandDto.UICultureLanguageId &&
-				p.IsDeleted == addPersonCommandDto.IsDeleted
-				)));
-			tenantDataManager.AssertWasCalled(x => x.SaveTenantData(Arg<TenantAuthenticationData>.Matches(t =>
-				t.ApplicationLogonName == addPersonCommandDto.ApplicationLogonName &&
-				t.Password == addPersonCommandDto.ApplicationLogOnPassword &&
-				t.Identity == addPersonCommandDto.Identity
-				)));
+				((IDeleteTag)p).IsDeleted == addPersonCommandDto.IsDeleted
+				).Should().Not.Be.Null();
 
-			unitOfWork.AssertWasCalled(x=>x.PersistAll());
+			var credentials = PostHttpRequest.SentJson;
+			credentials.Should().Contain(addPersonCommandDto.ApplicationLogonName);
+			credentials.Should().Contain(addPersonCommandDto.ApplicationLogOnPassword);
+			credentials.Should().Contain(addPersonCommandDto.Identity);
 			addPersonCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldNotPersistPersonIfFailedToSaveTenantData()
 		{
-			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			var tenantDataManager = MockRepository.GenerateMock<ITenantDataManager>();
-			var workflowControlSetRepository = MockRepository.GenerateMock<IWorkflowControlSetRepository>();
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-			tenantDataManager.Stub(x => x.SaveTenantData(Arg<TenantAuthenticationData>.Is.Anything))
-				.Return(new SavePersonInfoResult
-				{
-					Success = false
-				});
-			var target = new AddPersonCommandHandler(personRepository, currentUnitOfWorkFactory, tenantDataManager, workflowControlSetRepository);
-
 			var addPersonCommandDto = new AddPersonCommandDto
 			{
 				FirstName = "first",
@@ -112,9 +94,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				UICultureLanguageId = CultureInfo.CurrentUICulture.LCID,
 				IsDeleted = true
 			};
-			target.Handle(addPersonCommandDto);
 
-			unitOfWork.AssertWasNotCalled(x=>x.PersistAll());
+			PostHttpRequest.SetReturnValue(new PersistPersonInfoResult { ApplicationLogonNameIsValid = false, IdentityIsValid = true, PasswordStrengthIsValid = true });
+
+			Target.Handle(addPersonCommandDto);
+
 			addPersonCommandDto.Result.AffectedItems.Should().Be.EqualTo(0);
 			addPersonCommandDto.Result.AffectedId.Should().Be.EqualTo(null);
 		}
@@ -123,15 +107,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void ShouldThrowIfNotNullUsernameAndNullPassword()
 		{
-			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			var tenantDataManager = MockRepository.GenerateMock<ITenantDataManager>();
-			var workflowControlSetRepository = MockRepository.GenerateMock<IWorkflowControlSetRepository>();
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-			var target = new AddPersonCommandHandler(personRepository, currentUnitOfWorkFactory, tenantDataManager, workflowControlSetRepository);
 			var addPersonCommandDto = new AddPersonCommandDto
 			{
 				FirstName = "first",
@@ -149,8 +124,23 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				IsDeleted = true
 			};
 
-			Assert.Throws<ArgumentException>(() => target.Handle(addPersonCommandDto));
+			Assert.Throws<ArgumentException>(() => Target.Handle(addPersonCommandDto));
 		}
 
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<AddPersonCommandHandler>();
+
+			system.UseTestDouble<ChangePassword>().For<IChangePassword>();
+			system.UseTestDouble<TenantPeopleSaver>().For<ITenantPeopleSaver>();
+			system.UseTestDouble<TenantDataManager>().For<ITenantDataManager>();
+			system.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
+
+			system.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
+			system.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
+			system.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
+
+			system.AddModule(new AssemblerModule());
+		}
 	}
 }

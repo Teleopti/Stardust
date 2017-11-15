@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void Flush()
 		{
-			throw new NotImplementedException();
 		}
 
 		public void AfterSuccessfulTx(Action func)
