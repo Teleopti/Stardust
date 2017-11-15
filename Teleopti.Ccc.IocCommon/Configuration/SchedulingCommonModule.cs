@@ -128,6 +128,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<BackToLegalShiftService>().As<IBackToLegalShiftService>();
 				builder.RegisterType<ScheduleOvertimeNew>().As<IScheduleOvertime>();
 				builder.RegisterType<SchedulerOptimizerHelperNew>().As<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
+				builder.RegisterType<CascadingResourceCalculationContextFactoryNew>().As<CascadingResourceCalculationContextFactory>().SingleInstance();
 			}
 			else
 			{
@@ -141,8 +142,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<BackToLegalShiftServiceOLD>().As<IBackToLegalShiftService>();
 				builder.RegisterType<ScheduleOvertime>().As<IScheduleOvertime>();
 				builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
+				builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			}
-			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PersonalSkillsProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_EasierBlockScheduling_46155))

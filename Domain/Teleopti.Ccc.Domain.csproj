@@ -351,6 +351,7 @@
     <Compile Include="ResourceCalculation\AddBpoResourcesToContext.cs" />
     <Compile Include="ResourceCalculation\BpoResource.cs" />
     <Compile Include="ResourceCalculation\ISkillCombinationResourceBpoReader.cs" />
+    <Compile Include="ResourceCalculation\NestedResourceCalculationContextException.cs" />
     <Compile Include="ResourceCalculation\NoCurrentResourceCalculationContextException.cs" />
     <Compile Include="ResourceCalculation\NoSkillCombinationResourceBpoReader.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationContextFactoryExtensions.cs" />
