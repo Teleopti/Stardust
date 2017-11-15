@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Logon.Permissions
 {
 	[DomainTest]
 	[LoggedOff]
+	[DefaultData]
 	[RealPermissions]
 	public class AvailableTeamTest
 	{

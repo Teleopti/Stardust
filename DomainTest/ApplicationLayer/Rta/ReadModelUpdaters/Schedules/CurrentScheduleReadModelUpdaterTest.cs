@@ -11,11 +11,13 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using FakeDatabase = Teleopti.Ccc.TestCommon.FakeRepositories.FakeDatabase;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Schedules
 {
 	[TestFixture]
 	[DomainTest]
+	[DefaultData]
 	public class CurrentScheduleReadModelUpdaterTest
 	{
 		public FakeDatabase Database;

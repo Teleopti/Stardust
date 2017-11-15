@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[DomainTest]
 	[TestFixture]
+	[DefaultData]
 	public class SiteCardViewModelBuilderTeamsTest : ISetup
 	{
 		public SiteCardViewModelBuilder Target;

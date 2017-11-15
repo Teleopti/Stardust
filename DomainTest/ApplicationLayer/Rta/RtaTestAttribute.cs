@@ -13,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
@@ -22,11 +23,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	{
 	}
 
+	[DefaultData]
 	public class RtaTestLoggedOnAttribute : DomainTestAttribute
 	{
 		public FakeEventPublisher Publisher;
 		public MutableNow_ExperimentalEventPublishing Now;
-
+		
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
@@ -41,6 +43,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
+
+			Database.Value.WithDataSource(new StateForTest().SourceId);
 
 			Now.Is("2001-12-18 13:31");
 

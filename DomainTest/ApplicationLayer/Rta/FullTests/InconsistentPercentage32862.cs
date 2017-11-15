@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 	[TestFixture]
 	public class InconsistentPercentage32862
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeAdherencePercentageReadModelPersister Percentage;

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithAgent(null, name, null, null, null, null, null, null);
 		}
-		
+
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name)
 		{
 			return database.WithAgent(id, name, null, null, null, null, null, null);
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithAgent(null, name, null, null, null, null, timeZone, null);
 		}
-		
+
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, TimeZoneInfo timeZone)
 		{
 			return database.WithAgent(null, name, terminalDate, null, null, null, timeZone, null);
@@ -163,7 +163,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			database.WithExternalLogon(name);
 			return database;
 		}
-
 	}
 
 	public static class FakeDatabaseRuleExtensions
@@ -227,7 +226,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithMappedRule(ruleId, stateCode, activityId, staffingEffect, name, adherence, null);
 		}
-
 	}
 
 	public static class FakeDatabasePeriodExtensions
@@ -311,18 +309,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 	public class FakeDatabase
 	{
-		protected readonly FakeTenants _tenants;
-		protected readonly FakePersonRepository _persons;
-		protected readonly FakeBusinessUnitRepository _businessUnits;
+		private readonly FakeTenants _tenants;
+		private readonly FakePersonRepository _persons;
+		private readonly FakeBusinessUnitRepository _businessUnits;
 		private readonly FakeSiteRepository _sites;
 		private readonly FakeTeamRepository _teams;
 		private readonly FakeContractRepository _contracts;
 		private readonly FakePartTimePercentageRepository _partTimePercentages;
 		private readonly FakeContractScheduleRepository _contractSchedules;
 		private readonly FakeApplicationRoleRepository _applicationRoles;
-		protected readonly FakeScenarioRepository _scenarios;
+		private readonly FakeScenarioRepository _scenarios;
 		private readonly FakeDayOffTemplateRepository _dayOffTemplates;
-		protected readonly FakePersonAssignmentRepository _personAssignments;
+		private readonly FakePersonAssignmentRepository _personAssignments;
 		private readonly FakeApplicationFunctionRepository _applicationFunctions;
 		private readonly FakeAvailableDataRepository _availableDatas;
 		private readonly IDefinedRaptorApplicationFunctionFactory _allApplicationFunctions;
@@ -332,16 +330,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeCommonAgentNameProvider _commonAgentNameProvider;
 		private readonly FakeSkillRepository _skills;
 		private readonly FakeGroupingReadOnlyRepository _groupings;
-		protected readonly FakeRtaStateGroupRepository _stateGroups;
-		protected readonly FakeRtaMapRepository _mappings;
+		private readonly FakeRtaStateGroupRepository _stateGroups;
+		private readonly FakeRtaMapRepository _mappings;
 		private readonly FakeRtaRuleRepository _rules;
 		private readonly FakeExternalLogOnRepository _externalLogOns;
 		private readonly FakeDataSources _dataSources;
 		private readonly FakeMeetingRepository _meetings;
-		private readonly FakeAgentStateReadModelPersister _agentStates;
+		private readonly FakeAgentStatePersister _agentStates;
+		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
-
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -362,9 +360,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private RtaRule _rule;
 		private Meeting _meeting;
 		private MultiplicatorDefinitionSet _multiplicatorDefinitionSet;
-
-		public static string DefaultTenantName => DomainTestAttribute.DefaultTenantName;
-		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
 
 		public FakeDatabase(
 			FakeTenants tenants,
@@ -395,7 +390,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeDataSources dataSources,
 			FakeTeamCardReader teamCardReader,
 			FakeMeetingRepository meetings,
-			FakeAgentStateReadModelPersister agentStates,
+			FakeAgentStatePersister agentStates,
+			FakeAgentStateReadModelPersister agentStateReadModels,
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId, FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets)
 		{
 			_tenants = tenants;
@@ -426,23 +422,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_rules = rules;
 			_meetings = meetings;
 			_agentStates = agentStates;
+			_agentStateReadModels = agentStateReadModels;
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 			_multiplicatorDefinitionSets = multiplicatorDefinitionSets;
-
-			createDefaultData();
 		}
-		
-		private void createDefaultData()
+
+		public void CreateDefaultData()
 		{
 			// default data already created. ugly for now...
 			if (_applicationFunctions.LoadAll().Count > 0)
 				return;
-
+			
 			// all application functions
 			_allApplicationFunctions.ApplicationFunctions.ForEach(_applicationFunctions.Add);
 
 			// super role
-			var role = new ApplicationRole { Name = SystemUser.SuperRoleName };
+			var role = new ApplicationRole {Name = SystemUser.SuperRoleName};
 			role.SetId(SystemUser.SuperRoleId);
 			role.AddApplicationFunction(_applicationFunctions.LoadAll().Single(x => x.FunctionPath == DefinedRaptorApplicationFunctionPaths.All));
 			var availableData = new AvailableData
@@ -463,13 +458,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				CultureInfoFactory.CreateEnglishCulture(), null);
 			_person.PermissionInformation.AddApplicationRole(role);
 
-			WithBusinessUnit(DefaultBusinessUnitId);
+			WithBusinessUnit(DomainTestAttribute.DefaultBusinessUnitId);
 
 			WithScenario(null, true);
 
 			// seems to always exist
 			WithDataSource(-1, "-1");
 			WithDataSource(1, "-1");
+		}
+
+		// rta stuff we want to remove
+		public AgentState StoredState => _agentStates.LockNLoad(_agentStates.FindForCheck().Select(x => x.PersonId), DeadLockVictim.Yes).AgentStates.SingleOrDefault();
+		public AgentState StoredStateFor(Guid personId) => _agentStates.ForPersonId(personId);
+		public AgentStateReadModel PersistedReadModel => _agentStateReadModels.Models.SingleOrDefault();
+		public IEnumerable<IRtaState> StateCodes => _stateGroups.LoadAll().Single().StateCollection;
+
+		public string TenantName()
+		{
+			return _tenants.Tenants().Single().Name;
 		}
 
 		public Guid CurrentBusinessUnitId()
@@ -495,7 +501,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ensureExists(_teams, null, () => WithTeam(null, null));
 			return _team.Id.Value;
 		}
-		
+
 		public int CurrentDataSourceId()
 		{
 			return _dataSources.Datasources.Last().Value;
@@ -527,6 +533,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithBusinessUnit(Guid? id)
 		{
+			if (id.HasValue && _businessUnits.LoadAll().Any(x => x.Id.Equals(id)))
+				return this;
 			_businessUnit = new BusinessUnit(RandomName.Make());
 			_businessUnit.SetId(id ?? Guid.NewGuid());
 			_businessUnits.Has(_businessUnit);
@@ -605,7 +613,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_person.SetId(id ?? Guid.NewGuid());
 			_person.SetEmploymentNumber(employeeNumber?.ToString());
 			_persons.Has(_person);
-			
+
 			_person.InTimeZone(timeZone ?? TimeZoneInfo.Utc);
 			if (culture != null)
 				_person.PermissionInformation.SetCulture(culture);
@@ -675,12 +683,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithRole(AvailableDataRangeOption availableDataRange, Guid? teamId, params string[] functionPaths)
 		{
-			var role = new ApplicationRole { Name = "role" };
+			var role = new ApplicationRole {Name = "role"};
 			role.SetId(Guid.NewGuid());
-			functionPaths.ForEach(p =>
-			{
-				role.AddApplicationFunction(_applicationFunctions.LoadAll().Single(x => x.FunctionPath == p));
-			});
+			functionPaths.ForEach(p => { role.AddApplicationFunction(_applicationFunctions.LoadAll().Single(x => x.FunctionPath == p)); });
 			var availableData = new AvailableData
 			{
 				ApplicationRole = role,
@@ -701,6 +706,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithScenario(Guid? id, bool? @default)
 		{
+			Console.WriteLine("WithScenario");
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
 			_scenario = new Scenario(RandomName.Make("scenario"));
 			_scenario.SetId(id ?? Guid.NewGuid());
@@ -708,6 +714,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				_scenario.DefaultScenario = @default.Value;
 			_scenario.SetBusinessUnit(_businessUnit);
 			_scenarios.Has(_scenario);
+			Console.WriteLine(_scenario == null);
 			return this;
 		}
 
@@ -721,6 +728,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithAssignment(Guid? personId, string date)
 		{
+			Console.WriteLine("WithAssignment");
+			Console.WriteLine(_scenario == null);
 			var existingPerson = _persons.LoadAll().SingleOrDefault(x => x.Id == personId);
 			if (existingPerson != null)
 				_person = existingPerson as Person;
@@ -790,12 +799,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			ensureExists(_scenarios, null, () => WithScenario(null, true));
 			_meeting = new Meeting(
-				_person, 
-				new[] {new MeetingPerson(_person, false) }, 
-				subject, 
-				null, 
-				null, 
-				_activity, 
+				_person,
+				new[] {new MeetingPerson(_person, false)},
+				subject,
+				null,
+				null,
+				_activity,
 				_scenario)
 			{
 				StartDate = start.Date(),
@@ -892,8 +901,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				PersonId = _person.Id.Value,
 
 				FirstName = _person.Name.FirstName,
-				LastName= _person.Name.LastName,
-				EmploymentNumber= _person.EmploymentNumber,
+				LastName = _person.Name.LastName,
+				EmploymentNumber = _person.EmploymentNumber,
 
 				PageId = _hardcodedSkillGroupingPageId.GetGuid(),
 				GroupId = skillId,
@@ -908,7 +917,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_skills.Has(skill);
 			_skill = skill;
 		}
-		
+
 		public FakeDatabase WithStateGroup(Guid? id, string name)
 		{
 			return WithStateGroup(id, name, _stateGroups.LoadAll().IsEmpty());
@@ -951,7 +960,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					from s in g.StateCollection
 					where s.StateCode == stateCode
 					select g
-					).FirstOrDefault() as RtaStateGroup;
+				).FirstOrDefault() as RtaStateGroup;
 				if (_stateGroup == null)
 				{
 					WithStateGroup(null, name);
@@ -1014,7 +1023,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			stateGroup.SetBusinessUnit(_businessUnit);
 			_stateGroups.Add(stateGroup);
 
-			var mapping = new RtaMap(stateGroup, null) { RtaRule = _rule };
+			var mapping = new RtaMap(stateGroup, null) {RtaRule = _rule};
 			mapping.SetId(Guid.NewGuid());
 			mapping.SetBusinessUnit(_businessUnit);
 			_mappings.Add(mapping);
@@ -1044,22 +1053,31 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase ClearRuleMap()
+		{
+			_mappings.LoadAll().ForEach(x => _mappings.Remove(x));
+			return this;
+		}
+
+		public FakeDatabase ClearStates()
+		{
+			_stateGroups.LoadAll().ForEach(x => _stateGroups.Remove(x));
+			return this;
+		}
+
 		public FakeDatabase RemovePerson(Guid personId)
 		{
 			_persons.Remove(_persons.Get(personId));
 			return this;
 		}
-		
+
 		public FakeDatabase WithAgentState(AgentStateReadModel agentStateReadModel)
 		{
-			_agentStates.Has(agentStateReadModel);
+			_agentStateReadModels.Has(agentStateReadModel);
 			return this;
 		}
-		
 
 
-
-		
 		private static void ensureExists<T>(IRepository<T> loadAggregates, Guid? id, Action createAction)
 			where T : IAggregateRoot
 		{
@@ -1074,7 +1092,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (all.IsEmpty())
 				createAction();
 		}
-
-
 	}
 }

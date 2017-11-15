@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
+
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[Setting("UseSafeRtaTracer", false)]
 	public class TraceTest
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeRtaTracerPersister Logs;
 		public IRtaTracer Tracer;

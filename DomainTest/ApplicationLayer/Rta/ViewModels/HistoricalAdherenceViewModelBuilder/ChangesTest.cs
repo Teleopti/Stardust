@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder
 {
 	[DomainTest]
+	[DefaultData]
 	[TestFixture]
 	public class ChangesTest : ISetup
 	{

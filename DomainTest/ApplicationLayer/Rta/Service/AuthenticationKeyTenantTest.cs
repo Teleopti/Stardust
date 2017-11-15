@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[TestFixture]
 	public class AuthenticationKeyTenantTest
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]

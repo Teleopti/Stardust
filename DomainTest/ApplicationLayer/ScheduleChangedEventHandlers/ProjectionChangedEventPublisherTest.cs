@@ -17,13 +17,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	{
 		public ScheduleChangedEventForTest()
 		{
-			LogOnDatasource = FakeDatabase.DefaultTenantName;
-			LogOnBusinessUnitId = FakeDatabase.DefaultBusinessUnitId;
+			LogOnDatasource = DomainTestAttribute.DefaultTenantName;
+			LogOnBusinessUnitId = DomainTestAttribute.DefaultBusinessUnitId;
 		}
 	}
 
 	[TestFixture]
 	[DomainTest]
+	[DefaultData]
 	public class ProjectionChangedEventPublisherTest
 	{
 		public ProjectionChangedEventPublisher Target;

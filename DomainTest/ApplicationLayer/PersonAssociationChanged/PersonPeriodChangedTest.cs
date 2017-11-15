@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 {
 	[TestFixture]
 	[DomainTest]
+	[DefaultData]
 	public class PersonPeriodChangedTest
 	{
 		public PersonAssociationChangedEventPublisher Target;

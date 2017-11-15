@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[RtaTest]
 	public class CaseInsensitiveTest
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeAgentStateReadModelPersister Persister;
 

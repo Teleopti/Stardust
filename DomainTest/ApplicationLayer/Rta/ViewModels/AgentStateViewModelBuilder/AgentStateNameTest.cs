@@ -15,6 +15,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModelBuilder
 {
 	[DomainTest]
+	[DefaultData]
 	[TestFixture]
 	public class AgentStateNameTest
 	{

@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 {
 	[DomainTest]
 	[TestFixture]
+	[DefaultData]
 	public class UserTimeZoneTest : ISetup
 	{
 		public Domain.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;

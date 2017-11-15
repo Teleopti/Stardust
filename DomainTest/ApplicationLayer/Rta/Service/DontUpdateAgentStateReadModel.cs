@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class DontUpdateAgentStateReadModel
 	{
 		public FakeAgentStateReadModelPersister Persister;
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public MutableNow Now;
 		public AgentStateReadModelMaintainer Maintainer; 
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;

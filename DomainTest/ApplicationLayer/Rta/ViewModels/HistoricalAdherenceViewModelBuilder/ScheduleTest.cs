@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 {
 	[DomainTest]
 	[TestFixture]
+	[DefaultData]
 	public class ScheduleTest
 	{
 		public Domain.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;

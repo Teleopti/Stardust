@@ -23,6 +23,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SeatPlanning;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";
+		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -98,7 +101,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Rta
 			system.AddService<FakeDataSources>();
-			system.AddService<FakeRtaDatabase>();
 			system.UseTestDouble<FakeStateQueue>().For<IStateQueueWriter, IStateQueueReader>();
 
 			system.UseTestDouble<FakeDataSourceReader>().For<IDataSourceReader>();
@@ -119,7 +121,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			//
 
 			system.UseTestDouble<NoScheduleRangeConflictCollector>().For<IScheduleRangeConflictCollector>();
-			
+
 			// readmodels
 			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
 			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();
@@ -258,9 +260,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		private void fakePrincipal(ISystem system)
 		{
-			var context = QueryAllAttributes<LoggedOnAppDomainAttribute>().Any() ? 
-				(IThreadPrincipalContext) new FakeAppDomainPrincipalContext() : 
-				new FakeThreadPrincipalContext();
+			var context = QueryAllAttributes<LoggedOnAppDomainAttribute>().Any() ? (IThreadPrincipalContext) new FakeAppDomainPrincipalContext() : new FakeThreadPrincipalContext();
 
 			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
 			if (signedIn)
@@ -281,11 +281,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		public IAuthorizationScope AuthorizationScope;
 		public IAuthorization Authorization;
-		public ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
 		public IPersonRepository Persons;
+		public Lazy<FakeRepositories.FakeDatabase> Database;
 		private IDisposable _authorizationScope;
 		private Person _loggedOnPerson;
-		
+
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
@@ -306,6 +306,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			if (_loggedOnPerson != null)
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
+
+			Console.WriteLine(QueryAllAttributes<DefaultDataAttribute>().Any());
+			if (QueryAllAttributes<DefaultDataAttribute>().Any())
+				Database.Value.CreateDefaultData();
 		}
 
 		private bool fullPermissions()

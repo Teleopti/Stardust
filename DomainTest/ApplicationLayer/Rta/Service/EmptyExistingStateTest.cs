@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -13,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[TestFixture]
 	public class EmptyExistingStateTest
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public RtaTestAttribute Context;
 		public FakeEventPublisher Publisher;

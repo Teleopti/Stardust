@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 	[TestFixture]
 	public class UpdateAgentStateReadModelActivityTest
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		

@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 				AuthenticationKey = LegacyAuthenticationKey.TheKey.Remove(2, 2).Insert(2, "_")
 			});
 
-			TheService.RanWithDataSource.DataSourceName.Should().Be(FakeDatabase.DefaultTenantName);
+			TheService.RanWithDataSource.DataSourceName.Should().Be(DomainTestAttribute.DefaultTenantName);
 		}
 
 	}

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[RtaTest]
 	public class BelongsToDateTest
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;

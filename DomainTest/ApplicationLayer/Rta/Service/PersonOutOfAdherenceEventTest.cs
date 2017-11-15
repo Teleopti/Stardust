@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
+
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[RtaTest]
 	public class PersonOutOfAdherenceEventTest
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;

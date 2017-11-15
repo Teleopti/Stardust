@@ -11,6 +11,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
+
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 {
 	[TestFixture]
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 	public class QueueTest
 	{
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public MutableNow Now;
 		public FakeStateQueue Queue;
 		public FakeEventPublisher Publisher;

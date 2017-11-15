@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 
+
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 {
 	[RtaTest]
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		public FakeRtaTracerPersister Logs;
 		public FakeTenants Tenants;
 		public IDataSourceScope DataSource;
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 
 		[Test]
 		public void ShouldLogProcessReceivedForAllTenants()

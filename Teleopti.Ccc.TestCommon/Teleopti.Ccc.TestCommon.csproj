@@ -380,6 +380,7 @@
     <Compile Include="FakeRepositories\FakeLicenseRepository.cs" />
     <Compile Include="FakeData\FakeCurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeRepositories\FakeStateQueue.cs" />
+    <Compile Include="IoC\DefaultDataAttribute.cs" />
     <Compile Include="IoC\FakePermissionsAttribute.cs" />
     <Compile Include="IoC\IIoCTestContext.cs" />
     <Compile Include="IoC\InfrastructureTestAttribute.cs" />
@@ -408,7 +409,7 @@
     <Compile Include="ObjectCopyExtension.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaRuleRepository.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeRtaDatabase.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeDatabase.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaStateGroupRepository.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaMapRepository.cs" />
     <Compile Include="FakeRepositories\Tenant\FakeTenants.cs" />

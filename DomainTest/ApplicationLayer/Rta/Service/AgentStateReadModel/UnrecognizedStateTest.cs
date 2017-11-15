@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 	[RtaTest]
 	public class UnrecognizedStateTest
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeRtaStateGroupRepository StateGroups;
 

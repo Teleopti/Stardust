@@ -14,6 +14,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[DomainTest]
+	[DefaultData]
 	[TestFixture]
 	public class OrganizationViewModelBuilderTest : ISetup
 	{

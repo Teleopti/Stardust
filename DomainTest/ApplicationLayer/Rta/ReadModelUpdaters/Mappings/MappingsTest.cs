@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 {
 	[TestFixture]
 	[DomainTest]
+	[DefaultData]
 	public class MappingsTest
 	{
 		public FakeDatabase Database;

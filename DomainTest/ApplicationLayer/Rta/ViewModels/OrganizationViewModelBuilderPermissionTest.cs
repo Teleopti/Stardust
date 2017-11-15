@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[DomainTest]
 	[TestFixture]
+	[DefaultData]
 	[FakePermissions]
 	public class OrganizationViewModelBuilderPermissionTest
 	{

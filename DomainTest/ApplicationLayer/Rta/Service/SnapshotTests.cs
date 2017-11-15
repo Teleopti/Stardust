@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
+
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[RtaTest]
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class SnapshotTests
 	{
 		public FakeAgentStatePersister Persister;
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 

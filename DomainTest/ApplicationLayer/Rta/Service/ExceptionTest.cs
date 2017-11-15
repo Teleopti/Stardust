@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[TestFixture]
 	public class ExceptionTest
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]

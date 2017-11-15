@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 	[RtaTest]
 	public class UpdateAgentStateReadModelOutOfAdherencesTest
 	{
-		public FakeRtaDatabase Database;
+		public FakeDatabase Database;
 		public MutableNow Now;
 		public IJsonDeserializer Deserializer;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
