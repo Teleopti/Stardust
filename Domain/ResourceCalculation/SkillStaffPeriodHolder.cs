@@ -416,8 +416,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 										 new Task(skillStaffPeriod.Payload.TaskData.Tasks * factor,
 													skillStaffPeriod.Payload.TaskData.AverageTaskTime,
 													skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime),
-										 skillStaffPeriod.Payload.ServiceAgreementData,
-										 skillStaffPeriod.StaffingCalculatorService);
+										 skillStaffPeriod.Payload.ServiceAgreementData);
 				newShortPeriod.SetCalculatedResource65(skillStaffPeriod.Payload.CalculatedResource);
 				newShortPeriod.Payload.Shrinkage = skillStaffPeriod.Payload.Shrinkage;
 				newShortPeriod.Payload.SkillPersonData = skillStaffPeriod.Payload.SkillPersonData;

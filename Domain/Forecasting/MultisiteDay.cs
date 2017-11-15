@@ -424,9 +424,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                                                                                   new Percent(
                                                                                       content.SkillStaffPeriod.
                                                                                           Payload.
-                                                                                          CalculatedOccupancy)),
-                                                                              content.SkillStaffPeriod.
-                                                                                  StaffingCalculatorService);
+                                                                                          CalculatedOccupancy)));
 
                     skillStaffPeriod.Payload.Shrinkage = content.SkillStaffPeriod.Payload.Shrinkage;
                     skillStaffPeriod.Payload.Efficiency = content.SkillStaffPeriod.Payload.Efficiency;

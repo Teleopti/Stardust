@@ -340,37 +340,33 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var skillDay = SkillDayFactory.CreateSkillDay(_skill, DateOnly.Today);
 
 			IStaffingCalculatorServiceFacade svc = _mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
 
             _stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
                                              _task,
-                                             new ServiceAgreement(level1, new Percent(1),new Percent(2)),
-                                             svc);
+                                             new ServiceAgreement(level1, new Percent(1),new Percent(2)));
             _stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3),
                                              _task,
-                                             new ServiceAgreement(level1, new Percent(1),new Percent(2)),
-                                             svc);
+                                             new ServiceAgreement(level1, new Percent(1),new Percent(2)));
             _stPeriod3 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
                                              _task,
-                                             new ServiceAgreement(level1, new Percent(1),new Percent(2)),
-                                             svc);
+                                             new ServiceAgreement(level1, new Percent(1),new Percent(2)));
             _stPeriod4 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 4, 2000, 1, 5),
                                              _task,
-                                             new ServiceAgreement(level1, new Percent(1),new Percent(2)),
-                                             svc);
+                                             new ServiceAgreement(level1, new Percent(1),new Percent(2)));
 
             _stPeriod5 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 5, 2000, 1, 6),
                                              _task,
-                                             new ServiceAgreement(level1, new Percent(1),new Percent(2)),
-                                             svc);
+                                             new ServiceAgreement(level1, new Percent(1),new Percent(2)));
 
             _stPeriod6 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 6, 2000, 1, 7),
                                              _task,
-                                             ServiceAgreement.DefaultValues(), svc);
+                                             ServiceAgreement.DefaultValues());
 
             _stPeriod7 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 7, 2000, 1, 8),
                                              _task,
-                                             ServiceAgreement.DefaultValues(), svc);
+                                             ServiceAgreement.DefaultValues());
 
 			_stPeriod1.SetSkillDay(skillDay);
 			_stPeriod2.SetSkillDay(skillDay);

@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Domain.Helper
                             new Task(skillStaffPeriod.Payload.TaskData.Tasks * percentage, 
                                      skillStaffPeriod.Payload.TaskData.AverageTaskTime, 
                                      skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime),
-                            skillStaffPeriod.Payload.ServiceAgreementData,skillStaffPeriod.StaffingCalculatorService);
+                            skillStaffPeriod.Payload.ServiceAgreementData);
                         skillstaffPeriod.Payload.SkillPersonData = skillStaffPeriod.Payload.SkillPersonData;
                         skillstaffPeriod.Payload.Shrinkage = skillStaffPeriod.Payload.Shrinkage;
                         skillstaffPeriod.Payload.Efficiency = skillStaffPeriod.Payload.Efficiency;

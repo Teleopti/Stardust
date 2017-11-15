@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private SkillStaffPeriod _target;
         private DateTimePeriod _tp;
         private ITask _task;
-	    private IStaffingCalculatorServiceFacade _staffingCalculatorService;
         private ServiceAgreement _sa;
         private DateTime _dt = new DateTime(2008, 2, 1, 0, 0, 0, DateTimeKind.Utc);
         private MockRepository mocks;
@@ -41,8 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _tp = new DateTimePeriod(_dt.Add(TimeSpan.FromHours(10)), _dt.Add(TimeSpan.FromHours(11)));
             _task = new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(20));
             _sa = new ServiceAgreement(new ServiceLevel(new Percent(0.8), 20), new Percent(0), new Percent(1));
-			_staffingCalculatorService = new StaffingCalculatorServiceFacade();
-            _target = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
+            _target = new SkillStaffPeriod(_tp, _task, _sa);
 			
             _target.IsAvailable = true;
             _target.SetCalculatedResource65(123);
@@ -192,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ITask taskWithLongAfterTalk = new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(320));
             
             _sa = new ServiceAgreement(new ServiceLevel(new Percent(0.8), 20), new Percent(0), new Percent(100));
-            _target = new SkillStaffPeriod(_tp, taskWithLongAfterTalk, _sa, _staffingCalculatorService)
+            _target = new SkillStaffPeriod(_tp, taskWithLongAfterTalk, _sa)
 	            {
 		            IsAvailable = true
 	            };
@@ -201,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _target.Payload.CalculatedLoggedOn = 321;
             _target.Payload.Efficiency = new Percent(1);
 
-	        var serviceLevel = _staffingCalculatorService.ServiceLevelAchievedOcc(_target.Payload.CalculatedResource,
+	        var serviceLevel = _target.StaffingCalculatorService.ServiceLevelAchievedOcc(_target.Payload.CalculatedResource,
 		        _target.Payload.ServiceAgreementData.ServiceLevel.Seconds,
 		        _target.Payload.TaskData.Tasks,
 		        _target.Payload.TaskData.AverageTaskTime.TotalSeconds +
@@ -278,13 +276,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
 															_task,
-															new ServiceAgreement(level1, new Percent(1), new Percent(2)),
-															svc);
-			stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), _task, ServiceAgreement.DefaultValues(), _staffingCalculatorService);
+															new ServiceAgreement(level1, new Percent(1), new Percent(2)));
+			stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), _task, ServiceAgreement.DefaultValues());
 			IList<ISkillStaffPeriod> allSkillStaffPeriods = new List<ISkillStaffPeriod>();
 			allSkillStaffPeriods.Add(stPeriod1);
 			allSkillStaffPeriods.Add(stPeriod2);
-			stPeriod1.SetSkillDay(_skillDay);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+			stPeriod1.SetSkillDay(skillDay);
 			using (mocks.Record())
 			{
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(10d);
@@ -379,8 +379,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Task task2 = new Task(0, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10));
 
             ServiceAgreement sa1 = new ServiceAgreement(new ServiceLevel(new Percent(0.9), 30), new Percent(0.7), new Percent(0.95));
-            ISkillStaffPeriod sp1 = new SkillStaffPeriod(_tp, task1, sa1,_staffingCalculatorService);
-            ISkillStaffPeriod sp2 = new SkillStaffPeriod(_tp, task2, sa1,_staffingCalculatorService);
+            ISkillStaffPeriod sp1 = new SkillStaffPeriod(_tp, task1, sa1);
+            ISkillStaffPeriod sp2 = new SkillStaffPeriod(_tp, task2, sa1);
 
             List<ISkillStaffPeriod> list = new List<ISkillStaffPeriod>();
             list.Add(sp1);
@@ -412,7 +412,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             Task task1 = new Task(70, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10));
             ServiceAgreement sa1 = new ServiceAgreement(new ServiceLevel(new Percent(0.9), 30), new Percent(0.7), new Percent(0.95));
-            SkillStaffPeriod sp1 = new SkillStaffPeriod(_tp, task1, sa1,_staffingCalculatorService);
+            SkillStaffPeriod sp1 = new SkillStaffPeriod(_tp, task1, sa1);
 
             List<ISkillStaffPeriod> list = new List<ISkillStaffPeriod>();
             list.Add(sp1);
@@ -445,16 +445,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
 			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(2).TotalSeconds);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000,1,1,2000,1,2),
+			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000,1,1,2000,1,2),
                                                             _task,
-                                                            new ServiceAgreement(level1, new Percent(1), new Percent(2)),
-                                                            svc);
-            stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), _task, ServiceAgreement.DefaultValues(),_staffingCalculatorService);
+                                                            new ServiceAgreement(level1, new Percent(1), new Percent(2)));
+            stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), _task, ServiceAgreement.DefaultValues());
             IList<ISkillStaffPeriod> allSkillStaffPeriods = new List<ISkillStaffPeriod>();
             allSkillStaffPeriods.Add(stPeriod1);
             allSkillStaffPeriods.Add(stPeriod2);
-			stPeriod1.SetSkillDay(_skillDay);
+			stPeriod1.SetSkillDay(skillDay);
 			
             using(mocks.Record())
             {
@@ -473,43 +475,24 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreSame(stPeriod1.SortedSegmentCollection[1], stPeriod2.SegmentInThisCollection.First());
         }
 
-		[Test]
-		public void CalculateStaff_EfficiencyShouldNotAffectCalculatedOccupancy()
-		{
-			var calcService = MockRepository.GenerateStrictMock<IStaffingCalculatorServiceFacade>();
-			var dateTimePeriod = new DateTimePeriod(2013, 11, 04, 2013, 11, 04);
-			var period = new SkillStaffPeriod(dateTimePeriod,
-			                                  _task,
-			                                  ServiceAgreement.DefaultValues(),
-			                                  calcService) {Payload = {Efficiency = new Percent(0.9)}};
-			period.SetSkillDay(_skillDay);
-			var periods = new List<ISkillStaffPeriod> {period};
-
-			calcService.Expect(c => c.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments().Return(100);
-			calcService.Expect(c => c.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(83);
-			
-			period.CalculateStaff(periods);
-
-			var args = calcService.GetArgumentsForCallsMadeOn(c => c.Utilization(1, 1, 1, TimeSpan.MinValue, 1), s => s.IgnoreArguments());
-			args[0][0].Should().Be.EqualTo(100d);
-		}
-       
 
         [Test]
         public void VerifyCalculateStaffWhenLastSegmentIsOnlyParted()
         {
 			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(1.5).TotalSeconds);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
                                                             _task,
-                                                            new ServiceAgreement(level1, new Percent(1), new Percent(2)),
-                                                            svc);
-            stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), _task, new ServiceAgreement(),_staffingCalculatorService);
+                                                            new ServiceAgreement(level1, new Percent(1), new Percent(2)));
+            stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), _task, new ServiceAgreement());
             IList<ISkillStaffPeriod> allSkillStaffPeriods = new List<ISkillStaffPeriod>();
             allSkillStaffPeriods.Add(stPeriod1);
             allSkillStaffPeriods.Add(stPeriod2);
-			stPeriod1.SetSkillDay(_skillDay);
+			stPeriod1.SetSkillDay(skillDay);
             using (mocks.Record())
             {
                 Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(6d);
@@ -532,20 +515,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
 			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(5).TotalSeconds);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 4),
+			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 4),
                                                             _task,
-                                                            new ServiceAgreement(level1, new Percent(1), new Percent(2)),
-                                                            svc);
+                                                            new ServiceAgreement(level1, new Percent(1), new Percent(2)));
             stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 4, 2000, 1, 5),
-                                                              _task, new ServiceAgreement(),_staffingCalculatorService);
+                                                              _task, new ServiceAgreement());
             stPeriod3 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 5, 2000, 1, 7),
-                                                              _task, new ServiceAgreement(),_staffingCalculatorService);
+                                                              _task, new ServiceAgreement());
             IList<ISkillStaffPeriod> allSkillStaffPeriods = new List<ISkillStaffPeriod>();
             allSkillStaffPeriods.Add(stPeriod1);
             allSkillStaffPeriods.Add(stPeriod2);
             allSkillStaffPeriods.Add(stPeriod3);
-			stPeriod1.SetSkillDay(_skillDay);
+			stPeriod1.SetSkillDay(skillDay);
             using (mocks.Record())
             {
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments().Return(5d);
@@ -570,16 +555,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
 			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(2).TotalSeconds);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
                                                             _task,
-                                                            new ServiceAgreement(level1, new Percent(1), new Percent(2)),
-                                                            svc);
-            stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), _task, new ServiceAgreement(),_staffingCalculatorService);
+                                                            new ServiceAgreement(level1, new Percent(1), new Percent(2)));
+            stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), _task, new ServiceAgreement());
             IList<ISkillStaffPeriod> allSkillStaffPeriods = new List<ISkillStaffPeriod>();
             allSkillStaffPeriods.Add(stPeriod1);
             allSkillStaffPeriods.Add(stPeriod2);
-			stPeriod1.SetSkillDay(_skillDay);
+			stPeriod1.SetSkillDay(skillDay);
             using (mocks.Record())
             {
                 Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments().Return(0d);
@@ -600,44 +587,41 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
 			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
                                                                _task,
                                                                new ServiceAgreement(level1, new Percent(1),
-                                                                                    new Percent(2)),
-                                                               svc);
+                                                                                    new Percent(2)));
             stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3),
                                                                _task,
                                                                new ServiceAgreement(level1, new Percent(1),
-                                                                                    new Percent(2)),
-                                                               svc);
+                                                                                    new Percent(2)));
             stPeriod3 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
                                                                _task,
                                                                new ServiceAgreement(level1, new Percent(1),
-                                                                                    new Percent(2)),
-                                                               svc);
+                                                                                    new Percent(2)));
             stPeriod4 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 4, 2000, 1, 5),
                                                                _task,
                                                                new ServiceAgreement(level1, new Percent(1),
-                                                                                    new Percent(2)),
-                                                               svc);
+                                                                                    new Percent(2)));
 
             stPeriod5 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 5, 2000, 1, 6),
                                                                _task,
                                                                new ServiceAgreement(level1, new Percent(1),
-                                                                                    new Percent(2)),
-                                                               svc);
+                                                                                    new Percent(2)));
             stPeriod6 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 6, 2000, 1, 7),
                                                                _task,
                                                                new ServiceAgreement(level1, new Percent(1),
-                                                                                    new Percent(2)),
-                                                               svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
-			stPeriod5.SetSkillDay(_skillDay);
-			stPeriod6.SetSkillDay(_skillDay);
+                                                                                    new Percent(2)));
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
             using (mocks.Record())
             {
                 Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments()
@@ -724,31 +708,30 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
 			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
                                                                _task,
                                                                new ServiceAgreement(level1, new Percent(1),
-                                                                                    new Percent(2)),
-                                                               svc);
+                                                                                    new Percent(2)));
             stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3),
                                                                _task,
                                                                new ServiceAgreement(level1, new Percent(1),
-                                                                                    new Percent(2)),
-                                                               svc);
+                                                                                    new Percent(2)));
             stPeriod3 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
                                                                _task,
                                                                new ServiceAgreement(level1, new Percent(1),
-                                                                                    new Percent(2)),
-                                                               svc);
+                                                                                    new Percent(2)));
             stPeriod4 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 4, 2000, 1, 5),
                                                                _task,
                                                                new ServiceAgreement(level1, new Percent(1),
-                                                                                    new Percent(2)),
-                                                               svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
+                                                                                    new Percent(2)));
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
 
             using (mocks.Record())
             {
@@ -821,15 +804,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             DateTimePeriod period3 = period2.MovePeriod(TimeSpan.FromHours(1));
             DateTimePeriod period4 = period3.MovePeriod(TimeSpan.FromHours(1));
             ServiceAgreement ag1 = new ServiceAgreement(level1, new Percent(1), new Percent(2));
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(period1, _task, ag1, svc);
-            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1, svc);
-            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1, svc);
-            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1, svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
+			stPeriod1 = new SkillStaffPeriod(period1, _task, ag1);
+            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1);
+            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1);
+            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
 			
             using (mocks.Record())
             {
@@ -929,15 +915,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             DateTimePeriod period3 = period2.MovePeriod(TimeSpan.FromHours(1));
             DateTimePeriod period4 = period3.MovePeriod(TimeSpan.FromHours(1));
             ServiceAgreement ag1 = new ServiceAgreement(level1, new Percent(1), new Percent(2));
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(period1, _task, ag1, svc);
-            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1, svc);
-            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1, svc);
-            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1, svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
+			stPeriod1 = new SkillStaffPeriod(period1, _task, ag1);
+            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1);
+            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1);
+            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
 			
             using (mocks.Record())
             {
@@ -1030,15 +1019,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             DateTimePeriod period3 = period2.MovePeriod(TimeSpan.FromHours(1));
             DateTimePeriod period4 = period3.MovePeriod(TimeSpan.FromHours(1));
             ServiceAgreement ag1 = new ServiceAgreement(level1, new Percent(1), new Percent(2));
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(period1, _task, ag1, svc);
-            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1, svc);
-            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1, svc);
-            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1, svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
+			stPeriod1 = new SkillStaffPeriod(period1, _task, ag1);
+            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1);
+            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1);
+            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
 			
             using (mocks.Record())
             {
@@ -1089,27 +1081,30 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             DateTimePeriod period9 = period8.MovePeriod(TimeSpan.FromHours(1));
 
             ServiceAgreement ag1 = new ServiceAgreement(level1, new Percent(1), new Percent(2));
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(period1, _task, ag1, svc);
-            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1, svc);
-            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1, svc);
-            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1, svc);
-            stPeriod5 = new SkillStaffPeriod(period5, _task, ag1, svc);
-            stPeriod6 = new SkillStaffPeriod(period6, _task, ag1, svc);
-            stPeriod7 = new SkillStaffPeriod(period7, _task, ag1, svc);
+			stPeriod1 = new SkillStaffPeriod(period1, _task, ag1);
+            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1);
+            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1);
+            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1);
+            stPeriod5 = new SkillStaffPeriod(period5, _task, ag1);
+            stPeriod6 = new SkillStaffPeriod(period6, _task, ag1);
+            stPeriod7 = new SkillStaffPeriod(period7, _task, ag1);
 			
-            ISkillStaffPeriod stPeriod8 = new SkillStaffPeriod(period8, _task, ag1, svc);
-            ISkillStaffPeriod stPeriod9 = new SkillStaffPeriod(period9, _task, ag1, svc);
+            ISkillStaffPeriod stPeriod8 = new SkillStaffPeriod(period8, _task, ag1);
+            ISkillStaffPeriod stPeriod9 = new SkillStaffPeriod(period9, _task, ag1);
 
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
-			stPeriod5.SetSkillDay(_skillDay);
-			stPeriod6.SetSkillDay(_skillDay);
-			stPeriod7.SetSkillDay(_skillDay);
-			stPeriod8.SetSkillDay(_skillDay);
-			stPeriod9.SetSkillDay(_skillDay);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
+			stPeriod7.SetSkillDay(skillDay);
+			stPeriod8.SetSkillDay(skillDay);
+			stPeriod9.SetSkillDay(skillDay);
             using (mocks.Record())
             {
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
@@ -1216,19 +1211,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
                                                        new Percent(2));
             DateTimePeriod dtp = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(dtp, _task, sa, svc);
-            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa, svc);
-            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa, svc);
-            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa, svc);
-            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa, svc);
-            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa, svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
-			stPeriod5.SetSkillDay(_skillDay);
-			stPeriod6.SetSkillDay(_skillDay);
+			stPeriod1 = new SkillStaffPeriod(dtp, _task, sa);
+            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa);
+            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa);
+            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa);
+            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa);
+            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
             using (mocks.Record())
             {
                 Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2,1)).IgnoreArguments().Return(0d);
@@ -1286,19 +1284,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
                                                        new Percent(2));
             DateTimePeriod dtp = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(dtp, _task, sa, svc);
-            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa, svc);
-            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa, svc);
-            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa, svc);
-            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa, svc);
-            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa, svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
-			stPeriod5.SetSkillDay(_skillDay);
-			stPeriod6.SetSkillDay(_skillDay);
+			stPeriod1 = new SkillStaffPeriod(dtp, _task, sa);
+            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa);
+            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa);
+            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa);
+            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa);
+            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
             using (mocks.Record())
             {
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
@@ -1370,19 +1371,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
                                                        new Percent(2));
             DateTimePeriod dtp = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(dtp, _task, sa, svc);
-            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa, svc);
-            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa, svc);
-            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa, svc);
-            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa, svc);
-            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa, svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
-			stPeriod5.SetSkillDay(_skillDay);
-			stPeriod6.SetSkillDay(_skillDay);
+			stPeriod1 = new SkillStaffPeriod(dtp, _task, sa);
+            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa);
+            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa);
+            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa);
+            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa);
+            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
             using (mocks.Record())
             {
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
@@ -1422,19 +1426,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
                                                        new Percent(2));
             DateTimePeriod dtp = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(dtp, _task, sa, svc);
-            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa, svc);
-            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa, svc);
-            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa, svc);
-            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa, svc);
-            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa, svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
-			stPeriod5.SetSkillDay(_skillDay);
-			stPeriod6.SetSkillDay(_skillDay);
+			stPeriod1 = new SkillStaffPeriod(dtp, _task, sa);
+            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa);
+            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa);
+            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa);
+            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa);
+            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
             using (mocks.Record())
             {
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
@@ -1790,15 +1797,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             DateTimePeriod period3 = period2.MovePeriod(TimeSpan.FromHours(1));
             DateTimePeriod period4 = period3.MovePeriod(TimeSpan.FromHours(1));
             ServiceAgreement ag1 = new ServiceAgreement(level1, new Percent(1), new Percent(2));
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(period1, _task, ag1, svc);
-            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1, svc);
-            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1, svc);
-            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1, svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
+			stPeriod1 = new SkillStaffPeriod(period1, _task, ag1);
+            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1);
+            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1);
+            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
 			
             using (mocks.Record())
             {
@@ -1860,7 +1870,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyCombineAggregatedSkillStaffPeriod()
         {
             _aggregateSkillStaffPeriod.IsAggregate = true;
-            ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
+            ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa);
             IAggregateSkillStaffPeriod aggregateSkillStaffPeriod2 = (IAggregateSkillStaffPeriod)target2;
             aggregateSkillStaffPeriod2.IsAggregate = true;
             _aggregateSkillStaffPeriod.AggregatedFStaff = 4;
@@ -1878,8 +1888,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCombineAggregatedEstimatedServiceLevel()
         {
-            ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
-            ISkillStaffPeriod target3 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
+            ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa);
+            ISkillStaffPeriod target3 = new SkillStaffPeriod(_tp, _task, _sa);
             IAggregateSkillStaffPeriod aggregateSkillStaffPeriod2 = (IAggregateSkillStaffPeriod)target2;
             IAggregateSkillStaffPeriod aggregateSkillStaffPeriod3 = (IAggregateSkillStaffPeriod)target3;
             _aggregateSkillStaffPeriod.IsAggregate = true;
@@ -1903,8 +1913,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void VerifyCombineAggregatedEstimatedServiceLevelShrinkage()
 		{
-			ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
-			ISkillStaffPeriod target3 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
+			ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa);
+			ISkillStaffPeriod target3 = new SkillStaffPeriod(_tp, _task, _sa);
 			IAggregateSkillStaffPeriod aggregateSkillStaffPeriod2 = (IAggregateSkillStaffPeriod)target2;
 			IAggregateSkillStaffPeriod aggregateSkillStaffPeriod3 = (IAggregateSkillStaffPeriod)target3;
 			_aggregateSkillStaffPeriod.IsAggregate = true;
@@ -1928,8 +1938,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCombineStaffingThreshold()
         {
-            stPeriod1 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
-            stPeriod2 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
+            stPeriod1 = new SkillStaffPeriod(_tp, _task, _sa);
+            stPeriod2 = new SkillStaffPeriod(_tp, _task, _sa);
             var agg = (IAggregateSkillStaffPeriod) stPeriod1;
             var period = (IAggregateSkillStaffPeriod) stPeriod2;
             agg.IsAggregate = true;
@@ -1948,8 +1958,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCombineMinMaxStaffingAlarm()
         {
-            stPeriod1 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
-            stPeriod2 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
+            stPeriod1 = new SkillStaffPeriod(_tp, _task, _sa);
+            stPeriod2 = new SkillStaffPeriod(_tp, _task, _sa);
             var agg = (IAggregateSkillStaffPeriod) stPeriod1;
             var period = (IAggregateSkillStaffPeriod)stPeriod2;
             agg.IsAggregate = true;
@@ -2027,7 +2037,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCombineAggregatedSkillStaffPeriodThrowsExceptionIfInstanceIsNotAggregate()
         {
-            ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
+            ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa);
             IAggregateSkillStaffPeriod aggregateSkillStaffPeriod2 = (IAggregateSkillStaffPeriod)target2;
 			Assert.Throws<InvalidCastException>(() => aggregateSkillStaffPeriod2.CombineAggregatedSkillStaffPeriod(_aggregateSkillStaffPeriod));
         }
@@ -2035,7 +2045,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCombineAggregatedSkillStaffPeriodThrowsExceptionIfParameterIsNotAggregate()
         {
-            ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
+            ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa);
             IAggregateSkillStaffPeriod aggregateSkillStaffPeriod2 = (IAggregateSkillStaffPeriod)target2;
 			Assert.Throws<InvalidCastException>(() => _aggregateSkillStaffPeriod.CombineAggregatedSkillStaffPeriod(aggregateSkillStaffPeriod2));
         }
@@ -2052,48 +2062,46 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
 			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
 
-            stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
                                              _task,
                                              new ServiceAgreement(level1, new Percent(1),
-                                                                  new Percent(2)),
-                                             svc);
+                                                                  new Percent(2)));
             stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3),
                                              _task,
                                              new ServiceAgreement(level1, new Percent(1),
-                                                                  new Percent(2)),
-                                             svc);
+                                                                  new Percent(2)));
             stPeriod3 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
                                              _task,
                                              new ServiceAgreement(level1, new Percent(1),
-                                                                  new Percent(2)),
-                                             svc);
+                                                                  new Percent(2)));
             stPeriod4 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 4, 2000, 1, 5),
                                              _task,
                                              new ServiceAgreement(level1, new Percent(1),
-                                                                  new Percent(2)),
-                                             svc);
+                                                                  new Percent(2)));
 
             stPeriod5 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 5, 2000, 1, 6),
                                              _task,
                                              new ServiceAgreement(level1, new Percent(1),
-                                                                  new Percent(2)),
-                                             svc);
+                                                                  new Percent(2)));
 
             stPeriod6 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 6, 2000, 1, 7),
                                              _task,
-                                             ServiceAgreement.DefaultValues(), svc);
+                                             ServiceAgreement.DefaultValues());
 
             stPeriod7 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 7, 2000, 1, 8),
                                              _task,
-                                             ServiceAgreement.DefaultValues(), svc);
-			stPeriod1.SetSkillDay(_skillDay);
-			stPeriod2.SetSkillDay(_skillDay);
-			stPeriod3.SetSkillDay(_skillDay);
-			stPeriod4.SetSkillDay(_skillDay);
-			stPeriod5.SetSkillDay(_skillDay);
-			stPeriod6.SetSkillDay(_skillDay);
-			stPeriod7.SetSkillDay(_skillDay);
+                                             ServiceAgreement.DefaultValues());
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
+			stPeriod7.SetSkillDay(skillDay);
 
             List<ISkillStaffPeriod> periodlist = new List<ISkillStaffPeriod>
                                                      {
@@ -2139,8 +2147,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(start, end),
                                              _task,
                                              new ServiceAgreement(level1, new Percent(1),
-                                                                  new Percent(2)),
-                                             _staffingCalculatorService);
+                                                                  new Percent(2)));
 
 			Assert.Throws<ArgumentOutOfRangeException>(() => stPeriod1.Split(new TimeSpan(1, 0, 0)));
         }
@@ -2156,85 +2163,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(start, end),
                                              _task,
                                              new ServiceAgreement(level1, new Percent(1),
-                                                                  new Percent(2)),
-                                             _staffingCalculatorService);
+                                                                  new Percent(2)));
 
 			Assert.Throws<ArgumentOutOfRangeException>(() => stPeriod1.Split(new TimeSpan(0, 15, 0)));
         }
 
-        [Test, Ignore("Payload have no longer a setter")]
-        public void VerifySplitSkillStaffPeriod()
-        {
-            //IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
-            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromMinutes(4).TotalSeconds);
-            // create a period that is 30 minutes and expect to be splitted in two 15 minutes
-            DateTime start = new DateTime(2009,02,02,09,0,0,DateTimeKind.Utc);
-            DateTime end = new DateTime(2009, 02, 02, 09, 30, 0, DateTimeKind.Utc);
-
-            stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(start, end),
-                                             _task,
-                                             new ServiceAgreement(level1, new Percent(1),
-                                                                  new Percent(2)),
-                                             _staffingCalculatorService);
-            ISkillStaff skillStaff = mocks.StrictMock<ISkillStaff>();
-            
-
-            using (mocks.Record())
-            {
-                Expect.Call(skillStaff.CalculatedResource).Return(5).Repeat.AtLeastOnce();
-                Expect.Call(skillStaff.CalculatedTrafficIntensityWithShrinkage).Return(7).Repeat.AtLeastOnce();
-                Expect.Call(skillStaff.ForecastedIncomingDemand).Return(9).Repeat.AtLeastOnce();
-            }
-            using (mocks.Playback())
-            {
-							//Payload have no longer a setter
-                //stPeriod1.Payload = skillStaff;
-                IList<ISkillStaffPeriodView> views = stPeriod1.Split(new TimeSpan(0, 15, 0));
-                Assert.AreEqual(2, views.Count);
-                Assert.AreEqual(5, views[0].CalculatedResource);
-                Assert.AreEqual(9, views[0].ForecastedIncomingDemand);
-                Assert.AreEqual(15,views[0].Period.ElapsedTime().TotalMinutes);
-                Assert.AreEqual(start, views[0].Period.StartDateTime);
-                Assert.AreEqual(5, views[1].CalculatedResource);
-                Assert.AreEqual(9, views[1].ForecastedIncomingDemand);
-                Assert.AreEqual(15, views[1].Period.ElapsedTime().TotalMinutes);
-                Assert.AreEqual(start.AddMinutes(15), views[1].Period.StartDateTime);
-            }
-            
-        }
-
-				[Test, Ignore("Payload have no longer a setter")]
-        public void VerifySplitSkillStaffPeriodWhenSameLength()
-        {
-            //IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
-            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromMinutes(4).TotalSeconds);
-            // create a period that is 30 minutes and expect to be "splitted" in one 30 minutes
-            DateTime start = new DateTime(2009, 02, 02, 09, 0, 0, DateTimeKind.Utc);
-            DateTime end = new DateTime(2009, 02, 02, 09, 30, 0, DateTimeKind.Utc);
-
-            stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(start, end),
-                                             _task,
-                                             new ServiceAgreement(level1, new Percent(1),
-                                                                  new Percent(2)),
-                                             _staffingCalculatorService);
-            ISkillStaff skillStaff = mocks.StrictMock<ISkillStaff>();
-
-            using (mocks.Record())
-            {
-                Expect.Call(skillStaff.CalculatedResource).Return(5).Repeat.AtLeastOnce();
-                Expect.Call(skillStaff.CalculatedTrafficIntensityWithShrinkage).Return(5).Repeat.AtLeastOnce();
-                Expect.Call(skillStaff.ForecastedIncomingDemand).Return(9).Repeat.AtLeastOnce();
-            }
-            using (mocks.Playback())
-            {
-							//Payload have no longer a setter
-                //stPeriod1.Payload = skillStaff;
-                IList<ISkillStaffPeriodView> views = stPeriod1.Split(new TimeSpan(0, 30, 0));
-                Assert.AreEqual(1, views.Count);
-                Assert.AreEqual(5, views[0].CalculatedResource);
-            }
-
-        }
+        
     }
 
 

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var taskPeriod = new TemplateTaskPeriod(task, new DateTimePeriod(date, date.AddMinutes(15)));
 			var statTask = new StatisticTask{Interval = date};
 			var serviceAgreement = new ServiceAgreement();
-			var skillStaffPeriod = new SkillStaffPeriod(new DateTimePeriod(date, date.AddMinutes(15)), task, serviceAgreement, null){StatisticTask = statTask};
+			var skillStaffPeriod = new SkillStaffPeriod(new DateTimePeriod(date, date.AddMinutes(15)), task, serviceAgreement){StatisticTask = statTask};
 			Expect.Call(_workloadDay.Workload).Return(_workload);
 			Expect.Call(_workload.QueueSourceCollection).Return(new ReadOnlyCollection<IQueueSource>(new List<IQueueSource>()));
 			Expect.Call(_repositoryFactory.CreateStatisticRepository().LoadSpecificDates(new Collection<IQueueSource>(), new DateTimePeriod())).

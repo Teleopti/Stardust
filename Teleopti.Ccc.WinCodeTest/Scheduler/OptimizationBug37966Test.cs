@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				var skillStaffPeriod = new SkillStaffPeriod(period.MovePeriod(TimeSpan.FromMinutes(i*15)),
 					new Task(2, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(2)),
-					ServiceAgreement.DefaultValues(), skill.SkillType.StaffingCalculatorService);
+					ServiceAgreement.DefaultValues());
 				skillStaffPeriod.Payload.ManualAgents = i >= 8 ? 2 : 0;
 				return skillStaffPeriod;
 			}).ToArray());

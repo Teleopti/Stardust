@@ -16,8 +16,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	{
         private readonly SortedList<DateTime, ISkillStaffSegmentPeriod> _sortedSegmentCollection;
         private IList<ISkillStaffSegmentPeriod> _segmentInThisCollection;
-        private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
-
 		private bool _isAggregate;
         private double _aggregatedFStaff;
         private double _aggregatedCalculatedResources;
@@ -27,11 +25,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	    private readonly object Locker = new object();
 
-	    public SkillStaffPeriod(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData, IStaffingCalculatorServiceFacade staffingCalculatorService) : base(new SkillStaff(taskData, serviceAgreementData), period)
+	    public SkillStaffPeriod(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData) : base(new SkillStaff(taskData, serviceAgreementData), period)
         {
 	        AggregatedStaffingThreshold = StaffingThreshold.Ok;
 	        _sortedSegmentCollection = new SortedList<DateTime, ISkillStaffSegmentPeriod>();
-            _staffingCalculatorService = staffingCalculatorService;
             _segmentInThisCollection = new List<ISkillStaffSegmentPeriod>();
 			IntraIntervalSamples = new List<int>();
         }
@@ -339,7 +336,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             else
             {
-                _estimatedServiceLevel = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
+                _estimatedServiceLevel = new Percent(StaffingCalculatorService.ServiceLevelAchievedOcc(
                     ScheduledAgentsIncoming,
                     Payload.ServiceAgreementData.ServiceLevel.Seconds,
 					Payload.TaskData.Tasks,
@@ -351,7 +348,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 				if (largeVolumes())
 				{
-					_estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
+					_estimatedServiceLevelShrinkage = new Percent(StaffingCalculatorService.ServiceLevelAchievedOcc(
 						 ScheduledAgentsIncoming,
 						 Payload.ServiceAgreementData.ServiceLevel.Seconds,
 						 Payload.TaskData.Tasks,
@@ -365,7 +362,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				{
 					var shrinkage = Payload.UseShrinkage ? 1 - Payload.Shrinkage.Value : 1;
 					var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming * shrinkage;
-					_estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
+					_estimatedServiceLevelShrinkage = new Percent(StaffingCalculatorService.ServiceLevelAchievedOcc(
 						scheduledAgentsIncomingWithShrinkage,
 						Payload.ServiceAgreementData.ServiceLevel.Seconds,
 						Payload.TaskData.Tasks,
@@ -448,7 +445,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
 				if (!Payload.ManualAgents.HasValue && !Payload.NoneBlendDemand.HasValue)
 				{					
-					traffic = _staffingCalculatorService.AgentsUseOccupancy(
+					traffic = StaffingCalculatorService.AgentsUseOccupancy(
 					Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
 					(int)Math.Round(Payload.ServiceAgreementData.ServiceLevel.Seconds),
 					Payload.TaskData.Tasks,
@@ -482,7 +479,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				}
 			}
 
-			castedPayLoad.CalculatedOccupancy = _staffingCalculatorService.Utilization(demandWithoutEfficiency, Payload.TaskData.Tasks,
+			castedPayLoad.CalculatedOccupancy = StaffingCalculatorService.Utilization(demandWithoutEfficiency, Payload.TaskData.Tasks,
                                                       Payload.TaskData.AverageTaskTime.TotalSeconds +
                                                       Payload.TaskData.AverageAfterTaskTime.TotalSeconds, Period.ElapsedTime(), maxParallel);
             if (periods != null)
@@ -567,7 +564,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	        var skillDay = skillStaffPeriods[0].SkillDay;
             if (tasks == 0)
             {
-	            var newPeriod = new SkillStaffPeriod(period, new Task(), ServiceAgreement.DefaultValues(), skillStaffPeriods[0].StaffingCalculatorService);
+	            var newPeriod = new SkillStaffPeriod(period, new Task(), ServiceAgreement.DefaultValues());
 				newPeriod.SetSkillDay(skillDay);
 				return newPeriod;
             }
@@ -578,7 +575,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             Percent retMaxOcc = new Percent(maxOcc / tasks);
             ServiceAgreement retAgr = new ServiceAgreement(retLevel, retMinOcc, retMaxOcc);
 
-	        var ret = new SkillStaffPeriod(period, retTask, retAgr, skillStaffPeriods[0].StaffingCalculatorService) {IsAvailable = isAvail};
+	        var ret = new SkillStaffPeriod(period, retTask, retAgr) {IsAvailable = isAvail};
 	        ret.Payload.UseShrinkage = useShrinkage;
             ret.SetCalculatedResource65(resource);
 			((SkillStaff)ret.Payload).ForecastedIncomingDemand = forecastedIncomingHours;
@@ -607,7 +604,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public bool IsAvailable { get; set; }
 
-		public IStaffingCalculatorServiceFacade StaffingCalculatorService => _staffingCalculatorService;
+		public IStaffingCalculatorServiceFacade StaffingCalculatorService => SkillDay.Skill.SkillType.StaffingCalculatorService;
 
 		public void PickResources65()
         {
@@ -672,7 +669,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 skillStaffPeriod = new SkillStaffPeriod(period, Payload.TaskData,
                     new ServiceAgreement(Payload.ServiceAgreementData.ServiceLevel, 
                                         Payload.ServiceAgreementData.MinOccupancy,
-                                        Payload.ServiceAgreementData.MaxOccupancy),_staffingCalculatorService);
+                                        Payload.ServiceAgreementData.MaxOccupancy));
                 skillStaffPeriod.Payload.Shrinkage = Payload.Shrinkage;
                 skillStaffPeriod.Payload.SkillPersonData = Payload.SkillPersonData;
                 return skillStaffPeriod;
@@ -687,7 +684,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             skillStaffPeriod = new SkillStaffPeriod(period, newTaskData,
                     new ServiceAgreement(Payload.ServiceAgreementData.ServiceLevel,
                                         Payload.ServiceAgreementData.MinOccupancy,
-                                        Payload.ServiceAgreementData.MaxOccupancy),_staffingCalculatorService);
+                                        Payload.ServiceAgreementData.MaxOccupancy));
             skillStaffPeriod.Payload.Shrinkage = Payload.Shrinkage;
             return skillStaffPeriod;
         }
