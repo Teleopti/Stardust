@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		public static IDisposable Create(this ResourceCalculationContextFactory resourceCalculationContextFactory, ISchedulingResultStateHolder stateHolder, bool primarySkillMode, DateOnlyPeriod period)
 		{
-			return resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.Skills, primarySkillMode, period);
+			return resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.Skills, Enumerable.Empty<BpoResource>(), primarySkillMode, period);
 		}
 	}
 }

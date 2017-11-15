@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var resourceCalculationData = ResourceCalculationDataCreator.WithData(scenario, period , new[] { assignment }, skillDay, false, false);
 
 			var expected = assignment.Period.Intersect(today.ToDateTimePeriod(userTimeZone));
-			using (ResourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, false, today.ToDateOnlyPeriod()))
+			using (ResourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, Enumerable.Empty<BpoResource>(), false, today.ToDateOnlyPeriod()))
 			{
 				var partOfAssignmentInContext = ResourceCalculationContext.Fetch().AffectedResources(activity, today.ToDateTimePeriod(userTimeZone)).Any();
 				partOfAssignmentInContext.Should().Be.EqualTo(expected);

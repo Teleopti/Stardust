@@ -48,7 +48,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 					ISchedulingResultService schedulingResultService =
 						new SchedulingResultService(schedulingResultStateHolder, skills, new CascadingPersonSkillProvider());
 					IScheduleForecastSkillResourceCalculation scheduleForecastSkillResourceCalculation =
-						new ScheduleForecastSkillResourceCalculation(new ShovelResources(new ReducePrimarySkillResources(), new AddResourcesToSubSkills(), new SkillSetPerActivityProvider(), new PrimarySkillOverstaff(), new TimeZoneGuard(), new AddBpoResourcesToContext(new NoSkillCombinationResourceBpoReader(), new SkillCombinationToBpoResourceMapper())), 
+						new ScheduleForecastSkillResourceCalculation(new ShovelResources(new ReducePrimarySkillResources(), new AddResourcesToSubSkills(), new SkillSetPerActivityProvider(), new PrimarySkillOverstaff(), new TimeZoneGuard(), new AddBpoResourcesToContext()), 
 																	skillDaysDictionary, schedulingResultService,
 																	schedulingResultStateHolder.SkillStaffPeriodHolder,
 																	schedulingResultStateHolder.Schedules,

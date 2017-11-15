@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
 			var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(periodDateOnly, false);
 			_stardustJobFeedback.SendProgress($"Preloaded data for {resCalcData.Skills.Count()} skills.");
-			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, true, periodDateOnly))
+			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, Enumerable.Empty<BpoResource>(), true, periodDateOnly))
 			{
 				_resourceCalculation.ResourceCalculate(periodDateOnly, resCalcData);
 			}

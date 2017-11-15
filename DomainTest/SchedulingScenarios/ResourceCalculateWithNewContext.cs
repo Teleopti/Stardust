@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ResourceCalculation;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		
 		public void ResourceCalculate(DateOnlyPeriod period, ResourceCalculationData resourceCalculationData)
 		{
-			using (_cascadingResourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, false, period))
+			using (_cascadingResourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, Enumerable.Empty<BpoResource>(), false, period))
 			{
 				_resourceCalculation.ResourceCalculate(period, resourceCalculationData);
 			}

@@ -12,6 +12,12 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 	public static class ScheduleDictionaryCreator
 	{
 		public static IScheduleDictionary WithData(IScenario scenario,
+			DateOnlyPeriod period)
+		{
+			return WithData(scenario, period, Enumerable.Empty<IScheduleData>());
+		}
+		
+		public static IScheduleDictionary WithData(IScenario scenario,
 			DateOnlyPeriod period,
 			IEnumerable<IScheduleData> persistableScheduleData)
 		{
