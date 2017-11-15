@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -23,8 +22,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SeatPlanning;
-using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -307,7 +304,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			if (_loggedOnPerson != null)
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
 
-			Console.WriteLine(QueryAllAttributes<DefaultDataAttribute>().Any());
 			if (QueryAllAttributes<DefaultDataAttribute>().Any())
 				Database.Value.CreateDefaultData();
 		}
