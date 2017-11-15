@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<BpoResource> BpoResources
 		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
+			get { yield break; }
+			set {  }
 		}
 
 		public void AddSkills(params ISkill[] skills)
