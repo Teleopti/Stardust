@@ -129,18 +129,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		bool HasCorrectNumberOfDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod);
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_EasierBlockScheduling_46155)] // And remove virtual in base class
-	public class DaysOffInPeriodValidatorForBlockOLD : DaysOffInPeriodValidatorForBlock
-	{
-		public DaysOffInPeriodValidatorForBlockOLD(IDayOffsInPeriodCalculator dayOffsInPeriodCalculator) : base(dayOffsInPeriodCalculator)
-		{
-		}
-
-		public override bool HasCorrectNumberOfDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod)
-		{
-			return true;
-		}
-	}
 
 	public class DaysOffInPeriodValidatorForBlock : IDaysOffInPeriodValidatorForBlock
 	{
@@ -151,7 +139,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 		}
 
-		public virtual bool HasCorrectNumberOfDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod)
+		public bool HasCorrectNumberOfDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod)
 		{
 			return _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(scheduleDictionary, virtualSchedulePeriod, out int _,
 				out IList<IScheduleDay> _);

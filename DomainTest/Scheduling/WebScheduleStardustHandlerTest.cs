@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personAssignments.All(x => x.Source == ScheduleSource.WebScheduling).Should().Be.True();
 		}
 
-		public WebScheduleStardustHandlerTest(SeperateWebRequest seperateWebRequest, EasierBlockScheduling resourcePlannerEasierBlockScheduling46155, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(seperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680)
+		public WebScheduleStardustHandlerTest(SeperateWebRequest seperateWebRequest, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(seperateWebRequest, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680)
 		{
 		}
 	}

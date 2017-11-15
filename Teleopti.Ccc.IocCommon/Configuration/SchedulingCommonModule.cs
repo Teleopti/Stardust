@@ -145,14 +145,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PersonalSkillsProvider>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_EasierBlockScheduling_46155))
-			{
-				builder.RegisterType<DaysOffInPeriodValidatorForBlock>().As<IDaysOffInPeriodValidatorForBlock>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<DaysOffInPeriodValidatorForBlockOLD>().As<IDaysOffInPeriodValidatorForBlock>().SingleInstance();
-			}
+			builder.RegisterType<DaysOffInPeriodValidatorForBlock>().As<IDaysOffInPeriodValidatorForBlock>().SingleInstance();
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
 			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();

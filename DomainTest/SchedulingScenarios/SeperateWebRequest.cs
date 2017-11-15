@@ -2,7 +2,7 @@
 {
 	public enum SeperateWebRequest
 	{
-		DoSeperateWebRequest,
-		DontSeperateWebRequest
+		SimulateSecondRequestOrScheduler,
+		SimulateFirstRequestOrScheduler
 	}
 }

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(activityC);
 		}
 
-		public SchedulingIslandTests(SeperateWebRequest seperateWebRequest, EasierBlockScheduling resourcePlannerEasierBlockScheduling46155, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(seperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680)
+		public SchedulingIslandTests(SeperateWebRequest seperateWebRequest, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(seperateWebRequest, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680)
 		{
 		}
 	}

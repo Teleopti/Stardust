@@ -133,7 +133,6 @@ Scheduler_LoadWithoutRequests_38567 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_MergeTeamblockClassicIntraday_45508 = true
 ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
-ResourcePlanner_EasierBlockScheduling_46155 = true
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_FasterLoading_46307 = true
 ResourcePlanner_ShowSwitchedTimeZone_46303 = true
