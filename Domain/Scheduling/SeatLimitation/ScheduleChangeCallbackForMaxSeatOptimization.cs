@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private static void applyChangesToResourceContainer(IScheduleDay partBefore, IScheduleDay partAfter)
 		{
 			var container = ResourceCalculationContext.Fetch();
-			container.RemoveScheduleDayFromContainer(partBefore, container.MinSkillResolution);
-			container.AddScheduleDayToContainer(partAfter, container.MinSkillResolution);
+			container.RemoveScheduleDayFromContainer(partBefore);
+			container.AddScheduleDayToContainer(partAfter);
 		}
 
 		private void markModifiedDates(IScheduleDay partBefore, IScheduleDay partAfter)

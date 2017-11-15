@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					range.ScheduledDayCollection(period.Value.ToDateOnlyPeriod(item.Key.PermissionInformation.DefaultTimeZone()));
 				foreach (var scheduleDay in scheduleDays)
 				{
-					resources.AddScheduleDayToContainer(scheduleDay, minutesSplit);
+					resources.AddScheduleDayToContainer(scheduleDay);
 				}
 			}
 

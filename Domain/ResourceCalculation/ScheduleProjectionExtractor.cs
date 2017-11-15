@@ -9,14 +9,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// </summary>
     public sealed class ScheduleProjectionExtractor : IScheduleExtractor
     {
-	    private readonly int _minResolution;
 	    private readonly ResourceCalculationDataContainer retList;
 
 	    public ScheduleProjectionExtractor(IPersonSkillProvider personSkillProvider, int minResolution, bool primarySkillMode)
 	    {
 			retList = new ResourceCalculationDataContainer(personSkillProvider, minResolution, primarySkillMode);
-		    _minResolution = minResolution;
-	    }
+	   }
 
         /// <summary>
         /// Creates the relevant projection list.
@@ -42,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         void IScheduleExtractor.AddSchedulePart(IScheduleDay schedulePart)
         {
-			retList.AddScheduleDayToContainer(schedulePart, _minResolution);
+			retList.AddScheduleDayToContainer(schedulePart);
         }
     }
 }

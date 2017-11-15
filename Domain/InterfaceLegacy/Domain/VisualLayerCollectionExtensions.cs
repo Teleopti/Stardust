@@ -69,25 +69,24 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			       currentIntervalPeriod.EndDateTime > layer.Period.EndDateTime;
 		}
 
-		public static void AddScheduleDayToContainer(this IResourceCalculationDataContainerWithSingleOperation resources,
-			IScheduleDay scheduleDay, int minutesSplit)
+		public static void AddScheduleDayToContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay)
 		{
 			if (!scheduleDay.HasProjection()) return;
 
 			var projection = scheduleDay.ProjectionService().CreateProjection();
-			var resourceLayers = projection.ToResourceLayers(minutesSplit);
+			var resourceLayers = projection.ToResourceLayers(resources.MinSkillResolution);
 			foreach (var resourceLayer in resourceLayers)
 			{
 				resources.AddResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);
 			}
 		}
 
-		public static void RemoveScheduleDayFromContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)
+		public static void RemoveScheduleDayFromContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay)
 		{
             if (!scheduleDay.HasProjection()) return;
 
 			var projection = scheduleDay.ProjectionService().CreateProjection();
-			var resourceLayers = projection.ToResourceLayers(minutesSplit);
+			var resourceLayers = projection.ToResourceLayers(resources.MinSkillResolution);
 			foreach (var resourceLayer in resourceLayers)
 			{
 				resources.RemoveResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);
