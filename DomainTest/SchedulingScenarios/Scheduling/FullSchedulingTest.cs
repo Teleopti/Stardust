@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeMultisiteDayRepository MultisiteDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeStudentAvailabilityDayRepository StudentAvailabilityDayRepository;
+		public FakeSkillCombinationResourceBpoReader SkillCombinationResourceBpoReader;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 
 		[Test]
@@ -286,6 +287,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					AssignmentRepository.GetSingle(monday.AddDays(i), agent).AssignedWithDayOff(dayOff)
 						.Should().Be.True();
 			}		
+		}
+		
+		[TestCase(1, ExpectedResult = 8)]
+		[TestCase(3, ExpectedResult = 10)]
+		[Ignore("#46265 - To be fixed")]
+		public int ShouldConsiderBpos(int bpoResources)
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var date = new DateOnly(2017, 8, 21);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity).DefaultResolution(60);
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet8 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategory));
+			var ruleSet10 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), shiftCategory));
+			var bag = new RuleSetBag(ruleSet8, ruleSet10);
+			var agent = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), bag, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2)));
+			SkillCombinationResourceBpoReader.Has(bpoResources, new DateTimePeriod(new DateTime(date.Date.AddHours(16).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(17).Ticks, DateTimeKind.Utc)), skill);
+			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
+
+			return AssignmentRepository.GetSingle(date, agent).Period.StartDateTime.Hour;
 		}
 
 		public FullSchedulingTest(SeperateWebRequest seperateWebRequest, EasierBlockScheduling resourcePlannerEasierBlockScheduling46155, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(seperateWebRequest, resourcePlannerEasierBlockScheduling46155, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680)
