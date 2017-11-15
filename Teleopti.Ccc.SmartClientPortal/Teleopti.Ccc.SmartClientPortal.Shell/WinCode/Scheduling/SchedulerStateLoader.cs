@@ -230,6 +230,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				using (uow.DisableFilter(QueryFilter.Deleted))
 					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
 				_schedulerState.LoadSchedules((IFindSchedulesForPersons)scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod);
+
+				var period = scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(_schedulerState.TimeZoneInfo);
+				foreach (var scheduleRange in _schedulerState.Schedules.Values)
+				{
+					scheduleRange.ScheduledDayCollection(period).ForEach(x => _lazyManager.Initialize(x.PersonAssignment(true).DayOff()));	
+				}
 			}
 		}
 

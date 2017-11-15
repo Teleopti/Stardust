@@ -12,6 +12,7 @@ using Teleopti.Interfaces.Domain;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -33,19 +34,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	    private IScheduleStorageFactory _scheduleStorageFactory;
     	private ILazyLoadingManager _lazyManager;
 	    private DateTimePeriod _period;
-
-	    [SetUp]
+		
+		[SetUp]
         public void Setup()
         {
             _permittedPeople = new List<IPerson> { PersonFactory.CreatePerson() };
-
 			_period = _targetPeriod.ToDateTimePeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
             _unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
             _repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 	        _scheduleStorageFactory = MockRepository.GenerateMock<IScheduleStorageFactory>();
-						_targetScenario = ScenarioFactory.CreateScenarioAggregate();
-            _selectedSkill = SkillFactory.CreateSkill("Phone");
-			_targetStateHolder = new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, MockRepository.GenerateMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
+			_targetScenario = ScenarioFactory.CreateScenarioAggregate();
+			var schedules = new ScheduleDictionary(_targetScenario, new ScheduleDateTimePeriod(_period), null, null);
+			var schedulingResultStateHolder = new SchedulingResultStateHolder() {Schedules = schedules};
+			_selectedSkill = SkillFactory.CreateSkill("Phone");
+			_targetStateHolder = new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, MockRepository.GenerateMock<IDisableDeletedFilter>(), schedulingResultStateHolder, new TimeZoneGuard());
         	_lazyManager = MockRepository.GenerateMock<ILazyLoadingManager>();
         }
 		
