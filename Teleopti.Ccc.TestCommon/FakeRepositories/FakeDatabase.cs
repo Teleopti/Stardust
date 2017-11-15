@@ -706,7 +706,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithScenario(Guid? id, bool? @default)
 		{
-			Console.WriteLine("WithScenario");
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
 			_scenario = new Scenario(RandomName.Make("scenario"));
 			_scenario.SetId(id ?? Guid.NewGuid());
@@ -714,7 +713,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				_scenario.DefaultScenario = @default.Value;
 			_scenario.SetBusinessUnit(_businessUnit);
 			_scenarios.Has(_scenario);
-			Console.WriteLine(_scenario == null);
 			return this;
 		}
 
@@ -728,8 +726,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithAssignment(Guid? personId, string date)
 		{
-			Console.WriteLine("WithAssignment");
-			Console.WriteLine(_scenario == null);
 			var existingPerson = _persons.LoadAll().SingleOrDefault(x => x.Id == personId);
 			if (existingPerson != null)
 				_person = existingPerson as Person;
