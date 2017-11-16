@@ -15211,4 +15211,22 @@ Vill du registrera dig?</value>
   <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
     <value>Starttiden ({0}) för {1} matchar inte starttiden ({2}) för {3}.</value>
   </data>
+  <data name="PreviousShiftNotMatchShift" xml:space="preserve">
+    <value>Skiftet den {0} matchar inte skiftet den {1}</value>
+  </data>
+  <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
+    <value>Skiftet den {0} matchar inte skiftkategorin {1}</value>
+  </data>
+  <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
+    <value>Skiftet den {0} matchar inte starttiden {1}</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Din övertidsförfrågan har avslagits. Vissa dagar i perioden är inte öppna för förfrågningar. Du kan skicka förfrågningar för följande period: {0}</value>
+  </data>
+  <data name="ShiftCategoryNotMatchingShiftBag" xml:space="preserve">
+    <value>Skiftkategorin {0} den {1} finns inte i skiftpåsen {2}</value>
+  </data>
+  <data name="SelectOneOrMoreSites" xml:space="preserve">
+    <value>Välj en eller flera enheter</value>
+  </data>
 </root>

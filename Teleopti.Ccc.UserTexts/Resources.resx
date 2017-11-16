@@ -16702,23 +16702,23 @@ Do you want to participate?</value>
   </data>
   <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
     <value>The shift category ({0}) on {1} is not matching the shift category ({2}) on {3}.</value>
-    <comment>Scheduleing validation message in web scheduling and client. {0} and {2} are shift categories and {1} and {3} are dates.</comment>
+    <comment>Scheduling validation message in web scheduling and client. {0} and {2} are shift categories and {1} and {3} are dates.</comment>
   </data>
   <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
     <value>The start time ({0}) on {1} is not matching the start time ({2}) on {3}.</value>
-    <comment>Scheduleing validation message in web scheduling and client. {0} and {2} are start times and {1} and {3} are dates.</comment>
+    <comment>Scheduling validation message in web scheduling and client. {0} and {2} are start times and {1} and {3} are dates.</comment>
   </data>
   <data name="PreviousShiftNotMatchShift" xml:space="preserve">
-    <value>The shift on {0}  is not maching the shift on {1}</value>
-    <comment>Scheduleing validation message in web scheduling and client. {0} and {1} are dates</comment>
+    <value>The shift on {0} is not maching the shift on {1}</value>
+    <comment>Scheduling validation message in web scheduling and client. {0} and {1} are dates</comment>
   </data>
   <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>The shift on {0}  is not maching the  shift category {1}</value>
-    <comment>Scheduleing validation message in web scheduling and client. {0} is a date and {1} a shift category</comment>
+    <value>The shift on {0} is not maching the  shift category {1}</value>
+    <comment>Scheduling validation message in web scheduling and client. {0} is a date and {1} a shift category</comment>
   </data>
   <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
-    <value>The shift on {0}  is not maching the start time {1}</value>
-    <comment>Scheduleing validation message in web scheduling and client. {0} is a date and {1} a start time</comment>
+    <value>The shift on {0} is not maching the start time {1}</value>
+    <comment>Scheduling validation message in web scheduling and client. {0} is a date and {1} a start time</comment>
   </data>
   <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>
@@ -16726,7 +16726,7 @@ Do you want to participate?</value>
   </data>
   <data name="ShiftCategoryNotMatchingShiftBag" xml:space="preserve">
     <value>The shift category {0} on {1} doesn't exist in the shift bag {2}</value>
-    <comment>Scheduleing validation message in web scheduling and client. {0} is the shift category, {1} is the date for the shift and {2} is the shift bag</comment>
+    <comment>Scheduling validation message in web scheduling and client. {0} is the shift category, {1} is the date for the shift and {2} is the shift bag</comment>
   </data>
   <data name="ContractWorkRuleValidation" xml:space="preserve">
     <value>Contract work rule validation</value>
