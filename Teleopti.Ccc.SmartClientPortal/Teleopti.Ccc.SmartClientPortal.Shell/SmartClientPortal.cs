@@ -916,11 +916,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				pleaseRegisterAnEmailAddress(UserTexts.Resources.PleaseConfigureYourEmailAddress);
 				return;
 			}
-			if (!_toggleManager.IsEnabled(Toggles.Landing_Page_Data_Protection_Question_35721))
-			{
-				gotoCustomerWebAndLogOn();
-				return;
-			}
 
 			var dataProtectionResponse = dataProtectionSetting();
 			switch (dataProtectionResponse)

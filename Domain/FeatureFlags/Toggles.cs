@@ -164,7 +164,6 @@
 		Wfm_Intraday_ScheduledStaffing_41476,
 		Mailbox_Optimization_41900,
 		Wfm_Intraday_ESL_41827,
-		Landing_Page_Data_Protection_Question_35721,
 		Wfm_ResourcePlanner_SchedulingOnStardust_42874,
 
 		Staffing_Info_Configuration_44687,
