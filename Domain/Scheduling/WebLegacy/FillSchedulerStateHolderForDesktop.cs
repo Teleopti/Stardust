@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void FillBpos(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
-			schedulerStateHolderTo.SchedulingResultState.BpoResources = new List<BpoResource>();
+			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
+			schedulerStateHolderTo.SchedulingResultState.BpoResources = stateHolderFrom.SchedulingResultState.BpoResources;
 		}
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
