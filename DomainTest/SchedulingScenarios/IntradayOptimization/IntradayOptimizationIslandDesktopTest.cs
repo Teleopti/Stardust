@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -601,7 +602,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[TestCase(0, ExpectedResult = 8)]
 		[TestCase(0.1, ExpectedResult = 8)]
 		[TestCase(1.1, ExpectedResult = 10)]
-		[Ignore("46265 - todo add bpos to test")]
+		[Ignore("46265")]
 		public int ShouldConsiderBpos(double bpoResources)
 		{
 			var date = new DateOnly(2017, 8, 21);
@@ -618,11 +619,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agentAss = new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 18));
 			var agentToOptimizeAss = new PersonAssignment(agentToOptimize, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 18));
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2));
-			//SkillCombinationResourceBpoReader.Has(bpoResources, new DateTimePeriod(new DateTime(date.Date.AddHours(8).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc)), skill);
+			var bpo= new BpoResource(bpoResources, new[]{skill}, new DateTimePeriod(new DateTime(date.Date.AddHours(8).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc)));
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, date, new[] { agentToOptimize, agent }, new[] { agentAss, agentToOptimizeAss }, skillDay, bpo);
 
-			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentToOptimize, agent }, new[] { agentAss, agentToOptimizeAss }, skillDay);
-
-			Target.Optimize(new[] { agentToOptimize }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), new NoIntradayOptimizationCallback());
+			Target.Optimize(new[] { agentToOptimize }, date.ToDateOnlyPeriod(), new OptimizationPreferencesDefaultValueProvider().Fetch(), new NoIntradayOptimizationCallback());
 
 			return schedulerStateHolderFrom.Schedules[agentToOptimize].ScheduledDay(date).PersonAssignment().Period.StartDateTime.Hour;
 		}
