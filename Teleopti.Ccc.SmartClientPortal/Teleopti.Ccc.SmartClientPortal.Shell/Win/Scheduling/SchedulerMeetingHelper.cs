@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -29,20 +30,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private readonly IInitiatorIdentifier _initiatorIdentifier;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
 	    private readonly IResourceCalculation _resourceOptimizationHelper;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 	    private readonly ISkillPriorityProvider _skillPriorityProvider;
 	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
 	    private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 	    private readonly MeetingParticipantPermittedChecker _meetingParticipantPermittedChecker = new MeetingParticipantPermittedChecker();
 	    private IList<ModifyMeetingEventArgs> _modifiedMeetingArgs;
 
-		internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceCalculation resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, IScheduleStorageFactory scheduleStorageFactory)
+		internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, 
+										ISchedulerStateHolder schedulerStateHolder, 
+										IResourceCalculation resourceOptimizationHelper, 
+										ISkillPriorityProvider skillPriorityProvider, 
+										IScheduleStorageFactory scheduleStorageFactory,
+										CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
         {
             _initiatorIdentifier = initiatorIdentifier;
             _schedulerStateHolder = schedulerStateHolder;
 	        _resourceOptimizationHelper = resourceOptimizationHelper;
 		    _skillPriorityProvider = skillPriorityProvider;
 	        _scheduleStorageFactory = scheduleStorageFactory;
-        }
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+		}
 
         internal event EventHandler<ModifyMeetingEventArgs> ModificationOccured;
 
@@ -135,70 +143,86 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             }
         }
 
-	    /// <summary>
-        /// start meeting composer with supplied meeting, or null if new meeting should be created
-        /// </summary>
-        internal void MeetingComposerStart(IMeeting meeting, IScheduleViewBase scheduleViewBase, bool editPermission, bool viewSchedulesPermission, IToggleManager toggleManager)
-        {
-            if(scheduleViewBase == null) return;
-	        _modifiedMeetingArgs = new List<ModifyMeetingEventArgs>();
+		/// <summary>
+		/// start meeting composer with supplied meeting, or null if new meeting should be created
+		/// </summary>
+		internal void MeetingComposerStart(IMeeting meeting, IScheduleViewBase scheduleViewBase, bool editPermission,
+			bool viewSchedulesPermission, IToggleManager toggleManager)
+		{
+			if (scheduleViewBase == null) return;
+			_modifiedMeetingArgs = new List<ModifyMeetingEventArgs>();
 
 			MeetingViewModel meetingViewModel;
-            if (meeting == null)
-            {
-                DateOnly? meetingStart = null;
-                IList<IPerson> selectedPersons = new List<IPerson>();
-                foreach (var schedulePart in scheduleViewBase.CurrentColumnSelectedSchedules())
-                {
-                    if (!meetingStart.HasValue) meetingStart = schedulePart.DateOnlyAsPeriod.DateOnly;
+			if (meeting == null)
+			{
+				DateOnly? meetingStart = null;
+				IList<IPerson> selectedPersons = new List<IPerson>();
+				foreach (var schedulePart in scheduleViewBase.CurrentColumnSelectedSchedules())
+				{
+					if (!meetingStart.HasValue) meetingStart = schedulePart.DateOnlyAsPeriod.DateOnly;
 
-                    if (!selectedPersons.Contains(schedulePart.Person))
-                        selectedPersons.Add(schedulePart.Person);
-                }
+					if (!selectedPersons.Contains(schedulePart.Person))
+						selectedPersons.Add(schedulePart.Person);
+				}
 
 
-	            var meetingStartOrToday = meetingStart.GetValueOrDefault(DateOnly.Today);
-	            IList<IPerson> selectedActivePersons =
-		            selectedPersons.Where(new PersonIsActiveSpecification(meetingStartOrToday).IsSatisfiedBy).ToList();
+				var meetingStartOrToday = meetingStart.GetValueOrDefault(DateOnly.Today);
+				IList<IPerson> selectedActivePersons =
+					selectedPersons.Where(new PersonIsActiveSpecification(meetingStartOrToday).IsSatisfiedBy).ToList();
 
 				if (!_schedulerStateHolder.CommonStateHolder.ActiveActivities.Any() || selectedActivePersons.Count == 0) return;
 
-                using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    meetingViewModel =
-                        MeetingComposerPresenter.CreateDefaultMeeting(
-                            TeleoptiPrincipal.CurrentPrincipal.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWork)),
-                            _schedulerStateHolder, meetingStartOrToday,
+				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					meetingViewModel =
+						MeetingComposerPresenter.CreateDefaultMeeting(
+							TeleoptiPrincipal.CurrentPrincipal.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWork)),
+							_schedulerStateHolder, meetingStartOrToday,
 							selectedActivePersons, new Now());
-                }
-            }
-            else
-            {
-                using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
+				}
+			}
+			else
+			{
+				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
 					var persons = meeting.MeetingPersons.Select(m => m.Person).ToArray();
 					unitOfWork.Reassociate(persons);
 
-                    var period  = meeting.MeetingPeriod(meeting.StartDate);
-                    var start = period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-                    var end = period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-                    meeting.TimeZone = TimeZoneHelper.CurrentSessionTimeZone;
-                    meeting.StartTime = start.TimeOfDay;
-                    meeting.EndTime = end.TimeOfDay;
+					var period = meeting.MeetingPeriod(meeting.StartDate);
+					var start = period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
+					var end = period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
+					meeting.TimeZone = TimeZoneHelper.CurrentSessionTimeZone;
+					meeting.StartTime = start.TimeOfDay;
+					meeting.EndTime = end.TimeOfDay;
 
-                    meetingViewModel = new MeetingViewModel(meeting, _schedulerStateHolder.CommonNameDescription);
-                }
-            }
-
-            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider, _scheduleStorageFactory))
-            {
-				meetingComposerView.SetInstanceId(_initiatorIdentifier.InitiatorId);
-                meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;
-                meetingComposerView.ShowDialog();
-                meetingComposerView.ModificationOccurred -= meetingComposerView_ModificationOccurred;
-	            _modifiedMeetingArgs.ForEach(eventArg => NotifyModificationOccured(eventArg.ModifiedMeeting, eventArg.Delete));
+					meetingViewModel = new MeetingViewModel(meeting, _schedulerStateHolder.CommonNameDescription);
+				}
 			}
-        }
+
+			using (var meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider,_scheduleStorageFactory))
+			{
+				if (toggleManager.IsEnabled(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680))
+				{
+					using (_resourceCalculationContextFactory.Create(_schedulerStateHolder.SchedulingResultState, false, new DateOnlyPeriod(meetingViewModel.StartDate, meetingViewModel.EndDate)))
+					{
+						showMeetingComposer(meetingComposerView);
+					}
+				}
+				else
+				{
+					showMeetingComposer(meetingComposerView);
+				}
+			}
+		}
+
+		private void showMeetingComposer(MeetingComposerView meetingComposerView)
+		{
+			meetingComposerView.SetInstanceId(_initiatorIdentifier.InitiatorId);
+			meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;
+			meetingComposerView.ShowDialog();
+			meetingComposerView.ModificationOccurred -= meetingComposerView_ModificationOccurred;
+			_modifiedMeetingArgs.ForEach(eventArg => NotifyModificationOccured(eventArg.ModifiedMeeting, eventArg.Delete));
+		}
 
         /// <summary>
         /// Meetings from list.

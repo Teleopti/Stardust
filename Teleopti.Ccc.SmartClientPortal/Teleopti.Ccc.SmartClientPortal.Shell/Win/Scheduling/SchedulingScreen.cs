@@ -423,7 +423,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 #pragma warning disable 618
 			_schedulerState.UndoRedoContainer = _undoRedo;
 #pragma warning restore 618
-			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState, _container.Resolve<IResourceCalculation>(), _container.Resolve<ISkillPriorityProvider>(), _container.Resolve<IScheduleStorageFactory>());
+			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, 
+																_schedulerState, 
+																_container.Resolve<IResourceCalculation>(), 
+																_container.Resolve<ISkillPriorityProvider>(), 
+																_container.Resolve<IScheduleStorageFactory>(),
+																_container.Resolve<CascadingResourceCalculationContextFactory>());
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 
 			_clipHandlerSchedule = new ClipHandler<IScheduleDay>();
