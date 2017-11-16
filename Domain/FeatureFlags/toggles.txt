@@ -138,7 +138,6 @@ ResourcePlanner_FasterLoading_46307 = true
 ResourcePlanner_ShowSwitchedTimeZone_46303 = true
 ResourcePlanner_BlockSchedulingValidation_46092 = DEV
 ResourcePlanner_RemoveClassicShiftCat_46582 = RC
-ResourcePlanner_BpoScheduling_46265 = false # won't work in scheduler yet
 ResourcePlanner_DoNotKillCache_46724 = RC
 ResourcePlanner_RemoveImplicitResCalcContext_46680 = RC
 
