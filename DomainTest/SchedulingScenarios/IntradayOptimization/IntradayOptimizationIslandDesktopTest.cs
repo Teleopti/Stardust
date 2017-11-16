@@ -598,6 +598,35 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(assBefore.ShiftLayers.Single().Id);
 		}
 
+		[TestCase(0, ExpectedResult = 8)]
+		[TestCase(0.1, ExpectedResult = 8)]
+		[TestCase(1.1, ExpectedResult = 10)]
+		[Ignore("46265 - todo add bpos to test")]
+		public int ShouldConsiderBpos(double bpoResources)
+		{
+			var date = new DateOnly(2017, 8, 21);
+			var activity = new Activity();
+			var skill = new Skill().DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var scenario = new Scenario();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet8 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSet10 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
+			var bag = new RuleSetBag(ruleSet8, ruleSet10);
+			var contract = new ContractWithMaximumTolerance();
+			var agentToOptimize = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, contract, skill).WithSchedulePeriodOneDay(date);	
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, contract, skill).WithSchedulePeriodOneDay(date);
+			var agentAss = new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 18));
+			var agentToOptimizeAss = new PersonAssignment(agentToOptimize, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 18));
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2));
+			//SkillCombinationResourceBpoReader.Has(bpoResources, new DateTimePeriod(new DateTime(date.Date.AddHours(8).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc)), skill);
+
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentToOptimize, agent }, new[] { agentAss, agentToOptimizeAss }, skillDay);
+
+			Target.Optimize(new[] { agentToOptimize }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), new NoIntradayOptimizationCallback());
+
+			return schedulerStateHolderFrom.Schedules[agentToOptimize].ScheduledDay(date).PersonAssignment().Period.StartDateTime.Hour;
+		}
+
 		public IntradayOptimizationIslandDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002, RemoveImplicitResCalcContext resourcePlannerRemoveImplicitResCalcContext46680) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerBreakPreferenceStartTimeByMax46002, resourcePlannerRemoveImplicitResCalcContext46680)
 		{
 		}
