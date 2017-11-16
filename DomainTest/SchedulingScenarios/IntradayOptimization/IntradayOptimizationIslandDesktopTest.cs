@@ -613,9 +613,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var ruleSet8 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var ruleSet10 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
 			var bag = new RuleSetBag(ruleSet8, ruleSet10);
-			var contract = new ContractWithMaximumTolerance();
-			var agentToOptimize = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, contract, skill).WithSchedulePeriodOneDay(date);	
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, contract, skill).WithSchedulePeriodOneDay(date);
+			var agentToOptimize = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, skill).WithSchedulePeriodOneDay(date);	
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, skill).WithSchedulePeriodOneDay(date);
 			var agentAss = new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 18));
 			var agentToOptimizeAss = new PersonAssignment(agentToOptimize, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 18));
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2));
