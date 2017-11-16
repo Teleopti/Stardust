@@ -607,7 +607,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public int ShouldConsiderBpos(double bpoResources)
 		{
 			var date = new DateOnly(2017, 8, 21);
-			var activity = new Activity();
+			var activity = new Activity().WithId();
 			var skill = new Skill().DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var scenario = new Scenario();
 			var shiftCategory = new ShiftCategory("_").WithId();
