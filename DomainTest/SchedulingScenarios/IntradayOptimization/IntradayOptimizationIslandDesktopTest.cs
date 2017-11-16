@@ -599,8 +599,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(assBefore.ShiftLayers.Single().Id);
 		}
 
-		[TestCase(1, ExpectedResult = 8)]
-		[Ignore("#46265 - to Roger")]
+
+		[TestCase(0, ExpectedResult = 9)]
+		[TestCase(0.1, ExpectedResult = 9)]
+		[TestCase(1.1, ExpectedResult = 8)]
+		[Ignore("#46265")]
 		public int ShouldConsiderBpos(double bpoResources)
 		{
 			var date = new DateOnly(2017, 8, 21);
@@ -614,13 +617,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agentToOptimize = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, skill).WithSchedulePeriodOneDay(date);
 			var agentToOptimizeAss = new PersonAssignment(agentToOptimize, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 9));
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(9, 10), 2));
-
-			//temp "riktig" resurs, ta bort och ersätt med bpo nedan 
-			var poo = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, skill).WithSchedulePeriodOneDay(date);
-			var pooAss = new PersonAssignment(poo, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 10));
-
-			//var bpo = new BpoResource(bpoResources, new[] { skill }, new DateTimePeriod(new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(10).Ticks, DateTimeKind.Utc)));
-			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, date, new[] { agentToOptimize, poo }, new[] { agentToOptimizeAss, pooAss}, skillDay, null);
+			var bpo = new BpoResource(bpoResources, new[] { skill }, new DateTimePeriod(new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(10).Ticks, DateTimeKind.Utc)));
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, date, agentToOptimize, agentToOptimizeAss, skillDay, bpo);
 
 			Target.Optimize(new[] { agentToOptimize }, date.ToDateOnlyPeriod(), new OptimizationPreferencesDefaultValueProvider().Fetch(), new NoIntradayOptimizationCallback());
 
