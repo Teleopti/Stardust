@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebIntraday))
 			{
-				return _toggleManager.IsEnabled(Toggles.Wfm_Intraday_38074);
+				return true;
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.AccessToReports))
 			{

@@ -50,12 +50,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			areas.Single().Name.Invoke().Should().Be(Resources.RealTimeAdherence);
 			areas.Single().InternalName.Should().Be("rta");
 		}
-		
+
 		[Test]
 		public void ShouldNotHaveRtaAreaWhenItIsNotPermitted()
 		{
 			PermissionProvider.Enable();
-			
+
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Count().Should().Be(0);
@@ -102,16 +102,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			areas.Count().Should().Be(1);
 			areas.First().Path.Should().Be.EqualTo(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
-		
+
 		[Test]
-		public void ShouldHaveIntradayAreaWhenFeatureEnabledAndPermitted()
+		public void ShouldHaveIntradayAreaWhenPermitted()
 		{
 			ApplicationFunctionsToggleFilter
 				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebIntraday }
 			, o => true);
 
 			PermissionProvider.Enable();
-			ToggleManager.Enable(Toggles.Wfm_Intraday_38074);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebIntraday);
 
 			var areas = Target.GetWfmAreasWithPermissions();
@@ -122,22 +121,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
-		public void ShouldNotHaveIntradayAreaWhenFeatureIsDisabled()
-		{
-			PermissionProvider.Enable();
-			ToggleManager.Disable(Toggles.Wfm_Intraday_38074);
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebIntraday);
-
-			var areas = Target.GetWfmAreasWithPermissions();
-
-			areas.Count().Should().Be(0);
-		}
-
-		[Test]
 		public void ShouldNotHaveIntradayAreaWhenItIsNotPermitted()
 		{
 			PermissionProvider.Enable();
-			ToggleManager.Enable(Toggles.Wfm_Intraday_38074);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 

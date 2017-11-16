@@ -95,8 +95,6 @@
 
 		Wfm_Outbound_IgnoreScheduleForReplan_43752,
 
-		Wfm_Intraday_38074,
-
 		Wfm_People_PrepareForRelease_39040,
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
 		Wfm_People_SetFallbackValuesForImporting_43289,
