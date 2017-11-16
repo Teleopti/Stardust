@@ -33,7 +33,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
-
+ 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	/// Also includes tests for LazyLoadingManager
