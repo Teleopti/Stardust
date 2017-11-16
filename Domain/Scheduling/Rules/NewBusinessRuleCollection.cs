@@ -128,6 +128,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
 			rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
 
+			IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
+			IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
+			var ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
+			rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(),
+				new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),
+					new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
+
 			return rules;
 		}
 
