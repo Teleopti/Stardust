@@ -217,6 +217,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private bool _cancelButtonPressed;
 		private IDaysOffPreferences _daysOffPreferences;
 		private IEnumerable<IOptionalColumn> _optionalColumns;
+		private BpoResourcesProvider _bpoResourcesProvider;
 
 		#region Constructors
 
@@ -415,6 +416,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			_skillDayLoadHelper = _container.Resolve<ISkillDayLoadHelper>();
+			_bpoResourcesProvider = _container.Resolve<BpoResourcesProvider>();
 			_peopleAndSkillLoaderDecider = _container.Resolve<IPeopleAndSkillLoaderDecider>();
 
 			_schedulerState.SetRequestedScenario(loadScenario);
@@ -3566,6 +3568,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				    methods.Add(new LoaderMethod(loadRequests, LanguageResourceHelper.Translate("XXLoadingRequestsThreeDots")));
 
 				methods.Add(new LoaderMethod(loadSkillDays, LanguageResourceHelper.Translate("XXLoadingSkillDataTreeDots")));
+				methods.Add(new LoaderMethod(loadBpos, null)); //TODO: nån text eller?
 				methods.Add(new LoaderMethod(loadDefinitionSets, null));
 				methods.Add(new LoaderMethod(loadAccounts, null));
 				methods.Add(new LoaderMethod(loadSeniorityWorkingDays, null));
@@ -4968,6 +4971,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_skillIntradayGridControl.SetRowsAndCols();
 				positionControl(_skillIntradayGridControl);
 			}
+		}
+		
+		private void loadBpos(IUnitOfWork uow, ISchedulerStateHolder stateHolder, Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		{
+			stateHolder.SchedulingResultState.BpoResources = _bpoResourcesProvider.Fetch(stateHolder.SchedulingResultState.Skills, stateHolder.RequestedPeriod.Period());
 		}
 
 		private void loadSkillDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder,

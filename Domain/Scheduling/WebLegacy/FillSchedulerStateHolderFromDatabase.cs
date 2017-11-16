@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly ISkillRepository _skillRepository;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly ISkillCombinationResourceBpoReader _skillCombinationResourceBpoReader;
-		private readonly SkillCombinationToBpoResourceMapper _skillCombinationToBpoResourceMapper;
+		private readonly BpoResourcesProvider _bpoResourcesProvider;
 
 		public FillSchedulerStateHolderFromDatabase(PersonalSkillsProvider personalSkillsProvider,
 					IScenarioRepository scenarioRepository,
@@ -35,10 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					ISkillRepository skillRepository,
 					ICurrentUnitOfWork currentUnitOfWork,
 					IUserTimeZone userTimeZone,
-					//TODO: make one class of these 
-					ISkillCombinationResourceBpoReader skillCombinationResourceBpoReader, 
-					SkillCombinationToBpoResourceMapper skillCombinationToBpoResourceMapper) 
-					//////////////////////////////
+					BpoResourcesProvider bpoResourcesProvider)
 			: base(personalSkillsProvider)
 		{
 			_scenarioRepository = scenarioRepository;
@@ -49,8 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_skillRepository = skillRepository;
 			_currentUnitOfWork = currentUnitOfWork;
 			_userTimeZone = userTimeZone;
-			_skillCombinationResourceBpoReader = skillCombinationResourceBpoReader;
-			_skillCombinationToBpoResourceMapper = skillCombinationToBpoResourceMapper;
+			_bpoResourcesProvider = bpoResourcesProvider;
 		}
 
 		protected override void FillScenario(ISchedulerStateHolder schedulerStateHolderTo)
@@ -77,17 +72,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillBpos(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
 			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
-			//temp... make a seperate class of this 
-			var skillCombinationResources = _skillCombinationResourceBpoReader.Execute(dateTimePeriod);
-			var bpoResources = _skillCombinationToBpoResourceMapper.Execute(skillCombinationResources, skills);
-			//
-			schedulerStateHolderTo.SchedulingResultState.BpoResources = bpoResources;
+			schedulerStateHolderTo.SchedulingResultState.BpoResources = _bpoResourcesProvider.Fetch(skills, dateTimePeriod);
 		}
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
-			var personProvider = new PersonProvider(agents) {DoLoadByPerson = true }; //TODO: this is experimental
+			var personProvider = new PersonProvider(agents) {DoLoadByPerson = true };
 			schedulerStateHolderTo.LoadSchedules(_findSchedulesForPersons, personProvider,
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				dateTimePeriod);
