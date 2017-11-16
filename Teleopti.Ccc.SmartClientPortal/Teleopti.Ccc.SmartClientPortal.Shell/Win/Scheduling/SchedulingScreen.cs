@@ -3568,7 +3568,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				    methods.Add(new LoaderMethod(loadRequests, LanguageResourceHelper.Translate("XXLoadingRequestsThreeDots")));
 
 				methods.Add(new LoaderMethod(loadSkillDays, LanguageResourceHelper.Translate("XXLoadingSkillDataTreeDots")));
-				methods.Add(new LoaderMethod(loadBpos, null)); //TODO: nån text eller?
+				methods.Add(new LoaderMethod(loadBpos, null));
 				methods.Add(new LoaderMethod(loadDefinitionSets, null));
 				methods.Add(new LoaderMethod(loadAccounts, null));
 				methods.Add(new LoaderMethod(loadSeniorityWorkingDays, null));
