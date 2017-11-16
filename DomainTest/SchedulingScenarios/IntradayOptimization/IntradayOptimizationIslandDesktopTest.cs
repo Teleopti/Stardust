@@ -599,10 +599,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(assBefore.ShiftLayers.Single().Id);
 		}
 
-		[TestCase(0, ExpectedResult = 8)]
-		[TestCase(0.1, ExpectedResult = 8)]
-		[TestCase(1.1, ExpectedResult = 10)]
-		[Ignore("46265")]
+		[TestCase(1, ExpectedResult = 8)]
+		[Ignore("#46265 - to Roger")]
 		public int ShouldConsiderBpos(double bpoResources)
 		{
 			var date = new DateOnly(2017, 8, 21);
@@ -610,16 +608,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill().DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var scenario = new Scenario();
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet8 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var ruleSet10 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
+			var ruleSet8 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(9, 0, 9, 0, 15), shiftCategory));
+			var ruleSet10 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(10, 0, 10, 0, 15), shiftCategory));
 			var bag = new RuleSetBag(ruleSet8, ruleSet10);
-			var agentToOptimize = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, skill).WithSchedulePeriodOneDay(date);	
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, skill).WithSchedulePeriodOneDay(date);
-			var agentAss = new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 18));
-			var agentToOptimizeAss = new PersonAssignment(agentToOptimize, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 18));
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2));
-			var bpo= new BpoResource(bpoResources, new[]{skill}, new DateTimePeriod(new DateTime(date.Date.AddHours(8).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc)));
-			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, date, new[] { agentToOptimize, agent }, new[] { agentAss, agentToOptimizeAss }, skillDay, bpo);
+			var agentToOptimize = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, skill).WithSchedulePeriodOneDay(date);
+			var agentToOptimizeAss = new PersonAssignment(agentToOptimize, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 9));
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(9, 10), 2));
+
+			//temp "riktig" resurs, ta bort och ersätt med bpo nedan 
+			var poo = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(bag, skill).WithSchedulePeriodOneDay(date);
+			var pooAss = new PersonAssignment(poo, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 10));
+
+			//var bpo = new BpoResource(bpoResources, new[] { skill }, new DateTimePeriod(new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(10).Ticks, DateTimeKind.Utc)));
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, date, new[] { agentToOptimize, poo }, new[] { agentToOptimizeAss, pooAss}, skillDay, null);
 
 			Target.Optimize(new[] { agentToOptimize }, date.ToDateOnlyPeriod(), new OptimizationPreferencesDefaultValueProvider().Fetch(), new NoIntradayOptimizationCallback());
 
