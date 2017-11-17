@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				logger.Debug("Found HEAD-request");
 				return new EmptyResult();
 			}
+
 			var request = _openIdProvider.GetRequest();
 			if (request != null)
 			{
