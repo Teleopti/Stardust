@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 
@@ -329,6 +330,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var queuedJobs = Target.GetAllQueuedJobs(new JobFilterModel {From = 1, To = 50, Type = "UpdateStaffingLevelReadModelEvent"});
 			queuedJobs.Count.Should().Be.EqualTo(1);
 			queuedJobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
+		}
+
+		[Test]
+		public void ShouldCutOfNamespaceFromType()
+		{
+			var testEvent = new UpdateStaffingLevelReadModelEvent();
+			var job1 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = testEvent.GetType().ToString()
+			};
+			StardustRepositoryTestHelper.AddJob(job1);
+			var types = Target.GetAllTypes();
+			types.Single().Should().Be.EqualTo("UpdateStaffingLevelReadModelEvent");
+		}
+
+		[Test]
+		public void ShouldNotManipulateStringsWithoutNameSpace()
+		{
+			var testEvent = new IndexMaintenanceEvent();
+			var job1 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = testEvent.GetType().ToString()
+			};
+			StardustRepositoryTestHelper.AddJob(job1);
+			var types = Target.GetAllTypes();
+			types.Single().Should().Be.EqualTo("IndexMaintenanceEvent");
 		}
 	}
 }

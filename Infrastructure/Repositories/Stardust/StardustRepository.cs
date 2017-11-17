@@ -102,7 +102,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 						if (!sqlDataReader.HasRows) return types;
 						while (sqlDataReader.Read())
 						{
-							types.Add(sqlDataReader.GetString(0).Substring(44));
+							var type = sqlDataReader.GetString(0);
+							if (type.Contains("."))
+								type = type.Substring(type.LastIndexOf('.') + 1);
+							types.Add(type);
 						}
 					}
 				}
@@ -520,6 +523,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			{
 				JobId = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
 				Name = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Name")),
+				Type = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Type")),
 				CreatedBy = sqlDataReader.GetString(sqlDataReader.GetOrdinal("CreatedBy")),
 				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
 				Serialized = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Serialized"))

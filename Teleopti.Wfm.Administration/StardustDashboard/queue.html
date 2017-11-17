@@ -55,7 +55,7 @@
 										</md-checkbox>
 									</th>
 									<th>Tenant</th>
-									<th>Type</th>
+									<th>Event</th>
 									<th>Created (UTC)</th>
 								</tr>
 								</thead>
@@ -63,7 +63,7 @@
 								<tr ng-repeat="job in vm.Jobs">
 									<td><md-checkbox aria-label="check to delete" style="margin-bottom: 0" type="checkbox" ng-checked="vm.exists(job.JobId, vm.selected)" ng-click="vm.toggle(job.JobId, vm.selected)"/></td>
 									<td>{{job.DataSource}}</td>
-									<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Name}}</a></td>
+									<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Type}}</a></td>
 									<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 								</tr>
 								</tbody>
