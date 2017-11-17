@@ -19,16 +19,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		public IResourceCalculation Target;
 		public CascadingResourceCalculationContextFactory CascadingResourceCalculationContextFactory;
 
-		[Test]
-		public void ShouldConsiderBpoResourceWhenResourceCalculate()
+		[TestCase(true, 5, ExpectedResult = 5)]
+		[TestCase(false, 5, ExpectedResult = 0)]
+		public double ShouldConsiderBpoResourceWhenResourceCalculate(bool defaultScenario, double bpoResources)
 		{
-			var scenario = new Scenario();
+			var scenario = new Scenario {DefaultScenario = defaultScenario};
 			var activity = new Activity().WithId();
 			var date = DateOnly.Today;
 			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, date, skillDay);
-			var bpos = new[] {new BpoResource(5, new[] {skill}, skillDay.SkillStaffPeriodCollection.First().Period)};
+			var bpos = new[] {new BpoResource(bpoResources, new[] {skill}, skillDay.SkillStaffPeriodCollection.First().Period)};
 
 			using (CascadingResourceCalculationContextFactory.Create(
 				ScheduleDictionaryCreator.WithData(scenario, date.ToDateOnlyPeriod()), new[]{skill}, bpos, false, date.ToDateOnlyPeriod()))
@@ -36,14 +37,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				Target.ResourceCalculate(date, resCalcData);
 			}
 
-			skillDay.SkillStaffPeriodCollection.First().CalculatedResource
-				.Should().Be.EqualTo(5); 
+			return skillDay.SkillStaffPeriodCollection.First().CalculatedResource;
 		}
 
 		[Test]
 		public void ShouldHandleMultiskilledBpos()
 		{
-			var scenario = new Scenario();
+			var scenario = new Scenario {DefaultScenario = true};
 			var activity = new Activity().WithId();
 			var date = DateOnly.Today;
 			var skill1 = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[Test]
 		public void ShouldHandleMultiskilledWithDifferentActivitiesBpos()
 		{
-			var scenario = new Scenario();
+			var scenario = new Scenario {DefaultScenario = true};
 			var activity1 = new Activity().WithId();
 			var activity2 = new Activity().WithId();
 			var date = DateOnly.Today;
