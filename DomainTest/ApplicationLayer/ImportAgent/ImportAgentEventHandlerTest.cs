@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
 			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
-			system.UseTestDouble<FakeTenants>().For<IFindTenantByName>();
 
 
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();

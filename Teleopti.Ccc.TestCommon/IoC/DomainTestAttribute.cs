@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Messaging ztuff 
 			system.UseTestDouble<FakeSignalR>().For<ISignalR>();
-			//system.UseTestDouble<ActionImmediate>().For<IActionScheduler>();
 			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 			//
 
@@ -247,45 +246,31 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
 			system.AddService<FakeSchedulingSourceScope>();
 
-			fakePrincipal(system);
+			if (QueryAllAttributes<LoggedOnAppDomainAttribute>().Any())
+				system.UseTestDouble<FakeAppDomainPrincipalContext>().For<IThreadPrincipalContext>();
+			else
+				system.UseTestDouble<FakeThreadPrincipalContext>().For<IThreadPrincipalContext>();
 
 			if (fullPermissions())
 				system.UseTestDouble<FullPermission>().For<IAuthorization>();
 			if (fakePermissions())
 				system.UseTestDouble<FakePermissions>().For<IAuthorization>();
 		}
-
-		private void fakePrincipal(ISystem system)
-		{
-			var context = QueryAllAttributes<LoggedOnAppDomainAttribute>().Any() ? (IThreadPrincipalContext) new FakeAppDomainPrincipalContext() : new FakeThreadPrincipalContext();
-
-			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
-			if (signedIn)
-			{
-				_loggedOnPerson = new Person()
-					.WithName(new Name("Fake", "Login"))
-					.WithId();
-				_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-				_loggedOnPerson.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
-				_loggedOnPerson.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
-				var loggedOnBu = new BusinessUnit("loggedOnBu").WithId();
-				var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", new FakeDataSource(DefaultTenantName), loggedOnBu, null, null), _loggedOnPerson);
-				context.SetCurrentPrincipal(principal);
-			}
-
-			system.UseTestDouble(context).For<IThreadPrincipalContext>();
-		}
-
+		
 		public IAuthorizationScope AuthorizationScope;
 		public IAuthorization Authorization;
 		public IPersonRepository Persons;
-		public Lazy<FakeRepositories.FakeDatabase> Database;
+		public Lazy<FakeDatabase> Database;
 		private IDisposable _authorizationScope;
 		private Person _loggedOnPerson;
+		public IThreadPrincipalContext PrincipalContext;
+		public FakeDataSourceForTenant DataSourceForTenant;
 
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
+
+			fakeSignin();
 
 			createDefaultData();
 
@@ -297,6 +282,32 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
 			else
 				_authorizationScope = AuthorizationScope.OnThisThreadUse((FullPermission) Authorization);
+		}
+
+		private void fakeSignin()
+		{
+			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
+			if (signedIn)
+			{
+				_loggedOnPerson = new Person()
+					.WithName(new Name("Fake", "Login"))
+					.WithId();
+				_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+				_loggedOnPerson.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
+				_loggedOnPerson.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
+
+				var principal = new TeleoptiPrincipal(
+					new TeleoptiIdentity(
+						"Fake Login",
+						DataSourceForTenant.Tenant(DefaultTenantName),
+						new BusinessUnit("loggedOnBu").WithId(),
+						null,
+						null
+					),
+					_loggedOnPerson);
+
+				PrincipalContext.SetCurrentPrincipal(principal);
+			}
 		}
 
 		private void createDefaultData()
