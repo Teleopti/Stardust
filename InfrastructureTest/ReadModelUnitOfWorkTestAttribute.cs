@@ -1,4 +1,7 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest
@@ -8,13 +11,19 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
-			Resolve<IReadModelUnitOfWorkAspect>().OnBeforeInvocation(null);
+			Resolve<IEnumerable<IAspect>>()
+				.OfType<IReadModelUnitOfWorkAspect>()
+				.Single()
+				.OnBeforeInvocation(null);
 		}
 
 		protected override void AfterTest()
 		{
 			base.AfterTest();
-			Resolve<IReadModelUnitOfWorkAspect>().OnAfterInvocation(null, null);
+			Resolve<IEnumerable<IAspect>>()
+				.OfType<IReadModelUnitOfWorkAspect>()
+				.Single()
+				.OnAfterInvocation(null, null);
 			SetupFixtureForAssembly.RestoreCcc7Database();
 		}
 	}
