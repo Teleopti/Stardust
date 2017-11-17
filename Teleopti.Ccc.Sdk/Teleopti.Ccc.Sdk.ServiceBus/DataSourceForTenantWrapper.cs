@@ -4,6 +4,7 @@ using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -17,10 +18,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private static Lazy<IDataSourceForTenant> _lazy;
 
 		public DataSourceForTenantWrapper(
-			Func<IDataSourceForTenant> dataSourceForTenant, 
+			Func<IDataSourceForTenant> dataSourceForTenant,
 			ITenantUnitOfWork tenantUnitOfWork,
-			IInitializeApplication initializeApplication, 
-			ILoadAllTenants loadAllTenants)
+			IInitializeApplication initializeApplication,
+			ILoadAllTenants loadAllTenants,
+			IMessageBrokerComposite messageBroker)
 		{
 			if (_lazy == null)
 			{
@@ -29,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					var state = new State();
 					var appSettings = ConfigurationManager.AppSettings.ToDictionary();
 					initializeApplication.Start(state, null, appSettings);
-					new InitializeMessageBroker(initializeApplication.Messaging).Start(appSettings);
+					new InitializeMessageBroker(messageBroker).Start(appSettings);
 
 					//////////TODO: Remove this code when bus no longer has to "loop" tenants/datasources later (DataSourceForTenant.DoOnAllTenants_AvoidUsingThis)/////
 					using (tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
