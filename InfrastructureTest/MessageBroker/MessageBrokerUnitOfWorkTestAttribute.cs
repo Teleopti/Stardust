@@ -1,4 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
-			Resolve<IMessageBrokerUnitOfWorkAspect>().OnBeforeInvocation(null);
+			Resolve<IMessageBrokerUnitOfWorkScope>().Start();
 		}
-		
+
 		protected override void AfterTest()
 		{
 			base.AfterTest();
-			Resolve<IMessageBrokerUnitOfWorkAspect>().OnAfterInvocation(null, null);
+			Resolve<IMessageBrokerUnitOfWorkScope>().End(null);
 			SetupFixtureForAssembly.RestoreAnalyticsDatabase();
 		}
 	}
