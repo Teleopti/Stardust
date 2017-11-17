@@ -11,7 +11,7 @@
 	var realAjax = Teleopti.MyTimeWeb.Ajax;
 	var realGetTeleoptiTime = Date.prototype.getTeleoptiTime;
 	var realNotify = notifier.Notify;
-
+	var realGetNotificationDisplayTime = alertActivity.GetNotificationDisplayTime;
 	module("Teleopti.MyTimeWeb.PollScheduleUpdates", {
 		setup: function () {
 			fakeAjax();
@@ -34,6 +34,7 @@
 			Teleopti.MyTimeWeb.Ajax = realAjax;
 			Date.prototype.getTeleoptiTime = realGetTeleoptiTime;
 			notifier.Notify = realNotify;
+			alertActivity.GetNotificationDisplayTime = realGetNotificationDisplayTime;
 			target.Destroy();
 		}
 	});
