@@ -304,7 +304,6 @@
     <Compile Include="Execute.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAgentStateReadModelPersister.cs" />
-    <Compile Include="FakeAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="FakeCurrentBusinessUnit.cs" />
     <Compile Include="FakeDataSourcesFactory.cs" />
     <Compile Include="FakeData\FakeActivityRepository.cs" />
@@ -329,9 +328,7 @@
     <Compile Include="FakeDistributedLockAcquirer.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="FakeHangfireEventClient.cs" />
-    <Compile Include="FakeMessageBrokerUnitOfWorkAspect.cs" />
     <Compile Include="FakeMessageSender.cs" />
-    <Compile Include="FakeReadModelUnitOfWorkAspect.cs" />
     <Compile Include="FakeRecurringEventPublisher.cs" />
     <Compile Include="FakeRepositories\FakeAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakeAgentDayScheduleTagRepository.cs" />
