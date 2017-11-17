@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,13 +24,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
         private readonly ICanModifyMeeting _canModifyMeeting;
 	    private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 	    private readonly ISkillPriorityProvider _skillPriorityProvider;
-	    private readonly ISettingDataRepository _settingDataRepository;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISettingDataRepository _settingDataRepository;
         private readonly IActivityRepository _activityRepository;
         private readonly IPersonRepository _personRepository;
 
         public AddMeetingCommand(IMeetingOverviewView meetingOverviewView, ISettingDataRepository settingDataRepository,
             IActivityRepository activityRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMeetingOverviewViewModel model,
-            ICanModifyMeeting canModifyMeeting, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider)
+            ICanModifyMeeting canModifyMeeting, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider, ISkillDayLoadHelper skillDayLoadHelper)
         {
             _meetingOverviewView = meetingOverviewView;
             _activityRepository = activityRepository;
@@ -40,7 +42,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
             _canModifyMeeting = canModifyMeeting;
 	        _intraIntervalFinderService = intraIntervalFinderService;
 	        _skillPriorityProvider = skillPriorityProvider;
-        }
+			_skillDayLoadHelper = skillDayLoadHelper;
+		}
 
         public void Execute()
         {
@@ -71,7 +74,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
                 }
 
                 if (meetingViewModel != null)
-                    _meetingOverviewView.EditMeeting(meetingViewModel, _intraIntervalFinderService, _skillPriorityProvider);
+                    _meetingOverviewView.EditMeeting(meetingViewModel, _intraIntervalFinderService, _skillPriorityProvider, _skillDayLoadHelper);
             }
         }
 

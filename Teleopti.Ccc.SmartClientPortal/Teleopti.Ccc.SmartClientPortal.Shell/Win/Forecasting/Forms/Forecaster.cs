@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private readonly IDirtyForecastDayContainer _dirtyForecastDayContainer = new DirtyForecastDayContainer();
 		private bool _forceClose;
 		private Form _mainWindow;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private readonly IStatisticHelper _statisticHelper;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 
@@ -937,12 +938,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			setGridZoomLevel(TemplateTarget.Skill, _currentForecasterSettings.WorkingIntervalSkill);
 		}
 
-		public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm, IToggleManager toggleManager, Form mainWindow, IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider)
-			: this(  statisticHelper, businessRuleConfigProvider)
+		public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm,
+			IToggleManager toggleManager, Form mainWindow, IStatisticHelper statisticHelper,
+			IBusinessRuleConfigProvider businessRuleConfigProvider,
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+			: this(statisticHelper, businessRuleConfigProvider)
 		{
 			_toggleManager = toggleManager;
 			_dateTimePeriod = dateTimePeriod;
 			_mainWindow = mainWindow;
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 
 			_zoomButtons = new ZoomButtons();
 			_zoomButtons.ZoomChanged += buttonsZoomChanged;
@@ -971,6 +976,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			_gridrowInChartSetting.LineInChartEnabledChanged += gridrowInChartSettingLineInChartEnabledChanged;
 
 			_skill = skill;
+			_skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 			_scenario = scenario;
 			_longterm = longterm;
 			_currentLocalDate = dateTimePeriod.StartDate;
@@ -1010,6 +1016,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 					_multisiteSkill = _skill as IMultisiteSkill;
 				}
 			}
+
+			if(_skill != null)
+				_skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 		}
 
 		private void setUpClipboard()

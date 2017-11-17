@@ -41,6 +41,7 @@ namespace Teleopti.Wfm.Administration.Core
 		private readonly Func<ICurrentUnitOfWork, IKpiRepository> _kpiRepository;
 		private readonly Func<ICurrentUnitOfWork, ISkillTypeRepository> _skillTypeRepository;
 		private readonly Func<ICurrentUnitOfWork, IRtaStateGroupRepository> _rtaStateGroupRepository;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
 		public CreateBusinessUnit(IDataSourcesFactory dataSourcesFactory,
 			IRunWithUnitOfWork runWithUnitOfWork,
@@ -51,7 +52,8 @@ namespace Teleopti.Wfm.Administration.Core
 			Func<ICurrentUnitOfWork, IAvailableDataRepository> availableDataRepository,
 			Func<ICurrentUnitOfWork, IKpiRepository> kpiRepository,
 			Func<ICurrentUnitOfWork, ISkillTypeRepository> skillTypeRepository,
-			Func<ICurrentUnitOfWork, IRtaStateGroupRepository> rtaStateGroupRepository)
+			Func<ICurrentUnitOfWork, IRtaStateGroupRepository> rtaStateGroupRepository,
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
 			_runWithUnitOfWork = runWithUnitOfWork;
@@ -63,6 +65,7 @@ namespace Teleopti.Wfm.Administration.Core
 			_kpiRepository = kpiRepository;
 			_skillTypeRepository = skillTypeRepository;
 			_rtaStateGroupRepository = rtaStateGroupRepository;
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 		}
 
 		public void Create(Tenant tenant, string businessUnitName)
@@ -109,7 +112,7 @@ namespace Teleopti.Wfm.Administration.Core
 			});
 		}
 
-		private static void createMissingSkillTypes(ISkillTypeRepository skillTypeRepository)
+		private void createMissingSkillTypes(ISkillTypeRepository skillTypeRepository)
 		{
 			var existingSkillTypes = skillTypeRepository.LoadAll();
 			foreach (var skillType in buildSkillTypes())
@@ -141,7 +144,7 @@ namespace Teleopti.Wfm.Administration.Core
 			};
 		}
 
-		private static IEnumerable<ISkillType> buildSkillTypes()
+		private IEnumerable<ISkillType> buildSkillTypes()
 		{
 			return new List<ISkillType>
 			{
@@ -154,12 +157,16 @@ namespace Teleopti.Wfm.Administration.Core
 			};
 		}
 
-		private static ISkillType createSkillType(string desc, ForecastSource forecastSource)
+		private ISkillType createSkillType(string desc, ForecastSource forecastSource)
 		{
 			var description = new Description(desc);
-			var skillType = ForecastSource.InboundTelephony == forecastSource
-				? (ISkillType)new SkillTypePhone(description, forecastSource)
-				: new SkillTypeEmail(description, forecastSource);
+			var skillType = (ISkillType) new SkillTypeEmail(description, forecastSource);
+			if (ForecastSource.InboundTelephony == forecastSource)
+			{
+				skillType = new SkillTypePhone(description, forecastSource);
+				skillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
+			}
+			
 			return skillType;
 		}
 

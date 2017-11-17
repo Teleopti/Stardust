@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -50,7 +51,8 @@ namespace Teleopti.Wfm.AdministrationTest.Core
 				uow => _availableDataRepository,
 				uow => _kpiRepository,
 				uow => _skillTypeRepository,
-				uow => _rtaStateGroupRepository);
+				uow => _rtaStateGroupRepository,
+				new StaffingCalculatorServiceFacade());
 		}
 
 		[Test]

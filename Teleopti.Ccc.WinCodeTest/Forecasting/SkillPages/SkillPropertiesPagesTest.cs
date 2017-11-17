@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.SkillPages
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
 
-            target = new SkillPropertiesPages(_skill,_repositoryFactory,_unitOfWorkFactory);
+            target = new SkillPropertiesPages(_skill,_repositoryFactory,_unitOfWorkFactory, new StaffingCalculatorServiceFacade());
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.SkillPages
         [Test]
         public void VerifyCreateWithSkillType()
         {
-            target = new SkillPropertiesPages(_skillType,_repositoryFactory,_unitOfWorkFactory);
+            target = new SkillPropertiesPages(_skillType,_repositoryFactory,_unitOfWorkFactory, new StaffingCalculatorServiceFacade());
 
             Assert.IsNotNull(target);
         }

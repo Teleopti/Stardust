@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Cascading;
@@ -34,11 +35,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 					_jobParameters.Helper.Repository.LoadSkillWithSkillDays(
 						period.ToDateOnlyPeriod(TimeZoneInfo.Utc)));
 			IList<IPerson> persons = _jobParameters.StateHolder.PersonCollection.ToList();
-
+			var staffingCalculatorServiceFacade =
+				_jobParameters.ContainerHolder.IocContainer.Resolve<IStaffingCalculatorServiceFacade>();
 			foreach (IScenario scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
 			{
 				var skillDaysDictionary =
-					_jobParameters.StateHolder.GetSkillDaysDictionary(period, skills, scenario);
+					_jobParameters.StateHolder.GetSkillDaysDictionary(period, skills, scenario, staffingCalculatorServiceFacade);
 				IScheduleDictionary scheduleDictionary = _jobParameters.StateHolder.GetSchedules(period, scenario);
 
 				using (ISchedulingResultStateHolder schedulingResultStateHolder = new SchedulingResultStateHolder(persons,

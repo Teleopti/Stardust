@@ -39,14 +39,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IMultisiteDayRepository _multisiteDayRepository;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
-		public SkillDayLoadHelper(ISkillDayRepository skillDayRepository, IMultisiteDayRepository multisiteDayRepository)
+		public SkillDayLoadHelper(ISkillDayRepository skillDayRepository, IMultisiteDayRepository multisiteDayRepository, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			InParameter.NotNull(nameof(multisiteDayRepository), multisiteDayRepository);
 			InParameter.NotNull(nameof(skillDayRepository), skillDayRepository);
 
 			_skillDayRepository = skillDayRepository;
 			_multisiteDayRepository = multisiteDayRepository;
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 		}
 
 		/// <summary>
@@ -125,6 +127,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	                calculators.Add(new SkillDayCalculator(skill, skillDays, period));
 					foreach (ISkillDay skillDay in skillDays)
 					{
+						skillDay.Skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 						skillDay.RecalculateDailyTasks();
 					}
 				}

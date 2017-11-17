@@ -1,17 +1,26 @@
 ﻿using System;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.Import;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class ForecastEventModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
+
 		[ThreadStatic]
 		private static IJobResultFeedback jobResultFeedback;
+
+		public ForecastEventModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -34,6 +43,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StatisticHelper>().As<IStatisticHelper>();
 			builder.RegisterType<OpenAndSplitTargetSkill>().As<IOpenAndSplitTargetSkill>();
 			builder.RegisterType<ExportMultisiteSkillProcessor>().As<IExportMultisiteSkillProcessor>();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
+			{
+				builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>()
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+			}
 		}
 
 		private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)

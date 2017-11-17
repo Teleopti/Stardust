@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		private readonly MeetingImpactPresenter _presenter;
 		private readonly MeetingComposerView _meetingComposerView;
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private SkillIntradayGridControl _skillIntradayGridControl;
 		private readonly TransparentMeetingMeetingControl _transparentMeetingMeetingControl;
 		private readonly MeetingStateHolderLoaderHelper _meetingStateHolderLoaderHelper;
@@ -44,7 +46,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 								ISchedulerStateHolder schedulerStateHolder, 
 								MeetingComposerView meetingComposerView, 
 								IResourceCalculation resourceOptimizationHelper,
-								ISkillPriorityProvider skillPriorityProvider)
+								ISkillPriorityProvider skillPriorityProvider,
+								ISkillDayLoadHelper skillDayLoadHelper)
 			: this()
 		{
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
@@ -52,6 +55,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 
 			_meetingComposerView = meetingComposerView;
 			_skillPriorityProvider = skillPriorityProvider;
+			_skillDayLoadHelper = skillDayLoadHelper;
 			outlookTimePickerStartTime.CreateAndBindList();
 			outlookTimePickerEndTime.CreateAndBindList();
 
@@ -67,7 +71,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			var transparentWindowHandler = new MeetingImpactTransparentWindowHandler(this, meetingViewModel,
 																					 schedulerStateHolder.
 																						 SchedulingResultState);
-			_meetingStateHolderLoaderHelper = new MeetingStateHolderLoaderHelper(decider, schedulerStateHolder, stateHolderLoader, UnitOfWorkFactory.Current);
+			_meetingStateHolderLoaderHelper = new MeetingStateHolderLoaderHelper(decider, schedulerStateHolder, stateHolderLoader, UnitOfWorkFactory.Current, _skillDayLoadHelper);
 			_presenter = new MeetingImpactPresenter(schedulerStateHolder, this, meetingViewModel, _meetingStateHolderLoaderHelper,
 				slotFinder, new MeetingImpactCalculator(schedulerStateHolder, resourceOptimizationHelper, meetingViewModel.Meeting),
 				gridHandler, transparentWindowHandler, UnitOfWorkFactory.Current);

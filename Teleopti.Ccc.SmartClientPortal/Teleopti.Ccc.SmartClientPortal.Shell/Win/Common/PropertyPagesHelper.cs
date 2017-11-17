@@ -73,10 +73,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 			return SetEditMode(list, setEditMode);
 		}
 
-		public static void AddMultisiteSkillPages(IList<IPropertyPage> pages)
+		public static void AddMultisiteSkillPages(IList<IPropertyPage> pages, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			pages.Add(
-				 new MultisiteChildSkills());
+				 new MultisiteChildSkills(staffingCalculatorServiceFacade));
 		}
 
 		private static IList<IPropertyPage> SetEditMode(IList<IPropertyPage> list, bool setEditMode)

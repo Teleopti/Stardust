@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
@@ -15,6 +17,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	public class BudgetModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
+
+		public BudgetModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
 		protected override void Load(ContainerBuilder builder)
 		{
 			groupDayWiring(builder);
@@ -45,9 +53,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 			builder.RegisterType<LoadStaffEmployedCommand>().As<ILoadStaffEmployedCommand>();
 		}
 
-		private static void providerWiring(ContainerBuilder builder)
+		private void providerWiring(ContainerBuilder builder)
 		{
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
+			{
+				builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>()
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+			}
 			builder.RegisterType<BudgetingSkillStaffPeriodProvider>().As<IBudgetSkillStaffPeriodProvider>();
 			builder.RegisterType<BudgetPeopleProvider>().As<IBudgetPeopleProvider>();
 			builder.RegisterType<BudgetSettingsProvider>().SingleInstance().As<IBudgetSettingsProvider>();

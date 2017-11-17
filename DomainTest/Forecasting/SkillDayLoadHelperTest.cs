@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                           {
                               SkillFactory.CreateSkill("skill2")
                           };
-        	_target = new SkillDayLoadHelper(_skillDayRep,_multisiteDayRep);
+        	_target = new SkillDayLoadHelper(_skillDayRep,_multisiteDayRep, new StaffingCalculatorServiceFacade());
         }
 
         /// <summary>

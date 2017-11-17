@@ -9,6 +9,7 @@ using Syncfusion.Schedule;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Schedule;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -421,11 +422,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public void EditMeeting(IMeetingViewModel meetingViewModel, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider)
+		public void EditMeeting(IMeetingViewModel meetingViewModel, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider, ISkillDayLoadHelper skillDayLoadHelper)
 		{
 			var viewSchedulesPermission = isPermittedToViewSchedules();
 			var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-															  _eventAggregator, _resourceOptimizationHelper, skillPriorityProvider, _scheduleStorageFactory);
+															  _eventAggregator, _resourceOptimizationHelper, skillPriorityProvider, _scheduleStorageFactory, skillDayLoadHelper);
 			meetingComposerView.ShowDialog(this);
 		}
 

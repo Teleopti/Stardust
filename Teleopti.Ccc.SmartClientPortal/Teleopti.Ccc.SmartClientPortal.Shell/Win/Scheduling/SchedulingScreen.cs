@@ -430,7 +430,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 																_container.Resolve<IResourceCalculation>(), 
 																_container.Resolve<ISkillPriorityProvider>(), 
 																_container.Resolve<IScheduleStorageFactory>(),
-																_container.Resolve<CascadingResourceCalculationContextFactory>());
+																_container.Resolve<CascadingResourceCalculationContextFactory>(), 
+																_container.Resolve<ISkillDayLoadHelper>());
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 
 			_clipHandlerSchedule = new ClipHandler<IScheduleDay>();
@@ -3781,11 +3782,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
 			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
 		{
+			var staffingCalculatorServiceFacade = _container.Resolve<IStaffingCalculatorServiceFacade>();
 			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.RequestedPeriod.DateOnlyPeriod);
 			foreach (ISkill skill in skills)
 			{
-				if (skill.SkillType is SkillTypePhone)
-					skill.SkillType.StaffingCalculatorService = new StaffingCalculatorServiceFacade();
+				skill.SkillType.StaffingCalculatorService = staffingCalculatorServiceFacade;
 				stateHolder.SchedulingResultState.AddSkills(skill);
 			}
 		}

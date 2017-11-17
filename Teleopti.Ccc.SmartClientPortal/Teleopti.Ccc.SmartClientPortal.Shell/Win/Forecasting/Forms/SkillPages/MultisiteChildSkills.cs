@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 {
 	public partial class MultisiteChildSkills : BaseUserControl, IPropertyPage
 	{
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private MultisiteSkill _skill;
 		private TextBox _editBox;
 		private int _itemSelected;
@@ -25,6 +26,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 
 		public MultisiteChildSkills()
 		{
+			InitializeComponent();
+			if (!DesignMode) SetTexts();
+		}
+
+		public MultisiteChildSkills(IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		{
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
 		}
@@ -90,9 +98,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 							_skill.DisplayColor,
 							_skill);
 
-			SkillWizardPages.SetSkillDefaultSettings(childSkill);
+			new SkillWizardPages(childSkill, null, null, _staffingCalculatorServiceFacade).SetSkillDefaultSettings(childSkill);
 			DialogResult result;
-			using (var swp = new SkillWizardPages(childSkill,new RepositoryFactory(),UnitOfWorkFactory.Current))
+			using (var swp = new SkillWizardPages(childSkill,new RepositoryFactory(),UnitOfWorkFactory.Current, _staffingCalculatorServiceFacade))
 			{
 				swp.Initialize(PropertyPagesHelper.GetSkillPages(false, swp, true), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))

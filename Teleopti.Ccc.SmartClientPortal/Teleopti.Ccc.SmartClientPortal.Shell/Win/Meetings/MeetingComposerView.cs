@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 
 		public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
@@ -37,7 +39,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 
 		public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
 			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator,
-			IResourceCalculation resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, IScheduleStorageFactory scheduleStorageFactory)
+			IResourceCalculation resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, 
+			IScheduleStorageFactory scheduleStorageFactory, ISkillDayLoadHelper skillDayLoadHelper)
 			: this()
 		{
 			bool editMeetingPermission = editPermission;
@@ -45,6 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			_eventAggregator = eventAggregator;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_skillPriorityProvider = skillPriorityProvider;
+			_skillDayLoadHelper = skillDayLoadHelper;
 			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulerStateHolder, scheduleStorageFactory);
 			panelContent.Enabled = editMeetingPermission;
 			ribbonControlAdv1.Enabled = editMeetingPermission;
@@ -317,7 +321,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private IMeetingImpactView getImpactView()
 		{
-			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _resourceOptimizationHelper, _skillPriorityProvider);
+			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _resourceOptimizationHelper, _skillPriorityProvider, _skillDayLoadHelper);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

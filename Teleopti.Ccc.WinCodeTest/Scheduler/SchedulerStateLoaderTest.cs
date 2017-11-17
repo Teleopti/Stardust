@@ -13,6 +13,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -67,8 +68,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var scheduleRepository = MockRepository.GenerateMock<IScheduleStorage, IFindSchedulesForPersons>();
             var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
             var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
-            
-            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			var skillDayLoadHelper = MockRepository.GenerateMock<ISkillDayLoadHelper>();
+
+
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
             _repositoryFactory.Stub(x => x.CreateActivityRepository(uow)).Return(activityRepository);
 			_scheduleStorageFactory.Stub(x => x.Create(uow)).Return(scheduleRepository);
             _repositoryFactory.Stub(x => x.CreateSkillRepository(uow)).Return(skillRepository);
@@ -82,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var scheduleDateTimePeriod = new ScheduleDateTimePeriod(_period);
             _targetStateLoader.LoadSchedules(scheduleDateTimePeriod);
             _targetStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
-            _targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, uow, new BackgroundWorker(), new List<ISkill> { _selectedSkill });
+            _targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, uow, new BackgroundWorker(), new List<ISkill> { _selectedSkill }, skillDayLoadHelper);
 
             Assert.IsTrue(_targetStateHolder.SchedulingResultState.Skills.Contains(_selectedSkill));
             Assert.IsTrue(_targetStateHolder.ChoosenAgents.Contains(_permittedPeople[0]));

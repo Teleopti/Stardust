@@ -289,16 +289,16 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return _jobParameters.Helper.Repository.LoadSchedulePartsPerPersonAndDate(period, GetSchedules(period, scenario));
 		}
 
-		public ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck)
+		public ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
-			return _jobParameters.Helper.Repository.LoadSkillDays(scenario, lastCheck).ToArray();
+			return _jobParameters.Helper.Repository.LoadSkillDays(scenario, lastCheck, staffingCalculatorServiceFacade).ToArray();
 		}
 
-		public ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
+		public ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			// Load skill days in collection from dictionary
 			_skillDaysCollection = new List<ISkillDay>();
-			foreach (IList<ISkillDay> skillDay in GetSkillDaysDictionary(period, skills, scenario).Values)
+			foreach (IList<ISkillDay> skillDay in GetSkillDaysDictionary(period, skills, scenario, staffingCalculatorServiceFacade).Values)
 			{
 				_skillDaysCollection.AddRange(skillDay);
 			}
@@ -306,9 +306,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return _skillDaysCollection;
 		}
 
-		public IDictionary<ISkill, IEnumerable<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
-			return _jobParameters.Helper.Repository.LoadSkillDays(period, skills, scenario);
+			return _jobParameters.Helper.Repository.LoadSkillDays(period, skills, scenario, staffingCalculatorServiceFacade);
 		}
 
 		public IList<IPerson> UserCollection

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
             public void ShowMeetingComposerView(IPersonSelectorView parent, IMeetingViewModel meetingViewModel, bool viewSchedulesPermission)
             {
                 var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-															   new EventAggregator(), _container.Resolve<IResourceCalculation>(), _container.Resolve<ISkillPriorityProvider>(), _container.Resolve<IScheduleStorageFactory>());
+															   new EventAggregator(), _container.Resolve<IResourceCalculation>(), _container.Resolve<ISkillPriorityProvider>(), _container.Resolve<IScheduleStorageFactory>(), _container.Resolve<ISkillDayLoadHelper>());
                 meetingComposerView.Show((Control)parent);
             }
         }

@@ -139,6 +139,7 @@ ResourcePlanner_BlockSchedulingValidation_46092 = DEV
 ResourcePlanner_RemoveClassicShiftCat_46582 = RC
 ResourcePlanner_DoNotKillCache_46724 = RC
 ResourcePlanner_RemoveImplicitResCalcContext_46680 = RC
+ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some issues
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
 Wfm_DisplayOnlineHelp_39402 = true

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -46,7 +47,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         private HashSet<ISkill> _filteredSkills = new HashSet<ISkill>();
         private DateTimePeriod _lastPeriod;
         private readonly IUnitOfWorkFactory _uowFactory;
-        private readonly BackgroundWorker _reloadBackgroundWorker = new BackgroundWorker();
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly BackgroundWorker _reloadBackgroundWorker = new BackgroundWorker();
         private bool _disposed;
 
         public event FinishedEventHandler FinishedReloading;
@@ -56,14 +58,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                                                 IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
                                                 ISchedulerStateHolder schedulerStateHolder,
                                                 ISchedulerStateLoader schedulerStateLoader,
-                                                IUnitOfWorkFactory uowFactory)
+                                                IUnitOfWorkFactory uowFactory,
+												ISkillDayLoadHelper skillDayLoadHelper)
         {
             _peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
 	        _schedulerStateHolder = schedulerStateHolder;
 			_schedulingResultStateHolder = _schedulerStateHolder.SchedulingResultState;
             _schedulerStateLoader = schedulerStateLoader;
             _uowFactory = uowFactory;
-            _reloadBackgroundWorker.WorkerSupportsCancellation = true;
+			_skillDayLoadHelper = skillDayLoadHelper;
+			_reloadBackgroundWorker.WorkerSupportsCancellation = true;
             _reloadBackgroundWorker.DoWork += ReloadBackgroundWorkerDoWork;
             _reloadBackgroundWorker.RunWorkerCompleted += ReloadBackgroundWorkerRunWorkerCompleted;
         }
@@ -102,7 +106,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                                                                         new MeetingScheduleRangeToLoadCalculator(
                                                                             args.Period));
                 e.Result = args;
-                _schedulerStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, unitOfWork, _reloadBackgroundWorker, tempSkills);
+                _schedulerStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, unitOfWork, _reloadBackgroundWorker, tempSkills, _skillDayLoadHelper);
             }
         }
         

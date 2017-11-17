@@ -117,6 +117,7 @@
 		ResourcePlanner_BpoScheduling_46265,
 		ResourcePlanner_RemoveImplicitResCalcContext_46680,
 		ResourcePlanner_DoNotKillCache_46724,
+		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 
 		Wfm_DisplayOnlineHelp_39402,
 

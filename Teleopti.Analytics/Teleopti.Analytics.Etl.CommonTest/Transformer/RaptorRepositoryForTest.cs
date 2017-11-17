@@ -339,19 +339,23 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
-		private IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
-		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario,
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			return _skillDays;
 		}
+
+		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck,
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		{
+			throw new NotImplementedException();
+		}
+
+		private IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
+		
 		public void SetLoadSkillDays(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
 		{
 			_skillDays = skillDays;
-		}
-
-		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck)
-		{
-			throw new NotImplementedException();
 		}
 
 		public int PersistForecastWorkload(DataTable dataTable)

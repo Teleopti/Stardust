@@ -22,17 +22,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
     public class SkillWizardPages : AbstractWizardPages<ISkill>
     {
         private ISkillType _preselectedSkillType;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
-        public SkillWizardPages(ISkillType preselectedSkillType, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
+		public SkillWizardPages(ISkillType preselectedSkillType, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
             : base(repositoryFactory,unitOfWorkFactory)
-        {
-            _preselectedSkillType = preselectedSkillType;
-        }
+		{
+			_preselectedSkillType = preselectedSkillType;
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+		}
 
-        public SkillWizardPages(ISkill skill, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
+        public SkillWizardPages(ISkill skill, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
             : base(skill,repositoryFactory,unitOfWorkFactory)
         {
-        }
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+		}
 
         /// <summary>
         /// Gets the repository object.
@@ -50,7 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
             }
         }
 
-        /// <summary>
+		/// <summary>
         /// Gets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -92,8 +95,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
         {
             if (_preselectedSkillType == null)
             {
-                _preselectedSkillType = new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony);
-            }
+				_preselectedSkillType =
+					new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony)
+					{
+						StaffingCalculatorService = _staffingCalculatorServiceFacade
+					};
+			}
             var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             var newSkill = new Skill(UserTexts.Resources.LessThanSkillNameGreaterThan,
                                        string.Format(culture, UserTexts.Resources.SkillCreatedDotParameter0,
@@ -112,10 +119,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
         /// Created by: robink
         /// Created date: 2008-04-23
         /// </remarks>
-        public static void SetSkillDefaultSettings(ISkill newSkill)
+        public void SetSkillDefaultSettings(ISkill newSkill)
         {
             newSkill.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
-
+			newSkill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
             var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             ServiceAgreement serviceAgreement = ServiceAgreement.DefaultValues();
             DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, newSkill.TimeZone);

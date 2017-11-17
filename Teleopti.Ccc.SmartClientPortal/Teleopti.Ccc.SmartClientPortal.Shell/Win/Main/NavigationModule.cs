@@ -1,5 +1,8 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -41,7 +44,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
             builder.RegisterType<ShiftsNavigationPanel>();
             builder.RegisterType<NavigationPanelProvider>().SingleInstance();
             builder.RegisterType<ForecasterNavigator>();
-            builder.RegisterType<IntradayNavigator>();
+			 if (_config.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
+			 {
+				 builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>()
+					 .SingleInstance();
+			 }
+			 else
+			 {
+				 builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+			 }
+
+			 builder.RegisterType<IntradayNavigator>();
             builder.RegisterType<IntradayWebNavigator>();
             builder.RegisterType<PortalSettingsProvider>().SingleInstance();
             builder.RegisterType<BudgetGroupGroupNavigatorView>();

@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 		private Form _mainWindow;
 		private IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private readonly IStatisticHelper _statisticHelper;
 		private bool _hidePriorityToggle;
 
@@ -108,7 +109,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			IImportForecastViewFactory importForecastViewFactory,
 			IToggleManager toggleManager,
 			IEventPublisher publisher,
-			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider)
+			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, 
+			IStatisticHelper statisticHelper, 
+			IBusinessRuleConfigProvider businessRuleConfigProvider,
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 			: this(statisticHelper, businessRuleConfigProvider)
 		{
 			_jobHistoryViewFactory = jobHistoryViewFactory;
@@ -118,6 +122,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_publisher = publisher;
 			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 
 			setVisibility();
 		}
@@ -533,7 +538,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			skillTypeModel st = getSkillType(node);
 			var skillType = getInitializedSkillType(st);
-			using (var swp = new SkillWizardPages(skillType, _repositoryFactory, _unitOfWorkFactory))
+			using (var swp = new SkillWizardPages(skillType, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 			{
 				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))
@@ -978,10 +983,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			try
 			{
 				var skill = getInitializedSkill(skillModel);
-				using (var spp = new SkillPropertiesPages(skill, _repositoryFactory, _unitOfWorkFactory))
+				using (var spp = new SkillPropertiesPages(skill, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 				{
 					var pages = PropertyPagesHelper.GetSkillPages(false, spp, _hidePriorityToggle);
-					if (skillModel.IsMultisite) PropertyPagesHelper.AddMultisiteSkillPages(pages);
+					if (skillModel.IsMultisite) PropertyPagesHelper.AddMultisiteSkillPages(pages, _staffingCalculatorServiceFacade);
 					spp.Initialize(pages, new LazyLoadingManagerWrapper());
 					using (var propertiesPages = new PropertiesPages(spp))
 					{
@@ -1057,7 +1062,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private void startForecaster(DateOnlyPeriod selectedPeriod, IScenario scenario, ISkill skill)
 		{
 			Cursor = Cursors.WaitCursor;
-			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager, _mainWindow, _statisticHelper, _businessRuleConfigProvider);
+			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager, _mainWindow, _statisticHelper, _businessRuleConfigProvider, _staffingCalculatorServiceFacade);
 			forecaster.Show();
 			Cursor = Cursors.Default;
 		}
@@ -1133,11 +1138,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 		private ISkillType getInitializedSkillType(skillTypeModel skillTypeModel)
 		{
+			ISkillType skillType;
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var repsoitory = new SkillTypeRepository(uow);
-				return repsoitory.Get(skillTypeModel.Id);
+				skillType = repsoitory.Get(skillTypeModel.Id);
 			}
+
+			skillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
+			return skillType;
 		}
 
 		private void createMultisiteSkill(skillTypeModel skillTypeModel)
@@ -1149,10 +1158,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				Resources.LessThanSkillNameGreaterThan,
 				string.Format(culture, Resources.SkillCreatedDotParameter0, DateTime.Now),
 				Color.FromArgb(0), skillType.DefaultResolution, skillType);
-			SkillWizardPages.SetSkillDefaultSettings(skill);
+			new SkillWizardPages(skill, null, null, _staffingCalculatorServiceFacade).SetSkillDefaultSettings(skill);
 
 			DialogResult result;
-			using (var swp = new SkillWizardPages(skill, _repositoryFactory, _unitOfWorkFactory))
+			using (var swp = new SkillWizardPages(skill, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 			{
 				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))
@@ -1199,8 +1208,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 							Resources.SkillCreatedDotParameter0, DateTime.Now),
 						skill.DisplayColor, skill);
 
-					SkillWizardPages.SetSkillDefaultSettings(childSkill);
-					using (var swp = new SkillWizardPages(childSkill, _repositoryFactory, _unitOfWorkFactory))
+					new SkillWizardPages(childSkill, null, null, _staffingCalculatorServiceFacade).SetSkillDefaultSettings(childSkill);
+					using (var swp = new SkillWizardPages(childSkill, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 					{
 						swp.Initialize(PropertyPagesHelper.GetSkillPages(false, swp, true), new LazyLoadingManagerWrapper());
 						using (var wizard = new Wizard(swp))

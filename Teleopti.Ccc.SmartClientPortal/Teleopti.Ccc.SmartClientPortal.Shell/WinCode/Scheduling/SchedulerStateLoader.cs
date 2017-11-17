@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 	{
 		void LoadOrganization();
 		void LoadSchedules(IScheduleDateTimePeriod scheduleDateTimePeriod);
-		void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills);
+		void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills, ISkillDayLoadHelper skillDayLoadHelper);
 		void EnsureSkillsLoaded(DateOnlyPeriod period);
 	}
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			}
 		}
 
-		public void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills)
+		public void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills, ISkillDayLoadHelper skillDayLoadHelper)
 		{
 			_backgroundWorker = backgroundWorker;
 
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			initializeSkills(uow);
 			if (_backgroundWorker.CancellationPending)
 				return;
-			initializeSkillDays(uow, skills);
+			initializeSkillDays(uow, skills, skillDayLoadHelper);
 			if (_backgroundWorker.CancellationPending)
 				return;
 			initializeScheduleData();
@@ -205,13 +205,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			}
 		}
 
-		private void initializeSkillDays(IUnitOfWork uow, IEnumerable<ISkill> skills)
+		private void initializeSkillDays(IUnitOfWork uow, IEnumerable<ISkill> skills, ISkillDayLoadHelper skillDayLoadHelper)
 		{
 			using (PerformanceOutput.ForOperation("Loading skill days (intraday data)"))
 			{
-				_schedulerState.SchedulingResultState.SkillDays = new SkillDayLoadHelper(
-					_repositoryFactory.CreateSkillDayRepository(uow),
-					_repositoryFactory.CreateMultisiteDayRepository(uow)).LoadSchedulerSkillDays(
+				_schedulerState.SchedulingResultState.SkillDays = skillDayLoadHelper.LoadSchedulerSkillDays(
 					_schedulerState.RequestedPeriod.DateOnlyPeriod,
 					skills,
 					_schedulerState.RequestedScenario);

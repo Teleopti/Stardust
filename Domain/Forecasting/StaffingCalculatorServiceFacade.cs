@@ -1,10 +1,12 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Calculation;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.Calculation;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845)]
 	public class StaffingCalculatorServiceFacade : IStaffingCalculatorServiceFacade
 	{
 		private readonly IStaffingCalculatorService _secretService;
@@ -16,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_serviceLevelAchivedOcc = new ServiceLevelAchivedOcc(new TeleoptiCallCapacity(_secretService),  _secretService);
 		}
 
-		public double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength, double minOcc, double maxOcc,
+		public virtual double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength, double minOcc, double maxOcc,
 			int maxParallelTasks)
 		{
 			return _secretService.AgentsUseOccupancy(serviceLevel, serviceTime, tasks/maxParallelTasks, aht, periodLength, minOcc, maxOcc, 1);
@@ -58,5 +60,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			return _secretService.Utilization(demandWithoutEfficiency, tasks/maxParellelTasks, aht, periodLength);
 		}
+	}
+
+	public class StaffingCalculatorServiceFacadeErlangA : StaffingCalculatorServiceFacade
+	{
+		//public override double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength,
+		//	double minOcc, double maxOcc, int maxParallelTasks)
+		//{
+		//	return base.AgentsUseOccupancy(serviceLevel, serviceTime, tasks, aht, periodLength, minOcc, maxOcc,
+		//		maxParallelTasks);
+		//}
 	}
 }

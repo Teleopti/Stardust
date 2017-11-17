@@ -17,8 +17,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
     {
         private readonly ISkillType _preselectedSkillType;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
-        /// <summary>
+		/// <summary>
         /// Creates the new root.
         /// </summary>
         /// <returns></returns>
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
         /// </remarks>
         public override ISkill CreateNewRoot()
         {
-            using(AbstractWizardPages<ISkill> wp = new SkillWizardPages(_preselectedSkillType,RepositoryFactory,_unitOfWorkFactory))
+            using(AbstractWizardPages<ISkill> wp = new SkillWizardPages(_preselectedSkillType,RepositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
             {
                 return wp.CreateNewRoot();
             }
@@ -76,16 +77,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
             get { return RepositoryFactory.CreateSkillRepository(UnitOfWork); }
         }
 
-        public SkillPropertiesPages(ISkillType preselectedSkillType, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory) : base(repositoryFactory,unitOfWorkFactory)
+        public SkillPropertiesPages(ISkillType preselectedSkillType, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade) : base(repositoryFactory,unitOfWorkFactory)
         {
             _preselectedSkillType = preselectedSkillType;
             _unitOfWorkFactory = unitOfWorkFactory;
-        }
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+		}
 
-        public SkillPropertiesPages(ISkill preselectedSkill, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
+        public SkillPropertiesPages(ISkill preselectedSkill, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
             : base(preselectedSkill,repositoryFactory,unitOfWorkFactory)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
-        }
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+		}
     }
 }

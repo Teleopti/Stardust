@@ -1189,7 +1189,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 												_dataMartConnectionString);
 		}
 
-		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -1215,7 +1215,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				ISkillDayRepository skillDayRepository = new SkillDayRepository(uow);
 				IMultisiteDayRepository multisiteDayRepository = new MultisiteDayRepository(uow);
-				IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository).LoadSchedulerSkillDays(period.ToDateOnlyPeriod(TimeZoneInfo.Utc),
+				IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository, staffingCalculatorServiceFacade).LoadSchedulerSkillDays(period.ToDateOnlyPeriod(TimeZoneInfo.Utc),
 																											skills,
 																											scenario);
 				foreach (var keyValuePair in skillDays)
@@ -1230,7 +1230,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			}
 		}
 
-		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck)
+		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			IEnumerable<ISkillDay> skillDayList;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -1244,7 +1244,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			var groupedBySkill = skillDayList.GroupBy(s => s.Skill);
 			foreach (var item in groupedBySkill)
 			{
-				var skillDays = LoadSkillDays(new DateOnlyPeriod(item.Min(s => s.CurrentDate), item.Max(s => s.CurrentDate)).ToDateTimePeriod(item.Key.TimeZone), new List<ISkill> { item.Key }, scenario);
+				var skillDays = LoadSkillDays(new DateOnlyPeriod(item.Min(s => s.CurrentDate), item.Max(s => s.CurrentDate)).ToDateTimePeriod(item.Key.TimeZone), new List<ISkill> { item.Key }, scenario, staffingCalculatorServiceFacade);
 				result.AddRange(skillDays[item.Key]);
 			}
 

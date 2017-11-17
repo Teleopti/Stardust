@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterModule(new RequestFactoryModule(configuration));
 			builder.RegisterModule<QueryHandlerModule>();
 			builder.RegisterModule<SdkCommandHandlersModule>();
-			builder.RegisterModule<UpdateScheduleModule>();
+			builder.RegisterModule(new UpdateScheduleModule(configuration));
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterType<WebWindowsUserProvider>()
 				 .As<IWindowsUserProvider>()
@@ -188,6 +188,15 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			builder.RegisterType<ResourceCalculationPrerequisitesLoader>().As<IResourceCalculationPrerequisitesLoader>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().InstancePerLifetimeScope();
+			if (configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
+			{
+				builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>()
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+			}
 			builder.RegisterType<ScheduleSaveHandler>().As<IScheduleSaveHandler>().InstancePerLifetimeScope();
 
 			//remove this crap when we get rid of local systemuser in appdb
