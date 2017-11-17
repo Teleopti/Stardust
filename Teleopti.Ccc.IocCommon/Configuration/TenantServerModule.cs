@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()
 				.SingleInstance();
-			builder.RegisterType<TenantUnitOfWorkAspect>().As<ITenantUnitOfWorkAspect>().SingleInstance();
+			builder.RegisterType<TenantUnitOfWorkAspect>().As<IAspect>().SingleInstance();
 			builder.RegisterType<WithTenantUnitOfWork>().SingleInstance();
 			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
