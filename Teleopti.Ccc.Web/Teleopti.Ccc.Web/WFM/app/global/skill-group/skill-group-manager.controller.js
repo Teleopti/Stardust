@@ -22,9 +22,10 @@
         skillIconService,
         $rootScope
     ) {
-        var vm = this;
-
         var _ = $rootScope._;
+        var originalGroups = [];
+
+        var vm = this;
         vm.selectedTabIndex = 0;
         vm.selectedSkillGroup = null;
         vm.skills = [];
@@ -37,7 +38,7 @@
         vm.deleteConfirmation = false;
 
         vm.selectSkillGroup = function(index) {
-			vm.selectedSkillGroup = vm.skillGroups[index];
+            vm.selectedSkillGroup = vm.skillGroups[index];
             vm.skills = _.sortBy(
                 _.differenceBy(vm.allSkills, vm.selectedSkillGroup.Skills, function(skill) {
                     return skill.Id;
@@ -45,7 +46,7 @@
                 function(item) {
                     return item.Name;
                 }
-			);
+            );
             setSaveableState();
             unselectAllSkills();
         };
@@ -163,7 +164,14 @@
 
         vm.createSkillGroup = function(e) {
             document.getElementById('skillGroupNameBox').focus();
-            vm.selectedSkillGroup = null;
+            var newGroup = {
+                Name: '',
+                Id: null,
+                Skills: []
+            };
+            vm.skillGroups.push(newGroup);
+            vm.selectedSkillGroup = newGroup;
+            vm.skills = vm.allSkills.slice();
             vm.canSave = false;
         };
 
@@ -200,9 +208,15 @@
 
         function getAllSkillGroups() {
             SkillGroupSvc.getSkillGroups().then(function(result) {
-                vm.skillGroups = result.data.SkillAreas;
-                console.log('vm.skillGroups', vm.skillGroups);
+                vm.skillGroups = originalGroups = result.data.SkillAreas;
             });
+        }
+
+        function getChangedGroups(originalGroups, newGroups) {
+            if (originalGroups && newGroups) {
+                return _.differenceWith(originalGroups, newGroups, _.isEqual);
+            }
+            return [];
         }
 
         SkillGroupSvc.getSkills().then(function(result) {

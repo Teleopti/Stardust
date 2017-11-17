@@ -32,10 +32,9 @@
     };
 
     function modifySkillGroups(skillGroups) {
-			console.log('skillGroups', skillGroups);
       if (skillGroups) {
-        return $http.put('../api/skillgroup/update', {SkillGroups: skillGroups});
+        return $http.put('../api/skillgroup/update', skillGroups);
       }
-    };
+		};
   }
 })();

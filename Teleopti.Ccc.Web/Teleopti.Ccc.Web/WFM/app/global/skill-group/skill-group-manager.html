@@ -20,7 +20,7 @@
 <form name="form" class="wfm-form" novalidate ng-submit="vm.saveSkillGroup(form)">
 	<md-content class="md-padding">
 		<div class="con-row">
-			<div class="con-flex panel form-panel material-depth-1" dropfromgroup="vm.optionDrop">
+			<div class="con-flex panel form-panel material-depth-1">
 				<div class="con-row">
 					<div class="con-flex">
 						<h2>{{'AllSkillAreas'|translate}}</h2>
@@ -52,11 +52,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="con-flex x3 panel form-panel material-depth-1" dropfromgroup="vm.optionDrop">
+			<div class="con-flex x3 panel form-panel material-depth-1">
 				<div class="con-row">
-					{{'Name'|translate}}:
-					<input type="text" ng-model="vm.selectedSkillGroup.Name" maxlength="50" ng-maxlength="50" id="skillGroupNameBox"
-					/>
 					<div ng-cloak class="animate-show" ng-show="vm.selectedSkillGroup.Name.length > 0">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">
 							{{'NameRequired'|translate}}
@@ -104,10 +101,9 @@
 					<div class="con-flex x3 panel form-panel material-depth-1" style="margin: 5px">
 						<div class="con-row">
 							<div class="con-flex">
-								<h2>{{'SkillsInThisGroup'|translate}}</h2>
+								<span>{{'Name'|translate}}:</span>
+								<input style="width:80%;" type="text" ng-model="vm.selectedSkillGroup.Name" maxlength="50" ng-maxlength="50" id="skillGroupNameBox" />
 							</div>
-						</div>
-						<div class="con-row">
 						</div>
 						<div class="con-row">
 							<div class="con-flex">
