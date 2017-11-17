@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -17,13 +19,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IAsmViewModelFactory _asmModelFactory;
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
+		//private readonly ScheduleChangeChecker _scheduleChangeChecker;
 
 		public AsmController(IAsmViewModelFactory asmModelFactory, ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
-			IGlobalSettingDataRepository globalSettingDataRepository)
+			IGlobalSettingDataRepository globalSettingDataRepository
+			//, ScheduleChangeChecker scheduleChangeChecker
+			)
 		{
 			_asmModelFactory = asmModelFactory;
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_globalSettingDataRepository = globalSettingDataRepository;
+			//_scheduleChangeChecker = scheduleChangeChecker;
 		}
 
 		public ViewResult Index()
@@ -56,19 +62,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult NotificationsTimeToStaySetting()
 		{
-			var notificationsTimeToStay = _globalSettingDataRepository.FindValueByKey("NotificationDurationTime",new NotificationDurationTime());
+			var notificationsTimeToStay = _globalSettingDataRepository.FindValueByKey("NotificationDurationTime", new NotificationDurationTime());
 			return Json(notificationsTimeToStay, JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]
 		[HttpGet]
-		public virtual JsonResult CheckIfScheduleHasUpdates()
+		public virtual JsonResult CheckIfScheduleHasUpdates(DateOnlyPeriod period)
 		{
-			return Json(new {
-					HasUpdates = true,
-					StartDate = "2017-11-10",
-					EndDate = "2017-11-11"
+			var hasUpdates = true;// _scheduleChangeChecker.Check(period);
+			return Json(new
+			{
+				HasUpdates = hasUpdates,
+				StartDate = period.StartDate,
+				EndDate = period.EndDate
 			}, JsonRequestBehavior.AllowGet);
 		}
 	}
+
 }
