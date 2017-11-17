@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.IocCommon;
@@ -32,15 +31,13 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public FakeUserDeviceRepository UserDeviceRepository;
 		public FakeHttpServer Server;
 		public FakeConfigReader ConfigReader;
-		public FakeCurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
+		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 		public FakeLoggedOnUser LoggedOnUser;
 
 
 		[Test]
 		public async Task ShouldNotNotifyWhenNoLicense()
 		{
-			setCurrentDataSource();
-
 			var messages = new NotificationMessage();
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 			person.Email = "aa@teleopti.com";
@@ -54,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		[Test]
 		public async Task ShouldNotifyAndSetCustomerName()
 		{
-			setValidLicense();
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
 				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email });
 
@@ -65,13 +61,12 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			await Target.Notify(messages, person);
 
 			Sender.SentNotifications.Should().Not.Be.Empty();
-			messages.CustomerName.Should().Be.EqualTo("test");
+			messages.CustomerName.Should().Be.EqualTo("Teleopti_RD");
 		}
 
 		[Test]
 		public async Task ShouldSendNotification()
 		{
-			setValidLicense();
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
 				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email });
 
@@ -94,7 +89,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		[Test]
 		public async Task ShouldSendAppNotification()
 		{
-			setValidLicense();
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
 				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email, IsMobileNotificationEnabled = true });
 
@@ -128,7 +122,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		[Test]
 		public async Task ShouldSendNotificationForPersons()
 		{
-			setValidLicense();
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
 				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email });
 
@@ -164,8 +157,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		[Test]
 		public async Task ShouldRemoveUserDevicesInvalidTokensAfterFCMResponseResultWithError()
 		{
-			
-			setValidLicense();
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
 				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email, IsMobileNotificationEnabled = true });
 
@@ -220,21 +211,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
-
-		private void setValidLicense()
-		{
-			setCurrentDataSource();
-			DefinedLicenseDataFactory.SetLicenseActivator(CurrentUnitOfWorkFactory.Current().Name, new FakeLicenseActivator("test"));
-			DefinedLicenseDataFactory.GetLicenseActivator(CurrentUnitOfWorkFactory.Current().Name).EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
-		}
-
-		private void setCurrentDataSource()
-		{
-			var currentUow = new FakeUnitOfWorkFactory(new FakeStorage());
-			currentUow.Name = "test";
-			CurrentUnitOfWorkFactory.WithCurrent(currentUow);
-		}
-
 	}
 
 	

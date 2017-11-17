@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		IWriteSideRepository<T>,
 		IProxyForId<T> where T : IAggregateRoot
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakeWriteSideRepository(FakeStorage storage)
+		public FakeWriteSideRepository(IFakeStorage storage)
 		{
-			_storage = storage;
+			_storage = storage ?? new FakeStorageSimple();
 		}
 
 		public void Add(T entity)
@@ -49,4 +49,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.LoadAll<T>().GetEnumerator();
 		}
 	}
+
 }

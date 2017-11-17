@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 			using (DataSource.OnThisThreadUse("secondTenant"))
 				Target.Trace("secondUserCode");
 
-			Target.ProcessReceived(null, null);
+			using (DataSource.OnThisThreadUse(null as string))
+				Target.ProcessReceived(null, null);
 
 			using (DataSource.OnThisThreadUse("firstTenant"))
 				Logs.ReadOfType<ProcessReceivedLog>().Should().Have.Count.EqualTo(1);

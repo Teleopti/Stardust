@@ -2,11 +2,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeStorage
+	public interface IFakeStorage
+	{
+		void Add(IAggregateRoot entity);
+		void Remove(IAggregateRoot entity);
+		T Get<T>(Guid id) where T : IAggregateRoot;
+		IEnumerable<T> LoadAll<T>();
+	}
+
+	public class FakeStorageSimple : IFakeStorage
+	{
+		private readonly List<IAggregateRoot> _data = new List<IAggregateRoot>();
+
+		public void Add(IAggregateRoot entity)
+		{
+			_data.Add(entity);
+		}
+
+		public void Remove(IAggregateRoot entity)
+		{
+			_data.Remove(entity);
+		}
+
+		public T Get<T>(Guid id) where T : IAggregateRoot
+		{
+			return _data.OfType<T>().ToArray().SingleOrDefault(x => x.Id.Equals(id));
+		}
+
+		public IEnumerable<T> LoadAll<T>()
+		{
+			return _data.OfType<T>().ToArray();
+		}
+	}
+
+	public class FakeStorage : IFakeStorage
 	{
 		//maybe these needs to be thread safe coll types as well? let's see....
 		private readonly List<IAggregateRoot> _legacy = new List<IAggregateRoot>();

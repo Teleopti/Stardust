@@ -8,19 +8,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeRtaStateGroupRepositoryLegacy : FakeRtaStateGroupRepository
 	{
-		public FakeRtaStateGroupRepositoryLegacy() : base(new FakeStorage())
+		public FakeRtaStateGroupRepositoryLegacy() : base(null)
 		{
 		}
 	}
 
 	public class FakeRtaStateGroupRepository : IRtaStateGroupRepository
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakeRtaStateGroupRepository(FakeStorage storage)
+		public FakeRtaStateGroupRepository(IFakeStorage storage)
 		{
-			_storage = storage;
+			_storage = storage ?? new FakeStorageSimple();
 		}
+
 		public void Has(IRtaStateGroup stateGroup)
 		{
 			Add(stateGroup);

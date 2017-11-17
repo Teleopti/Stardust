@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -85,7 +87,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeReadModelUnitOfWorkAspect>().For<IReadModelUnitOfWorkAspect>();
 			system.UseTestDouble<FakeAllBusinessUnitsUnitOfWorkAspect>().For<IAllBusinessUnitsUnitOfWorkAspect>();
 			system.UseTestDouble<FakeDistributedLockAcquirer>().For<IDistributedLockAcquirer>();
-			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeCurrentAnalyticsUnitOfWorkFactory>().For<ICurrentAnalyticsUnitOfWorkFactory>();
 			system.UseTestDouble<FakeMessageBrokerUnitOfWorkAspect>().For<IMessageBrokerUnitOfWorkAspect>();
 			//
@@ -153,7 +154,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakePlanningPeriodRepository>().For<IPlanningPeriodRepository>();
 				system.UseTestDouble<FakeExistingForecastRepository>().For<IExistingForecastRepository>();
 				system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
-				system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 				system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
 				system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
 				system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
@@ -256,15 +256,18 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			if (fakePermissions())
 				system.UseTestDouble<FakePermissions>().For<IAuthorization>();
 		}
-		
+
 		public IAuthorizationScope AuthorizationScope;
 		public IAuthorization Authorization;
-		public IPersonRepository Persons;
-		public Lazy<FakeDatabase> Database;
-		private IDisposable _authorizationScope;
-		private Person _loggedOnPerson;
 		public IThreadPrincipalContext PrincipalContext;
 		public FakeDataSourceForTenant DataSourceForTenant;
+		public IDataSourceScope DataSourceScope;
+		public IPersonRepository Persons;
+		public Lazy<FakeDatabase> Database;
+
+		private IDisposable _authorizationScope;
+		private IDisposable _tenantScope;
+		private Person _loggedOnPerson;
 
 		protected override void BeforeTest()
 		{
@@ -277,11 +280,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// because DomainTest project has OneTimeSetUp that sets FullPermissions globally... 
 			// ... we need to scope real/fake/full for this test
 			if (realPermissions())
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((PrincipalAuthorization) Authorization);
+				_authorizationScope = AuthorizationScope.OnThisThreadUse((PrincipalAuthorization)Authorization);
 			else if (fakePermissions())
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
+				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions)Authorization);
 			else
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((FullPermission) Authorization);
+				_authorizationScope = AuthorizationScope.OnThisThreadUse((FullPermission)Authorization);
 		}
 
 		private void fakeSignin()
@@ -307,6 +310,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 					_loggedOnPerson);
 
 				PrincipalContext.SetCurrentPrincipal(principal);
+			}
+			else
+			{
+				// assuming that if you specify default data you are using FakeDatabase...
+				// ... and thereby you want a current tenant for it to work...
+				if (QueryAllAttributes<DefaultDataAttribute>().Any())
+					_tenantScope = DataSourceScope.OnThisThreadUse(DefaultTenantName);
 			}
 		}
 
@@ -338,6 +348,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.AfterTest();
 
+			_tenantScope?.Dispose();
 			_authorizationScope?.Dispose();
 		}
 	}

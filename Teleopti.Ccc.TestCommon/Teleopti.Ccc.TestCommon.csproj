@@ -194,6 +194,7 @@
     <Compile Include="FakeData\FakeNotificationConfigReader.cs" />
     <Compile Include="FakeData\FakePossibleShiftTradePersonsProvider.cs" />
     <Compile Include="FakeData\FakePushMessageDialogueRepository.cs" />
+    <Compile Include="FakeData\FakeReadModelUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
     <Compile Include="FakeData\FakePermissions.cs" />
     <Compile Include="FakeData\FakeIntradayQueueStatisticsLoader.cs" />
