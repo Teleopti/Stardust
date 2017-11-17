@@ -17,9 +17,23 @@
 	}
 
 	gamification-settings{
-		.setting-container{
+		margin: -5px;
 
-			margin-top: 10px;
+		.setting-list {
+			border-bottom: $SEPARATOR;
+			padding: 12px 24px;
+		}
+
+		.setting-propterties {
+			padding: 12px 24px;
+		}
+
+		.quality-container {
+			border-top: $SEPARATOR;
+			padding: 24px;
+		}
+
+		.setting-container{
 		}
 
 		.setting-name {
@@ -38,15 +52,7 @@
 
 		.setting-item-panel{
 			border: 1px solid rgb(124, 122, 122);
-			margin: 3px;			
-		}
-
-		input{
-			width:auto;
-		}
-
-		.setting-name-input{
-			outline: thin;
+			margin: 3px;
 		}
 	}
 
