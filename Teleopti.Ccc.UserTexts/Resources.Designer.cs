@@ -14890,6 +14890,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to of.
+        /// </summary>
+        public static string IntraDayChipNumberOf {
+            get {
+                return ResourceManager.GetString("IntraDayChipNumberOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Here you monitor intraday values, start by selecting either a skill or a skill group.
         /// </summary>
         public static string IntradayIntroText {

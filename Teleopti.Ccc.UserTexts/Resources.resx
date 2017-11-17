@@ -16748,4 +16748,8 @@ Do you want to participate?</value>
     <value>Applied Setting</value>
     <comment>(Table header, etc.) The (gamification) setting applied to the team</comment>
   </data>
+  <data name="IntraDayChipNumberOf" xml:space="preserve">
+    <value>of</value>
+    <comment>Used to show how many skills of a skill group that are selected</comment>
+  </data>
 </root>

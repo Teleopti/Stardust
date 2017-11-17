@@ -124,7 +124,7 @@
       if(vm.filterSkills.indexOf(skill) !== -1){
         return 'mdi mdi-check';
       }
-      return;
+      return vm.getSkillIcon(skill);
     };
 
     vm.skillSelected = function(item) {
@@ -177,6 +177,7 @@
 
     vm.selectedSkillChange = function(item) {
       if (item) {
+        vm.filterSkills = [];
         if (item.DoDisplayData) {
           vm.skillSelected(item);
           pollActiveTabDataByDayOffset(vm.activeTab, vm.chosenOffset.value);
@@ -201,6 +202,7 @@
 
     vm.selectedSkillAreaChange = function(item) {
       if (item) {
+        vm.filterSkills = [];
         vm.skillAreaSelected(item);
         pollData(vm.activeTab);
 
@@ -427,9 +429,11 @@
     });
 
     vm.getLocalDate = function(offset) {
-      return moment()
+      var offset = moment()
         .add(offset, 'days')
         .format('dddd, LL');
+
+      return offset.charAt(0).toUpperCase() + offset.substr(1).toLowerCase();
     };
 
     vm.getUTCDate = function(offset) {

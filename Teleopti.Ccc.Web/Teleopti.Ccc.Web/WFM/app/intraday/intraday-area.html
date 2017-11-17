@@ -96,6 +96,13 @@
 				<div class="sub-header" ng-if="vm.toggles.showOtherDay">
 					<h2 id="viewingDate">
 							{{vm.getLocalDate(vm.chosenOffset.value)}}
+							<span ng-if="vm.selectedSkillArea.Name">
+								,
+								<b>{{ vm.selectedSkillArea.Name }}</b>:
+								<span ng-if="vm.filterSkills.length > 0">{{vm.filterSkills.length}} {{'IntraDayChipNumberOf' | translate}} </span>
+								{{vm.selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}} 
+								<span ng-if="vm.skillAreaMessage">({{vm.skillAreaMessage}})</span>
+							</span>
 					</h2>
 					<div ng-hide="vm.showIncluded" class="animate-show con-row">
 						<div class="con-flex">
