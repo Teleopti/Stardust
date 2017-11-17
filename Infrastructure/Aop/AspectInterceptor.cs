@@ -14,12 +14,10 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 	public class AspectInterceptor : IInterceptor
 	{
 		private readonly Lazy<IEnumerable<IAspect>> _aspects;
-		private readonly IComponentContext _resolver;
 
-		public AspectInterceptor(Lazy<IEnumerable<IAspect>> aspects, IComponentContext resolver)
+		public AspectInterceptor(Lazy<IEnumerable<IAspect>> aspects)
 		{
 			_aspects = aspects;
-			_resolver = resolver;
 		}
 
 		[DebuggerStepThrough]
@@ -36,13 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			var aspects = attributes
 					.OrderBy(x => x.Order)
 					.Select(a => a.AspectType)
-					.Select(t =>
-					{
-						var aspect = _aspects.Value.SingleOrDefault(t.IsInstanceOfType);
-						if (aspect != null)
-							return aspect;
-						return (IAspect) _resolver.Resolve(t);
-					})
+					.Select(t => _aspects.Value.Single(t.IsInstanceOfType))
 					.ToArray()
 				;
 			if (!aspects.Any())
