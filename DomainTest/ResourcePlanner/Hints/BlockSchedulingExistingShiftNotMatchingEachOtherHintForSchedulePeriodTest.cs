@@ -109,7 +109,46 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingExistingShiftNotMatchingEachOtherHint));
-			result.First().ValidationErrors.First().Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchShiftCategory, shiftCategory.Description.ShortName, startDate.ToShortDateString(), anotherShiftCategory.Description.ShortName, startDate.AddDays(1).ToShortDateString()));
+			result.First().ValidationErrors.First().ErrorMessage.Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchShiftCategory, shiftCategory.Description.ShortName, startDate.ToShortDateString(), anotherShiftCategory.Description.ShortName, startDate.AddDays(1).ToShortDateString()));
+		}
+
+		[Test]
+		public void ShouldReturnBothValidationsTypes()
+		{
+			var startDate = new DateOnly(2017, 01, 23);
+			var endDate = new DateOnly(2017, 01, 29);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+			var scenario = new Scenario { DefaultScenario = true };
+			ScenarioRepository.Has(scenario);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var anotherShiftCategory = new ShiftCategory("_2").WithId();
+			var activity = ActivityRepository.Has("_");
+			var contract = new Contract("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet);
+
+			var currentSchedule = new ScheduleDictionaryForTest(scenario, planningPeriod.ToDateTimePeriod(TimeZoneInfo.Utc));
+
+			var personAssignment = new PersonAssignment(agent, scenario, startDate).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
+			var personAssignment2 = new PersonAssignment(agent, scenario, startDate.AddDays(1)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(anotherShiftCategory);
+			currentSchedule.AddPersonAssignment(personAssignment);
+			currentSchedule.AddPersonAssignment(personAssignment2);
+
+			var result =
+				Target.Execute(new HintInput(null, new[] { agent }, planningPeriod,
+					new FixedBlockPreferenceProvider(new ExtraPreferences
+					{
+						UseTeamBlockOption = true,
+						BlockTypeValue = BlockFinderType.SchedulePeriod,
+						UseBlockSameShiftCategory = true
+					}), false)
+				{
+					CurrentSchedule = currentSchedule
+				}).InvalidResources;
+
+			result.First().ValidationErrors.Count.Should().Be.EqualTo(2);
+			result.First().ValidationTypes.Count(x => x.Name == nameof(BlockSchedulingExistingShiftNotMatchingEachOtherHint)).Should().Be.EqualTo(1);
+			result.First().ValidationTypes.Count(x => x.Name == nameof(PersonSkillHint)).Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -148,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingExistingShiftNotMatchingEachOtherHint));
-			result.First().ValidationErrors.First().Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchStartTime, personAssignment.Period.StartDateTime.TimeOfDay, startDate.ToShortDateString(), personAssignment2.Period.StartDateTime.TimeOfDay, startDate.AddDays(1).ToShortDateString()));
+			result.First().ValidationErrors.First().ErrorMessage.Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchStartTime, personAssignment.Period.StartDateTime.TimeOfDay, startDate.ToShortDateString(), personAssignment2.Period.StartDateTime.TimeOfDay, startDate.AddDays(1).ToShortDateString()));
 		}
 
 		[Test]
@@ -188,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingExistingShiftNotMatchingEachOtherHint));
-			result.First().ValidationErrors.First().Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchShift, startDate.ToShortDateString(), startDate.AddDays(1).ToShortDateString()));
+			result.First().ValidationErrors.First().ErrorMessage.Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchShift, startDate.ToShortDateString(), startDate.AddDays(1).ToShortDateString()));
 		}
 	}
 }

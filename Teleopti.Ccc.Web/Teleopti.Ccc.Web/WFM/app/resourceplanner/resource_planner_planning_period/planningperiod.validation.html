@@ -35,15 +35,19 @@
                             <table class="wfm-table">
                                 <thead>
                                     <tr>
-                                        <th>{{'Issue' | translate}}</th>
-                                        <th>{{'Description' | translate}}</th>
+										<th>{{'Resource' | translate}}</th>
+										<th>{{'Area' | translate}}</th>
+										<th>{{'Description' | translate}}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="msg in vm.valData.preValidation | filter: vm.validationFilter">
-                                        <td>{{msg.ResourceType | translate }}: {{msg.ResourceName}}</td>
+                                        <td>{{msg.ResourceName}}</td>
+										<td>
+											<div ng-repeat="item in msg.ValidationErrors">{{item.ResourceType | translate}}</div>
+										</td>
                                         <td>
-                                            <div ng-repeat="item in msg.ValidationErrors">{{item}}</div>
+											<div ng-repeat="item in msg.ValidationErrors">{{item.ErrorMessage}}</div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -78,15 +82,19 @@
                             <table class="wfm-table">
                                 <thead>
                                     <tr>
-                                        <th>{{'Issue' | translate}}</th>
+                                        <th>{{'Resource' | translate}}</th>
+										<th>{{'Area' | translate}}</th>
                                         <th>{{'Description' | translate}}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="msg in vm.valData.scheduleIssues | filter: vm.scheduleIssuesFilter">
-                                        <td>{{msg.ResourceType | translate}}: {{msg.ResourceName}}</td>
+                                        <td>{{msg.ResourceName}}</td>
                                         <td>
-                                            <div ng-repeat="item in msg.ValidationErrors">{{item}}</div>
+											<div ng-repeat="item in msg.ValidationErrors">{{item.ResourceType | translate}}</div>
+                                        </td>
+                                        <td>
+                                            <div ng-repeat="item in msg.ValidationErrors">{{item.ErrorMessage}}</div>
                                         </td>
                                     </tr>
                                 </tbody>

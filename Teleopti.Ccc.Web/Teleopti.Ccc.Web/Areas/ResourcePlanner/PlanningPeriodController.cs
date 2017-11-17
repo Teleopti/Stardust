@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					{
 						foreach (var error in schedulingBusinessRulesValidationResult.ValidationErrors)
 						{
-							if (!optimizationResultBusinessRulesValidationResult.ValidationErrors.Contains(error))
+							if (optimizationResultBusinessRulesValidationResult.ValidationErrors.Any(x => x.ErrorMessage == error.ErrorMessage) == false) 
 							{
 								optimizationResultBusinessRulesValidationResult.ValidationErrors.Add(error);
 							}

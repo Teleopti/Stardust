@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -241,7 +242,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				PersonName = person.Name.ToString(),
 				PersonId = person.Id.Value,
 				ValidationError = message
-			}, GetType());
+			}, GetType(), ValidationResourceType.BlockScheduling);
 		}
 	}
 }

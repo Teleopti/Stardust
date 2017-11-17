@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.ResourceId.Should().Be.EqualTo(agent.Id.Value);
 			result.ResourceName.Should().Be.EqualTo(agent.Name.ToString(NameOrderOption.FirstNameLastName));
-			result.ResourceType.Should().Be.EqualTo(ValidationResourceType.Agent);
-			result.ValidationErrors.Any(x => string.Format(ScheduleStartOnWrongDateHint.ErrorOutput, date).Equals(x)).Should().Be.True();
+			result.ValidationErrors.First().ResourceType.Should().Be.EqualTo(ValidationResourceType.Basic);
+			result.ValidationErrors.Any(x => string.Format(ScheduleStartOnWrongDateHint.ErrorOutput, date).Equals(x.ErrorMessage)).Should().Be.True();
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

@@ -37,8 +37,10 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var validationError = result.SingleOrDefault();
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationErrors.Should().Contain(Resources.MissingSchedulePeriodForPeriod);
+			validationError.ValidationErrors.Count(x => x.ErrorMessage.Equals(Resources.MissingSchedulePeriodForPeriod)).Should().Be(1);
 		}
+	
+
 
 		[Test]
 		public void SchedulePeriodExactlyMatchesShouldNotReturnValidationError()
@@ -89,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var validationError = result.SingleOrDefault();
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationErrors.Should().Contain(Resources.NoMatchingSchedulePeriod);
+			validationError.ValidationErrors.Count(x=>x.ErrorMessage.Equals(Resources.NoMatchingSchedulePeriod)).Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -109,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var validationError = result.SingleOrDefault();
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationErrors.Should().Contain(Resources.NoMatchingSchedulePeriod);
+			validationError.ValidationErrors.Count(x=>x.ErrorMessage.Equals(Resources.NoMatchingSchedulePeriod)).Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -165,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var validationError = result.SingleOrDefault();
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
-			validationError.ValidationErrors.Should().Contain(Resources.NoMatchingSchedulePeriod);
+			validationError.ValidationErrors.Count(x=>x.ErrorMessage.Equals(Resources.NoMatchingSchedulePeriod)).Should().Be.EqualTo(1);
 		}
 		
 		[Test]

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreferenceHint));
-			result.First().ValidationErrors.First().Should().Be.EqualTo("Block scheduling may not work when using preference.");
+			result.First().ValidationErrors.First().ErrorMessage.Should().Be.EqualTo("Block scheduling may not work when using preference.");
 		}
 
 		[Test]

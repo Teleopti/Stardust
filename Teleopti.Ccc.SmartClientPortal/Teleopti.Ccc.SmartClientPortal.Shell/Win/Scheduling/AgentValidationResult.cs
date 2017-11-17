@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					var dataRow = dataTable.NewRow();
 					dataRow[0] = validationResultInvalidResource.ResourceName;
-					dataRow[1] = validationError;
+					dataRow[1] = validationError.ErrorMessage;
 					dataTable.Rows.Add(dataRow);
 				}			
 			}

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				PersonName = person.Name.ToString(),
 				PersonId = person.Id.Value,
 				ValidationError = message
-			}, GetType());
+			}, GetType(), ValidationResourceType.BlockScheduling);
 		}
 	}
 }

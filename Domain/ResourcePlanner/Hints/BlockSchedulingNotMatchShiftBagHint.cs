@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								PersonName = person.Name.ToString(),
 								PersonId = person.Id.Value,
 								ValidationError = string.Format(Resources.ShiftCategoryNotMatchingShiftBag, shiftCategory.Description.ShortName, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftBag.Description.Name)
-							}, GetType());
+							}, GetType(), ValidationResourceType.BlockScheduling);
 							break;
 						}
 					}
@@ -69,11 +69,11 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								PersonName = person.Name.ToString(),
 								PersonId = person.Id.Value,
 								ValidationError = string.Format(Resources.StartTimeNotMatchingShiftBag, timeOfDay, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftBag.Description.Name)
-							}, GetType());
+							}, GetType(), ValidationResourceType.BlockScheduling);
 							break;
 						}
 					}
-					
+
 					if (blockOption.UseBlockSameShift)
 					{
 						var dateOnlyAsDateTimePeriod = scheduleDay.DateOnlyAsPeriod;
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 									PersonName = person.Name.ToString(),
 									PersonId = person.Id.Value,
 									ValidationError = string.Format(Resources.ShiftNotMatchingShiftBag, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftBag.Description.Name)
-								}, GetType());
+								}, GetType(), ValidationResourceType.BlockScheduling);
 								break;
 							}
 						}
