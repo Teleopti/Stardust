@@ -85,16 +85,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			if (filteredOvertimeRequestOpenPeriodList.Count == 0)
 			{
-				var denyDays = getDenyDays(overtimeRequestOpenPeriodList);
-				foreach (var overtimeRequestOpenPeriod in overtimeRequestOpenPeriodList)
-				{
-					if (overtimeRequestOpenPeriod.AutoGrantType != OvertimeRequestAutoGrantType.Deny)
-					{
-						denyReason = string.Format(_languageCulture,
-							Resources.ResourceManager.GetString("OvertimeRequestDenyReasonNoPeriod", _languageCulture),
-							getSuggestedPeriodDateString(overtimeRequestOpenPeriod.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse()), denyDays));
-					}
-				}
+				denyReason = getDenyReasonWithSuggestedPeriod(overtimeRequestOpenPeriodList);
 			}
 			else
 			{
@@ -115,6 +106,35 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			};
 		}
 
+		private string getDenyReasonWithSuggestedPeriod(IList<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriodList)
+		{
+			string denyReason;
+			var denyDays = getDenyDays(overtimeRequestOpenPeriodList);
+			var dayCollection = new List<DateOnly>();
+
+			foreach (var overtimeRequestOpenPeriod in overtimeRequestOpenPeriodList)
+			{
+				if (overtimeRequestOpenPeriod.AutoGrantType != OvertimeRequestAutoGrantType.Deny)
+				{
+					dayCollection.AddRange(overtimeRequestOpenPeriod.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse())
+						.DayCollection().Where(a => a.CompareTo(ServiceLocatorForEntity.Now.ServerDate_DontUse()) >= 0));
+				}
+			}
+
+			if (dayCollection.Count > 0)
+			{
+				denyReason = string.Format(_languageCulture,
+					Resources.ResourceManager.GetString("OvertimeRequestDenyReasonNoPeriod", _languageCulture),
+					string.Join(",", getSuggestedPeriodDateString(dayCollection.Distinct().OrderBy(x => x.Date).ToList(), denyDays)));
+			}
+			else
+			{
+				denyReason = Resources.ResourceManager.GetString("OvertimeRequestDenyReasonClosedPeriod", _languageCulture);
+			}
+
+			return denyReason;
+		}
+
 		private IList<DateOnly> getDenyDays(IList<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriodList)
 		{
 			var denyDayCollection = new List<DateOnly>();
@@ -125,9 +145,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return denyDayCollection;
 		}
 
-		private string getSuggestedPeriodDateString(DateOnlyPeriod suggestedPeriod, IList<DateOnly> denyDays)
+		private string getSuggestedPeriodDateString(List<DateOnly> dateCollection, IList<DateOnly> denyDays)
 		{
-			var dayCollection = suggestedPeriod.DayCollection();
+			var dayCollection = dateCollection.Where(a => a.CompareTo(ServiceLocatorForEntity.Now.ServerDate_DontUse()) >= 0).ToList();
 			foreach (var denyDay in denyDays)
 			{
 				dayCollection.Remove(denyDay);

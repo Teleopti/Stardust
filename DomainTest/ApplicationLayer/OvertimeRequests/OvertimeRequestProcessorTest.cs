@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public ICurrentScenario Scenario;
 		public ISchedulingResultStateHolder SchedulingResultStateHolder;
 
-
 		private readonly TimePeriod _defaultOpenPeriod = new TimePeriod(8, 00, 21, 00);
 		private readonly DateOnly _periodStartDate = new DateOnly(2016, 1, 1);
 		private TimeSpan[] _intervals;
@@ -705,6 +704,105 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/12/2017,7/14/2017 - 7/16/2017.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		public void ShouldSuggestMultiplePeriods()
+		{
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(2)))
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(4), new DateOnly(Now.UtcDateTime().AddDays(6)))
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 15, 21, 0, 0, DateTimeKind.Utc), 1);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/14/2017,7/16/2017 - 7/18/2017.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		public void ShouldSuggestMultiplePeriodsNoEarlierThanToday()
+		{
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-2), new DateOnly(Now.UtcDateTime().AddDays(2)))
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(4), new DateOnly(Now.UtcDateTime().AddDays(6)))
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 15, 21, 0, 0, DateTimeKind.Utc), 1);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/14/2017,7/16/2017 - 7/18/2017.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		public void ShouldNotSuggestPeriodsWhenExpired()
+		{
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-4), new DateOnly(Now.UtcDateTime().AddDays(-1)))
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 15, 21, 0, 0, DateTimeKind.Utc), 1);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be("Your overtime request cannot be granted. Some dates are not open for requests at this time.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		public void ShouldSuggestMergedPeriods()
+		{
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(5)))
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(2)))
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 18, 21, 0, 0, DateTimeKind.Utc), 1);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/17/2017.");
 		}
 
 		[Test]
