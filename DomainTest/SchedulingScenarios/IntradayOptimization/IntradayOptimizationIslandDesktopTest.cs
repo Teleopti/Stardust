@@ -608,7 +608,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var date = new DateOnly(2017, 8, 21);
 			var activity = new Activity().WithId();
 			var skill = new Skill().DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var scenario = new Scenario();
+			var scenario = new Scenario {DefaultScenario = true};
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet8 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(9, 0, 9, 0, 15), shiftCategory));
 			var ruleSet10 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(10, 0, 10, 0, 15), shiftCategory));
