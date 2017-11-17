@@ -22,8 +22,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
 	[RequestPerformanceTuningTest]
-	[Toggle(Toggles.Wfm_Requests_OvertimeRequestHandling_45177),
-		Toggle(Toggles.Wfm_Requests_Refactoring_45470)]
+	[Toggle(Toggles.Wfm_Requests_OvertimeRequestHandling_45177)]
+	[Toggle(Toggles.Wfm_Requests_Refactoring_45470)]
 	public class OvertimeRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public IPersonRequestRepository PersonRequestRepository;
 		public IStardustJobFeedback StardustJobFeedback;
 		public IOvertimeRequestProcessor OvertimeRequestProcessor;
+		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
 
 		public ISiteRepository SiteRepository;
 
@@ -65,11 +66,13 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
 			requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>
-							  {
-								  SiteRepository.LoadAllWithFetchingOpenHours();
-								  UpdateStaffingLevel.Update(period);
-								  requests = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(new DateTime(2016, 01, 16, 16, 0, 0).Utc(), new DateTime(2016, 01, 16, 20, 0, 0).Utc()));
-							  });
+			{
+				MultiplicatorDefinitionSetRepository.LoadAll();
+				SiteRepository.LoadAllWithFetchingOpenHours();
+				UpdateStaffingLevel.Update(period);
+				requests = PersonRequestRepository.FindPersonRequestWithinPeriod(
+					new DateTimePeriod(new DateTime(2016, 01, 16, 16, 0, 0).Utc(), new DateTime(2016, 01, 16, 20, 0, 0).Utc()));
+			});
 		}
 
 		[Test]
@@ -86,6 +89,33 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				WithUnitOfWork.Do(() =>
 				{
 					OvertimeRequestProcessor.Process(request, true);
+				});
+			}
+			WithUnitOfWork.Do(() =>
+			{
+				var reqs = PersonRequestRepository.FindPersonRequestWithinPeriod(
+					new DateTimePeriod(new DateTime(2016, 01, 16, 16, 0, 0).Utc(), new DateTime(2016, 01, 16, 20, 0, 0).Utc()));
+				reqs.Count(x => x.IsApproved).Should().Be
+					.GreaterThan(100); //just to have something to catch if big changes are done, locally I get 172 approved
+			});
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
+		public void Run200RequestsWithRequestPeriodSetting()
+		{
+			Now.Is("2016-01-16 07:01");
+
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			Console.WriteLine($"Will process {requests.Count} requests");
+
+			foreach (var request in requests)
+			{
+				WithUnitOfWork.Do(() =>
+				{
+					OvertimeRequestProcessor.Process(request);
 				});
 			}
 			WithUnitOfWork.Do(() =>

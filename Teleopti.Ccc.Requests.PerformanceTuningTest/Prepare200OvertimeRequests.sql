@@ -15,6 +15,14 @@ truncate table [PerfA].[ReadModel].[SkillCombination]
 truncate table [PerfA].[ReadModel].[SkillCombinationResourceDelta]
 truncate table [PerfA].[dbo].[JobStartTime]
 
+-- delete existing OvertimeRequestOpenPeriod
+DELETE FROM OvertimeRequestOpenPeriod WHERE Parent = 'E97BC114-8939-4A70-AE37-A338010FFF19'
+
+INSERT INTO [dbo].[OvertimeRequestOpenPeriod]
+([Id],[PeriodType],[OrderIndex],[Parent],[DaysMinimum],[DaysMaximum],[Minimum],[Maximum],[AutoGrantType],[EnableWorkRuleValidation],[WorkRuleValidationHandleType])
+VALUES
+(newid(),'DatePeriod',0,'E97BC114-8939-4A70-AE37-A338010FFF19',NULL,NULL,'2016-01-01 00:00:00.000','2017-01-01 00:00:00.000',1,1,0)
+
 -- load 200 persons on bu '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B'
 -- should have personPeriod and schedule during period
 select distinct top 200 p.* into #tempPerson 

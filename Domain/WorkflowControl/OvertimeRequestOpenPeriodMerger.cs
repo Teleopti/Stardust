@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			foreach (var overtimeRequestOpenPeriod in overtimeRequestOpenPeriods)
 			{
-				if (prioritizedAutoGrantTypes.IndexOf(overtimeRequestOpenPeriod.AutoGrantType) <
+				if (prioritizedAutoGrantTypes.IndexOf(overtimeRequestOpenPeriod.AutoGrantType) <=
 					prioritizedAutoGrantTypes.IndexOf(mergedPeriod.AutoGrantType))
 				{
 					mergedPeriod.AutoGrantType = overtimeRequestOpenPeriod.AutoGrantType;
