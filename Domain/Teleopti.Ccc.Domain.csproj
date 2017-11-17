@@ -3076,7 +3076,6 @@
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplyer.cs" />
-    <Compile Include="Scheduling\SkillResolutionProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockClearer.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfo.cs" />

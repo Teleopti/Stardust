@@ -1351,7 +1351,6 @@
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplierTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\SkillIntervalDataTest.cs" />
-    <Compile Include="Scheduling\SkillResolutionProviderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoFactoryTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoTest.cs" />
