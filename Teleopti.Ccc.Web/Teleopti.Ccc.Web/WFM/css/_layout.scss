@@ -145,6 +145,10 @@ wfm-card > md-card {
 	background-color: $white !important;
 }
 
+.modal-box .dialog, .modal-box .dialog-mini {
+    top: 5%;
+}
+
 //new tree-picker
 
 tree-data-one, tree-data-two {
@@ -200,7 +204,7 @@ tree-data-one, tree-data-two {
 }
 
 
-//new date-range-picker style 
+//new date-range-picker style
 wfm-calendar-picker {
 	display: inline-block;
 	background-color: $white;
@@ -245,7 +249,7 @@ wfm-calendar-picker-body > .date-info-wrapper {
 			min-height: 80px;
 		}
 	}
-	
+
 	.clear-select-date-grow-out{
 		display: table;
 		position: absolute;
@@ -269,7 +273,7 @@ wfm-calendar-picker-body > .date-info-wrapper {
 			color: $text-color-standard;
 		}
 	}
-	
+
 	.select-date-info-wrapper:hover .clear-select-date-grow-out{
 		transform: translateX(0);
 		visibility: visible;
@@ -314,7 +318,7 @@ wfm-calendar-picker-body > .date-info-calendar-wrapper{
 
 		.uib-monthpicker, .uib-yearpicker {
 			table {
-				margin: 0 auto;	
+				margin: 0 auto;
 			}
 
 			tbody button.btn-default:hover, button.btn-default.active{
@@ -324,7 +328,5 @@ wfm-calendar-picker-body > .date-info-calendar-wrapper{
 				}
 			}
 		}
-	}	
+	}
 }
-
-
