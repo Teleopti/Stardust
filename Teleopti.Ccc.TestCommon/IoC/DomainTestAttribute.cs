@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Database aspects
 			system.UseTestDouble<FakeDistributedLockAcquirer>().For<IDistributedLockAcquirer>();
-			system.UseTestDouble<FakeAllBusinessUnitsUnitOfWorkAspect>().For<IAllBusinessUnitsUnitOfWorkAspect>();
 			system.UseTestDouble<FakeCurrentAnalyticsUnitOfWorkFactory>().For<ICurrentAnalyticsUnitOfWorkFactory>();
 			system.UseTestDouble<FakeMessageBrokerUnitOfWorkAspect>().For<IMessageBrokerUnitOfWorkAspect>();
 			//
