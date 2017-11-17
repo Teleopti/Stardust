@@ -161,8 +161,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 					}
 					else
 					{
-						// Actually there was not any job running.
-						throw;
+						log.InfoFormat("Distributed lock could not created. Job '{0}' could not be started.");
 					}
 				}
 			}

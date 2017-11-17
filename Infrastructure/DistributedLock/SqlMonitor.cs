@@ -2,11 +2,14 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain;
+using log4net;
 
 namespace Teleopti.Ccc.Infrastructure.DistributedLock
 {
 	public class SqlMonitor
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(SqlMonitor));
+
 		public bool TryEnter(string resource, TimeSpan timeout, SqlConnection connection)
 		{
 			var getCommand = connection.CreateCommand();
@@ -21,6 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			getCommand.ExecuteNonQuery();
 
 			var lockResult = (int)getCommand.Parameters["@Result"].Value;
+			logger.DebugFormat("sp_getapplock returned result = {0}", lockResult);
 
 			return lockResult >= 0;
 		}
