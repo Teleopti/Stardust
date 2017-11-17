@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		private IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private IGlobalSettingDataRepository _globalSettingsDataRepository;
 		private IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
+		private IDisposable dispose;
 
 		[SetUp]
 		public void Setup()
@@ -41,6 +43,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			_globalSettingsDataRepository = new FakeGlobalSettingDataRepository();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
+			dispose =CurrentAuthorization.ThreadlyUse(new FullPermission());
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			dispose.Dispose();
 		}
 
 		[Test]

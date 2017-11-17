@@ -26,13 +26,15 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void ShouldHavePermissionToEdit()
         {
-            target.HasEditRequestPermission(personRequest).Should().Be.True();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				target.HasEditRequestPermission(personRequest).Should().Be.True();
         }
 
         [Test]
         public void ShouldHavePermissionToView()
         {
-            target.HasViewRequestPermission(personRequest).Should().Be.True();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				target.HasViewRequestPermission(personRequest).Should().Be.True();
         }
 
         [Test]

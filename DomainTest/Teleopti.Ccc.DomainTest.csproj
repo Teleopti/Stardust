@@ -1627,7 +1627,6 @@
     <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
     <Compile Include="TestWithStaticDependenciesAvoidUseAttribute.cs" />
-    <Compile Include="OneTimeSetUp.cs" />
     <Compile Include="SiteOpenHours\SiteOpenHoursPersisterTest.cs" />
     <Compile Include="Specification\AllTest.cs" />
     <Compile Include="Specification\SpecificationTest.cs" />
