@@ -372,22 +372,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(7, skill.TemplateWeekCollection.Count);
         }
 
-		[Test]
-		public void ShouldReturnTheLowestResolution()
-		{
-			ISkill skill = CreateAggregateWithCorrectBusinessUnit();
-
-			PersistAndRemoveFromUnitOfWork(skill);
-			var repository = new SkillRepository(UnitOfWork);
-
-			repository.MinimumResolution().Should().Be.EqualTo(15);
-
-			skill = CreateAggregateWithCorrectBusinessUnit();
-			skill.DefaultResolution = 5;
-			PersistAndRemoveFromUnitOfWork(skill);
-
-			repository.MinimumResolution().Should().Be.EqualTo(5);
-		}
 
         [Test]
         public void VerifyIntervalsAreRemovedWhenSplittingAndMerging()

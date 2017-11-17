@@ -322,14 +322,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetMaxResults(maxHits)
 				.List<ISkill>();
 		}
-
-		public int MinimumResolution()
-	    {
-		    return Session.CreateCriteria<Skill>()
-				.SetProjection(Projections.Min("DefaultResolution"))
-				.UniqueResult<int>();
-	    }
-
+		
 			public IEnumerable<ISkill> FindSkillsWithAtLeastOneQueueSource()
 			{
 				return Session.GetNamedQuery("findSkillsWithAtLeastOneQueueSource")
