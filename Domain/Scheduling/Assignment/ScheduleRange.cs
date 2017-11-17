@@ -40,10 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				});
 		}
 
-		public ScheduleRange Snapshot
-		{
-			get { return _snapshot ?? (_snapshot = new ScheduleRange(Owner, this, _permissionChecker)); }
-		}
+		public ScheduleRange Snapshot => _snapshot ?? (_snapshot = new ScheduleRange(Owner, this, _permissionChecker));
 
 		public bool CanSeeUnpublishedSchedules { get; set; } = false;
 
@@ -316,8 +313,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				if (databaseVersioned != null)
 				{
 					var myVersioned = myVersion as IVersioned;
-					if (myVersioned != null)
-						myVersioned.SetVersion(databaseVersioned.Version.Value);
+					myVersioned?.SetVersion(databaseVersioned.Version.Value);
 				}
 			}
 		}
@@ -415,7 +411,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return retList;
 		}
 	}
-	public class PersistableScheduleDataForAuthorization : IPersistableScheduleDataAuthorizer
+	public class PersistableScheduleDataForAuthorization
 	{
 		private readonly IPersistableScheduleData _persistableScheduleData;
 
@@ -424,23 +420,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_persistableScheduleData = persistableScheduleData;
 		}
 
-		public string FunctionPath { get { return _persistableScheduleData.FunctionPath; } }
+		public string FunctionPath => _persistableScheduleData.FunctionPath;
 
-		public IPerson Person { get { return _persistableScheduleData.Person; } }
+		public IPerson Person => _persistableScheduleData.Person;
 
-		public DateOnly DateOnly
-		{
-			get
-			{
-				return
-					new DateOnly(
-						_persistableScheduleData.Period.StartDateTimeLocal(_persistableScheduleData.Person.PermissionInformation.DefaultTimeZone()));
-			}
-		}
+		public DateOnly DateOnly => new DateOnly(
+			_persistableScheduleData.Period.StartDateTimeLocal(_persistableScheduleData.Person.PermissionInformation.DefaultTimeZone()));
 	}
-
-	public interface IPersistableScheduleDataAuthorizer
-	{
-	}
-
 }

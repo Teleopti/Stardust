@@ -558,9 +558,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			}
 
 			newMessages.AddRange(
-				from permission in permissions.Keys
-				where !_permissionProvider.HasPersonPermission(permission, date, agent)
-				select permissions[permission]);
+				from permission in permissions
+				where !_permissionProvider.HasPersonPermission(permission.Key, date, agent)
+				select permission.Value);
 
 			messages.AddRange(newMessages);
 			return !newMessages.Any();
