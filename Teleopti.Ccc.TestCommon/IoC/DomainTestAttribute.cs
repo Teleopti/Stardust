@@ -28,6 +28,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -83,13 +84,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<EmptyStardustJobFeedback>().For<IStardustJobFeedback>();
 			//
 
-			// Database aspects
+			// Database stuff
 			system.UseTestDouble<FakeDistributedLockAcquirer>().For<IDistributedLockAcquirer>();
 			system.UseTestDouble<FakeCurrentAnalyticsUnitOfWorkFactory>().For<ICurrentAnalyticsUnitOfWorkFactory>();
-			system.UseTestDouble<FakeMessageBrokerUnitOfWorkAspect>().For<IMessageBrokerUnitOfWorkAspect>();
 			//
 
 			// Messaging ztuff 
+			system.UseTestDouble<FakeMessageBrokerUnitOfWorkScope>().For<IMessageBrokerUnitOfWorkScope>();
 			system.UseTestDouble<FakeSignalR>().For<ISignalR>();
 			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 			//
