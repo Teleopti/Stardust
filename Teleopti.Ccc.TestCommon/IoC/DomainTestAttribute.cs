@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Database stuff
 			system.UseTestDouble<FakeDistributedLockAcquirer>().For<IDistributedLockAcquirer>();
-			system.UseTestDouble<FakeCurrentAnalyticsUnitOfWorkFactory>().For<ICurrentAnalyticsUnitOfWorkFactory>();
 			//
 
 			// Messaging ztuff 
