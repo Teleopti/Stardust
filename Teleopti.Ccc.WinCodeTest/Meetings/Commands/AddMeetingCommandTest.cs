@@ -32,14 +32,14 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
         private IPersonRepository _personRepository;
 	    private IIntraIntervalFinderService _intraIntervalFinderService;
 	    private ISkillPriorityProvider _skillPriorityProvider;
-		private ISkillDayLoadHelper _skillDayLoadHelper;
+		private IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
 		[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _view = _mocks.StrictMock<IMeetingOverviewView>();
-			_skillDayLoadHelper = _mocks.StrictMock<ISkillDayLoadHelper>();
+			_staffingCalculatorServiceFacade = new StaffingCalculatorServiceFacade();
 			_settingDataRepository = _mocks.StrictMock<ISettingDataRepository>();
             _activityRepository = _mocks.StrictMock<IActivityRepository>();
             _personRepository = _mocks.StrictMock<IPersonRepository>();
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 			_skillPriorityProvider = new SkillPriorityProvider();
 	        _intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
             _target = new AddMeetingCommand(_view, _settingDataRepository, _activityRepository, _personRepository,
-                _currentUnitOfWorkFactory, _model, _canModifyMeeting, _intraIntervalFinderService, _skillPriorityProvider, _skillDayLoadHelper);
+                _currentUnitOfWorkFactory, _model, _canModifyMeeting, _intraIntervalFinderService, _skillPriorityProvider, _staffingCalculatorServiceFacade);
         
         }
 

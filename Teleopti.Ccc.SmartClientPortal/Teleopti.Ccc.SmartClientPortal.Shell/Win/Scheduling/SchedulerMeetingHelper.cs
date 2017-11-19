@@ -7,7 +7,6 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -32,9 +31,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private readonly ISchedulerStateHolder _schedulerStateHolder;
 	    private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
-	    private readonly ISkillPriorityProvider _skillPriorityProvider;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
+		private readonly ISkillPriorityProvider _skillPriorityProvider;
 	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 	    private readonly MeetingParticipantPermittedChecker _meetingParticipantPermittedChecker = new MeetingParticipantPermittedChecker();
 	    private IList<ModifyMeetingEventArgs> _modifiedMeetingArgs;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			ISkillPriorityProvider skillPriorityProvider,
 			IScheduleStorageFactory scheduleStorageFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			ISkillDayLoadHelper skillDayLoadHelper)
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 
 			_initiatorIdentifier = initiatorIdentifier;
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_skillPriorityProvider = skillPriorityProvider;
 			_scheduleStorageFactory = scheduleStorageFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
-			_skillDayLoadHelper = skillDayLoadHelper;
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 		}
 
 		internal event EventHandler<ModifyMeetingEventArgs> ModificationOccured;
@@ -204,7 +203,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 			}
 
-			using (var meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider,_scheduleStorageFactory, _skillDayLoadHelper))
+			using (var meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider,_scheduleStorageFactory, _staffingCalculatorServiceFacade))
 			{
 				if (toggleManager.IsEnabled(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680))
 				{

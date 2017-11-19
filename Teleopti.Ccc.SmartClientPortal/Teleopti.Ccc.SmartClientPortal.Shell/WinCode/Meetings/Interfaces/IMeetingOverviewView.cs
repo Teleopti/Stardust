@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces
         TimeZoneInfo UserTimeZone { get; set; }
         bool ConfirmDeletion(IMeeting theMeeting);
         void ReloadMeetings();
-        void EditMeeting(IMeetingViewModel meetingViewModel, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider, ISkillDayLoadHelper skillDayLoadHelper);
+        void EditMeeting(IMeetingViewModel meetingViewModel, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
         bool EditEnabled { get; set; }
         bool DeleteEnabled { get; set; }
         bool CopyEnabled { get; set; }

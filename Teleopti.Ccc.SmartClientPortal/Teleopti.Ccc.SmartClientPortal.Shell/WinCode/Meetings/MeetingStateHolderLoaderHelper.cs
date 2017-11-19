@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         private HashSet<ISkill> _filteredSkills = new HashSet<ISkill>();
         private DateTimePeriod _lastPeriod;
         private readonly IUnitOfWorkFactory _uowFactory;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private readonly BackgroundWorker _reloadBackgroundWorker = new BackgroundWorker();
         private bool _disposed;
 
@@ -59,14 +59,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                                                 ISchedulerStateHolder schedulerStateHolder,
                                                 ISchedulerStateLoader schedulerStateLoader,
                                                 IUnitOfWorkFactory uowFactory,
-												ISkillDayLoadHelper skillDayLoadHelper)
+												IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
         {
             _peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
 	        _schedulerStateHolder = schedulerStateHolder;
 			_schedulingResultStateHolder = _schedulerStateHolder.SchedulingResultState;
             _schedulerStateLoader = schedulerStateLoader;
             _uowFactory = uowFactory;
-			_skillDayLoadHelper = skillDayLoadHelper;
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 			_reloadBackgroundWorker.WorkerSupportsCancellation = true;
             _reloadBackgroundWorker.DoWork += ReloadBackgroundWorkerDoWork;
             _reloadBackgroundWorker.RunWorkerCompleted += ReloadBackgroundWorkerRunWorkerCompleted;
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                                                                         new MeetingScheduleRangeToLoadCalculator(
                                                                             args.Period));
                 e.Result = args;
-                _schedulerStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, unitOfWork, _reloadBackgroundWorker, tempSkills, _skillDayLoadHelper);
+                _schedulerStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, unitOfWork, _reloadBackgroundWorker, tempSkills, _staffingCalculatorServiceFacade);
             }
         }
         

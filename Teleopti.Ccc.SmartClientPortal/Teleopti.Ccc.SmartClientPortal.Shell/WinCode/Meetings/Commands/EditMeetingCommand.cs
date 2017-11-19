@@ -1,5 +1,4 @@
 using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,11 +19,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
         private readonly ICanModifyMeeting _canModifyMeeting;
 	    private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 	    private readonly ISkillPriorityProvider _skillPriorityProvider;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private readonly ISettingDataRepository _settingDataRepository;
 
         public EditMeetingCommand(IMeetingOverviewView meetingOverviewView, ISettingDataRepository settingDataRepository,
-            IUnitOfWorkFactory unitOfWorkFactory, ICanModifyMeeting canModifyMeeting, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider, ISkillDayLoadHelper skillDayLoadHelper)
+            IUnitOfWorkFactory unitOfWorkFactory, ICanModifyMeeting canModifyMeeting, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
         {
             _meetingOverviewView = meetingOverviewView;
             _settingDataRepository = settingDataRepository;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
             _canModifyMeeting = canModifyMeeting;
 	        _intraIntervalFinderService = intraIntervalFinderService;
 	        _skillPriorityProvider = skillPriorityProvider;
-			_skillDayLoadHelper = skillDayLoadHelper;
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 		}
 
         public void Execute()
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
                 
                 meetingViewModel = new MeetingViewModel(theMeeting, commonNameDescription);
             }
-            _meetingOverviewView.EditMeeting(meetingViewModel, _intraIntervalFinderService, _skillPriorityProvider, _skillDayLoadHelper);
+            _meetingOverviewView.EditMeeting(meetingViewModel, _intraIntervalFinderService, _skillPriorityProvider, _staffingCalculatorServiceFacade);
         }
 
         public bool CanExecute()

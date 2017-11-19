@@ -22,7 +22,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 	{
 		void LoadOrganization();
 		void LoadSchedules(IScheduleDateTimePeriod scheduleDateTimePeriod);
-		void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills, ISkillDayLoadHelper skillDayLoadHelper);
+
+		void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow,
+			BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills,
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
 		void EnsureSkillsLoaded(DateOnlyPeriod period);
 	}
 
@@ -79,7 +82,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			}
 		}
 
-		public void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills, ISkillDayLoadHelper skillDayLoadHelper)
+		public void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow,
+			BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills,
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			_backgroundWorker = backgroundWorker;
 
@@ -91,9 +96,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			if (_backgroundWorker.CancellationPending)
 				return;
 
-			if (_schedulerState.Schedules == null || _schedulerState.RequestedPeriod.Period() != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
+			if (_schedulerState.Schedules == null || _schedulerState.RequestedPeriod.Period() !=
+				scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
 			{
-				((SchedulerStateHolder)_schedulerState).RequestedPeriod =
+				((SchedulerStateHolder) _schedulerState).RequestedPeriod =
 					new DateOnlyPeriodAsDateTimePeriod(
 						scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(
 							_schedulerState.TimeZoneInfo), _schedulerState.TimeZoneInfo);
@@ -104,7 +110,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			initializeSkills(uow);
 			if (_backgroundWorker.CancellationPending)
 				return;
-			initializeSkillDays(uow, skills, skillDayLoadHelper);
+			initializeSkillDays(uow, skills, staffingCalculatorServiceFacade);
 			if (_backgroundWorker.CancellationPending)
 				return;
 			initializeScheduleData();
@@ -205,11 +211,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			}
 		}
 
-		private void initializeSkillDays(IUnitOfWork uow, IEnumerable<ISkill> skills, ISkillDayLoadHelper skillDayLoadHelper)
+		private void initializeSkillDays(IUnitOfWork uow, IEnumerable<ISkill> skills, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			using (PerformanceOutput.ForOperation("Loading skill days (intraday data)"))
 			{
-				_schedulerState.SchedulingResultState.SkillDays = skillDayLoadHelper.LoadSchedulerSkillDays(
+				_schedulerState.SchedulingResultState.SkillDays = new SkillDayLoadHelper(
+					_repositoryFactory.CreateSkillDayRepository(uow),
+					_repositoryFactory.CreateMultisiteDayRepository(uow), staffingCalculatorServiceFacade).LoadSchedulerSkillDays(
 					_schedulerState.RequestedPeriod.DateOnlyPeriod,
 					skills,
 					_schedulerState.RequestedScenario);
