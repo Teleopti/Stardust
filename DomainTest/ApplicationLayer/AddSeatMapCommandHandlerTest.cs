@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[SetUp]
 		public void Setup()
 		{
-			_seatMapLocationRepository = new FakeWriteSideRepository<ISeatMapLocation>(new FakeStorage());
+			_seatMapLocationRepository = new FakeWriteSideRepository<ISeatMapLocation>(null);
 
 			var bu = new Domain.Common.BusinessUnit("bu").WithId();
 			_buRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();

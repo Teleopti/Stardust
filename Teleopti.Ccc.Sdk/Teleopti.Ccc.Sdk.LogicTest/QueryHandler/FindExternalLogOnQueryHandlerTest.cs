@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		public void Setup()
 		{
 			_externalLogOnRepository = new FakeExternalLogOnRepository();
-			_unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeStorage());
+			_unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null);
 			
 			_target = new FindExternalLogOnQueryHandler(_externalLogOnRepository, _unitOfWorkFactory, new ExternalLogOnAssembler());
 		}

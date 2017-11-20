@@ -17,11 +17,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>, IWriteSideRepository<IPerson>, IProxyForId<IPerson>
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakePersonRepository(FakeStorage storage)
+		public FakePersonRepository(IFakeStorage storage)
 		{
-			_storage = storage;
+			_storage = storage ?? new FakeStorageSimple();
 		}
 
 		public void Has(IPerson person)

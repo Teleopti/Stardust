@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		public void ShouldGetScheduleChangesSubscriptionSettings()
 		{
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
-			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeStorage());
+			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null);
 			var target = new GetScheduleChangesSubscriptionSettingsQueryHandler(globalSettingDataRepository, unitOfWorkFactory);
 
 			var settings = new ScheduleChangeSubscriptions();
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		public void ShouldIncludePublicKeyForSignatureValidation()
 		{
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
-			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeStorage());
+			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null);
 			var target = new GetScheduleChangesSubscriptionSettingsQueryHandler(globalSettingDataRepository, unitOfWorkFactory);
 
 			var settings = new ScheduleChangeSubscriptions();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		public void ShouldRequirePermissionsToGetTheSubscriptions()
 		{
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
-			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeStorage());
+			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null);
 			var target = new GetScheduleChangesSubscriptionSettingsQueryHandler(globalSettingDataRepository, unitOfWorkFactory);
 
 			var settings = new ScheduleChangeSubscriptions();

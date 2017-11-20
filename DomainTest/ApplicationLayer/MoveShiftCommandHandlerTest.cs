@@ -328,10 +328,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldReturnPersonAssignmentIsNotValidDotErrorIfPersonAssignmentNotExists()
 		{
 			var agent = new Person().WithId();
-			var storage = new FakeStorage();
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage);
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null);
 			var scenario = new ThisCurrentScenario(new Scenario("scenario"));
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { agent };
 			var target = new MoveShiftCommandHandlerNoDeltas(personRepository, personAssignmentRepository, scenario);
 
 			var cmd = new MoveShiftCommand
@@ -357,13 +356,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 
-			var storage = new FakeStorage();
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage)
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null)
 			{
 				personAss
 			};
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { agent };
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayer = personAssignment.ShiftLayers.Single();
 			shiftLayer.WithId();
@@ -399,13 +397,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 			personAss.AddOvertimeActivity(overtimeAct, new DateTimePeriod(createDateTimeUtc(11), createDateTimeUtc(12)), new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime));
 
-			var storage = new FakeStorage();
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage)
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null)
 			{
 				personAss
 			};
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { agent };
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayers = personAssignment.ShiftLayers.ToList();
 			shiftLayers.ForEach(l => l.WithId());
@@ -447,13 +444,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 			personAss.AddPersonalActivity(personalActivity, new DateTimePeriod(createDateTimeUtc(11), createDateTimeUtc(12)));
 
-			var storage = new FakeStorage();
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage)
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null)
 			{
 				personAss
 			};
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { agent };
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayers = personAssignment.ShiftLayers.ToList();
 			shiftLayers.ForEach(l => l.WithId());
@@ -492,13 +488,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 			personAss.AddPersonalActivity(personalActivity, new DateTimePeriod(createDateTimeUtc(11), createDateTimeUtc(12)));
 
-			var storage = new FakeStorage();
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage)
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null)
 			{
 				personAss
 			};
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { agent };
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayers = personAssignment.ShiftLayers.ToList();
 			shiftLayers.ForEach(l => l.WithId());
@@ -532,13 +527,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 			personAss.AddPersonalActivity(personalActivity, new DateTimePeriod(createDateTimeUtc(7), createDateTimeUtc(8)));
 
-			var storage = new FakeStorage();
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage)
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null)
 			{
 				personAss
 			};
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { agent };
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { agent };
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayers = personAssignment.ShiftLayers.ToList();
 			shiftLayers.ForEach(l => l.WithId());

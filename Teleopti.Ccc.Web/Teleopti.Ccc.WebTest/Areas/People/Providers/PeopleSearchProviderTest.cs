@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
 			personRepository = new FakePersonRepositoryLegacy();
 			optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
-			personAbsenceRepository = new FakePersonAbsenceRepository(new FakeStorage());
+			personAbsenceRepository = new FakePersonAbsenceRepository(null);
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			loggedOnUser = new FakeLoggedOnUser();
 			currentScenario = new FakeCurrentScenario_DoNotUse();

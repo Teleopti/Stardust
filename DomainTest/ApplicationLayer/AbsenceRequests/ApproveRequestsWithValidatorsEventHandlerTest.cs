@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 
 			_target = new ApproveRequestsWithValidatorsEventHandler(_personRequestRepository, _writeProtectedScheduleCommandValidator,
-				_queuedAbsenceRequestRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
+				_queuedAbsenceRequestRepository, new FakeCurrentUnitOfWorkFactory(null));
 		}
 
 		[Test]

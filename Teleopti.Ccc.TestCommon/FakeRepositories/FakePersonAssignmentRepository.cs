@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonAssignmentRepository : IPersonAssignmentRepository
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
 		public ICurrentSchedulingSource CurrentSchedulingSource { get; set; }
 
-		public FakePersonAssignmentRepository(FakeStorage storage)
+		public FakePersonAssignmentRepository(IFakeStorage storage)
 		{
-			_storage = storage;
+			_storage = storage ?? new FakeStorageSimple();
 		}
 		
 		public void Has(IPersonAssignment personAssignment)

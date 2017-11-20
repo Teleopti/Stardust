@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonAbsenceRepository : IPersonAbsenceRepository
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakePersonAbsenceRepository(FakeStorage storage)
+		public FakePersonAbsenceRepository(IFakeStorage storage)
 		{
-			_storage = storage;
+			_storage = storage ?? new FakeStorageSimple();
 		}
 
 		public void Has(IPersonAbsence personAbsence)

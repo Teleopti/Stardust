@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[SetUp]
 		public void Setup()
 		{
-			_seatMapLocationRepository = new FakeWriteSideRepository<ISeatMapLocation>(new FakeStorage());
+			_seatMapLocationRepository = new FakeWriteSideRepository<ISeatMapLocation>(null);
 
 			var bu = new BusinessUnit("bu").WithId();
 			_buRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();

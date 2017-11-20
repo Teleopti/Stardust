@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanInitializeWithStateHolder()
         {
-	        var disableDeleteFilter = new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(new FakeStorage())));
+	        var disableDeleteFilter = new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null)));
 	        ISchedulerStateHolder schedulerStateHolder = new SchedulerStateHolder(_scenario,new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod,_timeZone),
                                                                                   new List<IPerson>
                                                                                       {
@@ -506,7 +506,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanCreateDefaultMeetingWithSchedulerStateHolder()
         {
-			var commonStateHolder = new CommonStateHolder(new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(new FakeStorage()))));
+			var commonStateHolder = new CommonStateHolder(new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))));
 
             Expect.Call(_schedulerStateHolder.RequestedScenario).Return(_scenario);
             Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_timeZone);
@@ -559,7 +559,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(new FakeStorage()))), new SchedulingResultStateHolder(), new TimeZoneGuard());
+                                                                                      }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), new SchedulingResultStateHolder(), new TimeZoneGuard());
 			_target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
 														  _repositoryFactory, _scheduleStorageFactory);
 			_target.TrySave();
@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(new FakeStorage()))), new SchedulingResultStateHolder(), new TimeZoneGuard());
+                                                                                      }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), new SchedulingResultStateHolder(), new TimeZoneGuard());
             _target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
                                                           _repositoryFactory, _scheduleStorageFactory);
 
@@ -645,7 +645,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public MeetingComposerPresenterForTest(IMeetingComposerView view, MeetingViewModel model, ISchedulerStateHolder
 
 schedulerStateHolder, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IScheduleStorageFactory scheduleStorageFactory)
-            : base(view, model, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(new FakeStorage()))), schedulerStateHolder, scheduleStorageFactory)
+            : base(view, model, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), schedulerStateHolder, scheduleStorageFactory)
         {
             RepositoryFactory = repositoryFactory;
             UnitOfWorkFactory = unitOfWorkFactory;

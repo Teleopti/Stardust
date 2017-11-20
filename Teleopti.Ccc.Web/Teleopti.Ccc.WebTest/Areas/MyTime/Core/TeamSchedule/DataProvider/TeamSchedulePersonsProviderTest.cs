@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
         public void Setup()
         {
             var permissionProvider = new FakePermissionProvider();
-			var personRepository = new FakePersonRepository(new FakeStorage());
+			var personRepository = new FakePersonRepository(null);
 
 	        _nameFormatSettingProvider = new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository());
 			_personForScheduleFinder = MockRepository.GenerateMock<IPersonForScheduleFinder>();

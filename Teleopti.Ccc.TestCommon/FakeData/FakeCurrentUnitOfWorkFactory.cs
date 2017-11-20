@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeCurrentUnitOfWorkFactory : ICurrentUnitOfWorkFactory
 	{
 		private IUnitOfWorkFactory _current;
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakeCurrentUnitOfWorkFactory(FakeStorage storage)
+		public FakeCurrentUnitOfWorkFactory(IFakeStorage storage)
 		{
-			_storage = storage;
+			_storage = storage ?? new FakeStorageSimple();
 		}
 
 		public ICurrentUnitOfWorkFactory WithCurrent(IUnitOfWorkFactory current)

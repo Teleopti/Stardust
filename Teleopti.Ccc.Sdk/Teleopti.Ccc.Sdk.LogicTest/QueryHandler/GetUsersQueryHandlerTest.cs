@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
 
-			var target = new GetUsersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()), new FullPermission());
+			var target = new GetUsersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(null), new FullPermission());
 			var result = target.Handle(new GetUsersQueryDto { LoadDeleted = false});
 
 			result.Count.Should().Be.EqualTo(1);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
 
-			var target = new GetUsersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()), new NoPermission());
+			var target = new GetUsersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(null), new NoPermission());
 			Assert.Throws<FaultException>(()=> target.Handle(new GetUsersQueryDto { LoadDeleted = false }));
 		}
 	}

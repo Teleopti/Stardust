@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			personRepository.Add(person);
 			fakeTenantLogonDataManager.SetLogon(person.Id.Value, "aa", "my@identi.ty");
 
-			var target = new GetPersonByUserNameQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()), fakeTenantLogonDataManager);
+			var target = new GetPersonByUserNameQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(null), fakeTenantLogonDataManager);
 			var result = target.Handle(new GetPersonByUserNameQueryDto
 			{
 				UserName = "aa"

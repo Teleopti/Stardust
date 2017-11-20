@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
 				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 
-			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeStorage());
+			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null);
 			var target = new GetPeopleByGroupPageGroupForDateRangeQueryHandler(groupingReadOnlyRepository, personRepository, assembler,
 				unitOfWorkFactory);
 			var dateOnly = new DateOnly(2012, 4, 30);

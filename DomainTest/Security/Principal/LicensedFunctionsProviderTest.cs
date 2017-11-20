@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         public void Setup()
         {
             functionFactory = new DefinedRaptorApplicationFunctionFactory();
-			_currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeStorage()).WithCurrent(new FakeUnitOfWorkFactory(new FakeStorage()) { Name = tenantName });
+			_currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = tenantName });
 			target = new LicensedFunctionsProvider(functionFactory);
         }
 

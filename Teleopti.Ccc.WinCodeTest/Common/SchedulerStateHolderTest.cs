@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	        target = new SchedulerStateHolder(scenario,
         	                                  new DateOnlyPeriodAsDateTimePeriod(
         	                                  	dtp.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()),
-												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(new FakeStorage()))), schedulingResultStateHolder, new TimeZoneGuard());
+												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), schedulingResultStateHolder, new TimeZoneGuard());
 			target.SetRequestedScenario(scenario);
             mocks = new MockRepository();
 			_permissionChecker = new PersistableScheduleDataPermissionChecker();

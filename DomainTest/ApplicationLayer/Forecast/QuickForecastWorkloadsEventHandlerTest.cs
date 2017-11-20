@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var taskOwnerPeriod = new TaskOwnerPeriod(new DateOnly(2013, 1, 1), new List<ITaskOwner>(), TaskOwnerPeriodType.Other);
 
 
-			_currentUnitOfWork.Stub(a => a.Current()).Return(new FakeUnitOfWork(new FakeStorage()));
+			_currentUnitOfWork.Stub(a => a.Current()).Return(new FakeUnitOfWork());
 
 			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);

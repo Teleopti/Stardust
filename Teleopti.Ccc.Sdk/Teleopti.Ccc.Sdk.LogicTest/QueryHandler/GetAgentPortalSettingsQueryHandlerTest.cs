@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		public void ShouldGetTheAgentPortalSettings()
 		{
 			var personalSettingDataRepository = new FakePersonalSettingDataRepository();
-			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeStorage());
+			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null);
 			var target = new GetAgentPortalSettingsQueryHandler(personalSettingDataRepository, unitOfWorkFactory);
 
 			var settings = new AgentPortalSettings {Resolution = 15};

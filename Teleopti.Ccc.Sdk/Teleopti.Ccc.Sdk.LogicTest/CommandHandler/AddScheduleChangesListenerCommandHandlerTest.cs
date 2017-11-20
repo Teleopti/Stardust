@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ShouldAddNewListener()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
-			var handler = new AddScheduleChangesListenerCommandHandler(repository,new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
+			var handler = new AddScheduleChangesListenerCommandHandler(repository,new FakeCurrentUnitOfWorkFactory(null));
 
 			var commandDto = new AddScheduleChangesListenerCommandDto
 			{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ShouldRejectNewListenerWithoutName()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
-			var handler = new AddScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
+			var handler = new AddScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(null));
 
 			var commandDto = new AddScheduleChangesListenerCommandDto
 			{
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ShouldRejectNewListenerWithRelativeStartDateAfterEndDate()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
-			var handler = new AddScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
+			var handler = new AddScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(null));
 
 			var commandDto = new AddScheduleChangesListenerCommandDto
 			{
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ShouldRejectNewListenerWithInvalidUri()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
-			var handler = new AddScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
+			var handler = new AddScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(null));
 
 			var commandDto = new AddScheduleChangesListenerCommandDto
 			{
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ShouldRejectNewListenerWithInsufficientPermissions()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
-			var handler = new AddScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
+			var handler = new AddScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(null));
 
 			var commandDto = new AddScheduleChangesListenerCommandDto
 			{

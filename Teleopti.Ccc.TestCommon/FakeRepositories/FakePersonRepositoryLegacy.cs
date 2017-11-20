@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonRepositoryLegacy2 : FakePersonRepository
 	{
-		public FakePersonRepositoryLegacy2() : base(new FakeStorage())
+		public FakePersonRepositoryLegacy2() : base(null)
 		{
 		}
 
@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 	public class FakePersonRepositoryLegacy : FakePersonRepository
 	{
-		public FakePersonRepositoryLegacy() : base(new FakeStorage())
+		public FakePersonRepositoryLegacy() : base(null)
 		{
 			Has(PersonFactory.CreatePersonWithId());
 		}
 
-		public FakePersonRepositoryLegacy(IPerson person) : base(new FakeStorage())
+		public FakePersonRepositoryLegacy(IPerson person) : base(null)
 		{
 			Has(person);
 		}
 
-		public FakePersonRepositoryLegacy(params IPerson[] persons) : base(new FakeStorage())
+		public FakePersonRepositoryLegacy(params IPerson[] persons) : base(null)
 		{
 			persons.ForEach(Has);
 		}

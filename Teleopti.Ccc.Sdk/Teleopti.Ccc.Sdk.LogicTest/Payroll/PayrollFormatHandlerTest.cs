@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
         [Test]
         public void ShouldReadPayrollFormatsFromStorage()
         {
-			var formatHandler = new PayrollFormatHandler(new FakePayrollFormatRepository(), new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
+			var formatHandler = new PayrollFormatHandler(new FakePayrollFormatRepository(), new FakeCurrentUnitOfWorkFactory(null));
 			var payrollFormatDtos = new List<PayrollFormatDto> { new PayrollFormatDto(new Guid("1E88583F-284C-4C17-BD07-B7AFA08D0BF4"), "Sweet Päjrållformat", "tjo") };
             //First Save a file
             formatHandler.Save(payrollFormatDtos);

@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseRemoveActivityEvent()
 		{
-			var storage = new FakeStorage();
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { PersonFactory.CreatePersonWithId()};
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { PersonFactory.CreatePersonWithId()};
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var otherActivity = ActivityFactory.CreateActivity("Admin");
 
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			pa.AddActivity(otherActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,14));
 
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage) { pa};			
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null) { pa};			
 
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 
@@ -71,8 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldSetupEntityStateForMainShiftLayer()
 		{
-			var storage = new FakeStorage();
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { PersonFactory.CreatePersonWithId() };
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { PersonFactory.CreatePersonWithId() };
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var otherActivity = ActivityFactory.CreateActivity("Admin");
 
@@ -82,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			pa.AddActivity(otherActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,14));
 
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage) { pa };
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null) { pa };
 
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 
@@ -112,8 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldSetupEntityStateForPersonalShiftLayer()
 		{
-			var storage = new FakeStorage();
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { PersonFactory.CreatePersonWithId() };
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { PersonFactory.CreatePersonWithId() };
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var otherActivity = ActivityFactory.CreateActivity("Admin");
 
@@ -123,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			pa.AddPersonalActivity(otherActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,14));
 
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage) { pa };
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null) { pa };
 
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 
@@ -154,15 +151,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReportErrorWhenRemoveBaseShiftLayer()
 		{
-			var storage = new FakeStorage();
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { PersonFactory.CreatePersonWithId() };
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { PersonFactory.CreatePersonWithId() };
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				personRepository.Single(),
 				mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16));
 		
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage) { pa };
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null) { pa };
 
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 
@@ -193,10 +189,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReportErrorWhenShiftLayerNotFound()
 		{
-			var storage = new FakeStorage();
-			var personRepository = new FakeWriteSideRepository<IPerson>(storage) { PersonFactory.CreatePersonWithId() };
+			var personRepository = new FakeWriteSideRepository<IPerson>(null) { PersonFactory.CreatePersonWithId() };
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(storage)
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository(null)
 			{
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(personRepository.Single(),
 					mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))

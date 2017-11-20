@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ShouldRevokeListener()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
-			var handler = new RevokeScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
+			var handler = new RevokeScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(null));
 			var subscriptions = new ScheduleChangeSubscriptions();
 			subscriptions.Add(new ScheduleChangeListener {Name = "Facebook"});
 			repository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ShouldRejectRevokeListenerWhenNotPermitted()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
-			var handler = new RevokeScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
+			var handler = new RevokeScheduleChangesListenerCommandHandler(repository, new FakeCurrentUnitOfWorkFactory(null));
 			var subscriptions = new ScheduleChangeSubscriptions();
 			subscriptions.Add(new ScheduleChangeListener { Name = "Facebook" });
 			repository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);

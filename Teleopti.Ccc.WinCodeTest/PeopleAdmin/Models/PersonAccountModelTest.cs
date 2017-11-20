@@ -124,9 +124,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyAccrued()
         {
-            var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
-			
-            _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
+            var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
+
+			_targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
             ((PersonAccountModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
             _targetDay.Accrued = 2;
             Assert.AreEqual(2, _targetDay.Accrued);
@@ -175,9 +175,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyBalanceIn()
         {
-            var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
-            
-            _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
+            var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
+
+			_targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
             ((PersonAccountModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
             _targetDay.BalanceIn = 5;
             Assert.AreEqual(5, _targetDay.BalanceIn);
@@ -197,9 +197,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		[Test]
         public void VerifyBalanceOut()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
-			
-            _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
+
+			_targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
             ((PersonAccountModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
             _targetDay.BalanceOut = 5;
             Assert.AreEqual(5, _targetDay.BalanceOut);
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyDate()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
 			_traceableRefreshService.Refresh(_targetDay.CurrentAccount);
             
             _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
@@ -234,9 +234,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyExtra()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory(new FakeStorage());
-			
-            _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
+
+			_targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
             ((PersonAccountModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
             _targetDay.Extra = 10;
             Assert.AreEqual(10, _targetDay.Extra);

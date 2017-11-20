@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			person.Email = "a@b.com";
 			personRepository.Add(person);
 
-			var target = new GetPersonByEmailQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(new FakeStorage()));
+			var target = new GetPersonByEmailQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(null));
 
 			var result = target.Handle(new GetPersonByEmailQueryDto
 			{

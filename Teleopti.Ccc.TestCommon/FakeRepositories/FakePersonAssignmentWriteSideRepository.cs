@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>,
 		IProxyForId<IPersonAssignment>
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakePersonAssignmentWriteSideRepository(FakeStorage storage)
+		public FakePersonAssignmentWriteSideRepository(IFakeStorage storage)
 		{
-			_storage = storage;
+			_storage = storage ?? new FakeStorageSimple();
 		}
 
 		public void Add (IPersonAssignment entity)
