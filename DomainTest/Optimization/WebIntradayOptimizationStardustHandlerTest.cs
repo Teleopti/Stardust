@@ -21,7 +21,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	[Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874)]
 	public class WebIntradayOptimizationStardustHandlerTest: IntradayOptimizationScenarioTest
 	{
 		public WebIntradayOptimizationStardustHandler Target;

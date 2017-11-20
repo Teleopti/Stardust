@@ -6,7 +6,6 @@
 			'$scope', '$state', '$translate', '$stateParams', 'ResourcePlannerReportSrvc', 'planningPeriodService', 'NoticeService', 'Toggle', '$interval',
 			function ($scope, $state, $translate, $stateParams, ResourcePlannerReportSrvc, planningPeriodService, NoticeService, toggleService, $interval) {
 				var toggledOptimization = false;
-				var toggledSchedulingOnStardust = false;
 				var tenMinutes = 1000 * 60 * 10;
 				var planningPeriodId = $stateParams.id ? $stateParams.id : $scope.id;
 				var checkProgressRef;
@@ -28,7 +27,6 @@
 
 				toggleService.togglesLoaded.then(function () {
 					toggledOptimization = toggleService.Scheduler_IntradayOptimization_36617;
-					toggledSchedulingOnStardust = toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874;
 					initLoad();
 				});
 
@@ -72,7 +70,7 @@
 				}
 
 				function initLoad() {
-					if (toggledSchedulingOnStardust && !$stateParams.ranSynchronously) {
+					if (!$stateParams.ranSynchronously) {
 						planningPeriodService.lastJobResult({ id: planningPeriodId })
 							.$promise.then(function (data) {
 								initResult(data.OptimizationResult, data.ScheduleResult, data.PlanningPeriod);
@@ -102,21 +100,12 @@
 
 				function intraOptimize() {
 					$scope.optimizeRunning = true;
-					if (toggledSchedulingOnStardust) {
-						ResourcePlannerReportSrvc.intraOptimize({
-							id: planningPeriodId,
-							runAsynchronously: true
-						}).$promise.then(checkIntradayOptimizationProgress, intradayOptimizationFailedHandler);
-					} else {
-						//to make sure long optimization request doesn't create a new cookie based on current time
-						//we call keepAlive here again
-						planningPeriodService.keepAlive().then(function () {
-							ResourcePlannerReportSrvc.intraOptimize({
-								id: planningPeriodId,
-								runAsynchronously: false
-							}).$promise.then(intradayOptimizationDone, intradayOptimizationFailedHandler);
-						});
-					}
+					
+					ResourcePlannerReportSrvc.intraOptimize({
+						id: planningPeriodId,
+						runAsynchronously: true
+					}).$promise.then(checkIntradayOptimizationProgress, intradayOptimizationFailedHandler);
+					
 				};
 
 				function checkIntradayOptimizationProgress() {

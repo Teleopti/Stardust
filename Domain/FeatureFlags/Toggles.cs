@@ -60,7 +60,6 @@
 
 		Wfm_MinimumScaffolding_32659,
 		Wfm_ResourcePlanner_32892,
-		Wfm_ChangePlanningPeriod_33043,
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 		Wfm_SearchAgentBasedOnCorrectPeriod_44552,
@@ -165,7 +164,7 @@
 		Wfm_Intraday_ScheduledStaffing_41476,
 		Mailbox_Optimization_41900,
 		Wfm_Intraday_ESL_41827,
-		Wfm_ResourcePlanner_SchedulingOnStardust_42874,
+
 
 		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,

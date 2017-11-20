@@ -137,7 +137,7 @@
 
 				toggleService.togglesLoaded.then(function () {
 					$scope.isEnabled = toggleService.Wfm_ChangePlanningPeriod_33043;
-					runAsynchronously = toggleService.Wfm_ResourcePlanner_SchedulingOnStardust_42874 && !$stateParams.runForTest;
+					runAsynchronously = !$stateParams.runForTest;
 				});
 
 				var checkProgressRef;

@@ -38,7 +38,6 @@ Backlog_Module_23980 = DEV
 # Set this to true to enable first page link to the new WFM web #
 Wfm_MinimumScaffolding_32659 = RC
 Wfm_ResourcePlanner_32892 = RC
-Wfm_ChangePlanningPeriod_33043 = true
 
 RTA_SpreadTransactionLocksStrategy_41823 = true
 RTA_EventPackagesOptimization_43924 = true
@@ -141,7 +140,7 @@ ResourcePlanner_DoNotKillCache_46724 = RC
 ResourcePlanner_RemoveImplicitResCalcContext_46680 = RC
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some issues
 
-Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
+
 Wfm_DisplayOnlineHelp_39402 = true
 
 ETL_SpeedUpPersonPeriodNightly_38097 = true
