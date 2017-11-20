@@ -93,7 +93,8 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.WebStaffing,
 				DefinedRaptorApplicationFunctionPaths.SaveFavoriteSearch,
 				DefinedRaptorApplicationFunctionPaths.BpoExchange,
-				DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport
+				DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport,
+				DefinedRaptorApplicationFunctionPaths.WebPlans,
 
 			};
 

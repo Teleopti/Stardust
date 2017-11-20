@@ -37,7 +37,7 @@ Gamification_NewBadgeCalculation_31185 = true
 Backlog_Module_23980 = DEV
 # Set this to true to enable first page link to the new WFM web #
 Wfm_MinimumScaffolding_32659 = RC
-Wfm_ResourcePlanner_32892 = true
+Wfm_ResourcePlanner_32892 = RC
 Wfm_ChangePlanningPeriod_33043 = true
 
 RTA_SpreadTransactionLocksStrategy_41823 = true

@@ -32,11 +32,12 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 			if (_toggleManager.IsEnabled(Toggles.Wfm_ResourcePlanner_32892))
 			{
-				searchResultModel.AddRange(searchPlanningPeriods(keyword));
-				searchResultModel.AddRange(searchApplicationRoles(keyword));
+				searchResultModel.AddRange(searchPlanningPeriods(keyword));	
 			}
+			searchResultModel.AddRange(searchApplicationRoles(keyword));
 
 			return Ok(searchResultModel.AsEnumerable());
+
 		}
 
 		private IEnumerable<SearchResultModel> searchApplicationRoles(string keyword)
