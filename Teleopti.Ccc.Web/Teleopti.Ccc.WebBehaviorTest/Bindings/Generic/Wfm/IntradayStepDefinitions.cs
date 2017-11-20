@@ -512,6 +512,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 																$"return scope.vm.selectedSkillArea === null;", "True");
 		}
 
+		[When(@"I return to skill group from skill '(.*)'")]
+		public void WhenIReturnToSkillGroupFromSkill(string skill)
+		{
+			var elementSelector = $"$(\"span:contains('{skill}')\").parent(\"span.wfm-chip\")";
+			Browser.Interactions.AssertJavascriptResultContains($"return {elementSelector}[0] !== undefined", "True");
+			Browser.Interactions.Javascript($"{elementSelector}.click();");
+		}
+
+
 		[When(@"I return to skill group '(.*)'")]
 		public void WhenIReturnToSkillGroup(string skillGroup)
 		{

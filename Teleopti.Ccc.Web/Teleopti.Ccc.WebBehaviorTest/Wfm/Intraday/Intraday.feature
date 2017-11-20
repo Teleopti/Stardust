@@ -220,7 +220,6 @@ Scenario: Select skill when skill group is selected
 	When I select skill 'Skill B' from included skills in skill group
 	Then I should see incoming traffic data in the chart
 	And I Should see skill 'Skill B' as selected skill
-	And I Should not see any skill group selected
 
 Scenario: Return to skill group when viewing included skill
 	Given the time is '2016-12-22 14:00'
@@ -230,7 +229,7 @@ Scenario: Return to skill group when viewing included skill
 	And I am viewing intraday page
 	And I select skill 'Skill A' from included skills in skill group
 	And There's no data available
-	When I return to skill group 'SkillArea1'
+	When I return to skill group from skill 'Skill A'
 	Then I should see incoming traffic data in the chart
 	And I should see a summary of incoming traffic
 
