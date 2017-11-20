@@ -124,7 +124,6 @@ Wfm_ImportSchedule_41247 = true
 Mailbox_Optimization_41900 = true
 WFM_WebScheduling_LowPriority_44320 = RC
 
-SchedulingScreen_BatchAgentValidation_41552 = true #Toggle for feature 41542
 Scheduler_LoadWithoutRequests_38567 = true
 
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production

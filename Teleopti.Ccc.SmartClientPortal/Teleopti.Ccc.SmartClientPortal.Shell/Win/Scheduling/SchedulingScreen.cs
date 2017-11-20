@@ -3706,23 +3706,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var rulesToRun = _schedulerState.SchedulingResultState.GetRulesToRun();
 			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.SchedulingScreen_BatchAgentValidation_41552))
+			var resolvedTranslatedString = LanguageResourceHelper.Translate("XXValidatingPersons2");
+			var validatedCount = 0;
+			foreach (var persons in _personsToValidate.Batch(100))
 			{
-				var resolvedTranslatedString = LanguageResourceHelper.Translate("XXValidatingPersons2");
-				var validatedCount = 0;
-				foreach (var persons in _personsToValidate.Batch(100))
-				{
-					var batchedPeople = persons as IList<IPerson> ?? persons.ToList();
-					validatedCount += batchedPeople.Count;
-					backgroundWorkerLoadData.ReportProgress(0,
-					string.Format(CultureInfo.CurrentCulture, resolvedTranslatedString, validatedCount, SchedulerState.ChoosenAgents.Count));
-					_schedulerState.Schedules.ValidateBusinessRulesOnPersons(batchedPeople, loggedOnCulture, rulesToRun);
-				}
+				var batchedPeople = persons as IList<IPerson> ?? persons.ToList();
+				validatedCount += batchedPeople.Count;
+				backgroundWorkerLoadData.ReportProgress(0,
+					string.Format(CultureInfo.CurrentCulture, resolvedTranslatedString, validatedCount,
+						SchedulerState.ChoosenAgents.Count));
+				_schedulerState.Schedules.ValidateBusinessRulesOnPersons(batchedPeople, loggedOnCulture, rulesToRun);
 			}
-			else
-			{
-				_schedulerState.Schedules.ValidateBusinessRulesOnPersons(_personsToValidate, loggedOnCulture, rulesToRun);
-			}
+
 			_personsToValidate.Clear();
 		}
 
