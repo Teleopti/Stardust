@@ -839,6 +839,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
+		public void ShouldNotDenyWhenVoilateMaxWeekWorkTimeRuleWithToggle46417Off()
+		{
+			setupPerson(8, 21);
+			var person = LoggedOnUser.CurrentUser();
+			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(8),
+				TimeSpan.FromHours(9), TimeSpan.FromHours(10), TimeSpan.FromHours(10));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 13, 8, 2017, 7, 13, 16));
+			ScheduleStorage.Add(pa);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 2);
+			Target.Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldNotDenyWhenVoilateMaxWeekWorkTimeRuleAndHandleTypeIsPending()
