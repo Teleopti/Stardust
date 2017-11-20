@@ -3322,6 +3322,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to exit the skill-group manager?.
+        /// </summary>
+        public static string AreYouSureYouWantToExitSGM {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToExitSGM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to cancel this absence request?.
         /// </summary>
         public static string AreYouSureYouWishToCancelAbsence {
