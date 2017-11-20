@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		{
 			var searchResultModel = new List<SearchResultModel>();
 
-			if (_toggleManager.IsEnabled(Toggles.Wfm_ResourcePlanner_32892))
+			if (_toggleManager.IsEnabled(Toggles.Wfm_WebPlan_Pilot_46815))
 			{
 				searchResultModel.AddRange(searchPlanningPeriods(keyword));	
 			}

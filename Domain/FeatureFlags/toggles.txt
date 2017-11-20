@@ -37,7 +37,6 @@ Gamification_NewBadgeCalculation_31185 = true
 Backlog_Module_23980 = DEV
 # Set this to true to enable first page link to the new WFM web #
 Wfm_MinimumScaffolding_32659 = RC
-Wfm_ResourcePlanner_32892 = RC
 
 RTA_SpreadTransactionLocksStrategy_41823 = true
 RTA_EventPackagesOptimization_43924 = true
@@ -140,7 +139,6 @@ ResourcePlanner_DoNotKillCache_46724 = RC
 ResourcePlanner_RemoveImplicitResCalcContext_46680 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some issues
 
-
 Wfm_DisplayOnlineHelp_39402 = true
 
 ETL_SpeedUpPersonPeriodNightly_38097 = true
@@ -208,3 +206,5 @@ Report_Show_Utc_In_Report_Selection_When_In_Use_45079 = true
 WFM_Unified_Skill_Group_Management_45417 = true
 WFM_Modify_Skill_Groups_45727 = RC
 WFM_AuditTrail_44006 = RC
+
+Wfm_WebPlan_Pilot_46815 = RC

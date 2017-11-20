@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		{
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebPlans))
 			{
-				return _toggleManager.IsEnabled(Toggles.Wfm_ResourcePlanner_32892);
+				return _toggleManager.IsEnabled(Toggles.Wfm_WebPlan_Pilot_46815);
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning))
 			{

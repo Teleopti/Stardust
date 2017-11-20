@@ -59,7 +59,7 @@
 		MyTimeWeb_ShowSeatBookingMonthView_39068,
 
 		Wfm_MinimumScaffolding_32659,
-		Wfm_ResourcePlanner_32892,
+		Wfm_WebPlan_Pilot_46815,
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 		Wfm_SearchAgentBasedOnCorrectPeriod_44552,

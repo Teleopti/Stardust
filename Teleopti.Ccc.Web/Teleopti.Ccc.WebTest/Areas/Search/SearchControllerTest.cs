@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldNotSearchIfSchedulingIsDisabled()
 		{
-			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_ResourcePlanner_32892);
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_WebPlan_Pilot_46815);
 			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)Target.GetResult("Next");
 			result.Content.Count().Should().Be.EqualTo(0);
 		}

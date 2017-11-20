@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		[Test]
 		public void ShouldNotGetUnpermittedModules()
 		{
-			var toggleManager = new FakeToggleManager(Toggles.Wfm_ResourcePlanner_32892);
+			var toggleManager = new FakeToggleManager(Toggles.Wfm_WebPlan_Pilot_46815);
 			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider(), new FakeApplicationFunctionsToggleFilter());
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			var target = new ApplicationController(areaPathProvider, globalSettingDataRepository);
