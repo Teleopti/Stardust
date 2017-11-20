@@ -62,7 +62,8 @@ var wfm = angular.module('wfm', [
     'wfm.skillGroup',
     'wfm.calendarPicker',
 	'wfm.popup',
-	'wfm.gamification'
+	'wfm.gamification',
+  'wfm.btnGroup'
 ]);
 
 wfm
