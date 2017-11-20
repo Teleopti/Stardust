@@ -340,7 +340,7 @@
     <Compile Include="Intraday\IntradaySkillProvider.cs" />
     <Compile Include="Intraday\ISkillTypeInfo.cs" />
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
-    <Compile Include="Notification\ScheduleChangeChecker.cs" />
+    <Compile Include="Notification\ScheduleChangeMailboxPoller.cs" />
     <Compile Include="Optimization\EffectiveRestrictionStartTimeDecider.cs" />
     <Compile Include="Optimization\TeamBlock\BlockPreferencesMapper.cs" />
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />

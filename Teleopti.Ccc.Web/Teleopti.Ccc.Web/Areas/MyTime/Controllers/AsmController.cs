@@ -19,17 +19,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IAsmViewModelFactory _asmModelFactory;
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
-		//private readonly ScheduleChangeChecker _scheduleChangeChecker;
+		private readonly ScheduleChangeMailboxPoller _scheduleChangePoller;
 
 		public AsmController(IAsmViewModelFactory asmModelFactory, ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
 			IGlobalSettingDataRepository globalSettingDataRepository
-			//, ScheduleChangeChecker scheduleChangeChecker
+			, ScheduleChangeMailboxPoller scheduleChangePoller
 			)
 		{
 			_asmModelFactory = asmModelFactory;
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_globalSettingDataRepository = globalSettingDataRepository;
-			//_scheduleChangeChecker = scheduleChangeChecker;
+			_scheduleChangePoller = scheduleChangePoller;
 		}
 
 		public ViewResult Index()
@@ -66,17 +66,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(notificationsTimeToStay, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWork]
+		[UnitOfWork, MessageBrokerUnitOfWork]
 		[HttpGet]
-		public virtual JsonResult CheckIfScheduleHasUpdates(DateOnlyPeriod period)
+		public virtual JsonResult CheckIfScheduleHasUpdates(Guid mailboxId, DateTime startDate, DateTime endDate)
 		{
-			var hasUpdates = true;// _scheduleChangeChecker.Check(period);
+			var hasUpdates = _scheduleChangePoller.Check(mailboxId, new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)));
 			return Json(new
 			{
 				HasUpdates = hasUpdates,
-				StartDate = period.StartDate,
-				EndDate = period.EndDate
+				StartDate = startDate.ToShortDateString(),
+				EndDate = endDate.ToShortDateString()
 			}, JsonRequestBehavior.AllowGet);
+		}
+		[UnitOfWork, MessageBrokerUnitOfWork]
+		[HttpGet]
+		public virtual JsonResult StartPolling()
+		{
+			return Json(_scheduleChangePoller.StartPolling(), JsonRequestBehavior.AllowGet);
 		}
 	}
 
