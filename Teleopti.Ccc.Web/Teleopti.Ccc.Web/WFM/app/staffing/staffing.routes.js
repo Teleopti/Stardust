@@ -44,8 +44,8 @@
                     returnState: "staffing"
                 },
                 url: "/skill-area-config",
-                templateUrl: "app/global/skill-group/skillgroup.html",
-                controller: "SkillGroupController as vm"
+                templateUrl: "app/global/skill-group/skill-group-manager.html",
+                controller: "SkillGroupManagerController as vm"
               })
     }
 })();
