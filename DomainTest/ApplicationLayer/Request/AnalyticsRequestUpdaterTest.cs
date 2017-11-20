@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		}
 
 		[Test]
-		public void MissingPersonPeriodInAnalyticsDatabaseThrows()
+		public void MissingPersonPeriodInAnalyticsDatabaseDoesNothing()
 		{
 			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
 			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(30), DateTime.Today + TimeSpan.FromDays(30));
@@ -93,12 +93,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			personRequest.Request.SetId(Guid.NewGuid());
 			((IBelongsToBusinessUnit)personRequest).SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
 			PersonRequestRepository.Add(personRequest);
-			Assert.Throws<PersonPeriodMissingInAnalyticsException>(() =>
-				Target.Handle(new PersonRequestChangedEvent
-				{
-					PersonRequestId = personRequest.Id.GetValueOrDefault(),
-					LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
-				}));
+			Target.Handle(new PersonRequestChangedEvent
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			});
+
+			AnalyticsRequestRepository.AnalyticsRequestedDays.Should().Be.Empty();
+			AnalyticsRequestRepository.AnalyticsRequests.Should().Be.Empty();
 		}
 
 		[Test]

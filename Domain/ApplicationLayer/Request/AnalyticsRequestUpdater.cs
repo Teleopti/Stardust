@@ -95,6 +95,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 
 			var personPeriod = getPersonPeriod(personRequest);
 
+			if (personPeriod == null)
+				return;
+
 			var personTimeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
 			var requestPeriod = personRequest.Request.Period;
 			var numOfDays = (requestPeriod.ToDateOnlyPeriod(personTimeZone));
@@ -206,8 +209,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 			var personPeriod =
 				personPeriods.FirstOrDefault(
 					x => x.ValidFromDate <= personRequest.RequestedDate && x.ValidToDate > personRequest.RequestedDate);
-			if (personPeriod == null)
-				throw new PersonPeriodMissingInAnalyticsException();
 			return personPeriod;
 		}
 	}
