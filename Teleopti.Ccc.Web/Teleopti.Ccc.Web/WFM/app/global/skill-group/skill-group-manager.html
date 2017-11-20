@@ -1,26 +1,26 @@
 <div class="view-header">
-	<div class="view-title">
-		<h1>
-			<i class="mdi mdi-compass-outline"></i>{{'ManageSkillGroup'|translate}}
-		</h1>
-	</div>
-</div>
-<div class="con-row">
 	<div class="con-flex">
-		<button class="wfm-fab material-depth-1 pull-right" id="save_all" ng-show="vm.canSave" ng-click="vm.saveAll()">
+		<div class="view-title pull-left" style="width: 70%">
+			<h1>
+				<i class="mdi mdi-compass-outline"></i>{{'ManageSkillGroup'|translate}}
+			</h1>
+		</div>
+		<button class="wfm-fab material-depth-1 grow-out pull-right" id="save_all" ng-show="vm.canSave" ng-click="vm.saveAll()">
 			<i class="mdi mdi-content-save"></i>
 			<md-tooltip>{{'Save'|translate}}</md-tooltip>
 		</button>
-		<button class="wfm-fab material-depth-1 pull-right" id="exit_sgm" ng-click="vm.exitConfigMode()">
+		<button class="wfm-fab material-depth-1 grow-out pull-right" id="exit_sgm" ng-click="vm.exitConfigMode()">
 			<i class="mdi mdi-close"></i>
 			<md-tooltip>{{'Close'|translate}}</md-tooltip>
 		</button>
 	</div>
 </div>
+<div class="con-row">
+</div>
 <form name="form" class="wfm-form" novalidate ng-submit="vm.saveSkillGroup(form)">
 	<md-content class="md-padding">
 		<div class="con-row">
-			<div class="con-flex panel form-panel material-depth-1">
+			<div class="con-flex panel form-panel material-depth-1" style="margin-right: 20px;">
 				<div class="con-row">
 					<div class="con-flex">
 						<h2>{{'AllSkillAreas'|translate}}</h2>
@@ -101,8 +101,8 @@
 					<div class="con-flex x3 panel form-panel material-depth-1" style="margin: 5px">
 						<div class="con-row">
 							<div class="con-flex">
-								<span>{{'Name'|translate}}:</span>
-								<input style="width:80%;" type="text" ng-model="vm.selectedSkillGroup.Name" maxlength="50" ng-maxlength="50" id="skillGroupNameBox" />
+								<input style="width:80%;" type="text" placeholder="{{'Name'|translate}}" ng-model="vm.selectedSkillGroup.Name" maxlength="50" ng-maxlength="50" id="skillGroupNameBox"
+								/>
 							</div>
 						</div>
 						<div class="con-row">
