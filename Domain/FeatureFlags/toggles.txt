@@ -31,7 +31,6 @@
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true
 Settings_SetAgentDescription_23257 = true
-Settings_AlertViaEmailFromSMSLink_30444 = true
 #Cannot be relreased yet due to performance and IO #
 Gamification_NewBadgeCalculation_31185 = true
 Backlog_Module_23980 = DEV

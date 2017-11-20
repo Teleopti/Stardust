@@ -24,10 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<NotificationValidationCheck>().As<INotificationValidationCheck>();
 			builder.RegisterType<EmailConfiguration>().As<IEmailConfiguration>();
 			builder.RegisterType<NotificationChecker>().As<INotificationChecker>();
-			if (!_toggleManager.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444))
-				builder.RegisterType<CustomNotificationSenderFactory>().As<INotificationSenderFactory>();
-			else
-				builder.RegisterType<MultipleNotificationSenderFactory>().As<INotificationSenderFactory>();
+			builder.RegisterType<MultipleNotificationSenderFactory>().As<INotificationSenderFactory>();
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
 			builder.RegisterType<Notifier>().As<INotifier>();
 			builder.RegisterType<NotifyAppSubscriptions>().ApplyAspects();

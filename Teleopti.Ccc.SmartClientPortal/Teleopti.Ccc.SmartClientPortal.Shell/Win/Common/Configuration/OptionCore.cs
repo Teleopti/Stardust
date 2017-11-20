@@ -202,10 +202,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			if (hasSmsLinkLicense)
 			{
-				if (!_toggleManager.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444))
-					allSupportedPages.Add(new SmsSettingsControl());
-				else
-					allSupportedPages.Add(new NotificationSettingsControl(_toggleManager));
+				allSupportedPages.Add(new NotificationSettingsControl(_toggleManager));
 			}
 			else if (_toggleManager.IsEnabled(Toggles.MobileApps_EnableMobileNotifications_44476))
 			{
