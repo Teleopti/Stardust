@@ -100,9 +100,9 @@
 				column="AdherenceGoldThreshold" />
 	</component>
 
-        <bag name="ExternalBadgeSettings" table="ExternalBadgeSetting" cascade="all-delete-orphan" inverse="true">
-             <key column="Parent" foreign-key="FK_ExternalBadgeSetting_GamificationSetting"/>
-             <one-to-many  class="Teleopti.Ccc.Domain.Common.ExternalBadgeSetting"/>
+        <bag name="BadgeSettings" table="BadgeSetting" cascade="all-delete-orphan" inverse="true">
+             <key column="Parent" foreign-key="FK_BadgeSetting_GamificationSetting"/>
+             <one-to-many  class="Teleopti.Ccc.Domain.Common.BadgeSetting"/>
         </bag>
 
 	<property name="SilverToBronzeBadgeRate"

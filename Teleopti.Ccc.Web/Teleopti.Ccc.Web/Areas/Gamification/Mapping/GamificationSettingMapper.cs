@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 				GoldToSilverBadgeRate = setting.GoldToSilverBadgeRate
 			};
 
-			vm.ExternalBadgeSettings = setting.ExternalBadgeSettings == null || !setting.ExternalBadgeSettings.Any()
+			vm.ExternalBadgeSettings = setting.BadgeSettings == null || !setting.BadgeSettings.Any()
 				? new List<ExternalBadgeSettingViewModel>()
-				: setting.ExternalBadgeSettings.Select(x => new ExternalBadgeSettingViewModel
+				: setting.BadgeSettings.Select(x => new ExternalBadgeSettingViewModel
 				{
 					Id = x.Id ?? Guid.Empty,
 					Name = x.Name,

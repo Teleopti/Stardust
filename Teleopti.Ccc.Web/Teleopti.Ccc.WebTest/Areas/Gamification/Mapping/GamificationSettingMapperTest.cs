@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 		public void ShouldNotMapEmptyExternalBadgeSettings()
 		{
 			var rawSetting = createRawGamificationSetting();
-			rawSetting.ExternalBadgeSettings = new List<IExternalBadgeSetting>(); 
+			rawSetting.BadgeSettings = new List<IBadgeSetting>(); 
 
 			var vm = mapper.Map(rawSetting);
 			Assert.IsNotNull(vm.ExternalBadgeSettings);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 		public void ShouldMapExternalBadgeSettings()
 		{
 			var rawSetting = createRawGamificationSetting();
-			var externalBadgeSetting1 = new ExternalBadgeSetting()
+			var externalBadgeSetting1 = new BadgeSetting()
 			{
 				Name = "ExternalBadge 1",
 				QualityId = 5,
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				GoldThreshold = 150,
 				UnitType = BadgeUnitType.Timespan
 			};
-			var externalBadgeSetting2 = new ExternalBadgeSetting()
+			var externalBadgeSetting2 = new BadgeSetting()
 			{
 				Name = "ExternalBadge 2",
 				QualityId = 8,
@@ -77,8 +77,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				GoldThreshold = 5000,
 				UnitType = BadgeUnitType.Percentage
 			};
-			var externalBadgeSettings = new List<IExternalBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};
-			rawSetting.ExternalBadgeSettings = externalBadgeSettings;
+			var externalBadgeSettings = new List<IBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};
+			rawSetting.BadgeSettings = externalBadgeSettings;
 
 			var vm = mapper.Map(rawSetting);
 
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 		public void ShouldMapNewQualityInfoIntoExternalBadgeSettings()
 		{
 			var rawSetting = createRawGamificationSetting();
-			var externalBadgeSetting1 = new ExternalBadgeSetting()
+			var externalBadgeSetting1 = new BadgeSetting()
 			{
 				Name = "ExternalBadge 1",
 				QualityId = 5,
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				GoldThreshold = 150,
 				UnitType = BadgeUnitType.Timespan
 			};
-			var externalBadgeSetting2 = new ExternalBadgeSetting()
+			var externalBadgeSetting2 = new BadgeSetting()
 			{
 				Name = "ExternalBadge 2",
 				QualityId = 8,
@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				GoldThreshold = 5000,
 				UnitType = BadgeUnitType.Percentage
 			};
-			var externalBadgeSettings = new List<IExternalBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};
-			rawSetting.ExternalBadgeSettings = externalBadgeSettings;
+			var externalBadgeSettings = new List<IBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};
+			rawSetting.BadgeSettings = externalBadgeSettings;
 
 			var alreadySetQualityInfo = new QualityInfo
 			{
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 
 			checkRawBadgeSettingAndVm(externalBadgeSetting1, vm.ExternalBadgeSettings.First());
 			checkRawBadgeSettingAndVm(externalBadgeSetting2, vm.ExternalBadgeSettings.Second());
-			checkRawBadgeSettingAndVm(new ExternalBadgeSetting
+			checkRawBadgeSettingAndVm(new BadgeSetting
 			{
 				Name = "New Quality Info",
 				QualityId = 9,
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 			Assert.AreEqual(rawSetting.GoldToSilverBadgeRate, vm.GoldToSilverBadgeRate);
 		}
 
-		private void checkRawBadgeSettingAndVm(IExternalBadgeSetting rawBadgeSetting, ExternalBadgeSettingViewModel vm)
+		private void checkRawBadgeSettingAndVm(IBadgeSetting rawBadgeSetting, ExternalBadgeSettingViewModel vm)
 		{
 			Assert.AreEqual(rawBadgeSetting.Name, vm.Name);
 			Assert.AreEqual(rawBadgeSetting.QualityId, vm.QualityId);

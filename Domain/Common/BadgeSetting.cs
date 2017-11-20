@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Common
 {
 	/// <summary>
-	/// A class for ExternalBadgeSetting.
+	/// A class for BadgeSetting.
 	/// It's designed to apply different threshold value types (count, percent, Timespan, etc.),
 	/// A BadgeUnitType property indicates what data type it applied.
 	/// All threshold values are converted into int to stored in this class.
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Common
 	/// 
 	/// -- This is really not a good design, but I did not find a better solution :-(
 	/// </summary>
-	public class ExternalBadgeSetting : AggregateEntity, IExternalBadgeSetting
+	public class BadgeSetting : AggregateEntity, IBadgeSetting
 	{
 		private string _name;
 		private int _qualityId;

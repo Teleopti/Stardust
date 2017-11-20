@@ -304,7 +304,7 @@
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteWithOpenHourProvider.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdater.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdater.cs" />
-    <Compile Include="Common\ExternalBadgeSetting.cs" />
+    <Compile Include="Common\BadgeSetting.cs" />
     <Compile Include="Common\QualityInfo.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
@@ -328,7 +328,7 @@
     <Compile Include="Infrastructure\PublishInitializeReadModelEventHandler.cs" />
     <Compile Include="Infrastructure\RequeueHangfireEventHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\BadgeUnitType.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IExternalBadgeSetting.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IBadgeSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestOpenPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestProcessor.cs" />

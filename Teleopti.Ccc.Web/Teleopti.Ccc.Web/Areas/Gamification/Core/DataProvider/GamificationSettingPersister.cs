@@ -352,18 +352,18 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			};
 		}
 
-		private IExternalBadgeSetting getExternalBadgeSetting(IGamificationSetting setting , int qualityId)
+		private IBadgeSetting getExternalBadgeSetting(IGamificationSetting setting , int qualityId)
 		{
-			if (setting.ExternalBadgeSettings == null)
+			if (setting.BadgeSettings == null)
 			{
-				setting.ExternalBadgeSettings = new List<IExternalBadgeSetting>();
+				setting.BadgeSettings = new List<IBadgeSetting>();
 			}
 
-			var externalBadgeSetting = setting.ExternalBadgeSettings.FirstOrDefault(x => x.QualityId == qualityId);
+			var externalBadgeSetting = setting.BadgeSettings.FirstOrDefault(x => x.QualityId == qualityId);
 			if (externalBadgeSetting == null)
 			{
 				var qualityInfo = getQualityInfo(qualityId);
-				externalBadgeSetting = new ExternalBadgeSetting
+				externalBadgeSetting = new BadgeSetting
 				{
 					Name = qualityInfo.QualityName,
 					QualityId = qualityId,
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 					UnitType = _mapper.ConvertRawQualityType(qualityInfo.QualityType)
 				};
 
-				setting.AddExternalBadgeSetting(externalBadgeSetting);
+				setting.AddBadgeSetting(externalBadgeSetting);
 			}
 
 			return externalBadgeSetting;
@@ -393,15 +393,15 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			var setting = getGamificationSetting(input.Id);
 			if (setting == null) return null;
 
-			if (setting.ExternalBadgeSettings == null)
+			if (setting.BadgeSettings == null)
 			{
-				setting.ExternalBadgeSettings = new List<IExternalBadgeSetting>();
+				setting.BadgeSettings = new List<IBadgeSetting>();
 			}
 
-			var externalBadgeSetting = setting.ExternalBadgeSettings.FirstOrDefault(x => x.QualityId == input.QualityId);
+			var externalBadgeSetting = setting.BadgeSettings.FirstOrDefault(x => x.QualityId == input.QualityId);
 			if (externalBadgeSetting == null)
 			{
-				externalBadgeSetting = new ExternalBadgeSetting
+				externalBadgeSetting = new BadgeSetting
 				{
 					Name = input.Name,
 					QualityId = input.QualityId,
@@ -414,7 +414,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 					UnitType = input.UnitType // TODO: Should get from quality_info
 				};
 
-				setting.AddExternalBadgeSetting(externalBadgeSetting);
+				setting.AddBadgeSetting(externalBadgeSetting);
 			}
 			else
 			{

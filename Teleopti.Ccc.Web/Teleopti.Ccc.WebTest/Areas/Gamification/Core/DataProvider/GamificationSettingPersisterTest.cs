@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		private IGamificationSettingRepository _fakegamificationSettingRepository;
 		private IGamificationSetting _gamificationSetting;
 		private IGamificationSettingMapper _mapper;
-		private IExternalBadgeSetting _externalBadgeSetting;
+		private IBadgeSetting _badgeSetting;
 		private IStatisticRepository _statisticRepository;
 		private QualityInfo _qualityInfo;
 
@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			_settingId = new Guid();
 			_gamificationSetting = new GamificationSetting("newGamification");
 			_gamificationSetting.SetId(_settingId);
-			_externalBadgeSetting = new ExternalBadgeSetting()
+			_badgeSetting = new BadgeSetting()
 			{
 				QualityId = 1,
 				UnitType = BadgeUnitType.Count
 			};
-			_gamificationSetting.ExternalBadgeSettings = new List<IExternalBadgeSetting>(){ _externalBadgeSetting };
+			_gamificationSetting.BadgeSettings = new List<IBadgeSetting>(){ _badgeSetting };
 			_gamificationSettingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
 			_gamificationSettingRepository.Stub(x => x.Get(_settingId)).Return(_gamificationSetting);
 
@@ -722,7 +722,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			{
 				GamificationSettingId = _settingId,
 				ThresholdValue = expactedThreshold,
-				QualityId = _externalBadgeSetting.QualityId,
+				QualityId = _badgeSetting.QualityId,
 				UnitType = BadgeUnitType.Count
 			});
 
@@ -740,7 +740,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			{
 				GamificationSettingId = _settingId,
 				ThresholdValue = expactedThreshold,
-				QualityId = _externalBadgeSetting.QualityId,
+				QualityId = _badgeSetting.QualityId,
 				UnitType = BadgeUnitType.Count
 			});
 
@@ -758,7 +758,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			{
 				GamificationSettingId = _settingId,
 				ThresholdValue = expactedThreshold,
-				QualityId = _externalBadgeSetting.QualityId,
+				QualityId = _badgeSetting.QualityId,
 				UnitType = BadgeUnitType.Count
 			});
 
@@ -776,7 +776,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			{
 				GamificationSettingId = _settingId,
 				ThresholdValue = expactedThreshold,
-				QualityId = _externalBadgeSetting.QualityId,
+				QualityId = _badgeSetting.QualityId,
 				UnitType = BadgeUnitType.Count
 			});
 
@@ -792,7 +792,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var result = target.PersistExternalBadgeLargerIsBetter(new ExternalBadgeSettingBooleanViewModel()
 			{
 				GamificationSettingId = _settingId,
-				QualityId = _externalBadgeSetting.QualityId,
+				QualityId = _badgeSetting.QualityId,
 				Value = true
 			});
 
@@ -817,9 +817,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			var result = target.PersistExternalBadgeEnabled(input);
 
 			result.Value.Should().Be.True();
-			Assert.AreEqual(1, gamificationSetting.ExternalBadgeSettings.Count);
+			Assert.AreEqual(1, gamificationSetting.BadgeSettings.Count);
 
-			var newBadgeSetting = gamificationSetting.ExternalBadgeSettings.First();
+			var newBadgeSetting = gamificationSetting.BadgeSettings.First();
 			// Check new created badge settting
 			Assert.AreEqual(_qualityInfo.QualityName, newBadgeSetting.Name);
 			Assert.AreEqual(_qualityInfo.QualityId, newBadgeSetting.QualityId);

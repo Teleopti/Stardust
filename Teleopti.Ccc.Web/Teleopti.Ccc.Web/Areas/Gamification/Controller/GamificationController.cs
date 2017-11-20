@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			return _gamificationSettingPersister.PersistExternalBadgeLargerIsBetter(input);
 		}
 
-		[HttpPost, Route("api/Gamification/Update/ExternalBadgeSetting"), UnitOfWork]
+		[HttpPost, Route("api/Gamification/Update/BadgeSetting"), UnitOfWork]
 		public virtual ExternalBadgeSettingViewModel UpdateExternalBadgeSetting(
 			[FromBody] UpdateExternalBadgeSettingViewModel input)
 		{
