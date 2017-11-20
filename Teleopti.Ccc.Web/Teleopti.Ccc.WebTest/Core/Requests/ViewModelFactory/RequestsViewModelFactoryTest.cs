@@ -436,6 +436,39 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldNotThrowExpcetionIfRequestNotFoundWhenRetrieveShiftTradePeriodViewModel()
+		{
+			var user = new FakeLoggedOnUser();
+			var person = new Person();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			user.SetFakeLoggedOnUser(person);
+			var timeZone = new FakeUserTimeZone();
+			var threadCulture = new ThreadCulture();
+			var mapper = MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>();
+			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
+			var now = MockRepository.GenerateMock<INow>();
+			var target = new RequestsViewModelFactory(null, null, null, provider, mapper, null, now, user, null, null, new FakePersonRequestRepository(),
+				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
+					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
+				new ShiftTradeSwapDetailViewModelMapper(
+					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
+						timeZone), new ProjectionProvider(), threadCulture, timeZone,
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))),
+				new PersonAccountViewModelMapper(timeZone),
+				null,
+				new NameFormatSettingsPersisterAndProvider(null));
+			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel();
+			var workflowControlSet = new WorkflowControlSet();
+
+			provider.Stub(p => p.RetrieveUserWorkflowControlSet()).Return(workflowControlSet);
+			mapper.Stub(x => x.Map(workflowControlSet, now, user.CurrentUser().PermissionInformation.DefaultTimeZone())).Return(shiftTradePeriodViewModel);
+
+			var result = target.CreateShiftTradePeriodViewModel(Guid.NewGuid());
+
+			result.Should().Be.SameInstanceAs(shiftTradePeriodViewModel);
+		}
+
+		[Test]
 		public void ShouldSetMiscSettingsFalseWhenNoOfferInShiftTrade()
 		{
 			var user = new FakeLoggedOnUser();

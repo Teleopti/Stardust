@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			if (id == null) return ret;
 
 			var personRequest = _personRequestRepository.Find(id.Value);
-			var shiftTrade = personRequest.Request as IShiftTradeRequest;
+			var shiftTrade = personRequest?.Request as IShiftTradeRequest;
 
 			if (shiftTrade == null || shiftTrade.Offer != null) return ret;
 
