@@ -37,8 +37,12 @@
         vm.canSave = false;
         vm.deleteConfirmation = false;
 
-        vm.selectSkillGroup = function(index) {
-            vm.selectedSkillGroup = vm.skillGroups[index];
+        vm.selectSkillGroup = function(group) {
+            if (isNumeric(group)) {
+                vm.selectedSkillGroup = vm.skillGroups[group];
+            } else {
+                vm.selectedSkillGroup = group;
+            }
             vm.skills = _.sortBy(
                 _.differenceBy(vm.allSkills, vm.selectedSkillGroup.Skills, function(skill) {
                     return skill.Id;
@@ -219,10 +223,18 @@
             return [];
         }
 
+        function isNumeric(n) {
+            return !isNaN(parseFloat(n)) && isFinite(n);
+        }
+
         SkillGroupSvc.getSkills().then(function(result) {
             vm.skills = result.data;
             vm.allSkills = vm.skills.slice();
         });
+
+        if ($state.params.selectedGroup && $state.params.selectedGroup.Id) {
+            vm.selectSkillGroup($state.params.selectedGroup);
+        }
 
         getAllSkillGroups();
     }

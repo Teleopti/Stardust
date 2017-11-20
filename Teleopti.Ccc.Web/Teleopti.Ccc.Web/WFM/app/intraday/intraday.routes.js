@@ -24,6 +24,9 @@
         controller: "SkillGroupController as vm"
       })
       .state("intraday.skill-area-manager", {
+				params:{
+					selectedGroup: {}
+				},
         url: "/skill-area-manager",
         templateUrl: "app/global/skill-group/skill-group-manager.html",
         controller: "SkillGroupManagerController as vm"

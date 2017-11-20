@@ -392,7 +392,8 @@
 
     vm.openSkillGroupManager = function() {
       $state.go('intraday.skill-area-manager', {
-        isNewSkillArea: false
+				isNewSkillArea: false,
+				selectedGroup: vm.selectedSkillArea
       });
     };
 
