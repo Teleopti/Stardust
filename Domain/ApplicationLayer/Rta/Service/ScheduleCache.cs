@@ -13,19 +13,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private static readonly object lockObject = new object();
 		private readonly IScheduleReader _reader;
 		private readonly PerTenant<CurrentScheduleReadModelVersion> _version;
-		private readonly PerTenant<IDictionary<Guid, IEnumerable<ScheduledActivity>>> _dictionary;
+		private readonly PerTenant<IDictionary<Guid, IEnumerable<ScheduledActivity>>> _cache;
 
 		public ScheduleCache(IScheduleReader reader, ICurrentDataSource dataSource)
 		{
 			_reader = reader;
 			_version = new PerTenant<CurrentScheduleReadModelVersion>(dataSource);
-			_dictionary = new PerTenant<IDictionary<Guid, IEnumerable<ScheduledActivity>>>(dataSource);
+			_cache = new PerTenant<IDictionary<Guid, IEnumerable<ScheduledActivity>>>(dataSource);
 		}
 
 		public IEnumerable<ScheduledActivity> Read(Guid personId)
 		{
 			IEnumerable<ScheduledActivity> result = null;
-			_dictionary.Value?.TryGetValue(personId, out result);
+			_cache.Value?.TryGetValue(personId, out result);
 			return result.EmptyIfNull();
 		}
 
@@ -54,24 +54,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				if (latestVersion.Equals(_version.Value))
 					return;
 
+				IEnumerable<CurrentSchedule> updates;
 				if (_version.Value == null || _version.Value.Version() != latestVersion.Version())
-				{
-					var all = Read();
-					_dictionary.Set(all.ToDictionary(x => x.PersonId, x => x.Schedule));
-				}
+					updates = Read();
 				else
-				{
-					var updates = Read(_version.Value.Revision());
-					_dictionary.Set(
-						merge(_dictionary.Value, updates.ToDictionary(x => x.PersonId, x => x.Schedule))
-					);
-				}
+					updates = Read(_version.Value.Revision());
+				var schedulePerPerson = updates.GroupBy(x => x.PersonId).ToDictionary(x => x.Key, x => x.Last().Schedule);
+				_cache.Set(mergeDictionaries(_cache.Value, schedulePerPerson));
 
 				_version.Set(latestVersion);
 			}
 		}
 
-		private static IDictionary<Guid, IEnumerable<ScheduledActivity>> merge(params IDictionary<Guid, IEnumerable<ScheduledActivity>>[] dictionaries)
+		private static IDictionary<Guid, IEnumerable<ScheduledActivity>> mergeDictionaries(params IDictionary<Guid, IEnumerable<ScheduledActivity>>[] dictionaries)
 		{
 			var result = new Dictionary<Guid, IEnumerable<ScheduledActivity>>();
 			foreach (var dict in dictionaries)
@@ -136,7 +131,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public override int GetHashCode()
 		{
-			unchecked { return (_cacheVersion.GetHashCode() * 397) ^ _scheduleRevision; }
+			unchecked
+			{
+				return (_cacheVersion.GetHashCode() * 397) ^ _scheduleRevision;
+			}
 		}
 
 		public override string ToString() => $"{_cacheVersion}:{_scheduleRevision}";

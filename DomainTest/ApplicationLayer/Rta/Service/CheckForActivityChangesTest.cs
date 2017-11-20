@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public RtaTestAttribute Context;
+		public FakeCurrentScheduleReadModelPersister Schedules;
 
 		[Test]
 		public void ShouldKeepPreviousStateWhenNotifiedOfActivityChange1()
@@ -250,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.PublishedEvents.OfType<AgentStateChangedEvent>().Single()
 				.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
 		}
-		
+
 		[Test]
 		public void ShouldNoticeScheduleActivityChange()
 		{
@@ -296,6 +297,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.RuleId.Should().Be(alarm);
+		}
+
+		[Test]
+		public void ShouldNotFailWhenReceivingMultipleSchedules()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "Phone", "2017-11-20 09:00", "2017-11-20 11:00")
+				;
+			Schedules.Has(personId, 1000, new[]
+			{
+				new ScheduledActivity
+				{
+					BelongsToDate = "2017-11-20".Date(),
+					PersonId = personId,
+					Name = "Phone",
+					StartDateTime = "2017-11-20 09:00".Utc(),
+					EndDateTime = "2017-11-20 11:00".Utc(),
+				},
+			});
+
+			Now.Is("2017-11-20 09:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Publisher.PublishedEvents.OfType<AgentStateChangedEvent>().Single()
+				.CurrentActivityName.Should().Be("Phone");
 		}
 	}
 }

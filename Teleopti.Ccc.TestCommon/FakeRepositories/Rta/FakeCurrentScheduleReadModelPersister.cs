@@ -12,16 +12,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			public Guid PersonId;
 			public IEnumerable<ScheduledActivity> Schedules;
-			public int LastUpdate;
+			public int Revision;
 			public bool Valid;
 		}
 		
 		private IEnumerable<data> _data = Enumerable.Empty<data>();
 
+		public void Has(Guid personId, int revision, IEnumerable<ScheduledActivity> schedule)
+		{
+			_data = _data
+				.Append(new data
+				{
+					PersonId = personId,
+					Schedules = schedule.ToArray(),
+					Revision = revision,
+					Valid = true
+				})
+				.ToArray();
+		}
+		
 		public IEnumerable<CurrentSchedule> Read(int fromRevision)
 		{
 			return _data
-				.Where(x => x.LastUpdate > fromRevision)
+				.Where(x => x.Revision > fromRevision)
 				.Select(x => new CurrentSchedule
 				{
 					PersonId = x.PersonId,
@@ -58,7 +71,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.ToArray();
 		}
 
-		public void Persist(Guid personId, int version, IEnumerable<ScheduledActivity> schedule)
+		public void Persist(Guid personId, int revision, IEnumerable<ScheduledActivity> schedule)
 		{
 			_data = _data
 				.Where(x => x.PersonId != personId)
@@ -66,7 +79,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				{
 					PersonId = personId,
 					Schedules = schedule.ToArray(),
-					LastUpdate = version,
+					Revision = revision,
 					Valid = true
 				})
 				.ToArray();

@@ -61,14 +61,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<Guid>();
 		}
 
-		public void Persist(Guid personId, int version, IEnumerable<ScheduledActivity> schedule)
+		public void Persist(Guid personId, int revision, IEnumerable<ScheduledActivity> schedule)
 		{
 			var serializedSchedule = _serializer.SerializeObject(schedule);
 
 			var updated = _unitOfWork.Current()
 				.CreateSqlQuery("UPDATE ReadModel.CurrentSchedule SET Schedule = :Schedule, Valid = 1, Revision = :Revision WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
-				.SetParameter("Revision", version)
+				.SetParameter("Revision", revision)
 				.SetParameter("Schedule", serializedSchedule, NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				_unitOfWork.Current()
 					.CreateSqlQuery("INSERT INTO ReadModel.CurrentSchedule (PersonId, Schedule, Revision, Valid) VALUES (:PersonId, :Schedule, :Revision, 1)")
 					.SetParameter("PersonId", personId)
-					.SetParameter("Revision", version)
+					.SetParameter("Revision", revision)
 					.SetParameter("Schedule", serializedSchedule, NHibernateUtil.StringClob)
 					.ExecuteUpdate();
 		}
