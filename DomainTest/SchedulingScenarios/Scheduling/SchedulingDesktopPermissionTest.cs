@@ -35,15 +35,24 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(true, ExpectedResult = true)]
 		[TestCase(false, ExpectedResult = false)]
-		[Ignore("46647")]
-		public bool ShouldScheduleWriteProtectedDayWhenHavingPermission(bool havePermisson)
+		public bool ShouldScheduleWriteProtectedDayWhenHavingPermission(bool havePermissonToModifyWriteProtected)
 		{
 			var personId = Guid.NewGuid();
 			Database.WithTenant("_").WithPerson(personId, "_");
-			if (havePermisson) Database.WithRole(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
+			var applicationFunctions = new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions;
+			foreach (var applicationFunction in applicationFunctions)
+			{
+				if(applicationFunction.FunctionPath.Equals(DefinedRaptorApplicationFunctionPaths.All))
+					continue;
+					
+				if (!havePermissonToModifyWriteProtected && applicationFunction.FunctionPath.Equals(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+					continue;
+				
+				Database.WithRole(AvailableDataRangeOption.Everyone, applicationFunction.FunctionPath);
+			}
+
 			var person = PersonRepository.Load(personId);
 			LogOnOff.LogOn("_", person, Database.CurrentBusinessUnitId());
-
 			var firstDay = new DateOnly(2017, 5, 15);
 			var period = new DateOnlyPeriod(firstDay, firstDay);
 			var activity = new Activity().WithId();
@@ -58,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			LockManager().AddLock(agent, firstDay, LockType.WriteProtected);
 
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
-			
+
 			return schedulerStateHolder.Schedules[agent].ScheduledDay(firstDay).IsScheduled();
 		}
 

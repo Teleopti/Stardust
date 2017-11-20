@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		public Guid AgentId { get; set; }
 		public DateOnly Date { get; set; }
+		public LockType LockType { get; set; }
 	}
 }

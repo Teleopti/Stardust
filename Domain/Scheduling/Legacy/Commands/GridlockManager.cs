@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				foreach (var gridLock in gridLockDictionary)
 				{
-					yield return new LockInfo { Date = gridLock.Value.LocalDate, AgentId = gridLock.Value.Person.Id.Value };
+					yield return new LockInfo { Date = gridLock.Value.LocalDate, AgentId = gridLock.Value.Person.Id.Value, LockType = gridLock.Value.LockType};
 				}
 			}
 		}

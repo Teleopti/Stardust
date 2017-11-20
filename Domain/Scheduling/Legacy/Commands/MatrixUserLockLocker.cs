@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -34,8 +36,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					matrix.UnlockPeriod(new DateOnlyPeriod(day, day));
 
 				var locks = gridlockManager.Gridlocks(currentPerson, day);
-				if (locks != null && locks.Count != 0)
-					matrix.LockDay(day);
+
+				if (locks == null) continue;
+				foreach (var userLock in locks)
+				{
+					if (userLock.Value.LockType.Equals(LockType.WriteProtected))
+					{
+						if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+						{
+							matrix.LockDay(day);
+						}
+					}
+					else
+					{
+						matrix.LockDay(day);
+					}
+				}
 			}
 		}
     }

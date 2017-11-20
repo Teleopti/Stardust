@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				var agent = schedulerStateHolderTo.ChoosenAgents.SingleOrDefault(x => x.Id.Value == lockInfo.AgentId);
 				if (agent != null)
 				{
-					lockInfoForStateHolder.GridlockManager.AddLock(agent, lockInfo.Date, LockType.Normal);
+					lockInfoForStateHolder.GridlockManager.AddLock(agent, lockInfo.Date, lockInfo.LockType);
 				}
 			}
 		}
