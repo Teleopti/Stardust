@@ -136,12 +136,12 @@
 										<md-tooltip ng-if="!vm.exporting">{{'ExportToExcel'|translate}}</md-tooltip>
 										<md-tooltip ng-if="vm.exporting">{{'WorkingThreeDots'|translate}}</md-tooltip>
 									</li>
-									<li ng-click="vm.showIncluded=!vm.showIncluded">
+									<li ng-if="vm.selectedSkillArea.Name" ng-click="vm.showIncluded=!vm.showIncluded">
 										<i ng-hide="vm.showIncluded" class="mdi mdi-eye"></i>
 										<i ng-show="vm.showIncluded" class="mdi mdi-eye-off"></i>
 										{{'IncludedSkills'|translate}}
 									</li>
-									<li ng-show="!vm.toggles.modifySkillGroups" ng-click='vm.toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
+									<li ng-show="!vm.toggles.modifySkillGroups && vm.selectedSkillArea.Name" ng-click='vm.toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
 								</ul>
 							</span>
 							</div>
