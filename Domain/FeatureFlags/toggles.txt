@@ -194,7 +194,6 @@ Staffing_BPOExchangeImport_45202 = true
 WFM_Forecaster_Refact_44480 = true
 Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 WFM_Export_Forecast_44716 = true
-WFM_RedirectPermissionToWeb_44562 = true
 WFM_TrainingPlanner_44780 = RC
 
 Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560 = true

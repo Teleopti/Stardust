@@ -465,18 +465,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions))
 			{
-				if (_toggleManager.IsEnabled(Toggles.WFM_RedirectPermissionToWeb_44562))
-				{
-					Process.Start(buildWfmUri("WFM/#/permissions").ToString());				
-				}
-				else
-				{
-					logInfo("toolStripButtonPermissons_Click: Showing permissions EO:URL " + wfmWebView.Url);
-					backStageViewMain.HideBackStage();
-					toggleWebControls(false);
-				}
+				Process.Start(buildWfmUri("WFM/#/permissions").ToString());
 			}
-			
 		}
 
 		private void persistSetting()
@@ -1023,31 +1013,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
 			}
-		}
-
-		private void toggleWebControls(bool hidePermissions)
-		{
-			wfmWebControl.Visible = !hidePermissions;
-			logInfo("Toggling the wfm view EO:URL" + wfmWebView.Url);
-			if (!hidePermissions)
-			{
-				webControl1.Visible = false;
-				webControlDataProtection.Visible = false;
-			}
-			else
-			{
-				if (showDataProtectionWebPage)
-				{
-					webControlDataProtection.Visible = true;
-					webControl1.Visible = false;
-				}
-
-				else
-				{
-					webControlDataProtection.Visible = false;
-					webControl1.Visible = true;
-				}
-			}		
 		}
 
 		private void wfmWebView_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
