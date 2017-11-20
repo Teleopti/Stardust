@@ -16752,4 +16752,28 @@ Do you want to participate?</value>
     <value>of</value>
     <comment>Used to show how many skills of a skill group that are selected</comment>
   </data>
+  <data name="AllSkillGroups" xml:space="preserve">
+    <value>All skill groups</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
+    <value>Are you sure you want to delete the skill-group</value>
+  </data>
+  <data name="AvailableSkills" xml:space="preserve">
+    <value>Available skills</value>
+  </data>
+  <data name="CreateNewSkillGroup" xml:space="preserve">
+    <value>Create new skill-group</value>
+  </data>
+  <data name="DoYouWantToDeleteSkillGroup" xml:space="preserve">
+    <value>Do you want to delete skill-group</value>
+  </data>
+  <data name="ManageSkillGroups" xml:space="preserve">
+    <value>Manage skill-groups</value>
+  </data>
+  <data name="MoveFromGroup" xml:space="preserve">
+    <value>Move from skill-group</value>
+  </data>
+  <data name="MoveToGroup" xml:space="preserve">
+    <value>Move to skill-group</value>
+  </data>
 </root>

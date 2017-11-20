@@ -2438,6 +2438,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All skill groups.
+        /// </summary>
+        public static string AllSkillGroups {
+            get {
+                return ResourceManager.GetString("AllSkillGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All team members must be loaded.
         /// </summary>
         public static string AllTeamMembersMustBeLoaded {
@@ -3295,6 +3304,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the skill-group.
+        /// </summary>
+        public static string AreYouSureYouWantToDeleteTheSkillGroup {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDeleteTheSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this campaign?.
         /// </summary>
         public static string AreYouSureYouWantToDeleteThisCampaign {
@@ -3725,6 +3743,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AvailableScorecards {
             get {
                 return ResourceManager.GetString("AvailableScorecards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available skills.
+        /// </summary>
+        public static string AvailableSkills {
+            get {
+                return ResourceManager.GetString("AvailableSkills", resourceCulture);
             }
         }
         
@@ -7463,6 +7490,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create new skill-group.
+        /// </summary>
+        public static string CreateNewSkillGroup {
+            get {
+                return ResourceManager.GetString("CreateNewSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create next planning period.
         /// </summary>
         public static string CreateNextPp {
@@ -9835,6 +9871,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DownloadTemplate {
             get {
                 return ResourceManager.GetString("DownloadTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to delete skill-group.
+        /// </summary>
+        public static string DoYouWantToDeleteSkillGroup {
+            get {
+                return ResourceManager.GetString("DoYouWantToDeleteSkillGroup", resourceCulture);
             }
         }
         
@@ -16753,6 +16798,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage skill-groups.
+        /// </summary>
+        public static string ManageSkillGroups {
+            get {
+                return ResourceManager.GetString("ManageSkillGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage SMS Settings.
         /// </summary>
         public static string ManageSmsSettings {
@@ -18284,6 +18338,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move from skill-group.
+        /// </summary>
+        public static string MoveFromGroup {
+            get {
+                return ResourceManager.GetString("MoveFromGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move Invalid Overlapped Activity.
         /// </summary>
         public static string MoveInvalidOverlappedActivity {
@@ -18451,6 +18514,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MoveTimeOn {
             get {
                 return ResourceManager.GetString("MoveTimeOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move to skill-group.
+        /// </summary>
+        public static string MoveToGroup {
+            get {
+                return ResourceManager.GetString("MoveToGroup", resourceCulture);
             }
         }
         
@@ -24611,7 +24683,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift on {0}  is not maching the shift on {1}.
+        ///   Looks up a localized string similar to The shift on {0} is not maching the shift on {1}.
         /// </summary>
         public static string PreviousShiftNotMatchShift {
             get {
@@ -24620,7 +24692,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift on {0}  is not maching the  shift category {1}.
+        ///   Looks up a localized string similar to The shift on {0} is not maching the  shift category {1}.
         /// </summary>
         public static string PreviousShiftNotMatchShiftCategory {
             get {
@@ -24629,7 +24701,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift on {0}  is not maching the start time {1}.
+        ///   Looks up a localized string similar to The shift on {0} is not maching the start time {1}.
         /// </summary>
         public static string PreviousShiftNotMatchStartTime {
             get {
