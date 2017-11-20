@@ -4,6 +4,7 @@ using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void Send(List<Guid> queuedId, DateTime timeStamp)
 		{
+			timeStamp = timeStamp.Truncate(TimeSpan.FromSeconds(1));
 			foreach (var batch in queuedId.Batch(1000))
 			{
 				var quesryString = "UPDATE[QueuedAbsenceRequest] SET Sent = :timestamp WHERE Id in (:ids)";
