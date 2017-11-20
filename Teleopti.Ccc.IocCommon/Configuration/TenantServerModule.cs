@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
 			builder.RegisterType<FindPersonInfo>().As<IFindPersonInfo>().SingleInstance();
 			builder.RegisterType<FindPersonInfoByCredentials>().As<IFindPersonInfoByCredentials>().SingleInstance();
+			builder.RegisterType<FindTenantNameByRtaKey>().As<IFindTenantNameByRtaKey>().SingleInstance();
 			builder.RegisterType<FindTenantByName>().As<IFindTenantByName>().SingleInstance();
 			builder.RegisterType<FindTenantByNameWithEnsuredTransaction>().As<IFindTenantByNameWithEnsuredTransaction>().SingleInstance();
 			builder.RegisterType<CountTenants>().As<ICountTenants>().SingleInstance();
