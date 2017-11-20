@@ -1,6 +1,7 @@
 using System;
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule(new TenantServerModule(configuration));
+			builder.RegisterType<TenantAuthenticationAlwaysAuthenticated>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterModule(new TestModule());
 
 			registrations?.Invoke(builder);
