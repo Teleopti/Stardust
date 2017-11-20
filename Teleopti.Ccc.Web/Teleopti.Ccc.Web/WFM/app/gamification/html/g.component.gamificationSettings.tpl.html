@@ -30,39 +30,31 @@
         </div>
     </div>
     <div class="setting-container ">
-        <div class="setting-propterties">
+        <div class="setting-propterties wfm-form">
             <div style="max-width: 400px;">
-                <div class="input-container">
-                    <div class="form-input-wrap">
-                        <label>{{'Description'|translate}}{{'Colon'|translate}}</label>
-                        <input type="text" class="setting-name-input" ng-model="$ctrl.currentSetting.name" ng-blur="$ctrl.changeSettingDescription()">
-                    </div>
+                <div class="form-input-wrap">
+                    <label>{{'Description'|translate}}{{'Colon'|translate}}</label>
+                    <input type="text" class="setting-name-input" ng-model="$ctrl.currentSetting.name" ng-blur="$ctrl.changeSettingDescription()">
                 </div>
 
-                <div class="input-container">
-                    <div class="inline-block">
-                        <label>{{'ChangeInfo'|translate}}{{'Colon'|translate}}</label>
-                        <p>Updated by {{$ctrl.currentSetting.updated_by}} on {{$ctrl.currentSetting.updated_on}}</p>
-                    </div>
+                <div class="form-input-wrap">
+                    <label>{{'ChangeInfo'|translate}}{{'Colon'|translate}}</label>
+                    <p>Updated by {{$ctrl.currentSetting.updated_by}} on {{$ctrl.currentSetting.updated_on}}</p>
                 </div>
 
-                <div class="input-container">
-                    <div class="form-input-wrap">
-                        <label>{{'Rule'|translate}}{{'Colon'|translate}}</label>
-                        <md-select id="gamificationSettingType " ng-change="$ctrl.ruleSelectionChanged()" ng-model="$ctrl.currentSetting.rule_id">
-                            <md-option ng-repeat="rule in $ctrl.currentSetting.rules " value="{{rule.id}}">
-                                <span ng-bind="rule.name "></span>
-                            </md-option>
-                        </md-select>
-                    </div>
+                <div class="form-input-wrap">
+                    <label>{{'Rule'|translate}}{{'Colon'|translate}}</label>
+                    <md-select id="gamificationSettingType " ng-change="$ctrl.ruleSelectionChanged()" ng-model="$ctrl.currentSetting.rule_id">
+                        <md-option ng-repeat="rule in $ctrl.currentSetting.rules " value="{{rule.id}}">
+                            <span ng-bind="rule.name "></span>
+                        </md-option>
+                    </md-select>
                 </div>
 
-                <div>
-                    <div ng-show="$ctrl.currentRule.items ">
-                        <div ng-repeat="item in $ctrl.currentRule.items" class="form-input-wrap">
-                            <label>{{item.name}}{{'Colon'|translate}}</label>
-                            <input class="setting-name-input" ng-blur="$ctrl.changeRuleValue(item)" type="text" ng-model="item.value">
-                        </div>
+                <div ng-show="$ctrl.currentRule.items">
+                    <div ng-repeat="item in $ctrl.currentRule.items" class="form-input-wrap">
+                        <label>{{item.name}}{{'Colon'|translate}}</label>
+                        <input class="setting-name-input" ng-blur="$ctrl.changeRuleValue(item)" type="text" ng-model="item.value">
                     </div>
                 </div>
             </div>
