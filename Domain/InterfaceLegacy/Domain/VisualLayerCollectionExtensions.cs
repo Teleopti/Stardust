@@ -102,21 +102,17 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool PrimarySkillMode { get; }
 	}
 
-	public interface IResourceCalculationDataContainer : IResourcesForShovelAndCalculation
+	public interface IResourceCalculationDataContainer
 	{
 		void Clear();
-		bool HasItems();
 
 		Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period);
 		double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period);
-	}
 
-	public interface IResourcesForShovelAndCalculation
-	{
 		IDictionary<DoubleGuidCombinationKey, AffectedSkills> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate);
 		int MinSkillResolution { get; }
 	}
-
+	
 	public struct AffectedSkills
 	{
 		public IEnumerable<ISkill> Skills { get; set; }

@@ -30,11 +30,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_dictionary.Clear();
 		}
 
-		public bool HasItems()
-		{
-			return _dictionary.Count > 0;
-		}
-
 		public void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
 			PeriodResource resources = _dictionary.GetOrAdd(resourceLayer.Period, new PeriodResource());

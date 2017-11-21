@@ -487,7 +487,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestIntradayFilter.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceCalculationPeriodDictionary.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\ResourcesExtractor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillCombinationResourceReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SlimSkillResourceCalculationPeriodWrapper.cs" />
     <Compile Include="ApplicationLayer\AllowFailuresAttribute.cs" />

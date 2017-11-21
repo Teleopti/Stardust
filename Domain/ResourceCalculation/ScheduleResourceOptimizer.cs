@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	/// </summary>
 	public class ScheduleResourceOptimizer
 	{
-		private readonly IResourcesForShovelAndCalculation _relevantProjections;
+		private readonly IResourceCalculationDataContainer _relevantProjections;
 		private readonly ISkillResourceCalculationPeriodDictionary _skillStaffPeriods;
 		private readonly IAffectedPersonSkillService _personSkillService;
 		private readonly IActivityDivider _activityDivider;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private const double _quotient = 1d; // the outer quotient: default = 1
 		private const int _maximumIteration = 100; // the maximum number of iterations
 
-		public ScheduleResourceOptimizer(IResourcesForShovelAndCalculation relevantProjections,
+		public ScheduleResourceOptimizer(IResourceCalculationDataContainer relevantProjections,
 										 ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
 										 IAffectedPersonSkillService personSkillService,
 										 bool clearSkillStaffPeriods, IActivityDivider activityDivider)

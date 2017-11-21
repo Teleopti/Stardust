@@ -61,22 +61,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldClearResources()
-		{
-			_target.AddResources(_person, _date,
-								 new ResourceLayer
-								 {
-									 PayloadId = _activity.Id.GetValueOrDefault(),
-									 Period = _period,
-									 RequiresSeat = false,
-									 Resource = 0.8
-								 });
-			_target.HasItems().Should().Be.True();
-			_target.Clear();
-			_target.HasItems().Should().Be.False();
-		}
-
-		[Test]
 		public void ShouldGetAffectedSkillsWithProficiency()
 		{
 			_person.ChangeSkillProficiency(_skill,new Percent(0.9), _person.Period(_date));

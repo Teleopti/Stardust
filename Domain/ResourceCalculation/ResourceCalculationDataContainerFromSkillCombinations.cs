@@ -176,11 +176,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			throw new NotImplementedException();
 		}
 
-		public bool HasItems()
-		{
-			throw new NotImplementedException();
-		}
-
 		public Tuple<double, double> SkillResources(ISkill skill, DateTimePeriod period)
 		{
 			throw new NotImplementedException();
