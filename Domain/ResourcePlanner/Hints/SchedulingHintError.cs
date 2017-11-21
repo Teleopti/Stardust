@@ -17,7 +17,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 	public class ValidationError
 	{
-		public string ErrorMessage { get; set; }
+		public string ErrorResource { get; set; }
+		public List<object> ErrorResourceData { get; set; }
+		public string ErrorMessageLocalized { get; set; }
 		[JsonConverter(typeof(StringEnumConverter))]
 		public ValidationResourceType ResourceType { get; set; }
 	}

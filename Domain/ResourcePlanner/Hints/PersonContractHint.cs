@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				{
 					hintResult.Add(new PersonHintError(person)
 					{
-						ValidationError = string.Format(Resources.DeletedContractAssigned, period.PersonContract.Contract.Description.Name)
+						ErrorResource = nameof(Resources.DeletedContractAssigned), 
+						ErrorResourceData = new object[] { period.PersonContract.Contract.Description.Name }.ToList()
 					}, GetType());
 				}
 			}

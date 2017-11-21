@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.UserTexts;
 
@@ -18,14 +20,15 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					{
 						hintResult.Add(new PersonHintError(person)
 						{
-							ValidationError = Resources.MissingShiftBagForPeriod
+							ErrorResource = nameof(Resources.MissingShiftBagForPeriod)
 						}, GetType());
 					}
 					else if (((IDeleteTag)period.RuleSetBag).IsDeleted)
 					{
 						hintResult.Add(new PersonHintError(person)
 						{
-							ValidationError = string.Format(Resources.DeletedShiftBagAssigned, period.RuleSetBag.Description.Name)
+							ErrorResource = nameof(Resources.DeletedShiftBagAssigned),
+							ErrorResourceData = new object[] { period.RuleSetBag.Description.Name }.ToList()
 						}, GetType());
 					}
 				}

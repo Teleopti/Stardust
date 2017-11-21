@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				where periods.Any(period => !period.PersonSkillCollection.Any())
 				select new PersonHintError(person)
 				{
-					ValidationError = Resources.MissingSkillsForPeriod
+					ErrorResource = nameof(Resources.MissingSkillsForPeriod)
 				};
 			foreach (var validationError in validationErrors)
 			{

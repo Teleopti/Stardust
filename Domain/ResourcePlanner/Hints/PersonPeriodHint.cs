@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				{
 					hintResult.Add(new PersonHintError(person)
 					{
-						ValidationError = Resources.MissingPersonPeriodForPeriod
+						ErrorResource = nameof(Resources.MissingPersonPeriodForPeriod)
 					}, GetType());
 				}
 			}

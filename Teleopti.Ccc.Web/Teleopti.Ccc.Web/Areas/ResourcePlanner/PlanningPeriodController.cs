@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Web.Http;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -14,6 +15,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				var schedulingResult = JsonConvert.DeserializeObject<SchedulingResultModel>(lastJobResult.Details.First().Message);
 				var optimizationResult = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message);
 				mergeScheduleResultIntoOptimizationResult(schedulingResult, optimizationResult);
+				localizeErrormessages(optimizationResult);
 
 				return Ok(new
 				{
@@ -80,6 +83,49 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(new { });
 		}
 
+		private static void localizeErrormessages(OptimizationResultModel optimizationResult)
+		{
+			foreach (var brvl in optimizationResult.BusinessRulesValidationResults)
+			{
+				foreach (var validationError in brvl.ValidationErrors)
+				{
+					validationError.ErrorMessageLocalized = LocalizeErrorMessage(validationError);
+				}
+			}
+		}
+
+		private static string LocalizeErrorMessage(ValidationError validationError)
+		{
+			// Message: "Muisiing forcas from {0:d} to {1:d}"
+			// Message: "Muisiing forcas from"
+			// Data: "2015", "to", "2017"
+			// "Muisiing forcas from 2015 to 2017"
+
+			// Message: "Perdiod between {0} and {1}"
+			// Data: "2015-01-01", "2017-05-01"
+			// "Perdiod between 2015-01-01 and 2017-05-01"
+
+			try
+			{
+				for (int i = 0; i < validationError.ErrorResourceData.Count; i++)
+				{
+					DateTime dateTime;
+					if (DateTime.TryParse(validationError.ErrorResourceData[i].ToString(), out dateTime))
+					{
+						validationError.ErrorResourceData[i] = dateTime;
+					}
+				}
+
+				var localizedString = Resources.ResourceManager.GetString(validationError.ErrorResource);
+				return string.Format(localizedString, validationError.ErrorResourceData);
+			}
+			catch (Exception ex)
+			{
+				return Resources.ResourceManager.GetString(validationError.ErrorResource);
+			}
+		}
+
+
 		private static void mergeScheduleResultIntoOptimizationResult(SchedulingResultModel schedulingResult, OptimizationResultModel optimizationResult)
 		{
 			foreach (var schedulingBusinessRulesValidationResult in schedulingResult.BusinessRulesValidationResults)
@@ -91,7 +137,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					{
 						foreach (var error in schedulingBusinessRulesValidationResult.ValidationErrors)
 						{
-							if (optimizationResultBusinessRulesValidationResult.ValidationErrors.Any(x => x.ErrorMessage == error.ErrorMessage) == false) 
+							// TODO kolla in detta. String.Format inline... inte så bra kanske.
+							if (optimizationResultBusinessRulesValidationResult.ValidationErrors.Any(x => string.Format(x.ErrorResource, x.ErrorResourceData) == string.Format(error.ErrorResource, error.ErrorResourceData)) == false) 
 							{
 								optimizationResultBusinessRulesValidationResult.ValidationErrors.Add(error);
 							}
@@ -246,6 +293,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					{
 						CurrentSchedule = schedules
 					});
+				foreach (var res in validationResult.InvalidResources)
+				{
+					foreach (var ve in res.ValidationErrors)
+					{
+						ve.ErrorMessageLocalized = LocalizeErrorMessage(ve);
+					}
+				}
 			}
 			return Ok(validationResult);
 		}
@@ -412,3 +466,4 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	}
 
 }
+

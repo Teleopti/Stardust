@@ -17780,7 +17780,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing forecast from.
+        ///   Looks up a localized string similar to Missing forecast from {0} to {1}.
         /// </summary>
         public static string MissingForecastFrom {
             get {

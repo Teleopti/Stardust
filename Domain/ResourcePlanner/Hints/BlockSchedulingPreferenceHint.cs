@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						var preference = scheduleDay.RestrictionCollection().OfType<IPreferenceRestriction>().SingleOrDefault();
 						if (preference != null)
 						{
+							// TODO read from resourcefile
 							addValidationError(hintResult, person, "Block scheduling may not work when using preference.");
 							break;
 						}
@@ -36,13 +37,14 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			}
 		}
 
-		private void addValidationError(HintResult hintResult, IPerson person, string message)
+		private void addValidationError(HintResult hintResult, IPerson person, string resourceString, params object[] resourceData)
 		{
 			hintResult.Add(new PersonHintError
 			{
 				PersonName = person.Name.ToString(),
 				PersonId = person.Id.Value,
-				ValidationError = message
+				ErrorResource = resourceString,
+				ErrorResourceData = resourceData.ToList()
 			}, GetType(), ValidationResourceType.BlockScheduling);
 		}
 	}

@@ -19,18 +19,15 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			if (InvalidResources.Any(x => x.ResourceId == error.PersonId))
 			{
 				var schedulingValidationError = InvalidResources.First(x => x.ResourceId == error.PersonId);
-				//schedulingValidationError.ValidationErrors.Add(error.ValidationError);
-				schedulingValidationError.ValidationErrors.Add(new ValidationError(){ErrorMessage = error.ValidationError,ResourceType = category});
+				schedulingValidationError.ValidationErrors.Add(new ValidationError(){ ErrorResource = error.ErrorResource, ErrorResourceData = error.ErrorResourceData, ResourceType = category });
 				schedulingValidationError.ValidationTypes.Add(validationType);
-				//schedulingValidationError.ResourceTypes.Add(category);
 			}
 			else
 				InvalidResources.Add(new SchedulingHintError
 				{
 					ResourceId = error.PersonId,
 					ResourceName = error.PersonName,
-					ValidationErrors = new List<ValidationError> { new ValidationError() { ErrorMessage = error.ValidationError, ResourceType = category } },
-					//ResourceTypes = new List<ValidationResourceType> { category },
+					ValidationErrors = new List<ValidationError> { new ValidationError() { ErrorResource = error.ErrorResource, ErrorResourceData = error.ErrorResourceData, ResourceType = category } },
 					ValidationTypes = new List<Type> { validationType}
 				});
 		}
@@ -39,21 +36,29 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		{
 			if (InvalidResources.Any(x => x.ResourceName == error.SkillName))
 			{
-				foreach (var err in error.MissingRanges.Select(x => $"{Resources.MissingForecastFrom} {x.StartDate:d} {Resources.ToText} {x.EndDate:d}"))
+				foreach (var err in error.MissingRanges)//.Select(x => $"{Resources.MissingForecastFrom} {x.StartDate:d} {Resources.ToText} {x.EndDate:d}"))
 				{
 					var schedulingValidationError = InvalidResources.First(x => x.ResourceName == error.SkillName);
-					schedulingValidationError.ValidationErrors.Add(new ValidationError() { ErrorMessage = err, ResourceType = ValidationResourceType.Skill });
+					schedulingValidationError.ValidationErrors.Add(
+						new ValidationError()
+						{
+							ErrorResource = nameof(Resources.MissingForecastFrom),
+							ErrorResourceData = new object[] { err.StartDate, err.EndDate }.ToList(),
+							ResourceType = ValidationResourceType.Skill
+						});
 					schedulingValidationError.ValidationTypes.Add(validationType);
 				}
 			}
 			else
 			{
 				var validationErrors = new List<ValidationError>();
-				foreach (var err in error.MissingRanges.Select(x => $"{Resources.MissingForecastFrom} {x.StartDate:d} {Resources.ToText} {x.EndDate:d}"))
+				foreach (var err in error.MissingRanges)//.Select(x => $"{Resources.MissingForecastFrom} {x.StartDate:d} {Resources.ToText} {x.EndDate:d}"))
 				{
 					validationErrors.Add(new ValidationError()
 					{
-						ErrorMessage = err, ResourceType = ValidationResourceType.Skill
+						ErrorResource = nameof(Resources.MissingForecastFrom),
+						ErrorResourceData = new object[] { err.StartDate, err.EndDate }.ToList(),
+						ResourceType = ValidationResourceType.Skill
 					});
 				}
 				InvalidResources.Add(new SchedulingHintError

@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.Resources;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Grid.Grouping;
@@ -51,7 +52,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					var dataRow = dataTable.NewRow();
 					dataRow[0] = validationResultInvalidResource.ResourceName;
-					dataRow[1] = validationError.ErrorMessage;
+					// TODO fixa with custom formatter....
+					dataRow[1] = string.Format(UserTexts.Resources.ResourceManager.GetString(validationError.ErrorResource), validationError.ErrorResourceData);
 					dataTable.Rows.Add(dataRow);
 				}			
 			}

@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -61,10 +60,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 											assignmentj.ShiftCategory != null &&
 											assignmenti.ShiftCategory != assignmentj.ShiftCategory)
 										{
-											addValidationResult(validationResult, person,
-												string.Format(Resources.ExistingShiftNotMatchShiftCategory,
-													assignmenti.ShiftCategory.Description.ShortName, scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly.ToShortDateString(),
-													assignmentj.ShiftCategory.Description.ShortName, scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.ToShortDateString()));
+											addValidationResult(validationResult, person, nameof(Resources.ExistingShiftNotMatchShiftCategory),
+												assignmenti.ShiftCategory.Description.ShortName, scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly.ToShortDateString(),
+												assignmentj.ShiftCategory.Description.ShortName, scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.ToShortDateString());
 											flag = true;
 											break;
 										}
@@ -90,9 +88,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 											assignmenti.Period.StartDateTime.TimeOfDay != assignmentj.Period.StartDateTime.TimeOfDay)
 										{
 											addValidationResult(validationResult, person,
-												string.Format(Resources.ExistingShiftNotMatchStartTime,
-													assignmenti.Period.StartDateTime.TimeOfDay, scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly.ToShortDateString(),
-													assignmentj.Period.StartDateTime.TimeOfDay, scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.ToShortDateString()));
+												nameof(Resources.ExistingShiftNotMatchStartTime),
+													assignmenti.Period.StartDateTime.TimeOfDay.ToString(), scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly.ToShortDateString(),
+													assignmentj.Period.StartDateTime.TimeOfDay.ToString(), scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.ToShortDateString());
 											flag = true;
 											break;
 										}
@@ -111,10 +109,10 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 									{
 										if (!_scheduleDayEquator.MainShiftEquals(scheduleDaysArray[i], scheduleDaysArray[j]))
 										{
-											addValidationResult(validationResult, person, 
-												string.Format(Resources.ExistingShiftNotMatchShift, 
+											addValidationResult(validationResult, person,
+												nameof(Resources.ExistingShiftNotMatchShift), 
 												scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly.ToShortDateString(),
-												scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.ToShortDateString()));
+												scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.ToShortDateString());
 											flag = true;
 											break;
 										}
@@ -177,12 +175,12 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								{
 									if (firstShiftCategory != shiftCategory)
 									{
-										addValidationResult(validationResult, person, 
-											string.Format(Resources.ExistingShiftNotMatchShiftCategory, 
+										addValidationResult(validationResult, person,
+											nameof(Resources.ExistingShiftNotMatchShiftCategory), 
 											firstShiftCategory.Description.ShortName, 
 											firstDate.Value.ToShortDateString(), 
 											shiftCategory.Description.ShortName, 
-											personAssignment.Date.ToShortDateString()));
+											personAssignment.Date.ToShortDateString());
 										break;
 									}
 								}
@@ -199,12 +197,12 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								{
 									if (firstStartTime.Value != startTime)
 									{
-										addValidationResult(validationResult, person, 
-											string.Format(Resources.ExistingShiftNotMatchStartTime, 
-											firstStartTime.Value, 
+										addValidationResult(validationResult, person,
+											nameof(Resources.ExistingShiftNotMatchStartTime), 
+											firstStartTime.Value.ToString(), 
 											firstDate.Value.ToShortDateString(), 
-											startTime,
-											personAssignment.Date.ToShortDateString()));
+											startTime.ToString(),
+											personAssignment.Date.ToShortDateString());
 										break;
 									}
 								}
@@ -221,10 +219,10 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								{
 									if (!_scheduleDayEquator.MainShiftEquals(firstScheduleDay, scheduleDay))
 									{
-										addValidationResult(validationResult, person, 
-											string.Format(Resources.ExistingShiftNotMatchShift,
+										addValidationResult(validationResult, person,
+											nameof(Resources.ExistingShiftNotMatchShift),
 											firstDate.Value.ToShortDateString(), 
-											personAssignment.Date.ToShortDateString()));
+											personAssignment.Date.ToShortDateString());
 										break;
 									}
 								}
@@ -235,13 +233,14 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			}
 		}
 
-		private void addValidationResult(HintResult validationResult, IPerson person, string message)
+		private void addValidationResult(HintResult validationResult, IPerson person, string resouceName, params object[] resourceParameters)
 		{
 			validationResult.Add(new PersonHintError
 			{
 				PersonName = person.Name.ToString(),
 				PersonId = person.Id.Value,
-				ValidationError = message
+				ErrorResource = resouceName,
+				ErrorResourceData = resourceParameters.ToList()
 			}, GetType(), ValidationResourceType.BlockScheduling);
 		}
 	}

@@ -71,29 +71,30 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				}
 				if (blockOption.UseBlockSameShiftCategory && scheduleDay.PersonAssignment().ShiftCategory != shiftCategory)
 				{
-					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShiftCategory, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftCategory.Description.Name));
+					addValidationError(validationResult, person, nameof(Resources.PreviousShiftNotMatchShiftCategory), scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftCategory.Description.Name);
 					break;
 				}
 				if (blockOption.UseBlockSameStartTime && scheduleDay.PersonAssignment().Period.StartDateTime.TimeOfDay != startTime)
 				{
-					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchStartTime, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), startTime));
+					addValidationError(validationResult, person, nameof(Resources.PreviousShiftNotMatchStartTime), scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), startTime.ToString());
 					break;
 				}
 				if (blockOption.UseBlockSameShift && !_scheduleDayEquator.MainShiftEquals(scheduleDay, firstDayAfterPeriod))
 				{
-					addValidationError(validationResult, person, string.Format(Resources.PreviousShiftNotMatchShift, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), personAssignment.Date.ToShortDateString()));
+					addValidationError(validationResult, person, nameof(Resources.PreviousShiftNotMatchShift), scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), personAssignment.Date.ToShortDateString());
 					break;
 				}
 			}
 		}
 
-		private void addValidationError(HintResult validationResult, IPerson person, string message)
+		private void addValidationError(HintResult validationResult, IPerson person, string resourceString, params object[] resourceParameters)
 		{
 			validationResult.Add(new PersonHintError
 			{
 				PersonName = person.Name.ToString(),
 				PersonId = person.Id.Value,
-				ValidationError = message
+				ErrorResource = resourceString,
+				ErrorResourceData = resourceParameters.ToList()
 			}, GetType(), ValidationResourceType.BlockScheduling);
 		}
 	}

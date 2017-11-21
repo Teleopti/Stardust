@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				{
 					hintResult.Add(new PersonHintError(person)
 					{
-						ValidationError = Resources.MissingSchedulePeriodForPeriod
+						ErrorResource = nameof(Resources.MissingSchedulePeriodForPeriod)
 					}, GetType());
 				}
 				else
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					{
 						hintResult.Add(new PersonHintError(person)
 						{
-							ValidationError = Resources.NoMatchingSchedulePeriod
+							ErrorResource = nameof(Resources.NoMatchingSchedulePeriod)
 						}, GetType());
 					}
 				}

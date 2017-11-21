@@ -13129,7 +13129,7 @@ Reduce the complexity to use these shifts.</value>
     <value>issues</value>
   </data>
   <data name="MissingForecastFrom" xml:space="preserve">
-    <value>Missing forecast from</value>
+    <value>Missing forecast from {0} to {1}</value>
     <comment>missing forecast message in planning period</comment>
   </data>
   <data name="MissingSkills" xml:space="preserve">

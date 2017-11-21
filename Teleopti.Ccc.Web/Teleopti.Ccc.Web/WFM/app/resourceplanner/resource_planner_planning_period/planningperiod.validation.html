@@ -47,7 +47,7 @@
 											<div ng-repeat="item in msg.ValidationErrors">{{item.ResourceType | translate}}</div>
 										</td>
                                         <td>
-											<div ng-repeat="item in msg.ValidationErrors">{{item.ErrorMessage}}</div>
+											<div ng-repeat="item in msg.ValidationErrors">{{item.ErrorMessageLocalized}}</div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -94,7 +94,7 @@
 											<div ng-repeat="item in msg.ValidationErrors">{{item.ResourceType | translate}}</div>
                                         </td>
                                         <td>
-                                            <div ng-repeat="item in msg.ValidationErrors">{{item.ErrorMessage}}</div>
+                                            <div ng-repeat="item in msg.ValidationErrors">{{item.ErrorMessageLocalized}}</div>
                                         </td>
                                     </tr>
                                 </tbody>

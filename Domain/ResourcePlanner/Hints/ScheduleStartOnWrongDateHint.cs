@@ -1,12 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
 	public class ScheduleStartOnWrongDateHint : IScheduleHint
 	{
-		public static string ErrorOutput = Resources.ShiftStartsDayBeforeOrAfter;
-		
 		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var agents = input.People;
@@ -25,7 +24,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				{
 					hintResult.Add(new PersonHintError(scheduleDay.Person)
 					{
-						ValidationError = string.Format(ErrorOutput, dateOfScheduleDay)
+						ErrorResource = nameof(Resources.ShiftStartsDayBeforeOrAfter),
+						ErrorResourceData = new object[] { dateOfScheduleDay.ToString() }.ToList()
 					}, GetType());
 				}
 			}
