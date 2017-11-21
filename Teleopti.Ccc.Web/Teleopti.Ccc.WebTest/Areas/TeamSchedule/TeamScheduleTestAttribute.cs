@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<PersonProvider>().For<IPersonProvider>();
 			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
 
 			var fakeActivityCommandHandler = new FakeActivityCommandHandler();

@@ -688,7 +688,6 @@
     <Compile Include="Common\ScheduleDictionaryLoadOptionsTest.cs" />
     <Compile Include="Common\TrueFalseRandomizerTest.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinderTest.cs" />
-    <Compile Include="Common\PersonProviderTest.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriodTest.cs" />
     <Compile Include="DayOffPlanning\CMSBCaseSolverTest.cs" />
     <Compile Include="DayOffPlanning\CMSBOneFreeWeekendMax5WorkingDaysDecisionMakerTest.cs" />
@@ -1101,7 +1100,6 @@
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapperTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataTest.cs" />
     <Compile Include="Scheduling\DayOffTemplateSorterTest.cs" />
-    <Compile Include="Scheduling\LoadScheduleByPersonSpecificationTest.cs" />
     <Compile Include="Scheduling\MasterActivityTest.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecificationTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTrackerTest.cs" />

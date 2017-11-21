@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] {agent}, new[] {assignment}, Enumerable.Empty<ISkillDay>(), userTimeZone);
 			stateHolder.SetRequestedScenario(scenario);
 
-			stateHolder.LoadSchedules(ScheduleStorage, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), stateHolder.RequestedPeriod.Period());
+			stateHolder.LoadSchedules(ScheduleStorage, new[] { agent }, new ScheduleDictionaryLoadOptions(false, false), stateHolder.RequestedPeriod.Period());
 
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment()
 				.Should().Be.EqualTo(assignment);

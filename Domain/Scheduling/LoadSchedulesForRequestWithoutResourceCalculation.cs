@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -17,21 +16,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
     {
         private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
         private readonly IScheduleStorage _scheduleStorage;
-        private readonly Func<IEnumerable<IPerson>, IPersonProvider> _personProviderMaker;
 
 	    public LoadSchedulesForRequestWithoutResourceCalculation(
 		    IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleStorage scheduleStorage)
-		    : this(personAbsenceAccountRepository, scheduleStorage, p => new PersonProvider(p))
-	    {
-	    }
-
-	    public LoadSchedulesForRequestWithoutResourceCalculation(
-		    IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleStorage scheduleStorage,
-			    Func<IEnumerable<IPerson>, IPersonProvider> personProviderMaker)
 	    {
 		    _personAbsenceAccountRepository = personAbsenceAccountRepository;
 		    _scheduleStorage = scheduleStorage;
-		    _personProviderMaker = personProviderMaker;
 	    }
 
 	    public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons,
@@ -39,15 +29,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    {
 		    schedulingResultStateHolder.LoadedAgents = requestedPersons.ToList();
 
-		    var personsProvider = _personProviderMaker.Invoke(schedulingResultStateHolder.LoadedAgents);
-		    personsProvider.DoLoadByPerson = true;
+		    var personsProvider = schedulingResultStateHolder.LoadedAgents;
 
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 
 		    schedulingResultStateHolder.Schedules =
-#pragma warning disable 618
 			    _scheduleStorage.FindSchedulesForPersons(
-#pragma warning restore 618
 					scenario,
 				    personsProvider,
 				    scheduleDictionaryLoadOptions,

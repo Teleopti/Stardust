@@ -848,7 +848,6 @@
     <Compile Include="InterfaceLegacy\Domain\IPersonMeeting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonPreferenceDayOccupationFactory.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IPersonProvider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonRequestCheckAuthorization.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonRequestSpecification.cs" />
@@ -1980,7 +1979,6 @@
     <Compile Include="Common\EntityBaseTypes\SimpleAggregateRoot.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorization.cs" />
     <Compile Include="Common\LogWriter.cs" />
-    <Compile Include="Common\PersonProvider.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriod.cs" />
     <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
@@ -2788,7 +2786,6 @@
     <Compile Include="Scheduling\DayOffTemplateSorter.cs" />
     <Compile Include="Scheduling\DeletedDescription.cs" />
     <Compile Include="ApplicationLayer\Events\FullDayAbsenceAddedEvent.cs" />
-    <Compile Include="Scheduling\LoadScheduleByPersonSpecification.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculation.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecification.cs" />
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />

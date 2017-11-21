@@ -76,24 +76,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterLoading_46307))
-			{
-				builder.RegisterType<ScheduleStorage46307>()
-					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
-					.As<IScheduleStorage>()
-					.As<IFindSchedulesForPersons>()
-					.AsSelf()
-					.SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<ScheduleStorage>()
-					.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
-					.As<IScheduleStorage>()
-					.As<IFindSchedulesForPersons>()
-					.AsSelf()
-					.SingleInstance();
-			}
+			builder.RegisterType<ScheduleStorage>()
+				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
+				.As<IScheduleStorage>()
+				.As<IFindSchedulesForPersons>()
+				.AsSelf()
+				.SingleInstance();
+
 			builder.RegisterType<AddBpoResourcesToContext>().SingleInstance();
 			builder.RegisterType<SkillCombinationToBpoResourceMapper>().SingleInstance();
 			builder.RegisterType<BpoResourcesProvider>().SingleInstance();

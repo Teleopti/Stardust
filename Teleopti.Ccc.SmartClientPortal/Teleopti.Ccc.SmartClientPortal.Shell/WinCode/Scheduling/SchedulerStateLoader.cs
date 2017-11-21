@@ -226,7 +226,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		private void initializeSchedules(IUnitOfWork uow, IScheduleDateTimePeriod scheduleDateTimePeriod)
 		{
-			IPersonProvider personsProvider = new PersonProvider(_schedulerState.SchedulingResultState.LoadedAgents);
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 			IScheduleStorage scheduleStorage = _scheduleStorageFactory.Create(uow);
 
@@ -235,7 +234,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				uow.Reassociate(_schedulerState.SchedulingResultState.LoadedAgents);
 				using (uow.DisableFilter(QueryFilter.Deleted))
 					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
-				_schedulerState.LoadSchedules((IFindSchedulesForPersons)scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod);
+				_schedulerState.LoadSchedules((IFindSchedulesForPersons)scheduleStorage, _schedulerState.SchedulingResultState.LoadedAgents, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod);
 
 				var period = scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(_schedulerState.TimeZoneInfo);
 				foreach (var scheduleRange in _schedulerState.Schedules.Values)

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var person = createAndSetupPerson(startDateTime, endDateTime);
 
 			var personRequest = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
-			var scheduleDictionary = ScheduleRepository.FindSchedulesForPersons(scenario, new PersonProvider(new[] {person}),
+			var scheduleDictionary = ScheduleRepository.FindSchedulesForPersons(scenario, new[] {person},
 				new ScheduleDictionaryLoadOptions(false, false), period, new[] {person}, false);
 
 			var absenceRequestApprovalService = new AbsenceRequestApprovalService(

@@ -44,8 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var resultStateHolder = _schedulerStateHolder().SchedulingResultState;
 			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(period, fixedStaffPeople, resultStateHolder);
 
-			var personsProvider = new PersonProvider(fixedStaffPeople) { DoLoadByPerson = true };
-			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), personsProvider, 
+			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), fixedStaffPeople, 
 				new ScheduleDictionaryLoadOptions(usePreferences, false, usePreferences), period.ToDateTimePeriod(_userTimeZone.TimeZone()), fixedStaffPeople, true);
 
 			var validationResults = _checkScheduleHints.Execute(new HintInput(scheduleOfSelectedPeople, fixedStaffPeople, period, _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup), usePreferences)).InvalidResources;

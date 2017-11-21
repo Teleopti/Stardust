@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private ISkillRepository _skillRepository;
 		private IWorkloadRepository _workloadRepository;
 		private IScheduleStorage _scheduleStorage;
-		private IPersonProvider _personProvider;
 
 		[SetUp]
 		public void Setup()
@@ -39,8 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			_scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
-			_personProvider = MockRepository.GenerateMock<IPersonProvider>();
-			_target = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, _skillRepository, _workloadRepository, _scheduleStorage, _peopleAndSkillLoadDecider, _skillDayLoadHelper, p => _personProvider);
+			_target = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, _skillRepository, _workloadRepository, _scheduleStorage, _peopleAndSkillLoadDecider, _skillDayLoadHelper);
 		}
 
 		[Test]
@@ -67,7 +65,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPerson person = PersonFactory.CreatePerson();
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var personsInOrganizationProvider = MockRepository.GenerateMock<IPersonProvider>();
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
 
 			var skills = new List<ISkill> {SkillFactory.CreateSkill("test")};
@@ -79,9 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
 			_personRepository.Stub(x => x.FindAllAgents(dateOnlyPeriod, false)).Return(peopleInOrganization);
 			_scheduleStorage.Stub(
-#pragma warning disable 618
-				x => x.FindSchedulesForPersons(scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, new DateTimePeriod(), null, false))
-#pragma warning restore 618
+				x => x.FindSchedulesForPersons(scenario, _schedulingResultStateHolder.LoadedAgents, scheduleDictionaryLoadOptions, new DateTimePeriod(), null, false))
 				.IgnoreArguments()
 				.Return(scheduleDictionary);
 			_peopleAndSkillLoadDecider.Stub(x => x.Execute(scenario, period, peopleInOrganization)).Return(MockRepository.GenerateMock<ILoaderDeciderResult>());
@@ -102,7 +97,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPerson person = PersonFactory.CreatePerson();
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var personsInOrganizationProvider = MockRepository.GenerateMock<IPersonProvider>();
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
 
 			var skills = new List<ISkill> {SkillFactory.CreateSkill("test")};
@@ -115,9 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_personRepository.Stub(x => x.FindAllAgents(dateOnlyPeriod, false)).Return(peopleInOrganization);
 			_scheduleStorage.Stub(
 				x =>
-#pragma warning disable 618
-					x.FindSchedulesForPersons(scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions,
-#pragma warning restore 618
+					x.FindSchedulesForPersons(scenario, _schedulingResultStateHolder.LoadedAgents, scheduleDictionaryLoadOptions,
 						new DateTimePeriod(), visiblePeople, false)).IgnoreArguments().Return(scheduleDictionary);
 			_skillRepository.Stub(x => x.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
 			_peopleAndSkillLoadDecider.Stub(x => x.Execute(scenario, period, requestedPeople))

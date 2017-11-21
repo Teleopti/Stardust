@@ -20,26 +20,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISkillRepository _skillRepository;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IScheduleStorage _scheduleStorage;
-		private readonly Func<IEnumerable<IPerson>, IPersonProvider> _personProviderMaker;
 
 		public LoadSchedulingStateHolderForResourceCalculation(IPersonRepository personRepository,
 			IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository,
 			IWorkloadRepository workloadRepository, IScheduleStorage scheduleStorage,
 			IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
 			ISkillDayLoadHelper skillDayLoadHelper)
-			: this(personRepository, personAbsenceAccountRepository, skillRepository, workloadRepository, scheduleStorage,
-				peopleAndSkillLoaderDecider, skillDayLoadHelper,
-				p => new PersonProvider(p))
-		{
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")
-		]
-		public LoadSchedulingStateHolderForResourceCalculation(IPersonRepository personRepository,
-			IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository,
-			IWorkloadRepository workloadRepository, IScheduleStorage scheduleStorage,
-			IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
-			ISkillDayLoadHelper skillDayLoadHelper, Func<IEnumerable<IPerson>, IPersonProvider> personProviderMaker)
 		{
 			_peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
 			_personRepository = personRepository;
@@ -48,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_skillRepository = skillRepository;
 			_workloadRepository = workloadRepository;
 			_scheduleStorage = scheduleStorage;
-			_personProviderMaker = personProviderMaker;
 		}
 
 		public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons, ISchedulingResultStateHolder schedulingResultStateHolder, Func<DateOnlyPeriod,ICollection<IPerson>> optionalLoadOrganizationFunc = null, bool loadLight = false)
@@ -71,13 +56,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			                   select p;
 			personsToAdd.ForEach(p => schedulingResultStateHolder.LoadedAgents.Add(p));
 
-			var personsProvider = _personProviderMaker.Invoke(schedulingResultStateHolder.LoadedAgents);
+			var personsProvider = schedulingResultStateHolder.LoadedAgents;
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 
 			schedulingResultStateHolder.Schedules =
-#pragma warning disable 618
 				_scheduleStorage.FindSchedulesForPersons(
-#pragma warning restore 618
 					scenario, 
 					personsProvider,
                     scheduleDictionaryLoadOptions,

@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			builder.RegisterType<OnEventStatisticMessageCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<OnEventMeetingMessageCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<LoadStatisticsAndActualHeadsCommand>().InstancePerLifetimeScope();
-			builder.RegisterType<LoadScheduleByPersonSpecification>().InstancePerLifetimeScope();
 		}
 
 		private class DummyScheduleUpdated : IUpdateScheduleDataFromMessages

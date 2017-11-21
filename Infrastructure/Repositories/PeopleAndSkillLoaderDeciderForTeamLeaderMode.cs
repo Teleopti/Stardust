@@ -36,9 +36,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    {
 			    return 0;
 		    }
-
-			[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterLoading_46307)]
-		    public double PercentageOfPeopleFiltered => 0;
 	    }
     }
 }

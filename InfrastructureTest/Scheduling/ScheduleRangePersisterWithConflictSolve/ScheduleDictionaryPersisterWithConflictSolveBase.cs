@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling.ScheduleRangePersisterWithC
 			WithUnitOfWork.Do(CreateBaseSchedules);
 
 			var firstScheduleDictionary = WithUnitOfWork.Get(() => ScheduleStorage.FindSchedulesForPersons(Scenario,
-				new PersonProvider(new[] {Agent}), new ScheduleDictionaryLoadOptions(false, false), DateOnlyPeriod.CreateWithNumberOfWeeks(StartDate, 1).ToDateTimePeriod(TimeZoneInfo.Local), new[] {Agent}, false));
+				new[] {Agent}, new ScheduleDictionaryLoadOptions(false, false), DateOnlyPeriod.CreateWithNumberOfWeeks(StartDate, 1).ToDateTimePeriod(TimeZoneInfo.Local), new[] {Agent}, false));
 			var secondScheduleDictionary = WithUnitOfWork.Get(() => ScheduleStorage.FindSchedulesForPersons(Scenario,
-				new PersonProvider(new[] {Agent}), new ScheduleDictionaryLoadOptions(false, false), DateOnlyPeriod.CreateWithNumberOfWeeks(StartDate, 1).ToDateTimePeriod(TimeZoneInfo.Local), new[] {Agent}, false));
+				new[] {Agent}, new ScheduleDictionaryLoadOptions(false, false), DateOnlyPeriod.CreateWithNumberOfWeeks(StartDate, 1).ToDateTimePeriod(TimeZoneInfo.Local), new[] {Agent}, false));
 
 			ModifyFirst(firstScheduleDictionary);
 			Target.Persist(firstScheduleDictionary);

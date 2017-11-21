@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Performance
 					ScheduleStorage.Add(new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(7, 17)));
 				}
 				setupUow.PersistAll();
-				schedules = ScheduleStorage.FindSchedulesForPersons(scenario, new PersonProvider(new[] {agent}),
+				schedules = ScheduleStorage.FindSchedulesForPersons(scenario, new[] {agent},
 					new ScheduleDictionaryLoadOptions(false, false),
 					period.ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()), new[] {agent}, false);
 			}

@@ -238,8 +238,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (planningPeriod.PlanningGroup != null)
 			{
 				var people = _planningGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.PlanningGroup).AllPeople.ToList();
-				var personsProvider = new PersonProvider(people) {DoLoadByPerson = true};
-				var schedules = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), personsProvider,
+				var schedules = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), people,
 					new ScheduleDictionaryLoadOptions(true, false, true),
 					planningPeriod.Range.ToDateTimePeriod(_userTimeZone.TimeZone()), people, true);
 				validationResult = _basicCheckScheduleHints.Execute(

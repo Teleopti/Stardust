@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignment.PopAllEvents();
 			Target.Handle(command);
 
-			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
+			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			personAssignment = scheduleDay.PersonAssignment();
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 
-			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
+			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			personAssignment = scheduleDay.PersonAssignment();
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 
-			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
+			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			personAssignment = scheduleDay.PersonAssignment();

@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private IScheduleStorage _scheduleStorage;
-		private IPersonProvider _personProvider;
 
 		[SetUp]
 		public void Setup()
@@ -29,8 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
 			_personAbsenceAccountRepository = _mocks.DynamicMock<IPersonAbsenceAccountRepository>();
 			_scheduleStorage = _mocks.DynamicMock<IScheduleStorage>();
-			_personProvider = _mocks.DynamicMock<IPersonProvider>();
-            _target = new LoadSchedulesForRequestWithoutResourceCalculation( _personAbsenceAccountRepository, _scheduleStorage, p => _personProvider);
+            _target = new LoadSchedulesForRequestWithoutResourceCalculation( _personAbsenceAccountRepository, _scheduleStorage);
 		}
 
 		[Test]
@@ -55,16 +53,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			IScenario scenario = _mocks.StrictMock<IScenario>();
 			IPerson person = PersonFactory.CreatePerson();
 			IScheduleDictionary scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			IPersonProvider personsInOrganizationProvider = _mocks.StrictMock<IPersonProvider>();
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
 
 			var requestedPeople = new List<IPerson> {person};
 
 			using (_mocks.Record())
 			{
-#pragma warning disable 618
-				Expect.Call(_scheduleStorage.FindSchedulesForPersons(scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, new DateTimePeriod(), null, false)).IgnoreArguments
-#pragma warning restore 618
+				Expect.Call(_scheduleStorage.FindSchedulesForPersons(scenario, _schedulingResultStateHolder.LoadedAgents, scheduleDictionaryLoadOptions, new DateTimePeriod(), null, false)).IgnoreArguments
 					().Return(scheduleDictionary);
 			}
 			using (_mocks.Playback())

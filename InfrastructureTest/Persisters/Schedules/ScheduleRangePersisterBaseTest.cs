@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 				var rep = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
 				var dictionary = rep.FindSchedulesForPersons(Scenario,
-																								 new PersonProvider(new[] { Person }),
+																								 new[] { Person },
 																								 new ScheduleDictionaryLoadOptions(true, true),
 																								 new DateTimePeriod(1800, 1, 1, 2040, 1, 1), new List<IPerson> { Person }, false);
 				return dictionary[Person];

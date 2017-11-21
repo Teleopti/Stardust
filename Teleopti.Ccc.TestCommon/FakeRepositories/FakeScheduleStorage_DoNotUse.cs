@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public static class KeepOldIncorrectBehaviourOfTheFake_JustToMakeTestsStillGreen
 	{
 		public static IScheduleDictionary FindSchedulesForPersons(this FakeScheduleStorage_DoNotUse storage, IScheduleDateTimePeriod period, IScenario scenario,
-			IPersonProvider personsProvider,
+			IEnumerable<IPerson> peopleInOrg,
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			IEnumerable<IPerson> visiblePersons)
 		{
@@ -134,10 +134,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, absencesPeriod, scheduleData)[person];
 		}
 
-		public IScheduleDictionary FindSchedulesForPersons(IScenario scenario, IPersonProvider personsProvider, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod dateTimePeriod, IEnumerable<IPerson> visiblePersons, bool extendPeriodBasedOnVisiblePersons)
+		public IScheduleDictionary FindSchedulesForPersons(IScenario scenario, IEnumerable<IPerson> peopleInOrg, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod dateTimePeriod, IEnumerable<IPerson> visiblePersons, bool extendPeriodBasedOnVisiblePersons)
 		{
-			var period = new ScheduleDateTimePeriod(dateTimePeriod, personsProvider.GetPersons());
-			return this.FindSchedulesForPersons(period, scenario, personsProvider, scheduleDictionaryLoadOptions, visiblePersons);
+			var period = new ScheduleDateTimePeriod(dateTimePeriod, peopleInOrg);
+			return this.FindSchedulesForPersons(period, scenario, peopleInOrg, scheduleDictionaryLoadOptions, visiblePersons);
 		}
 
 		public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)

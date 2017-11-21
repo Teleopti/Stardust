@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public interface IFindSchedulesForPersons
 	{
-		IScheduleDictionary FindSchedulesForPersons(IScenario scenario, IPersonProvider personsProvider, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod visiblePeriod, IEnumerable<IPerson> visiblePersons, bool extendPeriodBasedOnVisiblePersons);
+		IScheduleDictionary FindSchedulesForPersons(IScenario scenario, IEnumerable<IPerson> personsInOrganization, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod visiblePeriod, IEnumerable<IPerson> visiblePersons, bool extendPeriodBasedOnVisiblePersons);
 	}
 }

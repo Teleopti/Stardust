@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -14,25 +13,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	[RemoveMeWithToggle("Merge with schedulestorage", Toggles.ResourcePlanner_FasterLoading_46307)]
-	public class ScheduleStorage46307 : ScheduleStorage
-	{
-		public ScheduleStorage46307(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper) : base(currentUnitOfWork, repositoryFactory, dataPermissionChecker, scheduleStorageRepositoryWrapper)
-		{
-		}
-
-		protected override void LoadSchedules(IScenario scenario, IPersonProvider personsProvider,
-			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IEnumerable<IPerson> visiblePersons,
-			IScheduleDictionary scheduleDictionary, ScheduleDateTimePeriod periodBasedOnSelectedPersons,
-			IEnumerable<IPerson> personsInOrganization)
-		{
-			doLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary,
-				periodBasedOnSelectedPersons.LongLoadedDateOnlyPeriod(), visiblePersons);
-			doLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary,
-				periodBasedOnSelectedPersons.LongVisibleDateOnlyPeriod(), personsInOrganization.Except(visiblePersons));
-		}
-	}
-	
 	public class ScheduleStorage : IScheduleStorage
 	{
 	    private readonly IRepositoryFactory _repositoryFactory;
@@ -229,11 +209,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return retDic[person];
         }
 
-		public IScheduleDictionary FindSchedulesForPersons(IScenario scenario, IPersonProvider personsProvider, 
+		public IScheduleDictionary FindSchedulesForPersons(IScenario scenario, IEnumerable<IPerson> personsInOrganization, 
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod visiblePeriod, 
 			IEnumerable<IPerson> visiblePersons, bool extendPeriodBasedOnVisiblePersons)
 	    {
-		    if (personsProvider == null) throw new ArgumentNullException(nameof(personsProvider));
 		    if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException(nameof(scheduleDictionaryLoadOptions));
 
 			var periodBasedOnSelectedPersons = extendPeriodBasedOnVisiblePersons ? 
@@ -242,12 +221,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 		    var scheduleDictionary = new ScheduleDictionary(scenario, periodBasedOnSelectedPersons, 
 			    new DifferenceEntityCollectionService<IPersistableScheduleData>(), _dataPermissionChecker);
-		    var personsInOrganization = personsProvider.GetPersons();
 
 		    var uow = _currentUnitOfWork.Current();
 		    using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
-				LoadSchedules(scenario, personsProvider, scheduleDictionaryLoadOptions, visiblePersons, scheduleDictionary, periodBasedOnSelectedPersons, personsInOrganization);
+				loadSchedules(scenario, scheduleDictionaryLoadOptions, visiblePersons, scheduleDictionary, periodBasedOnSelectedPersons, personsInOrganization);
 
 				if (scheduleDictionaryLoadOptions.LoadRestrictions)
 			    {
@@ -274,27 +252,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    return scheduleDictionary;
 	    }
 
-		protected virtual void LoadSchedules(IScenario scenario, IPersonProvider personsProvider,
-			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IEnumerable<IPerson> visiblePersons,
+		private void loadSchedules(IScenario scenario, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IEnumerable<IPerson> visiblePersons,
 			IScheduleDictionary scheduleDictionary, ScheduleDateTimePeriod periodBasedOnSelectedPersons,
 			IEnumerable<IPerson> personsInOrganization)
 		{
-			if (personsProvider.DoLoadByPerson)
-			{
-				doLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary,
-					periodBasedOnSelectedPersons.LongLoadedDateOnlyPeriod(), visiblePersons);
-				doLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary,
-					periodBasedOnSelectedPersons.LongVisibleDateOnlyPeriod(), personsInOrganization.Except(visiblePersons));
-			}
-			else
-			{
-				doLoadScheduleForAll(scenario, scheduleDictionary, periodBasedOnSelectedPersons.LongLoadedDateOnlyPeriod(),
-					scheduleDictionaryLoadOptions);
-			}
+			doLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary,
+				periodBasedOnSelectedPersons.LongLoadedDateOnlyPeriod(), visiblePersons);
+			doLoadSchedulesPerPersons(scenario, scheduleDictionaryLoadOptions, scheduleDictionary,
+				periodBasedOnSelectedPersons.LongVisibleDateOnlyPeriod(), personsInOrganization.Except(visiblePersons));
 		}
 
-		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_FasterLoading_46307)]
-		protected void doLoadSchedulesPerPersons(IScenario scenario, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> personsToLoad)
+		private void doLoadSchedulesPerPersons(IScenario scenario, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> personsToLoad)
 	    {
 		    var uow = _currentUnitOfWork.Current();
 			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(personsToLoad, longDateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc), scenario), scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
@@ -312,33 +280,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    }
 	    }
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterLoading_46307)]
-	    private void doLoadScheduleForAll(IScenario scenario, IScheduleDictionary scheduleDictionary, DateOnlyPeriod dateOnlyPeriod, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions)
-	    {
-		    var longPeriod = dateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc);
-		    var uow = _currentUnitOfWork.Current();
-		    addPersonAbsences(scheduleDictionary,
-			    _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(longPeriod, scenario),
-			    scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
-		    var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(uow);
-		    addPersonAssignments(scheduleDictionary, personAssignmentRepository.Find(dateOnlyPeriod, scenario));
-		    addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(longPeriod, scenario),
-			    false, new List<IPerson>());
-
-		    if (scheduleDictionaryLoadOptions.LoadNotes)
-		    {
-			    addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(uow).Find(longPeriod, scenario));
-			    addPublicNotes(scheduleDictionary, _repositoryFactory.CreatePublicNoteRepository(uow).Find(longPeriod, scenario));
-		    }
-		    if (scheduleDictionaryLoadOptions.LoadAgentDayScheduleTags)
-		    {
-			    addAgentDayScheduleTags(scheduleDictionary,
-				    _repositoryFactory.CreateAgentDayScheduleTagRepository(uow).Find(longPeriod, scenario));
-		    }
-	    }
-
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ScheduleDictionary")]
-        private static void removeSchedulesOfPersonsNotInOrganization(IScheduleDictionary scheduleDictionary, IList<IPerson> personsInOrganization)
+        private static void removeSchedulesOfPersonsNotInOrganization(IScheduleDictionary scheduleDictionary, IEnumerable<IPerson> personsInOrganization)
         {
 			foreach (var person in personsInOrganization)
 			{

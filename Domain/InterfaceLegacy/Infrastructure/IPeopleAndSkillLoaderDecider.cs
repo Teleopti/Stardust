@@ -47,8 +47,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 		int FilterPeople(ICollection<IPerson> people);
 
 		int FilterSkills(ISkill[] skills, Action<ISkill> removeSkill, Action<ISkill> addSkill);
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterLoading_46307)]
-		double PercentageOfPeopleFiltered { get; }
 	}
 }

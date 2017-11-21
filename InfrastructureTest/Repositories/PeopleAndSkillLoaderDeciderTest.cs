@@ -178,35 +178,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, removed);
             Assert.AreEqual(0, list2Filter.Count);
         }
-
-        [Test]
-        public void ShouldShowZeroPercentageWhenFilterPeopleIsNotCalled()
-        {
-			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new Guid[0], new Guid[0]);
-            Assert.AreEqual(0, target.PercentageOfPeopleFiltered);
-        }
-
-        [Test]
-        public void ShouldFilterOut75PercentOfAllPeople()
-        {
-            Guid validGuid1 = Guid.NewGuid();
-            Guid validGuid2 = Guid.NewGuid();
-            Guid validGuid3 = Guid.NewGuid();
-            IPerson person1 = new Person();
-            person1.SetId(validGuid1);
-            IPerson person2 = new Person();
-            person2.SetId(validGuid2);
-            IPerson person3 = new Person();
-            person3.SetId(validGuid3);
-            IPerson person4 = new Person();
-            person4.SetId(Guid.NewGuid());
-
-            IList<IPerson> allPersonsInOrganization = new List<IPerson> { person1, person2, person3, person4 };
-
-			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new[] { validGuid1, validGuid2, validGuid3 }, new Guid[] { }, new Guid[] { });
-            target.FilterPeople(allPersonsInOrganization);
-
-            Assert.AreEqual(75d, target.PercentageOfPeopleFiltered);
-        }
     }
 }

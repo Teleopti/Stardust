@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(FixNotOverwriteLayerCommand command)
 		{
 			var person = _personForId.Load(command.PersonId);
-			var dict = _scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(), new PersonProvider(new[] {person}),
+			var dict = _scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(), new[] {person},
 				new ScheduleDictionaryLoadOptions(false, false),
 				command.Date.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()), new[] {person}, false);
 			var rule = new NotOverwriteLayerRule();

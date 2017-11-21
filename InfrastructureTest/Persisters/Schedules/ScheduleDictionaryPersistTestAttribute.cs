@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			WithUnitOfWork.Do(() =>
 			{
 				schedules = ScheduleStorage.FindSchedulesForPersons(Scenario.Current(),
-					new PersonProvider(new IPerson[] { }),
+					new IPerson[] { },
 					new ScheduleDictionaryLoadOptions(true, true),
 					new DateTimePeriod(1800, 1, 1, 2040, 1, 1), new List<IPerson>(), false);
 			});

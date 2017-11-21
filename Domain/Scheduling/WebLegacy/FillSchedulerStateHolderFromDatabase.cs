@@ -78,8 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
-			var personProvider = new PersonProvider(agents) {DoLoadByPerson = true };
-			schedulerStateHolderTo.LoadSchedules(_findSchedulesForPersons, personProvider,
+			schedulerStateHolderTo.LoadSchedules(_findSchedulesForPersons, agents,
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				dateTimePeriod);
 		}

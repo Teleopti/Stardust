@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             IScheduleDateTimePeriod period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             IScheduleDictionary scheduleDictionary = new ScheduleDictionary(ScenarioFactory.CreateScenarioAggregate(),period, _permissionChecker);
             var scheduleStorage = mocks.StrictMock<IFindSchedulesForPersons>();
-            IPersonProvider personsProvider = mocks.StrictMock<IPersonProvider>();
+            var personsProvider = Enumerable.Empty<IPerson>();
             var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
             using(mocks.Record())
             {
@@ -403,10 +403,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void ShouldThrowExceptionOnNullScheduleRepository()
         {
-            var personProvider = mocks.StrictMock<IPersonProvider>();
             var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
             var scheduleDateTimePeriod = mocks.StrictMock<IScheduleDateTimePeriod>();
-			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(null, personProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod));
+			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(null, Enumerable.Empty<IPerson>(), scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod));
         }
 
 		[Test]

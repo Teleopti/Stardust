@@ -3,10 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -15,22 +13,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[DomainTest]
-	[TestFixture(true, false)]
-	[TestFixture(false, false)]
-	[TestFixture(true, true)]
-	[TestFixture(false, true)]
-	public class FindSchedulesForPersonsTest : IConfigureToggleManager
+	public class FindSchedulesForPersonsTest
 	{
-		private readonly bool _loadByPerson;
-		private readonly bool _resourcePlannerFasterLoading46307;
 		public IFindSchedulesForPersons Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
-
-		public FindSchedulesForPersonsTest(bool loadByPerson, bool resourcePlannerFasterLoading46307)
-		{
-			_loadByPerson = loadByPerson;
-			_resourcePlannerFasterLoading46307 = resourcePlannerFasterLoading46307;
-		}
 
 		[Test]
 		public void ShouldNotIncludeNotSelectedAgentsScheduleOutsideChoosenPeriod()
@@ -43,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			PersonAssignmentRepository.Has(notSelectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), dateWithNotSelectedAgentAss, new TimePeriod(8, 17));
 
 			var schedules = Target.FindSchedulesForPersons(scenario,
-					new PersonProvider(new[] { selectedAgent, notSelectedAgent }) { DoLoadByPerson = _loadByPerson },
+					new[] { selectedAgent, notSelectedAgent },
 					new ScheduleDictionaryLoadOptions(false, false),
 					date.ToDateTimePeriod(TimeZoneInfo.Utc),
 					new[] { selectedAgent }, true);
@@ -62,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			PersonAssignmentRepository.Has(selectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), dateWithNotSelectedAgentAss, new TimePeriod(8, 17));
 
 			var schedules = Target.FindSchedulesForPersons(scenario,
-					new PersonProvider(new[] { selectedAgent }) { DoLoadByPerson = _loadByPerson },
+					new[] { selectedAgent },
 					new ScheduleDictionaryLoadOptions(false, false),
 					date.ToDateTimePeriod(TimeZoneInfo.Utc),
 					new[] { selectedAgent }, true);
@@ -81,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			PersonAssignmentRepository.Has(notSelectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), date, new TimePeriod(8, 17));
 
 			var schedules = Target.FindSchedulesForPersons(scenario,
-					new PersonProvider(new[] { selectedAgent, notSelectedAgent }) { DoLoadByPerson = _loadByPerson },
+					new[] { selectedAgent, notSelectedAgent },
 					new ScheduleDictionaryLoadOptions(false, false),
 					date.ToDateTimePeriod(TimeZoneInfo.Utc),
 					new[] { selectedAgent }, true);
@@ -102,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			PersonAssignmentRepository.Has(selectedAgentAss);
 
 			var schedules = Target.FindSchedulesForPersons(scenario,
-					new PersonProvider(new[] { selectedAgent, notSelectedAgent }) { DoLoadByPerson = _loadByPerson },
+					new[] { selectedAgent, notSelectedAgent },
 					new ScheduleDictionaryLoadOptions(false, false),
 					date.ToDateTimePeriod(TimeZoneInfo.Utc),
 					new[] { selectedAgent }, true);
@@ -119,19 +105,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			PersonAssignmentRepository.Has(selectedAgent, scenario, new Activity("_"), new ShiftCategory("_"), date, new TimePeriod(8, 17));
 
 			var schedules = Target.FindSchedulesForPersons(scenario,
-					new PersonProvider(new[] { selectedAgent }) { DoLoadByPerson = _loadByPerson },
+					new[] { selectedAgent },
 					new ScheduleDictionaryLoadOptions(false, false),
 					date.ToDateTimePeriod(TimeZoneInfo.Utc),
 					new[] { selectedAgent }, true);
 
 			schedules[selectedAgent].ScheduledDay(date).PersistableScheduleDataCollection().Count()
 				.Should().Be.EqualTo(1);
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if(_resourcePlannerFasterLoading46307)
-				toggleManager.Enable(Toggles.ResourcePlanner_FasterLoading_46307);
 		}
 	}
 }

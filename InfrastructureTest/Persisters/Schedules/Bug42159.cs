@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			IScheduleDictionary scheduleDictionary;
 			using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(scenario, new PersonProvider(new [] {agent}), new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(1900,1,1,2100,1,1), new [] {agent}, false);
+				scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(scenario, new [] {agent}, new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(1900,1,1,2100,1,1), new [] {agent}, false);
 			}
 			//make sure we clone the assignment
 			var scheduleDay = scheduleDictionary[agent].ScheduledDay(date);

@@ -72,15 +72,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		}
 			
 		[TestLog]
-		protected virtual  IScheduleDictionary Schedules( DateOnlyPeriod period)
+		protected virtual IScheduleDictionary Schedules( DateOnlyPeriod period)
 		{
 			var timeZone = _principal.Current().Regional.TimeZone;
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
-			var personsProvider = new PersonProvider(_agents) { DoLoadByPerson = false }; //TODO: this is experimental
-#pragma warning disable 618
 			return _scheduleStorage.FindSchedulesForPersons(_scenario,
-				personsProvider, new ScheduleDictionaryLoadOptions(false, false, true) {LoadAgentDayScheduleTags = false}, dateTimePeriod, _agents, false);
-#pragma warning restore 618
+				_agents, new ScheduleDictionaryLoadOptions(false, false, true) {LoadAgentDayScheduleTags = false}, dateTimePeriod, _agents, false);
 		}
 
 		public void PreFillInformation(DateOnlyPeriod period)

@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         private readonly IPeopleLoader _peopleLoader;
         private readonly ISkillDayLoadHelper _skillDayLoadHelper;
         private readonly IResourceCalculation _resourceOptimizationHelper;
-        private readonly LoadScheduleByPersonSpecification _loadScheduleByPersonSpecification;
 	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
 		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
 		private ILoaderDeciderResult _deciderResult;
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                                     IPeopleLoader peopleLoader,
             ISkillDayLoadHelper skillDayLoadHelper,
             IResourceCalculation resourceOptimizationHelper,
-            LoadScheduleByPersonSpecification loadScheduleByPersonSpecification,
 						IScheduleStorageFactory scheduleStorageFactory,
 			CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)
         {
@@ -62,7 +60,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             _peopleLoader = peopleLoader;
             _skillDayLoadHelper = skillDayLoadHelper;
             _resourceOptimizationHelper = resourceOptimizationHelper;
-            _loadScheduleByPersonSpecification = loadScheduleByPersonSpecification;
 	        _scheduleStorageFactory = scheduleStorageFactory;
 			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
 		}
@@ -181,15 +178,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             var scheduleStorage = _scheduleStorageFactory.Create(uow);
 
 			var requestedPeriod = SchedulerState.RequestedPeriod.Period().ChangeEndTime(TimeSpan.FromHours(24)).ChangeStartTime(TimeSpan.FromHours(-24));
-
-            IPersonProvider personsInOrganizationProvider =
-                new PersonProvider(SchedulerState.SchedulingResultState.LoadedAgents);
-            personsInOrganizationProvider.DoLoadByPerson =
-                _loadScheduleByPersonSpecification.IsSatisfiedBy(_deciderResult);
-
             var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, true);
 
-            SchedulerState.LoadSchedules(scheduleStorage, personsInOrganizationProvider, scheduleDictionaryLoadOptions, requestedPeriod);
+            SchedulerState.LoadSchedules(scheduleStorage, SchedulerState.SchedulingResultState.LoadedAgents, scheduleDictionaryLoadOptions, requestedPeriod);
         }
 
         public void InitializeScheduleData()

@@ -602,10 +602,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
-				var personsInOrganizationProvider = new PersonProvider(persons) { DoLoadByPerson = true };
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
 
-				var schedulesDictionary = scheduleRepository.FindSchedulesForPersons(scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, period, persons, false);
+				var schedulesDictionary = scheduleRepository.FindSchedulesForPersons(scenario, persons, scheduleDictionaryLoadOptions, period, persons, false);
 
 				//Clean ScheduleDictionary from all persons not present in LoadedAgents
 				IList<IPerson> personsToRemove = new List<IPerson>();

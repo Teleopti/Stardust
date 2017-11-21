@@ -3546,17 +3546,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (_scheduleView != null) enableSwapButtons(_scheduleView.SelectedSchedules());
 		}
 
-		[RemoveMeWithToggle("Remove get/setDeciderResult", Toggles.ResourcePlanner_FasterLoading_46307)]
 		private void loadAndOptimizeData(DoWorkEventArgs e)
 		{
 			var optimizerHelper = new OptimizerHelperHelper();
 			IList<LoaderMethod> methods = new List<LoaderMethod>();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ILoaderDeciderResult deciderResult = null;
-				var setDeciderResult = new Action<ILoaderDeciderResult>(r => deciderResult = r);
-				var getDeciderResult = new Func<ILoaderDeciderResult>(() => deciderResult);
-
 				uow.Reassociate(_scenario);
 				methods.Add(new LoaderMethod(loadCommonStateHolder, LanguageResourceHelper.Translate("XXLoadingDataTreeDots")));
 				methods.Add(new LoaderMethod(loadSkills, null));
@@ -3579,7 +3574,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					foreach (var method in methods)
 					{
 						backgroundWorkerLoadData.ReportProgress(1, method.StatusStripString);
-						method.Action.Invoke(uow, SchedulerState, setDeciderResult, getDeciderResult);
+						method.Action.Invoke(uow, SchedulerState);
 						if (backgroundWorkerLoadData.CancellationPending)
 						{
 							e.Cancel = true;
@@ -3728,23 +3723,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_requestPresenter.SetUndoRedoContainer(_undoRedo);
 		}
 
-		private void loadAccounts(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadAccounts(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			var rep = new PersonAbsenceAccountRepository(uow);
 			SchedulerState.SchedulingResultState.AllPersonAccounts = rep.LoadAllAccounts();
 		}
 
-		private void loadDefinitionSets(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadDefinitionSets(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository =
 				new MultiplicatorDefinitionSetRepository(uow);
 			MultiplicatorDefinitionSet = multiplicatorDefinitionSetRepository.FindAllDefinitions();
 		}
 
-		private void filteringPeopleAndSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void filteringPeopleAndSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			using (PerformanceOutput.ForOperation("Executing and filtering loader decider"))
 			{
@@ -3753,7 +3745,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var decider = _teamLeaderMode ? new PeopleAndSkillLoaderDeciderForTeamLeaderMode() : _peopleAndSkillLoaderDecider;
 				var result = decider.Execute(_schedulerState.RequestedScenario, _schedulerState.RequestedPeriod.Period(),
 					SchedulerState.ChoosenAgents);
-				setDeciderResult(result);
 
 				int removedPeople = result.FilterPeople(peopleInOrg);
 				log.Info("Removed " + removedPeople + " people when filtering (original: " + peopleCountFromBeginning +
@@ -3774,8 +3765,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void loadSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			var staffingCalculatorServiceFacade = _container.Resolve<IStaffingCalculatorServiceFacade>();
 			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.RequestedPeriod.DateOnlyPeriod);
@@ -3786,8 +3776,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 		
-		private void loadSettings(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadSettings(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			using (PerformanceOutput.ForOperation("Loading settings"))
 			{
@@ -3795,32 +3784,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void loadAuditingSettings(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadAuditingSettings(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			var repository = new AuditSettingRepository(new ThisUnitOfWork(uow));
 			var auditSetting = repository.Read();
 			_isAuditingSchedules = auditSetting.IsScheduleEnabled;
 		}
 
-		[RemoveMeWithToggle("Will automatically be simplified when removing other stuff related to toggle....", Toggles.ResourcePlanner_FasterLoading_46307)]
-		private void loadSchedules(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadSchedules(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			var period = stateHolder.RequestedPeriod.Period();
 			using (PerformanceOutput.ForOperation("Loading schedules " + period))
 			{
-				IPersonProvider personsInOrganizationProvider =
-					new PersonProvider(stateHolder.SchedulingResultState.LoadedAgents);
-				// If the people in organization is filtered out to 70% or less of all people then flag 
-				// so that a criteria for that is used later when loading schedules.
-				var loaderSpecification = new LoadScheduleByPersonSpecification();
-				personsInOrganizationProvider.DoLoadByPerson = loaderSpecification.IsSatisfiedBy(getDeciderResult());
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true)
 				{
 					LoadDaysAfterLeft = true
 				};
-				stateHolder.LoadSchedules(_container.Resolve<IFindSchedulesForPersons>(), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
+				stateHolder.LoadSchedules(_container.Resolve<IFindSchedulesForPersons>(), stateHolder.SchedulingResultState.LoadedAgents, scheduleDictionaryLoadOptions, period);
 				_schedulerState.Schedules.SetUndoRedoContainer(_undoRedo);
 			}
 			SchedulerState.Schedules.PartModified += schedulesPartModified;
@@ -3890,8 +3870,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void loadPeople(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadPeople(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			using (PerformanceOutput.ForOperation("Loading people"))
 			{
@@ -3917,8 +3896,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, true);
 		}
 
-		private void loadRequests(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadRequests(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			using (PerformanceOutput.ForOperation("Loading requests"))
 			{
@@ -3931,16 +3909,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void loadSeniorityWorkingDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadSeniorityWorkingDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			var result = new SeniorityWorkDayRanksRepository(uow).LoadAll();
 			var workDayRanks = result.IsEmpty() ? new SeniorityWorkDayRanks() : result.First();
 			stateHolder.SchedulingResultState.SeniorityWorkDayRanks = workDayRanks;
 		}
 
-		private static void loadCommonStateHolder(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private static void loadCommonStateHolder(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			stateHolder.LoadCommonState(uow, new RepositoryFactory());
 			if (!stateHolder.CommonStateHolder.DayOffs.Any())
@@ -4969,13 +4945,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 		
-		private void loadBpos(IUnitOfWork uow, ISchedulerStateHolder stateHolder, Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadBpos(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			stateHolder.SchedulingResultState.BpoResources = _bpoResourcesProvider.Fetch(stateHolder.SchedulingResultState.Skills, stateHolder.RequestedPeriod.Period());
 		}
 
-		private void loadSkillDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder,
-			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
+		private void loadSkillDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			if (_teamLeaderMode) return;
 			using (PerformanceOutput.ForOperation("Loading skill days"))

@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new PeopleAndSkillLoaderDeciderForTeamLeaderMode();
 			var result = target.Execute(ScenarioFactory.CreateScenarioAggregate(), new DateTimePeriod(2011, 10, 10, 2011, 10, 11), new List<IPerson>());
    
-            Assert.AreEqual(0f, result.PercentageOfPeopleFiltered);
             Assert.AreEqual(0, result.FilterPeople(new List<IPerson>()));
             Assert.AreEqual(0, result.FilterSkills(new ISkill[]{},null,null));
         }

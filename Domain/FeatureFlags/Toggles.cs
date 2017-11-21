@@ -109,7 +109,6 @@
 		ResourcePlanner_MergeTeamblockClassicIntraday_45508,
 		ResourcePlanner_BreakPreferenceStartTimeByMax_46002,
 		ResourcePlanner_ShowSwitchedTimeZone_46303,
-		ResourcePlanner_FasterLoading_46307,
 		ResourcePlanner_RemoveClassicShiftCat_46582,
 		ResourcePlanner_BlockSchedulingValidation_46092,
 		ResourcePlanner_BpoScheduling_46265,

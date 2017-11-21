@@ -143,10 +143,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		{
 			using (_uowFactory.CreateAndOpenUnitOfWork())
 			{
-				var personProvider = new PersonProvider(_fullyLoadedPersonsToMove);
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 				_callback.ReassociateDataForAllPeople();
-				ScheduleDictionaryToPersist = _scheduleStorage.FindSchedulesForPersons(_exportScenario, personProvider, scheduleDictionaryLoadOptions, schedulePartPeriod(), _fullyLoadedPersonsToMove, true);
+				ScheduleDictionaryToPersist = _scheduleStorage.FindSchedulesForPersons(_exportScenario, _fullyLoadedPersonsToMove, scheduleDictionaryLoadOptions, schedulePartPeriod(), _fullyLoadedPersonsToMove, true);
 				_involvedAbsences = _exportToScenarioAbsenceFinder.Find(_exportScenario, ScheduleDictionaryToPersist, _fullyLoadedPersonsToMove,_schedulePartsToExport, _datesToExport);
 				
 				return _moveSchedules.CopySchedulePartsToAnotherDictionary(ScheduleDictionaryToPersist, _schedulePartsToExport);

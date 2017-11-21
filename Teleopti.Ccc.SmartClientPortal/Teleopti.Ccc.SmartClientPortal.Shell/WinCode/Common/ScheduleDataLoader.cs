@@ -24,12 +24,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		public void LoadSchedule(IUnitOfWork unitOfWork, DateTimePeriod dateTimePeriod, IPerson person)
 		{
 			IList<IPerson> persons = new List<IPerson> { person };
-			IPersonProvider personProvider = new PersonProvider(persons);
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 			var repositoryFactory = new RepositoryFactory();
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
-			_schedulerStateHolder.LoadSchedules(scheduleRepository, personProvider, scheduleDictionaryLoadOptions, dateTimePeriod);
+			_schedulerStateHolder.LoadSchedules(scheduleRepository, persons, scheduleDictionaryLoadOptions, dateTimePeriod);
 		}
 	}
 }

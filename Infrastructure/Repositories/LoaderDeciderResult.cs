@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class LoaderDeciderResult : ILoaderDeciderResult
 	{
 		private readonly DateTimePeriod _period;
-		private double _percentageOfPeopleFiltererd;
 
 		public LoaderDeciderResult(DateTimePeriod period, Guid[] peopleResult, Guid[] skillResult, Guid[] siteResult)
 		{
@@ -24,14 +23,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			SiteGuidDependencies = siteResult;
 		}
 
-		public Guid[] PeopleGuidDependencies { get; private set; }
+		public Guid[] PeopleGuidDependencies { get; }
 
-		public Guid[] SkillGuidDependencies { get; private set; }
+		public Guid[] SkillGuidDependencies { get; }
 
-		public Guid[] SiteGuidDependencies { get; private set; }
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterLoading_46307)]
-		public double PercentageOfPeopleFiltered => _percentageOfPeopleFiltererd * 100;
+		public Guid[] SiteGuidDependencies { get; }
 
 		public int FilterPeople(ICollection<IPerson> people)
 		{
@@ -75,8 +71,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					people.Add(personToAdd);
 				}
 			}
-
-			_percentageOfPeopleFiltererd = (people.Count / (double)origCount);
 
 			return origCount - people.Count;
 		}
