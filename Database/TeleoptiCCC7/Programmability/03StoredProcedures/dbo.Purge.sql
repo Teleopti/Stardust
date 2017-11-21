@@ -10,7 +10,6 @@ GO
 -- Changed		Who			Why
 -- =============================================
 -- 2013-04-29	David J		Re-factor table into key/value, added Security Audit
--- 2014-04-16	Johan R		Removing purge of PayrollExport, is needed for automatic Payrolls
 -- =============================================
 CREATE PROCEDURE [dbo].[Purge]
 AS
@@ -40,8 +39,8 @@ if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepForecast')
 	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepForecast', 10)
 if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepMessage')
 	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepMessage', 10)
-if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPayroll')
-	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPayroll', 20)
+if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepPayroll')
+	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepPayroll', 240)
 if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepSchedule')
 	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepSchedule', 10)
 if not exists (select 1 from PurgeSetting where [key] = 'DaysToKeepSecurityAudit')
@@ -318,22 +317,45 @@ if datediff(second,@start,getdate()) > @timeout
 	return
 
 --Payroll
-select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPayroll'),getdate())
-select @MaxDate = dateadd(day,@BatchSize,isnull(min(UpdatedOn),'19900101')) from PayrollResult
+select @KeepUntil = dateadd(month,-1*(select isnull(Value,240) from PurgeSetting where [Key] = 'MonthsToKeepPayroll'),getdate())
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(100) PayrollResultDetail
+	from PayrollResultDetail prd
+	inner join PayrollResult pr on prd.Parent =pr.id
+	where pr.UpdatedOn < @KeepUntil
 
-delete PayrollResultDetail
-from PayrollResultDetail prd
-inner join PayrollResult pr on prd.Parent = pr.Id
-where pr.UpdatedOn < @KeepUntil
-and pr.UpdatedOn < @Maxdate
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
 
-delete PayrollResult
-from PayrollResult pr
-where pr.UpdatedOn < @KeepUntil
-and pr.UpdatedOn < @Maxdate
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(100) PayrollResult
+	from PayrollResult pr
+	where pr.UpdatedOn < @KeepUntil
 
-if datediff(second,@start,getdate()) > @timeout 
-	return
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(100) Xmlresult
+	from Xmlresult x
+	where not exists (
+		select 1 from PayrollResult pr
+		where x.Id = pr.XmlResult	)
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
 
 --Requests
 --AF: Need to remove top (50000) as this caused corrupt data...
