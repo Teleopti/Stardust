@@ -4289,13 +4289,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
 			{
-				using (var resourceChanges = new ShovelingAnalyzerView(_container.Resolve<IResourceCalculation>(), _container.Resolve<ITimeZoneGuard>()))
+				using (_container.Resolve<CascadingResourceCalculationContextFactory>().Create(_schedulerState.SchedulingResultState, false, _scheduleView.SelectedDateLocal().ToDateOnlyPeriod()))
 				{
-					resourceChanges.FillForm(_schedulerState.SchedulingResultState,
-						_skillIntradayGridControl.Presenter.Skill, 
-						_scheduleView.SelectedDateLocal(), 
-						_skillIntradayGridControl.Presenter.SelectedIntervalTime().GetValueOrDefault());
-					resourceChanges.ShowDialog(this);
+					using (var resourceChanges = new ShovelingAnalyzerView(_container.Resolve<IResourceCalculation>(), _container.Resolve<ITimeZoneGuard>()))
+					{
+						resourceChanges.FillForm(_schedulerState.SchedulingResultState,
+							_skillIntradayGridControl.Presenter.Skill, 
+							_scheduleView.SelectedDateLocal(), 
+							_skillIntradayGridControl.Presenter.SelectedIntervalTime().GetValueOrDefault());
+						resourceChanges.ShowDialog(this);
+					}					
 				}
 			}
 		}
