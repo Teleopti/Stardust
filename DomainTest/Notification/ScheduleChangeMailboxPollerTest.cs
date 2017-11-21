@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 
 namespace Teleopti.Ccc.DomainTest.Notification
 {
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public FakeScenarioRepository ScenarioRepository;
 		public DefaultScenarioFromRepository DefaultScenarioFromRepository;
 		public FakeLoggedOnUser LoggedOnUser;
-		public INow Now;
+		public MutableNow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<DefaultScenarioFromRepository>().For<ICurrentScenario>();
+			system.UseTestDouble<MutableNow>().For<INow>();
 		}
 
 		[Test]
@@ -51,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		}
 
 		[Test]
-		public void ShouldReturnTrueWhenHasScheduleChangedMessageWithinPollInterval()
+		public void ShouldReturnUpdatedPeriodsWhenHasScheduleChangedMessageWithinPollInterval()
 		{
 			var scenario = ScenarioFactory.CreateScenario("test", false, false).WithId();
 			ScenarioRepository.Add(scenario);
@@ -72,6 +74,18 @@ namespace Teleopti.Ccc.DomainTest.Notification
 					.Select(_ => me.Id.ToString()))
 			};
 
+			var scheduleChangeMessage2 = new Message
+			{
+				StartDate = Subscription.DateToString(new DateTime(2017, 11, 17, 10, 0, 0)),
+				EndDate = Subscription.DateToString(new DateTime(2017, 11, 17, 11, 0, 0)),
+				DomainReferenceId = scenario.Id.Value.ToString(),
+				DomainUpdateType = (int)DomainUpdateType.NotApplicable,
+				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
+				DomainType = typeof(IScheduleChangedMessage).Name,
+				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
+					.Select(_ => me.Id.ToString()))
+			};
+
 			FakeMailboxRepository.Add(new Mailbox
 			{
 				Id = mailboxId,
@@ -80,13 +94,14 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			});
 
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
+			FakeMailboxRepository.AddMessage(scheduleChangeMessage2);
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 11, 17), new DateOnly(2017, 11, 17));
-			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Should().Be.EqualTo(true);
+			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Count.Should().Be.EqualTo(2);
 		}
 
 		[Test]
-		public void ShouldReturnFalseWhenHasScheduleChangedMessageOutsideOfPollInterval()
+		public void ShouldNotReturnUpdatedPeriodWhenHasScheduleChangedMessageOutsideOfPollInterval()
 		{
 			var scenario = ScenarioFactory.CreateScenario("test", false, false).WithId();
 			ScenarioRepository.Add(scenario);
@@ -117,11 +132,11 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 11, 17), new DateOnly(2017, 11, 17));
-			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Should().Be.EqualTo(false);
+			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Should().Be.Empty();
 		}
 
 		[Test]
-		public void ShouldReturnTrueWhenHasScheduleChangedMessagePeriodIntersectWithPollInterval()
+		public void ShouldReturnUpdatedPeriodWhenHasScheduleChangedMessagePeriodIntersectWithPollInterval()
 		{
 			var scenario = ScenarioFactory.CreateScenario("test", false, false).WithId();
 			ScenarioRepository.Add(scenario);
@@ -152,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 11, 17), new DateOnly(2017, 11, 17));
-			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Should().Be.EqualTo(true);
+			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -187,9 +202,49 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
 
-			Target.Check(mailboxId, new DateTime(2017, 11, 21), new DateTime(2017, 11, 21)).Should().Be.EqualTo(false);
+			Target.Check(mailboxId, new DateTime(2017, 11, 21), new DateTime(2017, 11, 21)).Should().Be.Empty();
 		}
 
+		[Test]
+		public void ShouldResetPolling()
+		{
+			var scenario = ScenarioFactory.CreateScenario("test", false, false).WithId();
+			ScenarioRepository.Add(scenario);
+			var me = PersonFactory.CreatePerson().WithId();
+			me.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+			LoggedOnUser.SetFakeLoggedOnUser(me);
+			var mailboxId = Guid.NewGuid();
+
+
+			var scheduleChangeMessage = new Message
+			{
+				StartDate = Subscription.DateToString(new DateTime(2017, 11, 21, 20, 0, 0)),
+				EndDate = Subscription.DateToString(new DateTime(2017, 11, 21, 22, 0, 0)),
+				DomainReferenceId = scenario.Id.Value.ToString(),
+				DomainUpdateType = (int)DomainUpdateType.NotApplicable,
+				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
+				DomainType = typeof(IScheduleChangedMessage).Name,
+				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
+					.Select(_ => me.Id.ToString()))
+			};
+
+			var expiresAt = Now.UtcDateTime().Add(TimeSpan.FromSeconds(15 * 60));
+			Now.Is(expiresAt.Subtract(new TimeSpan(TimeSpan.FromSeconds(15 * 60).Ticks/2)).AddMinutes(1));
+			FakeMailboxRepository.Add(new Mailbox
+			{
+				Id = mailboxId,
+				Route = scheduleChangeMessage.Routes().First(),
+				ExpiresAt = expiresAt
+			});
+
+			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
+
+			Target.ResetPolling(mailboxId);
+
+			FakeMailboxRepository.Load(mailboxId).ExpiresAt.Should().Be.GreaterThan(expiresAt);
+			FakeMailboxRepository.PopMessages(mailboxId, null).Should().Be.Empty();
+
+		}
 
 	}
 }

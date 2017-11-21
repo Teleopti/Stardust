@@ -9,7 +9,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -70,19 +69,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult CheckIfScheduleHasUpdates(Guid mailboxId, DateTime startDate, DateTime endDate)
 		{
-			var hasUpdates = _scheduleChangePoller.Check(mailboxId, startDate, endDate);
-			return Json(new
-			{
-				HasUpdates = hasUpdates,
-				StartDate = startDate.ToShortDateString(),
-				EndDate = endDate.ToShortDateString()
-			}, JsonRequestBehavior.AllowGet);
+			return Json(_scheduleChangePoller.Check(mailboxId, startDate, endDate), JsonRequestBehavior.AllowGet);
 		}
 		[UnitOfWork, MessageBrokerUnitOfWork]
 		[HttpGet]
 		public virtual JsonResult StartPolling()
 		{
 			return Json(_scheduleChangePoller.StartPolling(), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWork, MessageBrokerUnitOfWork]
+		[HttpGet]
+		public virtual JsonResult ResetPolling(Guid mailboxId)
+		{
+			_scheduleChangePoller.ResetPolling(mailboxId);
+			return Json(new { }, JsonRequestBehavior.AllowGet);
 		}
 	}
 

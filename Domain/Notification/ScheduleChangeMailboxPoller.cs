@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Notification
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly INow _now;
-		private readonly TimeSpan _expirationInterval = TimeSpan.FromMinutes(15);
+		private readonly TimeSpan _expirationInterval;
 
 		public ScheduleChangeMailboxPoller(
 			IMailboxRepository mailboxRepository,
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.Domain.Notification
 			ICurrentDataSource currentDataSource,
 			ICurrentBusinessUnit currentBusinessUnit,
 			ICurrentScenario currentScenario,
-			INow now)
+			INow now, 
+			IConfigReader configReader)
 		{
 			_mailboxRepository = mailboxRepository;
 			_loggedOnUser = loggedOnUser;
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Notification
 			_currentBusinessUnit = currentBusinessUnit;
 			_currentScenario = currentScenario;
 			_now = now;
+			_expirationInterval = TimeSpan.FromSeconds(configReader.ReadValue("MessageBrokerMailboxExpirationInSeconds", 60 * 15));
 		}
 
 		public Guid StartPolling()
@@ -47,18 +50,28 @@ namespace Teleopti.Ccc.Domain.Notification
 			return mailboxId;
 		}
 
-		public bool Check(Guid mailboxId, DateTime startDateInUserTimezone, DateTime endDateInUserTimezone)
+		public IList<DateOnlyPeriod> Check(Guid mailboxId, DateTime startDateInUserTimezone, DateTime endDateInUserTimezone)
 		{
 			var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var period = new DateOnlyPeriod(new DateOnly(TimeZoneHelper.ConvertToUtc(startDateInUserTimezone, userTimezone)),
+			var period = new DateOnlyPeriod(
+				new DateOnly(TimeZoneHelper.ConvertToUtc(startDateInUserTimezone, userTimezone)),
 				new DateOnly(TimeZoneHelper.ConvertToUtc(endDateInUserTimezone, userTimezone)));
 			var notifications = popMessages(mailboxId);
 			var userId = _loggedOnUser.CurrentUser().Id.ToString();
-			return notifications.Any(n => n.BinaryData.Contains(userId)
-					&& period.StartDate <= new DateOnly(n.EndDateAsDateTime())
-					&& period.EndDate >= new DateOnly(n.StartDateAsDateTime()));
+			return notifications
+				.Where(n => n.BinaryData.Contains(userId)
+						&& period.StartDate <= new DateOnly(n.EndDateAsDateTime())
+						&& period.EndDate >= new DateOnly(n.StartDateAsDateTime()))
+				.Select(n => new DateOnlyPeriod(
+						new DateOnly(TimeZoneHelper.ConvertFromUtc(startDateInUserTimezone, userTimezone)),
+						new DateOnly(TimeZoneHelper.ConvertFromUtc(endDateInUserTimezone, userTimezone))))
+				.ToList();
 		}
 
+		public void ResetPolling(Guid mailboxId)
+		{
+			popMessages(mailboxId);
+		}
 
 		private IEnumerable<Message> popMessages(Guid mailboxId)
 		{
@@ -76,5 +89,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				"/", _currentDataSource.CurrentName(), _currentBusinessUnit.Current().Id.ToString(),
 				nameof(IScheduleChangedMessage), "ref", _currentScenario.Current().Id.ToString());
 		}
+
+		
 	}
 }
