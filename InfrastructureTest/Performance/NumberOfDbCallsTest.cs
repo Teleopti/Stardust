@@ -12,8 +12,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Performance
-{
-	
+{	
 	[DatabaseTest]
 	public class NumberOfDbCallsForAssignmentPersistTest
 	{
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Performance
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 
 		[Test]
-		[Ignore("#46311")]
 		public void ShouldBatchStatementsEffectivly()
 		{
 			var scenario = new Scenario();
@@ -57,7 +55,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Performance
 			CurrentUnitOfWorkFactory.Current().FetchSessionFactory().Statistics.Clear();
 			Target.Persist(schedules);
 
-			
 			//One select of version numbers
 			//one select to read activities
 			//one batch of insert of all layers
