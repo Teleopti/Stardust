@@ -6,7 +6,7 @@
 	gamification-settings,
 	gamification-targets,
 	gamification-targets-table,
-	gamification-target-row, {
+	gamification-target-row {
 		display: block;
 	}
 
@@ -16,7 +16,7 @@
 		}
 	}
 
-	gamification-settings{
+	gamification-settings {
 		margin: -5px;
 
 		.setting-list {
@@ -31,9 +31,6 @@
 		.quality-container {
 			border-top: $SEPARATOR;
 			padding: 24px;
-		}
-
-		.setting-container{
 		}
 
 		.setting-name {
