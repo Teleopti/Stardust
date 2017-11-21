@@ -91,9 +91,19 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	function _resetInterval(notification) {
 		if (notification.startDate <= settings.notifyPeriod.endDate
 			&& notification.endDate >= settings.notifyPeriod.startDate) {
+			_resetPoller();
 			_clearInterval();
 			_setUpInterval();
 		}
+	}
+
+	function _resetPoller() {
+		ajax.Ajax({
+			url: 'Asm/ResetPolling',
+			dataType: 'json',
+			type: 'GET',
+			data: { mailboxId: mailboxId}
+		});
 	}
 
 	function _setUpInterval() {
@@ -132,7 +142,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			endDate: moment(new Date(noticeListeningStartDate.getTime())).add('days', 1).toDate()
 		}
 
-		_startPolling().done(function (mailboxId) {
+		_startPolling().done(function () {
 			_setUpInterval();
 			_subscribeToMessageBroker();
 		});
