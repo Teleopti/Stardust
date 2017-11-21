@@ -41,7 +41,6 @@
 
             $timeout(function () {
                 var element = angular.element(document.getElementById("setting-name-id-" + id));
-                console.log(element);
                 element.focus();
             });
 

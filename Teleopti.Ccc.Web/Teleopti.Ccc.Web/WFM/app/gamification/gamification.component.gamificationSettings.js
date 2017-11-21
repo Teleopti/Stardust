@@ -225,8 +225,6 @@
 		}
 
 		ctrl.settingSelectionChanged = function () {
-			console.log('setting changed.');
-			console.log(ctrl.currentSettingId);
 			if (ctrl.currentSettingId) {
 				var setting = ctrl.findElementInArray(ctrl.allSettings, ctrl.currentSettingId);
 
