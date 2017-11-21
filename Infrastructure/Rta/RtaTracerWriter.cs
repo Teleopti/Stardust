@@ -4,6 +4,7 @@ using System.Linq;
 using Castle.Core.Internal;
 using log4net;
 using log4net.Appender;
+using log4net.Config;
 using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
@@ -75,7 +76,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 			// not really tested
 			logger().Level = Level.All;
-
+			logger().Additivity = false;
+			
 			logger().AddAppender(appender);
 			logger().Hierarchy.Configured = true;
 
