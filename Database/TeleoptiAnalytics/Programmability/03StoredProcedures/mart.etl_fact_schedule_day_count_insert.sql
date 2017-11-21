@@ -16,43 +16,11 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_insert]
 	@shift_category_id int,
 	@absence_id int,
 	@day_off_name nvarchar(50),
-	@day_off_shortname nvarchar(25)
+	@day_off_shortname nvarchar(25),
+	@day_off_id int
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	-- Get day off id from mart.dim_day_off. If not exist then insert it.
-	DECLARE @day_off_id int
-
-	IF @day_off_name IS NULL
-	BEGIN
-		SET @day_off_id = -1
-	END
-	ELSE
-	BEGIN
-		SELECT @day_off_id = day_off_id
-		FROM mart.dim_day_off
-		WHERE day_off_name = @day_off_name
-		AND business_unit_id =@business_unit_id
-
-		IF @day_off_id IS NULL
-		BEGIN
-		INSERT INTO [mart].[dim_day_off]
-			   ([day_off_name]
-			   ,[display_color]
-			   ,[business_unit_id]
-			   ,[display_color_html]
-			   ,[day_off_shortname])
-		 VALUES
-			   (@day_off_name
-			   ,-8355712
-			   ,@business_unit_id
-			   ,'#808080'
-			   ,@day_off_shortname)
-
-			SET @day_off_id = @@IDENTITY
-		END
-	END
 
 	INSERT INTO [mart].[fact_schedule_day_count]
            ([shift_startdate_local_id]

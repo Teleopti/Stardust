@@ -144,7 +144,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						@shift_category_id=:{nameof(dayCount.ShiftCategoryId)}, 
 						@absence_id=:{nameof(dayCount.AbsenceId)}, 
 						@day_off_name=:{nameof(dayCount.DayOffName)}, 
-						@day_off_shortname=:{nameof(dayCount.DayOffShortName)}")
+						@day_off_shortname=:{nameof(dayCount.DayOffShortName)},
+						@day_off_id =:{nameof(dayCount.DayOffId)}"
+				)
 				.SetInt32(nameof(dayCount.ShiftStartDateLocalId), dayCount.ShiftStartDateLocalId)
 				.SetInt32(nameof(dayCount.PersonId), dayCount.PersonId)
 				.SetInt32(nameof(dayCount.BusinessUnitId), dayCount.BusinessUnitId)
@@ -154,6 +156,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetInt32(nameof(dayCount.AbsenceId), dayCount.AbsenceId)
 				.SetString(nameof(dayCount.DayOffName), dayCount.DayOffName)
 				.SetString(nameof(dayCount.DayOffShortName), dayCount.DayOffShortName)
+				.SetInt32(nameof(dayCount.DayOffId), dayCount.DayOffId)
 
 				.ExecuteUpdate();
 		}

@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public IScenarioRepository Scenarios;
 		public IPersonRepository Persons;
 		public FakeIntervalLengthFetcher IntervalLength;
+		public FakeAnalyticsDayOffRepository AnalyticsDayOffRepository;
 
 		private readonly Guid businessUnitId = Guid.NewGuid();
 		private readonly Guid scenarioId = Guid.NewGuid();
@@ -303,6 +304,57 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			AnalyticsSchedules.FactScheduleDayCountRows.Single().StartTime.Should().Be.EqualTo(startDate.Date);
 			AnalyticsSchedules.FactScheduleDayCountRows.Single().DayOffName.Should().Be.EqualTo(dayOffTemplate.Description.Name);
 			AnalyticsSchedules.FactScheduleDayCountRows.Single().DayOffShortName.Should().Be.EqualTo(dayOffTemplate.Description.ShortName);
+		}
+
+		[Test]
+		public void ShouldAddDayOffIfNotExistsWhenPersistScheduleDayCount()
+		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
+			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
+			var person = PersonFactory.CreatePerson().WithId(personId);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(startDate)).WithId(personPeriodId);
+			personPeriod.Team = TeamFactory.CreateTeam("Team", "Site");
+			person.AddPersonPeriod(personPeriod);
+			var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("Slackday", "SD")).WithId(Guid.NewGuid());
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, new DateOnly(startDate), dayOffTemplate);
+
+			var shift = new ProjectionChangedEventShift
+			{
+				StartDateTime = startDate,
+				EndDateTime = startDate.AddHours(2).AddMinutes(15)
+			};
+
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				Shift = shift,
+				PersonPeriodId = personPeriodId,
+				Date = startDate.Date
+			};
+			var analyticsScenario = new AnalyticsScenario { ScenarioCode = scenarioId, ScenarioId = 66 };
+
+			BusinessUnits.Add(businessUnit);
+			Scenarios.Add(scenario);
+			Persons.Add(person);
+			Schedules.Add(assignment);
+
+			AnalyticsScenarios.AddScenario(analyticsScenario);
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod { PersonId = 11, BusinessUnitId = 2, PersonPeriodCode = personPeriodId });
+			IntervalLength.Has(15);
+
+			Target.Handle(new ProjectionChangedEvent
+			{
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
+				ScenarioId = scenarioId,
+				PersonId = personId,
+				LogOnBusinessUnitId = businessUnitId
+			});
+			
+			var analyticsDayOff = AnalyticsDayOffRepository.DayOffs().Single();
+			analyticsDayOff.DayOffName.Should().Be.EqualTo(dayOffTemplate.Description.Name);
+			analyticsDayOff.DayOffShortname.Should().Be.EqualTo(dayOffTemplate.Description.ShortName);
+			analyticsDayOff.BusinessUnitId.Should().Be.EqualTo(2);
+			analyticsDayOff.DayOffCode.Should().Be.EqualTo(dayOffTemplate.Id.Value);
 		}
 
 		[Test]

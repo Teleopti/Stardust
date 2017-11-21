@@ -13,5 +13,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics
 		string DayOffShortName { get; set; }
 		int AbsenceId { get; set; }
 		DateTime StartTime { get; set; }
+		int DayOffId { get; set; }
 	}
 }

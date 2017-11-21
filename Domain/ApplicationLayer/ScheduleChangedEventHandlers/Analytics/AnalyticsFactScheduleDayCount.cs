@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		public string DayOffShortName { get; set; }
 		public int AbsenceId { get; set; }
 		public DateTime StartTime { get; set; }
+		public int DayOffId { get; set; }
 	}
 }

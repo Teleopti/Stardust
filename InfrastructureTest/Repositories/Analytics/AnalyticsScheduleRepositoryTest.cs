@@ -309,7 +309,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				DayOffName = null,
 				DayOffShortName = null,
 				AbsenceId = 22,
-				BusinessUnitId = businessUnitId
+				BusinessUnitId = businessUnitId,
+				DayOffId = -1
 			};
 			WithAnalyticsUnitOfWork.Do(() => { Target.PersistFactScheduleDayCountRow(dayCount); });
 		}
@@ -320,7 +321,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
 			analyticsDataFactory.Setup(new ShiftCategory(-1, Guid.NewGuid(), "Kattegat", Color.Green, _datasource, businessUnitId));
 			analyticsDataFactory.Setup(new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId));
-			analyticsDataFactory.Setup(new DimDayOff(-1, Guid.NewGuid(), "DayOff", _datasource, businessUnitId));
+			analyticsDataFactory.Setup(new DimDayOff(-1, new Guid("00000000-0000-0000-0000-000000000000"), "Not Defined", _datasource, -1));
 		}
 
 		[Test]
