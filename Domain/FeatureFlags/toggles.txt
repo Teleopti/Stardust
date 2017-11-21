@@ -129,7 +129,6 @@ ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don'
 ResourcePlanner_MergeTeamblockClassicIntraday_45508 = true
 ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
-ResourcePlanner_ShowSwitchedTimeZone_46303 = true
 ResourcePlanner_BlockSchedulingValidation_46092 = DEV
 ResourcePlanner_RemoveClassicShiftCat_46582 = true
 ResourcePlanner_DoNotKillCache_46724 = RC

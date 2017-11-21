@@ -546,10 +546,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<MissingForecastHint>().AsSelf().As<IScheduleHint>().SingleInstance();
 				builder.RegisterType<PersonSchedulePeriodHint>().As<IScheduleHint>().SingleInstance();				
 			}
-			if (_configuration.Toggle(Toggles.ResourcePlanner_ShowSwitchedTimeZone_46303))
-			{
-				builder.RegisterType<ScheduleStartOnWrongDateHint>().As<IScheduleHint>().SingleInstance();
-			}
+			builder.RegisterType<ScheduleStartOnWrongDateHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<PersonSkillHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<PersonPeriodHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<PersonShiftBagHint>().As<IScheduleHint>().SingleInstance();

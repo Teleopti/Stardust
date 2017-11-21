@@ -21,7 +21,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_ShowSwitchedTimeZone_46303)]
 	public class ScheduleStartOnWrongDateHintTest : ISetup
 	{
 		public Func<ISchedulerStateHolder> StateHolder;
