@@ -43,5 +43,20 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			Assert.DoesNotThrow(() => run.WaitForException<SqlException>());
 		}
 
+		[Test]
+		public void ShouldNotBreakWhenPolling()
+		{
+			var run = new ConcurrencyRunner();
+			var route = new Message {BusinessUnitId = Guid.NewGuid().ToString()}.Routes().First();
+			var mailboxId = Guid.NewGuid().ToString();
+			
+			run.InParallel(() =>
+			{
+				Server.PopMessages(route, mailboxId);
+			}).Times(100);
+			
+			Assert.DoesNotThrow(() => run.WaitForException<SqlException>());
+		}
+
 	}
 }
