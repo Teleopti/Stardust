@@ -45,7 +45,10 @@ module.exports = function (config) {
 		exclude: [
 			'**/Gruntfile.js'
 		],
-		browserNoActivityTimeout: 100000,
+		captureTimeout: 210000,
+		browserDisconnectTolerance: 3, 
+		browserDisconnectTimeout : 210000,
+		browserNoActivityTimeout : 210000,
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
