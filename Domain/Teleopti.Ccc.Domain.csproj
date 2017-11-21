@@ -305,6 +305,7 @@
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdater.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdater.cs" />
     <Compile Include="Common\BadgeSetting.cs" />
+    <Compile Include="Common\BadgeSettingDataConverter.cs" />
     <Compile Include="Common\QualityInfo.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
