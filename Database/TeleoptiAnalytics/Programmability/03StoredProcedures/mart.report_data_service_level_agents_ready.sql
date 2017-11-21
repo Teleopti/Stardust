@@ -20,9 +20,8 @@ GO
 set statistics time on
 set statistics io on
 
-exec mart.report_data_service_level_agents_ready @skill_set=N'13',@workload_set=N'13',@interval_type=1,
-@date_from='2016-01-04 00:00:00:000',@date_to='2016-01-05 00:00:00:000',@interval_from=0,@interval_to=287,
-@sl_calc_id=3,@time_zone_id=2, @person_code='7EB3E1AE-3DF5-4558-81CF-9AB100258670',@report_id='AE758403-C16B-40B0-B6B2-E8F6043B6E04',@language_id=1053,
+exec mart.report_data_service_level_agents_ready @skill_set=N'18,169,79,8',@workload_set=N'18,187,68,8',@interval_type=4,@date_from='2016-11-07',@date_to='2016-11-07',
+@interval_from=0,@interval_to=287,@sl_calc_id=3,@time_zone_id=2, @person_code='490C31C7-8C30-4CF6-86B0-9E1559B682D5',@report_id='AE758403-C16B-40B0-B6B2-E8F6043B6E04',@language_id=1053,
 @business_unit_code='1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B'
 */
 CREATE PROCEDURE [mart].[report_data_service_level_agents_ready] 
@@ -74,6 +73,16 @@ CREATE TABLE #bridge_time_zone(
 	local_date_id int NULL,
 	local_interval_id smallint NULL
 	)
+CREATE TABLE #scheduled_agents_prepare(
+	shift_startdate_local_id int,
+	schedule_date_id int,
+	interval_id smallint,
+	scenario_id int,
+	person_id int,
+	person_code uniqueidentifier,
+	skillset_id int,
+	scheduled_ready_time_m int
+	)
 CREATE TABLE #scheduled_agents( 
 	period nvarchar(30),
 	scheduled_agents_ready decimal(18,3)
@@ -96,8 +105,17 @@ CREATE TABLE #queue(
 	)
 
 --declare
-DECLARE @hide_time_zone bit
+DECLARE @hide_time_zone bit, @default_scenario_id int, @business_unit_id int, @date_from_id int, @date_to_id int
+
 SET @hide_time_zone = 0
+
+SELECT @business_unit_id = business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code
+
+SELECT @default_scenario_id = scenario_id FROM mart.dim_scenario WHERE business_unit_id = @business_unit_id AND default_scenario = 1
+
+SELECT @date_from_id = date_id FROM mart.dim_date WHERE date_date = @date_from
+SELECT @date_to_id = date_id FROM mart.dim_date WHERE date_date = @date_to
+
 
 /*Split string of skill id:s*/
 INSERT INTO #skills
@@ -125,7 +143,19 @@ INNER JOIN mart.dim_date d
 	AND b.time_zone_id = @time_zone_id
 
 /*Get queue info*/
-INSERT #queue(period,calls_offered,calls_answered,calls_answ_after_sl,calls_answ_within_sl,calls_abnd,calls_abnd_within_sl,answ_rate,abnd_rate,service_level,service_level_numerator,service_level_denominator)
+INSERT #queue(
+	period,
+	calls_offered,
+	calls_answered,
+	calls_answ_after_sl,
+	calls_answ_within_sl,
+	calls_abnd,
+	calls_abnd_within_sl,
+	answ_rate,
+	abnd_rate,
+	service_level,
+	service_level_numerator,
+	service_level_denominator)
 SELECT 
 	CASE @interval_type 
 		WHEN 1 THEN i.interval_name
@@ -195,6 +225,7 @@ ORDER BY
 		WHEN 7 THEN d.weekday_resource_key
 		END
 
+
 /*Service Level Calculations*/
 IF @sl_calc_id=1
 BEGIN
@@ -221,6 +252,7 @@ BEGIN
 	WHERE calls_answered>0
 END
 
+
 /*
 Fix unreasonable values when:
 a) We have over 100% because calls answered this interval was pegged as offered in previous interval.
@@ -246,6 +278,33 @@ AND		calls_answ_within_sl > 0
 --2) dim person does NOT hold any direct skill-info, but skill_set info.
 --Thus for every person holding a Skillset that includes the selected Skill, we get a count=1 in fact_schedule
 --Result: The report will show you: "How many agents would have been able to work on the particular skill, if necessary"
+INSERT INTO #scheduled_agents_prepare (
+	shift_startdate_local_id,
+	schedule_date_id,
+	interval_id,
+	scenario_id,
+	person_id,
+	person_code,
+	skillset_id,
+	scheduled_ready_time_m)
+SELECT 
+	fs.shift_startdate_local_id, 
+	fs.schedule_date_id,
+	fs.interval_id, 
+	fs.scenario_id, 
+	fs.person_id, 
+	dp.person_code,
+	dp.skillset_id,
+	fs.scheduled_ready_time_m
+FROM mart.fact_schedule fs WITH (NOLOCK)
+INNER JOIN [mart].[DimPersonLocalized](@date_from, @date_to) dpl
+	ON dpl.person_id = fs.person_id
+INNER JOIN mart.dim_person dp  WITH (NOLOCK)
+	ON dp.person_id = dpl.person_id
+WHERE shift_startdate_local_id between @date_from_id and @date_to_id
+	AND fs.scenario_id = @default_scenario_id
+	AND fs.scheduled_ready_time_m > 0
+
 INSERT #scheduled_agents(period,scheduled_agents_ready)
 SELECT	CASE @interval_type 
 			WHEN 1 THEN i.interval_name
@@ -256,19 +315,15 @@ SELECT	CASE @interval_type
 			WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
 			WHEN 7 THEN d.weekday_resource_key
 		END AS 'period',
-		COUNT(DISTINCT dp.person_code)	'scheduled_agents_ready'
-FROM mart.fact_schedule fs WITH (NOLOCK)
-INNER JOIN [mart].[DimPersonLocalized](@date_from, @date_to) dpl
-	ON dpl.person_id = fs.person_id
-INNER JOIN mart.dim_person dp  WITH (NOLOCK)
-	ON dp.person_id = dpl.person_id
-	AND fs.shift_startdate_local_id BETWEEN dp.valid_from_date_id_local AND dp.valid_to_date_id_local
+		COUNT(DISTINCT fs.person_code)	'scheduled_agents_ready'
+FROM #scheduled_agents_prepare fs WITH (NOLOCK)
 INNER JOIN mart.bridge_skillset_skill bs 
-	ON dp.skillset_id = bs.skillset_id
-	AND bs.skill_id IN (select id from #skills)
+	ON fs.skillset_id = bs.skillset_id
+INNER JOIN #skills s
+	ON bs.skill_id = s.id
 INNER JOIN #bridge_time_zone b
 	ON fs.interval_id = b.interval_id
-	AND fs.schedule_date_id= b.date_id
+	AND fs.schedule_date_id = b.date_id
 	AND fs.shift_startdate_local_id BETWEEN b.date_id -1 AND b.date_id +1
 INNER JOIN mart.dim_date d 
 	ON b.local_date_id = d.date_id
@@ -276,9 +331,6 @@ INNER JOIN mart.dim_date d
 INNER JOIN mart.dim_interval i
 	ON b.local_interval_id = i.interval_id
 	AND i.interval_id BETWEEN @interval_from AND @interval_to
-INNER JOIN mart.dim_scenario s
-           ON s.scenario_id = fs.scenario_id AND s.default_scenario = 1
-WHERE fs.scheduled_ready_time_m>0
 GROUP BY
 	CASE @interval_type 
 	WHEN 1 THEN i.interval_name
@@ -289,6 +341,7 @@ GROUP BY
 		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
 		WHEN 7 THEN d.weekday_resource_key
 	END
+
 
 /*Scheduled Agents Ready with selected skill(not necessarily working on that skill)*/
 INSERT #ready_agents(period,agents_ready)
@@ -366,6 +419,7 @@ GROUP BY
 		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
 		WHEN 7 THEN d.weekday_resource_key
 	END
+
 
 UPDATE #result
 SET calls_offered =#queue.calls_offered,
