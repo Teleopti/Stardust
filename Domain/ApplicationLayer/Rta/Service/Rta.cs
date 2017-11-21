@@ -70,7 +70,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var input = _analytics.Get(() => _queueReader.Dequeue());
 				iterated = input != null;
 				if (iterated)
+				{
+					_tracer.ProcessProcessing();
 					process(input);
+				}
 			});
 			return iterated;
 		}
