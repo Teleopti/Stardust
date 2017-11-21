@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -47,7 +46,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 								MeetingComposerView meetingComposerView, 
 								IResourceCalculation resourceOptimizationHelper,
 								ISkillPriorityProvider skillPriorityProvider,
-								IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+								IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,
+								CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 			: this()
 		{
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 																						 SchedulingResultState);
 			_meetingStateHolderLoaderHelper = new MeetingStateHolderLoaderHelper(decider, schedulerStateHolder, stateHolderLoader, UnitOfWorkFactory.Current, _staffingCalculatorServiceFacade);
 			_presenter = new MeetingImpactPresenter(schedulerStateHolder, this, meetingViewModel, _meetingStateHolderLoaderHelper,
-				slotFinder, new MeetingImpactCalculator(schedulerStateHolder, resourceOptimizationHelper, meetingViewModel.Meeting),
+				slotFinder, new MeetingImpactCalculator(schedulerStateHolder, resourceOptimizationHelper, meetingViewModel.Meeting, resourceCalculationContextFactory),
 				gridHandler, transparentWindowHandler, UnitOfWorkFactory.Current);
 			SetTexts();
 

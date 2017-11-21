@@ -19,21 +19,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         private readonly IResourceCalculation _resourceOptimizationHelper;
         private readonly IMeeting _meeting;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
-        public MeetingImpactCalculator(ISchedulerStateHolder schedulerStateHolder, IResourceCalculation resourceOptimizationHelper, IMeeting meeting)
+        public MeetingImpactCalculator(ISchedulerStateHolder schedulerStateHolder, IResourceCalculation resourceOptimizationHelper, 
+			IMeeting meeting, CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)
         {
             _schedulerStateHolder = schedulerStateHolder;
             _resourceOptimizationHelper = resourceOptimizationHelper;
             _meeting = meeting;
-        }
+			_resourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
+		}
 
         public void RecalculateResources(DateOnly dateToCalculate)
         {
             RemoveMeetingFromDictionary(_meeting);
             AddPersonMeetingsToDictionary(_meeting);
 
-            _resourceOptimizationHelper.ResourceCalculate(dateToCalculate, _schedulerStateHolder.SchedulingResultState.ToResourceOptimizationData(true, false));
-        }
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder.SchedulingResultState, false, new DateOnlyPeriod(_meeting.StartDate, _meeting.EndDate)))
+			{
+				_resourceOptimizationHelper.ResourceCalculate(dateToCalculate, _schedulerStateHolder.SchedulingResultState.ToResourceOptimizationData(true, false));
+			}
+		}
 
         public void RemoveAndRecalculateResources(IMeeting meeting, DateOnly dateToCalculate)
         {

@@ -203,19 +203,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 			}
 
-			using (var meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider,_scheduleStorageFactory, _staffingCalculatorServiceFacade))
+			using (var meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider,_scheduleStorageFactory, _staffingCalculatorServiceFacade, _resourceCalculationContextFactory))
 			{
-				if (toggleManager.IsEnabled(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680))
-				{
-					using (_resourceCalculationContextFactory.Create(_schedulerStateHolder.SchedulingResultState, false, new DateOnlyPeriod(meetingViewModel.StartDate, meetingViewModel.EndDate)))
-					{
-						showMeetingComposer(meetingComposerView);
-					}
-				}
-				else
-				{
-					showMeetingComposer(meetingComposerView);
-				}
+				showMeetingComposer(meetingComposerView);
 			}
 		}
 

@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
 			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator,
 			IResourceCalculation resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, 
-			IScheduleStorageFactory scheduleStorageFactory, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+			IScheduleStorageFactory scheduleStorageFactory, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 			: this()
 		{
 			bool editMeetingPermission = editPermission;
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_skillPriorityProvider = skillPriorityProvider;
 			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulerStateHolder, scheduleStorageFactory);
 			panelContent.Enabled = editMeetingPermission;
 			ribbonControlAdv1.Enabled = editMeetingPermission;
@@ -320,7 +323,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private IMeetingImpactView getImpactView()
 		{
-			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _resourceOptimizationHelper, _skillPriorityProvider, _staffingCalculatorServiceFacade);
+			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, 
+				_resourceOptimizationHelper, _skillPriorityProvider, _staffingCalculatorServiceFacade, _resourceCalculationContextFactory);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

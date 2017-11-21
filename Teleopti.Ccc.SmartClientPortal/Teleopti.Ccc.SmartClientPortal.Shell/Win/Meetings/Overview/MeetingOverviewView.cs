@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 		private readonly IMeetingOverviewFilter _meetingOverviewFilter;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IScheduleStorageFactory _scheduleStorageFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		private IScheduleAppointment _selectedItem;
 		private readonly Control _nextButton;
@@ -42,13 +43,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 		private DateTime _clickedDate;
 
 
-		public MeetingOverviewView(IEventAggregator eventAggregator, MeetingsScheduleProvider dataProvider,IMeetingOverviewFilter meetingOverviewFilter, IResourceCalculation resourceOptimizationHelper, IScheduleStorageFactory scheduleStorageFactory)
+		public MeetingOverviewView(IEventAggregator eventAggregator, MeetingsScheduleProvider dataProvider,IMeetingOverviewFilter meetingOverviewFilter,
+									IResourceCalculation resourceOptimizationHelper, IScheduleStorageFactory scheduleStorageFactory, 
+									CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_eventAggregator = eventAggregator;
 			_dataProvider = dataProvider;
 			_meetingOverviewFilter = meetingOverviewFilter;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleStorageFactory = scheduleStorageFactory;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 
 			InitializeComponent();
 			SetTexts();
@@ -425,7 +429,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 		{
 			var viewSchedulesPermission = isPermittedToViewSchedules();
 			var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-															  _eventAggregator, _resourceOptimizationHelper, skillPriorityProvider, _scheduleStorageFactory, staffingCalculatorServiceFacade);
+															  _eventAggregator, _resourceOptimizationHelper, skillPriorityProvider,
+															  _scheduleStorageFactory,
+															  staffingCalculatorServiceFacade,
+															  _resourceCalculationContextFactory);
 			meetingComposerView.ShowDialog(this);
 		}
 
