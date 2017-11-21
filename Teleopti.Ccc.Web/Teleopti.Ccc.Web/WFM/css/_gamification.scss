@@ -41,6 +41,42 @@
 			margin-top: 10px;
 		}
 
+		.container-header{
+			font-size: 18px;
+			letter-spacing: .005em;
+			box-sizing: border-box;
+			font-weight: 400;
+			display: -webkit-box;
+			display: -webkit-flex;
+			display: flex;
+			-webkit-box-align: center;
+			-webkit-align-items: center;
+			align-items: center;
+			-webkit-box-orient: horizontal;
+			-webkit-box-direction: normal;
+			-webkit-flex-direction: row;
+			flex-direction: row;
+			width: 100%;
+			height: 40px;
+			max-height: 40px;
+			padding: 0 10px;
+			margin: 0;
+			background-color: $blue-300
+		}
+
+		.edit-icon{
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+
+		.items-content-container{
+			padding: 10px;
+		}
+
+		.item-content-container{
+			margin: 7px;
+		}
+
 		.icon-button{
 			display: inline-block;
 			padding-left: 10px;
@@ -48,8 +84,8 @@
 		}
 
 		.setting-item-panel{
-			border: 1px solid rgb(124, 122, 122);
-			margin: 3px;
+			// boborder: 1px solid rgb(124, 122, 122);
+			margin: 5px;
 		}
 	}
 

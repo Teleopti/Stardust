@@ -63,7 +63,7 @@
             </div>
         </div>
         <div class="quality-container">
-            <div class="inline-block material-depth-1" ng-repeat="settingInfo in $ctrl.currentSetting.settings">
+            <div class="inline-block material-depth-1 setting-item-panel" ng-repeat="settingInfo in $ctrl.currentSetting.settings">
                 <gamification-setting-info setting-info="settingInfo" current-rule-id="$ctrl.currentSetting.rule_id" save-data-callback="$ctrl.saveData"
                     current-setting-id="$ctrl.currentSettingId" save-value-callback="$ctrl.saveValue" select-item-callback="$ctrl.reachedMaxSelectedItems"></gamification-setting-info>
             </div>
