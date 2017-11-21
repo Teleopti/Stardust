@@ -157,7 +157,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var configuration = new IocConfiguration(iocArgs, toggleManager);
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(configuration));
-			builder.RegisterModule(new TenantServerModule(configuration));
 			builder.RegisterModule<NodeHandlersModule>();
 
 			builder.RegisterType<BadgeCalculationRepository>().As<IBadgeCalculationRepository>();

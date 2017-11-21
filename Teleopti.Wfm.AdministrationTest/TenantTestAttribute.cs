@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.AdministrationTest
 
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 
-			system.AddModule(new WfmAdminModule());
+			system.AddModule(new WfmAdminModule2(configuration));
 			system.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
 			system.UseTestDouble<FakeHangfireCookie>().For<IHangfireCookie>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();			

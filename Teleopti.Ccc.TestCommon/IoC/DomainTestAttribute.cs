@@ -55,8 +55,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			//TODO: move this to common
+			//TODO: move this to CommonModule
+			// Really, adding domain services here is a very bad idea
+			// because it will give false positives in the build
+			// even though it may fail in some clients
+			// all services should be added to the 
+			// CommonModule !!
 			system.AddModule(new OutboundScheduledResourcesProviderModule());
+			system.AddService<UserDeviceService>();
 			//
 
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
@@ -64,13 +70,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 
 			// Tenant (and datasource) stuff
-			system.AddModule(new TenantServerModule(configuration));
-			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
 			var tenants = new FakeTenants();
 			tenants.Has(DefaultTenantName, LegacyAuthenticationKey.TheKey);
-			system.UseTestDouble(tenants)
-				.For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
+			system.UseTestDouble(tenants).For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
+			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
 			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 			system.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
 			//
@@ -125,8 +129,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// licensing
 			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
-
-			system.AddService<UserDeviceService>();
 
 			// Repositories
 			system.AddService<FakeDatabase>();

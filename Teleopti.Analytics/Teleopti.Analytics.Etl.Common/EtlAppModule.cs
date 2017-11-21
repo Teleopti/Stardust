@@ -23,7 +23,6 @@ namespace Teleopti.Analytics.Etl.Common
 			};
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 			builder.RegisterModule(new CommonModule(configuration));
-			builder.RegisterModule(new TenantServerModule(configuration));
 			builder.RegisterModule(new EtlModule(configuration));
 		}
 	}

@@ -76,7 +76,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			base.Setup(system, configuration);
 
 			// Tenant stuff
-			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
 

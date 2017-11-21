@@ -18,7 +18,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Support.Security;
 using Teleopti.Wfm.Administration.Controllers;
@@ -26,6 +25,7 @@ using Teleopti.Wfm.Administration.Core.Hangfire;
 
 namespace Teleopti.Wfm.Administration.Core.Modules
 {
+
 	public class WfmAdminModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
@@ -34,10 +34,26 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
 			var iocConf = new IocConfiguration(iocArgs, toggleManager);
 
-			builder.RegisterModule(new StardustModule(iocConf));
-			builder.RegisterModule(new TenantServerModule(iocConf));
-			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterModule(new CommonModule(iocConf));
+			builder.RegisterModule(new WfmAdminModule2(iocConf));
+
+		}
+	}
+
+	public class WfmAdminModule2 : Module
+	{
+		private readonly IIocConfiguration _configuration;
+
+		public WfmAdminModule2(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
+		protected override void Load(ContainerBuilder builder)
+		{
+
+			builder.RegisterModule(new StardustModule(_configuration));
+			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<DatabaseHelperWrapper>().As<IDatabaseHelperWrapper>().SingleInstance();
 			builder.RegisterType<UpdateCrossDatabaseView>().As<IUpdateCrossDatabaseView>().SingleInstance();
@@ -49,7 +65,7 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<Import>().SingleInstance();
 			builder.RegisterType<SaveTenant>().SingleInstance();
 			builder.RegisterType<CreateBusinessUnit>().As<ICreateBusinessUnit>().InstancePerDependency();
-			if (iocConf.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
+			if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
 			{
 				builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>()
 					.SingleInstance();
@@ -89,4 +105,5 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<AdminAccessTokenRepository>().AsSelf();
 		}
 	}
+
 }

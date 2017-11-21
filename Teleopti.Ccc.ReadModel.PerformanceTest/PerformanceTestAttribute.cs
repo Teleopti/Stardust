@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			system.AddService<DataCreator>();
 			system.AddService<Database>();
 			system.AddService<AnalyticsDatabase>();
-			system.AddModule(new TenantServerModule(configuration));
 
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 

@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
 
 			builder.RegisterModule(new CommonModule(configuration));
-			builder.RegisterModule(new TenantServerModule(configuration));
 			builder.RegisterType<TenantAuthenticationAlwaysAuthenticated>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterModule(new TestModule());
 

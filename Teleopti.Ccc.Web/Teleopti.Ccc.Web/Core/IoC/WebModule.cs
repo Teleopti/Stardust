@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<PersonToRoleAssociation>().SingleInstance();
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
-			builder.RegisterModule(new TenantServerModule(_configuration));
 			builder.RegisterModule<SeatPlannerAreaModule>();
 			builder.RegisterModule<OutboundAreaModule>();
 			builder.RegisterModule<Web.Areas.People.Core.IoC.PeopleAreaModule>();

@@ -84,7 +84,6 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider
 				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForWeb()
 			};
 			var configuration = new IocConfiguration(args, new FalseToggleManager());
-			builder.RegisterModule(new TenantServerModule(configuration));
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<WindowsIpTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<CryptoKeyInfoRepository>().As<ICryptoKeyInfoRepository>().SingleInstance();

@@ -74,7 +74,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.AddService<Database>();
-			system.AddModule(new TenantServerModule(configuration));
 			system.AddModule(new AnywhereAreaModule(configuration));
 			system.AddModule(new TeamScheduleAreaModule());
 		}

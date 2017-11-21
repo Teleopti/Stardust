@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<MutableNow>().For<INow>();
 			system.AddService<Database>();
-			system.AddModule(new TenantServerModule(configuration));
 		}
 
 		protected override void Startup(IComponentContext container)

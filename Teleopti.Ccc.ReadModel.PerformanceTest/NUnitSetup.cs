@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			builder.RegisterType<AnalyticsDatabase>();
 			builder.RegisterType<Database>().SingleInstance().ApplyAspects();
 			builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
-			builder.RegisterModule(new TenantServerModule(configuration));
 			builder.RegisterType<FakeMessageSender>().As<IMessageSender>();
 
 			var container = builder.Build();

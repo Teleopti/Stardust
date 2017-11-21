@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.AddService<Database>();
-			system.AddModule(new TenantServerModule(configuration));
 			system.AddService<MultiplicatorDefinitionSetRepository>();
 		}
 	}

@@ -268,7 +268,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			system.UseTestDouble<ShiftTradeRequestHandler>().For<ShiftTradeRequestHandler>();
 
 			system.AddService<Database>();
-			system.AddModule (new TenantServerModule (configuration));
 		}
 
 		protected override void Startup (IComponentContext container)

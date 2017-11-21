@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			system.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.AddService<Database>();
-			system.AddModule(new TenantServerModule(configuration));
 		}
 
 		protected override void Startup(IComponentContext container)
