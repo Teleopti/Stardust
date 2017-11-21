@@ -21,6 +21,11 @@ namespace Teleopti.Ccc.TestCommon
 					.GetValue(unitOfWork, null);
 			return null;
 		}
-		
+
+		public static ISessionFactory FetchSessionFactory(this IUnitOfWorkFactory unitOfWorkFactory)
+		{
+			var application = (NHibernateUnitOfWorkFactory)unitOfWorkFactory;
+			return application.SessionFactory;
+		}
 	}
 }

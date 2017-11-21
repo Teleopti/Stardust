@@ -205,6 +205,7 @@
     <Compile Include="Foundation\InitializeMessageBrokerTest.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactoryTest.cs" />
     <Compile Include="Helper\StardustRepositoryTestHelper.cs" />
+    <Compile Include="Performance\NumberOfDbCallsTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDifferenceSaverTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReportTest.cs" />
