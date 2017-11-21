@@ -750,6 +750,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 		}
 
 		[Test]
+		[SetCulture("en-US")]
 		public void ShouldPersistExternalBadgeSettingSilverThreshold()
 		{
 			var expactedThreshold = "38.46";
