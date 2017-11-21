@@ -12,6 +12,7 @@ using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Logging;
+using Teleopti.Ccc.Web.Core.MessageBroker;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Filters;
 

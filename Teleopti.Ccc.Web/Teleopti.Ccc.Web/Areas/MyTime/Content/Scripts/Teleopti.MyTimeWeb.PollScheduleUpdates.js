@@ -10,9 +10,27 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	var notificerDisplayTime = 0;
 	var ajax = null;
 	var currentListener;
+	var mailboxId;
 
 	function _setListener(name, period, callback) {
 		currentListener = { name: name, period: period, callback: callback };
+	};
+
+	function _startPolling() {
+		var deferred = $.Deferred();
+		ajax.Ajax({
+			url: 'Asm/StartPolling',
+			dataType: 'json',
+			type: 'GET',
+			success: function (data) {
+				mailboxId = data;
+				deferred.resolve();
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				deferred.reject(false);
+			}
+		});
+		return deferred.promise();
 	};
 
 	function _checkIfScheduleHasUpdates(period) {
@@ -23,6 +41,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			url: 'Asm/CheckIfScheduleHasUpdates',
 			dataType: 'json',
 			type: 'GET',
+			data: { mailboxId: mailboxId, startDate: startDate, endDate: endDate },
 			success: function (data) {
 				deferred.resolve(data);
 			},
@@ -34,7 +53,6 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	}
 
 	function _showNotice(period) {
-
 		var notifyText = _getNotifyText(period);
 		if (!notificerDisplayTime) {
 			Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function (displayTime) {
@@ -66,9 +84,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	}
 
 	function _clearInterval() {
-		if (!interval) {
-			return;
-		}
+		if (!interval) return;
 		clearInterval(interval);
 	}
 
@@ -81,7 +97,6 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	}
 
 	function _setUpInterval() {
-
 		if (settings.intervalTimeout === 0) {
 			_handleListenersCallback();
 			return;
@@ -117,9 +132,10 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			endDate: moment(new Date(noticeListeningStartDate.getTime())).add('days', 1).toDate()
 		}
 
-		_setUpInterval();
-		_subscribeToMessageBroker();
-
+		_startPolling().done(function (mailboxId) {
+			_setUpInterval();
+			_subscribeToMessageBroker();
+		});
 	}
 
 	function _destroy() {

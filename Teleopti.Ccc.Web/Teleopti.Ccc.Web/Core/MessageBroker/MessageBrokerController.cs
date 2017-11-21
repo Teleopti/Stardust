@@ -3,7 +3,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 
-namespace Teleopti.Ccc.Web.Broker
+namespace Teleopti.Ccc.Web.Core.MessageBroker
 {
 	public class MessageBrokerController : ApiController
 	{

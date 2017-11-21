@@ -69,8 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
 				DomainType = typeof(IScheduleChangedMessage).Name,
 				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
-					.Select(_ => me.Id.ToString())),
-				TimeStamp = DateTime.UtcNow.AddMinutes(-2)
+					.Select(_ => me.Id.ToString()))
 			};
 
 			FakeMailboxRepository.Add(new Mailbox
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 11, 17), new DateOnly(2017, 11, 17));
-			Target.Check(mailboxId, period).Should().Be.EqualTo(true);
+			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Should().Be.EqualTo(true);
 		}
 
 		[Test]
@@ -105,8 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
 				DomainType = typeof(IScheduleChangedMessage).Name,
 				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
-					.Select(_ => me.Id.ToString())),
-				TimeStamp = DateTime.UtcNow.AddMinutes(-2)
+					.Select(_ => me.Id.ToString()))
 			};
 
 			FakeMailboxRepository.Add(new Mailbox
@@ -119,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 11, 17), new DateOnly(2017, 11, 17));
-			Target.Check(mailboxId, period).Should().Be.EqualTo(false);
+			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -141,8 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
 				DomainType = typeof(IScheduleChangedMessage).Name,
 				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
-					.Select(_ => me.Id.ToString())),
-				TimeStamp = DateTime.UtcNow.AddMinutes(-2)
+					.Select(_ => me.Id.ToString()))
 			};
 
 			FakeMailboxRepository.Add(new Mailbox
@@ -155,7 +152,42 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 11, 17), new DateOnly(2017, 11, 17));
-			Target.Check(mailboxId, period).Should().Be.EqualTo(true);
+			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldPollIntervalBeComparedBasedOnUtcTime()
+		{
+			var scenario = ScenarioFactory.CreateScenario("test", false, false).WithId();
+			ScenarioRepository.Add(scenario);
+			var me = PersonFactory.CreatePerson().WithId();
+			me.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+			LoggedOnUser.SetFakeLoggedOnUser(me);
+			var mailboxId = Guid.NewGuid();
+
+
+			var scheduleChangeMessage = new Message
+			{
+				StartDate = Subscription.DateToString(new DateTime(2017, 11, 21, 20, 0, 0)),
+				EndDate = Subscription.DateToString(new DateTime(2017, 11, 21, 22, 0, 0)),
+				DomainReferenceId = scenario.Id.Value.ToString(),
+				DomainUpdateType = (int)DomainUpdateType.NotApplicable,
+				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
+				DomainType = typeof(IScheduleChangedMessage).Name,
+				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
+					.Select(_ => me.Id.ToString()))
+			};
+
+			FakeMailboxRepository.Add(new Mailbox
+			{
+				Id = mailboxId,
+				Route = scheduleChangeMessage.Routes().First(),
+				ExpiresAt = Now.UtcDateTime().Add(TimeSpan.FromSeconds(15 * 60))
+			});
+
+			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
+
+			Target.Check(mailboxId, new DateTime(2017, 11, 21), new DateTime(2017, 11, 21)).Should().Be.EqualTo(false);
 		}
 
 

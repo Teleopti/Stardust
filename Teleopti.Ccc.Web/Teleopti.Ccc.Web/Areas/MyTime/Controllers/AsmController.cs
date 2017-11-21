@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult CheckIfScheduleHasUpdates(Guid mailboxId, DateTime startDate, DateTime endDate)
 		{
-			var hasUpdates = _scheduleChangePoller.Check(mailboxId, new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)));
+			var hasUpdates = _scheduleChangePoller.Check(mailboxId, startDate, endDate);
 			return Json(new
 			{
 				HasUpdates = hasUpdates,

@@ -47,9 +47,12 @@ namespace Teleopti.Ccc.Domain.Notification
 			return mailboxId;
 		}
 
-		public bool Check(Guid mailboxId, DateOnlyPeriod period)
+		public bool Check(Guid mailboxId, DateTime startDateInUserTimezone, DateTime endDateInUserTimezone)
 		{
-			var notifications = PopMessages(mailboxId);
+			var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var period = new DateOnlyPeriod(new DateOnly(TimeZoneHelper.ConvertToUtc(startDateInUserTimezone, userTimezone)),
+				new DateOnly(TimeZoneHelper.ConvertToUtc(endDateInUserTimezone, userTimezone)));
+			var notifications = popMessages(mailboxId);
 			var userId = _loggedOnUser.CurrentUser().Id.ToString();
 			return notifications.Any(n => n.BinaryData.Contains(userId)
 					&& period.StartDate <= new DateOnly(n.EndDateAsDateTime())
@@ -57,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Notification
 		}
 
 
-		public IEnumerable<Message> PopMessages(Guid mailboxId)
+		private IEnumerable<Message> popMessages(Guid mailboxId)
 		{
 			var mailbox = _mailboxRepository.Load(mailboxId);
 			var updateExpirationAt = mailbox.ExpiresAt.Subtract(new TimeSpan(_expirationInterval.Ticks / 2));
@@ -66,18 +69,12 @@ namespace Teleopti.Ccc.Domain.Notification
 				_mailboxRepository.PopMessages(mailboxId, _now.UtcDateTime().Add(_expirationInterval)) :
 				_mailboxRepository.PopMessages(mailboxId, null);
 		}
+
 		private string makeRoute()
 		{
 			return string.Join(
-				"/",
-				new[]
-				{
-					_currentDataSource.CurrentName(),
-					_currentBusinessUnit.Current().Id.ToString(),
-					nameof(IScheduleChangedMessage),
-					"ref",
-					_currentScenario.Current().Id.ToString()
-				});
+				"/", _currentDataSource.CurrentName(), _currentBusinessUnit.Current().Id.ToString(),
+				nameof(IScheduleChangedMessage), "ref", _currentScenario.Current().Id.ToString());
 		}
 	}
 }
