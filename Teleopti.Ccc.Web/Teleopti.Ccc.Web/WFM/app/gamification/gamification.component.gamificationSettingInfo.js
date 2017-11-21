@@ -87,7 +87,7 @@
                 var data = {
                     GamificationSettingId: ctrl.currentSettingId,
                     QualityId: ctrl.settingInfo.id,
-                    IsEnabled: ctrl.settingInfo.enable
+                    Value: ctrl.settingInfo.enable
                 }
 
                 if (ctrl.saveDataCallback) {
