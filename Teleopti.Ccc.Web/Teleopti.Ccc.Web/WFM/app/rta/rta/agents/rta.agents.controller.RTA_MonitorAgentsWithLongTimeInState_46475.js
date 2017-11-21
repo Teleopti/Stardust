@@ -220,7 +220,6 @@
 				siteIds: siteIds,
 				teamIds: teamIds,
 				skillIds: skillIds,
-				skillAreaId: skillAreaId,
 				inAlarm: vm.showInAlarm,
 				excludedStateIds: excludedStateIds().map(function (s) {
 					return s === nullStateId ? null : s;

@@ -179,4 +179,11 @@ describe('RtaAgentsController', function () {
 		expect(vm.direction).toEqual('desc');
 	});
 
+	it('should not pass skillAreaId to request params', function () {
+		stateParams = {skillAreaId: 'skillAreaId'};
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		expect($fakeBackend.lastAgentStatesRequestParams.skillAreaId).toBe(undefined);
+	});
 });
