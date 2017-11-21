@@ -1,142 +1,100 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common; 
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
-using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.Data;
+using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
 using Teleopti.Interfaces.Domain;
+using IRequestsViewModelFactory = Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory.IRequestsViewModelFactory;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 {
+	[SetCulture("en-US")]
+	[MyTimeWebTest]
 	[TestFixture]
-	public class RequestsViewModelFactoryTest
+	public class RequestsViewModelFactoryTest : ISetup
 	{
+		public IPersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
+		public IPermissionProvider PermissionProvider;
+		public INow Now;
+		public IRequestsViewModelFactory RequestsViewModelFactory;
+		public ILoggedOnUser LoggedOnUser;
+		public FakeAbsenceRepository FakeAbsenceRepository;
+		public FakeMultiplicatorDefinitionSetRepository FakeMultiplicatorDefinitionSetRepository;
+		public FakePermissionProvider FakePermissionProvider;
+		public FakePersonRequestRepository FakePersonRequestRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
+			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
+			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
+		}
+
 		[Test]
 		public void ShouldRetrieveDatePickerFormatForPersonForViewModel()
 		{
-			IPerson person = new Person();
-			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			var loggedOnUser = new FakeLoggedOnUser(person);
+			setUpWorkFlowControlSet();
 
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var target = new RequestsViewModelFactory(null,
-				getFakeAbsenceTypesProvider(loggedOnUser),
-				new FakePermissionProvider(), null, null, null, null,
-				loggedOnUser, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone),
-					getFakeMultiplicatorDefinitionSetProvider(loggedOnUser),
-					new NameFormatSettingsPersisterAndProvider(null));
+			currentUser().PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
 
+			var result = RequestsViewModelFactory.CreatePageViewModel();
 
-		 
-		var result = target.CreatePageViewModel();
-			var expectedFormat = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+			var expectedFormat = currentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 			result.DatePickerFormat.Should().Be.EqualTo(expectedFormat);
 		}
 
 		[Test]
 		public void ShouldRetrieveAbsenceTypesforViewModel()
 		{
-			IPerson person = new Person();
-			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			var loggedOnUser = new FakeLoggedOnUser(person);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
+			setUpWorkFlowControlSet();
 
 			var absence = new Absence { Description = new Description("Vacation"), Requestable = true }.WithId();
+			FakeAbsenceRepository.Add(absence);
 
-			var absenceRepository = new FakeAbsenceRepository();
-			absenceRepository.Add(absence);
-
-			var absenceTypesProvider = new AbsenceTypesProvider(absenceRepository, loggedOnUser);
-
-			var target = new RequestsViewModelFactory(null, absenceTypesProvider, new FakePermissionProvider(), null, null, null,
-													  null, loggedOnUser, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), 
-				getFakeMultiplicatorDefinitionSetProvider(loggedOnUser),
-				new NameFormatSettingsPersisterAndProvider(null));
-
-			var result = target.CreatePageViewModel();
+			var result = RequestsViewModelFactory.CreatePageViewModel();
 
 			var absenceType = result.AbsenceTypes.FirstOrDefault();
 			absenceType.Name.Should().Be.EqualTo(absence.Description.Name);
 			absenceType.Id.Should().Be.EqualTo(absence.Id);
-
 			result.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldRetrieveOvertimeTypesforViewModel()
 		{
-			IPerson person = new Person();
-			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			var loggedOnUser = new FakeLoggedOnUser(person);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
+			setUpWorkFlowControlSet();
 
 			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("overtime paid", MultiplicatorType.Overtime).WithId();
+			var personContract = new PersonContract(new Contract("sd"), new PartTimePercentage("d"), new ContractSchedule("d"));
+			personContract.Contract.AddMultiplicatorDefinitionSetCollection(multiplicatorDefinitionSet);
+			currentUser().AddPersonPeriod(new PersonPeriod(new DateOnly(Now.UtcDateTime()), personContract, new Team()));
+			FakeMultiplicatorDefinitionSetRepository.Add(multiplicatorDefinitionSet);
 
-			var multiplicatorDefinitionSetRepository = new FakeMultiplicatorDefinitionSetRepository();
-			multiplicatorDefinitionSetRepository.Add(multiplicatorDefinitionSet);
+			var result = RequestsViewModelFactory.CreatePageViewModel();
 
-			var multiplicatorDefinitionSetProvider = MockRepository.GenerateMock<IMultiplicatorDefinitionSetProvider>();
-			multiplicatorDefinitionSetProvider.Stub(x => x.GetDefinitionSetsForCurrentUser())
-				.Return(new List<MultiplicatorDefinitionSetViewModel>() {new MultiplicatorDefinitionSetViewModel()
-				{
-					Name = multiplicatorDefinitionSet.Name,
-					Id = multiplicatorDefinitionSet.Id.Value
-				}});
-
-			var target = new RequestsViewModelFactory(null, getFakeAbsenceTypesProvider(loggedOnUser), new FakePermissionProvider(), null, null, null,
-													  null, loggedOnUser, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone),
-				multiplicatorDefinitionSetProvider,
-				new NameFormatSettingsPersisterAndProvider(null));
-
-			var result = target.CreatePageViewModel();
-
-			//Ensure returning List<OvertimeTypeViewModel> for IE to display OvertimeTypes correctly.
 			Assert.AreEqual(result.OvertimeTypes.GetType(), typeof(List<OvertimeTypeViewModel>));
 			Assert.AreEqual(result.OvertimeTypes.FirstOrDefault().Name, multiplicatorDefinitionSet.Name);
 			Assert.AreEqual(result.OvertimeTypes.FirstOrDefault().Id, multiplicatorDefinitionSet.Id);
@@ -145,62 +103,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldReturnEmptyAbsenceAccountModelWhenNoMatchingRequestableAbsenceFound()
 		{
-			IPerson person = new Person();
-			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			var loggedOnUser = new FakeLoggedOnUser(person);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-
 			var absence = new Absence { Description = new Description("Vacation"), Requestable = true }.WithId();
-
-			var absenceRepository = new FakeAbsenceRepository();
-			absenceRepository.Add(absence);
-
-			var absenceTypesProvider = new AbsenceTypesProvider(absenceRepository, loggedOnUser);
-
-			var target = new RequestsViewModelFactory(null, absenceTypesProvider, new FakePermissionProvider(), null, null,
-				null, null, loggedOnUser, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-
-			var result = target.GetAbsenceAccountViewModel(Guid.NewGuid(), new DateOnly(2013, 1, 1));
+			FakeAbsenceRepository.Add(absence);
+			var result = RequestsViewModelFactory.GetAbsenceAccountViewModel(Guid.NewGuid(), new DateOnly(Now.UtcDateTime()));
 			result.Should().Be.Null();
 		}
 
 		[Test]
 		public void ShouldReturnEmptyAbsenceAccountModelWhenNoMatchingAccountFound()
 		{
-			IPerson person = new Person();
-			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			var loggedOnUser = new FakeLoggedOnUser(person);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-
 			var absence = new Absence { Description = new Description("Vacation"), Requestable = true }.WithId();
+			FakeAbsenceRepository.Add(absence);
 
-			var absenceRepository = new FakeAbsenceRepository();
-			absenceRepository.Add(absence);
-
-			var absenceTypesProvider = new AbsenceTypesProvider(absenceRepository, loggedOnUser);
-
-			var target = new RequestsViewModelFactory(null, absenceTypesProvider, new FakePermissionProvider(), null, null,
-				null, null, loggedOnUser, null, new AbsenceAccountProvider(loggedOnUser, new FakePersonAbsenceAccountRepository()), new FakePersonRequestRepository(),
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-
-			var result = target.GetAbsenceAccountViewModel(absence.Id.Value, new DateOnly(2013, 1, 1));
+			var result = RequestsViewModelFactory.GetAbsenceAccountViewModel(absence.Id.Value, new DateOnly(2013, 1, 1));
 			result.Should().Be.Null();
 		}
 
@@ -208,29 +123,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public void ShouldRetrieveReportableAbsenceTypesforViewModel()
 		{
 			var absence = new Absence { Description = new Description("Vacation") }.WithId();
-
 			var wfcs = new WorkflowControlSet();
 			wfcs.AddAllowedAbsenceForReport(absence);
-
-			var person = new Person { WorkflowControlSet = wfcs };
-			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			var loggedOnUser = new FakeLoggedOnUser(person);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-
-			var target = new RequestsViewModelFactory(null,
-				getFakeAbsenceTypesProvider(loggedOnUser), new FakePermissionProvider(), null, null, null,
-				null, loggedOnUser, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), 
-				getFakeMultiplicatorDefinitionSetProvider(loggedOnUser),
-				new NameFormatSettingsPersisterAndProvider(null));
-
-			var result = target.CreatePageViewModel();
+			currentUser().WorkflowControlSet = wfcs;
+			var result = RequestsViewModelFactory.CreatePageViewModel();
 
 			result.Should().Not.Be.Null();
 			result.AbsenceTypesForReport.Should().Not.Be.Null();
@@ -243,31 +139,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveTextRequestPermissionForViewModel()
 		{
-			IPerson person = new Person();
-			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			var loggedOnUser = new FakeLoggedOnUser(person);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
+			FakePermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.TextRequests,
+				new DateOnly(Now.UtcDateTime()), currentUser());
 
-			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
-			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
-			absenceTypesProvider.Stub(x => x.GetReportableAbsences()).Return(new List<IAbsence>());
-
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).
-				Return(true);
-
-			var target = new RequestsViewModelFactory(null, absenceTypesProvider, permissionProvider, null, null, null,
-				null, loggedOnUser, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), 
-				getFakeMultiplicatorDefinitionSetProvider(loggedOnUser),
-				new NameFormatSettingsPersisterAndProvider(null));
-			var result = target.CreatePageViewModel();
+			var result = RequestsViewModelFactory.CreatePageViewModel();
 
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
 		}
@@ -275,26 +150,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveAbsenceRequestPermissionForViewModel()
 		{
-			IPerson person = new Person();
-			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			var loggedOnUser = new FakeLoggedOnUser(person);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
+			FakePermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb, 
+				new DateOnly(Now.UtcDateTime()), currentUser());
 
-			var permissionProvider = new FakePermissionProvider();
-
-			var target = new RequestsViewModelFactory(null,
-				getFakeAbsenceTypesProvider(loggedOnUser), permissionProvider, null, null, null, null,
-				loggedOnUser, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), 
-				getFakeMultiplicatorDefinitionSetProvider(loggedOnUser),
-				new NameFormatSettingsPersisterAndProvider(null));
-			var result = target.CreatePageViewModel();
+			var result = RequestsViewModelFactory.CreatePageViewModel();
 
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
 		}
@@ -302,204 +161,85 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrievePersonRequestsForPagingViewModel()
 		{
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			var target = new RequestsViewModelFactory(personRequestProvider, null,
-				null, null, null, null, null, null, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-			var paging = new Paging();
+			var personRequestFactory = new PersonRequestFactory();
+			var personRequest1 = personRequestFactory.CreatePersonRequest(currentUser()).WithId();
+			var personRequest2 = personRequestFactory.CreatePersonRequest(currentUser()).WithId();
+			FakePersonRequestRepository.Add(personRequest1);
+			FakePersonRequestRepository.Add(personRequest2);
+
+			var paging = new Paging {Skip = 0, Take = 1};
 			var filter = new RequestListFilter { HideOldRequest = false, IsSortByUpdateDate = true };
-			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, filter)).Return(new IPersonRequest[] { });
+			var result = RequestsViewModelFactory.CreatePagingViewModel(paging, filter);
 
-
-			target.CreatePagingViewModel(paging, filter);
-
-			personRequestProvider.AssertWasCalled(x => x.RetrieveRequestsForLoggedOnUser(paging, filter));
+			result.Count().Should().Be(1);
+			result.FirstOrDefault().Id.Should().Be(personRequest1.Id.ToString());
 		}
 
 		[Test]
 		public void ShouldRetrievePersonRequestsAfterSpecificDateForPagingViewModel()
 		{
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			var target = new RequestsViewModelFactory(personRequestProvider, null,
-				null, null, null, null, null, null, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))),
-				new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-			var paging = new Paging();
-			var filter = new RequestListFilter() { HideOldRequest = true, IsSortByUpdateDate = true };
-			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, filter)).Return(new IPersonRequest[] { });
+			var personRequestFactory = new PersonRequestFactory { Person = currentUser() };
+			var personRequest1 = personRequestFactory.CreatePersonRequest().WithId();
+			var textRequest1 = new TextRequest(new DateTimePeriod(2014, 1, 1, 2014, 1, 2)).WithId();
+			personRequest1.Request = textRequest1;
+			FakePersonRequestRepository.Add(personRequest1);
 
-			target.CreatePagingViewModel(paging, filter);
+			var personRequest2 = personRequestFactory.CreatePersonRequest().WithId();
+			var textRequest2 = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(1))).WithId();
+			personRequest2.Request = textRequest2;
+			FakePersonRequestRepository.Add(personRequest2);
 
-			personRequestProvider.AssertWasCalled(x => x.RetrieveRequestsForLoggedOnUser(paging, filter));
-		}
+			var paging = new Paging { Skip = 0, Take = 2 };
+			var filter = new RequestListFilter { HideOldRequest = true, IsSortByUpdateDate = true };
+			var result = RequestsViewModelFactory.CreatePagingViewModel(paging, filter);
 
-		[Test]
-		public void ShouldMapToViewModelForPagingViewModel()
-		{
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var filter = new RequestListFilter { HideOldRequest = false, IsSortByUpdateDate = true };
-			var paging = new Paging();
-			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, filter)).Return(new List<IPersonRequest> { new PersonRequest(new Person(), new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())) });
-			var target = new RequestsViewModelFactory(personRequestProvider, null, null,
-				null, null, null, null, null, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), 
-				new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()));
-			var result = target.CreatePagingViewModel(paging, filter);
-
-			result.Count().Should().Be.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldMapToViewModelForId()
-		{
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var provider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			var target = new RequestsViewModelFactory(provider, null, null, null, null, null, null, null, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), 
-				new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-			var personRequest = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
-			var id = Guid.NewGuid();
-
-			personRequest.SetId(id);
-
-			provider.Stub(p => p.RetrieveRequest(id)).Return(personRequest);
-
-			target.CreateRequestViewModel(id).Should().Not.Be.Null();
+			result.Count().Should().Be(1);
+			result.FirstOrDefault().Id.Should().Be(personRequest2.Id.ToString());
 		}
 
 		[Test]
 		public void ShouldRetrieveShiftTradePeriodViewModel()
 		{
-			var user = new FakeLoggedOnUser();
-			var person = new Person();
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			user.SetFakeLoggedOnUser(person);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var mapper = MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>();
-			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
-			var now = MockRepository.GenerateMock<INow>();
-			var target = new RequestsViewModelFactory(null, null, null, provider, mapper, null, now, user, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), 
-				new PersonAccountViewModelMapper(timeZone), 
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel();
-			var workflowControlSet = new WorkflowControlSet();
+			setUpWorkFlowControlSet();
 
-			provider.Stub(p => p.RetrieveUserWorkflowControlSet()).Return(workflowControlSet);
-			mapper.Stub(x => x.Map(workflowControlSet, now, user.CurrentUser().PermissionInformation.DefaultTimeZone())).Return(shiftTradePeriodViewModel);
+			var result = RequestsViewModelFactory.CreateShiftTradePeriodViewModel();
 
-			var result = target.CreateShiftTradePeriodViewModel();
-
-			result.Should().Be.SameInstanceAs(shiftTradePeriodViewModel);
+			result.HasWorkflowControlSet.Should().Be.EqualTo(true);
+			result.MiscSetting.AnonymousTrading.Should().Be.EqualTo(true);
+			result.OpenPeriodRelativeStart.Should().Be.EqualTo(1);
+			result.OpenPeriodRelativeEnd.Should().Be.EqualTo(3);
+			result.NowYear.Should().Be.EqualTo(Now.UtcDateTime().Year);
+			result.NowMonth.Should().Be.EqualTo(Now.UtcDateTime().Month);
+			result.NowDay.Should().Be.EqualTo(Now.UtcDateTime().Day);
 		}
 
 		[Test]
 		public void ShouldNotThrowExpcetionIfRequestNotFoundWhenRetrieveShiftTradePeriodViewModel()
 		{
-			var user = new FakeLoggedOnUser();
-			var person = new Person();
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			user.SetFakeLoggedOnUser(person);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var mapper = MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>();
-			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
-			var now = MockRepository.GenerateMock<INow>();
-			var target = new RequestsViewModelFactory(null, null, null, provider, mapper, null, now, user, null, null, new FakePersonRequestRepository(),
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))),
-				new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel();
-			var workflowControlSet = new WorkflowControlSet();
+			setUpWorkFlowControlSet();
 
-			provider.Stub(p => p.RetrieveUserWorkflowControlSet()).Return(workflowControlSet);
-			mapper.Stub(x => x.Map(workflowControlSet, now, user.CurrentUser().PermissionInformation.DefaultTimeZone())).Return(shiftTradePeriodViewModel);
+			var result = RequestsViewModelFactory.CreateShiftTradePeriodViewModel(Guid.NewGuid());
 
-			var result = target.CreateShiftTradePeriodViewModel(Guid.NewGuid());
-
-			result.Should().Be.SameInstanceAs(shiftTradePeriodViewModel);
+			result.HasWorkflowControlSet.Should().Be.EqualTo(true);
+			result.MiscSetting.AnonymousTrading.Should().Be.EqualTo(true);
+			result.OpenPeriodRelativeStart.Should().Be.EqualTo(1);
+			result.OpenPeriodRelativeEnd.Should().Be.EqualTo(3);
+			result.NowYear.Should().Be.EqualTo(Now.UtcDateTime().Year);
+			result.NowMonth.Should().Be.EqualTo(Now.UtcDateTime().Month);
+			result.NowDay.Should().Be.EqualTo(Now.UtcDateTime().Day);
 		}
 
 		[Test]
 		public void ShouldSetMiscSettingsFalseWhenNoOfferInShiftTrade()
 		{
-			var user = new FakeLoggedOnUser();
-			var person = new Person();
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			user.SetFakeLoggedOnUser(person);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var mapper = MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>();
-			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
-			var now = MockRepository.GenerateMock<INow>();
-			var requestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var shiftTradeRequest = MockRepository.GenerateMock<IShiftTradeRequest>();
-			requestRepository.Stub(x => x.Find(new Guid())).IgnoreArguments().Return(new PersonRequest(new Person()) { Request = shiftTradeRequest });
-			var target = new RequestsViewModelFactory(null, null, null, provider, mapper, null, now, user, null, null, requestRepository,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), 
-				new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel { MiscSetting = new ShiftTradeRequestMiscSetting { AnonymousTrading = true } };
-			var workflowControlSet = new WorkflowControlSet();
+			setUpWorkFlowControlSet();
 
-			provider.Stub(p => p.RetrieveUserWorkflowControlSet()).Return(workflowControlSet);
-			mapper.Stub(x => x.Map(workflowControlSet, now, user.CurrentUser().PermissionInformation.DefaultTimeZone())).Return(shiftTradePeriodViewModel);
+			var personRequestFactory = new PersonRequestFactory { Person = currentUser() };
+			var personRequest =
+				personRequestFactory.CreatePersonShiftTradeRequest(currentUser(), new Person(), new DateOnly(Now.UtcDateTime())).WithId();
+			FakePersonRequestRepository.Add(personRequest);
 
-			var result = target.CreateShiftTradePeriodViewModel(new Guid());
+			var result = RequestsViewModelFactory.CreateShiftTradePeriodViewModel(personRequest.Id);
 
 			result.MiscSetting.AnonymousTrading.Should().Be.False();
 		}
@@ -507,130 +247,43 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveMyTeamId()
 		{
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
-			var shiftTradeDate = DateOnly.Today;
-			Guid? myTeamId = Guid.NewGuid();
+			var myTeam = new Team().WithId();
+			LoggedOnUser.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today,myTeam));
 
-			provider.Stub(x => x.RetrieveMyTeamId(shiftTradeDate)).Return(myTeamId);
-
-			var target = new RequestsViewModelFactory(null,
-				null,
-				null,
-				provider,
-				MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(),
-				null,
-				MockRepository.GenerateMock<INow>(),
-				null,
-				null,
-				null,
-				null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-				new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-				new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),timeZone), 
-				new ProjectionProvider(),
-				threadCulture,
-				timeZone,
-				new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))),
-				new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-
-			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(myTeamId.ToString());
+			RequestsViewModelFactory.CreateShiftTradeMyTeamSimpleViewModel(DateOnly.Today).Should().Be.EqualTo(myTeam.Id.ToString());
 		}
 
 		[Test]
 		public void ShouldRetrieveMySiteId()
 		{
-			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
-			var shiftTradeDate = DateOnly.Today;
-			Guid? mySiteId = Guid.NewGuid();
+			var site = new Site("site").WithId();
+			var myTeam = new Team
+			{
+				Site= site
+			}.WithId();
+			LoggedOnUser.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, myTeam));
 
-			provider.Stub(x => x.RetrieveMySiteId(shiftTradeDate)).Return(mySiteId);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var target = new RequestsViewModelFactory(null, null, null, provider,
-													  MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
-													  MockRepository.GenerateMock<INow>(), null, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-
-			target.CreateShiftTradeMySiteIdViewModel(shiftTradeDate).Should().Be.EqualTo(mySiteId.ToString());
+			RequestsViewModelFactory.CreateShiftTradeMySiteIdViewModel(DateOnly.Today).Should().Be.EqualTo(site.Id.ToString());
 		}
 
 		[Test]
 		public void ShouldRetrieveEmptyStringWhenNotBelongingToATeam()
 		{
-			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
-			var shiftTradeDate = DateOnly.Today;
-
-			provider.Stub(x => x.RetrieveMyTeamId(shiftTradeDate)).Return(null);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var target = new RequestsViewModelFactory(null, null, null, provider,
-													  MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
-													  MockRepository.GenerateMock<INow>(), null, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), 
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-
-			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(string.Empty);
+			RequestsViewModelFactory.CreateShiftTradeMyTeamSimpleViewModel(DateOnly.Today).Should().Be.EqualTo(string.Empty);
 		}
 
 		[Test]
 		public void ShouldRetrieveEmptyStringWhenNotBelongingToASite()
 		{
-			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
-			var shiftTradeDate = DateOnly.Today;
+			var myTeam = new Team().WithId();
+			LoggedOnUser.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, myTeam));
 
-			provider.Stub(x => x.RetrieveMyTeamId(shiftTradeDate)).Return(null);
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var target = new RequestsViewModelFactory(null, null, null, provider,
-													  MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
-													  MockRepository.GenerateMock<INow>(), null, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-
-			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(string.Empty);
+			RequestsViewModelFactory.CreateShiftTradeMySiteIdViewModel(DateOnly.Today).Should().Be.EqualTo(string.Empty);
 		}
 
 		[Test]
 		public void ShouldRetrieveShiftTradeScheduleViewModel()
 		{
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var mapper = MockRepository.GenerateMock<IShiftTradeScheduleViewModelMapper>();
-			var target = new RequestsViewModelFactory(null, null, null, null, null, null, null, null, mapper, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), 
-				new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(null));
-			var viewModel = new ShiftTradeScheduleViewModel();
 			var teamId = Guid.NewGuid();
 			var data = new ShiftTradeScheduleViewModelData
 			{
@@ -638,92 +291,45 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				TeamIdList = new List<Guid> { teamId }
 			};
 
-			mapper.Stub(x => x.Map(Arg<ShiftTradeScheduleViewModelData>.Is.Anything)).Return(viewModel);
-
-			var result = target.CreateShiftTradeScheduleViewModel(data);
-			result.Should().Be.SameInstanceAs(viewModel);
+			var result = RequestsViewModelFactory.CreateShiftTradeScheduleViewModel(data);
+			result.PageCount.Should().Be(0);
+			result.MySchedule.Should().Be(null);
 		}
 
 		[Test]
 		public void ShouldRetriveShiftTradeSwapDetailsViewModel()
 		{
-			var personRequestId = new Guid();
-			var requestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
-			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			var shiftTrade = MockRepository.GenerateStub<IShiftTradeRequest>();
-			var personRequest = MockRepository.GenerateStub<IPersonRequest>();
-			personRequest.Request = shiftTrade;
+			var personRequestFactory = new PersonRequestFactory { Person = currentUser() };
+			var personRequest =
+				personRequestFactory.CreatePersonShiftTradeRequest(currentUser(), new Person(), new DateOnly(Now.UtcDateTime())).WithId();
+			FakePersonRequestRepository.Add(personRequest);
 
-			var detail = MockRepository.GenerateMock<IShiftTradeSwapDetail>();
-			var details = new ReadOnlyCollection<IShiftTradeSwapDetail>(new List<IShiftTradeSwapDetail> { detail });
-			var loggedOnUser = new FakeLoggedOnUser(new Person());
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-			var target = new RequestsViewModelFactory(personRequestProvider, null, null, null, null, requestCheckSum,
-													  null, loggedOnUser, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()));
-
-			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
-			shiftTrade.Stub(x => x.ShiftTradeSwapDetails).Return(details);
-			requestCheckSum.Expect(s => s.Check(shiftTrade));
-			detail.Stub(x => x.Parent).Return(shiftTrade);
-
-			var result = target.CreateShiftTradeRequestSwapDetails(personRequestId);
+			var result = RequestsViewModelFactory.CreateShiftTradeRequestSwapDetails(personRequest.Id.Value);
 			result.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldRetrieveIsMyScheduleForLoggedOnUser()
 		{
-			var personRequestId = new Guid();
-			var requestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
-			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			var personRequest = MockRepository.GenerateStub<IPersonRequest>();
+			var personRequestFactory = new PersonRequestFactory { Person = currentUser() };
+			var personRequest =
+				personRequestFactory.CreatePersonShiftTradeRequest( new Person(), currentUser(), new DateOnly(Now.UtcDateTime())).WithId();
+			FakePersonRequestRepository.Add(personRequest);
 
-			var personFrom = new Person();
-			var personTo = new Person();
-			var loggedOnUser = new FakeLoggedOnUser(personTo);
-			var detail = new ShiftTradeSwapDetail(personFrom, personTo, DateOnly.Today, DateOnly.Today);
-			var shiftTradeSwapDetails = new List<IShiftTradeSwapDetail> { detail };
-			var shiftTrade = new ShiftTradeRequest(shiftTradeSwapDetails);
-			personRequest.Request = shiftTrade;
-			var timeZone = new FakeUserTimeZone();
-			var threadCulture = new ThreadCulture();
-
-			var target = new RequestsViewModelFactory(personRequestProvider, null, null, null, null, requestCheckSum,
-													  null, loggedOnUser, null, null, null,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new ShiftTradeSwapDetailViewModelMapper(
-					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
-						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))),
-				new PersonAccountViewModelMapper(timeZone),
-				null,
-				new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()));
-
-			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
-			requestCheckSum.Expect(s => s.Check(shiftTrade));
-
-			var result = target.CreateShiftTradeRequestSwapDetails(personRequestId);
+			var result = RequestsViewModelFactory.CreateShiftTradeRequestSwapDetails(personRequest.Id.Value);
 			result.First().To.IsMySchedule.Should().Be.True();
 		}
 
-		private static AbsenceTypesProvider getFakeAbsenceTypesProvider(FakeLoggedOnUser loggedOnUser)
+		private void setUpWorkFlowControlSet()
 		{
-			return new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser);
+			var workflowControlSet = new WorkflowControlSet { AnonymousTrading = true, ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 3) };
+			currentUser().WorkflowControlSet = workflowControlSet;
+			currentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 		}
 
-		private static MultiplicatorDefinitionSetProvider getFakeMultiplicatorDefinitionSetProvider(FakeLoggedOnUser loggedOnUser)
+		private IPerson currentUser()
 		{
-			return new MultiplicatorDefinitionSetProvider(new FakeMultiplicatorDefinitionSetRepository(), loggedOnUser, new Now());
+			return LoggedOnUser.CurrentUser();
 		}
 	}
 }
