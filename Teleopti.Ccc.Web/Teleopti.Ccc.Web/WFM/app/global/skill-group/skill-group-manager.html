@@ -146,8 +146,8 @@
 						</div>
 						<div class="modal-actions">
 							<aside>
-								<button type="button" ng-click="vm.deleteConfirmation=false; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-								<button type="button" ng-click="vm.deleteConfirmation=false; vm.deleteSkillGroup(); $event.stopPropagation();" class="wfm-btn wfm-btn-invis-primary">{{'OK'|translate}}</button>
+								<button type="button" id="cancelDeleteButton" ng-click="vm.deleteConfirmation=false; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+								<button type="button" id="confirmDeleteButton" ng-click="vm.deleteConfirmation=false; vm.deleteSkillGroup(); $event.stopPropagation();" class="wfm-btn wfm-btn-invis-primary">{{'OK'|translate}}</button>
 							</aside>
 						</div>
 					</div>
@@ -164,8 +164,8 @@
 						</div>
 						<div class="modal-actions">
 							<aside>
-								<button type="button" ng-click="vm.closeConfirmation=false; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'No'|translate}}</button>
-								<button type="button" ng-click="vm.closeConfirmation=false; vm.exitConfigMode(); $event.stopPropagation();" class="wfm-btn wfm-btn-invis-primary">{{'Yes'|translate}}</button>
+								<button type="button" id="cancelExitButton" ng-click="vm.closeConfirmation=false; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'No'|translate}}</button>
+								<button type="button" id="confirmExitButton" ng-click="vm.closeConfirmation=false; vm.exitConfigMode(); $event.stopPropagation();" class="wfm-btn wfm-btn-invis-primary">{{'Yes'|translate}}</button>
 							</aside>
 						</div>
 					</div>

@@ -197,6 +197,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenICloseTheSkillManager()
 		{
 			Browser.Interactions.Click("#exit_sgm");
+			Browser.Interactions.Click("#confirmExitButton");
 		}
 
 		[Then(@"I should see '(.*)' as included skill")]
