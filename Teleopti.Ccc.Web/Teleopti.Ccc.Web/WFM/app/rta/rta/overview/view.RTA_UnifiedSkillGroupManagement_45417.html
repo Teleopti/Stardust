@@ -74,7 +74,7 @@
 					</div>
 					<div ng-click="$event.stopPropagation(); vm.selectTeamOrSite(card);" class="rta-icons-container">
 						<i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
-						<md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip>
+						<md-tooltip>{{card.isSelected ? 'UnselectSite' : 'SelectSite' | translate}}</md-tooltip>
 					</div>
 					<a href="{{card.href}}" class="rta-icons-container" style="text-decoration: none;">
 						<div><i class="mdi mdi-arrow-right"></i>
@@ -94,7 +94,7 @@
 											<h1 ng-attr-data-max="{{team.AgentsCount}}" ng-attr-data-value="{{team.InAlarmCount}}" class="rta-team-name-container">
 												{{team.Name}}</h1>
 											<i class="mdi pull-right flex-1" ng-class="{'mdi-check': team.isSelected, 'mdi-plus': !team.isSelected}"></i>
-											<md-tooltip>{{team.isSelected ? "Unselect team" : "Select team"}}
+											<md-tooltip>{{team.isSelected ? 'UnselectTeam' : 'SelectTeam' | translate}}
 											</md-tooltip>
 										</div>
 										<div class="subtext"><span class="full-padding" ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}:
@@ -102,7 +102,7 @@
 									</span></div>
 									</div>
 									<div class="list-header-content">
-										<a type="button" class="wfm-btn wfm-btn-invis-primary pull-right" href="{{team.href}}" style="text-decoration: none;">Open</a>
+										<a type="button" class="wfm-btn wfm-btn-invis-primary pull-right" href="{{team.href}}" style="text-decoration: none;">{{'Open'|translate}}</a>
 									</div>
 								</div>
 							</div>

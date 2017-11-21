@@ -16779,4 +16779,20 @@ Do you want to participate?</value>
   <data name="MoveToGroup" xml:space="preserve">
     <value>Move to skill-group</value>
   </data>
+  <data name="SelectSite" xml:space="preserve">
+    <value>Select site</value>
+    <comment>Tooltip to be displayed on hovering the site cards in RTA overview when unselected</comment>
+  </data>
+  <data name="SelectTeam" xml:space="preserve">
+    <value>Select team</value>
+    <comment>Tooltip to be displayed on hovering the team cards in RTA overview when unselected</comment>
+  </data>
+  <data name="UnselectSite" xml:space="preserve">
+    <value>Unselect site</value>
+    <comment>Tooltip to be displayed on hovering the site cards in RTA overview when selected</comment>
+  </data>
+  <data name="UnselectTeam" xml:space="preserve">
+    <value>Unselect team</value>
+    <comment>Tooltip to be displayed on hovering the team cards in RTA when selected</comment>
+  </data>
 </root>

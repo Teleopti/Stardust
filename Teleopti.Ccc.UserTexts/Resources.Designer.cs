@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -29792,6 +29792,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select site.
+        /// </summary>
+        public static string SelectSite {
+            get {
+                return ResourceManager.GetString("SelectSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select site:.
         /// </summary>
         public static string SelectSiteColon {
@@ -29842,6 +29851,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectSuitableColor {
             get {
                 return ResourceManager.GetString("SelectSuitableColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select team.
+        /// </summary>
+        public static string SelectTeam {
+            get {
+                return ResourceManager.GetString("SelectTeam", resourceCulture);
             }
         }
         
@@ -35372,6 +35390,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UnselectedItems {
             get {
                 return ResourceManager.GetString("UnselectedItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unselect site.
+        /// </summary>
+        public static string UnselectSite {
+            get {
+                return ResourceManager.GetString("UnselectSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unselect team.
+        /// </summary>
+        public static string UnselectTeam {
+            get {
+                return ResourceManager.GetString("UnselectTeam", resourceCulture);
             }
         }
         
