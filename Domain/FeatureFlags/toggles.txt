@@ -37,7 +37,6 @@ Gamification_NewBadgeCalculation_31185 = true
 Wfm_MinimumScaffolding_32659 = RC
 
 RTA_SpreadTransactionLocksStrategy_41823 = true
-RTA_AsyncOptimization_43924 = true
 RTA_RememberMyPartOfTheBusiness_39082 = true
 RTA_RtaTracer_45597 = true
 RTA_UnifiedSkillGroupManagement_45417 = true

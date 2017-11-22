@@ -69,11 +69,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					}
 				};
 
-			var exceptionHandler = new LegacyReturnValue(_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924) ? 1 : 2);
-			if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-				_rta.Enqueue(input, exceptionHandler);
-			else
-				_rta.Process(input, exceptionHandler);
+			var exceptionHandler = new LegacyReturnValue();
+			_rta.Enqueue(input, exceptionHandler);
 			return exceptionHandler.ReturnValue;
 		}
 
@@ -109,11 +106,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				States = states
 			};
 
-			var exceptionHandler = new LegacyReturnValue(_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924) ? 1 : 2);
-			if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-				_rta.Enqueue(input, exceptionHandler);
-			else
-				_rta.Process(input, exceptionHandler);
+			var exceptionHandler = new LegacyReturnValue();
+			_rta.Enqueue(input, exceptionHandler);
 			return exceptionHandler.ReturnValue;
 		}
 

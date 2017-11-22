@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-
 	public static class HistoricalAdherenceUpdaterExtensions
 	{
 		public static void Handle(this HistoricalAdherenceUpdater instance, PersonOutOfAdherenceEvent @event)
@@ -28,13 +27,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			instance.Handle(@event.AsArray());
 		}
 	}
-	
-	public class HistoricalAdherenceUpdater : HistoricalAdherenceUpdaterImpl,
+
+	public class HistoricalAdherenceUpdater :
 		IHandleEvents,
 		IRunInSync
 	{
-		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
+		private readonly IHistoricalAdherenceReadModelPersister _adherencePersister;
+		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
+
+		public HistoricalAdherenceUpdater(
+			IHistoricalAdherenceReadModelPersister adherencePersister,
+			IHistoricalChangeReadModelPersister historicalChangePersister)
 		{
+			_adherencePersister = adherencePersister;
+			_historicalChangePersister = historicalChangePersister;
 		}
 
 		public void Subscribe(SubscriptionRegistrator registrator)
@@ -49,62 +55,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[ReadModelUnitOfWork]
 		public virtual void Handle(IEnumerable<IEvent> events)
 		{
-			events.ForEach(e => handle((dynamic)e));
-		}
-	}
-
-	[DisabledBy(Toggles.RTA_AsyncOptimization_43924)]
-	public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdaterImpl, 
-		IHandleEvents,
-		IRunOnHangfire
-	{
-		public HistoricalAdherenceUpdaterWithPackages(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
-		{
+			events.ForEach(e => handle((dynamic) e));
 		}
 
-		public void Subscribe(SubscriptionRegistrator registrator)
-		{
-			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
-			registrator.SubscribeTo<PersonInAdherenceEvent>();
-			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(IEnumerable<IEvent> events)
-		{
-			events.ForEach(e => handle((dynamic)e));
-		}
-	}
-
-	public abstract class HistoricalAdherenceUpdaterImpl
-	{
-		private readonly IHistoricalAdherenceReadModelPersister _adherencePersister;
-		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
-
-		protected HistoricalAdherenceUpdaterImpl(
-			IHistoricalAdherenceReadModelPersister adherencePersister, 
-			IHistoricalChangeReadModelPersister historicalChangePersister)
-		{
-			_adherencePersister = adherencePersister;
-			_historicalChangePersister = historicalChangePersister;
-		}
-
-		protected void handle(PersonOutOfAdherenceEvent @event)
+		private void handle(PersonOutOfAdherenceEvent @event)
 		{
 			_adherencePersister.AddOut(@event.PersonId, @event.Timestamp);
 		}
 
-		protected void handle(PersonInAdherenceEvent @event)
+		private void handle(PersonInAdherenceEvent @event)
 		{
 			_adherencePersister.AddIn(@event.PersonId, @event.Timestamp);
 		}
 
-		protected void handle(PersonNeutralAdherenceEvent @event)
+		private void handle(PersonNeutralAdherenceEvent @event)
 		{
 			_adherencePersister.AddNeutral(@event.PersonId, @event.Timestamp);
 		}
 
-		protected void handle(PersonStateChangedEvent @event)
+		private void handle(PersonStateChangedEvent @event)
 		{
 			_historicalChangePersister.Persist(new HistoricalChangeReadModel
 			{
@@ -121,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		protected void handle(PersonRuleChangedEvent @event)
+		private void handle(PersonRuleChangedEvent @event)
 		{
 			_historicalChangePersister.Persist(new HistoricalChangeReadModel
 			{
@@ -155,7 +124,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-
 	}
-
 }

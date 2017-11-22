@@ -361,7 +361,6 @@
     <Compile Include="Rta\Service\ScheduleCacheTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSiteSkillsTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSiteTest.cs" />
-    <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="Rta\Service\SnapshotTest.cs" />
     <Compile Include="Rta\Service\Persisters\StateQueueTest.cs" />
     <Compile Include="Rta\Service\TracingTest.cs" />

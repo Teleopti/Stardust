@@ -19,7 +19,6 @@
 		Settings_SetAgentDescription_23257,
 
 		RTA_SpreadTransactionLocksStrategy_41823,
-		RTA_AsyncOptimization_43924,
 		RTA_RememberMyPartOfTheBusiness_39082,
 		RTA_RtaTracer_45597,
 		RTA_UnifiedSkillGroupManagement_45417,

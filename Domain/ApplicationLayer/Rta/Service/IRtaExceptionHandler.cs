@@ -113,12 +113,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LegacyReturnValue));
 
-		public int ReturnValue;
-
-		public LegacyReturnValue(int defaultReturnValue)
-		{
-			ReturnValue = defaultReturnValue;
-		}
+		public int ReturnValue = 1;
 
 		public bool InvalidAuthenticationKey(InvalidAuthenticationKeyException exception)
 		{

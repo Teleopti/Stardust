@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly IToggleManager _toggles;
 		private readonly IRtaTracer _tracer;
 
-		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, INow now, IToggleManager toggles, IRtaTracer tracer)
+		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, INow now, IToggleManager toggles,
+			IRtaTracer tracer)
 		{
 			_rta = rta;
 			_now = now;
@@ -66,10 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private IHttpActionResult process(BatchInputModel input)
 		{
 			var exceptionHandler = new InvalidInputMessage();
-			if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-				_rta.Enqueue(input, exceptionHandler);
-			else
-				_rta.Process(input, exceptionHandler);
+			_rta.Enqueue(input, exceptionHandler);
 			if (exceptionHandler.Message != null)
 				return BadRequest(exceptionHandler.Message);
 			return Ok();
