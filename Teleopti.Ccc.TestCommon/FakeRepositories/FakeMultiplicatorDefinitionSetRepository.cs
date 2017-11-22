@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeMultiplicatorDefinitionSetRepository : IMultiplicatorDefinitionSetRepository
+	public class FakeMultiplicatorDefinitionSetRepository : IMultiplicatorDefinitionSetRepository, IProxyForId<IMultiplicatorDefinitionSet>
 	{
 		private readonly IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
 
