@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Config;
@@ -75,6 +76,9 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			{
 				_distributedLock.TryLockForTypeOfAnd(this, mailboxId, () =>
 				{
+					mailbox = _mailboxRepository.Load(mailboxIdGuid);
+					if (mailbox != null)
+						return;
 					_mailboxRepository.Add(new Mailbox
 					{
 						Route = route,

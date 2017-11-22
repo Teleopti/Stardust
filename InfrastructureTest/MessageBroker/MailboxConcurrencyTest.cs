@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 	{
 		public IMessageBrokerServer Server;
 		public FakeTime Time;
-		
+
 		[Test]
 		[Setting("MessageBrokerMailboxPurgeIntervalInSeconds", 0)]
 		[Setting("MessageBrokerMailboxExpirationInSeconds", 0)]
@@ -48,15 +48,15 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		{
 			var run = new ConcurrencyRunner();
 			var route = new Message {BusinessUnitId = Guid.NewGuid().ToString()}.Routes().First();
-			var mailboxId = Guid.NewGuid().ToString();
-			
-			run.InParallel(() =>
+
+			100.Times(() =>
 			{
-				Server.PopMessages(route, mailboxId);
-			}).Times(100);
-			
+				var mailboxId = Guid.NewGuid().ToString();
+				run.InParallel(() => Server.PopMessages(route, mailboxId))
+					.Times(5);
+			});
+
 			Assert.DoesNotThrow(() => run.WaitForException<SqlException>());
 		}
-
 	}
 }
