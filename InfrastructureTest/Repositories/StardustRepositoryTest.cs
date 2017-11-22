@@ -160,6 +160,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void JobFilterShouldOnlyShowFilteredDays()
+		{
+			const string testTenant = "test Tenant";
+			var testEvent = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = testTenant };
+
+			var job1 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type",
+				Started = new DateTime(2017, 01, 01, 10, 0, 0),
+				Ended = new DateTime(2017, 01, 01, 11, 0, 0)
+			};
+			var job2 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEvent),
+				Type = "Type",
+				Started = new DateTime(2017, 01, 03, 10, 0, 0),
+				Ended = new DateTime(2017, 01, 03, 11, 0, 0)
+			};
+			StardustRepositoryTestHelper.AddJob(job1);
+			StardustRepositoryTestHelper.AddJob(job2);
+
+
+			var jobs = Target.GetAllJobs(new JobFilterModel { From = 1, To = 2, FromDate = new DateTime(2017,01,01), ToDate = new DateTime(2017,01,01)});
+			jobs.Count.Should().Be.EqualTo(1);
+			jobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
+		}
+
+		[Test]
 		public void FailedJobFilterShouldShowTopXOfItsDataSource()
 		{
 			const string testTenant = "test Tenant";

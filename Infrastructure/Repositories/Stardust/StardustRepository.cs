@@ -147,6 +147,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			if (filter.Type != null)
 				selectCommandText = selectCommandText + $@"AND Type = 'Teleopti.Ccc.Domain.ApplicationLayer.Events.{filter.Type}' ";
 
+			if (filter.FromDate != null && filter.ToDate != null)
+				selectCommandText = selectCommandText + $@"AND Started BETWEEN '{filter.FromDate.Value.Date:yyyy-MM-dd}' AND '{filter.ToDate.Value.Date.AddDays(1):yyyy-MM-dd}' ";
+
 			selectCommandText = selectCommandText + "ORDER BY Created DESC";
 
 			using (var sqlConnection = new SqlConnection(_connectionString))

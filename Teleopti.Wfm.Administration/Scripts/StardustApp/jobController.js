@@ -28,8 +28,9 @@
 		vm.selectedDataSource = allTenantsString;
 		vm.dataSourceFilter = allTenantsString;
 		vm.jobTypeFilter = allTypesString;
+		vm.selectedFromDate = new Date(new Date() - 1000 * 60 * 60 * 24 * 7);
+		vm.selectedToDate = new Date(new Date());
 		var refreshInterval = 5000;
-		
 		getJobsByFilter();
 
 		var refreshPromise = $interval(getJobsByFilter, refreshInterval);
@@ -61,7 +62,7 @@
 				jobType = vm.jobTypeFilter;
 			}
 
-			var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType };
+			var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType, "fromdate": vm.fromDateFilter, "todate": vm.toDateFilter };
 			$http.get("./Stardust/Jobs", tokenHeaderService.getHeadersAndParams(params))
 				.success(function(data) {
 					if (data.length < vm.resultsTo) {
@@ -101,6 +102,8 @@
 			vm.dataSourceFilter = vm.selectedDataSource;
 			vm.jobTypeFilter = vm.selectedJobType;
 			vm.resultsTo = vm.limit;
+			vm.fromDateFilter = vm.selectedFromDate;
+			vm.toDateFilter = vm.selectedToDate;
 			getJobsByFilter();
 		}
 	}

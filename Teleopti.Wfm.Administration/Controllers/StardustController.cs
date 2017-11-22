@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Web.Http;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Staffing;
@@ -36,9 +37,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 		}
 
 		[HttpGet, Route("Stardust/Jobs")]
-		public IHttpActionResult JobHistoryFiltered(int from, int to, string dataSource = null, string type = null)
+		public IHttpActionResult JobHistoryFiltered(int from, int to, string dataSource = null, string type = null, DateTime? fromDate = null, DateTime? toDate = null)
 		{
-			return Ok(_stardustRepository.GetAllJobs(new JobFilterModel{DataSource = dataSource, Type = type, From = from, To = to}));
+			return Ok(_stardustRepository.GetAllJobs(new JobFilterModel{DataSource = dataSource, Type = type, From = from, To = to, FromDate = fromDate, ToDate = toDate}));
 		}
 
 		[HttpGet, Route("Stardust/Jobs/{from}/{to}")]

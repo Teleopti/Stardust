@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 		{
 			const string insertJobCommandText = @"insert into [Stardust].[Job] 
 											(JobId, Name, CreatedBy, Created, Started, Ended, Serialized, Type, SentToWorkerNodeUri, Result, Policy) 
-											Values (@jobId, 'Test', 'Test', GETDATE(), GETDATE(), GETDATE(), @serialized, @type , '123456' , 'Result' ,null)";
+											Values (@jobId, 'Test', 'Test', GETDATE(), @started, @ended, @serialized, @type , '123456' , 'Result' ,null)";
 
 			using (var connection = new SqlConnection(connectionString()))
 			{
@@ -40,6 +41,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 					comm.Parameters.AddWithValue("@jobId", job.JobId);
 					comm.Parameters.AddWithValue("@serialized", job.Serialized);
 					comm.Parameters.AddWithValue("@type", job.Type);
+					comm.Parameters.AddWithValue("@started", job.Started ?? DateTime.UtcNow);
+					comm.Parameters.AddWithValue("@ended", job.Ended ?? DateTime.UtcNow);
 
 					comm.ExecuteNonQuery();
 				}

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Wfm.Administration.Controllers;
-using Teleopti.Wfm.Administration.Core.Stardust;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
