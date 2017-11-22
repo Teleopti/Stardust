@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Mvc;
 using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
@@ -60,27 +61,34 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				return new EmptyResult();
 			}
 
-			var request = _openIdProvider.GetRequest();
-			if (request != null)
+			try
 			{
-				// handles request from site
-				if (request.IsResponseReady)
+				var request = _openIdProvider.GetRequest();
+				if (request != null)
 				{
-					return _openIdProvider.PrepareResponse(request).AsActionResultMvc5();
-				}
-				// handles request from browser
-				var pendingRequest = Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray());
-				string userName;
-				if (!_formsAuthentication.TryGetCurrentUser(out userName))
-				{
-					ViewBag.ReturnUrl = Url.Action("ProcessAuthRequest");
-					ViewBag.PendingRequest = pendingRequest;
-					return SignIn();
-				}
+					// handles request from site
+					if (request.IsResponseReady)
+					{
+						return _openIdProvider.PrepareResponse(request).AsActionResultMvc5();
+					}
+					// handles request from browser
+					var pendingRequest = Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray());
+					string userName;
+					if (!_formsAuthentication.TryGetCurrentUser(out userName))
+					{
+						ViewBag.ReturnUrl = Url.Action("ProcessAuthRequest");
+						ViewBag.PendingRequest = pendingRequest;
+						return SignIn();
+					}
 
-				return ProcessAuthRequest(pendingRequest, false);
+					return ProcessAuthRequest(pendingRequest, false);
+				}
+				return new EmptyResult();
 			}
-			return new EmptyResult();
+			catch (ProtocolException e)
+			{
+				throw new HttpException(404, e.Message);
+			}
 
 		}
 
