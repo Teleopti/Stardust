@@ -244,31 +244,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, callba
 		self.IsNewInProgress(false);
 	};
 
-	self.SetAjax = function (ajaxobj) { ajax = ajaxobj; };
+	self.SetAjax = function (ajaxobj) { ajax = ajaxobj; }
 
-	self.validateRequestTime = function() {
-		var timeFromArr = self.TimeFrom().split(':');
-		var timeToArr = self.TimeTo().split(':');
-
-		if (self.DateFrom().format('YYYY-MM-DD') == self.DateTo().format('YYYY-MM-DD')) {
-			if (timeFromArr[0] > timeToArr[0]) {
-				self.ShowError(true);
-				self.ErrorMessage(requestsMessagesUserTexts.ENDTIME_MUST_BE_GREATER_THAN_STARTTIME);
-			} else if (timeFromArr[0] == timeToArr[0]) {
-				if (timeFromArr[1] >= timeToArr[1]) {
-					self.ShowError(true);
-					self.ErrorMessage(requestsMessagesUserTexts.ENDTIME_MUST_BE_GREATER_THAN_STARTTIME);
-				} else {
-					self.ShowError(false);
-					self.ErrorMessage('');
-				}
-			} else {
-				self.ShowError(false);
-				self.ErrorMessage('');
-			}
-		} else if (self.DateFrom() > self.DateTo()) {
-			self.ShowError(true);
-			self.ErrorMessage(requestsMessagesUserTexts.ENDTIME_MUST_BE_GREATER_THAN_STARTTIME);
-		}
-	};
 };
