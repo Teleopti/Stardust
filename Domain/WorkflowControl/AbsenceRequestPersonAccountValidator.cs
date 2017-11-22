@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
@@ -24,8 +26,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var workflowControlSet = person.WorkflowControlSet;
 			
 			var absenceRequestOpenPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
-			//var waitlistingIsEnabled = workflowControlSet.WaitlistingIsEnabled (absenceRequest);
-
 			if (absenceRequestOpenPeriod?.PersonAccountValidator is AbsenceRequestNoneValidator)
 			{
 				return ValidatedRequest.Valid;
@@ -41,7 +41,19 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			IPersonAbsenceAccount personAbsenceAccount)
 		{
 			var person = personRequest.Person;
+
+			var absenceRequest = personRequest.Request as IAbsenceRequest;
+			if (personAbsenceAccount == null || personAbsenceAccount.AccountCollection().IsEmpty())
+			{
+				var calc = new EmptyPersonAccountBalanceCalculator(absenceRequest.Absence);
+				var isOk = calc.CheckBalance(null, new DateOnlyPeriod());
+				var validatedRequestNoAccount = new ValidatedRequest { IsValid = isOk };
+				if (!isOk) validatedRequestNoAccount.DenyOption = PersonRequestDenyOption.InsufficientPersonAccount;
+				return validatedRequestNoAccount;
+			}
+
 			var requestPeriod = personRequest.Request.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+
 			var affectedAccounts = personAbsenceAccount?.Find(requestPeriod);
 
 			var validatedRequest = ValidatedRequest.Valid;

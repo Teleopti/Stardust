@@ -88,6 +88,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual bool IsExpired => _personRequestDenyOption.HasFlag(PersonRequestDenyOption.RequestExpired);
 
+		public virtual bool InsufficientPersonAccount => _personRequestDenyOption.HasFlag(PersonRequestDenyOption.InsufficientPersonAccount);
+
 		public virtual bool TrySetMessage(string message)
 		{
 			if(!checkIfCanSetMessage()) return false;

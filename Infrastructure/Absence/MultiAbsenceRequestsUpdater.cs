@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -374,6 +375,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						denyOption = PersonRequestDenyOption.AlreadyAbsence;
 					else if (personRequest.IsExpired)
 						denyOption = PersonRequestDenyOption.RequestExpired;
+					else if (personRequest.InsufficientPersonAccount)
+						denyOption = PersonRequestDenyOption.InsufficientPersonAccount;
+
 					command = new DenyRequestCommand()
 					{
 						PersonRequestId = personRequest.Id.GetValueOrDefault(),
@@ -491,7 +495,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		{
 			IPersonAccountBalanceCalculator personAccountBalanceCalculator;
 
-			if (personAccount == null)
+			if (personAccount == null || personAccount.AccountCollection().IsEmpty())
 			{
 				personAccountBalanceCalculator = new EmptyPersonAccountBalanceCalculator(absenceRequest.Absence);
 			}

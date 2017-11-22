@@ -419,6 +419,34 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		public void ShouldDenyWhenPersonAccountIsMissing([Values]bool autoGrant)
+		{
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			_absence = createAbsence();
+
+			var isWaitlisted = autoGrant;
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
+			_absence.Tracker = Tracker.CreateDayTracker();
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be.True();
+			request.IsWaitlisted.Should().Be.False();
+			request.DenyReason.Should().Be(Resources.RequestDenyReasonPersonAccount);
+		}
+
+		[Test]
 		public void ShouldUpdatePeriodForQueuedRequest()
 		{
 			_absence = createAbsence();
@@ -482,12 +510,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(8)));
 			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(17)));
 			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.False();
-		}
-
-		[Test, Ignore("Not valid")]
-		public void ShouldThrowInvalidOperationIfQueuedRequestIsSent()
-		{
-			Assert.Throws<InvalidOperationException>(tryPersist);
 		}
 
 		[Test]

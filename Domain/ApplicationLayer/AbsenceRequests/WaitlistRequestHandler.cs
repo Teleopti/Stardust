@@ -85,10 +85,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				foreach (var pRequest in requestsNotHandled)
 				{
 					var absenceRequest = pRequest.Request as IAbsenceRequest;
-					var result = _absenceRequestSynchronousValidator.Validate(pRequest, dataHolder.PersonsSchedules[pRequest.Person], 
-						dataHolder.PersonAbsenceAccounts[pRequest.Person].Find(absenceRequest.Absence));
-
-					if(!result.IsValid)
+					var personAbsenceAccount = dataHolder.PersonAbsenceAccounts[pRequest.Person].Find(absenceRequest.Absence);
+					var result = _absenceRequestSynchronousValidator.Validate(pRequest, dataHolder.PersonsSchedules[pRequest.Person], personAbsenceAccount);
+					if (!result.IsValid)
 					{
 						pRequest.Deny(result.ValidationErrors, new PersonRequestCheckAuthorization(), null,
 							PersonRequestDenyOption.AutoDeny | result.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None));
@@ -246,40 +245,48 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				var mergedPeriod =
 					pRequest.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest) pRequest.Request);
-				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
-				var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
-
+				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod).ToList();
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
-				var shiftPeriodList = new List<DateTimePeriod>();
 
-				foreach (var day in scheduleDays)
-				{
-					var projection = day.ProjectionService().CreateProjection().FilterLayers(requestPeriod);
-					if (!projection.Any())
-					{
-						continue;
-					}
-					shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime,
-						projection.OriginalProjectionPeriod.Value.EndDateTime));
-				}
-
-				var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
-				foreach (var projectionPeriod in shiftPeriodList)
-				{
-					skillStaffingIntervalsToValidate.AddRange(
-						dataHolder.SkillStaffingIntervals.Where(
-							x => x.StartDateTime >= projectionPeriod.StartDateTime && x.StartDateTime < projectionPeriod.EndDateTime));
-				}
-				var validatedRequest =
-					staffingThresholdValidators.FirstOrDefault()
-						.ValidateLight((IAbsenceRequest) pRequest.Request, skillStaffingIntervalsToValidate);
-				if (validatedRequest.IsValid)
+				var validatedRequestStaffing = ValidateStaffing(dataHolder, scheduleDays, requestPeriod, validators, pRequest);
+				
+				if (validatedRequestStaffing.IsValid)
 				{
 					if (!autoGrant) continue;
 					requestToApprove.Add(pRequest);
 				}
 			}
 			return requestToApprove;
+		}
+
+		private static IValidatedRequest ValidateStaffing(WaitlistDataHolder dataHolder,
+			IEnumerable<IScheduleDay> scheduleDays, DateTimePeriod requestPeriod, List<IAbsenceRequestValidator> validators, IPersonRequest pRequest)
+		{
+			var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
+			if (staffingThresholdValidators.IsEmpty()) return new ValidatedRequest{IsValid = true};
+			var shiftPeriodList = new List<DateTimePeriod>();
+
+			foreach (var day in scheduleDays)
+			{
+				var projection = day.ProjectionService().CreateProjection().FilterLayers(requestPeriod);
+				if (!projection.Any())
+				{
+					continue;
+				}
+				shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime,
+					projection.OriginalProjectionPeriod.Value.EndDateTime));
+			}
+
+			var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
+			foreach (var projectionPeriod in shiftPeriodList)
+			{
+				skillStaffingIntervalsToValidate.AddRange(
+					dataHolder.SkillStaffingIntervals.Where(
+						x => x.StartDateTime >= projectionPeriod.StartDateTime && x.StartDateTime < projectionPeriod.EndDateTime));
+			}
+
+			return staffingThresholdValidators.FirstOrDefault()
+				.ValidateLight((IAbsenceRequest) pRequest.Request, skillStaffingIntervalsToValidate);
 		}
 
 		private static IDisposable getContext(List<SkillCombinationResource> combinationResources, List<ISkill> skills, bool useAllSkills)

@@ -196,5 +196,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool IsAlreadyAbsent { get; }
 
 		bool IsExpired { get; }
-    }
+
+		bool InsufficientPersonAccount { get; }
+
+	}
 }

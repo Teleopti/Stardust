@@ -954,6 +954,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
+		public void ShouldDenyWhenPersonAccountIsOnAndPersonAccountIsMissing()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
+			var scenario = ScenarioRepository.Has("scnearioName");
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			absence.InContractTime = true;
+			absence.InWorkTime = true;
+			absence.InPaidTime = true;
+			absence.Tracker = Tracker.CreateTimeTracker();
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new PersonAccountBalanceValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			wfcs.AbsenceRequestWaitlistEnabled = true;
+
+			var person = PersonFactory.CreatePerson(wfcs).WithId();
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 11, 2016, 12, 2, 20));
+			PersonAssignmentRepository.Has(assignment);
+
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 18))).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+
+			//createAccount(person, absence, createAccountDay(new DateOnly(2016, 12, 1), TimeSpan.FromMinutes(360)));
+
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.IsWaitlisted.Should().Be.False();
+			personRequest.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonPersonAccount);
+		}
+
+		[Test]
 		public void ShouldNotDenyWhenThereAreTwoBudgetDaysInTheSameDay()
 		{
 			Now.Is(new DateTime(2017, 6, 5));

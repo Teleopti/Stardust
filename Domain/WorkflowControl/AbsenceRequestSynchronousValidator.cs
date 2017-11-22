@@ -1,7 +1,9 @@
 ﻿using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
@@ -77,15 +79,21 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonAlreadyAbsent
 					, DenyOption = PersonRequestDenyOption.AlreadyAbsence };
 
-			var personAccountValidateResult = 
-				AbsenceRequestPersonAccountValidator.ValidatedRequestWithPersonAccount(personRequest, scheduleRange, personAbsenceAccount);
+			var workflowControlSet = personRequest.Person.WorkflowControlSet;
+			var absenceRequestOpenPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
+			if (absenceRequestOpenPeriod?.PersonAccountValidator is AbsenceRequestNoneValidator)
+			{
+				return ValidatedRequest.Valid;
+			}
+
+			var personAccountValidateResult = AbsenceRequestPersonAccountValidator.ValidatedRequestWithPersonAccount(personRequest, scheduleRange, personAbsenceAccount);
 			if (!personAccountValidateResult.IsValid)
 				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonPersonAccount
 					, DenyOption = PersonRequestDenyOption.InsufficientPersonAccount };
 
 			// We don't check open hours when we process waitlist 
 
-			return new ValidatedRequest(){IsValid = true};
+			return new ValidatedRequest{IsValid = true};
 		}
 	}
 
