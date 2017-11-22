@@ -46,8 +46,6 @@ function fnIsAzure {
     }
 }
 
-
-
   
 # Not used ? /Henry
 function TeleoptiWebSites-HttpGet([string]$BaseUrl)
@@ -176,15 +174,22 @@ Try
 	If (!(Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()))) {
 		throw "User is not Admin!"
 	}
-	
-	import-module WebAdministration
-	EventlogSource-Create "$JOB"
 
     $isAzure = fnIsAzure
-    RemoveAppOfflinePage $isAzure
+    EventlogSource-Create "$JOB"
+
+    $iis = Get-WmiObject Win32_Service -Filter "Name = 'W3SVC'"
+    $iisInstalled = $false;
+
+    if ($iis.Name -eq 'W3SVC') {
+        Write-host 'Found iis installed.'
+        import-module WebAdministration
+        $iisInstalled = $true;
+        RemoveAppOfflinePage $isAzure
+    }
 	
-	StopTeleoptiServer
-	StartTeleoptiServer $isAzure
+	StopTeleoptiServer $iisInstalled
+	StartTeleoptiServer $iisInstalled $isAzure
 
 }
 

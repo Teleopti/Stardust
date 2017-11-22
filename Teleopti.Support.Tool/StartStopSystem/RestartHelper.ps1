@@ -192,9 +192,12 @@ function AppPools-Start {
 
 function StopTeleoptiServer
 {
+    param
+	(
+        [bool] $iisInstalled
+	)
 	TeleoptiWindowsServices-Stop
-	$iis = Get-WmiObject Win32_Service -Filter "Name = 'W3SVC'"
-	if ($iis.Name -eq 'W3SVC') {
+	if ($iisInstalled) {
 		Invoke-Expression -Command:"iisreset /STOP"
 		StopWindowsService -ServiceName "W3SVC"
 	}
@@ -215,16 +218,16 @@ function StartTeleoptiServer
 {
 	param
 	(
+        [bool] $iisInstalled,
 		[bool] $isAzure = $false
 	)
 	
-	$iis = Get-WmiObject Win32_Service -Filter "Name = 'W3SVC'"
-	if ($iis.Name -eq 'W3SVC') {
+	if ($iisInstalled) {
 		StartWindowsService -ServiceName "W3SVC"
 		Invoke-Expression -Command:"iisreset /START"
+        AppPools-Start $isAzure
 	}
 	
-	AppPools-Start $isAzure
 	TeleoptiWindowsServices-Start
 	if ([int]$psversiontable.psversion.major -gt 2)
     {
