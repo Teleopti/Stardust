@@ -177,6 +177,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				_workRuleValidationHandleType =
 					OvertimeRequestWorkRuleValidationHandleOptionViews[overtimeRequestOpenPeriod.WorkRuleValidationHandleType.Value];
 			}
+			else
+			{
+				_workRuleValidationHandleType = null;
+			}
 		}
 	}
 }
