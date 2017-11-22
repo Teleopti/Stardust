@@ -76,7 +76,7 @@
         };
 
         function agentStatesFor(data) {
-            return $resource('../api/AgentStates/For', {}, { query: { method: 'GET' } }).query(data).$promise;
+            return $resource('../api/AgentStates/For', {}, { query: { method: 'POST' } }).query(data).$promise;
         };
 
         function getTeamCardsFor(data) {

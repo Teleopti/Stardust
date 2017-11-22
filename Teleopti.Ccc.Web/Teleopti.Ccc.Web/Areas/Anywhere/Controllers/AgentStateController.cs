@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_builder = builder;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/AgentStates/For")]
-		public virtual IHttpActionResult For([FromUri]AgentStateViewFilter filter)
+		[UnitOfWork, HttpPost, Route("api/AgentStates/For")]
+		public virtual IHttpActionResult For(AgentStateViewFilter filter)
 		{
 			return Ok(_builder.For(
 				new AgentStateFilter
@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		public class AgentStateViewFilter
 		{
-			public IEnumerable<Guid> SiteIds { get; set; }// include
-			public IEnumerable<Guid> TeamIds { get; set; }// include
+			public IEnumerable<Guid> SiteIds { get; set; } // include
+			public IEnumerable<Guid> TeamIds { get; set; } // include
 
 			public IEnumerable<Guid> SkillIds { get; set; } // filter
 			public IEnumerable<Guid?> ExcludedStateIds { get; set; } // filter

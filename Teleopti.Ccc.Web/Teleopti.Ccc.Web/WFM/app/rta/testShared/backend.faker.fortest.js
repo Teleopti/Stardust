@@ -12,7 +12,11 @@
 		function fake(url, response) {
 			$httpBackend.whenGET(url)
 				.respond(function (method, url, data, headers, params) {
-					return response(params, method, url, data, headers, params);
+					return response(params, data, method, url, headers);
+				});
+			$httpBackend.whenPOST(url)
+				.respond(function (method, url, data, headers, params) {
+					return response(JSON.parse(data), params, method, url, headers);
 				});
 		}
 

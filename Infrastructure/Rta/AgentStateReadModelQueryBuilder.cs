@@ -118,12 +118,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public AgentStateReadModelQueryBuilder WithSelection(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, INow now)
 		{
 			var teamSiteWheres = new List<string>();
-			if (siteIds != null)
+			if (!siteIds.IsNullOrEmpty())
 			{
 				teamSiteWheres.Add("a.SiteId IN (:siteIds)");
 				_parameters.Add(s => s.SetParameterList("siteIds", siteIds));
 			}
-			if (teamIds != null)
+			if (!teamIds.IsNullOrEmpty())
 			{
 				teamSiteWheres.Add("a.TeamId IN (:teamIds)");
 				_parameters.Add(s => s.SetParameterList("teamIds", teamIds));
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			if (teamSiteWheres.Any())
 				_wheres.Add($"({string.Join(" OR ", teamSiteWheres)})");
 
-			if (skillIds != null)
+			if (!skillIds.IsNullOrEmpty())
 			{
 				_wheres.Add(@"
 					EXISTS(

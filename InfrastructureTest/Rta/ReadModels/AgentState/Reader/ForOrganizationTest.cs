@@ -18,91 +18,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 	[UnitOfWorkTest]
 	public class ForOrganizationTest
 	{
-		public IJsonSerializer Serializer;
 		public IAgentStateReadModelReader Target;
 		public IAgentStateReadModelPersister Persister;
 		public MutableNow Now;
 		public ICurrentUnitOfWork UnitOfWork;
-
-		[Test]
-		public void ShouldLoadAgentStateByTeamId()
-		{
-			var teamId = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId
-			});
-
-			var result = Target.Read(new AgentStateFilter {TeamIds = teamId.AsArray()});
-
-			result.Single().PersonId.Should().Be(personId);
-		}
-
-		[Test]
-		public void ShouldLoadAgentStatesByTeamId()
-		{
-			var teamId = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
-
-			var result = Target.Read(new AgentStateFilter {TeamIds = teamId.AsArray()});
-
-			result.Count().Should().Be(2);
-		}
-
-		[Test]
-		public void ShouldNotLoadDeletedAgetnsForTeam()
-		{
-			var teamId = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId
-			});
-			Persister.Upsert(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId2
-			});
-			Persister.UpsertDeleted(personId2);
-
-			var result = Target.Read(new AgentStateFilter {TeamIds = teamId.AsArray()});
-
-			result.Single().PersonId.Should().Be(personId);
-		}
-
-		[Test]
-		public void ShouldLoadAgentStatesBySiteIds()
-		{
-			var siteId1 = Guid.NewGuid();
-			var siteId2 = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest {SiteId = siteId1, PersonId = Guid.NewGuid()});
-			Persister.Upsert(new AgentStateReadModelForTest {SiteId = siteId2, PersonId = Guid.NewGuid()});
-			Persister.Upsert(new AgentStateReadModelForTest {SiteId = Guid.Empty, PersonId = Guid.NewGuid()});
-
-			var result = Target.Read(new AgentStateFilter {SiteIds = new[] {siteId1, siteId2}});
-
-			result.Count().Should().Be(2);
-		}
-
-		[Test]
-		public void ShouldLoadAgentStatesByTeamIds()
-		{
-			var teamId1 = Guid.NewGuid();
-			var teamId2 = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId1, PersonId = Guid.NewGuid()});
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId2, PersonId = Guid.NewGuid()});
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
-
-			var result = Target.Read(new AgentStateFilter {TeamIds = new[] {teamId1, teamId2}});
-
-			result.Count().Should().Be(2);
-		}
 
 		[Test]
 		public void ShouldLoadStatesInAlarmOnly()
@@ -269,7 +188,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		}
 
 		[Test]
-		public void ShouldLoadScheduleForTeam()
+		public void ShouldLoadSchedule()
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
@@ -336,6 +255,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 
 			Assert.DoesNotThrow(() => Target.Read(new AgentStateFilter {TeamIds = teamId.AsArray()}));
 		}
-
 	}
 }

@@ -47,27 +47,33 @@
 
 		};
 
-		faker.fake(/\.\.\/api\/AgentStates\/For(.*)/,
+		faker.fake(/\.\.\/api\/AgentStates\/For/,
 			function (params) {
+				params.siteIds = params.siteIds || [];
+				params.teamIds = params.teamIds || [];
+				params.skillIds = params.skillIds || [];
+				params.excludedStateIds = params.excludedStateIds || [];
+				params.inAlarm = params.inAlarm === 'true' || params.inAlarm === true;
+				
 				var result = agentStates;
 				
 				service.lastAgentStatesRequestParams = params;
 				
-				if (params.siteIds)
+				if (params.siteIds.length > 0)
 					result = result.filter(function (a) {
 						return params.siteIds.indexOf(a.SiteId) >= 0
 					});
-				else if (params.teamIds)
+				else if (params.teamIds.length > 0)
 					result = result.filter(function (a) {
 						return params.teamIds.indexOf(a.TeamId) >= 0
 					});
 
-				if (params.skillIds)
+				if (params.skillIds.length > 0)
 					result = result.filter(function (a) {
 						return params.skillIds.indexOf(a.SkillId) >= 0
 					});
 
-				if (params.inAlarm == 'true'){
+				if (params.inAlarm){
 					result = result.filter(function (s) {
 						return s.TimeInAlarm > 0;
 					}).sort(function (s1, s2) {
@@ -75,7 +81,7 @@
 					});
 				}
 
-				if (params.excludedStateIds)
+				if (params.excludedStateIds.length > 0)
 					result = result.filter(function (s) {
 						return params.excludedStateIds.indexOf(s.StateId) === -1;
 					});
