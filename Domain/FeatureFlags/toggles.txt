@@ -162,6 +162,7 @@ ETL_RemoveTimeZoneAndDateNightly_40870 = true
 ETL_EventBasedAgentNameDescription_41432 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
 ETL_SpeedUpNightlyDayOff_38213 = true
+ETL_Show_Web_Based_ETL_Tool_46880 = RC
 
 WfmIntraday_MonitorActualvsForecasted_35176 = true
 Wfm_Intraday_OptimalStaffing_40921 = true
