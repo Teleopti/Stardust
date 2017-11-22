@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies', 'ngAria'])
+        .module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies', 'ngAria', '720kb.datepicker'])
 		.config(function ($routeProvider, $httpProvider) {
 
 			$routeProvider
@@ -66,6 +66,9 @@
 				.when('/StardustDashboard/failedJobs', {
 					templateUrl: 'StardustDashboard/failedJobs.html'
 				})
+				.when('/ETL', {
+					templateUrl: 'Etl/etl.html'
+				})
 
 				.when('/HangfireDashboard', {
 					templateUrl: 'HangfireDashboard.html'
@@ -73,6 +76,7 @@
 				.when('/HangfireMonitoring', {
 					templateUrl: 'HangfireMonitoring.html'
 				});
+
 
 			$httpProvider.interceptors.push('httpInterceptor');
 		});

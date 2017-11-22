@@ -48,7 +48,7 @@
 		vm.ErrorMessage = '';
 		vm.user = sessionStorage.getItem(userKey);
 		vm.Id = sessionStorage.getItem(idKey);
-		
+
 		$scope.state = {
 			selected: 1
 		};
@@ -64,8 +64,13 @@
 		}, {
 			text: "Hangfire Monitoring",
 			link: "#/HangfireMonitoring"
-		}];
-		$scope.message = "något som jag vill visa"; 
+        }
+   //         , {
+			//text: "ETL",
+			//link: "#/ETL"
+   //     }
+        ];
+		$scope.message = "något som jag vill visa";
 
 		$http.get("./HasNoUser").success(function (data) {
 			firstUser = data;

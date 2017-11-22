@@ -1,0 +1,48 @@
+﻿	<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default ">
+			<div class="panel-heading">
+				<div class="input-group ">
+					<span class="input-group-addon" id="basic-addon1">
+						<svg style="width:14px;height:14px" viewBox="0 0 24 24">
+							<path fill="#000000" d="M3,2H21V2H21V4H20.92L15,9.92V22.91L9,16.91V9.91L3.09,4H3V2M11,16.08L13,18.08V9H13.09L18.09,4H5.92L10.92,9H11V16.08Z" />
+						</svg>
+					</span>
+					<input type="text" class="form-control" ng-model="scheduleFilter" placeholder="Filter" aria-label="Username" aria-describedby="basic-addon1">
+				</div>
+			</div>
+			<div class="panel-body">
+				<table class="table">
+					<thead>
+					<tr>
+						<th scope="col">Schedule name</th>
+						<th scope="col">Job name</th>
+						<th scope="col">Enabled</th>
+						<th scope="col">Description</th>
+					</tr>
+					</thead>
+
+
+					<tbody ng-repeat="job in vm.schedules | filter: scheduleFilter">
+					<tr>
+						<td>
+							{{job.Name}}
+						</td>
+						<td>
+							{{job.Jname}}
+						</td>
+						<td>
+							{{job.Enabled}}
+						</td>
+						<td>
+							{{job.Description}}
+						</td>
+					</tr>
+					</tbody>
+
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
