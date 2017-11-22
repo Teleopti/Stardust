@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 		public void ShouldPersistInAdherence()
 		{
 			var personId = Guid.NewGuid();
-			
+
 			Target.AddOut(personId, "2016-10-13 12:00".Utc());
 			Target.AddIn(personId, "2016-10-13 12:15".Utc());
 

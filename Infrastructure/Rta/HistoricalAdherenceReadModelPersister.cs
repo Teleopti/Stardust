@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-	public class HistoricalAdherenceReadModelPersister : IHistoricalAdherenceReadModelPersister {
-
+	public class HistoricalAdherenceReadModelPersister : IHistoricalAdherenceReadModelPersister
+	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 
 		public HistoricalAdherenceReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork)
@@ -48,6 +50,6 @@ VALUES (:PersonId, :Timestamp, :Adherence)")
 				.SetParameter("Adherence", (int) adherence)
 				.ExecuteUpdate();
 		}
-	}
 
+	}
 }
