@@ -36,10 +36,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	function getUtcNowString() {
 		var now = new Date(new Date().getTeleoptiTime());
 		var dateStr = (now.getUTCMonth() + 1).toString() + '/' +
-					   now.getUTCDate().toString() + '/' +
-					   now.getUTCFullYear().toString() + ' ' +
-					   now.getUTCHours().toString() + ':' +
-					   now.getUTCMinutes().toString();
+			now.getUTCDate().toString() + '/' +
+			now.getUTCFullYear().toString() + ' ' +
+			now.getUTCHours().toString() + ':' +
+			now.getUTCMinutes().toString();
 		return dateStr;
 	};
 
@@ -62,7 +62,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				dataType: "json",
 				type: 'GET',
 				//pass as string to make sure no time included due to time zone stuff
-				data: { asmZeroLocal: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.yesterday())},
+				data: { asmZeroLocal: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.yesterday()) },
 				success: function (data) {
 					self.hours(data.Hours);
 					self._createLayers(data.Layers);
@@ -114,14 +114,14 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 
 		self.now.subscribe(function (currentMs) {
-			var yesterdayPlus2Days = moment(new Date(self.yesterday().getTime())).add('days',2).toDate();
+			var yesterdayPlus2Days = moment(new Date(self.yesterday().getTime())).add('days', 2).toDate();
 			if (currentMs > yesterdayPlus2Days.getTime()) {
 				var todayMinus1 = moment(new Date(currentMs)).add('days', -1).startOf('day').toDate();
 				self.yesterday(todayMinus1);
 			}
 
 			var visibleLayers = $.grep(self.layers(),
-				function(n, i) {
+				function (n, i) {
 					return n.visible();
 				});
 			self.visibleLayers(visibleLayers);
@@ -186,6 +186,24 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var elementToBind = $('.asm-outer-canvas')[0];
 		ko.applyBindings(vm, elementToBind);
 		vm.loadViewModel();
+
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
+			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("MyTimeAsm",
+				function () {
+					var listeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours', -1).toDate();
+					var listeningEndDate = moment(new Date(listeningStartDate.getTime())).add('days', 1).toDate();
+					return { startDate: listeningStartDate, endDate: listeningEndDate }
+				},
+				function (updatedPeriods) {
+					for (var i = 0; i < updatedPeriods.length; i++) {
+						var period = updatedPeriods[i];
+						if (_validSchedulePeriod(period)) {
+							vm.loadViewModel();
+							break;
+						}
+					}
+				});
+		}
 	}
 
 	function _setFixedElementAttributes() {
@@ -196,8 +214,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.col-1').hide(); //hide footer that takes "empty" space
 	}
 
-	function _updateNotificationDisplayTimeSetting(displayTime){
-		for (var type in notifyOptions){
+	function _updateNotificationDisplayTimeSetting(displayTime) {
+		for (var type in notifyOptions) {
 			notifyOptions[type].timeout = displayTime * 1000;
 		}
 	}
@@ -215,11 +233,13 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _validSchedulePeriod(notification) {
-		var messageStartDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).add('days', -1).toDate();
-		var messageEndDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).add('days', 1).toDate();
-		var listeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours',-1).toDate();
+		var isNotification = notification.hasOwnProperty('DomainType');
+		var messageStartDate = isNotification ? moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).add('days', -1).toDate()
+			: moment(notification.StartDate).add('days', -1).toDate();
+		var messageEndDate = isNotification ? moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).add('days', 1).toDate()
+			: moment(notification.EndDate).add('days', 1).toDate();
+		var listeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours', -1).toDate();
 		var listeningEndDate = moment(new Date(listeningStartDate.getTime())).add('days', 1).toDate();
-
 		if (messageStartDate < listeningEndDate && messageEndDate > listeningStartDate) {
 			return true;
 		}
@@ -252,7 +272,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	return {
-		ShowAsm: function(settings) {
+		ShowAsm: function (settings) {
+			Teleopti.MyTimeWeb.Common.Init(settings, ajax);
 			_settings = settings;
 			_showAsm();
 			_startPollingToAvoidLogOut();
@@ -261,10 +282,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		UpdateNotificationDisplayTimeSetting: _updateNotificationDisplayTimeSetting,
 		NotifyWhenScheduleChangedListener: function (notification, skipValidSchedulePeriod) {
 			var shouldValid = skipValidSchedulePeriod ? true : _validSchedulePeriod(notification);
-			if ( shouldValid && _validateNotificationSource(notification)) {
+			if (shouldValid && _validateNotificationSource(notification)) {
 				var changedDateRange = new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).format('L');
-				if (notification.StartDate !== notification.EndDate)
-				{
+				if (notification.StartDate !== notification.EndDate) {
 					changedDateRange = changedDateRange + ' - '
 						+ new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).format('L');
 				}

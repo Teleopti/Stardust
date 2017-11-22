@@ -54,13 +54,22 @@
 			},
 			header: '@Resources.Teleopti'
 		});
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
+								Teleopti.MyTimeWeb.PollScheduleUpdates.Init({
+									notifyText: '@Resources.YourScheduleTheDATEHasChanged',
+									originalDocumentTitle: document.title,
+									baseUrl: '@Url.Content("~/")',
+									header: '@Resources.Teleopti'
+								});
+							}
 
-			    $(window)
-			        .on("unload",
-			            function() {
-			            	Teleopti.MyTimeWeb.AlertActivity.AbortAjax();
-			                Teleopti.MyTimeWeb.Asm.Dispose();
-			            });
+
+		$(window)
+			.on("unload",
+			    function() {
+			        Teleopti.MyTimeWeb.AlertActivity.AbortAjax();
+			        Teleopti.MyTimeWeb.Asm.Dispose();
+			    });
 		</text>
 	}
 	});
