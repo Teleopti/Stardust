@@ -31,5 +31,27 @@ namespace Teleopti.Ccc.Domain.Analytics
 		public DateTime InsertDate { get; set; }
 		public DateTime UpdateDate { get; set; }
 		public DateTime DatasourceUpdateDate { get; set; }
+
+		public override bool Equals(object obj)
+		{
+			var workload = obj as AnalyticsForcastWorkload;
+			return workload != null &&
+				   DateId == workload.DateId &&
+				   IntervalId == workload.IntervalId &&
+				   StartTime == workload.StartTime &&
+				   WorkloadId == workload.WorkloadId &&
+				   ScenarioId == workload.ScenarioId;
+		}
+
+		public override int GetHashCode()
+		{
+			var hashCode = 1802931970;
+			hashCode = hashCode * -1521134295 + DateId.GetHashCode();
+			hashCode = hashCode * -1521134295 + IntervalId.GetHashCode();
+			hashCode = hashCode * -1521134295 + StartTime.GetHashCode();
+			hashCode = hashCode * -1521134295 + WorkloadId.GetHashCode();
+			hashCode = hashCode * -1521134295 + ScenarioId.GetHashCode();
+			return hashCode;
+		}
 	}
 }

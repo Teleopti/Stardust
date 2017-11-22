@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
@@ -52,14 +54,58 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 				logger.Debug($"Aborting because {typeof(ISkillDay)} {@event.SkillDayId} is not for a reportable scenario.");
 				return;
 			}
+
+			var newForecastWorkloads = createForecastWorkloads(skillDay).ToList();
+			var currentForecastWorkloads = getCurrentForecastWorkloads(skillDay).ToList();
+			var workloadsToRemove = currentForecastWorkloads.Where(x => !newForecastWorkloads.Contains(x)).ToList();
+
+			addOrUpdateWorkloads(newForecastWorkloads);
+			removeWorkloads(workloadsToRemove);
+		}
+
+		private void addOrUpdateWorkloads(IEnumerable<AnalyticsForcastWorkload> workloads)
+		{
+			foreach (var workload in workloads)
+			{
+				_analyticsForecastWorkloadRepository.AddOrUpdate(workload);
+			}
+		}
+
+		private void removeWorkloads(IEnumerable<AnalyticsForcastWorkload> workloads)
+		{
+			foreach (var workload in workloads)
+			{
+				_analyticsForecastWorkloadRepository.Delete(workload);
+			}
+		}
+
+		private IEnumerable<AnalyticsForcastWorkload> getCurrentForecastWorkloads(ISkillDay skillDay)
+		{
+			var dateId = getAnalyticsDate(skillDay.CurrentDate.Date).DateId;
+			var analyticsScenario = getAnalyticsScenario(skillDay);
+			var currentForecastWorkloads = new List<AnalyticsForcastWorkload>();
+
+			foreach (var workloadDay in skillDay.WorkloadDayCollection)
+			{
+				var analyticsWorkload = getAnalyticsWorkload(workloadDay);
+				var workloads = _analyticsForecastWorkloadRepository.GetForecastWorkloads(analyticsWorkload.WorkloadId, dateId, analyticsScenario.ScenarioId);
+				currentForecastWorkloads.AddRange(workloads);
+			}
+
+			return currentForecastWorkloads;
+		}
+
+		private IEnumerable<AnalyticsForcastWorkload> createForecastWorkloads(ISkillDay skillDay)
+		{
 			var analyticsScenario = getAnalyticsScenario(skillDay);
 			var intervals = _analyticsIntervalRepository.IntervalsPerDay();
-			var minutesPerInterval =  minutesPerDay / intervals;
-			
+			var minutesPerInterval = minutesPerDay / intervals;
+
 			foreach (var workloadDay in skillDay.WorkloadDayCollection)
 			{
 				var analyticsWorkload = getAnalyticsWorkload(workloadDay);
 				var templateTaskPeriodList = workloadDay.TemplateTaskPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
+				
 				foreach (var taskPeriod in templateTaskPeriodList)
 				{
 					var analyticsDate = getAnalyticsDate(taskPeriod.Period.StartDateTime.Date);
@@ -69,7 +115,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 					var forecastedCampaignAfterCallWorkSeconds = taskPeriod.CampaignAfterTaskTime.Value * forecastedAfterCallWorkSeconds;
 					var forecastedTalkTimeExclCampaignSeconds = taskPeriod.AverageTaskTime.TotalSeconds * taskPeriod.Tasks;
 					var forecastedAfterCallWorkExclCampaignSeconds = taskPeriod.AverageAfterTaskTime.TotalSeconds * taskPeriod.Tasks;
-					var analyticForecastWorkload = new AnalyticsForcastWorkload
+					yield return new AnalyticsForcastWorkload
 					{
 						BusinessUnitId = analyticsWorkload.BusinessUnitId,
 						WorkloadId = analyticsWorkload.WorkloadId,
@@ -83,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 						DatasourceUpdateDate = skillDay.UpdatedOn ?? DateTime.UtcNow,
 						ForecastedAfterCallWorkExclCampaignSeconds = forecastedAfterCallWorkExclCampaignSeconds,
 						ForecastedAfterCallWorkSeconds = forecastedAfterCallWorkSeconds,
-						ForecastedBackofficeTasks = skillDay.Skill.SkillType.ForecastSource == ForecastSource.Backoffice ? taskPeriod.Tasks : 0,
+						ForecastedBackofficeTasks = skillDay.Skill.SkillType.ForecastSource == ForecastSource.Backoffice ? taskPeriod.Tasks: 0,
 						ForecastedCalls = taskPeriod.TotalTasks,
 						ForecastedCallsExclCampaign = taskPeriod.Tasks,
 						ForecastedCampaignAfterCallWorkSeconds = forecastedCampaignAfterCallWorkSeconds,
@@ -96,7 +142,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 						ForecastedTalkTimeExclCampaignSeconds = forecastedTalkTimeExclCampaignSeconds,
 						ForecastedTalkTimeSeconds = forecastedTalkTimeSeconds
 					};
-					_analyticsForecastWorkloadRepository.AddOrUpdate(analyticForecastWorkload);
 				}
 			}
 		}
