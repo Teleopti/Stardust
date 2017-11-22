@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.MessageBroker.Server
 {
@@ -6,7 +7,8 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 	{
 		string AddSubscription(Subscription subscription, string connectionId);
 		void RemoveSubscription(string route, string connectionId);
-
+		void CreateMailbox(Guid mailboxId, string route);
+		IEnumerable<Message> PopMessages(Guid mailboxId);
 		IEnumerable<Message> PopMessages(string route, string mailboxId);
 
 		void NotifyClients(Message message);
