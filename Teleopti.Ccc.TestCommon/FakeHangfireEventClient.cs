@@ -98,6 +98,8 @@ namespace Teleopti.Ccc.TestCommon
 
 		public string EventTypeName(HangfireEventJob j)
 		{
+			if (j.Event == null)
+				return null;
 			var eventType = j.Event.GetType();
 			return $"{eventType.FullName}, {eventType.Assembly.GetName().Name}";
 		}

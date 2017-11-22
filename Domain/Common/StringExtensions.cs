@@ -10,13 +10,17 @@ namespace Teleopti.Ccc.Domain.Common
 		}
 	}
 
-	public static class GuidExtension
+	public static class ThingExtensions
 	{
-		public static Guid[] AsArray(this Guid g)
+		public static T[] AsArray<T>(this T g)
 		{
 			return new[] { g };
 		}
-
+	}
+	
+	public static class GuidExtension
+	{
+		
 		public static Guid?[] AsNullableArray(this Guid g)
 		{
 			return new Guid?[] { g };

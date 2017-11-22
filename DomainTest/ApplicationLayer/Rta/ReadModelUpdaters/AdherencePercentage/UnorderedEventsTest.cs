@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 		[TestCaseSource(typeof(PercentageEventsPermuationFactory), "Permutations")]
 		public void ShouldHandleAllCombinationsOfEventOrder(IEnumerable<IEvent> events)
 		{
-
-			events.ForEach(e => Target.Handle((dynamic)e));
+			Target.Handle(events);
 
 			Persister.PersistedModel.TimeInAdherence.Should().Be("2".Seconds());
 			Persister.PersistedModel.TimeOutOfAdherence.Should().Be("1".Seconds());

@@ -47,6 +47,7 @@ using Teleopti.Ccc.TestCommon.Services;
 namespace Teleopti.Ccc.TestCommon.IoC
 {
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpreadTransactionLocksStrategy_41823)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_AsyncOptimization_43924)]
 	[Toggle(Domain.FeatureFlags.Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{

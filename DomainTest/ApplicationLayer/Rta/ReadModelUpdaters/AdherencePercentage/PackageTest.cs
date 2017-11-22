@@ -15,11 +15,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_EventPackagesOptimization_43924)]
 	public class PackageTest
 	{
 		public FakeAdherencePercentageReadModelPersister Persister;
-		public AdherencePercentageReadModelUpdaterWithPackages Target;
+		public AdherencePercentageReadModelUpdater Target;
 
 		[Test]
 		public void ShouldSubscribeToEvents()

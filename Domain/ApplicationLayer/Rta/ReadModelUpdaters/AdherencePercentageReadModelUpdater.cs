@@ -4,18 +4,52 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
+	public static class AdherencePercentageReadModelUpdaterExtensions
+	{
+		public static void Handle(this AdherencePercentageReadModelUpdater instance, PersonInAdherenceEvent @event)
+		{
+			instance.Handle(@event.AsArray());
+		}
+
+		public static void Handle(this AdherencePercentageReadModelUpdater instance, PersonOutOfAdherenceEvent @event)
+		{
+			instance.Handle(@event.AsArray());
+		}
+
+		public static void Handle(this AdherencePercentageReadModelUpdater instance, PersonShiftStartEvent @event)
+		{
+			instance.Handle(@event.AsArray());
+		}
+
+		public static void Handle(this AdherencePercentageReadModelUpdater instance, PersonShiftEndEvent @event)
+		{
+			instance.Handle(@event.AsArray());
+		}
+
+		public static void Handle(this AdherencePercentageReadModelUpdater instance, PersonNeutralAdherenceEvent @event)
+		{
+			instance.Handle(@event.AsArray());
+		}
+
+		public static void Handle(this AdherencePercentageReadModelUpdater instance, PersonDeletedEvent @event)
+		{
+			instance.Handle(@event.AsArray());
+		}
+	}
+
 	[EnabledBy(Toggles.RTA_AsyncOptimization_43924)]
-	public class AdherencePercentageReadModelUpdaterInSync : AdherencePercentageReadModelUpdaterImpl,
+	public class AdherencePercentageReadModelUpdater : AdherencePercentageReadModelUpdaterImpl,
 		IHandleEvents,
 		IRunInSync
 	{
-		public AdherencePercentageReadModelUpdaterInSync(IAdherencePercentageReadModelPersister persister) : base(persister)
+		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister) : base(persister)
 		{
 		}
 
@@ -27,7 +61,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			registrator.SubscribeTo<PersonShiftStartEvent>();
 			registrator.SubscribeTo<PersonShiftEndEvent>();
 			registrator.SubscribeTo<PersonDeletedEvent>();
-
 		}
 
 		[ReadModelUnitOfWork]
@@ -37,11 +70,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		}
 	}
 
-	[EnabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
 	[DisabledBy(Toggles.RTA_AsyncOptimization_43924)]
-	public class AdherencePercentageReadModelUpdaterWithPackages : AdherencePercentageReadModelUpdaterImpl, IHandleEvents, IRunOnHangfire
+	public class AdherencePercentageReadModelUpdaterWithPackages : AdherencePercentageReadModelUpdaterImpl, IHandleEvents,
+		IRunOnHangfire
 	{
-		public AdherencePercentageReadModelUpdaterWithPackages(IAdherencePercentageReadModelPersister persister) : base(persister)
+		public AdherencePercentageReadModelUpdaterWithPackages(IAdherencePercentageReadModelPersister persister) :
+			base(persister)
 		{
 		}
 
@@ -53,64 +87,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			registrator.SubscribeTo<PersonShiftStartEvent>();
 			registrator.SubscribeTo<PersonShiftEndEvent>();
 			registrator.SubscribeTo<PersonDeletedEvent>();
-
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(IEnumerable<IEvent> events)
 		{
-			events.ForEach(e => handle((dynamic)e));
-		}
-	}
-
-	[DisabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
-	public class AdherencePercentageReadModelUpdater : AdherencePercentageReadModelUpdaterImpl,
-		IHandleEvent<PersonInAdherenceEvent>,
-		IHandleEvent<PersonOutOfAdherenceEvent>,
-		IHandleEvent<PersonNeutralAdherenceEvent>,
-		IHandleEvent<PersonShiftStartEvent>,
-		IHandleEvent<PersonShiftEndEvent>,
-		IHandleEvent<PersonDeletedEvent>,
-		IRunOnHangfire
-	{
-		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister) : base(persister)
-		{
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonInAdherenceEvent @event)
-		{
-			handle(@event);
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonOutOfAdherenceEvent @event)
-		{
-			handle(@event);
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonShiftStartEvent @event)
-		{
-			handle(@event);
-		}
-		
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonShiftEndEvent @event)
-		{
-			handle(@event);
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonNeutralAdherenceEvent @event)
-		{
-			handle(@event);
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonDeletedEvent @event)
-		{
-			handle(@event);
+			events.ForEach(e => handle((dynamic) e));
 		}
 	}
 
@@ -122,7 +104,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		{
 			_persister = persister;
 		}
-		
+
 		protected void handle(PersonShiftStartEvent @event)
 		{
 			handleEvent(
@@ -139,7 +121,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					m.ShiftEndTime = @event.ShiftEndTime;
 				});
 		}
-		
+
 		protected void handle(PersonInAdherenceEvent @event)
 		{
 			handleEvent(
@@ -165,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				},
 				m => m.IsLastTimeInAdherence = false);
 		}
-		
+
 		protected void handle(PersonNeutralAdherenceEvent @event)
 		{
 			handleEvent(
@@ -197,7 +179,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_persister.Delete(@event.PersonId);
 		}
 
-		private void handleEvent(Guid personId, DateOnly? belongsToDate, AdherencePercentageReadModelState readModelState, Action<AdherencePercentageReadModel> mutate)
+		private void handleEvent(Guid personId, DateOnly? belongsToDate, AdherencePercentageReadModelState readModelState,
+			Action<AdherencePercentageReadModel> mutate)
 		{
 			var date = belongsToDate.HasValue ? belongsToDate.Value : new DateOnly(readModelState.Timestamp);
 			var model = _persister.Get(date, personId);
@@ -221,7 +204,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			mutate(model);
 			_persister.Persist(model);
 		}
-		
+
 		private static void calculate(AdherencePercentageReadModel model)
 		{
 			AdherencePercentageReadModelState previous = null;

@@ -16,12 +16,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_EventPackagesOptimization_43924)]
 	public class PackageTest
 	{
 		public FakeHistoricalAdherenceReadModelPersister AdherencePersister;
 		public FakeHistoricalChangeReadModelPersister ChangePersister;
-		public HistoricalAdherenceUpdaterWithPackages Target;
+		public HistoricalAdherenceUpdater Target;
 		public MutableNow Now;
 
 		[Test]

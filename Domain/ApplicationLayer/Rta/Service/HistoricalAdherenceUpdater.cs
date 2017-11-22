@@ -4,17 +4,36 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 
-	public class HistoricalAdherenceWithProofUpdater : HistoricalAdherenceUpdaterImpl,
+	public static class HistoricalAdherenceUpdaterExtensions
+	{
+		public static void Handle(this HistoricalAdherenceUpdater instance, PersonOutOfAdherenceEvent @event)
+		{
+			instance.Handle(@event.AsArray());
+		}
+
+		public static void Handle(this HistoricalAdherenceUpdater instance, PersonInAdherenceEvent @event)
+		{
+			instance.Handle(@event.AsArray());
+		}
+
+		public static void Handle(this HistoricalAdherenceUpdater instance, PersonNeutralAdherenceEvent @event)
+		{
+			instance.Handle(@event.AsArray());
+		}
+	}
+	
+	public class HistoricalAdherenceUpdater : HistoricalAdherenceUpdaterImpl,
 		IHandleEvents,
 		IRunInSync
 	{
-		public HistoricalAdherenceWithProofUpdater(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
+		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
 		{
 		}
 
@@ -35,7 +54,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	}
 
 	[DisabledBy(Toggles.RTA_AsyncOptimization_43924)]
-	[EnabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
 	public class HistoricalAdherenceUpdaterWithPackages : HistoricalAdherenceUpdaterImpl, 
 		IHandleEvents,
 		IRunOnHangfire
@@ -55,37 +73,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Handle(IEnumerable<IEvent> events)
 		{
 			events.ForEach(e => handle((dynamic)e));
-		}
-	}
-
-	[DisabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
-	public class HistoricalAdherenceUpdater : HistoricalAdherenceUpdaterImpl, 
-		IHandleEvent<PersonOutOfAdherenceEvent>,
-		IHandleEvent<PersonInAdherenceEvent>,
-		IHandleEvent<PersonNeutralAdherenceEvent>,
-		IRunOnHangfire
-	{
-		public HistoricalAdherenceUpdater(IHistoricalAdherenceReadModelPersister adherencePersister, IHistoricalChangeReadModelPersister historicalChangePersister)
-			: base(adherencePersister, historicalChangePersister)
-		{
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonOutOfAdherenceEvent @event)
-		{
-			handle(@event);
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonInAdherenceEvent @event)
-		{
-			handle(@event);
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonNeutralAdherenceEvent @event)
-		{
-			handle(@event);
 		}
 	}
 
