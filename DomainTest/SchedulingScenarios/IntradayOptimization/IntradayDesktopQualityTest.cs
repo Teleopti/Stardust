@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -12,7 +11,9 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
@@ -21,11 +22,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
+	[LoggedOnAppDomain]
+	[UseIocForFatClient]
 	public class IntradayDesktopQualityTest : IntradayOptimizationScenarioTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		//TODO: Using wrong "internal" service here. Use IOptimizeIntradayDesktop if simulating desktop client!
-		public Domain.Optimization.IntradayOptimization Target;
+		public IOptimizeIntradayDesktop Target;
 		public IScheduleResultDataExtractorProvider ScheduleResultDataExtractorProvider;
 		public ResourceCalculateWithNewContext ResourceCalculation;
 
@@ -43,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 					stateHolder.SchedulingResultState);
 			var valueBefore = p.Values().First();
 
-			Target.Execute(date.ToDateOnlyPeriod(), agentList, false, new FixedBlockPreferenceProvider(schedulingOptions));
+			Target.Optimize(agentList,date.ToDateOnlyPeriod(), new OptimizationPreferences{General = { ScheduleTag = new ScheduleTag()}}, new NoIntradayOptimizationCallback());
 
 			var valueAfter = p.Values().First();
 			var valueImprovement = (valueBefore - valueAfter);
@@ -55,7 +58,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var activity = new Activity();
 			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc)
 				.IsOpen(new TimePeriod(8, 20))
-				.DefaultResolution(60);
+				.DefaultResolution(60)
+				.WithId();
 			var scenario = new Scenario();
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var lunchActivity = new Activity();
