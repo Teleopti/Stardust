@@ -12,8 +12,8 @@
 	</div>
 	<div class="con-row">
 		<div class="con-flex" style="flex: 2 1 0">
-			<div class="panel con-flex material-depth-1" style="height:100%">
-				<div class="con-row layout-align-center-center" style="height:100%">
+			<div class="panel con-flex material-depth-1">
+				<div class="con-row layout-align-center-center">
 					<span class="con-flex">
 						<md-autocomplete id="skill-id"
 										class="autocomplete-skill"
@@ -215,7 +215,7 @@
 											<div class="con-flex"></div>
 										</div>
 									</md-content>
-									<md-content ng-cloak class="md-padding" ng-show="!vm.viewObj.hasMonitorData">
+									<md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
 										<span class="con-flex no-data-available"
 											  ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
 											{{'NoDataAvailable'|translate}}
