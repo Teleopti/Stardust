@@ -313,6 +313,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool AutoGrantOvertimeRequest { get; set; }
 		ReadOnlyCollection<IOvertimeRequestOpenPeriod> OvertimeRequestOpenPeriods { get; }
 		void InsertOvertimePeriod(IOvertimeRequestOpenPeriod newOvertimeRequestOpenPeriod, int currentIndex);
-		IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest);
+		IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest, DateOnly viewpointDate);
 	}
 }

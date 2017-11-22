@@ -1,10 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -16,12 +12,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private readonly IList<IOvertimeRequestOpenPeriod> _overtimeRequestOpenPeriodList;
 		private readonly CultureInfo _dateCulture;
 		private readonly CultureInfo _languageCulture;
+		private readonly DateOnly _viewpointDate;
 
-		public OvertimeRequestPeriodProjection(IList<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriodList, CultureInfo dateCulture, CultureInfo languageCulture)
+		public OvertimeRequestPeriodProjection(IList<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriodList, 
+			CultureInfo dateCulture, CultureInfo languageCulture, DateOnly viewpointDate)
 		{
 			_overtimeRequestOpenPeriodList = overtimeRequestOpenPeriodList;
 			_dateCulture = dateCulture;
 			_languageCulture = languageCulture;
+			_viewpointDate = viewpointDate;
 		}
 
 		public IList<IOvertimeRequestOpenPeriod> GetProjectedOvertimeRequestsOpenPeriods(DateOnlyPeriod requestPeriod)
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var filteredPeriods = _overtimeRequestOpenPeriodList.Select(p => new DateOnlyOvertimeRequestOpenPeriod
 			{
 				AutoGrantType = p.AutoGrantType,
-				Period = p.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse()),
+				Period = p.GetPeriod(_viewpointDate),
 				EnableWorkRuleValidation = p.EnableWorkRuleValidation,
 				WorkRuleValidationHandleType = p.WorkRuleValidationHandleType
 			}
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				}
 			}
 
-			return results.Where(w => w.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse()).Intersection(requestPeriod).HasValue).ToList();
+			return results.Where(w => w.GetPeriod(_viewpointDate).Intersection(requestPeriod).HasValue).ToList();
 		}
 
 		private DateOnlyOvertimeRequestOpenPeriod createAutoDenyPeriod(IList<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriodList, IList<DateOnlyOvertimeRequestOpenPeriod> filteredOvertimeRequestOpenPeriodList)
@@ -116,8 +115,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			{
 				if (overtimeRequestOpenPeriod.AutoGrantType != OvertimeRequestAutoGrantType.Deny)
 				{
-					dayCollection.AddRange(overtimeRequestOpenPeriod.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse())
-						.DayCollection().Where(a => a.CompareTo(ServiceLocatorForEntity.Now.ServerDate_DontUse()) >= 0));
+					dayCollection.AddRange(overtimeRequestOpenPeriod.GetPeriod(_viewpointDate)
+						.DayCollection().Where(a => a.CompareTo(_viewpointDate) >= 0));
 				}
 			}
 
@@ -141,13 +140,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			overtimeRequestOpenPeriodList.Where(isOvertimeRequestOpenPeriodAutoDeny)
 				.ToList()
 				.ForEach(
-					p => denyDayCollection.AddRange(p.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse()).DayCollection()));
+					p => denyDayCollection.AddRange(p.GetPeriod(_viewpointDate).DayCollection()));
 			return denyDayCollection;
 		}
 
 		private string getSuggestedPeriodDateString(List<DateOnly> dateCollection, IList<DateOnly> denyDays)
 		{
-			var dayCollection = dateCollection.Where(a => a.CompareTo(ServiceLocatorForEntity.Now.ServerDate_DontUse()) >= 0).ToList();
+			var dayCollection = dateCollection.Where(a => a.CompareTo(_viewpointDate) >= 0).ToList();
 			foreach (var denyDay in denyDays)
 			{
 				dayCollection.Remove(denyDay);

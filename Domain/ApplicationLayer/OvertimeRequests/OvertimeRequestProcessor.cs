@@ -4,6 +4,7 @@ using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IEnumerable<IOvertimeRequestValidator> _overtimeRequestValidators;
 		private readonly IOvertimeRequestAvailableSkillsValidator _overtimeRequestAvailableSkillsValidator;
+		private readonly INow _now;
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillTypeRepository _skillTypeRepository;
@@ -20,7 +22,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		public OvertimeRequestProcessor(ICommandDispatcher commandDispatcher,
 			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators, IActivityRepository activityRepository, 
-			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository, IOvertimeRequestAvailableSkillsValidator overtimeRequestAvailableSkillsValidator)
+			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository, 
+			IOvertimeRequestAvailableSkillsValidator overtimeRequestAvailableSkillsValidator,
+			INow now)
 		{
 			_commandDispatcher = commandDispatcher;
 			_overtimeRequestValidators = overtimeRequestValidators;
@@ -28,6 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_skillRepository = skillRepository;
 			_skillTypeRepository = skillTypeRepository;
 			_overtimeRequestAvailableSkillsValidator = overtimeRequestAvailableSkillsValidator;
+			_now = now;
 		}
 
 		public void CheckAndProcessDeny(IPersonRequest personRequest)
@@ -134,7 +139,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriod(IPersonRequest personRequest)
 		{
-			return personRequest.Person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(personRequest.Request as IOvertimeRequest);
+			return personRequest.Person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(personRequest.Request as IOvertimeRequest,
+				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), personRequest.Person.PermissionInformation.DefaultTimeZone())));
 		}
 	}
 }

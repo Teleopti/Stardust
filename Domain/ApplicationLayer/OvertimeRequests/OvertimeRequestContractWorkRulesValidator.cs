@@ -19,23 +19,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation
 			_loadSchedulingDataForRequestWithoutResourceCalculation;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		public OvertimeRequestContractWorkRulesValidator(ICurrentScenario scenarioRepository, ISchedulingResultStateHolder schedulingResultStateHolder, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, IScheduleDayChangeCallback scheduleDayChangeCallback)
+		private readonly INow _now;
+
+		public OvertimeRequestContractWorkRulesValidator(ICurrentScenario scenarioRepository, 
+			ISchedulingResultStateHolder schedulingResultStateHolder, 
+			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, 
+			IScheduleDayChangeCallback scheduleDayChangeCallback,
+			INow now)
 		{
 			_scenarioRepository = scenarioRepository;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_now = now;
 		}
 
 		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest)
 		{
+			var person = personRequest.Person;
 			var overtimeRequestOpenPeriod = personRequest.Person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(
-				personRequest.Request as IOvertimeRequest);
+				personRequest.Request as IOvertimeRequest,
+				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())));
 
 			if (!overtimeRequestOpenPeriod.EnableWorkRuleValidation)
 				return new OvertimeRequestValidationResult { IsValid = true };
-
-			var person = personRequest.Person;
 
 			loadSchedules(personRequest.Request.Period, person, _scenarioRepository.Current());
 
