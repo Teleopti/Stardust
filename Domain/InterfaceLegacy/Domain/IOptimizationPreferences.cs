@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -34,10 +35,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <value>The local scheduling options.</value>
         IReschedulingPreferences Rescheduling { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        IShiftPreferences Shifts { get; set; }
+        ShiftPreferences Shifts { get; set; }
 
 	    bool ShiftBagBackToLegal { get; set; }
     }
@@ -356,53 +354,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	    IBlockFinder BlockFinder();
 	    bool IsClassic();
-    }
-
-    /// <summary>
-    /// Extra optimization preferences
-    /// </summary>
-    public interface IShiftPreferences
-    {
-        /// <summary>
-        /// Gets or sets a value indicating whether to keep shift categories.
-        /// </summary>
-        /// <value><c>true</c> if [keep shift categories]; otherwise, <c>false</c>.</value>
-        bool KeepShiftCategories { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to keep start and end times.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if keep start and end times; otherwise, <c>false</c>.
-        /// </value>
-        bool KeepStartTimes { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to keep start and end times.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if keep start and end times; otherwise, <c>false</c>.
-        /// </value>
-        bool KeepEndTimes { get; set; }
-
-        /// <summary>
-        /// Alter between property
-        /// </summary>
-        bool AlterBetween { get; set; }
-
-        /// <summary>
-        /// The selected Guids
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        IList<IActivity > SelectedActivities { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        TimePeriod SelectedTimePeriod { get; set; }
-
-	    bool KeepActivityLength { get; set; }
-	    IActivity ActivityToKeepLengthOn { get; set; }
     }
 
     /// <summary>

@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     public class ShiftsPreferencesPersonalSettingsTest
     {
         private ShiftsPreferencesPersonalSettings _target;
-        private IShiftPreferences _shiftPreferencesSource;
-        private IShiftPreferences _shiftPreferencesTarget;
+        private ShiftPreferences _shiftPreferencesSource;
+        private ShiftPreferences _shiftPreferencesTarget;
         private List<IActivity> _activityList;
 
         [SetUp]

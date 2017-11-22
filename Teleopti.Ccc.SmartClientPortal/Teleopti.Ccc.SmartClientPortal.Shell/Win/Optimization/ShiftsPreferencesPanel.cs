@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
     public partial class ShiftsPreferencesPanel : BaseUserControl, IDataExchange
     {
 
-        public IShiftPreferences Preferences { get; private set; }
+        public ShiftPreferences Preferences { get; private set; }
         private IEnumerable<IActivity> _availableActivity;
         private int _resolution;
 
@@ -20,9 +21,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
             if (!DesignMode) SetTexts();
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Initialize(
-            IShiftPreferences extraPreferences, IEnumerable<IActivity> availableActivity , int resolution)
+            ShiftPreferences extraPreferences, IEnumerable<IActivity> availableActivity , int resolution)
 		{
 		    _availableActivity = availableActivity;
 		    _resolution = resolution;

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool _keepActivityLength;
 		private Guid? _selectedActivityToKeepLenghtOn;
 		
-		public void MapTo(IShiftPreferences target,IEnumerable< IActivity > activityList )
+		public void MapTo(ShiftPreferences target,IEnumerable< IActivity > activityList )
 		{
 			target.KeepShiftCategories = _keepShiftCategories;
             target.KeepStartTimes = _keepStartTimes;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
-        public void MapFrom(IShiftPreferences source)
+        public void MapFrom(ShiftPreferences source)
 		{
 	        if (source == null) return;
 
