@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			ScenarioRepository.Add(scenario);
 			var me = PersonFactory.CreatePerson().WithId();
 			LoggedOnUser.SetFakeLoggedOnUser(me);
+			me.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			var mailboxId = Guid.NewGuid();
-
 
 			var scheduleChangeMessage = new Message
 			{
@@ -96,8 +96,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage2);
 
-			var period = new DateOnlyPeriod(new DateOnly(2017, 11, 17), new DateOnly(2017, 11, 17));
-			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Count.Should().Be.EqualTo(2);
+			var period = new PollerInputPeriod(new DateTime(2017, 11, 17), new DateTime(2017, 11, 17));
+			Target.Check(mailboxId, period)[period].Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -108,7 +108,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var me = PersonFactory.CreatePerson().WithId();
 			LoggedOnUser.SetFakeLoggedOnUser(me);
 			var mailboxId = Guid.NewGuid();
-
 
 			var scheduleChangeMessage = new Message
 			{
@@ -131,8 +130,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
 
-			var period = new DateOnlyPeriod(new DateOnly(2017, 11, 17), new DateOnly(2017, 11, 17));
-			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Should().Be.Empty();
+			var period = new PollerInputPeriod(new DateTime(2017, 11, 17), new DateTime(2017, 11, 17));
+			Target.Check(mailboxId, period)[period].Should().Be.Empty();
 		}
 
 		[Test]
@@ -166,8 +165,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
 
-			var period = new DateOnlyPeriod(new DateOnly(2017, 11, 17), new DateOnly(2017, 11, 17));
-			Target.Check(mailboxId, period.StartDate.Date, period.EndDate.Date).Count.Should().Be.EqualTo(1);
+			var period = new PollerInputPeriod(new DateTime(2017, 11, 17), new DateTime(2017, 11, 17));
+			Target.Check(mailboxId, period)[period].Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -201,8 +200,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			});
 
 			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
-
-			Target.Check(mailboxId, new DateTime(2017, 11, 21), new DateTime(2017, 11, 21)).Should().Be.Empty();
+			var period = new PollerInputPeriod(new DateTime(2017, 11, 21), new DateTime(2017, 11, 21));
+			Target.Check(mailboxId, period)[period].Should().Be.Empty();
 		}
 
 		[Test]

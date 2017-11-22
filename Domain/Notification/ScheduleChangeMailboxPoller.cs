@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Interfaces.Domain;
 
@@ -37,21 +38,32 @@ namespace Teleopti.Ccc.Domain.Notification
 			return mailboxId;
 		}
 
-		public IList<DateOnlyPeriod> Check(Guid mailboxId, DateTime startDateInUserTimezone, DateTime endDateInUserTimezone)
+		public IDictionary<PollerInputPeriod, IList<ScheduleUpdatedPeriod>> Check(Guid mailboxId, params PollerInputPeriod[] periods)
+		{
+			var userId = _loggedOnUser.CurrentUser().Id.ToString();
+			var notifications = _messageBrokerServer
+				.PopMessages(mailboxId)
+				.Where(n => n.BinaryData.Contains(userId))
+				.ToList();
+
+			return periods.ToDictionary(period => period, period => checkForPeriod(notifications, period));
+		}
+
+		private IList<ScheduleUpdatedPeriod> checkForPeriod(IList<Message> notifications, PollerInputPeriod period)
 		{
 			var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var period = new DateOnlyPeriod(
-				new DateOnly(TimeZoneHelper.ConvertToUtc(startDateInUserTimezone, userTimezone)),
-				new DateOnly(TimeZoneHelper.ConvertToUtc(endDateInUserTimezone, userTimezone)));
-			var notifications = _messageBrokerServer.PopMessages(mailboxId);
-			var userId = _loggedOnUser.CurrentUser().Id.ToString();
+			var periodInUtc = new DateTimePeriod(
+				TimeZoneHelper.ConvertToUtc(period.StartDateTime, userTimezone),
+				TimeZoneHelper.ConvertToUtc(period.EndDateTime, userTimezone));
+
 			return notifications
-				.Where(n => n.BinaryData.Contains(userId)
-						&& period.StartDate <= new DateOnly(n.EndDateAsDateTime())
-						&& period.EndDate >= new DateOnly(n.StartDateAsDateTime()))
-				.Select(n => new DateOnlyPeriod(
-						new DateOnly(TimeZoneHelper.ConvertFromUtc(startDateInUserTimezone, userTimezone)),
-						new DateOnly(TimeZoneHelper.ConvertFromUtc(endDateInUserTimezone, userTimezone))))
+				.Where(n => periodInUtc.StartDateTime.Date <= n.EndDateAsDateTime().Date
+						&& periodInUtc.EndDateTime.Date >= n.StartDateAsDateTime().Date)
+				.Select(n => new ScheduleUpdatedPeriod
+				{
+					StartDate = TimeZoneHelper.ConvertFromUtc(n.StartDateAsDateTime(), userTimezone).ToShortDateString(),
+					EndDate = TimeZoneHelper.ConvertFromUtc(n.EndDateAsDateTime(), userTimezone).ToShortDateString(),
+				})
 				.ToList();
 		}
 
@@ -65,5 +77,23 @@ namespace Teleopti.Ccc.Domain.Notification
 				"/", _currentDataSource.CurrentName(), _currentBusinessUnit.Current().Id.ToString(),
 				nameof(IScheduleChangedMessage), "ref", _currentScenario.Current().Id.ToString());
 		}
+	}
+
+	public class PollerInputPeriod
+	{
+		public PollerInputPeriod() { }
+		public PollerInputPeriod(DateTime startDateTime, DateTime endDateTime)
+		{
+			StartDateTime = startDateTime;
+			EndDateTime = endDateTime;
+		}
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+	}
+
+	public class ScheduleUpdatedPeriod
+	{
+		public string StartDate { get; set; }
+		public string EndDate { get; set; }
 	}
 }

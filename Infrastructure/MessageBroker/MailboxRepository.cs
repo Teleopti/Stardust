@@ -161,5 +161,14 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 				.ExecuteUpdate();
 		}
 
+		public void Purge(Guid mailBoxId) {
+
+			_unitOfWork.Current().CreateSqlQuery(
+				"DELETE FROM [msg].Mailbox WITH (TABLOCK) " +
+				"WHERE Id = :mailBoxId;")
+				.SetParameter("mailBoxId", mailBoxId)
+				.ExecuteUpdate();
+		}
+
 	}
 }

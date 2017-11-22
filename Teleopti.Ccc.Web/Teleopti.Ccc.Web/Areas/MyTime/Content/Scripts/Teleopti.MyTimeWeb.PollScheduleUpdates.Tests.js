@@ -4,7 +4,6 @@
 	var notifier = Teleopti.MyTimeWeb.Notifier;
 	var alertActivity = Teleopti.MyTimeWeb.AlertActivity;
 	var intervalTimeout = 5 * 60 * 1000; // hardcode to 5 min
-	var ajax;
 	var currentText;
 	var notifyText = "Your schedule for {0} has changed!"
 
@@ -15,6 +14,7 @@
 	module("Teleopti.MyTimeWeb.PollScheduleUpdates", {
 		setup: function () {
 			fakeAjax();
+
 			var options = {
 				UserTimezoneOffsetMinute: 0,
 				HasDayLightSaving: 'False',
@@ -43,7 +43,6 @@
 		target.Init({ intervalTimeout: 0, notifyText: notifyText });
 		equal(currentText, target.GetNotifyText(target.GetSettings().notifyPeriod));
 	});
-
 
 	test("Should call listener callback if has schedule change within  period",
 		function () {
@@ -75,11 +74,13 @@
 			return {
 				Ajax: function (options) {
 					switch (options.url) {
+						case 'Asm/StartPolling':
+							options.success('mailboxId');
+							break;
 						case 'Asm/CheckIfScheduleHasUpdates':
-							options.success({ HasUpdates: true });
+							options.success({ Listener: [target.GetSettings().notifyPeriod], Notify: [target.GetSettings().notifyPeriod] });
 							break;
 						case 'Asm/NotificationsTimeToStaySetting':
-							console.log('get notification time')
 							options.success(1000);
 							break;
 						case 'UserData/FetchUserData':
@@ -89,5 +90,6 @@
 				}
 			}
 		};
+		return Teleopti.MyTimeWeb.Ajax;
 	}
 });

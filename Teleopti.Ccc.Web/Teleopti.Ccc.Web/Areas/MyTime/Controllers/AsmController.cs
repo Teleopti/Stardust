@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Notification;
@@ -20,9 +21,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 		private readonly ScheduleChangeMailboxPoller _scheduleChangePoller;
 
-		public AsmController(IAsmViewModelFactory asmModelFactory, ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
-			IGlobalSettingDataRepository globalSettingDataRepository
-			, ScheduleChangeMailboxPoller scheduleChangePoller
+		public AsmController(IAsmViewModelFactory asmModelFactory,
+			ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
+			IGlobalSettingDataRepository globalSettingDataRepository,
+			ScheduleChangeMailboxPoller scheduleChangePoller
 			)
 		{
 			_asmModelFactory = asmModelFactory;
@@ -66,10 +68,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork, MessageBrokerUnitOfWork]
-		[HttpGet]
-		public virtual JsonResult CheckIfScheduleHasUpdates(Guid mailboxId, DateTime startDate, DateTime endDate)
+		[HttpPost]
+		public virtual JsonResult CheckIfScheduleHasUpdates(Guid mailBoxId, PollerInputPeriod notifyPeriod,
+			PollerInputPeriod listenerPeriod)
 		{
-			return Json(_scheduleChangePoller.Check(mailboxId, startDate, endDate), JsonRequestBehavior.AllowGet);
+			var hasListener = listenerPeriod != null;
+			var periods = hasListener ? new[] { notifyPeriod, listenerPeriod } : new[] { notifyPeriod };
+			var checkResult = _scheduleChangePoller.Check(mailBoxId, periods);
+			return Json(new
+			{
+				Listener = hasListener ? checkResult[listenerPeriod] : null,
+				Notify = checkResult[notifyPeriod]
+			}, JsonRequestBehavior.AllowGet);
 		}
 		[UnitOfWork, MessageBrokerUnitOfWork]
 		[HttpGet]
@@ -80,11 +90,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork, MessageBrokerUnitOfWork]
 		[HttpGet]
-		public virtual JsonResult ResetPolling(Guid mailboxId)
+		public virtual JsonResult ResetPolling(Guid mailBoxId)
 		{
-			_scheduleChangePoller.ResetPolling(mailboxId);
+			_scheduleChangePoller.ResetPolling(mailBoxId);
 			return Json(new { }, JsonRequestBehavior.AllowGet);
 		}
+
+
 	}
 
 }

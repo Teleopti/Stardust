@@ -652,9 +652,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
 			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("WeekScheduleWeb",
-				function () { return { startDate: vm.minDate(), endDate: vm.maxDate() } },
-				function () {
-					_fetchData(vm.selectedProbabilityType);
+				function () { return { startDate: vm.minDate().toDate(), endDate: vm.maxDate().toDate() } },
+				function (updatedPeriods) {
+					for (var i = 0; i < updatedPeriods.length; i++) {
+						var period = updatedPeriods[i];
+						if (vm.isWithinSelected(moment(period.StartDate).toDate(), moment(period.EndDate).toDate())) {							
+							_fetchData(vm.selectedProbabilityType);
+							break;
+						}
+					}
 				});
 		}
 	}
@@ -724,7 +730,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			domainType: "IScheduleChangedInDefaultScenario",
 			page: currentPage
 		});
-		
 	}
 
 	function _cleanBindings() {
@@ -776,7 +781,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
 				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack("Schedule/Week", Teleopti.MyTimeWeb.Schedule.PartialInit, Teleopti.MyTimeWeb.Schedule.PartialDispose);
 			}
-	
+
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxObj) {
 			Teleopti.MyTimeWeb.Test.TestMessage("1partialinit");

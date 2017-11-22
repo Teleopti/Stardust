@@ -10,7 +10,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	var notificerDisplayTime = 0;
 	var ajax = null;
 	var currentListener;
-	var mailboxId;
+	var mailBoxId;
 
 	function _setListener(name, period, callback) {
 		currentListener = { name: name, period: period, callback: callback };
@@ -23,7 +23,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			dataType: 'json',
 			type: 'GET',
 			success: function (data) {
-				mailboxId = data;
+				mailBoxId = data;
 				deferred.resolve();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -33,15 +33,17 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 		return deferred.promise();
 	};
 
-	function _checkIfScheduleHasUpdates(period) {
-		var startDate = period.startDate;
-		var endDate = period.endDate;
+	function _checkIfScheduleHasUpdates(listenerPeriod, notifyPeriod) {
 		var deferred = $.Deferred();
 		ajax.Ajax({
 			url: 'Asm/CheckIfScheduleHasUpdates',
 			dataType: 'json',
-			type: 'GET',
-			data: { mailboxId: mailboxId, startDate: startDate, endDate: endDate },
+			type: 'POST',
+			data: {
+				mailBoxId: mailBoxId,
+				listenerPeriod: !!listenerPeriod ? _getFormatedPeriod(listenerPeriod) : undefined,
+				notifyPeriod: _getFormatedPeriod(notifyPeriod)
+			},
 			success: function (data) {
 				deferred.resolve(data);
 			},
@@ -50,6 +52,13 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			}
 		});
 		return deferred.promise();
+	}
+
+	function _getFormatedPeriod(period) {
+		return {
+			StartDateTime: moment(period.startDate).format('YYYY-MM-DD'),
+			EndDateTime: moment(period.endDate).format('YYYY-MM-DD')
+		};
 	}
 
 	function _showNotice(period) {
@@ -61,7 +70,6 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			});
 			return;
 		}
-
 		Teleopti.MyTimeWeb.Notifier.Notify(settings, notifyText);
 	}
 
@@ -89,8 +97,12 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	}
 
 	function _resetInterval(notification) {
-		if (notification.startDate <= settings.notifyPeriod.endDate
-			&& notification.endDate >= settings.notifyPeriod.startDate) {
+		var notificationStartDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).toDate();
+		var notificationEndDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).toDate();
+		var notifyPeriodStartDate = moment(moment(settings.notifyPeriod.startDate).format('YYYY-MM-DD')).toDate();
+		var notifyPeriodEndDate = moment(moment(settings.notifyPeriod.endDate).format('YYYY-MM-DD')).toDate();
+		if (notificationStartDate <= notifyPeriodEndDate
+			&& notificationEndDate >= notifyPeriodStartDate) {
 			_resetPoller();
 			_clearInterval();
 			_setUpInterval();
@@ -102,7 +114,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			url: 'Asm/ResetPolling',
 			dataType: 'json',
 			type: 'GET',
-			data: { mailboxId: mailboxId}
+			data: { mailBoxId: mailBoxId }
 		});
 	}
 
@@ -117,24 +129,27 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	}
 
 	function _handleListenersCallback() {
-		_checkIfScheduleHasUpdates(settings.notifyPeriod).done(function (data) {
-			if (data.HasUpdates) {
-				_showNotice(settings.notifyPeriod);
+		var listenerPeriod
+		if (currentListener) {
+			listenerPeriod = $.isFunction(currentListener.period) ? currentListener.period() : currentListener.period;
+		}
+		_checkIfScheduleHasUpdates(listenerPeriod, settings.notifyPeriod).done(function (data) {
+			if (!!data.Notify && data.Notify.length) {
+				$.each(data.Notify, function (i, period) {
+					_showNotice(period);
+				});
+			}
+			if (!!data.Listener && !!data.Listener.length) {
+				currentListener && currentListener.callback && currentListener.callback(data.Listener);
 			}
 		});
-		if (currentListener) {
-			var listenPeriod = $.isFunction(currentListener.period) ? currentListener.period() : currentListener.period;
-			_checkIfScheduleHasUpdates(listenPeriod).done(function (data) {
-				if (data.HasUpdates) {
-					currentListener.callback(data);
-				}
-			});
-		}
 	}
 
 	function _init(options) {
 		ajax = new Teleopti.MyTimeWeb.Ajax();
-		settings = $.extend({ intervalTimeout: 5 * 60 * 1000 }, options);
+		settings = $.extend({
+			intervalTimeout: 1000 * 60 * 5
+		}, options);
 
 		var noticeListeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours', -1).toDate();
 		settings.notifyPeriod = {
