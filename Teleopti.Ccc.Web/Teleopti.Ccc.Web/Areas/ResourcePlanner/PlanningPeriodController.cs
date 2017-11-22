@@ -401,15 +401,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			foreach (var validationError in validationErrors)
 			{
-				var localizedString = Resources.ResourceManager.GetString(validationError.ErrorResource) ?? validationError.ErrorResource;
-				try
-				{
-					validationError.ErrorMessageLocalized = string.Format(localizedString, validationError.ErrorResourceData.ToArray());
-				}
-				catch (Exception)
-				{
-					validationError.ErrorMessageLocalized = localizedString;
-				}
+				validationError.ErrorMessageLocalized = HintsHelper.BuildErrorMessage(validationError);
 			}
 		}
 

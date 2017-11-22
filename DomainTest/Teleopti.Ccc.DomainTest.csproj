@@ -280,7 +280,6 @@
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingNotMatchShiftBagHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreferenceHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHintTest.cs" />
-    <Compile Include="ResourcePlanner\Hints\HintsHelper.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHintTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayCombinationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
