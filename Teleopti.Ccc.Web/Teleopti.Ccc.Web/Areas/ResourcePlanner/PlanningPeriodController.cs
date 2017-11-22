@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				{
 					validationError.ErrorMessageLocalized = string.Format(localizedString, validationError.ErrorResourceData.ToArray());
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
 					validationError.ErrorMessageLocalized = localizedString;
 				}
