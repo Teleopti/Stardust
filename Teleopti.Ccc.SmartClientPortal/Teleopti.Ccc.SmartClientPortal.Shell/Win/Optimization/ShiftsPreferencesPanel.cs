@@ -21,9 +21,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		[RemoveMeWithToggle("hideKeepShifts45688", Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 		public void Initialize(
-            IShiftPreferences extraPreferences, IEnumerable<IActivity> availableActivity , int resolution, bool hideKeepShifts45688)
+            IShiftPreferences extraPreferences, IEnumerable<IActivity> availableActivity , int resolution)
 		{
 		    _availableActivity = availableActivity;
 		    _resolution = resolution;
@@ -33,13 +32,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		    SetDefaultTimePeriod();
             ExchangeData(ExchangeDataOption.DataSourceToControls);
 		    SetInitialValues();
-			if (hideKeepShifts45688)
-			{
-				checkBoxKeepShifts.Checked = false;
-				checkBoxKeepShifts.Visible = false;
-				numericUpDownKeepShifts.Visible = false;
-				label1.Visible = false;
-			}
 		}
 
         private void SetDefaultTimePeriod()
@@ -113,15 +105,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         
         private void getDataFromControls()
         {
-           
-
             Preferences.KeepShiftCategories = checkBoxKeepShiftCategories.Checked;
             Preferences.KeepStartTimes = checkBoxKeepStartTimes.Checked;
             Preferences.KeepEndTimes = checkBoxKeepEndTimes.Checked;
-            Preferences.KeepShifts = checkBoxKeepShifts.Checked;
             Preferences.AlterBetween = checkBoxBetween.Checked ;
             Preferences.SelectedTimePeriod = new TimePeriod(fromToTimePicker1.StartTime.TimeValue(), fromToTimePicker1.EndTime.TimeValue());
-            Preferences.KeepShiftsValue = (double) numericUpDownKeepShifts.Value/100;
             IList<IActivity> activityList = new List<IActivity>();
 
             foreach (IActivity activity in SelectedActivities())
@@ -139,9 +127,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
             checkBoxKeepShiftCategories.Checked = Preferences.KeepShiftCategories;
             checkBoxKeepEndTimes.Checked = Preferences.KeepEndTimes;
             checkBoxKeepStartTimes.Checked = Preferences.KeepStartTimes;
-            checkBoxKeepShifts.Checked = Preferences.KeepShifts;
             checkBoxBetween.Checked = Preferences.AlterBetween;
-            numericUpDownKeepShifts.Value = (decimal) Preferences.KeepShiftsValue * 100;
             fromToTimePicker1.StartTime .SetTimeValue(Preferences.SelectedTimePeriod.StartTime );
             fromToTimePicker1.EndTime .SetTimeValue(Preferences.SelectedTimePeriod.EndTime );
 	        checkBoxKeepActivityLength.Checked = Preferences.KeepActivityLength;
@@ -183,16 +169,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         public IList<IActivity> SelectedActivities()
         {
             return twoListSelectorActivities.GetSelected<IActivity>();
-        }
-
-        private void setNumericUpDownKeepShiftsStatus()
-        {
-            numericUpDownKeepShifts.Enabled = checkBoxKeepShifts.Checked;
-        }
-
-        private void checkBoxKeepShifts_CheckedChanged(object sender, EventArgs e)
-        {
-            setNumericUpDownKeepShiftsStatus();
         }
 
 		private void checkBoxKeepActivityLength_CheckedChanged(object sender, EventArgs e)

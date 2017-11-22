@@ -42,29 +42,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			this.label6 = new System.Windows.Forms.Label();
 			this.checkBox1 = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBox2 = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxKeepShifts = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxAdvActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.checkBoxKeepShiftCategories = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.label1 = new System.Windows.Forms.Label();
-			this.numericUpDownKeepShifts = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
 			this.checkBoxKeepStartTimes = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxKeepEndTimes = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxKeepActivityLength = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.label2 = new System.Windows.Forms.Label();
-			this.twoListSelectorActivities = new TwoListSelector();
+			this.twoListSelectorActivities = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.TwoListSelector();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.fromToTimePicker1 = new FromToTimePicker();
+			this.fromToTimePicker1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.FromToTimePicker();
 			this.checkBoxBetween = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			((System.ComponentModel.ISupportInitialize)(this.checkBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBox2)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepShifts)).BeginInit();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvActivity)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepShiftCategories)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownKeepShifts)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepStartTimes)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepEndTimes)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepActivityLength)).BeginInit();
@@ -103,22 +98,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			this.checkBox2.Text = "xxUseAvailability";
 			this.checkBox2.ThemesEnabled = false;
 			// 
-			// checkBoxKeepShifts
-			// 
-			this.checkBoxKeepShifts.BeforeTouchSize = new System.Drawing.Size(258, 24);
-			this.checkBoxKeepShifts.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.checkBoxKeepShifts.DrawFocusRectangle = false;
-			this.checkBoxKeepShifts.Location = new System.Drawing.Point(10, 33);
-			this.checkBoxKeepShifts.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBoxKeepShifts.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxKeepShifts.Name = "checkBoxKeepShifts";
-			this.checkBoxKeepShifts.Size = new System.Drawing.Size(258, 24);
-			this.checkBoxKeepShifts.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxKeepShifts.TabIndex = 9;
-			this.checkBoxKeepShifts.Text = "xxShifts";
-			this.checkBoxKeepShifts.ThemesEnabled = false;
-			this.checkBoxKeepShifts.CheckedChanged += new System.EventHandler(this.checkBoxKeepShifts_CheckedChanged);
-			// 
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -143,27 +122,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 131F));
-			this.tableLayoutPanel5.Controls.Add(this.comboBoxAdvActivity, 1, 5);
-			this.tableLayoutPanel5.Controls.Add(this.checkBoxKeepShiftCategories, 0, 2);
-			this.tableLayoutPanel5.Controls.Add(this.label1, 2, 1);
-			this.tableLayoutPanel5.Controls.Add(this.numericUpDownKeepShifts, 1, 1);
-			this.tableLayoutPanel5.Controls.Add(this.checkBoxKeepShifts, 0, 1);
-			this.tableLayoutPanel5.Controls.Add(this.checkBoxKeepStartTimes, 0, 3);
-			this.tableLayoutPanel5.Controls.Add(this.checkBoxKeepEndTimes, 0, 4);
-			this.tableLayoutPanel5.Controls.Add(this.checkBoxKeepActivityLength, 0, 5);
+			this.tableLayoutPanel5.Controls.Add(this.comboBoxAdvActivity, 1, 4);
+			this.tableLayoutPanel5.Controls.Add(this.checkBoxKeepShiftCategories, 0, 1);
+			this.tableLayoutPanel5.Controls.Add(this.checkBoxKeepStartTimes, 0, 2);
+			this.tableLayoutPanel5.Controls.Add(this.checkBoxKeepEndTimes, 0, 3);
+			this.tableLayoutPanel5.Controls.Add(this.checkBoxKeepActivityLength, 0, 4);
 			this.tableLayoutPanel5.Controls.Add(this.label2, 0, 0);
 			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-			this.tableLayoutPanel5.RowCount = 7;
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel5.RowCount = 6;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel5.Size = new System.Drawing.Size(456, 185);
 			this.tableLayoutPanel5.TabIndex = 0;
 			// 
@@ -174,7 +150,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			this.tableLayoutPanel5.SetColumnSpan(this.comboBoxAdvActivity, 2);
 			this.comboBoxAdvActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxAdvActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvActivity.Location = new System.Drawing.Point(274, 153);
+			this.comboBoxAdvActivity.Location = new System.Drawing.Point(274, 123);
 			this.comboBoxAdvActivity.Name = "comboBoxAdvActivity";
 			this.comboBoxAdvActivity.Size = new System.Drawing.Size(179, 23);
 			this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -185,7 +161,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			this.checkBoxKeepShiftCategories.BeforeTouchSize = new System.Drawing.Size(258, 24);
 			this.checkBoxKeepShiftCategories.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxKeepShiftCategories.DrawFocusRectangle = false;
-			this.checkBoxKeepShiftCategories.Location = new System.Drawing.Point(10, 63);
+			this.checkBoxKeepShiftCategories.Location = new System.Drawing.Point(10, 33);
 			this.checkBoxKeepShiftCategories.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxKeepShiftCategories.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxKeepShiftCategories.Name = "checkBoxKeepShiftCategories";
@@ -195,46 +171,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			this.checkBoxKeepShiftCategories.Text = "xxShiftCategories";
 			this.checkBoxKeepShiftCategories.ThemesEnabled = false;
 			// 
-			// label1
-			// 
-			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(328, 37);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(17, 15);
-			this.label1.TabIndex = 21;
-			this.label1.Text = "%";
-			// 
-			// numericUpDownKeepShifts
-			// 
-			this.numericUpDownKeepShifts.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.numericUpDownKeepShifts.BeforeTouchSize = new System.Drawing.Size(46, 23);
-			this.numericUpDownKeepShifts.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
-			this.numericUpDownKeepShifts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.numericUpDownKeepShifts.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-			this.numericUpDownKeepShifts.Location = new System.Drawing.Point(275, 33);
-			this.numericUpDownKeepShifts.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
-			this.numericUpDownKeepShifts.Name = "numericUpDownKeepShifts";
-			this.numericUpDownKeepShifts.Size = new System.Drawing.Size(46, 23);
-			this.numericUpDownKeepShifts.TabIndex = 17;
-			this.numericUpDownKeepShifts.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDownKeepShifts.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-			this.numericUpDownKeepShifts.VisualStyle = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			// 
 			// checkBoxKeepStartTimes
 			// 
 			this.checkBoxKeepStartTimes.BeforeTouchSize = new System.Drawing.Size(258, 24);
 			this.checkBoxKeepStartTimes.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxKeepStartTimes.DrawFocusRectangle = false;
-			this.checkBoxKeepStartTimes.Location = new System.Drawing.Point(10, 93);
+			this.checkBoxKeepStartTimes.Location = new System.Drawing.Point(10, 63);
 			this.checkBoxKeepStartTimes.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxKeepStartTimes.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxKeepStartTimes.Name = "checkBoxKeepStartTimes";
@@ -249,7 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			this.checkBoxKeepEndTimes.BeforeTouchSize = new System.Drawing.Size(258, 24);
 			this.checkBoxKeepEndTimes.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxKeepEndTimes.DrawFocusRectangle = false;
-			this.checkBoxKeepEndTimes.Location = new System.Drawing.Point(10, 123);
+			this.checkBoxKeepEndTimes.Location = new System.Drawing.Point(10, 93);
 			this.checkBoxKeepEndTimes.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxKeepEndTimes.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxKeepEndTimes.Name = "checkBoxKeepEndTimes";
@@ -264,7 +206,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			this.checkBoxKeepActivityLength.BeforeTouchSize = new System.Drawing.Size(258, 24);
 			this.checkBoxKeepActivityLength.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxKeepActivityLength.DrawFocusRectangle = false;
-			this.checkBoxKeepActivityLength.Location = new System.Drawing.Point(10, 153);
+			this.checkBoxKeepActivityLength.Location = new System.Drawing.Point(10, 123);
 			this.checkBoxKeepActivityLength.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxKeepActivityLength.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxKeepActivityLength.Name = "checkBoxKeepActivityLength";
@@ -317,9 +259,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			// 
 			this.fromToTimePicker1.Location = new System.Drawing.Point(126, 10);
 			this.fromToTimePicker1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+			this.fromToTimePicker1.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePicker1.MinMaxEndTime")));
+			this.fromToTimePicker1.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePicker1.MinMaxStartTime")));
 			this.fromToTimePicker1.Name = "fromToTimePicker1";
 			this.fromToTimePicker1.Size = new System.Drawing.Size(310, 31);
 			this.fromToTimePicker1.TabIndex = 10;
+			this.fromToTimePicker1.WholeDayCheckboxVisible = true;
 			this.fromToTimePicker1.WholeDayText = "xxNextDay";
 			// 
 			// checkBoxBetween
@@ -347,13 +292,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			this.Size = new System.Drawing.Size(456, 473);
 			((System.ComponentModel.ISupportInitialize)(this.checkBox1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBox2)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepShifts)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel5.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvActivity)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepShiftCategories)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownKeepShifts)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepStartTimes)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepEndTimes)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepActivityLength)).EndInit();
@@ -368,14 +311,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBox1;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBox2;
 		private System.Windows.Forms.Label label6;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
-		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepShifts;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepShiftCategories;
-		private System.Windows.Forms.Label label1;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
-		private Syncfusion.Windows.Forms.Tools.NumericUpDownExt numericUpDownKeepShifts;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepStartTimes;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepEndTimes;
 		private FromToTimePicker fromToTimePicker1;
