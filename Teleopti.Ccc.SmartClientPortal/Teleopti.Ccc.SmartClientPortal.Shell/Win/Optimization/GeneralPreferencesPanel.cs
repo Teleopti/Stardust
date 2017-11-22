@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {
     public partial class GeneralPreferencesPanel : BaseUserControl, IDataExchange
     {
-        private IGeneralPreferences _generalPreferences;
+        private GeneralPreferences _generalPreferences;
         private IEnumerable<IScheduleTag> _scheduleTags;
     	private IEventAggregator _eventAggregator;
 
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         }
 
 	    public void Initialize(
-		    IGeneralPreferences generalPreferences,
+		    GeneralPreferences generalPreferences,
 		    IEnumerable<IScheduleTag> scheduleTags,
 		    IEventAggregator eventAggregator)
 	    {

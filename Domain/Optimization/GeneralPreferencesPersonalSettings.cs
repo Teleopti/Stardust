@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			SetDefaultValues();
 		}
 
-		public void MapTo(IGeneralPreferences target, IEnumerable<IScheduleTag> scheduleTags)
+		public void MapTo(GeneralPreferences target, IEnumerable<IScheduleTag> scheduleTags)
 		{
 			InParameter.NotNull(nameof(scheduleTags), scheduleTags);
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		}
 
-		public void MapFrom(IGeneralPreferences source)
+		public void MapFrom(GeneralPreferences source)
 		{
 			if (source.ScheduleTag != null)
 				_scheduleTagId = source.ScheduleTag.Id;

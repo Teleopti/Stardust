@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Gets or sets the general user preferences.
         /// </summary>
         /// <value>The general.</value>
-        IGeneralPreferences General { get; set; }
+        GeneralPreferences General { get; set; }
 
         /// <summary>
         /// Gets or sets the extra user preferences.
@@ -38,140 +38,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ShiftPreferences Shifts { get; set; }
 
 	    bool ShiftBagBackToLegal { get; set; }
-    }
-
-    /// <summary>
-    /// Optimization user defined general preferences
-    /// </summary>>
-    public interface IGeneralPreferences
-    {
-        /// <summary>
-        /// Gets or sets the schedule tag.
-        /// </summary>
-        /// <value>The schedule tag.</value>
-        IScheduleTag ScheduleTag { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use days off optimization step.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use step; otherwise, <c>false</c>.
-        /// </value>
-        bool OptimizationStepDaysOff { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to move time between days step.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use step; otherwise, <c>false</c>.
-        /// </value>
-        bool OptimizationStepTimeBetweenDays { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use shifts for flexible work time step.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use step; otherwise, <c>false</c>.
-        /// </value>
-        bool OptimizationStepShiftsForFlexibleWorkTime { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use days off for flexible work time step.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use step; otherwise, <c>false</c>.
-        /// </value>
-        bool OptimizationStepDaysOffForFlexibleWorkTime { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether to run the fairness step.
-		/// </summary>
-		bool OptimizationStepFairness { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indication wether to ruen the intra interval optimization step
-		/// </summary>
-		bool OptimizationStepIntraInterval { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether  to use time between days optimization step.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use step; otherwise, <c>false</c>.
-        /// </value>
-        bool OptimizationStepShiftsWithinDay { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use preferences.
-        /// </summary>
-        /// <value><c>true</c> if use preferences; otherwise, <c>false</c>.</value>
-        bool UsePreferences { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use must haves.
-        /// </summary>
-        /// <value><c>true</c> if use must haves; otherwise, <c>false</c>.</value>
-        bool UseMustHaves { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use rotations.
-        /// </summary>
-        /// <value><c>true</c> if use rotations; otherwise, <c>false</c>.</value>
-        bool UseRotations { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use availabilities.
-        /// </summary>
-        /// <value><c>true</c> if use availabilities; otherwise, <c>false</c>.</value>
-        bool UseAvailabilities { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use student availabilities.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use student availabilities; otherwise, <c>false</c>.
-        /// </value>
-        bool UseStudentAvailabilities { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use shift category limitations.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use shift category limitations; otherwise, <c>false</c>.
-        /// </value>
-        bool UseShiftCategoryLimitations { get; set; }
-
-        /// <summary>
-        /// Gets or sets the preferences value.
-        /// </summary>
-        /// <value>The preferences value.</value>
-        double PreferencesValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets the must haves value.
-        /// </summary>
-        /// <value>The must haves value.</value>
-        double MustHavesValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rotations value.
-        /// </summary>
-        /// <value>The rotations value.</value>
-        double RotationsValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets the availabilities value.
-        /// </summary>
-        /// <value>The availabilities value.</value>
-        double AvailabilitiesValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets the student availabilities value.
-        /// </summary>
-        /// <value>The student availabilities value.</value>
-        double StudentAvailabilitiesValue { get; set; }
-
-	    IScheduleTagSetter CreateScheduleTagSetter();
     }
 
     /// <summary>

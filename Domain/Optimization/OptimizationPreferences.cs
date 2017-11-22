@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             Shifts = new ShiftPreferences();
 		}
 
-		public IGeneralPreferences General { get; set; }
+		public GeneralPreferences General { get; set; }
 		public IExtraPreferences Extra { get; set; }
 		public IAdvancedPreferences Advanced { get; set; }
 		public IReschedulingPreferences Rescheduling { get; set; }
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool ShiftBagBackToLegal { get; set; }
 	}
 
-	public class GeneralPreferences : IGeneralPreferences
+	public class GeneralPreferences
 	{
 
 		public IScheduleTag ScheduleTag { get; set; }

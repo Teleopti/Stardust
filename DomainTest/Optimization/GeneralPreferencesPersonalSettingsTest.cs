@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private Guid _scheduleTag1Id;
 		private IScheduleTag _scheduleTag2;
 		private Guid _scheduleTag2Id;
-		private IGeneralPreferences _generalPreferencesSource;
-		private IGeneralPreferences _generalPreferencesTarget;
+		private GeneralPreferences _generalPreferencesSource;
+		private GeneralPreferences _generalPreferencesTarget;
 
 		[SetUp]
 		public void Setup()
