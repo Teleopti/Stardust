@@ -82,7 +82,6 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleViewModel.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleUtility.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.AlertActivity.js?bust=<%=version %>"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Test.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileStartDay.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.RequestDetail.js?bust=<%=version %>"></script>
@@ -91,8 +90,9 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.AsmMessage.List.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Notifier.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.PollScheduleUpdates.js?bust=<%=version %>"></script>
-		
 
+
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Test.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.PollScheduleUpdates.Tests.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Tests.js?bust=<%=version%>"></script>
