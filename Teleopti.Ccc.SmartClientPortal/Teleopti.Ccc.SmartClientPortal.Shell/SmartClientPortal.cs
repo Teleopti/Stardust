@@ -37,7 +37,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Properties;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Backlog;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.OutlookControls.Workspaces;
@@ -587,15 +586,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				});
 			}
 
-			if (_toggleManager.IsEnabled(Toggles.Backlog_Module_23980))
-				modulePanelItems.Add(new ModulePanelItem
-				{
-					ItemImage = Resources.help_32,
-					ItemText = "Backlog",
-					ItemEnabled = true,
-					Tag = "Raptor/PersonAdmin"
-				});
-
 			outlookBar1.AddItems(modulePanelItems.ToArray());
 		}
 
@@ -718,17 +708,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (modulePanelItem == null)
 				return;
-
-			if (modulePanelItem.ItemText == "Backlog" && _toggleManager.IsEnabled(Toggles.Backlog_Module_23980))
-			{
-				//using (var backLogSelector = new BacklogSelector(_container))
-				//{
-				//	backLogSelector.ShowDialog(this);
-				//}
-
-				var outboundView = new OutboundView(_container);
-				outboundView.Show(this);				
-			}
 
 			_portalSettings.LastModule = modulePanelItem.Tag.ToString();
 			SmartPartInvoker.ClearAllSmartParts();

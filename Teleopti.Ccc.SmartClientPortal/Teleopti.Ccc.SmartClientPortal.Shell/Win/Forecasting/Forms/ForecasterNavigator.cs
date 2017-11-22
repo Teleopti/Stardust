@@ -255,8 +255,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			ISkillTypeRepository skillTypeRep = new SkillTypeRepository(uow);
 			ICollection<ISkillType> skillTypes = skillTypeRep.LoadAll();
-			if (!_toggleManager.IsEnabled(Toggles.Backlog_Module_23980))
-				skillTypes = skillTypes.Where(s => s.ForecastSource != ForecastSource.OutboundTelephony).ToList();
+			skillTypes = skillTypes.Where(s => s.ForecastSource != ForecastSource.OutboundTelephony).ToList();
 
 			return
 				skillTypes.Select(
@@ -275,8 +274,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			ISkillRepository skillRep = _repositoryFactory.CreateSkillRepository(uow);
 			ICollection<ISkill> skills = skillRep.FindAllWithWorkloadAndQueues();
 			skills = skills.Except(skills.OfType<IChildSkill>()).ToList();
-			if (!_toggleManager.IsEnabled(Toggles.Backlog_Module_23980))
-				skills = skills.Where(s => s.SkillType.ForecastSource != ForecastSource.OutboundTelephony).ToList();
+			skills = skills.Where(s => s.SkillType.ForecastSource != ForecastSource.OutboundTelephony).ToList();
 
 			return skills.Select(createSkillModel).ToList();
 		}

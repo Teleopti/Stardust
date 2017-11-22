@@ -51,8 +51,6 @@
 		MyTimeWeb_WaitListPositionEnhancement_46301,
 		MyTimeWeb_PollToCheckScheduleChanges_46595,
 
-		Backlog_Module_23980,
-
 		Gamification_NewBadgeCalculation_31185,
 
 		MyTimeWeb_ShowSeatBookingMonthView_39068,

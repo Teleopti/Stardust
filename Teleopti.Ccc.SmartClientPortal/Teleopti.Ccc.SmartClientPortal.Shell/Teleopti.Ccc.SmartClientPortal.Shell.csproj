@@ -1245,36 +1245,6 @@
     <Compile Include="WinCode\Shifts\VisualPayloadInfo.cs" />
     <Compile Include="WinCode\Shifts\WorkShiftAddCallback.cs" />
     <Compile Include="WinCode\Tracking\DefaultTracker.cs" />
-    <Compile Include="Win\Backlog\AddActualBacklogView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Win\Backlog\AddActualBacklogView.Designer.cs">
-      <DependentUpon>AddActualBacklogView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Backlog\AddCampaign.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Win\Backlog\AddCampaign.Designer.cs">
-      <DependentUpon>AddCampaign.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Backlog\AddManualProductionView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Win\Backlog\AddManualProductionView.Designer.cs">
-      <DependentUpon>AddManualProductionView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Backlog\OutboundStatusView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Win\Backlog\OutboundStatusView.Designer.cs">
-      <DependentUpon>OutboundStatusView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Backlog\OutboundView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Win\Backlog\OutboundView.Designer.cs">
-      <DependentUpon>OutboundView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Win\Budgeting\AddShrinkageForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -4047,21 +4017,6 @@
     <Compile Include="SmartClientPortal.designer.cs">
       <DependentUpon>SmartClientPortal.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Win\Backlog\AddActualBacklogView.resx">
-      <DependentUpon>AddActualBacklogView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Backlog\AddCampaign.resx">
-      <DependentUpon>AddCampaign.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Backlog\AddManualProductionView.resx">
-      <DependentUpon>AddManualProductionView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Backlog\OutboundStatusView.resx">
-      <DependentUpon>OutboundStatusView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Backlog\OutboundView.resx">
-      <DependentUpon>OutboundView.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Win\Budgeting\AddShrinkageForm.resx">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>
       <SubType>Designer</SubType>

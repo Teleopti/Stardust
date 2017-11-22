@@ -33,7 +33,6 @@ Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true
 Settings_SetAgentDescription_23257 = true
 #Cannot be relreased yet due to performance and IO #
 Gamification_NewBadgeCalculation_31185 = true
-Backlog_Module_23980 = DEV
 # Set this to true to enable first page link to the new WFM web #
 Wfm_MinimumScaffolding_32659 = RC
 
