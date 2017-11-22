@@ -626,6 +626,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			return schedulerStateHolderFrom.Schedules[agentToOptimize].ScheduledDay(date).PersonAssignment().Period.StartDateTime.Hour;
 		}
 
+		[Test]
+		[Ignore("#46746 to be fixed")]
+		public void ShouldConsiderNotAvarageShiftLengthsWhenNotOnPeriodTime()
+		{
+			var scenario = new Scenario();
+			var phoneActivity = new Activity { InContractTime = true };
+			var lunchActivity = new Activity { InContractTime = false };
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), new ShiftCategory("_").WithId()));
+			ruleSet1.AddExtender(new ActivityAbsoluteStartExtender(lunchActivity, new TimePeriodWithSegment(1, 0, 1, 0, 60), new TimePeriodWithSegment(11, 0, 11, 0, 60)));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), new ShiftCategory("_").WithId()));
+			var ruleSetBag = new RuleSetBag(ruleSet1, ruleSet2);
+			var contract = new ContractWithMaximumTolerance { WorkTime = new WorkTime(new TimeSpan(8, 0, 0)) };
+			var skill = new Skill().For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(12, TimeSpan.FromMinutes(360)));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSetBag, contract, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phoneActivity, new TimePeriod(8, 18)).WithLayer(lunchActivity, new TimePeriod(12, 13));
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, skillDay);
+			var optPref = new OptimizationPreferencesDefaultValueProvider().Fetch();
+			optPref.Shifts.KeepStartTimes = true;
+			optPref.Shifts.KeepEndTimes = true;
+			optPref.Advanced.UseAverageShiftLengths = true;
+			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optPref, new NoIntradayOptimizationCallback());
+
+			schedulerStateHolderFrom.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().ShiftLayers
+				.Any(x => x.Period.StartDateTime.Hour == 11).Should().Be.True();
+		}
+
 		public IntradayOptimizationIslandDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002, RemoveImplicitResCalcContext resourcePlannerRemoveImplicitResCalcContext46680) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerBreakPreferenceStartTimeByMax46002, resourcePlannerRemoveImplicitResCalcContext46680)
 		{
 		}
