@@ -111,10 +111,12 @@
 				</div>
 			</div>
 		</div>
-		<label class="checkbox full-day-label">
-			<input type="checkbox" class="request-new-fullday" data-bind="checked: IsFullDay" />
-			@Resources.FullDay
-		</label>
+		<div>
+			<label class="cursorpointer displayinline-block inline-block checkbox full-day-label">
+				<input type="checkbox" class="request-new-fullday" data-bind="checked: IsFullDay" />
+				@Resources.FullDay
+			</label>
+		</div>
 		<div class="request-new-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage"></div>
 		<div class="pull-right">
 			<button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>
