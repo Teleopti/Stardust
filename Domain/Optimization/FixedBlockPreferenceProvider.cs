@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class FixedBlockPreferenceProvider : IBlockPreferenceProvider
 	{
-		private readonly IExtraPreferences _extraPreferences;
+		private readonly ExtraPreferences _extraPreferences;
 
-		public FixedBlockPreferenceProvider(IExtraPreferences extraPreferences)
+		public FixedBlockPreferenceProvider(ExtraPreferences extraPreferences)
 		{
 			_extraPreferences = new ExtraPreferences
 			{
@@ -35,14 +35,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			};
 		}
 
-		public IExtraPreferences ForAgent(IPerson person, DateOnly dateOnly)
+		public ExtraPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
 			return _extraPreferences;
 		}
 
-		public IEnumerable<IExtraPreferences> ForAgents(IEnumerable<IPerson> persons, DateOnly dateOnly)
+		public IEnumerable<ExtraPreferences> ForAgents(IEnumerable<IPerson> persons, DateOnly dateOnly)
 		{
-			return new List<IExtraPreferences> {_extraPreferences};
+			return new List<ExtraPreferences> {_extraPreferences};
 		}
 	}
 }

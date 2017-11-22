@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public class BlockPreferencesMapper
 	{
-		public void UpdateSchedulingOptionsFromExtraPreferences(SchedulingOptions schedulingOptions, IExtraPreferences[] blockPreferences)
+		public void UpdateSchedulingOptionsFromExtraPreferences(SchedulingOptions schedulingOptions, ExtraPreferences[] blockPreferences)
 		{
 			var distinctTypes = blockPreferences.Select(x => x.BlockTypeValue).Distinct().ToArray();
 			var blockFinderType =
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			optimizationPreferences.Extra.UseBlockSameStartTime = schedulingOptions.BlockSameStartTime;
 		}
 
-		public void UpdateOptimizationPreferencesFromExtraPreferences(IOptimizationPreferences optimizationPreferences, IExtraPreferences blockPreference)
+		public void UpdateOptimizationPreferencesFromExtraPreferences(IOptimizationPreferences optimizationPreferences, ExtraPreferences blockPreference)
 		{
 			optimizationPreferences.Extra.BlockTypeValue = blockPreference.BlockTypeValue;
 			optimizationPreferences.Extra.UseBlockSameShiftCategory = blockPreference.UseBlockSameShiftCategory;

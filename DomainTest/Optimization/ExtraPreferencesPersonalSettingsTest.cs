@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private ExtraPreferencesPersonalSettings _target;
 		private IList<GroupPageLight> _groupPages;
 		private GroupPageLight _groupPage1;
-		private IExtraPreferences _extraPreferencesSource;
-		private IExtraPreferences _extraPreferencesTarget;
+		private ExtraPreferences _extraPreferencesSource;
+		private ExtraPreferences _extraPreferencesTarget;
 	    private IList<GroupPageLight> _groupPagesForTeamBlockPer;
 
 	    [SetUp]

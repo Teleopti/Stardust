@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			asses[5].SetDayOff(new DayOffTemplate());
 			asses[0].ClearMainActivities();//blank day
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
-			IExtraPreferences extra = null;
+			ExtraPreferences extra = null;
 			switch (teamBlockType)
 			{
 				case TeamBlockType.Classic:
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			asses2[5].SetDayOff(new DayOffTemplate());
 			asses1[0].ClearMainActivities();//bland day
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent1, agent2 }, asses1.Union(asses2), skillDays);
-			IExtraPreferences extra = null;
+			ExtraPreferences extra = null;
 			switch (teamBlockType)
 			{
 				case TeamBlockType.Classic:
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			asses[2].SetDayOff(new DayOffTemplate());
 			asses[3].SetDayOff(new DayOffTemplate());
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
-			IExtraPreferences extra = null;
+			ExtraPreferences extra = null;
 			switch (teamBlockType)
 			{
 				case TeamBlockType.Classic:

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		public GeneralPreferences General { get; set; }
-		public IExtraPreferences Extra { get; set; }
+		public ExtraPreferences Extra { get; set; }
 		public IAdvancedPreferences Advanced { get; set; }
 		public IReschedulingPreferences Rescheduling { get; set; }
         public ShiftPreferences Shifts { get; set; }
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	}
 
-	public class ExtraPreferences : IExtraPreferences
+	public class ExtraPreferences
 	{
 		public bool UseTeams { get; set; }
 		public bool UseTeamSameDaysOff { get; set; }

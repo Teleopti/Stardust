@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Gets or sets the extra user preferences.
         /// </summary>
         /// <value>The extra.</value>
-        IExtraPreferences Extra { get; set; }
+        ExtraPreferences Extra { get; set; }
 
         /// <summary>
         /// Gets or sets the advanced user preferences.
@@ -148,78 +148,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// 	<c>true</c> if keep free weekend days; otherwise, <c>false</c>.
         /// </value>
         bool KeepFreeWeekendDays { get; set; }
-    }
-
-    /// <summary>
-    /// Extra optimization preferences
-    /// </summary>
-    public interface IExtraPreferences
-    {
-        bool UseTeams { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether [keep same days off in team].
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if [keep same days off in team]; otherwise, <c>false</c>.
-		/// </value>
-		bool UseTeamSameDaysOff { get; set; }
-
-        /// <summary>
-        /// Gets or sets the group page on team.
-        /// </summary>
-        /// <value>The group page on team.</value>
-        GroupPageLight TeamGroupPage { get; set; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		bool UseTeamSameStartTime { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		bool UseTeamSameEndTime { get; set; }
-		/// <summary>
-		/// 
-		/// </summary>
-		bool UseTeamSameShiftCategory { get; set; }
-        /// <summary>
-        /// Use Common Activity
-        /// </summary>
-        bool UseTeamSameActivity { get; set; }
-        /// <summary>
-        /// The actual common activity
-        /// </summary>
-        IActivity TeamActivityValue { get; set; }
-
-        /// <summary>
-        /// Block finder service for advance optimization service
-        /// </summary>
-        BlockFinderType BlockTypeValue { get; set; }
-
-        /// <summary>
-        /// Use TeamBlock same end time
-        /// </summary>
-        bool UseBlockSameEndTime { get; set; }
-        /// <summary>
-        /// Use TeamBlock same shift category
-        /// </summary>
-        bool UseBlockSameShiftCategory { get; set; }
-        /// <summary>
-        /// Use TeamBlock same start time
-        /// </summary>
-        bool UseBlockSameStartTime { get; set; }
-        /// <summary>
-        /// Use TeamBlock same shift
-        /// </summary>
-        bool UseBlockSameShift { get; set; }
-        /// <summary>
-        /// This is  used if TeamBlock per is used
-        /// </summary>
-        bool UseTeamBlockOption { get; set; }
-
-	    IBlockFinder BlockFinder();
-	    bool IsClassic();
     }
 
     /// <summary>

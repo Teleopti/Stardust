@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         private IEnumerable<IActivity> _availableActivity;
         private GroupPageLight _singleAgentEntry;
 
-		public IExtraPreferences Preferences { get; private set; }
+		public ExtraPreferences Preferences { get; private set; }
 
         public ExtraPreferencesPanel()
         {
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
             if (!DesignMode) SetTexts();
         }
 
-		public void Initialize(IExtraPreferences extraPreferences, SchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IActivity> availableActivity)
+		public void Initialize(ExtraPreferences extraPreferences, SchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IActivity> availableActivity)
         {
             Preferences = extraPreferences;
 		    _availableActivity = availableActivity;

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	    private BlockFinderType _blockFinderTypeForAdvanceOptimization;
 	    
-        public void MapTo(IExtraPreferences target, IList<GroupPageLight> groupPages, IList<GroupPageLight> groupPagesForTeamBlockPer)
+        public void MapTo(ExtraPreferences target, IList<GroupPageLight> groupPages, IList<GroupPageLight> groupPagesForTeamBlockPer)
 		{
 		    if (groupPagesForTeamBlockPer == null) throw new ArgumentNullException(nameof(groupPagesForTeamBlockPer));
 		    InParameter.NotNull(nameof(groupPages), groupPages);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			target.UseTeamSameActivity = _useTeamBlockSameActivity;
 		}
 
-		public void MapFrom(IExtraPreferences source)
+		public void MapFrom(ExtraPreferences source)
 		{
 			_groupPageOnTeamKey = source.TeamGroupPage.Key;
 

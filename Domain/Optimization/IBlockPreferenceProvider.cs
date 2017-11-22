@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IBlockPreferenceProvider
 	{
-		IExtraPreferences ForAgent(IPerson person, DateOnly dateOnly);
-		IEnumerable<IExtraPreferences> ForAgents(IEnumerable<IPerson> persons, DateOnly dateOnly);
+		ExtraPreferences ForAgent(IPerson person, DateOnly dateOnly);
+		IEnumerable<ExtraPreferences> ForAgents(IEnumerable<IPerson> persons, DateOnly dateOnly);
 	}
 }

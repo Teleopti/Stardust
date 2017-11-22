@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			}
 		}
 
-		private void checkIfPreivousDaysMatchEachOther(HintResult validationResult, IScheduleDay firstDayAfterPeriod, IEnumerable<IScheduleDay> period, IPerson person, IExtraPreferences blockOption)
+		private void checkIfPreivousDaysMatchEachOther(HintResult validationResult, IScheduleDay firstDayAfterPeriod, IEnumerable<IScheduleDay> period, IPerson person, ExtraPreferences blockOption)
 		{
 			var personAssignment = firstDayAfterPeriod.PersonAssignment();
 			var shiftCategory = personAssignment.ShiftCategory;
