@@ -628,7 +628,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 		[TestCase(true, ExpectedResult = true)]
 		[TestCase(false, ExpectedResult = true)]
-		//[Ignore("#46746 to be fixed")]
 		public bool ShouldWorkWithAndWithoutUseAverageShiftLength(bool useAvaregeShiftLength)
 		{
 			var scenario = new Scenario();
