@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			IMailboxRepository mailboxRepository,
 			IConfigReader config,
 			INow now,
-			IDistributedLockAcquirer distributedLock
-			)
+			IDistributedLockAcquirer distributedLock)
 		{
 			_signalR = signalR;
 			_mailboxRepository = mailboxRepository;
@@ -74,18 +73,25 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			var mailbox = _mailboxRepository.Load(mailboxIdGuid);
 			if (mailbox == null)
 			{
-				CreateMailbox(mailboxIdGuid, route);
+				_distributedLock.TryLockForTypeOfAnd(this, mailboxId, () =>
+				{
+					_mailboxRepository.Add(new Mailbox
+					{
+						Route = route,
+						Id = mailboxIdGuid,
+						ExpiresAt = _now.UtcDateTime().Add(_expirationInterval)
+					});
+				});
 
 				return Enumerable.Empty<Message>();
 			}
 
-			return popMessages(mailbox);
-		}
+			var updateExpirationAt = mailbox.ExpiresAt.Subtract(new TimeSpan(_expirationInterval.Ticks / 2));
+			var updateExpiration = _now.UtcDateTime() >= updateExpirationAt;
 
-		public IEnumerable<Message> PopMessages(Guid mailboxId)
-		{
-			var mailbox = _mailboxRepository.Load(mailboxId);
-			return popMessages(mailbox);
+			return updateExpiration
+				? _mailboxRepository.PopMessages(mailboxIdGuid, _now.UtcDateTime().Add(_expirationInterval))
+				: _mailboxRepository.PopMessages(mailboxIdGuid, null);
 		}
 
 		[MessageBrokerUnitOfWork]
@@ -110,6 +116,13 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			_tracer.ClientsNotified(message);
 		}
 
+		private void purgeSometimes()
+		{
+			if (_now.UtcDateTime() < _nextPurge) return;
+			_nextPurge = _now.UtcDateTime().Add(_purgeInterval);
+			_mailboxRepository.Purge();
+		}
+
 		public void NotifyClientsMultiple(IEnumerable<Message> notifications)
 		{
 			foreach (var notification in notifications)
@@ -128,42 +141,6 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 				hashedValue *= 3074457345618258799ul;
 			}
 			return hashedValue.GetHashCode().ToString(CultureInfo.InvariantCulture);
-		}
-
-		public void CreateMailbox(Guid mailboxId, string route)
-		{
-			_distributedLock.TryLockForTypeOfAnd(this, mailboxId.ToString(), () =>
-			{
-				_mailboxRepository.Add(new Mailbox
-				{
-					Route = route,
-					Id = mailboxId,
-					ExpiresAt = _now.UtcDateTime().Add(_expirationInterval)
-				});
-			});
-		}
-
-		public void RemoveMailbox(Guid mailboxId)
-		{
-			_distributedLock.TryLockForTypeOfAnd(this, mailboxId.ToString(), () =>
-			{
-				_mailboxRepository.Remove(mailboxId);
-			});
-		}
-		private IEnumerable<Message> popMessages(Mailbox mailbox)
-		{
-			var updateExpirationAt = mailbox.ExpiresAt.Subtract(new TimeSpan(_expirationInterval.Ticks / 2));
-			var updateExpiration = _now.UtcDateTime() >= updateExpirationAt;
-
-			return updateExpiration
-				? _mailboxRepository.PopMessages(mailbox.Id, _now.UtcDateTime().Add(_expirationInterval))
-				: _mailboxRepository.PopMessages(mailbox.Id, null);
-		}
-		private void purgeSometimes()
-		{
-			if (_now.UtcDateTime() < _nextPurge) return;
-			_nextPurge = _now.UtcDateTime().Add(_purgeInterval);
-			_mailboxRepository.Purge();
 		}
 	}
 }

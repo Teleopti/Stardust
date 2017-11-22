@@ -273,7 +273,6 @@
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
-    <Compile Include="Notification\ScheduleChangeMailboxPollerTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProviderTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisProviderTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHintForBetweenDayoffsTest.cs" />

@@ -57,7 +57,6 @@ using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Ccc.Web.Core.MessageBroker;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;

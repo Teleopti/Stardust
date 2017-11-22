@@ -34,7 +34,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		vm.initializeData(data);
 		daylightSavingAdjustment = data.DaylightSavingTimeAdjustment;
 		baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
-
+		
 		_initTimeIndicator();
 		$(".body-weekview-inner").show();
 		if (completelyLoaded && $.isFunction(completelyLoaded)) {
@@ -147,7 +147,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		} else {
 			self.minutes = hourMinuteSecond[0] * 60 + parseInt(hourMinuteSecond[1]);
 		}
-
+		
 		var timeFromMinutes = moment().startOf("day").add("minutes", self.minutes);
 
 		self.timeText = rawTimeline.TimeLineDisplay;
@@ -233,7 +233,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 
 			var selectedProbabilityTypeLabel;
-			switch (self.selectedProbabilityType) {
+			switch(self.selectedProbabilityType){
 				case constants.probabilityType.none:
 					selectedProbabilityTypeLabel = self.userTexts.HideStaffingInfo;
 					break;
@@ -253,7 +253,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.hideProbabilityEarlierThanNow = true;
 
 		self.switchProbabilityType = function (probabilityType) {
-			if (self.selectedProbabilityType == probabilityType) return;
+			if(self.selectedProbabilityType == probabilityType) return;
 
 			self.selectedProbabilityType = probabilityType;
 
@@ -359,7 +359,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		function getUrlPartForProbability() {
-			return self.selectedProbabilityType != undefined ? "/Probability/" + self.selectedProbabilityType : "";
+			return self.selectedProbabilityType != undefined ? "/Probability/" + self.selectedProbabilityType: "";
 		}
 
 		self.isWithinSelected = function (startDate, endDate) {
@@ -422,7 +422,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 
-			addRequestModel.type = function () { return self.requestViewModelTypes.textRequest; };
+			addRequestModel.type = function(){return self.requestViewModelTypes.textRequest;};
 			self.requestViewModel(addRequestModel);
 			self.requestViewModel().model.IsPostingData(false);
 			_fillFormData(data);
@@ -434,7 +434,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if (self.absenceRequestPermission() !== true) {
 				return;
 			}
-			addRequestModel.type = function () { return self.requestViewModelTypes.absenceRequest; };
+			addRequestModel.type = function(){return self.requestViewModelTypes.absenceRequest;};
 
 			self.requestViewModel(addRequestModel);
 			self.requestViewModel().model.IsPostingData(false);
@@ -477,14 +477,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_fillFormData(data);
 		};
 
-		self.showAddOvertimeAvailabilityForm = function (data) {
+		self.showAddOvertimeAvailabilityForm = function(data) {
 			if (!self.overtimeAvailabilityPermission()) {
 				return;
 			}
 
 			var addOvertimeAvailabilityModel = {
 				model: new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability),
-				type: function () {
+				type: function() {
 					return self.requestViewModelTypes.overtimeAvailability;
 				},
 				CancelAddingNewRequest: self.CancelAddingNewRequest
@@ -504,13 +504,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 			var addOvertimeRequestModel = {
 				model: new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax,
-					function (data) {
+					function(data) {
 						self.CancelAddingNewRequest(data);
 						_displayRequest(data);
 					},
 					self,
 					self.weekStart),
-				type: function () { return self.requestViewModelTypes.overtimeRequest; },
+				type: function() { return self.requestViewModelTypes.overtimeRequest; },
 				CancelAddingNewRequest: self.CancelAddingNewRequest
 			};
 			self.requestViewModel(addOvertimeRequestModel);
@@ -577,10 +577,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.staffingProbabilityEnabled = data.ViewPossibilityPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608");
 		self.staffingProbabilityForMultipleDaysEnabled = self.staffingProbabilityEnabled && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880");
 
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("Staffing_Info_Configuration_44687")) {
+		if(Teleopti.MyTimeWeb.Common.IsToggleEnabled("Staffing_Info_Configuration_44687")){
 			self.absenceProbabilityEnabled(data.AbsenceProbabilityEnabled && data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
 			self.overtimeProbabilityEnabled(data.OvertimeProbabilityEnabled);
-		} else {
+		}else{
 			self.overtimeProbabilityEnabled(true);
 			self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
 		}
@@ -645,23 +645,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.days(days);
 		if (self.showProbabilityToggle() &&
 			(self.selectedProbabilityType === constants.probabilityType.absence ||
-				self.selectedProbabilityType === constants.probabilityType.overtime)) {
+			self.selectedProbabilityType === constants.probabilityType.overtime)) {
 			self.fetchProbabilityData();
-		}
-
-
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
-			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("WeekScheduleWeb",
-				function () { return { startDate: vm.minDate().toDate(), endDate: vm.maxDate().toDate() } },
-				function (updatedPeriods) {
-					for (var i = 0; i < updatedPeriods.length; i++) {
-						var period = updatedPeriods[i];
-						if (vm.isWithinSelected(moment(period.StartDate).toDate(), moment(period.EndDate).toDate())) {							
-							_fetchData(vm.selectedProbabilityType);
-							break;
-						}
-					}
-				});
 		}
 	}
 
@@ -781,7 +766,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
 				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack("Schedule/Week", Teleopti.MyTimeWeb.Schedule.PartialInit, Teleopti.MyTimeWeb.Schedule.PartialDispose);
 			}
-
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxObj) {
 			Teleopti.MyTimeWeb.Test.TestMessage("1partialinit");

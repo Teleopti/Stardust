@@ -4,7 +4,7 @@
 @model PortalViewModel
 
 @section head {
-	<script type="text/javascript">
+    <script type="text/javascript">
         $(function() {
             Teleopti.MyTimeWeb.Portal.Init(
             {
@@ -48,18 +48,8 @@
                             Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
                         },
                         'IShiftTradeScheduleChangedInDefaultScenario'
-					);
-
-					Teleopti.MyTimeWeb.AsmMessage.Init();
-
-					if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
-						Teleopti.MyTimeWeb.PollScheduleUpdates.Init({
-                            notifyText: '@Resources.YourScheduleTheDATEHasChanged',
-                            originalDocumentTitle: document.title,
-                            baseUrl: '@Url.Content("~/")',
-							header: '@Resources.Teleopti'
-                        });
-					}
+                    );
+                    Teleopti.MyTimeWeb.AsmMessage.Init();
                 </text>
             }
 
@@ -85,10 +75,10 @@
 
             $.ajax(optionForBusinessUnits);
         }
-	</script>
+    </script>
 }
 
-<header dir="ltr">
+<header dir="ltr"> 
 	@Html.Partial("Navigation", Model)
 </header>
 <section id="page" class="fixed-non-responsive">
@@ -103,7 +93,7 @@
 		</div>
 	</article>
 	<div id="loading">
-		<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Loading..." />
+		<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Loading..."/>
 	</div>
-	<img id="loading-small-gray-blue" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." class="template" />
+	<img id="loading-small-gray-blue" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." class="template"/>
 </section>

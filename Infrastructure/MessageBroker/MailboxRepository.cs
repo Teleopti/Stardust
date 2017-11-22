@@ -161,12 +161,5 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 				.ExecuteUpdate();
 		}
 
-		public void Remove(Guid id)
-		{
-			_unitOfWork.Current().CreateSqlQuery(
-					$"DELETE FROM [msg].Mailbox WITH (TABLOCK) WHERE Id <= :Id;")
-				.SetParameter("Id", id)
-				.ExecuteUpdate();
-		}
 	}
 }

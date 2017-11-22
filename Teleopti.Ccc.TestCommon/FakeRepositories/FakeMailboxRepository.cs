@@ -47,8 +47,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IEnumerable<Message> PopMessages(Guid id, DateTime? expiredAt)
 		{
 			var mailbox = _data.SingleOrDefault(x => x.Id.Equals(id));
-			if (mailbox == null)
-				return Enumerable.Empty<Message>();
 			var messages = mailbox.Messages.ToArray();
 			mailbox.Messages.Clear();
 			mailbox.ExpiresAt = expiredAt ?? mailbox.ExpiresAt;
@@ -66,11 +64,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			PurgeWasCalled = true;
 			var mailboxesToDelete = _data.Where(x => _now.UtcDateTime() > x.ExpiresAt).ToArray();
 			mailboxesToDelete.ForEach(x => _data.Remove(x));
-		}
-
-		public void Remove(Guid id)
-		{
-			_data.Remove(_data.Single(x => x.Id.Equals(id)));
 		}
 	}
 }

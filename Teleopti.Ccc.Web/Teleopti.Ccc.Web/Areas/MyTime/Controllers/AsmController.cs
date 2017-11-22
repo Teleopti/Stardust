@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -19,18 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IAsmViewModelFactory _asmModelFactory;
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
-		private readonly ScheduleChangeMailboxPoller _scheduleChangePoller;
 
-		public AsmController(IAsmViewModelFactory asmModelFactory,
-			ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
-			IGlobalSettingDataRepository globalSettingDataRepository,
-			ScheduleChangeMailboxPoller scheduleChangePoller
-			)
+		public AsmController(IAsmViewModelFactory asmModelFactory, ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
+			IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_asmModelFactory = asmModelFactory;
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_globalSettingDataRepository = globalSettingDataRepository;
-			_scheduleChangePoller = scheduleChangePoller;
 		}
 
 		public ViewResult Index()
@@ -63,46 +56,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult NotificationsTimeToStaySetting()
 		{
-			var notificationsTimeToStay = _globalSettingDataRepository.FindValueByKey("NotificationDurationTime", new NotificationDurationTime());
+			var notificationsTimeToStay = _globalSettingDataRepository.FindValueByKey("NotificationDurationTime",new NotificationDurationTime());
 			return Json(notificationsTimeToStay, JsonRequestBehavior.AllowGet);
 		}
-
-		[UnitOfWork, MessageBrokerUnitOfWork]
-		[HttpPost]
-		public virtual JsonResult CheckIfScheduleHasUpdates(Guid mailboxId, PollerInputPeriod notifyPeriod,
-			PollerInputPeriod listenerPeriod)
-		{
-			var hasListener = listenerPeriod != null;
-			var periods = hasListener ? new[] { notifyPeriod, listenerPeriod } : new[] { notifyPeriod };
-			var checkResult = _scheduleChangePoller.Check(mailboxId, periods);
-			return Json(new
-			{
-				Listener = hasListener ? checkResult[listenerPeriod] : null,
-				Notify = checkResult[notifyPeriod]
-			}, JsonRequestBehavior.AllowGet);
-		}
-		[UnitOfWork, MessageBrokerUnitOfWork]
-		[HttpGet]
-		public virtual JsonResult StartPolling()
-		{
-			return Json(_scheduleChangePoller.StartPolling(), JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWork, MessageBrokerUnitOfWork]
-		[HttpGet]
-		public virtual JsonResult ResetPolling(Guid mailboxId)
-		{
-			_scheduleChangePoller.ResetPolling(mailboxId);
-			return Json(new { }, JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWork, MessageBrokerUnitOfWork]
-		[HttpDelete]
-		public virtual JsonResult RemoveSchedulePollerMailbox(Guid mailboxId)
-		{
-			_scheduleChangePoller.RemoveMailbox(mailboxId);
-			return Json(new { }, JsonRequestBehavior.AllowGet);
-		}
 	}
-
 }

@@ -46,9 +46,9 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 					'DataSource': options.datasource,
 					'DomainReferenceId': options.referenceId
 				})
-					.done(function (route) {
-						listeners.push({ Route: route, Callback: options.callback, Page: options.page });
-					});
+				.done(function (route) {
+					listeners.push({ Route: route, Callback: options.callback, Page: options.page });
+				});
 			});
 	}
 	function _remove(arr, lambda) {
@@ -58,7 +58,6 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 			}
 		}
 	}
-	
 	return {
 		AddSubscription: function (options) {
 			/// <summary>Adds an event subscription.</summary>

@@ -26,14 +26,11 @@
 		<script type="text/javascript" src="jquery.ui.calendarselectable.js"></script>
 		<script type="text/javascript" src="../../../../Content/jquery-plugin/jquery.touchSwipe.min.js"></script>
 		<script type="text/javascript" src="../../../../Content/signals/signals.min.js"></script>
-		<script type="text/javascript" src="../../../../Content/signalr/jquery.signalR-2.2.2.min.js"></script>
-		<script type="text/javascript" src="../../../../Content/signalr/broker-hubs.js"></script>
-		
 		<script type="text/javascript" src="../../../../Content/hasher/hasher.min.js"></script>
 		<script type="text/javascript" src="qrcode.js"></script>
 
 		<%
-			var version = DateTime.UtcNow.Ticks;
+		    var version = DateTime.UtcNow.Ticks;
 		%>
 
 
@@ -89,11 +86,7 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.FakeData.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.AsmMessage.List.js?bust=<%=version %>"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.Notifier.js?bust=<%=version %>"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.PollScheduleUpdates.js?bust=<%=version %>"></script>
-		
 
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.PollScheduleUpdates.Tests.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Probability.Tests.js?bust=<%=version%>"></script>
