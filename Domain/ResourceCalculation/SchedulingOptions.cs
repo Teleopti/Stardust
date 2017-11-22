@@ -47,7 +47,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public int RefreshRate { get; set; }
         public bool UseSameDayOffs { get; set; }
         public IScheduleTag TagToUseOnScheduling { get; set; }
-    	public TimeSpan? UseCustomTargetTime { get; set; }
+		//TODO maybe not needed?
+		public TimeSpan? UseCustomTargetTime { get; set; }
     	public bool ShowTroubleshot { get; set; }
 		public bool TeamSameStartTime { get; set; }
 		public bool TeamSameEndTime { get; set; }
