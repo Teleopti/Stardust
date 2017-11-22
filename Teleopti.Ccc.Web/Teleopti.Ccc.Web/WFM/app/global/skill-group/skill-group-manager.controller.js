@@ -1,4 +1,4 @@
-//This is the SGM used in PBI #45727 (the new one as of november 2017)
+//This is the SGM used in PBI #43727 (the new one as of november 2017)
 (function() {
     'use strict';
     angular.module('wfm.skillGroup').controller('SkillGroupManagerController', SkillGroupManagerController);
