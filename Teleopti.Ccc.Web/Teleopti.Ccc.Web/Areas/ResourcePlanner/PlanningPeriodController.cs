@@ -65,19 +65,32 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var lastJobResult = planningPeriod.GetLastSchedulingJob();
 			if (lastJobResult != null && lastJobResult.FinishedOk)
 			{
-				var schedulingResult = JsonConvert.DeserializeObject<SchedulingResultModel>(lastJobResult.Details.First().Message);
-				var optimizationResult = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message);
-				foreach (var schedulingHintError in schedulingResult.BusinessRulesValidationResults)
+				var schedulingResult = new SchedulingResultModel();
+				var optimizationResult = new OptimizationResultModel
 				{
-					localizeValidationError(schedulingHintError.ValidationErrors);
+					BusinessRulesValidationResults = new List<SchedulingHintError>()
+				};
+
+				try
+				{
+					schedulingResult = JsonConvert.DeserializeObject<SchedulingResultModel>(lastJobResult.Details.First().Message);
+					optimizationResult = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message);
+
+					foreach (var schedulingHintError in schedulingResult.BusinessRulesValidationResults)
+					{
+						localizeValidationError(schedulingHintError.ValidationErrors);
+					}
+					foreach (var schedulingHintError in optimizationResult.BusinessRulesValidationResults)
+					{
+						localizeValidationError(schedulingHintError.ValidationErrors);
+					}
+
+					mergeScheduleResultIntoOptimizationResult(schedulingResult, optimizationResult);
 				}
-				foreach (var schedulingHintError in optimizationResult.BusinessRulesValidationResults)
+				catch (Newtonsoft.Json.JsonSerializationException)
 				{
-					localizeValidationError(schedulingHintError.ValidationErrors);
 				}
 
-				mergeScheduleResultIntoOptimizationResult(schedulingResult, optimizationResult);
-				
 				return Ok(new
 				{
 					PlanningPeriod = new
@@ -88,9 +101,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					OptimizationResult = optimizationResult,
 				});
 			}
-			return Ok(new { });
+			return Ok(new {});
 		}
-		
+
 
 		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/status")]
 		public virtual IHttpActionResult JobStatus(Guid planningPeriodId)
