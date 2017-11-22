@@ -62,6 +62,22 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 		subscribed = true;
 	}
 
+	function registPollListener() {
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
+			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("WeekScheduleMobile",
+				function () { return { startDate: vm.minDate().toDate(), endDate: vm.maxDate().toDate() } },
+				function (updatedPeriods) {
+					for (var i = 0; i < updatedPeriods.length; i++) {
+						var period = updatedPeriods[i];
+						if (vm.isWithinSelected(moment(period.StartDate).toDate(), moment(period.EndDate).toDate())) {
+							fetchData();
+							break;
+						}
+					}
+				});
+		}
+	}
+
 	return {
 		Init: function () {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
@@ -72,12 +88,12 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			if ($(".weekview-mobile").length > 0) {
-
 				completelyLoaded = completelyLoadedCallback;
 				vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(ajax, fetchData);
 				ko.applyBindings(vm, $("#page")[0]);
 				fetchData();
 				readyForInteractionCallback();
+				registPollListener();
 			}
 		},
 		ReloadScheduleListener: function (notification) {
