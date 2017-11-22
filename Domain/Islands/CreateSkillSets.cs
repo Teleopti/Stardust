@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			_personalSkillsProvider = personalSkillsProvider;
 		}
 
-		public SkillSets Create(IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		public IEnumerable<SkillSet> Create(IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var skillSets = new Dictionary<ISet<ISkill>, ISet<IPerson>>(new SameSkillSetSkillsComparer());
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Islands
 					skillSets.Add(agentsSkills, new HashSet<IPerson> { agent });
 				}
 			}
-			return new SkillSets(skillSets.Select(keyValue => new SkillSet(keyValue.Key, keyValue.Value)));
+			return skillSets.Select(keyValue => new SkillSet(keyValue.Key, keyValue.Value));
 		}
 	}
 }

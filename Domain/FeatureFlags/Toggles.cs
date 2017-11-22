@@ -106,7 +106,6 @@
 		
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_RunPerfTestAsTeam_43537,
-		ResourcePlanner_MergeTeamblockClassicIntraday_45508,
 		ResourcePlanner_BreakPreferenceStartTimeByMax_46002,
 		ResourcePlanner_RemoveClassicShiftCat_46582,
 		ResourcePlanner_BlockSchedulingValidation_46092,

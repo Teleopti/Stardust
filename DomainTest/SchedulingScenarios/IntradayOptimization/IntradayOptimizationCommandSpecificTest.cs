@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationCommandSpecificTest : ISetup
+	public class IntradayOptimizationCommandSpecificTest
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IntradayOptimizationCommandHandler Target;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public IScheduleStorage ScheduleStorage;
-		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
 
 		[Test]
 		public void ShouldNotResolveWeeklyRestIfCommandSaysItShouldNotRun()
@@ -61,34 +60,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest).Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldOnlyOptimizeChoosenAgents()
-		{
-			var phoneActivity = ActivityFactory.CreateActivity("phone");
-			var skill = SkillRepository.Has("skill", phoneActivity);
-			var scenario = ScenarioRepository.Has("some name");
-			var dateOnly = new DateOnly(2015, 10, 12);
-			var agent1 = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
-			var agent2 = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill);
-			PersonAssignmentRepository.Has(agent1, scenario, phoneActivity, new ShiftCategory("_"), new DateOnlyPeriod(dateOnly, dateOnly.AddDays(7)), new TimePeriod(8, 0, 16, 0));
-			PersonAssignmentRepository.Has(agent2, scenario, phoneActivity, new ShiftCategory("_"), new DateOnlyPeriod(dateOnly, dateOnly.AddDays(7)), new TimePeriod(8, 0, 16, 0));
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6)), TimeSpan.FromMinutes(60)));
-
-			Target.Execute(new IntradayOptimizationCommand
-			{
-				AgentsToOptimize = new[] {agent1},
-				Period = new DateOnlyPeriod(dateOnly, dateOnly)
-			});
-
-			TrackOptimizeDaysForAgents.NumberOfOptimizationsFor(agent2)
-				.Should().Be.EqualTo(0);
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<TrackOptimizeDaysForAgents>().For<IIntradayOptimizeOneDayCallback>();
 		}
 	}
 }

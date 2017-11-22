@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public abstract class IntradayOptimizationEventBaseHandler
 	{
-		private readonly IIntradayOptimization _intradayOptimization;
+		private readonly IntradayOptimization _intradayOptimization;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
 		private readonly IGridlockManager _gridlockManager;
 
-		protected IntradayOptimizationEventBaseHandler(IIntradayOptimization intradayOptimization,
+		protected IntradayOptimizationEventBaseHandler(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			FillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,

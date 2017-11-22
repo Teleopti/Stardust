@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(scheduleDay,
 					schedulePartModifyAndRollbackService,
-					schedulingOptions.ConsiderShortBreaks, false, new AlwaysResourceCalculateAfterDelete());
+					schedulingOptions.ConsiderShortBreaks, false);
 			}
 
 		}

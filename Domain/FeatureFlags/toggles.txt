@@ -126,7 +126,6 @@ WFM_WebScheduling_LowPriority_44320 = RC
 Scheduler_LoadWithoutRequests_38567 = true
 
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
-ResourcePlanner_MergeTeamblockClassicIntraday_45508 = true
 ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_BlockSchedulingValidation_46092 = DEV

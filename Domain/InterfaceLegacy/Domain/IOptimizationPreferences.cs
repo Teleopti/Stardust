@@ -386,18 +386,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         bool KeepEndTimes { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to keep shifts.
-        /// </summary>
-        /// <value><c>true</c> if keep shifts; otherwise, <c>false</c>.</value>
-        bool KeepShifts { get; set; }
-
-        /// <summary>
-        /// Gets or sets the keep shifts value.
-        /// </summary>
-        /// <value>The keep shifts value.</value>
-        double KeepShiftsValue { get; set; }
-
-        /// <summary>
         /// Alter between property
         /// </summary>
         bool AlterBetween { get; set; }

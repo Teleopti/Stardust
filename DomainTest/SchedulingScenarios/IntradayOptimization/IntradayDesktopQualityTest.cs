@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	public class IntradayDesktopQualityTest : IntradayOptimizationScenarioTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IIntradayOptimization Target;
+		//TODO: Using wrong "internal" service here. Use IOptimizeIntradayDesktop if simulating desktop client!
+		public Domain.Optimization.IntradayOptimization Target;
 		public IScheduleResultDataExtractorProvider ScheduleResultDataExtractorProvider;
 		public ResourceCalculateWithNewContext ResourceCalculation;
 
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			return SchedulerStateHolder.Fill(scenario, date, agentList, assesList, skillDays);
 		}
 
-		public IntradayDesktopQualityTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002, RemoveImplicitResCalcContext resourcePlannerRemoveImplicitResCalcContext46680) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerBreakPreferenceStartTimeByMax46002, resourcePlannerRemoveImplicitResCalcContext46680)
+		public IntradayDesktopQualityTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002, RemoveImplicitResCalcContext resourcePlannerRemoveImplicitResCalcContext46680) : base(resourcePlannerBreakPreferenceStartTimeByMax46002, resourcePlannerRemoveImplicitResCalcContext46680)
 		{
 		}
 	}

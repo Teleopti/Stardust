@@ -13,9 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool _keepShiftCategories;
 		private bool _keepStartTimes;
         private bool _keepEndTimes;
-		private bool _keepShifts;
 		private IList<Guid> _selectedActivities = new List<Guid>();
-		private double _keepShiftsValue = 0.8d;
 	    private TimePeriod _selectedTimePeriod;
 	    private bool _alterBetween;
 		private bool _keepActivityLength;
@@ -26,13 +24,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			target.KeepShiftCategories = _keepShiftCategories;
             target.KeepStartTimes = _keepStartTimes;
             target.KeepEndTimes = _keepEndTimes;
-			target.KeepShifts = _keepShifts;
 
             if (target.SelectedActivities == null)
                 target.SelectedActivities = new List<IActivity>();
 
 			target.KeepActivityLength = _keepActivityLength;
-			target.KeepShiftsValue = _keepShiftsValue;
 		    target.SelectedTimePeriod = _selectedTimePeriod;
 		    target.AlterBetween = _alterBetween;
 
@@ -59,13 +55,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 	        _keepShiftCategories = source.KeepShiftCategories;
 	        _keepStartTimes = source.KeepStartTimes;
 	        _keepEndTimes = source.KeepEndTimes;
-	        _keepShifts = source.KeepShifts;
 	        if( source.SelectedActivities!= null)
 	        {
 		        _selectedActivities = source.SelectedActivities.Select(activity => activity.Id.GetValueOrDefault()).ToList();
 	        }
                
-	        _keepShiftsValue = source.KeepShiftsValue;
 	        _selectedTimePeriod = source.SelectedTimePeriod;
 	        _alterBetween = source.AlterBetween;
 	        _keepActivityLength = source.KeepActivityLength;

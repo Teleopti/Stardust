@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 
 		public WebIntradayOptimizationStardustHandler(
-			IIntradayOptimization intradayOptimization,
+			IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, 
 			FillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,

@@ -549,7 +549,6 @@
     <Compile Include="Logon\DataSourceAspectAuthenticationKeyTest.cs" />
     <Compile Include="Logon\LogonLicenseActivationConcurrencyTest35909.cs" />
     <Compile Include="Logon\LogonTest.cs" />
-    <Compile Include="Optimization\AgentsToSkillSetsTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationOverstaffedSkillSetsTest.cs" />
@@ -569,21 +568,16 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandSpecificTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIslandDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIslandTests.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationStopWhenLargeGroupTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\ShiftCategoryLimitationTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\TeamBlockSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\TrackIntradayOptimizationCallback.cs" />
-    <Compile Include="SchedulingScenarios\TrackOptimizeDaysForAgents.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizerTest.cs" />
     <Compile Include="ResourceCalculation\DoubleMatrixExtensions.cs" />
     <Compile Include="SchedulingScenarios\TrackSchedulingCallback.cs" />
     <Compile Include="Scheduling\AbsenceRequestValidatorProviderTest.cs" />
-    <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceSkipResCalcTest.cs" />
-    <Compile Include="Scheduling\Assignment\ResourceCalculateAfterDeleteDeciderTest.cs" />
-    <Compile Include="Scheduling\Assignment\VirtualSkillGroupsKeepStateTest.cs" />
     <Compile Include="Scheduling\PeriodExctractorFromSchedulePartsTest.cs" />
     <Compile Include="Scheduling\Rules\BusinessRuleConfigProviderTest.cs" />
     <Compile Include="Scheduling\Rules\BusinessRuleProviderTest.cs" />
@@ -708,7 +702,6 @@
     <Compile Include="DayOffPlanning\FreeWeekendDayValidatorTest.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendSolverTest.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendValidatorTest.cs" />
-    <Compile Include="DayOffPlanning\IntradayDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\KeepFreeWeekendDayValidatorTest.cs" />
     <Compile Include="DayOffPlanning\KeepFreeWeekendValidatorTest.cs" />
     <Compile Include="DayOffPlanning\LockableBitArrayChangesTrackerTest.cs" />
@@ -1340,7 +1333,6 @@
     <Compile Include="Scheduling\Overtime\OvertimePrefernecesGeneralPersonalSettingTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockPeriodFinderBetweenDayOffTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DynamicBlockFinderTest.cs" />

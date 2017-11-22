@@ -13,8 +13,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleDayEquator _scheduleDayEquator;
         private readonly IDictionary<DateOnly, IScheduleDay> _oldPeriodDaysState;
         private int _originalNumberOfDaysOff;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
-		private int _originalNumberOfWorkShifts;
     	private TimeSpan? _originalWorkTime;
         public bool StillAlive { get; set; }
 
@@ -31,8 +29,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 if (significantPart == SchedulePartView.DayOff)
                     _originalNumberOfDaysOff++;
-                if (significantPart == SchedulePartView.MainShift)
-                    _originalNumberOfWorkShifts++;
 
                 _oldPeriodDaysState.Add(scheduleDayPro.Day, scheduleDay);
             }
@@ -72,23 +68,6 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return 0;
 
             return (double)changedDaysOff/_originalNumberOfDaysOff;
-        }
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
-		public double ChangedWorkShiftsPercent()
-        {
-            int changedWorkShifts = 0;
-            foreach (IScheduleDayPro day in _matrix.EffectivePeriodDays)
-            {
-                DateOnly key = day.Day;
-                if (WorkShiftChanged(key))
-                    changedWorkShifts++;
-            }
-
-            if (_originalNumberOfWorkShifts == 0)
-                return 0;
-
-            return (double)changedWorkShifts/_originalNumberOfWorkShifts;
         }
 
         public bool WorkShiftChanged(DateOnly dateOnly)

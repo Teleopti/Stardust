@@ -221,14 +221,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleDayForPerson>().As<IScheduleDayForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRangeForPerson>().As<IScheduleRangeForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<PreSchedulingStatusChecker>().As<IPreSchedulingStatusChecker>().InstancePerLifetimeScope();
-			builder.RegisterType<IntradayOptimizationContext>().InstancePerLifetimeScope();
 			builder.RegisterType<NightRestWhiteSpotSolverServiceFactory>().As<INightRestWhiteSpotSolverServiceFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<NumberOfAgentsKnowingSkill>().SingleInstance();
 			builder.RegisterType<ReduceSkillSets>().SingleInstance();
 			builder.RegisterType<CreateIslands>().SingleInstance();
 			builder.RegisterType<MoveSkillSetToCorrectIsland>().SingleInstance();
-			builder.RegisterType<SkillSetProvider>().SingleInstance();
-			builder.RegisterType<SkillSetContext>().SingleInstance();
 			builder.RegisterType<IslandModelFactory>().SingleInstance();
 			builder.RegisterType<CreateSkillSets>().SingleInstance();
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
@@ -272,7 +269,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleService>().As<IScheduleService>().InstancePerLifetimeScope();
 			builder.RegisterType<AbsencePreferenceFullDayLayerCreator>().As<IAbsencePreferenceFullDayLayerCreator>().SingleInstance();
 			builder.RegisterType<ScheduleDayAvailableForDayOffSpecification>().As<IScheduleDayAvailableForDayOffSpecification>().SingleInstance();
-			builder.RegisterType<IntradayOptimizerCreator>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleOvertimeOnNonScheduleDays>().InstancePerLifetimeScope();
 
 			builder.RegisterType<DayOffsInPeriodCalculator>().As<IDayOffsInPeriodCalculator>().SingleInstance();
@@ -417,19 +413,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FullSchedulingResult>().SingleInstance();
 			builder.RegisterType<SuccessfulScheduledAgents>().SingleInstance();
 			builder.RegisterType<SchedulingInformationProvider>().SingleInstance().ApplyAspects();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508))
-			{
-				builder.RegisterType<IntradayOptimization>().As<IIntradayOptimization>().InstancePerLifetimeScope();
-				//remove As<xxxOLD> when toggle is gone
-				builder.RegisterType<TeamBlockDesktopOptimization>().As<TeamBlockDesktopOptimizationOLD>(); //set scope? Just keep old behavior for now...
-			}
-			else
-			{
-				builder.RegisterType<TeamBlockDesktopOptimizationOLD>();
-				builder.RegisterType<IntradayOptimizationClassic>().As<IIntradayOptimization>().InstancePerLifetimeScope();
-			}
+			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockDesktopOptimization>();
 			builder.RegisterType<OptimizationResult>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<IntradayDecisionMaker>().SingleInstance();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
 			builder.RegisterType<PlanningGroupStaffLoader>().As<IPlanningGroupStaffLoader>().SingleInstance();
 			builder.RegisterType<FetchPlanningGroupSettingsModel>().As<IFetchPlanningGroupSettingsModel>().SingleInstance();
@@ -444,13 +430,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FindFilter>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>().SingleInstance();
 			builder.RegisterType<DayOffBusinessRuleValidation>().SingleInstance();
-			builder.RegisterType<ResourceCalculateAfterDeleteDecider>().As<IResourceCalculateAfterDeleteDecider>().SingleInstance();
 			builder.RegisterType<LimitForNoResourceCalculation>().As<ILimitForNoResourceCalculation>().AsSelf().SingleInstance();
 			builder.RegisterType<NoSchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
-			builder.RegisterType<IntradayOptimizerContainerConsiderLargeSkillSets>().As<IIntradayOptimizerContainer>().SingleInstance();
-			builder.RegisterType<AgentsToSkillSets>().SingleInstance();
-			builder.RegisterType<IntradayOptimizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
-			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
 			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
 			builder.RegisterType<SchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<ClearPlanningPeriodSchedulingCommandHandler>().InstancePerLifetimeScope().ApplyAspects();

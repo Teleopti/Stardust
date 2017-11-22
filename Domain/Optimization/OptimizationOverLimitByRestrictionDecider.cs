@@ -63,9 +63,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool MoveMaxDaysOverLimit()
         {
-            if (_optimizationPreferences.Shifts.KeepShifts && _optimizationPreferences.Shifts.KeepShiftsValue > 1 - _originalStateContainer.ChangedWorkShiftsPercent())
-                return true;
-
 			if (_daysOffPreferences.UseKeepExistingDaysOff && _daysOffPreferences.KeepExistingDaysOffValue > 1 - _originalStateContainer.ChangedDayOffsPercent())
                 return true;
 

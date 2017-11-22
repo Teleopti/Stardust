@@ -22,11 +22,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool ValidateMatrix(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences, IDaysOffPreferences daysOffPreferences)
 		{
 			int originalNumberOfDaysOff = 0;
-			int originalNumberOfWorkShifts = 0;
 			int changedDaysOff = 0;
-			int changedShifts = 0;
 
-			if (!optimizationPreferences.Shifts.KeepShifts && !daysOffPreferences.UseKeepExistingDaysOff)
+			if (!daysOffPreferences.UseKeepExistingDaysOff)
 				return true;
 
 			var allSelectedScheduleRangeClones = optimizationPreferences.Rescheduling.AllSelectedScheduleRangeClones;
@@ -42,19 +40,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (daysOffPreferences.UseKeepExistingDaysOff && originalSignificantPart == SchedulePartView.DayOff)
 					originalNumberOfDaysOff++;
 
-				if (optimizationPreferences.Shifts.KeepShifts && originalSignificantPart == SchedulePartView.MainShift)
-					originalNumberOfWorkShifts++;
-
 				if (daysOffPreferences.UseKeepExistingDaysOff && !_scheduleDayEquator.DayOffEquals(originalScheduleDay, currentScheduleDay))
 					changedDaysOff++;
-
-				if (optimizationPreferences.Shifts.KeepShifts && !_scheduleDayEquator.MainShiftEquals(originalScheduleDay, currentScheduleDay))
-					changedShifts++;
-
 			}
-			if (optimizationPreferences.Shifts.KeepShifts && optimizationPreferences.Shifts.KeepShiftsValue > 1 - ((double)changedShifts / originalNumberOfWorkShifts))
-				return false;
-
 			if (daysOffPreferences.UseKeepExistingDaysOff && daysOffPreferences.KeepExistingDaysOffValue > 1 - ((double)changedDaysOff / originalNumberOfDaysOff))
 				return false;
 

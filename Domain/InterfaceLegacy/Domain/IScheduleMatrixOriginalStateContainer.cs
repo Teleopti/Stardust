@@ -42,12 +42,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         double ChangedDayOffsPercent();
 
         /// <summary>
-        /// Counts the changed workshifts in a schedule matrix.
-        /// </summary>
-        /// <returns></returns>
-        double ChangedWorkShiftsPercent();
-
-        /// <summary>
         /// Is the workshift changed.
         /// </summary>
         /// <param name="dateOnly">The date only.</param>

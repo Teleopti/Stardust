@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(false, _shiftPreferencesTarget.AlterBetween );
             Assert.AreEqual(false, _shiftPreferencesTarget.KeepEndTimes );
             Assert.AreEqual(false, _shiftPreferencesTarget.KeepShiftCategories);
-            Assert.AreEqual(false, _shiftPreferencesTarget.KeepShifts);
-            Assert.AreEqual(0.8d, _shiftPreferencesTarget.KeepShiftsValue );
             Assert.AreEqual(false, _shiftPreferencesTarget.KeepStartTimes);
 			Assert.AreEqual(false, _shiftPreferencesTarget.KeepActivityLength);
             Assert.AreEqual(new List<IActivity>(), _shiftPreferencesTarget.SelectedActivities);
@@ -47,8 +45,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _shiftPreferencesSource.AlterBetween = !_shiftPreferencesTarget.AlterBetween;
             _shiftPreferencesSource.KeepEndTimes = !_shiftPreferencesTarget.KeepEndTimes;
             _shiftPreferencesSource.KeepShiftCategories = !_shiftPreferencesTarget.KeepShiftCategories;
-            _shiftPreferencesSource.KeepShifts = !_shiftPreferencesTarget.KeepShifts;
-            _shiftPreferencesSource.KeepShiftsValue = 10.0d;
             _shiftPreferencesSource.KeepStartTimes = !_shiftPreferencesTarget.KeepStartTimes;
             
             _target.MapFrom(_shiftPreferencesSource );
@@ -57,8 +53,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(_shiftPreferencesSource.AlterBetween , _shiftPreferencesTarget.AlterBetween );
             Assert.AreEqual(_shiftPreferencesSource.KeepEndTimes, _shiftPreferencesTarget.KeepEndTimes);
             Assert.AreEqual(_shiftPreferencesSource.KeepShiftCategories, _shiftPreferencesTarget.KeepShiftCategories);
-            Assert.AreEqual(_shiftPreferencesSource.KeepShifts, _shiftPreferencesTarget.KeepShifts);
-            Assert.AreEqual(_shiftPreferencesSource.KeepShiftsValue, _shiftPreferencesTarget.KeepShiftsValue);
             Assert.AreEqual(_shiftPreferencesSource.KeepStartTimes, _shiftPreferencesTarget.KeepStartTimes);
         }
 

@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 
 				ExchangeData(ExchangeDataOption.ControlsToDataSource);
 				savePersonalSettings();
-				if (Preferences.Shifts.KeepShifts || DaysOffPreferences.UseKeepExistingDaysOff)
+				if (DaysOffPreferences.UseKeepExistingDaysOff)
 				{
 					var clonedRanges = new Dictionary<IPerson, IScheduleRange>();
 					foreach (var selectedPerson in _selectedPersons)

@@ -680,14 +680,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void MoveMaxDaysOverLimitShouldReturnFalseIfEverythingOk()
 		{
-            _optimizationPreferences.Shifts.KeepShifts = true;
-            _optimizationPreferences.Shifts.KeepShiftsValue = 1;
 			_daysOffPreferences.UseKeepExistingDaysOff = true;
 			_daysOffPreferences.KeepExistingDaysOffValue = 1;
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_originalStateContainer.ChangedWorkShiftsPercent()).Return(0);
 				Expect.Call(_originalStateContainer.ChangedDayOffsPercent()).Return(0);
 			}
 
@@ -705,33 +702,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 
 			Assert.IsFalse(ret);
-		}
-
-		[Test]
-		public void MoveMaxDaysOverLimitShouldReturnTrueIfShiftsOverLimit()
-		{
-            _optimizationPreferences.Shifts.KeepShifts = true;
-            _optimizationPreferences.Shifts.KeepShiftsValue = 1;
-
-			using (_mocks.Record())
-			{
-				Expect.Call(_originalStateContainer.ChangedWorkShiftsPercent()).Return(.5);
-			}
-
-			bool ret;
-
-			using (_mocks.Playback())
-			{
-				_target = new OptimizationOverLimitByRestrictionDecider(
-					_restrictionChecker,
-					_optimizationPreferences,
-					_originalStateContainer,
-					_daysOffPreferences);
-
-				ret = _target.MoveMaxDaysOverLimit();
-			}
-
-			Assert.IsTrue(ret);
 		}
 
 		[Test]
