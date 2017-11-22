@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		{
 			if (InvalidResources.Any(x => x.ResourceName == error.SkillName))
 			{
-				foreach (var err in error.MissingRanges)//.Select(x => $"{Resources.MissingForecastFrom} {x.StartDate:d} {Resources.ToText} {x.EndDate:d}"))
+				foreach (var err in error.MissingRanges)
 				{
 					var schedulingValidationError = InvalidResources.First(x => x.ResourceName == error.SkillName);
 					schedulingValidationError.ValidationErrors.Add(
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			else
 			{
 				var validationErrors = new List<ValidationError>();
-				foreach (var err in error.MissingRanges)//.Select(x => $"{Resources.MissingForecastFrom} {x.StartDate:d} {Resources.ToText} {x.EndDate:d}"))
+				foreach (var err in error.MissingRanges)
 				{
 					validationErrors.Add(new ValidationError()
 					{
@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				{
 					ResourceName = error.SkillName,
 					ValidationErrors = validationErrors,
-					//ResourceTypes = new List<ValidationResourceType>{ ValidationResourceType.Skill },
 					ResourceId = error.SkillId,
 					ValidationTypes = new List<Type> {validationType}
 				});

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					hintResult.Add(new PersonHintError(scheduleDay.Person)
 					{
 						ErrorResource = nameof(Resources.ShiftStartsDayBeforeOrAfter),
-						ErrorResourceData = new object[] { dateOfScheduleDay.ToString() }.ToList()
+						ErrorResourceData = new object[] { dateOfScheduleDay }.ToList()
 					}, GetType());
 				}
 			}

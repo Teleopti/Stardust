@@ -16,6 +16,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreferenceHint));
-			result.First().ValidationErrors.First().ErrorMessage.Should().Be.EqualTo("Block scheduling may not work when using preference.");
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(Resources.BlockSchedulingNotWorkingWhenUsingPreferences);
 		}
 
 		[Test]

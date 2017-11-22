@@ -11298,9 +11298,6 @@ Teleopti R&amp;D</value>
   <data name="IssuesText" xml:space="preserve">
     <value>问题</value>
   </data>
-  <data name="MissingForecastFrom" xml:space="preserve">
-    <value>缺少预测日期从</value>
-  </data>
   <data name="MissingSkills" xml:space="preserve">
     <value>这些技能缺少预测</value>
   </data>
@@ -13970,28 +13967,25 @@ Teleopti R&amp;D</value>
     <value>筛选排班设置</value>
   </data>
   <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
-    <value>班次包{1}中不存在日期 {0} 的班次</value>
+    <value>班次包{1}中不存在日期 {0:d} 的班次</value>
   </data>
   <data name="ModifySkillGroup" xml:space="preserve">
     <value>修改技能组</value>
   </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
-    <value>{0}的班次与{1}的班次不匹配</value>
+    <value>{0:d}的班次与{1:d}的班次不匹配</value>
   </data>
   <data name="IndividualFlexible" xml:space="preserve">
     <value>灵活性</value>
   </data>
   <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>班次类别 ({0})于{1} 与 班次类别 ({2})于{3} 不匹配.</value>
+    <value>班次类别 {0}于{1:d} 与 班次类别 {2}于{3:d} 不匹配.</value>
   </data>
   <data name="TextOFCreatePlanGroupSchedulingSetting" xml:space="preserve">
     <value>填入信息以创建一个新的排班设置</value>
   </data>
   <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
-    <value>{1} 的开始时间({0}) 与 {3}的开始时间({2}) 不匹配.</value>
-  </data>
-  <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
-    <value>班次包{1}中不存在日期 {0} 中此开始时间的班次</value>
+    <value>{1:d} 的开始时间{0} 与 {3:d}的开始时间{2} 不匹配.</value>
   </data>
   <data name="InfoOfSchedulingSetting" xml:space="preserve">
     <value>排班设置已应用于计划组</value>
@@ -14144,7 +14138,7 @@ Teleopti R&amp;D</value>
     <value>加班</value>
   </data>
   <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
-    <value>之前在日期 {0} 的班次与班次开始时间 {1} 不匹配</value>
+    <value>之前在日期 {0:d} 的班次与班次开始时间 {1} 不匹配</value>
   </data>
   <data name="NoSkillGroupsFound" xml:space="preserve">
     <value>没有找到技能组</value>
@@ -14174,13 +14168,13 @@ Teleopti R&amp;D</value>
     <value>您的加班申请无法被满足. 当前某些日期没有开放申请.</value>
   </data>
   <data name="PreviousShiftNotMatchShift" xml:space="preserve">
-    <value>之前在日期 {0} 的班次与日期 {1} 的班次不匹配</value>
+    <value>之前在日期 {0:d} 的班次与日期 {1:d} 的班次不匹配</value>
   </data>
   <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
-    <value>{0}: 一个班次不允许开始于前一天或后一天. 该问题可能是由于在人员模块中变更了座席代表的时区. 请选择正确的时区或删除此日期以修正问题.</value>
+    <value>{0:d}: 一个班次不允许开始于前一天或后一天. 该问题可能是由于在人员模块中变更了座席代表的时区. 请选择正确的时区或删除此日期以修正问题.</value>
   </data>
   <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>之前在日期 {0} 的班次与日期 {1} 的班次类别不匹配</value>
+    <value>之前在日期 {0:d} 的班次与日期 {1} 的班次类别不匹配</value>
   </data>
   <data name="NotShowingAbandonRate" xml:space="preserve">
     <value>当前选项无法显示放弃率</value>

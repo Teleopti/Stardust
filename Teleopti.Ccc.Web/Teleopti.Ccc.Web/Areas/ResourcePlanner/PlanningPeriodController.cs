@@ -67,9 +67,17 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			{
 				var schedulingResult = JsonConvert.DeserializeObject<SchedulingResultModel>(lastJobResult.Details.First().Message);
 				var optimizationResult = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message);
-				mergeScheduleResultIntoOptimizationResult(schedulingResult, optimizationResult);
-				localizeErrormessages(optimizationResult);
+				foreach (var schedulingHintError in schedulingResult.BusinessRulesValidationResults)
+				{
+					localizeValidationError(schedulingHintError.ValidationErrors);
+				}
+				foreach (var schedulingHintError in optimizationResult.BusinessRulesValidationResults)
+				{
+					localizeValidationError(schedulingHintError.ValidationErrors);
+				}
 
+				mergeScheduleResultIntoOptimizationResult(schedulingResult, optimizationResult);
+				
 				return Ok(new
 				{
 					PlanningPeriod = new
@@ -82,79 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			}
 			return Ok(new { });
 		}
-
-		private static void localizeErrormessages(OptimizationResultModel optimizationResult)
-		{
-			foreach (var brvl in optimizationResult.BusinessRulesValidationResults)
-			{
-				foreach (var validationError in brvl.ValidationErrors)
-				{
-					validationError.ErrorMessageLocalized = LocalizeErrorMessage(validationError);
-				}
-			}
-		}
-
-		private static string LocalizeErrorMessage(ValidationError validationError)
-		{
-			// Message: "Muisiing forcas from {0:d} to {1:d}"
-			// Message: "Muisiing forcas from"
-			// Data: "2015", "to", "2017"
-			// "Muisiing forcas from 2015 to 2017"
-
-			// Message: "Perdiod between {0} and {1}"
-			// Data: "2015-01-01", "2017-05-01"
-			// "Perdiod between 2015-01-01 and 2017-05-01"
-
-			try
-			{
-				for (int i = 0; i < validationError.ErrorResourceData.Count; i++)
-				{
-					DateTime dateTime;
-					if (DateTime.TryParse(validationError.ErrorResourceData[i].ToString(), out dateTime))
-					{
-						validationError.ErrorResourceData[i] = dateTime;
-					}
-				}
-
-				var localizedString = Resources.ResourceManager.GetString(validationError.ErrorResource);
-				return string.Format(localizedString, validationError.ErrorResourceData);
-			}
-			catch (Exception ex)
-			{
-				return Resources.ResourceManager.GetString(validationError.ErrorResource);
-			}
-		}
-
-
-		private static void mergeScheduleResultIntoOptimizationResult(SchedulingResultModel schedulingResult, OptimizationResultModel optimizationResult)
-		{
-			foreach (var schedulingBusinessRulesValidationResult in schedulingResult.BusinessRulesValidationResults)
-			{
-				var found = false;
-				foreach (var optimizationResultBusinessRulesValidationResult in optimizationResult.BusinessRulesValidationResults)
-				{
-					if (optimizationResultBusinessRulesValidationResult.ResourceId == schedulingBusinessRulesValidationResult.ResourceId)
-					{
-						foreach (var error in schedulingBusinessRulesValidationResult.ValidationErrors)
-						{
-							// TODO kolla in detta. String.Format inline... inte så bra kanske.
-							if (optimizationResultBusinessRulesValidationResult.ValidationErrors.Any(x => string.Format(x.ErrorResource, x.ErrorResourceData) == string.Format(error.ErrorResource, error.ErrorResourceData)) == false) 
-							{
-								optimizationResultBusinessRulesValidationResult.ValidationErrors.Add(error);
-							}
-						}
-						found = true;
-						break;
-					}
-				}
-
-				if (!found)
-				{
-					optimizationResult.BusinessRulesValidationResults =
-						optimizationResult.BusinessRulesValidationResults.Append(schedulingBusinessRulesValidationResult);
-				}
-			}
-		}
+		
 
 		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/status")]
 		public virtual IHttpActionResult JobStatus(Guid planningPeriodId)
@@ -295,10 +231,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					});
 				foreach (var res in validationResult.InvalidResources)
 				{
-					foreach (var ve in res.ValidationErrors)
-					{
-						ve.ErrorMessageLocalized = LocalizeErrorMessage(ve);
-					}
+					localizeValidationError(res.ValidationErrors);
 				}
 			}
 			return Ok(validationResult);
@@ -462,6 +395,51 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var allPlanningPeriods = _planningPeriodRepository.LoadAll();
 			return allPlanningPeriods.Any(p => p.Range.StartDate >= dateOnly);
+		}
+
+		private static void localizeValidationError(ICollection<ValidationError> validationErrors)
+		{
+			foreach (var validationError in validationErrors)
+			{
+				var localizedString = Resources.ResourceManager.GetString(validationError.ErrorResource) ?? validationError.ErrorResource;
+				try
+				{
+					validationError.ErrorMessageLocalized = string.Format(localizedString, validationError.ErrorResourceData.ToArray());
+				}
+				catch (Exception ex)
+				{
+					validationError.ErrorMessageLocalized = localizedString;
+				}
+			}
+		}
+
+		private static void mergeScheduleResultIntoOptimizationResult(SchedulingResultModel schedulingResult, OptimizationResultModel optimizationResult)
+		{
+			foreach (var schedulingBusinessRulesValidationResult in schedulingResult.BusinessRulesValidationResults)
+			{
+				var found = false;
+				foreach (var optimizationResultBusinessRulesValidationResult in optimizationResult.BusinessRulesValidationResults)
+				{
+					if (optimizationResultBusinessRulesValidationResult.ResourceId == schedulingBusinessRulesValidationResult.ResourceId)
+					{
+						foreach (var error in schedulingBusinessRulesValidationResult.ValidationErrors)
+						{
+							if (optimizationResultBusinessRulesValidationResult.ValidationErrors.Any(x => x.ErrorMessageLocalized == error.ErrorMessageLocalized) == false)
+							{
+								optimizationResultBusinessRulesValidationResult.ValidationErrors.Add(error);
+							}
+						}
+						found = true;
+						break;
+					}
+				}
+
+				if (!found)
+				{
+					optimizationResult.BusinessRulesValidationResults =
+						optimizationResult.BusinessRulesValidationResults.Append(schedulingBusinessRulesValidationResult);
+				}
+			}
 		}
 	}
 

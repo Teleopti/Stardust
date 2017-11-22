@@ -52,8 +52,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					var dataRow = dataTable.NewRow();
 					dataRow[0] = validationResultInvalidResource.ResourceName;
-					// TODO fixa with custom formatter....
-					dataRow[1] = string.Format(UserTexts.Resources.ResourceManager.GetString(validationError.ErrorResource), validationError.ErrorResourceData);
+					try
+					{
+						dataRow[1] = string.Format(UserTexts.Resources.ResourceManager.GetString(validationError.ErrorResource), validationError.ErrorResourceData.ToArray());
+					}
+					catch (System.Exception)
+					{
+						dataRow[1] = UserTexts.Resources.ResourceManager.GetString(validationError.ErrorResource);
+					}
 					dataTable.Rows.Add(dataRow);
 				}			
 			}

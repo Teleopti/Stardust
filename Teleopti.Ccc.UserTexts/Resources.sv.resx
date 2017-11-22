@@ -12198,7 +12198,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Nästa planeringsperiod</value>
   </data>
   <data name="MissingForecastFrom" xml:space="preserve">
-    <value>Saknar prognos från </value>
+    <value>Saknar prognos från  {0:d} till {1:d}</value>
   </data>
   <data name="MissingSkills" xml:space="preserve">
     <value>Prognos saknas för dessa kompetenser</value>
@@ -15161,7 +15161,7 @@ Vill du registrera dig?</value>
     <value>Användarinställningar</value>
   </data>
   <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
-    <value>{0}: Ett skift börjar dagen innan eller dagen efter vilket inte är tillåtet. Detta orsakades troligen genom att ändra agentens tidszon i Personer. </value>
+    <value>{0:d}: Ett skift börjar dagen innan eller dagen efter vilket inte är tillåtet. Detta orsakades troligen genom att ändra agentens tidszon i Personer. </value>
   </data>
   <data name="MaximumAgentToExport" xml:space="preserve">
     <value>Du kan exportera max 1000 agenter varje gång, du försöker nu exportera {0}. </value>
@@ -15194,37 +15194,37 @@ Vill du registrera dig?</value>
     <value>Din övertidsförfrågan har avslagits automatiskt, pga. en regel som administratören satt upp. </value>
   </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
-    <value>Starttiden för skiftet {0} finns inte i skiftpåsen {1}</value>
+    <value>Starttiden {0} den {1:d} finns inte i skiftpåsen {2}.</value>
   </data>
   <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
-    <value>Skiftet {0} finns inte i skiftpåsen {1}</value>
+    <value>Skiftet den {0:d} finns inte i skiftpåsen {1}</value>
   </data>
   <data name="OpenForOvertimeRequests" xml:space="preserve">
     <value>Öppen för övertidsförfrågningar</value>
   </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
-    <value>Skiftet för {0} matchar inte skiftet för {1}</value>
+    <value>Skiftet för {0:d} matchar inte skiftet för {1:d}</value>
   </data>
   <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>Skiftkategorin ({0}) för {1} matchar inte skiftkategorin ({2}) för {3}. </value>
+    <value>Skiftkategorin {0} för {1:d} matchar inte skiftkategorin {2} för {3:d}. </value>
   </data>
   <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
-    <value>Starttiden ({0}) för {1} matchar inte starttiden ({2}) för {3}.</value>
+    <value>Starttiden {0} för {1:d} matchar inte starttiden {2} för {3:d}.</value>
   </data>
   <data name="PreviousShiftNotMatchShift" xml:space="preserve">
-    <value>Skiftet den {0} matchar inte skiftet den {1}</value>
+    <value>Skiftet den {0:d} matchar inte skiftet den {1:d}</value>
   </data>
   <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>Skiftet den {0} matchar inte skiftkategorin {1}</value>
+    <value>Skiftet den {0:d} matchar inte skiftkategorin {1}</value>
   </data>
   <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
-    <value>Skiftet den {0} matchar inte starttiden {1}</value>
+    <value>Skiftet den {0:d} matchar inte starttiden {1}</value>
   </data>
   <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Din övertidsförfrågan har avslagits. Vissa dagar i perioden är inte öppna för förfrågningar. Du kan skicka förfrågningar för följande period: {0}</value>
   </data>
   <data name="ShiftCategoryNotMatchingShiftBag" xml:space="preserve">
-    <value>Skiftkategorin {0} den {1} finns inte i skiftpåsen {2}</value>
+    <value>Skiftkategorin {0} den {1:d} finns inte i skiftpåsen {2}.</value>
   </data>
   <data name="SelectOneOrMoreSites" xml:space="preserve">
     <value>Välj en eller flera enheter</value>

@@ -13129,7 +13129,7 @@ Reduce the complexity to use these shifts.</value>
     <value>issues</value>
   </data>
   <data name="MissingForecastFrom" xml:space="preserve">
-    <value>Missing forecast from {0} to {1}</value>
+    <value>Missing forecast from {0:d} to {1:d}</value>
     <comment>missing forecast message in planning period</comment>
   </data>
   <data name="MissingSkills" xml:space="preserve">
@@ -16643,7 +16643,7 @@ Do you want to participate?</value>
     <comment>wfm navbar icon tooltip</comment>
   </data>
   <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
-    <value>{0}: A shift begins the day before or the day after and that is not allowed. This was probably caused by changing agent time zone in People. Change to correct time zone or just press delete this day to correct it.</value>
+    <value>{0:d}: A shift begins the day before or the day after and that is not allowed. This was probably caused by changing agent time zone in People. Change to correct time zone or just press delete this day to correct it.</value>
     <comment>Used in validations</comment>
   </data>
   <data name="MaximumAgentToExport" xml:space="preserve">
@@ -16685,11 +16685,11 @@ Do you want to participate?</value>
     <value>Your overtime request has been denied automatically, due to a rule set up by the administrator.</value>
   </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
-    <value>The start time {0} on {1} doesn't exist in the shift bag {2}</value>
+    <value>The start time {0} on {1:d} doesn't exist in the shift bag {2}</value>
     <comment>Pre-scheduleing validation message in web scheduling and client. {0} is the start time, {1} is the date for the shift and {2} is the shift bag</comment>
   </data>
   <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
-    <value>The shift on {0} doesn't exist in the shift bag {1}</value>
+    <value>The shift on {0:d} doesn't exist in the shift bag {1}</value>
     <comment>Pre-scheduleing validation message in web scheduling and client. {0} is the date and {1} the shift bag</comment>
   </data>
   <data name="OpenForOvertimeRequests" xml:space="preserve">
@@ -16697,27 +16697,27 @@ Do you want to participate?</value>
     <comment>Open for overtime requests</comment>
   </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
-    <value>The shift on {0} is not matching the shift on {1}.</value>
+    <value>The shift on {0:d} is not matching the shift on {1:d}.</value>
     <comment>Scheduleing validation message in web scheduling and client. Both {0} and {1} are dates</comment>
   </data>
   <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>The shift category ({0}) on {1} is not matching the shift category ({2}) on {3}.</value>
+    <value>The shift category {0} on {1:d} does not match the shift category {2} on {3:d}.</value>
     <comment>Scheduling validation message in web scheduling and client. {0} and {2} are shift categories and {1} and {3} are dates.</comment>
   </data>
   <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
-    <value>The start time ({0}) on {1} is not matching the start time ({2}) on {3}.</value>
+    <value>The start time {0} on {1:d} does not match the start time {2} on {3:d}.</value>
     <comment>Scheduling validation message in web scheduling and client. {0} and {2} are start times and {1} and {3} are dates.</comment>
   </data>
   <data name="PreviousShiftNotMatchShift" xml:space="preserve">
-    <value>The shift on {0} is not maching the shift on {1}</value>
+    <value>The shift on {0:d} is not maching the shift on {1:d}</value>
     <comment>Scheduling validation message in web scheduling and client. {0} and {1} are dates</comment>
   </data>
   <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>The shift on {0} is not maching the  shift category {1}</value>
+    <value>The shift on {0:d} is not maching the  shift category {1}</value>
     <comment>Scheduling validation message in web scheduling and client. {0} is a date and {1} a shift category</comment>
   </data>
   <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
-    <value>The shift on {0} is not maching the start time {1}</value>
+    <value>The shift on {0:d} is not maching the start time {1}</value>
     <comment>Scheduling validation message in web scheduling and client. {0} is a date and {1} a start time</comment>
   </data>
   <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
@@ -16725,7 +16725,7 @@ Do you want to participate?</value>
     <comment>Overtime request has been denied. Some days in the requested period are not open for requests.</comment>
   </data>
   <data name="ShiftCategoryNotMatchingShiftBag" xml:space="preserve">
-    <value>The shift category {0} on {1} doesn't exist in the shift bag {2}</value>
+    <value>The shift category {0} on {1:d} doesn't exist in the shift bag {2}</value>
     <comment>Scheduling validation message in web scheduling and client. {0} is the shift category, {1} is the date for the shift and {2} is the shift bag</comment>
   </data>
   <data name="ContractWorkRuleValidation" xml:space="preserve">
@@ -16747,6 +16747,10 @@ Do you want to participate?</value>
   <data name="AppliedSetting" xml:space="preserve">
     <value>Applied Setting</value>
     <comment>(Table header, etc.) The (gamification) setting applied to the team</comment>
+  </data>
+  <data name="BlockSchedulingNotWorkingWhenUsingPreferences" xml:space="preserve">
+    <value>Block scheduling may not work when using preferences.</value>
+    <comment>Plans: Validation messages</comment>
   </data>
   <data name="IntraDayChipNumberOf" xml:space="preserve">
     <value>of</value>

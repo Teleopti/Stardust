@@ -1,5 +1,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
@@ -28,8 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						var preference = scheduleDay.RestrictionCollection().OfType<IPreferenceRestriction>().SingleOrDefault();
 						if (preference != null)
 						{
-							// TODO read from resourcefile
-							addValidationError(hintResult, person, "Block scheduling may not work when using preference.");
+							addValidationError(hintResult, person, nameof(Resources.BlockSchedulingNotWorkingWhenUsingPreferences));
 							break;
 						}
 					}

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								PersonName = person.Name.ToString(),
 								PersonId = person.Id.Value,
 								ErrorResource = nameof(Resources.ShiftCategoryNotMatchingShiftBag),
-								ErrorResourceData = new object[] { shiftCategory.Description.ShortName, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftBag.Description.Name }.ToList()
+								ErrorResourceData = new object[] { shiftCategory.Description.ShortName, scheduleDay.DateOnlyAsPeriod.DateOnly.Date, shiftBag.Description.Name }.ToList()
 							}, GetType(), ValidationResourceType.BlockScheduling);
 							break;
 						}
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								PersonName = person.Name.ToString(),
 								PersonId = person.Id.Value,
 								ErrorResource = nameof(Resources.StartTimeNotMatchingShiftBag),
-								ErrorResourceData = new object[] { timeOfDay.ToString(), scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftBag.Description.Name }.ToList()
+								ErrorResourceData = new object[] { timeOfDay.ToString(@"hh\:mm"), scheduleDay.DateOnlyAsPeriod.DateOnly.Date, shiftBag.Description.Name }.ToList()
 							}, GetType(), ValidationResourceType.BlockScheduling);
 							break;
 						}
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 									PersonName = person.Name.ToString(),
 									PersonId = person.Id.Value,
 									ErrorResource = nameof(Resources.ShiftNotMatchingShiftBag),
-									ErrorResourceData = new object[] { scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftBag.Description.Name }.ToList()
+									ErrorResourceData = new object[] { scheduleDay.DateOnlyAsPeriod.DateOnly.Date, shiftBag.Description.Name }.ToList()
 								}, GetType(), ValidationResourceType.BlockScheduling);
 								break;
 							}

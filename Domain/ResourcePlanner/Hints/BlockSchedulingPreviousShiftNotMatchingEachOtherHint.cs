@@ -71,17 +71,17 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				}
 				if (blockOption.UseBlockSameShiftCategory && scheduleDay.PersonAssignment().ShiftCategory != shiftCategory)
 				{
-					addValidationError(validationResult, person, nameof(Resources.PreviousShiftNotMatchShiftCategory), scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), shiftCategory.Description.Name);
+					addValidationError(validationResult, person, nameof(Resources.PreviousShiftNotMatchShiftCategory), scheduleDay.DateOnlyAsPeriod.DateOnly.Date, shiftCategory.Description.Name);
 					break;
 				}
 				if (blockOption.UseBlockSameStartTime && scheduleDay.PersonAssignment().Period.StartDateTime.TimeOfDay != startTime)
 				{
-					addValidationError(validationResult, person, nameof(Resources.PreviousShiftNotMatchStartTime), scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), startTime.ToString());
+					addValidationError(validationResult, person, nameof(Resources.PreviousShiftNotMatchStartTime), scheduleDay.DateOnlyAsPeriod.DateOnly.Date, startTime.ToString(@"hh\:mm"));
 					break;
 				}
 				if (blockOption.UseBlockSameShift && !_scheduleDayEquator.MainShiftEquals(scheduleDay, firstDayAfterPeriod))
 				{
-					addValidationError(validationResult, person, nameof(Resources.PreviousShiftNotMatchShift), scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString(), personAssignment.Date.ToShortDateString());
+					addValidationError(validationResult, person, nameof(Resources.PreviousShiftNotMatchShift), scheduleDay.DateOnlyAsPeriod.DateOnly.Date, personAssignment.Date.Date);
 					break;
 				}
 			}

@@ -4368,6 +4368,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Block scheduling may not work when using preferences..
+        /// </summary>
+        public static string BlockSchedulingNotWorkingWhenUsingPreferences {
+            get {
+                return ResourceManager.GetString("BlockSchedulingNotWorkingWhenUsingPreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to both first name and last name are empty;.
         /// </summary>
         public static string BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon {
@@ -11216,7 +11225,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift on {0} is not matching the shift on {1}..
+        ///   Looks up a localized string similar to The shift on {0:d} is not matching the shift on {1:d}..
         /// </summary>
         public static string ExistingShiftNotMatchShift {
             get {
@@ -11225,7 +11234,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift category ({0}) on {1} is not matching the shift category ({2}) on {3}..
+        ///   Looks up a localized string similar to The shift category {0} on {1:d} does not match the shift category {2} on {3:d}..
         /// </summary>
         public static string ExistingShiftNotMatchShiftCategory {
             get {
@@ -11234,7 +11243,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The start time ({0}) on {1} is not matching the start time ({2}) on {3}..
+        ///   Looks up a localized string similar to The start time {0} on {1:d} does not match the start time {2} on {3:d}..
         /// </summary>
         public static string ExistingShiftNotMatchStartTime {
             get {
@@ -17780,7 +17789,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing forecast from {0} to {1}.
+        ///   Looks up a localized string similar to Missing forecast from {0:d} to {1:d}.
         /// </summary>
         public static string MissingForecastFrom {
             get {
@@ -24692,7 +24701,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift on {0} is not maching the shift on {1}.
+        ///   Looks up a localized string similar to The shift on {0:d} is not maching the shift on {1:d}.
         /// </summary>
         public static string PreviousShiftNotMatchShift {
             get {
@@ -24701,7 +24710,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift on {0} is not maching the  shift category {1}.
+        ///   Looks up a localized string similar to The shift on {0:d} is not maching the  shift category {1}.
         /// </summary>
         public static string PreviousShiftNotMatchShiftCategory {
             get {
@@ -24710,7 +24719,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift on {0} is not maching the start time {1}.
+        ///   Looks up a localized string similar to The shift on {0:d} is not maching the start time {1}.
         /// </summary>
         public static string PreviousShiftNotMatchStartTime {
             get {
@@ -30629,7 +30638,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift category {0} on {1} doesn&apos;t exist in the shift bag {2}.
+        ///   Looks up a localized string similar to The shift category {0} on {1:d} doesn&apos;t exist in the shift bag {2}.
         /// </summary>
         public static string ShiftCategoryNotMatchingShiftBag {
             get {
@@ -30748,7 +30757,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift on {0} doesn&apos;t exist in the shift bag {1}.
+        ///   Looks up a localized string similar to The shift on {0:d} doesn&apos;t exist in the shift bag {1}.
         /// </summary>
         public static string ShiftNotMatchingShiftBag {
             get {
@@ -30811,7 +30820,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: A shift begins the day before or the day after and that is not allowed. This was probably caused by changing agent time zone in People. Change to correct time zone or just press delete this day to correct it..
+        ///   Looks up a localized string similar to {0:d}: A shift begins the day before or the day after and that is not allowed. This was probably caused by changing agent time zone in People. Change to correct time zone or just press delete this day to correct it..
         /// </summary>
         public static string ShiftStartsDayBeforeOrAfter {
             get {
@@ -32603,7 +32612,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The start time {0} on {1} doesn&apos;t exist in the shift bag {2}.
+        ///   Looks up a localized string similar to The start time {0} on {1:d} doesn&apos;t exist in the shift bag {2}.
         /// </summary>
         public static string StartTimeNotMatchingShiftBag {
             get {

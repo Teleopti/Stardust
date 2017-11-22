@@ -16,6 +16,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			result.ResourceId.Should().Be.EqualTo(agent.Id.Value);
 			result.ResourceName.Should().Be.EqualTo(agent.Name.ToString(NameOrderOption.FirstNameLastName));
 			result.ValidationErrors.First().ResourceType.Should().Be.EqualTo(ValidationResourceType.Basic);
-			result.ValidationErrors.Any(x => string.Format(ScheduleStartOnWrongDateHint.ErrorOutput, date).Equals(x.ErrorMessage)).Should().Be.True();
+			result.ValidationErrors.Any(x => string.Format(Resources.ShiftStartsDayBeforeOrAfter, date.Date).Equals(HintsHelper.BuildErrorMessage(x))).Should().Be.True();
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
