@@ -61,12 +61,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
+			personRequest.Pending();
+
 			if (isNotValid(personRequest)) return;
 
 			var skills = validateSkills(personRequest);
 			if (skills == null) return;
-
-			personRequest.Pending();
 
 			if (overtimeOpenPeriod.AutoGrantType == WorkflowControl.OvertimeRequestAutoGrantType.No)
 				return;

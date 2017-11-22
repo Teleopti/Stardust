@@ -881,7 +881,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = LoggedOnUser.CurrentUser();
 			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
 			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
-				TimeSpan.FromHours(41), TimeSpan.FromHours(10), TimeSpan.FromHours(10));
+				TimeSpan.FromHours(9), TimeSpan.FromHours(10), TimeSpan.FromHours(10));
 
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
@@ -894,13 +894,41 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			person.WorkflowControlSet = workflowControlSet;
 
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+			
+			var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 13, 8, 2017, 7, 13, 16));
+			ScheduleStorage.Add(pa);
 
-			for (int i = 0; i < 5; i++)
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 2);
+			Target.Process(personRequest);
+
+			personRequest.IsPending.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
+		public void ShouldPendingWhenVoilateMaxWeekWorkTimeRuleAndHandleTypeIsPendingAndAutoGrantIsYes()
+		{
+			setupPerson(8, 21);
+			var person = LoggedOnUser.CurrentUser();
+			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(9), TimeSpan.FromHours(10), TimeSpan.FromHours(10));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
 			{
-				var day = 10 + i;
-				var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, day, 8, 2017, 7, day, 16));
-				ScheduleStorage.Add(pa);
-			}
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Pending,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+			
+			var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 13, 8, 2017, 7, 13, 16));
+			ScheduleStorage.Add(pa);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 2);
 			Target.Process(personRequest);
@@ -1059,9 +1087,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		private IPersonRequest createOvertimeRequest(DateTimePeriod period)
 		{
-			var personRequestFactory = new PersonRequestFactory();
+			var personRequestFactory = new PersonRequestFactory {Person = LoggedOnUser.CurrentUser()};
 
-			var personRequest = personRequestFactory.CreatePersonRequest(LoggedOnUser.CurrentUser());
+			var personRequest = personRequestFactory.CreateNewPersonRequest();
 			var overTimeRequest = new OvertimeRequest(_multiplicatorDefinitionSet, period);
 			personRequest.Request = overTimeRequest;
 			PersonRequestRepository.Add(personRequest);
