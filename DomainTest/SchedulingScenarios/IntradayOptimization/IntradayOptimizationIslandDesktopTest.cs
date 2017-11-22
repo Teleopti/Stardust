@@ -626,8 +626,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			return schedulerStateHolderFrom.Schedules[agentToOptimize].ScheduledDay(date).PersonAssignment().Period.StartDateTime.Hour;
 		}
 
-		[Ignore("#46746 to be fixed")]
-		public void ShouldConsiderNotAvarageShiftLengthsWhenNotOnPeriodTime()
+		[TestCase(true, ExpectedResult = true)]
+		[TestCase(false, ExpectedResult = true)]
+		//[Ignore("#46746 to be fixed")]
+		public bool ShouldWorkWithAndWithoutUseAverageShiftLength(bool useAvaregeShiftLength)
 		{
 			var scenario = new Scenario();
 			var phoneActivity = new Activity { InContractTime = true };
@@ -646,11 +648,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var optPref = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optPref.Shifts.KeepStartTimes = true;
 			optPref.Shifts.KeepEndTimes = true;
-			optPref.Advanced.UseAverageShiftLengths = true;
+			optPref.Advanced.UseAverageShiftLengths = useAvaregeShiftLength;
 			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optPref, new NoIntradayOptimizationCallback());
 
-			schedulerStateHolderFrom.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().ShiftLayers
-				.Any(x => x.Period.StartDateTime.Hour == 11).Should().Be.True();
+			return schedulerStateHolderFrom.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().ShiftLayers.Any(x => x.Period.StartDateTime.Hour == 11);
 		}
 
 		public IntradayOptimizationIslandDesktopTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002, RemoveImplicitResCalcContext resourcePlannerRemoveImplicitResCalcContext46680) : base(resourcePlannerBreakPreferenceStartTimeByMax46002, resourcePlannerRemoveImplicitResCalcContext46680)
