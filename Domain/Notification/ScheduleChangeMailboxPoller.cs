@@ -71,12 +71,19 @@ namespace Teleopti.Ccc.Domain.Notification
 		{
 			_messageBrokerServer.PopMessages(mailboxId);
 		}
+
+		public void RemoveMailbox(Guid mailBoxId)
+		{
+			_messageBrokerServer.RemoveMailbox(mailBoxId);
+		}
 		private string makeRoute()
 		{
 			return string.Join(
 				"/", _currentDataSource.CurrentName(), _currentBusinessUnit.Current().Id.ToString(),
 				nameof(IScheduleChangedMessage), "ref", _currentScenario.Current().Id.ToString());
 		}
+
+		
 	}
 
 	public class PollerInputPeriod

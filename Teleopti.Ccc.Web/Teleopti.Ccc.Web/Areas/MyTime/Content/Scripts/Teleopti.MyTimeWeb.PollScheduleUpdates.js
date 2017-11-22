@@ -10,7 +10,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	var notificerDisplayTime = 0;
 	var ajax = null;
 	var currentListener;
-	var mailBoxId;
+	var mailboxId;
 
 	function _setListener(name, period, callback) {
 		currentListener = { name: name, period: period, callback: callback };
@@ -23,7 +23,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			dataType: 'json',
 			type: 'GET',
 			success: function (data) {
-				mailBoxId = data;
+				mailboxId = data;
 				deferred.resolve();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -40,7 +40,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			dataType: 'json',
 			type: 'POST',
 			data: {
-				mailBoxId: mailBoxId,
+				mailboxId: mailboxId,
 				listenerPeriod: !!listenerPeriod ? _getFormatedPeriod(listenerPeriod) : undefined,
 				notifyPeriod: _getFormatedPeriod(notifyPeriod)
 			},
@@ -114,7 +114,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			url: 'Asm/ResetPolling',
 			dataType: 'json',
 			type: 'GET',
-			data: { mailBoxId: mailBoxId }
+			data: { mailboxId: mailboxId }
 		});
 	}
 
@@ -145,6 +145,18 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 		});
 	}
 
+	function _onWindowUnload() {
+		$(window).on('beforeunload', function () {
+			ajax.Ajax({
+				url: 'Asm/RemoveSchedulePollerMailbox',
+				dataType: 'json',
+				type: 'DELETE',
+				data: { mailboxId: mailboxId }
+			});
+		});
+
+	}
+
 	function _init(options) {
 		ajax = new Teleopti.MyTimeWeb.Ajax();
 		settings = $.extend({
@@ -160,7 +172,9 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 		_startPolling().done(function () {
 			_setUpInterval();
 			_subscribeToMessageBroker();
+			_onWindowUnload();
 		});
+
 	}
 
 	function _destroy() {

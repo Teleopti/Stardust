@@ -69,12 +69,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork, MessageBrokerUnitOfWork]
 		[HttpPost]
-		public virtual JsonResult CheckIfScheduleHasUpdates(Guid mailBoxId, PollerInputPeriod notifyPeriod,
+		public virtual JsonResult CheckIfScheduleHasUpdates(Guid mailboxId, PollerInputPeriod notifyPeriod,
 			PollerInputPeriod listenerPeriod)
 		{
 			var hasListener = listenerPeriod != null;
 			var periods = hasListener ? new[] { notifyPeriod, listenerPeriod } : new[] { notifyPeriod };
-			var checkResult = _scheduleChangePoller.Check(mailBoxId, periods);
+			var checkResult = _scheduleChangePoller.Check(mailboxId, periods);
 			return Json(new
 			{
 				Listener = hasListener ? checkResult[listenerPeriod] : null,
@@ -90,13 +90,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork, MessageBrokerUnitOfWork]
 		[HttpGet]
-		public virtual JsonResult ResetPolling(Guid mailBoxId)
+		public virtual JsonResult ResetPolling(Guid mailboxId)
 		{
-			_scheduleChangePoller.ResetPolling(mailBoxId);
+			_scheduleChangePoller.ResetPolling(mailboxId);
 			return Json(new { }, JsonRequestBehavior.AllowGet);
 		}
 
-
+		[UnitOfWork, MessageBrokerUnitOfWork]
+		[HttpDelete]
+		public virtual JsonResult RemoveSchedulePollerMailbox(Guid mailboxId)
+		{
+			_scheduleChangePoller.RemoveMailbox(mailboxId);
+			return Json(new { }, JsonRequestBehavior.AllowGet);
+		}
 	}
 
 }

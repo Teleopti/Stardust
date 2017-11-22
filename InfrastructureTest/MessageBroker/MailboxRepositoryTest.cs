@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 				Target.AddMessage(message);
 			});
 		}
+
+
 	}
 
 	[TestFixture]
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		public IMailboxRepository Target;
 		public ICurrentMessageBrokerUnitOfWork UnitOfWork;
 		public MutableNow Now;
-		
+
 		[Test]
 		public void ShouldLoadById()
 		{
@@ -86,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			result.Should().Have.Count.EqualTo(1);
 			result.Single().BusinessUnitId.Should().Be(notification.BusinessUnitId);
 		}
-		
+
 		[Test]
 		public void ShouldAddNotifications()
 		{
@@ -134,7 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			var result = Target.Load(mailbox.Id);
 			result.ExpiresAt.Should().Be("2015-06-26 08:30".Utc());
 		}
-		
+
 		[Test]
 		public void ShouldPurgeExpiredMailbox()
 		{
@@ -150,6 +152,26 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 
 			Now.Is("2015-06-26 08:30");
 			Target.Purge();
+
+			Target.Load(mailbox.Id).Should().Be.Null();
+			Target.PopMessages(mailbox.Id, null).Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldRemoveMailbox()
+		{
+			var businessUnitId = Guid.NewGuid().ToString();
+			var mailbox = new Mailbox
+			{
+				Id = Guid.NewGuid(),
+				ExpiresAt = "2015-06-26 08:30".Utc(),
+				Route = new Message { BusinessUnitId = businessUnitId }.Routes().First()
+			};
+			Target.Add(mailbox);
+
+			Target.AddMessage(new Message { BusinessUnitId = businessUnitId });
+
+			Target.Remove(mailbox.Id);
 
 			Target.Load(mailbox.Id).Should().Be.Null();
 			Target.PopMessages(mailbox.Id, null).Should().Be.Empty();

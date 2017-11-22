@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			var mailbox = _mailboxRepository.Load(mailboxId);
 			return popMessages(mailbox);
 		}
-		
+
 		[MessageBrokerUnitOfWork]
 		public virtual void NotifyClients(Message message)
 		{
@@ -143,6 +143,13 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			});
 		}
 
+		public void RemoveMailbox(Guid mailboxId)
+		{
+			_distributedLock.TryLockForTypeOfAnd(this, mailboxId.ToString(), () =>
+			{
+				_mailboxRepository.Remove(mailboxId);
+			});
+		}
 		private IEnumerable<Message> popMessages(Mailbox mailbox)
 		{
 			var updateExpirationAt = mailbox.ExpiresAt.Subtract(new TimeSpan(_expirationInterval.Ticks / 2));

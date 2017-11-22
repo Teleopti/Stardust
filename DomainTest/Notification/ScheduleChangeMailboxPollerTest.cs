@@ -242,8 +242,46 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			FakeMailboxRepository.Load(mailboxId).ExpiresAt.Should().Be.GreaterThan(expiresAt);
 			FakeMailboxRepository.PopMessages(mailboxId, null).Should().Be.Empty();
-
 		}
 
+		[Test]
+		public void ShouldRemoveCreatedMailbox()
+		{
+			var scenario = ScenarioFactory.CreateScenario("test", false, false).WithId();
+			ScenarioRepository.Add(scenario);
+			var me = PersonFactory.CreatePerson().WithId();
+			me.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+			LoggedOnUser.SetFakeLoggedOnUser(me);
+			var mailboxId = Guid.NewGuid();
+
+
+			var scheduleChangeMessage = new Message
+			{
+				StartDate = Subscription.DateToString(new DateTime(2017, 11, 21, 20, 0, 0)),
+				EndDate = Subscription.DateToString(new DateTime(2017, 11, 21, 22, 0, 0)),
+				DomainReferenceId = scenario.Id.Value.ToString(),
+				DomainUpdateType = (int)DomainUpdateType.NotApplicable,
+				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
+				DomainType = typeof(IScheduleChangedMessage).Name,
+				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
+					.Select(_ => me.Id.ToString()))
+			};
+
+			var expiresAt = Now.UtcDateTime().Add(TimeSpan.FromSeconds(15 * 60));
+			Now.Is(expiresAt.Subtract(new TimeSpan(TimeSpan.FromSeconds(15 * 60).Ticks / 2)).AddMinutes(1));
+			FakeMailboxRepository.Add(new Mailbox
+			{
+				Id = mailboxId,
+				Route = scheduleChangeMessage.Routes().First(),
+				ExpiresAt = expiresAt
+			});
+
+			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
+
+			Target.RemoveMailbox(mailboxId);
+
+			FakeMailboxRepository.Load(mailboxId).Should().Be.Null();
+			FakeMailboxRepository.PopMessages(mailboxId, null).Should().Be.Empty();
+		}
 	}
 }
