@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseIocForFatClient]
 	public class IntradayOptimizationRestrictionsDesktopTest : IntradayOptimizationScenarioTest
 	{
-		public IOptimizeIntradayDesktop Target;
+		public OptimizationDesktopExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		
 		[Test]
@@ -45,11 +46,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var restriction = new RotationRestriction {ShiftCategory = shiftCategory};
 			var personRestriction = new ScheduleDataRestriction(agent, restriction, dateOnly);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, personRestriction }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UseRotations = true;
-			optimizationPreferences.General.RotationsValue = 1.0d;
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = {ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UseRotations = true, RotationsValue = 1.0d}
+			};
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Minute.Should().Be.EqualTo(0);
 		}
@@ -69,11 +71,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var restriction = new AvailabilityRestriction {NotAvailable = true};
 			var personRestriction = new ScheduleDataRestriction(agent, restriction, dateOnly);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, personRestriction }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UseAvailabilities = true;
-			optimizationPreferences.General.AvailabilitiesValue = 1.0d;
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UseAvailabilities = true, AvailabilitiesValue = 1.0d }
+			};
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Minute.Should().Be.EqualTo(0);
 		}
@@ -93,11 +96,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = shiftCategory};
 			var preferenceDay = new PreferenceDay(agent, dateOnly, preferenceRestriction);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UsePreferences = true;
-			optimizationPreferences.General.PreferencesValue = 1.0d;
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 1.0d }
+			};
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Minute.Should().Be.EqualTo(0);
 		}
@@ -115,12 +119,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(dateOnly);
 			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UsePreferences = true;
-			optimizationPreferences.General.PreferencesValue = 1.0d;
-			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60);
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 1.0d },
+				Advanced = {BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60) }
+			};
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(12);
 		}
@@ -140,11 +145,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var preferenceRestriction = new PreferenceRestriction {StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))};
 			var preferenceDay = new PreferenceDay(agent, dateOnly, preferenceRestriction);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UsePreferences = true;
-			optimizationPreferences.General.PreferencesValue = 0d;
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 0d }
+			};
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(12);
 		}
@@ -168,14 +174,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var preferenceRestriction = new PreferenceRestriction {StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))};
 			var preferenceDay = new PreferenceDay(agent, dateOnly, preferenceRestriction);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UsePreferences = true;
-			optimizationPreferences.General.PreferencesValue = 0d;
-			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60);
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 0d },
+				Advanced = {BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60)}
+			};
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
 
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(9);	
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(9);
 		}
 		
 		[Test]
@@ -197,12 +204,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var preferenceRestriction = new PreferenceRestriction {StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))};
 			var preferenceDay = new PreferenceDay(agent, dateOnly, preferenceRestriction);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UsePreferences = false;
-			optimizationPreferences.General.PreferencesValue = 0d;
-			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60);
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = false, PreferencesValue = 0d },
+				Advanced = { BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60) }
+			};
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(10);
 			
@@ -229,12 +237,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = shiftCategoryPrefered};
 			var preferenceDay = new PreferenceDay(agent, dateOnly, preferenceRestriction);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UsePreferences = true;
-			optimizationPreferences.General.PreferencesValue = 0d;
-			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromHours(breakByMaxHours);
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 0d },
+				Advanced = { BreakPreferenceStartTimeByMax = TimeSpan.FromHours(breakByMaxHours) }
+			};
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			return stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Equals(9);
 		}
@@ -258,12 +267,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var preferenceRestriction = new PreferenceRestriction {StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))};
 			var preferenceDay = new PreferenceDay(agent, dateOnly, preferenceRestriction);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UsePreferences = true;
-			optimizationPreferences.General.PreferencesValue = 0d;
-			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromHours(23);
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 0d },
+				Advanced = { BreakPreferenceStartTimeByMax = TimeSpan.FromHours(23) }
+			};
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(10);
 		}
@@ -289,15 +299,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				skillDays.Add(skill.CreateSkillDayWithDemandPerHour(scenario, date.AddDays(i), TimeSpan.FromMinutes(1), new Tuple<int, TimeSpan>(7, TimeSpan.FromMinutes(360))));
 				scheduleData.Add(new PreferenceDay(agent, date.AddDays(i), new PreferenceRestriction { StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))}));
 			}
-			scheduleData.Add(new PersonAssignment(agent, scenario, date.AddDays(5)).WithDayOff());	
-			scheduleData.Add(new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff());	
+			scheduleData.Add(new PersonAssignment(agent, scenario, date.AddDays(5)).WithDayOff());
+			scheduleData.Add(new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff());
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, scheduleData, skillDays);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UsePreferences = true;
-			optimizationPreferences.General.PreferencesValue = preferenceValue;
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = preferenceValue },
+			};
 
-			Target.Optimize(new[] { agent }, period, optimizationPreferences, new NoIntradayOptimizationCallback());
-			
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, period, optimizationPreferences, null);
+
 			return stateHolder.Schedules.SchedulesForPeriod(period, agent).Count(x => x.PersonAssignment().Period.StartDateTime.Hour == 7);
 		}
 		
@@ -315,16 +326,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var preferenceRestriction = new PreferenceRestriction {StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))};
 			preferenceRestriction.AddActivityRestriction(new ActivityRestriction(phoneActivity));
 			var preferenceDay = new PreferenceDay(agent, dateOnly, preferenceRestriction);
-			SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.UsePreferences = true;
-			optimizationPreferences.General.PreferencesValue = 1d;
-			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 1d },
+				Advanced = {BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60)}
+			};
 
 			Assert.DoesNotThrow(() =>
 			{
-				Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());	
-			});	
+				Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
+			});
 		}
 
 		public IntradayOptimizationRestrictionsDesktopTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002, RemoveImplicitResCalcContext resourcePlannerRemoveImplicitResCalcContext46680) : base(resourcePlannerBreakPreferenceStartTimeByMax46002, resourcePlannerRemoveImplicitResCalcContext46680)
