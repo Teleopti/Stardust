@@ -1,14 +1,17 @@
--- For PBI #46841
-CREATE TABLE [dbo].[ExternalPerformanceData](
-	[ExternalPerformanceId] [int] NOT NULL,
-	[DateFrom] [smalldatetime] NOT NULL,
-	[PersonId] [int] NOT NULL,
-	[OriginalPersonId] [nvarchar](100) NOT NULL,
-	[Score] [real] NULL
- CONSTRAINT [PK_ExternalPerformanceData] PRIMARY KEY CLUSTERED 
+CREATE TABLE [msg].[PersonScheduleChangeMessage](
+	[Id] [uniqueidentifier] NOT NULL,
+	[StartDate] [datetime] NOT NULL,
+	[EndDate] [datetime] NOT NULL,
+	[PersonId] [uniqueidentifier] NOT NULL,
+	[TimeStamp] [datetime] NOT NULL,
+	 CONSTRAINT [PK_PersonScheduleChangeMessage] PRIMARY KEY CLUSTERED 
 (
-	[ExternalPerformanceid] ASC,
-	[DateFrom] ASC,
+	[Id] ASC
+)
+) ON [MSG]
+
+CREATE NONCLUSTERED INDEX [IX_PersonScheduleChangeMessage_PersonId] ON [msg].[PersonScheduleChangeMessage] 
+(
 	[PersonId] ASC
-)) ON [PRIMARY]
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [MSG]
 GO
