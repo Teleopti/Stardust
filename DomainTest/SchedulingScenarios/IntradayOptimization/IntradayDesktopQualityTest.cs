@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	public class IntradayDesktopQualityTest : IntradayOptimizationScenarioTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IOptimizeIntradayDesktop Target;
+		public OptimizationDesktopExecuter Target;
 		public IScheduleResultDataExtractorProvider ScheduleResultDataExtractorProvider;
 		public ResourceCalculateWithNewContext ResourceCalculation;
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 					stateHolder.SchedulingResultState);
 			var valueBefore = p.Values().First();
 
-			Target.Optimize(agentList,date.ToDateOnlyPeriod(), new OptimizationPreferences{General = { ScheduleTag = new ScheduleTag()}}, new NoIntradayOptimizationCallback());
+			Target.Execute(new NoSchedulingProgress(), stateHolder, agentList, date.ToDateOnlyPeriod(), new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true} }, null);
 
 			var valueAfter = p.Values().First();
 			var valueImprovement = (valueBefore - valueAfter);
