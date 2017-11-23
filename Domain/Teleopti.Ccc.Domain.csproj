@@ -346,11 +346,13 @@
     <Compile Include="Intraday\IntradaySkillProvider.cs" />
     <Compile Include="Intraday\ISkillTypeInfo.cs" />
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
+    <Compile Include="Notification\PersonScheduleChangeMessage.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePoller.cs" />
     <Compile Include="Optimization\EffectiveRestrictionStartTimeDecider.cs" />
     <Compile Include="Optimization\TeamBlock\BlockPreferencesMapper.cs" />
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />
     <Compile Include="Repositories\IAnalyticsSiteRepository.cs" />
+    <Compile Include="Repositories\IPersonScheduleChangeMessageRepository.cs" />
     <Compile Include="Repositories\PersonBudgetGroupName.cs" />
     <Compile Include="Reports\IScheduleAnalysisProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />

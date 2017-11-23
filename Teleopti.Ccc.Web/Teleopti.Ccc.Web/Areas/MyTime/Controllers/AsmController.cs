@@ -69,12 +69,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork, MessageBrokerUnitOfWork]
 		[HttpPost]
-		public virtual JsonResult CheckIfScheduleHasUpdates(Guid mailboxId, PollerInputPeriod notifyPeriod,
+		public virtual JsonResult CheckIfScheduleHasUpdates(PollerInputPeriod notifyPeriod,
 			PollerInputPeriod listenerPeriod)
 		{
 			var hasListener = listenerPeriod != null;
 			var periods = hasListener ? new[] { notifyPeriod, listenerPeriod } : new[] { notifyPeriod };
-			var checkResult = _scheduleChangePoller.Check(mailboxId, periods);
+			var checkResult = _scheduleChangePoller.Check(periods);
 			return Json(new
 			{
 				Listener = hasListener ? checkResult[listenerPeriod] : null,
@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork, MessageBrokerUnitOfWork]
 		[HttpGet]
-		public virtual JsonResult ResetPolling(Guid mailboxId)
+		public virtual JsonResult ResetPolling()
 		{
-			_scheduleChangePoller.ResetPolling(mailboxId);
+			_scheduleChangePoller.ResetPolling();
 			return Json(new { }, JsonRequestBehavior.AllowGet);
 		}
 	}

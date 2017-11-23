@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.IocCommon;
@@ -17,11 +18,11 @@ using Teleopti.Ccc.Domain.Common.Time;
 
 namespace Teleopti.Ccc.DomainTest.Notification
 {
-	[TestFixture, DomainTest, Ignore("Not done")]
+	[TestFixture, DomainTest]
 	public class ScheduleChangeMessagePollerTest : ISetup
 	{
 		public ScheduleChangeMessagePoller Target;
-		public FakeMailboxRepository FakeMailboxRepository;
+		public FakePersonScheduleChangeMessageRepository FakePersonScheduleChangeMessageRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public DefaultScenarioFromRepository DefaultScenarioFromRepository;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -30,11 +31,11 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<ScheduleChangeMessagePoller>();
-			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<DefaultScenarioFromRepository>().For<ICurrentScenario>();
 			system.UseTestDouble<MutableNow>().For<INow>();
+			system.UseTestDouble<FakePersonScheduleChangeMessageRepository>().For<IPersonScheduleChangeMessageRepository>();
 		}
 
 		[Test]
@@ -45,44 +46,29 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var me = PersonFactory.CreatePerson().WithId();
 			LoggedOnUser.SetFakeLoggedOnUser(me);
 			me.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			var mailboxId = Guid.NewGuid();
 
-			var scheduleChangeMessage = new Message
+			var scheduleChangeMessage = new PersonScheduleChangeMessage
 			{
-				StartDate = Subscription.DateToString(new DateTime(2017, 11, 17, 8, 0, 0)),
-				EndDate = Subscription.DateToString(new DateTime(2017, 11, 17, 10, 0, 0)),
-				DomainReferenceId = scenario.Id.Value.ToString(),
-				DomainUpdateType = (int)DomainUpdateType.NotApplicable,
-				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
-				DomainType = typeof(IScheduleChangedMessage).Name,
-				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
-					.Select(_ => me.Id.ToString()))
+				StartDate = new DateTime(2017, 11, 17, 8, 0, 0),
+				EndDate = new DateTime(2017, 11, 17, 10, 0, 0),
+				PersonId = me.Id.Value,
+				TimeStamp = Now.UtcDateTime()
 			};
 
-			var scheduleChangeMessage2 = new Message
+			var scheduleChangeMessage2 = new PersonScheduleChangeMessage
 			{
-				StartDate = Subscription.DateToString(new DateTime(2017, 11, 17, 10, 0, 0)),
-				EndDate = Subscription.DateToString(new DateTime(2017, 11, 17, 11, 0, 0)),
-				DomainReferenceId = scenario.Id.Value.ToString(),
-				DomainUpdateType = (int)DomainUpdateType.NotApplicable,
-				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
-				DomainType = typeof(IScheduleChangedMessage).Name,
-				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
-					.Select(_ => me.Id.ToString()))
+				StartDate = new DateTime(2017, 11, 17, 10, 0, 0),
+				EndDate = new DateTime(2017, 11, 17, 11, 0, 0),
+				PersonId = me.Id.Value,
+				TimeStamp = Now.UtcDateTime()
 			};
 
-			FakeMailboxRepository.Add(new Mailbox
-			{
-				Id = mailboxId,
-				Route = scheduleChangeMessage.Routes().First(),
-				ExpiresAt = Now.UtcDateTime().Add(TimeSpan.FromSeconds(15 * 60))
-			});
 
-			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
-			FakeMailboxRepository.AddMessage(scheduleChangeMessage2);
+			FakePersonScheduleChangeMessageRepository.Add(scheduleChangeMessage);
+			FakePersonScheduleChangeMessageRepository.Add(scheduleChangeMessage2);
 
 			var period = new PollerInputPeriod(new DateTime(2017, 11, 17), new DateTime(2017, 11, 17));
-			Target.Check(mailboxId, period)[period].Count().Should().Be.EqualTo(2);
+			Target.Check(period)[period].Count.Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -92,31 +78,20 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			ScenarioRepository.Add(scenario);
 			var me = PersonFactory.CreatePerson().WithId();
 			LoggedOnUser.SetFakeLoggedOnUser(me);
-			var mailboxId = Guid.NewGuid();
 
-			var scheduleChangeMessage = new Message
+			var scheduleChangeMessage = new PersonScheduleChangeMessage
 			{
-				StartDate = Subscription.DateToString(new DateTime(2017, 11, 15, 8, 0, 0)),
-				EndDate = Subscription.DateToString(new DateTime(2017, 11, 15, 10, 0, 0)),
-				DomainReferenceId = scenario.Id.Value.ToString(),
-				DomainUpdateType = (int)DomainUpdateType.NotApplicable,
-				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
-				DomainType = typeof(IScheduleChangedMessage).Name,
-				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
-					.Select(_ => me.Id.ToString()))
+				StartDate = new DateTime(2017, 11, 15, 8, 0, 0),
+				EndDate = new DateTime(2017, 11, 15, 10, 0, 0),
+				PersonId = me.Id.Value,
+				TimeStamp = Now.UtcDateTime()
 			};
 
-			FakeMailboxRepository.Add(new Mailbox
-			{
-				Id = mailboxId,
-				Route = scheduleChangeMessage.Routes().First(),
-				ExpiresAt = Now.UtcDateTime().Add(TimeSpan.FromSeconds(15 * 60))
-			});
+			FakePersonScheduleChangeMessageRepository.Add(scheduleChangeMessage);
 
-			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
 
 			var period = new PollerInputPeriod(new DateTime(2017, 11, 17), new DateTime(2017, 11, 17));
-			Target.Check(mailboxId, period)[period].Should().Be.Empty();
+			Target.Check(period)[period].Should().Be.Empty();
 		}
 
 		[Test]
@@ -126,32 +101,19 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			ScenarioRepository.Add(scenario);
 			var me = PersonFactory.CreatePerson().WithId();
 			LoggedOnUser.SetFakeLoggedOnUser(me);
-			var mailboxId = Guid.NewGuid();
 
-
-			var scheduleChangeMessage = new Message
+			var scheduleChangeMessage = new PersonScheduleChangeMessage
 			{
-				StartDate = Subscription.DateToString(new DateTime(2017, 11, 16, 22, 0, 0)),
-				EndDate = Subscription.DateToString(new DateTime(2017, 11, 17, 5, 0, 0)),
-				DomainReferenceId = scenario.Id.Value.ToString(),
-				DomainUpdateType = (int)DomainUpdateType.NotApplicable,
-				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
-				DomainType = typeof(IScheduleChangedMessage).Name,
-				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
-					.Select(_ => me.Id.ToString()))
+				StartDate = new DateTime(2017, 11, 16, 22, 0, 0),
+				EndDate = new DateTime(2017, 11, 17, 5, 0, 0),
+				PersonId = me.Id.Value,
+				TimeStamp = Now.UtcDateTime()
 			};
 
-			FakeMailboxRepository.Add(new Mailbox
-			{
-				Id = mailboxId,
-				Route = scheduleChangeMessage.Routes().First(),
-				ExpiresAt = Now.UtcDateTime().Add(TimeSpan.FromSeconds(15 * 60))
-			});
-
-			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
+			FakePersonScheduleChangeMessageRepository.Add(scheduleChangeMessage);
 
 			var period = new PollerInputPeriod(new DateTime(2017, 11, 17), new DateTime(2017, 11, 17));
-			Target.Check(mailboxId, period)[period].Count().Should().Be.EqualTo(1);
+			Target.Check(period)[period].Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -162,31 +124,18 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var me = PersonFactory.CreatePerson().WithId();
 			me.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
 			LoggedOnUser.SetFakeLoggedOnUser(me);
-			var mailboxId = Guid.NewGuid();
 
-
-			var scheduleChangeMessage = new Message
+			var scheduleChangeMessage = new PersonScheduleChangeMessage
 			{
-				StartDate = Subscription.DateToString(new DateTime(2017, 11, 21, 20, 0, 0)),
-				EndDate = Subscription.DateToString(new DateTime(2017, 11, 21, 22, 0, 0)),
-				DomainReferenceId = scenario.Id.Value.ToString(),
-				DomainUpdateType = (int)DomainUpdateType.NotApplicable,
-				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
-				DomainType = typeof(IScheduleChangedMessage).Name,
-				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
-					.Select(_ => me.Id.ToString()))
+				StartDate = new DateTime(2017, 11, 21, 20, 0, 0),
+				EndDate = new DateTime(2017, 11, 21, 22, 0, 0),
+				PersonId = me.Id.Value,
+				TimeStamp = Now.UtcDateTime()
 			};
 
-			FakeMailboxRepository.Add(new Mailbox
-			{
-				Id = mailboxId,
-				Route = scheduleChangeMessage.Routes().First(),
-				ExpiresAt = Now.UtcDateTime().Add(TimeSpan.FromSeconds(15 * 60))
-			});
-
-			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
+			FakePersonScheduleChangeMessageRepository.Add(scheduleChangeMessage);
 			var period = new PollerInputPeriod(new DateTime(2017, 11, 21), new DateTime(2017, 11, 21));
-			Target.Check(mailboxId, period)[period].Should().Be.Empty();
+			Target.Check(period)[period].Should().Be.Empty();
 		}
 
 		[Test]
@@ -197,36 +146,21 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var me = PersonFactory.CreatePerson().WithId();
 			me.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
 			LoggedOnUser.SetFakeLoggedOnUser(me);
-			var mailboxId = Guid.NewGuid();
 
-
-			var scheduleChangeMessage = new Message
+			var scheduleChangeMessage = new PersonScheduleChangeMessage
 			{
-				StartDate = Subscription.DateToString(new DateTime(2017, 11, 21, 20, 0, 0)),
-				EndDate = Subscription.DateToString(new DateTime(2017, 11, 21, 22, 0, 0)),
-				DomainReferenceId = scenario.Id.Value.ToString(),
-				DomainUpdateType = (int)DomainUpdateType.NotApplicable,
-				DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
-				DomainType = typeof(IScheduleChangedMessage).Name,
-				BinaryData = string.Join(",", Enumerable.Range(0, 1000)
-					.Select(_ => me.Id.ToString()))
+				StartDate = new DateTime(2017, 11, 21, 20, 0, 0),
+				EndDate = new DateTime(2017, 11, 21, 22, 0, 0),
+				PersonId = me.Id.Value,
+				TimeStamp = Now.UtcDateTime()
 			};
 
-			var expiresAt = Now.UtcDateTime().Add(TimeSpan.FromSeconds(15 * 60));
-			Now.Is(expiresAt.Subtract(new TimeSpan(TimeSpan.FromSeconds(15 * 60).Ticks/2)).AddMinutes(1));
-			FakeMailboxRepository.Add(new Mailbox
-			{
-				Id = mailboxId,
-				Route = scheduleChangeMessage.Routes().First(),
-				ExpiresAt = expiresAt
-			});
+			FakePersonScheduleChangeMessageRepository.Add(scheduleChangeMessage);
 
-			FakeMailboxRepository.AddMessage(scheduleChangeMessage);
+			Target.ResetPolling();
 
-			Target.ResetPolling(mailboxId);
-
-			FakeMailboxRepository.Load(mailboxId).ExpiresAt.Should().Be.GreaterThan(expiresAt);
-			FakeMailboxRepository.PopMessages(mailboxId, null).Should().Be.Empty();
+			FakePersonScheduleChangeMessageRepository.PopMessages(me.Id.Value).Should().Be.Empty();
 		}
 	}
+
 }
