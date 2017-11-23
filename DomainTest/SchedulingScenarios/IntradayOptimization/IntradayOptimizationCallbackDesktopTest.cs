@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -26,8 +27,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseIocForFatClient]
 	public class IntradayOptimizationCallbackDesktopTest : IntradayOptimizationScenarioTest
 	{
-		public IOptimizeIntradayDesktop Target;
+		public IOptimizeIntradayDesktop Target; //should be OptimizationDesktopExecuter but there is no way to inject TrackIntradayOptimizationCallback from there currently. fix if problematic in the future!
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+		public CascadingResourceCalculationContextFactory ResourceCalculationContextFactory; //should not be needed if using OptimizationDesktopExecuter instead
 
 		[Test]
 		public void ShouldDoSuccesfulCallbacks()
@@ -45,11 +47,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				var agent = new Person().WithId().WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneWeek(dateOnly);
 				asses.Add(new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phoneActivity, new TimePeriod(8, 17)));
 			}
-			SchedulerStateHolderFrom.Fill(scenario, dateOnly, asses.Select(x => x.Person), asses, skillDay);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, asses.Select(x => x.Person), asses, skillDay);
 
-			var callbackTracker = new TrackIntradayOptimizationCallback();
-			Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
-			callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(10);
+			using (ResourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, false, dateOnly.ToDateOnlyPeriod()))
+			{
+				var callbackTracker = new TrackIntradayOptimizationCallback();
+				Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
+				callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(10);
+			}
 		}
 
 		[Test]
@@ -67,11 +72,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				var agent = new Person().WithId().WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneWeek(dateOnly);
 				asses.Add(new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phoneActivity, new TimePeriod(8, 17)));
 			}
-			SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), asses.Select(x => x.Person), asses, new List<ISkillDay>());
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), asses.Select(x => x.Person), asses, new List<ISkillDay>());
 
-			var callbackTracker = new TrackIntradayOptimizationCallback();
-			Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
-			callbackTracker.UnSuccessfulOptimizations().Should().Be.EqualTo(10);
+			using (ResourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, false, dateOnly.ToDateOnlyPeriod()))
+			{
+				var callbackTracker = new TrackIntradayOptimizationCallback();
+				Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
+				callbackTracker.UnSuccessfulOptimizations().Should().Be.EqualTo(10);
+			}
 		}
 
 		public IntradayOptimizationCallbackDesktopTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002, RemoveImplicitResCalcContext resourcePlannerRemoveImplicitResCalcContext46680) : base(resourcePlannerBreakPreferenceStartTimeByMax46002, resourcePlannerRemoveImplicitResCalcContext46680)
