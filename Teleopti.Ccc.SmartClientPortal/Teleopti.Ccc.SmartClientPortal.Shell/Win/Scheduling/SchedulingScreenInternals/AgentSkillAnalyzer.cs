@@ -25,7 +25,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		private readonly IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
 		private readonly DateOnlyPeriod _datePeriod;
 		private readonly CreateIslands _createIslands;
+		private readonly IReduceSkillSets _reduceSkillSets;
 		private IList<Island> _islandListBeforeReducing;
+		private IList<Island> _islandListAfterReducing;
 		private IDictionary<ISkill,TimeSpan> _skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 		private TimeSpan _totalForecastedForDate;
 		private readonly TimeFormatter _timeFormatter = new TimeFormatter(new ThisCulture(CultureInfo.CurrentCulture));
@@ -39,7 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		public AgentSkillAnalyzer(IEnumerable<IPerson> personList, IEnumerable<ISkill> skillList,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod datePeriod,
-			CreateIslands createIslands)
+			CreateIslands createIslands, IReduceSkillSets reduceSkillSets)
 		{
 			InitializeComponent();
 			_dtpDate = new DateTimePicker {Format = DateTimePickerFormat.Short};
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			_skillDays = skillDays;
 			_datePeriod = datePeriod;
 			_createIslands = createIslands;
+			_reduceSkillSets = reduceSkillSets;
 			_date = datePeriod.StartDate;
 			_dtpDate.MinDate = datePeriod.StartDate.Date;
 			_dtpDate.MaxDate = datePeriod.EndDate.Date;
@@ -70,13 +73,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			LoadData();
 		}
 
-		private void drawIslandList()
+		private void drawIslandList(IEnumerable<Island> islands)
 		{
 			listViewIslands.Items.Clear();
 			listViewIslands.Groups.Clear();
 			listViewIslands.SuspendLayout();
 			var islandNumber = 0;		
-			foreach (var island in _islandListBeforeReducing)
+			foreach (var island in islands)
 			{
 				var islandModel = island.CreatExtendedClientModel();
 				var notLoadedSkills = 0;
@@ -126,7 +129,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			}
 		}
 
-		private void drawSkillList()
+		private void drawSkillList(IEnumerable<Island> islands)
 		{
 			listViewSkillViewSkills.SuspendLayout();
 			listViewSkillViewSkills.Items.Clear();
@@ -134,7 +137,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			listViewSkillViewSkills.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
 			
 			var islandNumber = 0;
-			foreach (var island in _islandListBeforeReducing)
+			foreach (var island in islands)
 			{
 				var islandModel = island.CreatExtendedClientModel();
 				islandNumber ++;
@@ -169,13 +172,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			}
 		}
 
-		private void drawVirtualGroupList(ISkill filterSkill, ListView listView)
+		private void drawVirtualGroupList(ISkill filterSkill, ListView listView, IEnumerable<Island> islands)
 		{
 			listView.Items.Clear();
 			listView.SuspendLayout();
 
 			var islandCounter = 0;
-			foreach (var island in _islandListBeforeReducing)
+			foreach (var island in islands)
 			{
 				islandCounter++;
 				var islandModel = island.CreatExtendedClientModel();
@@ -352,7 +355,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			if (selectedSkill == null)
 				return;
 
-			drawVirtualGroupList(selectedSkill, listViewSkillGroupsForSkill);
+			var islands = toolStripButtonToggleReduce.Checked ? _islandListAfterReducing : _islandListBeforeReducing;
+			drawVirtualGroupList(selectedSkill, listViewSkillGroupsForSkill, islands);
 
 			listViewSkillViewAgents.SuspendLayout();
 			listViewSkillViewAgents.Items.Clear();
@@ -372,6 +376,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			foreach (var person in _personList)
 			{
 				var personPeriod = person.Period(_date);
+				if(personPeriod == null)
+					continue;
+
 				foreach (var personSkill in personPeriod.PersonSkillCollection)
 				{
 					if(personSkill.Skill.Id == skill.Id && personSkill.Active)
@@ -459,9 +466,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		private void drawLists()
 		{
-			drawVirtualGroupList(null, listViewAllVirtualGroups);
-			drawSkillList();
-			drawIslandList();
+			var islands = toolStripButtonToggleReduce.Checked ? _islandListAfterReducing : _islandListBeforeReducing;
+			drawVirtualGroupList(null, listViewAllVirtualGroups, islands);
+			drawSkillList(islands);
+			drawIslandList(islands);
 		}
 
 		private void calculate()
@@ -469,6 +477,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			_skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 			_totalForecastedForDate = TimeSpan.Zero;
 			_islandListBeforeReducing = _createIslands.Create(new ReduceNoSkillSets(), _personList, _date.ToDateOnlyPeriod()).ToList();
+			_islandListAfterReducing = _createIslands.Create(_reduceSkillSets, _personList, _date.ToDateOnlyPeriod()).ToList();
 			createSkillDayForSkillsDic();
 		}
 
@@ -516,6 +525,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			{
 				x.ShowDialog(this);
 			}
+		}
+
+		private void toolStripButtonToggleReduce_Click(object sender, EventArgs e)
+		{
+			drawLists();
 		}
 	}
 }

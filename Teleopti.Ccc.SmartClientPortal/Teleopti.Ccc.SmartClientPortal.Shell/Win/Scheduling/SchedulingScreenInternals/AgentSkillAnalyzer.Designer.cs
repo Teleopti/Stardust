@@ -86,6 +86,7 @@
 			this.toolStripMain = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonRemoveNotLoadedSkills = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonToggleReduce = new System.Windows.Forms.ToolStripButton();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -607,10 +608,11 @@
 			this.toolStripMain.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonRemoveNotLoadedSkills,
+            this.toolStripButtonToggleReduce,
             this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod});
 			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
 			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(429, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(573, 25);
 			this.toolStripMain.TabIndex = 0;
 			// 
 			// toolStripButtonRemoveNotLoadedSkills
@@ -632,6 +634,17 @@
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Size = new System.Drawing.Size(275, 22);
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Text = "Find agents with skillgroup changes during period";
 			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Click += new System.EventHandler(this.toolStripButtonFindAgentsThatHaveChangedSkillGroupDuringPeriodClick);
+			// 
+			// toolStripButtonToggleReduce
+			// 
+			this.toolStripButtonToggleReduce.CheckOnClick = true;
+			this.toolStripButtonToggleReduce.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonToggleReduce.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonToggleReduce.Image")));
+			this.toolStripButtonToggleReduce.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonToggleReduce.Name = "toolStripButtonToggleReduce";
+			this.toolStripButtonToggleReduce.Size = new System.Drawing.Size(113, 22);
+			this.toolStripButtonToggleReduce.Text = "Toggle auto reduce";
+			this.toolStripButtonToggleReduce.Click += new System.EventHandler(this.toolStripButtonToggleReduce_Click);
 			// 
 			// AgentSkillAnalyzer
 			// 
@@ -720,5 +733,6 @@
 		private System.Windows.Forms.ColumnHeader columnHeader32;
 		private System.Windows.Forms.ToolStripButton toolStripButtonRemoveNotLoadedSkills;
 		private System.Windows.Forms.ToolStripButton toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod;
+		private System.Windows.Forms.ToolStripButton toolStripButtonToggleReduce;
 	}
 }
