@@ -72,14 +72,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					//	x.Request.Period.StartDateTime >= validStart).ToList();
 					if (hasWaitlisted)
 					{
-						sendDenyCommand(personRequest, Resources.AbsenceRequestAlreadyInWaitlist);
+						sendDenyCommand(personRequest, Resources.AbsenceRequestAlreadyInWaitlist, PersonRequestDenyOption.None);
 						return;
 					}
 				}
 				if (!_skillCombinationResourceReadModelValidator.Validate())
 				{
-					logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonTechnicalIssues, CultureInfo.GetCultureInfo("en-US")) + $"Read model is not up to date Request {personRequest.Request.Id}");
-					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
+					logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonSystemBusy, CultureInfo.GetCultureInfo("en-US")) + $"Read model is not up to date Request {personRequest.Request.Id}");
+					sendDenyCommand(personRequest, Resources.DenyReasonSystemBusy, PersonRequestDenyOption.TechnicalIssues);
 					return;
 				}
 
@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
 				if (!combinationResources.Any())
 				{
-					logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonTechnicalIssues, CultureInfo.GetCultureInfo("en-US")) + $" Can not find any skillcombinations for period {personRequest.Request.Period} and Request {personRequest.Request.Id}.");
-					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
+					logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonNoSkillCombinationsFound, CultureInfo.GetCultureInfo("en-US")) + $" Can not find any skillcombinations for period {personRequest.Request.Period} and Request {personRequest.Request.Id}.");
+					sendDenyCommand(personRequest, Resources.DenyReasonNoSkillCombinationsFound, PersonRequestDenyOption.TechnicalIssues);
 					return;
 				}
 
@@ -151,33 +151,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var result = sendApproveCommand(personRequest);
 						if (!result)
 						{
-							sendDenyCommand(personRequest, validatedRequest.ValidationErrors);
+							sendDenyCommand(personRequest, validatedRequest.ValidationErrors, PersonRequestDenyOption.None);
 						}
 					}
 					else
 					{
-						sendDenyCommand(personRequest, validatedRequest.ValidationErrors);
+						sendDenyCommand(personRequest, validatedRequest.ValidationErrors, validatedRequest.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None));
 					}
 				}
 				else
 				{
 					logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonTechnicalIssues, CultureInfo.GetCultureInfo("en-US")) + " Can not find any staffingThresholdValidator.");
-					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
+					sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues, PersonRequestDenyOption.TechnicalIssues);
 				}
 			}
 			catch (Exception exp)
 			{
-				logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonTechnicalIssues, CultureInfo.GetCultureInfo("en-US")) + exp);
-				sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
+				logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonSystemBusy, CultureInfo.GetCultureInfo("en-US")) + exp);
+				sendDenyCommand(personRequest, Resources.DenyReasonSystemBusy, PersonRequestDenyOption.TechnicalIssues);
 			}
 		}
 
-		private void sendDenyCommand(IPersonRequest personRequest, string denyReason)
+		private void sendDenyCommand(IPersonRequest personRequest, string denyReason, PersonRequestDenyOption denyOption)
 		{
 			var command = new DenyRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				DenyReason = denyReason
+				DenyReason = denyReason,
+				DenyOption = denyOption
 			};
 			_commandDispatcher.Execute(command);
 

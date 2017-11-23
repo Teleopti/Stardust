@@ -14245,7 +14245,7 @@ Vill du registrera dig?</value>
     <value>Teleoptis kundcenter </value>
   </data>
   <data name="DenyReasonTechnicalIssues" xml:space="preserve">
-    <value>Din förfrågan har avslagits pga. tekniska problem. Var god försök igen senare. </value>
+    <value>Din förfrågan har avslagits p.g.a. tekniska problem. Var god försök igen senare. </value>
   </data>
   <data name="ShowAbsenceProbability" xml:space="preserve">
     <value>Visa sannolikhet för frånvaro</value>
@@ -15228,5 +15228,11 @@ Vill du registrera dig?</value>
   </data>
   <data name="SelectOneOrMoreSites" xml:space="preserve">
     <value>Välj en eller flera enheter</value>
+  </data>
+  <data name="DenyReasonSystemBusy" xml:space="preserve">
+    <value>Din förfrågan har avslagits p.g.a. att system är upptaget. Vänligen försök igen senare.</value>
+  </data>
+  <data name="DenyReasonNoSkillCombinationsFound" xml:space="preserve">
+    <value>Din förfrågan har avslagits. Systemet hittar inget schemadata för perioden.</value>
   </data>
 </root>

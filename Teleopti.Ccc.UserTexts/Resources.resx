@@ -16815,4 +16815,12 @@ Do you want to participate?</value>
     <value>Threshold for silver badge:</value>
     <comment>Text label in WFM gamification module</comment>
   </data>
+  <data name="DenyReasonSystemBusy" xml:space="preserve">
+    <value>Your request has been denied because the system is busy. Please try again later.</value>
+    <comment>Friendly message when SkillCombination Readmodel is not up to date.</comment>
+  </data>
+  <data name="DenyReasonNoSkillCombinationsFound" xml:space="preserve">
+    <value>Your request has been denied because the system cannot find staffing data for the request period.</value>
+    <comment>Message when system can not find any Skill Combinations in the request period.</comment>
+  </data>
 </root>

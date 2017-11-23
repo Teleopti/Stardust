@@ -9290,6 +9290,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your request has been denied because the system cannot find staffing data for the request period..
+        /// </summary>
+        public static string DenyReasonNoSkillCombinationsFound {
+            get {
+                return ResourceManager.GetString("DenyReasonNoSkillCombinationsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your request has been denied because the system is busy. Please try again later..
+        /// </summary>
+        public static string DenyReasonSystemBusy {
+            get {
+                return ResourceManager.GetString("DenyReasonSystemBusy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your request has been denied due to technical issues. Please try again later. .
         /// </summary>
         public static string DenyReasonTechnicalIssues {

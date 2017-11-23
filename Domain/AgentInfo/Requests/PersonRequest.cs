@@ -226,9 +226,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var isExpired = personRequestDenyOption.HasFlag(PersonRequestDenyOption.RequestExpired);
 			var hasInsufficientPersonAccount = personRequestDenyOption.HasFlag(PersonRequestDenyOption.InsufficientPersonAccount);
 			var allPersonSkillsClosed = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AllPersonSkillsClosed);
+			var technicalIssues = personRequestDenyOption.HasFlag(PersonRequestDenyOption.TechnicalIssues);
 			var isDeniedButNotWaitlisted = IsDenied && !IsWaitlisted;
 			return (!isAutoDeny && IsWaitlisted) || !IsDenied || alreadyAbsence || isExpired || isDeniedButNotWaitlisted
-				   || hasInsufficientPersonAccount || allPersonSkillsClosed;
+				   || hasInsufficientPersonAccount || allPersonSkillsClosed || technicalIssues;
 		}
 
 		public virtual bool IsEditable
@@ -478,10 +479,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var alreadyAbsent = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence);
 			var expired = personRequestDenyOption.HasFlag(PersonRequestDenyOption.RequestExpired);
 			var insufficientPersonAccount = personRequestDenyOption.HasFlag(PersonRequestDenyOption.InsufficientPersonAccount);
+			var technicalIssues = personRequestDenyOption.HasFlag(PersonRequestDenyOption.TechnicalIssues);
 			var allPersonSkillsClosed = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AllPersonSkillsClosed);
 			if (autoDenied)
 			{
-				if (waitlistingIsEnabled() && !alreadyAbsent && !expired && !insufficientPersonAccount && !allPersonSkillsClosed)
+				if (waitlistingIsEnabled() && !alreadyAbsent && !expired && !insufficientPersonAccount && !allPersonSkillsClosed && !technicalIssues)
 				{
 					RequestState = new waitListedPersonRequest(this);
 				}

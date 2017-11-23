@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		AlreadyAbsence = 2,
 		RequestExpired = 4,
 		InsufficientPersonAccount = 8,
-		AllPersonSkillsClosed = 16
+		AllPersonSkillsClosed = 16,
+		TechnicalIssues = 32
 	}
 }

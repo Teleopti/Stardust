@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -728,6 +729,35 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be(false);
 			request.DenyReason.Should().Be(string.Empty);
+		}
+
+		[Test]
+		public void ShouldDenyOnTechnicalIssuesWhenNoSkillCombinations()
+		{
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			_absence = createAbsence();
+
+			setWorkflowControlSet(usePersonAccountValidator: false);
+
+			_workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(9)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+
+			setupPersonSkills();
+
+			Persister.Persist(form);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
+			((DenyRequestCommand) CommandDispatcher.LatestCommand).DenyReason.Should().Be
+				.EqualTo(Resources.DenyReasonTechnicalIssues);
+
+			//PersonRequestRepository.LoadAll().First().DenyReason.Should().Be.EqualTo(Resources.DenyReasonTechnicalIssues);
 		}
 
 		private void tryPersist()
