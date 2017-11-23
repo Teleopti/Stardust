@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -110,8 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(seat.Roles.First().Id, loaded.Seats.First().Roles.First().Id);
 		}
 
-		[Test, Ignore("Temporarily Ignore.")]
-
+		[Test]
 		public void VerifyCreatingCorrectNumberOfRecordsInApplicationRolesForSeatTable()
 		{
 			var role1 = new ApplicationRole { Name = "RoleForSeat1" };
@@ -129,14 +130,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(seatMapLocation);
 
-			var applicationRolesForSeatRecords = Session.CreateSQLQuery("Select * From ApplicationRolesForSeat").List();
+			var applicationRolesForSeatRecords = Session.CreateSQLQuery("Select * From ApplicationRolesForSeat Order by Seat").List();
 			Assert.AreEqual(3, applicationRolesForSeatRecords.Count);
-			Assert.AreEqual(seat1.Id, ((dynamic)applicationRolesForSeatRecords[0])[0]);
-			Assert.AreEqual(seat1.Id, ((dynamic)applicationRolesForSeatRecords[1])[0]);
-			Assert.AreEqual(seat2.Id, ((dynamic)applicationRolesForSeatRecords[2])[0]);
-			Assert.AreEqual(role1.Id, ((dynamic)applicationRolesForSeatRecords[0])[1]);
-			Assert.AreEqual(role2.Id, ((dynamic)applicationRolesForSeatRecords[1])[1]);
-			Assert.AreEqual(role1.Id, ((dynamic)applicationRolesForSeatRecords[2])[1]);
+
+			var applicationRoleDictionary = new Dictionary<Guid, List<Guid>>();
+
+			foreach (dynamic roleRecord in applicationRolesForSeatRecords)
+			{
+				var seatId = roleRecord[0];
+				var roleId = roleRecord[1];
+
+				if (!applicationRoleDictionary.ContainsKey(seatId))
+				{
+					applicationRoleDictionary.Add(seatId, new List<Guid>(){roleId});
+				}else
+				{
+					applicationRoleDictionary[seatId].Add(roleId);
+				}
+			}
+
+			Assert.AreEqual(2, applicationRoleDictionary[seat1.Id.Value].Count);
+			Assert.AreEqual(1, applicationRoleDictionary[seat2.Id.Value].Count);
+
+			Assert.Contains(role1.Id, applicationRoleDictionary[seat1.Id.Value]);
+			Assert.Contains(role2.Id, applicationRoleDictionary[seat1.Id.Value]);
+			Assert.Contains(role1.Id, applicationRoleDictionary[seat2.Id.Value]);
+			
 		}
 
 		[Test]
