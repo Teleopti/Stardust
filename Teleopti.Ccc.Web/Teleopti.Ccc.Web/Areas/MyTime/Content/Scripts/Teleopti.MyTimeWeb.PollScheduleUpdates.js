@@ -10,28 +10,12 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	var notificerDisplayTime = 0;
 	var ajax = null;
 	var currentListener;
-	var mailboxId;
 
 	function _setListener(name, period, callback) {
 		currentListener = { name: name, period: period, callback: callback };
 	};
 
-	function _startPolling() {
-		var deferred = $.Deferred();
-		ajax.Ajax({
-			url: 'Asm/StartPolling',
-			dataType: 'json',
-			type: 'GET',
-			success: function (data) {
-				mailboxId = data;
-				deferred.resolve();
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				deferred.reject(false);
-			}
-		});
-		return deferred.promise();
-	};
+	
 
 	function _checkIfScheduleHasUpdates(listenerPeriod, notifyPeriod) {
 		var deferred = $.Deferred();
@@ -40,7 +24,6 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			dataType: 'json',
 			type: 'POST',
 			data: {
-				mailboxId: mailboxId,
 				listenerPeriod: !!listenerPeriod ? _getFormatedPeriod(listenerPeriod) : undefined,
 				notifyPeriod: _getFormatedPeriod(notifyPeriod)
 			},
@@ -65,7 +48,8 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 		var notifyText = _getNotifyText(period);
 		if (!notificerDisplayTime) {
 			Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function (displayTime) {
-				settings.timeout = notificerDisplayTime * 1000;
+				notificerDisplayTime = displayTime;
+				settings.timeout = displayTime * 1000;
 				Teleopti.MyTimeWeb.Notifier.Notify(settings, notifyText);
 			});
 			return;
@@ -113,8 +97,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 		ajax.Ajax({
 			url: 'Asm/ResetPolling',
 			dataType: 'json',
-			type: 'GET',
-			data: { mailboxId: mailboxId }
+			type: 'GET'
 		});
 	}
 
@@ -144,19 +127,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			}
 		});
 	}
-
-	function _onWindowUnload() {
-		$(window).on('beforeunload', function () {
-			ajax.Ajax({
-				url: 'Asm/RemoveSchedulePollerMailbox',
-				dataType: 'json',
-				type: 'DELETE',
-				data: { mailboxId: mailboxId }
-			});
-		});
-
-	}
-
+	
 	function _init(options) {
 		ajax = new Teleopti.MyTimeWeb.Ajax();
 		settings = $.extend({
@@ -168,13 +139,8 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 			startDate: noticeListeningStartDate,
 			endDate: moment(new Date(noticeListeningStartDate.getTime())).add('days', 1).toDate()
 		}
-
-		_startPolling().done(function () {
-			_setUpInterval();
-			_subscribeToMessageBroker();
-			_onWindowUnload();
-		});
-
+		_setUpInterval();
+		_subscribeToMessageBroker();
 	}
 
 	function _destroy() {
