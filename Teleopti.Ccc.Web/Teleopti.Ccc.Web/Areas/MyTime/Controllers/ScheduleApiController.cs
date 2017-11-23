@@ -3,6 +3,7 @@ using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
@@ -21,13 +22,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IIntradayScheduleEdgeTimeCalculator _intradayScheduleEdgeTimeCalculator;
+		private readonly IPushMessageProvider _pushMessageProvider;
 
-		public ScheduleApiController(IScheduleViewModelFactory scheduleViewModelFactory, INow now, IUserTimeZone timeZone, IIntradayScheduleEdgeTimeCalculator intradayScheduleEdgeTimeCalculator)
+		public ScheduleApiController(IScheduleViewModelFactory scheduleViewModelFactory, INow now, IUserTimeZone timeZone, IIntradayScheduleEdgeTimeCalculator intradayScheduleEdgeTimeCalculator, IPushMessageProvider pushMessageProvider)
 		{
 			_scheduleViewModelFactory = scheduleViewModelFactory;
 			_now = now;
 			_timeZone = timeZone;
 			_intradayScheduleEdgeTimeCalculator = intradayScheduleEdgeTimeCalculator;
+			_pushMessageProvider = pushMessageProvider;
 		}
 
 		[UnitOfWork, Route("api/Schedule/GetIntradayScheduleEdgeTime"), HttpGet]
@@ -48,6 +51,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var showForDate = date ?? new DateOnly(nowForUser.Date);
 			
 			return _scheduleViewModelFactory.CreateDayViewModel(showForDate, staffingPossiblityType);
+		}
+
+		[UnitOfWork, Route("api/Schedule/GetUnreadMessageCount"), HttpGet]
+		public virtual int GetUnreadMessageCount()
+		{
+			return _pushMessageProvider.UnreadMessageCount;
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchWeekData"), HttpGet]

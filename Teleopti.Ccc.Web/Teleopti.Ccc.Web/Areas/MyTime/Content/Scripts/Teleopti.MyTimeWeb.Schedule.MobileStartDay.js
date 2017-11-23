@@ -36,6 +36,12 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			domainType: "IScheduleChangedInDefaultScenario",
 			page: currentPage
 		});
+
+		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
+			successCallback: Teleopti.MyTimeWeb.Schedule.MobileStartDay.ReloadScheduleListener,
+			domainType: "IPushMessageDialogue",
+			page: currentPage
+		});
 		subscribed = true;
 	}
 
@@ -66,6 +72,14 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 	function initViewModel(weekStart) {
 		vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(weekStart, Teleopti.MyTimeWeb.Schedule.MobileStartDay, dataService);
 		applyBindings();
+	}
+
+	function updateUnreadMessageCount() {
+		dataService.fetchMessageCount(fetchUnreadMessageCountCallback);
+	}
+
+	function fetchUnreadMessageCountCallback(data) {
+		vm.unreadMessageCount(data);
 	}
 
 	function fetchData() {
@@ -123,13 +137,17 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			readyForInteractionCallback();
 		},
 		ReloadScheduleListener: function (notification) {
-			var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
-			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
-			var selectedDate = vm.selectedDate().toDate();
-
-			if (messageStartDate <= selectedDate && messageEndDate >= selectedDate) {
-				fetchData();
+			if (notification.DomainType === "IScheduleChangedInDefaultScenario") {
+				var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
+				var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
+				var selectedDate = vm.selectedDate().toDate();
+				if (messageStartDate <= selectedDate && messageEndDate >= selectedDate) {
+					fetchData();
+					return;
+				}
 			}
+
+			updateUnreadMessageCount();
 		},
 		PartialDispose: function () {
 			cleanBinding();

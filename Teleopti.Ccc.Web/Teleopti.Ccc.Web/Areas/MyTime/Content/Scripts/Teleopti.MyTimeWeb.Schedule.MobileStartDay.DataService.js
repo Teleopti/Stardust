@@ -30,4 +30,15 @@
 			}
 		});
 	};
+
+	self.fetchMessageCount = function(callback) {
+		ajax.Ajax({
+			url: "../api/Schedule/GetUnreadMessageCount",
+			dataType: "json",
+			type: "GET",
+			success: function(data) {
+				callback && callback(data);
+			}
+		});
+	};
 }

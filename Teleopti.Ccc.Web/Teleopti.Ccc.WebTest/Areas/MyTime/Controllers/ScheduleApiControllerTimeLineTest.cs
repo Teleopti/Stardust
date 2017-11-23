@@ -7,9 +7,11 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -18,6 +20,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
@@ -34,6 +37,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public ILoggedOnUser User;
 		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
+		public IPushMessageProvider PushMessageProvider;
+		public IPushMessageDialogueRepository PushMessageDialogueRepository;
 
 		[Test]
 		public void ShouldAdjustTimelineForOverTimeWhenSiteOpenHourPeriodContainsSchedulePeriod()
@@ -260,6 +265,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchDayData(date);
 
 			AssertTimeLine(result.TimeLine.ToList(),8,0,15,0);
+		}
+
+		[Test]
+		public void ShouldGetUnreadMessageCount()
+		{
+			PushMessageDialogueRepository.Add(new PushMessageDialogue(new PushMessage(), User.CurrentUser()));
+			var result = Target.GetUnreadMessageCount();
+
+			result.Should().Be.EqualTo(1);
 		}
 		
 		[Test]
