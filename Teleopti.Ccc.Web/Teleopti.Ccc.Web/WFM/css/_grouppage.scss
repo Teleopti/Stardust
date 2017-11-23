@@ -47,6 +47,8 @@ group-page-picker {
 	$NUM-OF-VISIBLE-ITEMS: 7;
 	$VIRTUAL-REPEAT-HEIGHT: $NUM-OF-VISIBLE-ITEMS * $REPEATED-ITEM-HEIGHT + 0.6 * $REPEATED-ITEM-HEIGHT;
 	$PD: .2em;
+	$CHECKBOX-WIDTH: 30px;
+	$EXPAND-ICON-WIDTH: 30px;
 
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
 	background-color: $white;
@@ -71,11 +73,11 @@ group-page-picker {
 		width: 100%;
 
 		.repeated-item {
-			height: $REPEATED-ITEM-HEIGHT;
 
 			md-checkbox {
 				padding: 0px;
-				width: auto;
+				width: $CHECKBOX-WIDTH;
+				margin: 0;
 				outline: none !important;
 
 				.vertically-centered {
@@ -103,8 +105,13 @@ group-page-picker {
 			}
 
 			.md-checkbox-label {
+				flex-grow: 1;
 				line-height: $REPEATED-ITEM-HEIGHT;
-				margin: 3px 0;
+				margin: 0;
+				max-width: calc(100% - $CHECKBOX-WIDTH - $EXPAND-ICON-WIDTH);
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 
 			.md-button {
@@ -130,6 +137,8 @@ group-page-picker {
 			.group-toggle {
 				cursor: pointer;
 				outline: none !important;
+				width: $EXPAND-ICON-WIDTH;
+				margin: 0;
 
 				&:active, &:hover, &:focus {
 					background-color: rgba(158,158,158,0.26);
@@ -148,7 +157,7 @@ group-page-picker {
 			label.clickable-area {
 				cursor: pointer;
 				display: block !important;
-				padding: 0 1em;
+				padding: 0 10px;
 				margin: 0;
 			}
 
@@ -156,7 +165,7 @@ group-page-picker {
 				padding: 0;
 
 				label.clickable-area {
-					padding: 0 1em 0 2em;
+					padding: 0 10px 0 20px;
 				}
 			}
 		}
@@ -202,6 +211,7 @@ group-page-picker {
 		margin-left: auto;
 		display: flex;
 		align-items: center;
+		justify-content: center;
 	}
 
 	md-tab-item {

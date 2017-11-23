@@ -222,6 +222,17 @@ describe('<group-page-picker>', function () {
 		expect(selectValue.innerText.trim()).toEqual("SeveralGroupsSelected");
 	});
 
+	it('should be able to select group by clicking on group name', function () {
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+		openPanel(picker);
+		expectPanelOpen();
+		clickTab(1);
+		checkGroupPageByClickingName(0);
+
+		var selectValue = picker.find("md-select-value")[0].querySelector('.selected-text');
+		expect(selectValue.innerText.trim()).toEqual("SeveralGroupsSelected");
+	});
+
 	it('should preselect teams ', function () {
 		 
 		scope.selectedGroups = {
@@ -1033,6 +1044,11 @@ describe('<group-page-picker>', function () {
 		expectPanelOpen();
 		var groupPageCheckboxes = $document[0].querySelectorAll('md-tab-content.md-active .group md-checkbox');
 		groupPageCheckboxes[index].click();
+	}
+
+	function checkGroupPageByClickingName(index) {
+		expectPanelOpen();
+		$document[0].querySelectorAll('md-tab-content.md-active .group span.md-checkbox-label')[index].click();
 	}
 
 	function findAndCheckChildGroup(groupPageIndex, childIndex) {
