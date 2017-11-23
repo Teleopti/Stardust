@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
-		[Ignore("#46898 to be fixed")]
 		public void ShouldWorkInCombinationWithTimeBetweenDaysAndDaysUsingBlock()
 		{
 			var date = new DateOnly(2014, 4, 1);

@@ -129,7 +129,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DesktopSchedulingNew>().As<DesktopScheduling>().InstancePerLifetimeScope();
 				builder.RegisterType<BackToLegalShiftService>().As<IBackToLegalShiftService>();
 				builder.RegisterType<ScheduleOvertimeNew>().As<IScheduleOvertime>();
-				builder.RegisterType<SchedulerOptimizerHelperNew>().As<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
 			}
 			else
 			{
@@ -142,8 +141,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 				builder.RegisterType<BackToLegalShiftServiceOLD>().As<IBackToLegalShiftService>();
 				builder.RegisterType<ScheduleOvertime>().As<IScheduleOvertime>();
-				builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
 			}
+			builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PersonalSkillsProvider>().SingleInstance();
