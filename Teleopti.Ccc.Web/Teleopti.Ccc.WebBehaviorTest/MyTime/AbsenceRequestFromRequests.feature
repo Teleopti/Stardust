@@ -244,10 +244,9 @@ Scenario: Adding invalid absence request values
 	Given I am an agent
 	And I am viewing requests
 	When I click to add a new absence request
-	And I input request subject 'Subject Text'
-	And I input later start time than end time
+	And I input empty subject
 	And I click the send button
-	Then I should see input time is invalid error
+	Then I should see subject is missing error
 	And I should not see any requests in the list
 
 Scenario: Adding too long message on absence request

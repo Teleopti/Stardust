@@ -90,10 +90,9 @@ Scenario: Adding invalid absence request values
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
 	And I click to add a new absence request
-	And I input request subject 'Subject Text'
-	And I input later start time than end time for date '2013-10-03'
-	And I click send request button
-	Then I should see input time is invalid error
+	And I input empty subject
+	And I click the send button
+	Then I should see subject is missing error
 	And I should not see a symbol at the top of the schedule for date '2013-10-03'
 	
 Scenario: View absence types
