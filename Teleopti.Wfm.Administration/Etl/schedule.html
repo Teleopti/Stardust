@@ -1,7 +1,7 @@
-﻿	<div class="row">
+﻿<div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default ">
-			<div class="panel-heading">
+			<div class="panel-heading" style="display: inline-flex;">
 				<div class="input-group ">
 					<span class="input-group-addon" id="basic-addon1">
 						<svg style="width:14px;height:14px" viewBox="0 0 24 24">
@@ -9,6 +9,7 @@
 						</svg>
 					</span>
 					<input type="text" class="form-control" ng-model="scheduleFilter" placeholder="Filter" aria-label="Username" aria-describedby="basic-addon1">
+					<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal2">New</button>
 				</div>
 			</div>
 			<div class="panel-body">
@@ -19,6 +20,7 @@
 						<th scope="col">Job name</th>
 						<th scope="col">Enabled</th>
 						<th scope="col">Description</th>
+						<th scope="col">Actions</th>
 					</tr>
 					</thead>
 
@@ -36,6 +38,21 @@
 						</td>
 						<td>
 							{{job.Description}}
+						</td>
+						<td>
+							<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div ng-if="vm.state === 'schedule'">
+										<div ng-include="'/Etl/scheduleModal.html'"></div>
+									</div>
+								</div>
+							</div>
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">Edit</button>
+							<span ng-click="job.Enabled = !job.Enabled">
+								<button ng-if="!job.Enabled" type="button" class="btn btn-primary">Enable</button>
+								<button ng-if="job.Enabled" type="button" class="btn btn-primary">Disable</button>
+							</span>
+							<button type="button" class="btn btn-primary">Delete</button>
 						</td>
 					</tr>
 					</tbody>
