@@ -2,8 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -22,32 +20,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	public class SyncInFatClientProcessEventPublisher_SimulateNoNewThreads : IEventPublisher
-	{
-		private readonly ResolveEventHandlers _resolver;
-		private readonly CommonEventProcessor _processor;
-
-		public SyncInFatClientProcessEventPublisher_SimulateNoNewThreads(ResolveEventHandlers resolver, CommonEventProcessor processor)
-		{
-			_resolver = resolver;
-			_processor = processor;
-		}
-
-		public void Publish(params IEvent[] events)
-		{
-#pragma warning disable 618
-			foreach (var @event in events)
-			{
-				foreach (var type in _resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event))
-				{
-					_processor.Process(@event, type);
-				}
-			}
-
-#pragma warning restore 618
-		}
-	}
-
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher_SimulateNoNewThreads))]
 	[LoggedOnAppDomain]
