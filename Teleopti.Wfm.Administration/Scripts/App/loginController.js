@@ -30,7 +30,7 @@
 			};
 		});
 
-	function loginController($scope, $http, $cookies, $rootScope) {
+    function loginController($scope, $http, $cookies, $rootScope, tokenHeaderService) {
 		var tokenKey = 'accessToken';
 		var userKey = 'userToken';
 		var emailKey = 'lastEmail';
@@ -39,9 +39,11 @@
 
 		//checked if has cookie
 		var cookie = $cookies.getObject('WfmAdminAuth');
-		var token = cookie ? cookie.tokenKey : null;
+        var token = cookie ? cookie.tokenKey : null;
+		
 
-		var vm = this;
+        var vm = this;
+		vm.shouldShowEtl = false;
 		vm.loginEmail = sessionStorage.getItem(emailKey);
 		vm.loginPassword = "";
 		vm.Message = '';
@@ -49,27 +51,41 @@
 		vm.user = sessionStorage.getItem(userKey);
 		vm.Id = sessionStorage.getItem(idKey);
 
-		$scope.state = {
-			selected: 1
-		};
-		$scope.menuItems = [{
-			text: "Tenant administration",
-			link: "#/"
-		}, {
-			text: "Stardust Dashboard",
-			link: "#/StardustDashboard"
-		}, {
-			text: "Hangfire Dashboard",
-			link: "#/HangfireDashboard"
-		}, {
-			text: "Hangfire Monitoring",
-			link: "#/HangfireMonitoring"
-        }
-   //         , {
-			//text: "ETL",
-			//link: "#/ETL"
-   //     }
-        ];
+		$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
+			.success(function (data) {
+                vm.shouldShowEtl = data;
+
+                $scope.menuItems.push(
+	                {
+		                text: "ETL",
+		                link: "#/ETL",
+		                toggle: vm.shouldShowEtl
+	                }
+                );
+			});
+
+	    $scope.state = {
+		    selected: 1
+	    };
+	    $scope.menuItems = [{
+			    text: "Tenant administration",
+			    link: "#/",
+			    toggle: true
+		    }, {
+			    text: "Stardust Dashboard",
+			    link: "#/StardustDashboard",
+			    toggle: true
+		    }, {
+			    text: "Hangfire Dashboard",
+			    link: "#/HangfireDashboard",
+			    toggle: true
+		    }, {
+			    text: "Hangfire Monitoring",
+			    link: "#/HangfireMonitoring",
+			    toggle: true
+		    }
+	    ];
+
 		$scope.message = "något som jag vill visa";
 
 		$http.get("./HasNoUser").success(function (data) {
@@ -94,7 +110,7 @@
 
 		function showError(jqXHR) {
 			vm.ErrorMessage = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
-		}
+        }
 
 		function createCookies(data) {
 			vm.user = data.userName;
