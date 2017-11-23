@@ -46,6 +46,8 @@
 		vm.orgDataDescriptionFilter = orgDataDescriptionFilter;
 		vm.isOrgDataSelected = isOrgDataSelected;
 		vm.selectOrgData = selectOrgData;
+		vm.functionGroup = 'All';
+		vm.orgGroup = 'All';
 
 		var functionsFilter = $filter('functionsFilter');
 		var dataFilter = $filter('dataFilter');

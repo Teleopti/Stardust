@@ -39,3 +39,13 @@
 .scroll-free-tree{
 	max-height: none!important;
 }
+
+.permission-radio-buttons{
+	md-radio-group{
+		align-items: baseline;
+
+		md-radio-button{
+			margin: $full-padding;
+		}
+	}
+}

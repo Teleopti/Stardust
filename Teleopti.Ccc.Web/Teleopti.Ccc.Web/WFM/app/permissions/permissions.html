@@ -145,46 +145,26 @@
 									</div>
 									<div class="con-flex split-1-2"></div>
 									<div class="con-flex line-right">
-										<div class="wfm-checkbox" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
-											<input type="checkbox" checked="true" ng-model="vm.isAllFunctionSelected" />
-											<label ng-click="toggleDangerModal = true" class="pointer">
-												<span>
-													<span class="wfm-checkbox-toggle"></span>
-													<span class="wfm-checkbox-label">{{'ToggleAll'|translate}}</span>
-												</span>
-											</label>
+
+										<div ng-click="toggleDangerModal = true" class="inline-flex" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
+											<md-checkbox ng-model="vm.isAllFunctionSelected" aria-label="Checkbox" class="non-pointer" >
+												{{'ToggleAll'|translate}}
+											</md-checkbox>
 										</div>
+
 									</div>
 								</div>
 								<div class="con-row">
 									<div class="con-flex">
 										<form class="permission-radio-buttons inline-flex" ng-class="{'non-pointer text-muted': vm.selectedRole.BuiltIn}">
-											<div class="wfm-radio">
-												<label>
-													<span class="wfm-radio-label permission-filter-label" translate>Show</span>
-												</label>
-											</div>
-											<div class="wfm-radio">
-												<label>
-													<input type="radio" checked name="tree-toggle" ng-checked="vm.allFuncFilter" ng-click="vm.allFunctionsFilter()">
-													<span class="wfm-radio-toggle"></span>
-													<span class="wfm-radio-label" translate>All</span>
-												</label>
-											</div>
-											<div class="wfm-radio">
-												<label>
-													<input type="radio" name="tree-toggle" ng-checked="vm.functionsFilterObj.isSelected" ng-click="vm.selectedFunctionsFilter()" value="true">
-													<span class="wfm-radio-toggle"></span>
-													<span class="wfm-radio-label" translate>SelectedItems</span>
-												</label>
-											</div>
-											<div class="wfm-radio">
-												<label>
-													<input type="radio" name="tree-toggle" ng-checked="vm.functionsFilterObj.isUnSelected" ng-click="vm.unSelectedFunctionsFilter()">
-													<span class="wfm-radio-toggle"></span>
-													<span class="wfm-radio-label" translate>UnselectedItems</span>
-												</label>
-											</div>
+
+											<md-radio-group class="inline-flex" ng-model="vm.functionGroup">
+												<label>{{'Show'|translate}}:</label>
+												<md-radio-button value="All" aria-label="radio" ng-click="vm.allFunctionsFilter()">{{'All' | translate}}</md-radio-button>
+												<md-radio-button value="Selected" aria-label="radio" ng-click="vm.selectedFunctionsFilter()">{{'SelectedItems' | translate}}</md-radio-button>
+												<md-radio-button value="Unselected" aria-label="radio" ng-click="vm.unSelectedFunctionsFilter()">{{'UnselectedItems' | translate}}</md-radio-button>
+											</md-radio-group>
+
 										</form>
 									</div>
 								</div>
@@ -217,32 +197,14 @@
 								<div class="con-row">
 									<div class="con-flex">
 										<form class="permission-radio-buttons inline-flex" ng-class="{'non-pointer text-muted': vm.selectedRole.BuiltIn}">
-											<div class="wfm-radio">
-												<label>
-													<span class="wfm-radio-label permission-filter-label" translate>Show</span>
-												</label>
-											</div>
-											<div class="wfm-radio">
-												<label>
-													<input type="radio" checked name="tree-toggle" ng-checked="vm.allOrgFilter" ng-click="vm.allDataFilter()">
-													<span class="wfm-radio-toggle"></span>
-													<span class="wfm-radio-label" translate>All</span>
-												</label>
-											</div>
-											<div class="wfm-radio">
-												<label>
-													<input type="radio" name="tree-toggle" ng-checked="vm.dataFilterObj.isSelected" ng-click="vm.selectedDataFilter()" value="true">
-													<span class="wfm-radio-toggle"></span>
-													<span class="wfm-radio-label" translate>SelectedItems</span>
-												</label>
-											</div>
-											<div class="wfm-radio">
-												<label>
-													<input type="radio" name="tree-toggle" ng-checked="vm.dataFilterObj.isUnSelected" ng-click="vm.unselectedDataFilter()" value="true">
-													<span class="wfm-radio-toggle"></span>
-													<span class="wfm-radio-label" translate>UnselectedItems</span>
-												</label>
-											</div>
+
+											<md-radio-group class="inline-flex" ng-model="vm.orgGroup">
+												<label>{{'Show'|translate}}:</label>
+												<md-radio-button value="All" aria-label="radio" ng-click="vm.allDataFilter()">{{'All' | translate}}</md-radio-button>
+												<md-radio-button value="Selected" aria-label="radio" ng-click="vm.selectedDataFilter()">{{'SelectedItems' | translate}}</md-radio-button>
+												<md-radio-button value="Unselected" aria-label="radio" ng-click="vm.unselectedDataFilter()">{{'UnselectedItems' | translate}}</md-radio-button>
+											</md-radio-group>
+
 										</form>
 									</div>
 								</div>
