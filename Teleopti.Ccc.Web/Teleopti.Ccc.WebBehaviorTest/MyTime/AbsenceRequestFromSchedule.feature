@@ -93,7 +93,8 @@ Scenario: Adding invalid absence request values
 	And I input empty subject
 	And I input later start time than end time for date '2013-10-03'
 	And I click send request button
-	Then I should see texts describing my errors
+	Then I should see input time is invalid error
+	And I should see subject is missing error
 	And I should not see a symbol at the top of the schedule for date '2013-10-03'
 	
 Scenario: View absence types

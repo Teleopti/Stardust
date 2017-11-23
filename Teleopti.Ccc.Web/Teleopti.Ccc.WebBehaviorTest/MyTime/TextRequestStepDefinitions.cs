@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			TypeMessage("A message. A very very very short message. Or maybe not.");
 			var date = DateOnlyForBehaviorTests.TestToday.Date;
 			var time = date.AddHours(12);
-			SetValuesForDateAndTime(date, time, date, time.AddHours(1));
+			SetValuesForDateAndTime(date, date, time, time.AddHours(1));
 		}
 		
 		[When(@"I input text request values with subject '(.*)' for date '(.*)'")]
 		public void WhenIInputSubject(string subject, DateTime date)
 		{
 			var time = date.AddHours(12);
-			SetValuesForDateAndTime(date, time, date, time.AddHours(1));
+			SetValuesForDateAndTime(date, date, time, time.AddHours(1));
 			TypeSubject(subject);
 			TypeMessage("A message. A very very very short message. Or maybe not.");
 		}
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			TypeMessage("A message. A very very very short message. Or maybe not.");
 			
 			var time = date.AddHours(12);
-			SetValuesForDateAndTime(date, time, date, time.AddHours(1));
+			SetValuesForDateAndTime(date, date, time, time.AddHours(1));
             
         }
 
@@ -178,14 +178,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [When(@"I input later start time than end time for date '(.*)'")]
         public void WhenIInputLaterStartTimeThanEndTimeForDate(DateTime date)
         {
-			SetValuesForDateAndTime(date.AddDays(1), date.AddHours(1), date, date.AddHours(-2));
+			SetValuesForDateAndTime(date.AddDays(1), date, date.AddHours(1), date.AddHours(-2));
         }
 
-		[Then(@"I should see texts describing my errors")]
-		public void ThenIShouldSeeTextsDescribingMyErrors()
+		[Then(@"I should see subject is missing error")]
+		public void ThenIShouldSeeSubjectIsMissingError()
 		{
-			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", string.Format(Resources.InvalidTimeValue, Resources.Period));
 			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", Resources.MissingSubject);
+		}
+
+		[Then(@"I should see input time is invalid error")]
+		public void ThenIShouldSeeInputTimeIsInvalidError()
+		{
+			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", Resources.EndTimeMustBeGreaterThanStartTime);
 		}
 
 		[Then(@"I should see message adjusted to maximum length")]
