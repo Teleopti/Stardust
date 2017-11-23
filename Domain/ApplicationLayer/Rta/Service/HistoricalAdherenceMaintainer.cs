@@ -9,26 +9,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IHandleEvent<TenantDayTickEvent>,
 		IRunOnHangfire
 	{
-		private readonly IHistoricalAdherenceReadModelPersister _adherencePersister;
+		private readonly IHistoricalAdherenceReadModelPersister _historicalAdherencePersister;
 		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
 		private readonly INow _now;
 
 		public HistoricalAdherenceMaintainer(
-			IHistoricalAdherenceReadModelPersister adherencePersister,
+			IHistoricalAdherenceReadModelPersister historicalAdherencePersister,
 			IHistoricalChangeReadModelPersister historicalChangePersister,
 			INow now)
 		{
-			_adherencePersister = adherencePersister;
+			_historicalAdherencePersister = historicalAdherencePersister;
 			_historicalChangePersister = historicalChangePersister;
 			_now = now;
 		}
 
-		[ReadModelUnitOfWork]
-		public virtual void Handle(TenantDayTickEvent tenantDayTickEvent)
+		public void Handle(TenantDayTickEvent tenantDayTickEvent)
 		{
-			_adherencePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
+			purgeHistoricalAdherence();
+			purgeHistoricalChange();
+		}
+
+		[ReadModelUnitOfWork]
+		protected virtual void purgeHistoricalChange()
+		{
 			_historicalChangePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
 		}
 
+		[ReadModelUnitOfWork]
+		protected virtual void purgeHistoricalAdherence()
+		{
+			_historicalAdherencePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
+		}
 	}
 }
