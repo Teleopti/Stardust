@@ -48,25 +48,15 @@
                     method: 'GET',
                     isArray: true
                 }
-            }).query()
-                .$promise
-                // .then(function (sites) {
-                //     if (sites.length > 0)
-                //         sites[0].Teams = [{
-                //             Id: "34590A63-6331-4921-BC9F-9B5E015AB495",
-                //             SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-                //             Name: "Fajker",
-                //         },
-                //         {
-                //             Id: "34590A63-6331-4921-BC9F-9B5E015AB496",
-                //             SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-                //             Name: "Fajker 2",
-                //         }]
-                //     return sites;
-                // })
+            }).query().$promise
         };
 
         function getOrganizationForSkills(data) {
+			data.skillIds = data.skillIds || [];
+			// with more than 20 skills in a skill area, display the whole organization
+			// not tested. we'r not even sure if skill ids should be filtered on the 
+			// server side at all
+			data.skillIds = data.skillIds.length > 20 ? [] : data.skillIds;
             return $resource('../api/Sites/OrganizationForSkills', {}, {
                 query: {
                     method: 'GET',
@@ -82,7 +72,7 @@
         function getTeamCardsFor(data) {
             return $resource('../api/Overview/TeamCards', {}, {
                 query: {
-                    method: 'GET',
+                    method: 'POST',
                     isArray: true
                 }
             }).query({
@@ -97,7 +87,7 @@
 
             return $resource('../api/Overview/SiteCards', {}, {
                 query: {
-                    method: 'GET'
+                    method: 'POST'
                 }
             }).query(data).$promise
         }

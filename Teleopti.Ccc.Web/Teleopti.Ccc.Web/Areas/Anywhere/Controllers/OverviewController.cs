@@ -15,25 +15,34 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly SiteCardViewModelBuilder _sites;
 		private readonly TeamCardViewModelBuilder _teams;
 
-		public OverviewController(SiteCardViewModelBuilder sites, TeamCardViewModelBuilder _teams)
+		public OverviewController(SiteCardViewModelBuilder sites, TeamCardViewModelBuilder teams)
 		{
 			_sites = sites;
-			this._teams = _teams;
+			_teams = teams;
 		}
 
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Overview/SiteCards")]
-		public virtual IHttpActionResult SiteCards([FromUri]Guid[] skillIds = null, [FromUri]Guid[] siteIds = null)
+		public class Params
 		{
-			return Ok(_sites.Build(skillIds, siteIds));
+			public Guid[] skillIds;
+			public Guid[] siteIds;
 		}
 		
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Overview/TeamCards")]
-		public virtual IHttpActionResult TeamCards([FromUri]Guid siteId, [FromUri]Guid[] skillIds = null)
+		[ReadModelUnitOfWork, UnitOfWork, HttpPost, Route("api/Overview/SiteCards")]
+		public virtual IHttpActionResult SiteCards([FromBody] Params p)
 		{
-			return Ok(skillIds.EmptyIfNull().Any() ?
-					_teams.Build(siteId, skillIds) :
-					_teams.Build(siteId))
-				;
+			return Ok(_sites.Build(p.skillIds, p.siteIds));
+		}
+
+		public class Params2
+		{
+			public Guid[] skillIds;
+			public Guid siteId;
+		}
+
+		[ReadModelUnitOfWork, UnitOfWork, HttpPost, Route("api/Overview/TeamCards")]
+		public virtual IHttpActionResult TeamCards([FromBody] Params2 p)
+		{
+			return Ok(p.skillIds.EmptyIfNull().Any() ? _teams.Build(p.siteId, p.skillIds) : _teams.Build(p.siteId));
 		}
 	}
 }

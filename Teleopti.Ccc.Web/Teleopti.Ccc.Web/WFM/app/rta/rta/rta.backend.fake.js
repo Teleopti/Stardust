@@ -44,7 +44,7 @@
 			get skillAreas() { return skillAreas; },
 
 			lastAgentStatesRequestParams: undefined
-
+			
 		};
 
 		faker.fake(/\.\.\/api\/AgentStates\/For/,
@@ -175,21 +175,22 @@
 
 		faker.fake(/\.\.\/api\/Overview\/SiteCards(.*)/,
 			function (params) {
+				params.skillIds = params.skillIds || [];
+				params.siteIds = params.siteIds || [];
 				var sites = JSON.parse(JSON.stringify(siteAdherences));
-
-				if (params.skillIds)
+				
+				if (params.skillIds.length > 0)
 					sites = sites.filter(function (sa) {
 						return params.skillIds.indexOf(sa.SkillId) > -1;
 					});
 
-				var siteIds = params.siteIds || [];
-				if (siteIds.length > 0) {
+				if (params.siteIds.length > 0) {
 					sites.forEach(function (site) {
-						if (siteIds.indexOf(site.Id) > -1) {
+						if (params.siteIds.indexOf(site.Id) > -1) {
 							var teams = teamAdherences.filter(function (team) {
 								return team.SiteId == site.Id;
 							})
-							if (params.skillIds)
+							if (params.skillIds.length > 0)
 								teams = teams.filter(function (team) {
 									return params.skillIds.indexOf(team.SkillId) > -1;
 								});
@@ -208,11 +209,12 @@
 
 		faker.fake(/\.\.\/api\/Overview\/TeamCards(.*)/,
 			function (params) {
+				params.skillIds = params.skillIds || [];
 				var result = teamAdherences;
 				result = result.filter(function (ta) {
 					return params.siteId == ta.SiteId;
 				});
-				if (params.skillIds)
+				if (params.skillIds.length > 0)
 					result = result.filter(function (ta) {
 						return params.skillIds.indexOf(ta.SkillId) > -1;
 					});
