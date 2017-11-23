@@ -16799,4 +16799,20 @@ Do you want to participate?</value>
     <value>Unselect team</value>
     <comment>Tooltip to be displayed on hovering the team cards in RTA when selected</comment>
   </data>
+  <data name="ThresholdForBadge" xml:space="preserve">
+    <value>Threshold for badge:</value>
+    <comment>Text label in WFM gamification module</comment>
+  </data>
+  <data name="ThresholdForGoldBadge" xml:space="preserve">
+    <value>Threshold for bronze badge:</value>
+    <comment>Text label in WFM gamification module</comment>
+  </data>
+  <data name="ThresholdForSilverBadge" xml:space="preserve">
+    <value>Threshold for gold badge:</value>
+    <comment>Text label in WFM gamification module</comment>
+  </data>
+  <data name="ThresholdForBronzeBadge" xml:space="preserve">
+    <value>Threshold for silver badge:</value>
+    <comment>Text label in WFM gamification module</comment>
+  </data>
 </root>

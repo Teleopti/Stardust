@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -34320,6 +34320,42 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Threshold {
             get {
                 return ResourceManager.GetString("Threshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for badge:.
+        /// </summary>
+        public static string ThresholdForBadge {
+            get {
+                return ResourceManager.GetString("ThresholdForBadge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for silver badge:.
+        /// </summary>
+        public static string ThresholdForBronzeBadge {
+            get {
+                return ResourceManager.GetString("ThresholdForBronzeBadge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for bronze badge:.
+        /// </summary>
+        public static string ThresholdForGoldBadge {
+            get {
+                return ResourceManager.GetString("ThresholdForGoldBadge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for gold badge:.
+        /// </summary>
+        public static string ThresholdForSilverBadge {
+            get {
+                return ResourceManager.GetString("ThresholdForSilverBadge", resourceCulture);
             }
         }
         

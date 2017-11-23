@@ -1442,8 +1442,11 @@
     <Content Include="WFM\app\gamification\gamification.controller.js" />
     <Content Include="WFM\app\gamification\gamification.routes.js" />
     <Content Include="WFM\app\gamification\html\g.component.gamification.tpl.html" />
+    <Content Include="WFM\app\gamification\html\g.component.gamificationSettingInfo.tpl.html" />
     <Content Include="WFM\app\gamification\html\g.component.gamificationSettings.tpl.html" />
+    <Content Include="WFM\app\gamification\html\g.component.gamificationTargetRow.tpl.html" />
     <Content Include="WFM\app\gamification\html\g.component.gamificationTargets.tpl.html" />
+    <Content Include="WFM\app\gamification\html\g.component.gamificationTargetsTable.tpl.html" />
     <Content Include="WFM\app\gamification\html\gamification.html" />
     <Content Include="WFM\app\gamification\gamificationSetting.service.js" />
     <Content Include="WFM\app\gamification\_modules.js" />

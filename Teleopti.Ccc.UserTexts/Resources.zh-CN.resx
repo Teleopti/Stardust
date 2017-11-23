@@ -14188,4 +14188,28 @@ Teleopti R&amp;D</value>
   <data name="ExportSchedulesMaximumDays" xml:space="preserve">
     <value>最多可选择31天</value>
   </data>
+  <data name="GamificationSettings" xml:space="preserve">
+    <value>游戏化设定</value>
+  </data>
+  <data name="SelectOneOrMoreSites" xml:space="preserve">
+    <value>选择一个或多个站点</value>
+  </data>
+  <data name="SetGamificationTargets" xml:space="preserve">
+    <value>设置游戏化目标</value>
+  </data>
+  <data name="AppliedSetting" xml:space="preserve">
+    <value>应用设定</value>
+  </data>
+  <data name="ThresholdForBadge" xml:space="preserve">
+    <value>徽章阈值：</value>
+  </data>
+  <data name="ThresholdForGoldBadge" xml:space="preserve">
+    <value>金色徽章阈值：</value>
+  </data>
+  <data name="ThresholdForSilverBadge" xml:space="preserve">
+    <value>银色徽章阈值：</value>
+  </data>
+  <data name="ThresholdForBronzeBadge" xml:space="preserve">
+    <value>青铜色徽章阈值：</value>
+  </data>
 </root>
