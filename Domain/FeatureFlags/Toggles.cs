@@ -23,6 +23,7 @@
 		RTA_RtaTracer_45597,
 		RTA_UnifiedSkillGroupManagement_45417,
 		RTA_MonitorAgentsWithLongTimeInState_46475,
+		RTA_MobileFriendlyCheckboxes_46758,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,

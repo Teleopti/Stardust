@@ -41,6 +41,7 @@ RTA_RememberMyPartOfTheBusiness_39082 = true
 RTA_RtaTracer_45597 = true
 RTA_UnifiedSkillGroupManagement_45417 = true
 RTA_MonitorAgentsWithLongTimeInState_46475 = RC
+RTA_MobileFriendlyCheckboxes_46758 = DEV
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true
