@@ -15,11 +15,10 @@ Scenario: Adding invalid text request values
 	Given I am an agent
 	And I am viewing requests
 	When I click to add a new text request
-	And I input empty subject
+	And I input request subject 'Subject Text'
 	And I input later start time than end time
 	And I click send request button
 	Then I should see input time is invalid error
-	And I should see subject is missing error
 	And I should not see any requests in the list
 
 Scenario: Adding too long text request

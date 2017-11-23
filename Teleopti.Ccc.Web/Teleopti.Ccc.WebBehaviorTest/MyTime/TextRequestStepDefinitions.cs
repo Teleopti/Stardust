@@ -115,6 +115,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-subject", string.Empty);
 		}
 
+		[When(@"I input request subject")]
+		public void WhenIInputRequestSubject()
+		{
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-subject", string.Empty);
+		}
+
+		[When(@"I input request subject '(.*)'")]
+		public void WhenIInputRequestSubject(string subject)
+		{
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-subject", subject);
+		}
+
 		[When(@"I try to input too long message request values")]
 		[When(@"I input too long text request values")]
         public void WhenIInputTooLongTextRequestValues()
