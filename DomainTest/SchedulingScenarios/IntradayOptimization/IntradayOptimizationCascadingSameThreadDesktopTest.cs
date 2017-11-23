@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public ResourceCalculateWithNewContext ResourceCalculateWithNewContext;
 
 		[Test]
-		[Ignore("#46898 to be fixed ")]
-		public void ShouldShovelResourcesUsingSameThread()
+		public void ShouldNotOverwriteLocalResourceCalculationContextInIsland()
 		{
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
