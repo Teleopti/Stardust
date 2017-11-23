@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -108,7 +109,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(skill, 10d, 5d);
 
 			var personRequest = createOvertimeRequest(18, 1);
-			//RequestApprovalServiceFactory.SetApprovalService(new OvertimeRequestApprovalService(null, null, new FakeCommandDispatcher(), new[] { skill }));
 
 			Target.Process(personRequest, true);
 
@@ -838,7 +838,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Target.Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be("The week contains too much work time (10:00). Max is 09:00.");
+			personRequest.DenyReason.Trim().Should().Be("The week contains too much work time (10:00). Max is 09:00.");
 		}
 
 		[Test]
@@ -934,6 +934,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Target.Process(personRequest);
 
 			personRequest.IsPending.Should().Be.True();
+			personRequest.GetMessage(new NoFormatting()).Trim().Should().Be("The week contains too much work time (10:00). Max is 09:00.");
 		}
 
 		[Test]
@@ -1006,7 +1007,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Target.Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be("There must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.");
+			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.");
 		}
 
 		[Test]
@@ -1072,7 +1073,52 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Target.Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be("The week does not have the stipulated (30:00) weekly rest.");
+			personRequest.DenyReason.Trim().Should().Be("The week does not have the stipulated (30:00) weekly rest.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
+		public void ShouldShowMultipleDenyReasonsWhenVoilateMoreThanOneWorkRule()
+		{
+			setupPerson(8, 21);
+			var person = LoggedOnUser.CurrentUser();
+			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(24), TimeSpan.FromHours(6), TimeSpan.FromHours(10));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
+
+			for (var i = 0; i < 5; i++)
+			{
+				var day = 10 + i;
+				var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, day, 8, 2017, 7, day, 16));
+				ScheduleStorage.Add(pa);
+			}
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 11);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+
+			var denyReason = personRequest.DenyReason;
+			(denyReason.IndexOf(
+				 "There must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.",
+				 StringComparison.Ordinal) >
+			 -1).Should().Be(true);
+			(denyReason.IndexOf(
+				 "The week contains too much work time (27:00). Max is 24:00.", StringComparison.Ordinal) >
+			 -1).Should().Be(true);
 		}
 
 		private IPersonAssignment createMainPersonAssignment(IPerson person, DateTimePeriod period)
@@ -1249,3 +1295,4 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 	}
 }
+

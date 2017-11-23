@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -62,11 +65,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			if (repsonses.Any())
 			{
+				var denyReasons = new StringBuilder();
+				repsonses.Distinct().Select(x => x.Message).Distinct().ForEach(message => denyReasons.AppendLine(message));
 				return new OvertimeRequestValidationResult
 				{
-					InvalidReason = repsonses.FirstOrDefault()?.Message,
+					InvalidReason = denyReasons.ToString(),
 					IsValid = false,
-					ShouldDenyIfInValid = overtimeRequestOpenPeriod.WorkRuleValidationHandleType == OvertimeWorkRuleValidationHandleType.Deny
+					ShouldDenyIfInValid = overtimeRequestOpenPeriod.WorkRuleValidationHandleType ==
+						OvertimeWorkRuleValidationHandleType.Deny
 				};
 			}
 

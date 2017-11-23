@@ -37,23 +37,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		public void CheckAndProcessDeny(IPersonRequest personRequest)
 		{
-			if (isNotValid(personRequest)) return;
+			var validateRulesResult = validateRules(personRequest);
+			if (!validateRulesResult.IsValid)
+			{
+				handleOvertimeRequestValidationResult(personRequest, validateRulesResult);
+				return;
+			}
 
-			validateSkills(personRequest);
+			var validateSkillsResult = validateSkills(personRequest);
+			if (!validateSkillsResult.IsValid)
+			{
+				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
+			}
 		}
 
 		public void Process(IPersonRequest personRequest, bool isAutoGrant)
 		{
-			if (isNotValid(personRequest)) return;
+			var validateRulesResult = validateRules(personRequest);
+			if (!validateRulesResult.IsValid)
+			{
+				handleOvertimeRequestValidationResult(personRequest, validateRulesResult);
+				return;
+			}
 
-			var skills = validateSkills(personRequest);
-			if(skills == null) return;
+			var validateSkillsResult = validateSkills(personRequest);
+			if (!validateSkillsResult.IsValid)
+			{
+				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
+				return;
+			}
 
 			personRequest.Pending();
 
 			if (!isAutoGrant) return;
 
-			executeApproveCommand(personRequest, skills);
+			executeApproveCommand(personRequest, validateSkillsResult.Skills);
 		}
 
 		public void Process(IPersonRequest personRequest)
@@ -68,15 +86,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			personRequest.Pending();
 
-			if (isNotValid(personRequest)) return;
+			var validateRulesResult = validateRules(personRequest);
+			if (!validateRulesResult.IsValid)
+			{
+				handleOvertimeRequestValidationResult(personRequest, validateRulesResult);
+				return;
+			}
 
-			var skills = validateSkills(personRequest);
-			if (skills == null) return;
+			var validateSkillsResult = validateSkills(personRequest);
+			if (!validateSkillsResult.IsValid)
+			{
+				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
+				return;
+			}
 
 			if (overtimeOpenPeriod.AutoGrantType == WorkflowControl.OvertimeRequestAutoGrantType.No)
 				return;
 
-			executeApproveCommand(personRequest, skills);
+			executeApproveCommand(personRequest, validateSkillsResult.Skills);
 		}
 
 		private void executeApproveCommand(IPersonRequest personRequest, ISkill[] skills)
@@ -107,7 +134,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_commandDispatcher.Execute(denyCommand);
 		}
 
-		private bool isNotValid(IPersonRequest personRequest)
+		private OvertimeRequestValidationResult validateRules(IPersonRequest personRequest)
 		{
 			// Preload to get rid of proxies later on #45827
 			_activityRepository.LoadAll();
@@ -116,25 +143,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			foreach (var overtimeRequestValidator in _overtimeRequestValidators)
 			{
-				var resultOfBasicValidator = overtimeRequestValidator.Validate(personRequest);
-				if (resultOfBasicValidator.IsValid) continue;
-				if (resultOfBasicValidator.ShouldDenyIfInValid)
-					denyRequest(personRequest, resultOfBasicValidator.InvalidReason);
-				return true;
+				var overtimeRequestValidationResult = overtimeRequestValidator.Validate(personRequest);
+				if (overtimeRequestValidationResult.IsValid) continue;
+				return overtimeRequestValidationResult;
 			}
-			return false;
+			return new OvertimeRequestValidationResult {IsValid = true};
 		}
 
-		private ISkill[] validateSkills(IPersonRequest personRequest)
+		private OvertimeRequestAvailableSkillsValidationResult validateSkills(IPersonRequest personRequest)
 		{
-			var resultOfAvailableSkillsValidator = _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
-			if (!resultOfAvailableSkillsValidator.IsValid)
-			{
-				denyRequest(personRequest, resultOfAvailableSkillsValidator.InvalidReason);
-				return null;
-			}
+			return _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
+		}
 
-			return resultOfAvailableSkillsValidator.Skills;
+		private void handleOvertimeRequestValidationResult(IPersonRequest personRequest,
+			OvertimeRequestValidationResult overtimeRequestValidationResult)
+		{
+			if (overtimeRequestValidationResult.IsValid) return;
+			if (overtimeRequestValidationResult.ShouldDenyIfInValid)
+			{
+				denyRequest(personRequest, overtimeRequestValidationResult.InvalidReason);
+			}
+			else
+			{
+				personRequest.TrySetMessage(overtimeRequestValidationResult.InvalidReason);
+			}
 		}
 
 		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriod(IPersonRequest personRequest)
