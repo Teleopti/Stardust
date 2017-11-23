@@ -71,6 +71,105 @@
 		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 		Teleopti.MyTimeWeb.Portal.ParseHash = old;
 		equal(vm.DateTo().isValid(), true);
-		
+	});
+
+	test("should check required subject for new request", function () {
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+
+		vm.Subject('');
+		vm.checkSubject();
+
+		equal(vm.ShowError(), true);
+		equal(vm.ErrorMessage(), 'Missing subject');
+	});
+
+	test("should validate date from input for new request", function () {
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+
+		vm.Subject('subject');
+		vm.DateFrom('2017-11-22');
+		vm.DateTo('2017-11-21');
+		vm.TimeFrom('08:00');
+		vm.TimeTo('08:01');
+
+		vm.AddRequest();
+
+		equal(vm.ShowError(), true);
+		equal(vm.ErrorMessage(), 'End time must be greater than start time');
+	});
+
+	test("should validate date to input for new request", function () {
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+
+		vm.Subject('subject');
+		vm.DateFrom('2017-11-22');
+		vm.DateTo('2017-11-21');
+		vm.TimeFrom('08:00');
+		vm.TimeTo('08:01');
+
+		vm.AddRequest();
+
+		equal(vm.ShowError(), true);
+		equal(vm.ErrorMessage(), 'End time must be greater than start time');
+	});
+
+	test("should validate illegal time from input for new request on same day", function () {
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+
+		vm.Subject('subject');
+		vm.DateFrom('2017-11-22');
+		vm.DateTo('2017-11-22');
+		vm.TimeFrom('08:00');
+		vm.TimeTo('08:00');
+
+		vm.AddRequest();
+
+		equal(vm.ShowError(), true);
+		equal(vm.ErrorMessage(), 'End time must be greater than start time');
+	});
+
+	test("should validate legal time from input for new request on same day", function () {
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+
+		vm.Subject('subject');
+		vm.DateFrom('2017-11-22');
+		vm.DateTo('2017-11-22');
+		vm.TimeFrom('08:00');
+		vm.TimeTo('08:01');
+
+		vm.AddRequest();
+
+		equal(vm.ShowError(), false);
+		equal(vm.ErrorMessage(), '');
+	});
+
+	test("should validate illegal time to input for new request on same day", function () {
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+
+		vm.Subject('subject');
+		vm.DateFrom('2017-11-22');
+		vm.DateTo('2017-11-22');
+		vm.TimeFrom('08:00');
+		vm.TimeTo('08:00');
+
+		vm.AddRequest();
+
+		equal(vm.ShowError(), true);
+		equal(vm.ErrorMessage(), 'End time must be greater than start time');
+	});
+
+	test("should validate legal time to input for new request on same day", function () {
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+
+		vm.Subject('subject');
+		vm.DateFrom('2017-11-22');
+		vm.DateTo('2017-11-22');
+		vm.TimeFrom('08:00');
+		vm.TimeTo('08:01');
+
+		vm.AddRequest();
+
+		equal(vm.ShowError(), false);
+		equal(vm.ErrorMessage(), '');
 	});
 });

@@ -1,11 +1,3 @@
-var requestsMessagesUserTexts = {
-	MISSING_SUBJECT: "Missing subject",
-	MISSING_OVERTIME_TYPE: "Missing overtime type",
-	MISSING_STARTTIME: "Missing start time",
-	MISSING_DURATION: "Missing duration",
-	OVERTIME_REQUEST_DATE_IS_PAST: "Can not add overtime request on past date"
-};
-
 $(document).ready(function() {
 	var vm,
 		ajax,
