@@ -7,10 +7,6 @@
 	</md-select>
 </div>
 <div class="divider"></div>
-<div class="wfm-checkbox morph-switch" ng-if="!disableCreate">
-	<input type="checkbox" id="UseExistingActivity" ng-model="inputs.useExisting" />
-	<label for="UseExistingActivity">
-		<span class="wfm-checkbox-toggle"></span>
-		<span class="wfm-checkbox-label" translate>UseExistingActivity</span>
-	</label>
-</div>
+<md-checkbox ng-if="!disableCreate" ng-model="inputs.useExisting" aria-label="Use Existing Activity">
+	{{'UseExistingActivity' | translate}}
+</md-checkbox>
