@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface IPersonScheduleChangeMessageRepository
 	{
 		void Add(PersonScheduleChangeMessage scheduleChangeMessage);
-		IList<PersonScheduleChangeMessage> PopMessages(Guid userId);
+		IEnumerable<PersonScheduleChangeMessage> PopMessages(Guid userId);
 	}
 }

@@ -16,12 +16,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			messages.Add(scheduleChangeMessage);
 		}
 
-		public IList<PersonScheduleChangeMessage> PopMessages(Guid personId)
+		public IEnumerable<PersonScheduleChangeMessage> PopMessages(Guid personId)
 		{
 			var results = messages.Where(m => m.PersonId == personId).ToList();
 			messages = messages.Where(m => m.PersonId != personId).ToList();
 			return results;
 		}
-
 	}
 }
