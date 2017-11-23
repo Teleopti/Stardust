@@ -50,6 +50,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Core;
 using Module = Autofac.Module;
+using Teleopti.Ccc.Domain.Notification;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 {
@@ -90,6 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AsmViewModelMapper>().As<IAsmViewModelMapper>();
 			builder.RegisterType<MessageViewModelFactory>().As<IMessageViewModelFactory>();
 			builder.RegisterType<PushMessageDialoguePersister>().As<IPushMessageDialoguePersister>();
+			builder.RegisterType<ScheduleChangeMessagePoller>().SingleInstance();
 		}
 
 		private void registerSettingsTypes(ContainerBuilder builder)
