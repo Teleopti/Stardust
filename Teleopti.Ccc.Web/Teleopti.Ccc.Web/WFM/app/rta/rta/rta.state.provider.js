@@ -30,14 +30,10 @@ angular.module('wfm.rta').provider('RtaState', function() {
                 templateUrl: function() {
                 	if (toggles.RTA_UnifiedSkillGroupManagement_45417)
                 		return 'app/rta/rta/overview/view.RTA_UnifiedSkillGroupManagement_45417.html';
-                    if (toggles.RTA_RememberMyPartOfTheBusiness_39082)
-                        return 'app/rta/rta/overview/view.RTA_RememberMyPartOfTheBusiness_39082.html';
-					return 'app/rta/rta/overview/view.html';
+					return 'app/rta/rta/overview/view.RTA_RememberMyPartOfTheBusiness_39082.html';
                 },
                 controllerProvider: function() {
-                    if (toggles.RTA_RememberMyPartOfTheBusiness_39082)
-                    	return 'RtaOverviewController39082 as vm';
-					return 'RtaOverviewController as vm';
+					return 'RtaOverviewController39082 as vm';
                 },
                 resolve: {
                     skills: function(rtaService) {
@@ -63,9 +59,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 						return 'app/rta/rta/agents/rta-agents.RTA_MonitorAgentsWithLongTimeInState_46475.html';
 					if (toggles.RTA_UnifiedSkillGroupManagement_45417)
 						return 'app/rta/rta/agents/rta-agents.RTA_UnifiedSkillGroupManagement_45417.html';
-                    if (toggles.RTA_RememberMyPartOfTheBusiness_39082)
-                        return 'app/rta/rta/agents/rta-agents.RTA_RememberMyPartOfTheBusiness_39082.html';
-					return 'app/rta/rta/agents/rta-agents.html';
+					return 'app/rta/rta/agents/rta-agents.RTA_RememberMyPartOfTheBusiness_39082.html';
                 },
 				controllerProvider: function() {
 					if (toggles.RTA_MonitorAgentsWithLongTimeInState_46475)

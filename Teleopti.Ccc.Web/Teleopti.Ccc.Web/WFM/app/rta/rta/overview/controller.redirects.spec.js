@@ -104,6 +104,7 @@ describe('RtaOverviewController redirects', function () {
 		allSkills.forEach(function (skill) { $fakeBackend.withSkill(skill); });
 		$fakeBackend.withSkillAreas(skillAreas);
 
+		lastGoParams = {};
 		spyOn($state, 'go').and.callFake(function (_, params) {
 			lastGoParams = params;
 		});

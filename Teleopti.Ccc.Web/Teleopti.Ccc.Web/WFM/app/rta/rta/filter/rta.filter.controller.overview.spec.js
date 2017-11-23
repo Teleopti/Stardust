@@ -31,7 +31,7 @@ describe('RtaFilterController', function () {
 		$controllerBuilder = _ControllerBuilder_;
 		$timeout = _$timeout_;
 
-		scope = $controllerBuilder.setup('RtaFilterController');
+		scope = $controllerBuilder.setup('RtaFilterController39082');
 		$fakeBackend.clear();
 		spyOn($state, 'go');
 	}));

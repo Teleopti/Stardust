@@ -1619,7 +1619,6 @@
     <Content Include="WFM\app\rta\rta\agents\rta-agents-rowtemplate-AllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents-rowtemplate.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents-shiftcelltemplate.html" />
-    <Content Include="WFM\app\rta\rta\agents\rta-agents.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_RememberMyPartOfTheBusiness_39082.html" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.build.service.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.alarmcontext.spec.js" />
@@ -1638,7 +1637,6 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.grid.service.js" />
     <Content Include="WFM\app\rta\rta\filter\filter-template.html" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.agents.QuicklyChangeAgentsSelection.spec.js" />
-    <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.js" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.overview.skillSelection.spec.js" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.overview.spec.js" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.RTA_RememberMyPartOfTheBusiness_39082.js" />
@@ -1651,17 +1649,12 @@
     <Content Include="WFM\app\rta\rta\historical\rta.card.header.component.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.spec.js" />
-    <Content Include="WFM\app\rta\rta\overview\controller.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.openclose.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.redirects.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.RTA_RememberMyPartOfTheBusiness_39082.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.selection.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.storeState.spec.js" />
-    <Content Include="WFM\app\rta\rta\overview\overview-component.html" />
-    <Content Include="WFM\app\rta\rta\overview\overview.component.js" />
-    <Content Include="WFM\app\rta\rta\overview\overview.component.spec.js" />
-    <Content Include="WFM\app\rta\rta\overview\view.html" />
     <Content Include="WFM\app\rta\rta\overview\view.RTA_RememberMyPartOfTheBusiness_39082.html" />
     <Content Include="WFM\app\rta\rta\rta.adherence.service.js" />
     <Content Include="WFM\app\rta\rta\rta.backend.fake.js" />

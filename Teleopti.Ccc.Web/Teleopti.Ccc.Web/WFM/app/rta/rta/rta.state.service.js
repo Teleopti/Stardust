@@ -155,10 +155,11 @@
 		}
 
 		function cleanState() {
-
 			state.open = state.open === true || state.open === "true";
 			state.siteIds = state.siteIds || [];
+			state.siteIds = angular.isArray(state.siteIds) ? state.siteIds : [state.siteIds];
 			state.teamIds = state.teamIds || [];
+			state.teamIds = angular.isArray(state.teamIds) ? state.teamIds : [state.teamIds];
 
 			// remove duplicate sites n teams
 			state.siteIds = state.siteIds.filter(function (item, pos) {

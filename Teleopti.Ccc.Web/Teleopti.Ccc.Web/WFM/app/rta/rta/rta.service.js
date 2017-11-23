@@ -82,9 +82,6 @@
         };
 
         function getOverviewModelFor(data) {
-            if (angular.isArray(data)) // remove with RTA_RememberMyPartOfTheBusiness_39082
-                data = { skillIds: data };
-
             return $resource('../api/Overview/SiteCards', {}, {
                 query: {
                     method: 'POST'
