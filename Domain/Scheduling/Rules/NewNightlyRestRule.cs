@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -112,6 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			public DateOnly Date { get; set; }
 			public DateTime? WorkTimeStart { get; set; }
 			public DateTime? WorkTimeEnd { get; set; }
+			public IPersonAssignment PersonAssignMent { get; set; }
 		}
 
 		private scheduleDayForValidation convert(IScheduleDay scheduleDay)
@@ -122,7 +124,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				Date = scheduleDay.DateOnlyAsPeriod.DateOnly,
 				SignificantPart = scheduleDay.SignificantPart(),
 				WorkTimeStart = _workTimeStartEndExtractor.WorkTimeStart(projection),
-				WorkTimeEnd = _workTimeStartEndExtractor.WorkTimeEnd(projection)
+				WorkTimeEnd = _workTimeStartEndExtractor.WorkTimeEnd(projection),
+				PersonAssignMent= scheduleDay.PersonAssignment()
 			};
 		}
 
@@ -132,9 +135,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var secondSignificant = secondDay.SignificantPart;
 
 			var checkFirstDay = firstSignificant == SchedulePartView.MainShift ||
-								firstSignificant == SchedulePartView.Overtime;
+								firstSignificant == SchedulePartView.Overtime ||overtimeExistsInDayOff(firstDay, firstSignificant);
 			var checkSecondDay = secondSignificant == SchedulePartView.MainShift ||
-								 secondSignificant == SchedulePartView.Overtime;
+								 secondSignificant == SchedulePartView.Overtime || overtimeExistsInDayOff(secondDay, secondSignificant);
 
 			if (!(checkFirstDay && checkSecondDay))
 				return null;
@@ -143,6 +146,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 			var restTime = secondDay.WorkTimeStart.Value.Subtract(firstDay.WorkTimeEnd.Value);
 			return restTime < nightRest ? (TimeSpan?) restTime : null;
+		}
+
+		private static bool overtimeExistsInDayOff(scheduleDayForValidation scheduleDay, SchedulePartView significantOfScheduleDate)
+		{
+			return significantOfScheduleDate == SchedulePartView.DayOff && scheduleDay.PersonAssignMent.ShiftLayers.OfType<OvertimeShiftLayer>().Any();
 		}
 
 		private IBusinessRuleResponse createResponseForRemove(IPerson person, DateOnly dateOnly, DateOnlyPeriod dateOnlyPeriod)

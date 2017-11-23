@@ -995,19 +995,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			person.WorkflowControlSet = workflowControlSet;
 
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
-
-			for (int i = 0; i < 5; i++)
-			{
-				var day = 10 + i;
-				var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, day, 8, 2017, 7, day, 16));
-				ScheduleStorage.Add(pa);
-			}
+			
+			var scheduleDataOne = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 13, 8, 2017, 7, 13, 16));
+			var scheduleDataTwo = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 14, 8, 2017, 7, 14, 16));
+			ScheduleStorage.Add(scheduleDataOne);
+			ScheduleStorage.Add(scheduleDataTwo);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 11);
 			Target.Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
+		public void ShouldDenyWhenVoilateNightlyRestTimeRuleOnDayOff()
+		{
+			setupPerson(8, 21);
+			var person = LoggedOnUser.CurrentUser();
+			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(60), TimeSpan.FromHours(20), TimeSpan.FromHours(10));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
+
+			ScheduleStorage.Add(createMainPersonAssignmenDayoff(person, new DateOnly(2017, 7, 15)));
+			ScheduleStorage.Add(createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 16, 8, 2017, 7, 16, 16)));
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 15, 0, 0, 0, DateTimeKind.Utc), 48);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 20:00 hours between 2 shifts. Between 7/15/2017 and 7/16/2017 there are only -16:00 hours.");
 		}
 
 		[Test]
@@ -1033,12 +1064,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
 
-			for (int i = 0; i < 5; i++)
-			{
-				var day = 10 + i;
-				var pa = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, day, 8, 2017, 7, day, 16));
-				ScheduleStorage.Add(pa);
-			}
+			var scheduleDataOne = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 13, 8, 2017, 7, 13, 16));
+			var scheduleDataTwo = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 14, 8, 2017, 7, 14, 16));
+			ScheduleStorage.Add(scheduleDataOne);
+			ScheduleStorage.Add(scheduleDataTwo);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 10);
 			Target.Process(personRequest);
@@ -1129,6 +1158,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			main.InWorkTime = true;
 			return PersonAssignmentFactory
 				.CreateAssignmentWithMainShift(person, Scenario.Current(), main, period, shiftCategory).WithId();
+		}
+
+		private IPersonAssignment createMainPersonAssignmenDayoff(IPerson person, DateOnly day)
+		{
+			var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("Slackday", "SD"));
+			return PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(), day, dayOffTemplate);
 		}
 
 		private IPersonRequest createOvertimeRequest(DateTimePeriod period)
@@ -1273,13 +1308,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		private void setupPerson(int siteOpenStartHour = 8, int siteOpenEndHour = 17, bool isOpenHoursClosed = false)
 		{
-			//var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			var person = createPersonWithSiteOpenHours(siteOpenStartHour, siteOpenEndHour, isOpenHoursClosed);
 			person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateUsCulture());
 			person.PermissionInformation.SetCulture(CultureInfoFactory.CreateUsCulture());
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.Utc);
-
 		}
 
 		private IPersonRequest createOvertimeRequest(int startHour, int duration)
