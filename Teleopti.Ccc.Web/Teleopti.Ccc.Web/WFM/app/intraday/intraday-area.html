@@ -23,6 +23,7 @@
 										md-items="skill in vm.querySearch(vm.searchSkillText, vm.skills)"
 										md-item-text="skill.Name"
 										md-min-length="0"
+										md-clear-button="true"
 										placeholder="{{'SelectSkill'|translate}}">
 							<md-item-template>
 								<i ng-class="vm.getSkillIcon(skill)"></i>
@@ -33,10 +34,6 @@
 								{{'NoSkillFound'|translate}}
 							</md-not-found>
 						</md-autocomplete>
-						<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill"
-						ng-click="vm.clearSkillHelper()">
-							<md-tooltip>{{'Clear'|translate}}</md-tooltip>
-						</i>
 					</span>
 					<span class="con-flex ">
 						<md-autocomplete id="skill-area-id"
@@ -48,6 +45,7 @@
 										md-items="skillArea in vm.querySearch(vm.searchSkillAreaText, vm.skillAreas)"
 										md-item-text="skillArea.Name"
 										md-min-length="0"
+										md-clear-button="true"
 										placeholder={{vm.getSkillGroupText()}}>
 							<md-item-template>
 								<span md-highlight-text="vm.searchSkillAreaText"
@@ -60,10 +58,6 @@
 								{{'NoSkillGroupsFound'|translate}}
 							</md-not-found>
 						</md-autocomplete>
-						<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkillArea"
-						ng-click="vm.clearSkillAreaHelper()">
-							<md-tooltip>{{'Clear'|translate}}</md-tooltip>
-						</i>
 					</span>
 					<div class="line-right last-time cursor-pointer" ng-show="chosenOffset.value === 0">
 						<span ng-show="latestActualInterval && latestActualInterval !== 'undefined - undefined'">
@@ -289,7 +283,7 @@
 											<div class="con-flex"></div>
 										</div>
 									</md-content>
-									<md-content ng-cloak class="md-padding" ng-show="!vm.viewObj.hasMonitorData">
+									<md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
 										<span class="con-flex no-data-available"
 											  ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
 											{{'NoDataAvailable'|translate}}
@@ -323,7 +317,7 @@
 											</div>
 										</div>
 									</md-content>
-									<md-content ng-cloak class="md-padding" ng-show="!vm.viewObj.hasMonitorData">
+									<md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
 										<span class="con-flex no-data-available"
 											  ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
 											{{'NoDataAvailable'|translate}}
