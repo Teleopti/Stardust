@@ -40,9 +40,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[Test]
 		[Ignore("#46732 Probably involved in end user bug. When this is solved, we probably (?) also need to involve skill open hours (middle of day) + timezones. ...or maybe a fix for this is enough?")]
-		public void ShouldHandleNightShiftsCorrectlyBothWhenUnderAndOverstaffed([Values(1, 100)] int demandOnDays)
+		public void ShouldHandleNightShiftsCorrectlyBothWhenUnderAndOverstaffed(
+			[Values(2, 10, 40)] int numberOfAgents,
+			[Values(1, 100)] int demandOnDays)
 		{
-			const int numberOfAgents = 10;
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
@@ -62,10 +63,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var assesOnDate = AssignmentRepository.Find(date.ToDateOnlyPeriod(), scenario);
 			var groupedByStartDateTime = assesOnDate.GroupBy(x => x.ShiftLayers.Single().Period.StartDateTime);
 			//half of agents should get shift from ruleset1, the other half from ruleset2. 
-			const int expected = numberOfAgents / 2;
-			groupedByStartDateTime.Count().Should().Be.EqualTo(2);
-			groupedByStartDateTime.First().Count().Should().Be.EqualTo(expected);
-			groupedByStartDateTime.Last().Count().Should().Be.EqualTo(expected);
+			var expected = numberOfAgents / 2;
+			Assert.Multiple(() =>
+			{
+				Assert.That(groupedByStartDateTime.First().Count(), Is.EqualTo(expected));
+				Assert.That(groupedByStartDateTime.Last().Count(), Is.EqualTo(expected));
+			});
 		}
 		
 		
