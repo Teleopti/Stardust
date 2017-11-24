@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
@@ -74,20 +75,20 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			var mailbox = _mailboxRepository.Load(mailboxIdGuid);
 			if (mailbox == null)
 			{
-				_distributedLock.TryLockForTypeOfAnd(this, mailboxId, () =>
+				mailbox = new Mailbox
 				{
-					mailbox = _mailboxRepository.Load(mailboxIdGuid);
-					if (mailbox != null)
-						return;
-					_mailboxRepository.Add(new Mailbox
-					{
-						Route = route,
-						Id = mailboxIdGuid,
-						ExpiresAt = _now.UtcDateTime().Add(_expirationInterval)
-					});
-				});
-
-				return Enumerable.Empty<Message>();
+					Route = route,
+					Id = mailboxIdGuid,
+					ExpiresAt = _now.UtcDateTime().Add(_expirationInterval)
+				};
+				try
+				{
+					_mailboxRepository.Add(mailbox);
+				}
+				catch (Exception e) when (e.ContainsSqlViolationOfPrimaryKey())
+				{
+					return Enumerable.Empty<Message>();
+				}
 			}
 
 			var updateExpirationAt = mailbox.ExpiresAt.Subtract(new TimeSpan(_expirationInterval.Ticks / 2));

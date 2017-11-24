@@ -12,16 +12,27 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	[Toggle(Toggles.Mailbox_Optimization_41900)]
-	public class MailboxConcurrencyOptimizedTest : MailboxConcurrencyTest
-	{
-	}
-
 	[TestFixture]
 	[AnalyticsDatabaseTest]
 	public class MailboxConcurrencyTest
 	{
 		public IMessageBrokerServer Server;
-		public FakeTime Time;
+
+		[Test]
+		public void ShouldNotBreakWhenPolling()
+		{
+			var run = new ConcurrencyRunner();
+			var route = new Message {BusinessUnitId = Guid.NewGuid().ToString()}.Routes().First();
+
+			100.Times(() =>
+			{
+				var mailboxId = Guid.NewGuid().ToString();
+				run.InParallel(() => Server.PopMessages(route, mailboxId))
+					.Times(5);
+			});
+
+			Assert.DoesNotThrow(() => run.WaitForException<SqlException>());
+		}
 
 		[Test]
 		[Setting("MessageBrokerMailboxPurgeIntervalInSeconds", 0)]
@@ -39,22 +50,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 				Server.PopMessages(messages.GetRandom().Routes().First(), Guid.NewGuid().ToString());
 				Server.NotifyClients(messages.GetRandom());
 			}).Times(100);
-
-			Assert.DoesNotThrow(() => run.WaitForException<SqlException>());
-		}
-
-		[Test]
-		public void ShouldNotBreakWhenPolling()
-		{
-			var run = new ConcurrencyRunner();
-			var route = new Message {BusinessUnitId = Guid.NewGuid().ToString()}.Routes().First();
-
-			100.Times(() =>
-			{
-				var mailboxId = Guid.NewGuid().ToString();
-				run.InParallel(() => Server.PopMessages(route, mailboxId))
-					.Times(5);
-			});
 
 			Assert.DoesNotThrow(() => run.WaitForException<SqlException>());
 		}
