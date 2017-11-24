@@ -3,6 +3,10 @@
 	.hide-on-ie {
 		display: none!important;
 	}
+	#skill-area-id>md-autocomplete-wrap>button,
+	#skill-id>md-autocomplete-wrap>button {
+		display: none!important;
+	}
 	.ie-cross {
 		display: inline!important;
 		float: right;
