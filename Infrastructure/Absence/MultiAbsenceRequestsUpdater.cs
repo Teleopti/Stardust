@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				{
 					stopwatch.Restart();
 					preloadData();
-					personRequests = _personRequestRepository.Find(personRequestsIds);
+					personRequests = _personRequestRepository.Find(personRequestsIds).Where(x => x.IsPending || x.IsWaitlisted).ToList();
 					_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
 					var currentScenario = _scenarioRepository.Current();
 					stopwatch.Stop();
