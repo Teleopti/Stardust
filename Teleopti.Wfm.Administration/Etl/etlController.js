@@ -12,30 +12,30 @@
 
 		//manual inputs
         vm.manualInitial = {
-            StartDate: new Date(),
-            EndDate: new Date()
+            StartDate: new Date().toLocaleDateString("en-US"),
+            EndDate: new Date().toLocaleDateString("en-US")
         }
 		vm.manualQueueStats = {
-			StartDate: new Date(),
-			EndDate: new Date()
+            StartDate: new Date().toLocaleDateString("en-US"),
+            EndDate: new Date().toLocaleDateString("en-US")
         }
 		vm.manualAgentStats = {
-			StartDate: new Date(),
-			EndDate: new Date()
+            StartDate: new Date().toLocaleDateString("en-US"),
+            EndDate: new Date().toLocaleDateString("en-US")
 		}
 		vm.manualSchedule = {
-			StartDate: new Date(),
-			EndDate: new Date()
+            StartDate: new Date().toLocaleDateString("en-US"),
+            EndDate: new Date().toLocaleDateString("en-US")
 		}
 		vm.manualForecast = {
-			StartDate: new Date(),
-			EndDate: new Date()
+            StartDate: new Date().toLocaleDateString("en-US"),
+            EndDate: new Date().toLocaleDateString("en-US")
         }
 
 		//history inputs
 		vm.historyWorkPeriod = {
-			StartDate: new Date(),
-			EndDate: new Date()
+            StartDate: new Date().toLocaleDateString("en-US"),
+            EndDate: new Date().toLocaleDateString("en-US")
 		}
 
 		vm.schedules = [
