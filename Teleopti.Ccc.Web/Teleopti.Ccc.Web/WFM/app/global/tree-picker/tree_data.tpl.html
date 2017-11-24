@@ -4,7 +4,7 @@
   </ol>
 </div>
 <script type="text/ng-template" id="tree_child_renderer.html">
-  <div class="tree-toggle-group" tree-animate ng-class="{'selected-true': node[vm.nodeSelectedMark]}">
+  <div class="tree-toggle-group" tree-animate ng-class="{'selected-true': node[vm.nodeSelectedMark], 'semi-true': node[vm.nodeSemiSelected]}">
     <div class="toggle-handle">
       <i ng-hide="!node[vm.nodeChildrenName] || node[vm.nodeChildrenName].length==0 " class="mdi mdi-chevron-right"></i>
     </div>

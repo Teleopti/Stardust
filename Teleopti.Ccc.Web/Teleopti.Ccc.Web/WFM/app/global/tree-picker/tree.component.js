@@ -273,15 +273,18 @@
             vm.node = item;
             var state = !item.$parent.node[vm.nodeSelectedMark];
             item.$parent.node[vm.nodeSelectedMark] = state;
-
+            if (rootSelectUnique) {
+                var rootIndex = mapParentIndex(item)[0];
+                setSiblingsToUnselect(vm.data[vm.nodeChildrenName], rootIndex);
+            }
             if (item.$parent.$parent.$parent.node && item.$parent.$parent.$parent.node[vm.nodeChildrenName].length) {
                 setParentNodesSelectState(item.$parent.$parent.$parent);
             }
             if (item.$parent.node[vm.nodeChildrenName] && item.$parent.node[vm.nodeChildrenName].length) {
-                if(item.$parent.node[vm.nodeSemiSelected]) {
+                if (item.$parent.node[vm.nodeSemiSelected]) {
                     item.$parent.node[vm.nodeSemiSelected] = false;
                     removeSemiStateToNode(event.target);
-                 }
+                }
                 removeSemiStateToAllChildren(event.target.parentNode.nextElementSibling);
                 setChildrenNodesSelectState(item.$parent.node[vm.nodeChildrenName], state);
             }
@@ -289,12 +292,12 @@
         }
 
         function siblingsHasSomeSelected(siblings) {
-            var selectedSiblings = siblings.filter(function(s){return s[vm.nodeSelectedMark]});
+            var selectedSiblings = siblings.filter(function (s) { return s[vm.nodeSelectedMark] });
             return selectedSiblings.length > 0 && selectedSiblings.length < siblings.length;
         }
 
         function siblingsHasAllSelected(siblings) {
-            var selectedSiblings = siblings.filter(function(s){return s[vm.nodeSelectedMark]});
+            var selectedSiblings = siblings.filter(function (s) { return s[vm.nodeSelectedMark] });
             return selectedSiblings.length === siblings.length;
         }
 
@@ -319,15 +322,15 @@
             var hasSemiSelected = siblingsHasSemiSelected(children);
             var hasNoneSelectedOrSemiSelected = !hasSomeSelected && !hasSemiSelected && !hasAllSelected;
             var hasAllSelected = siblingsHasAllSelected(children);
-            if(hasSomeSelected || hasSemiSelected) {
+            if (hasSomeSelected || hasSemiSelected) {
                 data.node[vm.nodeSelectedMark] = false;
                 data.node[vm.nodeSemiSelected] = true;
             }
-            if(hasNoneSelectedOrSemiSelected) {
+            if (hasNoneSelectedOrSemiSelected) {
                 data.node[vm.nodeSelectedMark] = false;
                 data.node[vm.nodeSemiSelected] = false;
             }
-            if(hasAllSelected) {
+            if (hasAllSelected) {
                 data.node[vm.nodeSelectedMark] = true;
                 data.node[vm.nodeSemiSelected] = false;
             }
@@ -351,6 +354,7 @@
             item.forEach(function (child, i) {
                 if (i !== index) {
                     item[i][vm.nodeSelectedMark] = false;
+                    item[i][vm.nodeSemiSelected] = false;
                     setChildrenNodesSelectState(child[vm.nodeChildrenName], false);
                 }
             });
@@ -380,11 +384,11 @@
             var hasSomeSelected = siblingsHasSomeSelected(parentSiblings);
             var hasAllSelected = siblingsHasAllSelected(parentSiblings);
             var hasNoneSelectedOrSemiSelected = !hasSomeSelected && !hasSemiSelected && !hasAllSelected;;
-            if((hasSemiSelected || hasSomeSelected) || (hasSemiSelected && hasSomeSelected))  {
+            if ((hasSemiSelected || hasSomeSelected) || (hasSemiSelected && hasSomeSelected)) {
                 return addSemiStateToNode(checkItem.childNodes[1].childNodes[3]);
             }
-            
-            if(hasNoneSelectedOrSemiSelected || hasAllSelected) {
+
+            if (hasNoneSelectedOrSemiSelected || hasAllSelected) {
                 return removeSemiStateToNode(checkItem.childNodes[1].childNodes[3]);
             }
         }
