@@ -19,10 +19,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>().SingleInstance();
 			builder.RegisterType<MessageBrokerServer>().As<IMessageBrokerServer>().SingleInstance().ApplyAspects();
-			if (_configuration.Toggle(Toggles.Mailbox_Optimization_41900))
-				builder.RegisterType<MailboxRepositoryOptimized>().As<IMailboxRepository>().SingleInstance();
-			else
-				builder.RegisterType<MailboxRepository>().As<IMailboxRepository>().SingleInstance();
+			builder.RegisterType<MailboxRepository>().As<IMailboxRepository>().SingleInstance();
 		}
 	}
 	

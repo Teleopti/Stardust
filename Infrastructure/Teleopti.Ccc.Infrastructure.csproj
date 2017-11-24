@@ -304,7 +304,6 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="MessageBroker\Extensions.cs" />
     <Compile Include="MessageBroker\MailboxRepository.cs" />
-    <Compile Include="MessageBroker\MailboxRepositoryOptimized.cs" />
     <Compile Include="MessageBroker\Scheduling\IScheduleMessageSubscriber.cs" />
     <Compile Include="MessageBroker\Scheduling\MailboxSubscriber.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantConnectionstrings.cs" />

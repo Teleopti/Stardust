@@ -117,7 +117,6 @@ Wfm_SkillPriorityRoutingGUI_39885 = RC
 WfmGlobalLayout_personalOptions_37114 = true
 Wfm_ArchiveSchedule_41498 = true
 Wfm_ImportSchedule_41247 = true
-Mailbox_Optimization_41900 = true
 WFM_WebScheduling_LowPriority_44320 = RC
 
 Scheduler_LoadWithoutRequests_38567 = true

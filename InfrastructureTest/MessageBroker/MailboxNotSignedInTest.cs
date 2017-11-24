@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	[Toggle(Toggles.Mailbox_Optimization_41900)]
 	public class MailboxNotSignedInTest
 	{
 		public IPrincipalAndStateContext Context;

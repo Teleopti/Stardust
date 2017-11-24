@@ -12,32 +12,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
-	[Toggle(Toggles.Mailbox_Optimization_41900)]
-	public class MailboxRepositoryOptimizedTest : MailboxRepositoryTest
-	{
-		[Test]
-		public void ShouldHandleLargeMessages()
-		{
-			var message = new Message
-			{
-				BusinessUnitId = Guid.NewGuid().ToString(),
-				BinaryData = string.Join("|", Enumerable.Range(0, 1000)
-					.Select(_ => Guid.NewGuid().ToString()))
-			};
-			var mailbox = new Mailbox
-			{
-				Id = Guid.NewGuid(),
-				Route = message.Routes().First()
-			};
-			Target.Add(mailbox);
-
-			Assert.DoesNotThrow(() =>
-			{
-				Target.AddMessage(message);
-			});
-		}
-	}
-
 	[TestFixture]
 	[MessageBrokerUnitOfWorkTest]
 	public class MailboxRepositoryTest
@@ -154,5 +128,28 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			Target.Load(mailbox.Id).Should().Be.Null();
 			Target.PopMessages(mailbox.Id, null).Should().Be.Empty();
 		}
+		
+		[Test]
+		public void ShouldHandleLargeMessages()
+		{
+			var message = new Message
+			{
+				BusinessUnitId = Guid.NewGuid().ToString(),
+				BinaryData = string.Join("|", Enumerable.Range(0, 1000)
+					.Select(_ => Guid.NewGuid().ToString()))
+			};
+			var mailbox = new Mailbox
+			{
+				Id = Guid.NewGuid(),
+				Route = message.Routes().First()
+			};
+			Target.Add(mailbox);
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.AddMessage(message);
+			});
+		}
+		
 	}
 }

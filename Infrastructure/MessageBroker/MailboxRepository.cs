@@ -1,10 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
@@ -15,151 +13,113 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 	public class MailboxRepository : IMailboxRepository
 	{
 		private readonly ICurrentMessageBrokerUnitOfWork _unitOfWork;
-		private readonly IJsonSerializer _serializer;
-		private readonly IJsonDeserializer _deserializer;
 		private readonly INow _now;
 
-		public MailboxRepository(
-			ICurrentMessageBrokerUnitOfWork unitOfWork,
-			IJsonSerializer serializer,
-			IJsonDeserializer deserializer,
-			INow now
-			)
+		public MailboxRepository(ICurrentMessageBrokerUnitOfWork unitOfWork, INow now)
 		{
 			_unitOfWork = unitOfWork;
-			_serializer = serializer;
-			_deserializer = deserializer;
 			_now = now;
 		}
 
-		public void Add(Mailbox model)
+		public void Add(Mailbox mailbox)
 		{
-			persist(model, Enumerable.Empty<Message>());
+			_unitOfWork.Current().CreateSqlQuery($@"
+						INSERT INTO [msg].Mailbox VALUES(:{nameof(Mailbox.Id)}, :{nameof(Mailbox.Route)}, '[]', :{nameof(Mailbox.ExpiresAt)})")
+				.SetGuid(nameof(Mailbox.Id), mailbox.Id)
+				.SetString(nameof(Mailbox.Route), mailbox.Route)
+				.SetParameter(nameof(Mailbox.ExpiresAt), mailbox.ExpiresAt.NullIfMinValue())
+				.ExecuteUpdate();
 		}
 
 		public Mailbox Load(Guid id)
 		{
-			return load(id, null).SingleOrDefault();
+			return _unitOfWork.Current().CreateSqlQuery($@"
+						SELECT Id, Route, ExpiresAt FROM [msg].Mailbox 
+						WHERE Id = :{nameof(Mailbox.Id)}
+					")
+				.SetGuid(nameof(Mailbox.Id), id)
+				.SetResultTransformer(Transformers.AliasToBean<Mailbox>())
+				.UniqueResult<Mailbox>();
 		}
 
 		public IEnumerable<Message> PopMessages(Guid id, DateTime? expiredAt)
 		{
-			var mailbox = load(id, null).SingleOrDefault();
-			if (mailbox == null)
-				return Enumerable.Empty<Message>();
-			var messages = mailbox.Notifications;
-			if (messages.Any() || expiredAt.HasValue)
-			{
-				mailbox.ExpiresAt = expiredAt ?? mailbox.ExpiresAt;
-				persist(mailbox, Enumerable.Empty<Message>());
-			}
-			return messages;
+			if (expiredAt.HasValue)
+				_unitOfWork.Current().CreateSqlQuery($@"
+					UPDATE [msg].Mailbox 
+						SET ExpiresAt = :{nameof(Mailbox.ExpiresAt)}
+					WHERE Id = :{nameof(Mailbox.Id)}")
+					.SetGuid(nameof(Mailbox.Id), id)
+					.SetParameter(nameof(Mailbox.ExpiresAt), expiredAt.Value)
+					.ExecuteUpdate();
+
+			return _unitOfWork.Current().CreateSqlQuery($@"
+						DELETE FROM [msg].MailboxNotification
+						OUTPUT DELETED.*
+						WHERE MailboxId = :{nameof(InternalMessage.MailboxId)}	
+					")
+				.SetGuid(nameof(InternalMessage.MailboxId), id)
+				.SetResultTransformer(Transformers.AliasToBean<InternalMessage>())
+				.List<Message>();
 		}
 
 		public void AddMessage(Message message)
 		{
-			load(null, message.Routes())
-				.ForEach(mailbox => persist(mailbox, mailbox.Notifications.Append(message).ToArray()));
-		}
-
-		private void persist(Mailbox model, IEnumerable<Message> notifications)
-		{
-			_unitOfWork.Current().CreateSqlQuery(
-					"MERGE INTO [msg].Mailbox AS T " +
-					"USING (" +
-					"	VALUES " +
-					"	(" +
-					"		:Id, " +
-					"		:Route, " +
-					"		:Notifications" +
-					"	)" +
-					") AS S (" +
-					"		Id, " +
-					"		Route, " +
-					"		Notifications" +
-					"	) " +
-					"ON " +
-					"	T.Id = S.Id AND " +
-					"	T.Route = S.Route " +
-					"WHEN NOT MATCHED THEN " +
-					"	INSERT " +
-					"	(" +
-					"		Id," +
-					"		Route," +
-					"		Notifications, " +
-					"		ExpiresAt " +
-					"	) VALUES (" +
-					"		S.Id," +
-					"		S.Route," +
-					"		S.Notifications, " +
-					"		:ExpiresAt " +
-					"	) " +
-					"WHEN MATCHED THEN " +
-					"	UPDATE SET" +
-					"		Notifications = S.Notifications," +
-					"		ExpiresAt = :ExpiresAt" +
-					";")
-				.SetGuid("Id", model.Id)
-				.SetString("Route", model.Route)
-				.SetParameter("Notifications", _serializer.SerializeObject(notifications), NHibernateUtil.StringClob)
-				.SetParameter("ExpiresAt", model.ExpiresAt.NullIfMinValue())
-				.ExecuteUpdate();
-		}
-
-		private IEnumerable<mailboxWithNotifications> load(Guid? id, string[] routes)
-		{
-			var where = "Id =:Id";
-			if (routes != null)
-				where = "Route IN (:Routes)";
-
-			var sql =
-					"SELECT " +
-					"	Id," +
-					"	Route," +
-					"	Notifications AS NotificationsJson, " +
-					"	ExpiresAt " +
-					"FROM [msg].Mailbox WHERE" +
-					$"	{where} "
-				;
-
-			var query = _unitOfWork.Current().CreateSqlQuery(sql)
-				.AddScalar("Id", NHibernateUtil.Guid)
-				.AddScalar("Route", NHibernateUtil.String)
-				.AddScalar("NotificationsJson", NHibernateUtil.StringClob)
-				.AddScalar("ExpiresAt", NHibernateUtil.DateTime)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(mailboxWithNotifications)))
-				;
-
-			if (routes != null)
-				query.SetParameterList("Routes", routes);
-			else
-				query.SetGuid("Id", id.Value);
-
-			var result = query.List<mailboxWithNotifications>();
-			result.ForEach(m => m.ParseJson(_deserializer));
-			return result;
-		}
-
-		private class mailboxWithNotifications : Mailbox
-		{
-			public IEnumerable<Message> Notifications { get; set; }
-			public string NotificationsJson { get; set; }
-
-			public void ParseJson(IJsonDeserializer deserializer)
+			var mailboxes = _unitOfWork.Current().CreateSqlQuery($@"
+						SELECT Id FROM [msg].Mailbox 
+						WHERE Route IN (:{nameof(message.Routes)})
+					")
+				.SetParameterList(nameof(message.Routes), message.Routes())
+				.List<Guid>();
+			mailboxes.ForEach(mailboxId =>
 			{
-				Notifications = deserializer.DeserializeObject<List<Message>>(NotificationsJson);
-				NotificationsJson = null;
-			}
+				_unitOfWork.Current().CreateSqlQuery($@"
+					INSERT INTO [msg].MailboxNotification VALUES(
+						:{nameof(InternalMessage.MailboxId)}, 
+						:{nameof(Message.DataSource)},
+						:{nameof(Message.BusinessUnitId)},
+						:{nameof(Message.DomainType)},
+						:{nameof(Message.DomainQualifiedType)},
+						:{nameof(Message.DomainId)},
+						:{nameof(Message.ModuleId)},
+						:{nameof(Message.DomainReferenceId)},
+						:{nameof(Message.EndDate)},
+						:{nameof(Message.StartDate)},
+						:{nameof(Message.DomainUpdateType)},
+						:{nameof(Message.BinaryData)},
+						:{nameof(Message.TrackId)})")
+					.SetGuid(nameof(InternalMessage.MailboxId), mailboxId)
+					.SetParameter(nameof(Message.DataSource), message.DataSource)
+					.SetParameter(nameof(Message.BusinessUnitId), message.BusinessUnitId)
+					.SetParameter(nameof(Message.DomainType), message.DomainType)
+					.SetParameter(nameof(Message.DomainQualifiedType), message.DomainQualifiedType)
+					.SetParameter(nameof(Message.DomainId), message.DomainId)
+					.SetParameter(nameof(Message.ModuleId), message.ModuleId)
+					.SetParameter(nameof(Message.DomainReferenceId), message.DomainReferenceId)
+					.SetParameter(nameof(Message.EndDate), message.EndDate)
+					.SetParameter(nameof(Message.StartDate), message.StartDate)
+					.SetParameter(nameof(Message.DomainUpdateType), message.DomainUpdateType)
+					.SetParameter(nameof(Message.BinaryData), message.BinaryData, NHibernateUtil.StringClob)
+					.SetParameter(nameof(Message.TrackId), message.TrackId)
+					.ExecuteUpdate();
+			});
 		}
 
 		public void Purge()
 		{
+			var utcDateTime = _now.UtcDateTime();
 			_unitOfWork.Current().CreateSqlQuery(
-				"DELETE FROM [msg].Mailbox WITH (TABLOCK) " +
-				"WHERE ExpiresAt <= :utcDateTime;")
-				.SetParameter("utcDateTime", _now.UtcDateTime())
+					$"DELETE FROM [msg].Mailbox WITH (TABLOCKX) WHERE ExpiresAt <= :{nameof(utcDateTime)};")
+				.SetParameter(nameof(utcDateTime), utcDateTime)
+				.ExecuteUpdate();
+			_unitOfWork.Current().CreateSqlQuery(
+					"DELETE mn FROM [msg].MailboxNotification mn LEFT JOIN [msg].Mailbox m ON mn.MailboxId = m.Id AND m.Id IS NULL")
 				.ExecuteUpdate();
 		}
 
+		private class InternalMessage : Message
+		{
+			public Guid MailboxId { get; set; }
+		}
 	}
 }
