@@ -10,6 +10,34 @@
 
         vm.state = 'manual';
 
+		//manual inputs
+        vm.manualInitial = {
+            StartDate: new Date(),
+            EndDate: new Date()
+        }
+		vm.manualQueueStats = {
+			StartDate: new Date(),
+			EndDate: new Date()
+        }
+		vm.manualAgentStats = {
+			StartDate: new Date(),
+			EndDate: new Date()
+		}
+		vm.manualSchedule = {
+			StartDate: new Date(),
+			EndDate: new Date()
+		}
+		vm.manualForecast = {
+			StartDate: new Date(),
+			EndDate: new Date()
+        }
+
+		//history inputs
+		vm.historyWorkPeriod = {
+			StartDate: new Date(),
+			EndDate: new Date()
+		}
+
 		vm.schedules = [
             {
                 Name: 'My main job',
