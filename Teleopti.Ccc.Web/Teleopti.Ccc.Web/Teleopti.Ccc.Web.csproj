@@ -1617,9 +1617,7 @@
     <Content Include="WFM\app\rta\tracer\rtaTracer.state.provider.js" />
     <Content Include="WFM\app\rta\tracer\_modules.js" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents-rowtemplate-AllOutOfAdherences_39146.html" />
-    <Content Include="WFM\app\rta\rta\agents\rta-agents-rowtemplate.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents-shiftcelltemplate.html" />
-    <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_RememberMyPartOfTheBusiness_39082.html" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.build.service.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.alarmcontext.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.byOrganizationAndSkills.spec.js" />
@@ -1635,7 +1633,6 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.filters.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.filters.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.grid.service.js" />
-    <Content Include="WFM\app\rta\rta\filter\filter-template.html" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.agents.QuicklyChangeAgentsSelection.spec.js" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.overview.skillSelection.spec.js" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.overview.spec.js" />
@@ -1655,7 +1652,6 @@
     <Content Include="WFM\app\rta\rta\overview\controller.selection.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.storeState.spec.js" />
-    <Content Include="WFM\app\rta\rta\overview\view.RTA_RememberMyPartOfTheBusiness_39082.html" />
     <Content Include="WFM\app\rta\rta\rta.adherence.service.js" />
     <Content Include="WFM\app\rta\rta\rta.backend.fake.js" />
     <Content Include="WFM\app\rta\rta\rta.faketime.service.js" />

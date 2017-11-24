@@ -38,7 +38,6 @@ Wfm_MinimumScaffolding_32659 = RC
 
 RTA_SpreadTransactionLocksStrategy_41823 = true
 RTA_RtaTracer_45597 = true
-RTA_UnifiedSkillGroupManagement_45417 = true
 RTA_MonitorAgentsWithLongTimeInState_46475 = RC
 RTA_MobileFriendlyCheckboxes_46758 = DEV
 

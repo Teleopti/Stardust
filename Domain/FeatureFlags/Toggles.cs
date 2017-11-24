@@ -20,7 +20,6 @@
 
 		RTA_SpreadTransactionLocksStrategy_41823,
 		RTA_RtaTracer_45597,
-		RTA_UnifiedSkillGroupManagement_45417,
 		RTA_MonitorAgentsWithLongTimeInState_46475,
 		RTA_MobileFriendlyCheckboxes_46758,
 

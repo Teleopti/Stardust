@@ -28,9 +28,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
                     es: {array: true}
                 },
                 templateUrl: function() {
-                	if (toggles.RTA_UnifiedSkillGroupManagement_45417)
-                		return 'app/rta/rta/overview/view.RTA_UnifiedSkillGroupManagement_45417.html';
-					return 'app/rta/rta/overview/view.RTA_RememberMyPartOfTheBusiness_39082.html';
+					return 'app/rta/rta/overview/view.RTA_UnifiedSkillGroupManagement_45417.html';
                 },
                 controllerProvider: function() {
 					return 'RtaOverviewController39082 as vm';
@@ -57,9 +55,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
                 templateUrl: function() {
 					if (toggles.RTA_MonitorAgentsWithLongTimeInState_46475)
 						return 'app/rta/rta/agents/rta-agents.RTA_MonitorAgentsWithLongTimeInState_46475.html';
-					if (toggles.RTA_UnifiedSkillGroupManagement_45417)
-						return 'app/rta/rta/agents/rta-agents.RTA_UnifiedSkillGroupManagement_45417.html';
-					return 'app/rta/rta/agents/rta-agents.RTA_RememberMyPartOfTheBusiness_39082.html';
+					return 'app/rta/rta/agents/rta-agents.RTA_UnifiedSkillGroupManagement_45417.html';
                 },
 				controllerProvider: function() {
 					if (toggles.RTA_MonitorAgentsWithLongTimeInState_46475)
