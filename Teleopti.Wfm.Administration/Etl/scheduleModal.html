@@ -1,6 +1,15 @@
 ﻿<div class="modal-content">
 	<div class="modal-header">
-		<h5 class="modal-title" id="exampleModalLabel">Job schedule</h5>
+		<h5 class="modal-title" id="exampleModalLabel">
+			<span>
+				<label class="form-check-label">
+					<input type="checkbox" class="form-check-input" ng-model="vm.scheduleNameEnabled">
+					Job Schedule - 
+					<span ng-if="!vm.scheduleNameEnabled">Disabled</span>
+					<span ng-if="vm.scheduleNameEnabled">Enabled</span>
+				</label>
+			</span>
+		</h5>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -8,31 +17,28 @@
 	<form>
 		<div class="modal-body">
 
-			<div class="row">
-				<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="form-check-label" for="scheduleName">
+						Schedule name
+					</label>
+					<input type="text" class="form-control" id="scheduleName" aria-describedby="emailHelp" placeholder="Name">
+				</div>
+				<div class="form-group">
 					<div class="form-group">
-						<label class="form-check-label" for="scheduleName">
-							<input type="checkbox" class="form-check-input" ng-model="vm.scheduleNameEnabled">
-							Schedule name
-							<span ng-if="vm.scheduleNameEnabled"> (Enabled)</span>
-							<span ng-if="!vm.scheduleNameEnabled"> (Disabled)</span>
-						</label>
-						<input type="text" class="form-control" id="scheduleName" aria-describedby="emailHelp" placeholder="Name">
-					</div>
-					<div class="form-group">
-						<div class="form-group">
-							<label for="jobs">Job</label>
-							<select class="form-control" id="jobs">
-								<option>Teleopti WFM</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select>
-						</div>
+						<label for="jobs">Job</label>
+						<select class="form-control" id="jobs">
+							<option>Teleopti WFM</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option>5</option>
+						</select>
 					</div>
 				</div>
 			</div>
+		</div>
 
 			<div class="row">
 				<div class="col-md-12">
