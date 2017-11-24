@@ -193,34 +193,25 @@
         }
 
         function setSaveableState() {
-            if (
-                vm.selectedSkillGroup !== null &&
-                vm.selectedSkillGroup.Skills &&
-                vm.selectedSkillGroup.Skills.length > 0 &&
-                vm.selectedSkillGroup.Name &&
-                vm.selectedSkillGroup.Name.length > 0
-            ) {
-                vm.canSave = true;
-            } else {
-                vm.canSave = false;
-            }
+            vm.canSave = hasChanges();
         }
 
         function notifySkillGroupCreation() {
             NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
         }
 
-        function getAllSkillGroups() {
+        function getAllSkillGroups(select) {
             SkillGroupSvc.getSkillGroups().then(function(result) {
-                vm.skillGroups = originalGroups = result.data.SkillAreas;
+                vm.skillGroups = result.data.SkillAreas;
+                originalGroups = _.cloneDeep(vm.skillGroups);
+                if (select) {
+                    vm.selectSkillGroup(_.find(vm.skillGroups, function(i){return i.Id === $state.params.selectedGroup.Id}));
+                }
             });
         }
 
-        function getChangedGroups(originalGroups, newGroups) {
-            if (originalGroups && newGroups) {
-                return _.differenceWith(originalGroups, newGroups, _.isEqual);
-            }
-            return [];
+        function hasChanges() {
+            return !_.isEqual(originalGroups, vm.skillGroups);
         }
 
         function isNumeric(n) {
@@ -233,9 +224,9 @@
         });
 
         if ($state.params.selectedGroup && $state.params.selectedGroup.Id) {
-            vm.selectSkillGroup($state.params.selectedGroup);
+            getAllSkillGroups(true);
+        } else {
+            getAllSkillGroups(false);
         }
-
-        getAllSkillGroups();
     }
 })();

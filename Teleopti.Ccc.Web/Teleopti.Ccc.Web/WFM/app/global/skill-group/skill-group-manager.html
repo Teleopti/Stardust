@@ -9,7 +9,7 @@
 			<i class="mdi mdi-content-save"></i>
 			<md-tooltip>{{'Save'|translate}}</md-tooltip>
 		</button>
-		<button class="wfm-fab material-depth-1 grow-out pull-right" id="exit_sgm" ng-click="vm.closeConfirmation=true">
+		<button class="wfm-fab material-depth-1 grow-out pull-right" id="exit_sgm" ng-click="vm.canSave ? vm.closeConfirmation=true : vm.exitConfigMode();">
 			<i class="mdi mdi-close"></i>
 			<md-tooltip>{{'Close'|translate}}</md-tooltip>
 		</button>
@@ -35,7 +35,7 @@
 				<div class="con-row">
 					<div class="con-flex">
 						<ul class="wfm-list" id="available_skill_groups_list">
-							<li ng-repeat="skillGroup in vm.skillGroups" ng-click="vm.selectSkillGroup($index)">
+							<li ng-repeat="skillGroup in vm.skillGroups track by Id" ng-click="vm.selectSkillGroup($index)">
 								<span class="list-item-container">
 									{{skillGroup.Name}}
 								</span>
@@ -139,7 +139,7 @@
 		<div ng-cloak class="modal-box">
 			<div ng-cloak ng-show="vm.deleteConfirmation">
 				<div class="modalbg">
-					<div class="dialog-mini material-depth-1">
+					<div class="dialog-mini material-depth-1" style="width: 30%">
 						<div class="modal-inner-content">
 							<h3>{{'DoYouWantToDeleteSkillGroup'|translate}}</h3>
 							{{'AreYouSureYouWantToDeleteTheSkillGroup'|translate}} {{vm.selectedSkillGroup.Name}}
@@ -157,7 +157,7 @@
 		<div ng-cloak class="modal-box">
 			<div ng-cloak ng-show="vm.closeConfirmation">
 				<div class="modalbg">
-					<div class="dialog-mini material-depth-1">
+					<div class="dialog-mini material-depth-1" style="width: 30%">
 						<div class="modal-inner-content">
 							<h3>{{'Exit'|translate}}</h3>
 							{{'AreYouSureYouWantToExitSGM'|translate}} {{vm.selectedSkillGroup.Name}}
