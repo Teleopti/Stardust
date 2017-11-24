@@ -2,357 +2,269 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
-	public class NewNightlyRestRuleTest
-    {
-        private NewNightlyRestRule _target;
-        private IDictionary<IPerson, IScheduleRange> _ranges;
-        private IScheduleDay _scheduleDay;
-        private IScheduleDay _yesterday;
-        private IScheduleDay _today;
-        private IScheduleDay _tomorrow;
-        private IList<IScheduleDay> _scheduleDays;
-        private MockRepository _mocks;
-        private IPerson _person;
-        private IScheduleRange _range;
-        private IEnumerable<IBusinessRuleResponse> _responsList;
-    	private IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
+	[DomainTest]
+	public class NewNightlyRestRuleTest : ISetup
+	{
+		public IScheduleStorage ScheduleStorage;
+		public ICurrentScenario Scenario;
+		public NewNightlyRestRule Target;
 
-    	[SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            _yesterday = _mocks.StrictMock<IScheduleDay>();
-            
-            _today = _mocks.StrictMock<IScheduleDay>();
-            _tomorrow = _mocks.StrictMock<IScheduleDay>();
+		private DateOnly personPeriodStartDate = new DateOnly(2010, 1, 1);
 
-            _scheduleDays = new List<IScheduleDay>{_scheduleDay};
-            _person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill>());
-            _person.SetId(Guid.NewGuid());
-            _range = _mocks.StrictMock<IScheduleRange>();
-            _ranges = new Dictionary<IPerson, IScheduleRange> {{_person, _range}};
-        	_workTimeStartEndExtractor = _mocks.StrictMock<IWorkTimeStartEndExtractor>();
-            _target = new NewNightlyRestRule(_workTimeStartEndExtractor);
-        }
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
+				.For<IScenarioRepository>();
+			system.UseTestDouble<NewNightlyRestRule>().For<NewNightlyRestRule>();
+		}
 
-        [Test]
-        public void VerifyProperties()
-        {
-            Assert.IsFalse(_target.IsMandatory);
-            Assert.IsTrue(_target.HaltModify);
-            _target.HaltModify = false;
-            Assert.IsFalse(_target.HaltModify);
-        }
+		[Test]
+		public void VerifyProperties()
+		{
+			Assert.IsFalse(Target.IsMandatory);
+			Assert.IsTrue(Target.HaltModify);
+			Target.HaltModify = false;
+			Assert.IsFalse(Target.HaltModify);
+		}
 
-        [Test]
-        public void VerifyNoPersonPeriod()
-        {
-            _person.RemoveAllPersonPeriods();
-            var dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-            using (_mocks.Record())
-            {
-                //currentScheduleDay
-                Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any(); 
-				Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2)).Repeat.AtLeastOnce();
-				Expect.Call(_range.Person).Return(_person).Repeat.Any();
-				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2010, 1, 1, 2010, 1, 3))).Return(new[] { _yesterday, _today, _tomorrow });
-				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
-				Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
-				mockShift(_yesterday, new DateTimePeriod());
-				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
-				Expect.Call(_today.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
-				mockShift(_today, new DateTimePeriod());
-				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 3), TimeZoneInfo.Utc)).Repeat.Any();
-				Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
-				mockShift(_tomorrow, new DateTimePeriod());
+		[Test]
+		public void VerifyNoPersonPeriod()
+		{
+			var person = setupPerson();
+			person.RemoveAllPersonPeriods();
+
+			for (int i = 1; i <= 3; i++)
+			{
+				var personAssignment = createMainPersonAssignment(person, new DateTimePeriod(2010, 1, i, 8, 2010, 1, i, 17));
+				ScheduleStorage.Add(personAssignment);
 			}
 
-            using (_mocks.Playback())
-            {
-                _responsList = _target.Validate(_ranges, _scheduleDays);
-            }
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(personPeriodStartDate, new DateOnly(2010, 1, 3)), Scenario.Current());
+			var scheduleRange = (IScheduleRange)scheduleDictionary[person].Clone();
+			var ranges = new Dictionary<IPerson, IScheduleRange> { { person, scheduleRange } };
 
-            Assert.AreEqual(0, _responsList.Count());
-        }
+			var responsList = Target.Validate(ranges, new[] { scheduleRange.ScheduledDay(new DateOnly(2010, 1, 2)) });
+			Assert.AreEqual(0, responsList.Count());
+		}
 
-        [Test]
-        public void VerifyNoSchedules()
-        {
-            var dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-            using (_mocks.Record())
-            {
-                
-                //currentScheduleDay
-                Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
-                Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2)).Repeat.AtLeastOnce();
-                Expect.Call(_range.Person).Return(_person).Repeat.Any();
+		[Test]
+		public void VerifyNoSchedules()
+		{
+			var person = setupPerson();
 
-                //yesterday
-				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2010, 1, 1, 2010, 1, 3))).Return(new[] { _yesterday, _today, _tomorrow });
-                Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
-				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
-				mockShift(_yesterday, new DateTimePeriod());
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(personPeriodStartDate, new DateOnly(2010, 1, 3)), Scenario.Current());
+			var scheduleRange = (IScheduleRange)scheduleDictionary[person].Clone();
+			var ranges = new Dictionary<IPerson, IScheduleRange> { { person, scheduleRange } };
 
-                //today
-                Expect.Call(_today.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
-				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
-				mockShift(_today, new DateTimePeriod());
+			var responsList = Target.Validate(ranges, new[] { scheduleRange.ScheduledDay(new DateOnly(2010, 1, 2)) });
+			Assert.AreEqual(0, responsList.Count());
+		}
 
-                //tomorrow
-                Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
-				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 3), TimeZoneInfo.Utc)).Repeat.Any();
-				mockShift(_tomorrow, new DateTimePeriod());
+		[Test]
+		public void VerifyScheduleBreaksRule()
+		{
+			var person = setupPerson(12);
 
-                Expect.Call(_range.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>()).
-                   Repeat.Any();
-            }
+			for (int i = 1; i <= 3; i++)
+			{
+				var personAssignment = createMainPersonAssignment(person, new DateTimePeriod(2010, 1, i, 5, 2010, 1, i, 19));
+				ScheduleStorage.Add(personAssignment);
+			}
 
-            using (_mocks.Playback())
-            {
-                _responsList = _target.Validate(_ranges, _scheduleDays);
-            }
-            
-            Assert.AreEqual(0, _responsList.Count());
-        }
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(personPeriodStartDate, new DateOnly(2010, 1, 3)), Scenario.Current());
+			var scheduleRange = (IScheduleRange)scheduleDictionary[person].Clone();
+			var ranges = new Dictionary<IPerson, IScheduleRange> { { person, scheduleRange } };
 
-        [Test]
-        public void VerifyScheduleBreaksRule()
-        {
-            var dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-            using (_mocks.Record())
-            {
+			var responsList = Target.Validate(ranges, new[] { scheduleRange.ScheduledDay(new DateOnly(2010, 1, 2)) });
 
-                //currentScheduleDay
-                Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
-                Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2)).Repeat.Any();
-                Expect.Call(_range.Person).Return(_person).Repeat.Any();
-                Expect.Call(_range.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>()).
-                    Repeat.Any();
+			Assert.AreEqual(4, responsList.Count());
+			Assert.IsFalse(responsList.First().Mandatory);
+			Assert.AreEqual(Target.HaltModify, responsList.First().Error);
 
-                //yesterday
-                Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2010, 1, 1,2010,1,3))).Return(new[]{_yesterday,_today,_tomorrow});
-                Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
+		}
 
-                mockShift(_yesterday, new DateTimePeriod(new DateTime(2010, 1, 1, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 1, 19, 0, 0, DateTimeKind.Utc)));
+		[Test]
+		public void VerifyScheduleOk()
+		{
+			var person = setupPerson(10);
 
-                //today
-                Expect.Call(_today.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
+			for (int i = 1; i <= 3; i++)
+			{
+				var personAssignment = createMainPersonAssignment(person, new DateTimePeriod(2010, 1, i, 6, 2010, 1, i, 19));
+				ScheduleStorage.Add(personAssignment);
+			}
 
-				mockShift(_today, new DateTimePeriod(new DateTime(2010, 1, 2, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 2, 19, 0, 0, DateTimeKind.Utc)));
-				
-                //tomorrow
-                Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-                Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010,1,3), TimeZoneInfo.Utc)).Repeat.Any();
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(personPeriodStartDate, new DateOnly(2010, 1, 3)), Scenario.Current());
+			var scheduleRange = (IScheduleRange)scheduleDictionary[person].Clone();
+			var ranges = new Dictionary<IPerson, IScheduleRange> { { person, scheduleRange } };
 
-				mockShift(_tomorrow, new DateTimePeriod(new DateTime(2010, 1, 3, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 3, 19, 0, 0, DateTimeKind.Utc)));
+			var responsList = Target.Validate(ranges, new[] { scheduleRange.ScheduledDay(new DateOnly(2010, 1, 2)) });
 
-            }
+			Assert.AreEqual(0, responsList.Count());
+		}
 
-            using (_mocks.Playback())
-            {
-                _responsList = _target.Validate(_ranges, _scheduleDays);
-            }
+		[Test]
+		public void VerifyRuleRemoveRangeBusinessRuleResponse()
+		{
+			var person = PersonFactory.CreatePersonWithPersonPeriod(personPeriodStartDate, new List<ISkill>()).WithId();
 
-            Assert.AreEqual(4, _responsList.Count());
-            Assert.IsFalse(_responsList.First().Mandatory);
-            Assert.AreEqual(_target.HaltModify, _responsList.First().Error);
+			var doPeriod = new DateOnlyPeriod(2010, 1, 3, 2010, 1, 3);
+			DateTimePeriod period = doPeriod.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			IList<IBusinessRuleResponse> list = new List<IBusinessRuleResponse>();
 
-        }
+			doPeriod = new DateOnlyPeriod(2010, 1, 3, 2010, 1, 4);
+			IBusinessRuleResponse thisResponse = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true,
+				period, person, doPeriod, "tjillevippen");
+			IBusinessRuleResponse anotherResponse = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true,
+				period.MovePeriod(TimeSpan.FromDays(10)), person, doPeriod, "tjillevippen");
 
-        [Test]
-        public void VerifyScheduleOk()
-        {
-            var dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-            using (_mocks.Record())
-            {
+			IBusinessRuleResponse thirdResponse = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true,
+				period, PersonFactory.CreatePerson(), doPeriod, "tjillevippen");
+			list.Add(thisResponse);
+			list.Add(anotherResponse);
+			list.Add(thirdResponse);
+			var target = new NewNightlyRestRule(new WorkTimeStartEndExtractor());
+			target.ClearMyResponses(list, person, new DateOnly(2010, 1, 3));
+			Assert.AreEqual(2, list.Count);
+		}
 
-                //currentScheduleDay
-                Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
-                Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2)).Repeat.Any();
-                Expect.Call(_range.Person).Return(_person).Repeat.Any();
+		[Test, SetUICulture("sv-SE")]
+		public void ShouldCalculateOvertime()
+		{
+			var person = setupPerson(10);
 
-                //yesterday
-				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2010, 1, 1, 2010, 1, 3))).Return(new[] { _yesterday, _today, _tomorrow });
-                Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
+			var activity = new Activity("test") { InWorkTime = true };
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("ot", MultiplicatorType.OBTime);
+			for (int i = 1; i <= 3; i++)
+			{
+				var personAssignment = createMainPersonAssignment(person, new DateTimePeriod(2010, 1, i, 5, 2010, 1, i, 19));
+				personAssignment.AddOvertimeActivity(activity, new DateTimePeriod(2010, 1, i, 19, 2010, 1, i, 20), multiplicatorDefinitionSet);
+				ScheduleStorage.Add(personAssignment);
+			}
 
-				mockShift(_yesterday, new DateTimePeriod(new DateTime(2010, 1, 1, 6, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 1, 19, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(personPeriodStartDate, new DateOnly(2010, 1, 3)), Scenario.Current());
+			var scheduleRange = (IScheduleRange)scheduleDictionary[person].Clone();
+			var ranges = new Dictionary<IPerson, IScheduleRange> { { person, scheduleRange } };
 
-                //today
-                Expect.Call(_today.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
-                
-				mockShift(_today, new DateTimePeriod(new DateTime(2010, 1, 2, 6, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 2, 19, 0, 0, DateTimeKind.Utc)));
-				
-                //tomorrow
-                Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
-				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 3), TimeZoneInfo.Utc)).Repeat.Any();
-                
-				mockShift(_tomorrow, new DateTimePeriod(new DateTime(2010, 1, 3, 6, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 3, 19, 0, 0, DateTimeKind.Utc)));
+			var responsList = Target.Validate(ranges, new[] { scheduleRange.ScheduledDay(new DateOnly(2010, 1, 2)) });
 
-                Expect.Call(_range.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>()).
-                    Repeat.Any();
+			Assert.AreEqual(4, responsList.Count());
+			Assert.IsFalse(responsList.First().Mandatory);
+			Assert.AreEqual(Target.HaltModify, responsList.First().Error);
 
-            }
-
-            using (_mocks.Playback())
-            {
-                _responsList = _target.Validate(_ranges, _scheduleDays);
-            }
-
-            Assert.AreEqual(0, _responsList.Count());
-        }
-
-        [Test]
-        public void VerifyRuleRemoveRangeBusinessRuleResponse()
-        {
-            var doPeriod = new DateOnlyPeriod(2010, 1, 3, 2010, 1, 3);
-            DateTimePeriod period = doPeriod.ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone());
-            IList<IBusinessRuleResponse> list = new List<IBusinessRuleResponse>();
-
-            doPeriod = new DateOnlyPeriod(2010, 1, 3, 2010, 1, 4);
-            IBusinessRuleResponse thisResponse = new BusinessRuleResponse(typeof (NewNightlyRestRule), "", true, true,
-                                                                          period, _person, doPeriod, "tjillevippen");
-            IBusinessRuleResponse anotherResponse = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true,
-                                                                          period.MovePeriod(TimeSpan.FromDays(10)), _person, doPeriod, "tjillevippen");
-
-            IBusinessRuleResponse thirdResponse = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true,
-                                                                          period, PersonFactory.CreatePerson(), doPeriod, "tjillevippen");
-            list.Add(thisResponse);
-            list.Add(anotherResponse);
-            list.Add(thirdResponse);
-        	var target = new NewNightlyRestRule(_workTimeStartEndExtractor);
-            target.ClearMyResponses(list, _person, new DateOnly(2010, 1, 3));
-            Assert.AreEqual(2, list.Count);
-        }
-
-	    [Test, SetUICulture("sv-SE")]
-	    public void ShouldCalculateOvertime()
-	    {
-		    var dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-		    using (_mocks.Record())
-		    {
-			    //currentScheduleDay
-			    Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
-			    Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
-			    Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2)).Repeat.Any();
-			    Expect.Call(_range.Person).Return(_person).Repeat.Any();
-			    Expect.Call(_range.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>()).
-				    Repeat.Any();
-
-			    //yesterday
-			    Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2010, 1, 1, 2010, 1, 3)))
-				    .Return(new[] {_yesterday, _today, _tomorrow});
-			    Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
-			    Expect.Call(_yesterday.DateOnlyAsPeriod)
-				    .Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc))
-				    .Repeat.Any();
-
-			    mockShift(_yesterday,
-				    new DateTimePeriod(new DateTime(2010, 1, 1, 5, 0, 0, DateTimeKind.Utc),
-					    new DateTime(2010, 1, 1, 19, 0, 0, DateTimeKind.Utc)));
-
-			    //today
-			    Expect.Call(_today.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
-			    Expect.Call(_today.DateOnlyAsPeriod)
-				    .Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc))
-				    .Repeat.Any();
-
-			    mockShift(_today,
-				    new DateTimePeriod(new DateTime(2010, 1, 2, 5, 0, 0, DateTimeKind.Utc),
-					    new DateTime(2010, 1, 2, 19, 0, 0, DateTimeKind.Utc)));
-
-			    //tomorrow
-			    Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
-			    Expect.Call(_tomorrow.DateOnlyAsPeriod)
-				    .Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 3), TimeZoneInfo.Utc))
-				    .Repeat.Any();
-
-			    mockShift(_tomorrow,
-				    new DateTimePeriod(new DateTime(2010, 1, 3, 5, 0, 0, DateTimeKind.Utc),
-					    new DateTime(2010, 1, 3, 19, 0, 0, DateTimeKind.Utc)));
-		    }
-
-		    using (_mocks.Playback())
-		    {
-			    _responsList = _target.Validate(_ranges, _scheduleDays).ToArray();
-		    }
-
-		    Assert.AreEqual(4, _responsList.Count());
-		    Assert.IsFalse(_responsList.First().Mandatory);
-		    Assert.AreEqual(_target.HaltModify, _responsList.First().Error);
-			
-		    foreach (var response in _responsList)
-		    {
-			    Assert.IsTrue(response.FriendlyName.StartsWith("Nattvilan är"));
+			foreach (var response in responsList)
+			{
+				Assert.IsTrue(response.FriendlyName.StartsWith("Nattvilan är"));
 				Assert.IsTrue(response.Message.StartsWith("Det måste finnas en"));
 			}
 		}
 
-	    [Test]
-		public void ShouldNotCalculateAbsence()
+		[Test, SetUICulture("sv-SE")]
+		public void ShouldCalculateOvertimeWithDayOff()
 		{
-			var dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-			using (_mocks.Record())
+			var person = setupPerson(10);
+
+			var activity = new Activity("test") { InWorkTime = true };
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("ot", MultiplicatorType.OBTime);
+
+			var personAssignmentYesterday = createMainPersonAssignment(person, new DateTimePeriod(2010, 1, 1, 5, 2010, 1, 1, 19));
+			ScheduleStorage.Add(personAssignmentYesterday);
+
+			var personAssignmentToday = createMainPersonAssignmenDayoff(person, new DateOnly(2010, 1, 2));
+			personAssignmentToday.AddOvertimeActivity(activity, new DateTimePeriod(2010, 1, 2, 0, 2010, 1, 2, 1), multiplicatorDefinitionSet);
+			ScheduleStorage.Add(personAssignmentToday);
+
+			var personAssignmentTomorrow = createMainPersonAssignmenDayoff(person, new DateOnly(2010, 1, 3));
+			ScheduleStorage.Add(personAssignmentTomorrow);
+
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(personPeriodStartDate, new DateOnly(2010, 1, 3)), Scenario.Current());
+			var scheduleRange = (IScheduleRange)scheduleDictionary[person].Clone();
+			var ranges = new Dictionary<IPerson, IScheduleRange> { { person, scheduleRange } };
+
+			var responsList = Target.Validate(ranges, new[] { scheduleRange.ScheduledDay(new DateOnly(2010, 1, 2)) });
+
+			Assert.AreEqual(2, responsList.Count());
+			Assert.IsFalse(responsList.First().Mandatory);
+			Assert.AreEqual(Target.HaltModify, responsList.First().Error);
+
+			foreach (var response in responsList)
 			{
-
-				//currentScheduleDay
-				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
-				Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2)).Repeat.Any();
-				Expect.Call(_range.Person).Return(_person).Repeat.Any();
-				Expect.Call(_range.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>()).
-					Repeat.Any();
-
-				//yesterday
-				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2010, 1, 1, 2010, 1, 3))).Return(new[] { _yesterday, _today, _tomorrow });
-				Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
-				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
-				mockShift(_yesterday, new DateTimePeriod());
-
-				//today
-				Expect.Call(_today.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.Any();
-				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
-				mockShift(_today, new DateTimePeriod());
-
-				//tomorrow
-				Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
-				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 3), TimeZoneInfo.Utc)).Repeat.Any();
-				mockShift(_tomorrow,new DateTimePeriod());
+				Assert.IsTrue(response.FriendlyName.StartsWith("Nattvilan är"));
+				Assert.IsTrue(response.Message.StartsWith("Det måste finnas en"));
 			}
-
-			using (_mocks.Playback())
-			{
-				_responsList = _target.Validate(_ranges, _scheduleDays);
-			}
-
-			Assert.AreEqual(0, _responsList.Count());
 		}
 
-		private void mockShift(IScheduleDay scheduleDay, DateTimePeriod period)
-        {
-            var projectionService = _mocks.StrictMock<IProjectionService>();
-            var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
-            Expect.Call(scheduleDay.ProjectionService()).Return(projectionService).Repeat.Any();
-            Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.Any();
-			Expect.Call(_workTimeStartEndExtractor.WorkTimeStart(visualLayerCollection)).Return(period.StartDateTime);
-			Expect.Call(_workTimeStartEndExtractor.WorkTimeEnd(visualLayerCollection)).Return(period.EndDateTime);
-        }
-    }
+		[Test]
+		public void ShouldNotCalculateAbsence()
+		{
+			var person = setupPerson(10);
+
+			var activity = new Activity("test") { InWorkTime = true };
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("ot", MultiplicatorType.OBTime);
+
+			var personAssignmentYesterday = createMainPersonAssignment(person, new DateTimePeriod(2010, 1, 1, 5, 2010, 1, 1, 19));
+			personAssignmentYesterday.AddOvertimeActivity(activity, new DateTimePeriod(2010, 1, 1, 19, 2010, 1, 1, 20), multiplicatorDefinitionSet);
+			ScheduleStorage.Add(personAssignmentYesterday);
+
+			ScheduleStorage.Add(new PersonAbsence(person, Scenario.Current(), new AbsenceLayer(new Absence(), new DateTimePeriod(2010, 1, 2, 0, 2010, 1, 3, 0))));
+
+			var personAssignmentTomorrow = createMainPersonAssignment(person, new DateTimePeriod(2010, 1, 3, 5, 2010, 1, 3, 19));
+			personAssignmentTomorrow.AddOvertimeActivity(activity, new DateTimePeriod(2010, 1, 3, 19, 2010, 1, 3, 20), multiplicatorDefinitionSet);
+			ScheduleStorage.Add(personAssignmentTomorrow);
+
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(personPeriodStartDate, new DateOnly(2010, 1, 3)), Scenario.Current());
+			var scheduleRange = (IScheduleRange)scheduleDictionary[person].Clone();
+			var ranges = new Dictionary<IPerson, IScheduleRange> { { person, scheduleRange } };
+
+			var responsList = Target.Validate(ranges, new[] { scheduleRange.ScheduledDay(new DateOnly(2010, 1, 2)) });
+
+			Assert.AreEqual(0, responsList.Count());
+		}
+
+		private IPersonAssignment createMainPersonAssignment(IPerson person, DateTimePeriod period)
+		{
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			main.InWorkTime = true;
+			return PersonAssignmentFactory
+				.CreateAssignmentWithMainShift(person, Scenario.Current(), main, period, shiftCategory).WithId();
+		}
+		private IPersonAssignment createMainPersonAssignmenDayoff(IPerson person, DateOnly day)
+		{
+			var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("Slackday", "SD"));
+			return PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(), day, dayOffTemplate);
+		}
+
+		private IPerson setupPerson(int nightlyRestHours = 6)
+		{
+			var person = PersonFactory.CreatePersonWithPersonPeriod(personPeriodStartDate, new List<ISkill>()).WithId();
+			var personPeriod = person.PersonPeriods(personPeriodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(24), TimeSpan.FromHours(nightlyRestHours), TimeSpan.FromHours(10));
+			return person;
+		}
+	}
 }
