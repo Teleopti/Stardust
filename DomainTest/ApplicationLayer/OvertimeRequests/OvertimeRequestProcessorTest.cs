@@ -811,7 +811,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		public void ShouldDenyWhenVoilateMaxWeekWorkTimeRule()
+		public void ShouldDenyWhenViolateMaxWeekWorkTimeRule()
 		{
 			setupPerson(8, 21);
 			var person = LoggedOnUser.CurrentUser();
@@ -843,7 +843,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		public void ShouldNotDenyWhenVoilateMaxWeekWorkTimeRuleWithToggle46417Off()
+		public void ShouldNotDenyWhenViolateMaxWeekWorkTimeRuleWithToggle46417Off()
 		{
 			setupPerson(8, 21);
 			var person = LoggedOnUser.CurrentUser();
@@ -875,7 +875,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		public void ShouldNotDenyWhenVoilateMaxWeekWorkTimeRuleAndHandleTypeIsPending()
+		public void ShouldNotDenyWhenViolateMaxWeekWorkTimeRuleAndHandleTypeIsPending()
 		{
 			setupPerson(8, 21);
 			var person = LoggedOnUser.CurrentUser();
@@ -907,7 +907,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		public void ShouldPendingWhenVoilateMaxWeekWorkTimeRuleAndHandleTypeIsPendingAndAutoGrantIsYes()
+		public void ShouldPendingWhenViolateMaxWeekWorkTimeRuleAndHandleTypeIsPendingAndAutoGrantIsYes()
 		{
 			setupPerson(8, 21);
 			var person = LoggedOnUser.CurrentUser();
@@ -976,7 +976,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		public void ShouldDenyWhenVoilateNightlyRestTimeRule()
+		public void ShouldDenyWhenViolateNightlyRestTimeRule()
 		{
 			setupPerson(8, 21);
 			var person = LoggedOnUser.CurrentUser();
@@ -1011,7 +1011,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		public void ShouldDenyWhenVoilateNightlyRestTimeRuleOnDayOff()
+		public void ShouldDenyWhenViolateNightlyRestTimeRuleOnDayOff()
 		{
 			setupPerson(8, 21);
 			var person = LoggedOnUser.CurrentUser();
@@ -1078,7 +1078,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		public void ShouldDenyWhenVoilateWeeklyRestTimeRule()
+		public void ShouldDenyWhenViolateWeeklyRestTimeRule()
 		{
 			setupPerson(0, 24);
 			var person = LoggedOnUser.CurrentUser();
@@ -1108,7 +1108,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
-		public void ShouldShowMultipleDenyReasonsWhenVoilateMoreThanOneWorkRule()
+		public void ShouldShowMultipleDenyReasonsWhenViolateMoreThanOneWorkRule()
 		{
 			setupPerson(8, 21);
 			var person = LoggedOnUser.CurrentUser();
