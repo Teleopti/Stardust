@@ -32,6 +32,29 @@
             EndDate: new Date().toLocaleDateString("en-US")
         }
 
+		vm.applyToAll = function(input) {
+			vm.manualInitial = {
+				StartDate: input,
+                EndDate: input
+			}
+			vm.manualQueueStats = {
+                StartDate: input,
+                EndDate: input
+			}
+			vm.manualAgentStats = {
+                StartDate: input,
+                EndDate: input
+			}
+			vm.manualSchedule = {
+                StartDate: input,
+                EndDate: input
+			}
+			vm.manualForecast = {
+                StartDate: input,
+                EndDate: input
+			}
+		}
+
 		//history inputs
 		vm.historyWorkPeriod = {
             StartDate: new Date().toLocaleDateString("en-US"),
