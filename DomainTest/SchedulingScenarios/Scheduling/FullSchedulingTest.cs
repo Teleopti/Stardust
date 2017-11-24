@@ -46,11 +46,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity);
-			var shiftCategory = new ShiftCategory("_").WithId();
+			var skill = SkillRepository.Has("skill", activity).DefaultResolution(60);
 			var scenario = ScenarioRepository.Has("_");
-			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
-			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(17, 0, 17, 0, 15), new TimePeriodWithSegment(25, 0, 25, 0, 15), shiftCategory));
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), new ShiftCategory("_").WithId()));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(17, 0, 17, 0, 15), new TimePeriodWithSegment(25, 0, 25, 0, 15), new ShiftCategory("_").WithId()));
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, numberOfAgents, demandOnDays, demandOnDays));
 			for (var i = 0; i < numberOfAgents; i++)
 			{
