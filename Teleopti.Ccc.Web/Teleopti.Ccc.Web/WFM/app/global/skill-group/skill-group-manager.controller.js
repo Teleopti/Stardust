@@ -106,7 +106,8 @@
                 vm.selectedSkills = _.unionBy(vm.selectedSkills, [skill], function(skill) {
                     return skill.Id;
                 });
-            }
+			}
+			vm.addSkills();
         };
 
         vm.selectGroupSkill = function(skill) {
@@ -116,7 +117,8 @@
                 vm.selectedGroupSkills = _.unionBy(vm.selectedGroupSkills, [skill], function(skill) {
                     return skill.Id;
                 });
-            }
+			}
+			vm.removeSkills();
         };
 
         vm.skillIsSelected = function(skill) {
