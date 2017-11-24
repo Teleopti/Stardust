@@ -73,6 +73,7 @@ group-page-picker {
 		width: 100%;
 
 		.repeated-item {
+			height: $REPEATED-ITEM-HEIGHT;
 
 			md-checkbox {
 				padding: 0px;
