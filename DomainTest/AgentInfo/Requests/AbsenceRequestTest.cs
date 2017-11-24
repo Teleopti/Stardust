@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		        new PersonRequest(person,
 			        new AbsenceRequest(new Absence {Description = new Description("The other Absence")},
 				        new DateTimePeriod(new DateTime(2009, 12, 10, 0, 0, 0, DateTimeKind.Utc),
-					        new DateTime(2009, 12, 10, 23, 59, 59, DateTimeKind.Utc)))).Request;
+					        new DateTime(2009, 12, 10, 23, 59, 0, DateTimeKind.Utc)))).Request;
             string otertext = obj2.GetDetails(new CultureInfo("es-ES"));
             Assert.AreEqual("The other Absence", otertext);
         }

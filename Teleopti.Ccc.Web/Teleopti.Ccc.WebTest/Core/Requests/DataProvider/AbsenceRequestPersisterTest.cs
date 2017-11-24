@@ -756,8 +756,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 			((DenyRequestCommand) CommandDispatcher.LatestCommand).DenyReason.Should().Be
 				.EqualTo(Resources.DenyReasonTechnicalIssues);
-
-			//PersonRequestRepository.LoadAll().First().DenyReason.Should().Be.EqualTo(Resources.DenyReasonTechnicalIssues);
 		}
 
 		private void tryPersist()

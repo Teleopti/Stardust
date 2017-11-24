@@ -12,6 +12,7 @@ using System.Linq;
 using NHibernate.Dialect.Function;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -242,7 +243,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static void filterRequestByPeriod(ICriteria criteria, RequestFilter filter)
 		{
-			var period = filter.Period;
+			var period = new DateTimePeriod(filter.Period.StartDateTime.Truncate(TimeSpan.FromMinutes(1)),
+				filter.Period.EndDateTime.Truncate(TimeSpan.FromMinutes(1)));
 
 			var requestForPeriod = DetachedCriteria.For<Request>()
 				.SetProjection(Projections.Property("Parent"));

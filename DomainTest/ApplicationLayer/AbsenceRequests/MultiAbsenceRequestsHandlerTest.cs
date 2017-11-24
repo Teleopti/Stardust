@@ -402,6 +402,93 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			requestUsingBudgetGroup.IsApproved.Should().Be.True();
 		}
 
+		[Test, Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
+		public void ShouldHandleRequestsWithSeconds()
+		{
+			var dateTimeNow = new DateTime(2016, 12, 01, 8, 0, 0, 0);
+			Now.Is(dateTimeNow);
+			var bu = new Domain.Common.BusinessUnit("bu").WithId();
+			BusinessUnitRepository.Has(bu);
+			var scenario = new Scenario("scenarioName").WithId();
+			scenario.DefaultScenario = true;
+			scenario.SetBusinessUnit(bu);
+			ScenarioRepository.Has(scenario);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
+			var absenceIllness = AbsenceFactory.CreateAbsence("Illness").WithId();
+			var wfcs = new WorkflowControlSet().WithId();
+
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var arp = new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absenceIllness,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			};
+			wfcs.AddOpenAbsenceRequestPeriod(arp);
+
+			wfcs.AbsenceRequestWaitlistEnabled = true;
+			WorkflowControlSetRepository.Add(wfcs);
+			var firstDay = new DateOnly(2016, 12, 01);
+			var activity = ActivityRepository.Has("activityName");
+			var skill = SkillRepository.Has("skillName", activity);
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 0));
+
+			var budgetGroup = new BudgetGroup().WithId();
+			var budgetDay = new BudgetDay(budgetGroup, scenario, new DateOnly(2016, 12, 1));
+
+			budgetDay.ShrinkedAllowance = 10;
+
+			FakeBudgetGroup.Add(budgetGroup);
+			FakeBudgetDay.Add(budgetDay);
+
+			var person = PersonRepository.Has(new Contract("contract"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			person.WorkflowControlSet = wfcs;
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 1, 10, 2016, 12, 2, 20));
+			PersonAssignmentRepository.Has(assignment);
+
+			person.PersonPeriodCollection.First().BudgetGroup = budgetGroup;
+
+			var personRequestWaitlisted = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 10, 2016, 12, 1, 11))).WithId();
+			personRequestWaitlisted.Pending();
+			personRequestWaitlisted.Deny("", new PersonRequestAuthorizationCheckerForTest(), person, PersonRequestDenyOption.AutoDeny);
+			PersonRequestRepository.Add(personRequestWaitlisted);
+
+			var startTime = new DateTime(2016, 12, 1, 14, 0, 0, DateTimeKind.Utc);
+			var requestUsingBudgetGroup = new PersonRequest(person, new AbsenceRequest(absenceIllness, new DateTimePeriod(startTime, startTime.AddHours(5).AddSeconds(59)))).WithId();
+
+			requestUsingBudgetGroup.Pending();
+			requestUsingBudgetGroup.Deny("", new PersonRequestAuthorizationCheckerForTest(), person, PersonRequestDenyOption.AutoDeny);
+			PersonRequestRepository.Add(requestUsingBudgetGroup);
+
+			QueuedAbsenceRequestRepository.Add(
+				new QueuedAbsenceRequest
+				{
+					PersonRequest = Guid.Empty,
+					Sent = dateTimeNow,  //truncated by DB
+					StartDateTime = personRequestWaitlisted.Request.Period.StartDateTime,
+					EndDateTime = new DateTime(2016, 12, 3)
+				});
+
+			var requestList = new List<Guid> { Guid.Empty };
+			Target.Handle(new NewMultiAbsenceRequestsCreatedEvent { PersonRequestIds = requestList, Sent = Now.UtcDateTime() });
+			personRequestWaitlisted.IsWaitlisted.Should().Be.True();
+			requestUsingBudgetGroup.IsApproved.Should().Be.True();
+		}
+
 		private void addToQueue(IPersonRequest personRequest, RequestValidatorsFlag requestValidatorsFlag)
 		{
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest

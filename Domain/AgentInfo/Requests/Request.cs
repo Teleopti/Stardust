@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -13,16 +15,22 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		protected Request(DateTimePeriod period)
 		{
-			_period = period;
+			_period = truncateSeconds(period);
 		}
 
 		protected Request() { }
 
 		protected void SetPeriod(DateTimePeriod period)
 		{
-			_period = period;
+			_period = truncateSeconds(period);
 		}
 
+		private DateTimePeriod truncateSeconds(DateTimePeriod period)
+		{
+			return new DateTimePeriod(
+				new DateTime(period.StartDateTime.Truncate(TimeSpan.FromMinutes(1)).Ticks, DateTimeKind.Utc),
+				new DateTime(period.EndDateTime.Truncate(TimeSpan.FromMinutes(1)).Ticks, DateTimeKind.Utc));
+		}
 		public virtual DateTimePeriod Period => _period;
 
 		public abstract void Deny(IPerson denyPerson);

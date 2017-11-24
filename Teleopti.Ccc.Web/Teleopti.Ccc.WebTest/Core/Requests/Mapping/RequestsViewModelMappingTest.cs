@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -246,14 +247,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldMapDate()
+		public void ShouldMapDateWithoutSeconds()
 		{
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5));
 			var request = new PersonRequest(new Person(), new TextRequest(period));
 			var result = target.Map(request);
 
-			result.DateTimeFrom.Should().Be.EqualTo(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(period.StartDateTime, _timeZone));
-			result.DateTimeTo.Should().Be.EqualTo(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(period.EndDateTime, _timeZone));
+			result.DateTimeFrom.Should().Be.EqualTo(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(period.StartDateTime.Truncate(TimeSpan.FromMinutes(1)), _timeZone));
+			result.DateTimeTo.Should().Be.EqualTo(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(period.EndDateTime.Truncate(TimeSpan.FromMinutes(1)), _timeZone));
 
 			DateTime.Parse(result.DateTimeFrom).Kind.Should().Be(DateTimeKind.Unspecified);
 			DateTime.Parse(result.DateTimeTo).Kind.Should().Be(DateTimeKind.Unspecified);

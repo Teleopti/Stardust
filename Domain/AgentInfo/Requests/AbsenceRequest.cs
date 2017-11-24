@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	        var timeZone = Person.PermissionInformation.DefaultTimeZone();
 	        var localStart = Period.StartDateTimeLocal(timeZone);
 	        var localEnd = Period.EndDateTimeLocal(timeZone);
-	        if (!localStart.AddDays(1).AddSeconds(-1).Equals(localEnd))
+	        if (!localStart.AddDays(1).AddMinutes(-1).Equals(localEnd))
             {
                 text = string.Format(cultureInfo, "{0}, {1} - {2}",
                                      Absence.Name,
