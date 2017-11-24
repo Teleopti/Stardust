@@ -140,5 +140,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			nextPeriod.Range.StartDate.Should().Be.EqualTo(new DateOnly(2017, 04, 09));
 			nextPeriod.Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 16));
 		}
+
+		[Test]
+		public void ShouldReturnMonthPeriodEvenIfStartDateIsInMiddleOfMonth()
+		{
+			var target = new PlanningPeriod(new DateOnlyPeriod(2017, 12, 10, 2018, 1, 9));
+			target.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Month);
+			target.Number.Should().Be.EqualTo(1);
+		}
 	}
 }

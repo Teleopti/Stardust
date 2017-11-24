@@ -94,6 +94,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_periodType = SchedulePeriodType.Month;
 				_number = 12 * (_range.EndDate.Year - _range.StartDate.Year) + (_range.EndDate.Month - _range.StartDate.Month) + 1;
 			}
+			else if (_range.StartDate.Day == _range.EndDate.AddDays(1).Day)
+			{
+				_periodType = SchedulePeriodType.Month;
+				_number = 12 * (_range.EndDate.Year - _range.StartDate.Year) + (_range.EndDate.Month - _range.StartDate.Month);
+			}
 			else
 			{
 				_periodType = SchedulePeriodType.Day;
