@@ -49,12 +49,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity).DefaultResolution(60);
 			var scenario = ScenarioRepository.Has("_");
-			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), new ShiftCategory("_").WithId()));
-			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(17, 0, 17, 0, 15), new TimePeriodWithSegment(25, 0, 25, 0, 15), new ShiftCategory("_").WithId()));
+			var dayRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), new ShiftCategory("_").WithId()));
+			var nightRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(17, 0, 17, 0, 15), new TimePeriodWithSegment(25, 0, 25, 0, 15), new ShiftCategory("_").WithId()));
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, numberOfAgents, demandOnDays, demandOnDays));
 			for (var i = 0; i < numberOfAgents; i++)
 			{
-				PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), new RuleSetBag(ruleSet1, ruleSet2), skill);
+				PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), new RuleSetBag(dayRuleSet, nightRuleSet), skill);
 			}
 			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
 			
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			var assesOnDate = AssignmentRepository.Find(date.ToDateOnlyPeriod(), scenario);
 			var groupedByStartDateTime = assesOnDate.GroupBy(x => x.ShiftLayers.Single().Period.StartDateTime);
-			//half of agents should get shift from ruleset1, the other half from ruleset2. 
+			//half of agents should get day shift the other half night shift (only two shifts available). 
 			var expected = numberOfAgents / 2;
 			Assert.Multiple(() =>
 			{
