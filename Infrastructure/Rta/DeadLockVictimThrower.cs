@@ -29,14 +29,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{
 				return action.Invoke();
 			}
-			catch (DataSourceException e)
+			catch (DataSourceException e) when (e.ContainsSqlDeadlock())
 			{
-				var sqlDeadlockException = e.AllExceptions().FirstOrDefault(x => x.IsSqlDeadlock());
-				if (sqlDeadlockException != null)
-					throw new DeadLockVictimException("Transaction deadlocked", sqlDeadlockException);
-				throw;
+				throw new DeadLockVictimException("Transaction deadlocked", e);
 			}
 		}
-
 	}
 }

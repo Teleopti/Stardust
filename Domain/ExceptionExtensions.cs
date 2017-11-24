@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Domain
 		{
 			yield return source;
 
-			var inners = new Exception[] {};
+			var inners = new Exception[] { };
 			if (source.InnerException != null)
-				inners = inners.Concat(new[] { source.InnerException}).ToArray();
+				inners = inners.Concat(new[] {source.InnerException}).ToArray();
 			if (source is AggregateException)
 				inners = inners.Concat((source as AggregateException).InnerExceptions).ToArray();
 
@@ -24,7 +24,16 @@ namespace Teleopti.Ccc.Domain
 					yield return e;
 				}
 			}
-			
+		}
+
+		public static bool ContainsSqlViolationOfPrimaryKey(this Exception e)
+		{
+			return e.AllExceptions().OfType<SqlException>().Any(x => x.Number == 2627);
+		}
+
+		public static bool ContainsSqlDeadlock(this Exception e)
+		{
+			return e.AllExceptions().OfType<SqlException>().Any(x => x.Number == 1205);
 		}
 
 		public static bool IsSqlDeadlock(this Exception source)
