@@ -261,6 +261,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private IPerson setupPerson(int nightlyRestHours = 6)
 		{
 			var person = PersonFactory.CreatePersonWithPersonPeriod(personPeriodStartDate, new List<ISkill>()).WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			var personPeriod = person.PersonPeriods(personPeriodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
 			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
 				TimeSpan.FromHours(24), TimeSpan.FromHours(nightlyRestHours), TimeSpan.FromHours(10));
