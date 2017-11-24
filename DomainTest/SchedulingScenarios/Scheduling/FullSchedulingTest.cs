@@ -39,6 +39,38 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 
 		[Test]
+		[Ignore("#46732 Probably involved in end user bug. When this is solved, we probably (?) also need to involve skill open hours (middle of day) + timezones. ...or maybe a fix for this is enough?")]
+		public void ShouldHandleNightShiftsCorrectlyBothWhenUnderAndOverstaffed([Values(1, 100)] int demandOnDays)
+		{
+			const int numberOfAgents = 40;
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var date = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var scenario = ScenarioRepository.Has("_");
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(17, 0, 17, 0, 15), new TimePeriodWithSegment(25, 0, 25, 0, 15), shiftCategory));
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, numberOfAgents, demandOnDays, demandOnDays));
+			for (var i = 0; i < numberOfAgents; i++)
+			{
+				PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), new RuleSetBag(ruleSet1, ruleSet2), skill);
+			}
+			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
+
+			var assesOnDate = AssignmentRepository.Find(date.ToDateOnlyPeriod(), scenario);
+			var groupedByStartDateTime = assesOnDate.GroupBy(x => x.ShiftLayers.Single().Period.StartDateTime);
+			const int expected = numberOfAgents / 2;
+			const int tolerance = 2;
+			groupedByStartDateTime.Count().Should().Be.EqualTo(2);
+			groupedByStartDateTime.First().Count().Should().Be.IncludedIn(expected - tolerance, expected + tolerance);
+			groupedByStartDateTime.Last().Count().Should().Be.IncludedIn(expected - tolerance, expected + tolerance);
+		}
+		
+		
+		[Test]
 		public void ShouldNotCreateTags()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
