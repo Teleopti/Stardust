@@ -209,6 +209,7 @@ wfm-calendar-picker {
 	display: inline-block;
 	background-color: $white;
 	padding: 0;
+	border: 1px solid $gray026;
 }
 
 wfm-calendar-picker-header {
@@ -216,13 +217,16 @@ wfm-calendar-picker-header {
 	.notice-info {
 		background-color: $blue-100 !important;
 	}
+
+	.card-context {
+		margin: 0;
+	}
 }
 
 wfm-calendar-picker-body > .date-info-wrapper {
 	min-height: 230px;
 	min-width: 230px;
 	padding: 0;
-	border: 1px $white solid;
 	overflow: hidden;
 
 	@media screen and (max-width:768px){
@@ -231,8 +235,10 @@ wfm-calendar-picker-body > .date-info-wrapper {
 	}
 
 	.disabled {
+		opacity: 0.5;
 		pointer-events: none;
-		background-color:rgba(0, 0, 0, 0.14) !important;
+		background-color: $gray087  !important;
+		color: $white;
 	}
 
 	.single-select-mode {
@@ -294,15 +300,10 @@ wfm-calendar-picker-body > .date-info-calendar-wrapper{
 		background-color:$blue-100 !important;
 	}
 
-	.uib-daypicker:focus{
-		outline:none!important;
-	}
-
 	.uib-datepicker {
 		min-height: 248px;
-		max-width:250px;
+		max-width: 260px;
 		overflow: hidden;
-		margin-right:20px;
 
 		button.btn-default {
 			border:none;
@@ -314,6 +315,10 @@ wfm-calendar-picker-body > .date-info-calendar-wrapper{
 		tbody button.btn-info.active {
 			background-color: $blue-500 !important;
 			color: $white !important;
+		}
+
+		.uib-daypicker:focus{
+			outline:none!important;
 		}
 
 		.uib-monthpicker, .uib-yearpicker {

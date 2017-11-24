@@ -268,25 +268,32 @@ table.overview {
 
 .pp-modal>.modal-box .modalbg .dialog {
 	max-height: 90%;
-	overflow-y: auto!important;
-}
+	overflow-y: auto!important;	
 
-@media (min-width: 768px) and (max-width: 1199px) {
-	.pp-modal>.modal-box .dialog,
-	.modal-box .dialog-mini {
+	md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar {
+		color: $blue-500 ;
+		background: $blue-500;
+	}
+	
+
+	@media (min-width: 768px) and (max-width: 1199px) {
+		margin: 10% auto;
 		width: 80%;
 	}
-}
-
-@media (min-width: 1200px) {
-	.pp-modal>.modal-box .dialog,
-	.modal-box .dialog-mini {
+	
+	@media (min-width: 1200px) {
+		margin: 10% auto;
 		width: 60%;
 	}
 }
 
+
 .pp-modal>.modal-box .modal-inner-content {
 	max-height: 80%;
+
+	h1.modal-title{
+		margin: 10px 36px 0px 36px !important;
+	}
 }
 
 .pp-startDate-picker,
@@ -505,9 +512,22 @@ card-panel-header > .pp-validation-progress {
 	}
 	span{
 		margin-left: 30px;
-	}
-		
+	}	
 }
+
+.pp-calendar-wrapper {
+	display: table;
+    margin: 0 auto;
+}
+
+.pp-custom-input-wrapper {
+	margin: 10px 0px;
+}
+
+.pp-custom-buttons-wrapper {
+	margin: 0 20px;
+}
+
 
 
 

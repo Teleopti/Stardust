@@ -1,30 +1,35 @@
 <h1>Date range picker</h1>
 
-<wfm-calendar-picker start-date="vm.startDate" end-date="vm.endDate"></wfm-calendar-picker>
+<wfm-calendar-picker ng-model="vm.data6"></wfm-calendar-picker>
 
 <h1>Example for wrapping date picker into pop up</h1>
 
 <button class="wfm-btn wfm-btn-default" ng-click="toggle =!toggle" style="min-width:246px; text-align:left">
     <i class="mdi mdi-calendar"></i>
-    <span ng-if="vm.startDate">From: {{vm.startDate | amDateFormat:"YYYY/MM/DD"}}</span>
-    <span ng-if="vm.endDate">To: {{vm.endDate | amDateFormat:"YYYY/MM/DD"}}</span>
-    <span ng-if="!vm.endDate && !vm.startDate" class="text-warning"> No selected date</span>
+    <span ng-if="vm.data5.startDate">From: {{vm.data5.startDate | amDateFormat:"YYYY/MM/DD"}}</span>
+    <span ng-if="vm.data5.endDate">To: {{vm.data5.endDate | amDateFormat:"YYYY/MM/DD"}}</span>
+    <span ng-if="!vm.data5.endDate && !vm.data5.startDate" class="text-warning"> No selected date</span>
 </button>
 <wfm-popup show="toggle">
-    <wfm-calendar-picker start-date="vm.startDate" end-date="vm.endDate"></wfm-calendar-picker>
+    <wfm-calendar-picker ng-model="vm.data5"></wfm-calendar-picker>
 </wfm-popup>
+
+<h1>Date range picker with only weeks interval</h1>
+
+<wfm-calendar-picker ng-model="vm.data4" interval-rule="week"></wfm-calendar-picker>
+
 
 <h1>Date range picker with disable selection on endDate</h1>
 
-<wfm-calendar-picker start-date="vm.startDate" end-date="vm.endDate1" show-week="true" disable="end-date"></wfm-calendar-picker>
+<wfm-calendar-picker ng-model="vm.data3" show-week="true" disable="end-date"></wfm-calendar-picker>
 
 <h1>Date range picker with disable selection on startDate</h1>
 
-<wfm-calendar-picker start-date="vm.startDate1" end-date="vm.endDate" show-week="true" disable="start-date"></wfm-calendar-picker>
+<wfm-calendar-picker ng-model="vm.data2" show-week="true" disable="start-date"></wfm-calendar-picker>
 
 <h1>Single Date picker</h1>
 
-<wfm-calendar-picker date="vm.startDate" show-week="true" single-date-picker></wfm-calendar-picker>
+<wfm-calendar-picker ng-model="vm.data" show-week="true" single-date-picker></wfm-calendar-picker>
 
 
 <h1>multi open</h1>

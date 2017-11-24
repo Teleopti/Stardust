@@ -17,7 +17,7 @@
 
         vm.color2 = {
             render: 'condition',
-            condition: {'card 1':'brown', 'card 2':'orange', 'card 3':'purple'}
+            condition: { 'card 1': 'brown', 'card 2': 'orange', 'card 3': 'purple' }
         };
 
         vm.color3 = {
@@ -39,7 +39,19 @@
             Content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. -- by Card 3'
         }];
 
-        vm.endDate1 = new Date();
-        vm.startDate1 = new Date();
+
+        var today = new Date();
+
+        vm.data2 = {
+            startDate: today
+        }
+
+        vm.data3 = {
+            endDate: today
+        }
+
+        vm.data4 = {
+            endDate: today.setDate(today.getDate() + 4)
+        }
     }
 })();
