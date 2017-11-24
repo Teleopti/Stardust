@@ -185,8 +185,10 @@
     <Content Include="Etl\etlController.js" />
     <Content Include="Etl\history.html" />
     <Content Include="Etl\manual.html" />
+    <Content Include="Etl\manual.service.js" />
     <Content Include="Etl\modal.html" />
     <Content Include="Etl\schedule.html" />
+    <Content Include="Etl\scheduleModal.html" />
     <Content Include="HangfireMonitoring.html" />
     <Content Include="login.html" />
     <Content Include="menuitem.html" />

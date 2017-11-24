@@ -212,3 +212,7 @@ datepicker input {
 	 }
 	 to {transform: rotate(360deg)}
  }
+
+.modal-body input, .modal-body select, .modal-body textarea {
+	max-width: 100%!important;
+}

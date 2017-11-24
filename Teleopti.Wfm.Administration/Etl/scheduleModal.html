@@ -1,15 +1,243 @@
 ﻿<div class="modal-content">
 	<div class="modal-header">
-		<h5 class="modal-title" id="exampleModalLabel">Datasource configuration</h5>
+		<h5 class="modal-title" id="exampleModalLabel">Job schedule</h5>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
 	</div>
-	<div class="modal-body">
-		Test
-	</div>
-	<div class="modal-footer">
-		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		<button type="button" class="btn btn-primary">Ok</button>
-	</div>
+	<form>
+		<div class="modal-body">
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label class="form-check-label" for="scheduleName">
+							<input type="checkbox" class="form-check-input" ng-model="vm.scheduleNameEnabled">
+							Schedule name
+							<span ng-if="vm.scheduleNameEnabled"> (Enabled)</span>
+							<span ng-if="!vm.scheduleNameEnabled"> (Disabled)</span>
+						</label>
+						<input type="text" class="form-control" id="scheduleName" aria-describedby="emailHelp" placeholder="Name">
+					</div>
+					<div class="form-group">
+						<div class="form-group">
+							<label for="jobs">Job</label>
+							<select class="form-control" id="jobs">
+								<option>Teleopti WFM</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<fieldset>
+						<legend>Daily frequency</legend>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="form-check-label" for="occursOnce1">
+										<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+										Occurs once at:
+									</label>
+
+									<input type="number" class="form-control" id="occursOnce1" aria-describedby="emailHelp" value="00:00">
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="form-check-label" for="occursEvery1">
+												<input class="form-check-input" type="radio" name="exampleRadios" id="occursEvery1" value="option2">
+												Occurs every:
+											</label>
+
+											<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="form-check-label" for="startingAt">
+												Starting at:
+											</label>
+
+											<input type="number" class="form-control" id="startingAt" aria-describedby="emailHelp">
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="form-check-label" for="endingAt">
+												Ending at:
+											</label>
+
+											<input type="number" class="form-control" id="endingAt" aria-describedby="emailHelp">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<fieldset>
+						<legend>Job parameters</legend>
+						<div class="row">
+							<div class="col-md-12">
+
+								<div class="form-group">
+									<div class="form-group">
+										<label for="jobs">Log data source</label>
+										<select class="form-control" id="jobs">
+											<option>Teleopti WFM</option>
+											<option>2</option>
+											<option>3</option>
+											<option>4</option>
+											<option>5</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-4">
+										<fieldset>
+											<legend>Initial</legend>
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label class="form-check-label" for="today1">
+															<input class="form-check-input" type="radio" name="exampleRadios" id="today1" value="option2">
+															Today
+														</label>
+														<label class="form-check-label" for="startEnd1">
+															<input class="form-check-input" type="radio" name="exampleRadios" id="startEnd1" value="option2">
+															Start/end
+														</label>
+														<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+														<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+													</div>
+												</div>
+											</div>
+										</fieldset>
+									</div>
+									<div class="col-md-4">
+										<fieldset>
+											<legend>Queue statistics</legend>
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label class="form-check-label" for="today2">
+															<input class="form-check-input" type="radio" name="exampleRadios" id="today2" value="option2">
+															Today
+														</label>
+														<label class="form-check-label" for="startEnd2">
+															<input class="form-check-input" type="radio" name="exampleRadios" id="startEnd2" value="option2">
+															Start/end
+														</label>
+														<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+														<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+													</div>
+												</div>
+											</div>
+										</fieldset>
+									</div>
+									<div class="col-md-4">
+										<fieldset>
+											<legend>Queue statistics</legend>
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label class="form-check-label" for="today3">
+															<input class="form-check-input" type="radio" name="exampleRadios" id="today3" value="option2">
+															Today
+														</label>
+														<label class="form-check-label" for="startEnd3">
+															<input class="form-check-input" type="radio" name="exampleRadios" id="startEnd3" value="option2">
+															Start/end
+														</label>
+														<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+														<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+													</div>
+												</div>
+											</div>
+										</fieldset>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<fieldset>
+											<legend>Agent statistics</legend>
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label class="form-check-label" for="today4">
+															<input class="form-check-input" type="radio" name="exampleRadios" id="today4" value="option2">
+															Today
+														</label>
+														<label class="form-check-label" for="startEnd4">
+															<input class="form-check-input" type="radio" name="exampleRadios" id="startEnd4" value="option2">
+															Start/end
+														</label>
+														<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+														<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+													</div>
+												</div>
+											</div>
+										</fieldset>
+									</div>
+									<div class="col-md-4">
+										<fieldset>
+											<legend>Schedule</legend>
+											<div class="row">
+												<div class="col-md-12">
+													<div class="form-group">
+														<label class="form-check-label" for="today5">
+															<input class="form-check-input" type="radio" name="exampleRadios" id="today5" value="option2">
+															Today
+														</label>
+														<label class="form-check-label" for="startEnd5">
+															<input class="form-check-input" type="radio" name="exampleRadios" id="startEnd5" value="option2">
+															Start/end
+														</label>
+														<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+														<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+													</div>
+												</div>
+											</div>
+										</fieldset>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<fieldset>
+						<legend>Description</legend>
+						<div class="row">
+							<div class="col-md-12">
+								Occurs every day at xyz
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary">Ok</button>
+		</div>
+	</form>
 </div>

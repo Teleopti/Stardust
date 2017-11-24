@@ -61,6 +61,10 @@
             EndDate: new Date().toLocaleDateString("en-US")
 		}
 
+		//schedule inputs
+		vm.scheduleNameEnabled = true;
+
+
 		vm.schedules = [
             {
                 Name: 'My main job',
