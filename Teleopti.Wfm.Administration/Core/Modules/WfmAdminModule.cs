@@ -53,6 +53,7 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 		{
 
 			builder.RegisterModule(new StardustModule(_configuration));
+			builder.RegisterModule(new EtlToolModule(_configuration));
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<DatabaseHelperWrapper>().As<IDatabaseHelperWrapper>().SingleInstance();

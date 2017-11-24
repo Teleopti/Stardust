@@ -317,6 +317,9 @@
     </Compile>
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\EtlController.cs" />
+    <Compile Include="Core\EtlTool\EtlToolJobCollectionModelProvider.cs" />
+    <Compile Include="Core\Modules\EtlToolModule.cs" />
+    <Compile Include="Models\JobCollectionModel.cs" />
     <Compile Include="Models\Stardust\LogOnModel.cs" />
     <Compile Include="Core\Stardust\IPingNode.cs" />
     <Compile Include="Core\Stardust\PingNode.cs" />
@@ -384,6 +387,10 @@
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj">
+      <Project>{34C3B171-160E-4320-AA49-B8162BAD0E36}</Project>
+      <Name>Teleopti.Analytics.Etl.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj">
       <Project>{7c7067a8-c9ff-462e-8469-78e886c2e002}</Project>
