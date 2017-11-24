@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 
 		[Test]
-		[Ignore("#46732 Probably involved in end user bug. When this is solved, we probably (?) also need to involve skill open hours (middle of day) + timezones. ...or maybe a fix for this is enough?")]
+		[Ignore("#46732")]
 		public void ShouldHandleNightShiftsCorrectlyBothWhenUnderAndOverstaffed(
 			[Values(2, 10, 40)] int numberOfAgents,
 			[Values(1, 100)] int demandOnDays)
