@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		public DateOnlyPeriod Period { get; }
 		public IBlockPreferenceProvider BlockPreferenceProvider { get; }
 		public bool UsePreferences { get; }
-		public IScheduleDictionary CurrentSchedule { get; set; }
 
 		public HintInput(IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod period,
 			IBlockPreferenceProvider blockPreferenceProvider, bool usePreferences)

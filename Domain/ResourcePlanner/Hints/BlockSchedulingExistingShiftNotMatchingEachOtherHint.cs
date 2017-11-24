@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 		public void FillResult(HintResult validationResult, HintInput input)
 		{
+			if (input.Schedules == null) return;
 			var people = input.People;
 			var period = input.Period;
 			var blockPreferenceProvider = input.BlockPreferenceProvider;
-			var scheduleDictionary = input.Schedules ?? input.CurrentSchedule;
-
-			foreach (var schedule in scheduleDictionary)
+			
+			foreach (var schedule in input.Schedules)
 			{
 				var person = schedule.Key;
 				if (!people.Contains(person)) continue;
@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 										{
 											addValidationResult(validationResult, person,
 												nameof(Resources.ExistingShiftNotMatchStartTime),
-													assignmenti.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly.Date,
-													assignmentj.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.Date);
+												assignmenti.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly.Date,
+												assignmentj.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.Date);
 											flag = true;
 											break;
 										}
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 										if (!_scheduleDayEquator.MainShiftEquals(scheduleDaysArray[i], scheduleDaysArray[j]))
 										{
 											addValidationResult(validationResult, person,
-												nameof(Resources.ExistingShiftNotMatchShift), 
+												nameof(Resources.ExistingShiftNotMatchShift),
 												scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly.Date,
 												scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.Date);
 											flag = true;
@@ -176,10 +176,10 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 									if (firstShiftCategory != shiftCategory)
 									{
 										addValidationResult(validationResult, person,
-											nameof(Resources.ExistingShiftNotMatchShiftCategory), 
-											firstShiftCategory.Description.ShortName, 
-											firstDate.Value.Date, 
-											shiftCategory.Description.ShortName, 
+											nameof(Resources.ExistingShiftNotMatchShiftCategory),
+											firstShiftCategory.Description.ShortName,
+											firstDate.Value.Date,
+											shiftCategory.Description.ShortName,
 											personAssignment.Date.Date);
 										break;
 									}
@@ -198,9 +198,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 									if (firstStartTime.Value != startTime)
 									{
 										addValidationResult(validationResult, person,
-											nameof(Resources.ExistingShiftNotMatchStartTime), 
-											firstStartTime.Value.ToString(@"hh\:mm"), 
-											firstDate.Value.Date, 
+											nameof(Resources.ExistingShiftNotMatchStartTime),
+											firstStartTime.Value.ToString(@"hh\:mm"),
+											firstDate.Value.Date,
 											startTime.ToString(@"hh\:mm"),
 											personAssignment.Date.Date);
 										break;
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 									{
 										addValidationResult(validationResult, person,
 											nameof(Resources.ExistingShiftNotMatchShift),
-											firstDate.Value.Date, 
+											firstDate.Value.Date,
 											personAssignment.Date.Date);
 										break;
 									}

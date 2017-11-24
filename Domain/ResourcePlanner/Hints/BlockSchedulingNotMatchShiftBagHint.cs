@@ -20,19 +20,21 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 		public void FillResult(HintResult hintResult, HintInput input)
 		{
+			if (input.Schedules == null)
+				return;
 			var people = input.People;
 			var period = input.Period;
 			var blockPreferenceProvider = input.BlockPreferenceProvider;
-			if (input.CurrentSchedule != null)
-				return;
-			var schedules = input.Schedules ?? input.CurrentSchedule;
-			foreach (var schedule in schedules)
+			
+			foreach (var schedule in input.Schedules)
 			{
 				var person = schedule.Key;
 				if (!people.Contains(person)) continue;
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
 				if (!blockOption.UseTeamBlockOption) continue;
 				var shiftBag = person.Period(period.StartDate).RuleSetBag;
+				if (shiftBag == null)
+					continue;
 				var shiftProjectionCaches = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(period.StartDate, person.PermissionInformation.DefaultTimeZone()), shiftBag.RuleSetCollection, false);
 				var allStartTime = shiftProjectionCaches.Select(x => x.WorkShiftStartTime).Distinct().ToList();
 				var allShifts = shiftProjectionCaches.Select(x=>x.TheWorkShift).Distinct().ToList();

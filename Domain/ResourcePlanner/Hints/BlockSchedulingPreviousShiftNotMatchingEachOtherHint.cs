@@ -18,11 +18,12 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 		public void FillResult(HintResult hintResult, HintInput input)
 		{
+			if (input.Schedules == null)
+				return;
 			var people = input.People;
 			var period = input.Period;
 			var blockPreferenceProvider = input.BlockPreferenceProvider;
-			var scheduleDictionary = input.Schedules ?? input.CurrentSchedule;
-			foreach (var schedule in scheduleDictionary)
+			foreach (var schedule in input.Schedules)
 			{
 				var person = schedule.Key;
 				if (!people.Contains(person)) continue;

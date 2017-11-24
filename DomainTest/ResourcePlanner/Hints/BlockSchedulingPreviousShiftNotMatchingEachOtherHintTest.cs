@@ -54,19 +54,15 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(null, new[] {agent}, planningPeriod,
+				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameStartTime = true
-					}), false)
-				{
-					CurrentSchedule = currentSchedule
-				}).InvalidResources;
+					}), false)).InvalidResources;
 
-			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
-			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint));
+			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.PreviousShiftNotMatchStartTime)).Should().Be.EqualTo(1);
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
 				.Should().Be.EqualTo(string.Format(Resources.PreviousShiftNotMatchStartTime, startDate.AddDays(-1).Date, personAssignment.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm")));
 		}
@@ -95,19 +91,15 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(null, new[] {agent}, planningPeriod,
+				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShift = true
-					}), false)
-				{
-					CurrentSchedule = currentSchedule
-				}).InvalidResources;
+					}), false)).InvalidResources;
 
-			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
-			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint));
+			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.PreviousShiftNotMatchShift)).Should().Be.EqualTo(1);
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
 				.Should().Be.EqualTo(string.Format(Resources.PreviousShiftNotMatchShift, startDate.AddDays(-1).ToShortDateString(), personAssignment.Date.ToShortDateString()));
 		}
@@ -137,16 +129,13 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(null, new[] {agent}, planningPeriod,
+				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShiftCategory = true
-					}), false)
-				{
-					CurrentSchedule = currentSchedule
-				}).InvalidResources;
+					}), false)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint));
@@ -179,16 +168,13 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(null, new[] {agent}, planningPeriod,
+				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShiftCategory = true
-					}), false)
-				{
-					CurrentSchedule = currentSchedule
-				}).InvalidResources;
+					}), false)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint));
@@ -221,16 +207,13 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(null, new[] {agent}, planningPeriod,
+				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShift = true
-					}), false)
-				{
-					CurrentSchedule = currentSchedule
-				}).InvalidResources;
+					}), false)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint));
@@ -262,16 +245,13 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(null, new[] {agent}, planningPeriod,
+				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameStartTime = true
-					}), false)
-				{
-					CurrentSchedule = currentSchedule
-				}).InvalidResources;
+					}), false)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint));
@@ -301,16 +281,13 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment);
 
 			var result =
-				Target.Execute(new HintInput(null, new[] {agent}, planningPeriod,
+				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShiftCategory = true
-					}), false)
-				{
-					CurrentSchedule = currentSchedule
-				}).InvalidResources;
+					}), false)).InvalidResources;
 
 			result.Count.Should().Be.EqualTo(0);
 		}

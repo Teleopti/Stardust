@@ -135,5 +135,35 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.ShiftNotMatchingShiftBag, personAssignment.Date.ToShortDateString(),
 				agent.PersonPeriodCollection.First().RuleSetBag.Description.Name));
 		}
+		[Test]
+		public void ShouldNotThrowExceptionWhenNoShiftBagIsAssigned()
+		{
+			var startDate = new DateOnly(2017, 01, 23);
+			var endDate = new DateOnly(2017, 01, 29);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+			var scenario = new Scenario { DefaultScenario = true };
+			ScenarioRepository.Has(scenario);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var contract = new Contract("_");
+			var agent = PersonRepository.Has(contract, new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), skill);
+
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, planningPeriod.ToDateTimePeriod(TimeZoneInfo.Utc));
+
+			var personAssignment = new PersonAssignment(agent, scenario, startDate.AddDays(1)).WithLayer(activity, new TimePeriod(8, 17)).ShiftCategory(shiftCategory);
+			scheduleDictionary.AddPersonAssignment(personAssignment);
+
+			var result =
+				Target.Execute(new HintInput(scheduleDictionary, new[] { agent }, planningPeriod,
+					new FixedBlockPreferenceProvider(new ExtraPreferences
+					{
+						UseTeamBlockOption = true,
+						BlockTypeValue = BlockFinderType.BetweenDayOff,
+						UseBlockSameShiftCategory = true
+					}), false)).InvalidResources;
+
+			result.Should().Not.Be.Null();
+		}
 	}
 }

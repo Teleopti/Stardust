@@ -9,17 +9,16 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var usePreferenes = input.UsePreferences;
-			if (!usePreferenes)
+			if (!usePreferenes || input.Schedules==null)
 				return;
 			var people = input.People;
 			var period = input.Period;
 			var blockPreferenceProvider = input.BlockPreferenceProvider;
-			var scheduleDictionary = input.Schedules ?? input.CurrentSchedule;
 			foreach (var person in people)
 			{
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
 				if (!blockOption.UseTeamBlockOption) continue;
-				var scheduleForPerson = scheduleDictionary[person];
+				var scheduleForPerson = input.Schedules[person];
 
 				var scheduleDays = scheduleForPerson.ScheduledDayCollection(period);
 				foreach (var scheduleDay in scheduleDays)
