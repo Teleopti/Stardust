@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[Test]
 		[Ignore("#46732")]
-		public void ShouldHandleNightShiftsCorrectlyBothWhenUnderAndOverstaffed(
+		public void ShouldHandleNightShiftsCorrectlyInDifferentTimeZones(
 			[Values("Taipei Standard Time", "UTC", "GMT Standard Time", "Mountain Standard Time")] string timeZoneForAll)
 		{
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneForAll);
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					.WithSchedulePeriodOneDay(date)
 					.InTimeZone(timeZone));
 			}
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, date, agents, skillDays);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date.AddDays(1)), agents, skillDays);
 
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), agents, date.ToDateOnlyPeriod());
 
