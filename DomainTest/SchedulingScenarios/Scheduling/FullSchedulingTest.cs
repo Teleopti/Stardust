@@ -37,40 +37,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeStudentAvailabilityDayRepository StudentAvailabilityDayRepository;
 		public FakeSkillCombinationResourceBpoReader SkillCombinationResourceBpoReader;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
-
-		[Test]
-		[Ignore("#46732")]
-		public void ShouldHandleNightShiftsCorrectlyBothWhenUnderAndOverstaffed(
-			[Values(2, 10, 40)] int numberOfAgents,
-			[Values(1, 100)] int demandOnDays)
-		{
-			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
-			var date = new DateOnly(2015, 10, 12);
-			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity).DefaultResolution(60);
-			var scenario = ScenarioRepository.Has("_");
-			var dayRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), new ShiftCategory("_").WithId()));
-			var nightRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(17, 0, 17, 0, 15), new TimePeriodWithSegment(25, 0, 25, 0, 15), new ShiftCategory("_").WithId()));
-			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, numberOfAgents, demandOnDays, demandOnDays));
-			for (var i = 0; i < numberOfAgents; i++)
-			{
-				PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), new RuleSetBag(dayRuleSet, nightRuleSet), skill);
-			}
-			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
-			
-			Target.DoScheduling(planningPeriod.Id.Value);
-
-			var assesOnDate = AssignmentRepository.Find(date.ToDateOnlyPeriod(), scenario);
-			var groupedByStartDateTime = assesOnDate.GroupBy(x => x.ShiftLayers.Single().Period.StartDateTime);
-			//half of agents should get day shift the other half night shift (only two shifts available). 
-			var expected = numberOfAgents / 2;
-			Assert.Multiple(() =>
-			{
-				Assert.That(groupedByStartDateTime.First().Count(), Is.EqualTo(expected));
-				Assert.That(groupedByStartDateTime.Last().Count(), Is.EqualTo(expected));
-			});
-		}
-		
 		
 		[Test]
 		public void ShouldNotCreateTags()
