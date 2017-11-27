@@ -1,53 +1,17 @@
 'use strict';
-describe('RtaAgentsController', function () {
 
-	var $interval,
-		$httpBackend,
-		$state,
-		$sessionStorage,
-		$fakeBackend,
-		$controllerBuilder,
-		vm,
-		scope;
+rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
+													$fakeBackend,
+													$controllerBuilder,
+													stateParams) {
 
-	var stateParams = {};
-
-	beforeEach(module('wfm.rta'));
-	beforeEach(module('wfm.rtaTestShared'));
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.factory('$stateParams', function () {
-				stateParams = {};
-				return stateParams;
-			});
-		});
-	});
-
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
-		$interval = _$interval_;
-		$state = _$state_;
-		$sessionStorage = _$sessionStorage_;
-		$httpBackend = _$httpBackend_;
-		$fakeBackend = _FakeRtaBackend_;
-		$controllerBuilder = _ControllerBuilder_;
-		scope = $controllerBuilder.setup('RtaAgentsController46475');
-		spyOn($state, 'go');
-	}));
-
-	afterEach(function () {
-		$fakeBackend.clear();
-		$sessionStorage.$reset();
-	});
-
-	it('should filter text', function () {
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
-		c.apply(function () {
-			vm.filterText = 'Charley';
+	it('should filter text', function (t) {
+		t.createController();
+		t.apply(function () {
+			t.vm.filterText = 'Charley';
 		}).wait(5000);
 
-		expect($fakeBackend.lastAgentStatesRequestParams.textFilter).toBe('Charley');
+		expect(t.backend().lastAgentStatesRequestParams.textFilter).toBe('Charley');
 	});
 
 	it('should not filter text immediately', function () {
@@ -180,10 +144,12 @@ describe('RtaAgentsController', function () {
 	});
 
 	it('should not pass skillAreaId to request params', function () {
-		stateParams = {skillAreaId: 'skillAreaId'};
+		stateParams.skillAreaId = 'skillAreaId';
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
 		expect($fakeBackend.lastAgentStatesRequestParams.skillAreaId).toBe(undefined);
 	});
+
 });
+

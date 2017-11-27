@@ -22,6 +22,7 @@ module.exports = function (config) {
 			'app/*.js',
 			'app/global/**/*.js',
 			'app/teamSchedule/**/*.js',
+			'app/rta*/**/rta.tester.fortest.js',
 			'app/rta*/**/*.js',
 
 			//served seat image file at browser because addSeat function need to create seat object from image in seatManagement test.

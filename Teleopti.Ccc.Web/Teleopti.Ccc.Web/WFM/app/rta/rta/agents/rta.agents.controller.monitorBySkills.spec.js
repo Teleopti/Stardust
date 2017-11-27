@@ -1,39 +1,10 @@
 'use strict';
-describe('RtaAgentsController', function() {
-	var $interval,
-		$httpBackend,
-		$state,
-		$fakeBackend,
-		$controllerBuilder,
-		scope,
-		vm;
-
-	var stateParams = {};
-
-	beforeEach(module('wfm.rta'));
-	beforeEach(module('wfm.rtaTestShared'));
-
-	beforeEach(function() {
-		module(function($provide) {
-			$provide.factory('$stateParams', function() {
-				stateParams = {};
-				return stateParams;
-			});
-		});
-	});
-
-	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _FakeRtaBackend_, _ControllerBuilder_) {
-		$interval = _$interval_;
-		$state = _$state_;
-		$httpBackend = _$httpBackend_;
-		$fakeBackend = _FakeRtaBackend_;
-		$controllerBuilder = _ControllerBuilder_;
-
-		$fakeBackend.clear();
-
-		scope = $controllerBuilder.setup('RtaAgentsController46475');
-		spyOn($state, 'go');
-	}));
+rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
+												   $state,
+												   $fakeBackend,
+												   $controllerBuilder,
+												   stateParams) {
+	var vm;
 
 	it('should get agent for skill', function() {
 		stateParams.skillIds = ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753"];

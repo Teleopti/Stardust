@@ -1,43 +1,14 @@
 'use strict';
-describe('RtaAgentsController', function () {
-	var $interval,
-		$httpBackend,
-		$state,
-		$sessionStorage,
-		scope,
-		$fakeBackend,
-		$controllerBuilder,
-		vm;
-
-	var stateParams = {};
-
-	beforeEach(module('wfm.rta'));
-	beforeEach(module('wfm.rtaTestShared'));
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.factory('$stateParams', function () {
-				stateParams = {};
-				return stateParams;
-			});
-		});
-	});
-
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
-		$interval = _$interval_;
-		$state = _$state_;
-		$sessionStorage = _$sessionStorage_;
-		$httpBackend = _$httpBackend_;
-		$fakeBackend = _FakeRtaBackend_;
-		$controllerBuilder = _ControllerBuilder_;
-		scope = $controllerBuilder.setup('RtaAgentsController46475');
-		spyOn($state, 'go');
-	}));
-
-	afterEach(function () {
-		$fakeBackend.clear();
-		$sessionStorage.$reset();
-	});
+rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
+													$interval,
+													$state,
+													$sessionStorage,
+													$httpBackend,
+													$fakeBackend,
+													$controllerBuilder,
+													stateParams,
+													scope) {
+	var vm;
 
 	[{
 		name: "multiple sites",
@@ -78,10 +49,10 @@ describe('RtaAgentsController', function () {
 			stateParams[selection.type] = selection.ids
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent("AshleyGuid", selection.ids[0], "Break", 30)
+					selection.createAgent("AshleyGuid", selection.ids[0], "Break", 30)
 				)
 				.withAgentState(
-				selection.createAgent("JohnGuid", selection.ids[1], "Ready", 30)
+					selection.createAgent("JohnGuid", selection.ids[1], "Ready", 30)
 				);
 
 			vm = $controllerBuilder.createController().vm;
@@ -94,10 +65,10 @@ describe('RtaAgentsController', function () {
 			stateParams[selection.type] = selection.ids
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent("AshleyGuid", selection.ids[0], "Ready", 30)
+					selection.createAgent("AshleyGuid", selection.ids[0], "Ready", 30)
 				)
 				.withAgentState(
-				selection.createAgent("JohnGuid", selection.ids[1], "In Call", 30)
+					selection.createAgent("JohnGuid", selection.ids[1], "In Call", 30)
 				);
 
 			var c = $controllerBuilder.createController();
@@ -106,10 +77,10 @@ describe('RtaAgentsController', function () {
 				.apply(function () {
 					$fakeBackend.clearAgentStates()
 						.withAgentState(
-						selection.createAgent("AshleyGuid", selection.ids[0], "In Call", 30)
+							selection.createAgent("AshleyGuid", selection.ids[0], "In Call", 30)
 						)
 						.withAgentState(
-						selection.createAgent("JohnGuid", selection.ids[1], "Ready", 30)
+							selection.createAgent("JohnGuid", selection.ids[1], "Ready", 30)
 						);
 
 				})
@@ -168,10 +139,10 @@ describe('RtaAgentsController', function () {
 			stateParams[selection.type] = selection.ids
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent("11610fe4-0130-4568-97de-9b5e015b2564", selection.ids[0], "Ready", 30)
+					selection.createAgent("11610fe4-0130-4568-97de-9b5e015b2564", selection.ids[0], "Ready", 30)
 				)
 				.withAgentState(
-				selection.createAgent("6b693b41-e2ca-4ef0-af0b-9e06008d969b", selection.ids[1], "Ready", 30)
+					selection.createAgent("6b693b41-e2ca-4ef0-af0b-9e06008d969b", selection.ids[1], "Ready", 30)
 				);
 
 			vm = $controllerBuilder.createController().vm;
@@ -185,7 +156,7 @@ describe('RtaAgentsController', function () {
 			stateParams[selection.type] = selection.ids[0];
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent("6b693b41-e2ca-4ef0-af0b-9e06008d969b", selection.ids[0], "Ready", 30)
+					selection.createAgent("6b693b41-e2ca-4ef0-af0b-9e06008d969b", selection.ids[0], "Ready", 30)
 				);
 
 			vm = $controllerBuilder.createController().vm;

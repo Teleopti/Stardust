@@ -1,39 +1,10 @@
 'use strict';
-describe('RtaAgentsController', function () {
-	var $interval,
-		$httpBackend,
-		$state,
-		$fakeBackend,
-		$controllerBuilder,
-		scope,
-		vm;
-
-	var stateParams = {};
-
-	beforeEach(module('wfm.rta'));
-	beforeEach(module('wfm.rtaTestShared'));
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.factory('$stateParams', function () {
-				stateParams = {};
-				return stateParams;
-			});
-		});
-	});
-
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _FakeRtaBackend_, _ControllerBuilder_) {
-		$interval = _$interval_;
-		$state = _$state_;
-		$httpBackend = _$httpBackend_;
-		$fakeBackend = _FakeRtaBackend_;
-		$controllerBuilder = _ControllerBuilder_;
-
-		scope = $controllerBuilder.setup('RtaAgentsController46475');
-
-		$fakeBackend.clear();
-		spyOn($state, 'go');
-	}));
+rtaTester.describe('RtaAgentsController', function(it, fit, xit, _, 
+													$state,
+												   $fakeBackend,
+												   $controllerBuilder,
+												   stateParams) {
+	var vm;
 
 	it('should include state id in agent states', function () {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
