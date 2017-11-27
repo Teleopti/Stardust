@@ -3,7 +3,7 @@
 
 	angular
 		.module('wfm.rta')
-		.controller('RtaAgentsController46475', RtaAgentsController);
+		.controller('RtaAgentsController46758', RtaAgentsController);
 
 	RtaAgentsController.$inject = [
 		'$scope',
