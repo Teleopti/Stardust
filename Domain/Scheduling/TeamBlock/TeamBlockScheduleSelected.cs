@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IEnumerable<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, SchedulingOptions schedulingOption, IBlockPreferenceProvider blockPreferenceProvider)
 		{
+			var resCalcData = new ResourceCalculationData(schedulingResultStateHolder, schedulingOption.ConsiderShortBreaks, false);
 			foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count(), true))
 			{
 				var blockPreferences = blockPreferenceProvider.ForAgents(teamInfo.GroupMembers, selectedPeriod.StartDate).ToArray();
@@ -85,9 +86,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 				if (_teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), schedulingCallback, _workShiftSelector, teamBlockInfo, datePointer, schedulingOption,
 					schedulePartModifyAndRollbackService,
-					resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
+					resourceCalculateDelayer, schedulingResultStateHolder.SkillDays, schedulingResultStateHolder.Schedules, resCalcData, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
+				{
 					verifyScheduledTeamBlock(schedulingCallback, selectedPersons, schedulePartModifyAndRollbackService, datePointer,
 						dateOnlySkipList, teamBlockInfo, schedulingOption);
+				}
 				else
 				{
 					schedulingCallback.Scheduled(new SchedulingCallbackInfo(null, false));

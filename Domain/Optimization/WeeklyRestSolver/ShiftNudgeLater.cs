@@ -76,10 +76,10 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				effectiveRestriction.EndTimeLimitation, effectiveRestriction.WorkTimeLimitation, effectiveRestriction.ShiftCategory,
 				effectiveRestriction.DayOffTemplate, effectiveRestriction.Absence,
 				new List<IActivityRestriction>(effectiveRestriction.ActivityRestrictionCollection));
-
+			var resCalcData = new ResourceCalculationData(schedulingResultStateHolder, schedulingOptions.ConsiderShortBreaks, false);
 			//TODO: should pass in orginal assignments here to fix same issue as #45540 for shiftswithinday
 			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, shiftDate, schedulingOptions,
-				rollbackService, new DoNothingResourceCalculateDelayer(), schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules,
+				rollbackService, new DoNothingResourceCalculateDelayer(), schedulingResultStateHolder.SkillDays, schedulingResultStateHolder.Schedules,resCalcData,
 				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
 			if (!result)
 			{

@@ -80,8 +80,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder());
 			if (teamBlockInfo == null)
 				return;
+			var resCalcData = new ResourceCalculationData(stateHolder.SchedulingResultState, schedulingOptions.ConsiderShortBreaks, false);
 			_teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer,
-				stateHolder.SchedulingResultState.AllSkillDays(), stateHolder.SchedulingResultState.Schedules, 
+				stateHolder.SchedulingResultState.SkillDays, stateHolder.SchedulingResultState.Schedules, resCalcData,
 				shiftNudgeDirective, createRules(overtimePreferences), _personSkillsForNonOvertimeProvider.SkillAggregator(overtimePreferences));
 		}
 

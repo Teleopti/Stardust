@@ -150,10 +150,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var orgAssignmentsForTeamBlock = scheduleDictionary.SchedulesForPeriod(teamBlockInfo.BlockInfo.BlockPeriod, teamBlockInfo.TeamInfo.GroupMembers.ToArray())
 					.Select(x => x.PersonAssignment()).Where(x => x != null).ToArray();
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
-
+				var resCalcData = new ResourceCalculationData(scheduleDictionary, skillDays, schedulingOptions.ConsiderShortBreaks, false);
 				var success = _teamBlockScheduler.ScheduleTeamBlockDay(orgAssignmentsForTeamBlock, new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
-					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), scheduleDictionary, new ShiftNudgeDirective(), businessRuleCollection, _groupPersonSkillAggregator);
+					resourceCalculateDelayer, skillDays, scheduleDictionary, resCalcData, new ShiftNudgeDirective(), businessRuleCollection, _groupPersonSkillAggregator);
 
 				callback.Optimizing(new IntradayOptimizationCallbackInfo(teamBlockInfo, success, totalTeamBlockInfos - runningTeamBlockCounter));
 

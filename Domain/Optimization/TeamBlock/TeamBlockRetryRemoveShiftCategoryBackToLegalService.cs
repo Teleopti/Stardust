@@ -123,16 +123,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						}
 					}
 				}
+				var resCalcData = new ResourceCalculationData(schedulingResultStateHolder, schedulingOptions.ConsiderShortBreaks, false);
 
-				var allSkillDays = schedulingResultStateHolder.AllSkillDays();
 				if (_teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
-					rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective,
+					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.SkillDays, schedulingResultStateHolder.Schedules, resCalcData, shiftNudgeDirective,
 					NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
 					continue;
 
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 				if (_teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
-					rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective,
+					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.SkillDays, schedulingResultStateHolder.Schedules, resCalcData, shiftNudgeDirective,
 					NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
 					continue;
 

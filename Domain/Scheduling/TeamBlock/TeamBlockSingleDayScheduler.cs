@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		bool ScheduleSingleDay(IEnumerable<IPersonAssignment> orginalPersonAssignments, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,
 			ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skills, IScheduleDictionary schedules, ResourceCalculationData resourceCalculationData,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
 	}
 
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public bool ScheduleSingleDay(IEnumerable<IPersonAssignment> orginalPersonAssignments, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,
 			ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skills, IScheduleDictionary schedules, ResourceCalculationData resourceCalculationData,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
 		{
 			var cancelMe = false;
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedules, schedulingOptions, teamBlockInfo, day, person, roleModelShift);
 					if (restriction == null)
 						return false;
+					var allSkillDays = skills.ToSkillDayEnumerable();
 
 					if (shiftNudgeRestriction != null)
 						restriction = restriction.Combine(shiftNudgeRestriction);
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						continue;
 				}
 				cancelMe = _teamScheduling.ExecutePerDayPerPerson(orginalPersonAssignments, person, day, teamBlockInfo, bestShiftProjectionCache,
-					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, businessRules, schedulingOptions, schedules, dayScheduled);
+					schedulePartModifyAndRollbackService, businessRules, schedulingOptions, schedules, resourceCalculationData, dayScheduled);
 			}
 
 			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo, schedulingOptions);

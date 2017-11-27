@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -35,6 +36,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public virtual void ResourceCalculate(DateOnlyPeriod period, ResourceCalculationData resourceCalculationData, Func< IDisposable> getResourceCalculationContext = null )
 		{
+			if (resourceCalculationData.SkipResourceCalculation|| !resourceCalculationData.Skills.Any())
+				return;
+
 			foreach (var date in period.DayCollection())
 			{
 				_resourceOptimizationHelper.ResourceCalculate(date, resourceCalculationData);

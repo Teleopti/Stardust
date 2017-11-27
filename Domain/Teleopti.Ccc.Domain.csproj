@@ -304,6 +304,7 @@
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteWithOpenHourProvider.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdater.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdater.cs" />
+    <Compile Include="Cascading\ResourceOptimizationHelperThatThrows.cs" />
     <Compile Include="Common\BadgeSetting.cs" />
     <Compile Include="Common\BadgeSettingDataConverter.cs" />
     <Compile Include="Common\QualityInfo.cs" />
@@ -570,7 +571,6 @@
     <Compile Include="Cascading\ActivityAndIntervalLength.cs" />
     <Compile Include="Cascading\EmptyShovelResourceDataForInterval.cs" />
     <Compile Include="Cascading\OrderedSkillSets.cs" />
-    <Compile Include="Cascading\ResourceCalculationThatThrows.cs" />
     <Compile Include="Cascading\ResourceDistributionForSkillSetsWithSameIndex.cs" />
     <Compile Include="Cascading\ShovelResourceDataExtensions.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModel.cs" />

@@ -84,8 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 					var originalDay = scheduleMatrixPro.GetScheduleDayByKey(date).DaySchedulePart();
 					var overTimeActivities = originalDay.PersonAssignment(true).OvertimeActivities();
 	
-					success = _backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService,
-						resourceCalculateDelayer, schedulingResultStateHolder);
+					success = _backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService, schedulingResultStateHolder);
 	
 					if (success)
 					{
@@ -207,8 +206,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				var originalDay = scheduleMatrixPro.GetScheduleDayByKey(date).DaySchedulePart();
 				var overTimeActivities = originalDay.PersonAssignment(true).OvertimeActivities();
 
-				success = _backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService,
-					resourceCalculateDelayer, schedulingResultStateHolder);
+				success = _backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService, schedulingResultStateHolder);
 
 				if (success)
 				{

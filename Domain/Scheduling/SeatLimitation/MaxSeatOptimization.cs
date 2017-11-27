@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -112,9 +113,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
 						//TODO: should pass in orginal assignments here to fix same issue as #45540 for shiftswithinday
+						var noResCalcData = new ResourceCalculationData(Enumerable.Empty<ISkill>(), new SkillResourceCalculationPeriodWrapper(new List<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>>()));
 						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelectorForMaxSeat, teamBlockInfo,
 							datePoint, schedulingOptions, rollbackService,
-							new DoNothingResourceCalculateDelayer(), allSkillDaysExceptMaxSeat.Union(skillDaysForTeamBlockInfo), schedules,
+							new DoNothingResourceCalculateDelayer(), allSkillDaysExceptMaxSeat.Union(skillDaysForTeamBlockInfo).ToSkillSkillDayDictionary(), schedules, noResCalcData,
 							new ShiftNudgeDirective(), businessRules, _groupPersonSkillAggregator);
 						var maxPeaksAfter = _maxSeatPeak.Fetch(scheduleCallback.ModifiedDates, skillDaysForTeamBlockInfo);
 

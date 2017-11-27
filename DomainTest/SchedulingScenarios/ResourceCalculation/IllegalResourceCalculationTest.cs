@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				ResourceCalculation.ResourceCalculate(
 					DateOnly.Today, 
 					new ResourceCalculationData(ScheduleDictionaryCreator.WithData(new Scenario(), DateOnly.Today.ToDateOnlyPeriod()),
-				Enumerable.Empty<ISkill>(), 
 				new Dictionary<ISkill, IEnumerable<ISkillDay>>(), 
 				false, 
 				false)));

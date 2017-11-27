@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 	{
 		bool ReSchedule(ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions,
 			ShiftProjectionCache roleModelShift,
-			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
+			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder);
 	}
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 
 		public bool ReSchedule(ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions,
 			ShiftProjectionCache roleModelShift,
-			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
+			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			var rules = NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder);
 			//TODO: should pass in orginal assignments here to fix same issue as #45540 for shiftswithinday
 			var success = _teamBlockSingleDayScheduler.ScheduleSingleDay(Enumerable.Empty<IPersonAssignment>(), _workShiftSelector, teamBlockInfo, schedulingOptions, date, roleModelShift,
-				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, null, rules, null);
+				rollbackService, schedulingResultStateHolder.SkillDays, schedulingResultStateHolder.Schedules, new ResourceCalculationData(schedulingResultStateHolder, schedulingOptions.ConsiderShortBreaks, false), null, rules, null);
 			if (!success)
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);

@@ -27,5 +27,22 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			return skillDays.Values.SelectMany(s => s);
 		}
+
+		public static IDictionary<ISkill, IEnumerable<ISkillDay>> ToSkillSkillDayDictionary(this IEnumerable<ISkillDay> allSkillDays)
+		{
+			var ret = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
+			foreach (var skillDay in allSkillDays)
+			{
+				if (ret.TryGetValue(skillDay.Skill, out var skillDaysForSkill))
+				{
+					((ICollection<ISkillDay>)skillDaysForSkill).Add(skillDay);
+				}
+				else
+				{
+					ret.Add(skillDay.Skill, new List<ISkillDay> {skillDay});
+				}
+			}
+			return ret;
+		}
 	}
 }

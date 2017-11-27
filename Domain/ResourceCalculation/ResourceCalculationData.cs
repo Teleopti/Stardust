@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -9,13 +11,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public ResourceCalculationData(ISchedulingResultStateHolder schedulingResultStateHolder, 
 																bool considerShortBreaks, 
 																bool doIntraIntervalCalculation)
-			: this(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.Skills, schedulingResultStateHolder.SkillDays, considerShortBreaks, doIntraIntervalCalculation)
+			: this(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.SkillDays, considerShortBreaks, doIntraIntervalCalculation)
 		{
 			SkipResourceCalculation = schedulingResultStateHolder.TeamLeaderMode || schedulingResultStateHolder.SkipResourceCalculation;
 		}
 
 		public ResourceCalculationData(IScheduleDictionary scheduleDictionary, 
-																	IEnumerable<ISkill> skills, 
 																	IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
 																	bool considerShortBreaks, 
 																	bool doIntraIntervalCalculation)
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			ConsiderShortBreaks = considerShortBreaks;
 			DoIntraIntervalCalculation = doIntraIntervalCalculation;
 			Schedules = scheduleDictionary;
-			Skills = skills;
+			Skills = new HashSet<ISkill>(skillDays.Keys);
 			SkillCombinationHolder = new SkillCombinationHolder();
 			SkillDays = skillDays;
 			SkillResourceCalculationPeriodDictionary =

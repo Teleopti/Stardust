@@ -102,7 +102,9 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 			var rules = NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder());
 			//TODO: should pass in orginal assignments here to fix same issue as #45540 for shiftswithinday
-			_teamScheduling.ExecutePerDayPerPerson(Enumerable.Empty<IPersonAssignment>(), person, dateOnly, teamBlock, shiftProjectionCacheBestFit, rollbackService, resourceCalculateDelayer, true, rules, schedulingOptions, schedulingResultStateHolder.Schedules, null);
+			_teamScheduling.ExecutePerDayPerPerson(Enumerable.Empty<IPersonAssignment>(), person, dateOnly, teamBlock, 
+				shiftProjectionCacheBestFit, rollbackService, rules, schedulingOptions, 
+				schedulingResultStateHolder.Schedules, new ResourceCalculationData(schedulingResultStateHolder, schedulingOptions.ConsiderShortBreaks, true),null);
 
 			daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
 			if (!daySchedule.IsScheduled())

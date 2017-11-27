@@ -290,10 +290,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				if (!_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
-
+				var resCalcData =new ResourceCalculationData(schedulingResultStateHolder, schedulingOptions.ConsiderShortBreaks, false);
 				if (!_teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
-					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(),
-					schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(),
+					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.SkillDays,
+					schedulingResultStateHolder.Schedules, resCalcData, new ShiftNudgeDirective(),
 					NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
 				{
 					if (optimizationPreferences.Extra.IsClassic())

@@ -23,12 +23,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public override void ResourceCalculate(DateOnly localDate, ResourceCalculationData resourceCalculationData)
 		{
-			if (resourceCalculationData.SkipResourceCalculation)
-				return;
-
-			if (!resourceCalculationData.Skills.Any())
-				return;
-
 			var relevantProjections = ResourceCalculationContext.Fetch();
 			resourceCalculateDate(resourceCalculationData, relevantProjections, localDate, resourceCalculationData.ConsiderShortBreaks);
 
@@ -68,12 +62,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public virtual void ResourceCalculate(DateOnly localDate, ResourceCalculationData resourceCalculationData)
 		{
-			if (resourceCalculationData.SkipResourceCalculation)
-				return;
-
-			if (!resourceCalculationData.Skills.Any())
-				return;
-
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
 			{
 				IDisposable context = null;

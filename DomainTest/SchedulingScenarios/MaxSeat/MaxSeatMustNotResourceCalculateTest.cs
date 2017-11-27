@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<ResourceCalculationThatThrows>().For<IResourceCalculation>();
+			system.UseTestDouble<ResourceOptimizationHelperThatThrows>().For<ResourceOptimizationHelper>();
 		}
 	}
 }
