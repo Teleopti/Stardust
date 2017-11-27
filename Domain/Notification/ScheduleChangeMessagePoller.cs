@@ -8,21 +8,25 @@ namespace Teleopti.Ccc.Domain.Notification
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IASMScheduleChangeTimeRepository _scheduleChangeTimeRepo;
+		private readonly INow _now;
+		private TimeSpan interval = TimeSpan.FromMinutes(5);
 
 		public ScheduleChangeMessagePoller(
 			ILoggedOnUser loggedOnUser,
-			IASMScheduleChangeTimeRepository scheduleChangeTimeRepo)
+			IASMScheduleChangeTimeRepository scheduleChangeTimeRepo,
+			INow now)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleChangeTimeRepo = scheduleChangeTimeRepo;
+			_now = now;
 		}
 
-		public bool Check(params PollerInputPeriod[] periods)
+		public bool Check()
 		{
 			var userId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault();
 			var time = _scheduleChangeTimeRepo.GetScheduleChangeTime(userId);
-
-			return false;
+			if (time == null) return false;
+			return _now.UtcDateTime() - time.TimeStamp <= interval;
 		}
 
 		//private IList<ScheduleUpdatedPeriod> checkForPeriod(IList<> messages, PollerInputPeriod period)

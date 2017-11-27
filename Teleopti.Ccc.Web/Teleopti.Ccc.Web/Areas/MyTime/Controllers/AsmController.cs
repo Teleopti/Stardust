@@ -69,13 +69,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork, MessageBrokerUnitOfWork]
 		[HttpPost]
-		public virtual JsonResult CheckIfScheduleHasUpdates(PollerInputPeriod notifyPeriod,
-			PollerInputPeriod listenerPeriod)
+		public virtual JsonResult CheckIfScheduleHasUpdates()
 		{
-			var hasListener = listenerPeriod != null;
-			var periods = hasListener ? new[] { notifyPeriod, listenerPeriod } : new[] { notifyPeriod };
-			var checkResult = _scheduleChangePoller.Check(periods);
-			return Json(new { HasUpdates = checkResult }, JsonRequestBehavior.AllowGet);
+			return Json(new { HasUpdates = _scheduleChangePoller.Check() }, JsonRequestBehavior.AllowGet);
 		}
 
 	}
