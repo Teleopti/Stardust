@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -13,24 +12,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
 	    private readonly AssignScheduledLayers _assignScheduledLayers;
 	    private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
-		private readonly IResourceCalculation _resourceCalculation;
-		private readonly ScheduleChangesAffectedDates _scheduleChangesAffectedDates;
 
-		public TeamScheduling(AssignScheduledLayers assignScheduledLayers, 
-			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
-			IResourceCalculation resourceCalculation,
-			ScheduleChangesAffectedDates scheduleChangesAffectedDates)
+	    public TeamScheduling(AssignScheduledLayers assignScheduledLayers, 
+			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
 	    {
 		    _assignScheduledLayers = assignScheduledLayers;
 		    _dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
-			_resourceCalculation = resourceCalculation;
-			_scheduleChangesAffectedDates = scheduleChangesAffectedDates;
-		}
+	    }
 
-	    public bool ExecutePerDayPerPerson(IEnumerable<IPersonAssignment> orginalPersonAssignments, IPerson person, DateOnly dateOnly, 
-			ITeamBlockInfo teamBlockInfo, ShiftProjectionCache shiftProjectionCache, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
-			INewBusinessRuleCollection businessRules, SchedulingOptions schedulingOptions, 
-			IScheduleDictionary schedules, ResourceCalculationData resourceCalculationData, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
+	    public bool ExecutePerDayPerPerson(IEnumerable<IPersonAssignment> orginalPersonAssignments, IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+		    ShiftProjectionCache shiftProjectionCache,
+		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, INewBusinessRuleCollection businessRules, SchedulingOptions schedulingOptions,
+			IScheduleDictionary schedules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
 	    {
 		    var tempMatrixList =
 			    teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly)
@@ -56,14 +50,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			
 
 		    assignShiftProjection(orginalPersonAssignments, shiftProjectionCache, scheduleDay,
-			    schedulePartModifyAndRollbackService, businessRules, schedulingOptions, resourceCalculationData);
+			    schedulePartModifyAndRollbackService, businessRules, schedulingOptions, resourceCalculateDelayer, doIntraIntervalCalculation);
 
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
 
 		private void assignShiftProjection(IEnumerable<IPersonAssignment> orginalPersonAssignments, ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, 
-			SchedulingOptions schedulingOptions, ResourceCalculationData resourceCalculationData)
+			SchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation)
         {
 			shiftProjectionCache.SetDate(destinationScheduleDay.DateOnlyAsPeriod);
 
@@ -87,12 +81,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        if (assignmentChanged(assignmentBefore, destinationScheduleDay))
 	        {
 				schedulePartModifyAndRollbackService.Modify(destinationScheduleDay, businessRules);
-				var destinationScheduleDayAfter = destinationScheduleDay.ReFetch();
-				var modifiedDates = _scheduleChangesAffectedDates.DecideDates(destinationScheduleDayAfter, destinationScheduleDay);
-				foreach (var modifiedDate in modifiedDates)
-				{
-					_resourceCalculation.ResourceCalculate(modifiedDate, resourceCalculationData);
-				}
+
+		        resourceCalculateDelayer.CalculateIfNeeded(destinationScheduleDay.DateOnlyAsPeriod.DateOnly,
+			        shiftProjectionCache.WorkShiftProjectionPeriod, doIntraIntervalCalculation);
 			}
 		}
 

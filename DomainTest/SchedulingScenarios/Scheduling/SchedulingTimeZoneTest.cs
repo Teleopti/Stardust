@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
+		[Ignore("#46732")]
 		public void ShouldHandleNightShiftsCorrectlyInDifferentTimeZones(
 			[Values("Taipei Standard Time", "UTC", "GMT Standard Time", "Mountain Standard Time")] string timeZoneForAll)
 		{

@@ -4,7 +4,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	//don't use this one. don't check night shift in correct way. Use ScheduleChangesAffectedDates instead
 	public class ResourceCalculateDelayer : IResourceCalculateDelayer
 	{
 		private readonly IResourceCalculation _resourceOptimizationHelper;
