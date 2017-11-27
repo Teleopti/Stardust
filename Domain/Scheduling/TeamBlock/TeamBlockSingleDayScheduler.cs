@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		bool ScheduleSingleDay(IEnumerable<IPersonAssignment> orginalPersonAssignments, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,
 			ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
+			IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
 	}
 
@@ -25,23 +25,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly TeamScheduling _teamScheduling;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			ProposedRestrictionAggregator proposedRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
 			TeamScheduling teamScheduling,
-			IGroupPersonSkillAggregator groupPersonSkillAggregator)
+			IGroupPersonSkillAggregator groupPersonSkillAggregator,
+			Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
 		{
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_proposedRestrictionAggregator = proposedRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
 			_teamScheduling = teamScheduling;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public bool ScheduleSingleDay(IEnumerable<IPersonAssignment> orginalPersonAssignments, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,
 			ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
+			IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
 		{
 			var cancelMe = false;
@@ -84,8 +87,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (bestShiftProjectionCache == null)
 						continue;
 				}
+				var resourceCalculationData = new ResourceCalculationData(_schedulingResultStateHolder(), schedulingOptions.ConsiderShortBreaks, false);
 				cancelMe = _teamScheduling.ExecutePerDayPerPerson(orginalPersonAssignments, person, day, teamBlockInfo, bestShiftProjectionCache,
-					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, businessRules, schedulingOptions, schedules, dayScheduled);
+					schedulePartModifyAndRollbackService, businessRules, schedulingOptions, schedules, resourceCalculationData, dayScheduled);
 			}
 
 			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo, schedulingOptions);
