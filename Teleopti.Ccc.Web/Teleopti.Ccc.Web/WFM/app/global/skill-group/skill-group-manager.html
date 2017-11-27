@@ -26,7 +26,7 @@
 						<h2>{{'AllSkillGroups'|translate}}</h2>
 					</div>
 					<div class="con-flex">
-						<button type="button" tabindex=0 class="wfm-fab mini mini-active pull-right" id="create-skill-group-button" ng-click="vm.createSkillGroup()">
+						<button type="button" tabindex=0 class="context-menu card-context notice-info pull-right notice-success" id="create-skill-group-button" ng-click="vm.createSkillGroup($event);">
 							<i class="mdi mdi-plus"></i>
 							<md-tooltip>{{'CreateNewSkillGroup'|translate}}</md-tooltip>
 						</button>
@@ -35,16 +35,18 @@
 				<div class="con-row">
 					<div class="con-flex">
 						<ul class="wfm-list" id="available_skill_groups_list">
-							<li ng-repeat="skillGroup in vm.skillGroups track by Id" ng-click="vm.selectSkillGroup($index)">
+							<li ng-repeat="skillGroup in vm.skillGroups track by skillGroup.Id" ng-click="vm.selectSkillGroup($index)">
 								<span class="list-item-container">
 									{{skillGroup.Name}}
 								</span>
 								<span ng-cloak ng-show="vm.selectedSkillGroup.Id === skillGroup.Id" class="list-dot grow-out">
 									<b class="mdi mdi-check list-mark"></b>
 								</span>
-								<div class="wfm-leave-behind wfm-leave-behind-1" ng-click="vm.selectedSkillGroup = skillGroup; vm.deleteConfirmation=true; $event.stopPropagation();">
+								<div class="wfm-leave-behind wfm-leave-behind-3">
 									<span>
-										<i class="mdi mdi-delete"></i>
+										<i class="mdi mdi-pencil" ng-click="vm.editNameClicked(skillGroup, $event)"></i>
+										<i class="mdi mdi-content-copy" ng-click="vm.copyGroupClicked(skillGroup, $event)"></i>
+										<i class="mdi mdi-delete" ng-click="vm.selectedSkillGroup = skillGroup; vm.deleteConfirmation=true; $event.stopPropagation();"></i>
 									</span>
 								</div>
 							</li>
@@ -90,10 +92,7 @@
 					</div>
 					<div class="con-flex x3 panel form-panel material-depth-1" style="margin: 5px">
 						<div class="con-row">
-							<div class="con-flex">
-								<input style="width:80%;" type="text" placeholder="{{'Name'|translate}}" ng-model="vm.selectedSkillGroup.Name" maxlength="50" ng-maxlength="50" id="skillGroupNameBox"
-								/>
-							</div>
+							<h1>{{vm.selectedSkillGroup.Name}}</h1>
 						</div>
 						<div class="con-row">
 							<div class="con-flex">
@@ -137,7 +136,8 @@
 						<div class="modal-actions">
 							<aside>
 								<button type="button" id="cancelDeleteButton" ng-click="vm.deleteConfirmation=false; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-								<button type="button" id="confirmDeleteButton" ng-click="vm.deleteConfirmation=false; vm.deleteSkillGroup(); $event.stopPropagation();" class="wfm-btn wfm-btn-invis-primary">{{'OK'|translate}}</button>
+								<button type="button" id="confirmDeleteButton" ng-click="vm.deleteConfirmation=false; vm.deleteSkillGroup(); $event.stopPropagation();"
+								 class="wfm-btn wfm-btn-invis-primary">{{'OK'|translate}}</button>
 							</aside>
 						</div>
 					</div>
@@ -150,12 +150,39 @@
 					<div class="dialog-mini material-depth-1" style="width: 30%">
 						<div class="modal-inner-content">
 							<h3>{{'Exit'|translate}}</h3>
-							{{'AreYouSureYouWantToExitSGM'|translate}} {{vm.selectedSkillGroup.Name}}
+							{{'AreYouSureYouWantToExitSGM'|translate}}
 						</div>
 						<div class="modal-actions">
 							<aside>
 								<button type="button" id="cancelExitButton" ng-click="vm.closeConfirmation=false; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'No'|translate}}</button>
-								<button type="button" id="confirmExitButton" ng-click="vm.closeConfirmation=false; vm.exitConfigMode(); $event.stopPropagation();" class="wfm-btn wfm-btn-invis-primary">{{'Yes'|translate}}</button>
+								<button type="button" id="confirmExitButton" ng-click="vm.closeConfirmation=false; vm.exitConfigMode(); $event.stopPropagation();"
+								 class="wfm-btn wfm-btn-invis-primary">{{'Yes'|translate}}</button>
+							</aside>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-cloak class="modal-box">
+			<div ng-cloak ng-show="vm.editGroupNameBox">
+				<div class="modalbg">
+					<div class="dialog-mini material-depth-1" style="width: 30%">
+						<div class="modal-inner-content">
+							<div class="con-row">
+								<h3>{{'Name'|translate}}</h3>
+							</div>
+							<div class="con-row">
+								<div class="con-flex">
+									<input type="text" placeholder="{{'Name'|translate}}" ng-model="vm.selectedSkillGroup.Name" maxlength="50" ng-maxlength="50"
+									 id="skillGroupNameBox" ng-keypress="vm.nameBoxKeyPress($event)"/>
+								</div>
+							</div>
+						</div>
+						<div class="modal-actions">
+							<aside>
+								<button type="button" id="confirmEditNameButton" ng-click="vm.saveNameEdit($event)"
+								class="wfm-btn wfm-btn-invis-primary">{{'OK'|translate}}</button>
+								<button type="button" id="cancelEditNameButton" ng-click="vm.editGroupNameBox=false; vm.selectedSkillGroup.Name = vm.oldName; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
 							</aside>
 						</div>
 					</div>

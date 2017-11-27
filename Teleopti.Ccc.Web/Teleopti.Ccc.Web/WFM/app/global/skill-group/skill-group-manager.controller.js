@@ -37,23 +37,7 @@
         vm.canSave = false;
         vm.deleteConfirmation = false;
 
-        vm.selectSkillGroup = function(group) {
-            if (isNumeric(group)) {
-                vm.selectedSkillGroup = vm.skillGroups[group];
-            } else {
-                vm.selectedSkillGroup = group;
-            }
-            vm.skills = _.sortBy(
-                _.differenceBy(vm.allSkills, vm.selectedSkillGroup.Skills, function(skill) {
-                    return skill.Id;
-                }),
-                function(item) {
-                    return item.Name;
-                }
-            );
-            setSaveableState();
-            unselectAllSkills();
-        };
+        //----------- scoped functions ----------------------------------------------------
 
         vm.addSkills = function() {
             if (vm.selectedSkills.length <= 0) return;
@@ -78,6 +62,62 @@
             unselectAllSkills();
         };
 
+        vm.copyGroupClicked = function(skillGroup, ev) {
+			ev.stopPropagation();
+            var clone = _.cloneDeep(skillGroup);
+            clone.Name = skillGroup.Name + '-copy';
+            clone.Id = skillGroup.Id + '-C';
+            vm.skillGroups.push(clone);
+            console.log('vm.skillGroups.length - 1', vm.skillGroups.length - 1);
+			
+            vm.selectSkillGroup(vm.skillGroups.length - 1);
+        };
+
+        vm.createSkillGroup = function(ev) {
+            vm.newGroup = {
+                Name: '',
+                Id: '',
+                Skills: []
+            };
+            vm.selectedSkillGroup = vm.newGroup;
+            vm.skills = vm.allSkills.slice();
+            vm.canSave = false;
+            vm.editGroupNameBox = true;
+            document.getElementById('skillGroupNameBox').focus();
+            ev.stopPropagation();
+        };
+
+        vm.deleteSkillGroup = function() {
+            SkillGroupSvc.deleteSkillGroup(vm.selectedSkillGroup).then(function() {
+                getAllSkillGroups();
+                unselectAllSkills();
+                vm.selectedSkillGroup = null;
+            });
+        };
+
+        vm.editNameClicked = function(skillGroup, ev) {
+            vm.selectedSkillGroup = skillGroup;
+            vm.editGroupNameBox = true;
+            document.getElementById('skillGroupNameBox').focus();
+            vm.oldName = vm.selectedSkillGroup.Name;
+            ev.stopPropagation();
+        };
+
+        vm.exitConfigMode = function() {
+            $state.go($state.params.returnState, {isNewSkillArea: false});
+        };
+
+        vm.groupSkillIsSelected = function(skill) {
+            var index = vm.selectedGroupSkills.indexOf(skill);
+            return index !== -1;
+        };
+
+        vm.nameBoxKeyPress = function(ev) {
+            if (ev.key === 'Enter' && vm.selectedSkillGroup.Name.length > 0) {
+                vm.saveNameEdit(ev);
+            }
+        };
+
         vm.removeSkills = function() {
             if (vm.selectedGroupSkills.length <= 0) return;
 
@@ -99,40 +139,21 @@
             unselectAllSkills();
         };
 
-        vm.selectSkill = function(skill) {
-            if (_.find(vm.selectedSkills, skill)) {
-                _.remove(vm.selectedSkills, skill);
-            } else {
-                vm.selectedSkills = _.unionBy(vm.selectedSkills, [skill], function(skill) {
-                    return skill.Id;
-                });
-			}
-			vm.addSkills();
+        vm.saveAll = function() {
+            SkillGroupSvc.modifySkillGroups(vm.skillGroups).then(function(result) {
+                getAllSkillGroups();
+                vm.canSave = false;
+            });
         };
 
-        vm.selectGroupSkill = function(skill) {
-            if (_.find(vm.selectedGroupSkills, skill)) {
-                _.remove(vm.selectedGroupSkills, skill);
-            } else {
-                vm.selectedGroupSkills = _.unionBy(vm.selectedGroupSkills, [skill], function(skill) {
-                    return skill.Id;
-                });
-			}
-			vm.removeSkills();
-        };
-
-        vm.skillIsSelected = function(skill) {
-            var index = vm.selectedSkills.indexOf(skill);
-            return index !== -1;
-        };
-
-        vm.groupSkillIsSelected = function(skill) {
-            var index = vm.selectedGroupSkills.indexOf(skill);
-            return index !== -1;
-        };
-
-        vm.exitConfigMode = function() {
-            $state.go($state.params.returnState, {isNewSkillArea: false});
+        vm.saveNameEdit = function(ev) {
+            vm.editGroupNameBox = false;
+            setSaveableState();
+            if (vm.newGroup) {
+                vm.skillGroups.push(vm.newGroup);
+                vm.newGroup = null;
+            }
+            ev.stopPropagation();
         };
 
         vm.saveSkillGroup = function(form) {
@@ -161,55 +182,81 @@
                 });
         };
 
-        vm.saveAll = function() {
-            SkillGroupSvc.modifySkillGroups(vm.skillGroups).then(function(result) {
-                getAllSkillGroups();
-                vm.canSave = false;
-            });
+        vm.selectGroupSkill = function(skill) {
+            if (_.find(vm.selectedGroupSkills, skill)) {
+                _.remove(vm.selectedGroupSkills, skill);
+            } else {
+                vm.selectedGroupSkills = _.unionBy(vm.selectedGroupSkills, [skill], function(skill) {
+                    return skill.Id;
+                });
+            }
+            vm.removeSkills();
         };
 
-        vm.createSkillGroup = function(e) {
-            document.getElementById('skillGroupNameBox').focus();
-            var newGroup = {
-                Name: '',
-                Id: null,
-                Skills: []
-            };
-            vm.skillGroups.push(newGroup);
-            vm.selectedSkillGroup = newGroup;
-            vm.skills = vm.allSkills.slice();
-            vm.canSave = false;
+        vm.selectSkill = function(skill) {
+            if (_.find(vm.selectedSkills, skill)) {
+                _.remove(vm.selectedSkills, skill);
+            } else {
+                vm.selectedSkills = _.unionBy(vm.selectedSkills, [skill], function(skill) {
+                    return skill.Id;
+                });
+            }
+            vm.addSkills();
         };
 
-        vm.deleteSkillGroup = function() {
-            SkillGroupSvc.deleteSkillGroup(vm.selectedSkillGroup).then(function() {
-                getAllSkillGroups();
-                unselectAllSkills();
-                vm.selectedSkillGroup = null;
-            });
+        vm.selectSkillGroup = function(group) {
+            if (isNumeric(group)) {
+                vm.selectedSkillGroup = vm.skillGroups[group];
+            } else {
+                vm.selectedSkillGroup = group;
+            }
+            console.log('vm.selectedSkillGroup', vm.selectedSkillGroup);
+
+            vm.skills = _.sortBy(
+                _.differenceBy(vm.allSkills, vm.selectedSkillGroup.Skills, function(skill) {
+                    return skill.Id;
+                }),
+                function(item) {
+                    return item.Name;
+                }
+            );
+            setSaveableState();
+            unselectAllSkills();
         };
 
-        function unselectAllSkills() {
-            vm.selectedSkills = [];
-            vm.selectedGroupSkills = [];
-        }
+        vm.skillIsSelected = function(skill) {
+            var index = vm.selectedSkills.indexOf(skill);
+            return index !== -1;
+        };
 
-        function setSaveableState() {
-            vm.canSave = hasChanges();
-        }
-
-        function notifySkillGroupCreation() {
-            NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
-        }
+        //----------- Local functions ----------------------------------------------------
 
         function getAllSkillGroups(select) {
             SkillGroupSvc.getSkillGroups().then(function(result) {
                 vm.skillGroups = result.data.SkillAreas;
                 originalGroups = _.cloneDeep(vm.skillGroups);
                 if (select) {
-                    vm.selectSkillGroup(_.find(vm.skillGroups, function(i){return i.Id === $state.params.selectedGroup.Id}));
+                    vm.selectSkillGroup(
+                        _.find(vm.skillGroups, function(i) {
+                            return i.Id === $state.params.selectedGroup.Id;
+                        })
+                    );
                 }
             });
+        }
+
+        function getRandom() {
+            return Math.random() * (1000000 - 1) + 1 + '';
+        }
+
+        function hasEmptySkillList() {
+            var hasEmpty = false;
+            _.each(vm.skillGroups, function(item) {
+                if (item.Skills.length === 0) {
+                    hasEmpty = true;
+                }
+            });
+            return hasEmpty;
         }
 
         function hasChanges() {
@@ -219,6 +266,21 @@
         function isNumeric(n) {
             return !isNaN(parseFloat(n)) && isFinite(n);
         }
+
+        function setSaveableState() {
+            vm.canSave = hasChanges() && !hasEmptySkillList();
+        }
+
+        function notifySkillGroupCreation() {
+            NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
+        }
+
+        function unselectAllSkills() {
+            vm.selectedSkills = [];
+            vm.selectedGroupSkills = [];
+        }
+
+        //----------- Run at instantiation ----------------------------------------------------
 
         SkillGroupSvc.getSkills().then(function(result) {
             vm.skills = result.data;
