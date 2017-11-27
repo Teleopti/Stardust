@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				_configReader.ReadValue("AllowedNodeDownTimeSeconds", 360), //heartbeat every 120 s
 				_configReader.ReadValue("CheckNewJobIntervalSeconds", 180),
 				_configReader.ReadValue("PurgeJobsBatchSize", 1000),
-				_configReader.ReadValue("PurgeJobsIntervalHours", 1),
-				_configReader.ReadValue("PurgeJobsOlderThanHours", 168),
+				_configReader.ReadValue("PurgeJobsIntervalHours", 12),
+				_configReader.ReadValue("PurgeJobsOlderThanHours", 720),
 				_configReader.ReadValue("PurgeNodesIntervalHours", 1));
 
 			app.UseStardustManager(managerConfiguration, _scope);
