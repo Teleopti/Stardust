@@ -10,11 +10,13 @@ namespace Teleopti.Wfm.AdministrationTest
 	{
 		private readonly List<WorkerNode> _nodes;
 		private readonly List<Job> _jobs;
+		private readonly List<Job> _queuedJobs;
 
 		public FakeStardustRepository()
 		{
 			_nodes = new List<WorkerNode>();
 			_jobs = new List<Job>();
+			_queuedJobs = new List<Job>();
 		}
 
 		public void Has(WorkerNode node)
@@ -48,7 +50,7 @@ namespace Teleopti.Wfm.AdministrationTest
 
 		public IList<Job> GetAllQueuedJobs(JobFilterModel filter)
 		{
-			throw new NotImplementedException();
+			return _queuedJobs;
 		}
 
 		public List<WorkerNode> GetAllWorkerNodes()

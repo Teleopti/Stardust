@@ -4,7 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Wfm.Administration.Controllers;
-using WorkerNode = Teleopti.Ccc.Infrastructure.Repositories.Stardust.WorkerNode;
+using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
