@@ -390,6 +390,7 @@
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\AnalyticsUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\FatClientOptimizationEventPublishingTest.cs" />
+    <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\ASMScheduleChangedTimePersisterTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\PersonChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\PersonAbsenceEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ScheduleChangedMessageDictionaryPersisterTest.cs" />

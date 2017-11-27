@@ -53,5 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			scheduleChangeTime.PersonId.Should().Be(personId);
 			scheduleChangeTime.TimeStamp.Should().Be(newTime);
 		}
+
+		
 	}
 }

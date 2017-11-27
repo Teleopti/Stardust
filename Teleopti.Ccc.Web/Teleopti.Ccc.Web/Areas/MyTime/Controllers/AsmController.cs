@@ -75,20 +75,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var hasListener = listenerPeriod != null;
 			var periods = hasListener ? new[] { notifyPeriod, listenerPeriod } : new[] { notifyPeriod };
 			var checkResult = _scheduleChangePoller.Check(periods);
-			return Json(new
-			{
-				Listener = hasListener ? checkResult[listenerPeriod] : null,
-				Notify = checkResult[notifyPeriod]
-			}, JsonRequestBehavior.AllowGet);
+			return Json(new { HasUpdates = checkResult }, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWork, MessageBrokerUnitOfWork]
-		[HttpGet]
-		public virtual JsonResult ResetPolling()
-		{
-			_scheduleChangePoller.ResetPolling();
-			return Json(new { }, JsonRequestBehavior.AllowGet);
-		}
 	}
 
 }
