@@ -46,15 +46,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_isDeleted = true;
 		}
 
-		public virtual IBusinessUnit BusinessUnitExplicit
-		{
-			get
-			{
-				if (_site == null)
-					return ServiceLocatorForEntity.CurrentBusinessUnit.Current();
-				return _site.BusinessUnit;
-			}
-		}
+		public virtual IBusinessUnit BusinessUnitExplicit => _site?.BusinessUnit ?? ServiceLocatorForEntity.CurrentBusinessUnit.Current();
 
 		public virtual IScorecard Scorecard { get { return _scorecard; } set { _scorecard = value; } }
 	}

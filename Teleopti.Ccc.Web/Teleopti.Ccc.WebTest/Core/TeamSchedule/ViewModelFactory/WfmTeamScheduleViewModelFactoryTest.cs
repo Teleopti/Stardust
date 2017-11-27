@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -12,9 +13,11 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.Global;
@@ -24,27 +27,25 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {
 	[TestFixture, TeamScheduleTest]
-	public class WfmTeamScheduleViewModelFactoryTest
+	public class WfmTeamScheduleViewModelFactoryTest : ISetup
 	{
 		public TeamScheduleViewModelFactory Target;
 		public FakePeopleSearchProvider PeopleSearchProvider;
 		public FakePersonRepository PersonRepository;
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public ICurrentScenario CurrentScenario;
 		public FakeUserTimeZone UserTimeZone;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
+		public FakeUserUiCulture UserUiCulture;
+
 		private ITeam team;
 		private IPerson personInUtc;
 		private IPerson personInHongKong;
 
 		private void setUpPersonAndCulture(bool addSecondPerson = false)
 		{
-			personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes");
-			personInHongKong = PersonFactory.CreatePerson("A", "Detective");
-			personInUtc.WithId();
-			personInHongKong.WithId();
-			personInHongKong.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+			personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
 			var contract = ContractFactory.CreateContract("Contract");
 			contract.WithId();
 			team = TeamFactory.CreateSimpleTeam().WithId();
@@ -52,14 +53,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
 
 			personInUtc.AddPersonPeriod(personPeriod);
-			personInHongKong.AddPersonPeriod(personPeriod);
 			PeopleSearchProvider.Add(personInUtc);
+			PersonRepository.Has(personInUtc);
+
 			if (addSecondPerson)
 			{
+				personInHongKong = PersonFactory.CreatePerson("A", "Detective").WithId();
+				personInHongKong.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+				personInHongKong.AddPersonPeriod(personPeriod);
+
 				PeopleSearchProvider.Add(personInHongKong);
 				PersonRepository.Has(personInHongKong);
 			}
-			PersonRepository.Has(personInUtc);
 
 		}
 
@@ -75,8 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			setUpPersonAndCulture(true);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -111,10 +115,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
-
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
-
+			
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			result.Total.Should().Be(1);
 
-			var projectionVm = result.Schedules.Single().Projection;
+			var projectionVm = result.Schedules.First().Projection;
 			projectionVm.Count().Should().Be.EqualTo(0);
 		}
 
@@ -142,8 +143,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -192,8 +193,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -231,8 +231,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -271,8 +270,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -309,8 +307,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -353,8 +350,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -397,11 +393,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnlyForScheduleSearch()
 		{
-
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
@@ -436,9 +430,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
-
+			var scenario = CurrentScenario.Current();
 
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
@@ -478,11 +470,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceAndDayoffForScheduleSearch()
 		{
-
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
@@ -525,8 +515,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 
 			var scheduleDate = new DateTime(2020, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc);
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			team = TeamFactory.CreateSimpleTeam().WithId();
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(scheduleDate.AddDays(-1)), team).WithId();
@@ -577,8 +566,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndNoPermissionForConfidentialForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			team = TeamFactory.CreateSimpleTeam().WithId();
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(scheduleDate.AddDays(-1)), team).WithId();
@@ -639,8 +627,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			setUpPersonAndCulture();
 			PeopleSearchProvider.AddPersonWithViewConfidentialPermission(personInUtc);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", Color.White),
@@ -701,7 +688,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				SchedulePublishedToDate = new DateTime(2019, 12, 30)
 			};
 			PeopleSearchProvider.Add(personInUtc);
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
@@ -727,7 +714,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				});
 
 
-			var schedule = result.Schedules.First();
+			var schedule = result.Schedules.ElementAt(1);
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
 
 
@@ -743,8 +730,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
@@ -784,8 +770,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario, new DateTimePeriod(2019, 12, 31, 20, 2020, 1, 1, 3));
@@ -818,8 +803,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario, new DateTimePeriod(2019, 12, 31, 20, 2020, 1, 1, 3));
@@ -851,8 +835,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9));
@@ -912,8 +895,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person6);
 			person6.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -979,8 +961,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
@@ -1051,8 +1032,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person6);
 			person6.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -1136,8 +1116,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person6);
 			person6.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -1200,11 +1179,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateTime(2015, 01, 01, 00, 00, 00, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
-			setUpPersonAndCulture();
-			PersonRepository.Add(personInHongKong);
-
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			setUpPersonAndCulture(true);
+			
+			var scenario = CurrentScenario.Current();
 
 			var personAssignment1 = new PersonAssignment(personInUtc, scenario, scheduleDateOnly);
 			personAssignment1.AddActivity(new Activity("activity1"), new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(18)));
@@ -1231,8 +1208,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -1274,8 +1250,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var queryDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(personInUtc, scenario, scheduleDate, DayOffFactory.CreateDayOff(new Description("DayOff")));
 
@@ -1315,8 +1290,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -1361,8 +1335,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 			personInUtc.TerminatePerson(new DateOnly(2019, 12, 1), new PersonAccountUpdaterDummy());
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
@@ -1408,8 +1381,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -1454,8 +1426,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var queryDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -1505,8 +1476,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			PeopleSearchProvider.AddPersonWithViewConfidentialPermission(personInUtc);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -1559,8 +1529,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			PermissionProvider.Enable();
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -1611,8 +1580,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
@@ -1657,8 +1625,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 			var note = new Note(personInUtc, new DateOnly(scheduleDate), scenario, "dummy notes");
 			ScheduleStorage.Add(note);
 
@@ -1688,8 +1655,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
 			personInUtc.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"));
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1723,8 +1689,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			setUpPersonAndCulture();
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var activity = ActivityFactory.CreateActivity("Phone");
 			activity.InContractTime = true;
@@ -1772,8 +1737,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Has(person);
 			PersonRepository.Has(person2);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var activity = ActivityFactory.CreateActivity("Phone");
 			activity.InContractTime = true;
@@ -1814,14 +1778,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			setUpPersonAndCulture();
-
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
-
+			
 			var result = Target.CreateViewModelForPeople(new[] { personInUtc.Id.Value }, scheduleDate);
 
 			result.Total.Should().Be.EqualTo(1);
-			var schedule = result.Schedules.Single();
+			var schedule = result.Schedules.First();
 			schedule.PersonId.Should().Be.EqualTo(personInUtc.Id.GetValueOrDefault().ToString());
 			schedule.Projection.Should().Be.Empty();
 		}
@@ -1830,13 +1791,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnCorrectMultiplicatorDefinitionSetsInDayViewModel()
 		{
 			var scheduleDate = new DateOnly(2020, 1, 1);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
-			person.WithId();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
-
-			var contract = ContractFactory.CreateContract("Contract");
-			contract.WithId();
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			
+			var contract = ContractFactory.CreateContract("Contract").WithId();
 			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("mds", MultiplicatorType.Overtime).WithId();
 			contract.AddMultiplicatorDefinitionSetCollection(mds);
 
@@ -1851,7 +1808,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModelForPeople(new[] { person.Id.Value }, scheduleDate);
 
 			result.Total.Should().Be.EqualTo(1);
-			var schedule = result.Schedules.Single();
+			var schedule = result.Schedules.First();
 			schedule.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault().ToString());
 			schedule.Projection.Should().Be.Empty();
 			schedule.MultiplicatorDefinitionSetIds.Single().Should().Be.EqualTo(mds.Id.Value);
@@ -1860,26 +1817,23 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectOrderIfSortByFirstName()
 		{
-			var contract = ContractFactory.CreateContract("Contract");
-			contract.WithId();
+			var contract = ContractFactory.CreateContract("Contract").WithId();
 			team = TeamFactory.CreateSimpleTeam().WithId();
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
-
-
+			
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
-			PeopleSearchProvider.Add(person1);
 			person1.AddPersonPeriod(personPeriod);
+			PeopleSearchProvider.Add(person1);
 			var person2 = PersonFactory.CreatePersonWithGuid("f1", "f1");
-			PeopleSearchProvider.Add(person2);
 			person2.AddPersonPeriod(personPeriod);
+			PeopleSearchProvider.Add(person2);
 			var person3 = PersonFactory.CreatePersonWithGuid("c1", "c1");
-			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
+			PeopleSearchProvider.Add(person3);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -1921,25 +1875,28 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[SetUICulture("zh-CN")]
 		public void ShouldBasedOnUserUiCultureIfSortByFirstName()
 		{
+			UserUiCulture.Is(CultureInfo.GetCultureInfo("zh-CN"));
 			var contract = ContractFactory.CreateContract("Contract");
 			contract.WithId();
 			team = TeamFactory.CreateSimpleTeam().WithId();
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
-
-
+			
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
-			PeopleSearchProvider.Add(person1);
 			person1.AddPersonPeriod(personPeriod);
+			PeopleSearchProvider.Add(person1);
+			PersonRepository.Add(person1);
 
 			var person2 = PersonFactory.CreatePersonWithGuid("绿", "俄");
-			PeopleSearchProvider.Add(person2);
 			person2.AddPersonPeriod(personPeriod);
+			PeopleSearchProvider.Add(person2);
+			PersonRepository.Add(person2);
 
 			var person3 = PersonFactory.CreatePersonWithGuid("阿", "画");
-			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
+			PeopleSearchProvider.Add(person3);
+			PersonRepository.Add(person3);
 
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
@@ -1955,8 +1912,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var schedules = result.Schedules.ToArray();
 
 			schedules[0].Name.Should().Be.EqualTo("a1@a1");
-			schedules[1].Name.Should().Be.EqualTo("阿@画");
-			schedules[2].Name.Should().Be.EqualTo("绿@俄");
+			schedules[3].Name.Should().Be.EqualTo("阿@画");
+			schedules[6].Name.Should().Be.EqualTo("绿@俄");
 		}
 
 		[Test]
@@ -1980,8 +1937,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -2043,8 +1999,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -2105,8 +2060,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -2167,8 +2121,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -2237,8 +2190,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PermissionProvider.Enable();
 			PermissionProvider.PublishToDate(new DateOnly(new DateTime(2019, 12, 31)));
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -2300,8 +2252,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -2359,8 +2310,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -2419,8 +2369,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -2478,8 +2427,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
@@ -2518,6 +2466,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectOrderWhenSortingByStartTimeOnlyWithDayOffOrEmptySchedule()
 		{
+			UserUiCulture.Is(CultureInfo.GetCultureInfo("zh-CN"));
 			var contract = ContractFactory.CreateContract("Contract");
 			contract.WithId();
 			team = TeamFactory.CreateSimpleTeam().WithId();
@@ -2539,8 +2488,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person4);
 			person4.AddPersonPeriod(personPeriod);
 
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			var scenario = CurrentScenario.Current();
 
 			var pa2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person2, scenario,
 				new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
@@ -2566,9 +2514,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			schedules[0].Name.Should().Be.EqualTo("p2@p2");
 			schedules[3].Name.Should().Be.EqualTo("p3@p3");
 			schedules[6].Name.Should().Be.EqualTo("p1@p1");
-			schedules[7].Name.Should().Be.EqualTo("p4@p4");
-
+			schedules[9].Name.Should().Be.EqualTo("p4@p4");
 		}
 
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
+		}
 	}
 }

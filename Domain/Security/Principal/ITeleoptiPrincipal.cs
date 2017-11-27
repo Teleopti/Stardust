@@ -6,15 +6,20 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {	
-	public interface ITeleoptiPrincipal : IPrincipal
+	public interface ITeleoptiPrincipal : IPrincipal, IPersonOwner, IClaimsOwner
 	{
 		IRegional Regional { get; }
+	}
+
+	public interface IPersonOwner
+	{
+		IPerson GetPerson(IPersonRepository personRepository);
+	}
+
+	public interface IClaimsOwner
+	{
 		IOrganisationMembership Organisation { get; }
 		IEnumerable<ClaimSet> ClaimSets { get; }
-		// required by RoleToPrincipalCommand which is used everywhere a principal is created.
-		// refactor??
 		void AddClaimSet(ClaimSet claimSet);
-
-		IPerson GetPerson(IPersonRepository personRepository);
 	}
 }

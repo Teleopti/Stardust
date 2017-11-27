@@ -70,40 +70,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		}
 	}
 
-	public class PrincipalAuthorization : IAuthorization
-    {
-		private readonly ICurrentTeleoptiPrincipal _teleoptiPrincipal;
+	public class ClaimsAuthorization : IAuthorization
+	{
+		private readonly IClaimsOwner _claimsOwner;
 
-		public PrincipalAuthorization(ICurrentTeleoptiPrincipal teleoptiPrincipal)
-        {
-            _teleoptiPrincipal = teleoptiPrincipal;
-        }
-
-
-		
-		public static IAuthorization Current()
+		public ClaimsAuthorization(IClaimsOwner claimsOwner)
 		{
-			return ServiceLocatorForLegacy.CurrentAuthorization.Current();
+			_claimsOwner = claimsOwner;
 		}
-
-
-
-		private IEnumerable<ClaimSet> principalClaimsets()
-		{
-			return _teleoptiPrincipal.Current() == null ? 
-				Enumerable.Empty<ClaimSet>() : 
-				_teleoptiPrincipal.Current().ClaimSets;
-		}
-
-		private IEnumerable<DateOnlyPeriod> principalPeriods()
-		{
-			return _teleoptiPrincipal.Current() == null ?
-				Enumerable.Empty<DateOnlyPeriod>() :
-				_teleoptiPrincipal.Current().Organisation.Periods();
-		}
-
-
-
 
 		public bool IsPermitted(string functionPath)
 		{
@@ -111,33 +85,33 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
-        {
-            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, person));
-        }
+		{
+			return checkPermitted(functionPath, a => a.Check(_claimsOwner?.Organisation, dateOnly, person));
+		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
-        {
-            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, team));
-        }
+		{
+			return checkPermitted(functionPath, a => a.Check(_claimsOwner?.Organisation, dateOnly, team));
+		}
 
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
-        {
-            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, site));
-        }
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
+		{
+			return checkPermitted(functionPath, a => a.Check(_claimsOwner?.Organisation, dateOnly, site));
+		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorization authorization)
 		{
-			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, authorization));
+			return checkPermitted(functionPath, a => a.Check(_claimsOwner?.Organisation, dateOnly, authorization));
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAuthorization authorization)
 		{
-			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, authorization));
+			return checkPermitted(functionPath, a => a.Check(_claimsOwner?.Organisation, dateOnly, authorization));
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAuthorization authorization)
 		{
-			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, authorization));
+			return checkPermitted(functionPath, a => a.Check(_claimsOwner?.Organisation, dateOnly, authorization));
 		}
 
 		private bool checkPermitted(string functionPath, Func<IAuthorizeAvailableData, bool> availableDataCheck)
@@ -145,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", functionPath);
 			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData");
 
-			foreach (var claimSet in principalClaimsets())
+			foreach (var claimSet in _claimsOwner?.ClaimSets ?? new ClaimSet[0])
 			{
 				if (claimSet.FindClaims(claimType, Rights.PossessProperty).Any())
 				{
@@ -165,42 +139,40 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 			return false;
 		}
-
-
-
+		
 		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
-        {
-            var owningPersonPeriods = principalPeriods();
-            owningPersonPeriods = owningPersonPeriods.Where(p => p.StartDate <= period.EndDate);
+		{
+			var owningPersonPeriods = _claimsOwner?.Organisation?.Periods() ?? new DateOnlyPeriod[0];
+			owningPersonPeriods = owningPersonPeriods.Where(p => p.StartDate <= period.EndDate);
 
-            var checkPersonPeriods = person.PersonPeriods(period);
+			var checkPersonPeriods = person.PersonPeriods(period);
 
-            var uniqueDates = new HashSet<DateOnly>();
-            foreach (var startDate in checkPersonPeriods.Select(p => p.StartDate).Concat(owningPersonPeriods.Select(p => p.StartDate)))
-            {
-                var minStartDate = startDate;
-                if (minStartDate < period.StartDate) minStartDate = period.StartDate;
-                uniqueDates.Add(minStartDate);
-            }
+			var uniqueDates = new HashSet<DateOnly>();
+			foreach (var startDate in checkPersonPeriods.Select(p => p.StartDate).Concat(owningPersonPeriods.Select(p => p.StartDate)))
+			{
+				var minStartDate = startDate;
+				if (minStartDate < period.StartDate) minStartDate = period.StartDate;
+				uniqueDates.Add(minStartDate);
+			}
 
-            uniqueDates.Add(period.StartDate);
-            var uniqueDatesArray = uniqueDates.OrderBy(d => d.Date).ToArray();
-            var permittedPeriods = new List<DateOnlyPeriod>();
+			uniqueDates.Add(period.StartDate);
+			var uniqueDatesArray = uniqueDates.OrderBy(d => d.Date).ToArray();
+			var permittedPeriods = new List<DateOnlyPeriod>();
 
-            int i = 0;
-            for (; i < uniqueDates.Count-1; i++)
-            {
-                var currentDate = uniqueDatesArray[i];
-                var result = IsPermitted(functionPath, currentDate, person);
-                if (result)
-                {
-                    permittedPeriods.Add(new DateOnlyPeriod(currentDate,uniqueDatesArray[i+1].AddDays(-1)));
-                }
-            }
+			int i = 0;
+			for (; i < uniqueDates.Count - 1; i++)
+			{
+				var currentDate = uniqueDatesArray[i];
+				var result = IsPermitted(functionPath, currentDate, person);
+				if (result)
+				{
+					permittedPeriods.Add(new DateOnlyPeriod(currentDate, uniqueDatesArray[i + 1].AddDays(-1)));
+				}
+			}
 
-            var lastDate = uniqueDatesArray[i];
-        	if (IsPermitted(functionPath, lastDate, person))
-            {
+			var lastDate = uniqueDatesArray[i];
+			if (IsPermitted(functionPath, lastDate, person))
+			{
 				var lastDateOfLastPeriod = period.EndDate;
 				var lastPersonPeriod = owningPersonPeriods.Where(d => d.StartDate == lastDate);
 				if (lastPersonPeriod.Any())
@@ -211,36 +183,102 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 						lastDateOfLastPeriod = endDate;
 					}
 				}
-            	permittedPeriods.Add(new DateOnlyPeriod(lastDate, lastDateOfLastPeriod));
-            }
+				permittedPeriods.Add(new DateOnlyPeriod(lastDate, lastDateOfLastPeriod));
+			}
 
-            //Maybe connect adjacent periods?
+			//Maybe connect adjacent periods?
 
-            return permittedPeriods;
-        }
+			return permittedPeriods;
+		}
 
 		public IEnumerable<IApplicationFunction> GrantedFunctions()
 		{
-            var grantedFunctions = new HashSet<IApplicationFunction>();
-            foreach (var claimSet in principalClaimsets())
-            {
-                foreach (var claim in claimSet)
-                {
+			var grantedFunctions = new HashSet<IApplicationFunction>();
+			foreach (var claimSet in _claimsOwner?.ClaimSets ?? new ClaimSet[0])
+			{
+				foreach (var claim in claimSet)
+				{
 					var applicationFunction = claim.Resource as IApplicationFunction;
 					if (applicationFunction == null)
 						continue;
 					grantedFunctions.Add(applicationFunction);
-                }
-            }
-            return grantedFunctions;
-        }
-		
+				}
+			}
+			return grantedFunctions;
+		}
+
 		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
+		{
+			return specification.IsSatisfiedBy(_claimsOwner?.ClaimSets ?? new ClaimSet[0]);
+		}
+	}
+
+	public class PrincipalAuthorization : IAuthorization
+    {
+		private readonly ICurrentTeleoptiPrincipal _teleoptiPrincipal;
+
+		public PrincipalAuthorization(ICurrentTeleoptiPrincipal teleoptiPrincipal)
         {
-			return specification.IsSatisfiedBy(principalClaimsets());
+            _teleoptiPrincipal = teleoptiPrincipal;
         }
 		
-    }
+		public static IAuthorization Current()
+		{
+			return ServiceLocatorForLegacy.CurrentAuthorization.Current();
+		}
+
+		private ClaimsAuthorization claimsAuthorization => new ClaimsAuthorization(_teleoptiPrincipal.Current());
+
+		public bool IsPermitted(string functionPath)
+		{
+			return claimsAuthorization.IsPermitted(functionPath);
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
+		{
+			return claimsAuthorization.IsPermitted(functionPath,dateOnly,person);
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
+		{
+			return claimsAuthorization.IsPermitted(functionPath, dateOnly, team);
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
+		{
+			return claimsAuthorization.IsPermitted(functionPath, dateOnly, site);
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorization authorization)
+		{
+			return claimsAuthorization.IsPermitted(functionPath, dateOnly, authorization);
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAuthorization authorization)
+		{
+			return claimsAuthorization.IsPermitted(functionPath, dateOnly, authorization);
+		}
+
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAuthorization authorization)
+		{
+			return claimsAuthorization.IsPermitted(functionPath, dateOnly, authorization);
+		}
+
+		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
+		{
+			return claimsAuthorization.PermittedPeriods(functionPath, period, person);
+		}
+
+		public IEnumerable<IApplicationFunction> GrantedFunctions()
+		{
+			return claimsAuthorization.GrantedFunctions();
+		}
+
+		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
+		{
+			return claimsAuthorization.EvaluateSpecification(specification);
+		}
+	}
 
 
 
@@ -248,7 +286,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
     {
         public override bool IsSatisfiedBy(IApplicationFunction obj)
         {
-            return obj != null && obj.Parent!=null && obj.SortOrder.HasValue && obj.Level == 1;
+            return obj?.Parent != null && obj.SortOrder.HasValue && obj.Level == 1;
         }
     }
 

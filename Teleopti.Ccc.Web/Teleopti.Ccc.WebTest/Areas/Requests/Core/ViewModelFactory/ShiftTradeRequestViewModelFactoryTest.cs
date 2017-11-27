@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IUserCulture UserCulture;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakePersonRepository PersonRepository;
+		public IUserTimeZone UserTimeZone;
 
 		private ITeam team;
 		private IPersonPeriod personPeriod;
@@ -149,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 
 			requestListViewModel.MinimumDateTime.Should().Be.EqualTo(input.StartDate.Date);
-			requestListViewModel.MaximumDateTime.Should().Be.EqualTo(shiftTradeWithLaterEndDate.Request.Period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone));
+			requestListViewModel.MaximumDateTime.Should().Be.EqualTo(shiftTradeWithLaterEndDate.Request.Period.EndDateTimeLocal(UserTimeZone.TimeZone()));
 		}
 
 		[Test]
@@ -283,7 +284,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			setShiftTradeSwapDetailsToAndFrom(shiftTradeRequest, schedule, personTo, personFrom);
 
 			var requestListViewModel = createRequestListViewModel(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3));
-			var requestViewModel = (ShiftTradeRequestViewModel)requestListViewModel.Requests.First();
+			var requestViewModel = requestListViewModel.Requests.First();
 
 			var shiftTradeDay = requestViewModel.ShiftTradeDays.Single(sftTradeDay => sftTradeDay.Date == new DateOnly(2016, 3, 2));
 

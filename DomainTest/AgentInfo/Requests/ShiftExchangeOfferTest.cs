@@ -206,6 +206,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		private static string createOfferAndReturnStatusText (ShiftExchangeOfferStatus status)
 		{
 			var currentShift = ScheduleDayFactory.Create (new DateOnly (2007, 1, 1));
+			currentShift.Person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
 			var target = new ShiftExchangeOffer (currentShift, new ShiftExchangeCriteria(), status);
 			var ret = target.GetStatusText();

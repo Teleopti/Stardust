@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IPersonRequest entity)
 		{
-			throw new NotImplementedException();
+			RequestRepository.Remove(entity);
 		}
 
 		public IPersonRequest Get(Guid id)
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person)
 		{
-			throw new NotImplementedException();
+			return RequestRepository.Where(p => p.Person == person).ToList();
 		}
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, Paging paging)

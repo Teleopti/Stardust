@@ -1,202 +1,138 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
 	[TestFixture]
-	public class TextRequestPersisterTest
+	[RequestsTest]
+	public class TextRequestPersisterTest : ISetup
 	{
+		public ITextRequestPersister Target;
+		public FakePersonRequestRepository PersonRequestRepository;
+		public FakeLoggedOnUser LoggedOnUser;
+
 		[Test]
 		public void ShouldAddTextRequest()
 		{ 
-			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var timeZone = new FakeUserTimeZone();
-			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new TextRequestPersister(personRequestRepository,
-				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new TextRequestFormMapper(loggedOnUser, timeZone,
-					new DateTimePeriodFormMapper(timeZone)));
 			var form = new TextRequestForm();
 			
-			target.Persist(form);
+			Target.Persist(form);
 
-			personRequestRepository.AssertWasCalled(x => x.Add(null), o => o.IgnoreArguments());
+			PersonRequestRepository.LoadAll().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldDelete()
 		{
-			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var timeZone = new FakeUserTimeZone();
-			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new TextRequestFormMapper(loggedOnUser, timeZone,
-					new DateTimePeriodFormMapper(timeZone)));
-			var personRequest = new PersonRequest(new Person());
-			personRequest.SetId(Guid.NewGuid());
+			var personRequest = new PersonRequest(LoggedOnUser.CurrentUser()){Request = new TextRequest(new DateTimePeriod())}.WithId();
+			PersonRequestRepository.Add(personRequest);
+			
+			Target.Delete(personRequest.Id.Value);
 
-			personRequestRepository.Stub(x => x.Find(personRequest.Id.Value)).Return(personRequest);
-
-			target.Delete(personRequest.Id.Value);
-
-			personRequestRepository.AssertWasCalled(x => x.Remove(personRequest));
+			PersonRequestRepository.LoadAll().Should().Have.Count.EqualTo(0);
 		}		
 		
 		[Test]
 		public void ShouldSetExchangeOfferStatusWhenDelete()
 		{
-			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var timeZone = new FakeUserTimeZone();
-			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new TextRequestFormMapper(loggedOnUser, timeZone,
-					new DateTimePeriodFormMapper(timeZone)));
-			var personRequest = new PersonRequest(new Person());
-			var shiftTradeRequest = MockRepository.GenerateMock<IShiftTradeRequest>();
 			var currentShift = ScheduleDayFactory.Create(DateOnly.Today.AddDays(1));
 			var offer = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.PendingAdminApproval);
-			shiftTradeRequest.Stub(x => x.Offer).Return(offer);
-			personRequest.SetId(Guid.NewGuid());
-			personRequest.Request = shiftTradeRequest;
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>()) {Offer = offer};
+			var personRequest = new PersonRequest(new Person(),shiftTradeRequest).WithId();
+			
+			PersonRequestRepository.Add(personRequest);
 
-			personRequestRepository.Stub(x => x.Find(personRequest.Id.Value)).Return(personRequest);
-
-			target.Delete(personRequest.Id.Value);
+			Target.Delete(personRequest.Id.Value);
 
 			offer.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.Pending);
-			personRequestRepository.AssertWasCalled(x => x.Remove(personRequest));
+			PersonRequestRepository.LoadAll().Should().Have.Count.EqualTo(0);
 		}		
 		
 		[Test]
-		public void ShouldNotSetCompletedExchangeOfferStatusWhenDelete()
+		public void ShouldNotChangeCompletedExchangeOfferStatusWhenDelete()
 		{
-			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var timeZone = new FakeUserTimeZone();
-			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new TextRequestFormMapper(loggedOnUser, timeZone,
-					new DateTimePeriodFormMapper(timeZone)));
-			var personRequest = new PersonRequest(new Person());
-			var shiftTradeRequest = MockRepository.GenerateMock<IShiftTradeRequest>();
 			var currentShift = ScheduleDayFactory.Create(DateOnly.Today.AddDays(1));
 			var offer = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Completed);
-			shiftTradeRequest.Stub(x => x.Offer).Return(offer);
-			personRequest.SetId(Guid.NewGuid());
-			personRequest.Request = shiftTradeRequest;
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>()) { Offer = offer };
+			var personRequest = new PersonRequest(new Person(), shiftTradeRequest).WithId();
 
-			personRequestRepository.Stub(x => x.Find(personRequest.Id.Value)).Return(personRequest);
+			PersonRequestRepository.Add(personRequest);
 
-			target.Delete(personRequest.Id.Value);
+			Target.Delete(personRequest.Id.Value);
 
 			offer.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.Completed);
-			personRequestRepository.AssertWasCalled(x => x.Remove(personRequest));
+			PersonRequestRepository.LoadAll().Should().Have.Count.EqualTo(0);
 		}		
 		
 		[Test]
-		public void ShouldNotSetInvalidExchangeOfferStatusWhenDelete()
+		public void ShouldNotChangeInvalidExchangeOfferStatusWhenDelete()
 		{
-			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var timeZone = new FakeUserTimeZone();
-			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new TextRequestFormMapper(loggedOnUser, timeZone,
-					new DateTimePeriodFormMapper(timeZone)));
-			var personRequest = new PersonRequest(new Person());
-			var shiftTradeRequest = MockRepository.GenerateMock<IShiftTradeRequest>();
 			var currentShift = ScheduleDayFactory.Create(DateOnly.Today.AddDays(1));
 			var offer = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Invalid);
-			shiftTradeRequest.Stub(x => x.Offer).Return(offer);
-			personRequest.SetId(Guid.NewGuid());
-			personRequest.Request = shiftTradeRequest;
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>()) { Offer = offer };
+			var personRequest = new PersonRequest(new Person(), shiftTradeRequest).WithId();
 
-			personRequestRepository.Stub(x => x.Find(personRequest.Id.Value)).Return(personRequest);
+			PersonRequestRepository.Add(personRequest);
 
-			target.Delete(personRequest.Id.Value);
+			Target.Delete(personRequest.Id.Value);
 
 			offer.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.Invalid);
-			personRequestRepository.AssertWasCalled(x => x.Remove(personRequest));
+			PersonRequestRepository.LoadAll().Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldThrowHttp404OIfTextRequestDoesNotExists()
 		{
-			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var timeZone = new FakeUserTimeZone();
-			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new TextRequestFormMapper(loggedOnUser, timeZone,
-					new DateTimePeriodFormMapper(timeZone)));
 			var id = Guid.NewGuid();
-
-			personRequestRepository.Stub(x => x.Find(id)).Return(null);
-
-			var exception = Assert.Throws<RequestPersistException>(() => target.Delete(id));
+			
+			var exception = Assert.Throws<RequestPersistException>(() => Target.Delete(id));
 			exception.GetHttpCode().Should().Be(404);
 		}
-
-		[Test]
-		public void ShouldThrowHttp404OIfRequestDeniedOrApproved()
-		{
-			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var timeZone = new FakeUserTimeZone();
-			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new TextRequestFormMapper(loggedOnUser, timeZone,
-					new DateTimePeriodFormMapper(timeZone)));
-			var personRequest = new PersonRequest(new Person());
-			personRequest.SetId(Guid.NewGuid());
-
-			personRequestRepository.Stub(x => x.Find(personRequest.Id.Value)).Return(personRequest);
-
-			personRequestRepository.Stub(x => x.Remove(personRequest)).Throw(new DataSourceException());
-
-			var exception = Assert.Throws<RequestPersistException>(() => target.Delete(personRequest.Id.Value));
-			exception.GetHttpCode().Should().Be(404);
-		}
-
+		
 		[Test]
 		public void ShouldUpdateExistingTextRequest()
 		{
-			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var timeZone = new FakeUserTimeZone();
-			var loggedOnUser = new FakeLoggedOnUser();
-			var personRequest = new PersonRequest(loggedOnUser.CurrentUser(),
-				new TextRequest(new DateTimePeriod(2017, 1, 1, 2017, 1, 1)));
-			var target = new TextRequestPersister(personRequestRepository, new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), loggedOnUser,
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
-				new TextRequestFormMapper(loggedOnUser, timeZone,
-					new DateTimePeriodFormMapper(timeZone)));
+			var personRequest = new PersonRequest(LoggedOnUser.CurrentUser(),
+				new TextRequest(new DateTimePeriod(2017, 1, 1, 2017, 1, 1))).WithId();
+			
 			var form = new TextRequestForm {Message = "test"};
-			var id = Guid.NewGuid();
-			form.EntityId = id;
+			form.EntityId = personRequest.Id.Value;
 
-			personRequestRepository.Stub(x => x.Find(id)).Return(personRequest);
+			PersonRequestRepository.Add(personRequest);
 
-			target.Persist(form);
+			Target.Persist(form);
+
+			personRequest.GetMessage(new NoFormatting()).Should().Be.EqualTo("test");
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
+			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			system.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
+
+			var currentBusinessUnit = new SpecificBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			system.UseTestDouble(currentBusinessUnit).For<ICurrentBusinessUnit>();
+			var dataSource = new FakeCurrentDatasource("Test");
+			system.UseTestDouble(dataSource).For<ICurrentDataSource>();
 		}
 	}
 }

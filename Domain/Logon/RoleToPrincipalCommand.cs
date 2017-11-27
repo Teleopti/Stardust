@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Domain.Logon
             _claimSetForApplicationRole = claimSetForApplicationRole;
         }
 
-		public void Execute(ITeleoptiPrincipal principalToFillWithClaimSets, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository)
+		public void Execute(IPersonOwner principalToFillWithClaimSets, IClaimsOwner claimsOwner, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository)
         {
             var person = principalToFillWithClaimSets.GetPerson(personRepository);
             foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
             {
-	            principalToFillWithClaimSets.AddClaimSet(_claimSetForApplicationRole.Transform(applicationRole, unitOfWorkFactory.Name));
+	            claimsOwner.AddClaimSet(_claimSetForApplicationRole.Transform(applicationRole, unitOfWorkFactory.Name));
             }
         }
     }

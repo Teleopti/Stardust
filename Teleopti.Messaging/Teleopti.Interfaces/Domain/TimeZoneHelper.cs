@@ -52,10 +52,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: robink
 		/// Created date: 2007-10-23
 		/// </remarks>
-		public static TimeZoneInfo CurrentSessionTimeZone
-		{
-			get { return StateHolderReader.Instance.StateReader.UserTimeZone; }
-		}
+		public static TimeZoneInfo CurrentSessionTimeZone => StateHolderReader.Instance.StateReader.UserTimeZone;
 
 		/// <summary>
 		/// Creates a new UTC format date time period from local date time.

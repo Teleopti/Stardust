@@ -88,7 +88,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var persons = new IPerson[] {user};
 			var scenario = new Scenario("s");
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var scheduleDays = new IScheduleDay[] {};
+			var scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(user);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
@@ -98,11 +99,12 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 				Arg<DateOnlyPeriod>.Is.Equal(period),
 				Arg<IScenario>.Is.Equal(scenario)))
 				.Return(scheduleDictionary);
-			scheduleDictionary.Stub(x => x.SchedulesForDay(date)).Return(scheduleDays);
+			scheduleDictionary.Stub(x => x[user]).Return(scheduleRange);
+			scheduleRange.Stub(x => x.ScheduledDay(date)).Return(scheduleDay);
 
 			var result = _target.GetScheduleForPersons(date, persons);
 
-			result.Should().Be.SameInstanceAs(scheduleDays);
+			result.Single().Should().Be.SameInstanceAs(scheduleDay);
 		}
 	}
 }

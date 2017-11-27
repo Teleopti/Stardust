@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Domain.Logon
 {
     public interface IRoleToPrincipalCommand
     {
-		void Execute(ITeleoptiPrincipal principalToFillWithClaimSets, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository);
+		void Execute(IPersonOwner principalToFillWithClaimSets, IClaimsOwner claimsOwner, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository);
     }
 }

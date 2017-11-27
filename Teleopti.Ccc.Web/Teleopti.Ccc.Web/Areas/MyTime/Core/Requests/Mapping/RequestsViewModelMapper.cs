@@ -1,12 +1,12 @@
 using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -23,25 +23,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private readonly IPersonNameProvider _personNameProvider;
-		private readonly IToggleManager _toggleManager;
 
 		public RequestsViewModelMapper(IUserTimeZone userTimeZone,
 			ILinkProvider linkProvider,
 			ILoggedOnUser loggedOnUser,
 			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker,
-			IPersonNameProvider personNameProvider,
-			IToggleManager toggleManager)
+			IPersonNameProvider personNameProvider)
 		{
 			_userTimeZone = userTimeZone;
 			_linkProvider = linkProvider;
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
 			_personNameProvider = personNameProvider;
-			_toggleManager = toggleManager;
 		}
 
 		public RequestViewModel Map(IPersonRequest s, NameFormatSettings nameFormatSettings=null)
 		{
+			var timeZone = _userTimeZone.TimeZone();
+			var localDateFrom = s.Request.Period.StartDateTimeLocal(timeZone);
+			var localDateTo = s.Request.Period.EndDateTimeLocal(timeZone);
 			return new RequestViewModel
 			{
 				Link = new Link
@@ -51,10 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					Methods = getAvailableMethods(s)
 				},
 				Subject = s.GetSubject(new NoFormatting()),
-				DateTimeFrom =
-					DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(s.Request.Period.StartDateTime, _userTimeZone.TimeZone()),
-				DateTimeTo =
-					DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(s.Request.Period.EndDateTime, _userTimeZone.TimeZone()),
+				DateTimeFrom = localDateFrom.FormatDateTimeToIso8601String(),
+				DateTimeTo = localDateTo.FormatDateTimeToIso8601String(),
 				Status = getStatusText(s),
 				IsNextDay = isNextDay(s),
 				IsReferred = isReferred(s),
@@ -63,26 +61,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				TypeEnum = s.Request.RequestType,
 				UpdatedOnDateTime =
 					s.UpdatedOn.HasValue
-						? DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(s.UpdatedOn.Value, _userTimeZone.TimeZone())
+						? DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(s.UpdatedOn.Value, timeZone)
 						: null,
 				DateFromYear =
-					CultureInfo.CurrentCulture.Calendar.GetYear(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime,
-						_userTimeZone.TimeZone())),
+					CultureInfo.CurrentCulture.Calendar.GetYear(localDateFrom),
 				DateFromMonth =
-					CultureInfo.CurrentCulture.Calendar.GetMonth(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime,
-						_userTimeZone.TimeZone())),
+					CultureInfo.CurrentCulture.Calendar.GetMonth(localDateFrom),
 				DateFromDayOfMonth =
-					CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime,
-						_userTimeZone.TimeZone())),
+					CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(localDateFrom),
 				DateToYear =
-					CultureInfo.CurrentCulture.Calendar.GetYear(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime,
-						_userTimeZone.TimeZone())),
+					CultureInfo.CurrentCulture.Calendar.GetYear(localDateTo),
 				DateToMonth =
-					CultureInfo.CurrentCulture.Calendar.GetMonth(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime,
-						_userTimeZone.TimeZone())),
+					CultureInfo.CurrentCulture.Calendar.GetMonth(localDateTo),
 				DateToDayOfMonth =
-					CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime,
-						_userTimeZone.TimeZone())),
+					CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(localDateTo),
 				Payload = s.Request.RequestPayloadDescription.Name,
 				PayloadId = resolvePayloadId(s),
 				IsFullDay = isRequestFullDay(s),
@@ -139,9 +131,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return false;
 			}
 
+			var timeZone = _userTimeZone.TimeZone();
 			var dateforDayCancellationCheck =
-				new DateOnly(personRequest.Request.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone));
-			if (dateforDayCancellationCheck >= DateOnly.Today)
+				new DateOnly(personRequest.Request.Period.StartDateTimeLocal(timeZone));
+			if (dateforDayCancellationCheck >= new DateOnly(TimeZoneHelper.ConvertFromUtc(ServiceLocatorForEntity.Now.UtcDateTime(),timeZone)))
 			{
 				if (PrincipalAuthorization.Current().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest, new DateOnly(personRequest.RequestedDate),
@@ -179,12 +172,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private bool isRequestFullDay(IPersonRequest personRequest)
 		{
-			var start =
-				TimeZoneInfo.ConvertTimeFromUtc(
-					personRequest.Request.Period.StartDateTime, _userTimeZone.TimeZone());
-			var end =
-				TimeZoneInfo.ConvertTimeFromUtc(
-					personRequest.Request.Period.EndDateTime, _userTimeZone.TimeZone());
+			var timeZone = _userTimeZone.TimeZone();
+			var start = personRequest.Request.Period.StartDateTimeLocal(timeZone);
+			var end = personRequest.Request.Period.EndDateTimeLocal(timeZone);
 			var allDayEndDateTime = start.AddDays(1).AddMinutes(-1);
 			return start.TimeOfDay == TimeSpan.Zero &&
 				   end.TimeOfDay == allDayEndDateTime.TimeOfDay;

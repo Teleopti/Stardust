@@ -1,10 +1,11 @@
 using System;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar;
 using Teleopti.Interfaces.Domain;
@@ -13,30 +14,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
 	public class ShiftTradeRequestPersonToPermissionValidator : IShiftTradeRequestPersonToPermissionValidator
 	{
-		private readonly IPrincipalFactory _principalFactory;
-		private readonly ICurrentDataSource _currentDataSource;
+		private readonly ICurrentUnitOfWorkFactory _currentDataSource;
 		private readonly IPersonRepository _personRepository;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
-		private readonly IPrincipalAuthorizationFactory _principalAuthorizationFactory;
+		private readonly IPrincipalAuthorizationFactory _authorizationFactory;
 
-		public ShiftTradeRequestPersonToPermissionValidator(IPrincipalFactory principalFactory,
-			ICurrentDataSource currentDataSource,
+		public ShiftTradeRequestPersonToPermissionValidator(ICurrentUnitOfWorkFactory currentDataSource,
 			IPersonRepository personRepository,
-			IRoleToPrincipalCommand roleToPrincipalCommand,
-			IPrincipalAuthorizationFactory principalAuthorizationFactory)
+			IRoleToPrincipalCommand roleToPrincipalCommand, IPrincipalAuthorizationFactory authorizationFactory)
 		{
-			_principalFactory = principalFactory;
 			_currentDataSource = currentDataSource;
 			_personRepository = personRepository;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
-			_principalAuthorizationFactory = principalAuthorizationFactory;
+			_authorizationFactory = authorizationFactory;
 		}
 
 		public bool IsSatisfied(IShiftTradeRequest shiftTradeRequest)
 		{
-			var principal = _principalFactory.MakePrincipal(shiftTradeRequest.PersonTo, _currentDataSource.Current(), null, null);
-			_roleToPrincipalCommand.Execute(principal, _currentDataSource.Current().Application, _personRepository);
-			var authorisation = _principalAuthorizationFactory.FromPrincipal(principal);
+			var principal = new ClaimsOwner(shiftTradeRequest.PersonTo);
+			_roleToPrincipalCommand.Execute(new SingleOwnedPerson(shiftTradeRequest.PersonTo), principal, _currentDataSource.Current(), _personRepository);
+			var authorisation = _authorizationFactory.FromClaimsOwner(principal);
 			var permissionProvider = new PermissionProvider(authorisation);
 			var checkDate = new DateOnly(shiftTradeRequest.Period.StartDateTime);
 

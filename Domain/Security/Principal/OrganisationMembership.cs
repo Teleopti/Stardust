@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 					pp =>
 					new PeriodizedOrganisationMembership(pp.StartDate, pp.EndDate(), pp.Team.Id.GetValueOrDefault(),
 														 pp.Team.Site.Id.GetValueOrDefault(),
-														 pp.Team.BusinessUnitExplicit.Id.GetValueOrDefault())).ToList();
+														 pp.Team.BusinessUnitExplicit?.Id.GetValueOrDefault() ?? Guid.Empty)).ToList();
 		}
 		
 		public bool BelongsToBusinessUnit(Guid businessUnitId, DateOnly dateOnly)

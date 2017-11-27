@@ -25,10 +25,13 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			lock (locker)
 			{
-				if (_licensedFunctions.ContainsKey(tenantName))
-					return _licensedFunctions[tenantName];
-				_licensedFunctions.Add(tenantName, fetchLicensedFunctions(tenantName));
-				return _licensedFunctions[tenantName];
+				IEnumerable<IApplicationFunction> functions;
+				if (_licensedFunctions.TryGetValue(tenantName, out functions))
+					return functions;
+
+				functions = fetchLicensedFunctions(tenantName);
+				_licensedFunctions.Add(tenantName, functions);
+				return functions;
 			}
 		}
 

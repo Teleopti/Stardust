@@ -25,11 +25,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IUserCulture _userCulture;
 		private readonly IRequestFilterCreator _requestFilterCreator;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
+		private readonly IUserTimeZone _userTimeZone;
 
 		private const int maxSearchPersonCount = 5000;
 
 		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper<ShiftTradeRequestViewModel> requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IScheduleProvider scheduleProvider, IUserCulture userCulture
-			, IRequestFilterCreator requestFilterCreator, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
+			, IRequestFilterCreator requestFilterCreator, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings, IUserTimeZone userTimeZone)
 		{
 			_requestsProvider = requestsProvider;
 			_requestViewModelMapper = requestViewModelMapper;
@@ -39,11 +40,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_userCulture = userCulture;
 			_requestFilterCreator = requestFilterCreator;
 			_nameFormatSettings = nameFormatSettings;
+			_userTimeZone = userTimeZone;
 		}
 
 		public ShiftTradeRequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
 		{
-			var requestListModel = new ShiftTradeRequestListViewModel()
+			var requestListModel = new ShiftTradeRequestListViewModel
 			{
 				FirstDayOfWeek = toIso8601DayNumber(_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek),
 				Requests = new ShiftTradeRequestViewModel[] { }
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			if (requests.Any())
 			{
 				requestListModel.Requests = requests.Select(request => _requestViewModelMapper.Map(createShiftTradeRequestViewModel(request, nameFormatSettings), request, nameFormatSettings)).ToList();
-				var maximumRequestDate = requests.Max(r => r.Request.Period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone));
+				var maximumRequestDate = requests.Max(r => r.Request.Period.EndDateTimeLocal(_userTimeZone.TimeZone()));
 				if (maximumRequestDate > requestListModel.MaximumDateTime)
 				{
 					requestListModel.MaximumDateTime = maximumRequestDate;

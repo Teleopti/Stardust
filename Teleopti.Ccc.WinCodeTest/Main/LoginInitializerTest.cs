@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
 			_raptorSynchronizer.Expect(r => r.CheckRaptorApplicationFunctions()).Return(raptorApplicationResult);
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
 
 			var result = _target.InitializeApplication(datasourceContainer);
 			result.Should().Be.True();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 				  .IgnoreArguments()
 				  .Return(DialogResult.No);
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
 
 			var result = _target.InitializeApplication(datasourceContainer);
 			result.Should().Be.False();
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 				  .IgnoreArguments()
 				  .Return(DialogResult.No);
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
 
 			var result = _target.InitializeApplication(datasourceContainer);
 			result.Should().Be.False();
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 										  Resources.AuthenticationFailed));
 
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
 
 			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
 			{

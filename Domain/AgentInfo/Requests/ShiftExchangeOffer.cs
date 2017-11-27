@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
@@ -79,15 +80,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			set { _typeDescription = value; }
 		}
 
-		public override RequestType RequestType
-		{
-			get { return RequestType.ShiftExchangeOffer; }
-		}
+		public override RequestType RequestType => RequestType.ShiftExchangeOffer;
 
-		public override Description RequestPayloadDescription
-		{
-			get { return new Description(); }
-		}
+		public override Description RequestPayloadDescription => new Description();
 
 		public override void Deny(IPerson denyPerson)
 		{
@@ -138,7 +133,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual bool IsWantedSchedule(IScheduleDay scheduleToCheck)
 		{
-			var period = scheduleToCheck == null?null:scheduleToCheck.ProjectionService().CreateProjection().Period();		
+			var period = scheduleToCheck?.ProjectionService().CreateProjection().Period();		
 			return _criteria.IsValid(period.HasValue ? (DateTimePeriod?)period.Value : null, scheduleToCheck != null && scheduleToCheck.HasDayOff());
 		}
 
@@ -156,7 +151,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual bool IsExpired()
 		{
-			return Date <= DateOnly.Today;
+			return Date <= new DateOnly(TimeZoneHelper.ConvertFromUtc(ServiceLocatorForEntity.Now.UtcDateTime(),
+					   _person.PermissionInformation.DefaultTimeZone()));
 		}				
 	}
 }

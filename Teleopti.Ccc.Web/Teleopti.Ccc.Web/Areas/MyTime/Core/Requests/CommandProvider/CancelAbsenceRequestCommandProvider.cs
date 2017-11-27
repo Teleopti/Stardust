@@ -15,17 +15,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.CommandProvider
 		private readonly IHandleCommand<CancelAbsenceRequestCommand> _cancelAbsenceRequestCommand;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
-		public CancelAbsenceRequestCommandProvider(IHandleCommand<CancelAbsenceRequestCommand> cancelAbsenceRequestCommand, IPersonRequestRepository personRequestRepository, IPermissionProvider permissionProvider)
+		public CancelAbsenceRequestCommandProvider(IHandleCommand<CancelAbsenceRequestCommand> cancelAbsenceRequestCommand, IPersonRequestRepository personRequestRepository, IPermissionProvider permissionProvider, IUserTimeZone userTimeZone)
 		{
 			_cancelAbsenceRequestCommand = cancelAbsenceRequestCommand;
 			_personRequestRepository = personRequestRepository;
 			_permissionProvider = permissionProvider;
+			_userTimeZone = userTimeZone;
 		}
 
 		public CancelAbsenceRequestCommand CancelAbsenceRequest (Guid personRequestId)
 		{
-
 			var command = new CancelAbsenceRequestCommand
 			{
 				PersonRequestId = personRequestId,
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.CommandProvider
 			if (workflowControlSet != null)
 			{
 				var threshold = workflowControlSet.AbsenceRequestCancellationThreshold ?? 0;
-				var minDate = new DateOnly(personRequest.Request.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).AddDays(-threshold));
+				var minDate = new DateOnly(personRequest.Request.Period.StartDateTimeLocal(_userTimeZone.TimeZone()).AddDays(-threshold));
 
 				if (DateOnly.Today > minDate )
 				{

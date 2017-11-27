@@ -28,18 +28,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			var scenario = new FakeCurrentScenario_DoNotUse();
 			var principalAuthorization = new FullPermission();
 
 			CurrentAuthorization.DefaultTo(principalAuthorization);
+			var scenario = new FakeScenarioRepository();
+			scenario.Has("Default");
 
 			system.AddModule(new WebModule(configuration, null));
 
 			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble(scenario).For<ICurrentScenario>();
 			system.UseTestDouble(principalAuthorization).For<IAuthorization>();
+			system.UseTestDouble(scenario).For<IScenarioRepository>();
 			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
 			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
 			system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();

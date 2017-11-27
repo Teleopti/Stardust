@@ -472,7 +472,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers).IgnoreArguments();
                 Expect.Call(_definitionSet.MultiplicatorType).Return(MultiplicatorType.Overtime).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.Equals(_definitionSet)).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_definitionSet.Equals(null)).Return(false).Repeat.AtLeastOnce();
             }
             using (_mocker.Playback())
             {

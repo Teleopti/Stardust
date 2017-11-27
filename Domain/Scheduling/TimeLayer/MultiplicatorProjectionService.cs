@@ -124,16 +124,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
         /// </remarks>
         private IEnumerable<IMultiplicatorLayer> ProjectionFromDefinitionSets(IEnumerable<IMultiplicatorDefinitionSet> sets)
         {
-            List<IMultiplicatorLayer> retList = new List<IMultiplicatorLayer>();
-            foreach (IMultiplicatorDefinitionSet definitionSet in sets)
-            {
-                DateOnly start = _dateOnly.AddDays(-1);
-                DateOnly end = _dateOnly.AddDays(1);
-                var projectionsForPeriod = definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start,end),
-                                                                                   _schedulePart.TimeZone);
-                retList.AddRange(projectionsForPeriod);
-            }
-            return retList;
+            var period = new DateOnlyPeriod(_dateOnly.AddDays(-1), _dateOnly.AddDays(1));
+			
+			return sets.SelectMany(s => s.CreateProjectionForPeriod(period, _schedulePart.TimeZone)).ToArray();
         }
 
         private static IEnumerable<MultiplicatorLayer> IntersectingLayersForOB(IVisualLayer layer, IEnumerable<IMultiplicatorLayer> layersToCheck)

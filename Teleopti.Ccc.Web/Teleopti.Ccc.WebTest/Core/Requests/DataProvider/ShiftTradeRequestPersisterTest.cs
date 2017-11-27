@@ -1,164 +1,127 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
 	[TestFixture]
-	public class ShiftTradeRequestPersisterTest
+	[RequestsTest]
+	public class ShiftTradeRequestPersisterTest : ISetup
 	{
-		private IShiftTradeRequestMapper mapper;
-		private IPersonRequestRepository repository;
-		private IEventPublisher publisher;
-		private IShiftTradeRequestSetChecksum shiftTradeSetChecksum;
-		private IShiftTradeRequestProvider shiftTradeRequestProvider;
-		private ICurrentUnitOfWork currentUnitOfWork;
-		private IShiftTradeRequestPersonToPermissionValidator shiftTradeRequestPermissionValidator;
-		private IPersonRequestCheckAuthorization personRequestCheckAuthorization;
-
-		[SetUp]
-		public void Setup()
-		{
-			mapper = MockRepository.GenerateMock<IShiftTradeRequestMapper>();
-			repository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			publisher = MockRepository.GenerateMock<IEventPublisher>();
-			shiftTradeSetChecksum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
-			shiftTradeRequestProvider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
-			currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
-			shiftTradeRequestPermissionValidator = MockRepository.GenerateMock<IShiftTradeRequestPersonToPermissionValidator>();
-			personRequestCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
-		}
-
+		public IShiftTradeRequestPersister Target;
+		public FakePersonRequestRepository PersonRequestRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeLoggedOnUser LoggedOnUser;
+		public IScheduleDayProvider ScheduleDayProvider;
+		public ICurrentScenario CurrentScenario;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		
 		[Test]
 		public void ShouldPersistMappedData()
 		{
-			var shiftTradeRequest = new PersonRequest(new Person()) { Request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>()) };
+			LoggedOnUser.SetFakeLoggedOnUser(PersonRepository.Has());
+			var person = PersonRepository.Has();
+			var form = new ShiftTradeRequestForm{Dates = new []{new DateOnly(2001,1,1)},Message = "test", PersonToId = person.Id.GetValueOrDefault(),Subject = "test"};
 			
-			var form = new ShiftTradeRequestForm();
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			Target.Persist(form);
 
-			mockPermissionValidatorPassed(true);
-
-			var target = new ShiftTradeRequestPersister(repository, mapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
-
-			target.Persist(form);
-
-			repository.AssertWasCalled(x => x.Add(shiftTradeRequest));
+			PersonRequestRepository.LoadAll().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldNotPersistMappedDataWhenOfferCompleted()
 		{
-			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
-				.Return(new WorkflowControlSet("bla") {LockTrading = true});
+			var loggedOnUser = PersonRepository.Has();
+			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+			loggedOnUser.WorkflowControlSet = new WorkflowControlSet("bla") {LockTrading = true}.WithId();
 
+			var person = PersonRepository.Has();
+			
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Completed);
 
-			var personRequests = new PersonRequest(new Person()) {Request = offer};
-			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
+			var personRequest = new PersonRequest(person) {Request = offer}.WithId();
+			PersonRequestRepository.Add(personRequest);
 
 			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty};
-			var shiftTradeRequest = new PersonRequest(new Person());
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
-
-			var target = new ShiftTradeRequestPersister(repository, mapper, publisher, null,
-				null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, null,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
-
-			var result = target.Persist(form);
+			
+			var result = Target.Persist(form);
 
 			result.ExchangeOffer.IsOfferAvailable.Should().Be.False();
-			repository.AssertWasNotCalled(x => x.Add(shiftTradeRequest));
-			uow.AssertWasNotCalled(x => x.AfterSuccessfulTx(Arg<Action>.Is.Anything));
+			PersonRequestRepository.FindAllRequestsForAgent(person).Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldNotPersistMappedDataWhenOfferPendingForAdminApproval()
 		{
-			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
-				.Return(new WorkflowControlSet("bla") {LockTrading = true});
+			var loggedOnUser = PersonRepository.Has();
+			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+			loggedOnUser.WorkflowControlSet = new WorkflowControlSet("bla") { LockTrading = true }.WithId();
+
+			var person = PersonRepository.Has();
 
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.PendingAdminApproval);
 
-			var personRequests = new PersonRequest(new Person()) {Request = offer};
-			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
-
+			var personRequest = new PersonRequest(person) { Request = offer }.WithId();
+			PersonRequestRepository.Add(personRequest);
+			
 			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty};
-			var shiftTradeRequest = new PersonRequest(new Person());
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
-
-			var target = new ShiftTradeRequestPersister(repository, mapper, publisher, null,
-				null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, null,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
-
-			var result = target.Persist(form);
+			
+			var result = Target.Persist(form);
 
 			result.ExchangeOffer.IsOfferAvailable.Should().Be.False();
-			repository.AssertWasNotCalled(x => x.Add(shiftTradeRequest));
-			uow.AssertWasNotCalled(x => x.AfterSuccessfulTx(Arg<Action>.Is.Anything));
+			PersonRequestRepository.FindAllRequestsForAgent(person).Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldAutoApprovedByAnnouncerWhenLockShiftTradeFromBulletinBoard()
 		{
-			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
-				.Return(new WorkflowControlSet("bla") {LockTrading = true});
+			var person = PersonRepository.Has();
+			var loggedOnUser = PersonRepository.Has();
 
-			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
-			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Pending);
+			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+			loggedOnUser.WorkflowControlSet = new WorkflowControlSet("bla") { LockTrading = true }.WithId();
+			var applicationRole = new ApplicationRole();
+			var functions = new DefinedRaptorApplicationFunctionFactory();
+			applicationRole.AvailableData = new AvailableData {AvailableDataRange = AvailableDataRangeOption.Everyone};
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions,DefinedRaptorApplicationFunctionPaths.ViewSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
+			
+			loggedOnUser.PermissionInformation.AddApplicationRole(applicationRole);
+			person.PermissionInformation.AddApplicationRole(applicationRole);
+			
+			var offer = new ShiftExchangeOffer(ScheduleDayProvider.GetScheduleDay(new DateOnly(2001,1,1),person),new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
+			
+			var personRequest = new PersonRequest(person) {Request = offer};
+			PersonRequestRepository.Add(personRequest);
 
-			var personRequests = new PersonRequest(new Person()) {Request = offer};
-			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
-
-			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = Guid.Empty };
-			var shiftTradeRequest = new PersonRequest(new Person()) {Request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())};
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-
-			mockPermissionValidatorPassed(true);
-
-			var target = new ShiftTradeRequestPersister(repository, mapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
-
-			var result = target.Persist(form);
+			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = Guid.Empty, Dates = new []{new DateOnly(2001,1,1)},PersonToId = person.Id.GetValueOrDefault()};
+			
+			var result = Target.Persist(form);
 
 			result.ExchangeOffer.IsOfferAvailable.Should().Be.True();
 			result.Status.Should().Be.EqualTo(Resources.WaitingThreeDots);
@@ -167,26 +130,33 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldAutoDeniedIfRecipientHasNoPermissionForShiftTrade()
 		{
-			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
-				.Return(new WorkflowControlSet("bla") { LockTrading = true });
+			var person = PersonRepository.Has();
+			var loggedOnUser = PersonRepository.Has();
 
-			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
-			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Pending);
-			var personRequests = new PersonRequest(new Person()) { Request = offer };
-			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
+			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+			loggedOnUser.WorkflowControlSet = new WorkflowControlSet("bla") { LockTrading = true }.WithId();
+			var applicationRole = new ApplicationRole();
+			var functions = new DefinedRaptorApplicationFunctionFactory();
+			applicationRole.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
 
-			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = Guid.Empty };
-			var shiftTradeRequest = new PersonRequest(new Person()) {Request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {new ShiftTradeSwapDetail(new Person(), new Person(), DateOnly.Today, DateOnly.Today)})};
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			var applicationRole2 = new ApplicationRole();
+			applicationRole2.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
+			applicationRole2.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewSchedules));
+			applicationRole2.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
+			
+			loggedOnUser.PermissionInformation.AddApplicationRole(applicationRole);
+			person.PermissionInformation.AddApplicationRole(applicationRole2);
 
-			mockPermissionValidatorPassed(false);
+			var offer = new ShiftExchangeOffer(ScheduleDayProvider.GetScheduleDay(new DateOnly(2001, 1, 1), person), new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
 
-			var target = new ShiftTradeRequestPersister(repository, mapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
-			var result = target.Persist(form);
+			var personRequest = new PersonRequest(person) { Request = offer };
+			PersonRequestRepository.Add(personRequest);
+
+			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = Guid.Empty, Dates = new[] { new DateOnly(2001, 1, 1) }, PersonToId = person.Id.GetValueOrDefault() };
+			var result = Target.Persist(form);
 
 			result.Status.Should().Be.EqualTo(Resources.Denied);
 			result.DenyReason.Should().Be.EqualTo(Resources.RecipientHasNoShiftTradePermission);
@@ -195,31 +165,28 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldSetPendingAdminApprovalWhenLockShiftTradeFromBulletinBoard()
 		{
-			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
-				.Return(new WorkflowControlSet("bla")
-				{
-					LockTrading = true,
-					AutoGrantShiftTradeRequest = false
-				});
+			var person = PersonRepository.Has();
+			var loggedOnUser = PersonRepository.Has();
 
-			var currentShift = ScheduleDayFactory.Create(DateOnly.Today.AddDays(1));
-			var offer = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
-			var personRequests = new PersonRequest(new Person()) {Request = offer};
-			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
+			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+			loggedOnUser.WorkflowControlSet = person.WorkflowControlSet = new WorkflowControlSet("bla") { LockTrading = true, AutoGrantShiftTradeRequest = false }.WithId();
+			var applicationRole = new ApplicationRole();
+			var functions = new DefinedRaptorApplicationFunctionFactory();
+			applicationRole.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
 
-			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty};
-			var shiftTradeRequest = new PersonRequest(new Person()) { Request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())};
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			loggedOnUser.PermissionInformation.AddApplicationRole(applicationRole);
+			person.PermissionInformation.AddApplicationRole(applicationRole);
+			
+			var offer = new ShiftExchangeOffer(ScheduleDayProvider.GetScheduleDay(DateOnly.Today.AddDays(1), person), new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
+			var personRequest = new PersonRequest(person) {Request = offer};
+			PersonRequestRepository.Add(personRequest);
 
-			mockPermissionValidatorPassed(true);
-
-			var target = new ShiftTradeRequestPersister(repository, mapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
-
-			var result = target.Persist(form);
+			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty, Dates = new[] { DateOnly.Today.AddDays(1) }, PersonToId = person.Id.GetValueOrDefault() };
+			
+			var result = Target.Persist(form);
 
 			offer.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.PendingAdminApproval);
 			result.ExchangeOffer.IsOfferAvailable.Should().Be.True();
@@ -229,29 +196,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldWaitingApprovedByAnnouncerWhenShiftTradeFromBulletinBoard()
 		{
-			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
-				.Return(new WorkflowControlSet("bla") {LockTrading = false});
+			var person = PersonRepository.Has();
+			var loggedOnUser = PersonRepository.Has();
 
-			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
-			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Pending);
-			offer.Stub(x => x.Period).Return(new DateTimePeriod(2017, 1, 1, 2017, 1, 1));
+			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+			loggedOnUser.WorkflowControlSet = person.WorkflowControlSet = new WorkflowControlSet("bla") { LockTrading = false }.WithId();
+			var applicationRole = new ApplicationRole();
+			var functions = new DefinedRaptorApplicationFunctionFactory();
+			applicationRole.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
 
-			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = Guid.Empty};
-			var shiftTradeRequest = new PersonRequest(new Person()) {Request = offer};
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			
-			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Pending);
-			var personRequests = new PersonRequest(new Person()) {Request = offer};
-			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
+			loggedOnUser.PermissionInformation.AddApplicationRole(applicationRole);
+			person.PermissionInformation.AddApplicationRole(applicationRole);
 
-			mockPermissionValidatorPassed(true);
+			var offer = new ShiftExchangeOffer(ScheduleDayProvider.GetScheduleDay(new DateOnly(2017, 1, 1), person), new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
+			var personRequest = new PersonRequest(person) { Request = offer };
+			PersonRequestRepository.Add(personRequest);
 
-			var target = new ShiftTradeRequestPersister(repository, mapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
-			var result = target.Persist(form);
+			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = Guid.Empty, Dates = new[] { new DateOnly(2017, 1, 1) }, PersonToId = person.Id.GetValueOrDefault() };
+			var result = Target.Persist(form);
 
 			result.Status.Should().Be.EqualTo(Resources.New);
 		}
@@ -259,89 +224,111 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldWaitingApprovedByAnnouncerWhenShiftTradeFromNormalRequestBoard()
 		{
-			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
-				.Return(new WorkflowControlSet("bla") {LockTrading = true});
+			var person = PersonRepository.Has();
+			var loggedOnUser = PersonRepository.Has();
 
-			var form = new ShiftTradeRequestForm {ShiftExchangeOfferId = null};
-			var shiftTradeRequest = new PersonRequest(new Person()) { Request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>()) };
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+			loggedOnUser.WorkflowControlSet = person.WorkflowControlSet = new WorkflowControlSet("bla") { LockTrading = false }.WithId();
+			var applicationRole = new ApplicationRole();
+			var functions = new DefinedRaptorApplicationFunctionFactory();
+			applicationRole.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
 
-			mockPermissionValidatorPassed(true);
-
-			var target = new ShiftTradeRequestPersister(repository, mapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
-			var result = target.Persist(form);
+			loggedOnUser.PermissionInformation.AddApplicationRole(applicationRole);
+			person.PermissionInformation.AddApplicationRole(applicationRole);
+			
+			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = null, Dates = new[] { new DateOnly(2017, 1, 1) }, PersonToId = person.Id.GetValueOrDefault() };
+			var result = Target.Persist(form);
 
 			result.Status.Should().Be.EqualTo(Resources.New);
 		}
 
 		[Test]
-		public void ShouldSendMessageToBus()
+		public void ShouldSetChecksumOnRequest()
 		{
-			//bajstest - calling bus shouldn't happen here at all I think...
-			//therefore - just dummy test
-			var now = MockRepository.GenerateMock<INow>();
-			now.Expect(x => x.UtcDateTime()).Return(DateTime.Now);
+			var person = PersonRepository.Has();
+			var loggedOnUser = PersonRepository.Has();
 
-			var dataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
-			dataSourceProvider.Expect(x => x.Current()).Return(MockRepository.GenerateMock<IDataSource>());
+			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+			loggedOnUser.WorkflowControlSet = person.WorkflowControlSet = new WorkflowControlSet("bla") { LockTrading = false }.WithId();
+			var applicationRole = new ApplicationRole();
+			var functions = new DefinedRaptorApplicationFunctionFactory();
+			applicationRole.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
 
-			var businessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
-			businessUnitProvider.Expect(x => x.Current()).Return(new BusinessUnit("d"));
+			loggedOnUser.PermissionInformation.AddApplicationRole(applicationRole);
+			person.PermissionInformation.AddApplicationRole(applicationRole);
+			PersonAssignmentRepository.Has(person, CurrentScenario.Current(), ActivityFactory.CreateActivity("Phone"),
+				ShiftCategoryFactory.CreateShiftCategory(), new DateOnly(2007, 1, 1), new TimePeriod(8, 17));
 
-			var form = new ShiftTradeRequestForm();
-			mapper.Stub(x => x.Map(form)).Return(new PersonRequest(new Person()) { Request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>()) });
+			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = null, Dates = new[] { new DateOnly(2017, 1, 1) }, PersonToId = person.Id.GetValueOrDefault() };
+			Target.Persist(form);
 
-			mockPermissionValidatorPassed(true);
-
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
-
-			var target = new ShiftTradeRequestPersister(MockRepository.GenerateMock<IPersonRequestRepository>(),
-				mapper,
-				publisher,
-				now,
-				dataSourceProvider,
-				businessUnitProvider,
-				currentUnitOfWork,
-				shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
-
-			target.Persist(form);
-
-			uow.AssertWasCalled(x => x.AfterSuccessfulTx(Arg<Action>.Is.Anything));
+			((IShiftTradeRequest) PersonRequestRepository.LoadAll().Last().Request).ShiftTradeSwapDetails.First().ChecksumTo
+				.Should().Not.Be.EqualTo(-1);
 		}
 
 		[Test]
-		public void ShouldSetChecksumOnRequest()
+		public void ShouldSetChecksumOnRequestFromOffer()
 		{
-			//elände - borde inte behöva anropa setchecksum explicit
-			var form = new ShiftTradeRequestForm();
-			var shiftTradeRequest = new PersonRequest(new Person()) { Request = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>()) };
+			var person = PersonRepository.Has();
+			var loggedOnUser = PersonRepository.Has();
 
-			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
-			mockPermissionValidatorPassed(true);
+			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+			loggedOnUser.WorkflowControlSet = person.WorkflowControlSet = new WorkflowControlSet("bla") { LockTrading = false }.WithId();
+			var applicationRole = new ApplicationRole();
+			var functions = new DefinedRaptorApplicationFunctionFactory();
+			applicationRole.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
 
-			var target = new ShiftTradeRequestPersister(repository, mapper, publisher, null,
-				null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider, null,
-				shiftTradeRequestPermissionValidator, personRequestCheckAuthorization,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), new FakeLoggedOnUser(),
-					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()));
-			target.Persist(form);
+			loggedOnUser.PermissionInformation.AddApplicationRole(applicationRole);
+			person.PermissionInformation.AddApplicationRole(applicationRole);
+			PersonAssignmentRepository.Has(person, CurrentScenario.Current(), ActivityFactory.CreateActivity("Phone"),
+				ShiftCategoryFactory.CreateShiftCategory(), new DateOnly(2007, 1, 1), new TimePeriod(8, 17));
+			
+			var offer = new ShiftExchangeOffer(ScheduleDayProvider.GetScheduleDay(new DateOnly(2007, 1, 1), person), new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
+			var personRequest = new PersonRequest(person) { Request = offer };
+			PersonRequestRepository.Add(personRequest);
+			
+			var form = new ShiftTradeRequestForm { ShiftExchangeOfferId = Guid.Empty, Dates = new[] { new DateOnly(2017, 1, 1) }, PersonToId = person.Id.GetValueOrDefault() };
+			Target.Persist(form);
 
-			shiftTradeSetChecksum.AssertWasCalled(x => x.SetChecksum(shiftTradeRequest.Request));
+			((IShiftTradeRequest)PersonRequestRepository.LoadAll().Last().Request).ShiftTradeSwapDetails.First().ChecksumTo
+				.Should().Not.Be.EqualTo(-1);
 		}
 
-		private void mockPermissionValidatorPassed(bool result)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			shiftTradeRequestPermissionValidator.Stub(
-				x => x.IsSatisfied(new ShiftTradeRequest(new List<IShiftTradeSwapDetail>())))
-				.IgnoreArguments().Return(result);
+			system.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
+			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			system.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
+
+			var currentBusinessUnit = new SpecificBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			system.UseTestDouble(currentBusinessUnit).For<ICurrentBusinessUnit>();
+			var dataSource = new FakeCurrentDatasource("Test");
+			system.UseTestDouble(dataSource).For<ICurrentDataSource>();
+		}
+	}
+
+	public class FakeLicensedFunctionProvider : ILicensedFunctionsProvider
+	{
+		public IEnumerable<IApplicationFunction> LicensedFunctions(string tenantName)
+		{
+			var functions = new DefinedRaptorApplicationFunctionFactory();
+			return new[]
+			{
+				ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewSchedules),
+				ApplicationFunction.FindByPath(functions.ApplicationFunctions,
+					DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules),
+				ApplicationFunction.FindByPath(functions.ApplicationFunctions,
+					DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)
+			};
 		}
 	}
 }

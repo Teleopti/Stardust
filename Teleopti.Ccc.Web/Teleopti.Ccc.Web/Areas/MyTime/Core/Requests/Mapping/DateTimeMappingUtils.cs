@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		public static String ConvertUtcToLocalDateTimeString(DateTime dateTime, TimeZoneInfo timeZoneInfo)
 		{
-			return formatDateTimeToIso8601String (convertToUserTimeZone (dateTime, timeZoneInfo));
+			return convertToUserTimeZone (dateTime, timeZoneInfo).FormatDateTimeToIso8601String();
 		}
 
 		private static DateTime convertToUserTimeZone(DateTime dateTime, TimeZoneInfo timeZoneInfo)
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZoneInfo);
 		}
 
-		private static String formatDateTimeToIso8601String(DateTime dateTime)
+		public static String FormatDateTimeToIso8601String(this DateTime dateTime)
 		{
 			var dateTimeUnspecified = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
 			return dateTimeUnspecified.ToString("o");

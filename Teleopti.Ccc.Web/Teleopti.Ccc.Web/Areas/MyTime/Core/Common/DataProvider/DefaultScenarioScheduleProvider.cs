@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				date.ToDateOnlyPeriod(),
 				defaultScenario);
 
-			return dictionary.SchedulesForDay(date);
+			return persons.Select(p => dictionary[p].ScheduledDay(date));
 		}
 
 		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons, bool loadNotes = false)

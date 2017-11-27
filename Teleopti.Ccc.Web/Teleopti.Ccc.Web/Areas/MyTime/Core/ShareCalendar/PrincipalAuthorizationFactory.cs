@@ -9,6 +9,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
             return new PrincipalAuthorization(new givenTeleoptiPrincipal(principal));
         }
 
+		public IAuthorization FromClaimsOwner(IClaimsOwner claimsOwner)
+		{
+			return new ClaimsAuthorization(claimsOwner);
+		}
+
         private class givenTeleoptiPrincipal : ICurrentTeleoptiPrincipal
         {
             private readonly ITeleoptiPrincipal _principal;

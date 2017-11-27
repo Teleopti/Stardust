@@ -6,74 +6,47 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
+using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture]
-	public class RequestsViewModelMappingTest
+	[RequestsTest]
+	public class RequestsViewModelMappingTest : ISetup
 	{
-		private IUserTimeZone _userTimeZone;
-		private ILinkProvider _linkProvider;
-		private ILoggedOnUser _loggedOnUser;
-		private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
-		private IPerson _loggedOnPerson;
-		private IPersonNameProvider _personNameProvider;
-		private TimeZoneInfo _timeZone;
-		private IToggleManager _toggleManager;
-		private RequestsViewModelMapper target;
+		public RequestsViewModelMapper Target;
+		public FakeLoggedOnUser LoggedOnUser;
+		public FakeUserTimeZone UserTimeZone;
+		public MutableNow Now;
 
-		[SetUp]
-		public void Setup()
-		{
-			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
-
-			_linkProvider = MockRepository.GenerateMock<ILinkProvider>();
-			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-
-			_loggedOnPerson = PersonFactory.CreatePerson("LoggedOn", "Agent");
-			_loggedOnUser.Expect(l => l.CurrentUser()).Return(_loggedOnPerson).Repeat.Any();
-			_shiftTradeRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
-
-			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name,null)).IgnoreArguments().Return("LoggedOn Agent");
-
-			_toggleManager = new TrueToggleManager();
-			
-			target = new RequestsViewModelMapper(_userTimeZone,_linkProvider,_loggedOnUser,_shiftTradeRequestStatusChecker,_personNameProvider,_toggleManager);
-		}
-		
 		[Test]
 		public void ShouldMapLink()
 		{
-			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
-			request.SetId(Guid.NewGuid());
+			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())).WithId();
 
-			_linkProvider.Stub(x => x.RequestDetailLink(request.Id.Value)).Return("aLink");
-
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.Link.rel.Should().Be("self");
-			result.Link.href.Should().Be("aLink");
+			result.Link.href.Should().Be(request.Id.ToString());
 			result.Link.Methods.Should().Contain("GET");
 			result.Link.Methods.Should().Contain("DELETE");
 			result.Link.Methods.Should().Contain("PUT");
@@ -85,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = stubRequestLinkForShiftExchangeOffer(ShiftExchangeOfferStatus.Pending, false);
 
 			result.Link.rel.Should().Be("self");
-			result.Link.href.Should().Be("aLink");
+			result.Link.href.Should().Be(result.Id);
 			result.Link.Methods.Should().Contain("GET");
 			result.Link.Methods.Should().Contain("DELETE");
 			result.Link.Methods.Should().Contain("PUT");
@@ -118,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private static void assertLinkForShiftExchageOfferWhenReadOnly(RequestViewModel result)
 		{
 			result.Link.rel.Should().Be("self");
-			result.Link.href.Should().Be("aLink");
+			result.Link.href.Should().Be(result.Id);
 			result.Link.Methods.Should().Contain("GET");
 			result.Link.Methods.Should().Contain("DELETE");
 			result.Link.Methods.Should().Not.Contain("PUT");
@@ -127,24 +100,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private RequestViewModel stubRequestLinkForShiftExchangeOffer(ShiftExchangeOfferStatus status, bool isExpired)
 		{
 			var offer = createShiftExchangeOffer(status, isExpired);
-			var request = new PersonRequest(new Person(), offer);
-			request.SetId(Guid.NewGuid());
+			var request = new PersonRequest(new Person(), offer).WithId();
 
-			_linkProvider.Stub(x => x.RequestDetailLink(request.Id.Value)).Return("aLink");
-
-			var result = target.Map(request);
+			var result = Target.Map(request);
 			return result;
 		}
 
 		[Test]
 		public void ShouldNotMapLinksDeleteMethodIfStateApproved()
 		{
-			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
-			request.SetId(Guid.NewGuid());
+			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())).WithId();
 			request.Pending();
-			request.Approve(MockRepository.GenerateMock<IRequestApprovalService>(), MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
+			request.Approve(MockRepository.GenerateMock<IRequestApprovalService>(),
+				MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
 
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.Link.Methods.Should().Not.Contain("DELETE");
 		}
@@ -153,9 +123,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapPayload()
 		{
 			const string payLoadName = "this is the one";
-			var abs = new Absence { Description = new Description(payLoadName) };
+			var abs = new Absence {Description = new Description(payLoadName)};
 			var request = new PersonRequest(new Person(), new AbsenceRequest(abs, new DateTimePeriod(1900, 1, 1, 1900, 1, 2)));
-			var result = target.Map(request);
+			var result = Target.Map(request);
 			result.Payload.Should().Be.EqualTo(payLoadName);
 		}
 
@@ -163,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldNotMapPayload()
 		{
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
-			var result = target.Map(request);
+			var result = Target.Map(request);
 			result.Payload.Should().Be.Empty();
 		}
 
@@ -174,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			request.SetId(Guid.NewGuid());
 			request.Pending();
 			request.Deny(null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.Link.Methods.Should().Not.Contain("DELETE");
 		}
@@ -185,9 +155,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
 			request.SetId(Guid.NewGuid());
 			request.Pending();
-			request.Approve(MockRepository.GenerateMock<IRequestApprovalService>(), MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
+			request.Approve(MockRepository.GenerateMock<IRequestApprovalService>(),
+				MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
 
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.Link.Methods.Should().Not.Contain("PUT");
 		}
@@ -199,7 +170,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			request.SetId(Guid.NewGuid());
 			request.Pending();
 			request.Deny(null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.Link.Methods.Should().Not.Contain("PUT");
 		}
@@ -216,23 +187,26 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapCancelMethodIfToggleOn()
 		{
-			setupStateHolderProxy();
+			UserTimeZone.IsSweden();
+			
+			var dateOnlyPeriod = Now.ServerDate_DontUse().AddDays(1).ToDateOnlyPeriod();
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var person = new Person();
+			var request = createApprovedAbsenceRequest(absence, dateOnlyPeriod, person);
 
-			var toggleManager = new FakeToggleManager();
-
-			var result = setupForToggleCheckOnApprovedRequest(toggleManager);
+			var result = Target.Map(request);
 
 			result.Link.Methods.Should().Contain("CANCEL");
 		}
 
-		
+
 		[Test]
 		public void ShouldMapId()
 		{
-			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())) { Subject = "Test" };
+			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())) {Subject = "Test"};
 			request.SetId(Guid.NewGuid());
 
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.Id.Should().Be(request.Id.ToString());
 		}
@@ -240,8 +214,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapSubject()
 		{
-			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())) { Subject = "Test" };
-			var result = target.Map(request);
+			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())) {Subject = "Test"};
+			var result = Target.Map(request);
 
 			result.Subject.Should().Be("Test");
 		}
@@ -249,28 +223,34 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapDateWithoutSeconds()
 		{
+			UserTimeZone.IsSweden();
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5));
 			var request = new PersonRequest(new Person(), new TextRequest(period));
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
-			result.DateTimeFrom.Should().Be.EqualTo(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(period.StartDateTime.Truncate(TimeSpan.FromMinutes(1)), _timeZone));
-			result.DateTimeTo.Should().Be.EqualTo(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(period.EndDateTime.Truncate(TimeSpan.FromMinutes(1)), _timeZone));
+			result.DateTimeFrom.Should().Be
+				.EqualTo(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(
+					period.StartDateTime.Truncate(TimeSpan.FromMinutes(1)),
+					UserTimeZone.TimeZone()));
+			result.DateTimeTo.Should().Be
+				.EqualTo(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(period.EndDateTime.Truncate(TimeSpan.FromMinutes(1)),
+					UserTimeZone.TimeZone()));
 
 			DateTime.Parse(result.DateTimeFrom).Kind.Should().Be(DateTimeKind.Unspecified);
 			DateTime.Parse(result.DateTimeTo).Kind.Should().Be(DateTimeKind.Unspecified);
-
 		}
 
 		[Test]
 		public void ShouldMapDatesForShiftRequestForOneDate()
 		{
-			_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(_timeZone);
+			UserTimeZone.IsSweden();
+			LoggedOnUser.CurrentUser().PermissionInformation.SetDefaultTimeZone(UserTimeZone.TimeZone());
 
-			var startDate = new DateOnly(DateTime.UtcNow);
-			var request = createShiftTrade(_loggedOnPerson, PersonFactory.CreatePerson("Receiver"),
-										   startDate, startDate);
+			var startDate = DateOnly.Today;
+			var request = createShiftTrade(LoggedOnUser.CurrentUser(), PersonFactory.CreatePerson("Receiver"),
+				startDate, startDate);
 
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			new DateOnly(DateTime.Parse(result.DateTimeFrom)).Should().Be.EqualTo(startDate);
 			new DateOnly(DateTime.Parse(result.DateTimeTo)).Should().Be.EqualTo(startDate);
@@ -280,27 +260,26 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapDatesForShiftRequestForDatePeriod()
 		{
-			_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(_timeZone);
+			UserTimeZone.IsSweden();
+			LoggedOnUser.CurrentUser().PermissionInformation.SetDefaultTimeZone(UserTimeZone.TimeZone());
 
-			var startDate = new DateOnly(DateTime.UtcNow);
+			var startDate = DateOnly.Today;
 			var endDate = startDate.AddDays(5);
 
-			var request = createShiftTrade(_loggedOnPerson, PersonFactory.CreatePerson("Receiver"),
-										   startDate, endDate);
+			var request = createShiftTrade(LoggedOnUser.CurrentUser(), PersonFactory.CreatePerson("Receiver"),
+				startDate, endDate);
 
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			new DateOnly(DateTime.Parse(result.DateTimeFrom)).Should().Be.EqualTo(startDate);
 			new DateOnly(DateTime.Parse(result.DateTimeTo)).Should().Be.EqualTo(endDate);
-
-
 		}
 
 		[Test]
 		public void ShouldMapType()
 		{
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.Type.Should().Be(request.Request.RequestTypeDescription);
 		}
@@ -309,7 +288,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapRequestTypeEnum()
 		{
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.TypeEnum.Should().Be(RequestType.TextRequest);
 		}
@@ -317,10 +296,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapUpdatedOn()
 		{
-			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())) { UpdatedOn = DateTime.UtcNow };
-			var result = target.Map(request);
+			UserTimeZone.IsSweden();
+			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())) {UpdatedOn = DateTime.UtcNow};
+			var result = Target.Map(request);
 
-			result.UpdatedOnDateTime.Should().Be(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(request.UpdatedOn.Value, _timeZone));
+			result.UpdatedOnDateTime.Should()
+				.Be(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(request.UpdatedOn.Value, UserTimeZone.TimeZone()));
 
 		}
 
@@ -330,7 +311,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
 			request.TrySetMessage("Message");
 
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.Text.Should().Be.EqualTo("Message");
 		}
@@ -339,7 +320,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapStatus()
 		{
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.Status.Should().Be.EqualTo(request.StatusText);
 		}
@@ -347,14 +328,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapRawTimeInfo()
 		{
+			UserTimeZone.IsSweden();
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2000, 1, 2, 3, 0, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(start, end);
 			var request = new PersonRequest(new Person(), new TextRequest(period));
-			var startInCorrectTimezone = TimeZoneHelper.ConvertFromUtc(start, _userTimeZone.TimeZone());
-			var endInCorrectTimezone = TimeZoneHelper.ConvertFromUtc(end, _userTimeZone.TimeZone());
+			var startInCorrectTimezone = TimeZoneHelper.ConvertFromUtc(start, UserTimeZone.TimeZone());
+			var endInCorrectTimezone = TimeZoneHelper.ConvertFromUtc(end, UserTimeZone.TimeZone());
 
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.DateTimeFrom.Should().Be.EqualTo(startInCorrectTimezone.ToString("o"));
 			result.DateTimeTo.Should().Be.EqualTo(endInCorrectTimezone.ToString("o"));
@@ -368,11 +350,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var period = new DateTimePeriod(start, end);
 			var request = new PersonRequest(new Person(), new TextRequest(period));
 
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			var calendar = CultureInfo.CurrentCulture.Calendar;
-			var dateFrom = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.StartDateTime, _timeZone);
-			var dateTo = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.EndDateTime, _timeZone);
+			var dateFrom = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.StartDateTime, UserTimeZone.TimeZone());
+			var dateTo = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.EndDateTime, UserTimeZone.TimeZone());
 
 			result.DateFromYear.Should().Be.EqualTo(calendar.GetYear(dateFrom));
 			result.DateFromMonth.Should().Be.EqualTo(calendar.GetMonth(dateFrom));
@@ -389,7 +371,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(new Person(), new AbsenceRequest(new Absence(), new DateTimePeriod()));
 			request.Deny("RequestDenyReasonNoWorkflow", new PersonRequestAuthorizationCheckerForTest());
 
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonNoWorkflow);
 		}
@@ -399,9 +381,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var denyReason = "You must work at 2011-09-23.";
 			var request = new PersonRequest(new Person(), new AbsenceRequest(new Absence(), new DateTimePeriod()));
-			request.Deny( denyReason, new PersonRequestAuthorizationCheckerForTest());
+			request.Deny(denyReason, new PersonRequestAuthorizationCheckerForTest());
 
-			var result = target.Map(request);
+			var result = Target.Map(request);
 
 			result.DenyReason.Should().Be.EqualTo(denyReason);
 		}
@@ -410,9 +392,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldSetIsCreatedByUserToTrueIfTheSenderIsTheSamePersonAsTheLoggedOnUser()
 		{
 			var receiver = PersonFactory.CreatePerson("Receiver");
-			var personRequest = createShiftTrade(_loggedOnPerson, receiver);
+			var personRequest = createShiftTrade(LoggedOnUser.CurrentUser(), receiver);
 
-			var result = target.Map(personRequest);
+			var result = Target.Map(personRequest);
 
 			Assert.That(result.IsCreatedByUser, Is.True);
 		}
@@ -421,9 +403,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldSetIsCreatedByUserToFalseIfTheSenderIsTheSamePersonAsTheLoggedOnUser()
 		{
 			var sender = PersonFactory.CreatePerson("Sender");
-			var personRequest = createShiftTrade(sender, _loggedOnPerson);
+			var personRequest = createShiftTrade(sender, LoggedOnUser.CurrentUser());
 
-			var result = target.Map(personRequest);
+			var result = Target.Map(personRequest);
 
 			Assert.That(result.IsCreatedByUser, Is.False);
 		}
@@ -433,17 +415,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var sender = PersonFactory.CreatePerson("Sender");
 			var tradeDate = new DateOnly(2010, 1, 1);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var loggedOnPerson = LoggedOnUser.CurrentUser();
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
+			var personRequest = new PersonRequest(loggedOnPerson) {Subject = "Subject of request", Request = shiftTradeRequest};
 
-			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			_personNameProvider.Stub(x => x.BuildNameFromSetting(sender.Name,null)).IgnoreArguments().Return("Sender");
+			var result = Target.Map(personRequest);
 
-			target = new RequestsViewModelMapper(_userTimeZone,_linkProvider,_loggedOnUser,_shiftTradeRequestStatusChecker,_personNameProvider,new TrueToggleManager());
-			var result = target.Map(personRequest);
-
-			Assert.That(result.From, Is.EqualTo(sender.Name.FirstName));
+			Assert.That(result.From, Is.EqualTo(sender.Name.ToString(NameOrderOption.FirstNameLastName)));
 		}
 
 		[Test]
@@ -451,13 +430,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var sender = PersonFactory.CreatePerson("Sender");
 			var tradeDate = new DateOnly(2010, 1, 1);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var loggedOnPerson = LoggedOnUser.CurrentUser();
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
+			var personRequest = new PersonRequest(loggedOnPerson) {Subject = "Subject of request", Request = shiftTradeRequest};
 
-			var result = target.Map(personRequest);
+			var result = Target.Map(personRequest);
 
-			Assert.That(result.To, Is.EqualTo(_loggedOnPerson.Name.FirstName + " " + _loggedOnPerson.Name.LastName));
+			Assert.That(result.To, Is.EqualTo(loggedOnPerson.Name.ToString(NameOrderOption.FirstNameLastName)));
 		}
 
 		[Test]
@@ -465,7 +445,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var personRequest = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
 
-			var result = target.Map(personRequest);
+			var result = Target.Map(personRequest);
 
 			result.From.Should().Be.Empty();
 			result.To.Should().Be.Empty();
@@ -500,8 +480,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var shiftExchangeOffer = createShiftExchangeOffer(ShiftExchangeOfferStatus.Pending, true);
 
-			var personRequest = new PersonRequest(_loggedOnPerson, shiftExchangeOffer);
-			var result = target.Map(personRequest);
+			var personRequest = new PersonRequest(LoggedOnUser.CurrentUser(), shiftExchangeOffer);
+			var result = Target.Map(personRequest);
 
 			result.Status.Should().Contain(Resources.Expired);
 		}
@@ -509,6 +489,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapShiftExchangeOfferNextDayTrue()
 		{
+			UserTimeZone.IsSweden();
 			var period = new DateTimePeriod(2015, 1, 30, 8, 2015, 1, 31, 0);
 			var shiftExchangeOffer = createShiftExchangeOffer(period);
 
@@ -531,9 +512,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapExchangeOfferViewModelWhenRequestIsShiftTrade()
 		{
-			var personRequest = new PersonRequest(_loggedOnPerson, new ShiftTradeRequest(new List<IShiftTradeSwapDetail>()));
-			
-			var result = target.Map(personRequest);
+			var personRequest =
+				new PersonRequest(LoggedOnUser.CurrentUser(), new ShiftTradeRequest(new List<IShiftTradeSwapDetail>()));
+
+			var result = Target.Map(personRequest);
 
 			result.ExchangeOffer.IsOfferAvailable.Should().Be.True();
 		}
@@ -542,12 +524,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapShiftTradeStatusOkByMeWhenUserHasCreatedTheShiftTradeRequest()
 		{
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
-			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByMe);
-			str.Expect(c => c.PersonFrom).Return(_loggedOnPerson);
-			var personRequest = new PersonRequest(_loggedOnPerson, str);
+			str.Expect(c => c.GetShiftTradeStatus(null)).IgnoreArguments().Return(ShiftTradeStatus.OkByMe);
+			str.Expect(c => c.PersonFrom).Return(LoggedOnUser.CurrentUser());
+			var personRequest = new PersonRequest(LoggedOnUser.CurrentUser(), str);
 			personRequest.ForcePending();
 
-			var result = target.Map(personRequest);
+			var result = Target.Map(personRequest);
 			result.Status.Should().Contain(Resources.WaitingForOtherPart);
 		}
 
@@ -555,12 +537,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapShiftTradeStatusOkByMeWhenUserHasRecievedTheShiftTradeRequest()
 		{
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
-			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByMe);
-			str.Expect(c => c.PersonFrom).Return(new Person());
-			var personRequest = new PersonRequest(_loggedOnPerson, str);
+			str.Expect(c => c.GetShiftTradeStatus(null)).IgnoreArguments().Return(ShiftTradeStatus.OkByMe);
+			var person = new Person();
+			str.Expect(c => c.PersonFrom).Return(person);
+			var personRequest = new PersonRequest(person, str);
 			personRequest.ForcePending();
 
-			var result = target.Map(personRequest);
+			var result = Target.Map(personRequest);
 			result.Status.Should().Contain(Resources.WaitingForYourApproval);
 		}
 
@@ -568,11 +551,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapShiftTradeStatusOkByBothParts()
 		{
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
-			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByBothParts);
+			str.Expect(c => c.GetShiftTradeStatus(null)).IgnoreArguments().Return(ShiftTradeStatus.OkByBothParts);
 			var personRequest = new PersonRequest(new Person(), str);
 			personRequest.ForcePending();
 
-			var result = target.Map(personRequest);
+			var result = Target.Map(personRequest);
 			result.Status.Should().Contain(Resources.WaitingForSupervisorApproval);
 		}
 
@@ -582,21 +565,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
 			var personRequest = new PersonRequest(new Person(), str);
 
-			var result = target.Map(personRequest);
+			var result = Target.Map(personRequest);
 			result.Status.Should().Not.Contain(",");
 
-			str.AssertWasNotCalled(x => x.GetShiftTradeStatus(_shiftTradeRequestStatusChecker));
+			str.AssertWasNotCalled(x => x.GetShiftTradeStatus(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldMapShiftTradeStatusReferred()
 		{
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
-			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.Referred);
+			str.Expect(c => c.GetShiftTradeStatus(null)).IgnoreArguments().Return(ShiftTradeStatus.Referred);
 			var personRequest = new PersonRequest(new Person(), str);
 			personRequest.ForcePending();
 
-			var result = target.Map(personRequest);
+			var result = Target.Map(personRequest);
 			result.Status.Should().Contain(Resources.TheScheduleHasChanged);
 		}
 
@@ -605,12 +588,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			//AFAIK - this status is not in used. Cannot be deleted due to SDK thingys (?).
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
-			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.NotValid);
+			str.Expect(c => c.GetShiftTradeStatus(null)).IgnoreArguments().Return(ShiftTradeStatus.NotValid);
 			var personRequest = new PersonRequest(new Person(), str);
 			personRequest.ForcePending();
 
 			Assert.Throws<ArgumentException>(() =>
-					target.Map(personRequest));
+				Target.Map(personRequest));
 		}
 
 		[Test]
@@ -618,17 +601,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var sender = PersonFactory.CreatePerson();
 			var tradeDate = new DateOnly(2010, 1, 1);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, LoggedOnUser.CurrentUser(), tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
+			var personRequest =
+				new PersonRequest(LoggedOnUser.CurrentUser()) {Subject = "Subject of request", Request = shiftTradeRequest};
 
-			var result = target.Map(personRequest);
+			var result = Target.Map(personRequest);
 
 			Assert.That(personRequest.IsNew);
 			Assert.That(result.IsNew, Is.True);
 
 			shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.Referred, new PersonRequestAuthorizationCheckerForTest());
-			result = target.Map(personRequest);
+			result = Target.Map(personRequest);
 
 			Assert.That(personRequest.IsNew, Is.False);
 			Assert.That(result.IsNew, Is.False);
@@ -640,16 +624,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var sender = PersonFactory.CreatePerson();
 			var tradeDate = new DateOnly(2010, 1, 1);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
-			var result = target.Map(personRequest);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, LoggedOnUser.CurrentUser(), tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
+			var personRequest =
+				new PersonRequest(LoggedOnUser.CurrentUser()) {Subject = "Subject of request", Request = shiftTradeRequest};
+			var result = Target.Map(personRequest);
 
 			Assert.That(personRequest.IsNew);
 			Assert.That(result.IsPending, Is.False);
 
 			personRequest.ForcePending();
-			result = target.Map(personRequest);
+			result = Target.Map(personRequest);
 
 			Assert.That(personRequest.IsPending, Is.True);
 			Assert.That(result.IsPending, Is.True);
@@ -660,17 +645,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var sender = PersonFactory.CreatePerson();
 			var tradeDate = new DateOnly(2010, 1, 1);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
-			var result = target.Map(personRequest);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, LoggedOnUser.CurrentUser(), tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
+			var personRequest =
+				new PersonRequest(LoggedOnUser.CurrentUser()) {Subject = "Subject of request", Request = shiftTradeRequest};
+			var result = Target.Map(personRequest);
 
 			Assert.That(personRequest.IsApproved, Is.False);
 			Assert.That(result.IsApproved, Is.False);
 
 			personRequest.ForcePending();
 			personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
-			result = target.Map(personRequest);
+			result = Target.Map(personRequest);
 
 			Assert.That(personRequest.IsApproved, Is.True);
 			Assert.That(result.IsApproved, Is.True);
@@ -681,17 +667,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var sender = PersonFactory.CreatePerson();
 			var tradeDate = new DateOnly(2010, 1, 1);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
-			var result = target.Map(personRequest);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, LoggedOnUser.CurrentUser(), tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
+			var personRequest =
+				new PersonRequest(LoggedOnUser.CurrentUser()) {Subject = "Subject of request", Request = shiftTradeRequest};
+			var result = Target.Map(personRequest);
 
 			Assert.That(personRequest.IsDenied, Is.False);
 			Assert.That(result.IsApproved, Is.False);
 
 			personRequest.ForcePending();
 			personRequest.Deny("MyDenyReason", new PersonRequestAuthorizationCheckerForTest());
-			result = target.Map(personRequest);
+			result = Target.Map(personRequest);
 
 			Assert.That(personRequest.IsDenied, Is.True);
 			Assert.That(result.IsDenied, Is.True);
@@ -702,15 +689,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var sender = PersonFactory.CreatePerson();
 			var tradeDate = new DateOnly(2010, 1, 1);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
-			var result = target.Map(personRequest);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, LoggedOnUser.CurrentUser(), tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
+			var personRequest =
+				new PersonRequest(LoggedOnUser.CurrentUser()) {Subject = "Subject of request", Request = shiftTradeRequest};
+			var result = Target.Map(personRequest);
 
 			Assert.That(result.IsReferred, Is.False);
 
 			shiftTradeRequest.Refer(new PersonRequestAuthorizationCheckerForTest());
-			result = target.Map(personRequest);
+			result = Target.Map(personRequest);
 
 			Assert.That(result.IsReferred, Is.True);
 		}
@@ -721,7 +709,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var shiftTradeSwapDetails = new List<IShiftTradeSwapDetail>();
 			var shifTradeRequest = new ShiftTradeRequest(shiftTradeSwapDetails);
 			var personRequest = new PersonRequest(PersonFactory.CreatePerson(), shifTradeRequest);
-			var shiftTradeRequestModel = target.Map(personRequest);
+			var shiftTradeRequestModel = Target.Map(personRequest);
 
 			Assert.That(shiftTradeRequestModel.From, Is.Null.Or.Empty);
 			Assert.That(shiftTradeRequestModel.To, Is.Null.Or.Empty);
@@ -730,11 +718,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapMultiplicatorDefinitionSet()
 		{
-			var definitionSet =  MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("test", MultiplicatorType.Overtime).WithId();
+			var definitionSet = MultiplicatorDefinitionSetFactory
+				.CreateMultiplicatorDefinitionSet("test", MultiplicatorType.Overtime).WithId();
 			var overtimeRequest = new OvertimeRequest(definitionSet, new DateTimePeriod());
 			var personRequest = new PersonRequest(PersonFactory.CreatePerson(), overtimeRequest);
 
-			var overtimeRequestModel = target.Map(personRequest);
+			var overtimeRequestModel = Target.Map(personRequest);
 
 			Assert.AreEqual(overtimeRequestModel.MultiplicatorDefinitionSet, definitionSet.Id.ToString());
 		}
@@ -743,8 +732,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var tradeDate = new DateOnly(2010, 1, 1);
 			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(from, to, tradeDate, tradeDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			var personRequest = new PersonRequest(from) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
+			var personRequest = new PersonRequest(from) {Subject = "Subject of request", Request = shiftTradeRequest};
 			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
 			personRequest.SetId(Guid.Empty);
 			return personRequest;
@@ -753,8 +742,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private static IPersonRequest createShiftTrade(IPerson from, IPerson to, DateOnly fromDate, DateOnly toDate)
 		{
 			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(from, to, fromDate, toDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			var personRequest = new PersonRequest(from) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
+			var personRequest = new PersonRequest(from) {Subject = "Subject of request", Request = shiftTradeRequest};
 			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
 			personRequest.SetId(Guid.Empty);
 			return personRequest;
@@ -762,15 +751,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 		private RequestViewModel createRequestViewModelWithShiftExchangeOffer(ShiftExchangeOffer shiftExchangeOffer)
 		{
-			var personRequest = new PersonRequest(_loggedOnPerson, shiftExchangeOffer);
-			var result = target.Map(personRequest);
+			var personRequest = new PersonRequest(LoggedOnUser.CurrentUser(), shiftExchangeOffer);
+			var result = Target.Map(personRequest);
 			return result;
 
 		}
 
 		private ShiftExchangeOffer createShiftExchangeOffer(ShiftExchangeOfferStatus status, bool isExpired)
 		{
-			var currentShift = ScheduleDayFactory.Create(isExpired ? DateOnly.Today : DateOnly.Today.AddDays(1));
+			var currentShift = ScheduleDayFactory.Create(isExpired ? Now.ServerDate_DontUse().AddDays(-1) : Now.ServerDate_DontUse().AddDays(1));
 			var str = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), status);
 			return str;
 		}
@@ -779,9 +768,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var scheduleDayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift, period);
 			var periodStartDate = new DateOnly(period.StartDateTime);
-			var shiftExchagneCriteria = new ShiftExchangeCriteria(periodStartDate.AddDays(-1), scheduleDayFilterCriteria);
+			var shiftExchangeCriteria = new ShiftExchangeCriteria(periodStartDate.AddDays(-1), scheduleDayFilterCriteria);
 			var currentShift = ScheduleDayFactory.Create(periodStartDate.AddDays(-2));
-			return new ShiftExchangeOffer(currentShift, shiftExchagneCriteria, ShiftExchangeOfferStatus.Pending);
+			return new ShiftExchangeOffer(currentShift, shiftExchangeCriteria, ShiftExchangeOfferStatus.Pending);
 		}
 
 		private RequestViewModel getViewModelForWaitlistedRequest()
@@ -797,35 +786,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			workflowControlSet.Stub(x => x.WaitlistingIsEnabled(absenceRequest)).Return(true);
 			person.WorkflowControlSet = workflowControlSet;
 
-			request.Deny(null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>(), null, PersonRequestDenyOption.AutoDeny);
+			request.Deny(null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>(), null,
+				PersonRequestDenyOption.AutoDeny);
 
-			return target.Map(request);
+			return Target.Map(request);
 		}
-
-		private static void setupStateHolderProxy()
-		{
-			var stateMock = new FakeState();
-			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
-			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
-			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
-		}
-
-		private RequestViewModel setupForToggleCheckOnApprovedRequest(FakeToggleManager toggleManager)
-		{
-
-			var dateOnlyPeriod = DateOnly.Today.ToDateOnlyPeriod();
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var person = new Person();
-			var request = createApprovedAbsenceRequest(absence, dateOnlyPeriod, person);
-
-			target = new RequestsViewModelMapper(_userTimeZone,_linkProvider,_loggedOnUser,_shiftTradeRequestStatusChecker,_personNameProvider,toggleManager);
-
-			var result = target.Map(request);
-			return result;
-		}
-
-		private static PersonRequest createApprovedAbsenceRequest(IAbsence absence, DateOnlyPeriod dateOnlyPeriod, IPerson person)
+		
+		private static PersonRequest createApprovedAbsenceRequest(IAbsence absence, DateOnlyPeriod dateOnlyPeriod,
+			IPerson person)
 		{
 			var absenceRequest = new AbsenceRequest(absence,
 				dateOnlyPeriod.ToDateTimePeriod(TimeZoneInfoFactory.StockholmTimeZoneInfo()));
@@ -846,12 +814,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			var businessRules = new FakeNewBusinessRuleCollection();
-			businessRules.SetRuleResponse(new List<IBusinessRuleResponse> { new BusinessRuleResponse(typeof(BusinessRuleResponse), "warning", true, false, dateTimePeriod, person, new DateOnlyPeriod(2010, 1, 1, 2010, 1, 2), "test warning") });
+			businessRules.SetRuleResponse(new List<IBusinessRuleResponse>
+			{
+				new BusinessRuleResponse(typeof(BusinessRuleResponse), "warning", true, false, dateTimePeriod, person,
+					new DateOnlyPeriod(2010, 1, 1, 2010, 1, 2), "test warning")
+			});
 			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-			return new AbsenceRequestApprovalService(scenario, scheduleDictionary, businessRules, scheduleDayChangeCallback, globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(personAbsenceAccountRepository));
+			return new AbsenceRequestApprovalService(scenario, scheduleDictionary, businessRules, scheduleDayChangeCallback,
+				globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(personAbsenceAccountRepository));
 		}
 
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
+			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+		}
 	}
 }

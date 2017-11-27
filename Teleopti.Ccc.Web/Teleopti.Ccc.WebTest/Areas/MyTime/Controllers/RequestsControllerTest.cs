@@ -14,10 +14,12 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
@@ -28,14 +30,17 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
-	public class RequestsControllerTest
+	[RequestsTest]
+	public class RequestsControllerTest : ISetup
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public RequestsController Target;
+
 		public void ShouldReturnRequestsPartialView()
 		{
 			var target = new RequestsController(MockRepository.GenerateMock<IRequestsViewModelFactory>(), null, null, null, null,
@@ -46,7 +51,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ViewName.Should().Be.EqualTo("RequestsPartial");
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnViewModelForIndex()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
@@ -571,8 +575,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var requestsController = new RequestsController(modelFactory, null, null, null, null, permissionProvider, null, null,
 				null, null,
-				new CancelAbsenceRequestCommandProvider(cancelAbsenceRequestCommandHandler, fakePersonRequestRepository,
-					permissionProvider));
+				new CancelAbsenceRequestCommandProvider(cancelAbsenceRequestCommandHandler, fakePersonRequestRepository, permissionProvider, new FakeUserTimeZone()));
 
 			var result = requestsController.CancelRequest(personRequest.Id.GetValueOrDefault());
 			var data = (RequestCommandHandlingResult)result.Data;
@@ -586,6 +589,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<RequestsController>();
 		}
 	}
 }
