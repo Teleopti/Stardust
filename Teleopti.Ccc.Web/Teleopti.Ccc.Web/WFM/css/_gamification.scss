@@ -235,6 +235,86 @@
 			}
 		}
 	}
+
+	gamification-import {
+		.droparea-wrapper {
+			padding: $PADDING;
+
+			.droparea {
+				min-height: 65px;
+				margin: 0 5px;
+				padding: $PADDING;
+				background: rgba(0, 0, 0, .06);
+				border: 1px solid #ddd;
+				text-align: center;
+
+				.prompt, .fileinfo {
+					font-size: 1.4em;
+					padding: 8px 0;
+				}
+
+				.fileinfo {
+					font-weight: bold;
+				}
+			}
+		}
+
+		.import-job-table {
+			$HEADER_HEIGHT: 54px;
+			border-top: $SEPARATOR;
+			margin: 0 -5px;
+			padding-bottom: $PADDING;
+	
+			header {
+				box-sizing: border-box;
+				display: flex;
+				padding: 0 $PADDING;
+				height: $HEADER_HEIGHT + 1px;
+				line-height: 18px;
+				border-bottom: $SEPARATOR;
+				font-weight: bold;
+				color: $gray054;
+	
+				& > * {
+					padding: $PADDING 0;
+				}
+				
+			}
+
+			.job, .owner, .started, .status {
+				display: flex;
+				align-items: center;
+				flex: 1 1 300px;
+			}
+
+			import-job + import-job {
+				border-top: $SEPARATOR;
+			}
+
+			import-job:last-child {
+				border-bottom: $SEPARATOR;
+			}
+		}
+
+		import-job {
+			box-sizing: border-box;
+			padding: 0 $PADDING;
+			display: flex;
+			height: 48px + 1px;
+			
+			&:hover {
+				background-color: $gray026;
+			}
+
+			&.selected {
+				background-color: $gray012;
+
+				&:hover {
+					background-color: $gray026;
+				}
+			}
+		}
+	}
 }
 
 //Stars

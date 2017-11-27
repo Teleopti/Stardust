@@ -1,4 +1,5 @@
-(function (angular) { 'use strict';
+(function (angular) {
+	'use strict';
 	angular.module('wfm.gamification')
 		.service('GamificationDataService', [
 			'$q',
@@ -69,6 +70,18 @@
 				});
 			});
 		};
+
+		svc.fetchJobs = function () {
+			return $q(function (resolve, reject) {
+				resolve([
+					new Job(4, '4.csv', 'Teleopti Demo', '2017-11-27T07:07:27.007Z', true),
+					new Job(3, '3.csv', 'Teleopti Demo', '2017-11-26T07:07:27.007Z', false),
+					new Job(2, '2.csv', 'Teleopti Demo', '2017-11-25T07:07:27.007Z', false),
+					new Job(1, '1.csv', 'Teleopti Demo', '2017-11-24T07:07:27.007Z', false),
+					new Job(0, '0.csv', 'Teleopti Demo', '2017-11-23T07:07:27.007Z', false)
+				]);
+			});
+		}
 	}
 
 	function Site(id, name) {
@@ -85,5 +98,13 @@
 	function Setting(id, name) {
 		this.id = id;
 		this.name = name;
+	}
+
+	function Job(id, name, owner, startingTime, status) {
+		this.id = id;
+		this.name = name;
+		this.owner = owner;
+		this.startingTime = startingTime;
+		this.status = status;
 	}
 })(angular);

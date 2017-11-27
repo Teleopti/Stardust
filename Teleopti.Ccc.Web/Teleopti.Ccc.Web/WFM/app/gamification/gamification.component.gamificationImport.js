@@ -1,8 +1,9 @@
-(function (angular) { 'use strict';
+(function (angular) {
+	'use strict';
 	angular.module('wfm.gamification')
 		.component('gamificationImport', {
 			templateUrl: 'app/gamification/html/g.component.gamificationImport.tpl.html',
-			controller: ['GamificationDataService',GamificationImportController]
+			controller: ['GamificationDataService', GamificationImportController]
 		});
 
 	function GamificationImportController(dataService) {

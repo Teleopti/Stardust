@@ -1,4 +1,36 @@
 <div>
-	<button id="downloadTmpl"></button>
-	<import-job ng-repeat="job in $ctrl.jobs" name="job.name"></import-job>
+
+	<div class="droparea-wrapper">
+		<div class="droparea">
+			<div ngf-drop ngf-select ngf-multiple="false" ngf-keep="false" ngf-allow-dir="false" ngf-accept="'.xls,.xlsx'" ng-model="$ctrl.file"
+			 ng-model-rejected="$ctrl.rejFiles">
+				<span class="prompt">{{ 'DragAndDropExcelFilesHereOrClickToUpload' | translate }}</span>
+				<div ng-show="$ctrl.file" class="fileinfo">
+					{{$ctrl.file.name}} - {{ $ctrl.file.size }}
+					<br />
+					<span ng-if="$ctrl.file.size > $ctrl.fileSizeLimit" class="text-warning">
+						<i class="mdi mdi-alert-octagon"></i>
+						{{ 'ExceedsMaximumUploadFileSize'|translate }} ({{ $ctrl.fileSizeLimit }})</span>
+				</div>
+			</div>
+			<div>
+				<button class="wfm-btn wfm-btn-primary">{{'UploadAndStart'|translate}}</button>
+			</div>
+			<div>
+				<button id="downloadTmpl" class="wfm-btn wfm-btn-invis-default">{{'DownloadTemplate'|translate}}</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="import-job-table">
+		<header>
+			<div class="job">{{'Job'|translate}}</div>
+			<div class="owner">{{'Owner'|translate}}</div>
+			<div class="started">{{'TimeStarted'|translate}}</div>
+			<div class="status">{{'Status'|translate}}</div>
+		</header>
+		<import-job ng-repeat="job in $ctrl.jobs" job-id="job.id" owner="job.owner" starting-time="job.startingTime" status="job.status"
+		 start name="job.name"></import-job>
+	</div>
+
 </div>

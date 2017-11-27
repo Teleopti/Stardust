@@ -21,6 +21,7 @@ describe('<gamification-import>', function () {
 			$material = $injector.get('$material');
 			$document = $injector.get('$document');
 			$timeout = $injector.get('$timeout');
+
 		});
 	});
 
@@ -57,9 +58,9 @@ describe('<gamification-import>', function () {
 		var cmp = setupComponent();
 		var list = cmp.find('import-job');
 		expect(list.length).toBe(3);
-		expect(list[0].querySelector('.name').innerText).toBe('Job 0');
-		expect(list[1].querySelector('.name').innerText).toBe('Job 1');
-		expect(list[2].querySelector('.name').innerText).toBe('Job 2');
+		expect(list[0].querySelector('.job').innerText).toBe('Job 0');
+		expect(list[1].querySelector('.job').innerText).toBe('Job 1');
+		expect(list[2].querySelector('.job').innerText).toBe('Job 2');
 	});
 
 	function setupComponent(attrs, scope) {

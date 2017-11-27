@@ -1,3 +1,17 @@
-<div>
-	<div class="name">{{$ctrl.name}}</div>
+<div class="job">
+	<span>{{$ctrl.name}}</span>
+</div>
+<div class="owner">
+	<span>{{$ctrl.owner}}</span>
+</div>
+<div class="started">
+	<span>{{$ctrl.startingTime}}</span>
+</div>
+<div class="status">
+	<div ng-if="$ctrl.status">
+		<span>In Progress</span>
+	</div>
+	<div ng-if="!$ctrl.status">
+		<a href="">Errors{{$ctrl.jobId}}</a>
+	</div>
 </div>
