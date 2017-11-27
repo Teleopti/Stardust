@@ -548,7 +548,7 @@
     <Compile Include="Areas\Requests\Controller\SiteWithOpenHourController.cs" />
     <Compile Include="Areas\People\Controllers\ApplySmartPropertyModel.cs" />
     <Compile Include="Areas\People\Controllers\ImportAgentController.cs" />
-    <Compile Include="Areas\People\Core\IMultipartHttpContentExtractor.cs" />
+    <Compile Include="Areas\Global\Core\IMultipartHttpContentExtractor.cs" />
     <Compile Include="Areas\People\Core\IoC\PeopleAreaModule.cs" />
     <Compile Include="Areas\People\Core\Models\InputModel.cs" />
     <Compile Include="Areas\People\Core\Models\PeopleShiftBagCommandInput.cs" />
@@ -558,7 +558,7 @@
     <Compile Include="Areas\People\Core\Models\SkillDataModel.cs" />
     <Compile Include="Areas\People\Core\Models\SkillUpdateCommandInputModel.cs" />
     <Compile Include="Areas\People\Controllers\WorkflowControlSetModel.cs" />
-    <Compile Include="Areas\People\Core\MultipartHttpContentExtractor.cs" />
+    <Compile Include="Areas\Global\Core\MultipartHttpContentExtractor.cs" />
     <Compile Include="Areas\Reporting\Core\ServerPathProvider.cs" />
     <Compile Include="Areas\Reporting\Core\IPathProvider.cs" />
     <Compile Include="Areas\Reporting\Core\CommonReportsFactory.cs" />

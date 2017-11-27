@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core
+namespace Teleopti.Ccc.Web.Areas.Global.Core
 {
 	public class MultipartHttpContentExtractor : IMultipartHttpContentExtractor
 	{

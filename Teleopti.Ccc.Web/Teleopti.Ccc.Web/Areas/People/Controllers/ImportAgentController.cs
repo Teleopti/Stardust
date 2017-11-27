@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
-using Teleopti.Ccc.Web.Areas.People.Core;
 using System.Web.Http.Results;
 using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers

@@ -4,9 +4,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.People.Core;
+using Teleopti.Ccc.Web.Areas.Global.Core;
 
-namespace Teleopti.Ccc.WebTest.Areas.People
+namespace Teleopti.Ccc.WebTest.Areas.Global
 {
 	[TestFixture]
 	public class MultipartHttpContentExtractorTest
