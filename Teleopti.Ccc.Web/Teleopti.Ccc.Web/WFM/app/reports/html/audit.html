@@ -29,11 +29,29 @@
 					<div class="con-flex">
 						<div class="form-input-wrap">
 							<label>{{'ScheduleDateColon'|translate}}</label></br>
-							<date-range-picker ng-model="vm.dateModifyRange" ng-change="vm.getOrgData()" template-type="'popup'" custom-validators=""></date-range-picker>
+							<div tabindex=0 class="context-menu card-context" ng-click="toggleSchedule =!toggleSchedule">
+								<i class="mdi mdi-calendar"></i>
+							</div>
+							<span ng-if="vm.dateModifyRange.startDate">From: {{vm.dateModifyRange.startDate | amDateFormat:"YYYY/MM/DD"}}</span>
+							<span ng-if="vm.dateModifyRange.endDate"> To: {{vm.dateModifyRange.endDate | amDateFormat:"YYYY/MM/DD"}}</span>
+							<span ng-if="!vm.dateModifyRange.endDate && !vm.dateModifyRange.startDate" class="text-warning"> No selected date</span>
+
+							<wfm-popup show="toggleSchedule" class="datepicker-popup">
+							    <wfm-calendar-picker ng-model="vm.dateModifyRange" ng-change="vm.getOrgData()"></wfm-calendar-picker>
+							</wfm-popup>
 						</div>
 						<div class="form-input-wrap">
 							<label>{{'ChangeDateColon'|translate}}</label></br>
-							<date-range-picker ng-model="vm.dateChangeRange" template-type="'popup'" custom-validators=""></date-range-picker>
+							<div tabindex=0 class="context-menu card-context" ng-click="toggleChange =!toggleChange">
+								<i class="mdi mdi-calendar"></i>
+							</div>
+							<span ng-if="vm.dateChangeRange.startDate">From: {{vm.dateChangeRange.startDate | amDateFormat:"YYYY/MM/DD"}}</span>
+							<span ng-if="vm.dateChangeRange.endDate"> To: {{vm.dateChangeRange.endDate | amDateFormat:"YYYY/MM/DD"}}</span>
+							<span ng-if="!vm.dateChangeRange.endDate && !vm.dateChangeRange.startDate" class="text-warning"> No selected date</span>
+
+							<wfm-popup show="toggleChange" class="datepicker-popup">
+							    <wfm-calendar-picker ng-model="vm.dateChangeRange"></wfm-calendar-picker>
+							</wfm-popup>
 						</div>
 						<div class="form-input-wrap" ng-class="{'non-pointer': vm.orgData.Children.length<1}">
 							<label>{{'OrganizationHierarchy'|translate}}:</label></br>
