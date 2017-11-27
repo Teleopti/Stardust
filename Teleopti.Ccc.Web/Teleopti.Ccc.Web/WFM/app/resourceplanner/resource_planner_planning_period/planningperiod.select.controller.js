@@ -22,7 +22,6 @@
         vm.modifyLastPpModal = false;
         vm.confirmDeletePpModal = false;
         vm.selectedIsValid = false;
-        vm.selectedIsValid = false;
         vm.textForDeletePp = '';
         vm.textForChangeThisPpMeg = '';
         vm.textForCreatePpMeg = '';
@@ -62,10 +61,7 @@
             var suggestionsForFirstPp = planningPeriodServiceNew.getPlanningPeriodSuggestions({ planningGroupId: planningGroupId });
             return suggestionsForFirstPp.$promise.then(function (data) {
                 vm.suggestions = data;
-                if (data.length > 0) {
-                    setSelectedDate(vm.suggestions[0]);
-                }
-                return vm.suggestions;
+                return setSelectedDate(vm.suggestions[0]);
             });
         }
 
@@ -77,13 +73,16 @@
         }
 
         function setSelectedDate(s) {
+            if (!s) {
+                return;
+            }
             vm.selectedSuggestion = {
                 startDate: moment(s.StartDate).toDate(),
                 endDate: moment(s.EndDate).toDate()
             };
             vm.intervalRange = s.Number;
             vm.intervalType = s.PeriodType || s.Type;
-            return vm.selectedSuggestion;
+            return vm.selectedIsValid = true;
         }
 
         function resetSelectedSuggestion() {
@@ -168,7 +167,7 @@
             var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({ planningGroupId: planningGroupId, startDate: startDate, endDate: newEndDate });
             return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
                 vm.planningPeriods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
-                vm.selectedIsValid = undefined;
+                vm.selectedIsValid = false;
                 return getLastPp();
             });
         }
@@ -181,7 +180,7 @@
             var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({ planningGroupId: planningGroupId, startDate: null, endDate: newEndDate });
             return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
                 vm.planningPeriods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
-                vm.selectedIsValid = undefined;
+                vm.selectedIsValid = false;
                 return getLastPp();
             });
         }
