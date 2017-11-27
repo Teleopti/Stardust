@@ -1,7 +1,7 @@
 #Searching for the words fit & fdescribe in all spec.js files under web project. 
 #To be sure that all tests is beeing run and no one accidentally commited it
 
-$fit = gci "$env:WorkingDirectory\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM\app\*.spec.js" -recurse | Select-String -pattern "\bfit\b" 
+$fit = gci "$env:WorkingDirectory\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM\app\*.spec.js" -recurse | Select-String -pattern "\bfit\s*\(" 
 $describe = gci "$env:WorkingDirectory\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM\app\*.spec.js" -recurse | Select-String -pattern "\bfdescribe\b" 
 
 if ($fit.count -gt "0") { 
