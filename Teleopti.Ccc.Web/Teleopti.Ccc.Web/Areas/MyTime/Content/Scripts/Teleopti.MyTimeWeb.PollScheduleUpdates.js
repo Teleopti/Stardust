@@ -11,22 +11,17 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	var ajax = null;
 	var currentListener;
 
-	function _setListener(name, period, callback) {
-		currentListener = { name: name, period: period, callback: callback };
+	function _setListener(name, callback) {
+		currentListener = { name: name, callback: callback };
 	};
 
-	
 
-	function _checkIfScheduleHasUpdates(listenerPeriod, notifyPeriod) {
+	function _checkIfScheduleHasUpdates() {
 		var deferred = $.Deferred();
 		ajax.Ajax({
 			url: 'Asm/CheckIfScheduleHasUpdates',
 			dataType: 'json',
 			type: 'POST',
-			data: {
-				listenerPeriod: !!listenerPeriod ? _getFormatedPeriod(listenerPeriod) : undefined,
-				notifyPeriod: _getFormatedPeriod(notifyPeriod)
-			},
 			success: function (data) {
 				deferred.resolve(data);
 			},
@@ -37,15 +32,8 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 		return deferred.promise();
 	}
 
-	function _getFormatedPeriod(period) {
-		return {
-			StartDateTime: moment(period.startDate).format('YYYY-MM-DD'),
-			EndDateTime: moment(period.endDate).format('YYYY-MM-DD')
-		};
-	}
-
-	function _showNotice(period) {
-		var notifyText = _getNotifyText(period);
+	function _showNotice() {
+		var notifyText = _getNotifyText();
 		if (!notificerDisplayTime) {
 			Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function (displayTime) {
 				notificerDisplayTime = displayTime;
@@ -57,15 +45,6 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 		Teleopti.MyTimeWeb.Notifier.Notify(settings, notifyText);
 	}
 
-	function _getNotifyText(period) {
-		var startDate = period.startDate;
-		var endDate = period.endDate;
-		var changedDateRange = new moment(startDate).format('L');
-		if (startDate !== endDate) {
-			changedDateRange = changedDateRange + ' - ' + new moment(endDate).format('L');
-		}
-		return settings.notifyText.format(changedDateRange);
-	}
 
 	function _subscribeToMessageBroker() {
 		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
@@ -87,18 +66,9 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 		var notifyPeriodEndDate = moment(moment(settings.notifyPeriod.endDate).format('YYYY-MM-DD')).toDate();
 		if (notificationStartDate <= notifyPeriodEndDate
 			&& notificationEndDate >= notifyPeriodStartDate) {
-			_resetPoller();
 			_clearInterval();
 			_setUpInterval();
 		}
-	}
-
-	function _resetPoller() {
-		ajax.Ajax({
-			url: 'Asm/ResetPolling',
-			dataType: 'json',
-			type: 'GET'
-		});
 	}
 
 	function _setUpInterval() {
@@ -112,22 +82,18 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	}
 
 	function _handleListenersCallback() {
-		var listenerPeriod
-		if (currentListener) {
-			listenerPeriod = $.isFunction(currentListener.period) ? currentListener.period() : currentListener.period;
-		}
-		_checkIfScheduleHasUpdates(listenerPeriod, settings.notifyPeriod).done(function (data) {
-			if (!!data.Notify && data.Notify.length) {
-				$.each(data.Notify, function (i, period) {
-					_showNotice(period);
-				});
-			}
-			if (!!data.Listener && !!data.Listener.length) {
-				currentListener && currentListener.callback && currentListener.callback(data.Listener);
+		_checkIfScheduleHasUpdates().done(function (data) {
+			if (!!data && !!data.HasUpdates) {
+				_showNotice();
+				currentListener && currentListener.callback && currentListener.callback(settings.notifyPeriod);
 			}
 		});
 	}
-	
+
+	function _getNotifyText() {
+		return settings.notifyText;
+	}
+
 	function _init(options) {
 		ajax = new Teleopti.MyTimeWeb.Ajax();
 		settings = $.extend({

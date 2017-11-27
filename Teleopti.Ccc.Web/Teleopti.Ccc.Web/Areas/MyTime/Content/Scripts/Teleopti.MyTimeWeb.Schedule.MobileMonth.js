@@ -7,17 +7,17 @@
 /// <reference path="~/Content/moment/moment.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel.js" />
 
-if (typeof(Teleopti) === "undefined") {
+if (typeof (Teleopti) === "undefined") {
 	Teleopti = {};
 }
-if (typeof(Teleopti.MyTimeWeb) === "undefined") {
+if (typeof (Teleopti.MyTimeWeb) === "undefined") {
 	Teleopti.MyTimeWeb = {};
 }
-if (typeof(Teleopti.MyTimeWeb.Schedule) === "undefined") {
+if (typeof (Teleopti.MyTimeWeb.Schedule) === "undefined") {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
+Teleopti.MyTimeWeb.Schedule.MobileMonth = (function ($) {
 	var vm,
 		completelyLoaded,
 		subscribed = false,
@@ -35,6 +35,19 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 			page: "Teleopti.MyTimeWeb.Schedule"
 		});
 		subscribed = true;
+	}
+
+	function registPollListener() {
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
+			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("MonthScheduleMobile",
+				function (period) {
+					var startDate = moment(moment(period.StartDate).format('YYYY-MM-DD')).toDate();
+					var endDate = moment(moment(period.EndDate).format('YYYY-MM-DD')).toDate();
+					if (vm.isWithinSelected(startDate, endDate)) {
+						fetchData(vm.selectedDate().format('YYYY/MM/DD'));
+					}
+				});
+		}
 	}
 
 	function registerSwipeEvent() {
@@ -70,15 +83,17 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 		ko.applyBindings(vm, $("#page")[0]);
 	}
 
+
+
 	return {
-		Init: function() {
+		Init: function () {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
 				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack("Schedule/MobileMonth",
 					Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit,
 					Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialDispose);
 			}
 		},
-		PartialInit: function(readyForInteractionCallback, completelyLoadedCallback, ajaxobj) {
+		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxobj) {
 			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
 			dataService = new Teleopti.MyTimeWeb.Schedule.MobileMonth.DataService(ajax);
 			completelyLoaded = completelyLoadedCallback;
@@ -87,34 +102,28 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 
 			registerSwipeEvent();
 			readyForInteractionCallback && readyForInteractionCallback();
+			registPollListener();
 		},
-		ReloadScheduleListener: function(notification) {
-			var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
-			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
-			var selectedDate = vm.selectedDate().toDate();
-
-			var weekViewModels = vm.weekViewModels();
-			var periodStartDateMoment = moment(weekViewModels[0].dayViewModels()[0].date);
-			var periodEndDateMoment = moment(weekViewModels[weekViewModels.length -1].dayViewModels()[6].date);
-
-			if (periodStartDateMoment <= moment(messageStartDate) && moment(messageEndDate) <= periodEndDateMoment) {
+		ReloadScheduleListener: function (notification) {
+			if (vm.isWithinSelected(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate),
+				Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate))) {
 				fetchData(vm.selectedDate().format('YYYY/MM/DD'));
 			}
 		},
-		PartialDispose: function() {
+		PartialDispose: function () {
 			cleanBinding();
 		},
-		Vm: function() {
+		Vm: function () {
 			return vm;
 		},
-		ReloadSchedule: function(date) {
+		ReloadSchedule: function (date) {
 			var requestDate = date || vm.selectedDate();
 			dataService.fetchData(requestDate.format('YYYY/MM/DD'),
 				function (data) {
 					vm.readData(data);
 				});
 		},
-		Ajax: function() {
+		Ajax: function () {
 			return ajax;
 		}
 	};

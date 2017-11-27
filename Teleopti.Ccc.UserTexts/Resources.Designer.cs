@@ -38234,6 +38234,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your schedule  has changed!.
+        /// </summary>
+        public static string YourScheduleHasChanged {
+            get {
+                return ResourceManager.GetString("YourScheduleHasChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your schedule for {0} has changed!.
         /// </summary>
         public static string YourScheduleTheDATEHasChanged {

@@ -18,7 +18,7 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === "undefined") {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) { 
+Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 	var vm;
 	var completelyLoaded;
 	var currentPage = "Teleopti.MyTimeWeb.Schedule";
@@ -43,6 +43,19 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			page: currentPage
 		});
 		subscribed = true;
+	}
+
+	function registPollListener() {
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
+			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("DayScheduleMobile",
+				function (period) {
+					var startDate = moment(moment(period.StartDate).format('YYYY-MM-DD')).toDate();
+					var endDate = moment(moment(period.EndDate).format('YYYY-MM-DD')).toDate();
+					if (vm.isWithinSelected(startDate, endDate)) {
+						fetchData(vm.selectedDate().format('YYYY/MM/DD'));
+					}
+				});
+		}
 	}
 
 	function registerSwipeEvent() {
@@ -99,16 +112,16 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 	}
 
 	function setUpLogoClickFn(mywindow) {
-		if(Teleopti.MyTimeWeb.Portal.IsMobile(mywindow) && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446")){
+		if (Teleopti.MyTimeWeb.Portal.IsMobile(mywindow) && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446")) {
 			var brand = $('a.navbar-brand');
-			if(brand.data('events') && brand.data('events')['click'])
+			if (brand.data('events') && brand.data('events')['click'])
 				brand.unbind('click');
 
 			brand.attr({
-					href:'#Schedule/MobileDay'
-				})
-				.click(function(){
-					if(!vm.selectedDate().isSame(vm.currentUserDate().format('YYYY-MM-DD'), 'day'))
+				href: '#Schedule/MobileDay'
+			})
+				.click(function () {
+					if (!vm.selectedDate().isSame(vm.currentUserDate().format('YYYY-MM-DD'), 'day'))
 						vm.today();
 				});
 
@@ -135,6 +148,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			mywindow = mywindow || window;
 			setUpLogoClickFn(mywindow);
 			readyForInteractionCallback();
+			registPollListener();
 		},
 		ReloadScheduleListener: function (notification) {
 			if (notification.DomainType === "IScheduleChangedInDefaultScenario") {
@@ -164,6 +178,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 					vm.readData(data);
 				});
 		},
-		Ajax: function() { return ajax; }
+		Ajax: function () { return ajax; }
 	};
 })(jQuery);

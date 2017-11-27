@@ -189,18 +189,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
 			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("MyTimeAsm",
-				function () {
-					var listeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours', -1).toDate();
-					var listeningEndDate = moment(new Date(listeningStartDate.getTime())).add('days', 1).toDate();
-					return { startDate: listeningStartDate, endDate: listeningEndDate }
-				},
-				function (updatedPeriods) {
-					for (var i = 0; i < updatedPeriods.length; i++) {
-						var period = updatedPeriods[i];
-						if (_validSchedulePeriod(period)) {
-							vm.loadViewModel();
-							break;
-						}
+				function (period) {
+					if (_validSchedulePeriod(period)) {
+						vm.loadViewModel();
 					}
 				});
 		}

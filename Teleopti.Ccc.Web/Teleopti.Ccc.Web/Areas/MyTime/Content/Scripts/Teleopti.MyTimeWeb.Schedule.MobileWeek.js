@@ -65,14 +65,11 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 	function registPollListener() {
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
 			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("WeekScheduleMobile",
-				function () { return { startDate: vm.minDate().toDate(), endDate: vm.maxDate().toDate() } },
-				function (updatedPeriods) {
-					for (var i = 0; i < updatedPeriods.length; i++) {
-						var period = updatedPeriods[i];
-						if (vm.isWithinSelected(moment(period.StartDate).toDate(), moment(period.EndDate).toDate())) {
-							fetchData();
-							break;
-						}
+				function (period) {
+					var startDate = moment(moment(period.StartDate).format('YYYY-MM-DD')).toDate();
+					var endDate = moment(moment(period.EndDate).format('YYYY-MM-DD')).toDate();
+					if (vm.isWithinSelected(startDate, endDate)) {
+						fetchData();
 					}
 				});
 		}

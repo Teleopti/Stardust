@@ -77,7 +77,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.isLoading = ko.observable(false);
 	self.mobileMonthUrl = "#Schedule/MobileMonth/" + Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 
-	self.navigateToMonthView = function(){
+	self.navigateToMonthView = function () {
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileMonth");
 	};
 
@@ -167,6 +167,12 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.isLoading(false);
 	};
 
+
+	self.isWithinSelected = function (startDate, endDate) {
+		var selectedDate = self.selectedDate().toDate();
+		return startDate <= selectedDate && endDate >= selectedDate;
+	}
+
 	function setPostShiftTradeMenuVisibility(data) {
 		if (!data.RequestPermission) {
 			return;
@@ -228,10 +234,10 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913"));
 
 
-		if(Teleopti.MyTimeWeb.Common.IsToggleEnabled("Staffing_Info_Configuration_44687")){
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("Staffing_Info_Configuration_44687")) {
 			self.absenceProbabilityEnabled(self.staffingProbabilityOnMobileEnabled() && data.CheckStaffingByIntraday && data.AbsenceProbabilityEnabled);
 			self.overtimeProbabilityEnabled(data.OvertimeProbabilityEnabled);
-		}else{
+		} else {
 			self.overtimeProbabilityEnabled(true);
 			self.absenceProbabilityEnabled(self.staffingProbabilityOnMobileEnabled() && data.CheckStaffingByIntraday);
 		}
@@ -414,7 +420,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	};
 
 
-	self.showAddOvertimeRequestForm = function(){
+	self.showAddOvertimeRequestForm = function () {
 		var requestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(parent.Ajax(), addRequestCallBack, self, weekStart);
 
 		setupRequestViewModel(requestViewModel);
