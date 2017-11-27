@@ -32,9 +32,9 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 
 		[Test]
-		public void JobQueueListShouldNotCrash()
+		public void JobHistoryFilteredShouldNotCrash()
 		{
-			Target.JobQueueList(1, 10);
+			Target.JobHistoryFiltered(1,2);
 		}
 
 
@@ -51,12 +51,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			Target.DeleteQueuedJobs(new[] {Guid.NewGuid()});
 		}
 		
-
-		[Test]
-		public void JobHistoryListShouldNotCrash()
-		{
-			Target.JobHistoryList(1, 10);
-		}
 
 		[Test]
 		public void JobHistoryListByNodeShouldNotCrash()
@@ -83,9 +77,9 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		}
 
 		[Test]
-		public void GetFailedJobsShouldNotCrash()
+		public void GetFailedJobsFilteredShouldNotCrash()
 		{
-			Target.FailedJobHistoryList(1, 10);
+			Target.FailedJobHistoryFiltered(1, 10);
 		}
 	}
 }
