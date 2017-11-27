@@ -4,13 +4,13 @@
 
 <h1>Example for wrapping date picker into pop up</h1>
 
-<button class="wfm-btn wfm-btn-default" ng-click="toggle =!toggle" style="min-width:246px; text-align:left">
+<button class="wfm-btn wfm-btn-default" ng-click="toggle =!toggle">
     <i class="mdi mdi-calendar"></i>
     <span ng-if="vm.data5.startDate">From: {{vm.data5.startDate | amDateFormat:"YYYY/MM/DD"}}</span>
-    <span ng-if="vm.data5.endDate">To: {{vm.data5.endDate | amDateFormat:"YYYY/MM/DD"}}</span>
+    <span ng-if="vm.data5.endDate"> To: {{vm.data5.endDate | amDateFormat:"YYYY/MM/DD"}}</span>
     <span ng-if="!vm.data5.endDate && !vm.data5.startDate" class="text-warning"> No selected date</span>
 </button>
-<wfm-popup show="toggle">
+<wfm-popup show="toggle" class="datepicker-popup">
     <wfm-calendar-picker ng-model="vm.data5"></wfm-calendar-picker>
 </wfm-popup>
 
@@ -145,5 +145,8 @@
     .orange {
         border-color: #FFC285
         /* $orange-400; */
+    }
+    .datepicker-popup .wfm-popup-wrap{
+      transition:none!important;
     }
 </style>
