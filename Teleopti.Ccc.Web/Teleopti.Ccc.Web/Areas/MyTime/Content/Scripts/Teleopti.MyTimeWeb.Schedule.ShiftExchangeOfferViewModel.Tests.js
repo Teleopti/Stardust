@@ -3,6 +3,12 @@ $(document).ready(function() {
 
 	module("Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel");
 
+	var resetLocale = function () {
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false
+		});
+	};
+
 	test("should post correct data for wish shift type", function() {
 		var ajaxPostData;
 
@@ -42,7 +48,6 @@ $(document).ready(function() {
 
 		equal(shiftExchangeOfferViewModel.IsTimeLegal(), true);
 
-
-
+		resetLocale();
 	});
 });

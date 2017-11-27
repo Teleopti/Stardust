@@ -5,6 +5,12 @@
 $(document).ready(function() {
 	module("Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel");
 
+	var resetLocale = function () {
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false
+		});
+	};
+
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	function fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(formattedDate){
@@ -72,6 +78,8 @@ $(document).ready(function() {
 		viewModel.readData(rawData);
 
 		equal(viewModel.displayDate(), moment(rawData.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
+
+		resetLocale();
 	});
 
 	test("should set summary color", function () {
