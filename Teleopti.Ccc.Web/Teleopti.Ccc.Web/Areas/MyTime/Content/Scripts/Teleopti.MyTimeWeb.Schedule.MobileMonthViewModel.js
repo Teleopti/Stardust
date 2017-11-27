@@ -44,6 +44,15 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 		self.selectedDate(date);
 	};
 
+	self.isWithinSelected = function (startDate, endDate) {
+		var selectedDate = self.selectedDate().toDate();
+		var weekViewModels = self.weekViewModels();
+		var periodStartDateMoment = moment(weekViewModels[0].dayViewModels()[0].date);
+		var periodEndDateMoment = moment(weekViewModels[weekViewModels.length - 1].dayViewModels()[6].date);
+		return periodStartDateMoment <= moment(startDate) && moment(endDate) <= periodEndDateMoment;
+	}
+
+
 	self.readData = function(data) {
 		self.weekDayNames(data.DayHeaders);
 		self.weekViewModels([]);
@@ -51,7 +60,7 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 
 		var newWeek;
 		for (var i = 0; i < data.ScheduleDays.length; i++) {
-			if (i % 7 == 0) {
+			if (i % 7 === 0) {
 				if (newWeek)
 					self.weekViewModels.push(newWeek);
 				newWeek = new Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel();
@@ -65,14 +74,7 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 		self.isLoading(false);
 	};
 
-	self.isWithinSelected = function(startDate, endDate) {
-		var selectedDate = self.selectedDate().toDate();
-		var weekViewModels = self.weekViewModels();
-		var periodStartDateMoment = moment(weekViewModels[0].dayViewModels()[0].date);
-		var periodEndDateMoment = moment(weekViewModels[weekViewModels.length - 1].dayViewModels()[6].date);
-		return periodStartDateMoment <= moment(startDate) && moment(endDate) <= periodEndDateMoment;
-	}
-
+	
 	function setUseFullHeightForDateCells() {
 		self.hasAbsenceOrOvertime(false);
 		self.hasAbsenceAndOvertime(false);
