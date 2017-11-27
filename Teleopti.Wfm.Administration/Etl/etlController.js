@@ -1,131 +1,95 @@
 (function () {
-	'use strict';
+    'use strict';
 
-	angular
-		.module('adminApp')
-		.controller('etlController', etlController, []);
+    angular
+        .module('adminApp')
+        .controller('etlController', etlController, ['$http']);
 
-	function etlController() {
-		var vm = this;
+    function etlController($http, tokenHeaderService) {
+        var vm = this;
 
         vm.state = 'manual';
+        vm.jobs = [];
 
-		//manual inputs
+        vm.getJobs = function () {
+            $http.get("./Etl/Jobs", tokenHeaderService.getHeaders())
+                .success(function (data) {
+                    vm.jobs = data;
+                });
+        }
+	    vm.getJobs();
+
+        //manual inputs
         vm.manualInitial = {
             StartDate: new Date().toLocaleDateString("en-US"),
             EndDate: new Date().toLocaleDateString("en-US")
         }
-		vm.manualQueueStats = {
+        vm.manualQueueStats = {
             StartDate: new Date().toLocaleDateString("en-US"),
             EndDate: new Date().toLocaleDateString("en-US")
         }
-		vm.manualAgentStats = {
+        vm.manualAgentStats = {
             StartDate: new Date().toLocaleDateString("en-US"),
             EndDate: new Date().toLocaleDateString("en-US")
-		}
-		vm.manualSchedule = {
+        }
+        vm.manualSchedule = {
             StartDate: new Date().toLocaleDateString("en-US"),
             EndDate: new Date().toLocaleDateString("en-US")
-		}
-		vm.manualForecast = {
+        }
+        vm.manualForecast = {
             StartDate: new Date().toLocaleDateString("en-US"),
             EndDate: new Date().toLocaleDateString("en-US")
         }
 
-		vm.applyToAll = function(input) {
-			vm.manualInitial = {
-				StartDate: input,
-                EndDate: input
-			}
-			vm.manualQueueStats = {
+        vm.applyToAll = function (input) {
+            vm.manualInitial = {
                 StartDate: input,
                 EndDate: input
-			}
-			vm.manualAgentStats = {
+            }
+            vm.manualQueueStats = {
                 StartDate: input,
                 EndDate: input
-			}
-			vm.manualSchedule = {
+            }
+            vm.manualAgentStats = {
                 StartDate: input,
                 EndDate: input
-			}
-			vm.manualForecast = {
+            }
+            vm.manualSchedule = {
                 StartDate: input,
                 EndDate: input
-			}
-		}
+            }
+            vm.manualForecast = {
+                StartDate: input,
+                EndDate: input
+            }
+        }
 
-		//history inputs
-		vm.historyWorkPeriod = {
+        //history inputs
+        vm.historyWorkPeriod = {
             StartDate: new Date().toLocaleDateString("en-US"),
             EndDate: new Date().toLocaleDateString("en-US")
-		}
+        }
 
-		//schedule inputs
-		vm.scheduleNameEnabled = true;
+        //schedule inputs
+        vm.scheduleNameEnabled = true;
 
 
-		vm.schedules = [
+        vm.schedules = [
             {
                 Name: 'My main job',
                 Jname: 'Nightly',
                 Enabled: true,
-				Description: 'Occurs every day at 15:58. Using the log data'
+                Description: 'Occurs every day at 15:58. Using the log data'
             },
-			{
-				Name: 'My secondary job',
-				Jname: 'Nightly',
-				Enabled: true,
-				Description: 'Occurs some days at 15:58. Who knows?'
-			}
-		];
-
-		vm.jobs = [
-			{
-                Name: 'Forecast',
-                Tasks: [
-	                {
-		                Name: 'stg_business_unit'
-	                },
-	                {
-		                Name: 'stg_date'
-	                },
-	                {
-		                Name: 'stg_skill'
-	                },
-	                {
-		                Name: 'stg_workload'
-	                },
-	                {
-		                Name: 'stg_queue_workload'
-	                }
-                ],
-				Open: false
-            },
-			{
-				Name: 'Permission',
-				Tasks: [
-					{
-						Name: 'stg_business_unit'
-					},
-					{
-						Name: 'stg_date'
-					},
-					{
-						Name: 'stg_skill'
-					},
-					{
-						Name: 'stg_workload'
-					},
-					{
-						Name: 'stg_queue_workload'
-					}
-				],
-				Open: false
-			}
+            {
+                Name: 'My secondary job',
+                Jname: 'Nightly',
+                Enabled: true,
+                Description: 'Occurs some days at 15:58. Who knows?'
+            }
         ];
 
 
-	}
+    }
 
 })();
