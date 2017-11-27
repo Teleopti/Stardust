@@ -32,7 +32,7 @@
 			});
 
 		function refresh() {
-			$http.get("./Stardust/Jobs/1/5", tokenHeaderService.getHeaders())
+			$http.get("./Stardust/Jobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
 				.success(function(data) {
 					vm.RunningJobs = data;
 					if (data.length > 0) {
@@ -51,7 +51,7 @@
 					}
 				});
 
-			$http.get("./Stardust/FailedJobs/1/5", tokenHeaderService.getHeaders())
+			$http.get("./Stardust/FailedJobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
 				.success(function(data) {
 					vm.FailedJobs = data;
 					if (data.length > 0) {
@@ -70,7 +70,7 @@
 					}
 				});
 
-			$http.get("./Stardust/QueuedJobs/1/5", tokenHeaderService.getHeaders())
+			$http.get("./Stardust/QueuedJobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5 }))
 				.success(function(data) {
 					vm.QueuedJobs = data;
 					if (data.length > 0) {

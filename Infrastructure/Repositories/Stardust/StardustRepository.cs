@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 						while (reader.Read())
 						{
 							var job = createJobFromSqlDataReader(reader);
-							setTotalDuration(job);
 							jobs.Add(job);
 						}
 					}
@@ -59,34 +58,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			job.TotalDuration = totalDuration.Substring(0, 8);
 		}
 
-
-		public IList<Job> GetAllJobs(int from, int to)
-		{
-			var jobs = new List<Job>();
-
-			using (var sqlConnection = new SqlConnection(_connectionString))
-			{
-				const string selectCommandText = @"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
-											FROM Stardust.Job WITH(NOLOCK) ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to";
-				sqlConnection.OpenWithRetry(_retryPolicy);
-				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
-				{
-					getAllJobsCommand.Parameters.AddWithValue("@from", from);
-					getAllJobsCommand.Parameters.AddWithValue("@to", to);
-					using (var reader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
-					{
-						if (!reader.HasRows) return jobs;
-						while (reader.Read())
-						{
-							var job = createJobFromSqlDataReader(reader);
-							setTotalDuration(job);
-							jobs.Add(job);
-						}
-					}
-				}
-			}
-			return jobs;
-		}
 
 		public List<string> GetAllTypes()
 		{
@@ -135,7 +106,29 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			return types;
 		}
 
-		public IList<Job> GetAllJobs(JobFilterModel filter)
+		public Job GetOldestJob()
+		{
+			Job job = null;
+			const string selectCommandText = "SELECT TOP 1 * FROM Stardust.Job order By Created asc";
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				using (var getOldestJobCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var reader = getOldestJobCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (!reader.HasRows) return job;
+						while (reader.Read())
+						{
+							job = createJobFromSqlDataReader(reader);
+						}
+					}
+				}
+			}
+			return job;
+		}
+
+		public IList<Job> GetJobs(JobFilterModel filter)
 		{
 			var jobs = new List<Job>();
 
@@ -150,6 +143,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			if (filter.FromDate != null && filter.ToDate != null)
 				selectCommandText = selectCommandText + $@"AND Started BETWEEN '{filter.FromDate.Value.Date:yyyy-MM-dd}' AND '{filter.ToDate.Value.Date.AddDays(1):yyyy-MM-dd}' ";
 
+			if (filter.Result != null)
+				selectCommandText = selectCommandText + $@"AND Result = '{filter.Result}'";
+
 			selectCommandText = selectCommandText + "ORDER BY Created DESC";
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
@@ -163,7 +159,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 						while (reader.Read())
 						{
 							var job = createJobFromSqlDataReader(reader);
-							setTotalDuration(job);
 							jobs.Add(job);
 						}
 					}
@@ -172,37 +167,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			return jobs;
 		}
 
-		public IList<Job> GetAllFailedJobs(JobFilterModel filter)
-		{
-			var jobs = new List<Job>();
-			var selectCommandText = $@"SELECT TOP {filter.To} * FROM Stardust.Job WHERE Result LIKE '%Fail%' ";
-
-			if (filter.DataSource != null)
-				selectCommandText = selectCommandText + $@"AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
-
-			if (filter.Type != null)
-				selectCommandText = selectCommandText + $@"AND Type = 'Teleopti.Ccc.Domain.ApplicationLayer.Events.{filter.Type}' ";
-
-			selectCommandText = selectCommandText + "ORDER BY Created DESC";
-			using (var sqlConnection = new SqlConnection(_connectionString))
-			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
-				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
-				{
-					using (var reader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
-					{
-						if (!reader.HasRows) return jobs;
-						while (reader.Read())
-						{
-							var job = createJobFromSqlDataReader(reader);
-							setTotalDuration(job);
-							jobs.Add(job);
-						}
-					}
-				}
-			}
-			return jobs;
-		}
 
 		public IList<Job> GetAllQueuedJobs(JobFilterModel filter)
 		{
@@ -254,7 +218,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 						if (!sqlDataReader.HasRows) return job;
 						sqlDataReader.Read();
 						job = createJobFromSqlDataReader(sqlDataReader);
-						setTotalDuration(job);
 					}
 				}
 			}
@@ -356,33 +319,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			}
 			return listToReturn;
 		}
-
-		public List<Job> GetAllQueuedJobs(int from, int to)
-		{
-			var jobs = new List<Job>();
-
-			using (var sqlConnection = new SqlConnection(_connectionString))
-			{
-				const string selectCommandText = @"WITH Ass AS (SELECT top (1000000) *, ROW_NUMBER() OVER (ORDER BY Created asc) AS 'RowNumber'
-											FROM Stardust.JobQueue WITH(NOLOCK) ORDER BY Created asc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to";
-				sqlConnection.OpenWithRetry(_retryPolicy);
-				using (var getAllQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
-				{
-					getAllQueuedJobsCommand.Parameters.AddWithValue("@from", from);
-					getAllQueuedJobsCommand.Parameters.AddWithValue("@to", to);
-					using (var sqlDataReader = getAllQueuedJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
-					{
-						if (!sqlDataReader.HasRows) return jobs;
-						while (sqlDataReader.Read())
-						{
-							var job = createQueuedJobFromSqlDataReader(sqlDataReader);
-							jobs.Add(job);
-						}
-					}
-				}
-			}
-			return jobs;
-		}
+	
 
 		public Job GetQueuedJob(Guid jobId)
 		{
@@ -467,33 +404,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			return ids;
 		}
 
-		public IList<Job> GetAllFailedJobs(int from, int to)
-		{
-			var jobs = new List<Job>();
-
-			using (var sqlConnection = new SqlConnection(_connectionString))
-			{
-				var selectCommandText = $@"WITH Ass AS (SELECT top (1000000) *,  ROW_NUMBER() OVER (ORDER BY Created desc) AS 'RowNumber' 
-											FROM Stardust.Job WITH(NOLOCK) WHERE Result LIKE '%Failed%' ORDER BY Created desc ) SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to";
-				sqlConnection.OpenWithRetry(_retryPolicy);
-				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
-				{
-					getAllJobsCommand.Parameters.AddWithValue("@from", from);
-					getAllJobsCommand.Parameters.AddWithValue("@to", to);
-					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
-					{
-						if (!sqlDataReader.HasRows) return jobs;
-						while (sqlDataReader.Read())
-						{
-							var job = createJobFromSqlDataReader(sqlDataReader);
-							setTotalDuration(job);
-							jobs.Add(job);
-						}
-					}
-				}
-			}
-			return jobs;
-		}
 
 		private static T getDBNullSafeValue<T>(object value) where T : class
 		{
@@ -516,7 +426,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 				Started = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Started")),
 				Ended = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Ended"))
 			};
-			
+			setTotalDuration(job);
 			return job;
 		}
 

@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		public string Type;
 		public DateTime? FromDate;
 		public DateTime? ToDate;
+		public string Result;
 	}
 }

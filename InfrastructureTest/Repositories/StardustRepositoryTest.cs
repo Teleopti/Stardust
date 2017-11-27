@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Serialized = JsonConvert.SerializeObject(testEventOtherTenant),
 				Type = "Type"
 			});
-			var jobs = Target.GetAllJobs(new JobFilterModel {From = 1, To = 50, DataSource = testTenant});
+			var jobs = Target.GetJobs(new JobFilterModel {From = 1, To = 50, DataSource = testTenant});
 			jobs.Count.Should().Be.EqualTo(1);
 			jobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
 		}
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			StardustRepositoryTestHelper.AddJob(job2);
 			
 
-			var jobs = Target.GetAllJobs(new JobFilterModel { From = 1, To = 2, DataSource = testTenant });
+			var jobs = Target.GetJobs(new JobFilterModel { From = 1, To = 2, DataSource = testTenant });
 			jobs.Count.Should().Be.EqualTo(2);
 			jobs.First().JobId.Should().Be.EqualTo(job2.JobId);
 			jobs.Second().JobId.Should().Be.EqualTo(job1.JobId);
@@ -185,94 +185,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			StardustRepositoryTestHelper.AddJob(job2);
 
 
-			var jobs = Target.GetAllJobs(new JobFilterModel { From = 1, To = 2, FromDate = new DateTime(2017,01,01), ToDate = new DateTime(2017,01,01)});
+			var jobs = Target.GetJobs(new JobFilterModel { From = 1, To = 2, FromDate = new DateTime(2017,01,01), ToDate = new DateTime(2017,01,01)});
 			jobs.Count.Should().Be.EqualTo(1);
 			jobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
 		}
 
 		[Test]
-		public void FailedJobFilterShouldShowTopXOfItsDataSource()
+		public void JobsShouldFIlterOnResult()
 		{
-			const string testTenant = "test Tenant";
-			var testEvent = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = testTenant };
-			var testEventOtherTenant = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = "Another tenant" };
+			var testEvent = new UpdateStaffingLevelReadModelEvent();
 
-			StardustRepositoryTestHelper.AddFailedJob(new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEvent),
-				Type = "Type"
-			});
-			Thread.Sleep(1000); //make sure there is different timestamps
 			var job1 = new Job
 			{
 				JobId = Guid.NewGuid(),
 				Serialized = JsonConvert.SerializeObject(testEvent),
-				Type = "Type"
+				Type = testEvent.GetType().ToString()
 			};
-
-			StardustRepositoryTestHelper.AddFailedJob(job1);
-			StardustRepositoryTestHelper.AddFailedJob(new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEventOtherTenant),
-				Type = "Type"
-			});
-			Thread.Sleep(1000); //make sure there is different timestamps
-			StardustRepositoryTestHelper.AddJob(new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEvent),
-				Type = "Type"
-			});
-
 			var job2 = new Job
 			{
 				JobId = Guid.NewGuid(),
 				Serialized = JsonConvert.SerializeObject(testEvent),
-				Type = "Type"
-			};
-
-			StardustRepositoryTestHelper.AddFailedJob(job2);
-
-			var jobs = Target.GetAllFailedJobs(new JobFilterModel { From = 1, To = 2, DataSource = testTenant });
-			jobs.Count.Should().Be.EqualTo(2);
-			jobs.First().JobId.Should().Be.EqualTo(job2.JobId);
-			jobs.Second().JobId.Should().Be.EqualTo(job1.JobId);
-		}
-
-
-		[Test]
-		public void FailedJobShouldFilterOnDataSource()
-		{
-			const string testTenant = "test Tenant";
-			var testEvent = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = testTenant };
-			var testEventOtherTenant = new UpdateStaffingLevelReadModelEvent { LogOnDatasource = "Another tenant" };
-
-			var job1 = new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEvent),
-				Type = "Type"
+				Type = testEvent.GetType().ToString()
 			};
 
 			StardustRepositoryTestHelper.AddFailedJob(job1);
-			StardustRepositoryTestHelper.AddFailedJob(new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEventOtherTenant),
-				Type = "Type"
-			});
-			StardustRepositoryTestHelper.AddJob(new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEvent),
-				Type = "Type"
-			});
-			var jobs = Target.GetAllFailedJobs(new JobFilterModel { From = 1, To = 50, DataSource = testTenant });
+			StardustRepositoryTestHelper.AddJob(job2);
+
+			var jobs = Target.GetJobs(new JobFilterModel { From = 1, To = 2, Result = "Failed"});
 			jobs.Count.Should().Be.EqualTo(1);
 			jobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
 		}
+
+		
 
 
 		[Test]
@@ -297,45 +241,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			StardustRepositoryTestHelper.AddJob(job1);
 			StardustRepositoryTestHelper.AddJob(job2);
 
-			var jobs = Target.GetAllJobs(new JobFilterModel {From = 1, To = 50, Type = "UpdateStaffingLevelReadModelEvent"});
+			var jobs = Target.GetJobs(new JobFilterModel {From = 1, To = 50, Type = "UpdateStaffingLevelReadModelEvent"});
 			jobs.Count.Should().Be.EqualTo(1);
 			jobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
 		}
 
-		[Test]
-		public void FailedJobShouldFilterOnType()
-		{
-			var testEvent = new UpdateStaffingLevelReadModelEvent();
-			var anotherEvent = new ExportMultisiteSkillsToSkillEvent();
-
-			var job1 = new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEvent),
-				Type = testEvent.GetType().ToString()
-			};
-			var job2 = new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(anotherEvent),
-				Type = anotherEvent.GetType().ToString()
-			};
-			var job3 = new Job
-			{
-				JobId = Guid.NewGuid(),
-				Serialized = JsonConvert.SerializeObject(testEvent),
-				Type = testEvent.GetType().ToString()
-			};
-
-			StardustRepositoryTestHelper.AddFailedJob(job1);
-			StardustRepositoryTestHelper.AddFailedJob(job2);
-			StardustRepositoryTestHelper.AddJob(job3);
-
-			var jobs = Target.GetAllFailedJobs(new JobFilterModel { From = 1, To = 50, Type = "UpdateStaffingLevelReadModelEvent" });
-			jobs.Count.Should().Be.EqualTo(1);
-			jobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
-		}
-
+	
 		[Test]
 		public void JobQueueShouldFilterOnType()
 		{

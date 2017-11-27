@@ -6,11 +6,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 	public interface IStardustRepository
 	{
 		void DeleteQueuedJobs(Guid[] jobIds);
-		IList<Job> GetAllFailedJobs(int from, int to);
-		IList<Job> GetAllFailedJobs(JobFilterModel filter);
-		IList<Job> GetAllJobs(int from, int to);
-		IList<Job> GetAllJobs(JobFilterModel filter);
-		List<Job> GetAllQueuedJobs(int from, int to);
+		IList<Job> GetJobs(JobFilterModel filter);
 		IList<Job> GetAllQueuedJobs(JobFilterModel filter);
 		List<WorkerNode> GetAllWorkerNodes();
 		Job GetJobByJobId(Guid jobId);
@@ -22,5 +18,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		WorkerNode WorkerNode(Guid nodeId);
 		List<string> GetAllTypes();
 		List<string> GetAllTypesInQueue();
+		Job GetOldestJob();
 	}
 }

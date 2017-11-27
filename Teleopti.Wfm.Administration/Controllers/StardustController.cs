@@ -39,25 +39,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpGet, Route("Stardust/Jobs")]
 		public IHttpActionResult JobHistoryFiltered(int from, int to, string dataSource = null, string type = null, DateTime? fromDate = null, DateTime? toDate = null)
 		{
-			return Ok(_stardustRepository.GetAllJobs(new JobFilterModel{DataSource = dataSource, Type = type, From = from, To = to, FromDate = fromDate, ToDate = toDate}));
-		}
-
-		[HttpGet, Route("Stardust/Jobs/{from}/{to}")]
-		public IHttpActionResult JobHistoryList(int from, int to)
-		{
-			return Ok(_stardustRepository.GetAllJobs(from, to));
-		}
-
-		[HttpGet, Route("Stardust/FailedJobs/{from}/{to}")]
-		public IHttpActionResult FailedJobHistoryList(int from, int to)
-		{
-			return Ok(_stardustRepository.GetAllFailedJobs(from, to));
+			return Ok(_stardustRepository.GetJobs(new JobFilterModel{DataSource = dataSource, Type = type, From = from, To = to, FromDate = fromDate, ToDate = toDate}));
 		}
 
 		[HttpGet, Route("Stardust/FailedJobs")]
-		public IHttpActionResult FailedJobHistoryFiltered(int from, int to, string dataSource = null, string type = null)
+		public IHttpActionResult FailedJobHistoryFiltered(int from, int to, string dataSource = null, string type = null, DateTime? fromDate = null, DateTime? toDate = null)
 		{
-			return Ok(_stardustRepository.GetAllFailedJobs(new JobFilterModel { DataSource = dataSource, Type = type, From = from, To = to }));
+			return Ok(_stardustRepository.GetJobs(new JobFilterModel { DataSource = dataSource, Type = type, From = from, To = to, FromDate = fromDate, ToDate = toDate, Result = "Failed"}));
 		}
 
 		[HttpGet, Route("Stardust/JobsByNode/{nodeId}/{from}/{to}")]
@@ -76,12 +64,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public IHttpActionResult Job(Guid jobId)
 		{
 			return Ok(_stardustRepository.GetJobByJobId(jobId));
-		}
-
-		[HttpGet, Route("Stardust/QueuedJobs/{from}/{to}")]
-		public IHttpActionResult JobQueueList(int from, int to)
-		{
-			return Ok(_stardustRepository.GetAllQueuedJobs(from, to));
 		}
 
 		[HttpGet, Route("Stardust/QueuedJobs")]
@@ -132,6 +114,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public IHttpActionResult QueueTypes()
 		{
 			return Ok(_stardustRepository.GetAllTypesInQueue());
+		}
+
+		[HttpGet, Route("Stardust/OldestJob")]
+		public IHttpActionResult GetOldestJob()
+		{
+			return Ok(_stardustRepository.GetOldestJob());
 		}
 
 		[HttpPost, Route("Stardust/TriggerResourceCalculation")]
@@ -195,7 +183,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 			if(healthCheckJob.Ended != null && healthCheckJob.Result != "Success")
 				return Ok("The Health Check job failed during execution. Check the Failed Jobs tab for more information.");
-			var queuedJobs = _stardustRepository.GetAllQueuedJobs(0, 5);
+			var queuedJobs = _stardustRepository.GetAllQueuedJobs(new JobFilterModel{From = 0, To = 5});
 			if(healthCheckJob.Ended == null || queuedJobs.Any())
 				return Ok("Something is wrong with Stardust and it smells like a bug!");
 			return Ok("Everything looks OK!");

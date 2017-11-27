@@ -32,10 +32,13 @@
 								</ul>
 							</div>
 							Started From:
-							<md-datepicker ng-model="vm.selectedFromDate" md-placeholder="Enter date" md-max-date="vm.selectedToDate"></md-datepicker>
+							<br />
+							<md-datepicker ng-model="vm.selectedFromDate" md-placeholder="Enter date" md-max-date="vm.selectedToDate" md-min-date="vm.minFrom"></md-datepicker>
+							<br/>
 							Started To:
-							<md-datepicker ng-model="vm.selectedToDate" md-placeholder="Enter date" md-min-date="vm.selectedFromDate"></md-datepicker>
-
+							<br />
+							<md-datepicker ng-model="vm.selectedToDate" md-placeholder="Enter date" md-min-date="vm.selectedFromDate" md-max-date="vm.maxTo"></md-datepicker>
+							<br />
 								<button class="btn btn-primary" style="float: right;" ng-click="vm.search()">
 									<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_search_white_24px.svg"></md-icon>
 								</button>

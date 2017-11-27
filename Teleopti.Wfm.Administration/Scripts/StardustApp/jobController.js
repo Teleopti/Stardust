@@ -28,8 +28,6 @@
 		vm.selectedDataSource = allTenantsString;
 		vm.dataSourceFilter = allTenantsString;
 		vm.jobTypeFilter = allTypesString;
-		vm.selectedFromDate = new Date(new Date() - 1000 * 60 * 60 * 24 * 7);
-		vm.selectedToDate = new Date(new Date());
 		var refreshInterval = 5000;
 		getJobsByFilter();
 
@@ -39,7 +37,6 @@
 			.success(function (data) {
 				vm.types = data;
 			});
-		
 
 		$scope.$on("$destroy",
 			function () {
@@ -49,6 +46,15 @@
 		$http.get("./AllTenants", tokenHeaderService.getHeaders())
 			.success(function (data) {
 				vm.Tenants = data;
+			});
+
+		$http.get("./Stardust/OldestJob", tokenHeaderService.getHeaders())
+			.success(function (data) {
+				var oldestJob = data;
+				vm.minFrom = new Date(oldestJob.Created);
+				vm.maxTo = new Date(new Date());
+				vm.selectedFromDate = vm.minFrom;
+				vm.selectedToDate = maxTo;
 			});
 
 		function getJobsByFilter() {

@@ -36,7 +36,6 @@
 				vm.types = data;
 			});
 
-
 		$scope.$on("$destroy",
 			function () {
 				$interval.cancel(refreshPromise);
@@ -45,6 +44,15 @@
 		$http.get("./AllTenants", tokenHeaderService.getHeaders())
 			.success(function (data) {
 				vm.Tenants = data;
+			});
+
+		$http.get("./Stardust/OldestJob", tokenHeaderService.getHeaders())
+			.success(function (data) {
+				var oldestJob = data;
+				vm.minFrom = new Date(oldestJob.Created);
+				vm.maxTo = new Date(new Date());
+				vm.selectedFromDate = vm.minFrom;
+				vm.selectedToDate = vm.maxTo;
 			});
 
 		function getJobsByFilter() {
@@ -58,7 +66,7 @@
 				jobType = vm.jobTypeFilter;
 			}
 
-			var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType };
+			var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType, "fromdate": vm.fromDateFilter, "todate": vm.toDateFilter};
 			$http.get("./Stardust/FailedJobs", tokenHeaderService.getHeadersAndParams(params))
 				.success(function (data) {
 					if (data.length < vm.resultsTo) {
@@ -101,6 +109,8 @@
 			vm.dataSourceFilter = vm.selectedDataSource;
 			vm.jobTypeFilter = vm.selectedJobType;
 			vm.resultsTo = vm.limit;
+			vm.fromDateFilter = vm.selectedFromDate;
+			vm.toDateFilter = vm.selectedToDate;
 			pollNewData();
 		}
 	}

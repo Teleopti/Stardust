@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IStardustRepository = Teleopti.Ccc.Infrastructure.Repositories.Stardust.IStardustRepository;
-using Job = Teleopti.Ccc.Infrastructure.Repositories.Stardust.Job;
-using JobDetail = Teleopti.Ccc.Infrastructure.Repositories.Stardust.JobDetail;
-using JobFilterModel = Teleopti.Ccc.Infrastructure.Repositories.Stardust.JobFilterModel;
-using WorkerNode = Teleopti.Ccc.Infrastructure.Repositories.Stardust.WorkerNode;
+using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 
 namespace Teleopti.Wfm.AdministrationTest
 {
+
 	public class FakeStardustRepository : IStardustRepository
 	{
 		private readonly List<WorkerNode> _nodes;
@@ -44,37 +41,12 @@ namespace Teleopti.Wfm.AdministrationTest
 			throw new NotImplementedException();
 		}
 
-		public IList<Job> GetAllFailedJobs(int @from, int to)
+		public IList<Job> GetJobs(JobFilterModel filter)
 		{
 			throw new NotImplementedException();
-		}
-
-		public IList<Job> GetAllFailedJobs(JobFilterModel filter)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<Job> GetAllJobs(int @from, int to)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<Job> GetAllJobs(JobFilterModel filter)
-		{
-			throw new NotImplementedException();
-		}
-
-		public List<Job> GetAllQueuedJobs(int @from, int to)
-		{
-			return new List<Job>();
 		}
 
 		public IList<Job> GetAllQueuedJobs(JobFilterModel filter)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<Job> GetAllRunningJobs()
 		{
 			throw new NotImplementedException();
 		}
@@ -125,6 +97,11 @@ namespace Teleopti.Wfm.AdministrationTest
 		}
 
 		public List<string> GetAllTypesInQueue()
+		{
+			throw new NotImplementedException();
+		}
+
+		public Job GetOldestJob()
 		{
 			throw new NotImplementedException();
 		}
