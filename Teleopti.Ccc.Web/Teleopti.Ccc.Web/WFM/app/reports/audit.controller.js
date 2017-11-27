@@ -59,7 +59,7 @@
 		}
 
 		function getOrgData() {
-			if (angular.isUndefined(vm.dateModifyRange)) {
+			if (angular.isUndefined(vm.dateModifyRange) || !vm.dateModifyRange.startDate || !vm.dateModifyRange.endDate) {
 				return;
 			}
 			var postObj = {
