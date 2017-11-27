@@ -112,5 +112,5 @@
 			vm.toDateFilter = vm.selectedToDate;
 			getJobsByFilter();
 		}
-	}
+	} 
 })();
