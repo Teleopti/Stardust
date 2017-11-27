@@ -14,10 +14,13 @@
         })
         .component('treeDataTwo', {
             templateUrl: 'app/global/tree-picker/tree_data.tpl.html',
+            require: {
+                ngModel: 'ngModel'
+            },
             controller: 'TreeDataTwoController',
             controllerAs: 'vm',
             bindings: {
-                data: "=",
+                // data: "=",
                 option: "="
             }
         })
@@ -26,7 +29,7 @@
         .directive('treeAnimate', treeAnimate);
 
     TreeDataOneController.$inject = ['$element'];
-    TreeDataTwoController.$inject = [];
+    TreeDataTwoController.$inject = ['$element'];
 
     function TreeDataOneController($element) {
         var vm = this;
@@ -116,7 +119,7 @@
         }
     }
 
-    function TreeDataTwoController() {
+    function TreeDataTwoController($element) {
         var vm = this;
 
         var rootSelectUnique = "false;"
@@ -136,21 +139,31 @@
                 vm.nodeSemiSelected = vm.option.nodeSemiSelected ? vm.option.nodeSemiSelected : "semiSelected";
                 rootSelectUnique = vm.option.RootSelectUnique ? vm.option.RootSelectUnique : false;
             }
-            return initSemiStateForData(vm.data);
+            vm.ngModel.$viewChangeListeners.push(onChange);
+            vm.ngModel.$render = onChange;
+            return;
         }
 
-        function initSemiStateForData(data) {
-            console.log(data)
+        function onChange() {
+            vm.data = vm.ngModel.$modelValue;
+            var selectedItems = $element[0].getElementsByClassName('tree-toggle-group selected-true');
+            console.log(selectedItems)
+            for (var index = 0; index < selectedItems.length; index++) {
+                var item = selectedItems[index];
+                console.log(item.$parent.$parent.$parent)
+                setParentNodesSelectState(item.$parent.$parent.$parent);
+            }
+            return;
         }
 
-        function selectNode(item, event, node) {
-            console.log(node)
+        function selectNode(item, event) {
             vm.node = item;
+            var indexList = mapParentIndex(item);
             var state = !item.$parent.node[vm.nodeSelectedMark];
             item.$parent.node[vm.nodeSelectedMark] = state;
             item.$parent.node[vm.nodeSemiSelected] = false;
             if (rootSelectUnique) {
-                var rootIndex = mapParentIndex(item)[0];
+                var rootIndex = indexList[0];
                 setSiblingsToUnselect(vm.data[vm.nodeChildrenName], rootIndex);
             }
             if (item.$parent.$parent.$parent.node && item.$parent.$parent.$parent.node[vm.nodeChildrenName].length !== 0) {
@@ -159,7 +172,7 @@
             if (item.$parent.node[vm.nodeChildrenName] && item.$parent.node[vm.nodeChildrenName].length !== 0) {
                 setChildrenNodesSelectState(item.$parent.node[vm.nodeChildrenName], state);
             }
-            return;
+            return vm.ngModel.$setViewValue(vm.data);
         }
 
         function setChildrenNodesSelectState(children, state) {

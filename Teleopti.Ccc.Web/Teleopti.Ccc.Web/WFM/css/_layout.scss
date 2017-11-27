@@ -158,7 +158,8 @@ tree-data-one, tree-data-two, tree-data-three {
 		border: 1px dotted $gray012;
 		border-top: none;
 	}
-	.tree-handle-wrapper{
+	
+	tree-handle-wrapper{
 		cursor:pointer;
 		position:relative;
 		margin-left: 3rem;
@@ -168,7 +169,7 @@ tree-data-one, tree-data-two, tree-data-three {
 		background: transparent;
 	}
 
-	.tree-handle-wrapper:before{
+	tree-handle-wrapper:before{
 		position: absolute;
 		width: 20px;
 		height: 20px;
@@ -182,13 +183,13 @@ tree-data-one, tree-data-two, tree-data-three {
 		color: $white;
 	}
 
-	.selected-true .tree-handle-wrapper:before{
+	.selected-true tree-handle-wrapper:before{
 		background-color: $blue-500;
 		content: "✓";
 		text-align: center;
 	}
 
-	.semi-true .tree-handle-wrapper:before{
+	.semi-true tree-handle-wrapper:before{
 		background-color: $blue-100 !important;
 		content: "─" !important;
 		color: $text-color-standard;

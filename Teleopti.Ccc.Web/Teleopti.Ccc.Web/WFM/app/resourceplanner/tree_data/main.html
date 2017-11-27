@@ -11,7 +11,7 @@
  </div>
  <div class="con-row">
    <div class="con-flex">
-      <tree-data-two data="vm.dataTwo" option="vm.option"></tree-data-two>
+      <tree-data-two ng-model="vm.dataTwo" option="vm.option"></tree-data-two>
      </div>
  </div>
 </wfm-popup>
@@ -28,7 +28,7 @@
       </div>
       <div class="con-row">
         <div class="con-flex">
-          <tree-data-two data="vm.dataThree" option="vm.optionTwo"></tree-data-two>
+          <tree-data-two ng-model="vm.dataThree" option="vm.optionTwo"></tree-data-two>
         </div>
       </div>
       <div class="con-footer">
@@ -38,3 +38,5 @@
     </div>
   </div>
 </div>
+
+{{vm.dataThree}}
