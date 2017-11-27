@@ -141,22 +141,18 @@
             }
             vm.ngModel.$viewChangeListeners.push(onChange);
             vm.ngModel.$render = onChange;
-            return;
+            return initSemi();
         }
 
         function onChange() {
             vm.data = vm.ngModel.$modelValue;
-            var selectedItems = $element[0].getElementsByClassName('tree-toggle-group selected-true');
-            console.log(selectedItems)
-            for (var index = 0; index < selectedItems.length; index++) {
-                var item = selectedItems[index];
-                console.log(item.$parent.$parent.$parent)
-                setParentNodesSelectState(item.$parent.$parent.$parent);
-            }
-            return;
         }
 
-        function selectNode(item, event) {
+        function initSemi() {
+            console.log($element[0].getElementsByClassName('selected-true'))
+        }
+
+        function selectNode(item) {
             vm.node = item;
             var indexList = mapParentIndex(item);
             var state = !item.$parent.node[vm.nodeSelectedMark];
