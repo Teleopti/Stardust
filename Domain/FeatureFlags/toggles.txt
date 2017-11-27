@@ -39,7 +39,7 @@ Wfm_MinimumScaffolding_32659 = RC
 RTA_SpreadTransactionLocksStrategy_41823 = true
 RTA_RtaTracer_45597 = true
 RTA_MonitorAgentsWithLongTimeInState_46475 = RC
-RTA_MobileFriendlyCheckboxes_46758 = DEV
+RTA_MobileFriendlyCheckboxes_46758 = RC
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true

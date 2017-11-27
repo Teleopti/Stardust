@@ -53,11 +53,15 @@ angular.module('wfm.rta').provider('RtaState', function() {
                     es: {array: true}
                 },
                 templateUrl: function() {
+                	if (toggles.RTA_MobileFriendlyCheckboxes_46758)
+						return 'app/rta/rta/agents/rta-agents.RTA_MobileFriendlyCheckboxes_46758.html';
 					if (toggles.RTA_MonitorAgentsWithLongTimeInState_46475)
 						return 'app/rta/rta/agents/rta-agents.RTA_MonitorAgentsWithLongTimeInState_46475.html';
 					return 'app/rta/rta/agents/rta-agents.RTA_UnifiedSkillGroupManagement_45417.html';
                 },
 				controllerProvider: function() {
+					if (toggles.RTA_MobileFriendlyCheckboxes_46758)
+						return 'RtaAgentsController46758 as vm';
 					if (toggles.RTA_MonitorAgentsWithLongTimeInState_46475)
 						return 'RtaAgentsController46475 as vm';
 					return 'RtaAgentsController as vm';
