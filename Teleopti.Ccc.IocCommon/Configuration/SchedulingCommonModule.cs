@@ -540,6 +540,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
 				builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
 			}
+			builder.RegisterType<BusinessRulesValidator>().As<IScheduleValidator>().SingleInstance();
+
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
