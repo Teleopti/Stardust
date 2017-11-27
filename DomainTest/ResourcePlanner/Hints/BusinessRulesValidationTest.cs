@@ -1,30 +1,29 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourcePlanner.Validation;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
+namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
 	public class BusinessRulesValidationTest : ISetup
 	{
-		public SchedulingValidator Target;
+		public CheckScheduleHints Target;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeActivityRepository ActivityRepository;
@@ -47,11 +46,11 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 
-			var result = Target.Validate(new ValidationInput(scheduleDictionary, new[] { agent }, planningPeriod)).InvalidResources;
+			var result = Target.Execute(new HintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
-			result.First().ValidationTypes.First().Name.Should().Be.EqualTo("BusinessRulesValidator");
-			result.First().ValidationErrors.First().Should()
+			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should()
 				.Be.EqualTo(string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage,2));
 		}
 
@@ -74,12 +73,12 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate.AddDays(-1)).WithDayOff());
 
-			var result = Target.Validate(new ValidationInput(scheduleDictionary, new[] { agent }, planningPeriod)).InvalidResources;
+			var result = Target.Execute(new HintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
-			result.First().ValidationTypes.First().Name.Should().Be.EqualTo("BusinessRulesValidator");
-			result.First().ValidationErrors.First().Should()
-				.Be.EqualTo(string.Format(UserTexts.Resources.TargetScheduleTimeNotFullfilled, DateHelper.HourMinutesString(40*60)));
+			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should()
+				.Be.EqualTo(string.Format(Resources.TargetScheduleTimeNotFullfilled, DateHelper.HourMinutesString(40*60)));
 		}
 
 		[Test]
@@ -100,12 +99,11 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 
-			var result = Target.Validate(new ValidationInput(scheduleDictionary, new[] { agent }, planningPeriod)).InvalidResources;
+			var result = Target.Execute(new HintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
-			result.First().ValidationTypes.First().Name.Should().Be.EqualTo("BusinessRulesValidator");
-			result.First().ValidationErrors.First().Should()
-				.Be.EqualTo(string.Format(UserTexts.Resources.AgentHasDaysWithoutAnySchedule, 6));
+			result.First().ValidationTypes.Any(x => x.Name == nameof(BusinessRulesHint)).Should().Be.True();
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.AgentHasDaysWithoutAnySchedule, 6));
 		}
 
 		[Test]
@@ -124,10 +122,10 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 
-			var result = Target.Validate(new ValidationInput(scheduleDictionary, new[] { agent }, planningPeriod)).InvalidResources;
+			var result = Target.Execute(new HintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
 
-			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
-			result.First().ValidationTypes.First().Name.Should().Be.EqualTo("PersonShiftBagValidator");
+			result.First().ValidationErrors.Count(x=>x.ErrorResource == nameof(Resources.MissingShiftBagForPeriod)).Should().Be.EqualTo(1);
+			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(PersonShiftBagHint));
 		}
 
 		[Test]
@@ -151,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent2, scenario, endDate).WithDayOff());
 
-			var result = Target.Validate(new ValidationInput(scheduleDictionary, new[] { agent }, planningPeriod)).InvalidResources;
+			var result = Target.Execute(new HintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().ResourceId.Should().Be.EqualTo(id);

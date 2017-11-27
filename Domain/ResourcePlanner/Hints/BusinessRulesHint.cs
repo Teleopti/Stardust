@@ -4,18 +4,18 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
+namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class BusinessRulesValidator:IScheduleValidator
+	public class BusinessRulesHint:IScheduleHint
 	{
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 
-		public BusinessRulesValidator(DayOffBusinessRuleValidation dayOffBusinessRuleValidation)
+		public BusinessRulesHint(DayOffBusinessRuleValidation dayOffBusinessRuleValidation)
 		{
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 		}
 
-		public void FillResult(ValidationResult validationResult, ValidationInput input)
+		public void FillResult(HintResult validationResult, HintInput input)
 		{
 			var schedules = input.Schedules;
 			var agents = input.People;
@@ -27,36 +27,35 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Validation
 				if (validationResult.InvalidResources.Any(x => item.Key.Id != null && x.ResourceId == item.Key.Id.Value)) continue;
 				if (!_dayOffBusinessRuleValidation.Validate(item.Value, period))
 				{
-					validationResult.Add(new PersonValidationError()
+					validationResult.Add(new PersonHintError
 					{
 						PersonName = item.Key.Name.ToString(),
 						PersonId = item.Key.Id.Value,
-						ValidationError = string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage,
-							item.Value.CalculatedTargetScheduleDaysOff(period))
+						ErrorResource = nameof(UserTexts.Resources.TargetDayOffNotFulfilledMessage),
+						ErrorResourceData = new object [] { item.Value.CalculatedTargetScheduleDaysOff(period) }.ToList()
 					}, GetType());
 				}
 				else if (!isAgentFulfillingContractTime(item.Value, period))
 				{
-					validationResult.Add(new PersonValidationError()
+					validationResult.Add(new PersonHintError
 					{
 						PersonName = item.Key.Name.ToString(),
 						PersonId = item.Key.Id.Value,
-						ValidationError =
-							string.Format(UserTexts.Resources.TargetScheduleTimeNotFullfilled,
-								DateHelper.HourMinutesString(
-									item.Value.CalculatedTargetTimeHolder(period).GetValueOrDefault(TimeSpan.Zero).TotalMinutes))
+						ErrorResource = nameof(UserTexts.Resources.TargetScheduleTimeNotFullfilled),
+						ErrorResourceData = new object[] {DateHelper.HourMinutesString(
+									item.Value.CalculatedTargetTimeHolder(period).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)}.ToList()
 					}, GetType());
 				}
 				else
 				{
 					var agentScheduleDaysWithoutSchedule = getAgentScheduleDaysWithoutSchedule(item.Value, period);
 					if (agentScheduleDaysWithoutSchedule <= 0) continue;
-					validationResult.Add(new PersonValidationError()
+					validationResult.Add(new PersonHintError
 					{
 						PersonName = item.Key.Name.ToString(),
 						PersonId = item.Key.Id.Value,
-						ValidationError =
-							string.Format(UserTexts.Resources.AgentHasDaysWithoutAnySchedule, agentScheduleDaysWithoutSchedule)
+						ErrorResource = nameof(UserTexts.Resources.AgentHasDaysWithoutAnySchedule),
+						ErrorResourceData = new object[] { agentScheduleDaysWithoutSchedule }.ToList()
 					}, GetType());
 				}
 			}

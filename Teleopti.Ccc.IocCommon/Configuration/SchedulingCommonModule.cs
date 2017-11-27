@@ -521,6 +521,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<NextPlanningPeriodProvider>().SingleInstance().As<INextPlanningPeriodProvider>();
 			builder.RegisterType<CheckScheduleHints>().SingleInstance();
+			builder.RegisterType<BusinessRulesHint>().As<IScheduleHint>().SingleInstance();
 			if (!_configuration.Args().IsFatClient)
 			{
 				builder.RegisterType<MissingForecastHint>().AsSelf().As<IScheduleHint>().SingleInstance();
@@ -540,7 +541,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
 				builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
 			}
-			builder.RegisterType<BusinessRulesValidator>().As<IScheduleValidator>().SingleInstance();
+			
 
 		}
 
