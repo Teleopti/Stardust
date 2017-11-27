@@ -91,5 +91,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillDay2.SkillStaffPeriodCollection.First().CalculatedResource
 				.Should().Be.EqualTo(0.5); 
 		}
+		
+		[Test]
+		public void ShouldShovelToSecondarySkill()
+		{
+			var scenario = new Scenario {DefaultScenario = true};
+			var activity = new Activity().WithId();
+			var date = DateOnly.Today;
+			var skill1 = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).CascadingIndex(1).WithId();
+			var skill2 = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).CascadingIndex(2).WithId();
+			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, date, 5);
+			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, date, 5);
+			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, date, new[]{skillDay1, skillDay2});
+			var bpos = new[] {new BpoResource(11, new[] {skill1, skill2}, skillDay1.SkillStaffPeriodCollection.First().Period)};
+			
+			using (CascadingResourceCalculationContextFactory.Create(
+				ScheduleDictionaryCreator.WithData(scenario, date.ToDateOnlyPeriod()), new[]{skill1, skill2}, bpos, false, date.ToDateOnlyPeriod()))
+			{
+				Target.ResourceCalculate(date, resCalcData);
+			}
+
+			skillDay1.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(6); 
+			skillDay2.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(5); 
+		}
 	}
 }

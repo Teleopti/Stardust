@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -11,9 +12,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
 	    private readonly ResourceCalculationDataContainer retList;
 
-	    public ScheduleProjectionExtractor(IPersonSkillProvider personSkillProvider, int minResolution, bool primarySkillMode)
+	    public ScheduleProjectionExtractor(IEnumerable<BpoResource> bpoResources, IPersonSkillProvider personSkillProvider, int minResolution, bool primarySkillMode)
 	    {
-			retList = new ResourceCalculationDataContainer(personSkillProvider, minResolution, primarySkillMode);
+			retList = new ResourceCalculationDataContainer(bpoResources, personSkillProvider, minResolution, primarySkillMode);
 	   }
 
         /// <summary>

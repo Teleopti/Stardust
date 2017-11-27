@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var minutesPerInterval = allSkills.Any() ?
 					allSkills.Min(s => s.DefaultResolution)
 					: 15;
-				var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval, primarySkillMode);
+				var extractor = new ScheduleProjectionExtractor(bpoResources, _personSkillProvider, minutesPerInterval, primarySkillMode);
 				var ret = extractor.CreateRelevantProjectionList(scheduleDictionary, dateTimePeriod);
 				if (scheduleDictionary.Scenario.DefaultScenario)
 				{
-					_addBpoResourcesToContext.Execute(ret, bpoResources);					
+					_addBpoResourcesToContext.Execute(ret, bpoResources);
 				}
 				return ret;
 			});

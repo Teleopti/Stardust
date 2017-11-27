@@ -16,13 +16,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 		private const double heads = 1d;
 
-		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode)
+		public ResourceCalculationDataContainer(IEnumerable<BpoResource> bpoResources, IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode)
 		{
 			_personSkillProvider = personSkillProvider;
+			BpoResources = bpoResources;
 			MinSkillResolution = minSkillResolution;
 			PrimarySkillMode = primarySkillMode;
 		}
 
+		public IEnumerable<BpoResource> BpoResources { get; }
 		public int MinSkillResolution { get; }
 
 		public void Clear()
