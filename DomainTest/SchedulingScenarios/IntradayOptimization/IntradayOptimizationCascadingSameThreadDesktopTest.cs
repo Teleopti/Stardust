@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotOverwriteLocalResourceCalculationContextInIsland()
 		{
+			if(_resourcePlannerRemoveImplicitResCalcContext46680==RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue)
+				Assert.Ignore("#46898 #46923");
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = new DateOnly(2010, 1, 1);

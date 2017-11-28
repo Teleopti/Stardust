@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	public abstract class IntradayOptimizationScenarioTest : IConfigureToggleManager, ISetup
 	{
 		protected readonly BreakPreferenceStartTimeByMax _resourcePlanner_BreakPreferenceStartTimeByMax_46002;
-		private readonly RemoveImplicitResCalcContext _resourcePlannerRemoveImplicitResCalcContext46680;
+		protected readonly RemoveImplicitResCalcContext _resourcePlannerRemoveImplicitResCalcContext46680;
 
 		protected IntradayOptimizationScenarioTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002,
 							RemoveImplicitResCalcContext resourcePlannerRemoveImplicitResCalcContext46680)

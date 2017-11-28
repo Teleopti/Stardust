@@ -35,17 +35,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[TestLog]
 		protected virtual void HandleEvent(IntradayOptimizationWasOrdered @event, Guid? planningPeriodId)
 		{
-			// kind of a hack to keep ref to callers context. 
-			// Might end up in this island on same thread as caller. And there we have a rescalc context which we need to hold on to.
-			// If ending up here on a new thread (normal case), this should be a noop.
-			using (ResourceCalculationCurrent.PreserveContext())
+			using (CommandScope.Create(@event))
 			{
-				using (CommandScope.Create(@event))
-				{
-					var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
-					DoOptimization(period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, planningPeriodId);
-					_synchronizeSchedulesAfterIsland.Synchronize(_schedulerStateHolder().Schedules, period);
-				}
+				var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
+				DoOptimization(period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, planningPeriodId);
+				_synchronizeSchedulesAfterIsland.Synchronize(_schedulerStateHolder().Schedules, period);
 			}
 		}
 
