@@ -76,7 +76,7 @@
 		svc.fetchJobs = function () {
 			return $q(function (resolve, reject) {
 				var jobs = [];
-				for (let i = 0; i < counter; i++) {
+				for (var i = 0; i < counter; i++) {
 					jobs.push(new Job(i, i + '.csv', 'Teleopti Demo', '2017-11-26T07:07:27.007Z', false));
 				}
 				counter++;
