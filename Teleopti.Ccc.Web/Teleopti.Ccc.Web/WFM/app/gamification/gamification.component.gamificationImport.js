@@ -12,13 +12,10 @@
 		ctrl.fileSizeLimit = 5242880;
 
 		ctrl.$onInit = function () {
-			dataService.fetchJobs().then(function (data) {
-				ctrl.jobs = data;
-			});
+			fetchJobs();
 		};
 
 		ctrl.fileIsInvalid = function () {
-
 			return !(!!ctrl.file) || ctrl.file.size > ctrl.fileSizeLimit || !ctrl.isCsvFile(ctrl.file);
 		};
 
@@ -38,6 +35,42 @@
 			}
 
 			return false;
+		};
+
+		ctrl.upload = function () {
+			startSpinner();
+			dataService.uploadCsv().then(function () {
+				stopSpinner();
+				clearFile();
+				fetchJobs();
+			});
+		};
+
+		function startSpinner() {
+			ctrl.uploading = true;
+		}
+
+		function stopSpinner() {
+			ctrl.uploading = false;
+		}
+
+		function clearFile() {
+			ctrl.file = null;
+		}
+
+		function fetchJobs() {
+			dataService.fetchJobs().then(function (data) {
+				var lastFetch = ctrl.jobs;
+				ctrl.jobs = data;
+				highlightNewOnes(lastFetch, ctrl.jobs);
+			});
+		}
+
+		function highlightNewOnes(prev, curr) {
+			var n = curr.length - prev.length;
+			for (var i = 0; i < n; i++) {
+				curr[i].isNew = true;
+			}
 		}
 	}
 

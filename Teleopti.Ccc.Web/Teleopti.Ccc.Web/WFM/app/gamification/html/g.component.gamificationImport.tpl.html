@@ -2,9 +2,9 @@
 
 	<div class="droparea-wrapper">
 		<div class="droparea">
-			<div ngf-drop ngf-select ngf-multiple="false" ngf-keep="false" ngf-allow-dir="false" ngf-accept="'.xls,.xlsx'" ng-model="$ctrl.file"
+			<div ngf-drop ngf-select ngf-multiple="false" ngf-keep="false" ngf-allow-dir="false" ngf-accept="'.csv'" ng-model="$ctrl.file"
 			 ng-model-rejected="$ctrl.rejFiles">
-				<span class="prompt">{{ 'DragAndDropExcelFilesHereOrClickToUpload' | translate }}</span>
+				<span class="prompt">{{ 'DragAndDropCSVFilesHereOrClickToUpload' | translate }}</span>
 				<div ng-show="$ctrl.file" class="fileinfo">
 					{{$ctrl.file.name}} - {{ $ctrl.file.size|filesize:2 }}
 					<br />
@@ -14,11 +14,14 @@
 				</div>
 			</div>
 			<div>
-				<button class="wfm-btn wfm-btn-primary" ng-disabled="$ctrl.fileIsInvalid()">{{'UploadAndStart'|translate}}</button>
+				<button class="wfm-btn wfm-btn-primary" ng-disabled="$ctrl.fileIsInvalid()" ng-click="$ctrl.upload()">{{'UploadAndStart'|translate}}</button>
 			</div>
 			<div>
 				<button id="downloadTmpl" class="wfm-btn wfm-btn-invis-default">{{'DownloadTemplate'|translate}}</button>
 			</div>
+		</div>
+		<div ng-if="$ctrl.uploading" class="loading-mask">
+			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 		</div>
 	</div>
 
@@ -29,7 +32,7 @@
 			<div class="started">{{'TimeStarted'|translate}}</div>
 			<div class="status">{{'Status'|translate}}</div>
 		</header>
-		<import-job ng-repeat="job in $ctrl.jobs" job-id="job.id" owner="job.owner" starting-time="job.startingTime" status="job.status"
+		<import-job ng-class="{'just-created': job.isNew}" ng-repeat="job in $ctrl.jobs" job-id="job.id" owner="job.owner" starting-time="job.startingTime" status="job.status"
 		 start name="job.name"></import-job>
 	</div>
 

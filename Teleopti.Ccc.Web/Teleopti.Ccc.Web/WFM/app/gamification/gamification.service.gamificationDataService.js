@@ -5,10 +5,11 @@
 			'$q',
 			'$http',
 			'$log',
+			'$timeout',
 			GamificationDataService
 		]);
 
-	function GamificationDataService($q, $http, $log) {
+	function GamificationDataService($q, $http, $log, $timeout) {
 		var svc = this;
 		svc.fetchSites = function () {
 			return $q(function (resolve, reject) {
@@ -71,17 +72,30 @@
 			});
 		};
 
+		var counter = 5;
 		svc.fetchJobs = function () {
 			return $q(function (resolve, reject) {
-				resolve([
-					new Job(4, '4.csv', 'Teleopti Demo', '2017-11-27T07:07:27.007Z', true),
-					new Job(3, '3.csv', 'Teleopti Demo', '2017-11-26T07:07:27.007Z', false),
-					new Job(2, '2.csv', 'Teleopti Demo', '2017-11-25T07:07:27.007Z', false),
-					new Job(1, '1.csv', 'Teleopti Demo', '2017-11-24T07:07:27.007Z', false),
-					new Job(0, '0.csv', 'Teleopti Demo', '2017-11-23T07:07:27.007Z', false)
-				]);
+				var jobs = [];
+				for (let i = 0; i < counter; i++) {
+					jobs.push(new Job(i, i + '.csv', 'Teleopti Demo', '2017-11-26T07:07:27.007Z', false));
+				}
+				counter++;
+				// resolve([
+				// 	new Job(4, '4.csv', 'Teleopti Demo', '2017-11-27T07:07:27.007Z', true),
+				// 	new Job(3, '3.csv', 'Teleopti Demo', '2017-11-26T07:07:27.007Z', false),
+				// 	new Job(2, '2.csv', 'Teleopti Demo', '2017-11-25T07:07:27.007Z', false),
+				// 	new Job(1, '1.csv', 'Teleopti Demo', '2017-11-24T07:07:27.007Z', false),
+				// 	new Job(0, '0.csv', 'Teleopti Demo', '2017-11-23T07:07:27.007Z', false)
+				// ]);
+				resolve(jobs);
 			});
-		}
+		};
+
+		svc.uploadCsv = function () {
+			return $q(function (resolve, reject) {
+				$timeout(function () { resolve(); }, 4000);
+			});
+		};
 	}
 
 	function Site(id, name) {
