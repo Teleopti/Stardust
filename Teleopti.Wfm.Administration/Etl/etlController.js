@@ -10,14 +10,33 @@
 
         vm.state = 'manual';
         vm.jobs = [];
+	    vm.tenants = [];
 
-        vm.getJobs = function () {
+        vm.getJobs = getJobs;
+	    vm.getTennants = getTennants;
+
+		//init
+	    vm.getManualData = function () { 
+            vm.getJobs();
+	        vm.getTennants();
+        }
+	    vm.getManualData();
+
+        function getJobs() {
             $http.get("./Etl/Jobs", tokenHeaderService.getHeaders())
                 .success(function (data) {
                     vm.jobs = data;
                 });
         }
-	    vm.getJobs();
+
+        function getTennants() {
+            $http.get("./AllTenants", tokenHeaderService.getHeaders())
+                .success(function (data) {
+                    vm.tenants = data;
+	            });
+        }
+
+
 
         //manual inputs
         vm.manualInitial = {
