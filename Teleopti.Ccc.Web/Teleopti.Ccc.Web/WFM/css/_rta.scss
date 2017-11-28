@@ -250,6 +250,19 @@ md-checkbox.rta-marked-checkbox .md-icon{
 	margin-top: $full-padding*4;
 }
 
+.rta-paused-message-wrapper {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.rta-on-grid-tools-wrapper {
+  margin-top: 8px;
+  margin-bottom: 0px;
+}
+
+wfm-right-panel.rta-right-panel-wrapper .panel-menu {
+  top: 15px;
+}
 ///////////End of rta-agents///////////////////////
 ///////////rta-historical-adherence///////////////////////
 
