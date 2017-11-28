@@ -5,6 +5,6 @@
 		Team,
 		Block,
 		TeamAndBlock,
-		Classic
+		Individual
 	}
 }

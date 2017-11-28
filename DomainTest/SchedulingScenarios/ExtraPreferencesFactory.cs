@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		{
 			switch (teamBlockType)
 			{
-				case TeamBlockType.Classic:
+				case TeamBlockType.Individual:
 					return new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false };
 				case TeamBlockType.Block:
 					return new ExtraPreferences { UseTeams = false, UseTeamBlockOption = true };

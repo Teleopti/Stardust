@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[TestCase(TeamBlockType.Team)]
 		[TestCase(TeamBlockType.Block)]
 		[TestCase(TeamBlockType.TeamAndBlock)]
-		[TestCase(TeamBlockType.Classic)]
+		[TestCase(TeamBlockType.Individual)]
 		public void ShouldMoveDayOffToDayWithLessDemand_MarkedBlankDay(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			var wasModified = !stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
-			if (teamBlockType == TeamBlockType.Classic)
+			if (teamBlockType == TeamBlockType.Individual)
 			{
 				wasModified.Should().Be.False();
 			}
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[TestCase(TeamBlockType.Team)]
 		[TestCase(TeamBlockType.Block)]
 		[TestCase(TeamBlockType.TeamAndBlock)]
-		[TestCase(TeamBlockType.Classic)]
+		[TestCase(TeamBlockType.Individual)]
 		public void ShouldMoveDayOffToDayWithLessDemandPerAgent_MarkedBlankDay(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			var wasModified1 = !stateHolder.Schedules[agent1].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
 			var wasModified2 = !stateHolder.Schedules[agent2].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
-			if (teamBlockType == TeamBlockType.Classic)
+			if (teamBlockType == TeamBlockType.Individual)
 			{
 				wasModified1.Should().Be.False();
 				wasModified2.Should().Be.True();
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[TestCase(TeamBlockType.Team)]
 		[TestCase(TeamBlockType.Block)]
 		[TestCase(TeamBlockType.TeamAndBlock)]
-		[TestCase(TeamBlockType.Classic)]
+		[TestCase(TeamBlockType.Individual)]
 		public void ShouldGetBackToLegalState(TeamBlockType teamBlockType)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			var wasModified1 = stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
 			var wasModified2 = stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff();
-			if (teamBlockType == TeamBlockType.Classic)
+			if (teamBlockType == TeamBlockType.Individual)
 			{
 				wasModified1.Should().Be.True();
 				wasModified2.Should().Be.True();
@@ -282,11 +282,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[TestCase(TeamBlockType.Team, false)]
 		[TestCase(TeamBlockType.Block, false)]
 		[TestCase(TeamBlockType.TeamAndBlock, false)]
-		[TestCase(TeamBlockType.Classic, false)]
+		[TestCase(TeamBlockType.Individual, false)]
 		[TestCase(TeamBlockType.Team, true)]
 		[TestCase(TeamBlockType.Block, true)]
 		[TestCase(TeamBlockType.TeamAndBlock, true)]
-		[TestCase(TeamBlockType.Classic, true)]
+		[TestCase(TeamBlockType.Individual, true)]
 		[Ignore("46956 to be fixed")]
 		public void ShouldNotOverwriteAbsencePartOfDayWhenGettingBackToLegalState(TeamBlockType teamBlockType, bool haveAbsence)
 		{
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), (o, args) => { });
 
-			if (teamBlockType == TeamBlockType.Classic && !haveAbsence)
+			if (teamBlockType == TeamBlockType.Individual && !haveAbsence)
 			{
 				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff().Should().Be.True();
 				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();
