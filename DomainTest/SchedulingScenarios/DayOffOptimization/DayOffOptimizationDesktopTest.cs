@@ -329,6 +329,81 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 		}
 
+		[TestCase(TeamBlockType.Team, false)]
+		[TestCase(TeamBlockType.Block, false)]
+		[TestCase(TeamBlockType.TeamAndBlock, false)]
+		[TestCase(TeamBlockType.Classic, false)]
+		[TestCase(TeamBlockType.Team, true)]
+		[TestCase(TeamBlockType.Block, true)]
+		[TestCase(TeamBlockType.TeamAndBlock, true)]
+		[TestCase(TeamBlockType.Classic, true)]
+		[Ignore("46956 to be fixed")]
+		public void ShouldNotOverwriteAbsencePartOfDayWhenGettingBackToLegalState(TeamBlockType teamBlockType, bool haveAbsence)
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var absence = new Absence();
+			var activity = new Activity("_");
+			var contract = new ContractWithMaximumTolerance();
+			var skill = new Skill().For(activity).IsOpen();
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodOneWeek(firstDay);
+			agent.SchedulePeriod(firstDay).SetDaysOff(1);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 5, 5, 1, 1, 5, 5, 5);	
+			var persistableScheduleData = new List<IPersistableScheduleData>();
+			for (var i = 0; i < 7; i++)
+			{
+				var day = firstDay.AddDays(i);
+				var personAssignment = new PersonAssignment(agent, scenario, day).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
+				if (i == 2 || i == 3)
+				{
+					personAssignment.SetDayOff(new DayOffTemplate());
+				}
+				persistableScheduleData.Add(personAssignment);
+
+				if (i == 5 && haveAbsence)
+				{
+					var personAbsence = new PersonAbsence(agent, scenario, new AbsenceLayer(absence, day.ToDateTimePeriod(new TimePeriod(8, 9), TimeZoneInfo.Utc)));
+					persistableScheduleData.Add(personAbsence);
+				}
+			}
+
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, persistableScheduleData, skillDays);
+			ExtraPreferences extra = null;
+			switch (teamBlockType)
+			{
+				case TeamBlockType.Classic:
+					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false };
+					break;
+				case TeamBlockType.Block:
+					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = true };
+					break;
+				case TeamBlockType.Team:
+					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = false };
+					break;
+				case TeamBlockType.TeamAndBlock:
+					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = true };
+					break;
+			}
+			var optPrefs = new OptimizationPreferences {General = {ScheduleTag = new ScheduleTag()}, Extra = extra};
+			var dayOffsPreferences = new DaysOffPreferences {UseFullWeekendsOff = true, FullWeekendsOffValue = new MinMax<int>(1, 1)};
+
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), (o, args) => { });
+
+			if (teamBlockType == TeamBlockType.Classic && !haveAbsence)
+			{
+				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff().Should().Be.True();
+				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();
+			}
+			else
+			{
+				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff().Should().Be.False();
+				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.False();
+			}
+		}
+
 		[Test]
 		public void ShouldReScheduleWhiteSpotsAfterGetBackToLegalStateClassic()
 		{
