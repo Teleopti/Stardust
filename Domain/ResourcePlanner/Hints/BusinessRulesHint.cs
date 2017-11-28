@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class BusinessRulesHint:IScheduleHint
+	public class BusinessRulesHint : IScheduleHint
 	{
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						PersonName = item.Key.Name.ToString(),
 						PersonId = item.Key.Id.Value,
 						ErrorResource = nameof(UserTexts.Resources.TargetDayOffNotFulfilledMessage),
-						ErrorResourceData = new object [] { item.Value.CalculatedTargetScheduleDaysOff(period) }.ToList()
+						ErrorResourceData = new object[] {item.Value.CalculatedTargetScheduleDaysOff(period)}.ToList()
 					}, GetType());
 				}
 				else if (!isAgentFulfillingContractTime(targetSummary, currentSummary))
@@ -51,8 +51,11 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						PersonName = item.Key.Name.ToString(),
 						PersonId = item.Key.Id.Value,
 						ErrorResource = nameof(UserTexts.Resources.TargetScheduleTimeNotFullfilled),
-						ErrorResourceData = new object[] {DateHelper.HourMinutesString(
-									item.Value.CalculatedTargetTimeHolder(period).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)}.ToList()
+						ErrorResourceData = new object[]
+						{
+							DateHelper.HourMinutesString(
+								item.Value.CalculatedTargetTimeHolder(period).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)
+						}.ToList()
 					}, GetType());
 				}
 				else
@@ -62,24 +65,27 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						PersonName = item.Key.Name.ToString(),
 						PersonId = item.Key.Id.Value,
 						ErrorResource = nameof(UserTexts.Resources.AgentHasDaysWithoutAnySchedule),
-						ErrorResourceData = new object[] { agentScheduleDaysWithoutSchedule }.ToList()
+						ErrorResourceData = new object[] {agentScheduleDaysWithoutSchedule}.ToList()
 					}, GetType());
 				}
 			}
 		}
 
-		private static DateOnlyPeriod getAffectedSchedulePeriod(DateOnlyPeriod period, KeyValuePair<IPerson, IScheduleRange> item)
+		private static DateOnlyPeriod getAffectedSchedulePeriod(DateOnlyPeriod period,
+			KeyValuePair<IPerson, IScheduleRange> item)
 		{
 			var virtualPeriods = new HashSet<IVirtualSchedulePeriod>();
 			foreach (var dateOnly in period.DayCollection())
 			{
 				virtualPeriods.Add(item.Key.VirtualSchedulePeriod(dateOnly));
 			}
-			var totalSchedulePeriod = new DateOnlyPeriod(virtualPeriods.Min(x => x.DateOnlyPeriod.StartDate), virtualPeriods.Max(x => x.DateOnlyPeriod.EndDate));
+			var totalSchedulePeriod = new DateOnlyPeriod(virtualPeriods.Min(x => x.DateOnlyPeriod.StartDate),
+				virtualPeriods.Max(x => x.DateOnlyPeriod.EndDate));
 			return totalSchedulePeriod;
 		}
 
-		private static bool isAgentFulfillingContractTime(TargetScheduleSummary targetSummary, CurrentScheduleSummary currentSummary)
+		private static bool isAgentFulfillingContractTime(TargetScheduleSummary targetSummary,
+			CurrentScheduleSummary currentSummary)
 		{
 			return targetSummary.TargetTime.HasValue &&
 				   targetSummary.TargetTime - targetSummary.NegativeTargetTimeTolerance <= currentSummary.ContractTime &&
