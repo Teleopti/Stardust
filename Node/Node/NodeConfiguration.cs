@@ -43,27 +43,19 @@ namespace Stardust.Node
 			}
 		}
 
-		private static string GetIpAddress()
+		private static string GetHostName()
 		{
-			var localIp = "?";
 			var host = Dns.GetHostEntry(Dns.GetHostName());
-			foreach (var ip in host.AddressList)
-			{
-				if (ip.AddressFamily == AddressFamily.InterNetwork)
-				{
-					localIp = ip.ToString();
-				}
-			}
-			return localIp;
+			return host.HostName;
 		}
-		
+
 		private Uri CreateNodeAddress(int port)
 		{
 			if (port <= 0)
 			{
 				throw new ArgumentNullException(nameof(port));
 			}
-			return new Uri("http://" + GetIpAddress() + ":" + port + "/");
+			return new Uri("http://" + GetHostName() + ":" + port + "/");
 		}
 	}
 }
