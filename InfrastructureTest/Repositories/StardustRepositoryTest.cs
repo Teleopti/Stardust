@@ -290,9 +290,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldNotManipulateStringsWithoutNameSpace()
+		public void ShouldFilterOnTypesWhenEventsFromDIfferentNamespaces()
 		{
 			var testEvent = new IndexMaintenanceEvent();
+			var testEventOtherNamespace = new UpdateStaffingLevelReadModelEvent();
 			var job1 = new Job
 			{
 				JobId = Guid.NewGuid(),
@@ -300,8 +301,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Type = testEvent.GetType().ToString()
 			};
 			StardustRepositoryTestHelper.AddJob(job1);
-			var types = Target.GetAllTypes();
-			types.Single().Should().Be.EqualTo("IndexMaintenanceEvent");
+			var job2 = new Job
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = JsonConvert.SerializeObject(testEventOtherNamespace),
+				Type = testEventOtherNamespace.GetType().ToString()
+			};
+			StardustRepositoryTestHelper.AddJob(job2);
+
+			var jobs = Target.GetJobs(new JobFilterModel {From = 1, To = 10, Type = "IndexMaintenanceEvent"});
+			jobs.Count.Should().Be.EqualTo(1);
+			jobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
 		}
 	}
 }

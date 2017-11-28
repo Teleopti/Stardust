@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 				selectCommandText = selectCommandText + $@"AND Serialized LIKE '%LogOnDatasource"":""{filter.DataSource}%' ";
 
 			if (filter.Type != null)
-				selectCommandText = selectCommandText + $@"AND Type = 'Teleopti.Ccc.Domain.ApplicationLayer.Events.{filter.Type}' ";
+				selectCommandText = selectCommandText + $@"AND Type LIKE '%.{filter.Type}' ";
 
 			if (filter.FromDate != null && filter.ToDate != null)
 				selectCommandText = selectCommandText + $@"AND Started BETWEEN '{filter.FromDate.Value.Date:yyyy-MM-dd}' AND '{filter.ToDate.Value.Date.AddDays(1):yyyy-MM-dd}' ";
