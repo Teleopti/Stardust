@@ -1,10 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Ccc.Web.Areas.Global;
+using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Filters;
@@ -19,14 +26,32 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		private readonly IGamificationSettingProvider _gamificationSettingProvider;
 		private readonly ISiteViewModelFactory _siteViewModelFactory;
 		private readonly ITeamGamificationSettingProviderAndPersister _gamificationSettingProviderAndPersister;
+		private readonly IMultipartHttpContentExtractor _multipartHttpContentExtractor;
+		private readonly IImportExternalPerformanceInfoService _importExternalPerformanceInfoService;
 
 		public GamificationController(IGamificationSettingPersister gamificationSettingPersister, IGamificationSettingProvider gamificationSettingProvider, 
-			ISiteViewModelFactory siteViewModelFactory, ITeamGamificationSettingProviderAndPersister gamificationSettingProviderAndPersister)
+			ISiteViewModelFactory siteViewModelFactory, ITeamGamificationSettingProviderAndPersister gamificationSettingProviderAndPersister, IMultipartHttpContentExtractor multipartHttpContentExtractor, IImportExternalPerformanceInfoService importExternalPerformanceInfoService)
 		{
 			_gamificationSettingPersister = gamificationSettingPersister;
 			_gamificationSettingProvider = gamificationSettingProvider;
 			_siteViewModelFactory = siteViewModelFactory;
 			_gamificationSettingProviderAndPersister = gamificationSettingProviderAndPersister;
+			_multipartHttpContentExtractor = multipartHttpContentExtractor;
+			_importExternalPerformanceInfoService = importExternalPerformanceInfoService;
+		}
+
+		[HttpPost, Route("api/Gamification/NewImportExternalPerformanceInfoJob"), UnitOfWork]
+		public async Task<OkResult> NewImportExternalPerformanceInfoJob()
+		{
+			var contents = await ImportCommonAction.ReadAsMultipartAsync(Request.Content);
+			var externalPerformanceInfo = _multipartHttpContentExtractor.ExtractFormModel<ImportExternalPerformanceInfo>(contents);
+			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents).SingleOrDefault();
+			if (fileData?.Data?.Length == 0)
+			{
+				throw new ArgumentNullException(Resources.File, Resources.NoInput);
+			}
+			_importExternalPerformanceInfoService.CreateJob(fileData, externalPerformanceInfo);
+			return Ok();
 		}
 
 		[HttpPost, Route("api/Gamification/Create"), UnitOfWork]

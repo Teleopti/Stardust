@@ -406,6 +406,7 @@
     <Compile Include="Areas\Gamification\Models\GamificationSettingViewModel.cs" />
     <Compile Include="Areas\Gamification\Mapping\IGamificationsettingMapper.cs" />
     <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
+    <Compile Include="Areas\Global\ImportCommonAction.cs" />
     <Compile Include="Areas\Global\Models\GroupPagesViewModel.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />
     <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
