@@ -209,7 +209,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, callba
 
 	self.AddRequest = function () {
 		validateRequestSubjectAndTimeInput();
-		if(self.ShowError())
+		if (self.ShowError())
 			return;
 
 		self.IsPostingData(true);
@@ -250,7 +250,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, callba
 
 	self.SetAjax = function (ajaxobj) { ajax = ajaxobj; };
 
-	self.checkSubject = function() {
+	self.checkSubject = function () {
 		if (self.Subject && (!self.Subject() || !/\S/.test(self.Subject()))) {
 			self.ShowError(true);
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_SUBJECT);
@@ -262,7 +262,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, callba
 	};
 
 	function validateRequestSubjectAndTimeInput() {
-		if(!self.Subject || !self.TimeFrom() || !self.TimeTo())
+		if (!self.Subject || !self.TimeFrom() || !self.TimeTo())
 			return;
 
 		if (!self.Subject() || !/\S/.test(self.Subject())) {
@@ -270,29 +270,15 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, callba
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_SUBJECT);
 			return;
 		}
-
-		var timeFromArr = self.TimeFrom().split(':');
-		var timeToArr = self.TimeTo().split(':');
-
-		if (self.DateFrom().format('YYYY-MM-DD') == self.DateTo().format('YYYY-MM-DD')) {
-			if (timeFromArr[0] > timeToArr[0]) {
-				self.ShowError(true);
-				self.ErrorMessage(requestsMessagesUserTexts.ENDTIME_MUST_BE_GREATER_THAN_STARTTIME);
-			} else if (timeFromArr[0] == timeToArr[0]) {
-				if (timeFromArr[1] >= timeToArr[1]) {
-					self.ShowError(true);
-					self.ErrorMessage(requestsMessagesUserTexts.ENDTIME_MUST_BE_GREATER_THAN_STARTTIME);
-				} else {
-					self.ShowError(false);
-					self.ErrorMessage('');
-				}
-			} else {
-				self.ShowError(false);
-				self.ErrorMessage('');
-			}
-		} else if (self.DateFrom() > self.DateTo()) {
+		
+		var timeFrom = moment(self.DateFrom().format('YYYY-MM-DD') + ' ' + self.TimeFrom());
+		var timeTo = moment(self.DateTo().format('YYYY-MM-DD') + ' ' + self.TimeTo());
+		if (timeFrom.isAfter(timeTo) || timeFrom.isSame(timeTo)) {
 			self.ShowError(true);
 			self.ErrorMessage(requestsMessagesUserTexts.ENDTIME_MUST_BE_GREATER_THAN_STARTTIME);
+		} else {
+			self.ShowError(false);
+			self.ErrorMessage('');
 		}
 	};
 };

@@ -172,4 +172,19 @@
 		equal(vm.ShowError(), false);
 		equal(vm.ErrorMessage(), '');
 	});
+
+	test("should validate legal time to input for new request on same day with US time format", function () {
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+
+		vm.Subject('subject');
+		vm.DateFrom('2017-11-22');
+		vm.DateTo('2017-11-22');
+		vm.TimeFrom('12:00 AM');
+		vm.TimeTo('11:59 PM');
+
+		vm.AddRequest();
+
+		equal(vm.ShowError(), false);
+		equal(vm.ErrorMessage(), '');
+	});
 });
