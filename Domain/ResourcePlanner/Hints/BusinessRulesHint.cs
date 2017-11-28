@@ -29,10 +29,11 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				if (validationResult.InvalidResources.Any(x => item.Key.Id != null && x.ResourceId == item.Key.Id.Value)) continue;
 
 				var targetSummary = new TargetScheduleSummaryCalculator().GetTargets(item.Value, period);
+				var selectedDaysSummary = new CurrentScheduleSummaryCalculator().GetCurrent(item.Value, period);
+				var agentScheduleDaysWithoutSchedule = selectedDaysSummary.DaysWithoutSchedule;
 				var totalSchedulePeriod = getAffectedSchedulePeriod(period, item);
 				var currentSummary = new CurrentScheduleSummaryCalculator().GetCurrent(item.Value, totalSchedulePeriod);
 
-				var agentScheduleDaysWithoutSchedule = currentSummary.DaysWithoutSchedule;
 				if (agentScheduleDaysWithoutSchedule == 0) continue;
 				if (!_dayOffBusinessRuleValidation.Validate(targetSummary, currentSummary))
 				{
