@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[When(@"I click apply planning period")]
 		public void WhenIClickApplyPlanningPeriod()
 		{
-			Browser.Interactions.Click(".apply-planning-period");
+			Browser.Interactions.ClickVisibleOnly(".apply-planning-period");
 		}
 
 		[When(@"I click create next planning period")]
