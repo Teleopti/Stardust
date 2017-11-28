@@ -52,7 +52,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var undoRedoContainer = new UndoRedoContainer();
 			setupUndo(undoRedoContainer, _schedulingResultStateHolder);
 
-			var scheduleDay = scheduleDictionary[person].ScheduledDay(new DateOnly(personRequest.Request.Period.StartDateTime));
+			var personLocalDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.StartDateTime,
+				person.PermissionInformation.DefaultTimeZone()));
+			var scheduleDay = scheduleDictionary[person].ScheduledDay(personLocalDate);
 			scheduleDay.CreateAndAddOvertime(new Scheduling.Activity("fake") { InWorkTime = true }, personRequest.Request.Period, ((IOvertimeRequest)personRequest.Request).MultiplicatorDefinitionSet, true);
 
 			var repsonses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay,

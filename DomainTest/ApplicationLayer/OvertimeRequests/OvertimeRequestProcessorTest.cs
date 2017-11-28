@@ -1078,6 +1078,52 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
+		public void ShouldShowPeriodUsingAgentTimezoneWhenViolateNightlyRestTimeRule()
+		{
+			setupPerson(8, 21);
+			var person = LoggedOnUser.CurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"));
+			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(25), TimeSpan.FromHours(20), TimeSpan.FromHours(10));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
+
+			var timezone = person.PermissionInformation.DefaultTimeZone();
+			for (var i = 0; i < 5; i++)
+			{
+				var day = 10 + i;
+				var startTime = TimeZoneHelper.ConvertToUtc(new DateTime(2017, 7, day, 14,0,0), timezone);
+				var endTime = TimeZoneHelper.ConvertToUtc(new DateTime(2017, 7, day, 23, 0, 0), timezone);
+				var pa = createMainPersonAssignment(person, new DateTimePeriod(startTime, endTime));
+				ScheduleStorage.Add(pa);
+			}
+
+			var requestDate = TimeZoneHelper.ConvertToUtc(new DateTime(2017, 7, 13, 23, 0, 0), timezone);
+			var personRequest = createOvertimeRequest(requestDate, 4);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+
+			var denyReason = personRequest.DenyReason;
+			(denyReason.IndexOf(
+				 "There must be a daily rest of at least 20:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 11:00 hours.", StringComparison.Ordinal) >
+			 -1).Should().Be(true);
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldDenyWhenViolateWeeklyRestTimeRule()
 		{
 			setupPerson(0, 24);
@@ -1149,6 +1195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				 "The week contains too much work time (27:00). Max is 24:00.", StringComparison.Ordinal) >
 			 -1).Should().Be(true);
 		}
+
 
 		private IPersonAssignment createMainPersonAssignment(IPerson person, DateTimePeriod period)
 		{
