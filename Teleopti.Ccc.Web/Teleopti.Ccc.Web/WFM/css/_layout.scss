@@ -183,19 +183,19 @@ tree-data-one, tree-data-two, tree-data-three {
 		color: $white;
 	}
 
-	.selected-true .tree-handle-wrapper:before{
+	.selected-true.tree-handle-wrapper:before{
 		background-color: $blue-500;
 		content: "✓";
 		text-align: center;
 	}
 
-	.semi-true .tree-handle-wrapper:before{
+	.semi-true.tree-handle-wrapper:before{
 		background-color: $blue-100 !important;
 		content: "─" !important;
 		color: $text-color-standard;
 	}
 
-	.semi-select:before{
+	.semi-select.tree-handle-wrapper:before{
 		background-color: $blue-100 !important;
 		content: "─" !important;
 		color: $text-color-standard;

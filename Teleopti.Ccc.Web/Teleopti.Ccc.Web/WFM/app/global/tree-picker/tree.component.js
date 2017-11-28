@@ -29,7 +29,7 @@
         .directive('treeAnimate', treeAnimate);
 
     TreeDataOneController.$inject = ['$element'];
-    TreeDataTwoController.$inject = ['$element'];
+    TreeDataTwoController.$inject = ['$element', '$timeout'];
 
     function TreeDataOneController($element) {
         var vm = this;
@@ -119,9 +119,10 @@
         }
     }
 
-    function TreeDataTwoController($element) {
+    function TreeDataTwoController($element, $timeout) {
         var vm = this;
 
+        var updateView = false;
         var rootSelectUnique = "false;"
         vm.node;
         vm.nodeDisplayName = "name";
@@ -141,25 +142,40 @@
             }
             vm.ngModel.$viewChangeListeners.push(onChange);
             vm.ngModel.$render = onChange;
-            return initSemi();
+            return;
         }
 
         function onChange() {
             vm.data = vm.ngModel.$modelValue;
-        }
-
-        function initSemi() {
-     
+            var lastChange = [];
+            $timeout(function () {
+                var selectedItems = $element[0].getElementsByClassName('selected-true');
+                for (var index = 0; index < selectedItems.length; index++) {
+                    var item = selectedItems[index];
+                    var check = lastChange.some(function(last){
+                        return last == item.$$hashKey;
+                    })
+                    if(!check) {
+                        updateView = true;
+                        item.click();
+                        lastChange.push(item.$$hashKey);
+                    } 
+                }
+            });
         }
 
         function selectNode(item) {
             vm.node = item;
-            var indexList = mapParentIndex(item);
-            var state = !item.$parent.node[vm.nodeSelectedMark];
-            item.$parent.node[vm.nodeSelectedMark] = state;
+            var state;
+            if (updateView) {
+                state = item.$parent.node[vm.nodeSelectedMark];
+            } else {
+                state = !item.$parent.node[vm.nodeSelectedMark];
+                item.$parent.node[vm.nodeSelectedMark] = state;
+            }
             item.$parent.node[vm.nodeSemiSelected] = false;
             if (rootSelectUnique) {
-                var rootIndex = indexList[0];
+                var rootIndex = mapParentIndex(item)[0];
                 setSiblingsToUnselect(vm.data[vm.nodeChildrenName], rootIndex);
             }
             if (item.$parent.$parent.$parent.node && item.$parent.$parent.$parent.node[vm.nodeChildrenName].length !== 0) {
@@ -168,6 +184,7 @@
             if (item.$parent.node[vm.nodeChildrenName] && item.$parent.node[vm.nodeChildrenName].length !== 0) {
                 setChildrenNodesSelectState(item.$parent.node[vm.nodeChildrenName], state);
             }
+            updateView = false;
             return vm.ngModel.$setViewValue(vm.data);
         }
 

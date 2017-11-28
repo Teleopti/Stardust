@@ -295,7 +295,7 @@ xdescribe('TreeDataTwoController', function () {
     });
 });
 
-describe('TreeDataTwoController', function () {
+xdescribe('TreeDataTwoController', function () {
     var vm,
         $controller,
         $compile,
