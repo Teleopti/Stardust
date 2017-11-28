@@ -1,10 +1,10 @@
 ﻿<!DOCTYPE html>
-<html ng-app="wfm">
+<html ng-app="wfm" lang="en">
 <head lang="en">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>WFM</title>
-	<link rel="stylesheet" href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css" media="none" onload="if(media!=='all')media='all'">
 	<meta name="theme-color" content="#0099FF" />
 	<link rel="manifest" href="manifest.webmanifest.json">
 	<link id="themeModules" rel="stylesheet" href="">
@@ -85,15 +85,15 @@
 /build -->
 
 <!--dummy links to disable IE default alt-key shortcuts-->
-<div class="shortcut-trick-ie">
-	<a href="" accesskey="a"></a>
-	<a href="" accesskey="c"></a>
-	<a href="" accesskey="e"></a>
-	<a href="" accesskey="f"></a>
-	<a href="" accesskey="h"></a>
-	<a href="" accesskey="t"></a>
-	<a href="" accesskey="v"></a>
-	<a href="" accesskey="x"></a>
+<div class="shortcut-trick-ie" style="display: none;">
+	<a href="" alt="a" accesskey="a">a</a>
+	<a href="" alt="c" accesskey="c">c</a>
+	<a href="" alt="e" accesskey="e">e</a>
+	<a href="" alt="f" accesskey="f">f</a>
+	<a href="" alt="h" accesskey="h">h</a>
+	<a href="" alt="t" accesskey="t">t</a>
+	<a href="" alt="v" accesskey="v">v</a>
+	<a href="" alt="x" accesskey="x">x</a>
 </div>
 </body>
 
