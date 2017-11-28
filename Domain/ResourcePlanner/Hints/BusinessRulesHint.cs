@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
@@ -25,7 +27,14 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			{
 				if (!agents.Contains(item.Key)) continue;
 				if (validationResult.InvalidResources.Any(x => item.Key.Id != null && x.ResourceId == item.Key.Id.Value)) continue;
-				if (!_dayOffBusinessRuleValidation.Validate(item.Value, period))
+
+				var targetSummary = new TargetScheduleSummaryCalculator().GetTargets(item.Value, period);
+				var totalSchedulePeriod = getAffectedSchedulePeriod(period, item);
+				var currentSummary = new CurrentScheduleSummaryCalculator().GetCurrent(item.Value, totalSchedulePeriod);
+
+				var agentScheduleDaysWithoutSchedule = currentSummary.DaysWithoutSchedule;
+				if (agentScheduleDaysWithoutSchedule == 0) continue;
+				if (!_dayOffBusinessRuleValidation.Validate(targetSummary, currentSummary))
 				{
 					validationResult.Add(new PersonHintError
 					{
@@ -35,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						ErrorResourceData = new object [] { item.Value.CalculatedTargetScheduleDaysOff(period) }.ToList()
 					}, GetType());
 				}
-				else if (!isAgentFulfillingContractTime(item.Value, period))
+				else if (!isAgentFulfillingContractTime(targetSummary, currentSummary))
 				{
 					validationResult.Add(new PersonHintError
 					{
@@ -48,8 +57,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				}
 				else
 				{
-					var agentScheduleDaysWithoutSchedule = getAgentScheduleDaysWithoutSchedule(item.Value, period);
-					if (agentScheduleDaysWithoutSchedule <= 0) continue;
 					validationResult.Add(new PersonHintError
 					{
 						PersonName = item.Key.Name.ToString(),
@@ -61,19 +68,22 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			}
 		}
 
-		private static bool isAgentFulfillingContractTime(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
+		private static DateOnlyPeriod getAffectedSchedulePeriod(DateOnlyPeriod period, KeyValuePair<IPerson, IScheduleRange> item)
 		{
-			var targetSummary = scheduleRange.CalculatedTargetTimeSummary(periodToCheck);
-			var scheduleSummary = scheduleRange.CalculatedCurrentScheduleSummary(periodToCheck);
-			return targetSummary.TargetTime.HasValue &&
-				   targetSummary.TargetTime - targetSummary.NegativeTargetTimeTolerance <= scheduleSummary.ContractTime &&
-				   targetSummary.TargetTime + targetSummary.PositiveTargetTimeTolerance >= scheduleSummary.ContractTime;
+			var virtualPeriods = new HashSet<IVirtualSchedulePeriod>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				virtualPeriods.Add(item.Key.VirtualSchedulePeriod(dateOnly));
+			}
+			var totalSchedulePeriod = new DateOnlyPeriod(virtualPeriods.Min(x => x.DateOnlyPeriod.StartDate), virtualPeriods.Max(x => x.DateOnlyPeriod.EndDate));
+			return totalSchedulePeriod;
 		}
 
-		private static int getAgentScheduleDaysWithoutSchedule(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
+		private static bool isAgentFulfillingContractTime(TargetScheduleSummary targetSummary, CurrentScheduleSummary currentSummary)
 		{
-			var scheduleSummary = scheduleRange.CalculatedCurrentScheduleSummary(periodToCheck);
-			return scheduleSummary.DaysWithoutSchedule;
+			return targetSummary.TargetTime.HasValue &&
+				   targetSummary.TargetTime - targetSummary.NegativeTargetTimeTolerance <= currentSummary.ContractTime &&
+				   targetSummary.TargetTime + targetSummary.PositiveTargetTimeTolerance >= currentSummary.ContractTime;
 		}
 	}
 }

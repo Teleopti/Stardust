@@ -1,19 +1,17 @@
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class DayOffBusinessRuleValidation
 	{
-		public bool Validate(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
+		public bool Validate(TargetScheduleSummary targetSummary, CurrentScheduleSummary currentSummary)
 		{
-			var summary = scheduleRange.CalculatedTargetTimeSummary(periodToCheck);
-			if (!summary.TargetDaysOff.HasValue)
+			if (!targetSummary.TargetDaysOff.HasValue)
 				return false;
 
-			var scheduledDaysOff = scheduleRange.CalculatedScheduleDaysOffOnPeriod(periodToCheck);
-			return summary.TargetDaysOff.Value - summary.NegativeTargetDaysOffTolerance <= scheduledDaysOff &&
-				summary.TargetDaysOff.Value + summary.PositiveTargetDaysOffTolerance >= scheduledDaysOff;
+			var scheduledDaysOff = currentSummary.NumberOfDaysOff;
+			return targetSummary.TargetDaysOff.Value - targetSummary.NegativeTargetDaysOffTolerance <= scheduledDaysOff &&
+				targetSummary.TargetDaysOff.Value + targetSummary.PositiveTargetDaysOffTolerance >= scheduledDaysOff;
 		}
 	}
 }
