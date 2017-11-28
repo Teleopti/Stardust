@@ -129,7 +129,8 @@
 	}
 }
 
-.wfm-checkbox .rta-marked-checkbox:after{
+.wfm-checkbox .rta-marked-checkbox:after, // remove with toggle RTA_MobileFriendlyCheckboxes_46758
+md-checkbox.rta-marked-checkbox .md-icon{
 	background-color: $blue-300;
 }
 

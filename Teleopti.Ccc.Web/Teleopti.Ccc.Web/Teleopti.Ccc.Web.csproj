@@ -1602,6 +1602,7 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.sort.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.tester.fortest.js" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_MobileFriendlyCheckboxes_46758.html" />
+    <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.RTA_MobileFriendlyCheckboxes_46758.js" />
     <Content Include="WFM\app\rta\rta\overview\view.RTA_UnifiedSkillGroupManagement_45417.html" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_UnifiedSkillGroupManagement_45417.html" />
     <Content Include="WFM\app\rta\shared\polling.service.js" />
