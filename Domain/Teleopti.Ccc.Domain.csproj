@@ -311,7 +311,8 @@
     <Compile Include="Cascading\ResourceOptimizationHelperThatThrows.cs" />
     <Compile Include="Common\BadgeSetting.cs" />
     <Compile Include="Common\BadgeSettingDataConverter.cs" />
-    <Compile Include="Common\QualityInfo.cs" />
+    <Compile Include="Common\ExternalPerformanceDataType.cs" />
+    <Compile Include="Common\ExternalPerformance.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
     <Compile Include="Common\TimeSpanExtensions.cs" />
@@ -353,6 +354,7 @@
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />
     <Compile Include="Repositories\IAnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\IASMScheduleChangeTimeRepository.cs" />
+    <Compile Include="Repositories\IExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\PersonBudgetGroupName.cs" />
     <Compile Include="Reports\IScheduleAnalysisProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />
@@ -4018,6 +4020,9 @@
     <EmbeddedResource Include="Common\ExternalBadgeSetting.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="Common\ExternalPerformance.hbm.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />

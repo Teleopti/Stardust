@@ -65,11 +65,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<QualityInfo> LoadAllQualityInfo()
-		{
-			return new List<QualityInfo>();
-		}
-
 		/// <summary>
 		/// Stub for loading matrix reports.
 		/// Note: It will return null, instead of an empty list.

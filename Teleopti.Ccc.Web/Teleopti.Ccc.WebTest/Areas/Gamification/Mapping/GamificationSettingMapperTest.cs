@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 using Teleopti.Interfaces.Domain;
@@ -16,15 +15,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 	[TestFixture]
 	public class GamificationSettingMapperTest
 	{
-		private IStatisticRepository statisticRepository;
+		private FakeExternalPerformanceRepository externalPerformanceRepository;
 		private GamificationSettingMapper mapper;
 
 		[SetUp]
 		public void SetUp()
 		{
-			statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			statisticRepository.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>());
-			mapper = new GamificationSettingMapper(statisticRepository);
+			externalPerformanceRepository = new FakeExternalPerformanceRepository();
+			mapper = new GamificationSettingMapper(externalPerformanceRepository);
 		}
 
 		[Test]
@@ -53,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 		public void ShouldMapExternalBadgeSettings()
 		{
 			var rawSetting = createRawGamificationSetting();
-			var externalBadgeSetting1 = new BadgeSetting()
+			var externalBadgeSetting1 = new BadgeSetting
 			{
 				Name = "ExternalBadge 1",
 				QualityId = 5,
@@ -65,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				GoldThreshold = 150,
 				UnitType = BadgeUnitType.Timespan
 			};
-			var externalBadgeSetting2 = new BadgeSetting()
+			var externalBadgeSetting2 = new BadgeSetting
 			{
 				Name = "ExternalBadge 2",
 				QualityId = 8,
@@ -90,10 +88,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 		}
 
 		[Test]
-		public void ShouldMapNewQualityInfoIntoExternalBadgeSettings()
+		public void ShouldMapNewExternalPerformanceIntoExternalBadgeSettings()
 		{
 			var rawSetting = createRawGamificationSetting();
-			var externalBadgeSetting1 = new BadgeSetting()
+			var externalBadgeSetting1 = new BadgeSetting
 			{
 				Name = "ExternalBadge 1",
 				QualityId = 5,
@@ -105,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				GoldThreshold = 150,
 				UnitType = BadgeUnitType.Timespan
 			};
-			var externalBadgeSetting2 = new BadgeSetting()
+			var externalBadgeSetting2 = new BadgeSetting
 			{
 				Name = "ExternalBadge 2",
 				QualityId = 8,
@@ -120,28 +118,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 			var externalBadgeSettings = new List<IBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};
 			rawSetting.BadgeSettings = externalBadgeSettings;
 
-			var alreadySetQualityInfo = new QualityInfo
+			var alreadySetExternalPerformances = new ExternalPerformance
 			{
-				QualityId = 8,
-				QualityName = "Exist Quality Info",
-				QualityType = "PERCENT",
-				ScoreWeight = 1
+				ExternalId = 8,
+				Name = "Exist External Performance Info",
+				DataType = ExternalPerformanceDataType.Percentage
 			};
-			var newQualityInfo = new QualityInfo
+			var newExternalPerformance = new ExternalPerformance
 			{
-				QualityId = 9,
-				QualityName = "New Quality Info",
-				QualityType = "GRADE",
-				ScoreWeight = 1
+				ExternalId = 9,
+				Name = "New External Performance Info",
+				DataType = ExternalPerformanceDataType.Numeric
 			};
 
-			var statisticRepositoryWithQualityInfo = MockRepository.GenerateMock<IStatisticRepository>();
-			statisticRepositoryWithQualityInfo.Stub(x => x.LoadAllQualityInfo()).Return(new List<QualityInfo>
-			{
-				alreadySetQualityInfo,
-				newQualityInfo
-			});
-			var targetMapper = new GamificationSettingMapper(statisticRepositoryWithQualityInfo);
+			var externalPerformanceRepositoryWithExternalPerformance = new FakeExternalPerformanceRepository();
+			externalPerformanceRepositoryWithExternalPerformance.Add(alreadySetExternalPerformances);
+			externalPerformanceRepositoryWithExternalPerformance.Add(newExternalPerformance);
+			var targetMapper = new GamificationSettingMapper(externalPerformanceRepositoryWithExternalPerformance);
 			var vm = targetMapper.Map(rawSetting);
 
 			checkRawSettingAndVm(rawSetting, vm);
@@ -151,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 			checkRawBadgeSettingAndVm(externalBadgeSetting2, vm.ExternalBadgeSettings.Second());
 			checkRawBadgeSettingAndVm(new BadgeSetting
 			{
-				Name = "New Quality Info",
+				Name = "New External Performance Info",
 				QualityId = 9,
 				LargerIsBetter = true,
 				Enabled = false,

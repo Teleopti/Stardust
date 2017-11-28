@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Logging;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
@@ -10,16 +10,34 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 {
 	public class GamificationSettingMapper : IGamificationSettingMapper
 	{
-		private readonly IStatisticRepository _statisticRepository;
-		private static readonly ILog logger = LogManager.GetLogger(typeof(GamificationSettingMapper));
+		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
 
-		public GamificationSettingMapper(IStatisticRepository statisticRepository)
+		public GamificationSettingMapper(IExternalPerformanceRepository externalPerformanceRepository)
 		{
-			_statisticRepository = statisticRepository;
+			_externalPerformanceRepository = externalPerformanceRepository;
 		}
 
 		public GamificationSettingViewModel Map(IGamificationSetting setting)
 		{
+			var externalBadgeSetting = setting.BadgeSettings == null || !setting.BadgeSettings.Any()
+				? new List<ExternalBadgeSettingViewModel>()
+				: setting.BadgeSettings.Select(x => new ExternalBadgeSettingViewModel
+				{
+					Id = x.Id ?? Guid.Empty,
+					Name = x.Name,
+					QualityId = x.QualityId,
+					LargerIsBetter = x.LargerIsBetter,
+
+					Enabled = x.Enabled,
+
+					Threshold = x.Threshold,
+					BronzeThreshold = x.BronzeThreshold,
+					SilverThreshold = x.SilverThreshold,
+					GoldThreshold = x.GoldThreshold,
+
+					UnitType = x.UnitType
+				}).ToList();
+
 			var vm = new GamificationSettingViewModel
 			{
 				Id = setting.Id,
@@ -27,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 				UpdatedBy = setting.UpdatedBy?.Name.ToString() ?? string.Empty,
 				UpdatedOn = setting.UpdatedOn,
 				GamificationSettingRuleSet = setting.GamificationSettingRuleSet,
+				ExternalBadgeSettings = externalBadgeSetting,
 
 				AnsweredCallsBadgeEnabled = setting.AnsweredCallsBadgeEnabled,
 				AHTBadgeEnabled = setting.AHTBadgeEnabled,
@@ -51,52 +70,23 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 				GoldToSilverBadgeRate = setting.GoldToSilverBadgeRate
 			};
 
-			vm.ExternalBadgeSettings = setting.BadgeSettings == null || !setting.BadgeSettings.Any()
-				? new List<ExternalBadgeSettingViewModel>()
-				: setting.BadgeSettings.Select(x => new ExternalBadgeSettingViewModel
-				{
-					Id = x.Id ?? Guid.Empty,
-					Name = x.Name,
-					QualityId = x.QualityId,
-					LargerIsBetter = x.LargerIsBetter,
+			var externalPerformances = _externalPerformanceRepository.FindAllExternalPerformances().ToList();
+			if (!externalPerformances.Any()) return vm;
 
-					Enabled = x.Enabled,
-
-					Threshold = x.Threshold,
-					BronzeThreshold = x.BronzeThreshold,
-					SilverThreshold = x.SilverThreshold,
-					GoldThreshold = x.GoldThreshold,
-
-					UnitType = x.UnitType
-				}).ToList();
-
-			var qualityInfoList = _statisticRepository.LoadAllQualityInfo().ToList();
-			if (!qualityInfoList.Any()) return vm;
-
-
-			foreach (var qualityInfo in qualityInfoList)
+			foreach (var performanceInfo in externalPerformances)
 			{
-				if (vm.ExternalBadgeSettings.Any(x => x.QualityId == qualityInfo.QualityId))
+				if (vm.ExternalBadgeSettings.Any(x => x.QualityId == performanceInfo.ExternalId))
 				{
 					continue;
 				}
 
-				BadgeUnitType unitType;
-				try
-				{
-					unitType = ConvertRawQualityType(qualityInfo.QualityType);
-				}
-				catch (Exception ex)
-				{
-					logger.Error("Failed to convert unit type of quality.", ex);
-					continue;
-				}
+				var unitType = ConvertRawQualityType(performanceInfo.DataType);
 
 				vm.ExternalBadgeSettings.Add(new ExternalBadgeSettingViewModel
 				{
 					Id = Guid.Empty,
-					Name = qualityInfo.QualityName,
-					QualityId = qualityInfo.QualityId,
+					Name = performanceInfo.Name,
+					QualityId = performanceInfo.ExternalId,
 					LargerIsBetter = true,
 					Enabled = false,
 					UnitType = unitType
@@ -106,26 +96,20 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 			return vm;
 		}
 
-		// TODO: Check quality type conversion in product environment
-		public BadgeUnitType ConvertRawQualityType(string qualityType)
+		public BadgeUnitType ConvertRawQualityType(ExternalPerformanceDataType dataType)
 		{
 			BadgeUnitType result;
-			switch (qualityType)
+			switch (dataType)
 			{
-				case "PERCENTAGE":
+				case ExternalPerformanceDataType.Numeric:
+					result = BadgeUnitType.Count;
+					break;
+				case ExternalPerformanceDataType.Percentage:
 					result = BadgeUnitType.Percentage;
 					break;
-				case "GRADE":
-					result = BadgeUnitType.Count;
-					break;
-				case "POINT":
-					result = BadgeUnitType.Count;
-					break;
-				case "TIMESPAN":
-					result = BadgeUnitType.Timespan;
-					break;
 				default:
-					throw new ArgumentException($@"Unsupported quality type '{qualityType}'", nameof(qualityType));
+					// We support numberic and percent only by now (PBI #46841)
+					throw new ArgumentException($@"Unsupported quality type '{dataType}'", nameof(dataType));
 			}
 
 			return result;

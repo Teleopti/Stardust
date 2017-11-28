@@ -135,29 +135,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public IEnumerable<QualityInfo> LoadAllQualityInfo()
-		{
-			return repositoryActionWithRetry(uow =>
-			{
-				const string sql = "SELECT [quality_id], [quality_name], [quality_type], [score_weight] FROM [dbo].[quality_info]";
-
-				return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
-					.AddScalar("quality_id", NHibernateUtil.Int32)
-					.AddScalar("quality_name", NHibernateUtil.String)
-					.AddScalar("quality_type", NHibernateUtil.String)
-					.AddScalar("score_weight", NHibernateUtil.Double)
-					.SetReadOnly(true)
-					.List<object[]>()
-					.Select(x => new QualityInfo
-					{
-						QualityId = (int) x[0],
-						QualityName = (string) x[1],
-						QualityType = (string) x[2],
-						ScoreWeight = (double) x[3]
-					});
-			});
-		}
-
 		public DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources)
 		{
 			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())

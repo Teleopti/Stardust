@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 	{
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
 		private readonly IGamificationSettingMapper _mapper;
-		private readonly IStatisticRepository _statisticRepository;
+		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
 
-		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IStatisticRepository statisticRepository)
+		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IExternalPerformanceRepository externalPerformanceRepository)
 		{
 			_gamificationSettingRepository = gamificationSettingRepository;
 			_mapper = mapper;
-			_statisticRepository = statisticRepository;
+			_externalPerformanceRepository = externalPerformanceRepository;
 		}
 
 		public GamificationSettingViewModel Persist()
@@ -360,32 +360,30 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			}
 
 			var externalBadgeSetting = setting.BadgeSettings.FirstOrDefault(x => x.QualityId == qualityId);
-			if (externalBadgeSetting == null)
-			{
-				var qualityInfo = getQualityInfo(qualityId);
-				externalBadgeSetting = new BadgeSetting
-				{
-					Name = qualityInfo.QualityName,
-					QualityId = qualityId,
-					LargerIsBetter = true,
-					Enabled = false,
-					Threshold = 0,
-					BronzeThreshold = 0,
-					SilverThreshold = 0,
-					GoldThreshold = 0,
-					UnitType = _mapper.ConvertRawQualityType(qualityInfo.QualityType)
-				};
+			if (externalBadgeSetting != null) return externalBadgeSetting;
 
-				setting.AddBadgeSetting(externalBadgeSetting);
-			}
+			var externalPerformance = getExternalPerformance(qualityId);
+			externalBadgeSetting = new BadgeSetting
+			{
+				Name = externalPerformance.Name,
+				QualityId = qualityId,
+				LargerIsBetter = true,
+				Enabled = false,
+				Threshold = 0,
+				BronzeThreshold = 0,
+				SilverThreshold = 0,
+				GoldThreshold = 0,
+				UnitType = _mapper.ConvertRawQualityType(externalPerformance.DataType)
+			};
+
+			setting.AddBadgeSetting(externalBadgeSetting);
 
 			return externalBadgeSetting;
 		}
 
-		private QualityInfo getQualityInfo(int inputQualityId)
+		private ExternalPerformance getExternalPerformance(int inputExternalPerformanceId)
 		{
-			var qualitiInfos = _statisticRepository.LoadAllQualityInfo();
-			return qualitiInfos.FirstOrDefault(qualitiInfo => qualitiInfo.QualityId == inputQualityId);
+			return _externalPerformanceRepository.FindExternalPerformanceByExternalId(inputExternalPerformanceId);
 		}
 
 		private IGamificationSetting getGamificationSetting(Guid? id)

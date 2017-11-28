@@ -43,7 +43,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources);
 
 		ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date);
-
-		IEnumerable<QualityInfo> LoadAllQualityInfo();
 	}
 }
