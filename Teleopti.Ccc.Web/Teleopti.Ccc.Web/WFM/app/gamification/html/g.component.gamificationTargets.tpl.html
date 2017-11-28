@@ -1,5 +1,5 @@
 <div class="filter">
-	<md-select multiple="true" ng-model="$ctrl.selectedSites" md-selected-text="$ctrl.sitePickerSelectedText()" md-on-close="$ctrl.selectClosed()" class="md-no-underline">
+	<md-select multiple="true" ng-model="$ctrl.selectedSites" md-selected-text="$ctrl.sitePickerSelectedText()" md-on-close="$ctrl.selectClosed()" class="md-no-underline" aria-label="Select sites">
 		<md-option ng-repeat="site in $ctrl.sites" ng-value="site">
 			{{ site.name }}
 		</md-option>
