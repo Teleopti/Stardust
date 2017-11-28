@@ -22,6 +22,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
+	/* TODO: some if(individual) asserts here. 
+	 * Just here until we make teamblock work the same as for individual
+	*/
 	[DomainTest]
 	public class DayOffOptimizationDesktopTest : DayOffOptimizationScenario
 	{
