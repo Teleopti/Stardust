@@ -6,11 +6,11 @@
 			 ng-model-rejected="$ctrl.rejFiles">
 				<span class="prompt">{{ 'DragAndDropExcelFilesHereOrClickToUpload' | translate }}</span>
 				<div ng-show="$ctrl.file" class="fileinfo">
-					{{$ctrl.file.name}} - {{ $ctrl.file.size }}
+					{{$ctrl.file.name}} - {{ $ctrl.file.size|filesize:2 }}
 					<br />
 					<span ng-if="$ctrl.file.size > $ctrl.fileSizeLimit" class="text-warning">
 						<i class="mdi mdi-alert-octagon"></i>
-						{{ 'ExceedsMaximumUploadFileSize'|translate }} ({{ $ctrl.fileSizeLimit }})</span>
+						{{ 'ExceedsMaximumUploadFileSize'|translate }} ({{ $ctrl.fileSizeLimit|filesize:2 }})</span>
 				</div>
 			</div>
 			<div>

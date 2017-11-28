@@ -1,6 +1,10 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.gamification', ['pascalprecht.translate', 'ngFileUpload']);
+	angular.module('wfm.gamification', [
+		'wfm.utilities',
+		'pascalprecht.translate',
+		'ngFileUpload'
+	]);
 
 })();

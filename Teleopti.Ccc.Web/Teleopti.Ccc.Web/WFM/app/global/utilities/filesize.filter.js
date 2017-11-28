@@ -1,7 +1,7 @@
 (function (angular) {
 	'use strict';
 
-	angular.module('wfm.people')
+	angular.module('wfm.utilities')
 		.filter('filesize', function () {
 			var units = ['B', 'KB', 'MB', 'GB'];
 			return function (bytes, precision) {
