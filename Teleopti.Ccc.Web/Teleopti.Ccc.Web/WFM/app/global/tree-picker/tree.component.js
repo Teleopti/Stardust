@@ -149,7 +149,7 @@
         }
 
         function initSemi() {
-            console.log($element[0].getElementsByClassName('selected-true'))
+     
         }
 
         function selectNode(item) {

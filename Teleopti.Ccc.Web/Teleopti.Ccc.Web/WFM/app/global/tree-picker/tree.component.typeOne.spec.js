@@ -1,4 +1,4 @@
-describe('TreeDataOneController', function () {
+xdescribe('TreeDataOneController', function () {
     var vm,
         $controller,
         $compile,
