@@ -31,7 +31,7 @@ describe('RtaFilterController', function () {
 		$controllerBuilder = _ControllerBuilder_;
 		$timeout = _$timeout_;
 
-		scope = $controllerBuilder.setup('RtaFilterController39082');
+		scope = $controllerBuilder.setup('RtaFilterController46758');
 
 		$fakeBackend.clear();
 		
@@ -1050,7 +1050,7 @@ describe('RtaFilterController', function () {
 		expect(lastGoParams.skillAreaId).toEqual('phoneAndEmailGuid');
 	});
 
-	xit('should go to agents on team when partial permission for site', function () {
+	it('should go to agents on team when partial permission for site', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
 			FullPermission: false,
@@ -1070,7 +1070,7 @@ describe('RtaFilterController', function () {
 		expect(lastGoParams.teamIds).toEqual(['TeamGuid']);
 	});
 
-	xit('should go to agents on site and team when selecting sites and full permission for site1 and partial permission for site2', function () {
+	it('should go to agents on site and team when selecting sites and full permission for site1 and partial permission for site2', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
 			FullPermission: true,
@@ -1094,12 +1094,12 @@ describe('RtaFilterController', function () {
 			vm.sites[1].toggle();
 			vm.goToAgents();
 		});
-
+		
 		expect(lastGoParams.siteIds).toEqual(['LondonGuid']);
 		expect(lastGoParams.teamIds).toEqual(['TeamParisGuid']);
 	});
 
-	xit('should go to agents on site and team when selecting team and sitefull permission for site1 and partial permission for site2', function () {
+	it('should go to agents on site and team when selecting team and sitefull permission for site1 and partial permission for site2', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
 			FullPermission: true,

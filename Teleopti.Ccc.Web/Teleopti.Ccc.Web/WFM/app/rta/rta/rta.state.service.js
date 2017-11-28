@@ -171,10 +171,13 @@
 
 			// add sites where all teams are selected
 			organization.filter(function (site) {
-				if (site.Teams.length == 0) return false;
+				return site.Teams.length > 0;
+			}).filter(function (site) {
 				return site.Teams.every(function (team) {
 					return state.teamIds.some(function (teamId) { return teamId == team.Id });
 				});
+			}).filter(function (site) {
+				return site.FullPermission !== false;
 			}).forEach(function (site) {
 				if (!state.siteIds.some(function (siteId) { return siteId == site.Id }))
 					state.siteIds.push(site.Id);
