@@ -21,7 +21,6 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -260,8 +259,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		protected override void Setup (ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup (system, configuration);
-			system.AddModule (new CommonModule (configuration));
-
 
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
