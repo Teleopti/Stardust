@@ -16827,4 +16827,16 @@ Do you want to participate?</value>
     <value>Your schedule  has changed!</value>
     <comment>Your schedule  has changed!</comment>
   </data>
+  <data name="AnErrorOccurredWhenUploadingTheFile" xml:space="preserve">
+    <value>An error occurred when uploading the file</value>
+    <comment>Error message when an upload fails</comment>
+  </data>
+  <data name="ImportExternalData" xml:space="preserve">
+    <value>Import External Data</value>
+    <comment>Tab title in the Gamification module</comment>
+  </data>
+  <data name="UploadAndStart" xml:space="preserve">
+    <value>Upload and Start</value>
+    <comment>Button title for importing a file</comment>
+  </data>
 </root>

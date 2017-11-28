@@ -93,7 +93,13 @@
 
 		svc.uploadCsv = function () {
 			return $q(function (resolve, reject) {
-				$timeout(function () { resolve(); }, 4000);
+				$timeout(function () {
+					var n = Math.floor(Math.random() * 2);
+					if (n === 0)
+						resolve()
+					else
+						reject()
+				}, 4000);
 			});
 		};
 	}

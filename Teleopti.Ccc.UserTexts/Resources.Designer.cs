@@ -2600,6 +2600,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred when uploading the file.
+        /// </summary>
+        public static string AnErrorOccurredWhenUploadingTheFile {
+            get {
+                return ResourceManager.GetString("AnErrorOccurredWhenUploadingTheFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A new import job has been created for &apos;{0}&apos;.
         /// </summary>
         public static string ANewImportJobHasBeenCreatedFor {
@@ -14228,6 +14237,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ImportError {
             get {
                 return ResourceManager.GetString("ImportError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import External Data.
+        /// </summary>
+        public static string ImportExternalData {
+            get {
+                return ResourceManager.GetString("ImportExternalData", resourceCulture);
             }
         }
         
@@ -35688,6 +35706,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UpdatingAbsence {
             get {
                 return ResourceManager.GetString("UpdatingAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload and Start.
+        /// </summary>
+        public static string UploadAndStart {
+            get {
+                return ResourceManager.GetString("UploadAndStart", resourceCulture);
             }
         }
         

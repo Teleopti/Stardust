@@ -39,12 +39,20 @@
 
 		ctrl.upload = function () {
 			startSpinner();
+			setUploadingError(false);
 			dataService.uploadCsv().then(function () {
 				stopSpinner();
 				clearFile();
 				fetchJobs();
+			}, function(){
+				setUploadingError(true);
+				stopSpinner();
 			});
 		};
+
+		function setUploadingError(isError){
+			ctrl.file.uploadingError = isError;
+		}
 
 		function startSpinner() {
 			ctrl.uploading = true;
@@ -62,11 +70,11 @@
 			dataService.fetchJobs().then(function (data) {
 				var lastFetch = ctrl.jobs;
 				ctrl.jobs = data;
-				highlightNewOnes(lastFetch, ctrl.jobs);
+				if (lastFetch && lastFetch.length) highlightNewJobs(lastFetch, ctrl.jobs);
 			});
 		}
 
-		function highlightNewOnes(prev, curr) {
+		function highlightNewJobs(prev, curr) {
 			var n = curr.length - prev.length;
 			for (var i = 0; i < n; i++) {
 				curr[i].isNew = true;

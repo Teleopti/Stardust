@@ -4,20 +4,24 @@
 		<div class="droparea">
 			<div ngf-drop ngf-select ngf-multiple="false" ngf-keep="false" ngf-allow-dir="false" ngf-accept="'.csv'" ng-model="$ctrl.file"
 			 ng-model-rejected="$ctrl.rejFiles">
-				<span class="prompt">{{ 'DragAndDropCSVFilesHereOrClickToUpload' | translate }}</span>
+				<span class="prompt pointer">{{ 'DragAndDropCSVFilesHereOrClickToUpload' | translate }}</span>
 				<div ng-show="$ctrl.file" class="fileinfo">
-					{{$ctrl.file.name}} - {{ $ctrl.file.size|filesize:2 }}
-					<br />
-					<span ng-if="$ctrl.file.size > $ctrl.fileSizeLimit" class="text-warning">
+					<span class="filename pointer">{{$ctrl.file.name}} - {{ $ctrl.file.size|filesize:2 }}</span>
+					<div ng-if="$ctrl.file.size > $ctrl.fileSizeLimit" class="text-warning pointer">
+						<i class="mdi mdi mdi-alert"></i>
+						{{ 'ExceedsMaximumUploadFileSize'|translate }} ({{ $ctrl.fileSizeLimit|filesize:2 }})
+					</div>
+					<div class="text-danger pointer" ng-if="$ctrl.file.uploadingError">
 						<i class="mdi mdi-alert-octagon"></i>
-						{{ 'ExceedsMaximumUploadFileSize'|translate }} ({{ $ctrl.fileSizeLimit|filesize:2 }})</span>
+						{{'AnErrorOccurredWhenUploadingTheFile'|translate}}
+					</div>
 				</div>
 			</div>
 			<div>
 				<button class="wfm-btn wfm-btn-primary" ng-disabled="$ctrl.fileIsInvalid()" ng-click="$ctrl.upload()">{{'UploadAndStart'|translate}}</button>
 			</div>
 			<div>
-				<button id="downloadTmpl" class="wfm-btn wfm-btn-invis-default">{{'DownloadTemplate'|translate}}</button>
+				<button id="downloadTmpl" class="wfm-btn wfm-btn-invis-default"><i class="mdi mdi-help-circle-outline"></i>&nbsp;Import File Format</button>
 			</div>
 		</div>
 		<div ng-if="$ctrl.uploading" class="loading-mask">
