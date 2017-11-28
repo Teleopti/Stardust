@@ -215,5 +215,4 @@
                 .replace("{0}", moment(p.StartDate).format('L'))
                 .replace("{1}", moment(p.EndDate).format('L'));
         }
-    }
 })();
