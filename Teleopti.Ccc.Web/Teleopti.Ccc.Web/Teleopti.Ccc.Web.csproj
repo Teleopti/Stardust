@@ -2731,6 +2731,7 @@
     <Content Include="WFM\css\_start.scss" />
     <Content Include="WFM\css\_reports.scss" />
     <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\README.md" />
+    <Content Include="WFM\manifest.webmanifest.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
