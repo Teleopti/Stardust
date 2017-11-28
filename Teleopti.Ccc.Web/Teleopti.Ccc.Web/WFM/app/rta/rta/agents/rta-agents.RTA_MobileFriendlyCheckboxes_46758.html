@@ -65,14 +65,8 @@
 	</div>
 	<wfm-right-panel ng-if="!vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
 		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
-		<div ng-repeat="state in vm.states">
-			<div class="wfm-checkbox">
-				<label>
-					<input type="checkbox" name="checkbox" id="{{state.Id}}" ng-model="state.Selected"/>
-					<span class="wfm-checkbox-toggle"></span>
-					<span class="wfm-checkbox-label rta-deselect-state">{{state.Name}}</span>
-				</label>
-			</div>
+		<div class="full-padding">
+			<md-checkbox ng-repeat="state in vm.states" ng-model="state.Selected" aria-label="Checkbox">{{state.Name}}</md-checkbox>
 		</div>
 	</wfm-right-panel>
 </div>
