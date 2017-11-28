@@ -152,26 +152,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			asses[5].SetDayOff(new DayOffTemplate());
 			asses[0].ClearMainActivities();//blank day
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
-			ExtraPreferences extra = null;
-			switch (teamBlockType)
-			{
-				case TeamBlockType.Classic:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.Block:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = true };
-					break;
-				case TeamBlockType.Team:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.TeamAndBlock:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = true };
-					break;
-			}
 			var optPrefs = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag() },
-				Extra = extra
+				Extra = teamBlockType.CreateExtraPreferences()
 			};
 
 			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
@@ -218,33 +202,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			asses2[5].SetDayOff(new DayOffTemplate());
 			asses1[0].ClearMainActivities();//bland day
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent1, agent2 }, asses1.Union(asses2), skillDays);
-			ExtraPreferences extra = null;
-			switch (teamBlockType)
-			{
-				case TeamBlockType.Classic:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.Block:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = true };
-					break;
-				case TeamBlockType.Team:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.TeamAndBlock:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = true };
-					break;
-			}
 			var optPrefs = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag() },
-				Extra = extra
+				Extra = teamBlockType.CreateExtraPreferences()
 			};
 
 			Target.Execute(period, new[] { agent1, agent2 }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
 
 			var wasModified1 = !stateHolder.Schedules[agent1].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
 			var wasModified2 = !stateHolder.Schedules[agent2].ScheduledDay(firstDay.AddDays(5)).HasDayOff();
-
 			if (teamBlockType == TeamBlockType.Classic)
 			{
 				wasModified1.Should().Be.False();
@@ -285,28 +252,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			asses[2].SetDayOff(new DayOffTemplate());
 			asses[3].SetDayOff(new DayOffTemplate());
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
-			ExtraPreferences extra = null;
-			switch (teamBlockType)
-			{
-				case TeamBlockType.Classic:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.Block:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = true };
-					break;
-				case TeamBlockType.Team:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.TeamAndBlock:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = true };
-					break;
-			}
 			var optPrefs = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag() },
-				Extra = extra
+				Extra = teamBlockType.CreateExtraPreferences()
 			};
-
 			var dayOffsPreferences = new DaysOffPreferences
 			{
 				UseFullWeekendsOff = true,
@@ -371,23 +321,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, persistableScheduleData, skillDays);
-			ExtraPreferences extra = null;
-			switch (teamBlockType)
-			{
-				case TeamBlockType.Classic:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.Block:
-					extra = new ExtraPreferences { UseTeams = false, UseTeamBlockOption = true };
-					break;
-				case TeamBlockType.Team:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = false };
-					break;
-				case TeamBlockType.TeamAndBlock:
-					extra = new ExtraPreferences { UseTeams = true, UseTeamBlockOption = true };
-					break;
-			}
-			var optPrefs = new OptimizationPreferences {General = {ScheduleTag = new ScheduleTag()}, Extra = extra};
+			var optPrefs = new OptimizationPreferences {General = {ScheduleTag = new ScheduleTag()}, Extra = teamBlockType.CreateExtraPreferences()};
 			var dayOffsPreferences = new DaysOffPreferences {UseFullWeekendsOff = true, FullWeekendsOffValue = new MinMax<int>(1, 1)};
 
 			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), (o, args) => { });
