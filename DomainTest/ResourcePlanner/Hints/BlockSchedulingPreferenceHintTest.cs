@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseBlockSameShiftCategory = true
 					}), false)).InvalidResources;
 
-			result.Count.Should().Be.EqualTo(0);
+			result.First().ValidationTypes.Count(x => x.Name == nameof(BlockSchedulingPreferenceHint)).Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseBlockSameShiftCategory = true
 					}), true)).InvalidResources;
 
-			result.Count.Should().Be.EqualTo(0);
+			result.First().ValidationTypes.Count(x => x.Name == nameof(BlockSchedulingPreferenceHint)).Should().Be.EqualTo(0);
 		}
 	}
 }
