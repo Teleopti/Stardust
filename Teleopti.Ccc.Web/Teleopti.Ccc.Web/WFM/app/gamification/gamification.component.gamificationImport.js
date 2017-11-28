@@ -18,8 +18,27 @@
 		};
 
 		ctrl.fileIsInvalid = function () {
-			return !(!!ctrl.file) || ctrl.file.size > ctrl.fileSizeLimit;
+
+			return !(!!ctrl.file) || ctrl.file.size > ctrl.fileSizeLimit || !ctrl.isCsvFile(ctrl.file);
 		};
+
+		ctrl.isCsvFile = function (file) {
+			if (!file) {
+				return false;
+			}
+
+			var name = file.name;
+			if (!name) {
+				return false;
+			}
+
+			var index = name.toLowerCase().lastIndexOf('.csv');
+			if (index > -1) {
+				return true;
+			}
+
+			return false;
+		}
 	}
 
 })(angular);

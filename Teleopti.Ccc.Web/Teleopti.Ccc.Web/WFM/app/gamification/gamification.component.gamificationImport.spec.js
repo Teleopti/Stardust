@@ -63,6 +63,25 @@ describe('<gamification-import>', function () {
 		expect(list[2].querySelector('.job').innerText).toBe('Job 2');
 	});
 
+	it('should only allow .csv file', function () {
+		var cmp = setupComponent();
+		var ctrl = cmp.controller('gamificationImport');
+		expect(ctrl).toBeTruthy();
+
+		var file = {
+			name: 'test.csv'
+		};
+
+		expect(ctrl.isCsvFile(file)).toBe(true);
+
+		file.name = 'x.xls';
+		expect(ctrl.isCsvFile(file)).toBe(false);
+
+		file.name = 'x.cSv';
+		expect(ctrl.isCsvFile(file)).toBe(true);
+
+	});
+
 	function setupComponent(attrs, scope) {
 		var el;
 
