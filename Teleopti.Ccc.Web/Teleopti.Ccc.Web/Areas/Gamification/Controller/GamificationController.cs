@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			_importExternalPerformanceInfoService = importExternalPerformanceInfoService;
 		}
 
-		[HttpPost, Route("api/Gamification/NewImportExternalPerformanceInfoJob"), UnitOfWork]
+		[HttpPost, Route("api/Gamification/NewImportExternalPerformanceInfoJob")]
 		public async Task<OkResult> NewImportExternalPerformanceInfoJob()
 		{
 			var contents = await ImportCommonAction.ReadAsMultipartAsync(Request.Content);

@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IFileProcessor _fileProcessor;
 		private readonly IStardustJobFeedback _feedback;
-		private readonly IImportAgentJobArtifactValidator _validator;
+		private readonly IImportJobArtifactValidator _validator;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportAgentEventHandler));
 
 		public ImportAgentEventHandler(
 			IJobResultRepository jobResultRepository,
 			IFileProcessor fileProcessor,
-			IStardustJobFeedback feedback, IImportAgentJobArtifactValidator validator)
+			IStardustJobFeedback feedback, IImportJobArtifactValidator validator)
 		{
 			_jobResultRepository = jobResultRepository;
 			_fileProcessor = fileProcessor;
@@ -52,13 +52,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 
 		protected void HandleJob(ImportAgentEvent @event)
 		{
-			var processResult = _validator.ValidateJobArtifact(@event, _feedback.SendProgress);
+			var jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
+			var inputFile = _validator.ValidateJobArtifact(jobResult, _feedback.SendProgress);
 			
-			if (processResult == null)
+			if (inputFile == null)
 			{
 				_feedback.SendProgress("Job artifact validation has error, give up!");
 				return;
 			}
+
+			var processResult = _fileProcessor.Process(new FileData
+			{
+				Data = inputFile.Content,
+				FileName = inputFile.Name
+			}, @event.Defaults, _feedback.SendProgress);
+			processResult.TimezoneForCreator = jobResult.Owner.PermissionInformation.DefaultTimeZone();
+			processResult.InputArtifactInfo = new { inputFile.FileName, inputFile.FileType };
 
 			_fileProcessor.BatchPersist(processResult.TimezoneForCreator, _feedback.SendProgress, processResult.RawResults.ToArray());
 

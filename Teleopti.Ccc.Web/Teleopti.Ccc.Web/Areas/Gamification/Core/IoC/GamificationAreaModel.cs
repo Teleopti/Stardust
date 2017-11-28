@@ -1,5 +1,7 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Global.Core;
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.core.IoC
 			builder.RegisterType<TeamGamificationSettingProviderAndPersister>().As<ITeamGamificationSettingProviderAndPersister>().SingleInstance();
 			builder.RegisterType<ImportExternalPerformanceInfoService>().As<IImportExternalPerformanceInfoService>().SingleInstance();
 			builder.RegisterType<MultipartHttpContentExtractor>().As<IMultipartHttpContentExtractor>().SingleInstance();
+			builder.RegisterType<ImportJobArtifactValidator>().As<IImportJobArtifactValidator>().ApplyAspects();
 		}
 	}
 }
