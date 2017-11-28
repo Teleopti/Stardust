@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -45,9 +46,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				ret.Set(index, ((significant == SchedulePartView.DayOff) || (significant == SchedulePartView.ContractDayOff)));
 				if (!matrix.UnlockedDays.Contains(scheduleDayPro))
 					ret.Lock(index, true);
-				if (significant == SchedulePartView.FullDayAbsence)
+				if (!scheduleDayPro.DaySchedulePart().PersonAbsenceCollection().IsEmpty())
 					ret.Lock(index, true);
-				if(dontUseOnDates.Contains(scheduleDayPro.Day))
+				if (dontUseOnDates.Contains(scheduleDayPro.Day))
 					ret.Lock(index, true);
 				index++;
 			}

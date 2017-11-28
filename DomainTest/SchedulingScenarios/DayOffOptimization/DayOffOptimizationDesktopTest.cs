@@ -290,7 +290,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[TestCase(TeamBlockType.Block, true)]
 		[TestCase(TeamBlockType.TeamAndBlock, true)]
 		[TestCase(TeamBlockType.Individual, true)]
-		[Ignore("46956 to be fixed")]
 		public void ShouldNotOverwriteAbsencePartOfDayWhenGettingBackToLegalState(TeamBlockType teamBlockType, bool haveAbsence)
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
