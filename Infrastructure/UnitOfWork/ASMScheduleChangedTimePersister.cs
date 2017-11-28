@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return modifiedRoots.Select(r => r.Root)
 				.OfType<IPersistableScheduleData>()
 				.Where(s =>
-				s.Scenario.DefaultScenario
-				&& isWithinASMNotifyPeriod(s)
-				&& includedTypes.Any(t => s.GetType().GetInterfaces().Contains(t)))
+					includedTypes.Any(t => s.GetType().GetInterfaces().Contains(t))
+					&& s.Scenario.DefaultScenario
+					&& isWithinASMNotifyPeriod(s))
 				.ToList();
 		}
 
