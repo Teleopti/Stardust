@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public bool ContinueShovel(CascadingSkillSet skillSet)
 		{
-			if (!_resourcesMovedOnSkillSet.TryGetValue(skillSet, out double resourcesMovedOnSkillSet))
+			if (!_resourcesMovedOnSkillSet.TryGetValue(skillSet, out var resourcesMovedOnSkillSet))
 			{
 				resourcesMovedOnSkillSet = 0;
 			}
-			var ret =  RemainingOverstaffing > (IsAnyPrimarySkillOpen ? 0.1 : 0.001) &&
+			var ret = RemainingOverstaffing > (IsAnyPrimarySkillOpen ? 0.1 : 0.001) &&
 					resourcesMovedOnSkillSet < MaxToMoveForThisSkillSet(skillSet) &&
 					   _continueShovelingBasedOnSubSkills;
 			_continueShovelingBasedOnSubSkills = false;

@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			foreach (var primarySkill in skillSetsWithSameIndex.First().PrimarySkills)
 			{
-				IShovelResourceDataForInterval shovelResourceDataForInterval;
-				if (!shovelResourceData.TryGetDataForInterval(primarySkill, interval, out shovelResourceDataForInterval))
+				if (!shovelResourceData.TryGetDataForInterval(primarySkill, interval, out var shovelResourceDataForInterval))
 					continue;
 				primarySkillsExistsButTheyAreAllClosed = false;
 				var primarySkillOverstaff = shovelResourceDataForInterval.AbsoluteDifference;
