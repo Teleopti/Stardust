@@ -51,7 +51,8 @@
 					<table class="wfm-table">
 						<tr ng-repeat="state in tracedUser.states" class="trace">
 							<td width="200px" style="vertical-align: top">{{state.stateCode}}</td>
-							<td><span ng-repeat="trace in state.traces">{{trace}}<br/></span></td>
+							<!-- track by $index cant be tested -->
+							<td><span ng-repeat="trace in state.traces track by $index">{{trace}}<br/></span></td>
 						</tr>
 					</table>
 				</div>
