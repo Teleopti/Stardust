@@ -52,7 +52,7 @@
 
       var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
           .replace('{0}', $translate.instant('Forecasts'))
-          .replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' target='_blank'>")
+          .replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' rel='noopener'>")
           .replace('{2}', '</a>');
       NoticeService.info(message, null, true);
     }

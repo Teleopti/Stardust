@@ -25,7 +25,7 @@
 
 <div class="nav-tools inline-flex" ng-controller="ThemesPickerController as vm">
 
-	<a href="https://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank" ng-cloak>
+	<a href="https://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank" rel="noopener">
 		<div tabindex=0 class="context-menu card-context even-icon feedback-wrap">
 			<svg class="feedback" viewBox="0 0 44 44">
 				<g>
@@ -41,7 +41,7 @@
 
 
 <!-- ng-if="vm.displayHelp" -->
-<a ng-controller="HelpController as vm" href="{{vm.helpUrl}}" target="_blank">
+<a ng-controller="HelpController as vm" href="{{vm.helpUrl}}" target="_blank" rel="noopener">
 	<div tabindex=0 class="context-menu card-context">
 		<i class="mdi mdi-help-circle"></i>
 		<md-tooltip>{{'HelpLabel'|translate}}</md-tooltip>
