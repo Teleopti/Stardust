@@ -149,6 +149,10 @@ wfm-card > md-card {
     top: 5%;
 }
 
+.baseline{
+	align-items: baseline;
+}
+
 //new tree-picker
 
 tree-data-one, tree-data-two, tree-data-three {
@@ -158,7 +162,7 @@ tree-data-one, tree-data-two, tree-data-three {
 		border: 1px dotted $gray012;
 		border-top: none;
 	}
-	
+
 	.tree-handle-wrapper{
 		cursor:pointer;
 		position:relative;
