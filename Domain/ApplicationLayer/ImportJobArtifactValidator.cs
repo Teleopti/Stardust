@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class ImportJobArtifactValidator : IImportJobArtifactValidator
 	{
-		[UnitOfWork]
 		public virtual JobResultArtifact ValidateJobArtifact(IJobResult jobResult, Action<string> sendProgress )
 		{
 			if (jobResult == null)

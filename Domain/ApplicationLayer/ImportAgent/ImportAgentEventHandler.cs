@@ -22,16 +22,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		private readonly IStardustJobFeedback _feedback;
 		private readonly IImportJobArtifactValidator _validator;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportAgentEventHandler));
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		public ImportAgentEventHandler(
 			IJobResultRepository jobResultRepository,
 			IFileProcessor fileProcessor,
-			IStardustJobFeedback feedback, IImportJobArtifactValidator validator)
+			IStardustJobFeedback feedback, IImportJobArtifactValidator validator, ICurrentUnitOfWorkFactory currentUnitOfWork)
 		{
 			_jobResultRepository = jobResultRepository;
 			_fileProcessor = fileProcessor;
 			_feedback = feedback;
 			_validator = validator;
+			_currentUnitOfWorkFactory = currentUnitOfWork;
 		}
 
 		[AsSystem]
@@ -50,24 +52,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 		}
 
-		protected void HandleJob(ImportAgentEvent @event)
+			protected virtual void HandleJob(ImportAgentEvent @event)
 		{
-			var jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
-			var inputFile = _validator.ValidateJobArtifact(jobResult, _feedback.SendProgress);
-			
-			if (inputFile == null)
+			IJobResult jobResult = null;
+			JobResultArtifact inputFile = null;
+			AgentFileProcessResult processResult = null;
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				_feedback.SendProgress("Job artifact validation has error, give up!");
-				return;
-			}
+				jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
+				inputFile = _validator.ValidateJobArtifact(jobResult, _feedback.SendProgress);
+				if (inputFile == null)
+				{
+					_feedback.SendProgress("Job artifact validation has error, give up!");
+					return;
+				}
 
-			var processResult = _fileProcessor.Process(new FileData
-			{
-				Data = inputFile.Content,
-				FileName = inputFile.Name
-			}, @event.Defaults, _feedback.SendProgress);
-			processResult.TimezoneForCreator = jobResult.Owner.PermissionInformation.DefaultTimeZone();
-			processResult.InputArtifactInfo = new { inputFile.FileName, inputFile.FileType };
+				processResult = _fileProcessor.Process(new FileData
+				{
+					Data = inputFile.Content,
+					FileName = inputFile.Name
+				}, @event.Defaults, _feedback.SendProgress);
+				processResult.TimezoneForCreator = jobResult.Owner.PermissionInformation.DefaultTimeZone();
+				processResult.InputArtifactInfo = new { inputFile.FileName, inputFile.FileType };
+			}
+			
 
 			_fileProcessor.BatchPersist(processResult.TimezoneForCreator, _feedback.SendProgress, processResult.RawResults.ToArray());
 
