@@ -1,25 +1,26 @@
 ﻿using NHibernate.Transform;
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
+using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Schedule
 {
 	public class ASMScheduleChangeTimeRepository : IASMScheduleChangeTimeRepository
 	{
-		private readonly ICurrentMessageBrokerUnitOfWork _unitOfWork;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
-		public ASMScheduleChangeTimeRepository(ICurrentMessageBrokerUnitOfWork unitOfWork, INow now)
+		public ASMScheduleChangeTimeRepository(ICurrentUnitOfWork unitOfWork, INow now)
 		{
 			_unitOfWork = unitOfWork;
 			_now = now;
 		}
 		public ASMScheduleChangeTime GetScheduleChangeTime(Guid personId)
 		{
-			return _unitOfWork.Current().CreateSqlQuery($@"
-						SELECT [PersonId], [TimeStamp] FROM [msg].ASMScheduleChangeTime 
+			return _unitOfWork.Current().Session().CreateSQLQuery($@"
+						SELECT [PersonId], [TimeStamp] FROM [dbo].ASMScheduleChangeTime 
 						WHERE PersonId = :{nameof(ASMScheduleChangeTime.PersonId)}
 					")
 				.SetGuid(nameof(ASMScheduleChangeTime.PersonId), personId)
@@ -29,8 +30,8 @@ namespace Teleopti.Ccc.Infrastructure.Schedule
 
 		public void Add(ASMScheduleChangeTime time)
 		{
-			_unitOfWork.Current().CreateSqlQuery($@"
-						INSERT INTO [msg].ASMScheduleChangeTime (
+			_unitOfWork.Current().Session().CreateSQLQuery($@"
+						INSERT INTO [dbo].ASMScheduleChangeTime (
 					[{nameof(ASMScheduleChangeTime.PersonId)}]
 					 ,[{nameof(ASMScheduleChangeTime.TimeStamp)}])
 					VALUES 
@@ -43,8 +44,8 @@ namespace Teleopti.Ccc.Infrastructure.Schedule
 		}
 
 		public void Update(ASMScheduleChangeTime time) {
-			_unitOfWork.Current().CreateSqlQuery($@"
-					UPDATE [msg].ASMScheduleChangeTime 
+			_unitOfWork.Current().Session().CreateSQLQuery($@"
+					UPDATE [dbo].ASMScheduleChangeTime 
 						SET TimeStamp = :{nameof(ASMScheduleChangeTime.TimeStamp)}
 					WHERE PersonId = :{nameof(ASMScheduleChangeTime.PersonId)}")
 				.SetGuid(nameof(ASMScheduleChangeTime.PersonId), time.PersonId)

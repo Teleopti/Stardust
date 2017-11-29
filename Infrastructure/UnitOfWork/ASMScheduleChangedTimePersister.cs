@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			addOrUpdateTime(personDataInDefaultScenario);
 		}
 
-		[MessageBrokerUnitOfWork]
+		[UnitOfWork]
 		protected virtual void addOrUpdateTime(IEnumerable<Guid> personIds)
 		{
 			var personIdList = personIds.ToList();

@@ -28,24 +28,6 @@ namespace Teleopti.Ccc.Domain.Notification
 			if (time == null) return false;
 			return _now.UtcDateTime() - time.TimeStamp <= interval;
 		}
-
-		//private IList<ScheduleUpdatedPeriod> checkForPeriod(IList<> messages, PollerInputPeriod period)
-		//{
-		//	var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-		//	var periodInUtc = new DateTimePeriod(
-		//		TimeZoneHelper.ConvertToUtc(period.StartDateTime, userTimezone),
-		//		TimeZoneHelper.ConvertToUtc(period.EndDateTime, userTimezone));
-
-		//	return messages
-		//		.Where(n => periodInUtc.StartDateTime.Date <= n.EndDate.Date
-		//				&& periodInUtc.EndDateTime.Date >= n.StartDate.Date)
-		//		.Select(n => new ScheduleUpdatedPeriod
-		//		{
-		//			StartDate = TimeZoneHelper.ConvertFromUtc(n.StartDate, userTimezone).ToShortDateString(),
-		//			EndDate = TimeZoneHelper.ConvertFromUtc(n.EndDate, userTimezone).ToShortDateString(),
-		//		})
-		//		.ToList();
-		//}
 	}
 
 	public class PollerInputPeriod
