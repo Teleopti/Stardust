@@ -41,6 +41,33 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
+		[Ignore("#47012")]
+		public void ShouldHandleBposCorrectlyWhenSkillWithOtherIntervalLengthExists()
+		{
+			var scenario = new Scenario { DefaultScenario = true };
+			var activity = new Activity().WithId();
+			var date = DateOnly.Today;
+			var skillWithBpos = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(60).IsOpenBetween(8, 9).WithId();
+			var otherSkill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(15).IsOpenBetween(8, 9).WithId();
+			var skillWithBposDay = skillWithBpos.CreateSkillDayWithDemand(scenario, date, 10);
+			var otherSkillDay = otherSkill.CreateSkillDayWithDemand(scenario, date, 10);
+			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, date, new[] { skillWithBposDay, otherSkillDay });
+			var bpos = new[] { new BpoResource(1, new[] { skillWithBpos }, skillWithBposDay.SkillStaffPeriodCollection.First().Period) };
+
+			using (CascadingResourceCalculationContextFactory.Create(
+				ScheduleDictionaryCreator.WithData(scenario, date.ToDateOnlyPeriod()), new[] { skillWithBpos, otherSkill }, bpos, false, date.ToDateOnlyPeriod()))
+			{
+				Target.ResourceCalculate(date, resCalcData);
+			}
+
+			var firstBpoStaffPeriod = skillWithBposDay.SkillStaffPeriodCollection.First();
+			firstBpoStaffPeriod.Period.ElapsedTime()
+				.Should().Be.EqualTo(TimeSpan.FromHours(1));
+			firstBpoStaffPeriod.CalculatedResource
+				.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldHandleMultiskilledBpos()
 		{
 			var scenario = new Scenario {DefaultScenario = true};
