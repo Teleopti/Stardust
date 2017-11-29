@@ -800,7 +800,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewPlanningPeriodsForPlanningGroup(string planningGroupName)
 		{
 			TestControllerMethods.Logon();
-			var planningGroupConfigurable = DataMaker.Data().UserDatasOfType<PlanningGroupConfigurable>().First();
+			var planningGroupConfigurable = DataMaker.Data().UserDatasOfType<PlanningGroupConfigurable>().Single();
 			Navigation.GoToPlanningPeriodListForPlanningGroup(planningGroupConfigurable.PlanningGroup.Id.GetValueOrDefault());
 		}
 	}
