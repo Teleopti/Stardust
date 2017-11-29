@@ -15,7 +15,6 @@ define([
 
 			self.Resources = resources;
 			self.MyTimeVisible = ko.observable(false);
-			self.RealTimeAdherenceVisible = ko.observable(false);
 			self.ReportsVisible = ko.observable(false);
 			self.TeamScheduleVisible = ko.observable(false);
 			self.ActiveView = ko.observable("");
@@ -55,7 +54,7 @@ define([
 			}
 
 			self.urlForHome = function() {
-				return navigation.UrlForHome(self.CurrentBusinessUnitId(), self.RealTimeAdherenceVisible(), self.TeamScheduleVisible());
+				return navigation.UrlForHome(self.CurrentBusinessUnitId());
 			};
 			self.urlForTeamScheduleToday = function() {
 				return navigation.UrlForTeamScheduleToday(self.CurrentBusinessUnitId());
@@ -73,7 +72,7 @@ define([
 					var date = self.CurrentDate();
 					if (date)
 						return navigation.UrlForTeamScheduleForDate(buId, date);
-					else return navigation.UrlForHome(buId, self.RealTimeAdherenceVisible(), self.TeamScheduleVisible());
+					else return navigation.UrlForHome(buId);
 				}
 			};
 		};

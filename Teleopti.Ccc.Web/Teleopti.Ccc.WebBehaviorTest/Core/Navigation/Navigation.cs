@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/intraday");
 		}
 
-		public static void GotoRealTimeAdherenceAgentsOnBu()
+		public static void GotoRealTimeAdherenceAgents()
 		{
 			GoToPage("wfm/#/rta/agents/?pollingInterval=100");
 		}

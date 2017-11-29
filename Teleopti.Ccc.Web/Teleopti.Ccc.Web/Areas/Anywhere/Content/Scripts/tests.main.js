@@ -18,10 +18,6 @@ var testCases = [
 	'views/personschedule/vm_test',
 	'views/personschedule/absencelistitem_test',
 	'views/teamschedule/vm_test',
-	'views/realtimeadherencesites/vm_test',
-	'views/realtimeadherenceteams/vm_test',
-	'views/realtimeadherenceagents/vm_test',
-	'views/realtimeadherenceteams/team_test',
 	'helpers_test',
 	'navigation_test'
 ];

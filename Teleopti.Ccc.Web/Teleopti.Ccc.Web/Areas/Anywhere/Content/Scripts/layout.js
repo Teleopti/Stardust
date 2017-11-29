@@ -318,11 +318,8 @@ define([
 
 	loadNavigationContent(function(responseData) {
 		menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
-		menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
+		menu.RealTimeAdherenceVisible(false);
 		menu.TeamScheduleVisible(responseData.IsTeamScheduleAvailable === true);
-		if (!responseData.IsTeamScheduleAvailable && responseData.IsRealTimeAdherenceAvailable) {
-			defaultView = 'realtimeadherencesites';
-		}
 		menu.UserName(responseData.UserName);
 		timezoneCurrent.SetIanaTimeZone(responseData.IanaTimeZone);
 		trackingPersonId = responseData.PersonId;

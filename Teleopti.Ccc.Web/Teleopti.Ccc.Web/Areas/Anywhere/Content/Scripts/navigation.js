@@ -28,26 +28,8 @@ define([
 			windowWrap.setLocationHash('teamschedule/' + buid + '/' + id + '/' + toDateString(date) 
 				+ '/#/' + selectedPersonId + (!isNaN(selectedStartMinutes) ? '/' + selectedStartMinutes : '/'));
 		},
-		GotoRealTimeAdherenceTeams: function (buid, siteId) {
-			windowWrap.setLocationHash('realtimeadherenceteams/' + buid + '/' + siteId);
-		},
-
-		GotoRealTimeAdherenceTeamDetails: function (buid, teamId) {
-			windowWrap.setLocationHash('realtimeadherenceagents/' + buid + '/' + teamId);
-		},
-		GotoRealTimeAdherenceMultipleTeamDetails: function (buid) {
-			windowWrap.setLocationHash('realtimeadherenceagents/' + buid + '/' + 'MultipleTeams');
-		},
-		GotoRealTimeAdherenceMultipleSiteDetails: function(buid) {
-			windowWrap.setLocationHash('realtimeadherenceagents/' + buid + '/' + 'MultipleSites');
-		},
-
 		
-		UrlForHome: function (buid, realTimeAdherenceAvailable, teamScheduleAvailable) {
-			if(teamScheduleAvailable)
-				return baseLocation() + "#teamschedule/" + buid;
-			else if(realTimeAdherenceAvailable)
-				return baseLocation() + "#realtimeadherencesites/" + buid;
+		UrlForHome: function (buid) {
 			return baseLocation() + "#teamschedule/" + buid;
 		},
 		UrlForTeamScheduleToday: function(buid) {
@@ -55,9 +37,6 @@ define([
 		},
 		UrlForChangingSchedule : function(buid,teamId,personId) {
 		    return baseLocation() + "#teamschedule/" + buid + "/" + teamId + "/" + personId;
-		},
-		UrlForRealTimeAdherence: function (buid) {
-			return baseLocation() + "#realtimeadherencesites/" + buid ;
 		},
 		UrlForTeamScheduleForDate: function (buid, date) {
 			return baseLocation() + '#teamschedule/' + buid + '/' + toDateString(date);

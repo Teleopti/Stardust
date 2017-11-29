@@ -672,7 +672,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewRealTimeAdherenceForAllAgentsOnEntireBu()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoRealTimeAdherenceAgentsOnBu();
+			Navigation.GotoRealTimeAdherenceAgents();
 		}
 
 		[When(@"I am viewing real time adherence for agents without state '(.*)' on team '(.*)'")]

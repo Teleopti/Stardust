@@ -388,7 +388,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Areas\Anywhere\Controllers\AgentStateController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\OrganizationController.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ExportForecastInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
@@ -410,10 +409,8 @@
     <Compile Include="Areas\Global\Models\GroupPagesViewModel.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />
     <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereAgentsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\PhoneStateController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\SkillsController.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
@@ -470,6 +467,9 @@
     <Compile Include="Areas\Intraday\IntradayMonitorStatisticsController.cs" />
     <Compile Include="Areas\Intraday\IntradayController.cs" />
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
+    <Compile Include="Areas\Rta\Controllers\AdherenceController.cs" />
+    <Compile Include="Areas\Rta\Controllers\AgentStateController.cs" />
+    <Compile Include="Areas\Rta\Controllers\PhoneStateController.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaTracerController.cs" />
     <Compile Include="Areas\SkillGroup\SkillGroupController.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillController.cs" />
@@ -2032,31 +2032,18 @@
     <Content Include="Areas\Anywhere\Content\Scripts\knockout-3.2.0.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\notifications.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.started.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-current.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-display.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\subscriptions.adherenceagents.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\subscriptions.adherenceteams.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.trackingmessages.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\subscriptions.adherencesites.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\resources.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\permissions.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\view.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\moveactivityform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\filter.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agent.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\getadherence.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\view.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\moment.timepicker.ext.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Common.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.List.Tests.js" />
@@ -2103,7 +2090,6 @@
     <Content Include="WFM\app\seatManagement\teampicker.directive.js" />
     <Content Include="WFM\app\start\start.controller.js" />
     <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
-    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.unsubscriber.js" />
     <Content Include="Areas\MyTime\Views\Widget\Index.cshtml" />
     <EmbeddedResource Include="tzdb2016c.nzd" />
     <Content Include="WFM\css\_navbar.scss" />
@@ -2191,7 +2177,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\xregexp\xregexp-all-min.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\business_unit.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\team_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
@@ -2207,8 +2192,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\messagebroker.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\Tests.html" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\team.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addactivityform.js" />
@@ -2220,12 +2203,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page-group.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\vm_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\site.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\view.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page.js" />
@@ -2233,15 +2210,9 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
-    <Content Include="Areas\Anywhere\Content\Styles\realtimeadherence.css" />
-    <Content Include="Areas\Anywhere\Content\Templates\diagnosis\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\manageadherence\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\notification.html" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceagents\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesites\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
     <Content Include="Areas\MultiTenancy\these_files_will_probably_be_moved.txt" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\main.js" />

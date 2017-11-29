@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 
 			((object)content.UserName).Should().Be.EqualTo("fake");
 			((object)content.IsMyTimeAvailable).Should().Be.EqualTo(true);
-			((object)content.IsRealTimeAdherenceAvailable).Should().Be.EqualTo(false);
 			((object)content.PersonId).Should().Be.EqualTo(person.Id);
 			((object)content.IanaTimeZone).Should().Be.EqualTo("Europe/Berlin");
 		}

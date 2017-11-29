@@ -6,11 +6,7 @@ define(
 
 		'messagebroker',
 		'subscriptions.groupschedule',
-		'subscriptions.personschedule',
-		//'views/realtimeadherenceteams/subscriptions.adherenceteams',
-		//'views/realtimeadherencesites/subscriptions.adherencesites',
-		//'views/realtimeadherenceagents/subscriptions.adherenceagents',
-		//'subscriptions.trackingmessages'
+		'subscriptions.personschedule'
 
     ], function (
         errorTemplate,

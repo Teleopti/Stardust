@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class PhoneStateController : ApiController

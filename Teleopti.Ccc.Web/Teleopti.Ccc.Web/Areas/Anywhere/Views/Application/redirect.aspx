@@ -27,12 +27,8 @@
 
 			if (pendingTimeInSecond <= 0) {
 				var targetUrl = "./WFM";
-				if (window.location.href.indexOf("/Anywhere#teamschedule/") > 0) {
+				if (window.location.href.indexOf("/Anywhere#teamschedule/") > 0)
 					targetUrl += "/#/teams";
-				} else if (window.location.href.indexOf("/Anywhere#realtimeadherencesites/") > 0) {
-					targetUrl += "/#/rta";
-				}
-
 				window.location.href = targetUrl;
 			} else {
 				pendingTimeInSecond -= 1;
@@ -89,7 +85,7 @@
 			</ul>
 		</div>
 	</nav>
-	<div class="container realtimeadherencesites">
+	<div class="container">
 		<div class="row" style="background: #bada55; text-align: left; color: #333 !important; text-decoration: none !important;">
 			<h2 class="text-center"><%= ViewData.Eval("ResMyTeamMigrated") %></h2>
 		</div>
