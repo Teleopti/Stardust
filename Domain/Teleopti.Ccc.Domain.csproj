@@ -4022,9 +4022,9 @@
     <EmbeddedResource Include="Common\ExternalBadgeSetting.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="Common\ExternalPerformance.hbm.xml">
+    <EmbeddedResource Include="Common\ExternalPerformance.hbm.xml">
       <SubType>Designer</SubType>
-    </Content>
+    </EmbeddedResource>
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />

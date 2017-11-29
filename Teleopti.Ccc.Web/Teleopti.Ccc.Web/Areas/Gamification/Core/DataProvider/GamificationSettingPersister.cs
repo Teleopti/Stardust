@@ -381,7 +381,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return externalBadgeSetting;
 		}
 
-		private ExternalPerformance getExternalPerformance(int inputExternalPerformanceId)
+		private IExternalPerformance getExternalPerformance(int inputExternalPerformanceId)
 		{
 			return _externalPerformanceRepository.FindExternalPerformanceByExternalId(inputExternalPerformanceId);
 		}

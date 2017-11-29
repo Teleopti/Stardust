@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -14,12 +15,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			externalPerformances.Add(externalPerformance);
 		}
 
-		public IEnumerable<ExternalPerformance> FindAllExternalPerformances()
+		public IEnumerable<IExternalPerformance> FindAllExternalPerformances()
 		{
 			return externalPerformances;
 		}
 
-		public ExternalPerformance FindExternalPerformanceByExternalId(int externalId)
+		public IExternalPerformance FindExternalPerformanceByExternalId(int externalId)
 		{
 			return externalPerformances.SingleOrDefault(p => p.ExternalId == externalId);
 		}

@@ -28,9 +28,12 @@ namespace Teleopti.Ccc.Domain.Common
 			set => _dataType = value;
 		}
 
-		public bool IsDeleted => _isDeleted;
+		public virtual bool IsDeleted
+		{
+			get => _isDeleted;
+		}
 
-		public void SetDeleted()
+		public virtual void SetDeleted()
 		{
 			_isDeleted = true;
 		}

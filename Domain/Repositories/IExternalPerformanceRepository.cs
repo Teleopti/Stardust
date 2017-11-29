@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IExternalPerformanceRepository
 	{
-		IEnumerable<ExternalPerformance> FindAllExternalPerformances();
-		ExternalPerformance FindExternalPerformanceByExternalId(int externalId);
+		IEnumerable<IExternalPerformance> FindAllExternalPerformances();
+		IExternalPerformance FindExternalPerformanceByExternalId(int externalId);
 	}
 }
