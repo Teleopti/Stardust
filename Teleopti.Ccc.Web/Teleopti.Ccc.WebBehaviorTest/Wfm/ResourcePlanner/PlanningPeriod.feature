@@ -3,6 +3,7 @@ Feature: Planning Period
 	As a resource planner
 	I want to work on planning periods
 
+@ignore
 Scenario: The first planning period suggestion should be the next upcoming schedule period
 	Given the time is '2016-06-07'
 	And I am swedish
@@ -31,7 +32,7 @@ Scenario: The first planning period suggestion should be the next upcoming sched
 	When I click apply planning period
 	Then I should see a planning period between '2016-06-12' and '2016-06-18'
 
-	Scenario: Creating next planning period should generate a period with the same type as the previous one 
+Scenario: Creating next planning period should generate a period with the same type as the previous one 
 	Given the time is '2016-06-07'
 	And I am swedish
 	And I have a role with
