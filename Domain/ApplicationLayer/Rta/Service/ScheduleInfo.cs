@@ -223,6 +223,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		
 		public static DateTime? NextCheck(IEnumerable<ScheduledActivity> schedule, int? lastTimeWindowCheckSum, DateTime? lastCheck)
 		{
+			// note to self: return null means check now ;)
+			
 			if (!lastCheck.HasValue)
 				return null;
 
@@ -234,12 +236,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var next = nextActivity(schedule, current, lastCheck.Value);
 			var activityEnteringTimeWindow = schedule.FirstOrDefault(x => x.StartDateTime >= timeWindowEnd(lastCheck.Value));
 			var activityEntersTimeWindowAt = activityEnteringTimeWindow?.StartDateTime.Subtract(timeWindowFuture);
-
+			var noSchedule = DateTime.MaxValue;
+			
+			// {null, null, 2017-11-29 10:00, DateTime.MaxValue}.Min() = 2017-11-29 10:00
 			return new[]
 			{
 				current?.EndDateTime,
 				next?.StartDateTime,
-				activityEntersTimeWindowAt
+				activityEntersTimeWindowAt,
+				noSchedule
 			}.Min();
 		}
 
