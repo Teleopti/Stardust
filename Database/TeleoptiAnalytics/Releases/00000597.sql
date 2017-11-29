@@ -1,14 +1,5 @@
 -- For PBI #46841
-CREATE TABLE [dbo].[ExternalPerformanceData](
-	[ExternalPerformanceId] [int] NOT NULL,
-	[DateFrom] [smalldatetime] NOT NULL,
-	[PersonId] [int] NOT NULL,
-	[OriginalPersonId] [nvarchar](100) NOT NULL,
-	[Score] [real] NULL
- CONSTRAINT [PK_ExternalPerformanceData] PRIMARY KEY CLUSTERED 
-(
-	[ExternalPerformanceid] ASC,
-	[DateFrom] ASC,
-	[PersonId] ASC
-)) ON [PRIMARY]
+-- Still in development, not released; if it already exists, we should drop it.
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ExternalPerformanceData]') AND type in (N'U'))
+   DROP TABLE [dbo].[ExternalPerformanceData]
 GO
