@@ -1,36 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class ASMScheduleChangedTimePersister : ITransactionHook
+	public class ASMScheduleChangeTimePersister : ITransactionHook
 	{
 		private static readonly Type[] includedScheduleTypes = { typeof(IPersonAbsence), typeof(IPersonAssignment), typeof(IMeeting) };
 		private readonly IASMScheduleChangeTimeRepository _scheduleChangeTimeRepository;
 		private readonly INow _now;
-		public ASMScheduleChangedTimePersister(IASMScheduleChangeTimeRepository scheduleChangeTimeRepository, INow now)
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly ICurrentDataSource _currentDataSource;
+		private InputWithLogOnContext _logOnContext;
+
+
+		public ASMScheduleChangeTimePersister(IASMScheduleChangeTimeRepository scheduleChangeTimeRepository,
+			INow now,
+			ICurrentBusinessUnit currentBusinessUnit,
+			ICurrentDataSource currentDataSource)
 		{
 			_scheduleChangeTimeRepository = scheduleChangeTimeRepository;
 			_now = now;
+			_currentBusinessUnit = currentBusinessUnit;
+			_currentDataSource = currentDataSource;
 		}
 		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+			_logOnContext =
+				new InputWithLogOnContext(_currentDataSource.CurrentName(), _currentBusinessUnit.Current().Id.GetValueOrDefault());
+			Task.Run(() =>
+			{
+				Persist(modifiedRoots);
+			});
+		}
+
+		public void Persist(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			if (modifiedRoots == null || !modifiedRoots.Any()) return;
 
 			var personDataInDefaultScenario = extractPersonIdsFromScheduleChangesOnlyInDefaultScenario(modifiedRoots);
 
 			if (!personDataInDefaultScenario.Any()) return;
-			addOrUpdateTime(personDataInDefaultScenario);
+			
+			addOrUpdateTime(_logOnContext, personDataInDefaultScenario);
 		}
 
-		[UnitOfWork]
-		protected virtual void addOrUpdateTime(IEnumerable<Guid> personIds)
+		[AsSystem, UnitOfWork]
+		protected virtual void addOrUpdateTime(InputWithLogOnContext logOnContext, IEnumerable<Guid> personIds)
 		{
 			var personIdList = personIds.ToList();
 			foreach (var personId in personIdList)

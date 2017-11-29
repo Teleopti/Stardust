@@ -614,7 +614,7 @@
     <Compile Include="Repositories\ResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Analytics\AnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\AnalyticsUnitOfWork.cs" />
-    <Compile Include="UnitOfWork\ASMScheduleChangedTimePersister.cs" />
+    <Compile Include="UnitOfWork\ASMScheduleChangeTimePersister.cs" />
     <Compile Include="UnitOfWork\CurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentSchedulingSource.cs" />
     <Compile Include="UnitOfWork\DisableBusinessUnitFilter.cs" />

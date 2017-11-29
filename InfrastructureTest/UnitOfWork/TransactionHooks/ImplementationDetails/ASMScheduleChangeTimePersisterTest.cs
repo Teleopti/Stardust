@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using System;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
@@ -15,20 +14,20 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.ImplementationDetails
 {
 	[TestFixture]
-	public class ASMScheduleChangedTimePersisterTest
+	public class ASMScheduleChangeTimePersisterTest
 	{
-		private ASMScheduleChangedTimePersister _target;
+		private ASMScheduleChangeTimePersister _target;
 		private IASMScheduleChangeTimeRepository _repo;
 		private MutableNow _now;
-
 
 		[SetUp]
 		public void Setup()
 		{
 			_repo = MockRepository.GenerateMock<IASMScheduleChangeTimeRepository>();
 			_now = new MutableNow();
-
-			_target = new ASMScheduleChangedTimePersister(_repo, _now);
+			var currentBu = new FakeCurrentBusinessUnit();
+			currentBu.FakeBusinessUnit(BusinessUnitFactory.CreateWithId(Guid.NewGuid()));
+			_target = new ASMScheduleChangeTimePersister(_repo, _now, currentBu, new FakeCurrentDatasource("fake"));
 		}
 		[Test]
 		public void ShouldAddScheduleChangeTimeForPersonAssignment()
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 				TimeStamp = _now.UtcDateTime()
 			};
 
-			_target.AfterCompletion(roots);
+			_target.Persist(roots);
 
 			_repo.AssertWasCalled(x => x.Add(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
 		}
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 				TimeStamp = _now.UtcDateTime()
 			};
 
-			_target.AfterCompletion(roots);
+			_target.Persist(roots);
 
 			_repo.AssertWasCalled(x => x.Add(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
 
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 				TimeStamp = _now.UtcDateTime()
 			};
 
-			_target.AfterCompletion(roots);
+			_target.Persist(roots);
 			_repo.AssertWasNotCalled(x => x
 				.Add(Arg<ASMScheduleChangeTime>
 				.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
@@ -133,7 +132,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 				PersonId = person.Id.GetValueOrDefault(),
 				TimeStamp = _now.UtcDateTime()
 			};
-			_target.AfterCompletion(roots);
+			_target.Persist(roots);
 			_repo.AssertWasNotCalled(x => x
 							.Add(Arg<ASMScheduleChangeTime>
 							.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
@@ -162,7 +161,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 				TimeStamp = _now.UtcDateTime()
 			};
 
-			_target.AfterCompletion(roots);
+			_target.Persist(roots);
 
 			_repo.AssertWasCalled(x => x
 						.Add(Arg<ASMScheduleChangeTime>
@@ -194,7 +193,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			var newTime = new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc);
 			_now.Is(newTime);
 
-			_target.AfterCompletion(roots);
+			_target.Persist(roots);
 
 			_repo.AssertWasCalled(x => x
 						.Update(Arg<ASMScheduleChangeTime>
@@ -227,7 +226,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			var newTime = new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc);
 			_now.Is(newTime);
 
-			_target.AfterCompletion(roots);
+			_target.Persist(roots);
 
 			_repo.AssertWasCalled(x => x
 					.Update(Arg<ASMScheduleChangeTime>
@@ -258,7 +257,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			var newTime = new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc);
 			_now.Is(newTime);
 
-			_target.AfterCompletion(roots);
+			_target.Persist(roots);
 			_repo.AssertWasNotCalled(x => x
 					.Update(Arg<ASMScheduleChangeTime>
 					.Matches(t => t.TimeStamp == newTime && t.PersonId == time.PersonId)));
@@ -286,7 +285,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 				TimeStamp = _now.UtcDateTime()
 			};
 
-			_target.AfterCompletion(roots);
+			_target.Persist(roots);
 
 			_repo.AssertWasNotCalled(x => x.Add(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
 

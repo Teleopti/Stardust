@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(notificationsTimeToStay, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWork, MessageBrokerUnitOfWork]
+		[UnitOfWork]
 		[HttpPost]
 		public virtual JsonResult CheckIfScheduleHasUpdates()
 		{

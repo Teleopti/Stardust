@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MessageBrokerSender>().As<ITransactionHook>().SingleInstance();
 			builder.RegisterType<ScheduleChangedMessageSender>().As<ITransactionHook>();
 			if (_configuration.Toggle(Toggles.MyTimeWeb_PollToCheckScheduleChanges_46595))
-				builder.RegisterType<ASMScheduleChangedTimePersister>().As<ITransactionHook>().SingleInstance().ApplyAspects();
+				builder.RegisterType<ASMScheduleChangeTimePersister>().As<ITransactionHook>().SingleInstance().ApplyAspects();
 		}
 	}
 }
