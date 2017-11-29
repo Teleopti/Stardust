@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -38,9 +36,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest)
 		{
 			var person = personRequest.Person;
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var overtimeRequestOpenPeriod = personRequest.Person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(
 				personRequest.Request as IOvertimeRequest,
-				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())));
+				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone)));
 
 			if (!overtimeRequestOpenPeriod.EnableWorkRuleValidation)
 				return new OvertimeRequestValidationResult { IsValid = true };
@@ -52,8 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var undoRedoContainer = new UndoRedoContainer();
 			setupUndo(undoRedoContainer, _schedulingResultStateHolder);
 
-			var personLocalDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.StartDateTime,
-				person.PermissionInformation.DefaultTimeZone()));
+			var personLocalDate = new DateOnly(personRequest.Request.Period.StartDateTimeLocal(timeZone));
 			var scheduleDay = scheduleDictionary[person].ScheduledDay(personLocalDate);
 			scheduleDay.CreateAndAddOvertime(new Scheduling.Activity("fake") { InWorkTime = true }, personRequest.Request.Period, ((IOvertimeRequest)personRequest.Request).MultiplicatorDefinitionSet, true);
 
@@ -65,11 +63,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			if (repsonses.Any())
 			{
-				var denyReasons = new StringBuilder();
-				repsonses.Distinct().Select(x => x.Message).Distinct().ForEach(message => denyReasons.AppendLine(message));
 				return new OvertimeRequestValidationResult
 				{
-					InvalidReason = denyReasons.ToString(),
+					InvalidReason = string.Join(System.Environment.NewLine, repsonses.Select(x => x.Message).Distinct()),
 					IsValid = false,
 					ShouldDenyIfInValid = overtimeRequestOpenPeriod.WorkRuleValidationHandleType ==
 						OvertimeWorkRuleValidationHandleType.Deny
