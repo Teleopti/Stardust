@@ -28,8 +28,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public OptimizationDesktopExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		[Test]
-		public void ShouldNotOverwriteLocalResourceCalculationContextInIsland()
+		[TestCase(TeamBlockType.Individual)]
+		[TestCase(TeamBlockType.Team)]
+		public void ShouldNotOverwriteLocalResourceCalculationContextInIsland(TeamBlockType teamBlockType)
 		{
 			if(_resourcePlannerRemoveImplicitResCalcContext46680==RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue)
 				Assert.Ignore("#46898 #46923");
@@ -50,7 +51,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(phoneActivity, new TimePeriod(8, 17)).ShiftCategory(new ShiftCategory("_").WithId());
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA, skillDayB });
 
-			Target.Execute(new NoSchedulingProgress(), schedulerStateHolderFrom, new[] { agent }, dateOnly.ToDateOnlyPeriod(), new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true } }, null);
+			Target.Execute(new NoSchedulingProgress(), schedulerStateHolderFrom, new[] {agent}, dateOnly.ToDateOnlyPeriod(),
+				new OptimizationPreferences
+				{
+					General = {ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true},
+					Extra = teamBlockType.CreateExtraPreferences()
+				}, null);
 
 			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
