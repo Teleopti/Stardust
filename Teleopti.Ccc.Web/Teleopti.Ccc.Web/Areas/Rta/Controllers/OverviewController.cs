@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class OverviewController : ApiController
@@ -21,26 +21,26 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_teams = teams;
 		}
 
-		public class Params
+		public class SiteCardsParams
 		{
 			public Guid[] skillIds;
 			public Guid[] siteIds;
 		}
 		
 		[ReadModelUnitOfWork, UnitOfWork, HttpPost, Route("api/Overview/SiteCards")]
-		public virtual IHttpActionResult SiteCards([FromBody] Params p)
+		public virtual IHttpActionResult SiteCards([FromBody] SiteCardsParams p)
 		{
 			return Ok(_sites.Build(p.skillIds, p.siteIds));
 		}
 
-		public class Params2
+		public class TeamCardsParams
 		{
 			public Guid[] skillIds;
 			public Guid siteId;
 		}
 
 		[ReadModelUnitOfWork, UnitOfWork, HttpPost, Route("api/Overview/TeamCards")]
-		public virtual IHttpActionResult TeamCards([FromBody] Params2 p)
+		public virtual IHttpActionResult TeamCards([FromBody] TeamCardsParams p)
 		{
 			return Ok(p.skillIds.EmptyIfNull().Any() ? _teams.Build(p.siteId, p.skillIds) : _teams.Build(p.siteId));
 		}

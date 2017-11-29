@@ -388,7 +388,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Areas\Anywhere\Controllers\OrganizationController.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ExportForecastInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastExportToExcel.cs" />
@@ -409,9 +408,7 @@
     <Compile Include="Areas\Global\Models\GroupPagesViewModel.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />
     <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\AnywhereAgentsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\SkillsController.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
     <Compile Include="Areas\Forecasting\Core\CampaignPersister.cs" />
@@ -432,7 +429,6 @@
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\ReportItemsProvider.cs" />
     <Compile Include="Areas\Anywhere\Core\IReportItemsProvider.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\OverviewController.cs" />
     <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />
@@ -470,8 +466,11 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
     <Compile Include="Areas\Rta\Controllers\AdherenceController.cs" />
     <Compile Include="Areas\Rta\Controllers\AgentStateController.cs" />
+    <Compile Include="Areas\Rta\Controllers\OrganizationController.cs" />
+    <Compile Include="Areas\Rta\Controllers\OverviewController.cs" />
     <Compile Include="Areas\Rta\Controllers\PhoneStateController.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaTracerController.cs" />
+    <Compile Include="Areas\Rta\Controllers\SkillsController.cs" />
     <Compile Include="Areas\SkillGroup\SkillGroupController.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillController.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
