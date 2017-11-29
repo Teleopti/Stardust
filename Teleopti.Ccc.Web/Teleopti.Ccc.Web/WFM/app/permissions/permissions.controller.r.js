@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular
-		.module('wfm.permissions')
-		.controller('PermissionsController', PermissionsCtrl);
+	.module('wfm.permissions')
+	.controller('PermissionsController', PermissionsCtrl);
 
 	PermissionsCtrl.$inject = ['$filter', '$location', 'PermissionsServiceRefact', 'permissionsDataService', 'localeLanguageSortingService'];
 
@@ -48,19 +48,22 @@
 		vm.selectOrgData = selectOrgData;
 		vm.functionGroup = 'All';
 		vm.orgGroup = 'All';
+		vm.sendingNewRole;
 
 		var functionsFilter = $filter('functionsFilter');
 		var dataFilter = $filter('dataFilter');
 		var descriptionFilter = $filter('newDescriptionFilter');
 
 		function createRole(roleName) {
-			if (angular.isUndefined(roleName)) {
+			if (angular.isUndefined(roleName) || vm.sendingNewRole === true) {
+				console.log('returned');
 				return;
 			}
 
 			var roleData = {
 				Description: roleName
 			};
+			vm.sendingNewRole = true;
 			PermissionsServiceRefact.roles.save(roleData).$promise.then(function (data) {
 				vm.roles.unshift(data);
 				refreshRoleSelection();
@@ -70,6 +73,7 @@
 				}).$promise.then(function (data) {
 					vm.selectedRole = data;
 					vm.showCreateModal = false;
+					vm.sendingNewRole = false;
 					vm.roleName = '';
 				});
 			});
@@ -102,9 +106,12 @@
 
 			PermissionsServiceRefact.manage.deleteRole({
 				Id: role.Id
-			});
-			var index = vm.roles.indexOf(role);
-			vm.roles.splice(index, 1);
+			}).$promise.then(
+				function(){
+					var index = vm.roles.indexOf(role);
+					vm.roles.splice(index, 1);
+				}
+			)
 
 			if (role.Id === vm.selectedRole.Id) {
 				toggleSelection(vm.applicationFunctions, false);
@@ -119,7 +126,7 @@
 
 		function copyRole(role) {
 			if (!role)
-				return;
+			return;
 			PermissionsServiceRefact.copyRole.copy({
 				Id: role.Id
 			}).$promise.then(function (data) {
@@ -367,7 +374,7 @@
 			} else {
 				vm.selectedFunctions[func.FunctionId] = true;
 			}
-				delete vm.selectedFunctions[vm.applicationFunctions[0].FunctionId];
+			delete vm.selectedFunctions[vm.applicationFunctions[0].FunctionId];
 		}
 
 		function createFlatFunctions(functions, flatFunctions) {
@@ -386,9 +393,9 @@
 				return;
 			}
 			var parents = permissionsDataService.findParentFunctions(vm.applicationFunctions, fn)
-				.map(function (f) {
-					return f.FunctionId;
-				});
+			.map(function (f) {
+				return f.FunctionId;
+			});
 			var functions = [];
 			if (isFunctionSelected(fn)) {
 				functions = parents.concat(fn.FunctionId);
@@ -404,12 +411,12 @@
 
 			if(vm.isAllFunctionSelected) vm.selectedFunctions[vm.applicationFunctions[0].FunctionId] = true;
 
-				PermissionsServiceRefact.deleteFunction.delete({
-					Id: vm.selectedRole.Id,
-					FunctionId: vm.applicationFunctions[0].FunctionId
-				}).$promise.then(function () {
-					permissionsDataService.selectFunction(vm.selectedRole, functions, fn);
-				})
+			PermissionsServiceRefact.deleteFunction.delete({
+				Id: vm.selectedRole.Id,
+				FunctionId: vm.applicationFunctions[0].FunctionId
+			}).$promise.then(function () {
+				permissionsDataService.selectFunction(vm.selectedRole, functions, fn);
+			})
 
 		}
 

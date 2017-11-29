@@ -29,7 +29,7 @@
 
 		<div class="modal-actions">
 			<aside>
-				<input type="submit" class="wfm-btn wfm-btn-invis-primary" id="submit" value="{{'Add'|translate}}" />
+				<input type="submit" ng-disabled="vm.sendingNewRole" class="wfm-btn wfm-btn-invis-primary" id="submit" value="{{'Add'|translate}}" />
 			</aside>
 		</div>
 
@@ -72,7 +72,7 @@
 											{{'Edit' | translate}}
 										</md-tooltip>
 									</i>
-									<i class="mdi mdi-delete" ng-click="confirmDeleteRole=true; $event.stopPropagation();">
+									<i class="mdi mdi-delete" ng-click="confirmDeleteRole = true; $event.stopPropagation();" ng-touch="confirmDeleteRole = true; $event.stopPropagation();">
 										<md-tooltip ng-hide="role.IsMyRole">
 											{{'Delete' | translate}}
 										</md-tooltip>
@@ -104,7 +104,7 @@
 							</modal-dialog>
 
 							<div ng-cloak class="modal-box">
-								<div ng-cloak ng-show="confirmDeleteRole">
+								<div ng-show="confirmDeleteRole">
 									<div class="modalbg">
 										<div class="dialog-mini">
 											<div class="modal-inner-content">
@@ -112,8 +112,8 @@
 											</div>
 											<div class="modal-actions">
 												<aside>
-													<button ng-click="confirmDeleteRole=false" class="wfm-btn wfm-btn-invis-default">{{'Close' | translate}}</button>
-													<button ng-click="confirmDeleteRole = false; vm.deleteRole(role)" id="delete-role" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate}}</button>
+													<button ng-click="confirmDeleteRole = false;" class="wfm-btn wfm-btn-invis-default">{{'Close' | translate}}</button>
+													<button ng-click="confirmDeleteRole = false; vm.deleteRole(role)" ng-touch="confirmDeleteRole = false; vm.deleteRole(role)" id="delete-role" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate}}</button>
 												</aside>
 											</div>
 										</div>
