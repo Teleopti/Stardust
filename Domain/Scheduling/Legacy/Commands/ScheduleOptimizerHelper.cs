@@ -163,6 +163,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				continuedStep = runFlexibleTime(optimizationPreferences, continuedStep, selectedPeriod, selectedAgents,
 					dayOffOptimizationPreferenceProvider, _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod));
 
+				//This is actually wrong - doing this inside context. Probably works because it's the last in context block so nested context here doesn't matter. maybe...
 				continuedStep = OptimizationStepIntraday(backgroundWorker, selectedAgents, selectedPeriod, optimizationPreferences, continuedStep);
 			}
 

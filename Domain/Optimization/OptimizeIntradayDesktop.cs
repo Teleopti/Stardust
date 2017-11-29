@@ -16,17 +16,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly DesktopOptimizationContext _desktopOptimizationContext;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resourceCalculation;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 
 		public OptimizeIntradayDesktop(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
 			DesktopOptimizationContext desktopOptimizationContext,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IResourceCalculation resourceCalculation)
+			IResourceCalculation resourceCalculation,
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
 			_desktopOptimizationContext = desktopOptimizationContext;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceCalculation = resourceCalculation;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 		
 		public void Optimize(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizerPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
@@ -43,7 +46,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				_intradayOptimizationCommandHandler.Execute(command);
 			}
-			_resourceCalculation.ResourceCalculate(selectedPeriod, new ResourceCalculationData(stateHolder.SchedulingResultState, stateHolder.ConsiderShortBreaks, false));
+
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().SchedulingResultState, false, selectedPeriod.Inflate(1)))
+			{
+				_resourceCalculation.ResourceCalculate(selectedPeriod, new ResourceCalculationData(stateHolder.SchedulingResultState, stateHolder.ConsiderShortBreaks, false));				
+			}
 		}	
 	}
 	
