@@ -5,5 +5,4 @@ CREATE TABLE [msg].[ASMScheduleChangeTime](
 (
 	[PersonId] ASC
 )
-) ON [MSG]
-GO
+)
