@@ -105,7 +105,7 @@ task TeardownAndCleanup -depends InitSetup, TeardownAndPrepare, CreateDatabase, 
     DropDatabase
     DropPatchLogin
     DropApplicationLogin
-    CleanUpLog
+    #CleanUpLog
 	Write-Output "##teamcity[blockClosed name='<TeardownAndCleanup>']"
 }
 
@@ -134,8 +134,10 @@ function global:CheckEditionAndVersion ()
 
 function global:SettingsAndPreparation {
     
-    if ($global:TestEdition -eq $SQLAzure) {
+    if ($global:TestEdition -eq "SQL Azure") {
         
+		Write-Output "TestEdition: SQL Azure selected..."
+		
         $global:AdminSqlLogin = $AzureAdminSqlLogin
 	    $global:AdminSqlPwd = $AzureAdminSqlPwd
     }
@@ -310,16 +312,31 @@ function global:CreateDatabaseWithSQLAdmin () {
     $Params = "$global:DBManagerString -C -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
+	    
+		if ($lastexitecode -ne 0) {
+        Write-Host "Something went wrong during creation of: '$MartDB'"
+        exit 1
+        }
 
     $Params = "$global:DBManagerString -C -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
+	    
+		if ($lastexitecode -ne 0) {
+            Write-Host "Something went wrong during creation of: '$AppDB'"
+            exit 1
+        }
 
     if (!($SQLEdition -eq $SQLAzure)) {
 
     $Params = "$global:DBManagerString -C -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
+		
+		if ($lastexitecode -ne 0) {
+            Write-Host "Something went wrong during creation of: '$global:AggDB'"
+            exit 1
+        }
     }
 }
 
@@ -343,14 +360,29 @@ function global:PatchDatabaseWithDboOnly () {
     $Params = "$global:DBManagerString -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
+		
+		if ($lastexitecode -ne 0) {
+        Write-Host "Something went wrong during creation of: '$MartDB'"
+        exit 1
+        }
        
     $Params = "$global:DBManagerString -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
+
+		if ($lastexitecode -ne 0) {
+            Write-Host "Something went wrong during creation of: '$AppDB'"
+            exit 1
+        }
         
     $Params = "$global:DBManagerString -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
+		
+		if ($lastexitecode -ne 0) {
+            Write-Host "Something went wrong during creation of: '$global:AggDB'"
+            exit 1
+        }
     }
 }
 
@@ -359,6 +391,11 @@ function global:DataModifications () {
     $Params = "$global:SecurityExeString -AP$AppDB -AN$MartDB -CD$global:AggDB"
     $Prms = $Params.Split(" ")
     & "$SecurityExe" $Prms
+	
+	if ($lastexitecode -ne 0) {
+        Write-Host "Something went wrong during the running of security EXE on : '$AppDB'"
+        exit 1
+    }
 }
 
 function global:ScriptedTestsRunOnAllDBs () {
