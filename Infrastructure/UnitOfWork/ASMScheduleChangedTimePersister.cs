@@ -11,10 +11,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class ASMScheduleChangedTimePersister : ITransactionHook
 	{
-		private static readonly Type[] includedTypes = new[] { typeof(IPersonAbsence), typeof(IPersonAssignment) };
+		private static readonly Type[] includedScheduleTypes = { typeof(IPersonAbsence), typeof(IPersonAssignment), typeof(IMeeting) };
 		private readonly IASMScheduleChangeTimeRepository _scheduleChangeTimeRepository;
 		private readonly INow _now;
-
 		public ASMScheduleChangedTimePersister(IASMScheduleChangeTimeRepository scheduleChangeTimeRepository, INow now)
 		{
 			_scheduleChangeTimeRepository = scheduleChangeTimeRepository;
@@ -24,20 +23,18 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			if (modifiedRoots == null || !modifiedRoots.Any()) return;
 
-			var scheduleDataInDefaultScenario = extractScheduleChangesOnlyInDefaultScenario(modifiedRoots);
-			var persistableScheduleDatas = scheduleDataInDefaultScenario as IPersistableScheduleData[] ?? scheduleDataInDefaultScenario.ToArray();
-			if (!persistableScheduleDatas.Any()) return;
+			var personDataInDefaultScenario = extractPersonIdsFromScheduleChangesOnlyInDefaultScenario(modifiedRoots);
 
-			addOrUpdateTime(persistableScheduleDatas);
+			if (!personDataInDefaultScenario.Any()) return;
+			addOrUpdateTime(personDataInDefaultScenario);
 		}
 
 		[MessageBrokerUnitOfWork]
-		protected virtual void addOrUpdateTime(IEnumerable<IPersistableScheduleData> persistableScheduleDatas)
+		protected virtual void addOrUpdateTime(IEnumerable<Guid> personIds)
 		{
-
-			foreach (var scheduleData in persistableScheduleDatas)
+			var personIdList = personIds.ToList();
+			foreach (var personId in personIdList)
 			{
-				var personId = scheduleData.Person.Id.Value;
 				var time = _scheduleChangeTimeRepository.GetScheduleChangeTime(personId);
 				if (time == null)
 				{
@@ -56,25 +53,35 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		private IEnumerable<IPersistableScheduleData> extractScheduleChangesOnlyInDefaultScenario(IEnumerable<IRootChangeInfo> modifiedRoots)
+		private IEnumerable<Guid> extractPersonIdsFromScheduleChangesOnlyInDefaultScenario(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			return modifiedRoots.Select(r => r.Root)
-				.OfType<IPersistableScheduleData>()
-				.Where(s =>
-					includedTypes.Any(t => s.GetType().GetInterfaces().Contains(t))
-					&& s.Scenario.DefaultScenario
-					&& isWithinASMNotifyPeriod(s))
+			var roots = modifiedRoots.Select(r => r.Root)
+				.Where(s => includedScheduleTypes.Any(t => s.GetType().GetInterfaces().Contains(t)))
 				.ToList();
+
+			var scheduleData = roots.OfType<IPersistableScheduleData>()
+				.Where(s => s.Scenario.DefaultScenario && isWithinASMNotifyPeriod(s.Period.StartDateTime, s.Period.EndDateTime, s.Person))
+				.Select(s => s.Person.Id.Value).ToList();
+
+			var meetingData = roots.OfType<IMeeting>()
+				.Where(m => m.Scenario.DefaultScenario)
+				.SelectMany(meeting => meeting.MeetingPersons
+					.Where(p => isWithinASMNotifyPeriod(meeting.StartDate.Date.Add(meeting.StartTime), meeting.EndDate.Date.Add(meeting.EndTime), p.Person))
+					.Select(p => p.Person.Id.Value)).ToList();
+
+			return scheduleData.Union(meetingData);
 		}
 
-		private bool isWithinASMNotifyPeriod(IPersistableScheduleData scheduleData)
+		private bool isWithinASMNotifyPeriod(DateTime startDateTime, DateTime endDateTime, IPerson person)
 		{
 			var nowInUtc = _now.UtcDateTime();
-			var personTimezone = scheduleData.Person.PermissionInformation.DefaultTimeZone();
+			var personTimezone = person.PermissionInformation.DefaultTimeZone();
 			var nowInPersonTimezone = TimeZoneHelper.ConvertFromUtc(nowInUtc, personTimezone);
-			var expectedPeriodInUtc = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(nowInPersonTimezone.Date.AddDays(-1), personTimezone),
-				TimeZoneHelper.ConvertToUtc(nowInPersonTimezone.Date.AddDays(1), personTimezone));
-			return scheduleData.Period.StartDateTime <= expectedPeriodInUtc.EndDateTime && scheduleData.Period.EndDateTime >= expectedPeriodInUtc.StartDateTime;
+			var nowStartDate = nowInPersonTimezone.Date.AddDays(-1);
+			var nowEndDate = nowInPersonTimezone.Date.AddDays(1);
+			var userStartDate = TimeZoneHelper.ConvertFromUtc(startDateTime, personTimezone).Date;
+			var userEndDate = TimeZoneHelper.ConvertFromUtc(endDateTime, personTimezone).Date;
+			return nowStartDate <= userEndDate && nowEndDate >= userStartDate;
 		}
 	}
 }
