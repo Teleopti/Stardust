@@ -21,16 +21,18 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				var scheduleForPerson = input.Schedules[person];
 
 				var scheduleDays = scheduleForPerson.ScheduledDayCollection(period);
+
+				bool anyDaysWithoutSchedules = scheduleDays.Any(scheduleDay => !scheduleDay.IsScheduled());
+
+				if (!anyDaysWithoutSchedules)
+					continue;
 				foreach (var scheduleDay in scheduleDays)
 				{
-					if (!scheduleDay.IsScheduled())
+					var preference = scheduleDay.RestrictionCollection().OfType<IPreferenceRestriction>().SingleOrDefault();
+					if (preference != null)
 					{
-						var preference = scheduleDay.RestrictionCollection().OfType<IPreferenceRestriction>().SingleOrDefault();
-						if (preference != null)
-						{
-							addValidationError(hintResult, person, nameof(Resources.BlockSchedulingNotWorkingWhenUsingPreferences));
-							break;
-						}
+						addValidationError(hintResult, person, nameof(Resources.BlockSchedulingNotWorkingWhenUsingPreferences));
+						break;
 					}
 				}
 			}
