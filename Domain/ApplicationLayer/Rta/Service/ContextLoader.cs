@@ -15,49 +15,20 @@ using Teleopti.Ccc.Domain.Logon.Aspects;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
-	{
-		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource,
-			DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper,
-			ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm,
-			IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues,
-			AgentStateProcessor processor, IEventPublisherScope eventPublisherScope, ICurrentEventPublisher eventPublisher,
-			IRtaTracer tracer) : base(dataSource, dataSourceMapper, now, stateMapper, externalLogonMapper, scheduleCache,
-			agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor, eventPublisherScope,
-			eventPublisher, tracer)
-
-		{
-		}
-
-		protected override void ProcessTransactions(string tenant, IContextLoadingStrategy strategy, IEnumerable<Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>>> transactions, ConcurrentBag<Exception> exceptions)
-		{
-			var taskTransactionCount = Math.Max(2, transactions.Count() / strategy.ParallelTransactions);
-
-			var tasks = transactions
-				.Batch(taskTransactionCount)
-				.Select(transactionBatch => { return Task.Factory.StartNew(() => { transactionBatch.ForEach(transaction => { ProcessTransaction(tenant, strategy, transaction, exceptions); }); }); })
-				.ToArray();
-
-			Task.WaitAll(tasks);
-		}
-	}
-
-
 	public class ContextLoader : IContextLoader
 	{
 		private readonly ICurrentDataSource _dataSource;
 		private readonly DataSourceMapper _dataSourceMapper;
-		protected readonly INow _now;
+		private readonly INow _now;
 		private readonly StateMapper _stateMapper;
 		private readonly ExternalLogonMapper _externalLogonMapper;
 		private readonly ScheduleCache _scheduleCache;
-		protected readonly IAgentStatePersister _agentStatePersister;
+		private readonly IAgentStatePersister _agentStatePersister;
 		private readonly ProperAlarm _appliedAlarm;
-		protected readonly IConfigReader _config;
-		protected readonly DeadLockRetrier _deadLockRetrier;
+		private readonly IConfigReader _config;
+		private readonly DeadLockRetrier _deadLockRetrier;
 		private readonly IKeyValueStorePersister _keyValues;
 		private readonly AgentStateProcessor _processor;
-		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly IRtaTracer _tracer;
 
@@ -65,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache,
 			IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config,
 			DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor,
-			IEventPublisherScope eventPublisherScope, ICurrentEventPublisher eventPublisher, IRtaTracer tracer)
+			ICurrentEventPublisher eventPublisher, IRtaTracer tracer)
 		{
 			_dataSource = dataSource;
 			_dataSourceMapper = dataSourceMapper;
@@ -79,7 +50,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_deadLockRetrier = deadLockRetrier;
 			_keyValues = keyValues;
 			_processor = processor;
-			_eventPublisherScope = eventPublisherScope;
 			_eventPublisher = eventPublisher;
 			_tracer = tracer;
 		}
@@ -119,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					}))
 					.ToArray();
 
-				ProcessTransactions(_dataSource.CurrentName(), strategy, transactions, exceptions);
+				processTransactions(_dataSource.CurrentName(), strategy, transactions, exceptions);
 			}
 			else
 			{
@@ -138,6 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var e = exceptions.First();
 				ExceptionDispatchInfo.Capture(e).Throw();
 			}
+
 			if (exceptions.Any())
 				throw new System.AggregateException(exceptions);
 		}
@@ -156,17 +127,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return maxTransactionSize;
 		}
 
-		protected virtual void ProcessTransactions(
+		private void processTransactions(
 			string tenant,
 			IContextLoadingStrategy strategy,
 			IEnumerable<Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>>> transactions,
 			ConcurrentBag<Exception> exceptions)
 		{
-			Parallel.ForEach(
-				transactions,
-				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
-				data => { ProcessTransaction(tenant, strategy, data, exceptions); }
-			);
+			// transaction spreading over sql clustered index strategy optimization...
+			// minimizing chance for page lock dead locks ;)
+
+			var taskTransactionCount = Math.Max(2, transactions.Count() / strategy.ParallelTransactions);
+
+			var tasks = transactions
+				.Batch(taskTransactionCount)
+				.Select(transactionBatch => { return Task.Factory.StartNew(() => { transactionBatch.ForEach(transaction => { ProcessTransaction(tenant, strategy, transaction, exceptions); }); }); })
+				.ToArray();
+
+			Task.WaitAll(tasks);
 		}
 
 		[TenantScope]
@@ -182,7 +159,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				if (Thread.CurrentThread.Name == null)
 					Thread.CurrentThread.Name = $"{strategy.ParentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
 
-				_deadLockRetrier.RetryOnDeadlock(() => Transaction(tenant, strategy, transaction));
+				_deadLockRetrier.RetryOnDeadlock(() => this.transaction(strategy, transaction));
 			}
 			catch (Exception e)
 			{
@@ -190,8 +167,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		protected virtual void Transaction(
-			string tenant,
+		private void transaction(
 			IContextLoadingStrategy strategy,
 			Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>> agentStates
 		)

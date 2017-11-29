@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 {
 	[TestFixture]
 	[MultiDatabaseTest]
-	[Toggle(Toggles.RTA_SpreadTransactionLocksStrategy_41823)]
 	[Explicit]
 	[Category("LongRunning")]
 	public class DeadlockTest : ISetup

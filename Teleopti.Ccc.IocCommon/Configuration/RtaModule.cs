@@ -35,10 +35,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExternalLogonMapper>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ScheduleCache>().SingleInstance().ApplyAspects();
 
-			if (_config.Toggle(Toggles.RTA_SpreadTransactionLocksStrategy_41823))
-				builder.RegisterType<ContextLoaderWithSpreadTransactionLockStrategy>().As<IContextLoader>().ApplyAspects().SingleInstance();
-			else
-				builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
+			builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			builder.RegisterType<DeadLockRetrier>().SingleInstance();
 			builder.RegisterType<DeadLockVictimThrower>().SingleInstance();
 

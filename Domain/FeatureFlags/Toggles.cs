@@ -18,7 +18,6 @@
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 		Settings_SetAgentDescription_23257,
 
-		RTA_SpreadTransactionLocksStrategy_41823,
 		RTA_RtaTracer_45597,
 		RTA_MonitorAgentsWithLongTimeInState_46475,
 		RTA_MobileFriendlyCheckboxes_46758,

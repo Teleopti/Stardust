@@ -12,7 +12,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 {
-	[Toggle(Toggles.RTA_SpreadTransactionLocksStrategy_41823)]
 	[RealHangfire]
 	[TestFixture]
 	[Explicit]
