@@ -336,6 +336,7 @@
     <Compile Include="Infrastructure\RequeueHangfireEventHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\BadgeUnitType.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBadgeSetting.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IExternalPerformance.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestOpenPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestProcessor.cs" />

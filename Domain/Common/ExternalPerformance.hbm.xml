@@ -8,5 +8,25 @@
 		<property name="ExternalId" type="int" not-null="true" />
 		<property name="Name" length="200" type="string" not-null ="true" />
 		<property name="DataType" type="int" not-null="true" />
+
+		<many-to-one name="UpdatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 foreign-key="FK_ExternalPerformance_Person_UpdatedBy"/>
+		<property name="UpdatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+		<many-to-one name="BusinessUnit"
+					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+					 access="nosetter.camelcase-underscore"
+					 not-null="true"
+					 foreign-key="FK_ExternalPerformance_BusinessUnit"/>
+		<property name="IsDeleted"
+				  type="boolean"
+				  not-null="true"/>
+		<filter name="businessUnitFilter"
+				condition=":businessUnitParameter = BusinessUnit" />
+		<filter name="deletedFlagFilter"
+				condition="IsDeleted = 0" />
 	</class>
 </hibernate-mapping>
