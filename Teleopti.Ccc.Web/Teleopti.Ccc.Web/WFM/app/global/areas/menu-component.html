@@ -6,14 +6,14 @@
 		</div>
 	</div>
 </a>
-<a ng-if="$ctrl.menuItem.isStateless" ng-href="{{$ctrl.menuItem.url}}" target="{{$ctrl.menuItem.isOpenInNewTab?'_blank':'_self'}}" rel="noopener" class="my-time-link">
+<a ng-if="$ctrl.menuItem.isStateless" ng-href="{{$ctrl.menuItem.url}}" target="{{$ctrl.menuItem.isOpenInNewTab?'_blank':'_self'}}" class="my-time-link">
 	<div class="con-row main-menu-link">
 		<div class="con-flex con-row">
 			<div>
 				<i ng-class="$ctrl.menuItem.i"></i>
 				<span class="main-menu-label">{{$ctrl.menuItem.displayName}}</span>
 			</div>
-			
+
 			<div class="open-in-new" ng-if="$ctrl.menuItem.isOpenInNewTab">
 				<i class="mdi mdi-open-in-new"></i>
 			</div>
