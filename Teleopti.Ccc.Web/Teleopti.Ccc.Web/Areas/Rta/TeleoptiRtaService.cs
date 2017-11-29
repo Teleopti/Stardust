@@ -17,13 +17,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	public class TeleoptiRtaService : ITeleoptiRtaService
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
-		private readonly IToggleManager _toggles;
 		private readonly IRtaTracer _tracer;
 
-		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta, IToggleManager toggles, IRtaTracer tracer)
+		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta, IRtaTracer tracer)
 		{
 			_rta = rta;
-			_toggles = toggles;
 			_tracer = tracer;
 		}
 

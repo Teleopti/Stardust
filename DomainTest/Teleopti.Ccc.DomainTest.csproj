@@ -348,7 +348,6 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\AgentStateValuesTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Skill\SkillViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterTest.cs" />

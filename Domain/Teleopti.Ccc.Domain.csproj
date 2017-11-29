@@ -1351,7 +1351,6 @@
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilder.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\TeamCardViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModel.cs" />

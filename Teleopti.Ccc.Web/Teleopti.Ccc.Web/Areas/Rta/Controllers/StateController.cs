@@ -14,15 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private readonly INow _now;
-		private readonly IToggleManager _toggles;
 		private readonly IRtaTracer _tracer;
 
-		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, INow now, IToggleManager toggles,
-			IRtaTracer tracer)
+		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, INow now, IRtaTracer tracer)
 		{
 			_rta = rta;
 			_now = now;
-			_toggles = toggles;
 			_tracer = tracer;
 		}
 
