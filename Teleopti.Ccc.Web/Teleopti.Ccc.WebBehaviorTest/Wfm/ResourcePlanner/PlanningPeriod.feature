@@ -27,7 +27,8 @@ Scenario: The first planning period suggestion should be the next upcoming sched
 		| Team                | Team 1          |
 	When I view planning periods for planning group 'PlanningGroup 1'
 	And I click create planning period
-	And I click apply planning period
+	Then I should see planning period suggestions
+	When I click apply planning period
 	Then I should see a planning period between '2016-06-12' and '2016-06-18'
 
 	Scenario: Creating next planning period should generate a period with the same type as the previous one 

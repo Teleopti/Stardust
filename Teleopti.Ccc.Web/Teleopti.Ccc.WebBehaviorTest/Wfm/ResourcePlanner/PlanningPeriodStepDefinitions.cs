@@ -27,6 +27,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.Click(".create-next-planning-period");
 		}
 
+		[Then(@"I should see planning period suggestions")]
+		public void ThenIShouldSeePlanningPeriodSuggestions()
+		{
+			Browser.Interactions.AssertExists(".wfm-chip-wrap");
+		}
 
 		[Then(@"I should see a planning period between '(.*)' and '(.*)'" ), SetCulture("sv-SE")]
 		public void ThenIShouldSeeAPlanningPeriodBetweenAnd(string from, string to)
