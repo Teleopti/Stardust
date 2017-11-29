@@ -33,14 +33,24 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return tempAgent;
 		}
 		
-		public IEnumerable<ResourceLayer> CreateResourceLayers()
+		public IEnumerable<ResourceLayer> CreateResourceLayers(TimeSpan minSkillResolution)
 		{
-			return _activities.Value.Select(activity => new ResourceLayer
+			var resourceOnEachLayer = _resources / _activities.Value.Count;
+			var currentStartTime = _period.StartDateTime;
+			while (currentStartTime < _period.EndDateTime)
 			{
-				PayloadId = activity.Id.Value,
-				Period = _period,
-				Resource = _resources / _activities.Value.Count
-			});
+				var layerPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(minSkillResolution));
+				foreach (var activity in _activities.Value)
+				{
+					yield return new ResourceLayer
+					{
+						PayloadId = activity.Id.Value,
+						Period = layerPeriod,
+						Resource = resourceOnEachLayer
+					};
+				}
+				currentStartTime += minSkillResolution;
+			}
 		}
 	}
 }

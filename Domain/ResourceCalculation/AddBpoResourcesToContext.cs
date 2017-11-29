@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			foreach (var bpoResource in bpoResources)
 			{
 				var tempAgent = bpoResource.CreateTempAgent();
-				foreach (var resourceLayer in bpoResource.CreateResourceLayers())
+				foreach (var resourceLayer in bpoResource.CreateResourceLayers(TimeSpan.FromMinutes(resourceCalculationDataContainer.MinSkillResolution)))
 				{
 					resourceCalculationDataContainer.AddResources(tempAgent, DateOnly.Today, resourceLayer);
 				}
