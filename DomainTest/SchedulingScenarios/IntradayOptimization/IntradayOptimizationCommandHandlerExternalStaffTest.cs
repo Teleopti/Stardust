@@ -71,5 +71,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsToOptimize
 				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
 		}
+
+		[TestCase(TeamBlockType.Individual)]
+		[TestCase(TeamBlockType.Team)]
+		[Ignore("#46845")]
+		public void ShouldNotIncludeExternalStaffInAgentsInIslands(TeamBlockType teamBlockType)
+		{
+			var skill = new Skill().DefaultResolution(60).WithId();
+			var agent1 = new Person().WithId().WithPersonPeriod(skill);
+			var agent2 = new Person().WithId().WithPersonPeriod(skill);
+			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+			SkillRepository.Has(skill);
+			SkillCombinationResourceReader.Has(1, period, skill);
+			OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
+			{
+				Extra = teamBlockType.CreateExtraPreferences()
+			});
+
+			Target.Execute(new IntradayOptimizationCommand { Period = period.ToDateOnlyPeriod(TimeZoneInfo.Utc) });
+
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsInIsland
+				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
+		}
 	}
 }
