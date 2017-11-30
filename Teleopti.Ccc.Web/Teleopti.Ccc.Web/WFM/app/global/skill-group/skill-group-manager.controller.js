@@ -63,14 +63,14 @@
         };
 
         vm.copyGroupClicked = function(skillGroup, ev) {
-			ev.stopPropagation();
+            ev.stopPropagation();
             var clone = _.cloneDeep(skillGroup);
-            clone.Name = skillGroup.Name + '-copy';
-            clone.Id = skillGroup.Id + '-C';
+            clone.Name = skillGroup.Name + '-' + getRandom();
+            clone.Id = skillGroup.Id + '-' + getRandom();
             vm.skillGroups.push(clone);
-            console.log('vm.skillGroups.length - 1', vm.skillGroups.length - 1);
-			
-            vm.selectSkillGroup(vm.skillGroups.length - 1);
+            vm.skillGroups = _.sortBy(vm.skillGroups, function(item) {
+                return item.Name;
+            });
         };
 
         vm.createSkillGroup = function(ev) {
@@ -83,7 +83,6 @@
             vm.skills = vm.allSkills.slice();
             vm.canSave = false;
             vm.editGroupNameBox = true;
-            document.getElementById('skillGroupNameBox').focus();
             ev.stopPropagation();
         };
 
@@ -98,7 +97,6 @@
         vm.editNameClicked = function(skillGroup, ev) {
             vm.selectedSkillGroup = skillGroup;
             vm.editGroupNameBox = true;
-            document.getElementById('skillGroupNameBox').focus();
             vm.oldName = vm.selectedSkillGroup.Name;
             ev.stopPropagation();
         };
@@ -246,7 +244,7 @@
         }
 
         function getRandom() {
-            return Math.random() * (1000000 - 1) + 1 + '';
+            return Math.ceil(Math.random() * (1000000 - 1) + 1) + '';
         }
 
         function hasEmptySkillList() {
