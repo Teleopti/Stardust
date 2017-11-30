@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_stateGroups = stateGroups;
 		}
 
-		public PhoneStateViewModel For(Guid[] ids)
+		public PhoneStateViewModel Build(Guid[] ids)
 		{
 			var lookup = _stateGroups.LoadAll().ToLookup(s => s.Id.Value);
 

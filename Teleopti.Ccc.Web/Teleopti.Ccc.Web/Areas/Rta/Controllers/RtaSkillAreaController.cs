@@ -11,32 +11,23 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class RtaSkillAreaController : ApiController
 	{
-		private readonly FetchSkillGroup _fetchSkillGroup;
+		private readonly SkillGroupViewModelBuilder _skillGroupViewModelBuilder;
 
-		public RtaSkillAreaController(FetchSkillGroup fetchSkillGroup)
+		public RtaSkillAreaController(SkillGroupViewModelBuilder skillGroupViewModelBuilder)
 		{
-			_fetchSkillGroup = fetchSkillGroup;
+			_skillGroupViewModelBuilder = skillGroupViewModelBuilder;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/SkillAreas")]
-		public virtual IHttpActionResult GetSkillAreas()
+		[UnitOfWork, HttpGet, Route("api/SkillGroups")]
+		public virtual IHttpActionResult Index()
 		{
-			return Ok(new SkillAreaInfo
-			{
-				SkillAreas = _fetchSkillGroup.GetAll()
-			});
+			return Ok(_skillGroupViewModelBuilder.GetAll());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/SkillArea/For")]
 		public virtual IHttpActionResult NameFor(Guid skillAreaId)
 		{
-			return Ok(_fetchSkillGroup.Get(skillAreaId));
+			return Ok(_skillGroupViewModelBuilder.Get(skillAreaId));
 		}
 	}
-
-	public class SkillAreaInfo
-	{
-		public IEnumerable<SkillGroupViewModel> SkillAreas { get; set; }
-	}
-
 }

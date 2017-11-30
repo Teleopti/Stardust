@@ -38,9 +38,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
                         return rtaService.getSkills();
                     },
                     skillAreas: function(rtaService) {
-                        return rtaService.getSkillAreas().then(function(result) {
-                            return result.SkillAreas;
-                        });
+                        return rtaService.getSkillAreas();
                     }
                 }
             })

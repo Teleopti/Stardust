@@ -25,7 +25,7 @@
 
         return service;
 
-        function getSkills(data) {
+        function getSkills() {
             return $resource('../api/Skills', {}, {
                 query: {
                     method: 'GET',
@@ -34,15 +34,16 @@
             }).query().$promise;
         };
 
-        function getSkillAreas(data) {
-            return $resource('../api/SkillAreas', {}, {
+        function getSkillAreas() {
+            return $resource('../api/SkillGroups', {}, {
                 query: {
-                    method: 'GET'
+                    method: 'GET',
+					isArray: true
                 }
             }).query().$promise;
         };
 
-        function getOrganization(data) {
+        function getOrganization() {
             return $resource('../api/Sites/Organization', {}, {
                 query: {
                     method: 'GET',
@@ -66,7 +67,7 @@
         };
 
         function agentStatesFor(data) {
-            return $resource('../api/AgentStates/For', {}, { query: { method: 'POST' } }).query(data).$promise;
+            return $resource('../api/AgentStates/Poll', {}, { query: { method: 'POST' } }).query(data).$promise;
         };
 
         function getTeamCardsFor(data) {

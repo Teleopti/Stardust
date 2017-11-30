@@ -7,13 +7,13 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.SkillGroupManagement
 {
-	public class FetchSkillGroup
+	public class SkillGroupViewModelBuilder
 	{
 		private readonly ISkillGroupRepository _skillGroupRepository;
 		private readonly ILoadAllSkillInIntradays _loadAllSkillInIntradays;
 		private readonly IUserUiCulture _uiCulture;
 
-		public FetchSkillGroup(ISkillGroupRepository skillGroupRepository, ILoadAllSkillInIntradays loadAllSkillInIntradays, IUserUiCulture uiCulture)
+		public SkillGroupViewModelBuilder(ISkillGroupRepository skillGroupRepository, ILoadAllSkillInIntradays loadAllSkillInIntradays, IUserUiCulture uiCulture)
 		{
 			_skillGroupRepository = skillGroupRepository;
 			_loadAllSkillInIntradays = loadAllSkillInIntradays;

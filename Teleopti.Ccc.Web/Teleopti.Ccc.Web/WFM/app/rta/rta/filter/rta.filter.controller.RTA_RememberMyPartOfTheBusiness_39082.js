@@ -81,7 +81,7 @@
 							var deffered = $q.defer();
 							deffered.resolve();
 							vm.skillAreasLoaded = true;
-							vm.skillAreas = skillAreas.SkillAreas;
+							vm.skillAreas = skillAreas;
 							if (skillAreaId != null && skillIds == null)
 								vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
 							return deffered.promise;

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[UnitOfWork, HttpGet, Route("api/PhoneState/InfoFor")]
 		public virtual IHttpActionResult InfoFor([FromUri] Query query)
 		{
-			return Ok(_build.For(query.Ids));
+			return Ok(_build.Build(query.Ids));
 		}
 
 		public class Query

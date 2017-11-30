@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.All)]
 	public class RtaToolController : ApiController
 	{
-		private readonly IRtaToolViewModelBuilder _viewModelBuilder;
+		private readonly RtaToolViewModelBuilderFromAgentState _viewModelBuilder;
 		private readonly IRtaStateGroupRepository _stateGroups;
 		private readonly ITeamCardReader _teamCardReader;
 
-		public RtaToolController(IRtaToolViewModelBuilder viewModelBuilder, IRtaStateGroupRepository stateGroups, ITeamCardReader teamCardReader)
+		public RtaToolController(RtaToolViewModelBuilderFromAgentState viewModelBuilder, IRtaStateGroupRepository stateGroups, ITeamCardReader teamCardReader)
 		{
 			_viewModelBuilder = viewModelBuilder;
 			_stateGroups = stateGroups;

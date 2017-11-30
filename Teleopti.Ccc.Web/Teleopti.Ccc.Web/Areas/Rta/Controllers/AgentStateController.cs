@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_builder = builder;
 		}
 
-		[UnitOfWork, HttpPost, Route("api/AgentStates/For")]
-		public virtual IHttpActionResult For(AgentStateFilter filter)
+		[UnitOfWork, HttpPost, Route("api/AgentStates/Poll")]
+		public virtual IHttpActionResult Poll(AgentStateFilter filter)
 		{
-			return Ok(_builder.For(filter));
+			return Ok(_builder.Build(filter));
 		}
 	}
 }

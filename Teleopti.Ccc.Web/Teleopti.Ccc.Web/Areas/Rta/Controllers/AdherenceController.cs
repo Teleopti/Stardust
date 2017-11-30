@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class AdherenceController : ApiController
 	{
-		private readonly IAdherencePercentageViewModelBuilder _adherencePercentageViewModelBuilder;
+		private readonly AdherencePercentageViewModelBuilder _adherencePercentageViewModelBuilder;
 		private readonly HistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
 
 		public AdherenceController(
-			IAdherencePercentageViewModelBuilder adherencePercentageViewModelBuilder, 
+			AdherencePercentageViewModelBuilder adherencePercentageViewModelBuilder, 
 			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder)
 		{
 			_adherencePercentageViewModelBuilder = adherencePercentageViewModelBuilder;

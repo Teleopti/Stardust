@@ -553,7 +553,7 @@
     <Compile Include="Intraday\IncomingTrafficViewModelCreatorTest.cs" />
     <Compile Include="Logon\AsSystemAspectTest.cs" />
     <Compile Include="SkillGroups\DeleteSkillGroupTest.cs" />
-    <Compile Include="SkillGroups\FetchSkillGroupTest.cs" />
+    <Compile Include="SkillGroups\SkillGroupViewModelBuilderTest.cs" />
     <Compile Include="Intraday\FetchSkillInIntradayTest.cs" />
     <Compile Include="Logon\DataSourceAspectAuthenticationKeyTest.cs" />
     <Compile Include="Logon\LogonLicenseActivationConcurrencyTest35909.cs" />

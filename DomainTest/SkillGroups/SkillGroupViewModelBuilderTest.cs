@@ -16,9 +16,9 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.DomainTest.SkillGroups
 {
 	[DomainTest]
-	public class FetchSkillGroupTest : ISetup
+	public class SkillGroupViewModelBuilderTest : ISetup
 	{
-		public FetchSkillGroup Target;
+		public SkillGroupViewModelBuilder Target;
 		public FakeSkillGroupRepository SkillGroupRepository;
 		public FakeLoadAllSkillInIntradays LoadAllSkillInIntradays;
 		public FakeUserUiCulture UiCulture;
@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 				Id = Guid.NewGuid(),
 				Name = RandomName.Make()
 			});
-		}		
+		}
 
 		[Test]
 		public void ShouldGetAll()
 		{
-			SkillGroupRepository.Has(new SkillGroup { Skills = defaultSkills }.WithId());
-			SkillGroupRepository.Has(new SkillGroup { Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup {Skills = defaultSkills}.WithId());
+			SkillGroupRepository.Has(new SkillGroup {Skills = defaultSkills}.WithId());
 
 			Target.GetAll().Count()
 				.Should().Be.EqualTo(2);
@@ -52,23 +52,23 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 		[Test]
 		public void ShouldSortNameInSkillarea()
 		{
-			SkillGroupRepository.Has(new SkillGroup { Name = "B", Skills = defaultSkills }.WithId());
-			SkillGroupRepository.Has(new SkillGroup { Name = "C", Skills = defaultSkills }.WithId());
-			SkillGroupRepository.Has(new SkillGroup { Name = "A", Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup {Name = "B", Skills = defaultSkills}.WithId());
+			SkillGroupRepository.Has(new SkillGroup {Name = "C", Skills = defaultSkills}.WithId());
+			SkillGroupRepository.Has(new SkillGroup {Name = "A", Skills = defaultSkills}.WithId());
 
 			UiCulture.IsSwedish();
-			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "B", "C" });
+			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] {"A", "B", "C"});
 		}
 
 		[Test]
 		public void ShouldSortSwedishNameInSkillarea()
 		{
-			SkillGroupRepository.Has(new SkillGroup { Name = "Ä", Skills = defaultSkills }.WithId());
-			SkillGroupRepository.Has(new SkillGroup { Name = "A", Skills = defaultSkills }.WithId());
-			SkillGroupRepository.Has(new SkillGroup { Name = "Å", Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup {Name = "Ä", Skills = defaultSkills}.WithId());
+			SkillGroupRepository.Has(new SkillGroup {Name = "A", Skills = defaultSkills}.WithId());
+			SkillGroupRepository.Has(new SkillGroup {Name = "Å", Skills = defaultSkills}.WithId());
 
 			UiCulture.IsSwedish();
-			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "Å", "Ä" });
+			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] {"A", "Å", "Ä"});
 		}
 
 		[Test]
@@ -79,13 +79,13 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
 				{
-					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false }
+					new SkillInIntraday {Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false}
 				}
 			}.WithId();
 
 			SkillGroupRepository.Has(existingSkillArea);
 
-			var skillInIntraday = new SkillInIntraday() { Id = existingSkillArea.Skills.First().Id, DoDisplayData = true, SkillType = "InboundPhone" };
+			var skillInIntraday = new SkillInIntraday() {Id = existingSkillArea.Skills.First().Id, DoDisplayData = true, SkillType = "InboundPhone"};
 			LoadAllSkillInIntradays.Has(skillInIntraday);
 
 			var result = Target.GetAll().Single();
@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
 				{
-					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false },
-					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true }
+					new SkillInIntraday {Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false},
+					new SkillInIntraday {Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true}
 				}
 			}.WithId();
 
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 				Name = "SkillAreaName",
 				Skills = new List<SkillInIntraday>
 				{
-					new SkillInIntraday { Id = skillId, Name = "Phone", IsDeleted = false }
+					new SkillInIntraday {Id = skillId, Name = "Phone", IsDeleted = false}
 				}
 			}.WithId(skillAreaId);
 			SkillGroupRepository.Has(new SkillGroup());
@@ -165,8 +165,8 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
 				{
-					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true },
-					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true }
+					new SkillInIntraday {Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true},
+					new SkillInIntraday {Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true}
 				}
 			}.WithId();
 

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			builder.RegisterType<TaskPeriodsProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
-			builder.RegisterType<FetchSkillGroup>().SingleInstance();
+			builder.RegisterType<SkillGroupViewModelBuilder>().SingleInstance();
 			builder.RegisterType<CreateSkillGroup>().SingleInstance();
 			builder.RegisterType<DeleteSkillGroup>().SingleInstance();
 			builder.RegisterType<ModifySkillGroup>().SingleInstance();

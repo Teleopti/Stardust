@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamCardViewModelBuilder>().SingleInstance();
 			builder.RegisterType<RtaTracerViewModelBuilder>().SingleInstance();
 
-			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
+			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
 
 			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>();
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentScheduleReadModelUpdater>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ActivityChangeChecker>().AsSelf().As<IActivityChangeCheckerFromScheduleChangeProcessor>().SingleInstance();
 
-			builder.RegisterType<RtaToolViewModelBuilderFromAgentState>().As<IRtaToolViewModelBuilder>().SingleInstance();
+			builder.RegisterType<RtaToolViewModelBuilderFromAgentState>().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_RtaTracer_45597))
 			{

@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		    _user = user;
 		}
 		
-		public AgentStatesViewModel For(AgentStateFilter filter)
+		public AgentStatesViewModel Build(AgentStateFilter filter)
 		{
 		    if (filter.SiteIds.EmptyIfNull().IsEmpty() && filter.TeamIds.EmptyIfNull().IsEmpty())
 		    {

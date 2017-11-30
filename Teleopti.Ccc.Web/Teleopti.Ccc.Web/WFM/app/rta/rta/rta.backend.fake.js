@@ -47,7 +47,7 @@
 			
 		};
 
-		faker.fake(/\.\.\/api\/AgentStates\/For/,
+		faker.fake(/\.\.\/api\/AgentStates\/Poll/,
 			function (params) {
 				params.siteIds = params.siteIds || [];
 				params.teamIds = params.teamIds || [];
@@ -101,11 +101,9 @@
 				return [200, result[0]];
 			});
 
-		faker.fake(/\.\.\/api\/SkillAreas(.*)/,
+		faker.fake(/\.\.\/api\/SkillGroups(.*)/,
 			function () {
-				return [200, {
-					SkillAreas: skillAreas
-				}];
+				return [200, skillAreas];
 			});
 
 		faker.fake(/\.\.\/api\/Skills(.*)/,

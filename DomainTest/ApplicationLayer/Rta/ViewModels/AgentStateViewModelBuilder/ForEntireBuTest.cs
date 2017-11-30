@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 							SiteId = siteParisId
 						});
 
-			Target.For(new AgentStateFilter { InAlarm = false })
+			Target.Build(new AgentStateFilter { InAlarm = false })
 				.States.Select(x => x.SiteId)
 				.Should().Have.SameValuesAs(siteLondonId.ToString(), siteParisId.ToString());
 			
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					IsRuleAlarm = true
 				});
 
-			Target.For(new AgentStateFilter { InAlarm = true })
+			Target.Build(new AgentStateFilter { InAlarm = true })
 				.States.Select(x => x.SiteId)
 				.Should().Have.SameValuesAs(siteLondonId.ToString(), siteParisId.ToString());
 		}

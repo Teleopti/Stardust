@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					SiteId = siteId2
 				});
 			Permissions.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, siteId1);
-			var agentState = Target.For(new AgentStateFilter { SiteIds = new[] { siteId1, siteId2 } }).States.ToArray();
+			var agentState = Target.Build(new AgentStateFilter { SiteIds = new[] { siteId1, siteId2 } }).States.ToArray();
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(personId1);
 		}
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					TeamId = Guid.NewGuid()
 				});
 			Permissions.HasPermissionForTeam(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, teamId);
-			var agentState = Target.For(new AgentStateFilter { SiteIds = new[] { siteId } }).States.ToArray();
+			var agentState = Target.Build(new AgentStateFilter { SiteIds = new[] { siteId } }).States.ToArray();
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(personId1);
 		}
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					TeamId = Guid.NewGuid()
 				});
 			Permissions.HasPermissionForTeam(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, teamId);
-			var agentState = Target.For(new AgentStateFilter { TeamIds = new[] { teamId } }).States.ToArray();
+			var agentState = Target.Build(new AgentStateFilter { TeamIds = new[] { teamId } }).States.ToArray();
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(personId1);
 		}

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Database
 				.WithStateGroup(phoneId, "phone");
 
-			var result = Target.For(new[] { phoneId }).PhoneStates.Single();
+			var result = Target.Build(new[] { phoneId }).PhoneStates.Single();
 
 			result.Id.Should().Be(phoneId);
 			result.Name.Should().Be("phone");
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithStateGroup(phoneId, "phone")
 				.WithStateGroup(Guid.NewGuid(), "someOtherStateGroup");
 
-			var result = Target.For(new[] { phoneId }).PhoneStates.Single();
+			var result = Target.Build(new[] { phoneId }).PhoneStates.Single();
 
 			result.Id.Should().Be(phoneId);
 			result.Name.Should().Be("phone");
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithStateGroup(phoneId, "phone")
 				.WithStateGroup(Guid.NewGuid(), "someOtherStateGroup");
 
-			var result = Target.For(new[] { Guid.NewGuid() }).PhoneStates;
+			var result = Target.Build(new[] { Guid.NewGuid() }).PhoneStates;
 
 			result.Should().Be.Empty();
 			

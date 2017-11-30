@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 		private readonly IAuthorization _authorization;
 		private readonly CreateSkillGroup _createSkillGroup;
 		private readonly DeleteSkillGroup _deleteSkillGroup;
-		private readonly FetchSkillGroup _fetchSkillGroup;
+		private readonly SkillGroupViewModelBuilder _skillGroupViewModelBuilder;
 		private readonly ModifySkillGroup _modifySkillGroup;
 		private readonly ISkillGroupRepository _skillGroupRepository;
 
 
 		public SkillGroupController(
 			CreateSkillGroup createSkillGroup,
-			FetchSkillGroup fetchSkillGroup,
+			SkillGroupViewModelBuilder skillGroupViewModelBuilder,
 			DeleteSkillGroup deleteSkillGroup,
 			ModifySkillGroup modifySkillGroup,
 			IAuthorization authorization,
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 		)
 		{
 			_createSkillGroup = createSkillGroup;
-			_fetchSkillGroup = fetchSkillGroup;
+			_skillGroupViewModelBuilder = skillGroupViewModelBuilder;
 			_deleteSkillGroup = deleteSkillGroup;
 			_authorization = authorization;
 			_modifySkillGroup = modifySkillGroup;
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 			{
 				HasPermissionToModifySkillArea =
 					_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup),
-				SkillAreas = _fetchSkillGroup.GetAll()
+				SkillAreas = _skillGroupViewModelBuilder.GetAll()
 			});
 		}
 

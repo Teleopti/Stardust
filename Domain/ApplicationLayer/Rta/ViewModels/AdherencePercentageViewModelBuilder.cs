@@ -5,12 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
-	public interface IAdherencePercentageViewModelBuilder
-	{
-		AdherencePercentageViewModel Build(Guid personId);
-	}
-
-	public class AdherencePercentageViewModelBuilder : IAdherencePercentageViewModelBuilder
+	public class AdherencePercentageViewModelBuilder
 	{
 		private readonly IAdherencePercentageReadModelReader _adherencePercentageReadModelReader;
 		private readonly INow _now;

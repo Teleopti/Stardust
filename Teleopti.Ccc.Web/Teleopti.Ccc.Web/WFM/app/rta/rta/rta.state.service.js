@@ -35,7 +35,7 @@
 					}),
 				rtaService.getSkillAreas()
 					.then(function (data) {
-						skillAreas = data.SkillAreas;
+						skillAreas = data;
 					})
 			]);
 		}

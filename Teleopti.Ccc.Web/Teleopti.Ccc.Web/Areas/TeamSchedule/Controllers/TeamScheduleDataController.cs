@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly SkillViewModelBuilder _skillBuilder;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
-		private readonly FetchSkillGroup _fetchSkillGroup;
+		private readonly SkillGroupViewModelBuilder _skillGroupViewModelBuilder;
 
 		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider,
 			IScheduleValidationProvider validationProvider,
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			IToggleManager toggleManager,
 			SkillViewModelBuilder skillBuilder,
 			IScenarioRepository scenarioRepository,
-			IOptionalColumnRepository optionalColumnRepository, FetchSkillGroup fetchSkillGroup)
+			IOptionalColumnRepository optionalColumnRepository, SkillGroupViewModelBuilder skillGroupViewModelBuilder)
 		{
 			_teamScheduleDataProvider = teamScheduleDataProvider;
 			_validationProvider = validationProvider;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_skillBuilder = skillBuilder;
 			_scenarioRepository = scenarioRepository;
 			_optionalColumnRepository = optionalColumnRepository;
-			_fetchSkillGroup = fetchSkillGroup;
+			_skillGroupViewModelBuilder = skillGroupViewModelBuilder;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchActivities")]
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			return Ok(new SkillGroupInfo
 			{
-				SkillAreas = _fetchSkillGroup.GetAll()
+				SkillAreas = _skillGroupViewModelBuilder.GetAll()
 			});
 		}
 

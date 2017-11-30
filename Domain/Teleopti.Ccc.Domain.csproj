@@ -2110,7 +2110,7 @@
     <Compile Include="IProvideCustomChangeInfo.cs" />
     <Compile Include="Logon\ApplicationFunctionsForRole.cs" />
     <Compile Include="SkillGroupManagement\CreateSkillGroup.cs" />
-    <Compile Include="SkillGroupManagement\FetchSkillGroup.cs" />
+    <Compile Include="SkillGroupManagement\SkillGroupViewModelBuilder.cs" />
     <Compile Include="Logon\Aspects\TenantFromArguments.cs" />
     <Compile Include="Logon\AsSystem.cs" />
     <Compile Include="Intraday\FetchSkillInIntraday.cs" />
