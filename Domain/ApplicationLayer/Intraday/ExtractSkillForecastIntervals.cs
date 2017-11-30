@@ -24,15 +24,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		{
 			var returnList = new HashSet<SkillStaffingInterval>();
 			var skillDays =  _skillDayRepository.FindReadOnlyRange(GetLongestPeriod(skills, period), skills, _currentScenario.Current());
-
-
-			var skillStaffPeriods = skillDays.SelectMany(y => y.SkillStaffPeriodCollection.Where(x => period.Intersect(x.Period))).ToList();
-
-			if (useShrinkage)
-				skillStaffPeriods.ForEach(x => x.Payload.UseShrinkage = true);
-
-
-			/*
 			foreach (var skillDay in skillDays)
 			{
 				if (useShrinkage)
@@ -43,10 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 					}
 				}
 				getSkillStaffingIntervals(skillDay).ForEach(i => returnList.Add(i));
-			}*/
-
-			getSkillStaffingIntervals(skillStaffPeriods).ForEach(i => returnList.Add(i));
-
+			}
 			return returnList.Where(x => period.Contains(x.StartDateTime) || x.DateTimePeriod.Contains(period.StartDateTime));
 		}
 
@@ -97,18 +85,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			return skillStaffPeriods.Select(skillStaffPeriod => new SkillStaffingInterval
 			{
 				SkillId = skillDay.Skill.Id.GetValueOrDefault(),
-				StartDateTime = skillStaffPeriod.Period.StartDateTime,
-				EndDateTime = skillStaffPeriod.Period.EndDateTime,
-				Forecast = skillStaffPeriod.FStaff,
-				StaffingLevel = 0,
-			});
-		}
-
-		private IEnumerable<SkillStaffingInterval> getSkillStaffingIntervals(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
-		{			
-			return skillStaffPeriods.Select(skillStaffPeriod => new SkillStaffingInterval
-			{
-				SkillId = skillStaffPeriod.SkillDay.Skill.Id.GetValueOrDefault(),
 				StartDateTime = skillStaffPeriod.Period.StartDateTime,
 				EndDateTime = skillStaffPeriod.Period.EndDateTime,
 				Forecast = skillStaffPeriod.FStaff,
