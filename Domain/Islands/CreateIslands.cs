@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Islands
 			_moveSkillSetToCorrectIsland = moveSkillSetToCorrectIsland;
 		}
 
-		public IEnumerable<Island> Create(IReduceSkillSets reduceSkillSets, IEnumerable<IPerson> peopleInOrganization, DateOnlyPeriod period)
+		public IEnumerable<Island> Create(IReduceSkillSets reduceSkillSets, IEnumerable<IPerson> allStaff, DateOnlyPeriod period)
 		{
-			var allSkillSets = _createSkillSets.Create(peopleInOrganization, period).ToList();
+			var allSkillSets = _createSkillSets.Create(allStaff, period).ToList();
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillSets);
 			while (true)
 			{

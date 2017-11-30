@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_activities = new Lazy<ISet<IActivity>>(() => new HashSet<IActivity>(_skills.Select(x => x.Activity)));
 		}
 
-		public IPerson CreateBpoAgent()
+		public IPerson CreateExternalAgent()
 		{
 			var tempAgent = new Person();
 			var personPeriod = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());

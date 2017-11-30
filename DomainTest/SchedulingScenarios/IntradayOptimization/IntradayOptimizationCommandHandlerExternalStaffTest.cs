@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
 
 		[Test]
-		[Ignore("#46845")]
 		public void ShouldConsiderExternalStaffWhenCreatingIslands()
 		{
 			var skill1 = new Skill().DefaultResolution(60).WithId();

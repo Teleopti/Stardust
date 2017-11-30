@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			foreach (var bpoResource in bpoResources)
 			{
-				var tempAgent = bpoResource.CreateBpoAgent();
+				var tempAgent = bpoResource.CreateExternalAgent();
 				foreach (var resourceLayer in bpoResource.CreateResourceLayers(TimeSpan.FromMinutes(resourceCalculationDataContainer.MinSkillResolution)))
 				{
 					resourceCalculationDataContainer.AddResources(tempAgent, DateOnly.Today, resourceLayer);
