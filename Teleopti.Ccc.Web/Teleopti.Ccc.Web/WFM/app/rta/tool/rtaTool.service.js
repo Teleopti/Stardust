@@ -14,24 +14,24 @@
 			getAgents: getAgents,
 			sendBatch: sendBatch,
 			getOrganization: getOrganization
-		}
+		};
 
 		return service;
-
-		function getStateCodes() {
-			return $resource('../RtaTool/PhoneStates/For', {}, { query: { method: 'GET', isArray: true } }).query().$promise;
-		}
-
-		function getAgents(params) {
-			return $resource('../RtaTool/Agents/For', params, { query: { method: 'GET', isArray: true } }).query().$promise;
-		}
 
 		function sendBatch(batch) {
 			return $resource('../Rta/State/Batch', {}, { query: { method: 'POST', }, }).query(batch).$promise;
 		}
 
+		function getStateCodes() {
+			return $resource('../api/RtaTool/PhoneStates', {}, { query: { method: 'GET', isArray: true } }).query().$promise;
+		}
+
+		function getAgents(params) {
+			return $resource('../api/RtaTool/Agents', params, { query: { method: 'GET', isArray: true } }).query().$promise;
+		}
+
 		function getOrganization() {
-			return $resource('../RtaTool/Organization/For', {}, { query: { method: 'GET', isArray: false } }).query().$promise;
+			return $resource('../api/RtaTool/Organization', {}, { query: { method: 'GET', isArray: false } }).query().$promise;
 		}
 
 	};

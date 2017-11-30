@@ -93,12 +93,7 @@ describe('RtaToolController', function () {
 			}
 		);
 
-		expect(vm.filteredAgents.length).toEqual(1);
-		expect(vm.filteredAgents[0].Name).toEqual('John Smith');
-		expect(vm.filteredAgents[0].UserCode).toEqual('0019');
-		expect(vm.filteredAgents[0].DataSource).toEqual('1');
-		expect(vm.filteredAgents[0].TeamName).toEqual('Students');
-		expect(vm.filteredAgents[0].SiteName).toEqual('London');
+		expect(fakeBackend.lastAgentsParams.siteIds).toBe('londonId');
 	});
 
 	it('should get agents by team', function () {
@@ -115,7 +110,7 @@ describe('RtaToolController', function () {
 				UserCode: '0068',
 				DataSource: '1',
 				TeamName: 'Team nights',
-				SiteId: 'teamNightsId'
+				TeamId: 'teamNightsId'
 			});
 
 		var c = $controllerbuilder.createController();
@@ -127,11 +122,7 @@ describe('RtaToolController', function () {
 			}
 		);
 
-		expect(vm.filteredAgents.length).toEqual(1);
-		expect(vm.filteredAgents[0].Name).toEqual('John Smith');
-		expect(vm.filteredAgents[0].UserCode).toEqual('0019');
-		expect(vm.filteredAgents[0].DataSource).toEqual('1');
-		expect(vm.filteredAgents[0].TeamName).toEqual('Students');
+		expect(fakeBackend.lastAgentsParams.teamIds).toBe('studentsId');
 	});
 
 	it('should reset on clear', function () {
