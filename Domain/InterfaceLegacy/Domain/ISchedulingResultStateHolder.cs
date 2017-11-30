@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly);
 
 		ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
-		IEnumerable<BpoResource> BpoResources { get; set; }
+		IEnumerable<ExternalStaff> BpoResources { get; set; }
 		void AddSkills(params ISkill[] skills);
 	    void ClearSkills();
 	    void RemoveSkill(ISkill skill);

@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private bool _cancelButtonPressed;
 		private IDaysOffPreferences _daysOffPreferences;
 		private IEnumerable<IOptionalColumn> _optionalColumns;
-		private BpoResourcesProvider _bpoResourcesProvider;
+		private ExternalStaffProvider _externalStaffProvider;
 
 		#region Constructors
 
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			_skillDayLoadHelper = _container.Resolve<ISkillDayLoadHelper>();
-			_bpoResourcesProvider = _container.Resolve<BpoResourcesProvider>();
+			_externalStaffProvider = _container.Resolve<ExternalStaffProvider>();
 			_peopleAndSkillLoaderDecider = _container.Resolve<IPeopleAndSkillLoaderDecider>();
 
 			_schedulerState.SetRequestedScenario(loadScenario);
@@ -4949,7 +4949,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		
 		private void loadBpos(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
-			stateHolder.SchedulingResultState.BpoResources = _bpoResourcesProvider.Fetch(stateHolder.SchedulingResultState.Skills, stateHolder.RequestedPeriod.Period());
+			stateHolder.SchedulingResultState.BpoResources = _externalStaffProvider.Fetch(stateHolder.SchedulingResultState.Skills, stateHolder.RequestedPeriod.Period());
 		}
 
 		private void loadSkillDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder)

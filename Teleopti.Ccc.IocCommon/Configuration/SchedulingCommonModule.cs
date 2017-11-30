@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AddBpoResourcesToContext>().SingleInstance();
 			builder.RegisterType<SkillCombinationToBpoResourceMapper>().SingleInstance();
-			builder.RegisterType<BpoResourcesProvider>().SingleInstance();
+			builder.RegisterType<ExternalStaffProvider>().SingleInstance();
 			builder.RegisterType<MaxSeatPeak>().SingleInstance();
 			builder.RegisterType<IsOverMaxSeat>().SingleInstance();
 			builder.RegisterType<LockDaysOnTeamBlockInfos>().SingleInstance();

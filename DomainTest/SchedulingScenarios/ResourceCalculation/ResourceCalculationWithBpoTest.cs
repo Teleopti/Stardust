@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 9).WithId();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, date, skillDay);
-			var bpos = new[] {new BpoResource(bpoResources, new[] {skill}, skillDay.SkillStaffPeriodCollection.First().Period)};
+			var bpos = new[] {new ExternalStaff(bpoResources, new[] {skill}, skillDay.SkillStaffPeriodCollection.First().Period)};
 
 			using (CascadingResourceCalculationContextFactory.Create(
 				ScheduleDictionaryCreator.WithData(scenario, date.ToDateOnlyPeriod()), new[]{skill}, bpos, false, date.ToDateOnlyPeriod()))
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillWithBposDay = skillWithBpos.CreateSkillDayWithDemand(scenario, date, 10);
 			var otherSkillDay = otherSkill.CreateSkillDayWithDemand(scenario, date, 10);
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, date, new[] { skillWithBposDay, otherSkillDay });
-			var bpos = new[] { new BpoResource(1, new[] { skillWithBpos }, skillWithBposDay.SkillStaffPeriodCollection.First().Period) };
+			var bpos = new[] { new ExternalStaff(1, new[] { skillWithBpos }, skillWithBposDay.SkillStaffPeriodCollection.First().Period) };
 
 			using (CascadingResourceCalculationContextFactory.Create(
 				ScheduleDictionaryCreator.WithData(scenario, date.ToDateOnlyPeriod()), new[] { skillWithBpos, otherSkill }, bpos, false, date.ToDateOnlyPeriod()))
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).DefaultResolution(30).IsOpenBetween(8, 9).WithId();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, date, skillDay);
-			var bpos = new[] { new BpoResource(10, new[] { skill }, skillDay.SkillStaffPeriodCollection.First().Period) };
+			var bpos = new[] { new ExternalStaff(10, new[] { skill }, skillDay.SkillStaffPeriodCollection.First().Period) };
 
 			using (CascadingResourceCalculationContextFactory.Create(
 				ScheduleDictionaryCreator.WithData(scenario, date.ToDateOnlyPeriod()), new[] { skill }, bpos, false, date.ToDateOnlyPeriod()))
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, date, 10);
 			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, date, 10);
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, date, new[]{skillDay1, skillDay2});
-			var bpos = new[] {new BpoResource(1, new[] {skill1, skill2}, skillDay1.SkillStaffPeriodCollection.First().Period)};
+			var bpos = new[] {new ExternalStaff(1, new[] {skill1, skill2}, skillDay1.SkillStaffPeriodCollection.First().Period)};
 			
 			using (CascadingResourceCalculationContextFactory.Create(
 				ScheduleDictionaryCreator.WithData(scenario, date.ToDateOnlyPeriod()), new[]{skill1, skill2}, bpos, false, date.ToDateOnlyPeriod()))
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, date, 10);
 			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, date, 10);
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, date, new[]{skillDay1, skillDay2});
-			var bpos = new[] {new BpoResource(1, new[] {skill1, skill2}, skillDay1.SkillStaffPeriodCollection.First().Period)};
+			var bpos = new[] {new ExternalStaff(1, new[] {skill1, skill2}, skillDay1.SkillStaffPeriodCollection.First().Period)};
 			
 			using (CascadingResourceCalculationContextFactory.Create(
 				ScheduleDictionaryCreator.WithData(scenario, date.ToDateOnlyPeriod()), new[]{skill1, skill2}, bpos, false, date.ToDateOnlyPeriod()))
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, date, 5);
 			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, date, 5);
 			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, date, new[]{skillDay1, skillDay2});
-			var bpos = new[] {new BpoResource(11, new[] {skill1, skill2}, skillDay1.SkillStaffPeriodCollection.First().Period)};
+			var bpos = new[] {new ExternalStaff(11, new[] {skill1, skill2}, skillDay1.SkillStaffPeriodCollection.First().Period)};
 			
 			using (CascadingResourceCalculationContextFactory.Create(
 				ScheduleDictionaryCreator.WithData(scenario, date.ToDateOnlyPeriod()), new[]{skill1, skill2}, bpos, false, date.ToDateOnlyPeriod()))

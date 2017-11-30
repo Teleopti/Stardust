@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer);
 		IEnumerable<DateTimePeriod> IntraIntervalResources(ISkill skill, DateTimePeriod period);
 		bool PrimarySkillMode { get; }
-		IEnumerable<BpoResource> BpoResources { get; }
+		IEnumerable<ExternalStaff> BpoResources { get; }
 	}
 
 	public interface IResourceCalculationDataContainer

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly ISkillRepository _skillRepository;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly BpoResourcesProvider _bpoResourcesProvider;
+		private readonly ExternalStaffProvider _externalStaffProvider;
 
 		public FillSchedulerStateHolderFromDatabase(PersonalSkillsProvider personalSkillsProvider,
 					IScenarioRepository scenarioRepository,
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					ISkillRepository skillRepository,
 					ICurrentUnitOfWork currentUnitOfWork,
 					IUserTimeZone userTimeZone,
-					BpoResourcesProvider bpoResourcesProvider)
+					ExternalStaffProvider externalStaffProvider)
 			: base(personalSkillsProvider)
 		{
 			_scenarioRepository = scenarioRepository;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_skillRepository = skillRepository;
 			_currentUnitOfWork = currentUnitOfWork;
 			_userTimeZone = userTimeZone;
-			_bpoResourcesProvider = bpoResourcesProvider;
+			_externalStaffProvider = externalStaffProvider;
 		}
 
 		protected override void FillScenario(ISchedulerStateHolder schedulerStateHolderTo)
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillBpos(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
 			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
-			schedulerStateHolderTo.SchedulingResultState.BpoResources = _bpoResourcesProvider.Fetch(skills, dateTimePeriod);
+			schedulerStateHolderTo.SchedulingResultState.BpoResources = _externalStaffProvider.Fetch(skills, dateTimePeriod);
 		}
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)

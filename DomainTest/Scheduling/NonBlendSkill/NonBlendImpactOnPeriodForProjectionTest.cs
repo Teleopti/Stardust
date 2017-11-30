@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			_personSkillProvider = new PersonSkillProvider();
 
-			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<BpoResource>(), _personSkillProvider, 60, false);
+			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 60, false);
 			foreach (var layer in new []{_layerCollection1,_layerCollection2})
 			{
 				foreach (var resourceLayer in layer.ToResourceLayers(15))

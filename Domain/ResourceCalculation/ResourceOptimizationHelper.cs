@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				IDisposable context = null;
 				if (!ResourceCalculationContext.InContext)
 				{
-					context = _resourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, Enumerable.Empty<BpoResource>(), false, localDate.ToDateOnlyPeriod());
+					context = _resourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, Enumerable.Empty<ExternalStaff>(), false, localDate.ToDateOnlyPeriod());
 				}
 				var relevantProjections = ResourceCalculationContext.Fetch();
 				resourceCalculateDate(resourceCalculationData, relevantProjections, localDate, resourceCalculationData.ConsiderShortBreaks);

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			if (!cascadingSkills.Any())
 				return;
 
-			var bpoResources = ResourceCalculationContext.InContext ? ResourceCalculationContext.Fetch().BpoResources : Enumerable.Empty<BpoResource>();
+			var bpoResources = ResourceCalculationContext.InContext ? ResourceCalculationContext.Fetch().BpoResources : Enumerable.Empty<ExternalStaff>();
 			var activitiesAndIntervalLengths = cascadingSkills.AffectedActivities().ToArray();
 			shovelingCallback.BeforeShoveling(shovelResourceData);
 			using (ResourceCalculationCurrent.PreserveContext())
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 		}
 
-		private IDisposable getDefaultContext(IScheduleDictionary scheduleDictionary, IEnumerable<BpoResource> bpoResources, IEnumerable<ISkill> allSkills, DateOnlyPeriod period)
+		private IDisposable getDefaultContext(IScheduleDictionary scheduleDictionary, IEnumerable<ExternalStaff> bpoResources, IEnumerable<ISkill> allSkills, DateOnlyPeriod period)
 		{
 			var rcf = new ResourceCalculationContextFactory(new PersonSkillProvider(), _timeZoneGuard, _addBpoResourcesToContext);
 			return rcf.Create(scheduleDictionary, allSkills, bpoResources, false, period);

@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public bool PrimarySkillMode { get; }
 
-		public IEnumerable<BpoResource> BpoResources => Enumerable.Empty<BpoResource>();
+		public IEnumerable<ExternalStaff> BpoResources => Enumerable.Empty<ExternalStaff>();
 
 		private SkillCombination fetchSkills(IPerson person, DateOnly personDate)
 		{

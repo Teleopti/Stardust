@@ -9,14 +9,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class BpoResource
+	public class ExternalStaff
 	{
 		private readonly IEnumerable<ISkill> _skills;
 		private readonly double _resources;
 		private readonly DateTimePeriod _period;
 		private readonly Lazy<ISet<IActivity>> _activities;
 
-		public BpoResource(double resources, IEnumerable<ISkill> skills, DateTimePeriod period)
+		public ExternalStaff(double resources, IEnumerable<ISkill> skills, DateTimePeriod period)
 		{
 			_resources = resources;
 			_skills = skills;

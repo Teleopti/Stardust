@@ -361,9 +361,9 @@
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisProvider.cs" />
     <Compile Include="ResourceCalculation\AddBpoResourcesToContext.cs" />
-    <Compile Include="ResourceCalculation\BpoResource.cs" />
+    <Compile Include="ResourceCalculation\ExternalStaff.cs" />
     <Compile Include="ResourcePlanner\Hints\BusinessRulesHint.cs" />
-    <Compile Include="ResourceCalculation\BpoResourcesProvider.cs" />
+    <Compile Include="ResourceCalculation\ExternalStaffProvider.cs" />
     <Compile Include="ResourceCalculation\ISkillCombinationResourceBpoReader.cs" />
     <Compile Include="ResourceCalculation\NoCurrentResourceCalculationContextException.cs" />
     <Compile Include="ResourceCalculation\NoSkillCombinationResourceBpoReader.cs" />

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 				IEnumerable<IPerson> agents,
 				IEnumerable<IScheduleData> persistableScheduleData,
 				IEnumerable<ISkillDay> skillDays,
-				IEnumerable<BpoResource> bpoResources,
+				IEnumerable<ExternalStaff> bpoResources,
 				TimeZoneInfo timeZone)
 		{
 			var stateHolder = stateHolderFunc();
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			IEnumerable<ISkillDay> skillDays,
 			TimeZoneInfo timeZone)
 			{
-				return Fill(stateHolderFunc, scenario, period, agents, persistableScheduleData, skillDays, Enumerable.Empty<BpoResource>(), timeZone);
+				return Fill(stateHolderFunc, scenario, period, agents, persistableScheduleData, skillDays, Enumerable.Empty<ExternalStaff>(), timeZone);
 			}
 
 		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			IEnumerable<IScheduleData> persistableScheduleData,
 			IEnumerable<ISkillDay> skillDays)
 		{
-			return Fill(stateHolderFunc, scenario, period, agents, persistableScheduleData, skillDays, Enumerable.Empty<BpoResource>(), TimeZoneInfo.Utc);
+			return Fill(stateHolderFunc, scenario, period, agents, persistableScheduleData, skillDays, Enumerable.Empty<ExternalStaff>(), TimeZoneInfo.Utc);
 		}
 		
 		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,
@@ -178,20 +178,9 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			IEnumerable<IPerson> agents,
 			IEnumerable<IScheduleData> scheduleDatas,
 			ISkillDay skillDay,
-			BpoResource bpoResource)
+			ExternalStaff externalStaff)
 		{
-			return Fill(stateHolderFunc, scenario, date.ToDateOnlyPeriod(), agents, scheduleDatas, new[] {skillDay}, new[]{bpoResource},TimeZoneInfo.Utc);
-		}
-		
-		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,
-			IScenario scenario,
-			DateOnly date,
-			IPerson agent,
-			IScheduleData scheduleData,
-			ISkillDay skillDay,
-			BpoResource bpoResource)
-		{
-			return Fill(stateHolderFunc, scenario, date, new[]{agent}, new[]{scheduleData}, skillDay, bpoResource);
+			return Fill(stateHolderFunc, scenario, date.ToDateOnlyPeriod(), agents, scheduleDatas, new[] {skillDay}, new[]{externalStaff},TimeZoneInfo.Utc);
 		}
 	}
 }

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class AddBpoResourcesToContext
 	{
-		public void Execute(ResourceCalculationDataContainer resourceCalculationDataContainer, IEnumerable<BpoResource> bpoResources)
+		public void Execute(ResourceCalculationDataContainer resourceCalculationDataContainer, IEnumerable<ExternalStaff> bpoResources)
 		{
 			foreach (var bpoResource in bpoResources)
 			{

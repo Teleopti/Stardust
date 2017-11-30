@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		
 		public void ResourceCalculate(DateOnlyPeriod period, ResourceCalculationData resourceCalculationData)
 		{
-			using (_cascadingResourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, Enumerable.Empty<BpoResource>(), false, period))
+			using (_cascadingResourceCalculationContextFactory.Create(resourceCalculationData.Schedules, resourceCalculationData.Skills, Enumerable.Empty<ExternalStaff>(), false, period))
 			{
 				_resourceCalculation.ResourceCalculate(period, resourceCalculationData);
 			}
