@@ -836,6 +836,40 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			});
 		}
 
+		[Test]
+		[Ignore("46993 to be fixed")]
+		public void ShouldNotAddOvertimeWhenNotPossibleToGetEffectiveRestriction()
+		{
+			var scenario = new Scenario();
+			var activity = new Activity();
+			var dateOnly = DateOnly.Today;
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(11), TimeSpan.FromHours(16)) };
+			var definitionSet = new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime);
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodOneDay(dateOnly);
+			var assDayBefore = new PersonAssignment(agent, scenario, dateOnly.AddDays(-1)).WithLayer(activity, new TimePeriod(10, 19)).ShiftCategory(shiftCategory);
+			var overtimeAvailability = new OvertimeAvailability(agent, dateOnly, TimeSpan.FromHours(4), TimeSpan.FromHours(5));
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = definitionSet,
+				ShiftBagToUse = new RuleSetBag(ruleSet),
+				ScheduleTag = new ScheduleTag(),
+				AvailableAgentsOnly = true,
+				SelectedSpecificTimePeriod = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(34)),
+				SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(1))
+			};
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly), new[] { agent }, new IPersistableScheduleData[] { assDayBefore, overtimeAvailability }, skillDay);
+
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+		
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities()
+				.Should().Be.Empty();
+		}
+
 		public OvertimeOnNonScheduledDaysTest(RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(removeImplicitResCalcContext46680)
 		{
 			
