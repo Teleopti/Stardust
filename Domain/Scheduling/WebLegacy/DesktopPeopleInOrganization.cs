@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class DesktopPeopleInOrganization : IPeopleInOrganization
+	public class DesktopPeopleInOrganization : IAllStaff
 	{
 		private readonly DesktopContext _desktopContext;
 

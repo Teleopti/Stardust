@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
-	public interface IPeopleInOrganization
+	public interface IAllStaff
 	{
 		IEnumerable<IPerson> Agents(DateOnlyPeriod period);
 	}

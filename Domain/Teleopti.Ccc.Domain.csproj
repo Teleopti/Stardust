@@ -1648,7 +1648,7 @@
     <Compile Include="Security\Principal\IUpdatedBy.cs" />
     <Compile Include="Security\Principal\IUpdatedByScope.cs" />
     <Compile Include="Security\Principal\UpdatedBy.cs" />
-    <Compile Include="DayOffPlanning\IPeopleInOrganization.cs" />
+    <Compile Include="DayOffPlanning\IAllStaff.cs" />
     <Compile Include="DayOffPlanning\PeopleInOrganization.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Intraday\IncomingIntervalModel.cs" />

@@ -12,19 +12,19 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 	{
 		private readonly CreateIslands _createIslands;
 		private readonly ReduceSkillSets _reduceSkillSets;
-		private readonly IPeopleInOrganization _peopleInOrganization;
+		private readonly IAllStaff _allStaff;
 
-		public IslandModelFactory(CreateIslands createIslands, ReduceSkillSets reduceSkillSets, IPeopleInOrganization peopleInOrganization)
+		public IslandModelFactory(CreateIslands createIslands, ReduceSkillSets reduceSkillSets, IAllStaff allStaff)
 		{
 			_createIslands = createIslands;
 			_reduceSkillSets = reduceSkillSets;
-			_peopleInOrganization = peopleInOrganization;
+			_allStaff = allStaff;
 		}
 
 		public IslandTopModel Create()
 		{
 			var period = DateOnly.Today.ToDateOnlyPeriod();
-			var agents = _peopleInOrganization.Agents(period);
+			var agents = _allStaff.Agents(period);
 
 			var islandsModelBefore = createIslandsModel(new ReduceNoSkillSets(), agents, period);
 			var islandsModelAfter = createIslandsModel(_reduceSkillSets, agents, period);

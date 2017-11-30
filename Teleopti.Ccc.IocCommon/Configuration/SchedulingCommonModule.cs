@@ -441,7 +441,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Args().IsFatClient)
 			{
-				builder.RegisterType<DesktopPeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
+				builder.RegisterType<DesktopPeopleInOrganization>().As<IAllStaff>().SingleInstance();
 				builder.RegisterType<DesktopOptimizationContext>()
 					.As<IOptimizationPreferencesProvider>()
 					.As<ICurrentIntradayOptimizationCallback>()
@@ -475,7 +475,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().AsSelf().As<IOptimizationPreferencesProvider>().SingleInstance();
 					builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().SingleInstance();
 				}
-				builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
+				builder.RegisterType<PeopleInOrganization>().As<IAllStaff>().SingleInstance();
 				builder.RegisterType<CurrentIntradayOptimizationCallback>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<CurrentSchedulingCallback>().As<ICurrentSchedulingCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();

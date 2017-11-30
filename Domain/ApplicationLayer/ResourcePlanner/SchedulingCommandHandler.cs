@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly IGridlockManager _gridLockManager;
 		private readonly CreateIslands _createIslands;
 		private readonly ReduceSkillSets _reduceSkillSets;
-		private readonly IPeopleInOrganization _peopleInOrganization;
+		private readonly IAllStaff _allStaff;
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				IGridlockManager gridLockManager, 
 				CreateIslands createIslands, 
 				ReduceSkillSets reduceSkillSets, 
-				IPeopleInOrganization peopleInOrganization,
+				IAllStaff allStaff,
 				ISchedulingOptionsProvider schedulingOptionsProvider,
 				CrossAgentsAndSkills crossAgentsAndSkills)
 		{
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_gridLockManager = gridLockManager;
 			_createIslands = createIslands;
 			_reduceSkillSets = reduceSkillSets;
-			_peopleInOrganization = peopleInOrganization;
+			_allStaff = allStaff;
 			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_crossAgentsAndSkills = crossAgentsAndSkills;
 		}
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		[UnitOfWork]
 		public virtual IEnumerable<IPerson> AllAgents_DeleteThisLater(SchedulingCommand command)
 		{
-			return _peopleInOrganization.Agents(command.Period);
+			return _allStaff.Agents(command.Period);
 		}
 		private bool teamScheduling(SchedulingCommand command)
 		{
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			using (CommandScope.Create(command))
 			{
-				return _createIslands.Create(_reduceSkillSets, _peopleInOrganization.Agents(period), period);
+				return _createIslands.Create(_reduceSkillSets, _allStaff.Agents(period), period);
 			}
 		}
 	}

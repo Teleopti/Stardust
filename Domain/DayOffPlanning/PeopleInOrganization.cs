@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
-	public class PeopleInOrganization : IPeopleInOrganization
+	public class PeopleInOrganization : IAllStaff
 	{
 		private readonly IPersonRepository _personRepository;
 

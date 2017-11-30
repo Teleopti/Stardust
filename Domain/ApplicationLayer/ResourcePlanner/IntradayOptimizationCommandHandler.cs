@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly CreateIslands _createIslands;
 		private readonly IGridlockManager _gridLockManager;
 		private readonly ReduceSkillSets _reduceSkillSets;
-		private readonly IPeopleInOrganization _peopleInOrganization;
+		private readonly IAllStaff _allStaff;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 												CreateIslands createIslands,
 												IGridlockManager gridLockManager,
 												ReduceSkillSets reduceSkillSets,
-												IPeopleInOrganization peopleInOrganization,
+												IAllStaff allStaff,
 												IOptimizationPreferencesProvider optimizationPreferencesProvider,
 												CrossAgentsAndSkills crossAgentsAndSkills)
 		{
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_createIslands = createIslands;
 			_gridLockManager = gridLockManager;
 			_reduceSkillSets = reduceSkillSets;
-			_peopleInOrganization = peopleInOrganization;
+			_allStaff = allStaff;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_crossAgentsAndSkills = crossAgentsAndSkills;
 		}
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			using (CommandScope.Create(command))
 			{
-				return _createIslands.Create(_reduceSkillSets, _peopleInOrganization.Agents(period), period);
+				return _createIslands.Create(_reduceSkillSets, _allStaff.Agents(period), period);
 			}
 		}
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		[UnitOfWork]
 		public virtual IEnumerable<IPerson> AllAgents_DeleteThisLater(IntradayOptimizationCommand command)
 		{
-			return _peopleInOrganization.Agents(command.Period);
+			return _allStaff.Agents(command.Period);
 		}
 		private bool teamScheduling(IntradayOptimizationCommand command)
 		{
