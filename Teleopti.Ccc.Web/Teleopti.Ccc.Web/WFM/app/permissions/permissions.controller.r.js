@@ -106,12 +106,10 @@
 
 			PermissionsServiceRefact.manage.deleteRole({
 				Id: role.Id
-			}).$promise.then(
-				function(){
-					var index = vm.roles.indexOf(role);
-					vm.roles.splice(index, 1);
-				}
-			)
+			});
+			
+			var index = vm.roles.indexOf(role);
+			vm.roles.splice(index, 1);
 
 			if (role.Id === vm.selectedRole.Id) {
 				toggleSelection(vm.applicationFunctions, false);
