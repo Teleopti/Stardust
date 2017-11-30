@@ -4,28 +4,34 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.Notification
 {
+	public class ClickatellNotificationSender : NotificationSenderBase
+	{
+		public ClickatellNotificationSender():base(LogManager.GetLogger(nameof(ClickatellNotificationSender)), new ClickatellNotificationWebClient())
+		{
+		}
+	}
+
+	public class RawPostNotificationSender : NotificationSenderBase
+	{
+		public RawPostNotificationSender() : base(LogManager.GetLogger(nameof(RawPostNotificationSender)), new RawPostNotificationWebClient())
+		{
+		}
+	}
 	// this class is a dll where all the Notification Senders could be 
 	// Then more could be added without changes in the Service Bus
-	public class ClickatellNotificationSender : INotificationSender
+	public class NotificationSenderBase : INotificationSender
 	{
-
-		private static ILog Logger;
+		private static ILog _logger;
 		private INotificationConfigReader _notificationConfigReader;
 		private readonly INotificationClient _notificationClient;
 
-		public ClickatellNotificationSender()
-		{
-			_notificationClient= new NotificationWebClient();
-			Logger = LogManager.GetLogger(nameof(ClickatellNotificationSender));
-		}
-		public ClickatellNotificationSender(ILogManager logManager, INotificationClient notificationClient)
+		public NotificationSenderBase(ILog log, INotificationClient notificationClient)
 		{
 			_notificationClient = notificationClient;
-			Logger = logManager.GetLogger(nameof(ClickatellNotificationSender));
+			_logger = log;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -36,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Notification
 
 			if (string.IsNullOrEmpty(notificationHeader.MobileNumber))
 			{
-				Logger.Info($"Did not find a Mobile Number on {notificationHeader.PersonName}");
+				_logger.Info($"Did not find a Mobile Number on {notificationHeader.PersonName}");
 				return;
 			}
 
@@ -95,35 +101,35 @@ namespace Teleopti.Ccc.Domain.Notification
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
 		private void sendSmsNotifications(string smsMessage, string mobileNumber, bool containUnicode)
 		{
-				var smsString = _notificationConfigReader.Data;
+			var smsString = _notificationConfigReader.Data;
 
-				if (containUnicode)
-					smsMessage = smsMessage.Aggregate(@"", (current, c) => $"{current}{Convert.ToUInt32(((int)c).ToString(CultureInfo.InvariantCulture)):x4}")
-						.ToUpper();
+			if (containUnicode)
+				smsMessage = smsMessage.Aggregate(@"", (current, c) => $"{current}{Convert.ToUInt32(((int)c).ToString(CultureInfo.InvariantCulture)):x4}")
+					.ToUpper();
 
-				var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User,
-																		_notificationConfigReader.Password, _notificationConfigReader.Api, mobileNumber, _notificationConfigReader.From,
-																		smsMessage, containUnicode ? 1 : 0);
+			var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User,
+																	_notificationConfigReader.Password, _notificationConfigReader.Api, mobileNumber, _notificationConfigReader.From,
+																	smsMessage, containUnicode ? 1 : 0);
 
-				Logger.Info($"Sending SMS on: {_notificationConfigReader.Url}{msgData}");
-				try
+			_logger.Info($"Sending SMS on: {_notificationConfigReader.Url}{msgData}");
+			try
+			{
+				var data = _notificationClient.MakeRequest(_notificationConfigReader.Url, msgData);
+				if (data != null)
 				{
-					var data = _notificationClient.MakeRequest(_notificationConfigReader.Url, msgData);
-					if (data != null)
-					{
-						if (_notificationConfigReader.SkipSearch) return;
-						var hasError = (_notificationConfigReader.FindSuccessOrError.Equals("Error") && data.Contains(_notificationConfigReader.ErrorCode))
-							|| !data.Contains(_notificationConfigReader.SuccessCode);
+					if (_notificationConfigReader.SkipSearch) return;
+					var hasError = (_notificationConfigReader.FindSuccessOrError.Equals("Error") && data.Contains(_notificationConfigReader.ErrorCode))
+						|| !data.Contains(_notificationConfigReader.SuccessCode);
 
-						if (hasError)
-							Logger.Error($"Error occurred sending SMS: {data}");
+					if (hasError)
+						_logger.Error($"Error occurred sending SMS: {data}");
 
-					}
 				}
-				catch (Exception exception)
-				{
-					Logger.Error($"Error occurred trying receiver access: {_notificationConfigReader.Url}{msgData}", exception);
-				}
+			}
+			catch (Exception exception)
+			{
+				_logger.Error($"Error occurred trying receiver access: {_notificationConfigReader.Url}{msgData}", exception);
+			}
 		}
 
 		public void SetConfigReader(INotificationConfigReader notificationConfigReader)

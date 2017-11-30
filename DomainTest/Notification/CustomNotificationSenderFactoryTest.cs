@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 						_mocks.ReplayAll();
 						var sender = _target.GetSender();
 						Assert.That(sender, Is.Not.Null);
-						Assert.That(sender.GetType(), Is.EqualTo(typeof (ClickatellNotificationSender)));
+						Assert.That(sender.GetType(), Is.EqualTo(typeof (NotificationSenderBase)));
 						_mocks.VerifyAll();
 				}
 

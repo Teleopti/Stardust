@@ -350,6 +350,7 @@
     <Compile Include="Intraday\ISkillTypeInfo.cs" />
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
     <Compile Include="Notification\ASMScheduleChangeTime.cs" />
+    <Compile Include="Notification\ClickatellNotificationWebClient.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePoller.cs" />
     <Compile Include="Optimization\EffectiveRestrictionStartTimeDecider.cs" />
     <Compile Include="Optimization\TeamBlock\BlockPreferencesMapper.cs" />
@@ -2264,7 +2265,7 @@
     <Compile Include="MessageBroker\Server\MessageBrokerServer.cs" />
     <Compile Include="MessageBroker\Server\SubscriptionFiller.cs" />
     <Compile Include="MessageBroker\Server\SubscriptionPassThrough.cs" />
-    <Compile Include="Notification\ClickatellNotificationSender.cs" />
+    <Compile Include="Notification\NotificationSenderBase.cs" />
     <Compile Include="Notification\CustomNotificationSenderFactory.cs" />
     <Compile Include="Notification\EmailConfiguration.cs" />
     <Compile Include="Notification\EmailSender.cs" />
@@ -2278,7 +2279,6 @@
     <Compile Include="Notification\NotificationConfigReader.cs" />
     <Compile Include="Notification\NotificationMessage.cs" />
     <Compile Include="Notification\NotificationValidationCheck.cs" />
-    <Compile Include="Notification\NotificationWebClient.cs" />
     <Compile Include="Notification\Notifier.cs" />
     <Compile Include="Notification\SignificantChangeChecker.cs" />
     <Compile Include="Optimization\CancelSignal.cs" />

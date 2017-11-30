@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var result = target.GetSender();
 
 			result.Should().Not.Be.SameInstanceAs(defaultNotificationSender);
-			result.Should().Be.OfType<ClickatellNotificationSender>();
+			result.Should().Be.OfType<NotificationSenderBase>();
 		}
 	}
 }
