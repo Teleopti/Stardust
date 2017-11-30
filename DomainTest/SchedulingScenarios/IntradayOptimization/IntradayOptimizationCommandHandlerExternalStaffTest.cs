@@ -46,5 +46,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count()
 				.Should().Be.EqualTo(1);
 		}
+
+		[Test]
+		[Ignore("#46845 to be fixed")]
+		public void ShouldNotOptimizeExternalStaff()
+		{
+			var skill1 = new Skill().DefaultResolution(60).WithId();
+			var skill2 = new Skill().DefaultResolution(60).WithId();
+			var agent1 = new Person().WithId().WithPersonPeriod(skill1);
+			var agent2 = new Person().WithId().WithPersonPeriod(skill2);
+			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+			SkillRepository.Has(skill1);
+			SkillRepository.Has(skill2);
+			SkillCombinationResourceReader.Has(1, period, skill1, skill2);
+
+			Target.Execute(new IntradayOptimizationCommand { Period = period.ToDateOnlyPeriod(TimeZoneInfo.Utc) });
+
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsToOptimize.Count()
+				.Should().Be.EqualTo(2);
+		}
 	}
 }
