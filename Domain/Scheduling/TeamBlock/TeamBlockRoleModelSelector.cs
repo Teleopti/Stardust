@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			
 			effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
 			var adjustedStartTimeRestriction = _effectiveRestrictionStartTimeDecider.Decide(schedulingOptions, effectiveRestriction, schedules[person].ScheduledDay(datePointer));
-			effectiveRestriction = effectiveRestriction.Combine(adjustedStartTimeRestriction);
+			effectiveRestriction = effectiveRestriction?.Combine(adjustedStartTimeRestriction);
+			if (effectiveRestriction == null) return null;
 
 			//TODO: This check could probably be moved "higher up" for perf reasons/fewer calls
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlock.Check(allSkillDays, teamBlockInfo, groupPersonSkillAggregator);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -836,9 +837,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			});
 		}
 
-		[Test]
-		[Ignore("46993 to be fixed")]
-		public void ShouldNotAddOvertimeWhenNotPossibleToGetEffectiveRestriction()
+		[TestCase(false, ExpectedResult = false)]
+		[TestCase(true, ExpectedResult = true)]
+		public bool ShouldNotAddOvertimeWhenNotPossibleToGetEffectiveRestriction(bool onlyAvailable)
 		{
 			var scenario = new Scenario();
 			var activity = new Activity();
@@ -858,16 +859,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				OvertimeType = definitionSet,
 				ShiftBagToUse = new RuleSetBag(ruleSet),
 				ScheduleTag = new ScheduleTag(),
-				AvailableAgentsOnly = true,
+				AvailableAgentsOnly = onlyAvailable,
 				SelectedSpecificTimePeriod = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(34)),
 				SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(1))
 			};
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly), new[] { agent }, new IPersistableScheduleData[] { assDayBefore, overtimeAvailability }, skillDay);
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
-		
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities()
-				.Should().Be.Empty();
+
+			return stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().IsEmpty();
 		}
 
 		public OvertimeOnNonScheduledDaysTest(RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(removeImplicitResCalcContext46680)
