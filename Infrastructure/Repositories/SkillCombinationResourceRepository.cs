@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using NHibernate.SqlAzure;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -399,8 +400,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private IEnumerable<SkillCombinationResource> skillCombinationResourcesWithBpo(DateTimePeriod period)
 		{
 			var combinationResources = skillCombinationResourcesWithoutBpo(period).ToList();
-			combinationResources.AddRange(Execute(period));
-		
+			var bpoResources = Execute(period);
+			//combinationResources.AddRange(Execute(period));
+
+			if (!bpoResources.Any())
+			{
+				return combinationResources;
+			}
+
+			combinationResources.AddRange(bpoResources);
+
 			var newList = new List<SkillCombinationResourceWithCombinationId>();
 			newList.AddRange(combinationResources.Select(x=> new SkillCombinationResourceWithCombinationId
 			{
@@ -421,7 +430,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						result.FirstOrDefault(
 							x =>
 								x.StartDateTime == item.StartDateTime && x.EndDateTime == item.EndDateTime &&
-								!x.SkillCombination.Except(item.SkillCombination).Any());
+								!Enumerable.Except(x.SkillCombination, item.SkillCombination).Any());
 					foundItem.Resource = foundItem.Resource+ item.Resource;
 
 				}else

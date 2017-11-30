@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var skillDays = new List<ISkillDay>();
 	        var defaultReadOnly = Session.DefaultReadOnly;
 	        Session.DefaultReadOnly = true;
-            foreach (var skillBatch in skills.Batch(20))
+            foreach (var skillBatch in skills.Batch(300))
             {
                 var restriction = Restrictions.Conjunction()
                 .Add(Restrictions.Eq("skillDay.Scenario", scenario))
