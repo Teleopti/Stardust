@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
-		[Ignore("#47013")]
+		//[Ignore("#47013")]
 		public void ShouldAddMissingDaysOffAndReportTrueIfNoRestrictions()
 		{
 			var date = new DateOnly(2017, 12, 01);
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			agent.Period(date).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractScheduleWorkingMondayToFriday());
 			var skillDays =
 				skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31), 1);
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, date, new[] {agent}, skillDays);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] {agent}, Enumerable.Empty<IPersonAssignment>(), skillDays);
 
 			var result = Target.Execute(agent.VirtualSchedulePeriod(date));
 			result.Should().Be.True();

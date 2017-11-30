@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ClearPlanningPeriodSchedulingCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<IntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<CrossAgentsAndSkills>().SingleInstance();
-			builder.RegisterType<RestrictionsAbleToBeScheduled>().SingleInstance();
+			builder.RegisterType<RestrictionsAbleToBeScheduled>().InstancePerLifetimeScope();
 
 			if (_configuration.Args().IsFatClient)
 			{

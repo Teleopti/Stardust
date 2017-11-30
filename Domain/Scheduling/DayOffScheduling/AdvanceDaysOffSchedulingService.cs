@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 		public void Execute(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> matrixes, IEnumerable<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions, IGroupPersonBuilderWrapper groupPersonBuilderForOptimization, DateOnlyPeriod selectedPeriod)
 		{
-			_absencePreferenceScheduling.AddPreferredAbsence(schedulingCallback, matrixes, schedulingOptions);
+			_absencePreferenceScheduling.AddPreferredAbsence(schedulingCallback, matrixes, schedulingOptions, rollbackService);
 			_teamDayOffScheduling.DayOffScheduling(schedulingCallback, matrixes, selectedPersons, rollbackService, schedulingOptions, groupPersonBuilderForOptimization);
 
 			var selectedMatrixes = new List<IScheduleMatrixPro>();
