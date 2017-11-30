@@ -277,6 +277,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
     <Compile Include="Notification\FakeASMScheduleChangeTimeRepository.cs" />
+    <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePollerTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProviderTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisProviderTest.cs" />
