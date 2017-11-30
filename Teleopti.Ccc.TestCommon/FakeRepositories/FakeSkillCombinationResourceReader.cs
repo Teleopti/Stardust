@@ -6,11 +6,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeSkillCombinationResourceBpoReader : ISkillCombinationResourceBpoReader
+	public class FakeSkillCombinationResourceReader : ISkillCombinationResourceReader
 	{
 		private readonly ICollection<SkillCombinationResource> _skillCombinationResources;
 
-		public FakeSkillCombinationResourceBpoReader()
+		public FakeSkillCombinationResourceReader()
 		{
 			_skillCombinationResources = new List<SkillCombinationResource>();
 		}

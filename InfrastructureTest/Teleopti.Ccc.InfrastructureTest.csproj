@@ -217,7 +217,7 @@
     <Compile Include="Intraday\PersonProviderForOvertimeTest.cs" />
     <Compile Include="Repositories\PersonRequestRepositoryOvertimeTest.cs" />
     <Compile Include="Repositories\RequeueHangfireRepositoryTest.cs" />
-    <Compile Include="Repositories\SkillCombinationResourceBpoReaderTest.cs" />
+    <Compile Include="Repositories\SkillCombinationResourceReaderTest.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepositoryTest.cs" />
     <Compile Include="Logon\ImpersonateSystemTest.cs" />
     <Compile Include="MessageBroker\MailboxConcurrencyTest.cs" />

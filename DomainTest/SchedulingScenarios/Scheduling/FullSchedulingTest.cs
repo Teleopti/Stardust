@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeMultisiteDayRepository MultisiteDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeStudentAvailabilityDayRepository StudentAvailabilityDayRepository;
-		public FakeSkillCombinationResourceBpoReader SkillCombinationResourceBpoReader;
+		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		
 		[Test]
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var alreadyScheduledAgent = PersonRepository.Has(skill);
 			AssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, date, new TimePeriod(8, 18));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2)));
-			SkillCombinationResourceBpoReader.Has(bpoResources, new DateTimePeriod(new DateTime(date.Date.AddHours(8).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc)), skill);
+			SkillCombinationResourceReader.Has(bpoResources, new DateTimePeriod(new DateTime(date.Date.AddHours(8).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc)), skill);
 			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
 			
 			Target.DoScheduling(planningPeriod.Id.Value);

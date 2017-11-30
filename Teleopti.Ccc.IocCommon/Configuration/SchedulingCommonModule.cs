@@ -100,11 +100,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_BpoScheduling_46265))
 			{
-				builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceBpoReader>().SingleInstance();
+				builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceReader>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<NoSkillCombinationResourceBpoReader>().As<ISkillCombinationResourceBpoReader>().SingleInstance();
+				builder.RegisterType<NoSkillCombinationResourceReader>().As<ISkillCombinationResourceReader>().SingleInstance();
 			}
 
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().SingleInstance();

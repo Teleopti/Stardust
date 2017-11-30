@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public interface ISkillCombinationResourceBpoReader
+	public interface ISkillCombinationResourceReader
 	{
 		IEnumerable<SkillCombinationResource> Execute(DateTimePeriod period);
 	}

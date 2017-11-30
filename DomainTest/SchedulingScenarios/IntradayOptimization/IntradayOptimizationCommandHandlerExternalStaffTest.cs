@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;
-		public FakeSkillCombinationResourceBpoReader SkillCombinationResourceBpoReader;
+		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
 
 		[Test]
 		[Ignore("#46845")]
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			SkillRepository.Has(skill1);
 			SkillRepository.Has(skill2);
 			//prevents creating two different islands
-			SkillCombinationResourceBpoReader.Has(1,
+			SkillCombinationResourceReader.Has(1,
 				new DateTimePeriod(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 					new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc)), skill1, skill2);
 

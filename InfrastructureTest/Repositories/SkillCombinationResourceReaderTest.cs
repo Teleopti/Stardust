@@ -22,10 +22,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[UnitOfWorkTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	public class SkillCombinationResourceBpoReaderTest : IConfigureToggleManager
+	public class SkillCombinationResourceReaderTest : IConfigureToggleManager
 	{
 		private readonly bool _resourcePlannerBpoScheduling46265;
-		public ISkillCombinationResourceBpoReader Target;
+		public ISkillCombinationResourceReader Target;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public INow Now;
 		public ISkillRepository SkillRepository;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public IActivityRepository ActivityRepository;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 
-		public SkillCombinationResourceBpoReaderTest(bool resourcePlannerBpoScheduling46265)
+		public SkillCombinationResourceReaderTest(bool resourcePlannerBpoScheduling46265)
 		{
 			_resourcePlannerBpoScheduling46265 = resourcePlannerBpoScheduling46265;
 		}

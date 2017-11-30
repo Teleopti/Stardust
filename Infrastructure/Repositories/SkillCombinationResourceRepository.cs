@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class SkillCombinationResourceRepository : ISkillCombinationResourceRepository, ISkillCombinationResourceBpoReader
+	public class SkillCombinationResourceRepository : ISkillCombinationResourceRepository, ISkillCombinationResourceReader
 	{
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
