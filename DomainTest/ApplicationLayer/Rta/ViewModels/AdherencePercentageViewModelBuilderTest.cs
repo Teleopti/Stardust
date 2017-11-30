@@ -20,19 +20,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 	[TestFixture]
 	public class AdherencePercentageViewModelBuilderTest : ISetup
 	{
+		public FakeAdherencePercentageReadModelPersister Reader;
+		public AdherencePercentageViewModelBuilder Target;
+		public MutableNow Now;
+		public FakeUserTimeZone TimeZone;
+		public FakeUserCulture Culture;
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
 		}
 
-		public FakeAdherencePercentageReadModelPersister Reader;
-		public IAdherencePercentageViewModelBuilder Target;
-		public MutableNow Now;
-		public FakeUserTimeZone TimeZone;
-		public FakeUserCulture Culture;
-		public FakePersonRepository PersonRepository;
-		
 		[Test]
 		public void ShouldBuildViewModel()
 		{
@@ -41,9 +40,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = new DateTime(2014,12,24)
+				Date = new DateTime(2014, 12, 24)
 			});
-			
+
 			var result = Target.Build(personId);
 
 			result.Should().Not.Be.Null();
@@ -57,12 +56,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = new DateTime(2014,12,24),
+				Date = new DateTime(2014, 12, 24),
 				TimeInAdherence = "74".Minutes(),
 				TimeOutOfAdherence = "74".Minutes(),
 				LastTimestamp = "2014-12-24 15:00".Utc()
 			});
-			
+
 			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(50);
@@ -81,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				TimeOutOfAdherence = "0".Minutes(),
 				LastTimestamp = "2014-12-24 15:00".Utc()
 			});
-			
+
 			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(100);
@@ -100,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				TimeOutOfAdherence = "12".Minutes(),
 				LastTimestamp = "2014-12-24 15:00".Utc()
 			});
-			
+
 			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(0);
@@ -120,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				TimeOutOfAdherence = "0".Minutes(),
 				LastTimestamp = "2014-12-24 15:00".Utc()
 			});
-			
+
 			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(null);
@@ -150,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				LastTimestamp = "2014-12-24 10:00".Utc(),
 				IsLastTimeInAdherence = true
 			});
-			
+
 			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(50);
@@ -170,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				LastTimestamp = "2014-12-24 10:00".Utc(),
 				IsLastTimeInAdherence = false
 			});
-			
+
 			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(50);
@@ -234,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			result.LastTimestamp.Should().Be("2014-12-24 14:00".InHawaii().AsCatalanShortTime());
 		}
-		
+
 		[Test]
 		public void ShouldSetAgentDateToUtcNowWhenPersonNotFound()
 		{

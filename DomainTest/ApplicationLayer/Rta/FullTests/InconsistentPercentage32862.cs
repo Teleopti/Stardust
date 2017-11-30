@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeAdherencePercentageReadModelPersister Percentage;
-		public IAdherencePercentageViewModelBuilder PercentageView;
+		public AdherencePercentageViewModelBuilder PercentageView;
 		public FakeEventPublisher Publisher;
 		
 		[Test]

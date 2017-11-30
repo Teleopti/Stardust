@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					AlarmStartTime = "2016-11-07 08:00".Utc()
 				});
 
-			Target.For(new AgentStateFilter { SiteIds = new[] { site }, ExcludedStates = new Guid?[] { loggedOut } })
+			Target.Build(new AgentStateFilter { SiteIds = new[] { site }, ExcludedStates = new Guid?[] { loggedOut } })
 				.States.Single()
 				.PersonId.Should().Be(person1);
 		}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					AlarmStartTime = "2016-11-07 08:00".Utc()
 				});
 
-			Target.For(new AgentStateFilter { TeamIds = new[] { team }, ExcludedStates = new Guid?[] { loggedOut } })
+			Target.Build(new AgentStateFilter { TeamIds = new[] { team }, ExcludedStates = new Guid?[] { loggedOut } })
 				.States.Single()
 				.PersonId.Should().Be(person1);
 		}
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				.WithPersonSkill(person2, phone);
 
-			Target.For(new AgentStateFilter { SkillIds = new[] { phone }, ExcludedStates = new Guid?[] { loggedOut } })
+			Target.Build(new AgentStateFilter { SkillIds = new[] { phone }, ExcludedStates = new Guid?[] { loggedOut } })
 				.States.Single()
 				.PersonId.Should().Be(person1);
 		}
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(siteFiltered, skill)
 				;
 
-			Target.For(
+			Target.Build(
 					new AgentStateFilter
 					{
 						SiteIds = new[] { site },
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(teamFiltered, skillId)
 				;
 
-			Target.For(
+			Target.Build(
 				new AgentStateFilter
 				{
 					TeamIds = new[] { team },
