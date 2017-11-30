@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		public CrossAgentsAndSkillsResult Execute(IEnumerable<Island> allIslands, IEnumerable<IPerson> selectedAgents)
 		{
-			var retAgents = new List<Guid>();
-			var retSkills = new List<Guid>();
+			var retAgents = new HashSet<Guid>();
+			var retSkills = new HashSet<Guid>();
 			foreach (var selectedAgent in selectedAgents)
 			{
 				foreach (var island in allIslands)
@@ -19,8 +19,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					var islandAgents = island.AgentsInIsland();
 					if (islandAgents.Contains(selectedAgent))
 					{
-						retAgents.AddRange(islandAgents.Select(x => x.Id.Value));
-						retSkills.AddRange(island.SkillIds());
+						foreach (var agentId in islandAgents.Select(x => x.Id.Value))
+						{
+							retAgents.Add(agentId);
+						}
+						foreach (var skillId in island.SkillIds())
+						{
+							retSkills.Add(skillId);
+						}
 						break;
 					}
 				}
