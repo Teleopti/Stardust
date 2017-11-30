@@ -429,6 +429,8 @@ namespace Teleopti.Ccc.Domain.Common
 			addPersonPeriodChangedEvent();
 		}
 
+		public virtual bool IsExternalAgent => false;
+
 		public virtual void RemoveAllPersonPeriods()
 		{
 			_personPeriodCollection.Clear();

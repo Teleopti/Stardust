@@ -311,6 +311,7 @@
     <Compile Include="Cascading\ResourceOptimizationHelperThatThrows.cs" />
     <Compile Include="Common\BadgeSetting.cs" />
     <Compile Include="Common\BadgeSettingDataConverter.cs" />
+    <Compile Include="Common\ExternalAgent.cs" />
     <Compile Include="Common\ExternalPerformanceDataType.cs" />
     <Compile Include="Common\ExternalPerformance.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />

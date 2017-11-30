@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 		[TestCase(TeamBlockType.Individual)]
 		[TestCase(TeamBlockType.Team)]
-		[Ignore("#46845 to be fixed")]
 		public void ShouldNotOptimizeExternalStaff(TeamBlockType teamBlockType)
 		{
 			var skill = new Skill().DefaultResolution(60).WithId();

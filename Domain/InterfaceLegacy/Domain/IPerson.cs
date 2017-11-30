@@ -275,5 +275,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    PersonWorkDay[] AverageWorkTimes(DateOnlyPeriod period);
 	    ISiteOpenHour SiteOpenHour(DateOnly dateOnly);
 	    void RemoveAllPeriodsAfter(DateOnly date);
+		bool IsExternalAgent { get; }
     }
 }

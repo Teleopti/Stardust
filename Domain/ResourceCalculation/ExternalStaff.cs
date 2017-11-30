@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IPerson CreateExternalAgent()
 		{
-			var tempAgent = new Person();
+			var tempAgent = new ExternalAgent();
 			var personPeriod = new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team());
 			_skills.ForEach(x => personPeriod.AddPersonSkill(new PersonSkill(x, new Percent(1))));
 			tempAgent.AddPersonPeriod(personPeriod);

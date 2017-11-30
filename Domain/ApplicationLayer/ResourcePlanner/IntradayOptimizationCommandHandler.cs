@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 			if (teamScheduling(command))
 			{
-				var agentsToSchedule = command.AgentsToOptimize ?? AllAgents_DeleteThisLater(command);
+				var agentsToSchedule = command.AgentsToOptimize ?? AllAgents_DeleteThisLater(command).Where(x => !x.IsExternalAgent);
 				var agentIds = agentsToSchedule.Select(x => x.Id.Value);
 				var crossAgentsAndSkillsResult = _crossAgentsAndSkills.Execute(islands, agentsToSchedule);
 				events.Add(new IntradayOptimizationWasOrdered
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				{
 					var agentsInIsland = island.AgentsInIsland();
 					var agentsToOptimize = command.AgentsToOptimize?.Where(x => agentsInIsland.Contains(x)).ToArray()
-										   ?? agentsInIsland;
+										   ?? agentsInIsland.Where(x => !x.IsExternalAgent);
 
 					if (agentsToOptimize.Any())
 					{
