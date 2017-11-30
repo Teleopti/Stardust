@@ -32,6 +32,7 @@
 					.map(function (tracer) {
 						return {
 							process: tracer.Process,
+							dataReceived: Number.isInteger(tracer.DataReceivedCount), 
 							dataReceivedAt: tracer.DataReceivedAt,
 							dataReceivedBy: tracer.DataReceivedBy,
 							dataReceivedCount: tracer.DataReceivedCount,

@@ -99,7 +99,7 @@ describe('RtaTracerController', function () {
 		expect(vm.tracers[0].activityCheckAt).toBe('2017-10-02 09:21:' + random);
 		expect(vm.tracers[0].tracing).toBe('usercode34, Ashley Andeen' + random);
 	});
-	
+
 	it('should display tracer exception', function () {
 		$fakeBackend.withTracer({
 			Exception: 'something is broken'
@@ -110,8 +110,8 @@ describe('RtaTracerController', function () {
 
 		expect(vm.tracers[0].exception).toBe('something is broken');
 	});
-	
-	it('should display tracer recevied by and count', function () {
+
+	it('should display tracer received by and count', function () {
 		$fakeBackend.withTracer({
 			DataReceivedBy: 'method',
 			DataReceivedCount: 123
@@ -124,7 +124,61 @@ describe('RtaTracerController', function () {
 		expect(vm.tracers[0].dataReceivedCount).toBe(123);
 	});
 
-	
+	it('should display tracer received something', function () {
+		$fakeBackend.withTracer({
+			DataReceivedCount: 1
+		});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		expect(vm.tracers[0].dataReceived).toBe(true);
+	});
+
+	it('should display tracer received something', function () {
+		$fakeBackend.withTracer({
+			DataReceivedCount: 0
+		});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		expect(vm.tracers[0].dataReceived).toBe(true);
+	});
+
+	it('should display tracer received nothing', function () {
+		$fakeBackend.withTracer({
+			DataReceivedCount: null
+		});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		expect(vm.tracers[0].dataReceived).toBe(false);
+	});
+
+	it('should display tracer received nothing', function () {
+		$fakeBackend.withTracer({
+			DataReceivedCount: undefined
+		});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		expect(vm.tracers[0].dataReceived).toBe(false);
+	});
+
+	it('should display tracer received nothing', function () {
+		$fakeBackend.withTracer({
+			DataReceivedBy: 'asdasd'
+		});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		expect(vm.tracers[0].dataReceived).toBe(false);
+	});
+
 	it('should display user codes', function () {
 		$fakeBackend.withTracedUser({
 			User: 'usercode34, Ashley Andeen'
