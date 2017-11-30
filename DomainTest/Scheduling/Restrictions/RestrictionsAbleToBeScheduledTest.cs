@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -32,26 +33,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
-		//[Ignore("#47013")]
 		public void ShouldAddMissingDaysOffAndReportTrueIfNoRestrictions()
 		{
-			var date = new DateOnly(2017, 12, 01);
-			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
-			var activity = new Activity().WithId();
-			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
-			var scenario = new Scenario();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
-				new TimePeriodWithSegment(10, 0, 10, 0, 60), new TimePeriodWithSegment(17, 0, 19, 0, 60),
-				new ShiftCategory("_").WithId()));
-			var agent = new Person().WithId()
-				.WithPersonPeriod(new RuleSetBag(ruleSet), skill)
-				.WithSchedulePeriodOneMonth(date);
-			agent.Period(date).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractScheduleWorkingMondayToFriday());
-			var skillDays =
-				skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] {agent}, Enumerable.Empty<IPersonAssignment>(), skillDays);
 
-			var result = Target.Execute(agent.VirtualSchedulePeriod(date));
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
 			result.Should().Be.True();
 
 			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new []{agent}, period);
@@ -60,23 +47,61 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		//[Ignore("#47013")]
+		public void ShouldReportTrueIfRestrictionsProperlyEntered()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var preferenceDays = new List<IPreferenceDay>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
+					continue;
+
+				preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+					new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+			}
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.True();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
+				.EqualTo(TimeSpan.FromHours(168));
+		}
+
+		[Test]
+		public void ShouldReportTrueIfRestrictionsProperlyEnteredAndSomeManualSchedulesHaveBeenEntered()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var assignedOrPreferedDays = new List<IPersistableScheduleData>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
+					continue;
+
+				assignedOrPreferedDays.Add(new PreferenceDay(agent, dateOnly,
+					new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+			}
+
+			var ass = new PersonAssignment(agent, scenario, period.StartDate);
+			ass.SetDayOff(new DayOffTemplate());
+			assignedOrPreferedDays.Add(ass);
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, assignedOrPreferedDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.True();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
+				.EqualTo(TimeSpan.FromHours(168));
+		}
+
+		[Test]
 		public void ShouldReportFalseIfWillWorkRestrictionOnAllDays()
 		{
-			var date = new DateOnly(2017, 12, 01);
-			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
-			var activity = new Activity().WithId();
-			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
-			var scenario = new Scenario();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
-				new TimePeriodWithSegment(10, 0, 10, 0, 60), new TimePeriodWithSegment(17, 0, 19, 0, 60),
-				new ShiftCategory("_").WithId()));
-			var agent = new Person().WithId()
-				.WithPersonPeriod(new RuleSetBag(ruleSet), skill)
-				.WithSchedulePeriodOneMonth(date);
-			agent.Period(date).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractScheduleWorkingMondayToFriday());
-			var skillDays =
-				skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
 			var preferenceDays = new List<IPreferenceDay>();
 			foreach (var dateOnly in period.DayCollection())
 			{
@@ -86,12 +111,78 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
 
-			var result = Target.Execute(agent.VirtualSchedulePeriod(date));
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
 			result.Should().Be.False();
 
 			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
 			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
 				.EqualTo(TimeSpan.Zero);
+		}
+
+		[Test]
+		public void ShouldReportFalseIfRestrictionMinWorkTimeLongerThanTargetTime()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var preferenceDays = new List<IPreferenceDay>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if(dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
+					continue;
+
+				preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+					new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(10)) }));
+			}
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.False();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
+				.EqualTo(TimeSpan.Zero);
+		}
+
+		[Test]
+		public void ShouldReportFalseIfRestrictionMaxWorkTimeShorterThanTargetTime()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var preferenceDays = new List<IPreferenceDay>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
+					continue;
+
+				preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+					new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(4), TimeSpan.FromHours(4)) }));
+			}
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.False();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
+				.EqualTo(TimeSpan.Zero);
+		}
+
+		private static DateOnlyPeriod createStandardSetup(out Scenario scenario, out Person agent, out IList<ISkillDay> skillDays)
+		{
+			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
+			scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
+				new ShiftCategory("_").WithId()));
+			agent = new Person().WithId()
+				.WithPersonPeriod(new RuleSetBag(ruleSet), skill)
+				.WithSchedulePeriodOneMonth(period.StartDate);
+			agent.Period(period.StartDate).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"),
+				new ContractScheduleWorkingMondayToFriday());
+			skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			return period;
 		}
 
 		public RestrictionsAbleToBeScheduledTest(SeperateWebRequest seperateWebRequest, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(seperateWebRequest, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680)
