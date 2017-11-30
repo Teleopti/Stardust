@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
@@ -36,11 +34,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 				configurationHandler.BaseConfiguration.RunIndexMaintenance);
 			var jobCollection = new JobCollection(jobParameters);
 
-			return jobCollection.Select(m => new JobCollectionModel{JobName = m.Name ,
-				JobStepNames = m.StepList.Select(y => y.Name).ToList(),
-				NeedsParameterDataSource = m.NeedsParameterDataSource,
-				NeededDatePeriods = m.JobCategoryCollection.Where(y => y != JobCategoryType.DoNotNeedDatePeriod).Select(y => y.ToString()).ToList()
-			}).ToList();
+			return jobCollection.Select(m => new JobCollectionModel{JobName = m.Name , JobStepNames = m.StepList.Select(y => y.Name).ToList()}).ToList();
 		}
 	}
 }

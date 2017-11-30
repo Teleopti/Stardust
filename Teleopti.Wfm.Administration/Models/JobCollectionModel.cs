@@ -6,7 +6,5 @@ namespace Teleopti.Wfm.Administration.Models
 	{
 		public string JobName { get; set; }
 		public IList<string> JobStepNames { get; set; }
-		public bool NeedsParameterDataSource { get; set; }
-		public IList<string> NeededDatePeriods { get; set; }
 	}
 }
