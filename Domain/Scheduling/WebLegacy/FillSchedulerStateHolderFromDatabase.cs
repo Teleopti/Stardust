@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillBpos(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
 			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
-			schedulerStateHolderTo.SchedulingResultState.BpoResources = _externalStaffProvider.Fetch(skills, dateTimePeriod);
+			schedulerStateHolderTo.SchedulingResultState.ExternalStaff = _externalStaffProvider.Fetch(skills, dateTimePeriod);
 		}
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)

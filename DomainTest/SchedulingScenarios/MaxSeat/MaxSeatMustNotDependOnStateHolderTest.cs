@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				set { throw new NotImplementedException(); }
 			}
 
-			public IEnumerable<ExternalStaff> BpoResources
+			public IEnumerable<ExternalStaff> ExternalStaff
 			{
 				get { throw new NotImplementedException(); }
 				set { throw new NotImplementedException(); }

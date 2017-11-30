@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool SkipResourceCalculation { get; set; }
 		public bool UseValidation { get; set; }
 		public IDictionary<IPerson, IPersonAccountCollection> AllPersonAccounts { get; set; }
-		public IEnumerable<ExternalStaff> BpoResources { get; set; }
+		public IEnumerable<ExternalStaff> ExternalStaff { get; set; }
 		public bool TeamLeaderMode { get; set; }
 		public bool UseMinWeekWorkTime { get; set; }
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			LoadedAgents = new List<IPerson>();
 			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
-			BpoResources = new List<ExternalStaff>();
+			ExternalStaff = new List<ExternalStaff>();
 		}
 
 		public SchedulingResultStateHolder(ICollection<IPerson> personsInOrganization, IScheduleDictionary schedules, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)

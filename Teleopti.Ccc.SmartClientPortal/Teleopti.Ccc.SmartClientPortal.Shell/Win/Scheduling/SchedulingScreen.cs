@@ -4949,7 +4949,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		
 		private void loadBpos(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
-			stateHolder.SchedulingResultState.BpoResources = _externalStaffProvider.Fetch(stateHolder.SchedulingResultState.Skills, stateHolder.RequestedPeriod.Period());
+			stateHolder.SchedulingResultState.ExternalStaff = _externalStaffProvider.Fetch(stateHolder.SchedulingResultState.Skills, stateHolder.RequestedPeriod.Period());
 		}
 
 		private void loadSkillDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder)

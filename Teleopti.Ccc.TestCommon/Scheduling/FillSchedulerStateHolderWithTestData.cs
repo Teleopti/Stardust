@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			{
 				stateHolder.SchedulingResultState.SkillDays[uniqueSkill] = skillDays.Where(skillDay => skillDay.Skill.Equals(uniqueSkill));
 			}
-			stateHolder.SchedulingResultState.BpoResources = bpoResources;
+			stateHolder.SchedulingResultState.ExternalStaff = bpoResources;
 			stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
 			stateHolder.CommonStateHolder.SetDayOffTemplate(DayOffFactory.CreateDayOff());
 			stateHolder.Schedules.TakeSnapshot();

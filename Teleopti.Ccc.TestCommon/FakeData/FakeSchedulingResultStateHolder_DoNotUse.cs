@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
 
-		public IEnumerable<ExternalStaff> BpoResources
+		public IEnumerable<ExternalStaff> ExternalStaff
 		{
 			get { yield break; }
 			set {  }
