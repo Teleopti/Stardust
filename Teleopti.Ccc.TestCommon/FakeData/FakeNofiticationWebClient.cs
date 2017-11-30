@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 		public List<string> SentMessages { get; private set; }
 
-		public string MakeRequest(string queryStringData)
+		public string MakeRequest(Uri url, string queryStringData)
 		{
 			SentMessages.Add(queryStringData);
 			if (_requestFaild) {
@@ -40,10 +41,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public void MakeRequestFaild()
 		{
 			_requestFaild = true;
-		}
-		public void Dispose()
-		{
-
 		}
 	}
 

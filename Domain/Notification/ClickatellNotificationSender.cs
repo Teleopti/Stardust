@@ -15,13 +15,16 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		private static ILog Logger;
 		private INotificationConfigReader _notificationConfigReader;
+		private readonly INotificationClient _notificationClient;
 
 		public ClickatellNotificationSender()
 		{
+			_notificationClient= new NotificationWebClient();
 			Logger = LogManager.GetLogger(nameof(ClickatellNotificationSender));
 		}
-		public ClickatellNotificationSender(ILogManager logManager)
+		public ClickatellNotificationSender(ILogManager logManager, INotificationClient notificationClient)
 		{
+			_notificationClient = notificationClient;
 			Logger = logManager.GetLogger(nameof(ClickatellNotificationSender));
 		}
 
@@ -92,10 +95,6 @@ namespace Teleopti.Ccc.Domain.Notification
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
 		private void sendSmsNotifications(string smsMessage, string mobileNumber, bool containUnicode)
 		{
-			using (var client = _notificationConfigReader.CreateClient())
-			{
-				// Add a user agent header in case the 
-				// requested URI contains a query.
 				var smsString = _notificationConfigReader.Data;
 
 				if (containUnicode)
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				Logger.Info($"Sending SMS on: {_notificationConfigReader.Url}{msgData}");
 				try
 				{
-					var data = client.MakeRequest(msgData);
+					var data = _notificationClient.MakeRequest(_notificationConfigReader.Url, msgData);
 					if (data != null)
 					{
 						if (_notificationConfigReader.SkipSearch) return;
@@ -125,7 +124,6 @@ namespace Teleopti.Ccc.Domain.Notification
 				{
 					Logger.Error($"Error occurred trying receiver access: {_notificationConfigReader.Url}{msgData}", exception);
 				}
-			}
 		}
 
 		public void SetConfigReader(INotificationConfigReader notificationConfigReader)

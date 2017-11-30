@@ -292,10 +292,5 @@ namespace Teleopti.Ccc.Domain.Notification
 				return false;
 			}
 		}
-
-		public virtual INotificationClient CreateClient()
-	    {
-	        return new NotificationWebClient(Url);
-	    }
 	}
 }

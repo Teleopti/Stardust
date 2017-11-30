@@ -46,17 +46,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_configXml.LoadXml(xmlConfig);
 		}
 
-		public FakeNotificationConfigReader()
-		{
-			Client = new FakeNofiticationWebClient();
-		}
-
-		public FakeNofiticationWebClient Client { get; private set; }
-		public INotificationClient CreateClient()
-		{
-			return Client;
-		}
-
 		private string getValue(string tagName) {
 			if (!HasLoadedConfig)
 				return string.Empty;

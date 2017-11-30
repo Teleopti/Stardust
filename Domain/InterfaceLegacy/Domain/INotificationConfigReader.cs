@@ -25,6 +25,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		string SmtpUser { get; }
 		string SmtpPassword { get; }
 		bool SmtpUseRelay { get; }
-		INotificationClient CreateClient();
 	}
 }

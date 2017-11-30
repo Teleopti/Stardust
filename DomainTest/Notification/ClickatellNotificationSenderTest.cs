@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		private ClickatellNotificationSender _target;
 		private readonly INotificationMessage smsMessage = new NotificationMessage { Subject = "Schedule has changed" };
 		private LogSpy _log;
+		private FakeNofiticationWebClient _fakeNofiticationWebClient;
 
 		private const string xml = @"<?xml version='1.0' encoding='utf-8' ?>
 		<Config>
@@ -52,10 +53,10 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			_log = new LogSpy();
-			_target = new ClickatellNotificationSender(new FakeLogManager(_log));
+			_fakeNofiticationWebClient = new FakeNofiticationWebClient();
+			_target = new ClickatellNotificationSender(new FakeLogManager(_log), _fakeNofiticationWebClient);
 
 			system.UseTestDouble<FakeNotificationConfigReader>().For<INotificationConfigReader>();
-			system.UseTestDouble<FakeNofiticationWebClient>().For<INotificationClient>();
 		}
 
 		[Test]
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_target.SetConfigReader(_notificationConfigReader);
 			smsMessage.Messages.Add("On a day");
 			_target.SendNotification(smsMessage, new NotificationHeader());
-			_notificationConfigReader.Client.SentMessages.Count.Should().Be(0);
+			_fakeNofiticationWebClient.SentMessages.Count.Should().Be(0);
 		}
 
 		[Test]
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_notificationConfigReader.LoadConfig(xml);
 			smsMessage.Messages.Add("test send");
 			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
-			_notificationConfigReader.Client.SentMessages.Count.Should().Be(1);
+			_fakeNofiticationWebClient.SentMessages.Count.Should().Be(1);
 		}
 
 		[Test]
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_notificationConfigReader.LoadConfig(xml);
 			smsMessage.Messages.Add("test send");
 			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "" });
-			_notificationConfigReader.Client.SentMessages.Count.Should().Be(0);
+			_fakeNofiticationWebClient.SentMessages.Count.Should().Be(0);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), Test]
@@ -163,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_target.SetConfigReader(_notificationConfigReader);
 			_notificationConfigReader.LoadConfig(incorrectXml);
 
-			_notificationConfigReader.Client.MakeRequestFaild();
+			_fakeNofiticationWebClient.MakeRequestFaild();
 			smsMessage.Messages.Add("test send");
 			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
 
@@ -201,11 +202,11 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_target.SetConfigReader(_notificationConfigReader);
 			_notificationConfigReader.LoadConfig(xmlWithNoCheck);
 
-			_notificationConfigReader.Client.MakeRequestFaild();
+			_fakeNofiticationWebClient.MakeRequestFaild();
 			smsMessage.Messages.Add("test send");
 			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
 
-			_notificationConfigReader.Client.SentMessages.Count.Should().Be.EqualTo(1);
+			_fakeNofiticationWebClient.SentMessages.Count.Should().Be.EqualTo(1);
 			_log.ErrorMessages.Count.Should().Be.EqualTo(0);
 		}
 
@@ -243,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			smsMessage.Messages.Add("test send");
 			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
-			_notificationConfigReader.Client.SentMessages.Count.Should().Be.EqualTo(1);
+			_fakeNofiticationWebClient.SentMessages.Count.Should().Be.EqualTo(1);
 			_log.ErrorMessages.Count.Should().Be.EqualTo(0);
 		}
 
