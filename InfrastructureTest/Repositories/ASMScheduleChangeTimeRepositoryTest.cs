@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				var personId = Guid.NewGuid();
 				var nowInUtc = Now.UtcDateTime();
-				Target.Add(new ASMScheduleChangeTime
+				Target.Save(new ASMScheduleChangeTime
 				{
 					PersonId = personId,
 					TimeStamp = nowInUtc
@@ -43,14 +43,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				var personId = Guid.NewGuid();
 				var nowInUtc = Now.UtcDateTime();
-				Target.Add(new ASMScheduleChangeTime
+				Target.Save(new ASMScheduleChangeTime
 				{
 					PersonId = personId,
 					TimeStamp = nowInUtc
 				});
 
 				var newTime = new DateTime(2017, 11, 24, 10, 30, 0);
-				Target.Update(new ASMScheduleChangeTime
+				Target.Save(new ASMScheduleChangeTime
 				{
 					PersonId = personId,
 					TimeStamp = newTime

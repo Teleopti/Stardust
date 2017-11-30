@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				PersonId = me.Id.Value,
 				TimeStamp = Now.UtcDateTime()
 			};
-			FakeASMScheduleChangeTimeRepository.Add(scheduleChangeMessage);
+			FakeASMScheduleChangeTimeRepository.Save(scheduleChangeMessage);
 
 			Target.Check().Should().Be.EqualTo(true);
 		}
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				TimeStamp = new DateTime(2017, 11, 27, 10, 0, 0)
 			};
 
-			FakeASMScheduleChangeTimeRepository.Add(scheduleChangeMessage);
+			FakeASMScheduleChangeTimeRepository.Save(scheduleChangeMessage);
 			Now.Is(new DateTime(2017, 11, 27, 10, 30, 0));
 
 			Target.Check().Should().Be.False();

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Schedule
 		public ASMScheduleChangeTime GetScheduleChangeTime(Guid personId)
 		{
 			return _unitOfWork.Current().Session().CreateSQLQuery($@"
-						SELECT [PersonId], [TimeStamp] FROM [dbo].ASMScheduleChangeTime 
+						SELECT [PersonId], [TimeStamp] FROM [ReadModel].ASMScheduleChangeTime 
 						WHERE PersonId = :{nameof(ASMScheduleChangeTime.PersonId)}
 					")
 				.SetGuid(nameof(ASMScheduleChangeTime.PersonId), personId)
@@ -28,29 +28,30 @@ namespace Teleopti.Ccc.Infrastructure.Schedule
 				.UniqueResult<ASMScheduleChangeTime>();
 		}
 
-		public void Add(ASMScheduleChangeTime time)
-		{
+		public void Save(ASMScheduleChangeTime time) {
+
 			_unitOfWork.Current().Session().CreateSQLQuery($@"
-						INSERT INTO [dbo].ASMScheduleChangeTime (
-					[{nameof(ASMScheduleChangeTime.PersonId)}]
-					 ,[{nameof(ASMScheduleChangeTime.TimeStamp)}])
-					VALUES 
-					(:{nameof(ASMScheduleChangeTime.PersonId)}, 
-					:{nameof(ASMScheduleChangeTime.TimeStamp)})")
+			MERGE INTO[ReadModel].[ASMScheduleChangeTime] AS T
+				USING ( VALUES (:{nameof(ASMScheduleChangeTime.PersonId)}))
+				AS S({nameof(ASMScheduleChangeTime.PersonId)})
+				ON T.PersonId = S.PersonId
+				WHEN NOT MATCHED THEN
+					INSERT
+					(
+						{nameof(ASMScheduleChangeTime.PersonId)},
+						{nameof(ASMScheduleChangeTime.TimeStamp)}
+					) VALUES (
+						S.{nameof(ASMScheduleChangeTime.PersonId)},
+							:{nameof(ASMScheduleChangeTime.TimeStamp)}
+					)
+				WHEN MATCHED THEN
+					UPDATE SET
+						{nameof(ASMScheduleChangeTime.TimeStamp)} = :{nameof(ASMScheduleChangeTime.TimeStamp)}
+					;")
 				.SetGuid(nameof(ASMScheduleChangeTime.PersonId), time.PersonId)
 				.SetDateTime(nameof(ASMScheduleChangeTime.TimeStamp), time.TimeStamp)
 				.ExecuteUpdate();
-
-		}
-
-		public void Update(ASMScheduleChangeTime time) {
-			_unitOfWork.Current().Session().CreateSQLQuery($@"
-					UPDATE [dbo].ASMScheduleChangeTime 
-						SET TimeStamp = :{nameof(ASMScheduleChangeTime.TimeStamp)}
-					WHERE PersonId = :{nameof(ASMScheduleChangeTime.PersonId)}")
-				.SetGuid(nameof(ASMScheduleChangeTime.PersonId), time.PersonId)
-				.SetParameter(nameof(ASMScheduleChangeTime.TimeStamp), time.TimeStamp)
-				.ExecuteUpdate();
-		}
+			
+	}
 	}
 }

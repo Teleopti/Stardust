@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			_target.Persist(roots);
 
-			_repo.AssertWasCalled(x => x.Add(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
+			_repo.AssertWasCalled(x => x.Save(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
 		}
 
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			_target.Persist(roots);
 
-			_repo.AssertWasCalled(x => x.Add(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
+			_repo.AssertWasCalled(x => x.Save(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
 
 		}
 
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			_target.Persist(roots);
 			_repo.AssertWasNotCalled(x => x
-				.Add(Arg<ASMScheduleChangeTime>
+				.Save(Arg<ASMScheduleChangeTime>
 				.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
 
 		}
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			};
 			_target.Persist(roots);
 			_repo.AssertWasNotCalled(x => x
-							.Add(Arg<ASMScheduleChangeTime>
+							.Save(Arg<ASMScheduleChangeTime>
 							.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
 		}
 
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			_target.Persist(roots);
 
 			_repo.AssertWasCalled(x => x
-						.Add(Arg<ASMScheduleChangeTime>
+						.Save(Arg<ASMScheduleChangeTime>
 						.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
 		}
 
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			_target.Persist(roots);
 
 			_repo.AssertWasCalled(x => x
-						.Update(Arg<ASMScheduleChangeTime>
+						.Save(Arg<ASMScheduleChangeTime>
 						.Matches(t => t.TimeStamp == newTime && t.PersonId == time.PersonId)));
 		}
 
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			_target.Persist(roots);
 
 			_repo.AssertWasCalled(x => x
-					.Update(Arg<ASMScheduleChangeTime>
+					.Save(Arg<ASMScheduleChangeTime>
 					.Matches(t => t.TimeStamp == newTime && t.PersonId == time.PersonId)));
 		}
 		[Test]
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			_target.Persist(roots);
 			_repo.AssertWasNotCalled(x => x
-					.Update(Arg<ASMScheduleChangeTime>
+					.Save(Arg<ASMScheduleChangeTime>
 					.Matches(t => t.TimeStamp == newTime && t.PersonId == time.PersonId)));
 
 		}
@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			_target.Persist(roots);
 
-			_repo.AssertWasNotCalled(x => x.Add(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
+			_repo.AssertWasNotCalled(x => x.Save(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
 
 		}
 

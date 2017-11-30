@@ -60,20 +60,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var personIdList = personIds.ToList();
 			foreach (var personId in personIdList)
 			{
-				var time = _scheduleChangeTimeRepository.GetScheduleChangeTime(personId);
-				if (time == null)
+				_scheduleChangeTimeRepository.Save(new ASMScheduleChangeTime
 				{
-					_scheduleChangeTimeRepository.Add(new ASMScheduleChangeTime
-					{
-						PersonId = personId,
-						TimeStamp = _now.UtcDateTime()
-					});
-				}
-				else
-				{
-					time.TimeStamp = _now.UtcDateTime();
-					_scheduleChangeTimeRepository.Update(time);
-				}
+					PersonId = personId,
+					TimeStamp = _now.UtcDateTime()
+				});
 
 			}
 		}

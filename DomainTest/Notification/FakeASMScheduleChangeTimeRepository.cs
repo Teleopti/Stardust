@@ -9,19 +9,20 @@ namespace Teleopti.Ccc.DomainTest.Notification
 	public class FakeASMScheduleChangeTimeRepository : IASMScheduleChangeTimeRepository
 	{
 		private IList<ASMScheduleChangeTime> _times = new List<ASMScheduleChangeTime>();
-		public void Add(ASMScheduleChangeTime time)
-		{
-			_times.Add(time);
-		}
+
 
 		public ASMScheduleChangeTime GetScheduleChangeTime(Guid personId)
 		{
 			return _times.SingleOrDefault(time => time.PersonId == personId);
 		}
 
-		public void Update(ASMScheduleChangeTime time)
+		public void Save(ASMScheduleChangeTime time)
 		{
-			
+			var orignal = GetScheduleChangeTime(time.PersonId);
+			if (orignal == null)
+				_times.Add(time);
+			else
+				orignal.TimeStamp = time.TimeStamp;
 		}
 	}
 }
