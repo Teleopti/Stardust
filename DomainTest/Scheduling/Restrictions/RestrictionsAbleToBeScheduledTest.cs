@@ -167,6 +167,40 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				.EqualTo(TimeSpan.Zero);
 		}
 
+		[Test]
+		public void ShouldHandleMoreThanOneCallToTargetWithDifferentPreferences()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var preferenceDays = new List<IPreferenceDay>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
+					continue;
+
+				preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+					new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(4), TimeSpan.FromHours(4)) }));
+			}
+
+			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.False();
+
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
+					continue;
+
+				preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+					new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+			}
+
+			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.True();
+		}
+
 		private static DateOnlyPeriod createStandardSetup(out Scenario scenario, out Person agent, out IList<ISkillDay> skillDays)
 		{
 			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);

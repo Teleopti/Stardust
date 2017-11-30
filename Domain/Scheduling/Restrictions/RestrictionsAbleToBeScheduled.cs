@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_advanceDaysOffSchedulingService.Execute(schedulingCallBack, matrixList, selectedAgents,
 				schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions, _groupPersonBuilderWrapper,
 				selectedPeriod);
+
+			_workShiftMinMaxCalculator.ResetCache();
 			var minMaxTime = _workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(matrixList.First(), schedulingOptions);
 			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTime(matrixList.First());
 			schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
