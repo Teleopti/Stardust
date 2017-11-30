@@ -54,16 +54,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Ignore("#46845 to be fixed")]
 		public void ShouldNotOptimizeExternalStaff(TeamBlockType teamBlockType)
 		{
-			var skill1 = new Skill().DefaultResolution(60).WithId();
-			var skill2 = new Skill().DefaultResolution(60).WithId();
-			var agent1 = new Person().WithId().WithPersonPeriod(skill1);
-			var agent2 = new Person().WithId().WithPersonPeriod(skill2);
+			var skill = new Skill().DefaultResolution(60).WithId();
+			var agent1 = new Person().WithId().WithPersonPeriod(skill);
+			var agent2 = new Person().WithId().WithPersonPeriod(skill);
 			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
-			SkillRepository.Has(skill1);
-			SkillRepository.Has(skill2);
-			SkillCombinationResourceReader.Has(1, period, skill1, skill2);
+			SkillRepository.Has(skill);
+			SkillCombinationResourceReader.Has(1, period, skill);
 			OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
 			{
 				Extra = teamBlockType.CreateExtraPreferences()
