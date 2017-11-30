@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var islands = CreateIslands(command.Period, command);
 			if (teamScheduling(command))
 			{
-				var agentsToSchedule = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command);
+				var agentsToSchedule = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command).Where(x => !x.IsExternalAgent);
 				var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, agentsToSchedule);
 				events.Add(new SchedulingWasOrdered
 				{

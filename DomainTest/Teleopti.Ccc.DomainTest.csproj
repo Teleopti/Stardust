@@ -294,6 +294,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingSameThreadDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandHandlerExternalStaffTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffTest.cs" />
     <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />
     <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationScenarioTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeSchedulingScenario.cs" />
