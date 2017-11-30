@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 
 namespace Teleopti.Ccc.Web.Areas.Global.Core
 {
@@ -29,11 +29,11 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			return hasFallBacks ?  formModel : default(T);			
 		}
 
-		public IEnumerable<FileData> ExtractFileData(IEnumerable<HttpContent> contents)
+		public IEnumerable<ImportFileData> ExtractFileData(IEnumerable<HttpContent> contents)
 		{
 			return from content in contents
 				where content.Headers.ContentDisposition.Name.Trim('\"') == "file"
-				select new FileData
+				select new ImportFileData
 				{
 					FileName = content.Headers.ContentDisposition.FileName.Trim('\"'),
 					Data = content.ReadAsByteArrayAsync().Result

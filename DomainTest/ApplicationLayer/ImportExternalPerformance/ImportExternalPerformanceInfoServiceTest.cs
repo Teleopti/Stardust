@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 		private IJobResult createValidJob(ImportExternalPerformanceInfo fallbacks = null)
 		{
-			var fileData = new FileData()
+			var fileData = new ImportFileData()
 			{
 				FileName = "test.csv",
 				Data = Encoding.ASCII.GetBytes("test")

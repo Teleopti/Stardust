@@ -1,6 +1,6 @@
-namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
+namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	public class FileData
+	public class ImportFileData
 	{
 		public string FileName { get; set; }
 		public byte[] Data { get; set; }

@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
-		public AgentFileProcessResult Process(FileData fileData, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null)
+		public AgentFileProcessResult Process(ImportFileData importFileData, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null)
 		{
-			var workbook = ParseFile(fileData);
+			var workbook = ParseFile(importFileData);
 
 			if (sendProgress == null)
 			{
@@ -75,9 +75,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 		}
 
-		public AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null)
+		public AgentFileProcessResult Process(ImportFileData importFileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null)
 		{
-			var workbook = ParseFile(fileData);
+			var workbook = ParseFile(importFileData);
 			return Process(workbook, timezone, defaultValues, sendProgress);
 		}
 
@@ -186,18 +186,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 
 
-		public IWorkbook ParseFile(FileData fileData)
+		public IWorkbook ParseFile(ImportFileData importFileData)
 		{
-			if (fileData == null) return null;
-			var fileName = fileData.FileName;
+			if (importFileData == null) return null;
+			var fileName = importFileData.FileName;
 			if (!fileName.ToLower().EndsWith("xls") && !fileName.ToLower().EndsWith("xlsx"))
 				return null;
-			var dataStream = new MemoryStream(fileData.Data);
+			var dataStream = new MemoryStream(importFileData.Data);
 			return fileName.ToLower().EndsWith("xlsx")
 				? (IWorkbook)new XSSFWorkbook(dataStream)
 				: new HSSFWorkbook(dataStream);
 		}
-
+		
 		public void HasException()
 		{
 			hasException = true;
@@ -211,10 +211,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 	public interface IFileProcessor
 	{
 		MemoryStream CreateFileForInvalidAgents(IList<AgentExtractionResult> agents, bool isXlsx);
-		AgentFileProcessResult Process(FileData fileData, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null);
-		AgentFileProcessResult Process(FileData fileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null);
+		AgentFileProcessResult Process(ImportFileData importFileData, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null);
+		AgentFileProcessResult Process(ImportFileData importFileData, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null);
 		AgentFileProcessResult Process(IWorkbook workbook, TimeZoneInfo timezone, ImportAgentDefaults defaultValues = null, Action<string> sendProgress = null);
-		IWorkbook ParseFile(FileData fileData);
+		IWorkbook ParseFile(ImportFileData importFileData);
 		void BatchPersist(TimeZoneInfo timezone, Action<string> sendProgress, AgentExtractionResult[] extractedAgents);
 	}
 }

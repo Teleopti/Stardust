@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 		}
 
 
-		public IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks)
+		public IJobResult CreateJob(ImportFileData importFileData, ImportAgentDefaults fallbacks)
 		{
 			var dateOnlyPeriod = DateOnly.Today.ToDateOnlyPeriod();
 			var jobResult = new JobResult(JobCategory.WebImportAgent, dateOnlyPeriod, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
-			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, fileData.FileName, fileData.Data));
+			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, importFileData.FileName, importFileData.Data));
 			_jobResultRepository.Add(jobResult);
 			_eventPublisher.Publish(new ImportAgentEvent
 			{

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 using System.Web.Http.Results;
 using System;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.UserTexts;
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[UnitOfWork]
-		public virtual IJobResult CreateJob(FileData fileData, ImportAgentDefaults defaults)
+		public virtual IJobResult CreateJob(ImportFileData fileData, ImportAgentDefaults defaults)
 		{
 			if (fileData?.Data?.Length == 0)
 			{

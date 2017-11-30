@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
 	public interface IImportExternalPerformanceInfoService
 	{
-		IJobResult CreateJob(FileData fileData, ImportExternalPerformanceInfo fallbacks);
+		IJobResult CreateJob(ImportFileData importFileData, ImportExternalPerformanceInfo fallbacks);
 	}
 	public class ImportExternalPerformanceInfoService : IImportExternalPerformanceInfoService
 	{
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public IJobResult CreateJob(FileData fileData, ImportExternalPerformanceInfo fallbacks)
+		public IJobResult CreateJob(ImportFileData importFileData, ImportExternalPerformanceInfo fallbacks)
 		{
 			var dateOnlyPeriod = DateOnly.Today.ToDateOnlyPeriod();
 			var jobResult = new JobResult(JobCategory.WebImportAgent, dateOnlyPeriod, _loggedOnUser.CurrentUser(), DateTime.UtcNow);

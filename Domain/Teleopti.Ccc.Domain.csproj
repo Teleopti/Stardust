@@ -172,7 +172,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\AgentDataModel.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplate.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersister.cs" />
-    <Compile Include="ApplicationLayer\ImportAgent\FileData.cs" />
+    <Compile Include="ApplicationLayer\ImportFileData.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\FileProcessor.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\IImportAgentDataProvider.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\IImportAgentFileValidator.cs" />

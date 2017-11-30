@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 		private IJobResult createValidJob(ImportAgentDefaults fallbacks = null)
 		{
-			var fileData = new FileData()
+			var fileData = new ImportFileData()
 			{
 				FileName = "test.xlsx",
 				Data = Encoding.ASCII.GetBytes("test")

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {
 	public interface IImportAgentJobService
 	{
-		IJobResult CreateJob(FileData fileData, ImportAgentDefaults fallbacks);
+		IJobResult CreateJob(ImportFileData importFileData, ImportAgentDefaults fallbacks);
 		IList<ImportAgentJobResultDetail> GetJobsForCurrentBusinessUnit();
 		JobResultArtifact GetJobResultArtifact(Guid id, JobResultArtifactCategory category);
 	}

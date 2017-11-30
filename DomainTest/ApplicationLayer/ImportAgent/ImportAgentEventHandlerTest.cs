@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			jobResult.Artifacts.Count(ar => ar.Category == JobResultArtifactCategory.OutputWarning).Should().Be(0);
 
 			var failedArtifact = jobResult.Artifacts.Single(ar => ar.Category == JobResultArtifactCategory.OutputError);
-			var wookbook = FileProcessor.ParseFile(new FileData
+			var wookbook = FileProcessor.ParseFile(new ImportFileData
 			{
 				FileName = failedArtifact.Name,
 				Data = failedArtifact.Content

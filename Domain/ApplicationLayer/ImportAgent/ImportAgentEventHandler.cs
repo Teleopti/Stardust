@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 			}
 		}
 
-			protected virtual void HandleJob(ImportAgentEvent @event)
+		protected virtual void HandleJob(ImportAgentEvent @event)
 		{
 			IJobResult jobResult = null;
 			JobResultArtifact inputFile = null;
 			AgentFileProcessResult processResult = null;
-			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
 				inputFile = _validator.ValidateJobArtifact(jobResult, _feedback.SendProgress);
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 					return;
 				}
 
-				processResult = _fileProcessor.Process(new FileData
+				processResult = _fileProcessor.Process(new ImportFileData
 				{
 					Data = inputFile.Content,
 					FileName = inputFile.Name
