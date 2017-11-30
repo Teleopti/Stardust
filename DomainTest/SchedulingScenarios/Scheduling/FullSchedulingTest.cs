@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[TestCase(0, ExpectedResult = 8)]
 		[TestCase(0.1, ExpectedResult = 8)]
 		[TestCase(1.1, ExpectedResult = 10)]
-		public int ShouldConsiderBpos(double bpoResources)
+		public int ShouldConsiderExternalStaff(double externalResources)
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2017, 8, 21);
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var alreadyScheduledAgent = PersonRepository.Has(skill);
 			AssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, date, new TimePeriod(8, 18));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2)));
-			SkillCombinationResourceReader.Has(bpoResources, new DateTimePeriod(new DateTime(date.Date.AddHours(8).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc)), skill);
+			SkillCombinationResourceReader.Has(externalResources, new DateTimePeriod(new DateTime(date.Date.AddHours(8).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc)), skill);
 			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
 			
 			Target.DoScheduling(planningPeriod.Id.Value);

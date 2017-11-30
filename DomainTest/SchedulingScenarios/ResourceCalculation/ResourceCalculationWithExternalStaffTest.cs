@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class ResourceCalculationWithBpoTest : ResourceCalculationScenario
+	public class ResourceCalculationWithExternalStaffTest : ResourceCalculationScenario
 	{
 		public IResourceCalculation Target;
 		public CascadingResourceCalculationContextFactory CascadingResourceCalculationContextFactory;
