@@ -58,6 +58,7 @@
     <Compile Include="UpdateReadModelPerformanceTestAttribute.cs" />
     <Compile Include="UpdateStaffingReadModelWithOnlySkillCombinationResourcesTest.cs" />
     <Compile Include="UpdateStaffingReadModel2WeeksTest.cs" />
+    <Compile Include="StaffingPerformanceLoadingTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

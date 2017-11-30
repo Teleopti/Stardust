@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -71,6 +72,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			system.UseTestDouble(toggles).For<IToggleManager>();
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			system.UseTestDouble<StaffingViewModelCreator>().For<StaffingViewModelCreator>();
 			system.AddService<Database>();
 			system.AddService<MultiplicatorDefinitionSetRepository>();
 		}

@@ -2,10 +2,13 @@
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
@@ -30,11 +33,13 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			var intervalFetcher = new FakeIntervalLengthFetcher();
 			intervalFetcher.Has(15);  //because we don't restore Analytics
 			base.Setup(system, configuration);
+			system.UseTestDouble<ScenarioRepository>().For<IScenarioRepository>();
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<MutableNow>().For<INow>();
 			system.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			system.UseTestDouble<StaffingViewModelCreator>().For<StaffingViewModelCreator>();
 			system.AddService<Database>();
 		}
 
