@@ -19,47 +19,58 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldAddScheduleChangeTime()
 		{
+
+			var personId = Guid.NewGuid();
+			var nowInUtc = Now.UtcDateTime();
 			WithUnitOfWork.Do(() =>
 			{
-				var personId = Guid.NewGuid();
-				var nowInUtc = Now.UtcDateTime();
 				Target.Save(new ASMScheduleChangeTime
 				{
 					PersonId = personId,
 					TimeStamp = nowInUtc
 				});
+			});
 
+			WithUnitOfWork.Do(() =>
+			{
 				var scheduleChangeTime = Target.GetScheduleChangeTime(personId);
 
 				scheduleChangeTime.PersonId.Should().Be(personId);
 				scheduleChangeTime.TimeStamp.Should().Be(nowInUtc);
 			});
+
 		}
 
 		[Test]
 		public void ShouldUpdateScheduleChangeTime()
 		{
+
+			var personId = Guid.NewGuid();
+			var nowInUtc = Now.UtcDateTime();
 			WithUnitOfWork.Do(() =>
 			{
-				var personId = Guid.NewGuid();
-				var nowInUtc = Now.UtcDateTime();
 				Target.Save(new ASMScheduleChangeTime
 				{
 					PersonId = personId,
 					TimeStamp = nowInUtc
 				});
-
-				var newTime = new DateTime(2017, 11, 24, 10, 30, 0);
+			});
+			var newTime = new DateTime(2017, 11, 24, 10, 30, 0);
+			WithUnitOfWork.Do(() =>
+			{
 				Target.Save(new ASMScheduleChangeTime
 				{
 					PersonId = personId,
 					TimeStamp = newTime
 				});
-
+			});
+			WithUnitOfWork.Do(() =>
+			{
 				var scheduleChangeTime = Target.GetScheduleChangeTime(personId);
 				scheduleChangeTime.PersonId.Should().Be(personId);
 				scheduleChangeTime.TimeStamp.Should().Be(newTime);
 			});
+
 		}
 
 
