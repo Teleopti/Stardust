@@ -7,19 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Notification
 {
-	public class ClickatellNotificationSender : NotificationSenderBase
-	{
-		public ClickatellNotificationSender():base(LogManager.GetLogger(nameof(ClickatellNotificationSender)), new ClickatellNotificationWebClient())
-		{
-		}
-	}
-
-	public class RawPostNotificationSender : NotificationSenderBase
-	{
-		public RawPostNotificationSender() : base(LogManager.GetLogger(nameof(RawPostNotificationSender)), new RawPostNotificationWebClient())
-		{
-		}
-	}
 	// this class is a dll where all the Notification Senders could be 
 	// Then more could be added without changes in the Service Bus
 	public class NotificationSenderBase : INotificationSender
