@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				{
 					var agentsInIsland = island.AgentsInIsland();
 					var agentsToOptimize = command.AgentsToOptimize?.Where(x => agentsInIsland.Contains(x)).ToArray()
-										   ?? agentsInIsland.Where(x => !x.IsExternalAgent);
+										   ?? agentsInIsland;
 
 					if (agentsToOptimize.Any())
 					{
