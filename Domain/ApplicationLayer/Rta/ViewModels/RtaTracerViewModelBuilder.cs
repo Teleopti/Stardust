@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					Tracing = tracing,
 					DataReceivedAt = dataReceived?.ReceivedAt?.ToString("T"),
 					DataReceivedBy = dataReceived?.ReceivedBy,
-					DataReceivedCount = dataReceived?.ReceivedCount ?? 0,
+					DataReceivedCount = dataReceived?.ReceivedCount,
 					ActivityCheckAt = activityCheckAt,
 					Exception = exception
 				};
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string Process;
 		public string DataReceivedAt;
 		public string DataReceivedBy;
-		public int DataReceivedCount;
+		public int? DataReceivedCount;
 		public string ActivityCheckAt;
 		public string Tracing;
 		public string Exception;
