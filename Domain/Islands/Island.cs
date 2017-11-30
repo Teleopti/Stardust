@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public IEnumerable<IPerson> AgentsInIsland()
 		{
-			return _skillSets.SelectMany(x => x.Agents);
+			return _skillSets.SelectMany(x => x.Agents).Where(x => !x.IsExternalAgent);
 		}
 
 		public IEnumerable<Guid> SkillIds()

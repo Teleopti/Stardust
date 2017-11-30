@@ -74,7 +74,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 		[TestCase(TeamBlockType.Individual)]
 		[TestCase(TeamBlockType.Team)]
-		[Ignore("#46845")]
 		public void ShouldNotIncludeExternalStaffInAgentsInIslands(TeamBlockType teamBlockType)
 		{
 			var skill = new Skill().DefaultResolution(60).WithId();
