@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -21,8 +22,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessor));
 
 		public OvertimeRequestProcessor(ICommandDispatcher commandDispatcher,
-			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators, IActivityRepository activityRepository, 
-			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository, 
+			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators, IActivityRepository activityRepository,
+			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository,
 			IOvertimeRequestAvailableSkillsValidator overtimeRequestAvailableSkillsValidator,
 			INow now)
 		{
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				if (overtimeRequestValidationResult.IsValid) continue;
 				return overtimeRequestValidationResult;
 			}
-			return new OvertimeRequestValidationResult {IsValid = true};
+			return new OvertimeRequestValidationResult { IsValid = true };
 		}
 
 		private OvertimeRequestAvailableSkillsValidationResult validateSkills(IPersonRequest personRequest)
@@ -161,12 +162,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			if (overtimeRequestValidationResult.IsValid) return;
 			if (overtimeRequestValidationResult.ShouldDenyIfInValid)
 			{
-				denyRequest(personRequest, overtimeRequestValidationResult.InvalidReason);
+				denyRequest(personRequest, overtimeRequestValidationResult.InvalidReasons.First());
 			}
-			else
-			{
-				personRequest.TrySetMessage(overtimeRequestValidationResult.InvalidReason);
-			}
+			personRequest.TrySetMessage(string.Join(Environment.NewLine,overtimeRequestValidationResult.InvalidReasons));
 		}
 
 		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriod(IPersonRequest personRequest)

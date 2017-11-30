@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return new OvertimeRequestAvailableSkillsValidationResult
 				{
 					IsValid = false,
-					InvalidReason =Resources.NoAvailableSkillForOvertime
+					InvalidReasons = new []{Resources.NoAvailableSkillForOvertime }
 				};
 			}
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return new OvertimeRequestAvailableSkillsValidationResult
 				{
 					IsValid = false,
-					InvalidReason = Resources.PeriodIsOutOfSkillOpenHours
+					InvalidReasons = new[]{Resources.PeriodIsOutOfSkillOpenHours}
 				};
 			}
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return new OvertimeRequestAvailableSkillsValidationResult
 				{
 					IsValid = false,
-					InvalidReason = Resources.NoUnderStaffingSkill
+					InvalidReasons = new[]{Resources.NoUnderStaffingSkill}
 				};
 			}
 

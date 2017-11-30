@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				return new OvertimeRequestValidationResult
 				{
-					InvalidReason = string.Join(System.Environment.NewLine, repsonses.Select(x => x.Message).Distinct()),
+					InvalidReasons = repsonses.Select(x => x.Message).Distinct().ToArray(),
 					IsValid = false,
 					ShouldDenyIfInValid = overtimeRequestOpenPeriod.WorkRuleValidationHandleType ==
 						OvertimeWorkRuleValidationHandleType.Deny

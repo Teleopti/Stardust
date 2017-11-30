@@ -35,18 +35,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				return new OvertimeRequestValidationResult
 				{
-					InvalidReason = string.Format(Resources.OvertimeRequestDenyReasonSiteOpenHourClosed,
+					InvalidReasons = new []{string.Format(Resources.OvertimeRequestDenyReasonSiteOpenHourClosed,
 						requestPeriod,
-						siteOpenHour.TimePeriod)
+						siteOpenHour.TimePeriod)}
 				};
 
 			}
 
 			return new OvertimeRequestValidationResult
 			{
-				InvalidReason = string.Format(Resources.OvertimeRequestDenyReasonOutOfSiteOpenHour,
+				InvalidReasons = new[]{ string.Format(Resources.OvertimeRequestDenyReasonOutOfSiteOpenHour,
 					requestPeriod,
-					siteOpenHour.TimePeriod),
+					siteOpenHour.TimePeriod)}
 			};
 		}
 	}

@@ -43,9 +43,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return new OvertimeRequestValidationResult
 			{
 				IsValid = false,
-				InvalidReason = string.Format(Resources.OvertimeRequestAlreadyHasScheduleInPeriod,
-						TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.StartDateTime, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()),
-						TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.EndDateTime, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()))
+				InvalidReasons = new []{string.Format(Resources.OvertimeRequestAlreadyHasScheduleInPeriod,
+					TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.StartDateTime, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()),
+					TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.EndDateTime, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()))}
 			};
 		}
 	}

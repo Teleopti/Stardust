@@ -6,6 +6,6 @@
 
 		public bool ShouldDenyIfInValid { get; set; } = true;
 
-		public string InvalidReason { get; set; }
+		public string[] InvalidReasons { get; set; }
 	}
 }
