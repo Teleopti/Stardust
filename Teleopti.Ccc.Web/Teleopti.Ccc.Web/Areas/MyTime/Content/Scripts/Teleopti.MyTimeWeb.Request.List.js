@@ -435,7 +435,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 			self.TextSegments(messageInList);
 			self.ListText(textNoBr.length > 50 ? textNoBr.substring(0, 50) + '...' : textNoBr);
-			self.DenyReason(data.DenyReason === undefined ? '' : data.DenyReason.replace("\n", "<br/>"));
+			self.DenyReason(data.DenyReason === undefined ? '' : data.DenyReason.replace(/\n/g, "<br/>"));
 			self.Link(data.Link.href);
 			self.Id(data.Id);
 			self.StatusClass(_classFromStatus(data));
