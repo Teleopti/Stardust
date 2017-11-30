@@ -27,21 +27,24 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeTimeZoneGuard TimeZoneGuard; //this shouldn't effect scheduling at all, but it does currently....
 		public FakeUserTimeZone UserTimeZone; //this shouldn't effect scheduling at all, but it does currently....
 
-		[Ignore("To be fixed #45818 - need more tests later (=choosing best shift when timezones differ)")]
+		[Ignore("To be fixed #45818 - need more tests later (=eg choosing best shift when timezones differ)")]
 		[Test]
-		public void UserTimeZoneShouldNotAffectSchedulingOutcome(
+		public void ShouldBeAbleToScheduleNoMatterTimeZoneSettingsAlsoWhenRequiresSkillIsTrue(
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string userTimeZone,
-			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string agentTimeZone)
+			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string userViewPointTimeZone,
+			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string agentTimeZone,
+			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string skillTimeZone)
 		{
 			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userTimeZone));
+			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById(userViewPointTimeZone));
 			var date = new DateOnly(2017, 9, 7);
-			var activity = new Activity { RequiresSkill = true }.WithId();
-			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var activity = new Activity{RequiresSkill = true}.WithId();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(skillTimeZone)).WithId().IsOpen();
 			var scenario = new Scenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 6, 0, 15), new TimePeriodWithSegment(14, 0, 14, 0, 15), new ShiftCategory("_").WithId()));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone)).WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneDay(date);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone)).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date.AddDays(-1), 1, 1, 1);
-			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, date, agent, skillDays);
 
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, date.ToDateOnlyPeriod());
 
