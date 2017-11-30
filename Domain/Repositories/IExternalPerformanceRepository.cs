@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		IEnumerable<IExternalPerformance> FindAllExternalPerformances();
 		IExternalPerformance FindExternalPerformanceByExternalId(int externalId);
+		int GetExernalPerformanceCount();
 	}
 }

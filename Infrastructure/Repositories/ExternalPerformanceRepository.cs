@@ -1,10 +1,11 @@
 using System.Collections.Generic;
-using System.Linq;
+using log4net;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -22,22 +23,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<IExternalPerformance> FindAllExternalPerformances()
 		{
-			ICollection<IExternalPerformance> result = Session.CreateCriteria(typeof(ExternalPerformance))
-				.Add(Restrictions.Eq("IsDeleted", false))
+			return Session.CreateCriteria(typeof(ExternalPerformance))
 				.AddOrder(Order.Asc("Name"))
 				.List<IExternalPerformance>();
-
-			return result;
 		}
 
 		public IExternalPerformance FindExternalPerformanceByExternalId(int externalId)
 		{
-			var result = Session.CreateCriteria<ExternalPerformance>()
+			return Session.CreateCriteria<ExternalPerformance>()
 				.Add(Restrictions.Eq("ExternalId", externalId))
-				.Add(Restrictions.Eq("IsDeleted", false))
-				.List<IExternalPerformance>()
-				.SingleOrDefault();
-			return result;
+				.UniqueResult<IExternalPerformance>();
+		}
+
+		public int GetExernalPerformanceCount()
+		{
+			return Session.QueryOver<ExternalPerformance>().RowCount();
 		}
 	}
 }

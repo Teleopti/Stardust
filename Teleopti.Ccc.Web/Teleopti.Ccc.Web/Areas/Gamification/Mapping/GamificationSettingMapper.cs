@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 {
 	public class GamificationSettingMapper : IGamificationSettingMapper
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(GamificationSettingMapper));
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
 
 		public GamificationSettingMapper(IExternalPerformanceRepository externalPerformanceRepository)
@@ -69,6 +71,15 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 				SilverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate,
 				GoldToSilverBadgeRate = setting.GoldToSilverBadgeRate
 			};
+
+			var perf = _externalPerformanceRepository.FindExternalPerformanceByExternalId(1);
+			logger.Warn($"[xinfli] Found perf with name {perf.Name}");
+
+			perf = _externalPerformanceRepository.FindExternalPerformanceByExternalId(9);
+			logger.Warn($"[xinfli] perf == null: {perf == null}");
+
+			var count = _externalPerformanceRepository.GetExernalPerformanceCount();
+			logger.Warn($"[xinfli] Total external performance count: {count}");
 
 			var externalPerformances = _externalPerformanceRepository.FindAllExternalPerformances().ToList();
 			if (!externalPerformances.Any()) return vm;
