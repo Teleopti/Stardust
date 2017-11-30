@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 
 		[Test]
-		[Ignore("#46845")]
 		public void ShouldConsiderExternalStaffWhenCreatingIslands()
 		{
 			var period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10);
