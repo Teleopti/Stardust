@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
-					ExcludedStates = loggedOut.AsNullableArray()
+					ExcludedStateIds = loggedOut.AsNullableArray()
 				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				new AgentStateFilter()
 				{
 					TeamIds = teamId.AsArray(),
-					ExcludedStates = loggedOut.AsNullableArray()
+					ExcludedStateIds = loggedOut.AsNullableArray()
 				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				{
 					SiteIds = siteId.AsArray(),
 					TeamIds = teamId.AsArray(),
-					ExcludedStates = loggedOut.AsNullableArray()
+					ExcludedStateIds = loggedOut.AsNullableArray()
 				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1, personId2);
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 					SiteIds = siteId.AsArray(),
 					TeamIds = teamId.AsArray(),
 					SkillIds = phoneId.AsArray(),
-					ExcludedStates = loggedOut.AsNullableArray()
+					ExcludedStateIds = loggedOut.AsNullableArray()
 				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam);
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 					new AgentStateFilter()
 					{
 						SkillIds = phoneId.AsArray(),
-						ExcludedStates = loggedOut.AsNullableArray()
+						ExcludedStateIds = loggedOut.AsNullableArray()
 					}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(expected);
@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
-					ExcludedStates = loggedOut.AsNullableArray()
+					ExcludedStateIds = loggedOut.AsNullableArray()
 				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
-					ExcludedStates = new Guid?[] {null}
+					ExcludedStateIds = new Guid?[] {null}
 				}))
 				.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
-					ExcludedStates = new Guid?[]
+					ExcludedStateIds = new Guid?[]
 					{
 						null,
 						loggedOut

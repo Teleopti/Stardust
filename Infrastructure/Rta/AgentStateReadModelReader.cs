@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					.WithTextFilter(filter.TextFilter);
 			if (filter.InAlarm)
 				builder.InAlarm(_now);
-			if (filter.ExcludedStates.EmptyIfNull().Any())
-				builder.Exclude(filter.ExcludedStates);
+			if (filter.ExcludedStateIds.EmptyIfNull().Any())
+				builder.Exclude(filter.ExcludedStateIds);
 			if (!filter.OrderBy.IsNullOrEmpty())
 				builder.WithSorting(builder.SortingFor(filter.OrderBy), filter.Direction);
 

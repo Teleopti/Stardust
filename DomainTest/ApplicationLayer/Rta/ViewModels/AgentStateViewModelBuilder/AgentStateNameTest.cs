@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			assert(Target.Build(p).States);
 			p.InAlarm = true;
 			assert(Target.Build(p).States);
-			p.ExcludedStates = new Guid?[] {Guid.NewGuid()};
+			p.ExcludedStateIds = new Guid?[] {Guid.NewGuid()};
 			assert(Target.Build(p).States);
 		}
 

@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<Guid> TeamIds { get; set; }// include
 
 		public IEnumerable<Guid> SkillIds { get; set; } // filter
-		public IEnumerable<Guid?> ExcludedStates { get; set; } // filter
+		public IEnumerable<Guid?> ExcludedStateIds { get; set; } // filter
 		public string TextFilter { get; set; } // filter
 		
 		public bool InAlarm { get; set; } // filter and order

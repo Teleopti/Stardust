@@ -93,7 +93,7 @@ INSERT INTO [ReadModel].[AgentState]
 					assert(Target.Read(p));
 					p.InAlarm = true;
 					assert(Target.Read(p));
-					p.ExcludedStates = new Guid?[]{ Guid.NewGuid() };
+					p.ExcludedStateIds = new Guid?[]{ Guid.NewGuid() };
 					assert(Target.Read(p));
 				});
 			});

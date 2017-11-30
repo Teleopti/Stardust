@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				TeamIds = Enumerable.Empty<Guid>(),
 				SiteIds = Enumerable.Empty<Guid>(),
 				SkillIds = Enumerable.Empty<Guid>(),
-				ExcludedStates = Enumerable.Empty<Guid?>()
+				ExcludedStateIds = Enumerable.Empty<Guid?>()
 			});
 
 			result.Single().PersonId.Should().Be(personId);

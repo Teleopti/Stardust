@@ -170,8 +170,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				result = result.Concat(includeTeams(filter.TeamIds));
 			result = result.Distinct();
 
-			if (filter.ExcludedStates.EmptyIfNull().Any())
-				result = filterStateGroups(result, filter.ExcludedStates);
+			if (filter.ExcludedStateIds.EmptyIfNull().Any())
+				result = filterStateGroups(result, filter.ExcludedStateIds);
 			if (filter.SkillIds.EmptyIfNull().Any())
 				result = filterSkills(result, filter.SkillIds);
 
