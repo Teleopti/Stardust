@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
+		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
 		[Test]
 		public void ShouldConsiderExternalStaffWhenCreatingIslands()
@@ -47,9 +49,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(1);
 		}
 
-		[Test]
+		[TestCase(TeamBlockType.Individual)]
+		[TestCase(TeamBlockType.Team)]
 		[Ignore("#46845 to be fixed")]
-		public void ShouldNotOptimizeExternalStaff()
+		public void ShouldNotOptimizeExternalStaff(TeamBlockType teamBlockType)
 		{
 			var skill1 = new Skill().DefaultResolution(60).WithId();
 			var skill2 = new Skill().DefaultResolution(60).WithId();
@@ -61,11 +64,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			SkillRepository.Has(skill1);
 			SkillRepository.Has(skill2);
 			SkillCombinationResourceReader.Has(1, period, skill1, skill2);
+			OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
+			{
+				Extra = teamBlockType.CreateExtraPreferences()
+			});
 
 			Target.Execute(new IntradayOptimizationCommand { Period = period.ToDateOnlyPeriod(TimeZoneInfo.Utc) });
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsToOptimize.Count()
-				.Should().Be.EqualTo(2);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsToOptimize
+				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
 		}
 	}
 }
