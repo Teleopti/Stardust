@@ -447,6 +447,11 @@
             var mmnt = null;
             if (typeof value === "string") {
                 mmnt = moment(value, format);
+
+                //If the input string is empty,
+                //change default start date 01/01/0000 to 01/01/0001 to be consistent with C#.
+                if(value.length === 0)
+                    mmnt = moment(value, format).add(1, 'years');
             }
             if (!mmnt || !mmnt.isValid()) {
                 mmnt = moment(value);

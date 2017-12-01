@@ -148,10 +148,14 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, callba
 	};
 
 	function loadAbsenceAccount(forceAccountUpdate) {
-		if (!self.PersonalAccountPermission || self.AbsenceId() == undefined || self.AbsenceId() == null)
+		if (!self.PersonalAccountPermission || self.AbsenceId() == undefined || self.AbsenceId() == null || self.DateFrom().isAfter(self.DateTo()))
 			return;
+
 		var absenceChanged = self.AbsenceId() != self.PreviousAbsenceId();
 		var dateToChanged = !self.DateTo().isSame(self.PreviousDateTo().format("YYYY-MM-DD HH:mm:ss"));
+
+		//We will get problem when absence period is overlapping on two absence account periods.
+		//Then we need decide which absence account should be shown? Or show both like WFM/Requests?
 		var isOutOfPeriodRange = self.DateTo().isBefore(self.AbsenceAccountPeriodStart()) || self.DateTo().isAfter(self.AbsenceAccountPeriodEnd());
 		if (forceAccountUpdate || absenceChanged || (dateToChanged && isOutOfPeriodRange)) {
 

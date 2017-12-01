@@ -87,8 +87,8 @@
 		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 
 		vm.Subject('subject');
-		vm.DateFrom('2017-11-22');
-		vm.DateTo('2017-11-21');
+		vm.DateFrom(moment('2017-11-22'));
+		vm.DateTo(moment('2017-11-21'));
 		vm.TimeFrom('08:00');
 		vm.TimeTo('08:01');
 
@@ -102,8 +102,8 @@
 		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 
 		vm.Subject('subject');
-		vm.DateFrom('2017-11-22');
-		vm.DateTo('2017-11-21');
+		vm.DateFrom(moment('2017-11-22'));
+		vm.DateTo(moment('2017-11-21'));
 		vm.TimeFrom('08:00');
 		vm.TimeTo('08:01');
 
@@ -117,8 +117,8 @@
 		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 
 		vm.Subject('subject');
-		vm.DateFrom('2017-11-22');
-		vm.DateTo('2017-11-22');
+		vm.DateFrom(moment('2017-11-22'));
+		vm.DateTo(moment('2017-11-22'));
 		vm.TimeFrom('08:00');
 		vm.TimeTo('08:00');
 
@@ -132,8 +132,8 @@
 		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 
 		vm.Subject('subject');
-		vm.DateFrom('2017-11-22');
-		vm.DateTo('2017-11-22');
+		vm.DateFrom(moment('2017-11-22'));
+		vm.DateTo(moment('2017-11-22'));
 		vm.TimeFrom('08:00');
 		vm.TimeTo('08:01');
 
@@ -147,8 +147,8 @@
 		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 
 		vm.Subject('subject');
-		vm.DateFrom('2017-11-22');
-		vm.DateTo('2017-11-22');
+		vm.DateFrom(moment('2017-11-22'));
+		vm.DateTo(moment('2017-11-22'));
 		vm.TimeFrom('08:00');
 		vm.TimeTo('08:00');
 
@@ -162,8 +162,8 @@
 		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 
 		vm.Subject('subject');
-		vm.DateFrom('2017-11-22');
-		vm.DateTo('2017-11-22');
+		vm.DateFrom(moment('2017-11-22'));
+		vm.DateTo(moment('2017-11-22'));
 		vm.TimeFrom('08:00');
 		vm.TimeTo('08:01');
 
@@ -177,8 +177,8 @@
 		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 
 		vm.Subject('subject');
-		vm.DateFrom('2017-11-22');
-		vm.DateTo('2017-11-22');
+		vm.DateFrom(moment('2017-11-22'));
+		vm.DateTo(moment('2017-11-22'));
 		vm.TimeFrom('12:00 AM');
 		vm.TimeTo('11:59 PM');
 
@@ -186,5 +186,69 @@
 
 		equal(vm.ShowError(), false);
 		equal(vm.ErrorMessage(), '');
+	});
+
+	test("should trigger absence account reload when absence is change", function () {
+		var ajaxTemp = Teleopti.MyTimeWeb.Ajax;
+
+		var absenceAccountReloaded = false;
+		Teleopti.MyTimeWeb.Ajax = function(){
+			return {
+				Ajax: function(option){
+					if (option.url == 'Requests/FetchAbsenceAccount'){
+						absenceAccountReloaded = true;
+					}
+				}
+			}
+		}
+
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel(null, null, null, {
+			defaultFulldayStartTime: moment('2017-11-22').add(8, 'hours'),
+			defaultFulldayEndTime: moment('2017-11-22').add(17, 'hours')
+		});
+
+		vm.onLoadComplete();
+
+		vm.PreviousAbsenceId('oldId');
+		vm.AbsenceId('newId');
+
+		vm.Subject('subject');
+		vm.DateFrom(moment('2017-11-22'));
+		vm.DateTo(moment('2017-11-22'));
+		vm.IsFullDay(true);
+
+		equal(absenceAccountReloaded, true);
+
+		Teleopti.MyTimeWeb.Ajax = ajaxTemp;
+	});
+
+	test("should not trigger absence account reload when date to is before date from", function () {
+		var ajaxTemp = Teleopti.MyTimeWeb.Ajax;
+
+		var absenceAccountReloaded = false;
+		Teleopti.MyTimeWeb.Ajax = function(){
+			return {
+				Ajax: function(option){
+					if (option.url == 'Requests/FetchAbsenceAccount')
+						absenceAccountReloaded = true;
+				}
+			}
+		}
+
+		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel(null, null, null, {
+			defaultFulldayStartTime: moment('2017-11-22').add(8, 'hours'),
+			defaultFulldayEndTime: moment('2017-11-22').add(17, 'hours')
+		});
+
+		vm.onLoadComplete();
+
+		vm.Subject('subject');
+		vm.DateFrom(moment('2017-11-22'));
+		vm.DateTo(moment('2017-11-21'));
+		vm.IsFullDay(true);
+
+		equal(absenceAccountReloaded, false);
+
+		Teleopti.MyTimeWeb.Ajax = ajaxTemp;
 	});
 });
