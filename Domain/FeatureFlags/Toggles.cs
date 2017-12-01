@@ -21,6 +21,7 @@
 		RTA_RtaTracer_45597,
 		RTA_MonitorAgentsWithLongTimeInState_46475,
 		RTA_MobileFriendlyCheckboxes_46758,
+		RTA_ViewHistoricalAhderenceForRecentShifts_46786,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
