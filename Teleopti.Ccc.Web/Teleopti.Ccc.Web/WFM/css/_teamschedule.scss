@@ -366,18 +366,19 @@ wfm-multiple-search-input {
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		height: 100%;
-	  
-	  	.timezone-picker{
-		  padding-top: 5px;
+
+		.timezone-picker {
+			padding-top: 5px;
 		}
 	}
 
 	.rightside-part {
 		display: flex;
-		flex-wrap: nowrap;
+		flex-wrap: wrap;
 		flex-direction: row;
 		justify-content: flex-start;
-	  	align-self: auto;
+		align-self: auto;
+		min-width: 135px;
 	}
 
 	timezone-picker {

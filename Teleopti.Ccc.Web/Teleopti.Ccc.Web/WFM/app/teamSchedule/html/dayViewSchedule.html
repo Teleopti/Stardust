@@ -85,18 +85,18 @@
 		</div>
 
 		<div class="rightside-part">
-			<span class="icon-container inline-block cursor-pointer"
+			<div class="context-menu card-context"
 				  ng-if="vm.toggles.WfmTeamSchedule_ExportSchedulesToExcel_45795" ng-click="vm.openExportPanel()">
 				<i class="mdi mdi-file-excel">
 					<md-tooltip>
 						{{'ExportSchedule'|translate}}
 					</md-tooltip>
 				</i>
-			</span>
+			</div>
 
-			<span class="icon-container inline-block cursor-pointer" ng-click="vm.openSettingsPanel()">
+			<div class="context-menu card-context" ng-click="vm.openSettingsPanel()">
 				<i class="mdi mdi-settings"></i>
-			</span>
+			</div>
 
 			<teamschedule-command-menu class="teamschedule-command"
 									   validate-warning-enabled="vm.currentSettings.validateWarningEnabled"
