@@ -214,7 +214,7 @@ function global:DropDatabase () {
 
 		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
     
-		# Check if Databases exists
+		# Check if Databases exists on Ground
 		$appDbExists = checkIfDbExists $AppDB
 		$martDbExists = checkIfDbExists $MartDB
 		$aggDbExists = checkIfDbExists $global:AggDB
@@ -235,12 +235,11 @@ function global:DropDatabase () {
 		$Query_DropAzureDB_Mart = "DROP DATABASE $MartDB"
 		$Query_DropAzureDB_App = "DROP DATABASE $AppDB"
 
-		# Check if Database exists
-		$query = "SELECT COUNT(*) FROM sys.sysdatabases where name='$AppDB'"
-		$count = RunAndRetryScalar $ConnectionString $query
-		$count = $count[$count.Count - 1]
-
-        if ($count -gt 0) {
+		# Check if Databases exists on Azure
+		$appDbExists = checkIfDbExists $AppDB
+		$martDbExists = checkIfDbExists $MartDB
+		
+		if ($appDbExists -or $martDbExists -gt 0) {
 
 			Write-Output "$(Get-Date -f $timeStampFormat) - Dropping Database: $AppDB on $SQLAzure"
 			RunAndRetryNonQuery $ConnectionString $Query_DropAzureDB_App        
