@@ -63,7 +63,7 @@ Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = true
 Wfm_Requests_HandleFourteenDaysFast_43390 = true
 Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = true
 
-Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = RC
+Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = true
 
 
 Wfm_People_PrepareForRelease_39040 = RC #Was not ready enough
