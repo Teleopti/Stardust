@@ -58,14 +58,14 @@
                     return item.Name;
                 }
             );
-            setSaveableState();
+            vm.canSave = true;
             unselectAllSkills();
         };
 
         vm.copyGroupClicked = function(skillGroup, ev) {
             ev.stopPropagation();
             var clone = _.cloneDeep(skillGroup);
-            clone.Name = skillGroup.Name + '-' + getRandom();
+            clone.Name = $translate.instant('CopyOf') + ' ' + skillGroup.Name;
             clone.Id = skillGroup.Id + '-' + getRandom();
             vm.skillGroups.push(clone);
             vm.skillGroups = _.sortBy(vm.skillGroups, function(item) {
@@ -133,7 +133,7 @@
                     return item.Name;
                 }
             );
-            setSaveableState();
+            vm.canSave = true;
             unselectAllSkills();
         };
 

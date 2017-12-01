@@ -26,7 +26,8 @@
 						<h2>{{'AllSkillGroups'|translate}}</h2>
 					</div>
 					<div class="con-flex">
-						<button type="button" tabindex=0 class="context-menu card-context notice-info pull-right notice-success" id="create-skill-group-button" ng-click="vm.createSkillGroup($event);">
+						<button type="button" tabindex=0 class="context-menu card-context notice-info pull-right notice-success" id="create-skill-group-button"
+						 ng-click="vm.createSkillGroup($event);">
 							<i class="mdi mdi-plus"></i>
 							<md-tooltip>{{'CreateNewSkillGroup'|translate}}</md-tooltip>
 						</button>
@@ -44,9 +45,21 @@
 								</span>
 								<div class="wfm-leave-behind wfm-leave-behind-3">
 									<span>
-										<i class="mdi mdi-pencil" ng-click="vm.editNameClicked(skillGroup, $event)"></i>
-										<i class="mdi mdi-content-copy" ng-click="vm.copyGroupClicked(skillGroup, $event)"></i>
-										<i class="mdi mdi-delete" ng-click="vm.selectedSkillGroup = skillGroup; vm.deleteConfirmation=true; $event.stopPropagation();"></i>
+										<i class="mdi mdi-content-copy" aria-label="Copy" ng-click="vm.copyGroupClicked(skillGroup, $event)">
+											<md-tooltip>
+												{{'Copy' | translate}}
+											</md-tooltip>
+										</i>
+										<i class="mdi mdi-pencil" aria-label="Edit" ng-click="vm.editNameClicked(skillGroup, $event)">
+											<md-tooltip>
+												{{'Edit' | translate}}
+											</md-tooltip>
+										</i>
+										<i class="mdi mdi-delete" aria-label="Delete" ng-click="vm.selectedSkillGroup = skillGroup; vm.deleteConfirmation=true; $event.stopPropagation();">
+											<md-tooltip ng-hide="role.IsMyRole">
+												{{'Delete' | translate}}
+											</md-tooltip>
+										</i>
 									</span>
 								</div>
 							</li>
@@ -173,16 +186,16 @@
 							</div>
 							<div class="con-row">
 								<div class="con-flex">
-									<input type="text" autofocus="true" placeholder="{{'Name'|translate}}" ng-model="vm.selectedSkillGroup.Name" maxlength="50" ng-maxlength="50"
-									 id="skillGroupNameBox" ng-keypress="vm.nameBoxKeyPress($event)"/>
+									<input type="text" autofocus="true" placeholder="{{'Name'|translate}}" ng-model="vm.selectedSkillGroup.Name" maxlength="50"
+									 ng-maxlength="50" id="skillGroupNameBox" ng-keypress="vm.nameBoxKeyPress($event)" />
 								</div>
 							</div>
 						</div>
 						<div class="modal-actions">
 							<aside>
-								<button type="button" id="confirmEditNameButton" ng-click="vm.saveNameEdit($event)"
-								class="wfm-btn wfm-btn-invis-primary">{{'OK'|translate}}</button>
-								<button type="button" id="cancelEditNameButton" ng-click="vm.editGroupNameBox=false; vm.selectedSkillGroup.Name = vm.oldName; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+								<button type="button" id="confirmEditNameButton" ng-click="vm.saveNameEdit($event)" class="wfm-btn wfm-btn-invis-primary">{{'OK'|translate}}</button>
+								<button type="button" id="cancelEditNameButton" ng-click="vm.editGroupNameBox=false; vm.selectedSkillGroup.Name = vm.oldName; $event.stopPropagation();"
+								 class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
 							</aside>
 						</div>
 					</div>
