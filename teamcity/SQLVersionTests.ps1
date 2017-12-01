@@ -194,18 +194,32 @@ function global:SettingsAndPreparation {
        	}
 }
 
+function checkIfDbExists {
+    
+    Param (
+        $DB 
+    )
+
+    $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"    
+    
+    $query = "SELECT COUNT(*) FROM sys.sysdatabases where name='$DB'"
+    $count = RunAndRetryScalar $ConnectionString $query
+    $count = $count[$count.Count - 1]
+    return $count
+}
+
 function global:DropDatabase () {
    
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
 		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
     
-		# Check if Database exists
-		$query = "SELECT COUNT(*) FROM sys.sysdatabases where name='$AppDB'"
-		$count = RunAndRetryScalar $ConnectionString $query
-		$count = $count[$count.Count - 1]
+		# Check if Databases exists
+		$appDbExists = checkIfDbExists $AppDB
+		$martDbExists = checkIfDbExists $MartDB
+		$aggDbExists = checkIfDbExists $global:AggDB
 
-        if ($count -gt 0) {
+        if ($appDbExists -or $martDbExists -or $aggDbExists -gt 0) {
 
 			$global:DropDbCmd = "ALTER DATABASE [$AppDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$AppDB];ALTER DATABASE [$MartDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$MartDB];ALTER DATABASE [$global:AggDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$global:AggDB]"
 
