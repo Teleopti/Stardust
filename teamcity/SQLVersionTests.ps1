@@ -56,6 +56,7 @@ task default -depends InitSetup,`
 task InitSetup -description "Checking SQL Version & Edition" {
 	
 	Write-Output "##teamcity[blockOpened name='<InitSetup>']"
+	CleanUpLog
     SettingsAndPreparation
 	Write-Output "##teamcity[blockClosed name='<InitSetup>']"
 }
@@ -105,8 +106,7 @@ task TeardownAndCleanup -depends InitSetup, TeardownAndPrepare, CreateDatabase, 
     DropDatabase
     DropPatchLogin
     DropApplicationLogin
-    CleanUpLog
-	Write-Output "##teamcity[blockClosed name='<TeardownAndCleanup>']"
+    Write-Output "##teamcity[blockClosed name='<TeardownAndCleanup>']"
 }
 
 function global:CheckEditionAndVersion () 
@@ -115,19 +115,15 @@ function global:CheckEditionAndVersion ()
     $query = ""
 
     )
-    $ConnectionString="Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-
+    
+	$ConnectionString="Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
     Write-Output "$(Get-Date -f $timeStampFormat) - Checking SQL Version & Edition on [$global:SQLServerInstance]"		
-	
-    $CheckVersion = ExecuteSQLQuery $ConnectionString $query
-
-    $global:SQLVersion = $CheckVersion.Column1
-
+	$CheckVersion = ExecuteSQLQuery $ConnectionString $query
+	$global:SQLVersion = $CheckVersion.Column1
     $global:SQLVersionMajor = $global:sqlversion.split(".")[0]
     $global:SQLVersionMinor = $global:sqlversion.split(".")[1]
     $global:SQLVersion = $global:SQLVersionMajor + "." + $global:SQLVersionMinor
-    
-    $global:SQLEdition = $CheckVersion.Column2
+	$global:SQLEdition = $CheckVersion.Column2
 
     return $global:SQLVersion, $global:SQLEdition | out-null
 }
@@ -139,7 +135,8 @@ function global:SettingsAndPreparation {
         $global:AdminSqlLogin = $AzureAdminSqlLogin
 	    $global:AdminSqlPwd = $AzureAdminSqlPwd
     }
-
+	
+	#Checking SQL edition and product version
     $query = @("SELECT SERVERPROPERTY('productversion'), SERVERPROPERTY ('edition')")
     CheckEditionandVersion -query $query
     
@@ -157,85 +154,84 @@ function global:SettingsAndPreparation {
     # Check that SQL Edition is correct
     if (!($global:SQLEdition -eq $TestEdition)) { 
     
-    Write-Output "Expected SQLEdition: [$TestEdition], but was: [$global:SQLEdition]" 
-    exit 1
+		Write-Output "Expected SQLEdition: [$TestEdition], but was: [$global:SQLEdition]" 
+		exit 1
     }
             
         if ($global:SQLEdition -eq $SQLAzure) { 
     
-    
-        $global:InstallAndPatchSqlLogin = $AzureAdminSqlLogin
-        $global:InstallAndPatchSqlPwd = $AzureAdminSqlPwd
-        $global:AggDB = "$DbNamePrefix"+"_MartDB"
-
-        }
-
+			$global:InstallAndPatchSqlLogin = $AzureAdminSqlLogin
+			$global:InstallAndPatchSqlPwd = $AzureAdminSqlPwd
+			$global:AggDB = "$DbNamePrefix"+"_MartDB"
+		}
+		
         elseif (!($SQLEdition -eq $SQLAzure)) {
-
-        $global:Query_CreateInstallAndPatchSqlLoginCommand = "CREATE LOGIN [$global:InstallAndPatchSqlLogin] WITH PASSWORD=N'$InstallAndPatchSqlPwd', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[english], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
-        $global:AggDB = "$DbNamePrefix"+"_AggDB"
-        $global:Query_DropDatabasesCommand = "ALTER DATABASE [$AppDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$AppDB];ALTER DATABASE [$MartDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$MartDB];ALTER DATABASE [$global:AggDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$global:AggDB]"
-        $global:Query_RevokeServerRolesCommand = "ALTER SERVER ROLE [dbcreator] DROP MEMBER [$global:InstallAndPatchSqlLogin];ALTER SERVER ROLE [securityadmin] DROP MEMBER [$global:InstallAndPatchSqlLogin]"
-        $global:Query_GrantServerRolesCommand = "ALTER SERVER ROLE [dbcreator] ADD MEMBER [$global:InstallAndPatchSqlLogin];ALTER SERVER ROLE [securityadmin] ADD MEMBER [$global:InstallAndPatchSqlLogin]"
+		
+			#SQL Setup Queries on Ground
+			$global:CreateGroundLoginCmd = "CREATE LOGIN [$global:InstallAndPatchSqlLogin] WITH PASSWORD=N'$InstallAndPatchSqlPwd', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[english], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
+			$global:AggDB = "$DbNamePrefix"+"_AggDB"
         
+			$global:DropDbCmd = "ALTER DATABASE [$AppDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$AppDB];ALTER DATABASE [$MartDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$MartDB];ALTER DATABASE [$global:AggDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$global:AggDB]"
+			$global:RevokeSrvRoleCmd = "ALTER SERVER ROLE [dbcreator] DROP MEMBER [$global:InstallAndPatchSqlLogin];ALTER SERVER ROLE [securityadmin] DROP MEMBER [$global:InstallAndPatchSqlLogin]"
+			$global:GrantSrvRoleCmd = "ALTER SERVER ROLE [dbcreator] ADD MEMBER [$global:InstallAndPatchSqlLogin];ALTER SERVER ROLE [securityadmin] ADD MEMBER [$global:InstallAndPatchSqlLogin]"
         }
-
+		
+		#Setting DB Manager & Teleopti.Support.Security.exe parameters
         $global:DBManagerString = "-S$global:SQLServerInstance -U$global:InstallAndPatchSqlLogin -P$global:InstallAndPatchSqlPwd -T -L$global:ApplicationDbLogin`:$global:ApplicationDbPwd"
         $global:SecurityExeString = "-DS$global:SQLServerInstance -DU$global:InstallAndPatchSqlLogin -DP$global:InstallAndPatchSqlPwd"
         
         #Check that SQL version is correct
         if (!($TestMajorMinor -eq $global:SQLVersion)) { 
     
-        Write-Output "Expected SQL Version: [$global:TestMajorMinor], but was: [$global:SQLVersion]" 
-        exit 1
+			Write-Output "Expected SQL Version: [$global:TestMajorMinor], but was: [$global:SQLVersion]" 
+			exit 1
         }
 
         elseif ($global:TestMajorMinor -eq $SQL2008R2) {
 
-        $global:Query_GrantServerRolesCommand = "EXEC master..sp_addsrvrolemember @loginame = N'$global:InstallAndPatchSqlLogin', @rolename = N'dbcreator';EXEC master..sp_addsrvrolemember @loginame = N'$global:InstallAndPatchSqlLogin', @rolename = N'securityadmin'"
-        $global:Query_RevokeServerRolesCommand = "EXEC master..sp_dropsrvrolemember @loginame = N'$global:InstallAndPatchSqlLogin', @rolename = N'dbcreator';EXEC master..sp_dropsrvrolemember @loginame = N'$global:InstallAndPatchSqlLogin', @rolename = N'securityadmin'"
-       	
-        }
+			$global:GrantSrvRoleCmd = "EXEC master..sp_addsrvrolemember @loginame = N'$global:InstallAndPatchSqlLogin', @rolename = N'dbcreator';EXEC master..sp_addsrvrolemember @loginame = N'$global:InstallAndPatchSqlLogin', @rolename = N'securityadmin'"
+			$global:RevokeSrvRoleCmd = "EXEC master..sp_dropsrvrolemember @loginame = N'$global:InstallAndPatchSqlLogin', @rolename = N'dbcreator';EXEC master..sp_dropsrvrolemember @loginame = N'$global:InstallAndPatchSqlLogin', @rolename = N'securityadmin'"
+       	}
 }
 
 function global:DropDatabase () {
    
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
-    $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
+		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
     
-    # Check if Database exists
-    $query = "SELECT COUNT(*) FROM sys.sysdatabases where name='$AppDB'"
-    $count = RunAndRetryScalar $ConnectionString $query
-    $count = $count[$count.Count - 1]
+		# Check if Database exists
+		$query = "SELECT COUNT(*) FROM sys.sysdatabases where name='$AppDB'"
+		$count = RunAndRetryScalar $ConnectionString $query
+		$count = $count[$count.Count - 1]
 
         if ($count -gt 0) {
 
-        $global:Query_DropDatabasesCommand = "ALTER DATABASE [$AppDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$AppDB];ALTER DATABASE [$MartDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$MartDB];ALTER DATABASE [$global:AggDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$global:AggDB]"
+			$global:DropDbCmd = "ALTER DATABASE [$AppDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$AppDB];ALTER DATABASE [$MartDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$MartDB];ALTER DATABASE [$global:AggDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$global:AggDB]"
 
-        Write-OutPut "$(Get-Date -f $timeStampFormat) - Dropping Databases: [$AppDB] & [$MartDB] & [$global:AggDB] on $global:SQLServerInstance"
-        RunAndRetryNonQuery $ConnectionString $global:Query_DropDatabasesCommand
+			Write-OutPut "$(Get-Date -f $timeStampFormat) - Dropping Databases: [$AppDB] & [$MartDB] & [$global:AggDB] on $global:SQLServerInstance"
+			RunAndRetryNonQuery $ConnectionString $global:DropDbCmd
 
         } 
     }
 
     elseif ($global:SQLEdition -eq $SQLAzure) {
 
-    $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-    $Query_DropAzureDB_Mart = "DROP DATABASE $MartDB"
-    $Query_DropAzureDB_App = "DROP DATABASE $AppDB"
+		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
+		$Query_DropAzureDB_Mart = "DROP DATABASE $MartDB"
+		$Query_DropAzureDB_App = "DROP DATABASE $AppDB"
 
-    # Check if Database exists
-    $query = "SELECT COUNT(*) FROM sys.sysdatabases where name='$AppDB'"
-    $count = RunAndRetryScalar $ConnectionString $query
-    $count = $count[$count.Count - 1]
+		# Check if Database exists
+		$query = "SELECT COUNT(*) FROM sys.sysdatabases where name='$AppDB'"
+		$count = RunAndRetryScalar $ConnectionString $query
+		$count = $count[$count.Count - 1]
 
         if ($count -gt 0) {
 
-        Write-Output "$(Get-Date -f $timeStampFormat) - Dropping Database: $AppDB on $SQLAzure"
-        RunAndRetryNonQuery $ConnectionString $Query_DropAzureDB_App        
-        Write-OutPut "$(Get-Date -f $timeStampFormat) - Dropping Database: $MartDB on $SQLAzure"
-        RunAndRetryNonQuery $ConnectionString $Query_DropAzureDB_Mart
+			Write-Output "$(Get-Date -f $timeStampFormat) - Dropping Database: $AppDB on $SQLAzure"
+			RunAndRetryNonQuery $ConnectionString $Query_DropAzureDB_App        
+			Write-OutPut "$(Get-Date -f $timeStampFormat) - Dropping Database: $MartDB on $SQLAzure"
+			RunAndRetryNonQuery $ConnectionString $Query_DropAzureDB_Mart
 
         } 
     }
@@ -245,25 +241,23 @@ function global:CreateInstallAndPatchSqlLoginCommandTarget () {
 
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
-    $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-    $query_droplogin = "$global:DropInstallAndPatchSqlLoginCommand"
-    $query_createlogin = "$global:Query_CreateInstallAndPatchSqlLoginCommand"
+		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
+		$query_droplogin = "$global:DropInstallAndPatchSqlLoginCommand"
+		$query_createlogin = "$global:CreateGroundLoginCmd"
 
-    $Login = Test-SQLLogin -SqlLogin "$global:InstallAndPatchSqlLogin"
+		$Login = Test-SQLLogin -SqlLogin "$global:InstallAndPatchSqlLogin"
 
-        if ($Login) {
+		if ($Login) {
        
-        Write-Output "$(Get-Date -f $timeStampFormat) - Dropping login: [$global:InstallAndPatchSqlLogin] on [$global:SQLServerInstance]"
-        RunAndRetryNonQuery $ConnectionString $query_droplogin
-           
+			Write-Output "$(Get-Date -f $timeStampFormat) - Dropping login: [$global:InstallAndPatchSqlLogin] on [$global:SQLServerInstance]"
+			RunAndRetryNonQuery $ConnectionString $query_droplogin
         }
 
         else {
             
-        Write-Output "$(Get-Date -f $timeStampFormat) - Create login: [$global:InstallAndPatchSqlLogin] on [$global:SQLServerInstance]"
-        RunAndRetryNonQuery $ConnectionString $query_createlogin
-
-        }
+			Write-Output "$(Get-Date -f $timeStampFormat) - Create login: [$global:InstallAndPatchSqlLogin] on [$global:SQLServerInstance]"
+			RunAndRetryNonQuery $ConnectionString $query_createlogin
+		}
 
     }
 }
@@ -296,11 +290,11 @@ function global:GrantServerRoles () {
 
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
-    $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-    $query = "$global:Query_GrantServerRolesCommand"
+		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
+		$query = "$global:GrantSrvRoleCmd"
 
-    Write-Output "$(Get-Date -f $timeStampFormat) - Adding: [$global:InstallAndPatchSqlLogin] as Admin on: [$global:SQLServerInstance]"
-    RunAndRetryNonQuery $ConnectionString $query
+		Write-Output "$(Get-Date -f $timeStampFormat) - Adding: [$global:InstallAndPatchSqlLogin] as Admin on: [$global:SQLServerInstance]"
+		RunAndRetryNonQuery $ConnectionString $query
 
     }
 }
@@ -327,11 +321,11 @@ function global:RevokeServerRoles () {
 
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
-    $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-    $query = "$global:Query_RevokeServerRolesCommand"
+		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=master;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
+		$query = "$global:RevokeSrvRoleCmd"
 
-    Write-Output "$(Get-Date -f $timeStampFormat) - Revoking: [$global:InstallAndPatchSqlLogin] as Admin on: [$global:SQLServerInstance]"
-    RunAndRetryNonQuery $ConnectionString $query
+		Write-Output "$(Get-Date -f $timeStampFormat) - Revoking: [$global:InstallAndPatchSqlLogin] as Admin on: [$global:SQLServerInstance]"
+		RunAndRetryNonQuery $ConnectionString $query
 
     }
 }
@@ -340,17 +334,17 @@ function global:PatchDatabaseWithDboOnly () {
 
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
-    $Params = "$global:DBManagerString -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
-    $Prms = $Params.Split(" ")
-    & "$DbManagerExe" $Prms
+		$Params = "$global:DBManagerString -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
+		$Prms = $Params.Split(" ")
+		& "$DbManagerExe" $Prms
        
-    $Params = "$global:DBManagerString -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
-    $Prms = $Params.Split(" ")
-    & "$DbManagerExe" $Prms
+		$Params = "$global:DBManagerString -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
+		$Prms = $Params.Split(" ")
+		& "$DbManagerExe" $Prms
         
-    $Params = "$global:DBManagerString -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
-    $Prms = $Params.Split(" ")
-    & "$DbManagerExe" $Prms
+		$Params = "$global:DBManagerString -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
+		$Prms = $Params.Split(" ")
+		& "$DbManagerExe" $Prms
     }
 }
 
@@ -365,17 +359,17 @@ function global:ScriptedTestsRunOnAllDBs () {
     
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
-    $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$MartDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-    $query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql"
+		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$MartDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
+		$query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql"
     
-    Write-Output "$(Get-Date -f $timeStampFormat) - Running script: [PK-namingStandard.sql] on [$MartDB]" 
-    RunAndRetryNonQuery $ConnectionString $query
+		Write-Output "$(Get-Date -f $timeStampFormat) - Running script: [PK-namingStandard.sql] on [$MartDB]" 
+		RunAndRetryNonQuery $ConnectionString $query
 
-    $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$AppDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-    $query = Get-Content "$WorkingDirectory\..\Database\Tools\NoHeapsCheck.sql"
+		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$AppDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
+		$query = Get-Content "$WorkingDirectory\..\Database\Tools\NoHeapsCheck.sql"
     
-    Write-Output "$(Get-Date -f $timeStampFormat) - Running script: [NoHeapsCheck.sql] on [$AppDB]"
-    RunAndRetryNonQuery $ConnectionString $query
+		Write-Output "$(Get-Date -f $timeStampFormat) - Running script: [NoHeapsCheck.sql] on [$AppDB]"
+		RunAndRetryNonQuery $ConnectionString $query
 
     }
 }
