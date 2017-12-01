@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html ng-app="wfm" lang="en">
 <head lang="en">
 	<meta charset="UTF-8">
@@ -10,7 +10,7 @@
 	<link id="themeModules" rel="stylesheet" href="">
 	<link id="themeStyle" rel="stylesheet" href="">
 	<style>
-		.loader{width:75px;height:75px;margin:5% auto 0;border:6px solid transparent;border-top:6px solid #09f;animation-name:spin;animation-duration:1s;animation-iteration-count:infinite;border-radius:50%;transform:rotate(0);overflow:hidden}@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}.backdrop{position:fixed;z-index:999999;left:0;right:0;bottom:0;top:0;background:#fff}
+	.loader{width:75px;height:75px;margin:5% auto 0;border:6px solid transparent;border-top:6px solid #09f;animation-name:spin;animation-duration:1s;animation-iteration-count:infinite;border-radius:50%;transform:rotate(0);overflow:hidden}@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}.backdrop{position:fixed;z-index:999999;left:0;right:0;bottom:0;top:0;background:#fff}
 	</style>
 </head>
 <body ng-show="isAuthenticated" ng-cloak ng-controller="MainController as main">
@@ -35,9 +35,9 @@
 						{{'MainScreen' | translate}}
 					</md-tooltip>
 				</b>
-		</h2>
-		<div ng-controller="BusinessUnitsController as businessunit" ng-cloak class="bu-align">
-			<div tabindex="0" class="businessunit-menu" id="business-unit-select">
+			</h2>
+
+			<div  ng-controller="BusinessUnitsController as businessunit" ng-cloak class="bu-align">
 				<span class="pointer" tabindex="0" ng-click="businessunit.toggleBuMenu();">
 					<span ng-if="vm.detectMobile();">{{businessunit.data.selectedBu.Name}} <i class="mdi mdi-menu-down"></i></span>
 					<span ng-if="!vm.detectMobile();"><i class="mdi mdi-vector-square"></i></span>
@@ -46,55 +46,59 @@
 						{{'BusinessUnit'|translate}}
 					</md-tooltip>
 				</span>
-				<span class="context-menu-bottom" ng-if="businessunit.buMenu">
-					<ul class="wfm-list material-depth-2">
-						<li ng-repeat="bu in businessunit.data.businessUnits" ng-cloak ng-click="businessunit.changeBusinessUnit(bu)">
-							<i class="mdi mdi-vector-square businessunit-menu-icon"></i>
-							{{bu.Name}}
-						</li>
-					</ul>
-				</span>
+				<wfm-popup show="businessunit.buMenu" style="white-space:nowrap;">
+					<div class="con-row">
+						<div class="con-flex">
+							<ul class="wfm-list">
+								<li ng-repeat="bu in businessunit.data.businessUnits" ng-cloak ng-click="businessunit.changeBusinessUnit(bu)">
+									<i class="mdi mdi-vector-square businessunit-menu-icon"></i>
+									{{bu.Name}}
+								</li>
+							</ul>
+						</div>
+					</div>
+				</wfm-popup>
 			</div>
-	</div>
+			
 			<div ng-show="vm.mainMenuState" class="main-menu-slide main-menu-link-wrapper material-depth-1">
 				<div ng-repeat="a in vm.areas">
 					<mainmenu data="a" open="vm.mainMenuState" ng-click="vm.toggleMobileMenu();"></mainmenu>
 				</div>
 			</div>
+		</div>
+
+
+		<div id="materialcontainer" class="container content">
+			<div ui-view></div>
+			<wfm-notice notices="$parent.wfmNotices"></wfm-notice>
+		</div>
+
 	</div>
 
+	<script type="text/javascript" src="index_desktop_client_mods.js"></script>
+	<!-- build:template
+	<% if (environment === 'dev') { %>
+	<script src="dist/resources/modules.js"></script>
+	<script src="dist/templates.js"></script>
+	<script src="dist/main.js"></script>
+	<% } else { %>
+	<script src="dist/resources/modules.min.js"></script>
+	<script src="dist/templates.min.js"></script>
+	<script src="dist/main.min.js"></script>
+	<% } %>
+	/build -->
 
-	<div id="materialcontainer" class="container content">
-		<div ui-view></div>
-		<wfm-notice notices="$parent.wfmNotices"></wfm-notice>
+	<!--dummy links to disable IE default alt-key shortcuts-->
+	<div class="shortcut-trick-ie" style="display: none;">
+		<a href="" alt="a" accesskey="a">a</a>
+		<a href="" alt="c" accesskey="c">c</a>
+		<a href="" alt="e" accesskey="e">e</a>
+		<a href="" alt="f" accesskey="f">f</a>
+		<a href="" alt="h" accesskey="h">h</a>
+		<a href="" alt="t" accesskey="t">t</a>
+		<a href="" alt="v" accesskey="v">v</a>
+		<a href="" alt="x" accesskey="x">x</a>
 	</div>
-
-</div>
-
-<script type="text/javascript" src="index_desktop_client_mods.js"></script>
-<!-- build:template
-<% if (environment === 'dev') { %>
-<script src="dist/resources/modules.js"></script>
-<script src="dist/templates.js"></script>
-<script src="dist/main.js"></script>
-<% } else { %>
-<script src="dist/resources/modules.min.js"></script>
-<script src="dist/templates.min.js"></script>
-<script src="dist/main.min.js"></script>
-<% } %>
-/build -->
-
-<!--dummy links to disable IE default alt-key shortcuts-->
-<div class="shortcut-trick-ie" style="display: none;">
-	<a href="" alt="a" accesskey="a">a</a>
-	<a href="" alt="c" accesskey="c">c</a>
-	<a href="" alt="e" accesskey="e">e</a>
-	<a href="" alt="f" accesskey="f">f</a>
-	<a href="" alt="h" accesskey="h">h</a>
-	<a href="" alt="t" accesskey="t">t</a>
-	<a href="" alt="v" accesskey="v">v</a>
-	<a href="" alt="x" accesskey="x">x</a>
-</div>
 </body>
 
 </html>
