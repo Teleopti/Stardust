@@ -1461,7 +1461,6 @@
     <Content Include="WFM\app\global\card-panel\_moudules.js" />
     <Content Include="WFM\app\global\tree-picker\tree.component.js" />
     <Content Include="WFM\app\global\tree-picker\tree.component.typeOne.spec.js" />
-    <Content Include="WFM\app\global\tree-picker\tree.component.typeThree.spec.js" />
     <Content Include="WFM\app\global\tree-picker\tree.component.typeTwo.spec.js" />
     <Content Include="WFM\app\global\tree-picker\tree_data.tpl.html" />
     <Content Include="WFM\app\global\tree-picker\_modules.js" />

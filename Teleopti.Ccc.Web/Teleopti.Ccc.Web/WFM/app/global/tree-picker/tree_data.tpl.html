@@ -8,7 +8,7 @@
     <div class="toggle-handle">
       <i ng-hide="!node[vm.nodeChildrenName] || node[vm.nodeChildrenName].length==0 " class="mdi mdi-chevron-right"></i>
     </div>
-    <div class="tree-handle-wrapper" ng-class="{'selected-true': node[vm.nodeSelectedMark], 'semi-true': node[vm.nodeSemiSelected]}" ng-click="vm.selectNode(this, $event)" ng-bind="node[vm.nodeDisplayName]"></div>
+    <div class="tree-handle-wrapper" ng-class="{'selected-true': node[vm.nodeSelectedMark], 'semi-true': node[vm.nodeSemiSelected]}" ng-click="vm.selectNode(this)" ng-bind="node[vm.nodeDisplayName]"></div>
   </div>
   <ol ng-model="node">
     <li node-id="$index" ng-repeat="node in node[vm.nodeChildrenName]" ng-include="'tree_child_renderer.html'" class="hidden"></li>

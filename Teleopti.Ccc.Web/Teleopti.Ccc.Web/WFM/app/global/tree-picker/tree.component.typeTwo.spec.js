@@ -1,4 +1,4 @@
-xdescribe('TreeDataTwoController', function () {
+describe('TreeDataTwoController', function () {
     var vm,
         $controller,
         $compile,
@@ -172,7 +172,7 @@ xdescribe('TreeDataTwoController', function () {
 
         $rootScope.data = data;
         $rootScope.option = option;
-        picker = setupPicker('data="data" option="option"');
+        picker = setupPicker('ng-model="data" option="option"');
         componentData = picker.find('div').scope().vm.data;
         componentOption = picker.find('div').scope().vm.option;
     });
@@ -241,9 +241,9 @@ xdescribe('TreeDataTwoController', function () {
         var componentSelectedNode = picker.find('div').scope().vm.node;
         var mapParents = mapParentIndex(componentSelectedNode);
 
-        expect(data.nodes[mapParents[0]].selected).toEqual(true);    
-        expect(data.nodes[mapParents[0]].nodes[mapParents[1]].selected).toEqual(true);    
-        expect(data.nodes[mapParents[0]].nodes[mapParents[1]].nodes[mapParents[2]].selected).toEqual(true);    
+        expect(data.nodes[mapParents[0]].semiSelected).toEqual(true);    
+        expect(data.nodes[mapParents[0]].nodes[mapParents[1]].semiSelected).toEqual(true);    
+        expect(data.nodes[mapParents[0]].nodes[mapParents[1]].nodes[mapParents[2]].semiSelected).toEqual(true);    
         expect(data.nodes[mapParents[0]].nodes[mapParents[1]].nodes[mapParents[2]].nodes[mapParents[3]].selected).toEqual(true);    
         expect(data.nodes[mapParents[0]].nodes[mapParents[1]].nodes[mapParents[2]].nodes[mapParents[3]].nodes[mapParents[4]].selected).toEqual(true);    
     });
@@ -272,7 +272,7 @@ xdescribe('TreeDataTwoController', function () {
         var componentSelectedNode = picker.find('div').scope().vm.node;
         var mapParents = mapParentIndex(componentSelectedNode);
 
-        expect(data.nodes[mapParents[0]].selected).toEqual(true);    
+        expect(data.nodes[mapParents[0]].semiSelected).toEqual(true);    
         expect(data.nodes[mapParents[0]].nodes[mapParents[1]].selected).toEqual(true);    
         expect(data.nodes[mapParents[0]].nodes[mapParents[1]].nodes[mapParents[2]].selected).toEqual(true);     
         expect(data.nodes[mapParents[0]].nodes[1].selected).toEqual(false);    
@@ -286,16 +286,16 @@ xdescribe('TreeDataTwoController', function () {
         var componentSelectedNode = picker.find('div').scope().vm.node;
         var mapParents = mapParentIndex(componentSelectedNode);
 
-        expect(data.nodes[mapParents[0]].selected).toEqual(true);    
-        expect(data.nodes[mapParents[0]].nodes[mapParents[1]].selected).toEqual(true);    
-        expect(data.nodes[mapParents[0]].nodes[mapParents[1]].nodes[mapParents[2]].selected).toEqual(true);     
+        expect(data.nodes[mapParents[0]].semiSelected).toEqual(true);    
+        expect(data.nodes[mapParents[0]].nodes[mapParents[1]].semiSelected).toEqual(true);    
+        expect(data.nodes[mapParents[0]].nodes[mapParents[1]].nodes[mapParents[2]].semiSelected).toEqual(true);     
         expect(data.nodes[mapParents[0]].nodes[mapParents[1]].nodes[mapParents[2]].nodes[mapParents[3]].selected).toEqual(true);     
         expect(data.nodes[mapParents[0]].nodes[mapParents[1]].nodes[mapParents[2]].nodes[1].selected).toEqual(false);    
         expect(data.nodes[mapParents[0]].nodes[mapParents[1]].nodes[mapParents[2]].nodes[1].nodes[0].selected).toEqual(false);       
     });
 });
 
-xdescribe('TreeDataTwoController', function () {
+describe('TreeDataTwoController', function () {
     var vm,
         $controller,
         $compile,
@@ -470,7 +470,7 @@ xdescribe('TreeDataTwoController', function () {
 
         $rootScope.data = data;
         $rootScope.option = option;
-        picker = setupPicker('data="data" option="option"');
+        picker = setupPicker('ng-model="data" option="option"');
         componentData = picker.find('div').scope().vm.data;
         componentOption = picker.find('div').scope().vm.option;
     });
@@ -518,7 +518,7 @@ xdescribe('TreeDataTwoController', function () {
         var componentSelectedNode = picker.find('div').scope().vm.node;
         var mapParents = mapParentIndex(componentSelectedNode);
 
-        expect(data.nodes[mapParents[0]].selected).toEqual(true);    
-        expect(data.nodes[mapParents[0]+1].selected).toEqual(false);      
+        expect(data.nodes[mapParents[0]].semiSelected).toEqual(true);    
+        expect(data.nodes[mapParents[0]+1].semiSelected).toEqual(false);      
     });
 });

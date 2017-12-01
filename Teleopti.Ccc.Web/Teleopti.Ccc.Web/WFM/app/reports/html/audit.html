@@ -75,7 +75,7 @@
 							<wfm-popup show="showOrgPicker">
 								<div class="con-row">
 									<div class="con-flex">
-										<tree-data-two data="vm.orgData" option="vm.option" ng-click="vm.calculateOrgSelection(vm.orgData.Children)"></tree-data-two>
+										<tree-data-two ng-model="vm.orgData" option="vm.option" ng-click="vm.calculateOrgSelection(vm.orgData.Children)"></tree-data-two>
 									</div>
 								</div>
 							</wfm-popup>

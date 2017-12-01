@@ -183,5 +183,9 @@
         vm.dataOne = angular.copy(data);
         vm.dataTwo = angular.copy(data);
         vm.dataThree = angular.copy(data);
+
+        vm.getChange = function (){
+           console.log(123)
+        };
     }
 })();

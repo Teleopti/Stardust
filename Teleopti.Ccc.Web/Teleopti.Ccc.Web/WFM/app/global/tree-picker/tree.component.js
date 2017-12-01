@@ -5,10 +5,12 @@
         .module('wfm.treePicker')
         .component('treeDataOne', {
             templateUrl: 'app/global/tree-picker/tree_data.tpl.html',
+            require: {
+                ngModel: 'ngModel'
+            },
             controller: 'TreeDataOneController',
             controllerAs: 'vm',
             bindings: {
-                data: "=",
                 option: "="
             }
         })
@@ -20,7 +22,6 @@
             controller: 'TreeDataTwoController',
             controllerAs: 'vm',
             bindings: {
-                // data: "=",
                 option: "="
             }
         })
@@ -28,17 +29,17 @@
         .controller('TreeDataTwoController', TreeDataTwoController)
         .directive('treeAnimate', treeAnimate);
 
-    TreeDataOneController.$inject = ['$element'];
-    TreeDataTwoController.$inject = ['$element', '$timeout'];
+    TreeDataOneController.$inject = ['$element', '$timeout'];
+    TreeDataTwoController.$inject = ['$element', '$timeout', '$attrs'];
 
-    function TreeDataOneController($element) {
+    function TreeDataOneController($element, $timeout) {
         var vm = this;
 
+        var updateView = false;
         vm.node;
         vm.nodeDisplayName = "name";
         vm.nodeChildrenName = "children";
         vm.nodeSelectedMark = "mark";
-        vm.selectedState = "none";
         vm.selectNode = selectNode;
 
         vm.$onInit = fetchSetting;
@@ -49,22 +50,34 @@
                 vm.nodeChildrenName = vm.option.NodeChildrenName ? vm.option.NodeChildrenName : "children";
                 vm.nodeSelectedMark = vm.option.NodeSelectedMark ? vm.option.NodeSelectedMark : "mark";
             }
+            vm.ngModel.$viewChangeListeners.push(onChange);
+            vm.ngModel.$render = onChange;
             return;
         }
 
-        function selectNode(item, event) {
+        function onChange() {
+            var check = angular.equals(vm.ngModel.$modelValue, vm.data);
+            if (!check)
+                vm.data = vm.ngModel.$modelValue;
+        }
+
+        function selectNode(item) {
             vm.node = item;
-            if (item.$parent.node[vm.nodeSelectedMark] == true) {
-                item.$parent.node[vm.nodeSelectedMark] = false;
+            var state = !item.$parent.node[vm.nodeSelectedMark];
+            item.$parent.node[vm.nodeSelectedMark] = state;
+            if (!state) {
                 if (item.$parent.node[vm.nodeChildrenName] && item.$parent.node[vm.nodeChildrenName].length !== 0) {
-                    removeSemiStateToAllChildren(event.target.parentNode.nextElementSibling);
                     setChildrenNodesToUnselect(item.$parent.node[vm.nodeChildrenName]);
                 }
             } else {
                 setParentNodesSelectState(item.$parent, true);
             }
-            removeSemiStateToNode(event.target);
-            return checkSemiStateToSelectedNodeParent(item.$parent, event.target.parentNode.parentNode.parentNode.parentNode);
+            return updateNgModelDateForTreePicker();
+        }
+
+        function updateNgModelDateForTreePicker() {
+            var update = angular.copy(vm.data);
+            return vm.ngModel.$setViewValue(update);
         }
 
         function setChildrenNodesToUnselect(children) {
@@ -82,48 +95,14 @@
                 return setParentNodesSelectState(data.$parent.$parent, state);
             }
         }
-
-        function removeSemiStateToAllChildren(checkItem) {
-            var items = checkItem.getElementsByClassName("semi-select");
-            for (var index = 0; index < items.length; index++) {
-                removeSemiStateToNode(items[index]);
-            }
-        }
-
-        function addSemiStateToNode(checkItem) {
-            if (checkItem.classList.contains("tree-handle-wrapper")) {
-                checkItem.classList.add("semi-select");
-            }
-        }
-
-        function removeSemiStateToNode(checkItem) {
-            if (checkItem.classList.contains("semi-select")) {
-                checkItem.classList.remove("semi-select");
-            }
-        }
-
-        function checkAnyChildrenNodesSelectedState(parentSiblings, checkItem) {
-            var selectedSiblings = parentSiblings.filter(function (sib) { return sib[vm.nodeSelectedMark] == false || !sib[vm.nodeSelectedMark]; })
-            if (selectedSiblings.length == 0 || selectedSiblings.length == parentSiblings.length)
-                return removeSemiStateToNode(checkItem.childNodes[1].childNodes[3]);
-            if (selectedSiblings.length < parentSiblings.length)
-                return addSemiStateToNode(checkItem.childNodes[1].childNodes[3]);
-        }
-
-        function checkSemiStateToSelectedNodeParent(data, checkItem) {
-            if (data.$parent.$parent.node) {
-                checkAnyChildrenNodesSelectedState(data.$parent.$parent.node[vm.nodeChildrenName], checkItem);
-                return checkSemiStateToSelectedNodeParent(data.$parent.$parent, checkItem.parentNode.parentNode);
-            }
-            return removeSemiStateToNode(checkItem);
-        }
     }
 
-    function TreeDataTwoController($element, $timeout) {
+    function TreeDataTwoController($element, $timeout, $attrs) {
         var vm = this;
 
         var updateView = false;
-        var rootSelectUnique = "false;"
+        var rootSelectUnique = "false";
+        var lastChange = [];
         vm.node;
         vm.nodeDisplayName = "name";
         vm.nodeChildrenName = "children";
@@ -146,34 +125,30 @@
         }
 
         function onChange() {
-            vm.data = vm.ngModel.$modelValue;
-            var lastChange = [];
-            $timeout(function () {
-                var selectedItems = $element[0].getElementsByClassName('selected-true');
-                for (var index = 0; index < selectedItems.length; index++) {
-                    var item = selectedItems[index];
-                    var check = lastChange.some(function(last){
-                        return last == item.$$hashKey;
-                    })
-                    if(!check) {
-                        updateView = true;
-                        item.click();
-                        lastChange.push(item.$$hashKey);
-                    } 
-                }
-            });
+            var check = angular.equals(vm.ngModel.$modelValue, vm.data);
+            if (!check) {
+                vm.data = vm.ngModel.$modelValue;
+                $timeout(function () {
+                    var selectedItems = $element[0].getElementsByClassName('selected-true');
+                    for (var index = 0; index < selectedItems.length; index++) {
+                        var item = selectedItems[index];
+                        var check = lastChange.some(function (last) {
+                            return last == item.$$hashKey;
+                        })
+                        if (!check) {
+                            updateView = true;
+                            item.click();
+                            lastChange.push(item.$$hashKey);
+                        }
+                    }
+                });
+            }
         }
 
         function selectNode(item) {
             vm.node = item;
-            var state;
-            if (updateView) {
-                state = item.$parent.node[vm.nodeSelectedMark];
-            } else {
-                state = !item.$parent.node[vm.nodeSelectedMark];
-                item.$parent.node[vm.nodeSelectedMark] = state;
-            }
-            item.$parent.node[vm.nodeSemiSelected] = false;
+            var state = generateState(item);
+            resetSemiState(item);
             if (rootSelectUnique) {
                 var rootIndex = mapParentIndex(item)[0];
                 setSiblingsToUnselect(vm.data[vm.nodeChildrenName], rootIndex);
@@ -184,13 +159,38 @@
             if (item.$parent.node[vm.nodeChildrenName] && item.$parent.node[vm.nodeChildrenName].length !== 0) {
                 setChildrenNodesSelectState(item.$parent.node[vm.nodeChildrenName], state);
             }
-            updateView = false;
-            return vm.ngModel.$setViewValue(vm.data);
+            return updateNgModelDateForTreePicker();
+        }
+
+        function generateState(item) {
+            var state;
+            if (updateView) {
+                return state = item.$parent.node[vm.nodeSelectedMark];
+            } else {
+                state = !item.$parent.node[vm.nodeSelectedMark];
+                item.$parent.node[vm.nodeSelectedMark] = state;
+                return state;
+            }
+        }
+
+        function resetSemiState(item) {
+            return item.$parent.node[vm.nodeSemiSelected] = false;
+        }
+
+        function updateNgModelDateForTreePicker() {
+            if (updateView) {
+                updateView = false;
+                return vm.ngModel.$setViewValue(vm.data);
+            } else {
+                var update = angular.copy(vm.data);
+                return vm.ngModel.$setViewValue(update);
+            }
         }
 
         function setChildrenNodesSelectState(children, state) {
             children.forEach(function (child) {
                 child[vm.nodeSelectedMark] = state;
+                child[vm.nodeSemiSelected] = false;
                 if (child[vm.nodeChildrenName] && child[vm.nodeChildrenName].length !== 0) {
                     return setChildrenNodesSelectState(child[vm.nodeChildrenName], state);
                 }
@@ -209,13 +209,17 @@
 
         function siblingsHasSemiSelected(siblings) {
             return siblings.some(function (item) {
-                return item[vm.nodeSelectedMark] == true || item[vm.nodeSemiSelected] == true;
+                if (item[vm.nodeSelectedMark] || item[vm.nodeSemiSelected])
+                    return item[vm.nodeSelectedMark] == true || item[vm.nodeSemiSelected] == true;
+                return false;
             })
         }
 
         function siblingsHasAllSelected(siblings) {
             return !siblings.some(function (item) {
-                return item[vm.nodeSelectedMark] == false;
+                if (item[vm.nodeSelectedMark])
+                    return item[vm.nodeSelectedMark] == false;
+                return true;
             })
         }
 

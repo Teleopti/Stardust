@@ -220,10 +220,6 @@
             return;
         }
 
-        function disableActiveButtonOnCalendar() {
-
-        }
-
         function generateWeeksOnlyDateRangeInfo(a, b) {
             var a = moment(a);
             var b = moment(b).add(1, 'day');

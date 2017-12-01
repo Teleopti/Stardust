@@ -1,4 +1,4 @@
-xdescribe('TreeDataOneController', function () {
+describe('TreeDataOneController', function () {
     var vm,
         $controller,
         $compile,
@@ -171,7 +171,7 @@ xdescribe('TreeDataOneController', function () {
 
         $rootScope.data = data;
         $rootScope.option = option;
-        picker = setupPicker('data="data" option="option"');
+        picker = setupPicker('ng-model="data" option="option"');
         componentData = picker.find('div').scope().vm.data;
         componentOption = picker.find('div').scope().vm.option;
     });

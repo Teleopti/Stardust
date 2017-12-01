@@ -1,5 +1,5 @@
 <h1>Tree Data One</h1>
-<tree-data-one data="vm.dataOne" option="vm.option"></tree-data-one>
+<tree-data-one ng-model="vm.dataOne" ng-change="vm.getChange()" option="vm.option"></tree-data-one>
 
 <h1>Tree Data Two</h1>
 <div class="con-row">
@@ -28,7 +28,7 @@
       </div>
       <div class="con-row">
         <div class="con-flex">
-          <tree-data-two ng-model="vm.dataThree" option="vm.optionTwo"></tree-data-two>
+          <tree-data-two ng-model="vm.dataThree" ng-change="vm.getChange()" option="vm.optionTwo"></tree-data-two>
         </div>
       </div>
       <div class="con-footer">
@@ -38,5 +38,3 @@
     </div>
   </div>
 </div>
-
-{{vm.dataThree}}
