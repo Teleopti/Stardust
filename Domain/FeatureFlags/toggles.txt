@@ -127,7 +127,7 @@ ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_BlockSchedulingValidation_46092 = RC
 ResourcePlanner_RemoveClassicShiftCat_46582 = true
 ResourcePlanner_DoNotKillCache_46724 = true
-ResourcePlanner_RemoveImplicitResCalcContext_46680 = RC #put back to true when #46898 is fixed
+ResourcePlanner_RemoveImplicitResCalcContext_46680 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some issues
 ResourcePlanner_BpoScheduling_46265 = true
 
