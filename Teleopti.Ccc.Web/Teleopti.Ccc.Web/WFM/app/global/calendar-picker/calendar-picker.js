@@ -14,14 +14,15 @@
                 showWeek: '<',
                 disable: '@',
                 intervalRule: '@',
-                singleDatePicker: '@'
+                singleDatePicker: '@',
+                customValidate: '&'
             }
         })
         .controller('PpDateRangeController', PpDateRangeController);
 
-    PpDateRangeController.$inject = ['$scope', '$element'];
+    PpDateRangeController.$inject = ['$scope', '$element', '$attrs'];
 
-    function PpDateRangeController($scope, $element) {
+    function PpDateRangeController($scope, $element, $attrs) {
         var vm = this;
 
         vm.resetStartDate = resetStartDate;
@@ -79,6 +80,7 @@
                     vm.displayCalenderView = displayCalenderViewForDisableView;
                     break;
             }
+            vm.isValid = !vm.validate();
             return;
         }
 
@@ -90,7 +92,7 @@
             var oldVal = [angular.copy(vm.pickStartDate), angular.copy(vm.pickEndDate)];
             var newVal = fetchNgModelDateForDateRangePicker();
             vm.displayCalenderView(oldVal, newVal);
-            return displayDateRange(vm.pickStartDate, vm.pickEndDate);
+            return;
         }
 
         function fetchNgModelDateForDateRangePicker() {
@@ -104,19 +106,36 @@
         }
 
         function displayCalenderViewForDisableView(oldVal, newVal) {
-            if (!!(newVal[1] - oldVal[1]) && vm.disable == 'end-date')
-                return vm.pickDate = vm.pickStartDate;
-            if (!!(newVal[0] - oldVal[0]) && vm.disable == 'start-date')
-                return vm.pickDate = vm.pickEndDate;
-            if (vm.disable == 'all')
-                return vm.pickDate = vm.pickStartDate;
+            if (!!(newVal[1] - oldVal[1]) && vm.disable == 'end-date') {
+                vm.pickDate = vm.pickStartDate;
+                displayDateRange(vm.pickStartDate, vm.pickEndDate);
+                return;
+            }
+            if (!!(newVal[0] - oldVal[0]) && vm.disable == 'start-date') {
+                vm.pickDate = vm.pickEndDate;
+                displayDateRange(vm.pickStartDate, vm.pickEndDate);
+                return;
+            }
+            if (vm.disable == 'all') {
+                vm.pickDate = vm.pickStartDate;
+                displayDateRange(vm.pickStartDate, vm.pickEndDate);
+                return;
+            }
+            return;
         }
 
         function displayCalenderViewDefault(oldVal, newVal) {
-            if (!!(newVal[0] - oldVal[0]))
-                return vm.pickDate = vm.pickStartDate;
-            if (!!(newVal[1] - oldVal[1]))
-                return vm.pickDate = vm.pickEndDate;
+            if (!!(newVal[0] - oldVal[0])) {
+                vm.pickDate = vm.pickStartDate;
+                displayDateRange(vm.pickStartDate, vm.pickEndDate);
+                return;
+            }
+            if (!!(newVal[1] - oldVal[1])) {
+                vm.pickDate = vm.pickEndDate;
+                displayDateRange(vm.pickStartDate, vm.pickEndDate);
+                return;
+            }
+            return;
         }
 
         function validateDate() {
@@ -129,6 +148,9 @@
             if (!vm.pickEndDate) {
                 return vm.dateRangeText = 'Please select end date';
             }
+            if (!!$attrs.customValidate) {
+                return vm.dateRangeText = vm.customValidate();
+            }
             if (vm.pickEndDate - vm.pickStartDate < 0) {
                 return vm.dateRangeText = 'End date should be later than start date';
             }
@@ -139,6 +161,9 @@
             if (!vm.pickEndDate) {
                 return vm.dateRangeText = 'Please select end date';
             }
+            if (!!$attrs.customValidate) {
+                return vm.dateRangeText = vm.customValidate();
+            }
             if (vm.pickEndDate - vm.pickStartDate <= 0) {
                 return vm.dateRangeText = 'End date should be later than start date';
             }
@@ -148,6 +173,9 @@
         function validateStartDate() {
             if (!vm.pickStartDate) {
                 return vm.dateRangeText = 'Please select start date';
+            }
+            if (!!$attrs.customValidate) {
+                return vm.dateRangeText = vm.customValidate();
             }
             if (vm.pickEndDate - vm.pickStartDate <= 0) {
                 return vm.dateRangeText = 'Start date should be earlier than end date';
@@ -319,6 +347,8 @@
         function renderRangeDate(data) {
             var date = data.date,
                 mode = data.mode;
+            if (!vm.pickStartDate && !vm.pickEndDate)
+                return '';
             if (mode === 'day' && vm.isValid) {
                 if (!moment(date).isBefore(vm.pickStartDate, 'day') && !moment(date).isAfter(vm.pickEndDate, 'day')) {
                     return 'in-date-range';

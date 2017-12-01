@@ -53,5 +53,9 @@
         vm.data4 = {
             endDate: today.setDate(today.getDate() + 4)
         }
+
+        vm.customValid = function (data) {
+            return "this is custom validate";
+        }
     }
 })();
