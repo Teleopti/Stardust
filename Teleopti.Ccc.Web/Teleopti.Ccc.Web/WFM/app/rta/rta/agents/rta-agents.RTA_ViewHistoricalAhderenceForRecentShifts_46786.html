@@ -58,13 +58,13 @@
 		<tr>
 			<th style="width: 8.5%" ng-click=" vm.sort('Name')">
 				{{'Name'|translate}}
-				<i ng-show="vm.orderBy == 'Name'"
-				   ng-class="{'ui-grid-icon-up-dir': vm.direction === 'asc', 'ui-grid-icon-down-dir': vm.direction === 'desc'}"></i>
+				<i ng-show="vm.orderBy == 'Name'" class="mdi"
+				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 			</th>
 			<th style="width: 8.5%" ng-click="vm.sort('SiteAndTeamName')">
 				{{'SiteTeam'|translate}}
-				<i ng-show="vm.orderBy == 'SiteAndTeamName'"
-				   ng-class="{'ui-grid-icon-up-dir': vm.direction === 'asc', 'ui-grid-icon-down-dir': vm.direction === 'desc'}"></i>
+				<i ng-show="vm.orderBy == 'SiteAndTeamName'" class="mdi"
+				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 			</th>
 			<th class="shift-cell-header" style="padding: 0; position: relative;">
 				<label ng-repeat="time in vm.timeline" class="label label-info"
@@ -74,28 +74,31 @@
 			</th>
 			<th style="width: 8.5%" ng-click="vm.sort('Rule')">
 				{{'Rule'|translate}}
-				<i ng-show="vm.orderBy == 'Rule'"
-				   ng-class="{'ui-grid-icon-up-dir': vm.direction === 'asc', 'ui-grid-icon-down-dir': vm.direction === 'desc'}"></i>
+				<i ng-show="vm.orderBy == 'Rule'" class="mdi"
+				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 			</th>
 			<th style="width: 8.5%" ng-click="vm.sort('TimeOutOfAdherence')">
 				{{'TimeOOA'|translate}}
-				<i ng-show="vm.orderBy == 'TimeOutOfAdherence'"
-				   ng-class="{'ui-grid-icon-up-dir': vm.direction === 'asc', 'ui-grid-icon-down-dir': vm.direction === 'desc'}"></i>
+				<i ng-show="vm.orderBy == 'TimeOutOfAdherence'" class="mdi"
+				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 			</th>
 			<th style="width: 8.5%" ng-click="vm.sort('TimeInAlarm')">
 				{{'TimeInAlarm'|translate}}
-				<i ng-show="vm.orderBy == 'TimeInAlarm'"
-				   ng-class="{'ui-grid-icon-up-dir': vm.direction === 'asc', 'ui-grid-icon-down-dir': vm.direction === 'desc'}"></i>
+				<i ng-show="vm.orderBy == 'TimeInAlarm'" class="mdi"
+				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 			</th>
 			<th style="width: 8.5%" ng-click="vm.sort('TimeInState')">
 				{{'TimeInState'|translate}}
-				<i ng-show="vm.orderBy == 'TimeInState'"
-				   ng-class="{'ui-grid-icon-up-dir': vm.direction === 'asc', 'ui-grid-icon-down-dir': vm.direction === 'desc'}"></i>
+				<i ng-show="vm.orderBy == 'TimeInState'" class="mdi"
+				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 			</th>
 			<th style="width: 8.5%" ng-click="vm.sort('State')">
 				{{'State'|translate}}
-				<i ng-show="vm.orderBy == 'State'"
-				   ng-class="{'ui-grid-icon-up-dir': vm.direction === 'asc', 'ui-grid-icon-down-dir': vm.direction === 'desc'}"></i>
+				<i ng-show="vm.orderBy == 'State'" class="mdi"
+				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+			</th>
+			<th style="width: 40px">
+
 			</th>
 		</tr>
 		<tr ng-repeat="agentState in vm.agentStates">
@@ -145,18 +148,66 @@
 			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
 				{{agentState.State}}
 			</td>
+			<td style="position: relative">
+
+				<div tabindex=0 class="context-menu card-context"
+					 style="position: absolute; padding: 3px; margin: -9px 0 0 0">
+					<i class="mdi mdi-dots-vertical"></i>
+					<span class="context-menu-left">
+					<ul class="wfm-list">
+						
+						<li>
+							<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-pencil" style="font-style: normal"></i>
+								<span>{{'ModifySchedule'|translate}}</span>
+							</a>
+						</li>
+						
+						<!--<div style="margin: 15px">{{'AgentHistoricalAdherence'|translate}}</div>-->
+
+						<li>
+							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-account" style="font-style: normal"></i>
+								<span>2017-11-29 97%</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-account" style="font-style: normal"></i>
+								<span>2017-11-30 65%</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-account" style="font-style: normal"></i>
+								<span>2017-12-01 0%</span>
+							</a>
+						</li>
+						
+					</ul>
+					</span>
+				</div>
+
+			</td>
 		</tr>
 	</table>
-	<div class="con-row">
-		<div class="con-flex agent-table-wrapper">
-			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.allGrid && !vm.showInAlarm" ui-grid-auto-resize
-				 ui-grid-resize-columns
-				 ui-grid-disable-animation ui-grid="vm.allGrid"></div>
-			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.showInAlarm"
-				 ui-grid-auto-resize ui-grid-resize-columns
-				 ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>
-		</div>
-	</div>
+
+	<!--<div class="con-row">-->
+	<!--<div class="con-flex agent-table-wrapper">-->
+	<!--<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.allGrid && !vm.showInAlarm" ui-grid-auto-resize-->
+	<!--ui-grid-resize-columns-->
+	<!--ui-grid-disable-animation ui-grid="vm.allGrid"></div>-->
+	<!--<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.showInAlarm"-->
+	<!--ui-grid-auto-resize ui-grid-resize-columns-->
+	<!--ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>-->
+	<!--</div>-->
+	<!--</div>-->
 	<wfm-right-panel ng-if="!vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
 		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
 		<div class="full-padding">

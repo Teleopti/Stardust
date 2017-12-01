@@ -74,6 +74,13 @@
 .wfm-table th:not(.shift-cell-header):hover {
   background-color: $blue-300;
 }
+.wfm-table th i.mdi-sort-ascending:before {
+  font-size: 14px!important;
+}
+.wfm-table th i.mdi-sort-descending:before {
+  font-size: 14px!important;
+}
+
 
 .cell-header {
 	height: 6px;
