@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Notification
 			_logger.Info($"Sending SMS on: {_notificationConfigReader.Url}{msgData}");
 			try
 			{
-				var data = _notificationClient.MakeRequest(_notificationConfigReader.Url, msgData);
+				var data = _notificationClient.MakeRequest(_notificationConfigReader, msgData);
 				if (data != null)
 				{
 					if (_notificationConfigReader.SkipSearch) return;

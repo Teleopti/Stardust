@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		private XmlDocument _configXml;
 		public bool HasLoadedConfig => XmlDocument != null;
 		public IXPathNavigable XmlDocument => _configXml;
-		public Uri Url { get; }
+		public Uri Url { get; set; }
 		public string User { get; }
 		public string Password { get; }
 		public string From { get; }
@@ -54,6 +54,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				return tag[0].InnerText;
 			return string.Empty;
 		}
-		
+
+		public string ContentType { get; set; }
+		public string EncodingName { get; set; }
 	}
 }

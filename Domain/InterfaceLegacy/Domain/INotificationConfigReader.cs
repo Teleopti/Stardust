@@ -25,5 +25,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		string SmtpUser { get; }
 		string SmtpPassword { get; }
 		bool SmtpUseRelay { get; }
+		string ContentType { get; }
+		string EncodingName { get; }
 	}
 }

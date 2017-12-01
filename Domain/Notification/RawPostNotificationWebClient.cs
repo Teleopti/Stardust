@@ -31,12 +31,14 @@ namespace Teleopti.Ccc.Domain.Notification
 		{
 			_webRequestFactory = webRequestFactory;
 		}
-		public string MakeRequest(Uri url, string queryStringData)
+
+		public string MakeRequest(INotificationConfigReader config, string queryStringData)
 		{
-			var req = _webRequestFactory.Create(url);
-			req.ContentType = "application/x-www-form-urlencoded";
+			var req = _webRequestFactory.Create(config.Url);
+			req.ContentType = string.IsNullOrEmpty(config.ContentType) ? "application/x-www-form-urlencoded" : config.ContentType;
 			req.Method = "POST";
-			var bytes = Encoding.ASCII.GetBytes(queryStringData);
+			var encodingName = string.IsNullOrEmpty(config.EncodingName)? "utf-8" : config.EncodingName;
+			var bytes = Encoding.GetEncoding(encodingName).GetBytes(queryStringData);
 			req.ContentLength = bytes.Length;
 			var os = req.GetRequestStream();
 			os.Write(bytes, 0, bytes.Length);

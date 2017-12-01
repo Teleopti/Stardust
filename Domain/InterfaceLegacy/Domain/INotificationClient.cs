@@ -1,9 +1,7 @@
-using System;
-
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     public interface INotificationClient
     {
-        string MakeRequest(Uri url, string queryStringData);
+        string MakeRequest(INotificationConfigReader config, string queryStringData);
     }
 }

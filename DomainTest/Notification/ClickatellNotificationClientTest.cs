@@ -4,6 +4,7 @@ using System.Net;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Notification;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.DomainTest.Notification
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var webClientFactory = new TestWebClientFactory();
 			var target = new ClickatellNotificationWebClient(webClientFactory);
 
-			target.MakeRequest(new Uri("http://test"), "username=user1&password=pass1");
+			target.MakeRequest(new FakeNotificationConfigReader {Url = new Uri("http://test") }, "username=user1&password=pass1");
 
 			webClientFactory.TheClient.Headers["user-agent"].Should().Be.EqualTo("Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
 			webClientFactory.TheClient.Headers["Accept-Language"].Should().Be.EqualTo("en-US,en;q=0.8,sv-SE;q=0.7,sv;q=0.5");
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			var url = new Uri("http://test");
 			var data = "username=user1&password=pass1";
-			target.MakeRequest(url, data);
+			target.MakeRequest(new FakeNotificationConfigReader { Url = url }, data);
 
 			webClientFactory.TheClient.Address.Should().Be.EqualTo(url);
 			webClientFactory.TheClient.Method.Should().Be.EqualTo("POST");

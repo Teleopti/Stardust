@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 		public List<string> SentMessages { get; private set; }
 
-		public string MakeRequest(Uri url, string queryStringData)
+		public string MakeRequest(INotificationConfigReader config, string queryStringData)
 		{
 			SentMessages.Add(queryStringData);
 			if (_requestFaild) {

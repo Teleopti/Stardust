@@ -292,5 +292,27 @@ namespace Teleopti.Ccc.Domain.Notification
 				return false;
 			}
 		}
+
+		public string ContentType
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				var contentType = _configXml.GetElementsByTagName("ContentType");
+				return contentType.Count > 0 ? contentType[0].InnerText : "";
+			}
+		}
+
+		public string EncodingName
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				var contentType = _configXml.GetElementsByTagName("EncodingName");
+				return contentType.Count > 0 ? contentType[0].InnerText : "";
+			}
+		}
 	}
 }
