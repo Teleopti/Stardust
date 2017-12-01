@@ -225,7 +225,35 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				.EqualTo(TimeSpan.FromHours(168));
 		}
 
-		//ShouldHandleLessDaysOffIfFlexibleDaysOff
+		[Test]
+		public void ShouldHandleLessDaysOffIfFlexibleDaysOff()
+		{
+			var period = createStandardSetupWithFlexibleContract(out var scenario, out var agent, out var skillDays);
+			var preferenceDays = new List<IPreferenceDay>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if ((dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday) && dateOnly != new DateOnly(2017, 12, 2))
+				{
+					preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+						new PreferenceRestriction { DayOffTemplate = new DayOffTemplate() }));
+				}
+				else
+				{
+					preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+						new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(7), TimeSpan.FromHours(8)) }));
+				}
+			}
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.True();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
+				.EqualTo(TimeSpan.FromHours(168));
+		}
+
 		//ShouldHandleMorePreferedWorkTimeIfFlexibleContractTime
 		//ShouldHandleLessPreferedWorkTimeIfFlexibleContractTime
 
