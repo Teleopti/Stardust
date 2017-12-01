@@ -56,10 +56,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			_workShiftMinMaxCalculator.ResetCache();
 			var minMaxTime = _workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(matrixList.First(), schedulingOptions);
-			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTime(matrixList.First());
+			var targetTimePeriod = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrixList.First());
 			schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
 
-			return minMaxTime.Minimum <= targetTime && minMaxTime.Maximum >= targetTime;
+			return minMaxTime.Minimum <= targetTimePeriod.EndTime && minMaxTime.Maximum >= targetTimePeriod.StartTime;
 		}
 	}
 }

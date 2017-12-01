@@ -201,6 +201,52 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			result.Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldHandleMoreDaysOffIfFlexibleDaysOff()
+		{
+			var period = createStandardSetupWithFlexibleContract(out var scenario, out var agent, out var skillDays);
+			var preferenceDays = new List<IPreferenceDay>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday || dateOnly == new DateOnly(2017, 12, 1))
+				{
+					preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+						new PreferenceRestriction { DayOffTemplate = new DayOffTemplate()}));
+				}
+			}
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.True();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
+				.EqualTo(TimeSpan.FromHours(168));
+		}
+
+		//ShouldHandleLessDaysOffIfFlexibleDaysOff
+		//ShouldHandleMorePreferedWorkTimeIfFlexibleContractTime
+		//ShouldHandleLessPreferedWorkTimeIfFlexibleContractTime
+
+		private static DateOnlyPeriod createStandardSetupWithFlexibleContract(out Scenario scenario, out Person agent, out IList<ISkillDay> skillDays)
+		{
+			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
+			scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
+				new ShiftCategory("_").WithId()));
+			agent = new Person().WithId()
+				.WithPersonPeriod(new RuleSetBag(ruleSet), skill)
+				.WithSchedulePeriodOneMonth(period.StartDate);
+			agent.Period(period.StartDate).PersonContract = new PersonContract(new ContractWithMaximumTolerance(), new PartTimePercentage("_"),
+				new ContractScheduleWorkingMondayToFriday());
+			skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			return period;
+		}
+
 		private static DateOnlyPeriod createStandardSetup(out Scenario scenario, out Person agent, out IList<ISkillDay> skillDays)
 		{
 			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
