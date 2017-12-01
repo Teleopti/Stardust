@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -42,41 +44,45 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			.ToArray());
 		}
 
-		private IEnumerable<Guid> extractPersonIdsFromScheduleChangesOnlyInDefaultScenario(IEnumerable<IRootChangeInfo> modifiedRoots)
+		private IEnumerable<Guid> extractPersonIdsFromScheduleChangesOnlyInDefaultScenario(IEnumerable<IRootChangeInfo> rootChangeInfos)
 		{
-			var roots = modifiedRoots.Select(r => r.Root)
-				.Where(s => includedScheduleTypes.Any(t => s.GetType().GetInterfaces().Contains(t)))
+			var infos = rootChangeInfos
+				.Where(s => includedScheduleTypes.Any(t => s.Root.GetType().GetInterfaces().Contains(t)))
 				.ToList();
 
-			var scheduleData = roots
+			var scheduleData = infos
+				.Select(r => r.Root)
 				.OfType<IPersistableScheduleData>()
 				.Where(s => s.Scenario.DefaultScenario && isWithinASMNotifyPeriod(s.Period.StartDateTime, s.Period.EndDateTime, s.Person))
-				.Select(s => s.Person.Id.Value).ToList();
+				.Select(s => s.Person.Id.Value);
 
-			var meetingData = roots
-				.OfType<IMeeting>()
-				.SelectMany(meeting => isMeetingWithinASMNotifyPeriod(meeting))
-				.ToList();
+			var meetingData = getPersonDataForMeeting(infos);
 
 			return scheduleData.Union(meetingData);
 		}
 
-		private IEnumerable<Guid> isMeetingWithinASMNotifyPeriod(IMeeting meeting)
+		private IEnumerable<Guid> getPersonDataForMeeting(IList<IRootChangeInfo> rootChangeInfos)
 		{
-			if (!meeting.Scenario.DefaultScenario)
-				return Enumerable.Empty<Guid>();
+			var result = new List<Guid>();
+			foreach (var info in rootChangeInfos)
+			{
+				if (info.Root as IMeeting == null)
+					continue;
 
-			var meetingDaysInUtc = meeting.MeetingRecurrenceOption.GetMeetingDays(meeting.StartDate, meeting.EndDate)
-				.Select(md => new
+				var changes = (info.Root as IProvideCustomChangeInfo).CustomChanges(info.Status);
+				foreach (var change in changes)
 				{
-					StartDateTime = TimeZoneHelper.ConvertToUtc(md.Date.Add(meeting.StartTime), meeting.TimeZone),
-					EndDateTime = TimeZoneHelper.ConvertToUtc(md.Date.Add(meeting.EndTime), meeting.TimeZone)
-				});
+					var person = (change.Root as IMainReference)?.MainRoot as IPerson;
+					var period = (change.Root as IPeriodized)?.Period;
+					if (person == null
+						|| period == null
+						|| !isWithinASMNotifyPeriod(period.Value.StartDateTime, period.Value.EndDateTime, person))
+						continue;
 
-			return meeting.MeetingPersons
-				.Where(person =>
-				meetingDaysInUtc.Any(md => isWithinASMNotifyPeriod(md.StartDateTime, md.EndDateTime, person.Person)))
-				.Select(person => person.Person.Id.GetValueOrDefault());
+					result.Add(person.Id.GetValueOrDefault());
+				}
+			}
+			return result.Distinct();
 		}
 
 		private bool isWithinASMNotifyPeriod(DateTime startDateTime, DateTime endDateTime, IPerson person)
