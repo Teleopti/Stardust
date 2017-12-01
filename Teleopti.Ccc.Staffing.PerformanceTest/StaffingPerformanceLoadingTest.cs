@@ -53,16 +53,16 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public AddOverTime AddOverTime;
 		public StaffingViewModelCreator StaffingViewModelCreator;
 
-		private IList<IPersonRequest> requests;
+		//private IList<IPersonRequest> requests;
 		private DateTime _nowDateTime;
-		private ICollection<IPerson> _personList;
-		private List<IWorkflowControlSet> _wfcs;
+		//private ICollection<IPerson> _personList;
+		//private List<IWorkflowControlSet> _wfcs;
 		private IEnumerable<ISkill> _skills;
 
 
 		public override void OneTimeSetUp()
 		{
-			_wfcs = new List<IWorkflowControlSet>();
+			//_wfcs = new List<IWorkflowControlSet>();
 			_nowDateTime = new DateTime(2016, 04, 06, 6, 58, 0).Utc();
 			Now.Is(_nowDateTime);
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(14));
-			requests = new List<IPersonRequest>();
+			//requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>
 			{
 				AbsenceRepository.LoadAll();
