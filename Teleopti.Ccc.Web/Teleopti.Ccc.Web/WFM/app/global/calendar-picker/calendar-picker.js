@@ -129,7 +129,7 @@
             if (!vm.pickEndDate) {
                 return vm.dateRangeText = 'Please select end date';
             }
-            if (vm.pickEndDate - vm.pickStartDate <= 0) {
+            if (vm.pickEndDate - vm.pickStartDate < 0) {
                 return vm.dateRangeText = 'End date should be later than start date';
             }
             return vm.dateRangeText = '';
