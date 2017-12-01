@@ -10,19 +10,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 	[TestFixture]
 	public class ScheduleJobStepsTest
 	{
-		private IJobParameters _jobParameters;
-
-		[SetUp]
-		public void Setup()
-		{
-			_jobParameters = JobParametersFactory.SimpleParameters(false);
-			_jobParameters.Helper = new JobHelperForTest(new RaptorRepositoryForTest(), null);
-		}
-
 		[Test]
 		public void VerifyScheduleJobSteps()
 		{
-			IList<IJobStep> jobStepList = new ScheduleJobCollection(_jobParameters);
+			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			jobParameters.Helper = new JobHelperForTest(new RaptorRepositoryForTest(), null);
+			IList<IJobStep> jobStepList = new ScheduleJobCollection(jobParameters);
 
 			foreach (var jobStep in jobStepList)
 			{

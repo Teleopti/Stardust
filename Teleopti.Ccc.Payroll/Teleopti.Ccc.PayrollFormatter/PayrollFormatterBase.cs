@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.PayrollFormatter
             return value;
         }
 
-        public virtual string FileSuffix { get { return "txt"; } }
+        public virtual string FileSuffix => "txt";
 
-        private static string applyLength(ItemFormat format, string value)
+		private static string applyLength(ItemFormat format, string value)
         {
             if (format.Length>0 && value.Length>format.Length)
             {

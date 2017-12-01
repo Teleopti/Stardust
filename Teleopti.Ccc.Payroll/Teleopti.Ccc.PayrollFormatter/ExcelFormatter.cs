@@ -69,14 +69,8 @@ namespace Teleopti.Ccc.PayrollFormatter
             return memoryStream;
         }
 
-        public override string FileSuffix
-        {
-            get
-            {
-                return "xls";
-            }
-        }
+        public override string FileSuffix => "xls";
 
-        #endregion
+		#endregion
     }
 }

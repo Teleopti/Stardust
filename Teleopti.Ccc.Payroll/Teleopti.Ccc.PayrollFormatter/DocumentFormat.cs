@@ -28,17 +28,11 @@ namespace Teleopti.Ccc.PayrollFormatter
             ItemsElement = string.Empty;
         }
 
-        public DocumentFormatType DocumentFormatType
-        {
-            get { return _documentFormatType; }
-        }
+        public DocumentFormatType DocumentFormatType => _documentFormatType;
 
-        public string Element
-        {
-            get { return _element; }
-        }
+		public string Element => _element;
 
-        public string ItemSeparator
+		public string ItemSeparator
         {
             get { return _itemSeparator; }
             set { _itemSeparator = value; }
@@ -50,12 +44,9 @@ namespace Teleopti.Ccc.PayrollFormatter
             set { _rowSeparator = value; }
         }
 
-        public Encoding Encoding
-        {
-            get { return _encoding; }
-        }
+        public Encoding Encoding => _encoding;
 
-        public bool HeaderEnabled { get; set; }
+		public bool HeaderEnabled { get; set; }
 
         public bool FooterEnabled { get; set; }
 
@@ -63,12 +54,9 @@ namespace Teleopti.Ccc.PayrollFormatter
 
         public string FooterElement { get; set; }
 
-        public ReadOnlyCollection<ItemFormat> Items
-        {
-            get { return new ReadOnlyCollection<ItemFormat>(_items); }
-        }
+        public ReadOnlyCollection<ItemFormat> Items => new ReadOnlyCollection<ItemFormat>(_items);
 
-        public string ItemsElement { get; set; }
+		public string ItemsElement { get; set; }
 
         public void SetEncoding(string encodingName)
         {

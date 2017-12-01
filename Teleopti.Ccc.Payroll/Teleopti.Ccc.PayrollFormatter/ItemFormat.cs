@@ -16,17 +16,11 @@ namespace Teleopti.Ccc.PayrollFormatter
             _xmlType = xmlType;
         }
 
-        public string XmlType
-        {
-            get { return _xmlType; }
-        }
+        public string XmlType => _xmlType;
 
-        public string Element
-        {
-            get { return _element; }
-        }
+		public string Element => _element;
 
-        public string Format
+		public string Format
         {
             get { return _format; }
             set { _format = value; }
