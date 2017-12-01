@@ -66,10 +66,13 @@
 	color: $text-color-standard!important;
 }
 
-.shift-cell-header {
+.shift-cell-header, .wfm-table th.shift-cell-header {
 	height: $full-padding*6;
 	background-color: $white;
 	padding-top: $full-padding;
+}
+.wfm-table th:not(.shift-cell-header):hover {
+  background-color: $blue-300;
 }
 
 .cell-header {
@@ -188,8 +191,8 @@ md-checkbox.rta-marked-checkbox .md-icon{
 	position: relative;
 	width: 100%;
 	height: 100%;
-	padding: 0 2% 0 0;
-	margin: 0 0 0 3%;
+	padding: 0;
+	margin: 0;
 }
 
 .rta-alarmline {

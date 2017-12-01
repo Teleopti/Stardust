@@ -113,6 +113,20 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect($fakeBackend.lastAgentStatesRequestParams.direction).toBeUndefined();
 	});
 
+	it('should not sort when viewing agents in alarm', function () {
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		c.apply(function () {
+			vm.showInAlarm = true;
+		});
+		c.apply(function () {
+			vm.sort("Name");
+		});
+
+		expect(vm.orderBy).toBe(undefined);
+	});
+
 	it('should not sort when viewing agents in alarm after switching', function () {
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;

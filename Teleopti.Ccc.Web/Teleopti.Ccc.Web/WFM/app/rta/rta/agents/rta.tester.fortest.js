@@ -37,9 +37,8 @@ var rtaTester = (function () {
 			$fakeBackend = _FakeRtaBackend_;
 			$controllerBuilder = _ControllerBuilder_;
 			NoticeService = _NoticeService_;
-			scope = $controllerBuilder.setup('RtaAgentsController46758');
+			scope = $controllerBuilder.setup('RtaAgentsController46786');
 			spyOn($state, 'go');
-			// spyOn(NoticeService, 'info');
 		}));
 
 		afterEach(function () {

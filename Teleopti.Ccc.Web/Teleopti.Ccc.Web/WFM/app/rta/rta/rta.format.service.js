@@ -73,11 +73,10 @@
 		function buildTimeline(statesTime) {
 			var timeline = function (time) {
 				var percent = timeToPercent(statesTime, time);
-				if (percent <= 94)
-					return {
-						Time: time.format('HH:mm'),
-						Offset: percent + "%"
-					};
+				return {
+					Time: time.format('HH:mm'),
+					Offset: percent + "%"
+				};
 			};
 
 			var time = moment(statesTime).startOf('hour');

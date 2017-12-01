@@ -1,15 +1,16 @@
 'use strict';
 
 rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
-													 $fakeBackend,
-													 $controllerBuilder,
-													 stateParams) {
+													$fakeBackend,
+													$controllerBuilder,
+													stateParams) {
 	var vm;
 
-	[{
-		time: "2016-05-26T00:30:00",
-		expect: ["00:00", "01:00", "02:00", "03:00"]
-	},
+	[
+		{
+			time: "2016-05-26T00:30:00",
+			expect: ["00:00", "01:00", "02:00", "03:00"]
+		},
 		{
 			time: "2016-05-26T11:30:00",
 			expect: ["11:00", "12:00", "13:00", "14:00"]
@@ -42,13 +43,14 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 
 	});
 
-	[{
-		time: "2016-05-26T12:00:00",
-		expect: ["25%", "50%", "75%"],
-	},
+	[
+		{
+			time: "2016-05-26T12:00:00",
+			expect: ["25%", "50%", "75%", "100%"]
+		},
 		{
 			time: "2016-05-26T12:30:00",
-			expect: ["12.5%", "37.5%", "62.5%", "87.5%"],
+			expect: ["12.5%", "37.5%", "62.5%", "87.5%"]
 		}
 	].forEach(function (example) {
 

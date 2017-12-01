@@ -52,7 +52,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
                 },
                 templateUrl: function() {
                 	if (toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)
-						return 'app/rta/rta/agents/rta-agents.RTA_ViewHistoricalAhderenceForRecentShifts_46786';
+						return 'app/rta/rta/agents/rta-agents.RTA_ViewHistoricalAhderenceForRecentShifts_46786.html';
                 	if (toggles.RTA_MobileFriendlyCheckboxes_46758)
 						return 'app/rta/rta/agents/rta-agents.RTA_MobileFriendlyCheckboxes_46758.html';
 					if (toggles.RTA_MonitorAgentsWithLongTimeInState_46475)

@@ -355,6 +355,9 @@
 		}
 
 		vm.sort = function (column) {
+			if (vm.showInAlarm)
+				return;
+			
 			if (vm.orderBy !== column)
 				vm.direction = 'asc';
 			else

@@ -32,7 +32,7 @@
 
 			var shiftHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div col-index="renderIndex" title="TOOLTIP">'
 				+ '<label ng-repeat="row in grid.appScope.vm.timeline" class="label label-info"'
-				+ 'ng-attr-style="position: absolute; left: {{row.Offset}}; top:5px;">{{row.Time}}</label></div>';
+				+ 'ng-attr-style="position: absolute; left: {{row.Offset}}; top:5px; margin-left: -18px">{{row.Time}}</label></div>';
 
 
 			var cellHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div role="columnheader" ng-class="{ \'sortable\': sortable }" ui-grid-one-bind-aria-labelledby-grid="col.uid + \'-header-text \' + col.uid + \'-sortdir-text\'"'
