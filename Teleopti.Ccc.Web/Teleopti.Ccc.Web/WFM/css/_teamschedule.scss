@@ -373,6 +373,7 @@ wfm-multiple-search-input {
 	}
 
 	.rightside-part {
+		display: flex;
 		flex-wrap: nowrap;
 		flex-direction: row;
 		justify-content: flex-start;
