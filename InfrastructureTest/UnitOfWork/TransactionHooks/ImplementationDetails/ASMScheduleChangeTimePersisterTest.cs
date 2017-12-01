@@ -1,9 +1,7 @@
 ﻿using NUnit.Framework;
-using Rhino.Mocks;
 using System;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -14,6 +12,8 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.IocCommon;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.ImplementationDetails
 {
@@ -198,10 +198,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			};
 			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
 			Target.AfterCompletion(roots);
-			
-			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null(); 
-		}
 
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
+		}
 
 		[Test]
 		public void ShouldNotAddScheduleChangeTimeForPersonAssignmentIfNotInDefaultScenario()
@@ -221,6 +220,98 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
 		}
 
+		[Test]
+		public void ShouldAddScheduleChangeTimeForMeeting() {
+			var person = PersonFactory.CreatePerson().WithId();
+			var requiredPerson = PersonFactory.CreatePerson().WithId();
+			requiredPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var activity = ActivityFactory.CreateActivity("Meeting");
+			Meeting meeting = new Meeting(person,
+								  new List<IMeetingPerson>
+									  {
+										   new MeetingPerson(requiredPerson, false),
+									  }, "my subject", "my location",
+								  "my description", activity, scenario);
+			
+			meeting.StartDate = new DateOnly(2017, 12, 1);
+			meeting.EndDate = new DateOnly(2017, 12, 1);
+			meeting.StartTime = TimeSpan.FromHours(8);
+			meeting.EndTime = TimeSpan.FromHours(10);
+			meeting.TimeZone = TimeZoneInfo.Utc;
+
+			var now = new DateTime(2017, 12, 1, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(meeting, DomainUpdateType.Update)
+			};
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(requiredPerson.Id.GetValueOrDefault()).TimeStamp.Should().Be.EqualTo(now);
+		}
+
+		[Test]
+		public void ShouldAddScheduleChangeTimeForRecurrentMeetingIfAnyMeetingDaysInNotifyPeriod()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var requiredPerson = PersonFactory.CreatePerson().WithId();
+			requiredPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var activity = ActivityFactory.CreateActivity("Meeting");
+			Meeting meeting = new Meeting(person,
+								  new List<IMeetingPerson>
+									  {
+										   new MeetingPerson(requiredPerson, false),
+									  }, "my subject", "my location",
+								  "my description", activity, scenario);
+			meeting.SetRecurrentOption(new RecurrentDailyMeeting { IncrementCount = 1 });
+			meeting.StartDate = new DateOnly(2017, 12, 1);
+			meeting.EndDate = new DateOnly(2017, 12, 6);
+			meeting.StartTime = TimeSpan.FromHours(8);
+			meeting.EndTime = TimeSpan.FromHours(10);
+			meeting.TimeZone = TimeZoneInfo.Utc;
+
+			var now = new DateTime(2017, 12, 1, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(meeting, DomainUpdateType.Update)
+			};
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(requiredPerson.Id.GetValueOrDefault()).TimeStamp.Should().Be.EqualTo(now);
+		}
+
+		[Test]
+		public void ShouldNotAddScheduleChangeTimeForRecurrentMeetingIfNoMeetingDaysInNotifyPeriod()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var requiredPerson = PersonFactory.CreatePerson().WithId();
+			requiredPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var activity = ActivityFactory.CreateActivity("Meeting");
+			Meeting meeting = new Meeting(person,
+								  new List<IMeetingPerson>
+									  {
+										   new MeetingPerson(requiredPerson, false),
+									  }, "my subject", "my location",
+								  "my description", activity, scenario);
+			meeting.SetRecurrentOption(new RecurrentDailyMeeting { IncrementCount = 1 });
+			meeting.StartDate = new DateOnly(2017, 11, 29);
+			meeting.EndDate = new DateOnly(2017, 11, 30);
+			meeting.StartTime = TimeSpan.FromHours(6);
+			meeting.EndTime = TimeSpan.FromHours(7);
+			meeting.TimeZone = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+
+			var now = new DateTime(2017, 12, 1, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(meeting, DomainUpdateType.Update)
+			};
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(requiredPerson.Id.GetValueOrDefault()).Should().Be.Null();
+		}
 
 	}
 

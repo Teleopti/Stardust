@@ -48,17 +48,35 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.Where(s => includedScheduleTypes.Any(t => s.GetType().GetInterfaces().Contains(t)))
 				.ToList();
 
-			var scheduleData = roots.OfType<IPersistableScheduleData>()
+			var scheduleData = roots
+				.OfType<IPersistableScheduleData>()
 				.Where(s => s.Scenario.DefaultScenario && isWithinASMNotifyPeriod(s.Period.StartDateTime, s.Period.EndDateTime, s.Person))
 				.Select(s => s.Person.Id.Value).ToList();
 
-			var meetingData = roots.OfType<IMeeting>()
-				.Where(m => m.Scenario.DefaultScenario)
-				.SelectMany(meeting => meeting.MeetingPersons
-					.Where(p => isWithinASMNotifyPeriod(meeting.StartDate.Date.Add(meeting.StartTime), meeting.EndDate.Date.Add(meeting.EndTime), p.Person))
-					.Select(p => p.Person.Id.Value)).ToList();
+			var meetingData = roots
+				.OfType<IMeeting>()
+				.SelectMany(meeting => isMeetingWithinASMNotifyPeriod(meeting))
+				.ToList();
 
 			return scheduleData.Union(meetingData);
+		}
+
+		private IEnumerable<Guid> isMeetingWithinASMNotifyPeriod(IMeeting meeting)
+		{
+			if (!meeting.Scenario.DefaultScenario)
+				return Enumerable.Empty<Guid>();
+
+			var meetingDaysInUtc = meeting.MeetingRecurrenceOption.GetMeetingDays(meeting.StartDate, meeting.EndDate)
+				.Select(md => new
+				{
+					StartDateTime = TimeZoneHelper.ConvertToUtc(md.Date.Add(meeting.StartTime), meeting.TimeZone),
+					EndDateTime = TimeZoneHelper.ConvertToUtc(md.Date.Add(meeting.EndTime), meeting.TimeZone)
+				});
+
+			return meeting.MeetingPersons
+				.Where(person =>
+				meetingDaysInUtc.Any(md => isWithinASMNotifyPeriod(md.StartDateTime, md.EndDateTime, person.Person)))
+				.Select(person => person.Person.Id.GetValueOrDefault());
 		}
 
 		private bool isWithinASMNotifyPeriod(DateTime startDateTime, DateTime endDateTime, IPerson person)
