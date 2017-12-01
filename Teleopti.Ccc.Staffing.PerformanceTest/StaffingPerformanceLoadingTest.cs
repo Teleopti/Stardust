@@ -26,6 +26,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
+	[Toggle(Toggles.Staffing_BPOExchangeImport_45202)]
 	public class StaffingPerformanceLoadingTest : PerformanceTestWithOneTimeSetup
 	{
 		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
@@ -72,7 +73,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>
 			{
-				//WorkflowControlSetRepository.LoadAll();
 				AbsenceRepository.LoadAll();
 				WorkloadRepository.LoadAll();
 				ActivityRepository.LoadAll();
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 
 				ScenarioRepository.LoadDefaultScenario();
 
-				//UpdateStaffingLevel.Update(period); 
+				UpdateStaffingLevel.Update(period); 
 			});
 		}
 
@@ -101,10 +101,13 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			{
 				var selectedSkills = _skills.Select(s => s.Id.GetValueOrDefault());
 
-				foreach (var skill in selectedSkills)
+				3.Times(_ =>
 				{
-					var model = StaffingViewModelCreator.Load(new [] { skill });
-				}
+					foreach (var skill in selectedSkills)
+					{
+						var model = StaffingViewModelCreator.Load(new[] {skill});
+					}
+				});
 			});
 		}
 	}
