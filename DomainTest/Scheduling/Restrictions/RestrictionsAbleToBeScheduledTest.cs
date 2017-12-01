@@ -254,8 +254,63 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				.EqualTo(TimeSpan.FromHours(168));
 		}
 
-		//ShouldHandleMorePreferedWorkTimeIfFlexibleContractTime
-		//ShouldHandleLessPreferedWorkTimeIfFlexibleContractTime
+		[Test]
+		public void ShouldHandleMorePreferedWorkTimeIfFlexibleContractTime()
+		{
+			var period = createStandardSetupWithFlexibleContract(out var scenario, out var agent, out var skillDays);
+			var preferenceDays = new List<IPreferenceDay>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
+				{
+					preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+						new PreferenceRestriction { DayOffTemplate = new DayOffTemplate() }));
+				}
+				else
+				{
+					preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+						new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(9), TimeSpan.FromHours(9)) }));
+				}
+			}
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.True();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
+				.EqualTo(TimeSpan.FromHours(189));
+		}
+
+		[Test]
+		public void ShouldHandleLessPreferedWorkTimeIfFlexibleContractTime()
+		{
+			var period = createStandardSetupWithFlexibleContract(out var scenario, out var agent, out var skillDays);
+			var preferenceDays = new List<IPreferenceDay>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
+				{
+					preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+						new PreferenceRestriction { DayOffTemplate = new DayOffTemplate() }));
+				}
+				else
+				{
+					preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+						new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(7), TimeSpan.FromHours(7)) }));
+				}
+			}
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.True();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
+				.EqualTo(TimeSpan.FromHours(147));
+		}
 
 		private static DateOnlyPeriod createStandardSetupWithFlexibleContract(out Scenario scenario, out Person agent, out IList<ISkillDay> skillDays)
 		{
