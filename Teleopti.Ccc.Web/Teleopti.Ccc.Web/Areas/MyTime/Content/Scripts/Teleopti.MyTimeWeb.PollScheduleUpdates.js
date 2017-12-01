@@ -9,7 +9,6 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	var settings = null;
 	var notificerDisplayTime = 0;
 	var ajax = null;
-	var currentListener;
 
 	function _setListener(name, callback) {
 		currentListener = { name: name, callback: callback };

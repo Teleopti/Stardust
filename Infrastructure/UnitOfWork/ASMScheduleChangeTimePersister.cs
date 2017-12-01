@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -35,18 +31,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			addOrUpdateTime(personDataInDefaultScenario);
 		}
 
-
 		private void addOrUpdateTime(IEnumerable<Guid> personIds)
 		{
 			var personIdList = personIds.ToList();
-			foreach (var personId in personIdList)
+			_scheduleChangeTimeRepository.Save(personIdList.Select(personId => new ASMScheduleChangeTime
 			{
-				_scheduleChangeTimeRepository.Save(new ASMScheduleChangeTime
-				{
-					PersonId = personId,
-					TimeStamp = _now.UtcDateTime()
-				});
-			}
+				PersonId = personId,
+				TimeStamp = _now.UtcDateTime()
+			})
+			.ToArray());
 		}
 
 		private IEnumerable<Guid> extractPersonIdsFromScheduleChangesOnlyInDefaultScenario(IEnumerable<IRootChangeInfo> modifiedRoots)

@@ -9,24 +9,28 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.IocCommon;
+using SharpTestsEx;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.ImplementationDetails
 {
-	[TestFixture]
-	public class ASMScheduleChangeTimePersisterTest
+	[TestFixture, DatabaseTest]
+	public class ASMScheduleChangeTimePersisterTest : ISetup
 	{
-		private ASMScheduleChangeTimePersister _target;
-		private IASMScheduleChangeTimeRepository _repo;
-		private MutableNow _now;
+		public ASMScheduleChangeTimePersister Target;
+		public FakeASMScheduleChangeTimeRepository Repo;
+		public MutableNow Now;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_repo = MockRepository.GenerateMock<IASMScheduleChangeTimeRepository>();
-			_now = new MutableNow();
-			_target = new ASMScheduleChangeTimePersister(_repo, _now);
+			system.UseTestDouble<ASMScheduleChangeTimePersister>().For<ITransactionHook>();
+			system.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
+			system.UseTestDouble<MutableNow>().For<INow>();
 		}
+
 		[Test]
 		public void ShouldAddScheduleChangeTimeForPersonAssignment()
 		{
@@ -40,16 +44,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			{
 				new RootChangeInfo(pa, DomainUpdateType.Update)
 			};
-			_now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
-			var time = new ASMScheduleChangeTime
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				TimeStamp = _now.UtcDateTime()
-			};
+			var now = new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			Target.AfterCompletion(roots);
 
-			_target.AfterCompletion(roots);
-
-			_repo.AssertWasCalled(x => x.Save(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
 		}
 
 
@@ -63,22 +62,15 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 				new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc));
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period);
 
-
 			var roots = new IRootChangeInfo[]
 			{
 				new RootChangeInfo(personAbsence, DomainUpdateType.Update)
 			};
-			_now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
-			var time = new ASMScheduleChangeTime
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				TimeStamp = _now.UtcDateTime()
-			};
+			var now = new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
 
-			_target.AfterCompletion(roots);
-
-			_repo.AssertWasCalled(x => x.Save(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
-
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
 		}
 
 		[Test]
@@ -93,18 +85,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			{
 						new RootChangeInfo(person, DomainUpdateType.Update)
 			};
-			_now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
-			var time = new ASMScheduleChangeTime
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				TimeStamp = _now.UtcDateTime()
-			};
-
-			_target.AfterCompletion(roots);
-			_repo.AssertWasNotCalled(x => x
-				.Save(Arg<ASMScheduleChangeTime>
-				.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
-
+			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
 		}
 
 
@@ -124,16 +107,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			{
 								new RootChangeInfo(pa, DomainUpdateType.Update)
 			};
-			_now.Is(new DateTime(2017, 11, 26, 20, 0, 0, DateTimeKind.Utc));
-			var time = new ASMScheduleChangeTime
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				TimeStamp = _now.UtcDateTime()
-			};
-			_target.AfterCompletion(roots);
-			_repo.AssertWasNotCalled(x => x
-							.Save(Arg<ASMScheduleChangeTime>
-							.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
+			Now.Is(new DateTime(2017, 11, 26, 20, 0, 0, DateTimeKind.Utc));
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
 		}
 
 		[Test]
@@ -150,20 +126,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			var roots = new IRootChangeInfo[]
 			{
-								new RootChangeInfo(pa, DomainUpdateType.Update)
+				new RootChangeInfo(pa, DomainUpdateType.Update)
 			};
-			_now.Is(new DateTime(2017, 11, 26, 20, 0, 0, DateTimeKind.Utc));
-			var time = new ASMScheduleChangeTime
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				TimeStamp = _now.UtcDateTime()
-			};
-
-			_target.AfterCompletion(roots);
-
-			_repo.AssertWasCalled(x => x
-						.Save(Arg<ASMScheduleChangeTime>
-						.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
+			var now = new DateTime(2017, 11, 26, 20, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
 		}
 
 		[Test]
@@ -179,27 +147,21 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			{
 								new RootChangeInfo(pa, DomainUpdateType.Update)
 			};
-			_now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
-			var time = new ASMScheduleChangeTime
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				TimeStamp = _now.UtcDateTime()
-			};
-			_repo.Stub(x => x.GetScheduleChangeTime(Arg<Guid>
-						.Matches(t => t == time.PersonId))).Return(time);
+			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
+
+			Target.AfterCompletion(roots);
 
 			var newTime = new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc);
-			_now.Is(newTime);
+			Now.Is(newTime);
 
-			_target.AfterCompletion(roots);
+			Target.AfterCompletion(roots);
 
-			_repo.AssertWasCalled(x => x
-						.Save(Arg<ASMScheduleChangeTime>
-						.Matches(t => t.TimeStamp == newTime && t.PersonId == time.PersonId)));
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(newTime);
 		}
 
 		[Test]
-		public void ShouldUpdateScheduleChangeTimeForPersonAbsence() {
+		public void ShouldUpdateScheduleChangeTimeForPersonAbsence()
+		{
 			var person = PersonFactory.CreatePerson().WithId();
 			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -211,24 +173,16 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			{
 				new RootChangeInfo(personAbsence, DomainUpdateType.Update)
 			};
-			_now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
-			var time = new ASMScheduleChangeTime
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				TimeStamp = _now.UtcDateTime()
-			};
+			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
 
-			_repo.Stub(x => x.GetScheduleChangeTime(Arg<Guid>
-						.Matches(t => t == time.PersonId))).Return(time);
+			Target.AfterCompletion(roots);
 
 			var newTime = new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc);
-			_now.Is(newTime);
+			Now.Is(newTime);
 
-			_target.AfterCompletion(roots);
+			Target.AfterCompletion(roots);
 
-			_repo.AssertWasCalled(x => x
-					.Save(Arg<ASMScheduleChangeTime>
-					.Matches(t => t.TimeStamp == newTime && t.PersonId == time.PersonId)));
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(newTime);
 		}
 		[Test]
 		public void ShouldNotUpdateScheduleChangeTimeIfTheTypeIsNotAbsenceOrAssignment()
@@ -242,24 +196,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			{
 						new RootChangeInfo(person, DomainUpdateType.Update)
 			};
-			_now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
-			var time = new ASMScheduleChangeTime
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				TimeStamp = _now.UtcDateTime()
-			};
-
-			_repo.Stub(x => x.GetScheduleChangeTime(Arg<Guid>
-						.Matches(t => t == time.PersonId))).Return(time);
-
-			var newTime = new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc);
-			_now.Is(newTime);
-
-			_target.AfterCompletion(roots);
-			_repo.AssertWasNotCalled(x => x
-					.Save(Arg<ASMScheduleChangeTime>
-					.Matches(t => t.TimeStamp == newTime && t.PersonId == time.PersonId)));
-
+			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
+			Target.AfterCompletion(roots);
+			
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null(); 
 		}
 
 
@@ -276,18 +216,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			{
 				new RootChangeInfo(pa, DomainUpdateType.Update)
 			};
-			_now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
-			var time = new ASMScheduleChangeTime
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				TimeStamp = _now.UtcDateTime()
-			};
-
-			_target.AfterCompletion(roots);
-
-			_repo.AssertWasNotCalled(x => x.Save(Arg<ASMScheduleChangeTime>.Matches(t => t.TimeStamp == time.TimeStamp && t.PersonId == time.PersonId)));
-
+			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
 		}
+
 
 	}
 

@@ -1,7 +1,7 @@
 ﻿using NHibernate;
 using NHibernate.Transform;
 using System;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,28 +20,25 @@ namespace Teleopti.Ccc.Infrastructure.Schedule
 		{
 			using (var session = openSession())
 			{
-				using (var transaction = session.BeginTransaction())
-				{
-					var time = session.CreateSQLQuery($@"
+				return session.CreateSQLQuery($@"
 						SELECT [PersonId], [TimeStamp] FROM [ReadModel].ASMScheduleChangeTime 
 						WHERE PersonId = :{nameof(ASMScheduleChangeTime.PersonId)}
 					")
-					.SetGuid(nameof(ASMScheduleChangeTime.PersonId), personId)
-					.SetResultTransformer(Transformers.AliasToBean<ASMScheduleChangeTime>())
-					.UniqueResult<ASMScheduleChangeTime>();
-					transaction.Commit();
-					return time;
-				}
+				.SetGuid(nameof(ASMScheduleChangeTime.PersonId), personId)
+				.SetResultTransformer(Transformers.AliasToBean<ASMScheduleChangeTime>())
+				.UniqueResult<ASMScheduleChangeTime>();
 			}
 		}
 
-		public void Save(ASMScheduleChangeTime time)
+		public void Save(params ASMScheduleChangeTime[] times)
 		{
 			using (var session = openSession())
 			{
 				using (var transaction = session.BeginTransaction())
 				{
-					session.CreateSQLQuery($@"
+					foreach (var time in times)
+					{
+						session.CreateSQLQuery($@"
 							MERGE INTO[ReadModel].[ASMScheduleChangeTime] AS T
 							USING ( VALUES (:{nameof(ASMScheduleChangeTime.PersonId)}))
 							AS S({nameof(ASMScheduleChangeTime.PersonId)})
@@ -59,16 +56,15 @@ namespace Teleopti.Ccc.Infrastructure.Schedule
 								UPDATE SET
 									{nameof(ASMScheduleChangeTime.TimeStamp)} = :{nameof(ASMScheduleChangeTime.TimeStamp)}
 								;")
-									.SetGuid(nameof(ASMScheduleChangeTime.PersonId), time.PersonId)
-									.SetDateTime(nameof(ASMScheduleChangeTime.TimeStamp), time.TimeStamp)
-									.ExecuteUpdate();
-
+								.SetGuid(nameof(ASMScheduleChangeTime.PersonId), time.PersonId)
+								.SetDateTime(nameof(ASMScheduleChangeTime.TimeStamp), time.TimeStamp)
+								.ExecuteUpdate();
+					}
 					transaction.Commit();
 				}
 			}
 
 		}
-
 
 		private IStatelessSession openSession()
 		{

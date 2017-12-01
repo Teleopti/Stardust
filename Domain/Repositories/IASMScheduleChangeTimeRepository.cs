@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface IASMScheduleChangeTimeRepository
 	{
 		ASMScheduleChangeTime GetScheduleChangeTime(Guid personId);
-		void Save(ASMScheduleChangeTime time);
+		void Save(params ASMScheduleChangeTime[] time);
 	}
 }
