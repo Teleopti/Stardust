@@ -37,7 +37,7 @@ Gamification_NewBadgeCalculation_31185 = true
 Wfm_MinimumScaffolding_32659 = RC
 
 RTA_RtaTracer_45597 = true
-RTA_MonitorAgentsWithLongTimeInState_46475 = RC
+RTA_MonitorAgentsWithLongTimeInState_46475 = true
 RTA_MobileFriendlyCheckboxes_46758 = RC
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
@@ -116,6 +116,7 @@ WfmGlobalLayout_personalOptions_37114 = true
 Wfm_ArchiveSchedule_41498 = true
 Wfm_ImportSchedule_41247 = true
 WFM_WebScheduling_LowPriority_44320 = RC
+Wfm_WebPlan_Pilot_46815 = RC
 
 Scheduler_LoadWithoutRequests_38567 = true
 
@@ -124,10 +125,10 @@ ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_BlockSchedulingValidation_46092 = RC
 ResourcePlanner_RemoveClassicShiftCat_46582 = true
-ResourcePlanner_DoNotKillCache_46724 = RC
+ResourcePlanner_DoNotKillCache_46724 = true
 ResourcePlanner_RemoveImplicitResCalcContext_46680 = RC #put back to true when #46898 is fixed
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some issues
-ResourcePlanner_BpoScheduling_46265 = RC
+ResourcePlanner_BpoScheduling_46265 = true
 
 Wfm_DisplayOnlineHelp_39402 = true
 
@@ -196,5 +197,3 @@ Report_Show_Utc_In_Report_Selection_When_In_Use_45079 = true
 WFM_Unified_Skill_Group_Management_45417 = true
 WFM_Modify_Skill_Groups_45727 = RC
 WFM_AuditTrail_44006 = RC
-
-Wfm_WebPlan_Pilot_46815 = RC
