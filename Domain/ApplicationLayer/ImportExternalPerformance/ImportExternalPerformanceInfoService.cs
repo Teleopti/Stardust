@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
 	public interface IImportExternalPerformanceInfoService
 	{
-		IJobResult CreateJob(ImportFileData importFileData, ImportExternalPerformanceInfo fallbacks);
+		IJobResult CreateJob(ImportFileData importFileData);
 	}
 	public class ImportExternalPerformanceInfoService : IImportExternalPerformanceInfoService
 	{
@@ -25,16 +25,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public IJobResult CreateJob(ImportFileData importFileData, ImportExternalPerformanceInfo fallbacks)
+		public IJobResult CreateJob(ImportFileData importFileData)
 		{
 			var dateOnlyPeriod = DateOnly.Today.ToDateOnlyPeriod();
-			var jobResult = new JobResult(JobCategory.WebImportAgent, dateOnlyPeriod, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
-			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, fileData.FileName, fileData.Data));
+			var jobResult = new JobResult(JobCategory.WebImportExternalGamification, dateOnlyPeriod, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
+			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, importFileData.FileName, importFileData.Data));
 			_jobResultRepository.Add(jobResult);
 			_eventPublisher.Publish(new ImportExternalPerformanceInfoEvent()
 			{
-				JobResultId = jobResult.Id.GetValueOrDefault(),
-				ExternalPerformanceInfo = fallbacks
+				JobResultId = jobResult.Id.GetValueOrDefault()
 			});
 			return jobResult;
 		}

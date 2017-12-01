@@ -44,13 +44,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		public async Task<OkResult> NewImportExternalPerformanceInfoJob()
 		{
 			var contents = await ImportCommonAction.ReadAsMultipartAsync(Request.Content);
-			var externalPerformanceInfo = _multipartHttpContentExtractor.ExtractFormModel<ImportExternalPerformanceInfo>(contents);
 			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents).SingleOrDefault();
 			if (fileData?.Data?.Length == 0)
 			{
 				throw new ArgumentNullException(Resources.File, Resources.NoInput);
 			}
-			_importExternalPerformanceInfoService.CreateJob(fileData, externalPerformanceInfo);
+			_importExternalPerformanceInfoService.CreateJob(fileData);
 			return Ok();
 		}
 

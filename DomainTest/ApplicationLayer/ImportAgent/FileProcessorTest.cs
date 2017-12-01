@@ -4,6 +4,7 @@ using System.Linq;
 using NPOI.HSSF.UserModel;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		[Test, Ignore("file parsing")]
 		public void ShouldParseWorkbookFromHttpContent()
 		{
-			var fileData = new FileData();
+			var fileData = new ImportFileData();
 			using (var file = new FileStream(@"C:\TeleoptiWFM\SourceCode\main\Teleopti\Logs\test.xls", FileMode.Open, FileAccess.Read))
 			{
 				var ms = new MemoryStream();
@@ -97,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public void ShouldReturnNullWithWrongFileType()
 		{
 			var ms = new MemoryStream();
-			var fileData = new FileData
+			var fileData = new ImportFileData
 			{
 				FileName = "test.jpg",
 				Data = ms.ToArray()

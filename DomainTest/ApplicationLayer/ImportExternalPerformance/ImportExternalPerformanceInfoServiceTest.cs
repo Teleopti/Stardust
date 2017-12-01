@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			createValidJob();
 			var result = JobResultRepository.LoadAll().Single();
 
-			result.JobCategory.Should().Be(JobCategory.WebImportAgent);
+			result.JobCategory.Should().Be(JobCategory.WebImportExternalGamification);
 			result.Owner.Id.Should().Be(LoggedOnUser.CurrentUser().Id);
 			result.Artifacts.Single().Category.Should().Be(JobResultArtifactCategory.Input);
 		}
@@ -55,13 +54,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public void ShouldPublishImportAgentEvent()
 		{
 			setCurrentLoggedOnUser();
-			var expectedData = new ImportExternalPerformanceInfo();
-			var job = createValidJob(expectedData);
+			var job = createValidJob();
 
 			var @event = Publisher.PublishedEvents.Single() as ImportExternalPerformanceInfoEvent;
 			@event.Should().Not.Be.Null();
 			@event.JobResultId.Should().Be(job.Id);
-			@event.ExternalPerformanceInfo.Should().Equals(expectedData);
 		}
 
 		private IPerson setCurrentLoggedOnUser()
@@ -71,14 +68,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			return person;
 		}
 
-		private IJobResult createValidJob(ImportExternalPerformanceInfo fallbacks = null)
+		private IJobResult createValidJob()
 		{
 			var fileData = new ImportFileData()
 			{
 				FileName = "test.csv",
 				Data = Encoding.ASCII.GetBytes("test")
 			};
-			return Target.CreateJob(fileData, fallbacks);
+			return Target.CreateJob(fileData);
 		}
 	}
 }
