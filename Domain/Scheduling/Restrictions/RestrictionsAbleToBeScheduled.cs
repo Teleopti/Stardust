@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var schedulingOptions = new SchedulingOptions { DayOffTemplate = new DayOffTemplate() };
 			var schedulingCallBack = new SchedulingCallbackForDesktop(new NoSchedulingProgress(), new SchedulingOptions());
 			var selectedAgents = new List<IPerson> { schedulePeriod.Person };
-			var selectedPeriod = schedulePeriod.DateOnlyPeriod;
+			var selectedPeriod = schedulePeriod.DateOnlyPeriod.Extend(6);
 			_teamInfoFactoryFactory.Create(_schedulerStateHolder().ChoosenAgents, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var matrixList =
 				_matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
