@@ -59,7 +59,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var targetTimePeriod = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrixList.First());
 			schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
 
-			return minMaxTime.Minimum <= targetTimePeriod.EndTime && minMaxTime.Maximum >= targetTimePeriod.StartTime;
+			var periodCheck = minMaxTime.Minimum <= targetTimePeriod.EndTime && minMaxTime.Maximum >= targetTimePeriod.StartTime;
+			var weekCheck = checkWeeks(matrixList.First());
+
+			if (periodCheck && weekCheck)
+				return true;
+
+			return false;
+		}
+
+		private bool checkWeeks(IScheduleMatrixPro matrix)
+		{
+			return true;
 		}
 	}
 }

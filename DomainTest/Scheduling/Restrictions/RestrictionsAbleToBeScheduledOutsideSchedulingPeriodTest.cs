@@ -60,6 +60,51 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				.EqualTo(176);
 		}
 
+		[Test]
+		public void ShouldCheckOnWeekMaxTime()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var extendedPeriod = period.Extend(6);
+			var preferenceDays = new List<IPersistableScheduleData>();
+
+			preferenceDays.Add(new PreferenceDay(agent, new DateOnly(2017, 12, 4), 
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(9), TimeSpan.FromHours(9)) }));
+			preferenceDays.Add(new PreferenceDay(agent, new DateOnly(2017, 12, 5),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+			preferenceDays.Add(new PreferenceDay(agent, new DateOnly(2017, 12, 6),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+			preferenceDays.Add(new PreferenceDay(agent, new DateOnly(2017, 12, 7),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+			preferenceDays.Add(new PreferenceDay(agent, new DateOnly(2017, 12, 8),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+			preferenceDays.Add(new PreferenceDay(agent, new DateOnly(2017, 12, 9),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+
+			preferenceDays.Add(new PreferenceDay(agent, new DateOnly(2017, 12, 10),
+				new PreferenceRestriction { DayOffTemplate = new DayOffTemplate() }));
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.False();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, extendedPeriod);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).TotalHours.Should().Be
+				.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldCheckOnWeekMaxTimeAndIncludeFullWeekBefore()
+		{
+			
+		}
+
+		[Test]
+		public void ShouldCheckOnWeekMaxTimeAndIncludeFullWeekAfter()
+		{
+
+		}
+
 		private static DateOnlyPeriod createStandardSetup(out Scenario scenario, out Person agent, out IList<ISkillDay> skillDays)
 		{
 			var period = new DateOnlyPeriod(2017, 11, 01, 2017, 11, 30);
