@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
@@ -41,9 +42,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var schedulingCallBack = new SchedulingCallbackForDesktop(new NoSchedulingProgress(), new SchedulingOptions());
 			var selectedAgents = new List<IPerson> { schedulePeriod.Person };
 			var selectedPeriod = schedulePeriod.DateOnlyPeriod;
+			var extendedPeriod = new DateOnlyPeriod(selectedPeriod.StartDate, selectedPeriod.EndDate.AddDays(6));
 			_teamInfoFactoryFactory.Create(_schedulerStateHolder().ChoosenAgents, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var matrixList =
-				_matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
+				_matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, extendedPeriod);
 			if (!matrixList.Any())
 				return false;
 
@@ -52,16 +54,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 					new ScheduleTagSetter(new NullScheduleTag()));
 			_advanceDaysOffSchedulingService.Execute(schedulingCallBack, matrixList, selectedAgents,
 				schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions, _groupPersonBuilderWrapper,
-				selectedPeriod);
+				extendedPeriod);
 
 			_workShiftMinMaxCalculator.ResetCache();
 			var minMaxTime = _workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(matrixList.First(), schedulingOptions);
 			var targetTimePeriod = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrixList.First());
-			schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
 
 			var periodCheck = minMaxTime.Minimum <= targetTimePeriod.EndTime && minMaxTime.Maximum >= targetTimePeriod.StartTime;
 			var weekCheck = checkWeeks(matrixList.First());
-
+			schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
 			if (periodCheck && weekCheck)
 				return true;
 
@@ -70,6 +71,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		private bool checkWeeks(IScheduleMatrixPro matrix)
 		{
+
+			var weekCount = _workShiftMinMaxCalculator.WeekCount(matrix);
+			for (int i = 0; i < weekCount; i++)
+			{
+				//_workShiftMinMaxCalculator.ResetCache();
+				if (!_workShiftMinMaxCalculator.IsWeekInLegalState(i, matrix, new SchedulingOptions()))
+					return false;
+			}
+
 			return true;
 		}
 	}
