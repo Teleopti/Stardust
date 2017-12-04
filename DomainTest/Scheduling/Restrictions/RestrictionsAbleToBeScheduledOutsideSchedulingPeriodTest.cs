@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public void ShouldHandleMonthEndingOnThursday()
 		{
 			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
-			var extendedPeriod = period.Extend(6);
+			var extendedPeriod = new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(6));
 			var preferenceDays = new List<IPersistableScheduleData>();
 			foreach (var dateOnly in period.DayCollection())
 			{
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public void ShouldCheckOnWeekMaxTime()
 		{
 			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
-			var extendedPeriod = period.Extend(6);
+			var extendedPeriod = new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(6));
 			var preferenceDays = new List<IPersistableScheduleData>();
 
 			preferenceDays.Add(new PreferenceDay(agent, new DateOnly(2017, 11, 6), 
@@ -95,14 +96,39 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		//[Test]
 		//public void ShouldCheckOnWeekMaxTimeAndIncludeFullWeekBefore()
 		//{
-			
-		//}
-
-		//[Test]
-		//public void ShouldCheckOnWeekMaxTimeAndIncludeFullWeekAfter()
-		//{
 
 		//}
+
+		[Test]
+		public void ShouldCheckOnWeekMaxTimeAndIncludeFullWeekAfter()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var extendedPeriod = new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(6));
+			var preferenceDaysOrAss = new List<IPersistableScheduleData>();
+
+			preferenceDaysOrAss.Add(new PreferenceDay(agent, new DateOnly(2017, 11, 27),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(10)) }));
+			preferenceDaysOrAss.Add(new PreferenceDay(agent, new DateOnly(2017, 11, 28),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(10)) }));
+			preferenceDaysOrAss.Add(new PreferenceDay(agent, new DateOnly(2017, 11, 29),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(10)) }));
+			preferenceDaysOrAss.Add(new PreferenceDay(agent, new DateOnly(2017, 11, 30),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(10)) }));
+
+			var ass = new PersonAssignment(agent, scenario, new DateOnly(2017, 12, 1));
+			var activity = new Activity().WithId();
+			ass.AddActivity(activity, new TimePeriod(8,18));
+			ass.SetShiftCategory(new ShiftCategory("_"));
+			preferenceDaysOrAss.Add(ass);
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDaysOrAss, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.False();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, extendedPeriod);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).TotalHours.Should().Be.LessThan(176);
+		}
 
 		private static DateOnlyPeriod createStandardSetup(out Scenario scenario, out Person agent, out IList<ISkillDay> skillDays)
 		{
