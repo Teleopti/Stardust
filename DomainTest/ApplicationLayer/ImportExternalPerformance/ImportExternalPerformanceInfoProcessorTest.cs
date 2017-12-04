@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldOnlyHave8FieldsForEachLine()
 		{
-			var invalidLine = "20171120,1,Kalle,Pettersson,Sales result,2,Number,2000,extraline";
+			var invalidLine = "20171120,1,Kalle,Pettersson,Sales result,2,numeric,2000,extraline";
 			var fileData = createFileData(invalidLine);
 
 			var expectedErrorMsg = invalidLine + "," + string.Format(Resources.InvalidNumberOfFields, 8, 9);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldNotAllowInvalidDate()
 		{
-			var invalidDateRecord = "20172020,1,Kalle,Pettersson,Sales result,2,Number,2000";
+			var invalidDateRecord = "20172020,1,Kalle,Pettersson,Sales result,2,numeric,2000";
 			var fileData = createFileData(invalidDateRecord);
 
 			var expectedErrorMsg = invalidDateRecord + "," + Resources.ImportBpoWrongDateFormat;
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		{
 			string agentId = new String('a', 101);
 			var invalidRecord =
-				"20170820,"+ agentId + ",Kalle,Pettersson,Sales result,2,Number,2000";
+				"20170820,"+ agentId + ",Kalle,Pettersson,Sales result,2,numeric,2000";
 			var fileData = createFileData(invalidRecord);
 
 			string errorMsg = Resources.AgentIdIsTooLong;
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public void GameMeasureNameShouldBeWithin200Characters()
 		{
 			string measureName = new String('a', 201);
-			var invalidRecord = $"20170820,1,Kalle,Pettersson,{measureName},2,Number,2000";
+			var invalidRecord = $"20170820,1,Kalle,Pettersson,{measureName},2,numeric,2000";
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.GameNameIsTooLong}";
@@ -110,12 +110,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
-		public void ShouldNotParseScoreForInvalidNumber()
+		public void ShouldNotParseScoreForInvalidNumericScore()
 		{
-			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Number,InvalidScore";
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,numeric,InvalidScore";
 			var fileData = createFileData(invalidRecord);
 
-			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidNumber}";
+			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidScore}";
 			var result = Target.Process(fileData, Feedback.SendProgress);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
@@ -123,14 +123,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
-		public void ShouldNotAllowMoreThan10ExternalPerformances()
+		public void ShouldNotParseScoreForInvalidPercentScore()
 		{
-			for (int i = 0; i < 10; ++i)
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,percent,InvalidScore";
+			var fileData = createFileData(invalidRecord);
+
+			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidScore}";
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void ShouldNotAllowMoreThan10ExternalPerformancesCase1()
+		{
+			for (int i = 1; i < 11; ++i)
 			{
 				PerformanceRepository.Add(new ExternalPerformance(){ExternalId = i});
 			}
 
-			var the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,10,Percent,87";
+			var the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,11,Percent,87";
 			var fileData = createFileData(the11thRecord);
 
 			var expectedErrorRecord = $"{the11thRecord},{Resources.OutOfMaximumLimit}";
@@ -141,9 +154,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
+		public void ShouldNotAllowMoreThan10ExternalPerformancesCase2()
+		{
+			for (int i = 1; i < 10; ++i)
+			{
+				PerformanceRepository.Add(new ExternalPerformance(){ExternalId = i});
+			}
+
+			var the10thRecord = "20171120,1,Kalle,Pettersson,Quality Score,10,Percent,87";
+			var the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,11,Percent,87";
+			var records = new List<string>() {the10thRecord, the11thRecord};
+			var fileData = createFileData(records);
+
+			var expectedErrorRecord = $"{the11thRecord},{Resources.OutOfMaximumLimit}";
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.ValidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
 		public void ShouldNotAllowInvalidGameId()
 		{
-			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,invalidId,Number,87";
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,invalidId,numeric,87";
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidGameId}";
@@ -174,6 +208,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		{
 			var records = new List<string> { record };
 
+			var data = stringToArray(records);
+
+			var fileData = new ImportFileData() { FileName = "test.csv", Data = data };
+			return fileData;
+		}
+
+		private ImportFileData createFileData(IList<string> records)
+		{
 			var data = stringToArray(records);
 
 			var fileData = new ImportFileData() { FileName = "test.csv", Data = data };

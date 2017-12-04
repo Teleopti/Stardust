@@ -15268,6 +15268,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid score.
+        /// </summary>
+        public static string InvalidScore {
+            get {
+                return ResourceManager.GetString("InvalidScore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid time value &apos;{0}&apos;.
         /// </summary>
         public static string InvalidTimeValue {

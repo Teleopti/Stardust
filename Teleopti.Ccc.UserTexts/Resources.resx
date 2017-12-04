@@ -16867,4 +16867,8 @@ Do you want to participate?</value>
     <value>There is a limit of {0} gamification measures, this record can not be imported as it would exceed this limit. </value>
     <comment>use for gamification error info when import external performance csv file.</comment>
   </data>
+  <data name="InvalidScore" xml:space="preserve">
+    <value>Invalid score</value>
+    <comment>use for gamification error info when import external performance csv file.</comment>
+  </data>
 </root>

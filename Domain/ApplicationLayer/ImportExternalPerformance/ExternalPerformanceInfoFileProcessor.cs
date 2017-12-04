@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private readonly int MAX_AGENT_ID_LENGTH = 100;
 		private readonly int MAX_GAME_NAME_LENGTH = 200;
 		private readonly int MAX_MEASURE_COUNT = 10;
+		private readonly string GAME_TYPE_NUMBERIC = "numeric";
+		private readonly string GAME_TYPE_PERCENT = "percent";
 
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
 
@@ -122,14 +124,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 				extractionResult.DateFrom = dateTime;
 
-				if (columns[6].ToLower() != "number" && columns[6].ToLower() != "percent")
-				{
-					processResult.HasError = true;
-					processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidGameType}");
-					continue;
-				}
-				extractionResult.GameType = columns[6].ToLower();
-
 				var measureName = columns[4];
 				if (!verifyFieldLength(measureName, MAX_GAME_NAME_LENGTH))
 				{
@@ -138,13 +132,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 				extractionResult.GameName = measureName;
 
-				if (extractionResult.GameType == "number")
+				if (columns[6].ToLower() != GAME_TYPE_NUMBERIC && columns[6].ToLower() != GAME_TYPE_PERCENT)
+				{
+					processResult.HasError = true;
+					processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidGameType}");
+					continue;
+				}
+				extractionResult.GameType = columns[6].ToLower();
+
+				if (extractionResult.GameType == GAME_TYPE_NUMBERIC)
 				{
 					int score;
 					if (int.TryParse(columns.Last(), out score)) extractionResult.GameNumberScore = score;
 					else
 					{
-						processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidNumber}");
+						processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidScore}");
 						continue;
 					}
 				}
@@ -154,7 +156,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					if (Percent.TryParse(columns.Last(), out score)) extractionResult.GamePercentScore = score;
 					else
 					{
-						processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidGameId}");
+						processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidScore}");
 						continue;
 					}
 				}
