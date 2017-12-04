@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		        (existingReadModel == null && newReadModel.Workday == false))
 		        return null;
 		    if ((newReadModel != null && newReadModel.Workday == false) &&
-		        (existingReadModel != null && existingReadModel.Workday == false))
+		        (existingReadModel != null && existingReadModel.Workday == false)
+				&& !isOvertimeAddedOnDayOff(newReadModel, existingReadModel))
 		        return null;
             
                 //if new ReadModel is NULL and existing Read Model is not NULL  (From Working Day to an OFF Day)
@@ -72,5 +73,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
             return null;
         }
-    }
+
+		private static bool isOvertimeAddedOnDayOff(ScheduleDayReadModel newReadModel, ScheduleDayReadModel existingReadModel)
+		{
+			var defaultValue = new ScheduleDayReadModel();
+			var isDayOff = isNotWorkingDay(existingReadModel)
+						   && defaultValue.StartDateTime.Equals(existingReadModel.StartDateTime)
+						   && defaultValue.EndDateTime.Equals(existingReadModel.EndDateTime);
+			if (!isDayOff)
+				return false;
+
+			var isOvertimeAdded = isNotWorkingDay(newReadModel)
+								  && (!newReadModel.StartDateTime.Equals(defaultValue.StartDateTime)
+									  || !newReadModel.EndDateTime.Equals(defaultValue.EndDateTime));
+			return isOvertimeAdded;
+		}
+
+		private static bool isNotWorkingDay(ScheduleDayReadModel scheduleDayReadModel)
+		{
+			return !scheduleDayReadModel.Workday && scheduleDayReadModel.ContractTimeTicks.Equals(0L)
+				   && scheduleDayReadModel.WorkTimeTicks.Equals(0L);
+		}
+	}
 }

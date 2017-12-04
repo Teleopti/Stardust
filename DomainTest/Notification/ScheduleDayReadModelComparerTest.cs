@@ -208,5 +208,39 @@ namespace Teleopti.Ccc.DomainTest.Notification
                                                                               DateOnly.Today);
             Assert.IsNull(message);
         }
-    }
+
+		[Test]
+		public void ShouldReturnNotificationWhenOvertimeAddedOnDayOff()
+		{
+			var newReadModel = new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2012, 08, 31, 08, 00, 00),
+				EndDateTime = new DateTime(2012, 08, 31, 09, 00, 00),
+				Date = new DateTime(2012, 08, 31),
+				Workday = false,
+				WorkTimeTicks = 0,
+				ContractTimeTicks = 0,
+				Label = "FP",
+				ColorCode = 0,
+				NotScheduled = false,
+				Version = 2
+			};
+
+			var existingReadModel = new ScheduleDayReadModel
+			{
+				Date = new DateTime(2012, 08, 31),
+				Workday = false,
+				WorkTimeTicks = 0,
+				ContractTimeTicks = 0,
+				Label = "FP",
+				ColorCode = 0,
+				NotScheduled = false,
+				Version = 1
+			};
+
+			var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
+				_person.PermissionInformation.Culture(), new DateOnly(2012, 08, 31));
+			Assert.IsNotNull(message);
+		}
+	}
 }
