@@ -13,10 +13,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			Name = "CalculateBadges";
 		}
 
-		protected virtual IUnitOfWorkFactory UnitOfWorkFactory
-		{
-			get { return Ccc.Infrastructure.UnitOfWork.UnitOfWorkFactory.Current; }
-		}
+		protected virtual IUnitOfWorkFactory UnitOfWorkFactory => Ccc.Infrastructure.UnitOfWork.UnitOfWorkFactory.Current;
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate
@@ -86,27 +87,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate
 			_jobMultiDateDictionary.Clear();
 		}
 
-		public int Count
-		{
-			get
-			{
-				return _jobMultiDateDictionary.Count;
-			}
-		}
+		public int Count => _jobMultiDateDictionary.Count;
 
-		public ReadOnlyCollection<JobCategoryType> JobCategoryCollection
-		{
-			get { return new ReadOnlyCollection<JobCategoryType>(new List<JobCategoryType>(_jobMultiDateDictionary.Keys)); }
-		}
+		public ReadOnlyCollection<JobCategoryType> JobCategoryCollection => new ReadOnlyCollection<JobCategoryType>(_jobMultiDateDictionary.Keys.ToArray());
 
-		public ReadOnlyCollection<IJobMultipleDateItem> AllDatePeriodCollection
-		{
-			get
-			{
-				return
-					 new ReadOnlyCollection<IJobMultipleDateItem>(
-						  new List<IJobMultipleDateItem>(_jobMultiDateDictionary.Values));
-			}
-		}
+		public ReadOnlyCollection<IJobMultipleDateItem> AllDatePeriodCollection => new ReadOnlyCollection<IJobMultipleDateItem>(_jobMultiDateDictionary.Values.ToArray());
 	}
 }

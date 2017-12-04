@@ -27,39 +27,16 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate
 			}
 		}
 
-		public DateTime StartDateLocal
-		{
-			get
-			{
-				return _startDateLocal;
-			}
-		}
-		public DateTime StartDateUtc
-		{
-			get { return _timeZoneInfo.SafeConvertTimeToUtc(StartDateLocal); }
-		}
+		public DateTime StartDateLocal => _startDateLocal;
 
-		public DateTime EndDateUtc
-		{
-			get { return _timeZoneInfo.SafeConvertTimeToUtc(EndDateLocal); }
-		}
+		public DateTime StartDateUtc => _timeZoneInfo.SafeConvertTimeToUtc(StartDateLocal);
 
-		public DateTime StartDateUtcFloor
-		{
-			get { return StartDateUtc.Date; }
-		}
+		public DateTime EndDateUtc => _timeZoneInfo.SafeConvertTimeToUtc(EndDateLocal);
 
-		public DateTime EndDateUtcCeiling
-		{
-			get { return EndDateUtc.Date.AddDays(1).AddMilliseconds(-1); }
-		}
+		public DateTime StartDateUtcFloor => StartDateUtc.Date;
 
-		public DateTime EndDateLocal
-		{
-			get
-			{
-				return _endDateLocal;
-			}
-		}
+		public DateTime EndDateUtcCeiling => EndDateUtc.Date.AddDays(1).AddMilliseconds(-1);
+
+		public DateTime EndDateLocal => _endDateLocal;
 	}
 }

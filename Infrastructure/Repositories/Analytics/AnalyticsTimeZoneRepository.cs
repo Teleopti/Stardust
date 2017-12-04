@@ -34,8 +34,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void SetToBeDeleted(string timeZoneCode, bool tobeDeleted)
 		{
-			var query = $@"UPDATE mart.dim_time_zone SET to_be_deleted=:{nameof(tobeDeleted)} where time_zone_code='{timeZoneCode}'";
+			var query = $@"UPDATE mart.dim_time_zone SET to_be_deleted=:{nameof(tobeDeleted)} where time_zone_code=:{nameof(timeZoneCode)}";
 			AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query)
+				.SetString(nameof(timeZoneCode), timeZoneCode)
 				.SetBoolean(nameof(tobeDeleted), tobeDeleted)
 				.ExecuteUpdate();
 		}

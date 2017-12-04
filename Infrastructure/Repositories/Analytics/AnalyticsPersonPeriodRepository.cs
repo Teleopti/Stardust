@@ -353,8 +353,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						set 
 						  dp.team_name = :{nameof(teamName)}					  
 						from mart.dim_person dp
-						  where dp.team_code='{teamCode}'")
+						  where dp.team_code= :{nameof(teamCode)}")
 				.SetString(nameof(teamName), teamName)
+				.SetGuid(nameof(teamCode), teamCode)
 				.ExecuteUpdate();
 		}
 
@@ -365,8 +366,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						set 
 						  dp.site_name = :{nameof(siteName)}					  
 						from mart.dim_person dp
-						  where dp.site_code='{siteCode}'")
+						  where dp.site_code= :{nameof(siteCode)}")
 				.SetString(nameof(siteName), siteName)
+				.SetGuid(nameof(siteCode), siteCode)
 				.ExecuteUpdate();
 		}
 	}

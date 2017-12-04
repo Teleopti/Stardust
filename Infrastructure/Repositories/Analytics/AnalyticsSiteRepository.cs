@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void UpdateName(Guid siteCode, string name)
 		{
-			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"UPDATE mart.dim_site SET site_name=:{nameof(name)} WHERE site_code='{siteCode}'")
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"UPDATE mart.dim_site SET site_name=:{nameof(name)} WHERE site_code=:{nameof(siteCode)}")
 				.SetString(nameof(name), name)
+				.SetGuid(nameof(siteCode),siteCode)
 				.ExecuteUpdate();
 		}
 

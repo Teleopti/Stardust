@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void UpdateName(Guid teamId, string name)
 		{
-			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"UPDATE mart.dim_team SET team_name=:{nameof(name)} WHERE team_code='{teamId}'")
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"UPDATE mart.dim_team SET team_name=:{nameof(name)} WHERE team_code=:{nameof(teamId)}")
+				.SetGuid(nameof(teamId),teamId)
 				.SetString(nameof(name), name)
 				.ExecuteUpdate();
 		}
