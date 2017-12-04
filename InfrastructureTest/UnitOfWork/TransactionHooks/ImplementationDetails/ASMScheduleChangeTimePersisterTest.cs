@@ -243,7 +243,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		}
 
 		[Test]
-		public void ShouldAddScheduleChangeTimeForMeetingInDefaultScenario() {
+		public void ShouldAddScheduleChangeTimeForMeetingInDefaultScenario()
+		{
 			var person = PersonFactory.CreatePerson().WithId();
 			var requiredPerson = PersonFactory.CreatePerson().WithId();
 			requiredPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -255,7 +256,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 										   new MeetingPerson(requiredPerson, false),
 									  }, "my subject", "my location",
 								  "my description", activity, scenario);
-			
+
 			meeting.StartDate = new DateOnly(2017, 12, 1);
 			meeting.EndDate = new DateOnly(2017, 12, 1);
 			meeting.StartTime = TimeSpan.FromHours(8);
@@ -302,48 +303,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			Target.AfterCompletion(roots);
 			Repo.GetScheduleChangeTime(attendee.Id.GetValueOrDefault()).Should().Be.Null();
 		}
-
-		//[Test]
-		//public void ShouldNotUpdateScheduleChangeTimeForExistingAttendeeWhenAddingAttendeeToMeeting()
-		//{
-		//	var meetingCreator = PersonFactory.CreatePerson().WithId();
-			
-		//	var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-		//	var activity = ActivityFactory.CreateActivity("Meeting");
-		//	var attendee = PersonFactory.CreatePerson().WithId();
-		//	attendee.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-		//	var personMeeting = new MeetingPerson(attendee, false);
-		//	Meeting meeting = new Meeting(meetingCreator,
-		//						  new List<IMeetingPerson> {personMeeting
-		//						  }, "my subject", "my location",
-		//						  "my description", activity, scenario);
-
-		//	meeting.StartDate = new DateOnly(2017, 12, 1);
-		//	meeting.EndDate = new DateOnly(2017, 12, 1);
-		//	meeting.StartTime = TimeSpan.FromHours(8);
-		//	meeting.EndTime = TimeSpan.FromHours(10);
-		//	meeting.TimeZone = TimeZoneInfo.Utc;
-
-		//	var now = new DateTime(2017, 12, 1, 13, 0, 0, DateTimeKind.Utc);
-		//	Now.Is(now);
-		//	var roots = new IRootChangeInfo[]
-		//	{
-		//		new RootChangeInfo(meeting, DomainUpdateType.Insert)
-		//	};
-			
-		//	Target.AfterCompletion(roots);
-		//	Repo.GetScheduleChangeTime(attendee.Id.GetValueOrDefault()).TimeStamp.Should().Be.EqualTo(now);
-		//	var attendeeAnother = PersonFactory.CreatePerson().WithId();
-		//	meeting.AddMeetingPerson(new MeetingPerson(attendeeAnother, false));
-
-		//	Now.Is(now.AddHours(1));
-		//	Target.AfterCompletion(new IRootChangeInfo[]
-		//	{
-		//		new RootChangeInfo(meeting, DomainUpdateType.Update)
-		//	});
-		//	Repo.GetScheduleChangeTime(attendee.Id.GetValueOrDefault()).TimeStamp.Should().Be.EqualTo(now);
-		//	Repo.GetScheduleChangeTime(attendeeAnother.Id.GetValueOrDefault()).TimeStamp.Should().Be.EqualTo(now.AddHours(1));
-		//}
 
 		[Test]
 		public void ShouldAddScheduleChangeTimeForRecurrentMeetingIfAnyMeetingDaysInNotifyPeriod()
