@@ -20,12 +20,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<ProjectionVersion> LockAndGetVersions(Guid personId, DateOnly from, DateOnly to)
 		{
-			var dates = from.DateRange(to).Select(x => x.Date.ToString("s"));
-			var dateString = string.Join(" UNION ", dates.Select(x => $"SELECT '{x}'"));
-			_unitOfWork.Session().CreateSQLQuery(
+			var dates = from.DateRange(to).Select((d,i) => new {D = d, name = "d" + i}).ToArray();
+			var sqlQuery = _unitOfWork.Session().CreateSQLQuery(
 				$@"MERGE INTO [dbo].ProjectionVersion WITH (XLOCK) AS T  
 						USING (
-						{dateString}
+						SELECT * FROM (VALUES {string.Join(",",dates.Select(d => "(:" + d.name + ")"))}) AS x (d)
 					) AS S ( 
 						[Date]  
 					) 
@@ -46,7 +45,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					WHEN MATCHED THEN
 					UPDATE SET
 						[Version] = [Version] + 1
-						; ")
+						; ");
+
+			foreach (var d in dates)
+			{
+				sqlQuery.SetDateOnly(d.name, d.D);
+			}
+			sqlQuery
 				.SetGuid("Person", personId)
 				.ExecuteUpdate();
 
