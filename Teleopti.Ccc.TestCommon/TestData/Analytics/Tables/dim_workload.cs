@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			float percentage_abandoned_within_service_level,
 			float percentage_abandoned_after_service_level,
 			int business_unit_id,
-			int datasource_id)
+			int datasource_id,
+			bool isDeleted = false)
 		{
 			var row = dataTable.NewRow();
 			row["workload_id"] = workload_id;
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;
 			row["datasource_update_date"] = DateTime.Now;
-			row["is_deleted"] = false;
+			row["is_deleted"] = isDeleted;
 			dataTable.Rows.Add(row);
 		}
 	}

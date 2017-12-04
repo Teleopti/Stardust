@@ -116,10 +116,13 @@ BEGIN
 			ON bz.local_date_id = d.date_id
 		INNER JOIN mart.dim_interval i WITH (NOLOCK) 
 			ON bz.local_interval_id = i.interval_id
+		INNER JOIN mart.dim_workload wl WITH (NOLOCK)
+			ON wl.workload_id = fw.workload_id
 	WHERE
 		fw.scenario_id = @default_scenario_id
 		AND bz.time_zone_id = @time_zone_id
 		AND d.date_date = @today
+		AND wl.is_deleted = 0
 	GROUP BY
 		d.date_date,
 		i.interval_id

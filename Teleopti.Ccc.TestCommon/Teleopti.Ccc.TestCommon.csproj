@@ -450,6 +450,7 @@
     <Compile Include="IoC\ToggleAttribute.cs" />
     <Compile Include="TestData\Analytics\Absence.cs" />
     <Compile Include="TestData\Analytics\DimOvertime.cs" />
+    <Compile Include="TestData\Analytics\FillFactForecastWorkload.cs" />
     <Compile Include="TestData\Analytics\QueueStatisticsForSkill.cs" />
     <Compile Include="TestData\Analytics\ShiftCategory.cs" />
     <Compile Include="TestData\Analytics\Activity.cs" />
@@ -468,6 +469,7 @@
     <Compile Include="TestData\Analytics\Tables\dim_shift_length.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_skillset.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_team.cs" />
+    <Compile Include="TestData\Analytics\Tables\fact_forecast_workload.cs" />
     <Compile Include="TestData\Analytics\Tables\sys_configuration.cs" />
     <Compile Include="TestData\Analytics\Team.cs" />
     <Compile Include="TestData\CommonNameDescriptionSettingsTestData.cs" />
