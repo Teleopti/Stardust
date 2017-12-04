@@ -29,8 +29,8 @@
 					<div class="con-flex">
 						<div class="form-input-wrap">
 							<label>{{'ScheduleDateColon'|translate}}</label><br/>
-							<div class="inline-flex baseline">
-								<div tabindex=0 class="context-menu card-context" ng-click="toggleSchedule =!toggleSchedule">
+							<div class="inline-flex baseline pointer" ng-click="toggleSchedule =!toggleSchedule">
+								<div tabindex=0 class="context-menu card-context">
 									<i class="mdi mdi-calendar"></i>
 								</div>
 								<div ng-if="vm.dateModifyRange.startDate">From: {{vm.dateModifyRange.startDate | amDateFormat:"YYYY/MM/DD"}}</div>
@@ -48,8 +48,8 @@
 
 						<div class="form-input-wrap">
 							<label>{{'ChangeDateColon'|translate}}</label></br>
-							<div class="inline-flex baseline">
-								<div tabindex=0 class="context-menu card-context" ng-click="toggleChange =!toggleChange">
+							<div class="inline-flex baseline pointer" ng-click="toggleChange =!toggleChange">
+								<div tabindex=0 class="context-menu card-context">
 									<i class="mdi mdi-calendar"></i>
 								</div>
 								<div ng-if="vm.dateChangeRange.startDate">From: {{vm.dateChangeRange.startDate | amDateFormat:"YYYY/MM/DD"}}</div>
