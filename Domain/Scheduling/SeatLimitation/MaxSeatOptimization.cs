@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			var allSkillDaysExceptMaxSeat = allSkillDays.Except(x => x.Skill is MaxSeatSkill).ToArray();
 			var optimizationLimits = _optimizationLimitsForAgentFactory.Create(optimizationPreferences, teamBlockInfos);
 
-			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills(), Enumerable.Empty<ExternalStaff>(), false, period.Extend(1)))
+			using (_resourceCalculationContextFactory.Create(schedules, maxSeatData.AllMaxSeatSkills(), Enumerable.Empty<ExternalStaff>(), false, period.Inflate(1)))
 			{
 				var checkedInfos = 1;
 				var numInfos = teamBlockInfos.Count();

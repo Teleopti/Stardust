@@ -25,11 +25,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			return new DateOnlyPeriod(period.StartDate.AddDays(-days), period.EndDate.AddDays(days));
 		}
 
-		public static DateOnlyPeriod Extend(this DateOnlyPeriod period, int days)
-		{
-			return new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(1));
-		}
-
 		public static DateOnlyPeriod? MaximumPeriod(this DateOnlyPeriod? period1, DateOnlyPeriod? period2)
 		{
 			if (!period2.HasValue)
