@@ -66,7 +66,7 @@ namespace Teleopti.Analytics.Etl.Common
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private IEnumerable<TenantInfo> _tenants = Enumerable.Empty<TenantInfo>();
-		private bool _tenantsLoaded = false;
+		private bool _tenantsLoaded;
 
 		public Tenants(
 			ITenantUnitOfWork tenantUnitOfWork, 
@@ -107,7 +107,7 @@ namespace Teleopti.Analytics.Etl.Common
 		public IDataSource DataSourceForTenant(string name)
 		{
 			var tenant = Tenant(name);
-			return tenant == null ? null : tenant.DataSource;
+			return tenant?.DataSource;
 		}
 
 		private void ensureTenantsLoaded()

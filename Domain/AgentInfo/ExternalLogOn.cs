@@ -149,12 +149,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             set { _dataSourceName = value; }
         }
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+        public virtual bool IsDeleted => _isDeleted;
 
-        public virtual void SetDeleted()
+		public virtual void SetDeleted()
         {
             _isDeleted = true;
         }

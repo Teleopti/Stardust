@@ -2,7 +2,6 @@ using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Analytics.Etl.Common
 {

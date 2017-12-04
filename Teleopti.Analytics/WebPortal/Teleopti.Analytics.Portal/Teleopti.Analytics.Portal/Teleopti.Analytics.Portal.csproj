@@ -24,6 +24,7 @@
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -117,21 +118,18 @@
     </Compile>
     <Compile Include="ErrorMessage.aspx.cs">
       <DependentUpon>ErrorMessage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ErrorMessage.aspx.designer.cs">
       <DependentUpon>ErrorMessage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Logout.aspx.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Logout.aspx.designer.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
     </Compile>
     <Compile Include="PerformanceManager\CloseReport.aspx.cs">
       <DependentUpon>CloseReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PerformanceManager\CloseReport.aspx.designer.cs">
       <DependentUpon>CloseReport.aspx</DependentUpon>
@@ -139,7 +137,6 @@
     <Compile Include="PerformanceManager\CustomTree.cs" />
     <Compile Include="PerformanceManager\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PerformanceManager\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -148,7 +145,6 @@
     <Compile Include="PerformanceManager\Helper\DatabaseAccess.cs" />
     <Compile Include="PerformanceManager\KeepAlive.aspx.cs">
       <DependentUpon>KeepAlive.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PerformanceManager\KeepAlive.aspx.designer.cs">
       <DependentUpon>KeepAlive.aspx</DependentUpon>
@@ -156,14 +152,12 @@
     <Compile Include="PerformanceManager\ReportInstanceHandler.cs" />
     <Compile Include="PerformanceManager\ShowReport.aspx.cs">
       <DependentUpon>ShowReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PerformanceManager\ShowReport.aspx.designer.cs">
       <DependentUpon>ShowReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="PerformanceManager\View\ActionBarView.ascx.cs">
       <DependentUpon>ActionBarView.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PerformanceManager\View\ActionBarView.ascx.designer.cs">
       <DependentUpon>ActionBarView.ascx</DependentUpon>
@@ -176,7 +170,6 @@
     </Compile>
     <Compile Include="PerformanceManager\View\NewView.ascx.cs">
       <DependentUpon>NewView.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PerformanceManager\View\NewView.ascx.designer.cs">
       <DependentUpon>NewView.ascx</DependentUpon>
@@ -186,39 +179,32 @@
     </Compile>
     <Compile Include="PerformanceManager\Site1.Master.cs">
       <DependentUpon>Site1.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PerformanceManager\Site1.Master.designer.cs">
       <DependentUpon>Site1.Master</DependentUpon>
     </Compile>
     <Compile Include="PerformanceManager\test.aspx.cs">
       <DependentUpon>test.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PerformanceManager\ViewModel\AnalyzerReportViewModel.cs" />
     <Compile Include="PerformanceManager\ViewModel\ReportTreeViewModel.cs" />
     <Compile Include="PerformanceManager\View\AddReportView.ascx.cs">
       <DependentUpon>AddReportView.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PerformanceManager\View\AnalyzerReportView.ascx.cs">
       <DependentUpon>AnalyzerReportView.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PerformanceManager\View\ReportTreeView.ascx.cs">
       <DependentUpon>ReportTreeView.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PmContainer.aspx.cs">
       <DependentUpon>PmContainer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PmContainer.aspx.designer.cs">
       <DependentUpon>PmContainer.aspx</DependentUpon>
     </Compile>
     <Compile Include="Timeout.aspx.cs">
       <DependentUpon>Timeout.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Timeout.aspx.designer.cs">
       <DependentUpon>Timeout.aspx</DependentUpon>
@@ -229,7 +215,6 @@
     <Compile Include="Utils\UserInfo.cs" />
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>

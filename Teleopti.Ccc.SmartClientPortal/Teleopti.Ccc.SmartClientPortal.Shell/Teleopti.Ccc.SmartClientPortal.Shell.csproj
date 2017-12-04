@@ -2132,9 +2132,7 @@
     <Compile Include="Win\Grouping\DynamicOptionType.cs" />
     <Compile Include="Win\Grouping\FindPersonsModel.cs" />
     <Compile Include="Win\Grouping\FindPersonsPresenter.cs" />
-    <Compile Include="Win\Grouping\FindPersonsView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Win\Grouping\FindPersonsView.cs" />
     <Compile Include="Win\Grouping\FindPersonsView.Designer.cs">
       <DependentUpon>FindPersonsView.cs</DependentUpon>
     </Compile>
