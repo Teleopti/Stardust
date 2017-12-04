@@ -215,5 +215,74 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
 				.Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchShift, startDate.ToShortDateString(), startDate.AddDays(1).ToShortDateString()));
 		}
+
+		[Test]
+		public void ExistingShiftsMatchingEachotherShouldNotReturnHint()
+		{
+			var startDate = new DateOnly(2017, 01, 23);
+			var endDate = new DateOnly(2017, 01, 24);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+			var scenario = new Scenario { DefaultScenario = true };
+			ScenarioRepository.Has(scenario);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var contract = new Contract("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(startDate, SchedulePeriodType.Day, 2), ruleSet, skill);
+
+			var currentSchedule = new ScheduleDictionaryForTest(scenario, planningPeriod.ToDateTimePeriod(TimeZoneInfo.Utc));
+
+			var personAssignment =
+				new PersonAssignment(agent, scenario, startDate).WithLayer(activity, new TimePeriod(8, 16)).WithLayer(activity, new TimePeriod(11, 12)).ShiftCategory(shiftCategory);
+			var personAssignment2 =
+				new PersonAssignment(agent, scenario, startDate.AddDays(1)).WithLayer(activity, new TimePeriod(8, 16)).WithLayer(activity, new TimePeriod(11, 12)).ShiftCategory(shiftCategory);
+			currentSchedule.AddPersonAssignment(personAssignment);
+			currentSchedule.AddPersonAssignment(personAssignment2);
+
+			var result =
+				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+					new FixedBlockPreferenceProvider(new ExtraPreferences
+					{
+						UseTeamBlockOption = true,
+						BlockTypeValue = BlockFinderType.SchedulePeriod,
+						UseBlockSameShift = true
+					}), false)).InvalidResources;
+
+			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.ExistingShiftNotMatchShift)).Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ExistingShiftAndEmptyShiftShouldNotReturnHint()
+		{
+			var startDate = new DateOnly(2017, 01, 23);
+			var endDate = new DateOnly(2017, 01, 24);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+			var scenario = new Scenario { DefaultScenario = true };
+			ScenarioRepository.Has(scenario);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var contract = new Contract("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(startDate, SchedulePeriodType.Day, 2), ruleSet, skill);
+
+			var currentSchedule = new ScheduleDictionaryForTest(scenario, planningPeriod.ToDateTimePeriod(TimeZoneInfo.Utc));
+
+			var personAssignment =
+				new PersonAssignment(agent, scenario, startDate).WithLayer(activity, new TimePeriod(8, 16)).WithLayer(activity, new TimePeriod(11, 12)).ShiftCategory(shiftCategory);
+			currentSchedule.AddPersonAssignment(personAssignment);
+
+			var result =
+				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+					new FixedBlockPreferenceProvider(new ExtraPreferences
+					{
+						UseTeamBlockOption = true,
+						BlockTypeValue = BlockFinderType.SchedulePeriod,
+						UseBlockSameShift = true
+					}), false)).InvalidResources;
+
+			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.ExistingShiftNotMatchShift)).Should().Be.EqualTo(0);
+		}
 	}
 }

@@ -105,9 +105,16 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								var flag = false;
 								for (var i = 0; i < length - 1; i++)
 								{
-									for (var j = i; j < length; j++)
+									var editableShift1 = scheduleDaysArray[i].GetEditorShift();
+									if (editableShift1 == null)
+										continue;
+									for (var j = i + 1; j < length; j++)
 									{
-										if (!_scheduleDayEquator.MainShiftEquals(scheduleDaysArray[i], scheduleDaysArray[j]))
+										var editableShift2 = scheduleDaysArray[j].GetEditorShift();
+										if (editableShift2 == null)
+											continue;
+
+										if (!_scheduleDayEquator.MainShiftBasicEquals(editableShift1, editableShift2,TimeZoneInfo.Utc))
 										{
 											addValidationResult(validationResult, person,
 												nameof(Resources.ExistingShiftNotMatchShift),
