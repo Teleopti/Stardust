@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.debug-Setup\FixMyConfigFlow.bat = .debug-Setup\FixMyConfigFlow.bat
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
 		.debug-Setup\InfratestConfig.bat = .debug-Setup\InfratestConfig.bat
+		.debug-Setup\Restore to Local.bat = .debug-Setup\Restore to Local.bat
 		BuildArtifacts\SDKApplicationInsights.config = BuildArtifacts\SDKApplicationInsights.config
 		BuildArtifacts\SDKWeb.config = BuildArtifacts\SDKWeb.config
 		BuildArtifacts\ServiceBusHost.config = BuildArtifacts\ServiceBusHost.config
@@ -27,7 +28,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		BuildArtifacts\Web.Start.Web.config = BuildArtifacts\Web.Start.Web.config
 		BuildArtifacts\Web.WindowsIdentityProvider.Web.config = BuildArtifacts\Web.WindowsIdentityProvider.Web.config
 		BuildArtifacts\WebApplicationInsights.config = BuildArtifacts\WebApplicationInsights.config
-		.debug-Setup\Restore to Local.bat = .debug-Setup\Restore to Local.bat
 	EndProjectSection
 	ProjectSection(FolderStartupServices) = postProject
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
@@ -170,7 +170,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCC.CCC7Prereq", "Teleopti.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Administration", "Teleopti.Wfm.Administration\Teleopti.Wfm.Administration.csproj", "{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.AdministrationTest", "Teleopti.Wfm.AdministrationTest\Teleopti.Wfm.AdministrationTest.csproj", "{5974BB53-DC66-401B-ACC2-1C1A57610E2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Administration.IntegrationTest", "Teleopti.Wfm.Administration.IntegrationTest\Teleopti.Wfm.Administration.IntegrationTest.csproj", "{5974BB53-DC66-401B-ACC2-1C1A57610E2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Scheduling.PerformanceTest", "Teleopti.Ccc.Scheduling.PerformanceTest\Teleopti.Ccc.Scheduling.PerformanceTest.csproj", "{0302E194-5B57-4011-A49C-FD99B41D9731}"
 EndProject
@@ -219,6 +219,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Win", "Win\Teleopti.Ccc.Win.csproj", "{26C57CBE-E75F-42C9-9747-8016AEB305F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.WinCode", "Teleopti.Ccc.WinCode\Teleopti.Ccc.WinCode.csproj", "{3B495E4B-1803-413C-9480-40C8EFCCBA45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.AdministrationTest", "Teleopti.Wfm.AdministrationTest\Teleopti.Wfm.AdministrationTest.csproj", "{164DFD25-24EE-47E2-B5A6-B7AA7B122731}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1212,6 +1214,22 @@ Global
 		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|x86.ActiveCfg = Release|x86
 		{3B495E4B-1803-413C-9480-40C8EFCCBA45}.Release|x86.Build.0 = Release|x86
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Debug|.NET.Build.0 = Debug|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Debug|x86.Build.0 = Debug|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|.NET.ActiveCfg = Release|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|.NET.Build.0 = Release|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|x86.ActiveCfg = Release|Any CPU
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1253,6 +1271,7 @@ Global
 		{3D4691C7-A41C-49B8-8F16-86F70C721D1D} = {60EAE402-FE16-440F-897D-6222012A77F0}
 		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA} = {60EAE402-FE16-440F-897D-6222012A77F0}
 		{096E69DA-1F3B-4E43-848D-FA5D92281394} = {FEFF4A24-4851-4A21-BF0F-68A36655E0E7}
+		{164DFD25-24EE-47E2-B5A6-B7AA7B122731} = {5AC253DA-DE38-4EB4-8ECB-4E5E332D6011}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11E3E7A7-5B00-4514-9B17-892CE32AD321}
