@@ -55,7 +55,6 @@
 		</div>
 	</div>
 	<table class="wfm-table cursor-pointer" style="table-layout:fixed; border-collapse: collapse;">
-		<thead>
 		<tr>
 			<th style="width: 8.5%" ng-click=" vm.sort('Name')">
 				{{'Name'|translate}}
@@ -99,17 +98,14 @@
 				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 			</th>
 		</tr>
-		</thead>
-		<tbody ng-repeat="agentState in vm.agentStates">
-		<tr ng-init="toggle[$index] = false" ng-click="toggle[$index] = !toggle[$index]">
+		<tr ng-repeat="agentState in vm.agentStates" ng-init="toggle[$index] = false" ng-click="toggle[$index] = !toggle[$index]" ng-mouseleave = "toggle[$index] = false">
 			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
 				{{agentState.Name}}
 			</td>
 			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
 				{{agentState.SiteAndTeamName}}
 			</td>
-			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: relative; height: 100%; padding: 0">
-				
+			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: relative; height: 100%; padding: 0" class="wfm-list perm-list">
 				<span ng-repeat="outOfAdherence in agentState.OutOfAdherences" class="rta-alarmline"
 					  ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}};">
 					<md-tooltip md-direction="top">
@@ -128,7 +124,35 @@
 						</md-tooltip>
 					</div>
 				</div>
+						<div class="wfm-leave-behind" ng-show="toggle[$index]" ng-class="{'animate-show':toggle[$index]}"  style="width:100%; background-color:#fff">
+							<span class="flex">
+								<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
+								   style="text-decoration: none" class="flex-1">
+									<i class="mdi mdi-pencil" style="font-style: normal; vertical-align: middle"></i>
+									<span style="vertical-align: middle">{{'ModifySchedule'|translate}}</span>
+								</a>
+						
+								<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+								   style="text-decoration: none" class="flex-1">
+									<i class="mdi mdi-history" style="font-style: normal"></i>
+									<span>2017-11-29 97%</span>
+								</a>
+						
 
+								<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+								   style="text-decoration: none" class="flex-1">
+									<i class="mdi mdi-history" style="font-style: normal"></i>
+									<span>2017-11-30 65%</span>
+								</a>
+							
+
+								<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+								   style="text-decoration: none" class="flex-1">
+									<i class="mdi mdi-history" style="font-style: normal"></i>
+									<span>2017-12-01 0%</span>
+								</a>
+							</span>
+						</div>
 			</td>
 			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
 				<div class="label rta-label"
@@ -149,61 +173,8 @@
 				{{agentState.State}}
 			</td>
 		</tr>
-		<tr ng-if="toggle[$index]">
-			<td colspan="2" style="background-color: lightgrey">
-					
-						<span style="margin-right:40px">
-							<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-pencil" style="font-style: normal"></i>
-								<span>{{'ModifySchedule'|translate}}</span>
-							</a>
-						</span>
-
-			</td>
-			<td colspan="6" style="background-color:lightgrey">
-				
-				<!--<div style="margin: 15px">{{'AgentHistoricalAdherence'|translate}}</div>-->
-
-				<span style="margin-right:60px">
-							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-11-29 Adherence: 97%</span>
-							</a>
-						</span>
-
-				<span style="margin-right:60px">
-							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-11-30 Adherence: 65%</span>
-							</a>
-						</span>
-
-				<span style="margin-right:60px">
-							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-12-01 Adherence: 0%</span>
-							</a>
-						</span>
-
-			</td>
-		</tr>
-		</tbody>
 	</table>
 
-	<!--<div class="con-row">-->
-	<!--<div class="con-flex agent-table-wrapper">-->
-	<!--<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.allGrid && !vm.showInAlarm" ui-grid-auto-resize-->
-	<!--ui-grid-resize-columns-->
-	<!--ui-grid-disable-animation ui-grid="vm.allGrid"></div>-->
-	<!--<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.showInAlarm"-->
-	<!--ui-grid-auto-resize ui-grid-resize-columns-->
-	<!--ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>-->
-	<!--</div>-->
-	<!--</div>-->
 	<wfm-right-panel ng-if="!vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
 		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
 		<div class="full-padding">
