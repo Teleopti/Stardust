@@ -5,11 +5,15 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 {
@@ -18,10 +22,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 	{
 		public IExternalPerformanceInfoFileProcessor Target;
 		public IStardustJobFeedback Feedback;
+		public FakeExternalPerformanceRepository PerformanceRepository;
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
 		}
 
 		[Test]
@@ -34,61 +40,162 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.ErrorMessages.Should().Be.Equals(Resources.InvalidInput);
 		}
 
-		[Ignore("need to use memory instead of hard disk file"), Test]
+		[Test]
 		public void ShouldOnlyHave8FieldsForEachLine()
 		{
-			var validLine = "2017-11-20,1,Kalle,Pettersson,Quality Score,1,Procent,87";
-			var invalidLine = "2017-11-20,1,Kalle,Pettersson,Sales result,2,Number,2000,extraline";
-			var lines = new List<string> {validLine, invalidLine};
-			var data = stringToArray(lines);
+			var invalidLine = "20171120,1,Kalle,Pettersson,Sales result,2,Number,2000,extraline";
+			var fileData = createFileData(invalidLine);
 
-
-			var fileData = new ImportFileData() { FileName = "test.csv", Data = data };
 			var expectedErrorMsg = invalidLine + "," + string.Format(Resources.InvalidNumberOfFields, 8, 9);
 			var result = Target.Process(fileData, Feedback.SendProgress);
 
-			result.HasError.Should().Be.True();
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorMsg);
+		}
+
+		[Test]
+		public void ShouldNotAllowInvalidDate()
+		{
+			var invalidDateRecord = "20172020,1,Kalle,Pettersson,Sales result,2,Number,2000";
+			var fileData = createFileData(invalidDateRecord);
+
+			var expectedErrorMsg = invalidDateRecord + "," + Resources.ImportBpoWrongDateFormat;
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorMsg);
+		}
+
+		[Test]
+		public void AgentIdShouldBeWithin100Characters()
+		{
+			string agentId = new String('a', 101);
+			var invalidRecord =
+				"20170820,"+ agentId + ",Kalle,Pettersson,Sales result,2,Number,2000";
+			var fileData = createFileData(invalidRecord);
+
+			string errorMsg = Resources.AgentIdIsTooLong;
+			var expectedErrorRecord = string.Format("{0},{1}", invalidRecord, errorMsg);
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void GameMeasureNameShouldBeWithin200Characters()
+		{
+			string measureName = new String('a', 201);
+			var invalidRecord = $"20170820,1,Kalle,Pettersson,{measureName},2,Number,2000";
+			var fileData = createFileData(invalidRecord);
+
+			var expectedErrorRecord = $"{invalidRecord},{Resources.GameNameIsTooLong}";
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void ShouldNotAllowWrongGameType()
+		{
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,bla,87";
+			var fileData = createFileData(invalidRecord);
+
+			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidGameType}";
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void ShouldNotParseScoreForInvalidNumber()
+		{
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Number,InvalidScore";
+			var fileData = createFileData(invalidRecord);
+
+			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidNumber}";
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void ShouldNotAllowMoreThan10ExternalPerformances()
+		{
+			for (int i = 0; i < 10; ++i)
+			{
+				PerformanceRepository.Add(new ExternalPerformance(){ExternalId = i});
+			}
+
+			var the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,10,Percent,87";
+			var fileData = createFileData(the11thRecord);
+
+			var expectedErrorRecord = $"{the11thRecord},{Resources.OutOfMaximumLimit}";
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void ShouldNotAllowInvalidGameId()
+		{
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,invalidId,Number,87";
+			var fileData = createFileData(invalidRecord);
+
+			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidGameId}";
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void ShouldGetCorrectRecord()
+		{
+			var validRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Percent,87";
+			var fileData = createFileData(validRecord);
+
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.ValidRecords.Count.Should().Be.EqualTo(1);
+			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateTime(2017, 11, 20));
+			result.ValidRecords[0].GameName.Should().Be.EqualTo("Quality Score");
+			result.ValidRecords[0].GameType.Should().Be.EqualTo("percent");
+			result.ValidRecords[0].AgentId.Should().Be.EqualTo("1");
+			result.ValidRecords[0].GameId.Should().Be.EqualTo(1);
+			result.ValidRecords[0].GamePercentScore.Should().Be.EqualTo(new Percent(0.87));
+		}
+
+		private ImportFileData createFileData(string record)
+		{
+			var records = new List<string> { record };
+
+			var data = stringToArray(records);
+
+			var fileData = new ImportFileData() { FileName = "test.csv", Data = data };
+			return fileData;
 		}
 
 		private byte[] stringToArray(IList<string> lines)
 		{
 			byte[] data;
 
-			//using (MemoryStream ms = new MemoryStream())
-			//{
-			//	using (StreamWriter sw = new StreamWriter(ms))
-			//	{
-			//		foreach (var line in lines)
-			//		{
-			//			sw.WriteLine(line);
-						
-			//		}
-			//		sw.Close();
-			//	}
-
-			//	data = ms.GetBuffer();
-
-			//}
-
-			var path = Path.Combine(Environment.CurrentDirectory, "test.csv");
-			using (var sw = File.CreateText(path))
+			using (MemoryStream ms = new MemoryStream())
 			{
-
-				foreach (var line in lines)
+				using (StreamWriter sw = new StreamWriter(ms))
 				{
-					sw.WriteLine(line);
+					foreach (var line in lines)
+					{
+						sw.WriteLine(line);
 
+					}
+					sw.Close();
 				}
-				sw.Flush();
-			}
-
-			using (FileStream fs = File.OpenRead(path))
-			{
-				var r = new BinaryReader(fs);
-				r.BaseStream.Seek(0, SeekOrigin.Begin);
-				data = r.ReadBytes((int)r.BaseStream.Length);
+				data = ms.ToArray();
 			}
 
 			return data;

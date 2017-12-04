@@ -1835,6 +1835,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agent id is too long..
+        /// </summary>
+        public static string AgentIdIsTooLong {
+            get {
+                return ResourceManager.GetString("AgentIdIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string AgentInfo {
@@ -13278,6 +13287,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Game name is too long.
+        /// </summary>
+        public static string GameNameIsTooLong {
+            get {
+                return ResourceManager.GetString("GameNameIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The game type is not same as before.
+        /// </summary>
+        public static string GameTypeChanged {
+            get {
+                return ResourceManager.GetString("GameTypeChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gamification.
         /// </summary>
         public static string Gamification {
@@ -15138,6 +15165,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InvalidFieldNameInHeader {
             get {
                 return ResourceManager.GetString("InvalidFieldNameInHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to InvalidGameId.
+        /// </summary>
+        public static string InvalidGameId {
+            get {
+                return ResourceManager.GetString("InvalidGameId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The game type must be &quot;number&quot; or &quot;percent&quot;..
+        /// </summary>
+        public static string InvalidGameType {
+            get {
+                return ResourceManager.GetString("InvalidGameType", resourceCulture);
             }
         }
         
@@ -22397,6 +22442,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OutOfIndexRange {
             get {
                 return ResourceManager.GetString("OutOfIndexRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is a limit of {0} gamification measures, this record can not be imported as it would exceed this limit. .
+        /// </summary>
+        public static string OutOfMaximumLimit {
+            get {
+                return ResourceManager.GetString("OutOfMaximumLimit", resourceCulture);
             }
         }
         

@@ -16843,4 +16843,28 @@ Do you want to participate?</value>
     <value>Each record must have {0} fields, this record has {1}.</value>
     <comment>Used in gamification external measures import when a record we are inputting has an invalid number of fields.  Parameters: {0} = expected number of fields, {1} = actual number of fields</comment>
   </data>
+  <data name="GameNameIsTooLong" xml:space="preserve">
+    <value>Game name is too long</value>
+    <comment>use for gamification error info when import external performance csv file.</comment>
+  </data>
+  <data name="AgentIdIsTooLong" xml:space="preserve">
+    <value>Agent id is too long.</value>
+    <comment>use for gamification error info when import external performance csv file.</comment>
+  </data>
+  <data name="InvalidGameType" xml:space="preserve">
+    <value>The game type must be "number" or "percent".</value>
+    <comment>use for gamification error info when import external performance csv file.</comment>
+  </data>
+  <data name="GameTypeChanged" xml:space="preserve">
+    <value>The game type is not same as before</value>
+    <comment>use for gamification error info when import external performance csv file.</comment>
+  </data>
+  <data name="InvalidGameId" xml:space="preserve">
+    <value>InvalidGameId</value>
+    <comment>use for gamification error info when import external performance csv file.</comment>
+  </data>
+  <data name="OutOfMaximumLimit" xml:space="preserve">
+    <value>There is a limit of {0} gamification measures, this record can not be imported as it would exceed this limit. </value>
+    <comment>use for gamification error info when import external performance csv file.</comment>
+  </data>
 </root>
