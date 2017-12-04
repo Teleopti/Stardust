@@ -73,14 +73,12 @@ wfm
         '$translateProvider',
         '$httpProvider',
         'RtaStateProvider',
-        'RequestsStateProvider',
         function(
             $stateProvider,
             $urlRouterProvider,
             $translateProvider,
             $httpProvider,
-            RtaStateProvider,
-            RequestsStateProvider
+            RtaStateProvider
         ) {
             $urlRouterProvider.otherwise('/#');
 
@@ -90,10 +88,6 @@ wfm
             });
 
             RtaStateProvider.config($stateProvider);
-
-            //For fixing the routings in Requests when having different controllers with same url.
-            //This will be removed after Wfm_Requests_Refactoring_45470 is stable.
-            RequestsStateProvider.config($stateProvider);
 
             $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
             $translateProvider.useUrlLoader('../api/Global/Language');
@@ -111,7 +105,6 @@ wfm
         'Toggle',
         '$q',
         'RtaState',
-        'RequestsState',
         'WfmShortcuts',
         '$locale',
         function(
@@ -123,7 +116,6 @@ wfm
             toggleService,
             $q,
             RtaState,
-            RequestsState,
             WfmShortcuts,
             $locale
         ) {
@@ -169,10 +161,6 @@ wfm
             $rootScope._ = window._;
 
             RtaState(toggleService);
-
-            //For fixing the routings in Requests when having different controllers with same url.
-            //This will be removed after Wfm_Requests_Refactoring_45470 is stable.
-            RequestsState(toggleService);
         }
     ])
     .constant('_', window._);

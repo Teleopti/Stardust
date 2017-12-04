@@ -109,7 +109,7 @@
 		}
 
 		function getSelectedRequestIds() {
-			if (toggleSvc.Wfm_Requests_OvertimeRequestHandling_45177 && toggleSvc.Wfm_Requests_Refactoring_45470) {
+			if (toggleSvc.Wfm_Requests_OvertimeRequestHandling_45177) {
 				if($state.current.name.indexOf(REQUESTS_TAB_NAMES.overtime) > -1){
 					return requestCommandParamsHolder.getOvertimeSelectedRequestIds();
 				}

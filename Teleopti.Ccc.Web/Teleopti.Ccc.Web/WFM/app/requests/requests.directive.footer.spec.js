@@ -91,7 +91,6 @@
 
 			it('should show correct selected overtime requests info with selected requests ids number', function() {
 				toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
-				toggles.Wfm_Requests_Refactoring_45470 = true;
 
 				fakeState.current.name = REQUESTS_TAB_NAMES.overtime;
 
