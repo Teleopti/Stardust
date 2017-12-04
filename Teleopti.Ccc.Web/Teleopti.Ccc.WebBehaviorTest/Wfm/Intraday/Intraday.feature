@@ -41,7 +41,6 @@ Scenario: Create Skill Group in SGM
 	And I select to create a new Skill Group in SGM
 	And I name the Skill Group 'my Area'
 	And I select the skill 'Skill A' in SGM
-	And I move the skill to the group
 	And I save the Skill Groups
 	When I close the Skill Manager
 	Then I select to monitor skill area 'my Area'
@@ -55,7 +54,6 @@ Scenario: Rename Skill Group in SGM
 	And I select to create a new Skill Group in SGM
 	And I name the Skill Group 'my Area'
 	And I select the skill 'Skill A' in SGM
-	And I move the skill to the group
 	And I save the Skill Groups
 	And I select the Skill Group 'my Area'
 	When I name the Skill Group 'my Area 2'
@@ -72,8 +70,7 @@ Scenario: Rename Skill Group in SGM
 	And I select to manage Skill Groups
 	And I select the Skill Group 'SkillArea A'
 	And I select 'Skill A' from available skill
-	When I add selected skill to skill group
-	And I save the Skill Groups
+	When I save the Skill Groups
 	And I close the Skill Manager
 	Then I select to monitor skill area 'SkillArea A'
 	And I should see 'Skill A' as included skill
@@ -86,8 +83,7 @@ Scenario: Remove Skill from Skill Group in SGM
 	And I select to manage Skill Groups
 	And I select the Skill Group 'SkillArea A'
 	And I select 'Skill A' from SkillsInThisGroup
-	When I remove selected skill from skill group
-	And I save the Skill Groups
+	When I save the Skill Groups
 	And I close the Skill Manager
 	Then I select to monitor skill area 'SkillArea A'
 	And I should monitor 'SkillArea A'

@@ -173,13 +173,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.ClickContaining("#available_skills_list", skillName);
 		}
 
-		[Given(@"I move the skill to the group")]
-		public void GivenIMoveTheSkillToTheGroup()
-		{
-			Browser.Interactions.Click("#move_to_group");
-		}
-
-
 		[When(@"I am done creating Skill Area")]
 		public void WhenIAmDoneCreatingSkillArea()
 		{
@@ -213,12 +206,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Javascript($"{elementSelector}.click();");
 		}
 
-		[When(@"I remove selected skill from skill group")]
-		public void WhenIRemoveSelectedSkillFromSkillGroup()
-		{
-			Browser.Interactions.Click("#move_from_group");
-		}
-
 		[Then(@"I should not see '(.*)' as included skill")]
 		public void ThenIShouldNotSeeAsIncludedSkill(string skill)
 		{
@@ -230,13 +217,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			var elementSelector = $"$(\"span:contains('{skill}')\").parent()";
 			Browser.Interactions.Javascript($"{elementSelector}.click();");
-		}
-
-		[When(@"I add selected skill to skill group")]
-		[Given(@"I add selected skill to skill group")]
-		public void GivenIAddSelectedSkillToSkillGroup()
-		{
-			Browser.Interactions.Click("#move_to_group");
 		}
 
 		[Then(@"I select to monitor skill area '(.*)'")]
