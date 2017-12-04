@@ -30,14 +30,14 @@
 					params: {
 						getParams: undefined
 					},
-					templateUrl: 'app/requests/html/requests-absenceAndText.html',
+					templateUrl: 'app/requests/html/requests-absence-and-text.html',
 					controller: 'requestsAbsenceAndTextController as vm'
 				}).state('requests.shiftTrade', {
 					url: '/shiftTrade',
 					params: {
 						getParams: undefined
 					},
-					templateUrl: 'app/requests/html/requests-shiftTrade.html',
+					templateUrl: 'app/requests/html/requests-shift-trade.html',
 					controller: 'requestsShiftTradeController as vm'
 				}).state('requests.overtime', {
 					url: '/overtime',
