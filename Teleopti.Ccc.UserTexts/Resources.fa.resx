@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
     <value>مرخصی</value>
@@ -11318,5 +11318,263 @@ Teleopti R&amp;D</value>
   </data>
   <data name="IgnoredScheduleHint" xml:space="preserve">
     <value>زمانبندی پنهان شده</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>فیلتر کردن گزارشها</value>
+  </data>
+  <data name="ShiftLengthExceed36Hours" xml:space="preserve">
+    <value>طول شیفت از 36 ساعت بیشتر شد</value>
+  </data>
+  <data name="PreviewTheNewRequestsModule" xml:space="preserve">
+    <value>نمایش ماژول جدید درخواستها</value>
+  </data>
+  <data name="PreviewTheNewPeopleModule" xml:space="preserve">
+    <value>نمایش ماژول جدید افراد</value>
+  </data>
+  <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
+    <value>تعداد {0} مورد بهتر شده است. ما از دریافت {1} بازخورد شما خوشحال میشویم {2}</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>بازه داده</value>
+  </data>
+  <data name="ReportOptions" xml:space="preserve">
+    <value>گزینه های گزارش</value>
+  </data>
+  <data name="ShowOnlyAgentsWithNoSeat" xml:space="preserve">
+    <value>فقط پاسخگوهایی رو نشان بده که صندلی ندارند</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>توقف</value>
+  </data>
+  <data name="PausedAt" xml:space="preserve">
+    <value>توقف در</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>ادامه</value>
+  </data>
+  <data name="RtaPauseDisableNotice" xml:space="preserve">
+    <value>مانیتورینگ همراستایی به هنگام فعال شد</value>
+  </data>
+  <data name="RtaPauseEnabledNotice" xml:space="preserve">
+    <value>مانیتورینگ همراستایی به هنگام در زمان {0} متوقف شد. با زدن ادامه دوباره فعالش کنید</value>
+  </data>
+  <data name="DeletePerson" xml:space="preserve">
+    <value>حذف افراد</value>
+  </data>
+  <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
+    <value>بازه روزها میتواند حداکثر 60 روز باشد</value>
+  </data>
+  <data name="OrganizeCascadingSkills" xml:space="preserve">
+    <value>مرتب کردن مهارتهای الویت بندی شده</value>
+  </data>
+  <data name="EditLocationProperty" xml:space="preserve">
+    <value>ویرایش مشخصات مکان</value>
+  </data>
+  <data name="LocationProperties" xml:space="preserve">
+    <value>مشخصات مکان</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>پیش نام</value>
+  </data>
+  <data name="Suffix" xml:space="preserve">
+    <value>پس نام</value>
+  </data>
+  <data name="NotAllowedChange" xml:space="preserve">
+    <value>تغییر ممکن نیست</value>
+  </data>
+  <data name="NightRest" xml:space="preserve">
+    <value>استراحت شبانه</value>
+  </data>
+  <data name="WeeklyRestTime" xml:space="preserve">
+    <value>استراحت هفتگی</value>
+  </data>
+  <data name="PersonAccount" xml:space="preserve">
+    <value>حساب کاربری</value>
+  </data>
+  <data name="SkillOpeningHours" xml:space="preserve">
+    <value>زمان کار مهارت</value>
+  </data>
+  <data name="ShiftActivity" xml:space="preserve">
+    <value>فعالیت شیقت</value>
+  </data>
+  <data name="MinWeeklyWorkTime" xml:space="preserve">
+    <value>حداقل زمان کاری هفته</value>
+  </data>
+  <data name="BrokenRules" xml:space="preserve">
+    <value>قوانین شکسته شده</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRules" xml:space="preserve">
+    <value>تایید براساس قوانین کاری</value>
+  </data>
+  <data name="SubmitApproveBasedOnBusinessRulesSuccess" xml:space="preserve">
+    <value>درخواستهای انتخاب شده برای تایید بر اساس قوانین کاری </value>
+  </data>
+  <data name="ApproveBasedOnBusinessRulesFinished" xml:space="preserve">
+    <value>پردازش درخواستها براساس قوانین کاری کامل شد</value>
+  </data>
+  <data name="NoPermissionToModifyPersonAssignment" xml:space="preserve">
+    <value>اطلاعات بیشتر درمورد روش پیش بینی تشخیص انحرافات</value>
+  </data>
+  <data name="PartialSuccessMessageForEditingShiftCategory" xml:space="preserve">
+    <value>تغییر دسته بندی شیفت برای {0} پاسخگو انجام شد. {1} مورد موفقیت آمیز و {2} مورد شکست خورد</value>
+  </data>
+  <data name="MultipleSeatsSelected" xml:space="preserve">
+    <value>(چند صندلی انتخاب شده است)</value>
+  </data>
+  <data name="SeatNumber" xml:space="preserve">
+    <value>شماره صندلی</value>
+  </data>
+  <data name="AgentsDoNotRequireSeats" xml:space="preserve">
+    <value>پاسخگوها صندلی نیاز ندارند</value>
+  </data>
+  <data name="AgentsWithoutBookings" xml:space="preserve">
+    <value>پاسخگو بدون صندلی</value>
+  </data>
+  <data name="SeatBookingSummary" xml:space="preserve">
+    <value>خلاصه رزرو صندلی</value>
+  </data>
+  <data name="SuccessfulBookings" xml:space="preserve">
+    <value>رزرو صندلی با موفقیت آمیز بود</value>
+  </data>
+  <data name="SelectACategory" xml:space="preserve">
+    <value>انتخاب دسته بندی</value>
+  </data>
+  <data name="LoadingSkills" xml:space="preserve">
+    <value>بارگذاری مهارتها</value>
+  </data>
+  <data name="LoadingSkillAreas" xml:space="preserve">
+    <value>بارگذاری گروه مهارتها</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>بازگشت به فهرست</value>
+  </data>
+  <data name="NotOk" xml:space="preserve">
+    <value>خوب نیست</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>حساب کاربری</value>
+  </data>
+  <data name="RequestInvalidMessageLength" xml:space="preserve">
+    <value>چون پیام از 200 حرف بیشتر شده است، قابل ذخیره شدن نیست</value>
+  </data>
+  <data name="RequestInvalidMessageModification" xml:space="preserve">
+    <value>پاسخ شما را برای اینکه از {0} بیشتر شده است نمیتوان ذخیره کرد</value>
+  </data>
+  <data name="ReplyAndCancel" xml:space="preserve">
+    <value>پاسخ و لغو</value>
+  </data>
+  <data name="ReplySuccess" xml:space="preserve">
+    <value>پیام شما به {0} درخواست ذخیره شد</value>
+  </data>
+  <data name="SelectBusinessRulesWithColon" xml:space="preserve">
+    <value>انتخاب قوانین کاری:</value>
+  </data>
+  <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
+    <value>تایید درخواستها بر اساس بودجه اختصاص داده شده</value>
+  </data>
+  <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
+    <value>تایید درخواستها بر اساس میزان نیروی کاری روزانه</value>
+  </data>
+  <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
+    <value>دسترسی لازم برای ویرایش دسته بندی شیفت پاسخگوها وجود ندارد</value>
+  </data>
+  <data name="OverrideForTheseAgents" xml:space="preserve">
+    <value>بازنویسی این پاسخگوها</value>
+  </data>
+  <data name="ManageOpenHours" xml:space="preserve">
+    <value>ساعات کاری سایت</value>
+  </data>
+  <data name="SaveSiteOpenHoursSuccess" xml:space="preserve">
+    <value>ساعات کاری به روز شده است</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourErrorMessage" xml:space="preserve">
+    <value>هیچ ساعات کاری در {0} سایت {1} بین {2} و {3} وجود ندارد</value>
+  </data>
+  <data name="SiteOpeningHours" xml:space="preserve">
+    <value>ساعات کاری سایت</value>
+  </data>
+  <data name="BySeniority" xml:space="preserve">
+    <value>ارشدیت</value>
+  </data>
+  <data name="FirstComeFirstServed" xml:space="preserve">
+    <value>اولویت با درخواست زودتر</value>
+  </data>
+  <data name="ToggleClose" xml:space="preserve">
+    <value>بستن </value>
+  </data>
+  <data name="NoChangeHasBeenMade" xml:space="preserve">
+    <value>هیچ تغییری داده نشده</value>
+  </data>
+  <data name="ConfigureValidationWarnings" xml:space="preserve">
+    <value>تغییر هشدارهای تایید</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>هشدار</value>
+  </data>
+  <data name="BusinessRuleDayOffFriendlyName" xml:space="preserve">
+    <value>تداخل در روزهای تعطیل</value>
+  </data>
+  <data name="BusinessRuleMaxWeekWorkTimeFriendlyName" xml:space="preserve">
+    <value>ساعات کاری این هفته بیش از حد است</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeFriendlyName" xml:space="preserve">
+    <value>ساعات کاری این هفته کمتر از حد تعیین شده است</value>
+  </data>
+  <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
+    <value>زمان استراحت شب نقض شده</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourFriendlyName" xml:space="preserve">
+    <value>فعالیت خارج ساعات کاری سایت </value>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenFriendlyName" xml:space="preserve">
+    <value>فعالیت خارج ساعات کاری مهارت</value>
+  </data>
+  <data name="BusinessRuleOverlappingFriendlyName3" xml:space="preserve">
+    <value>فعالیت غیر قابل بازنویسی، تغییر کرده</value>
+  </data>
+  <data name="BusinessRulePersonAccountFriendlyName" xml:space="preserve">
+    <value>حساب کاربری از مقدار درست بیشت شده</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
+    <value>محدودیت دسته بندی شیفت در این دوره نقض شده است</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
+    <value>محدودیت دسته بندی شیفت در این هفته نقض شده است</value>
+  </data>
+  <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
+    <value>این هفته استراحت هفتگی قید شده را ندارد</value>
+  </data>
+  <data name="Overwritable" xml:space="preserve">
+    <value>قابل بازنویسی</value>
+  </data>
+  <data name="ValidationAlerts" xml:space="preserve">
+    <value>هشدار تایید</value>
+  </data>
+  <data name="AllPermittedSitesToMakeShiftTradeWith" xml:space="preserve">
+    <value>همه سایتها</value>
+  </data>
+  <data name="ReforecastedStaff" xml:space="preserve">
+    <value>پاسخگوهای بازپیش بینی شده</value>
+  </data>
+  <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
+    <value>بخاطر کمبود صندلی درخواست تبادل شیفت جدید رد میشود</value>
+  </data>
+  <data name="EnableShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>برقراری امکان تایید حداکثر صندلی</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>تایید حداکثر صندلی</value>
+  </data>
+  <data name="ShiftTradeRequestSettings" xml:space="preserve">
+    <value>تنظیمات درخواست تبادل شیفت</value>
+  </data>
+  <data name="AgentHistoricalAdherence" xml:space="preserve">
+    <value>سابقه هم راستایی</value>
+  </data>
+  <data name="TimeOOA" xml:space="preserve">
+    <value>زمان OOA</value>
+  </data>
+  <data name="AdherenceFor" xml:space="preserve">
+    <value>هم راستایی برای</value>
   </data>
 </root>
