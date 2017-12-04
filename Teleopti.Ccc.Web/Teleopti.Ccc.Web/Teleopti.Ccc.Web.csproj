@@ -1558,7 +1558,7 @@
     <Content Include="WFM\app\requests\requests.controller.overtime.js" />
     <Content Include="WFM\app\requests\requests.service.commands.configurations.js" />
     <Content Include="WFM\app\requests\requests.directive.synchronizeHeaderHeight.js" />
-    <Content Include="WFM\app\requests\requests-uigrid-fix.js" />
+    <Content Include="WFM\app\requests\requests.uigridFix.js" />
     <Content Include="WFM\app\requests\requests.controller.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\organization-tree-node.html" />
