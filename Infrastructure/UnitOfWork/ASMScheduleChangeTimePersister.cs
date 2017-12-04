@@ -66,8 +66,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var result = new List<Guid>();
 			foreach (var info in rootChangeInfos)
 			{
-				if (info.Root as IMeeting == null)
+				var meeting = info.Root as IMeeting;
+				if (meeting == null || !meeting.Scenario.DefaultScenario)
 					continue;
+
 
 				var changes = (info.Root as IProvideCustomChangeInfo).CustomChanges(info.Status);
 				foreach (var change in changes)

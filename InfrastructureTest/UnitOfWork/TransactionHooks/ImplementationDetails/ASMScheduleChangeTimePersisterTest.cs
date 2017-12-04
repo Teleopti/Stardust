@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(newTime);
 		}
 		[Test]
-		public void ShouldNotUpdateScheduleChangeTimeIfTheTypeIsNotAbsenceOrAssignment()
+		public void ShouldNotUpdateScheduleChangeTimeIfTheTypeIsNotAbsenceOrAssignmentOrPersonMeeting()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
 			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			var roots = new IRootChangeInfo[]
 			{
-						new RootChangeInfo(person, DomainUpdateType.Update)
+				new RootChangeInfo(person, DomainUpdateType.Update)
 			};
 			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
 			Target.AfterCompletion(roots);
@@ -220,8 +220,30 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
 		}
 
+
 		[Test]
-		public void ShouldAddScheduleChangeTimeForMeeting() {
+		public void ShouldNotAddScheduleChangeTimeForPersonAbsenceIfNotInDefaultScenario()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", false);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var period = new DateTimePeriod(new DateTime(2017, 11, 24, 6, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period);
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(personAbsence, DomainUpdateType.Update)
+			};
+			var now = new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldAddScheduleChangeTimeForMeetingInDefaultScenario() {
 			var person = PersonFactory.CreatePerson().WithId();
 			var requiredPerson = PersonFactory.CreatePerson().WithId();
 			requiredPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -249,6 +271,79 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			Target.AfterCompletion(roots);
 			Repo.GetScheduleChangeTime(requiredPerson.Id.GetValueOrDefault()).TimeStamp.Should().Be.EqualTo(now);
 		}
+
+		[Test]
+		public void ShouldNotAddScheduleChangeTimeForPersonMeetingIfNotInDefaultScenario()
+		{
+			var meetingCreator = PersonFactory.CreatePerson().WithId();
+			var attendee = PersonFactory.CreatePerson().WithId();
+			attendee.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", false);
+			var activity = ActivityFactory.CreateActivity("Meeting");
+			Meeting meeting = new Meeting(meetingCreator,
+								  new List<IMeetingPerson>
+									  {
+										   new MeetingPerson(attendee, false),
+									  }, "my subject", "my location",
+								  "my description", activity, scenario);
+
+			meeting.StartDate = new DateOnly(2017, 12, 1);
+			meeting.EndDate = new DateOnly(2017, 12, 1);
+			meeting.StartTime = TimeSpan.FromHours(8);
+			meeting.EndTime = TimeSpan.FromHours(10);
+			meeting.TimeZone = TimeZoneInfo.Utc;
+
+			var now = new DateTime(2017, 12, 1, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(meeting, DomainUpdateType.Update)
+			};
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(attendee.Id.GetValueOrDefault()).Should().Be.Null();
+		}
+
+		//[Test]
+		//public void ShouldNotUpdateScheduleChangeTimeForExistingAttendeeWhenAddingAttendeeToMeeting()
+		//{
+		//	var meetingCreator = PersonFactory.CreatePerson().WithId();
+			
+		//	var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+		//	var activity = ActivityFactory.CreateActivity("Meeting");
+		//	var attendee = PersonFactory.CreatePerson().WithId();
+		//	attendee.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+		//	var personMeeting = new MeetingPerson(attendee, false);
+		//	Meeting meeting = new Meeting(meetingCreator,
+		//						  new List<IMeetingPerson> {personMeeting
+		//						  }, "my subject", "my location",
+		//						  "my description", activity, scenario);
+
+		//	meeting.StartDate = new DateOnly(2017, 12, 1);
+		//	meeting.EndDate = new DateOnly(2017, 12, 1);
+		//	meeting.StartTime = TimeSpan.FromHours(8);
+		//	meeting.EndTime = TimeSpan.FromHours(10);
+		//	meeting.TimeZone = TimeZoneInfo.Utc;
+
+		//	var now = new DateTime(2017, 12, 1, 13, 0, 0, DateTimeKind.Utc);
+		//	Now.Is(now);
+		//	var roots = new IRootChangeInfo[]
+		//	{
+		//		new RootChangeInfo(meeting, DomainUpdateType.Insert)
+		//	};
+			
+		//	Target.AfterCompletion(roots);
+		//	Repo.GetScheduleChangeTime(attendee.Id.GetValueOrDefault()).TimeStamp.Should().Be.EqualTo(now);
+		//	var attendeeAnother = PersonFactory.CreatePerson().WithId();
+		//	meeting.AddMeetingPerson(new MeetingPerson(attendeeAnother, false));
+
+		//	Now.Is(now.AddHours(1));
+		//	Target.AfterCompletion(new IRootChangeInfo[]
+		//	{
+		//		new RootChangeInfo(meeting, DomainUpdateType.Update)
+		//	});
+		//	Repo.GetScheduleChangeTime(attendee.Id.GetValueOrDefault()).TimeStamp.Should().Be.EqualTo(now);
+		//	Repo.GetScheduleChangeTime(attendeeAnother.Id.GetValueOrDefault()).TimeStamp.Should().Be.EqualTo(now.AddHours(1));
+		//}
 
 		[Test]
 		public void ShouldAddScheduleChangeTimeForRecurrentMeetingIfAnyMeetingDaysInNotifyPeriod()
