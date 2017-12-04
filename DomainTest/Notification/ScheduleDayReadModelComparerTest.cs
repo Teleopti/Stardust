@@ -242,5 +242,27 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				_person.PermissionInformation.Culture(), new DateOnly(2012, 08, 31));
 			Assert.IsNotNull(message);
 		}
+
+		[Test]
+		public void ShouldReturnNotificationWhenOvertimeAddedOnNonScheduledDay()
+		{
+			var newReadModel = new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2012, 08, 31, 08, 00, 00),
+				EndDateTime = new DateTime(2012, 08, 31, 09, 00, 00),
+				Date = new DateTime(2012, 08, 31),
+				Workday = true,
+				WorkTimeTicks = 0,
+				ContractTimeTicks = 0,
+				Label = "FP",
+				ColorCode = 0,
+				NotScheduled = false,
+				Version = 2
+			};
+
+			var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, null,
+				_person.PermissionInformation.Culture(), new DateOnly(2012, 08, 31));
+			Assert.IsNotNull(message);
+		}
 	}
 }
