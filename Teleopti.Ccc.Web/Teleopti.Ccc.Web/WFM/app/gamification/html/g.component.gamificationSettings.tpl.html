@@ -50,7 +50,7 @@
                     <div ng-show="$ctrl.currentRule.items">
                         <div ng-repeat="item in $ctrl.currentRule.items" class="form-input-wrap">
                             <label>{{item.name | translate}}</label>
-                            <input ng-blur="$ctrl.changeRuleValue(item)" type="number" ng-model="item.value">
+                            <input ng-blur="$ctrl.changeRuleValue(item)" type="number" min="2" ng-model="item.value">
                         </div>
                     </div>
                 </div>
