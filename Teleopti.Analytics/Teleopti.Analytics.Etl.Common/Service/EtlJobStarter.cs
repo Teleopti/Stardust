@@ -119,13 +119,12 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			var runController = new RunController((IRunControllerRepository)repository);
 
 			log.Debug("Checking if permitted to run");
-			IEtlRunningInformation etlRunningInformation;
-			if (runController.CanIRunAJob(out etlRunningInformation))
+			if (runController.CanIRunAJob(out var etlRunningInformation))
 			{
 				try
 				{
 					log.Debug("Trying to aquire lock");
-					using (var etlJobLock = new EtlJobLock(_connectionString, jobToRun.Name, true))
+					using (new EtlJobLock(_connectionString, jobToRun.Name, true))
 					{
 						log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
 
@@ -154,8 +153,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				}
 				catch (DistributedLockException)
 				{
-					IEtlRunningInformation runningEtlJob;
-					if (!runController.CanIRunAJob(out runningEtlJob))
+					if (!runController.CanIRunAJob(out var runningEtlJob))
 					{
 						logConflictingEtlRun(jobToRun, runningEtlJob);
 					}

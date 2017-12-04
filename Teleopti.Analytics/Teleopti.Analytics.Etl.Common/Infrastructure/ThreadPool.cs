@@ -32,10 +32,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public event RowsUpdatedEventHandler RowsUpdatedEvent;
 
-		public Exception ThreadError
-		{
-			get { return _threadError; }
-		}
+		public Exception ThreadError => _threadError;
 
 		public void Load(IEnumerable<ITaskParameters> taskParameters, DoWork doWork)
 		{
@@ -105,8 +102,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			}
 			var rowsUpdated = (int)e.Result;
 
-			if (RowsUpdatedEvent != null)
-				RowsUpdatedEvent(this, new RowsUpdatedEventArgs(rowsUpdated));
+			RowsUpdatedEvent?.Invoke(this, new RowsUpdatedEventArgs(rowsUpdated));
 
 			lock (_lockObject)
 			{

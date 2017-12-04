@@ -14,10 +14,10 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 			var scheulesOverDue = from s in jobScheduleCollection
 								  where s.Enabled
-								  where s.TimeToRunNextJob > s.LastTimeStarted
-								  where s.TimeToRunNextJob < now
-								  where s.TimeToRunNextJob > serviceStartTime
-								  where (s.PeriodicStartingTodayAt < now && now < s.PeriodicEndingTodayAt) || s.ScheduleType == JobScheduleType.OccursDaily
+										&& s.TimeToRunNextJob > s.LastTimeStarted
+										&& s.TimeToRunNextJob < now
+										&& s.TimeToRunNextJob > serviceStartTime 
+										&& (s.PeriodicStartingTodayAt < now && now < s.PeriodicEndingTodayAt || s.ScheduleType == JobScheduleType.OccursDaily)
 								  orderby s.TimeToRunNextJob
 								  select s;
 
@@ -26,18 +26,20 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				Console.WriteLine("Schedule: Next: {0} / Last: {1}", etlSchedule.TimeToRunNextJob, etlSchedule.LastTimeStarted);
 			}
 
-			if (scheulesOverDue.Count() >= 1)
+			var first = scheulesOverDue.FirstOrDefault();
+			if (first!=null)
 			{
-				Console.WriteLine("Overdue: Next: {0} / Last: {1}", scheulesOverDue.First().TimeToRunNextJob, scheulesOverDue.First().LastTimeStarted);
+				Console.WriteLine("Overdue: Next: {0} / Last: {1}", first.TimeToRunNextJob, first.LastTimeStarted);
 			}
 
-			if (scheulesOverDue.Count() >= 2)
+			var count = scheulesOverDue.Count();
+			if (count >= 2)
 			{
-				var logText = "There are " + scheulesOverDue.Count() + "enqueued jobs";
+				var logText = "There are " + count + "enqueued jobs";
 				log.Info(logText);
 			}
 
-			return scheulesOverDue.Count() == 0 ? null : scheulesOverDue.First();
+			return first;
 		}
 
 	}

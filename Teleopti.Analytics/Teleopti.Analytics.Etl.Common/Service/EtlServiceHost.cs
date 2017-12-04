@@ -47,8 +47,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		public void Dispose()
 		{
-			if (_container != null)
-				_container.Dispose();
+			_container?.Dispose();
 		}
 
 		private class retryingOnAllStrategy : ITransientErrorDetectionStrategy
@@ -59,7 +58,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				return true;
 			}
 		}
-
 	}
 
 }

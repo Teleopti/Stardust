@@ -75,10 +75,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			if (!stop)
 			{
 				log.Debug("Starting timer");
-				if (_timer != null)
-				{
-					_timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
-				}
+				_timer?.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
 				log.Debug("Timer started");
 			}
 		}
@@ -105,11 +102,9 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		public void Dispose()
 		{
 			log.Info("The service is stopping.");
-			if (_timer != null)
-			{
-				_timer.Dispose();
-				_timer = null;
-			}
+
+			_timer?.Dispose();
+			_timer = null;
 		}
 	}
 }
