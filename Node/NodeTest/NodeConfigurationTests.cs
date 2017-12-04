@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Net;
 using System.Reflection;
 using System.Reflection.Emit;
 using NUnit.Framework;
@@ -23,7 +24,7 @@ namespace NodeTest
 				60,
 				2000);
 
-		    StaticIp = "127.1.33.7";
+		    FixedIp = IPAddress.Parse("127.13.3.7");
             NodeConfigurationStaticIp = new NodeConfiguration(
                 new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
                 Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
@@ -31,7 +32,7 @@ namespace NodeTest
                 "TestNode",
                 60,
                 2000,
-                StaticIp);
+                FixedIp);
 
             UriToTest = NodeConfiguration.ManagerLocation;
 
@@ -76,7 +77,7 @@ namespace NodeTest
 		private Uri JobDoneUri { get; set; }
 		private Uri JobDoneTemplateUri { get; set; }
 		private Guid Guid { get; set; }
-        private string StaticIp { get; set; }
+        private IPAddress FixedIp { get; set; }
 
 
 		[Test]
@@ -115,10 +116,10 @@ namespace NodeTest
 		}
 
 	    [Test]
-	    public void ShouldReturnCorrectUrlWhenStaticIpIsSet()
+	    public void ShouldReturnCorrectUrlWhenFixedNodeIpIsSet()
 	    {
 	        var uri = NodeConfigurationStaticIp.BaseAddress;
-            var expectedUri = new Uri("http://" + StaticIp + ":1337/");
+            var expectedUri = new Uri("http://" + FixedIp + ":1337/");
 	        Assert.IsTrue(uri == expectedUri);
 	    }
     }

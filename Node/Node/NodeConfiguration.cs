@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 
 namespace Stardust.Node
@@ -19,15 +20,15 @@ namespace Stardust.Node
 		}
 
 	    public NodeConfiguration(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName,
-	        int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds, string staticNodeIp) : this(managerLocation,
+	        int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds, IPAddress fixedNodeIp) : this(managerLocation,
 	        handlerAssembly, port, nodeName, pingToManagerSeconds, sendDetailsToManagerMilliSeconds)
 	    {
-	        if (string.IsNullOrEmpty(staticNodeIp))
+	        if (fixedNodeIp == null)
 	        {
-	            throw new ArgumentNullException(nameof(staticNodeIp));
+	            throw new ArgumentNullException(nameof(fixedNodeIp));
 	        }
 
-            BaseAddress = CreateNodeAddress(port, staticNodeIp);
+            BaseAddress = CreateNodeAddress(port, fixedNodeIp);
         }
 
         public Uri BaseAddress { get; }
@@ -59,13 +60,25 @@ namespace Stardust.Node
 			return host.HostName;
 		}
 
-		private Uri CreateNodeAddress(int port, string staticIp = null)
+		private Uri CreateNodeAddress(int port, IPAddress fixedIp = null)
 		{
 			if (port <= 0)
 			{
 				throw new ArgumentNullException(nameof(port));
 			}
-			return new Uri("http://" + (staticIp ?? GetHostName()) + ":" + port + "/");
+
+		    var nodeUrl = "http://";
+
+            if(fixedIp != null)
+            {
+                nodeUrl += fixedIp.AddressFamily == AddressFamily.InterNetworkV6 ? "[" + fixedIp + "]" : fixedIp.ToString();
+            }
+            else
+            {
+                nodeUrl += GetHostName();
+            }
+
+			return new Uri(nodeUrl + ":" + port + "/");
 		}
 	}
 }
