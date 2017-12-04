@@ -1095,4 +1095,22 @@
   <data name="ResFulfilled" xml:space="preserve">
     <value>تکمیل شده</value>
   </data>
+  <data name="ResIncludeDetails" xml:space="preserve">
+    <value>شامل این جزئیات میشود</value>
+  </data>
+  <data name="ResRequestStatusCancelled" xml:space="preserve">
+    <value>لغو شده</value>
+  </data>
+  <data name="ResRequestStatusWaitlisted" xml:space="preserve">
+    <value>در انتظار</value>
+  </data>
+  <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
+    <value>چند فعالیت/مرخصی</value>
+  </data>
+  <data name="ResESLInclShrinkagePercent" xml:space="preserve">
+    <value>ESL inc. Shrinkage (%)</value>
+  </data>
+  <data name="ResESLPercent" xml:space="preserve">
+    <value>ESL (%)</value>
+  </data>
 </root>
