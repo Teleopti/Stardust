@@ -31,7 +31,6 @@ Background:
 	| Subject      | Subject - Illness request from Ashley |
 	| Message      | Message - Illness request from Ashley |
 
-@OnlyRunIfEnabled('Wfm_Requests_Refactoring_45470')
 Scenario: Should view absence and text requests 
 	When I view wfm requests
 	And I select to go to absence and text requests view
@@ -41,7 +40,6 @@ Scenario: Should view absence and text requests
 	Then I should see a absence and text request from 'Ashley Andeen' in the list
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_Refactoring_45470')
 Scenario: Should keep selected requests when navigating to different page
 	When I view wfm requests
 	And I select to go to absence and text requests view

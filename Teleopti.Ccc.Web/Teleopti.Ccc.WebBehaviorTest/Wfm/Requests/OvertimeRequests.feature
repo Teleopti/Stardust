@@ -29,7 +29,6 @@ Background:
 	| Subject      | Subject - Illness request from Ashley |
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_Refactoring_45470')
 Scenario: Should view overtime requests 
 	When I view wfm requests
 	And I select to go to overtime view
@@ -39,7 +38,6 @@ Scenario: Should view overtime requests
 	Then I should see a overtime request from 'Ashley Andeen' in the list
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_Refactoring_45470')
 Scenario: Should keep selected requests when navigating to different page
 	When I view wfm requests
 	And I select to go to overtime view

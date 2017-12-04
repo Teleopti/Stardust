@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
 	[RequestPerformanceTuningTest]
 	[Toggle(Toggles.Wfm_Requests_OvertimeRequestHandling_45177)]
-	[Toggle(Toggles.Wfm_Requests_Refactoring_45470)]
 	public class OvertimeRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
