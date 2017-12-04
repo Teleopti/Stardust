@@ -18,21 +18,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		public int ScenarioId { get; set; }
 		public int WorkloadId { get; set; }
-		public int ForecastedCalls { get; set; }
-		public int ForecastedEmails { get; set; }
-		public int ForecastedBackofficeTasks { get; set; }
-		public int ForecastedCampaignCalls { get; set; }
-		public int ForecastedCallsExclCampaign { get; set; }
-		public int ForecastedTalkTimeS { get; set; }
-		public int ForecastedCampaignTalkTimeS { get; set; }
-		public int ForecastedTalkTimeExclCampaignS { get; set; }
-		public int ForecastedAfterCallWorkS { get; set; }
-		public int ForecastedCampaignAfterCallWorkS { get; set; }
-		public int ForecastedAfterCallWorkExclCampaignS { get; set; }
-		public int ForecastedHandlingTimeSeconds { get; set; }
-		public int ForecastedCampaignHandlingTimeS { get; set; }
-		public int ForecastedHandlingTimeExclCampaignS { get; set; }
-		public int PeriodLengthMin { get; set; }
+		public double ForecastedCalls { get; set; }
+		public double ForecastedEmails { get; set; }
+		public double ForecastedBackofficeTasks { get; set; }
+		public double ForecastedCampaignCalls { get; set; }
+		public double ForecastedCallsExclCampaign { get; set; }
+		public double ForecastedTalkTimeS { get; set; }
+		public double ForecastedCampaignTalkTimeS { get; set; }
+		public double ForecastedTalkTimeExclCampaignS { get; set; }
+		public double ForecastedAfterCallWorkS { get; set; }
+		public double ForecastedCampaignAfterCallWorkS { get; set; }
+		public double ForecastedAfterCallWorkExclCampaignS { get; set; }
+		public double ForecastedHandlingTimeSeconds { get; set; }
+		public double ForecastedCampaignHandlingTimeS { get; set; }
+		public double ForecastedHandlingTimeExclCampaignS { get; set; }
+		public double PeriodLengthMin { get; set; }
 		public int BusinessUnitId { get; set; }
 
 		public FillFactForecastWorkload(IDateData date, IIntervalData intervals, ISkillData skillData)

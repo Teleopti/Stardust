@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			double forecasted_campaign_handling_time_s,
 			double forecasted_handling_time_excl_campaign_s,
 			double period_length_min,
-			double business_unit_id
+			int business_unit_id
 			)
 
 		{
