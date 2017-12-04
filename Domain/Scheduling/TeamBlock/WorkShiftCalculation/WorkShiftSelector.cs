@@ -25,11 +25,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 	public class WorkShiftSelector : IWorkShiftSelector, IWorkShiftSelectorForIntraInterval
 	{
-		private readonly IWorkShiftValueCalculator _workShiftValueCalculator;
+		private readonly WorkShiftValueCalculator _workShiftValueCalculator;
 		private readonly IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 
-		public WorkShiftSelector(IWorkShiftValueCalculator workShiftValueCalculator,
+		public WorkShiftSelector(WorkShiftValueCalculator workShiftValueCalculator,
 												IEqualWorkShiftValueDecider equalWorkShiftValueDecider,
 												IActivityIntervalDataCreator activityIntervalDataCreator)
 		{

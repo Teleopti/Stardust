@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 	{
 		private IWorkShiftPeriodValueCalculator _workShiftPeriodValueCalculator;
 		private IWorkShiftLengthValueCalculator _workShiftLengthValueCalculator;
-		private IWorkShiftValueCalculator _target;
+		private WorkShiftValueCalculator _target;
 		private DateTimePeriod _period1;
 		private readonly DateTime _start = new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc);
 		private readonly DateTime _end = new DateTime(2009, 02, 02, 8, 30, 0, DateTimeKind.Utc);

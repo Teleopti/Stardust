@@ -676,7 +676,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private void registerWorkShiftSelector(ContainerBuilder builder)
 		{
 			builder.RegisterType<WorkShiftLengthValueCalculator>().As<IWorkShiftLengthValueCalculator>().SingleInstance();
-			builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>().SingleInstance();
+			builder.RegisterType<WorkShiftValueCalculator>().SingleInstance();
 			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().SingleInstance();
 			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
 			builder.RegisterType<PullTargetValueFromSkillIntervalData>().SingleInstance();

@@ -8,14 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
-	public interface IWorkShiftValueCalculator
-	{
-		double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity,
-			IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic,
-			PeriodValueCalculationParameters periodValueCalculationParameters, TimeZoneInfo timeZoneInfo);
-	}
-
-	public class WorkShiftValueCalculator : IWorkShiftValueCalculator
+	public class WorkShiftValueCalculator
 	{
 		private readonly IWorkShiftPeriodValueCalculator _workShiftPeriodValueCalculator;
 		private readonly IWorkShiftLengthValueCalculator _workShiftLengthValueCalculator;
