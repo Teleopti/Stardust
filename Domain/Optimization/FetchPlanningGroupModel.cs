@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private int getAgentsToday(IPlanningGroup planningGroup)
 		{
 			return _personRepository.CountPeopleInPlanningGroup(planningGroup,
-				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+				DateOnly.Today.ToDateOnlyPeriod());
 		}
 	}
 }

@@ -788,7 +788,7 @@ namespace Teleopti.Ccc.Domain.Common
 			var partTimePercentage = personPeriod.PersonContract.PartTimePercentage;
 		    return new PersonWorkDay(dateOnly, new Lazy<TimeSpan>(()=>calculateAverageWorkTime(personPeriod, SchedulePeriod(dateOnly), dateOnly)),
 				contract.WorkTimeSource,
-				partTimePercentage != null ? partTimePercentage.Percentage : new Percent(1d),
+				partTimePercentage?.Percentage ?? new Percent(1d),
 				isWorkDay(contractSchedule,dateOnly));
         }
 
@@ -799,9 +799,10 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual ISiteOpenHour SiteOpenHour(DateOnly dateOnly)
 	    {
-			if (MyTeam(dateOnly) != null)
+			var myTeam = MyTeam(dateOnly);
+			if (myTeam != null)
 			{
-				var siteOpenHours = MyTeam(dateOnly).Site.OpenHourCollection;
+				var siteOpenHours = myTeam.Site.OpenHourCollection;
 				foreach (var siteOpenHour in siteOpenHours)
 				{
 					if (siteOpenHour.WeekDay == dateOnly.DayOfWeek)

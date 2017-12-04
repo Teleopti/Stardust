@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <ApplicationInsightsResourceId>/subscriptions/9020de4a-13f8-465b-a3ae-995caf390fb8/resourcegroups/Default-ApplicationInsights-NorthEurope/providers/microsoft.insights/components/rd_insights</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/9020de4a-13f8-465b-a3ae-995caf390fb8/resourcegroups/Default-ApplicationInsights-NorthEurope/providers/microsoft.insights/components/rd_insights</ApplicationInsightsAnnotationResourceId>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -194,7 +195,6 @@
     </Compile>
     <Compile Include="GetPayrollResultById.aspx.cs">
       <DependentUpon>GetPayrollResultById.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="GetPayrollResultById.aspx.designer.cs">
       <DependentUpon>GetPayrollResultById.aspx</DependentUpon>

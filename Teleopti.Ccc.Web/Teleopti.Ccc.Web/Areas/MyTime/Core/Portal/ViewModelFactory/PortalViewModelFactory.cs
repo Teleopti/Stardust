@@ -82,10 +82,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge);
 
 			ITeamGamificationSetting teamSetting = null;
-			if (_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today) != null)
+			var person = _loggedOnUser.CurrentUser();
+			var myTeam = person.MyTeam(DateOnly.Today);
+			if (myTeam != null)
 			{
 				teamSetting =
-					_teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today));
+					_teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(myTeam);
 			}
 
 			var badgeFeatureEnabled = (teamSetting != null);
@@ -96,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				ReportNavigationItems = reportsList,
 				NavigationItems = navigationItems,
 				CustomerName = customerName,
-				CurrentLogonAgentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name),
+				CurrentLogonAgentName = _personNameProvider.BuildNameFromSetting(person.Name),
 				ShowChangePassword = showChangePassword(),
 				ShowWFMAppGuide = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration)
 				&& _toggleManager.IsEnabled(Toggles.MyTimeWeb_ViewWFMAppGuide_43848),

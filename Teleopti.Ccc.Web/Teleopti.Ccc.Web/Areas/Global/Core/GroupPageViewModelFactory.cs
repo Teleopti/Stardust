@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			var groupPages = buildInGroupPages.Union(customGroupPages).ToList();
 			
 			var allAvailableGroups = _groupingReadOnlyRepository
-				.AvailableGroups( new DateOnlyPeriod(date, date), groupPages.Select(gp=>gp.PageId).ToArray())
+				.AvailableGroups(date.ToDateOnlyPeriod(), groupPages.Select(gp=>gp.PageId).ToArray())
 				.ToLookup(t => t.PageId);
 
 			var actualGroupPages = groupPages.Select(gp =>

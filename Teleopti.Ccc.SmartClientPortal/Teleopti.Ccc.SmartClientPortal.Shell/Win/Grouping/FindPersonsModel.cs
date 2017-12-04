@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
             {
                 _period = new DateOnlyPeriod(value, _period.EndDate);
             }
-
         }
 
         public DateOnly ToDate
@@ -36,9 +35,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
             }
         }
 
-        public IEnumerable<IPerson> Persons
-        {
-            get { return _persons; }
-        }
-    }
+        public IEnumerable<IPerson> Persons => _persons;
+	}
 }

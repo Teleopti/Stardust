@@ -669,14 +669,12 @@
     <Compile Include="Areas\Reporting\Reports\CCC\PersonModel.cs" />
     <Compile Include="Areas\Reporting\ScheduleAdherence.aspx.cs">
       <DependentUpon>ScheduleAdherence.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Areas\Reporting\ScheduleAdherence.aspx.designer.cs">
       <DependentUpon>ScheduleAdherence.aspx</DependentUpon>
     </Compile>
     <Compile Include="Areas\Reporting\Index.aspx.cs">
       <DependentUpon>Index.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Areas\Reporting\Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>

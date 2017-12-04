@@ -352,9 +352,7 @@
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
     <Compile Include="Notification\ASMScheduleChangeTime.cs" />
     <Compile Include="Notification\ClickatellNotificationSender.cs" />
-    <Compile Include="Notification\ClickatellNotificationWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Notification\ClickatellNotificationWebClient.cs" />
     <Compile Include="Notification\RawPostNotificationSender.cs" />
     <Compile Include="Notification\RawPostNotificationWebClient.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePoller.cs" />

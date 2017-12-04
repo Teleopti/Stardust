@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
         public GroupPageOptions(IEnumerable<IPerson> persons)
         {
             Persons = persons;
-            SelectedPeriod = new DateOnlyPeriod(DateOnly.Today,DateOnly.Today);
+            SelectedPeriod = DateOnly.Today.ToDateOnlyPeriod();
         }
 
-        public IEnumerable<IPerson> Persons { get; private set; }
+        public IEnumerable<IPerson> Persons { get; }
 
         public string CurrentGroupPageName { get; set; }
 
