@@ -1862,12 +1862,8 @@
     <Content Include="WFM\app\outbound\outbound.service.spec.js" />
     <Content Include="WFM\app\people\people.cart.controller.spec.js" />
     <Content Include="WFM\app\people\people.start.controller.spec.js" />
-    <Content Include="WFM\app\requests\requests-overview.directive.spec.js" />
-    <Content Include="WFM\app\requests\html\requests-overview.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-table-container.tpl.html" />
-    <Content Include="WFM\app\requests\html\requests.html" />
     <Content Include="WFM\app\requests\requests-data.service.js" />
-    <Content Include="WFM\app\requests\requests-overview.directive.js" />
     <Content Include="WFM\app\requests\requests-reply-message.directive.js" />
     <Content Include="WFM\app\requests\requests-reply-message.directive.spec.js" />
     <Content Include="WFM\app\requests\requests-shift-trade-grid-configuration.service.js" />
@@ -1876,7 +1872,6 @@
     <Content Include="WFM\app\requests\requests-table-container.directive.js" />
     <Content Include="WFM\app\requests\requests-definitions.service.js" />
     <Content Include="WFM\app\requests\requests-definitions.service.spec.js" />
-    <Content Include="WFM\app\requests\requests.controller.js" />
     <Content Include="WFM\app\requests\requests.controller.spec.js" />
     <Content Include="WFM\app\requests\requests-schedule-table.directive.js" />
     <Content Include="WFM\app\requests\requests.routes.js" />

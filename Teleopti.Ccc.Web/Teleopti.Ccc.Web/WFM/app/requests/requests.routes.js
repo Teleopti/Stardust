@@ -9,7 +9,7 @@
 			this.$get = function() {
 				return function(toggleService) {
 					toggleService.togglesLoaded.then(function() {
-						toggles = toggleService
+						toggles = toggleService;
 					});
 				};
 			};
@@ -18,16 +18,10 @@
 				$stateProvider.state('requests', {
 					url: '/requests',
 					templateUrl: function() {
-						if (toggles.Wfm_Requests_Refactoring_45470)
-							return 'app/requests/html/requests.refactor.html';
-						else
-							return 'app/requests/html/requests.html';
+						return 'app/requests/html/requests.refactor.html';
 					},
 					controllerProvider: function(){
-						if(toggles.Wfm_Requests_Refactoring_45470)
-							return 'requestsRefactorController as vm';
-						else
-							return 'requestsOriginController as vm';
+						return 'requestsRefactorController as vm';
 					}
 				});
 
