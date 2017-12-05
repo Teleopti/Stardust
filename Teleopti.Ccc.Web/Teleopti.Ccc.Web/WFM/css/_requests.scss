@@ -184,8 +184,11 @@
 		}
 	}
 
+	.requests-table-header{
+		margin-bottom: 10px;
+	}
+
 	.ui-grid {
-		margin-top: 10px;
 		.ui-grid-cell-contents.ui-grid-cell-contents {
 			width: 85%;
 			text-align: left;
