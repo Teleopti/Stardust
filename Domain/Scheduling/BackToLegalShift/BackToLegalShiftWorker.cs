@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 	{
 		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
-		private readonly ITeamBlockSingleDayScheduler _teamBlockSingleDayScheduler;
+		private readonly TeamBlockSingleDayScheduler _teamBlockSingleDayScheduler;
 		private readonly IWorkShiftSelector _workShiftSelector;
 
 		public BackToLegalShiftWorker(TeamBlockClearer teamBlockClearer,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-			ITeamBlockSingleDayScheduler teamBlockSingleDayScheduler,
+			TeamBlockSingleDayScheduler teamBlockSingleDayScheduler,
 			IWorkShiftSelector workShiftSelector)
 		{
 			_teamBlockClearer = teamBlockClearer;

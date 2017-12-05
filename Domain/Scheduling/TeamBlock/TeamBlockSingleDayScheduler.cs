@@ -11,15 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface ITeamBlockSingleDayScheduler
-	{
-		bool ScheduleSingleDay(IEnumerable<IPersonAssignment> orginalPersonAssignments, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,
-			ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IDictionary<ISkill, IEnumerable<ISkillDay>> skills, IScheduleDictionary schedules, ResourceCalculationData resourceCalculationData,
-			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
-	}
-
-	public class TeamBlockSingleDayScheduler : ITeamBlockSingleDayScheduler
+	public class TeamBlockSingleDayScheduler
 	{
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly ProposedRestrictionAggregator _proposedRestrictionAggregator;
