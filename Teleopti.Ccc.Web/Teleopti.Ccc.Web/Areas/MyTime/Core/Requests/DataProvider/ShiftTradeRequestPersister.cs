@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			var personRequest = _shiftTradeRequestMapper.Map(form);
+			_shiftTradeSetChecksum.SetChecksum(personRequest.Request);
 			_personRequestRepository.Add(personRequest);
 
 			var permissionSatisfied =

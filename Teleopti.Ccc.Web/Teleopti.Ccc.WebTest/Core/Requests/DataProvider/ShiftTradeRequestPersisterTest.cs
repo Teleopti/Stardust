@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			Target.Persist(form);
 
 			((IShiftTradeRequest) PersonRequestRepository.LoadAll().Last().Request).ShiftTradeSwapDetails.First().ChecksumTo
-				.Should().Not.Be.EqualTo(-1);
+				.Should().Be.EqualTo(-1);
 		}
 
 		[Test]
