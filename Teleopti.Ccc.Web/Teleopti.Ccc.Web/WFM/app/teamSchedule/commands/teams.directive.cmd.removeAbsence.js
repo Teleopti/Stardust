@@ -50,6 +50,7 @@
 
 				selectedPersonAbsences.push({
 					PersonId: selection.PersonId,
+					Name: selection.Name,
 					AbsenceDates: absenceDates
 				});
 			});
