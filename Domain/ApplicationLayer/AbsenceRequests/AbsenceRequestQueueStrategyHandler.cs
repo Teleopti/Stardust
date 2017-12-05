@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public AbsenceRequestQueueStrategyHandler(IAbsenceRequestStrategyProcessor absenceRequestStrategyProcessor,
 												  IEventPublisher publisher, INow now,
 												  IRequestStrategySettingsReader requestStrategySettingsReader, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-												  IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, IPersonRepository personRepository, IUpdatedByScope updatedByScope, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRequestRepository personRequestRepository, IFilterRequestsWithDifferentVersion filterRequestsWithDifferentVersion)
+												  IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, IPersonRepository personRepository, 
+												  IUpdatedByScope updatedByScope, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, 
+												  IFilterRequestsWithDifferentVersion filterRequestsWithDifferentVersion)
 		{
 			_absenceRequestStrategyProcessor = absenceRequestStrategyProcessor;
 			_requestStrategySettingsReader = requestStrategySettingsReader;
@@ -60,10 +62,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				_updatedByScope.OnThisThreadUse(person);
 				
 				absenceRequestBulkFrequencyMinutes = _requestStrategySettingsReader.GetIntSetting("AbsenceRequestBulkFrequencyMinutes", 10);
-				//var bulkRequestTimeoutMinutes = _requestStrategySettingsReader.GetIntSetting("BulkRequestTimeoutMinutes", 60);
-
-				//_queuedAbsenceRequestRepository.CheckAndUpdateSent(bulkRequestTimeoutMinutes);
-				//uow.PersistAll();
 			}
 
 			businessUnits.ForEach(businessUnit =>
@@ -77,10 +75,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			        //include yesterday to deal with timezones
 			        var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)),
 			            new DateOnly(now.AddDays(windowSize)));
-				    var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(thresholdTime,  //same value for near and far - pbi #44752
-																						thresholdTime,
-																						pastThresholdTime, initialPeriod, windowSize);
-			        if (!listOfAbsenceRequests.Any()) return;
+
+					var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(
+						thresholdTime, //same value for near and far - pbi #44752
+						thresholdTime,
+						pastThresholdTime, initialPeriod, windowSize);
+
+					if (!listOfAbsenceRequests.Any()) return;
 
 			        listOfAbsenceRequests = _filterRequestsWithDifferentVersion.Filter(reqWithVersion, listOfAbsenceRequests);
 

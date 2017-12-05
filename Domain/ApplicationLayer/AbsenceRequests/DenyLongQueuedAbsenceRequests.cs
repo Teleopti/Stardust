@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
@@ -11,33 +12,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private readonly IQueuedAbsenceRequestRepository _absenceRequestRepository;
 		private readonly ICommandDispatcher _commandDispatcher;
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly IConfigReader _configReader;
 
-		public DenyLongQueuedAbsenceRequests(IQueuedAbsenceRequestRepository absenceRequestRepository, ICommandDispatcher commandDispatcher, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public DenyLongQueuedAbsenceRequests(IQueuedAbsenceRequestRepository absenceRequestRepository, ICommandDispatcher commandDispatcher, IConfigReader configReader)
 		{
 			_absenceRequestRepository = absenceRequestRepository;
 			_commandDispatcher = commandDispatcher;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_configReader = configReader;
 		}
 
-		public void DenyAndRemoveLongRunningRequests(IEnumerable<IQueuedAbsenceRequest> longRequests )
+		public IList<IQueuedAbsenceRequest> DenyAndRemoveLongRunningRequests(IList<IQueuedAbsenceRequest> allRequests)
 		{
-			using (var uow = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork())
+			var maxDaysForAbsenceRequest = _configReader.ReadValue("MaximumDayLengthForAbsenceRequest", 60);
+			var longRequests = allRequests.Where(x => x.EndDateTime.Subtract(x.StartDateTime).TotalDays >= maxDaysForAbsenceRequest).ToList();
+			
+			longRequests.ForEach(request =>
 			{
-				longRequests.ForEach(request =>
+				if (request.PersonRequest != Guid.Empty)
 				{
-					var command = new DenyRequestCommand()
+					var command = new DenyRequestCommand
 					{
 						PersonRequestId = request.PersonRequest,
 						DenyReason = UserTexts.Resources.RequestedPeriodIsTooLong,
 						DenyOption = PersonRequestDenyOption.None
 					};
 					_commandDispatcher.Execute(command);
-					_absenceRequestRepository.Remove(request);
-				});
-				uow.PersistAll();
-			}
-			
+				}
+				_absenceRequestRepository.Remove(request);
+			});
+
+			return allRequests.Except(longRequests).ToList();
 		}
 	}
 }
