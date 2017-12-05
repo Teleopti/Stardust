@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ExtractBudgetGroupPeriods>().As<IExtractBudgetGroupPeriods>();
 			builder.RegisterType<OvertimeAvailabilityPersister>().As<IOvertimeAvailabilityPersister>();
 			builder.RegisterType<AbsenceReportPersister>().As<IAbsenceReportPersister>();
-			builder.RegisterType<WeekScheduleDomainDataProvider>().As<IWeekScheduleDomainDataProvider>().SingleInstance();
+			builder.RegisterType<WeekScheduleDomainDataProvider>().As<IWeekScheduleDomainDataProvider>();
 			builder.RegisterType<MonthScheduleDomainDataProvider>().As<IMonthScheduleDomainDataProvider>().SingleInstance();
 			builder.RegisterType<StaffingPossibilityViewModelFactory>().As<IStaffingPossibilityViewModelFactory>().SingleInstance();
 			builder.RegisterType<ScheduleMinMaxTimeCalculator>().As<IScheduleMinMaxTimeCalculator>().SingleInstance();
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
 			builder.RegisterType<AllowanceProvider>().As<IAllowanceProvider>();
 			builder.RegisterType<AbsenceTimeProvider>().As<IAbsenceTimeProvider>();
-			builder.RegisterType<AbsenceTimeProviderCache>().As<IAbsenceTimeProviderCache>().SingleInstance();
+			builder.RegisterType<AbsenceTimeProviderCache>().As<IAbsenceTimeProviderCache>();
 			builder.RegisterType<AbsenceRequestProbabilityProvider>().As<IAbsenceRequestProbabilityProvider>();
 			builder.RegisterType<TeamViewModelFactory>().As<ITeamViewModelFactory>();
 			builder.RegisterType<SiteViewModelFactory>().As<ISiteViewModelFactory>();
