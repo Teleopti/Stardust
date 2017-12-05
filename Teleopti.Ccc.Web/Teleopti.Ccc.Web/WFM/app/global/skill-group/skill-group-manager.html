@@ -45,17 +45,17 @@
 								</span>
 								<div class="wfm-leave-behind wfm-leave-behind-3">
 									<span>
-										<i class="mdi mdi-content-copy" aria-label="Copy" ng-click="vm.copyGroupClicked(skillGroup, $event)">
+										<i class="mdi mdi-content-copy" aria-label="Copy" id="copySkillGroupButton" ng-click="vm.copyGroupClicked(skillGroup, $event)">
 											<md-tooltip>
 												{{'Copy' | translate}}
 											</md-tooltip>
 										</i>
-										<i class="mdi mdi-pencil" aria-label="Edit" ng-click="vm.editNameClicked(skillGroup, $event)">
+										<i class="mdi mdi-pencil" aria-label="Edit" id="renameSkillGroupButton" ng-click="vm.editNameClicked(skillGroup, $event)">
 											<md-tooltip>
 												{{'Edit' | translate}}
 											</md-tooltip>
 										</i>
-										<i class="mdi mdi-delete" aria-label="Delete" ng-click="vm.selectedSkillGroup = skillGroup; vm.deleteConfirmation=true; $event.stopPropagation();">
+										<i class="mdi mdi-delete" aria-label="Delete" id="deleteSkillGroupButton" ng-click="vm.selectedSkillGroup = skillGroup; vm.deleteConfirmation=true; $event.stopPropagation();">
 											<md-tooltip ng-hide="role.IsMyRole">
 												{{'Delete' | translate}}
 											</md-tooltip>

@@ -132,7 +132,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I name the Skill Group '(.*)'")]
 		public void GivenINameTheSkillGroup(string skillGroupName)
 		{
+
 			Browser.Interactions.FillWith("#skillGroupNameBox", skillGroupName);
+			Browser.Interactions.Click("#confirmEditNameButton");
+
 		}
 
 		[Given(@"I select the Skill Group '(.*)'")]
@@ -140,6 +143,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.ClickContaining("#available_skill_groups_list", skillGroupName);
 		}
+
+		[Given(@"I chose to rename the Skill Group")]
+		public void GivenIChoseToRenameTheSkillGroup()
+		{
+			Browser.Interactions.Click("#renameSkillGroupButton");
+		}
+
 
 		[Given(@"I select to manage Skill Groups")]
 		public void GivenISelectToManageSkillGroups()
@@ -156,6 +166,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 							 "var skillet = scope.vm.skills.find(function(e){{return e.Name === '" + skillName + "'}});" +
 							 "scope.vm.selectedSkill = skillet;" +
 							 "scope.vm.selectedSkillChange(skillet);" +
+							 "setTimeout(function(){console.log('delay')}, 1000);"; 
+			Browser.Interactions.Javascript(javascript);
+		}
+
+		[Given(@"I pick the skillgroup '(.*)'")]
+		[When(@"I pick the skillgroup '(.*)'")]
+		public void GivenIPickTheSkillGroup(string skillName)
+		{
+			Browser.Interactions.AssertExists("md-autocomplete");
+			var javascript = "var scope = angular.element(document.querySelector('md-autocomplete')).scope();" +
+							 "var sg = scope.vm.skillAreas.find(function(e){{return e.Name === '" + skillName + "'}});" +
+							 "scope.vm.selectedSkillArea = sg;" +
+							 "scope.vm.selectedSkillAreaChange(sg);" +
 							 "setTimeout(function(){console.log('delay')}, 1000);"; 
 			Browser.Interactions.Javascript(javascript);
 		}
@@ -190,7 +213,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenICloseTheSkillManager()
 		{
 			Browser.Interactions.Click("#exit_sgm");
-			Browser.Interactions.Click("#confirmExitButton");
+			if (Browser.Interactions.IsExists("#confirmExitButton"))
+			{
+				Browser.Interactions.Click("#confirmExitButton");
+			}
 		}
 
 		[Then(@"I should see '(.*)' as included skill")]
@@ -219,6 +245,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Javascript($"{elementSelector}.click();");
 		}
 
+		[Given(@"I select to monitor skill area '(.*)'")]
 		[Then(@"I select to monitor skill area '(.*)'")]
 		public void ThenISelectToMonitorSkillArea(string skillArea)
 		{

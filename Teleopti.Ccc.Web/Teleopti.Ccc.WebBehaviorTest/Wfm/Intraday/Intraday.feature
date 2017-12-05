@@ -56,6 +56,7 @@ Scenario: Rename Skill Group in SGM
 	And I select the skill 'Skill A' in SGM
 	And I save the Skill Groups
 	And I select the Skill Group 'my Area'
+	And I chose to rename the Skill Group
 	When I name the Skill Group 'my Area 2'
 	And I save the Skill Groups
 	And I close the Skill Manager
@@ -110,6 +111,7 @@ Scenario: View performance for a skill area
 	And there is queue statistics for the skill 'Skill A' up until '2016-12-22 13:30'
 	And there is forecast data for skill 'Skill A' for date '2016-12-22'
 	When I am viewing intraday page
+	And I pick the skillgroup 'Area A'
 	And I should see incoming traffic data in the chart
 	And I am navigating to intraday performance view
 	Then I should see performance data in the chart
@@ -213,6 +215,7 @@ Scenario: Select skill when skill group is selected
 	And there is forecast data for skill 'Skill B' for date '2016-12-22'
 	And there is a Skill Area called 'SkillArea1' that monitors skills 'Skill A, Skill B'
 	And I am viewing intraday page
+	And I pick the skillgroup 'SkillArea1'
 	When I select skill 'Skill B' from included skills in skill group
 	Then I should see incoming traffic data in the chart
 	And I Should see skill 'Skill B' as selected skill
@@ -223,6 +226,7 @@ Scenario: Return to skill group when viewing included skill
 	And there is forecast data for skill 'Skill B' for date '2016-12-22'
 	And there is a Skill Area called 'SkillArea1' that monitors skills 'Skill A, Skill B'
 	And I am viewing intraday page
+	And I pick the skillgroup 'SkillArea1'
 	And I select skill 'Skill A' from included skills in skill group
 	And There's no data available
 	When I return to skill group from skill 'Skill A'
