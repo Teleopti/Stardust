@@ -6,6 +6,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		public string AgentId { get; set; }
 		public int GameNumberScore { get; set; }
 		public Percent GamePercentScore { get; set; }
+		public Guid PersonId { get; set; }
 	}
 
 	public class ExternalPerformanceInfoProcessResult
@@ -55,10 +57,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private readonly string GAME_TYPE_PERCENT = "percent";
 
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
+		private readonly IPersonRepository _personRepository;
 
-		public ExternalPerformanceInfoFileProcessor(IExternalPerformanceRepository externalPerformanceRepository)
+		public ExternalPerformanceInfoFileProcessor(IExternalPerformanceRepository externalPerformanceRepository, IPersonRepository personRepository)
 		{
 			_externalPerformanceRepository = externalPerformanceRepository;
+			_personRepository = personRepository;
 		}
 
 		public ExternalPerformanceInfoProcessResult Process(ImportFileData importFileData, Action<string> sendProgress)
@@ -102,6 +106,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var existMeasures = _externalPerformanceRepository.FindAllExternalPerformances();
 			var allMeasures = new List<IExternalPerformance>();
 			allMeasures.AddRange(existMeasures);
+			var personIdentityInfos = _personRepository.GetPersonIdentityInfos();
+			var externalLogonInfos = _personRepository.GetPersonExternalLogonInfos();
 
 			foreach (var currentLine in allLines)
 			{
@@ -179,12 +185,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 				extractionResult.GameId = gameId;
 
-				if (allMeasures.Count == MAX_MEASURE_COUNT)
-				{
-					processResult.HasError = true;
-					processResult.InvalidRecords.Add($"{currentLine},{Resources.OutOfMaximumLimit}");
-					continue;
-				}
 				var measure = allMeasures.FirstOrDefault(g => g.ExternalId == extractionResult.GameId);
 				if (measure != null)
 				{
@@ -197,6 +197,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 				else
 				{
+					if (allMeasures.Count == MAX_MEASURE_COUNT)
+					{
+						processResult.HasError = true;
+						processResult.InvalidRecords.Add($"{currentLine},{Resources.OutOfMaximumLimit}");
+						continue;
+					}
 					allMeasures.Add(new ExternalPerformance()
 					{
 						DataType = convertMeasureToDataType(extractionResult.GameType),
@@ -204,11 +210,44 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 						Name = extractionResult.GameName
 					});
 				}
-				
-				//check agent
 
+				var agentsWithSameExternalLogon = new List<PerformanceInfoExtractionResult>();
+				var personIdentity = personIdentityInfos.SingleOrDefault(
+					x => x.AppLogonName == extractionResult.AgentId || x.EmployeeNumber == extractionResult.AgentId);
+				if (personIdentity != null)
+				{
+					extractionResult.PersonId = personIdentity.PersonId;
+					agentsWithSameExternalLogon.Add(extractionResult);
+				}
+				else
+				{
+					var externalLogonInfo = externalLogonInfos.Where(
+						x => x.ExternalLogonName.Any(o => string.Equals(extractionResult.AgentId, o, StringComparison.OrdinalIgnoreCase)
+														  && x.PersonPeriod.Contains(new DateOnly(extractionResult.DateFrom))));
+					if (!externalLogonInfo.Any())
+					{
+						processResult.HasError = true;
+						processResult.InvalidRecords.Add($"{currentLine},{Resources.AgentDoNotExist}");
+						continue;
+					}
+					foreach (var logonInfo in externalLogonInfo)
+					{
+						var eachExternalLogonInfo = new PerformanceInfoExtractionResult()
+						{
+							AgentId = extractionResult.AgentId,
+							DateFrom = extractionResult.DateFrom,
+							GameId = extractionResult.GameId,
+							GameName = extractionResult.GameName,
+							GameNumberScore = extractionResult.GameNumberScore,
+							GamePercentScore = extractionResult.GamePercentScore,
+							GameType = extractionResult.GameType,
+							PersonId = logonInfo.PersonId
+						};
+						agentsWithSameExternalLogon.Add(eachExternalLogonInfo);
+					}
+				}
 
-				processResult.ValidRecords.Add(extractionResult);
+				processResult.ValidRecords.AddRange(agentsWithSameExternalLogon);
 			}
 
 			return processResult;

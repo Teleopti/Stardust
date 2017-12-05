@@ -132,6 +132,8 @@
     <Compile Include="AgentInfo\ISkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\ISkillStaffingReadModelDataLoader.cs" />
     <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProvider.cs" />
+    <Compile Include="AgentInfo\PersonExternalLogonInfo.cs" />
+    <Compile Include="AgentInfo\PersonIdentityInfo.cs" />
     <Compile Include="AgentInfo\PlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\CalculatedPossibilityModel.cs" />
     <Compile Include="AgentInfo\EnumerablePersonExtensions.cs" />

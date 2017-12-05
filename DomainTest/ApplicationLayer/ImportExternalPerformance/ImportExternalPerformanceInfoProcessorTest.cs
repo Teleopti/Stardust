@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
@@ -23,11 +24,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public IExternalPerformanceInfoFileProcessor Target;
 		public IStardustJobFeedback Feedback;
 		public FakeExternalPerformanceRepository PerformanceRepository;
+		public IPersonRepository PersonRepository;
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 		}
 
 		[Test]
@@ -156,6 +159,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldNotAllowMoreThan10ExternalPerformancesCase2()
 		{
+			setPerson(Guid.Empty);
 			for (int i = 1; i < 10; ++i)
 			{
 				PerformanceRepository.Add(new ExternalPerformance(){ExternalId = i});
@@ -170,8 +174,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var result = Target.Process(fileData, Feedback.SendProgress);
 
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
+			result.ValidRecords[0].GameId.Should().Be.EqualTo(10);
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void ShouldAllowExternalPerformancesWhenItWasExist()
+		{
+			setPerson(Guid.Empty);
+			for (int i = 1; i < 11; ++i)
+			{
+				PerformanceRepository.Add(new ExternalPerformance() { ExternalId = i, DataType = ExternalPerformanceDataType.Percentage});
+			}
+
+			var theexistRecord = "20171120,1,Kalle,Pettersson,Quality Score,8,Percent,87";
+			var fileData = createFileData(theexistRecord);
+
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.ValidRecords.Count.Should().Be.EqualTo(1);
+			result.ValidRecords[0].GamePercentScore.Should().Be.EqualTo(new Percent(0.87));
 		}
 
 		[Test]
@@ -188,8 +211,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
+		public void ShouldNotAllowWhenAgentDoNotExist()
+		{
+			var agentNotExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,numeric,87";
+			var fileData = createFileData(agentNotExistRecord);
+
+			var expectedErrorRecord = $"{agentNotExistRecord},{Resources.AgentDoNotExist}";
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
 		public void ShouldGetCorrectRecord()
 		{
+			var personId = Guid.NewGuid();
+			setPerson(personId);
 			var validRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Percent,87";
 			var fileData = createFileData(validRecord);
 
@@ -202,6 +240,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.ValidRecords[0].AgentId.Should().Be.EqualTo("1");
 			result.ValidRecords[0].GameId.Should().Be.EqualTo(1);
 			result.ValidRecords[0].GamePercentScore.Should().Be.EqualTo(new Percent(0.87));
+			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personId);
+		}
+
+		private void setPerson(Guid personId)
+		{
+			var person = new Person();
+			person.SetEmploymentNumber("1");
+			person.WithId(personId);
+			PersonRepository.Add(person);
 		}
 
 		private ImportFileData createFileData(string record)

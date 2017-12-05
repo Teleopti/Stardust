@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -41,5 +42,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		int CountPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
 		IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
 		IList<PersonBudgetGroupName> FindBudgetGroupNameForPeople(IList<Guid> personIds, DateTime startDate);
+		IList<PersonIdentityInfo> GetPersonIdentityInfos();
+		IList<PersonExternalLogonInfo> GetPersonExternalLogonInfos();
 	}
 }

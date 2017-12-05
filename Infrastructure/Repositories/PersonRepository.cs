@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
@@ -749,6 +750,57 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<PersonBudgetGroupName>());
 			}
 			return results;
+		}
+
+		public IList<PersonIdentityInfo> GetPersonIdentityInfos()
+		{
+			return Session.CreateSQLQuery("Select p.Id, ApplicationLogonName, EmploymentNumber " +
+										  "From Person p " +
+										  "Left Join Tenant.PersonInfo pinfo on p.Id = pinfo.Id " +
+										  "where p.IsDeleted = 0")
+				.AddScalar("Id", NHibernateUtil.Guid)
+				.AddScalar("ApplicationLogonName", NHibernateUtil.String)
+				.AddScalar("EmploymentNumber", NHibernateUtil.String)
+				.SetReadOnly(true)
+				.List<object[]>()
+				.Select(x =>
+					new PersonIdentityInfo
+					{
+						PersonId = (Guid) x[0],
+						AppLogonName = (string) x[1],
+						EmployeeNumber = (string) x[2]
+					}).ToList();
+		}
+
+		public IList<PersonExternalLogonInfo> GetPersonExternalLogonInfos()
+		{
+			var dbObjects = Session.CreateSQLQuery("Select pp.Parent as PersonId, el.AcdLogOnName, pp.StartDate, pp.EndDate " +
+												   "From Person p " +
+												   "Inner Join PersonPeriod pp on p.Id = pp.Parent " +
+												   "Inner Join ExternalLogOnCollection elc on pp.Id = elc.PersonPeriod " +
+												   "Inner Join ExternalLogOn el on elc.ExternalLogOn = el.Id " +
+												   "Where p.IsDeleted = 0")
+				.AddScalar("PersonId", NHibernateUtil.Guid)
+				.AddScalar("AcdLogOnName", NHibernateUtil.String)
+				.AddScalar("StartDate", NHibernateUtil.DateTime)
+				.AddScalar("EndDate", NHibernateUtil.DateTime)
+				.SetReadOnly(true)
+				.List<object[]>()
+				.Select(x =>
+					new
+					{
+						PersonId = (Guid) x[0],
+						ExternalLogonName = (string) x[1],
+						StartDate = new DateOnly((DateTime) x[2]),
+						EndDate = new DateOnly((DateTime) x[3])
+					}).ToList();
+
+			return dbObjects.GroupBy(o => new {o.PersonId, o.StartDate, o.EndDate}).Select(kv => new PersonExternalLogonInfo
+			{
+				PersonId = kv.Key.PersonId,
+				PersonPeriod = new DateOnlyPeriod(kv.Key.StartDate, kv.Key.EndDate),
+				ExternalLogonName = kv.Select(x => x.ExternalLogonName).ToList()
+			}).ToList();
 		}
 	}
 }

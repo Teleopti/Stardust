@@ -26,7 +26,11 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -1787,6 +1791,69 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindAllSortByName());
 			Assert.AreEqual(testList[0], per1);
 			Assert.That(testList[0].OptionalColumnValueCollection.Count, Is.EqualTo(1));
+		}
+
+		[Test]
+		public void ShouldGetPersonIdentityInfosCase1()
+		{
+			ISite site = SiteFactory.CreateSimpleSite("d");
+			PersistAndRemoveFromUnitOfWork(site);
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.SetDescription(new Description("sdf"));
+			PersistAndRemoveFromUnitOfWork(team);
+
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			per1.SetEmploymentNumber("employee1");
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
+
+			PersistAndRemoveFromUnitOfWork(per1);
+
+			var target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			var result = target.GetPersonIdentityInfos();
+
+			result.Count.Should().Be.EqualTo(1);
+			result[0].EmployeeNumber.Should().Be.EqualTo("employee1");
+			result[0].AppLogonName.Should().Be.Null();
+		}
+
+		[Ignore("cannot persist personInfo by this way now!"), Test]
+		public void ShouldGetPersonIdentityInfosCase2()
+		{
+			ISite site = SiteFactory.CreateSimpleSite("d");
+			PersistAndRemoveFromUnitOfWork(site);
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.SetDescription(new Description("sdf"));
+			PersistAndRemoveFromUnitOfWork(team);
+
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
+			per1.SetEmploymentNumber("employee1");
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
+			PersistAndRemoveFromUnitOfWork(per1);
+			PersistAndRemoveFromUnitOfWork(per2);
+
+			var tenant = new Tenant(RandomName.Make("bla"));
+			var personInfo = new PersonInfo(tenant, per2.Id.Value);
+			personInfo.SetIdentity("appLogon");
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "appLogon", RandomName.Make(), new OneWayEncryption()); 
+			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
+			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
+			tenantUnitOfWorkManager.CurrentSession().Save(tenant);
+			var personInfoPersister = new PersistPersonInfo(tenantUnitOfWorkManager);
+			personInfoPersister.Persist(personInfo);
+
+			var target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			var result = target.GetPersonIdentityInfos();
+
+			result.Count.Should().Be.EqualTo(2);
+			result[0].EmployeeNumber.Should().Be.EqualTo("employee1");
+			result[0].AppLogonName.Should().Be.Null();
+			result[1].AppLogonName.Should().Be.EqualTo("appLogon");
+			result[1].EmployeeNumber.Should().Be.Null();
+			tenantUnitOfWorkManager.Dispose();
 		}
 
 		[Test, TestCaseSource(nameof(planningGroupFilterTestCases))]

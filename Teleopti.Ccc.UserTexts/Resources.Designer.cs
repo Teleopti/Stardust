@@ -1817,6 +1817,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This agent do not exist.
+        /// </summary>
+        public static string AgentDoNotExist {
+            get {
+                return ResourceManager.GetString("AgentDoNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agent has {0} days without any schedule..
         /// </summary>
         public static string AgentHasDaysWithoutAnySchedule {

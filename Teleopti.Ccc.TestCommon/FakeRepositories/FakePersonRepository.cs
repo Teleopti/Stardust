@@ -314,5 +314,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return Get(id);
 		}
+
+		public IList<PersonIdentityInfo> GetPersonIdentityInfos()
+		{
+			var persons = _storage.LoadAll<IPerson>();
+			return persons.ToList().Select(x => new PersonIdentityInfo() {EmployeeNumber = x.EmploymentNumber, PersonId = x.Id.Value}).ToList();
+		}
+
+		public IList<PersonExternalLogonInfo> GetPersonExternalLogonInfos()
+		{
+			return new List<PersonExternalLogonInfo>();
+		}
 	}
 }
