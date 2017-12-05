@@ -82,13 +82,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		private IEnumerable<PayloadWorkTime> getAbsenceTimes(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
 		{
-			_absenceTimeProviderCache.Setup (scenario, period, budgetGroup);
+			_absenceTimeProviderCache.Setup();
 
-			var absenceTimes = _absenceTimeProviderCache.Get();
+			var cacheKey = AbsenceTimeProviderCache.GetCacheKey(period, budgetGroup, scenario);
+			var absenceTimes = _absenceTimeProviderCache.Get(cacheKey);
 			if (absenceTimes != null) return absenceTimes;
 
 			absenceTimes = getAbsenceTimeFromRepository(period, budgetGroup, scenario);
-			_absenceTimeProviderCache.Add(absenceTimes);
+			_absenceTimeProviderCache.Add(cacheKey, absenceTimes);
 
 			return absenceTimes;
 		}

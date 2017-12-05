@@ -11,15 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public class AbsenceTimeProviderCache : IAbsenceTimeProviderCache
 	{
-		private String _cacheKey;
 		private int _cacheExpiry;
 		private bool _cacheEnabled;
 
 
-		public void Setup(IScenario scenario, DateOnlyPeriod period, IBudgetGroup budgetGroup)
+		public void Setup()
 		{
-			_cacheKey = GetCacheKey(period, budgetGroup, scenario);
-
 			getCacheExpiryValue();
 		}
 
@@ -39,26 +36,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return WebConfigurationManager.AppSettings["BudgetGroupAbsenceTimeCacheExpiryInSeconds"];
 		}
 
-		public IEnumerable<PayloadWorkTime> Get()
+		public IEnumerable<PayloadWorkTime> Get(string key)
 		{
 			if (!_cacheEnabled)
 			{
 				return null;
 			}
 
-			return HttpRuntime.Cache.Get(_cacheKey) as IEnumerable<PayloadWorkTime>;
+			return HttpRuntime.Cache.Get(key) as IEnumerable<PayloadWorkTime>;
 		}
 
-		public void Add(IEnumerable<PayloadWorkTime> absenceTime)
+		public void Add(string key, IEnumerable<PayloadWorkTime> absenceTime)
 		{
 			if (!_cacheEnabled)
 			{
 				return;
 			}
 
-			if (HttpRuntime.Cache.Get(_cacheKey) == null)
+			if (HttpRuntime.Cache.Get(key) == null)
 			{
-				HttpRuntime.Cache.Add(_cacheKey, absenceTime, null, DateTime.UtcNow.AddSeconds(_cacheExpiry), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+				HttpRuntime.Cache.Add(key, absenceTime, null, DateTime.UtcNow.AddSeconds(_cacheExpiry), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
 			}
 		}
 
