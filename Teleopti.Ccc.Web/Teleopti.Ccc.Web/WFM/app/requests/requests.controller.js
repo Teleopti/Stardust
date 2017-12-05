@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.requests').controller('requestsRefactorController', requestsRefactorController);
+	angular.module('wfm.requests').controller('requestsController', requestsController);
 
-	requestsRefactorController.$inject = [
+	requestsController.$inject = [
 		'$scope',
 		'$state',
 		'$q',
@@ -20,7 +20,7 @@
 		'RequestsFilter'
 	];
 
-	function requestsRefactorController(
+	function requestsController(
 		$scope,
 		$state,
 		$q,

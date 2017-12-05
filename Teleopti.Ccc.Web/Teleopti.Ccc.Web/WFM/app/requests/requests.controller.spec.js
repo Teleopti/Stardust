@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('Requests - Refactor(remove later) controller controllers',
+describe('Requests controller tests',
 	function () {
 
 		var $rootScope,
@@ -46,7 +46,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 			$httpBackend = _$httpBackend_;
 			requestCommandParamsHolder = _requestCommandParamsHolder_;
 
-			$httpBackend.whenGET('app/requests/html/requests.refactor.html').respond(function () {
+			$httpBackend.whenGET('app/requests/html/requests.html').respond(function () {
 				return [200, true];
 			});
 		}));
@@ -411,7 +411,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 		function setUpTarget() {
 			var scope = $rootScope.$new();
 
-			var controller = $controller('requestsRefactorController', {
+			var controller = $controller('requestsController', {
 				$scope: scope,
 				$q: $q
 			});

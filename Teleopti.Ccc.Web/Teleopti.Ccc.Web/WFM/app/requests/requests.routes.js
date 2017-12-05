@@ -6,7 +6,7 @@
 			$stateProvider.state('requests', {
 				url: '/requests',
 				templateUrl: 'app/requests/html/requests.html',
-				controller: 'requestsRefactorController as vm'
+				controller: 'requestsController as vm'
 			}).state('requests.absenceAndText', {
 				url: '/absenceAndText',
 				params: {
