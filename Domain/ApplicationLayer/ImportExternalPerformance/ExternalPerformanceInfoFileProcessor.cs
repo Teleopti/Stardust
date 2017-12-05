@@ -250,6 +250,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				processResult.ValidRecords.AddRange(agentsWithSameExternalLogon);
 			}
 
+			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom}).Select(x => x.Last()).ToList();
+			processResult.ExternalPerformances =
+				allMeasures.Where(m => !existMeasures.Any(e => e.ExternalId == m.ExternalId)).ToList();
 			return processResult;
 		}
 

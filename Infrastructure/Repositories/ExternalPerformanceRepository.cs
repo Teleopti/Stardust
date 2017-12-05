@@ -1,11 +1,10 @@
+using System;
 using System.Collections.Generic;
-using log4net;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -38,6 +37,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public int GetExernalPerformanceCount()
 		{
 			return Session.QueryOver<ExternalPerformance>().RowCount();
+		}
+
+		public bool Equals(IEntity other)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Guid? Id { get; }
+		public void SetId(Guid? newId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ClearId()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
