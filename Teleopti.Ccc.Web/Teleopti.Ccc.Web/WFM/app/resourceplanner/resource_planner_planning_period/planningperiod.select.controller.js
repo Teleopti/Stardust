@@ -56,7 +56,6 @@
 		function getSuggestionsForFirstPp() {
 			if (planningGroupId == null || vm.planningPeriods.length > 0)
 				return;
-			vm.suggestions = [];
 			var suggestionsForFirstPp = planningPeriodServiceNew.getPlanningPeriodSuggestions({ planningGroupId: planningGroupId });
 			return suggestionsForFirstPp.$promise.then(function (data) {
 				vm.suggestions = data;
