@@ -1450,6 +1450,8 @@
     <Content Include="WFM\app\gamification\html\gamification.html" />
     <Content Include="WFM\app\gamification\gamificationSetting.service.js" />
     <Content Include="WFM\app\gamification\_modules.js" />
+    <Content Include="WFM\app\global\calendar-picker\calendar-picker.basic.spec.js" />
+    <Content Include="WFM\app\global\calendar-picker\calendar-picker.custom.spec.js" />
     <Content Include="WFM\app\global\calendar-picker\calendar-picker.js" />
     <Content Include="WFM\app\global\calendar-picker\calendar-picker.template.tpl.html" />
     <Content Include="WFM\app\global\calendar-picker\_moudules.js" />

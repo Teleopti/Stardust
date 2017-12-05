@@ -33,7 +33,7 @@
         vm.isValid = true;
         vm.options = {
             customClass: renderRangeDate,
-            showWeeks: !!vm.showWeek || vm.showWeek,
+            showWeeks: vm.showWeek
         };
 
         vm.$onInit = function () {
@@ -85,14 +85,13 @@
         }
 
         function hightLightToday() {
-            return vm.pickDate = new Date();
+            return vm.pickDate = moment();
         }
 
         function onChangeForDateRangePicker() {
             var oldVal = [angular.copy(vm.pickStartDate), angular.copy(vm.pickEndDate)];
             var newVal = fetchNgModelDateForDateRangePicker();
-            vm.displayCalenderView(oldVal, newVal);
-            return;
+            return vm.displayCalenderView(oldVal, newVal);
         }
 
         function fetchNgModelDateForDateRangePicker() {
@@ -102,40 +101,30 @@
         }
 
         function onChangeForSingleDatePicker() {
-            return vm.pickDate = !vm.ngModel.$modelValue ? new Date() : vm.ngModel.$modelValue;
+            return vm.pickDate = !vm.ngModel.$modelValue ? moment() : vm.ngModel.$modelValue;
         }
 
         function displayCalenderViewForDisableView(oldVal, newVal) {
             if (!!(newVal[1] - oldVal[1]) && vm.disable == 'end-date') {
                 vm.pickDate = vm.pickStartDate;
-                displayDateRange(vm.pickStartDate, vm.pickEndDate);
-                return;
             }
             if (!!(newVal[0] - oldVal[0]) && vm.disable == 'start-date') {
                 vm.pickDate = vm.pickEndDate;
-                displayDateRange(vm.pickStartDate, vm.pickEndDate);
-                return;
             }
             if (vm.disable == 'all') {
                 vm.pickDate = vm.pickStartDate;
-                displayDateRange(vm.pickStartDate, vm.pickEndDate);
-                return;
             }
-            return;
+            return displayDateRange(vm.pickStartDate, vm.pickEndDate);
         }
 
         function displayCalenderViewDefault(oldVal, newVal) {
             if (!!(newVal[0] - oldVal[0])) {
                 vm.pickDate = vm.pickStartDate;
-                displayDateRange(vm.pickStartDate, vm.pickEndDate);
-                return;
             }
             if (!!(newVal[1] - oldVal[1])) {
                 vm.pickDate = vm.pickEndDate;
-                displayDateRange(vm.pickStartDate, vm.pickEndDate);
-                return;
             }
-            return;
+            return displayDateRange(vm.pickStartDate, vm.pickEndDate);
         }
 
         function validateDate() {
@@ -219,9 +208,9 @@
         }
 
         function autoSelectDate() {
-            var betweenToStart = vm.pickDate - vm.pickStartDate;
-            var betweenToEnd = vm.pickDate - vm.pickEndDate;
-            if (betweenToStart > 0 && betweenToEnd >= 0) {
+            var betweenToStart = moment(vm.pickDate).diff(vm.pickStartDate, 'day');
+            var betweenToEnd = moment(vm.pickDate).diff(vm.pickEndDate, 'day');
+            if (betweenToStart > 0 && betweenToEnd >= 0 || betweenToStart == 6) {
                 return selectEndDate();
             }
             if (betweenToStart <= 0 && betweenToEnd < 0) {
