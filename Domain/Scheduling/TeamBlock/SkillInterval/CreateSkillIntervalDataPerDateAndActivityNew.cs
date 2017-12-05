@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
+	[RemoveMeWithToggle("rename/remove new", Toggles.ResourcePlanner_TimeZoneIssues_45818)]
 	public class CreateSkillIntervalDataPerDateAndActivityNew : ICreateSkillIntervalDataPerDateAndActivity
 	{
 		private readonly ICreateSkillIntervalDatasPerActivtyForDate _createSkillIntervalDatasPerActivtyForDate;

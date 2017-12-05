@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		protected readonly SeperateWebRequest SeperateWebRequest;
 		protected readonly RemoveClassicShiftCategory ResourcePlannerRemoveClassicShiftCat46582;
 		protected readonly RemoveImplicitResCalcContext RemoveImplicitResCalcContext46680;
-		private readonly bool _resourcePlannerTimeZoneIssues45818;
+		protected readonly bool _resourcePlannerTimeZoneIssues45818;
 
 		public IIoCTestContext IoCTestContext;
 

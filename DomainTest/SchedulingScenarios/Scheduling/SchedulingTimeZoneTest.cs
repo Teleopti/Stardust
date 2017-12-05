@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeTimeZoneGuard TimeZoneGuard; //this shouldn't effect scheduling at all, but it does currently....
 		public FakeUserTimeZone UserTimeZone; //this shouldn't effect scheduling at all, but it does currently....
 
-		[Ignore("To be fixed #45818 - need more tests later (=eg choosing best shift when timezones differ)")]
 		[Test]
 		public void ShouldBeAbleToScheduleNoMatterTimeZoneSettingsAlsoWhenRequiresSkillIsTrue(
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string userTimeZone,
@@ -35,6 +33,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string agentTimeZone,
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string skillTimeZone)
 		{
+			if(!_resourcePlannerTimeZoneIssues45818)
+				Assert.Ignore("Only works when toggle 45818 is turned on");
 			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userTimeZone));
 			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById(userViewPointTimeZone));
 			var date = new DateOnly(2017, 9, 7);

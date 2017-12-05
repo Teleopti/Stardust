@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
+	[RemoveMeWithToggle("rename/remove new", Toggles.ResourcePlanner_TimeZoneIssues_45818)]
 	public class MedianCalculatorForDaysNew : IMedianCalculatorForDays
 	{
 		private readonly IMedianCalculatorForSkillInterval _medianCalculatorForSkillInterval;

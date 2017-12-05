@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_TimeZoneIssues_45818)]
     public interface IMedianCalculatorForDays
     {
 		Dictionary<DateTime, ISkillIntervalData> CalculateMedian(Dictionary<DateOnly, Dictionary<DateTime, ISkillIntervalData>> days, double resolution, DateOnly returnListDateOnly);
     }
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_TimeZoneIssues_45818)]
     public class MedianCalculatorForDays : IMedianCalculatorForDays
     {
         private readonly IMedianCalculatorForSkillInterval _medianCalculatorForSkillInterval;
