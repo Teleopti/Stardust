@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
@@ -20,9 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public Dictionary<DateTime, ISkillIntervalData> CalculateMedian(Dictionary<DateOnly, Dictionary<DateTime, ISkillIntervalData>> days, double resolution, DateOnly returnListDateOnly)
 		{
 			var result = new Dictionary<DateTime, ISkillIntervalData>();
-			if (!days.Any())
-				return result;
-
 			var temp = new Dictionary<TimeSpan, IList<ISkillIntervalData>>();
 			foreach (var dateOnlyList in days)
 			{
