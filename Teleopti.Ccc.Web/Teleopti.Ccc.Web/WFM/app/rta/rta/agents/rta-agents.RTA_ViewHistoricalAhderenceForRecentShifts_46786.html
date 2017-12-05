@@ -55,6 +55,7 @@
 		</div>
 	</div>
 	<table class="wfm-table cursor-pointer" style="table-layout:fixed; border-collapse: collapse;">
+		<thead>
 		<tr>
 			<th style="width: 8.5%" ng-click=" vm.sort('Name')">
 				{{'Name'|translate}}
@@ -97,11 +98,10 @@
 				<i ng-show="vm.orderBy == 'State'" class="mdi"
 				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 			</th>
-			<th style="width: 40px">
-
-			</th>
 		</tr>
-		<tr ng-repeat="agentState in vm.agentStates">
+		</thead>
+		<tbody ng-repeat="agentState in vm.agentStates">
+		<tr ng-init="toggle[$index] = false" ng-click="toggle[$index] = !toggle[$index]">
 			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
 				{{agentState.Name}}
 			</td>
@@ -148,54 +148,50 @@
 			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
 				{{agentState.State}}
 			</td>
-			<td style="position: relative">
-
-				<div tabindex=0 class="context-menu card-context"
-					 style="position: absolute; padding: 3px; margin: -9px 0 0 0">
-					<i class="mdi mdi-dots-vertical"></i>
-					<span class="context-menu-left">
-					<ul class="wfm-list">
-						
-						<li>
+		</tr>
+		<tr ng-if="toggle[$index]">
+			<td colspan="2" style="background-color: lightgrey">
+					
+						<span style="margin-right:40px">
 							<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
 							   style="text-decoration: none;">
 								<i class="mdi mdi-pencil" style="font-style: normal"></i>
 								<span>{{'ModifySchedule'|translate}}</span>
 							</a>
-						</li>
-						
-						<!--<div style="margin: 15px">{{'AgentHistoricalAdherence'|translate}}</div>-->
+						</span>
 
-						<li>
+			</td>
+			<td colspan="6" style="background-color:lightgrey">
+				
+				<!--<div style="margin: 15px">{{'AgentHistoricalAdherence'|translate}}</div>-->
+
+				<span style="margin-right:60px">
 							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
 							   style="text-decoration: none;">
 								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-11-29 97%</span>
+								<span>2017-11-29 Adherence: 97%</span>
 							</a>
-						</li>
+						</span>
 
-						<li>
+				<span style="margin-right:60px">
 							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
 							   style="text-decoration: none;">
 								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-11-30 65%</span>
+								<span>2017-11-30 Adherence: 65%</span>
 							</a>
-						</li>
+						</span>
 
-						<li>
+				<span style="margin-right:60px">
 							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
 							   style="text-decoration: none;">
 								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-12-01 0%</span>
+								<span>2017-12-01 Adherence: 0%</span>
 							</a>
-						</li>
-						
-					</ul>
-					</span>
-				</div>
+						</span>
 
 			</td>
 		</tr>
+		</tbody>
 	</table>
 
 	<!--<div class="con-row">-->
