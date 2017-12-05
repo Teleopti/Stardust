@@ -107,6 +107,7 @@
 		ResourcePlanner_RemoveImplicitResCalcContext_46680,
 		ResourcePlanner_DoNotKillCache_46724,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
+		ResourcePlanner_TimeZoneIssues_45818,
 
 		Wfm_DisplayOnlineHelp_39402,
 
