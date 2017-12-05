@@ -142,7 +142,7 @@
 
 	.filter-switch {
 		display: inline-block;
-		padding-left: 3px;
+		margin: 0 10px;
 
 		md-switch{
 			margin: 10px 0;
@@ -155,9 +155,9 @@
 		background-color: $white;
 
 		.left-part {
-			flex: 1 1 80%;
 			display: flex;
 			flex-wrap: wrap;
+			flex-grow: 1;
 			justify-content: flex-start;
 			padding-top: 5px;
 
@@ -167,9 +167,14 @@
 		}
 
 		.right-part {
-			flex: 1 1 20%;
 			display: flex;
 			justify-content: flex-end;
+		}
+
+		@media screen and (min-width: 500px) {
+			.right-part {
+				min-width: 150px;
+			}
 		}
 	}
 
