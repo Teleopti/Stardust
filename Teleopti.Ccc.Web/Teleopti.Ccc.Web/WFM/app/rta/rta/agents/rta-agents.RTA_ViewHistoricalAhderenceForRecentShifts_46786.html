@@ -98,14 +98,57 @@
 				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 			</th>
 		</tr>
-		<tr ng-repeat="agentState in vm.agentStates" ng-init="toggle[$index] = false" ng-click="toggle[$index] = !toggle[$index]" ng-mouseleave = "toggle[$index] = false">
-			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
-				{{agentState.Name}}
+		<tr ng-repeat="agentState in vm.agentStates">
+			<td style=""  ng-init="toggle[$index] = false" ng-click="toggle[$index] = !toggle[$index]" >
+				<span>{{agentState.Name}}</span>
+
+				<!--<div tabindex=0 class="context-menu card-context"-->
+				<!--style="position: absolute; padding: 3px; margin: -9px 0 0 0; z-index:9999" ng-show="toggle[$index]">-->
+				<!--<i class="mdi mdi-dots-vertical"></i>-->
+				
+				<span class="context-menu-right" style="position: absolute; padding: 3px; margin: -9px 0 0 0; z-index:9999" ng-show="toggle[$index]">
+					<ul class="wfm-list">
+						<li>
+							<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-pencil" style="font-style: normal"></i>
+								<span>{{'ModifySchedule'|translate}}</span>
+							</a>
+						</li>
+						
+						<li>
+							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-account" style="font-style: normal"></i>
+								<span>2017-11-29 97%</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-account" style="font-style: normal"></i>
+								<span>2017-11-30 65%</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-account" style="font-style: normal"></i>
+								<span>2017-12-01 0%</span>
+							</a>
+						</li>
+						
+					</ul>
+					</span>
+				<!--</div>-->
 			</td>
 			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
 				{{agentState.SiteAndTeamName}}
 			</td>
-			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: relative; height: 100%; padding: 0" class="wfm-list perm-list">
+			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: relative; height: 100%; padding: 0" ng-init="toggle[$index] = false" ng-click="toggle[$index] = !toggle[$index]">
+				
 				<span ng-repeat="outOfAdherence in agentState.OutOfAdherences" class="rta-alarmline"
 					  ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}};">
 					<md-tooltip md-direction="top">
@@ -124,35 +167,44 @@
 						</md-tooltip>
 					</div>
 				</div>
-						<div class="wfm-leave-behind" ng-show="toggle[$index]" ng-class="{'animate-show':toggle[$index]}"  style="width:100%; background-color:#fff">
-							<span class="flex">
-								<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
-								   style="text-decoration: none" class="flex-1">
-									<i class="mdi mdi-pencil" style="font-style: normal; vertical-align: middle"></i>
-									<span style="vertical-align: middle">{{'ModifySchedule'|translate}}</span>
-								</a>
-						
-								<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-								   style="text-decoration: none" class="flex-1">
-									<i class="mdi mdi-history" style="font-style: normal"></i>
-									<span>2017-11-29 97%</span>
-								</a>
-						
 
-								<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-								   style="text-decoration: none" class="flex-1">
-									<i class="mdi mdi-history" style="font-style: normal"></i>
-									<span>2017-11-30 65%</span>
-								</a>
-							
+				<span class="context-menu-right" style="position: absolute; padding: 3px; margin: -9px 0 0 0; z-index:9999" ng-show="toggle[$index]">
+					<ul class="wfm-list">
+						<li>
+							<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-pencil" style="font-style: normal"></i>
+								<span>{{'ModifySchedule'|translate}}</span>
+							</a>
+						</li>
+						
+						<li>
+							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-account" style="font-style: normal"></i>
+								<span>2017-11-29 97%</span>
+							</a>
+						</li>
 
-								<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-								   style="text-decoration: none" class="flex-1">
-									<i class="mdi mdi-history" style="font-style: normal"></i>
-									<span>2017-12-01 0%</span>
-								</a>
-							</span>
-						</div>
+						<li>
+							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-account" style="font-style: normal"></i>
+								<span>2017-11-30 65%</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+							   style="text-decoration: none;">
+								<i class="mdi mdi-account" style="font-style: normal"></i>
+								<span>2017-12-01 0%</span>
+							</a>
+						</li>
+						
+					</ul>
+					</span>
+
 			</td>
 			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
 				<div class="label rta-label"
@@ -172,9 +224,7 @@
 			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
 				{{agentState.State}}
 			</td>
-		</tr>
 	</table>
-
 	<wfm-right-panel ng-if="!vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
 		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
 		<div class="full-padding">
