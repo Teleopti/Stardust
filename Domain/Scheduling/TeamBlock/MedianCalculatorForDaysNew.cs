@@ -30,15 +30,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				foreach (var interval in dateOnlyList.Value)
 				{
 					var timeSpanKey = interval.Key.TimeOfDay;
+					var intervalDateOnly = new DateOnly(interval.Key);
 
-					if (new DateOnly(interval.Key).Equals(returnListDateOnly.AddDays(-1)))
+					if (intervalDateOnly == returnListDateOnly.AddDays(-1))
 						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(-1));
 
-					if (new DateOnly(interval.Key).Equals(baseDate.AddDays(1)))
+					if (intervalDateOnly == baseDate.AddDays(1))
 						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(1));
 
-					IList<ISkillIntervalData> value;
-					if (!temp.TryGetValue(timeSpanKey, out value))
+					if (!temp.TryGetValue(timeSpanKey, out var value))
 					{
 						value = new List<ISkillIntervalData>();
 						temp.Add(timeSpanKey, value);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			foreach (var interval in temp)
 			{
-				ISkillIntervalData skillIntervalData = _medianCalculatorForSkillInterval.CalculateMedian(interval.Key,
+				var skillIntervalData = _medianCalculatorForSkillInterval.CalculateMedian(interval.Key,
 					interval.Value,
 					resolution,
 					returnListDateOnly);
