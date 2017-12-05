@@ -22,21 +22,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 			var skills = groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
-
-			var extraDateBefore = blockPeriod.StartDate.AddDays(-1);
-			var extraDayBeforeIntervalDataPerActivity = _createSkillIntervalDatasPerActivtyForDate.CreateFor(blockPeriod.StartDate.AddDays(-1), skills, allSkillDays);
-			dayIntervalDataPerDateAndActivity.Add(extraDateBefore, extraDayBeforeIntervalDataPerActivity);
-
-			foreach (var dateOnly in blockPeriod.DayCollection())
+			foreach (var dateOnly in blockPeriod.Inflate(1).DayCollection())
 			{
 				var dayIntervalDataPerActivity = _createSkillIntervalDatasPerActivtyForDate.CreateFor(dateOnly, skills, allSkillDays);
 				dayIntervalDataPerDateAndActivity.Add(dateOnly, dayIntervalDataPerActivity);
 			}
-
-			var extraDate = blockPeriod.EndDate.AddDays(1);
-			var extraDayIntervalDataPerActivity = _createSkillIntervalDatasPerActivtyForDate.CreateFor(blockPeriod.EndDate.AddDays(1), skills, allSkillDays);
-
-			dayIntervalDataPerDateAndActivity.Add(extraDate, extraDayIntervalDataPerActivity);
 			return dayIntervalDataPerDateAndActivity;
 		}
 	}
