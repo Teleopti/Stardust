@@ -42,7 +42,6 @@
 		vm.isValidMaxWeeks = isValidMaxWeeks;
 		vm.isValidMaxMonths = isValidMaxMonths;
 
-
 		getSuggestionsForFirstPp();
 		getLastPp();
 

@@ -86,63 +86,60 @@
 		<div class="modal-box" ng-show="vm.modifyLastPpModal">
 			<div class="modalbg">
 				<div class="dialog material-depth-1">
-					<div class="modal-inner-content">
-						<h1 class="modal-title">{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate
-							| amDateFormat:"L"}}</h1>
-						<md-content class="md-padding">
-							<md-tabs md-dynamic-height md-border-bottom>
-								<md-tab label="By Customs">
-									<md-content class="md-padding">
-										<div class="con-row">
-											<label>
-												<i class="mdi mdi-information-outline"></i>Set up the peroid interval length and select start date
-											</label>
-										</div>
-										<div class="con-row pp-custom-input-wrapper">
-											<wfm-btn-group items="vm.types" selected="vm.intervalType" output="vm.typeChanged" btn-class="'wfm-btn-default'" selection-class="'wfm-btn-primary'"></wfm-btn-group>
-											<div class="con-flex pp-custom-buttons-wrapper">
-												<div class="wfm-option form-input-wrap con-flex" ng-if="vm.intervalType == 'Week'">
-													<label for="workMin" translate>Week</label>
-													<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" ame="WeekInterval" placeholder="0" min="0"
-													/>
-												</div>
-												<div class="wfm-option form-input-wrap con-flex" ng-if="vm.intervalType == 'Month'">
-													<label for="workMax" translate>Month</label>
-													<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="MonthInterval" placeholder="0" min="0"
-													/>
-												</div>
+					<h1 class="modal-title">{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate
+						| amDateFormat:"L"}}</h1>
+					<md-content class="md-padding pp-create-modal">
+						<md-tabs md-dynamic-height md-border-bottom>
+							<md-tab label="By Customs">
+								<md-content class="md-padding">
+									<div class="con-row">
+										<label>
+											<i class="mdi mdi-information-outline"></i>Set up the peroid interval length and select start date
+										</label>
+									</div>
+									<div class="con-row pp-custom-input-wrapper">
+										<wfm-btn-group items="vm.types" selected="vm.intervalType" output="vm.typeChanged" btn-class="'wfm-btn-default'" selection-class="'wfm-btn-primary'"></wfm-btn-group>
+										<div class="con-flex pp-custom-buttons-wrapper">
+											<div class="wfm-option form-input-wrap con-flex" ng-if="vm.intervalType == 'Week'">
+												<label for="workMin" translate>Week</label>
+												<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" ame="WeekInterval" placeholder="0" min="0"
+												/>
+											</div>
+											<div class="wfm-option form-input-wrap con-flex" ng-if="vm.intervalType == 'Month'">
+												<label for="workMax" translate>Month</label>
+												<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="MonthInterval" placeholder="0" min="0"
+												/>
 											</div>
 										</div>
-										<div class="con-row pp-calendar-wrapper">
-											<div class="con-flex" ng-if="vm.planningPeriods.length > 1">
-												<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="all"
-												 ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
-												<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="all"
-												 ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
-											</div>
-											<div class="con-flex" ng-if="vm.planningPeriods.length == 1">
-												<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="end-date"
-												 ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
-												<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="end-date"
-												 ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
-											</div>
+									</div>
+									<div class="con-row pp-calendar-wrapper">
+										<div class="con-flex" ng-if="vm.planningPeriods.length > 1">
+											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="all"
+											 ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
+											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="all"
+											 ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
 										</div>
-									</md-content>
-								</md-tab>
-							</md-tabs>
-						</md-content>
-					</div>
-					<div class="modal-actions">
-						<aside>
-							<button ng-click="vm.modifyLastPpModal=false" class="wfm-btn wfm-btn-invis-default" translate>
-								Cancel
-							</button>
-							<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsValid, 'wfm-btn-invis-disabled': !vm.selectedIsValid}" ng-disabled="!vm.selectedIsValid"
-							 ng-click="vm.changeDateForLastPp(vm.selectedSuggestion);" class="wfm-btn save-planning-period" translate>
-								Apply
-							</button>
-						</aside>
-					</div>
+										<div class="con-flex" ng-if="vm.planningPeriods.length == 1">
+											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="end-date"
+											 ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
+											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="end-date"
+											 ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
+										</div>
+									</div>
+								</md-content>
+							</md-tab>
+						</md-tabs>
+					</md-content>
+
+					<aside>
+						<button ng-click="vm.modifyLastPpModal=false" class="wfm-btn wfm-btn-invis-default" translate>
+							Cancel
+						</button>
+						<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsValid, 'wfm-btn-invis-disabled': !vm.selectedIsValid}" ng-disabled="!vm.selectedIsValid"
+						 ng-click="vm.changeDateForLastPp(vm.selectedSuggestion);" class="wfm-btn save-planning-period" translate>
+							Apply
+						</button>
+					</aside>
 				</div>
 			</div>
 		</div>
@@ -153,82 +150,78 @@
 		<div ng-cloak class="modal-box" ng-if="vm.openCreatePpModal">
 			<div class="modalbg">
 				<div class="dialog material-depth-1">
-					<div class="modal-inner-content">
-						<h1 class="modal-title">{{'CreateFirstPlanningPeriod' | translate}}</h1>
-						<md-content class="md-padding">
-							<md-tabs md-dynamic-height md-border-bottom>
-								<md-tab label="By Suggestions">
-									<md-content class="md-padding">
-										<div class="con-row">
-											<label>
-												<i class="mdi mdi-information-outline"></i>Select a suggested period to work with
-											</label>
-										</div>
-										<div class="con-row">
-											<div class="con-flex">
-												<div class="wfm-chip-wrap" ng-repeat="s in vm.suggestions | limitTo: 10">
-													<span class="wfm-chip" ng-click="vm.setSelectedDate(s)">
-														<span class="chip-handle">{{s.Number}}{{s.PeriodType}}</span>
-														<span class="chip-text">{{s.StartDate | amDateFormat:"LL"}} - {{s.EndDate | amDateFormat:"LL"}}</span>
-													</span>
-												</div>
+					<h1 class="modal-title">{{'CreateFirstPlanningPeriod' | translate}}</h1>
+					<md-content class="md-padding pp-create-modal">
+						<md-tabs md-dynamic-height md-border-bottom>
+							<md-tab label="By Suggestions">
+								<md-content class="md-padding">
+									<div class="con-row">
+										<label>
+											<i class="mdi mdi-information-outline"></i>Select a suggested period to work with
+										</label>
+									</div>
+									<div class="con-row">
+										<div class="con-flex">
+											<div class="wfm-chip-wrap" ng-repeat="s in vm.suggestions | limitTo: 10">
+												<span class="wfm-chip" ng-click="vm.setSelectedDate(s)">
+													<span class="chip-handle">{{s.Number}}{{s.PeriodType}}</span>
+													<span class="chip-text">{{s.StartDate | amDateFormat:"LL"}} - {{s.EndDate | amDateFormat:"LL"}}</span>
+												</span>
 											</div>
 										</div>
-										<div class="con-row pp-calendar-wrapper">
-											<div class="con-flex ">
-												<wfm-calendar-picker disable="all" ng-model="vm.selectedSuggestion" interval-rule="week"></wfm-calendar-picker>
-											</div>
+									</div>
+									<div class="con-row pp-calendar-wrapper">
+										<div class="con-flex ">
+											<wfm-calendar-picker disable="all" ng-model="vm.selectedSuggestion" interval-rule="week"></wfm-calendar-picker>
 										</div>
-									</md-content>
-								</md-tab>
-								<md-tab label="By Customs">
-									<md-content class="md-padding">
-										<div class="con-row">
-											<label>
-												<i class="mdi mdi-information-outline"></i>Set up the peroid interval length and select start date
-											</label>
-										</div>
-										<div class="con-row pp-custom-input-wrapper">
-											<wfm-btn-group items="vm.types" selected="vm.intervalType" output="vm.typeChanged" btn-class="'wfm-btn-default'" selection-class="'wfm-btn-primary'"></wfm-btn-group>
-											<div class="con-flex pp-custom-buttons-wrapper" ng-if="vm.intervalType == 'Week'">
-												<div class="wfm-option form-input-wrap con-flex" >
-													<label for="workMin" translate>Week</label>
-													<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" ame="WeekInterval" placeholder="0" min="0"
-													/>
-												</div>
-												<p class="text-danger" ng-show="!vm.isValidMaxWeeks()" translate>InvalidInput</p>
+									</div>
+								</md-content>
+							</md-tab>
+							<md-tab label="By Customs">
+								<md-content class="md-padding">
+									<div class="con-row">
+										<label>
+											<i class="mdi mdi-information-outline"></i>Set up the peroid interval length and select start date
+										</label>
+									</div>
+									<div class="con-row pp-custom-input-wrapper">
+										<wfm-btn-group items="vm.types" selected="vm.intervalType" output="vm.typeChanged" btn-class="'wfm-btn-default'" selection-class="'wfm-btn-primary'"></wfm-btn-group>
+										<div class="con-flex pp-custom-buttons-wrapper" ng-if="vm.intervalType == 'Week'">
+											<div class="wfm-option form-input-wrap con-flex">
+												<label for="workMin" translate>Week</label>
+												<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" ame="WeekInterval" placeholder="0" min="0"
+												/>
 											</div>
-											<div class="con-flex pp-custom-buttons-wrapper" ng-if="vm.intervalType == 'Month'">
-												<div class="wfm-option form-input-wrap con-flex" >
-													<label for="workMax" translate>Month</label>
-													<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="MonthInterval" placeholder="0" min="0"
-													/>
-												</div>
-												<p class="text-danger" ng-show="!vm.isValidMaxMonths()" translate>InvalidInput</p>
-											</div>
+											<p class="text-danger" ng-show="!vm.isValidMaxWeeks()" translate>InvalidInput</p>
 										</div>
-										<div class="con-row pp-calendar-wrapper">
-											<div class="con-flex ">
-												<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="end-date"
-												 ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
-												<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="end-date"
-												 ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
+										<div class="con-flex pp-custom-buttons-wrapper" ng-if="vm.intervalType == 'Month'">
+											<div class="wfm-option form-input-wrap con-flex">
+												<label for="workMax" translate>Month</label>
+												<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="MonthInterval" placeholder="0" min="0"
+												/>
 											</div>
+											<p class="text-danger" ng-show="!vm.isValidMaxMonths()" translate>InvalidInput</p>
 										</div>
-									</md-content>
-								</md-tab>
-							</md-tabs>
-						</md-content>
-					</div>
-					<div class="modal-actions">
-						<aside>
-							<button ng-click="vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default " translate>Cancel</button>
-							<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsValid, 'wfm-btn-invis-disabled': !vm.selectedIsValid}" ng-disabled="!vm.selectedIsValid"
-							 ng-click="vm.createFirstPp()" class="wfm-btn apply-planning-period" translate>
-								Apply
-							</button>
-						</aside>
-					</div>
+									</div>
+									<div class="con-row pp-calendar-wrapper">
+										<div class="con-flex ">
+											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="end-date"
+											 ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
+											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="end-date"
+											 ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
+										</div>
+									</div>
+								</md-content>
+							</md-tab>
+						</md-tabs>
+					</md-content>
+					<aside>
+						<button ng-click="vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default " translate>Cancel</button>
+						<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsValid, 'wfm-btn-invis-disabled': !vm.selectedIsValid}" ng-disabled="!vm.selectedIsValid"
+						 ng-click="vm.createFirstPp()" class="wfm-btn apply-planning-period" translate>
+							Apply
+						</button>
+					</aside>
 				</div>
 			</div>
 		</div>

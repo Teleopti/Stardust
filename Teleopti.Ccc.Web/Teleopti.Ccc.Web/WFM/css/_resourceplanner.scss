@@ -274,11 +274,10 @@ table.overview {
 		color: $blue-500 ;
 		background: $blue-500;
 	}
-	
 
 	@media (min-width: 768px) and (max-width: 1199px) {
-		margin: 10% auto;
-		width: 80%;
+		margin: 3% auto;
+		width: 90%;
 	}
 	
 	@media (min-width: 1200px) {
@@ -526,6 +525,10 @@ card-panel-header > .pp-validation-progress {
 
 .pp-custom-buttons-wrapper {
 	margin: 0 20px;
+}
+
+md-content.pp-create-modal {
+	padding: 0 16px;
 }
 
 
