@@ -34,9 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (new DateOnly(interval.Key).Equals(returnListDateOnly.AddDays(-1)))
 						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(-1));
 
-					if (new DateOnly(interval.Key).Equals(baseDate.AddDays(-1)))
-						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(-1));
-
 					if (new DateOnly(interval.Key).Equals(baseDate.AddDays(1)))
 						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(1));
 
