@@ -81,11 +81,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				var transactions = items
 					.Batch(transactionSize)
-					.Select(some => new Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>>(() =>
+					.Select(some => new Func<IEnumerable<Tuple<AgentState, StateTraceLog>>>(() =>
 					{
 						var result = _agentStatePersister.LockNLoad(some, strategy.DeadLockVictim);
 						refreshCaches(strategy, strategyContext, result.ScheduleVersion, result.MappingVersion);
-						return result.AgentStates.Select(x => (x, strategy.GetTraceFor(x)));
+						return result.AgentStates.Select(x => new Tuple<AgentState,StateTraceLog>(x, strategy.GetTraceFor(x)));
 					}))
 					.ToArray();
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private void processTransactions(
 			string tenant,
 			IContextLoadingStrategy strategy,
-			IEnumerable<Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>>> transactions,
+			IEnumerable<Func<IEnumerable<Tuple<AgentState,StateTraceLog>>>> transactions,
 			ConcurrentBag<Exception> exceptions)
 		{
 			// transaction spreading over sql clustered index strategy optimization...
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected virtual void ProcessTransaction(
 			string tenant,
 			IContextLoadingStrategy strategy,
-			Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>> transaction,
+			Func<IEnumerable<Tuple<AgentState, StateTraceLog>>> transaction,
 			ConcurrentBag<Exception> exceptions)
 		{
 			try
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private void transaction(
 			IContextLoadingStrategy strategy,
-			Func<IEnumerable<(AgentState state, StateTraceLog traceLog)>> agentStates
+			Func<IEnumerable<Tuple<AgentState, StateTraceLog>>> agentStates
 		)
 		{
 			WithUnitOfWork(() =>
@@ -180,12 +180,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							new ProcessInput(
 								strategy.CurrentTime,
 								strategy.DeadLockVictim,
-								strategy.GetInputFor(x.state),
-								x.state,
-								_scheduleCache.Read(x.state.PersonId),
+								strategy.GetInputFor(x.Item1),
+								x.Item1,
+								_scheduleCache.Read(x.Item1.PersonId),
 								_stateMapper,
 								_appliedAlarm,
-								x.traceLog
+								x.Item2
 							)
 						)
 						.Select(x => _processor.Process(x))
