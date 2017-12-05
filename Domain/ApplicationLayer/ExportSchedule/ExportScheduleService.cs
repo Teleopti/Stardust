@@ -112,8 +112,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			var hasPermissionToViewConfidential =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
-			var personRows = scheduleDayLookup.Select(sl => createPersonScheduleRow(sl, input.OptionalColumnIds?.ToArray() ?? new Guid[0], timeZone, hasPermissionToViewUnpublished, hasPermissionToViewConfidential, nameDescriptionSetting)).OrderBy(r => r.Name).ToArray();
-			var selectedOptionalColumns = input.OptionalColumnIds == null ? new List<IOptionalColumn>() : _optionalColumnRepository.GetOptionalColumns<Person>().Where(p => input.OptionalColumnIds.Contains(p.Id.GetValueOrDefault()));
+
+			var selectedOptionalColumns = input.OptionalColumnIds == null ? new List<IOptionalColumn>()
+				: _optionalColumnRepository.GetOptionalColumns<Person>()
+				.Where(p => input.OptionalColumnIds
+				.Contains(p.Id.GetValueOrDefault())).OrderBy(t => t.Name).ToList();
+
+			var personRows = scheduleDayLookup.Select(sl => 
+			createPersonScheduleRow(sl, selectedOptionalColumns, timeZone, hasPermissionToViewUnpublished, hasPermissionToViewConfidential, nameDescriptionSetting))
+			.OrderBy(r => r.Name).ToArray();
+
 			var optionalColumnNames = selectedOptionalColumns.Select(oc => oc.Name).ToArray();
 			return new ScheduleExcelExportData
 			{
@@ -127,19 +135,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			};
 		}
 		
-		private PersonRow createPersonScheduleRow(IGrouping<IPerson, IScheduleDay> personScheduleGroup, Guid[] optionalColIds, TimeZoneInfo timeZone, bool hasPermissionToViewUnpublished, bool hasPermissionToViewConfidential, ICommonNameDescriptionSetting nameDescriptionSetting)
+		private PersonRow createPersonScheduleRow(IGrouping<IPerson, IScheduleDay> personScheduleGroup, List<IOptionalColumn> selectedOptionalColumns, TimeZoneInfo timeZone, bool hasPermissionToViewUnpublished, bool hasPermissionToViewConfidential, ICommonNameDescriptionSetting nameDescriptionSetting)
 		{
 			var p = personScheduleGroup.Key;
 			var scheduleDays = personScheduleGroup;
 			var name = nameDescriptionSetting.BuildFor(p);
 			var optionalColumns = new List<string>();
 
-			optionalColIds.ForEach(o =>
+			selectedOptionalColumns.ForEach(o =>
 			{
-				var matchedOptionalColumValue = p.OptionalColumnValueCollection.SingleOrDefault(x => x.Parent.Id == o);
+				var matchedOptionalColumValue = p.OptionalColumnValueCollection.SingleOrDefault(x => x.Parent.Id == o.Id);
 				optionalColumns.Add(matchedOptionalColumValue != null ? matchedOptionalColumValue.Description : string.Empty);
+
 			});
-			
+
 			var scheduleSummarys = scheduleDays
 				.Select(sd =>
 				{

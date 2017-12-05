@@ -233,7 +233,67 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo("value1");
 			
 		}
-		
+
+		[Test]
+		public void ShouldDisplayCorrectOrderForOptionalColumnHeadersAndValuesInScheduleSummaryInContentRow()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			CurrentScenario.FakeScenario(scenario);
+			ScenarioRepository.Has(scenario);
+			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
+			var person = PersonFactory.CreatePerson("ashley", "andeen").WithId();
+			person.SetEmploymentNumber("1234");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(scheduleDate.AddDays(-1)), PersonContractFactory.CreatePersonContract(), team));
+			PersonFinder.Has(person);
+			PersonRepository.Has(person);
+
+			var optionalColumn = new OptionalColumn("opt1").WithId();
+			var optionalColumnValue1 = new OptionalColumnValue("opt1 value1").WithId();
+
+			var optionalColumnAnother = new OptionalColumn("opt2").WithId();
+			var optionalColumnAnotherValue1 = new OptionalColumnValue("opt2 value1").WithId();
+
+			person.AddOptionalColumnValue(optionalColumnValue1, optionalColumn);
+			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(optionalColumnValue1);
+
+			person.AddOptionalColumnValue(optionalColumnAnotherValue1, optionalColumnAnother);
+			OptionalColumnRepository.Add(optionalColumnAnother);
+			OptionalColumnRepository.AddPersonValues(optionalColumnAnotherValue1);
+
+			var input = new ExportScheduleForm
+			{
+				StartDate = new DateOnly(scheduleDate),
+				EndDate = new DateOnly(scheduleDate),
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				SelectedGroups = new SearchGroupIdsData
+				{
+					SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
+				},
+				OptionalColumnIds = new[] {
+					optionalColumnAnother.Id.GetValueOrDefault(),
+					optionalColumn.Id.GetValueOrDefault()
+				}
+			};
+
+			var byteArray = Target.ExportToExcel(input).Data;
+			var workbook = new XSSFWorkbook(new MemoryStream(byteArray));
+			var sheet = workbook.GetSheetAt(0);
+
+			var headerRow = sheet.GetRow(8);
+			headerRow.Cells[3].StringCellValue.Should().Be.EqualTo("opt1");
+			headerRow.Cells[4].StringCellValue.Should().Be.EqualTo("opt2");
+
+			var scheduleData = sheet.GetRow(9);
+			scheduleData.Cells[3].StringCellValue.Should().Be.EqualTo("opt1 value1");
+			scheduleData.Cells[4].StringCellValue.Should().Be.EqualTo("opt2 value1");
+
+		}
+
+
 		[Test]
 		public void ShouldDisplayEmptyOptionalColumnValuesInScheduleSummaryWhenNoValueInContentRow()
 		{
