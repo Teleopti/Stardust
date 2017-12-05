@@ -138,15 +138,39 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private void startNode(int port, string nodeName)
 		{
-			var nodeConfig = new NodeConfiguration(
-				new Uri(_configReader.AppConfig("ManagerLocation")),
-				Assembly.Load(_configReader.ReadValue("handlerAssembly", "Teleopti.Ccc.Domain")),
-				port,
-				nodeName,
-				_configReader.ReadValue("pingToManagerSeconds", 120),
-				// if changing this, also change in StardustServerStarter AllowedNodeDownTimeSeconds = 360
-				_configReader.ReadValue("sendDetailsToManagerMilliSeconds", 2000)
-			);
+			var managerLocation = new Uri(_configReader.AppConfig("ManagerLocation"));
+			var handlerAssembly = Assembly.Load(_configReader.ReadValue("handlerAssembly", "Teleopti.Ccc.Domain"));
+			var pingToManagerSeconds = _configReader.ReadValue("pingToManagerSeconds", 120);
+			// if changing this, also change in StardustServerStarter AllowedNodeDownTimeSeconds = 360
+			var sendDetailsToManagerMilliSeconds = _configReader.ReadValue("sendDetailsToManagerMilliSeconds", 2000);
+
+			var fixedNodeIp = _configReader.ReadValue("FixedNodeIp", "");
+
+			NodeConfiguration nodeConfig;
+
+			if (string.IsNullOrEmpty(fixedNodeIp))
+			{
+				nodeConfig = new NodeConfiguration(
+					managerLocation,
+					handlerAssembly,
+					port,
+					nodeName,
+					pingToManagerSeconds,
+					sendDetailsToManagerMilliSeconds
+				);
+			}
+			else
+			{
+				nodeConfig = new NodeConfiguration(
+					managerLocation,
+					handlerAssembly,
+					port,
+					nodeName,
+					pingToManagerSeconds,
+					sendDetailsToManagerMilliSeconds,
+					IPAddress.Parse(fixedNodeIp)
+				);
+			}
 
 			var iocArgs = new IocArgs(new ConfigReader())
 			{
