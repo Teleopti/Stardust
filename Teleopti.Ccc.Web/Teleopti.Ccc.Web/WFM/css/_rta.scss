@@ -163,6 +163,7 @@ md-checkbox.rta-marked-checkbox .md-icon{
 	color: $gray087 !important;
 } 
 
+
 .wfm-dropdown-panel {
   position: absolute;
   top: 0px;
@@ -456,7 +457,12 @@ wfm-right-panel.rta-right-panel-wrapper .panel-menu {
         z-index: 12;
         opacity: .7;
       }
+
+.rta-view {
+  
+  a.mdi:before {
+	font-size: 14px !important;
+  }
+
+}
     
-      
-
-

@@ -1,153 +1,116 @@
-<div class="view-header with-fab with-desc" ng-cloak>
-	<div class="view-title">
-		<div class="pull-left">
-			<h1><i class="mdi mdi-alarm"></i> {{'Agents'|translate}}</h1>
-		</div>
-		<div class="rta-top-buttons-wrapper pull-left">
+<div class="rta-view">
+	
+	<div class="view-header with-fab with-desc" ng-cloak>
+		<div class="view-title">
+			<div class="pull-left">
+				<h1><i class="mdi mdi-alarm"></i> {{'Agents'|translate}}</h1>
+			</div>
+			<div class="rta-top-buttons-wrapper pull-left">
 			<span>
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.goToOverview()">{{'Dashboard'|translate}}</button>
 				<button class="wfm-btn wfm-btn-primary rta-default-cursor" ng-click="vm.goToSelectItem()">{{'Agents'|translate}}</button>
 			</span>
-			<span class="rta-paused-message-wrapper" ng-if="vm.pausedAt">
+				<span class="rta-paused-message-wrapper" ng-if="vm.pausedAt">
 				{{'PausedAt'|translate}} {{vm.pausedAt}}
 				</span>
-		</div>
-	</div>
-	<div class="fab-wrapper pull-right">
-		<button class="wfm-fab material-depth-1" ng-click="vm.pause = !vm.pause">
-			<i ng-class="{'mdi mdi-play': vm.pause, 'mdi mdi-pause': !vm.pause}"></i>
-			<md-tooltip>{{(vm.pause ? 'Play' : 'Pause')|translate}}</md-tooltip>
-		</button>
-	</div>
-</div>
-
-<div class="panel material-depth-1 rta-filter-panel"
-	 ng-include="'app/rta/rta/filter/filter-template_RTA_MobileFriendlyCheckboxes_46758.html'"
-	 ng-controller="RtaFilterController46758 as vm"></div>
-
-<div class="panel material-depth-1" ng-if="vm.displayNoAgentsMessage()">
-	<div class="con-row">
-		<div class="con-flex">
-			{{'NoAgentsToBeDisplayed' | translate}}
-		</div>
-	</div>
-</div>
-
-<div class="panel material-depth-1">
-	<div class="con-row" ng-class="{'rta-agents-filter-wrapper': vm.agentStates.length >= vm.maxNumberOfAgents}">
-		<div class="con-flex">
-			<div class="rta-on-grid-tools-wrapper">
-				<label for="filter-agents" class="input-icon">
-					<i class="mdi mdi-filter-outline">
-						<input type="text" id="filter-agents" ng-model="vm.filterText"
-							   placeholder="{{'FilterRtaShort'|translate}}">
-						<md-tooltip>{{'FilterRtaFull'|translate}}</md-tooltip>
-					</i>
-				</label>
 			</div>
 		</div>
-		<div class="con-flex split-3-1"></div>
-		<div class="con-flex">
-			<md-switch ng-model="vm.showInAlarm" aria-label="Switch"
-					   class="rta-agents-in-alarm-switch rta-on-grid-tools-wrapper pull-right" style="min-width: 150px">
-				<span>{{vm.showInAlarm ? 'InAlarm' : 'All'|translate}}</span>
-			</md-switch>
+		<div class="fab-wrapper pull-right">
+			<button class="wfm-fab material-depth-1" ng-click="vm.pause = !vm.pause">
+				<i ng-class="{'mdi mdi-play': vm.pause, 'mdi mdi-pause': !vm.pause}"></i>
+				<md-tooltip>{{(vm.pause ? 'Play' : 'Pause')|translate}}</md-tooltip>
+			</button>
 		</div>
 	</div>
-	<table class="wfm-table cursor-pointer" style="table-layout:fixed; border-collapse: collapse;">
-		<tr>
-			<th style="width: 8.5%" ng-click=" vm.sort('Name')">
-				{{'Name'|translate}}
-				<i ng-show="vm.orderBy == 'Name'" class="mdi"
-				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
-			</th>
-			<th style="width: 8.5%" ng-click="vm.sort('SiteAndTeamName')">
-				{{'SiteTeam'|translate}}
-				<i ng-show="vm.orderBy == 'SiteAndTeamName'" class="mdi"
-				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
-			</th>
-			<th class="shift-cell-header" style="padding: 0; position: relative;">
-				<label ng-repeat="time in vm.timeline" class="label label-info"
-					   ng-attr-style="position: absolute; left: {{time.Offset}}; top:5px; margin-left: -18px">
-					{{time.Time}}
-				</label>
-			</th>
-			<th style="width: 8.5%" ng-click="vm.sort('Rule')">
-				{{'Rule'|translate}}
-				<i ng-show="vm.orderBy == 'Rule'" class="mdi"
-				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
-			</th>
-			<th style="width: 8.5%" ng-click="vm.sort('TimeOutOfAdherence')">
-				{{'TimeOOA'|translate}}
-				<i ng-show="vm.orderBy == 'TimeOutOfAdherence'" class="mdi"
-				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
-			</th>
-			<th style="width: 8.5%" ng-click="vm.sort('TimeInAlarm')">
-				{{'TimeInAlarm'|translate}}
-				<i ng-show="vm.orderBy == 'TimeInAlarm'" class="mdi"
-				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
-			</th>
-			<th style="width: 8.5%" ng-click="vm.sort('TimeInState')">
-				{{'TimeInState'|translate}}
-				<i ng-show="vm.orderBy == 'TimeInState'" class="mdi"
-				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
-			</th>
-			<th style="width: 8.5%" ng-click="vm.sort('State')">
-				{{'State'|translate}}
-				<i ng-show="vm.orderBy == 'State'" class="mdi"
-				   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
-			</th>
-		</tr>
-		<tr ng-repeat="agentState in vm.agentStates">
-			<td style=""  ng-init="toggle[$index] = false" ng-click="toggle[$index] = !toggle[$index]" >
-				<span>{{agentState.Name}}</span>
 
-				<!--<div tabindex=0 class="context-menu card-context"-->
-				<!--style="position: absolute; padding: 3px; margin: -9px 0 0 0; z-index:9999" ng-show="toggle[$index]">-->
-				<!--<i class="mdi mdi-dots-vertical"></i>-->
-				
-				<span class="context-menu-right" style="position: absolute; padding: 3px; margin: -9px 0 0 0; z-index:9999" ng-show="toggle[$index]">
-					<ul class="wfm-list">
-						<li>
-							<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-pencil" style="font-style: normal"></i>
-								<span>{{'ModifySchedule'|translate}}</span>
-							</a>
-						</li>
-						
-						<li>
-							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-11-29 97%</span>
-							</a>
-						</li>
+	<div class="panel material-depth-1 rta-filter-panel"
+		 ng-include="'app/rta/rta/filter/filter-template_RTA_MobileFriendlyCheckboxes_46758.html'"
+		 ng-controller="RtaFilterController46758 as vm"></div>
 
-						<li>
-							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-11-30 65%</span>
-							</a>
-						</li>
+	<div class="panel material-depth-1" ng-if="vm.displayNoAgentsMessage()">
+		<div class="con-row">
+			<div class="con-flex">
+				{{'NoAgentsToBeDisplayed' | translate}}
+			</div>
+		</div>
+	</div>
 
-						<li>
-							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-12-01 0%</span>
-							</a>
-						</li>
-						
-					</ul>
-					</span>
-				<!--</div>-->
-			</td>
-			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
-				{{agentState.SiteAndTeamName}}
-			</td>
-			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: relative; height: 100%; padding: 0" ng-init="toggle[$index] = false" ng-click="toggle[$index] = !toggle[$index]">
+	<div class="panel material-depth-1">
+		<div class="con-row" ng-class="{'rta-agents-filter-wrapper': vm.agentStates.length >= vm.maxNumberOfAgents}">
+			<div class="con-flex">
+				<div class="rta-on-grid-tools-wrapper">
+					<label for="filter-agents" class="input-icon">
+						<i class="mdi mdi-filter-outline">
+							<input type="text" id="filter-agents" ng-model="vm.filterText"
+								   placeholder="{{'FilterRtaShort'|translate}}">
+							<md-tooltip>{{'FilterRtaFull'|translate}}</md-tooltip>
+						</i>
+					</label>
+				</div>
+			</div>
+			<div class="con-flex split-3-1"></div>
+			<div class="con-flex">
+				<md-switch ng-model="vm.showInAlarm" aria-label="Switch"
+						   class="rta-agents-in-alarm-switch rta-on-grid-tools-wrapper pull-right" style="min-width: 150px">
+					<span>{{vm.showInAlarm ? 'InAlarm' : 'All'|translate}}</span>
+				</md-switch>
+			</div>
+		</div>
+		<table class="wfm-table cursor-pointer" style="table-layout:fixed; border-collapse: collapse;">
+			<thead>
+			<tr>
+				<th style="width: 8.5%" ng-click=" vm.sort('Name')">
+					{{'Name'|translate}}
+					<i ng-show="vm.orderBy == 'Name'" class="mdi"
+					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+				</th>
+				<th style="width: 8.5%" ng-click="vm.sort('SiteAndTeamName')">
+					{{'SiteTeam'|translate}}
+					<i ng-show="vm.orderBy == 'SiteAndTeamName'" class="mdi"
+					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+				</th>
+				<th class="shift-cell-header" style="padding: 0; position: relative;">
+					<label ng-repeat="time in vm.timeline" class="label label-info"
+						   ng-attr-style="position: absolute; left: {{time.Offset}}; top:5px; margin-left: -18px">
+						{{time.Time}}
+					</label>
+				</th>
+				<th style="width: 8.5%" ng-click="vm.sort('Rule')">
+					{{'Rule'|translate}}
+					<i ng-show="vm.orderBy == 'Rule'" class="mdi"
+					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+				</th>
+				<th style="width: 8.5%" ng-click="vm.sort('TimeOutOfAdherence')">
+					{{'TimeOOA'|translate}}
+					<i ng-show="vm.orderBy == 'TimeOutOfAdherence'" class="mdi"
+					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+				</th>
+				<th style="width: 8.5%" ng-click="vm.sort('TimeInAlarm')">
+					{{'TimeInAlarm'|translate}}
+					<i ng-show="vm.orderBy == 'TimeInAlarm'" class="mdi"
+					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+				</th>
+				<th style="width: 8.5%" ng-click="vm.sort('TimeInState')">
+					{{'TimeInState'|translate}}
+					<i ng-show="vm.orderBy == 'TimeInState'" class="mdi"
+					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+				</th>
+				<th style="width: 8.5%" ng-click="vm.sort('State')">
+					{{'State'|translate}}
+					<i ng-show="vm.orderBy == 'State'" class="mdi"
+					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+				</th>
+			</tr>
+			</thead>
+			<tbody ng-repeat="agentState in vm.agentStates">
+			<tr ng-click="vm.selectAgent(agentState.PersonId)">
+				<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+					{{agentState.Name}}
+				</td>
+				<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+					{{agentState.SiteAndTeamName}}
+				</td>
+				<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: relative; height: 100%; padding: 0">
 				
 				<span ng-repeat="outOfAdherence in agentState.OutOfAdherences" class="rta-alarmline"
 					  ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}};">
@@ -155,81 +118,73 @@
 						{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}
 					</md-tooltip>
 				</span>
-				<span class="rta-current-time"></span>
-				<div class="rta-shift" style="height: 31px">
-					<div tabindex="-1" ng-repeat="activity in agentState.Shift"
-						 class="rta-layer absolute floatleft selectable ng-scope noneSelected {{activity.Class}}"
-						 ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}};"
-						 ng-attr-name="{{activity.Name}}">
-						<md-tooltip class="multiline-tooltip layer-summary">
-							<div>{{activity.Name}}</div>
-							<div>{{activity.Time}}</div>
-						</md-tooltip>
+					<span class="rta-current-time"></span>
+					<div class="rta-shift" style="height: 31px">
+						<div tabindex="-1" ng-repeat="activity in agentState.Shift"
+							 class="rta-layer absolute floatleft selectable ng-scope noneSelected {{activity.Class}}"
+							 ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}};"
+							 ng-attr-name="{{activity.Name}}">
+							<md-tooltip class="multiline-tooltip layer-summary">
+								<div>{{activity.Name}}</div>
+								<div>{{activity.Time}}</div>
+							</md-tooltip>
+						</div>
 					</div>
-				</div>
 
-				<span class="context-menu-right" style="position: absolute; padding: 3px; margin: -9px 0 0 0; z-index:9999" ng-show="toggle[$index]">
-					<ul class="wfm-list">
-						<li>
-							<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-pencil" style="font-style: normal"></i>
-								<span>{{'ModifySchedule'|translate}}</span>
-							</a>
-						</li>
-						
-						<li>
-							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-11-29 97%</span>
-							</a>
-						</li>
+				</td>
+				<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+					<div class="label rta-label"
+						 ng-attr-style="font-size: 14px; color: white; background-color: {{vm.hexToRgb(agentState.Color)}}">
+						{{agentState.Rule}}
+					</div>
+				</td>
+				<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+					{{agentState.TimeOutOfAdherence}}
+				</td>
+				<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+					{{agentState.TimeInAlarm}}
+				</td>
+				<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+					{{agentState.TimeInState}}
+				</td>
+				<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+					{{agentState.State}}
+				</td>
+			</tr>
+			<tr ng-if="vm.isSelected(agentState.PersonId)">
+				<td colspan="2">
+				</td>
+				<td class="flex" style="border:none">
+					<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
+					   style="text-decoration: none; height:14px" class="rta-icon-alignment mdi mdi-pencil flex-1">
+						{{'ModifySchedule'|translate}}
+					</a>
+					<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+					   style="text-decoration: none;" class="rta-icon-alignment mdi mdi-history flex-1">
+						2017-11-29 97%
+					</a>
+					<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+					   style="text-decoration: none;" class="rta-icon-alignment mdi mdi-history flex-1">
+						2017-11-30 65%
+					</a>
+					<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+					   style="text-decoration: none;" class="rta-icon-alignment mdi mdi-history flex-1">
+						2017-12-01 0%
+					</a>
+				</td>
+				<td colspan="5">
+				</td>
+			</tr>
+			</tbody>
+		</table>
 
-						<li>
-							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-11-30 65%</span>
-							</a>
-						</li>
-
-						<li>
-							<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-							   style="text-decoration: none;">
-								<i class="mdi mdi-account" style="font-style: normal"></i>
-								<span>2017-12-01 0%</span>
-							</a>
-						</li>
-						
-					</ul>
-					</span>
-
-			</td>
-			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
-				<div class="label rta-label"
-					 ng-attr-style="font-size: 14px; color: white; background-color: {{vm.hexToRgb(agentState.Color)}}">
-					{{agentState.Rule}}
-				</div>
-			</td>
-			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
-				{{agentState.TimeOutOfAdherence}}
-			</td>
-			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
-				{{agentState.TimeInAlarm}}
-			</td>
-			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
-				{{agentState.TimeInState}}
-			</td>
-			<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
-				{{agentState.State}}
-			</td>
-	</table>
-	<wfm-right-panel ng-if="!vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
-		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
-		<div class="full-padding">
-			<md-checkbox ng-repeat="state in vm.states" ng-model="state.Selected" aria-label="Checkbox">{{state.Name}}
-			</md-checkbox>
-		</div>
-	</wfm-right-panel>
+		<wfm-right-panel ng-if="!vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
+			<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
+			<div class="full-padding">
+				<md-checkbox ng-repeat="state in vm.states" ng-model="state.Selected" aria-label="Checkbox">{{state.Name}}
+				</md-checkbox>
+			</div>
+		</wfm-right-panel>
+	</div>
+	
 </div>
