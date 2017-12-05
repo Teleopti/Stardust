@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public interface IExternalPerformanceRepository : IAggregateRoot, IRepository<IExternalPerformance>
+	public interface IExternalPerformanceRepository : IRepository<IExternalPerformance>
 	{
 		IEnumerable<IExternalPerformance> FindAllExternalPerformances();
 		IExternalPerformance FindExternalPerformanceByExternalId(int externalId);

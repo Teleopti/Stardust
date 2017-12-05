@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -28,6 +29,31 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public int GetExernalPerformanceCount()
 		{
 			return externalPerformances.Count;
+		}
+
+		public void Add(IExternalPerformance root)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Remove(IExternalPerformance root)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IExternalPerformance Get(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IExternalPerformance Load(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IExternalPerformance> LoadAll()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

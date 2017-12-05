@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="Teleopti.Ccc.Domain" namespace="Teleopti.Ccc.Domain.Common" default-access="field.camelcase-underscore">
+	<class name="ExternalPerformanceData">
+		<id name="Id" access="nosetter.camelcase-underscore" type="guid" unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		
+		<property name="ExternalPerformance" type="guid" not-null="true" />
+		<property name="DateFrom" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure" not-null ="true" />
+		<property name="Person" type="guid" not-null="true" />
+		<property name="OriginalPersonId" type="guid" not-null="true" />
+		<property name="Score" type="int" not-null="true" />
+	</class>
+</hibernate-mapping>

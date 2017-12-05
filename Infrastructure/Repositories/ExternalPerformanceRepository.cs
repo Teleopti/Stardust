@@ -38,21 +38,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return Session.QueryOver<ExternalPerformance>().RowCount();
 		}
-
-		public bool Equals(IEntity other)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Guid? Id { get; }
-		public void SetId(Guid? newId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void ClearId()
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

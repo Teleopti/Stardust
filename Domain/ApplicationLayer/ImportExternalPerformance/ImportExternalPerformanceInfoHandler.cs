@@ -96,6 +96,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		{
 			
 		}
+
 		private void saveErrorJobResultDetail(ImportExternalPerformanceInfoEvent @event, string message, Exception exception, byte[] data)
 		{
 			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);

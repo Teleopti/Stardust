@@ -312,6 +312,7 @@
     <Compile Include="Common\BadgeSetting.cs" />
     <Compile Include="Common\BadgeSettingDataConverter.cs" />
     <Compile Include="Common\ExternalAgent.cs" />
+    <Compile Include="Common\ExternalPerformanceData.cs" />
     <Compile Include="Common\ExternalPerformanceDataType.cs" />
     <Compile Include="Common\ExternalPerformance.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
@@ -4030,6 +4031,7 @@
     <EmbeddedResource Include="Common\ExternalPerformance.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="Common\ExternalPerformanceData.hbm.xml" />
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />
