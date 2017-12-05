@@ -6,4 +6,5 @@ SET DIRECTORY=%DIRECTORY:~0,-1%
 powershell set-executionpolicy unrestricted
 ::execute
 powershell . .\PatchDatabases.ps1  >nul
-exit %ERRORLEVEL%
+exit /b 0
+::exit %ERRORLEVEL%
