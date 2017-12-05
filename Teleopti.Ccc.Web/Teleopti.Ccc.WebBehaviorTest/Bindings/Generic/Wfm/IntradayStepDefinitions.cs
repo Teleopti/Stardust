@@ -165,8 +165,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			var javascript = "var scope = angular.element(document.querySelector('.c3')).scope();" +
 							 "var skillet = scope.vm.skills.find(function(e){{return e.Name === '" + skillName + "'}});" +
 							 "scope.vm.selectedSkill = skillet;" +
-							 "scope.vm.selectedSkillChange(skillet);" +
-							 "setTimeout(function(){console.log('delay')}, 1000);"; 
+							 "scope.vm.selectedSkillChange(skillet);"; 
 			Browser.Interactions.Javascript(javascript);
 		}
 
@@ -178,8 +177,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			var javascript = "var scope = angular.element(document.querySelector('md-autocomplete')).scope();" +
 							 "var sg = scope.vm.skillAreas.find(function(e){{return e.Name === '" + skillName + "'}});" +
 							 "scope.vm.selectedSkillArea = sg;" +
-							 "scope.vm.selectedSkillAreaChange(sg);" +
-							 "setTimeout(function(){console.log('delay')}, 1000);"; 
+							 "scope.vm.selectedSkillAreaChange(sg);"; 
 			Browser.Interactions.Javascript(javascript);
 		}
 
@@ -213,7 +211,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenICloseTheSkillManager()
 		{
 			Browser.Interactions.Click("#exit_sgm");
-			if (Browser.Interactions.IsExists("#confirmExitButton"))
+			if (Browser.Interactions.IsVisible("#confirmExitButton"))
 			{
 				Browser.Interactions.Click("#confirmExitButton");
 			}
