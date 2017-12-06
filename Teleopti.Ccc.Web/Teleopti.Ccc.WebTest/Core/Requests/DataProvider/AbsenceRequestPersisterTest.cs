@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
 
-			setWorkflowControlSet(usePersonAccountValidator: false);
+			setWorkflowControlSet();
 
 			_workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
 			var form = createAbsenceRequestForm(new DateTimePeriodForm
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
 
-			setWorkflowControlSet(usePersonAccountValidator: false);
+			setWorkflowControlSet();
 
 			var accountDay = new AccountDay(_today)
 			{
@@ -697,6 +697,43 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		public void ShouldDenyWhenRemainingHourIsNotEnoughForMultipleEmptyDays()
+		{
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+				_today.AddDays(1).ToDateTimePeriod(UserTimeZone.TimeZone())));
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+				_today.AddDays(2).ToDateTimePeriod(UserTimeZone.TimeZone())));
+
+			_absence = createAbsence("Time Off In Lieu");
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true);
+
+			var accountTime = new AccountTime(_today.AddDays(-1))
+			{
+				BalanceIn = TimeSpan.FromMinutes(0),
+				Accrued = TimeSpan.FromMinutes(480),
+				Extra = TimeSpan.FromMinutes(0),
+				LatestCalculatedBalance = TimeSpan.Zero
+			};
+			createPersonAbsenceAccount(_person, _absence, accountTime);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today.AddDays(1),
+				EndDate = _today.AddDays(2),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+			setupPersonSkills();
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be(true);
+			request.DenyReason.Should().Be(Resources.RequestDenyReasonPersonAccount);
+		}
+
+		[Test]
 		public void ShouldApproveWhenRemainingHourIsEnoughOnEmptyDay()
 		{
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
@@ -738,7 +775,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
 
-			setWorkflowControlSet(usePersonAccountValidator: false);
+			setWorkflowControlSet();
 
 			_workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
 			var form = createAbsenceRequestForm(new DateTimePeriodForm
@@ -756,31 +793,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 			((DenyRequestCommand) CommandDispatcher.LatestCommand).DenyReason.Should().Be
 				.EqualTo(Resources.DenyReasonTechnicalIssues);
-		}
-
-		private void tryPersist()
-		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
-			var newPersonRequest = setupSimpleAbsenceRequest();
-
-			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
-			{
-				PersonRequest = newPersonRequest.Id.GetValueOrDefault(),
-				StartDateTime = newPersonRequest.Request.Period.StartDateTime,
-				EndDateTime = newPersonRequest.Request.Period.EndDateTime,
-				Sent = DateTime.Now
-			});
-
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
-			{
-				StartDate = _today,
-				EndDate = _today.AddDays(1),
-				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
-				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
-			});
-			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
-			Persister.Persist(form);
 		}
 
 		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoGrant = false

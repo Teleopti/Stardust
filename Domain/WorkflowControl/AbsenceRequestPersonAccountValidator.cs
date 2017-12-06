@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				requestedTime += requestedPeriod.ElapsedTime() < averageContractTimeSpan
 					? requestedPeriod.ElapsedTime()
 					: averageContractTimeSpan;
-				numberMinutes = requestedTime.TotalMinutes;
+				numberMinutes += requestedTime.TotalMinutes;
 			}
 			
 			return numberMinutes;
