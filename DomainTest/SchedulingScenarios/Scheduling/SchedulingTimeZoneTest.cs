@@ -23,8 +23,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-		public FakeTimeZoneGuard TimeZoneGuard; //this shouldn't effect scheduling at all, but it does currently....
-		public FakeUserTimeZone UserTimeZone; //this shouldn't effect scheduling at all, but it does currently....
+		//these shouldn't effect scheduling at all, but it does currently.... Replace with "throw stubs" later
+		public FakeTimeZoneGuard TimeZoneGuard; 
+		public FakeUserTimeZone UserTimeZone;
+		//
 
 		[Test]
 		public void ShouldBeAbleToScheduleNoMatterTimeZoneSettingsAlsoWhenRequiresSkillIsTrue(
