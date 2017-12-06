@@ -41,7 +41,7 @@
 
 	test("Should show notice if schedule changed within correct period", function () {
 		target.Init({ intervalTimeout: 0, notifyText: notifyText });
-		equal(currentText, target.GetNotifyText(target.GetSettings().notifyPeriod));
+		equal(currentText, target.GetNotifyText());
 	});
 
 	test("Should not show notice if no schedule changed within correct period", function () {

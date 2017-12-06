@@ -224,11 +224,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _validSchedulePeriod(notification) {
-		var isNotification = notification.hasOwnProperty('DomainType');
-		var messageStartDate = isNotification ? moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).add('days', -1).toDate()
-			: moment(notification.StartDate).add('days', -1).toDate();
-		var messageEndDate = isNotification ? moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).add('days', 1).toDate()
-			: moment(notification.EndDate).add('days', 1).toDate();
+		var messageStartDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).add('days', -1).toDate();
+		var messageEndDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).add('days', 1).toDate();
 		var listeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours', -1).toDate();
 		var listeningEndDate = moment(new Date(listeningStartDate.getTime())).add('days', 1).toDate();
 		if (messageStartDate < listeningEndDate && messageEndDate > listeningStartDate) {
