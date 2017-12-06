@@ -1,4 +1,5 @@
 ﻿using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Administration.Core.Modules;
@@ -14,7 +15,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			system.AddModule(new EtlToolModule());
 
 			system.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
-			system.UseTestDouble<FakeGeneralInfrastructure>().For<IGeneralInfrastructure>();
+			system.UseTestDouble<FakePmInfoProvider>().For<IPmInfoProvider>();
 		}
 	}
 }

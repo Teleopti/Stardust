@@ -23,7 +23,6 @@ namespace Teleopti.Wfm.AdministrationTest.EtlTool
 			{
 				_baseConfigurationDic.Add(connectionString, configuration);
 			}
-			
 		}
 	}
 }

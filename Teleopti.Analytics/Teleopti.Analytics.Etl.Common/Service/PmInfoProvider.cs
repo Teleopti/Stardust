@@ -3,7 +3,13 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
-	public class PmInfoProvider
+	public interface IPmInfoProvider
+	{
+		string PmInstallation();
+		string Cube();
+	}
+
+	public class PmInfoProvider : IPmInfoProvider
 	{
 		private readonly IServerConfigurationRepository _serverConfigurationRepository;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;

@@ -19,11 +19,11 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 	public class EtlToolJobCollectionModelProvider
 	{
 		private readonly IComponentContext _componentContext;
-		private readonly PmInfoProvider _pmInfoProvider;
+		private readonly IPmInfoProvider _pmInfoProvider;
 		private readonly IConfigurationHandler _configurationHandler;
 		private readonly ILoadAllTenants _loadAllTenants;
 
-		public EtlToolJobCollectionModelProvider(IComponentContext componentContext, PmInfoProvider pmInfoProvider, IConfigurationHandler configurationHandler, ILoadAllTenants loadAllTenants)
+		public EtlToolJobCollectionModelProvider(IComponentContext componentContext, IPmInfoProvider pmInfoProvider, IConfigurationHandler configurationHandler, ILoadAllTenants loadAllTenants)
 		{
 			_componentContext = componentContext;
 			_pmInfoProvider = pmInfoProvider;
