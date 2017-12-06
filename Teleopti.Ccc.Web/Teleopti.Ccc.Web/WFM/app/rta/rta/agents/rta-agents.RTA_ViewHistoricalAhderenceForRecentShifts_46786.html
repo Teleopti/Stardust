@@ -64,7 +64,7 @@
 					<i ng-show="vm.orderBy == 'Name'" class="mdi"
 					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 				</th>
-				<th style="width: 8.5%" ng-click="vm.sort('SiteAndTeamName')">
+				<th style="width: 10.5%" ng-click="vm.sort('SiteAndTeamName')">
 					{{'SiteTeam'|translate}}
 					<i ng-show="vm.orderBy == 'SiteAndTeamName'" class="mdi"
 					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
@@ -80,17 +80,17 @@
 					<i ng-show="vm.orderBy == 'Rule'" class="mdi"
 					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 				</th>
-				<th style="width: 8.5%" ng-click="vm.sort('TimeOutOfAdherence')">
+				<th style="width: 4.5%" ng-click="vm.sort('TimeOutOfAdherence')">
 					{{'TimeOOA'|translate}}
 					<i ng-show="vm.orderBy == 'TimeOutOfAdherence'" class="mdi"
 					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 				</th>
-				<th style="width: 8.5%" ng-click="vm.sort('TimeInAlarm')">
+				<th style="width: 4.5%" ng-click="vm.sort('TimeInAlarm')">
 					{{'TimeInAlarm'|translate}}
 					<i ng-show="vm.orderBy == 'TimeInAlarm'" class="mdi"
 					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 				</th>
-				<th style="width: 8.5%" ng-click="vm.sort('TimeInState')">
+				<th style="width: 4.5%" ng-click="vm.sort('TimeInState')">
 					{{'TimeInState'|translate}}
 					<i ng-show="vm.orderBy == 'TimeInState'" class="mdi"
 					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
@@ -99,6 +99,8 @@
 					{{'State'|translate}}
 					<i ng-show="vm.orderBy == 'State'" class="mdi"
 					   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+				</th>
+				<th style="width: 2.5%">
 				</th>
 			</tr>
 			</thead>
@@ -150,23 +152,35 @@
 				<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
 					{{agentState.State}}
 				</td>
+				<td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+					<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
+					   style="text-decoration: none;" class="mdi mdi-calendar-clock flex-1">
+						<md-tooltip>{{'ModifySchedule'|translate}}</md-tooltip>
+					</a>
+				</td>
+			</tr>
 			</tr>
 			<tr ng-if="vm.isSelected(agentState.PersonId)">
 				<td colspan="2">
 				</td>
-				<td style="border:none">
-					<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
-					   style="text-decoration: none; margin-right:20px" class="mdi mdi-pencil">
-						{{'ModifySchedule'|translate}}
+				<td class="flex" style="border:none">
+					<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+					   style="text-decoration: none;" class="mdi mdi-history flex-1">
+						2017-12-04 97%
 					</a>
 					<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
-					   style="text-decoration: none;" class="mdi mdi-history">
-						{{'AgentHistoricalAdherence'|translate}}
+					   style="text-decoration: none;" class="mdi mdi-history flex-1">
+						2017-12-05 65%
+					</a>
+					<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+					   style="text-decoration: none;" class="mdi mdi-history flex-1">
+						2017-12-06 0%
 					</a>
 				</td>
 				<td colspan="5">
 				</td>
 			</tr>
+
 			</tbody>
 		</table>
 
