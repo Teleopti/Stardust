@@ -6,23 +6,35 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 {
 	[DomainTest]
-	public class IntradayOptimizationCommandHandlerExternalStaffTest
+	[TestFixture(SUT.IntradayOptimization)]
+	[TestFixture(SUT.Scheduling)]
+	public class CommandHandlerExternalStaffTest
 	{
-		public IntradayOptimizationCommandHandler Target;
+		private readonly SUT _sut;
+		public IntradayOptimizationCommandHandler IntradayOptimizationCommandHandler;
+		public SchedulingCommandHandler SchedulingCommandHandler;
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
+		public SchedulingOptionsProvider SchedulingOptionsProvider;
+
+		public CommandHandlerExternalStaffTest(SUT sut)
+		{
+			_sut = sut;
+		}
 
 		[Test]
 		public void ShouldConsiderExternalStaffWhenCreatingIslands()
@@ -40,12 +52,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				new DateTimePeriod(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 					new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc)), skill1, skill2);
 
-			Target.Execute(new IntradayOptimizationCommand
-			{
-				Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10)
-			});
+			executeTarget(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10));
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count()
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count()
 				.Should().Be.EqualTo(1);
 		}
 
@@ -61,14 +70,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonRepository.Has(agent2);
 			SkillRepository.Has(skill);
 			SkillCombinationResourceReader.Has(1, period, skill);
-			OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
-			{
-				Extra = teamBlockType.CreateExtraPreferences()
-			});
 
-			Target.Execute(new IntradayOptimizationCommand { Period = period.ToDateOnlyPeriod(TimeZoneInfo.Utc) });
+			executeTarget(period.ToDateOnlyPeriod(TimeZoneInfo.Utc), teamBlockType);
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().Agents
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().Agents
 				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
 		}
 
@@ -84,15 +89,40 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonRepository.Has(agent2);
 			SkillRepository.Has(skill);
 			SkillCombinationResourceReader.Has(1, period, skill);
-			OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
-			{
-				Extra = teamBlockType.CreateExtraPreferences()
-			});
 
-			Target.Execute(new IntradayOptimizationCommand { Period = period.ToDateOnlyPeriod(TimeZoneInfo.Utc) });
+			executeTarget(period.ToDateOnlyPeriod(TimeZoneInfo.Utc), teamBlockType);
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsInIsland
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().AgentsInIsland
 				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
+		}
+		
+		private void executeTarget(DateOnlyPeriod period, TeamBlockType? teamBlockType = null)
+		{
+			switch (_sut)
+			{
+				case SUT.Scheduling:
+					if (teamBlockType.HasValue)
+					{
+						SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+						{
+							UseTeam = teamBlockType == TeamBlockType.Team
+						});
+					}
+					SchedulingCommandHandler.Execute(new SchedulingCommand { Period = period });
+					break;
+				case SUT.IntradayOptimization:
+					if (teamBlockType.HasValue)
+					{
+						OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
+						{
+							Extra = teamBlockType.Value.CreateExtraPreferences()
+						});
+					}
+					IntradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand { Period = period });
+					break;
+				default:
+					throw new NotSupportedException();
+			}
 		}
 	}
 }

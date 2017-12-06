@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	public interface IIslandInfo
 	{
 		IEnumerable<Guid> AgentsInIsland { get; }
+		IEnumerable<Guid> Agents { get; }
 	}
 }
