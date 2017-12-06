@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseBlockSameShift = true
 					}), false)).InvalidResources;
 
-			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.ExistingShiftNotMatchShift)).Should().Be.EqualTo(0);
+			result.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]

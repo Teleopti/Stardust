@@ -77,37 +77,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 							break;
 						}
 					}
-
-					if (blockOption.UseBlockSameShift)
-					{
-						var dateOnlyAsDateTimePeriod = scheduleDay.DateOnlyAsPeriod;
-						var editorShiftFromScheduleDay = scheduleDay.GetEditorShift();
-
-						if (editorShiftFromScheduleDay?.ShiftCategory != null)
-						{
-							var found = false;
-							foreach (var workShift in allShifts)
-							{
-								var editorShiftFromShiftBag = workShift.ToEditorShift(dateOnlyAsDateTimePeriod, TimeZoneInfo.Utc);
-								if (_scheduleDayEquator.MainShiftEquals(editorShiftFromScheduleDay, editorShiftFromShiftBag))
-								{
-									found = true;
-									break;
-								}
-							}
-							if (!found)
-							{
-								hintResult.Add(new PersonHintError
-								{
-									PersonName = person.Name.ToString(),
-									PersonId = person.Id.Value,
-									ErrorResource = nameof(Resources.ShiftNotMatchingShiftBag),
-									ErrorResourceData = new object[] { scheduleDay.DateOnlyAsPeriod.DateOnly.Date, shiftBag.Description.Name }.ToList()
-								}, GetType(), ValidationResourceType.BlockScheduling);
-								break;
-							}
-						}
-					}
 				}
 			}
 		}

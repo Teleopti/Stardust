@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		}
 
 		[Test]
-		public void ShouldReturnShiftNotMatchingShiftBag()
+		public void ShouldNotReturnShiftNotMatchingShiftBagWhenSameShiftIsUsed()
 		{
 			var startDate = new DateOnly(2017, 01, 23);
 			var endDate = new DateOnly(2017, 01, 29);
@@ -130,10 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseBlockSameShift = true
 					}), false)).InvalidResources;
 
-			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
-			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));
-			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.ShiftNotMatchingShiftBag, personAssignment.Date.ToShortDateString(),
-				agent.PersonPeriodCollection.First().RuleSetBag.Description.Name));
+			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.ShiftNotMatchingShiftBag)).Should().Be.EqualTo(0);
 		}
 		[Test]
 		public void ShouldNotThrowExceptionWhenNoShiftBagIsAssigned()

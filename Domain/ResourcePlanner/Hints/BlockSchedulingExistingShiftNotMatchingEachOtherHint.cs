@@ -224,7 +224,10 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								}
 								else
 								{
-									if (!_scheduleDayEquator.MainShiftEquals(firstScheduleDay, scheduleDay))
+									var editableFirstShift = firstScheduleDay.GetEditorShift();
+									var editableSecondShift = scheduleDay.GetEditorShift();
+									if (editableFirstShift == null || editableSecondShift == null) continue;
+									if (!_scheduleDayEquator.MainShiftBasicEquals(editableFirstShift, editableSecondShift,TimeZoneInfo.Utc))
 									{
 										addValidationResult(validationResult, person,
 											nameof(Resources.ExistingShiftNotMatchShift),
