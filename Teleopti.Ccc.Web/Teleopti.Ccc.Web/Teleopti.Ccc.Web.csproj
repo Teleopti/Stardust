@@ -2609,9 +2609,7 @@
     <Content Include="Content\Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Content\Scripts\knockout-2.2.1.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko.js" />
-    <Content Include="Content\moment-datepicker\moment-datepicker.d.ts" />
     <Content Include="Content\moment-datepicker\moment-datepicker.js" />
-    <Content Include="Content\moment-datepicker\moment-datepicker.min.js" />
     <Content Include="Content\moment\moment.js" />
     <Content Include="Content\moment\moment.min.js" />
     <Content Include="Content\select2\select2.js" />
