@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public DateOnly EndDate { get; set; }
 		public IEnumerable<Guid> AgentsInIsland { get; set; }
 		public bool RunResolveWeeklyRestRule { get; set; }
-		public IEnumerable<Guid> AgentsToOptimize { get; set; }
+		public IEnumerable<Guid> Agents { get; set; }
 		public Guid CommandId { get; set; }
 		public IEnumerable<LockInfo> UserLocks { get; set; }
 		public IEnumerable<Guid> Skills { get; set; }

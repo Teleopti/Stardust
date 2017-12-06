@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(new SchedulingCommand { Period = period.ToDateOnlyPeriod(TimeZoneInfo.Utc) });
 
-			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().AgentsToSchedule
+			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().Agents
 				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
 		}
 

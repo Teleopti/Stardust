@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = period.ToDateOnlyPeriod(TimeZoneInfo.Utc) });
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsToOptimize
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().Agents
 				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
 		}
 

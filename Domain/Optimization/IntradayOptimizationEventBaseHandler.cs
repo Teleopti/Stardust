@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			using (CommandScope.Create(@event))
 			{
 				var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
-				DoOptimization(period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, planningPeriodId);
+				DoOptimization(period, @event.AgentsInIsland, @event.Agents, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, planningPeriodId);
 				_synchronizeSchedulesAfterIsland.Synchronize(_schedulerStateHolder().Schedules, period);
 			}
 		}

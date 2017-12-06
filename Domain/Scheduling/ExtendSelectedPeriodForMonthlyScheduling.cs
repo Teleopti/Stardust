@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				var firstDaysOfWeek = new List<DayOfWeek>();
 				foreach (
-					var person in schedulerStateHolder.ChoosenAgents.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)))
+					var person in schedulerStateHolder.ChoosenAgents.Where(x => @event.Agents.Contains(x.Id.Value)))
 				{
 					if (!firstDaysOfWeek.Contains(person.FirstDayOfWeek))
 					{

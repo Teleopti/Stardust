@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, agentsToSchedule);
 				events.Add(new SchedulingWasOrdered
 				{
-					AgentsToSchedule = agentsToSchedule.Select(x => x.Id.Value),
+					Agents = agentsToSchedule.Select(x => x.Id.Value),
 					AgentsInIsland = agentsAndSkills.Agents,
 					StartDate = command.Period.StartDate,
 					EndDate = command.Period.EndDate,
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					{
 						var @event = new SchedulingWasOrdered
 						{
-							AgentsToSchedule = agentsToSchedule.Select(x=>x.Id.Value),
+							Agents = agentsToSchedule.Select(x=>x.Id.Value),
 							AgentsInIsland = agentsInIsland.Select(x=>x.Id.Value),
 							StartDate = command.Period.StartDate,
 							EndDate = command.Period.EndDate,

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual void DoScheduling(SchedulingWasOrdered @event, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod)
 		{
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, @event.AgentsToSchedule, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, @event.Agents, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
 			var schedulingCallback = _currentSchedulingCallback.Current();
 			var schedulingProgress = schedulingCallback is IConvertSchedulingCallbackToSchedulingProgress converter ? converter.Convert() : new NoSchedulingProgress();
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			_scheduleExecutor.Execute(schedulingCallback,
 				schedulingOptions, schedulingProgress,
-				schedulerStateHolder.ChoosenAgents.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)).ToArray(),
+				schedulerStateHolder.ChoosenAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray(),
 				selectedPeriod, @event.RunWeeklyRestSolver, blockPreferenceProvider);
 		}
 	}

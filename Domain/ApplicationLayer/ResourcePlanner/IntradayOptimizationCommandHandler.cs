@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					EndDate = command.Period.EndDate,
 					RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
 					AgentsInIsland = crossAgentsAndSkillsResult.Agents,
-					AgentsToOptimize = agentIds,
+					Agents = agentIds,
 					CommandId = command.CommandId,
 					UserLocks = lockInfos,
 					Skills = crossAgentsAndSkillsResult.Skills
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 							EndDate = command.Period.EndDate,
 							RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
 							AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
-							AgentsToOptimize = agentsToOptimize.Select(x => x.Id.Value),
+							Agents = agentsToOptimize.Select(x => x.Id.Value),
 							CommandId = command.CommandId,
 							UserLocks = lockInfos,
 							Skills = island.SkillIds()

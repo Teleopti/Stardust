@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1 } });
 
-			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().AgentsToSchedule.Should().Have.SameValuesAs(agent1.Id.Value);
+			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().Agents.Should().Have.SameValuesAs(agent1.Id.Value);
 		}
 
 		[Test]
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var events = EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().ToArray();
 			var event1 = events[0];
 			var event2 = events[1];
-			event1.AgentsToSchedule.Single()
-				.Should().Not.Be.EqualTo(event2.AgentsToSchedule.Single());
+			event1.Agents.Single()
+				.Should().Not.Be.EqualTo(event2.Agents.Single());
 		}
 
 		[Test]
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10) });
 
-			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().AgentsToSchedule.Count().Should().Be.EqualTo(2);
+			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().Agents.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1 } });
 
-			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().AgentsToSchedule.Count().Should().Be.EqualTo(1);
+			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().Agents.Count().Should().Be.EqualTo(1);
 		}
 	}
 }
