@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -110,6 +111,52 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				else
 					schedulerStateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(i)).HasDayOff().Should().Be.True();
 			}	
+		}
+
+		[Test]
+		[Ignore("#47074 to be fixed")]
+		public void ShouldScheduleWhenPreferencesConflictWithContractDayOff()
+		{
+			var date = new DateOnly(2017, 1, 2);
+			var period = new DateOnlyPeriod(date, date.AddDays(13));
+			var activity = new Activity().WithId();
+			var scenario = new Scenario();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var contractSchedule = new ContractSchedule("_");
+			var contractScheduleWeek1 = new ContractScheduleWeek();
+			var contractScheduleWeek2 = new ContractScheduleWeek();
+			contractScheduleWeek1.Add(DayOfWeek.Monday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Tuesday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Wednesday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Thursday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Friday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Saturday, false);//doff
+			contractScheduleWeek1.Add(DayOfWeek.Sunday, false); //doff
+			contractScheduleWeek2.Add(DayOfWeek.Monday, true);
+			contractScheduleWeek2.Add(DayOfWeek.Tuesday, true); 
+			contractScheduleWeek2.Add(DayOfWeek.Wednesday, true);
+			contractScheduleWeek2.Add(DayOfWeek.Thursday, true);
+			contractScheduleWeek2.Add(DayOfWeek.Friday, true);
+			contractScheduleWeek2.Add(DayOfWeek.Saturday, false);//doff
+			contractScheduleWeek2.Add(DayOfWeek.Sunday, false);//doff
+			contractSchedule.AddContractScheduleWeek(contractScheduleWeek1);
+			contractSchedule.AddContractScheduleWeek(contractScheduleWeek2);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet,contractSchedule, skill).WithSchedulePeriodTwoWeeks(date);
+			var shiftcategoryRestriction = new PreferenceRestriction { ShiftCategory = shiftCategory };
+			var preferenceDays = new List<IPreferenceDay>();
+			for (var i = 0; i < 6; i++)
+			{
+				preferenceDays.Add(new PreferenceDay(agent, date.AddDays(i), shiftcategoryRestriction).WithId());
+			}	
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new []{agent}, preferenceDays, skillDays);
+			var schedulingOptions = new SchedulingOptions { UsePreferences = true };
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
+
+			schedulerStateHolder.Schedules[agent].ScheduledDayCollection(period).ForEach(x => x.IsScheduled().Should().Be.True());
 		}
 
 		public SchedulingRestrictionsDesktopTest(SeperateWebRequest seperateWebRequest, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680, bool resourcePlannerTimeZoneIssues45818) : base(seperateWebRequest, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680, resourcePlannerTimeZoneIssues45818)
