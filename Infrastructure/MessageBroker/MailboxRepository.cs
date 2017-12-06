@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Transform;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
@@ -65,17 +64,9 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 
 		public void AddMessage(Message message)
 		{
-			var mailboxes = _unitOfWork.Current().CreateSqlQuery($@"
-						SELECT Id FROM [msg].Mailbox 
-						WHERE Route IN (:{nameof(message.Routes)})
-					")
-				.SetParameterList(nameof(message.Routes), message.Routes())
-				.List<Guid>();
-			mailboxes.ForEach(mailboxId =>
-			{
-				_unitOfWork.Current().CreateSqlQuery($@"
-					INSERT INTO [msg].MailboxNotification VALUES(
-						:{nameof(InternalMessage.MailboxId)}, 
+			_unitOfWork.Current().CreateSqlQuery($@"
+					INSERT INTO [msg].MailboxNotification SELECT 
+						m.Id, 
 						:{nameof(Message.DataSource)},
 						:{nameof(Message.BusinessUnitId)},
 						:{nameof(Message.DomainType)},
@@ -87,22 +78,23 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 						:{nameof(Message.StartDate)},
 						:{nameof(Message.DomainUpdateType)},
 						:{nameof(Message.BinaryData)},
-						:{nameof(Message.TrackId)})")
-					.SetGuid(nameof(InternalMessage.MailboxId), mailboxId)
-					.SetParameter(nameof(Message.DataSource), message.DataSource)
-					.SetParameter(nameof(Message.BusinessUnitId), message.BusinessUnitId)
-					.SetParameter(nameof(Message.DomainType), message.DomainType)
-					.SetParameter(nameof(Message.DomainQualifiedType), message.DomainQualifiedType)
-					.SetParameter(nameof(Message.DomainId), message.DomainId)
-					.SetParameter(nameof(Message.ModuleId), message.ModuleId)
-					.SetParameter(nameof(Message.DomainReferenceId), message.DomainReferenceId)
-					.SetParameter(nameof(Message.EndDate), message.EndDate)
-					.SetParameter(nameof(Message.StartDate), message.StartDate)
-					.SetParameter(nameof(Message.DomainUpdateType), message.DomainUpdateType)
-					.SetParameter(nameof(Message.BinaryData), message.BinaryData, NHibernateUtil.StringClob)
-					.SetParameter(nameof(Message.TrackId), message.TrackId)
-					.ExecuteUpdate();
-			});
+						:{nameof(Message.TrackId)}
+						FROM [msg].Mailbox m 
+						WHERE m.Route IN (:{nameof(message.Routes)})")
+				.SetParameter(nameof(Message.DataSource), message.DataSource)
+				.SetParameter(nameof(Message.BusinessUnitId), message.BusinessUnitId)
+				.SetParameter(nameof(Message.DomainType), message.DomainType)
+				.SetParameter(nameof(Message.DomainQualifiedType), message.DomainQualifiedType)
+				.SetParameter(nameof(Message.DomainId), message.DomainId)
+				.SetParameter(nameof(Message.ModuleId), message.ModuleId)
+				.SetParameter(nameof(Message.DomainReferenceId), message.DomainReferenceId)
+				.SetParameter(nameof(Message.EndDate), message.EndDate)
+				.SetParameter(nameof(Message.StartDate), message.StartDate)
+				.SetParameter(nameof(Message.DomainUpdateType), message.DomainUpdateType)
+				.SetParameter(nameof(Message.BinaryData), message.BinaryData, NHibernateUtil.StringClob)
+				.SetParameter(nameof(Message.TrackId), message.TrackId)
+				.SetParameterList(nameof(message.Routes), message.Routes())
+				.ExecuteUpdate();
 		}
 
 		public void Purge()
@@ -113,7 +105,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 				.SetParameter(nameof(utcDateTime), utcDateTime)
 				.ExecuteUpdate();
 			_unitOfWork.Current().CreateSqlQuery(
-					"DELETE mn FROM [msg].MailboxNotification mn LEFT JOIN [msg].Mailbox m ON mn.MailboxId = m.Id AND m.Id IS NULL")
+					"DELETE mn FROM [msg].MailboxNotification mn LEFT JOIN [msg].Mailbox m ON mn.MailboxId = m.Id WHERE m.Id IS NULL")
 				.ExecuteUpdate();
 		}
 
