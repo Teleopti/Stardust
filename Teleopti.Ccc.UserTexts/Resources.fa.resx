@@ -12249,4 +12249,286 @@ Teleopti R&amp;D</value>
   <data name="FilterValidationIssues" xml:space="preserve">
     <value>فیلتر خطاها</value>
   </data>
+  <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
+    <value>قوانین روز تعطیل برای همه دوره های برنامه ریزی اعمال میشود</value>
+  </data>
+  <data name="Issue" xml:space="preserve">
+    <value>مشکل</value>
+  </data>
+  <data name="ManageDayOffForPlanningGroup" xml:space="preserve">
+    <value>مدیریت روز تعطیل برای گروه برنامه ریزی {0}</value>
+  </data>
+  <data name="NoValidIssuesForPp" xml:space="preserve">
+    <value>هیچ مشکلی برای این دوره برنامه ریزی وجود ندارد</value>
+  </data>
+  <data name="PreSchedulingValidationIssues" xml:space="preserve">
+    <value>مشکلهای موجود در بررسی قبل از زمانبندی</value>
+  </data>
+  <data name="RefreshPreSchedulingValidationIssues" xml:space="preserve">
+    <value>مشکلهای موجود در بررسی قبل از زمانبندی را بروزرسانی کن</value>
+  </data>
+  <data name="SearchForPlanningGroup" xml:space="preserve">
+    <value>جستجوی سایت/ تیم/ مهارت/ قرارداد</value>
+  </data>
+  <data name="SearchForDayOff" xml:space="preserve">
+    <value>جسجوی سایت/ تیم/ قرارداد</value>
+  </data>
+  <data name="SelectedPlanningPeriod" xml:space="preserve">
+    <value>دوره برنامه ریزی انتخاب شده</value>
+  </data>
+  <data name="UpdatedValidation" xml:space="preserve">
+    <value>مشکلات یافت شده در هنگام بررسی بروزرسانی شد</value>
+  </data>
+  <data name="ConfirmToggleAllData" xml:space="preserve">
+    <value>این دکمه تمام موارد پایین را فعال/غیر فعال میکند. میخواهید ادامه دهید؟</value>
+  </data>
+  <data name="AnErrorOccurredPleaseTryAgain" xml:space="preserve">
+    <value>خطایی اتفاق افتاد. دوباره سعی کنید</value>
+  </data>
+  <data name="ChangePlanningPeriodDurationColon" xml:space="preserve">
+    <value>تغییر مدت زمان دوره برنامه ریزی</value>
+  </data>
+  <data name="CreatePlanningPeriod" xml:space="preserve">
+    <value>ایجاد دوره برنامه ریزی</value>
+  </data>
+  <data name="ModifyEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>تغییر زمان پایان برای این دوره برنامه ریزی</value>
+  </data>
+  <data name="ModifyStartAndEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>تغییر زمان شروع و پایان برای این دوره برنامه ریزی</value>
+  </data>
+  <data name="RunningIntradayOptimization" xml:space="preserve">
+    <value>شروع بهینه سازی روزانه</value>
+  </data>
+  <data name="SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot" xml:space="preserve">
+    <value>یکی از دوره پیشنهاد شده برداشته یا تاریخ شروع و پایانی را خودتان اتنخاب کنید</value>
+  </data>
+  <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
+    <value>شما دارید دوره برنامه ریزی به {0} - {1} تغییر میدهید</value>
+  </data>
+  <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
+    <value>شما دارید دوره برنامه ریزی از {0} - {1} ایجاد میکنید</value>
+  </data>
+  <data name="FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>بهینه سازی روزانه برای دوره زمان بندی {0} تا {1} بخاطر مشکل فنی ناموفق بود. لطفاً دوباره تلاش کنید</value>
+  </data>
+  <data name="SuccessfullyIntradayOptimizationPlanningPeriodFromTo" xml:space="preserve">
+    <value>بهینه سازی روزانه برای دوره برنامه ریزی {0} تا {1} با موفقیت انجام شد</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>درخواست نادرست</value>
+  </data>
+  <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
+    <value>زمان پایان باید بعد از زمان شروع باشد</value>
+  </data>
+  <data name="TeleoptiWFMApp" xml:space="preserve">
+    <value>Teleopti WFM برنامه موبایل</value>
+  </data>
+  <data name="WFMAppGuideStep1" xml:space="preserve">
+    <value>مرحله اول:</value>
+  </data>
+  <data name="WFMAppGuideStep1Description" xml:space="preserve">
+    <value>برنامه موبایل را با کلیک بر روی دکمه یا اسکن کد زیر دانلود و نصب کنید</value>
+  </data>
+  <data name="WFMAppGuideStep2" xml:space="preserve">
+    <value>مرحله دو:</value>
+  </data>
+  <data name="WFMAppGuideStep2Description" xml:space="preserve">
+    <value>برنامه موبایل را تنظیم کنید. ابتدا برنامه را شروع کرده و بعد کد زیر را اسکن کنید</value>
+  </data>
+  <data name="WFMAppGuideTitle" xml:space="preserve">
+    <value>راهنمای برنامه موبایل Teleopti WFM</value>
+  </data>
+  <data name="EnableMobileNotifications" xml:space="preserve">
+    <value>پیام برنامه موبایل را فعال کنید</value>
+  </data>
+  <data name="MobileNotificationSettings" xml:space="preserve">
+    <value>تنظیم پیام برنامه موبایل</value>
+  </data>
+  <data name="FilterPlanningGroups" xml:space="preserve">
+    <value>فیلتر گروههای برنامه ریزی</value>
+  </data>
+  <data name="PlansPageCreatePlanningGroup" xml:space="preserve">
+    <value>برای ایجاد گروه برنامه ریزی یا اسم را بنویسید و یا فیلتر مورد نظر را انتخاب کنید</value>
+  </data>
+  <data name="UnsupportedDataSeriesFound" xml:space="preserve">
+    <value>شامل انواع مختلف مهارت میشود. بعضی از داده ها ممکن است در دسترس قرار نگیرد</value>
+  </data>
+  <data name="FilterPlanningPeriods" xml:space="preserve">
+    <value>فیلتر دورههای برنامه ریزی</value>
+  </data>
+  <data name="ETOTRequests" xml:space="preserve">
+    <value>درخواستهای اضافه کاری</value>
+  </data>
+  <data name="UnavailableSeries" xml:space="preserve">
+    <value>انتخاب موجود شامل مهارت ایمیل نمیشود. عضی از داده ها ممکن است در دسترس قرار نگیرد</value>
+  </data>
+  <data name="NotShowingReforcastedAgents" xml:space="preserve">
+    <value>پاسخگوهای پیشبینی شده برای انتخاب حاضر قابل استفاده نیستند</value>
+  </data>
+  <data name="NotShowingAbandonRate" xml:space="preserve">
+    <value>نرخ تماس برای انتخاب حاضر قابل نمایش نیست</value>
+  </data>
+  <data name="EnableAbsenceProbability" xml:space="preserve">
+    <value>احتمال مرخصی را فعال کن</value>
+  </data>
+  <data name="EnableOvertimeProbability" xml:space="preserve">
+    <value>احتمال اضافه کاری را فعال کن</value>
+  </data>
+  <data name="Plans" xml:space="preserve">
+    <value>برنامه ها</value>
+  </data>
+  <data name="ApplySuggestion" xml:space="preserve">
+    <value>اعمال موارد انتخاب شده</value>
+  </data>
+  <data name="GetSuggestionsForOvertime" xml:space="preserve">
+    <value>گرفتن پیشنهاد برای اضافه کاری</value>
+  </data>
+  <data name="MoveOvertime" xml:space="preserve">
+    <value>جابجایی اضافه کاری</value>
+  </data>
+  <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
+    <value>دسترسی لازم برای جابجایی اضافه کاری پاسخگوها وجود ندارد</value>
+  </data>
+  <data name="ChooseDayOffset" xml:space="preserve">
+    <value>انتخاب روز</value>
+  </data>
+  <data name="CannotApplyThisToAgentsInADifferentTimeZone" xml:space="preserve">
+    <value>بر پاسخگوهای واقع در مناطق زمانی دیگر قابل اعمال نیست</value>
+  </data>
+  <data name="MissingDuration" xml:space="preserve">
+    <value>مدت زمان فراموش شده</value>
+  </data>
+  <data name="MissingStartTime" xml:space="preserve">
+    <value>زمان شروع فراموش شده</value>
+  </data>
+  <data name="OvertimeRequestDateExceeds14Days" xml:space="preserve">
+    <value>زمان درخواست بیشتر از 14 روز از الان است</value>
+  </data>
+  <data name="OvertimeRequestDateIsPast" xml:space="preserve">
+    <value>اضافه کاری را نمیتوان به تاریخ در گذشته اضافه کرد</value>
+  </data>
+  <data name="AllowedOvertime" xml:space="preserve">
+    <value>اضافه کاری مجاز</value>
+  </data>
+  <data name="CloseOvertimeSettings" xml:space="preserve">
+    <value>بستن تنظیمات اضافه کاری</value>
+  </data>
+  <data name="Compensations" xml:space="preserve">
+    <value>انتخابهای دیگر</value>
+  </data>
+  <data name="DiscardSuggestionData" xml:space="preserve">
+    <value>شما دارای داده های پیشنهادی فعالی هستید. اگر ادامه دهید از دستشان میدهید.</value>
+  </data>
+  <data name="OvertimeSettings" xml:space="preserve">
+    <value>تنظیمات اضافه کاری</value>
+  </data>
+  <data name="PressEscToClose" xml:space="preserve">
+    <value>زدن Esc برا بستن</value>
+  </data>
+  <data name="CreateDayOffRule" xml:space="preserve">
+    <value>ایجاد قانون روز کاری</value>
+  </data>
+  <data name="EditDayOffRule" xml:space="preserve">
+    <value>تغییر قانون روز کاری</value>
+  </data>
+  <data name="FilterDayOffRules" xml:space="preserve">
+    <value>فیلتر قانون روز کاری</value>
+  </data>
+  <data name="PlansPageEditPlanningGroup" xml:space="preserve">
+    <value>ویرایش نام و فیلترها برای گروههای برنامه ریزی</value>
+  </data>
+  <data name="ClassicIntraday" xml:space="preserve">
+    <value>روزانه کلاسیک</value>
+  </data>
+  <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
+    <value>دوره درخواست شده خارج از ساعات کاری مهارتها قرار دارد</value>
+  </data>
+  <data name="NoUnderStaffingSkill" xml:space="preserve">
+    <value>هیچ مهارتی برای دوره درخواست شده کمبود شدید نیرو ندارد</value>
+  </data>
+  <data name="NoAccessToSites" xml:space="preserve">
+    <value>شما به هیچ تیم و سایتی دسترسی ندارید</value>
+  </data>
+  <data name="PublicNote" xml:space="preserve">
+    <value>یادداشت عمومی</value>
+  </data>
+  <data name="ShiftCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>توجه: برای جابجایی شیفت پاسخگو. به منطقه زمانی دیگر ابتدا منطقه زمان آنها را از منو مربوطه انتخاب کنید</value>
+  </data>
+  <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
+    <value>درخواست اضافه کاری برای {0} - {1} تایید شد</value>
+  </data>
+  <data name="BpoExchange" xml:space="preserve">
+    <value>تبادل BPO</value>
+  </data>
+  <data name="DragAndDropCSVFilesHereOrClickToUpload" xml:space="preserve">
+    <value>فایل CSV را به اینجا بکشید یا بر روی بارگذاری کلیت کنید</value>
+  </data>
+  <data name="SuccessfullyImported" xml:space="preserve">
+    <value>اضافه کردن از فایل موفق بود</value>
+  </data>
+  <data name="AnywhereMigrated" xml:space="preserve">
+    <value>ماژول قدیمی Anywhere به {0} Teleopti WFM {1} منتقل شد</value>
+  </data>
+  <data name="PageWillBeRedirected" xml:space="preserve">
+    <value>این صفحه شما را بطور خودکار در {0} ثانیه را برنامه هدایت میکند</value>
+  </data>
+  <data name="SeveralGroupsSelected" xml:space="preserve">
+    <value>تعداد {0} گروه انتخاب شد است</value>
+  </data>
+  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+    <value>مهارتی با نام {0} در سیستم وجود ندارد</value>
+  </data>
+  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+    <value>مهارتی با نام {0} {1} بار در سیستم ایجاد شده. تنها یک بار مجاز است</value>
+  </data>
+  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+    <value>خط دارای {0} پارامتر است درحالیکه باید {1} تا باشد</value>
+  </data>
+  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>خطایی در خط {0} پیدا شده مه شامل اینها میشود: {1} و {2}</value>
+  </data>
+  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+    <value>پارارمتر {0} نمیتواند خالی باشد</value>
+  </data>
+  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+    <value>نام موجود در سربرگ نامعتبر است.{0}. نامهای معتبر اینها هستند {1}</value>
+  </data>
+  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+    <value>فایلی که قرار است وارد شود نمیتواند خالی باشد</value>
+  </data>
+  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+    <value>اولین خط در فایل نمیتواند خالی باشد</value>
+  </data>
+  <data name="OpenSite" xml:space="preserve">
+    <value>سایت را باز کن</value>
+  </data>
+  <data name="NoSuggestionsFound" xml:space="preserve">
+    <value>هیچ پیشنهادی با توجه به تنظیمات اضافه کاری وجود ندارد</value>
+  </data>
+  <data name="ImportBpoWrongDateFormat" xml:space="preserve">
+    <value>فرمت داده نادرست است</value>
+  </data>
+  <data name="ImportBpoWrongResourceFormat" xml:space="preserve">
+    <value>پارامتر منابع- شماره {0} با مقدار {1} نامعتبر است. پارارمتر باید به صورت عدد دسیمال باشد مانند 14.2 </value>
+  </data>
+  <data name="ImportBpoDuplicateRecord" xml:space="preserve">
+    <value>دو ردیف مشابه پیدا شد. اطلاعات یکسانی در بیشتر از یک خط وارد شده است که مجاز نیست</value>
+  </data>
+  <data name="AbandonedRateParenthesisPercentSign" xml:space="preserve">
+    <value>نرخ تماس بی پاسخ (%)</value>
+  </data>
+  <data name="AverageSpeedOfAnswersParenthesisSeconds" xml:space="preserve">
+    <value>سرعت میانگین پاسخ</value>
+  </data>
+  <data name="ESLParenthesisPercentSign" xml:space="preserve">
+    <value>ESL (%)</value>
+  </data>
+  <data name="Interval" xml:space="preserve">
+    <value>بازه</value>
+  </data>
+  <data name="SkillsParenthesisS" xml:space="preserve">
+    <value>مهارت</value>
+  </data>
 </root>
