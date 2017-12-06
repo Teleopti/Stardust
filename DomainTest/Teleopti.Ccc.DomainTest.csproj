@@ -474,7 +474,6 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodJobCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationDesktopTest.cs" />
-    <Compile Include="SchedulingScenarios\Islands\CommandHandlerIncreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandExtendedModelTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelAfterReducingTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelBeforeReducingTest.cs" />
