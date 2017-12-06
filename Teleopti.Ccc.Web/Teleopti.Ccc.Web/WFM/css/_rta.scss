@@ -66,7 +66,7 @@
 	color: $text-color-standard!important;
 }
 
-.shift-cell-header, .wfm-table th.shift-cell-header {
+.shift-cell-header {
 	height: $full-padding*6;
 	background-color: $white;
 	padding-top: $full-padding;
@@ -458,11 +458,92 @@ wfm-right-panel.rta-right-panel-wrapper .panel-menu {
         opacity: .7;
       }
 
+
 .rta-view {
+
+  .wfm-table {
+
+	th.blank-header {
+	  background-color: $white;
+	}
+	
+	td {
+	  overflow: hidden;
+	  white-space: nowrap;
+	  text-overflow: ellipsis
+	}
+	
+	a.mdi {
+	  text-decoration: none;
+	}
+	a.mdi:before {
+	  font-size: 14px !important;
+	}
+	
+  }
   
-  a.mdi:before {
-	font-size: 14px !important;
+  .timeline-container {
+	position: relative;
+	padding: 0;
+	margin: 0;
+	
+	.time {
+	  position: absolute;
+	  margin-left: -18px;
+	}
+  }
+  
+  .schedule-container {
+	position: relative;
+	padding: 0;
+	margin: 0;
+	
+	.alarmline {
+	  background-color: darkred;
+	  z-index: 6;
+	  position: absolute;
+	  right: 75%;
+	  height: $full-padding;
+	  margin-top: 0;
+	  bottom: 44%;
+	  opacity: 0.6;
+	  min-width: 1px;
+	}
+	
+	.current-time {
+	  z-index: 5;
+	  position: absolute;
+	  left: 25%;
+	  width: 2px;
+	  height: 100%;
+	  margin-top: 0;
+	  background-color: red;
+	}
+
+	.layer {
+	  height: 70%;
+	  position: absolute;
+	}
+
   }
 
+  .wfm-table td .label{
+	font-size: 12px;
+	font-weight: 100;
+	padding: 5px;
+  }
+  
+  wfm-right-panel {
+	background-color: inherit;
+  }
+
+  wfm-right-panel .panel-menu {
+	top: 15px;
+  }
+
+  .grid-tools {
+	margin-top: 8px;
+	margin-bottom: 0px;
+  }
 }
     
