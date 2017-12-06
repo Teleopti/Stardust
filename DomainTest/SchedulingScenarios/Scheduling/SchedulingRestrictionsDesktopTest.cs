@@ -114,7 +114,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#47074 to be fixed")]
 		public void ShouldScheduleWhenPreferencesConflictWithContractDayOff()
 		{
 			var date = new DateOnly(2017, 1, 2);
@@ -126,24 +125,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var contractSchedule = new ContractSchedule("_");
-			var contractScheduleWeek1 = new ContractScheduleWeek();
-			var contractScheduleWeek2 = new ContractScheduleWeek();
-			contractScheduleWeek1.Add(DayOfWeek.Monday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Tuesday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Wednesday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Thursday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Friday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Saturday, false);//doff
-			contractScheduleWeek1.Add(DayOfWeek.Sunday, false); //doff
-			contractScheduleWeek2.Add(DayOfWeek.Monday, true);
-			contractScheduleWeek2.Add(DayOfWeek.Tuesday, true); 
-			contractScheduleWeek2.Add(DayOfWeek.Wednesday, true);
-			contractScheduleWeek2.Add(DayOfWeek.Thursday, true);
-			contractScheduleWeek2.Add(DayOfWeek.Friday, true);
-			contractScheduleWeek2.Add(DayOfWeek.Saturday, false);//doff
-			contractScheduleWeek2.Add(DayOfWeek.Sunday, false);//doff
-			contractSchedule.AddContractScheduleWeek(contractScheduleWeek1);
-			contractSchedule.AddContractScheduleWeek(contractScheduleWeek2);
+			var contractScheduleWeek = new ContractScheduleWeek();
+			contractScheduleWeek.Add(DayOfWeek.Monday, true);
+			contractScheduleWeek.Add(DayOfWeek.Tuesday, true);
+			contractScheduleWeek.Add(DayOfWeek.Wednesday, true);
+			contractScheduleWeek.Add(DayOfWeek.Thursday, true);
+			contractScheduleWeek.Add(DayOfWeek.Friday, true);
+			contractScheduleWeek.Add(DayOfWeek.Saturday, false);
+			contractScheduleWeek.Add(DayOfWeek.Sunday, false);
+			contractSchedule.AddContractScheduleWeek(contractScheduleWeek);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet,contractSchedule, skill).WithSchedulePeriodTwoWeeks(date);
 			var shiftcategoryRestriction = new PreferenceRestriction { ShiftCategory = shiftCategory };
 			var preferenceDays = new List<IPreferenceDay>();

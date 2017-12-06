@@ -19,8 +19,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 			_bestSpotForAddingDayOffFinder = bestSpotForAddingDayOffFinder;
 		}
 
-		public DateOnly? Find(IMatrixData workingItem, IList<DateOnlyPeriod> splitedWeeksFromSchedulePeriod,
-			IList<DateOnly> bannedDates)
+		public DateOnly? Find(IMatrixData workingItem, IList<DateOnlyPeriod> splitedWeeksFromSchedulePeriod, IList<DateOnly> bannedDates)
+		{
+			var numberOfWeeks = splitedWeeksFromSchedulePeriod.Count;
+			for (var i = 0; i < numberOfWeeks; i++)
+			{
+				var leastDaysOffWeek = weekLeastDaysOff(workingItem, splitedWeeksFromSchedulePeriod);
+				var scheduleDayCollection = getScheduleDayDataBasedOnPeriod(workingItem.ScheduleDayDataCollection, leastDaysOffWeek, bannedDates);
+				var bestSpot = _bestSpotForAddingDayOffFinder.Find(scheduleDayCollection);
+				if (bestSpot != null) return bestSpot;
+				splitedWeeksFromSchedulePeriod.Remove(leastDaysOffWeek);
+			}
+			
+			return null;
+		}
+
+		private DateOnlyPeriod weekLeastDaysOff(IMatrixData workingItem, IEnumerable<DateOnlyPeriod> splitedWeeksFromSchedulePeriod)
 		{
 			var leastDaysOff = int.MaxValue;
 			var leastDaysOffWeek = new DateOnlyPeriod();
@@ -41,11 +55,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 					leastDaysOff = daysOff;
 				}
 			}
-			var scheduleDayCollection = getScheduleDayDataBasedOnPeriod(workingItem.ScheduleDayDataCollection, leastDaysOffWeek,
-				bannedDates);
-
-			return _bestSpotForAddingDayOffFinder.Find(scheduleDayCollection);
+			return leastDaysOffWeek;
 		}
+
 
 		private IList<IScheduleDayData> getScheduleDayDataBasedOnPeriod(IEnumerable<IScheduleDayData> scheduleDayDataCollection, DateOnlyPeriod weekPeriod, IList<DateOnly> alreadyAnalyzedDates)
 		{
