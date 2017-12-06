@@ -111,9 +111,8 @@ namespace Teleopti.Messaging.Client.Http
 		{
 			try
 			{
-				var c = _client.GetOrThrow("MessageBroker/PopMessages/?route=" + subscription.Route() + "&id=" + subscription.MailboxId);
-				if (content != null)
-					content(c);
+				var c = _client.GetOrThrow("MessageBroker/PopMessages/?route=" + Uri.EscapeDataString(subscription.Route()) + "&id=" + subscription.MailboxId);
+				content?.Invoke(c);
 				return true;
 			}
 			catch (HttpRequestException)
@@ -142,10 +141,7 @@ namespace Teleopti.Messaging.Client.Http
 
 		public void Dispose()
 		{
-			if (_timer != null)
-				_timer.Dispose();
+			_timer?.Dispose();
 		}
-
-
 	}
 }

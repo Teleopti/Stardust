@@ -47,9 +47,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				}				
 			}
 			var aggregatedScheduleChangeMessageSender = _transactionHooks.Current().OfType<ScheduleChangedMessageSender>().SingleOrDefault();
-			if (aggregatedScheduleChangeMessageSender != null)
-				aggregatedScheduleChangeMessageSender.Send(completeResult.InitiatorIdentifier, completeResult.ModifiedRoots);
-            
+			aggregatedScheduleChangeMessageSender?.Send(completeResult.InitiatorIdentifier, completeResult.ModifiedRoots);
+
 			return completeResult.PersistConflicts;
 		}
 	}

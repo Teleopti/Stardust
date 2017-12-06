@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			}
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false, false) { LoadDaysAfterLeft = true };
 			var day = availabilityDay.RestrictionDate;
-			var period = new DateOnlyPeriod(day, day);
+			var period = day.ToDateOnlyPeriod();
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(availabilityDay.Person,
 				scheduleDictionaryLoadOptions,
 				period, scenario);

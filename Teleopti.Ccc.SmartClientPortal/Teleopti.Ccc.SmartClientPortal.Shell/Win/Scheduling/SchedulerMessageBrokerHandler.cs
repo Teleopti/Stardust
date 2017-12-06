@@ -215,16 +215,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (eventMessage.ModuleId != InitiatorId)
 				{
 					var deletedRequest = deleteOnEventRequest(eventMessage);
-					var onRequestDeletedFromBroker = RequestDeletedFromBroker;
-					if (onRequestDeletedFromBroker != null)
-						onRequestDeletedFromBroker(this, new CustomEventArgs<IPersonRequest>(deletedRequest));
+					RequestDeletedFromBroker?.Invoke(this, new CustomEventArgs<IPersonRequest>(deletedRequest));
 
 					if (eventMessage.DomainUpdateType != DomainUpdateType.Delete)
 					{
 						IPersonRequest insertedRequest = updateInsertOnEventRequests(eventMessage);
-						var onRequestInsertedFromBroker = RequestInsertedFromBroker;
-						if (onRequestInsertedFromBroker != null)
-							onRequestInsertedFromBroker(this, new CustomEventArgs<IPersonRequest>(insertedRequest));
+						RequestInsertedFromBroker?.Invoke(this, new CustomEventArgs<IPersonRequest>(insertedRequest));
 					}
 				}
 			}
