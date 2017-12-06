@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 					{
 						SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 						{
-							UseTeam = teamBlockType == TeamBlockType.Team
+							UseTeam = teamBlockType == TeamBlockType.Team || teamBlockType == TeamBlockType.TeamAndBlock
 						});
 					}
 					var schedCmd = new SchedulingCommand {Period = period, AgentsToSchedule = agents};
