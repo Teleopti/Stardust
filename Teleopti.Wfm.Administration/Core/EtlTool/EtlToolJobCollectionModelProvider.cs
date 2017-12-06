@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
@@ -31,12 +32,14 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		}
 		public IList<JobCollectionModel> Create(string tenantName)
 		{
-			/*_configurationHandler.SetConnectionString("Ten");
+			var dataMartConnectionString = extractConnectionString(tenantName);
+
+			_configurationHandler.SetConnectionString(dataMartConnectionString);
 			IJobParameters jobParameters = new JobParameters(null, 1,
 				_configurationHandler.BaseConfiguration.TimeZoneCode,
 				_configurationHandler.BaseConfiguration.IntervalLength.Value,
-				_pmInfoProvider.Cube(), _pmInfoProvider.PmInstallation(), 
-				CultureInfo.GetCultureInfo(_configurationHandler.BaseConfiguration.CultureId.Value), 
+				_pmInfoProvider.Cube(), _pmInfoProvider.PmInstallation(),
+				CultureInfo.GetCultureInfo(_configurationHandler.BaseConfiguration.CultureId.Value),
 				new IocContainerHolder(_componentContext),
 				_configurationHandler.BaseConfiguration.RunIndexMaintenance);
 			var jobCollection = new JobCollection(jobParameters);
@@ -44,13 +47,23 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			return jobCollection
 				.Select(m => new JobCollectionModel
 				{
-					JobName = m.Name ,
+					JobName = m.Name,
 					JobStepNames = m.StepList
 						.Select(y => y.Name)
 						.ToList()
 				})
-				.ToList();*/
-			return null;
+				.ToList();
+		}
+
+		private string extractConnectionString(string tenantName)
+		{
+			var currentTenant = _loadAllTenants.Tenants()
+				.SingleOrDefault(x => x.Name == tenantName);
+
+			if (currentTenant == null)
+				throw new ArgumentException($"A tenant with name '{tenantName}' could not be found.", nameof(tenantName));
+
+			return currentTenant.DataSourceConfiguration.AnalyticsConnectionString;
 		}
 	}
 }

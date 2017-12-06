@@ -58,7 +58,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AdministrationTestAttribute.cs" />
-    <Compile Include="Jobs\EtlToolJobCollectionModelProviderTest.cs" />
+    <Compile Include="EtlTool\EtlToolJobCollectionModelProviderTest.cs" />
+    <Compile Include="EtlTool\FakeBaseConfigurationRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -72,6 +73,10 @@
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj">
+      <Project>{34C3B171-160E-4320-AA49-B8162BAD0E36}</Project>
+      <Name>Teleopti.Analytics.Etl.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
