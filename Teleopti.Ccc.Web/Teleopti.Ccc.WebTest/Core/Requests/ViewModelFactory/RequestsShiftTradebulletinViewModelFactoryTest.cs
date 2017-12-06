@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -35,15 +37,36 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
 			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
-			system.UseTestDouble<FakePossibleShiftTradePersonsProvider>().For<IPossibleShiftTradePersonsProvider>();
+			system.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
+		}
+	}
+
+	public class FakePeopleForShiftTradeFinder : IPeopleForShiftTradeFinder
+	{
+		private IList<IPersonAuthorization> storage = new List<IPersonAuthorization>();
+
+		public void Has(IPersonAuthorization authorization)
+		{
+			storage.Add(authorization);
+		}
+
+		public IList<IPersonAuthorization> GetPeople(IPerson personFrom, DateOnly shiftTradeDate, IList<Guid> teamIdList, string name,
+			NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
+		{
+			return storage;
+		}
+
+		public IList<IPersonAuthorization> GetPeople(IPerson personFrom, DateOnly shiftTradeDate, IList<Guid> peopleIdList)
+		{
+			return storage;
 		}
 	}
 
 	[TestFixture, MyTimeWebRequestsShiftTradeBulletinBoardViewModelFactoryTest]
 	public class RequestsShiftTradebulletinViewModelFactoryTest
 	{
+		public FakePeopleForShiftTradeFinder PeopleForShiftTradeFinder;
 		public FakePersonRepository PersonRepository;
-		public FakePossibleShiftTradePersonsProvider PossibleShiftTradePersonsProvider;
 		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public ITeamRepository TeamRepository;
 		public IScheduleStorage ScheduleStorage;
@@ -107,7 +130,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personRequest = new PersonRequest(person) {Request = offer};
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
-			PossibleShiftTradePersonsProvider.AddPerson(person); 
+			PersonRepository.Has(person); 
+			PeopleForShiftTradeFinder.Has(new PersonAuthorization{PersonId = person.Id.GetValueOrDefault()});
 			return offer.ShiftExchangeOfferId;
 		}
 
