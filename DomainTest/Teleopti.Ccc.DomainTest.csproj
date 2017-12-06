@@ -293,6 +293,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingSameThreadDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerExternalStaffTest.cs" />
+    <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerGeneralTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerIncreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\SUT.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
@@ -513,7 +514,6 @@
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingResultTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\MinMaxStaffingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\PerformanceTestHackTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\ScheduleCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingIslandTests.cs" />
@@ -538,7 +538,6 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerTest.cs" />
     <Compile Include="Budgeting\AbsenceRequestBudgetGroupValidationHelperTest.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNewByFakeTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodDateFixerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\SoftDeleteTest.cs" />
