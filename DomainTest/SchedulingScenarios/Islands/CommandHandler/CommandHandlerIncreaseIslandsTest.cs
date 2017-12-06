@@ -12,15 +12,11 @@ using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 {
-	[TestFixture(SUT.IntradayOptimization)]
-	[TestFixture(SUT.Scheduling)]
-	[DomainTest]
-	public class CommandHandlerIncreaseIslandsTest
+	public class CommandHandlerIncreaseIslandsTest : ResourcePlannerCommandHandlerTest
 	{
 		private readonly SUT _sut;
 		public FakeEventPublisher EventPublisher;

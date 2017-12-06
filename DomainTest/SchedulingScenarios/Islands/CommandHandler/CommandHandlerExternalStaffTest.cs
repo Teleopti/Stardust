@@ -16,10 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 {
-	[DomainTest]
-	[TestFixture(SUT.IntradayOptimization)]
-	[TestFixture(SUT.Scheduling)]
-	public class CommandHandlerExternalStaffTest
+	public class CommandHandlerExternalStaffTest : ResourcePlannerCommandHandlerTest
 	{
 		private readonly SUT _sut;
 		public IntradayOptimizationCommandHandler IntradayOptimizationCommandHandler;
