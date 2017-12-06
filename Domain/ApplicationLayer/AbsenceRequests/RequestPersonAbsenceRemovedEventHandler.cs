@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -12,14 +13,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
-		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly INow _now;
 
 
-		public RequestPersonAbsenceRemovedEventHandler(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IWorkflowControlSetRepository workflowControlSetRepository, ICommandDispatcher commandDispatcher)
+		public RequestPersonAbsenceRemovedEventHandler(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IWorkflowControlSetRepository workflowControlSetRepository, INow now)
 		{
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_workflowControlSetRepository = workflowControlSetRepository;
-			_commandDispatcher = commandDispatcher;
+			_now = now;
 		}
 
 		[AsSystem, UnitOfWork]
@@ -33,15 +34,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private void queueAbsenceRequest(RequestPersonAbsenceRemovedEvent @event)
 		{
-			var queuedAbsenceRequest = new QueuedAbsenceRequest()
-			{
-				PersonRequest = Guid.Empty,
-				Created = DateTime.UtcNow,
-				StartDateTime = @event.StartDateTime,
-				EndDateTime = @event.EndDateTime
-			};
-			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
-		}
 
+			var start = @event.StartDateTime;
+			var end = @event.EndDateTime;
+			while (start < end)
+			{
+				if (start >= _now.UtcDateTime())
+				{
+					var queuedAbsenceRequest = new QueuedAbsenceRequest()
+					{
+						PersonRequest = Guid.Empty,
+						Created = DateTime.UtcNow,
+						StartDateTime = start,
+						EndDateTime = start.AddDays(1)
+					};
+					_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+				}
+				
+				start = start.AddDays(1);
+			}
+		}
 	}
 }
