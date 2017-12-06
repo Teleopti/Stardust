@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
@@ -22,6 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage)]
 	public class GamificationController : ApiController
 	{
+		private readonly string CSV_CONTENT_TYPE = "text/csv"; //maybe text/x-csv or application/csv or application/x-csv
 		private readonly IGamificationSettingPersister _gamificationSettingPersister;
 		private readonly IGamificationSettingProvider _gamificationSettingProvider;
 		private readonly ISiteViewModelFactory _siteViewModelFactory;
@@ -51,6 +56,26 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			}
 			_importExternalPerformanceInfoService.CreateJob(fileData);
 			return Ok();
+		}
+
+		[HttpGet, Route("api/Gamification/job/{id}/artifact/{category}"), UnitOfWork]
+		public virtual HttpResponseMessage DownloadArtifact(Guid id, JobResultArtifactCategory category)
+		{
+			var response = Request.CreateResponse();
+			var artifact = _importExternalPerformanceInfoService.GetJobResultArtifact(id, category);
+			if (artifact == null)
+			{
+				response.StatusCode = HttpStatusCode.NotFound;
+				return response;
+			}
+
+			response.Content = new ByteArrayContent(artifact.Content);
+			response.Content.Headers.ContentType = new MediaTypeHeaderValue(CSV_CONTENT_TYPE);
+			response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+			{
+				FileName = artifact.Name
+			};
+			return response;
 		}
 
 		[HttpPost, Route("api/Gamification/Create"), UnitOfWork]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
 using Teleopti.Ccc.Domain.Common;
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 	public interface IImportExternalPerformanceInfoService
 	{
 		IJobResult CreateJob(ImportFileData importFileData);
+		JobResultArtifact GetJobResultArtifact(Guid id, JobResultArtifactCategory category);
 	}
 	public class ImportExternalPerformanceInfoService : IImportExternalPerformanceInfoService
 	{
@@ -36,6 +38,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				JobResultId = jobResult.Id.GetValueOrDefault()
 			});
 			return jobResult;
+		}
+
+		public JobResultArtifact GetJobResultArtifact(Guid id, JobResultArtifactCategory category)
+		{
+			var jobResult = _jobResultRepository.Get(id);
+			return jobResult?.Artifacts.FirstOrDefault(ar => ar.Category == category);
 		}
 	}
 }
