@@ -7,6 +7,11 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public interface IExternalPerformanceData : IAggregateRoot
 	{
+		Guid ExternalPerformance { get; set; }
+		DateOnly DateFrom { get; set; }
+		Guid Person { get; set; }
+		string OriginalPersonId { get; set; }
+		int Score { get; set; }
 	}
 
 	public class ExternalPerformanceData : SimpleAggregateRoot, IExternalPerformanceData

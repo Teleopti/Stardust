@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -20,19 +21,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private readonly IStardustJobFeedback _feedback;
 		private readonly IImportJobArtifactValidator _validator;
 		private readonly IExternalPerformanceInfoFileProcessor _externalPerformanceInfoFileProcessor;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
+		private readonly IExternalPerformanceDataRepository _externalPerformanceDataRepository;
+
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportExternalPerformanceInfoHandler));
 
 		public ImportExternalPerformanceInfoHandler(IJobResultRepository jobResultRepository, IStardustJobFeedback feedback, 
-			IImportJobArtifactValidator validator, IExternalPerformanceInfoFileProcessor externalPerformanceInfoFileProcessor, ILoggedOnUser loggedOnUser, IExternalPerformanceRepository externalPerformanceRepository)
+			IImportJobArtifactValidator validator, IExternalPerformanceInfoFileProcessor externalPerformanceInfoFileProcessor, 
+			IExternalPerformanceRepository externalPerformanceRepository, IExternalPerformanceDataRepository externalPerformanceDataRepository)
 		{
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
 			_validator = validator;
 			_externalPerformanceInfoFileProcessor = externalPerformanceInfoFileProcessor;
-			_loggedOnUser = loggedOnUser;
 			_externalPerformanceRepository = externalPerformanceRepository;
+			_externalPerformanceDataRepository = externalPerformanceDataRepository;
 		}
 
 		[AsSystem]
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			catch (Exception e)
 			{
 				Logger.Error(e);
-				saveErrorJobResultDetail(@event, e.Message, e, null);
+				saveErrorJobResultDetail(@event, DetailLevel.Error, e.Message, e);
 				throw;
 			}
 		}
@@ -77,11 +80,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			{
 				var msg = string.Join(", ", processResult.ErrorMessages);
 				_feedback.SendProgress($"Extract file has error:{msg}.");
-				saveErrorJobResultDetail(@event, msg, null, stringToArray(processResult.InvalidRecords));
+				saveErrorJobResultDetail(@event, DetailLevel.Error, msg, null);
 				return;
 			}
 
+			saveJobArtifactsAndUpdateRecords(@event, processResult);
+		}
+
+		private void saveJobArtifactsAndUpdateRecords(ImportExternalPerformanceInfoEvent @event, ExternalPerformanceInfoProcessResult processResult)
+		{
+			var jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
+
+			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Start to save job artifact!");
+			if (processResult.InvalidRecords.Any())
+			{
+				jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "InvalidRecords.csv", stringToArray(processResult.InvalidRecords)));
+				_jobResultRepository.Add(jobResult);
+			}
+			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Save job artifact success!");
+
 			saveSettings(processResult.ExternalPerformances);
+			saveRecords(processResult.ValidRecords);
+
+			saveErrorJobResultDetail(@event, DetailLevel.Info, "", null);
 		}
 
 		private void saveSettings(IList<IExternalPerformance> externalPerformances )
@@ -92,25 +113,43 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 		}
 
-		private void saveRecords(IList<PerformanceInfoExtractionResult> validRecourds)
+		private void saveRecords(IList<PerformanceInfoExtractionResult> validRecords)
 		{
-			
+			var externalPerformanceSettings = _externalPerformanceRepository.FindAllExternalPerformances();
+			var allExistData = _externalPerformanceDataRepository.LoadAll();
+
+			foreach (var validRecord in validRecords)
+			{
+				var score = validRecord.GameNumberScore;
+				if (validRecord.GameType == "percent") score = Convert.ToInt32(validRecord.GamePercentScore.Value * 10000);
+
+				var existData = allExistData.FirstOrDefault(x => x.Person == validRecord.PersonId && x.DateFrom == validRecord.DateFrom);
+				if (existData == null)
+				{
+					_externalPerformanceDataRepository.Add(new ExternalPerformanceData()
+					{
+						ExternalPerformance = externalPerformanceSettings.FirstOrDefault(x => x.ExternalId == validRecord.GameId).Id.Value,
+						DateFrom = validRecord.DateFrom,
+						OriginalPersonId = validRecord.AgentId,
+						Person = validRecord.PersonId,
+						Score = score
+					});
+				}
+				else
+				{
+					existData.Score = score;
+				}
+			}
 		}
 
-		private void saveErrorJobResultDetail(ImportExternalPerformanceInfoEvent @event, string message, Exception exception, byte[] data)
+		private void saveErrorJobResultDetail(ImportExternalPerformanceInfoEvent @event, DetailLevel level, string message, Exception exception)
 		{
 			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);
-			var detail = new JobResultDetail(DetailLevel.Error, message, DateTime.UtcNow, exception);
+			var detail = new JobResultDetail(level, message, DateTime.UtcNow, exception);
 			result.AddDetail(detail);
 			result.FinishedOk = true;
-			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Done with adding job process detail, detail level:{DetailLevel.Error}, message:{message}, exception: {exception}.");
 
-			if (data == null) return;
-			var dateOnlyPeriod = DateOnly.Today.ToDateOnlyPeriod();
-			var jobResult = new JobResult(JobCategory.WebImportExternalGamification, dateOnlyPeriod, _loggedOnUser.CurrentUser(),
-				DateTime.UtcNow);
-			jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "InvalidRecords.csv", data));
-			_jobResultRepository.Add(jobResult);
+			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Done with adding job process detail, detail level:{level}, message:{message}, exception: {exception}.");
 		}
 
 		private byte[] stringToArray(IList<string> lines)

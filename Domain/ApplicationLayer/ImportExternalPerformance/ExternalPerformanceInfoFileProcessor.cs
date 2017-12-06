@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 	public class PerformanceInfoExtractionResult
 	{
-		public DateTime DateFrom { get; set; }
+		public DateOnly DateFrom { get; set; }
 		public string GameType { get; set; }
 		public string GameName { get; set; }
 		public int GameId { get; set; }
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.ImportBpoWrongDateFormat}");
 					continue;
 				}
-				extractionResult.DateFrom = dateTime;
+				extractionResult.DateFrom = new DateOnly(dateTime);
 
 				var measureName = columns[4];
 				if (!verifyFieldLength(measureName, MAX_GAME_NAME_LENGTH))
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				{
 					var externalLogonInfo = externalLogonInfos.Where(
 						x => x.ExternalLogonName.Any(o => string.Equals(extractionResult.AgentId, o, StringComparison.OrdinalIgnoreCase)
-														  && x.PersonPeriod.Contains(new DateOnly(extractionResult.DateFrom))));
+														  && x.PersonPeriod.Contains(extractionResult.DateFrom)));
 					if (!externalLogonInfo.Any())
 					{
 						processResult.HasError = true;

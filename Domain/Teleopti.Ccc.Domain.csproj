@@ -363,6 +363,7 @@
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />
     <Compile Include="Repositories\IAnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\IASMScheduleChangeTimeRepository.cs" />
+    <Compile Include="Repositories\IExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\IExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\PersonBudgetGroupName.cs" />
     <Compile Include="Reports\IScheduleAnalysisProvider.cs" />
