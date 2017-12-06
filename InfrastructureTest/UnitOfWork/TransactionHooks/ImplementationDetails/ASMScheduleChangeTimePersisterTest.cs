@@ -51,6 +51,137 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
 		}
 
+		[Test]
+		public void ShouldAddScheduleChangeTimeForPersonAssignmentIfNextDayInNotifyPeriod()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				ScenarioFactory.CreateScenarioWithId("default", true),
+				new DateTimePeriod(new DateTime(2017, 11, 25, 6, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 11, 25, 15, 0, 0, DateTimeKind.Utc)));
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(pa, DomainUpdateType.Update)
+			};
+			var now = new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
+		}
+
+		[Test]
+		public void ShouldAddScheduleChangeTimeIfTheDayAfterNextDayInNotifyPeriod()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				ScenarioFactory.CreateScenarioWithId("default", true),
+				new DateTimePeriod(new DateTime(2017, 12, 8, 13, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 12, 8, 15, 0, 0, DateTimeKind.Utc)));
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(pa, DomainUpdateType.Update)
+			};
+			var now = new DateTime(2017, 12, 6, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
+		}
+
+
+		[Test]
+		public void ShouldNotAddScheduleChangeTimeIfTheDayAfterNextDayNotInNotifyPeriod()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				ScenarioFactory.CreateScenarioWithId("default", true),
+				new DateTimePeriod(new DateTime(2017, 12, 8, 8, 10, 0, DateTimeKind.Utc),
+				new DateTime(2017, 12, 8, 20, 0, 0, DateTimeKind.Utc)));
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(pa, DomainUpdateType.Update)
+			};
+			var now = new DateTime(2017, 12, 6, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldNotAddScheduleChangeTimeIfThePreviousDayNotInNotifyPeriod()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				ScenarioFactory.CreateScenarioWithId("default", true),
+				new DateTimePeriod(new DateTime(2017, 12, 5, 23, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 12, 5, 23, 30, 0, DateTimeKind.Utc)));
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(pa, DomainUpdateType.Update)
+			};
+			var now = new DateTime(2017, 12, 6, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldAddScheduleChangeTimeForPersonAssignmentThePreviousDayInNotifyPeriod()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				ScenarioFactory.CreateScenarioWithId("default", true),
+				new DateTimePeriod(new DateTime(2017, 12, 5, 0, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 12, 5, 1, 0, 0, DateTimeKind.Utc)));
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(pa, DomainUpdateType.Update)
+			};
+			var now = new DateTime(2017, 12, 6, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
+		}
+
+		[Test]
+		public void ShouldAddScheduleChangeTimeForPersonAssignmentInUserTimeZone()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				ScenarioFactory.CreateScenarioWithId("default", true),
+				new DateTimePeriod(new DateTime(2017, 12, 5, 23, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 12, 5, 23, 30, 0, DateTimeKind.Utc)));
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(pa, DomainUpdateType.Update)
+			};
+			var now = new DateTime(2017, 12, 6, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
+		}
+
 
 		[Test]
 		public void ShouldAddScheduleChangeTimeForPersonAbsence()
@@ -112,28 +243,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
 		}
 
-		[Test]
-		public void ShouldAddScheduleChangeTimeForPersonAssignmentIfJustInASMNotifyPeriod()
-		{
-			var person = PersonFactory.CreatePerson().WithId();
-			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
-
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-				ScenarioFactory.CreateScenarioWithId("default", true),
-				new DateTimePeriod(new DateTime(2017, 11, 25, 10, 0, 0, DateTimeKind.Utc),
-				new DateTime(2017, 11, 25, 16, 0, 0, DateTimeKind.Utc)));
-
-			var roots = new IRootChangeInfo[]
-			{
-				new RootChangeInfo(pa, DomainUpdateType.Update)
-			};
-			var now = new DateTime(2017, 11, 26, 20, 0, 0, DateTimeKind.Utc);
-			Now.Is(now);
-			Target.AfterCompletion(roots);
-			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
-		}
-
+		
 		[Test]
 		public void ShouldUpdateScheduleChangeTimeForPersonAssignment()
 		{

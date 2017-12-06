@@ -92,11 +92,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var nowInUtc = _now.UtcDateTime();
 			var personTimezone = person.PermissionInformation.DefaultTimeZone();
 			var nowInPersonTimezone = TimeZoneHelper.ConvertFromUtc(nowInUtc, personTimezone);
-			var nowStartDate = nowInPersonTimezone.Date.AddDays(-1);
-			var nowEndDate = nowInPersonTimezone.Date.AddDays(1);
-			var userStartDate = TimeZoneHelper.ConvertFromUtc(startDateTime, personTimezone).Date;
-			var userEndDate = TimeZoneHelper.ConvertFromUtc(endDateTime, personTimezone).Date;
-			return nowStartDate <= userEndDate && nowEndDate >= userStartDate;
+			var nowStartDate = nowInPersonTimezone.AddHours(-1);
+			var nowEndDate = nowInPersonTimezone.AddDays(1);
+			var userStartDate = TimeZoneHelper.ConvertFromUtc(startDateTime, personTimezone).Date.AddDays(-1);
+			var userEndDate = TimeZoneHelper.ConvertFromUtc(endDateTime, personTimezone).Date.AddDays(1);
+			return nowStartDate < userEndDate && nowEndDate > userStartDate;
 		}
 	}
 }
