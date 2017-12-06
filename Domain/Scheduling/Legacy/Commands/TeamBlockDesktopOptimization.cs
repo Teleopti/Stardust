@@ -101,9 +101,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
 					optimizationPreferences.General.OptimizationStepDaysOff = false;
-					//should probably use _dayOffOptimizationDesktopTeamBlock here later
-					optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
-						schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
+					_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
+
+					_teamBlockDayOffOptimizer.OptimizeDaysOff(
+						allMatrixes,
+						selectedPeriod,
+						selectedPersons,
+						optimizationPreferences,
+						schedulingOptions,
+						resourceCalculateDelayer,
+						dayOffOptimizationPreferenceProvider,
+						new FixedBlockPreferenceProvider(optimizationPreferences.Extra), 
+						teamInfoFactory,
+						_backgroundWorker);
 					optimizationPreferences.General.OptimizationStepDaysOff = optimizeDayOffs;
 				}
 			}
@@ -200,30 +210,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService,
 				resourceCalculateDelayer, selectedPeriod, allMatrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
-		}
-
-		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod,
-			IEnumerable<IPerson> selectedPersons,
-			IOptimizationPreferences optimizationPreferences,
-			IEnumerable<IScheduleMatrixPro> allMatrixes,
-			SchedulingOptions schedulingOptions,
-			ITeamInfoFactory teamInfoFactory,
-			IResourceCalculateDelayer resourceCalculateDelayer,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
-		{
-			_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
-
-			_teamBlockDayOffOptimizer.OptimizeDaysOff(
-				allMatrixes,
-				selectedPeriod,
-				selectedPersons,
-				optimizationPreferences,
-				schedulingOptions,
-				resourceCalculateDelayer,
-				dayOffOptimizationPreferenceProvider,
-				new FixedBlockPreferenceProvider(optimizationPreferences.Extra), 
-				teamInfoFactory,
-				_backgroundWorker);
 		}
 
 		private void resourceOptimizerPersonOptimized(object sender, ResourceOptimizerProgressEventArgs e)
@@ -330,9 +316,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
 					optimizationPreferences.General.OptimizationStepDaysOff = false;
-					//should probably use _dayOffOptimizationDesktopTeamBlock here later
-					optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
-						schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
+					_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
+
+					_teamBlockDayOffOptimizer.OptimizeDaysOff(
+						allMatrixes,
+						selectedPeriod,
+						selectedPersons,
+						optimizationPreferences,
+						schedulingOptions,
+						resourceCalculateDelayer,
+						dayOffOptimizationPreferenceProvider,
+						new FixedBlockPreferenceProvider(optimizationPreferences.Extra), 
+						teamInfoFactory,
+						_backgroundWorker);
 					optimizationPreferences.General.OptimizationStepDaysOff = optimizeDayOffs;
 				}
 
@@ -426,30 +422,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService,
 				resourceCalculateDelayer, selectedPeriod, allMatrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
-		}
-
-		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod,
-			IEnumerable<IPerson> selectedPersons,
-			IOptimizationPreferences optimizationPreferences,
-			IEnumerable<IScheduleMatrixPro> allMatrixes,
-			SchedulingOptions schedulingOptions,
-			ITeamInfoFactory teamInfoFactory,
-			IResourceCalculateDelayer resourceCalculateDelayer,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
-		{
-			_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
-
-			_teamBlockDayOffOptimizer.OptimizeDaysOff(
-				allMatrixes,
-				selectedPeriod,
-				selectedPersons,
-				optimizationPreferences,
-				schedulingOptions,
-				resourceCalculateDelayer,
-				dayOffOptimizationPreferenceProvider,
-				new FixedBlockPreferenceProvider(optimizationPreferences.Extra), 
-				teamInfoFactory,
-				_backgroundWorker);
 		}
 
 		private void resourceOptimizerPersonOptimized(object sender, ResourceOptimizerProgressEventArgs e)
