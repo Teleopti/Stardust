@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		private readonly ExecuteSql _usingMaster;
 		private readonly ExecuteSql _usingDatabase;
 
-		public DatabaseHelper(string connectionString, DatabaseType databaseType, IUpgradeLog log)
+		public DatabaseHelper(string connectionString, DatabaseType databaseType, IUpgradeLog log, bool forceMasterInAzure = false)
 		{
 			ConnectionString = connectionString;
 			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			IsAzure = new SqlConnectionStringBuilder(connectionString).DataSource.Contains(".database.windows.net");
 
 			if (IsAzure)  //in Azure
-				_usingMaster = new ExecuteSql(() => openConnection(), Logger);
+				_usingMaster = new ExecuteSql(() => openConnection(forceMasterInAzure), Logger);
 			else
 				_usingMaster = new ExecuteSql(() => openConnection(true), Logger);
 
@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		}
 
-		public DatabaseHelper(string connectionString, DatabaseType databaseType)
-			: this(connectionString, databaseType, new NullLog())
+		public DatabaseHelper(string connectionString, DatabaseType databaseType, bool forceMasterInAzure = false)
+			: this(connectionString, databaseType, new NullLog(), forceMasterInAzure)
 		{
 		}
 
