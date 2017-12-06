@@ -10,6 +10,18 @@
 
 	function Controller($stateParams, planningGroupService) {
 		var vm = this;
+
+		vm.organizationFilters = vm.planningGroup.Filters.filter(function(filter){
+			return filter.FilterType == 'site' || filter.FilterType == 'team';
+		});
+
+		vm.skillFilters = vm.planningGroup.Filters.filter(function(filter){
+			return filter.FilterType == 'skill';
+		});
+
+		vm.contractFilters = vm.planningGroup.Filters.filter(function(filter){
+			return filter.FilterType == 'contract';
+		});
 	}
 	
 	function planninggroupDetailDirective() {

@@ -85,7 +85,6 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 
 .dayNode{
 	display: inline-flex;
-
 }
 
 .understaffed{
@@ -236,34 +235,30 @@ table.overview {
 }
 /*refactor me: heat map*/
 
-.wfm-chip-none {
-	pointer-events: none;
-}
-
 .pp-scheduled {
 	background-color: $green-100  !important;
-}
-
-.pp-scheduled-failed {
-	background-color: $orange-400  !important;
-}
-
-.pp-scheduled-label {
-	color: $green-100  !important;
 }
 
 .pp-scheduled-failed-label {
 	color: $orange-400  !important;
 }
 
+.pp-label {
+	color: $gray087;
+
+	.pp-scheduled-failed {
+		background-color: $orange-400  !important;
+	}
+	
+	.pp-scheduled-label {
+		color: $green-100  !important;
+	}
+}
+
 .pp-status {
 	padding: 6px;
 	background-color: $orange-500 ;
 	border-radius: 3px;
-}
-
-.pp-datepicker {
-	margin: auto;
 }
 
 .pp-modal>.modal-box .modalbg .dialog {
@@ -284,20 +279,23 @@ table.overview {
 		margin: 10% auto;
 		width: 60%;
 	}
-}
 
-
-.pp-modal>.modal-box .modal-inner-content {
-	max-height: 80%;
-
-	h1.modal-title{
-		margin: 10px 36px 0px 36px !important;
+	.pp-create-modal {
+		padding: 0 16px;
 	}
-}
 
-.pp-startDate-picker,
-.pp-startDate-picker button {
-	pointer-events: none;
+	.pp-calendar-wrapper {
+		display: table;
+		margin: 0 auto;
+	}
+	
+	.pp-custom-input-wrapper {
+		margin: 10px 0px;
+	}
+	
+	.pp-custom-buttons-wrapper {
+		margin: 0 20px;
+	}
 }
 
 .pp-progress {
@@ -308,36 +306,45 @@ table.overview {
 	margin: 0 0 10px;
 }
 
-.pp-label {
-	color: $gray087;
-}
+.con-fluid-row {
+	.list-content {
+		padding: 0;
+		background-color: $white;
+	}
 
-.wfm-grid .list-content {
-	padding: 0;
-	position: relative;
-}
+	.list-header {
+		padding: 5px 10px;
+		background-color: rgba(0, 0, 0, 0.04);
+		height: 100px;
+		position: relative;
+	}
 
-.list-header {
-	padding: 5px 10px;
-	background-color: rgba(0, 0, 0, 0.04);
-	height: 100px;
-	position: relative;
+	.list-header-content {
+		overflow: hidden;
+	}
 }
 
 .wfm-toolbar {
 	background-color: $white;
-}
 
-.wfm-toolbar-group-container {
-	margin: 5px 0px;
-	padding: 0px 5px;
-	border-right: 1px solid $gray026;
-	display: inline-block;
-}
+	.wfm-toolbar-group-container {
+		margin: 5px 0px;
+		padding: 0px 5px;
+		border-right: 1px solid $gray-500 ;
+		display: inline-block;
+	}
 
-.plan-filter-container {
-	padding:10px 0px;
-	margin:5px;
+	.plan-filter-container {
+		padding:10px 0px;
+		margin:5px;
+	}
+
+	.pp-scheduling-setting-open{
+		border-left: 1px solid $gray-500 ;
+		margin: 5px;
+		padding: 5px 5px 5px 10px; 
+		color: $gray054;
+	}
 }
 
 .wfm-btn{
@@ -355,6 +362,12 @@ table.overview {
 .pp-tabContent {
 	display:none;
 	overflow:hidden;
+
+	.pp-overview-dashborad-header {
+		margin: 0 5px;
+		padding:5px;
+		border-bottom: 1px solid $gray026;
+	}
 }
 
 .pp-tabContent.active {
@@ -362,77 +375,81 @@ table.overview {
 	overflow:hidden;
 }
 
-.pp-overview-dashborad-header {
-	margin: 0 5px;
-	padding:5px;
-	border-bottom: 1px solid $gray026;
-}
-
-wfm-card.pp-validation-card > md-card {
-	border-left: 10px solid $red-600 ;
-}
-
-.pp-validation-wfm-list > md-content {
-	margin: -10px 0px -30px -2px;
-}
-
-.pp-validation-color { //new-red
+.pp-validation-color {
 	border-color: $red-600 !important;
 }
 
-.pp-validation-number {
-	padding: 9px;
-    background-color: $red-600;
-	border-radius: 20px;
-}
+card-panel-header {
+	.pp-validation-progress {
+		position: absolute;
+		top:0;
+		left:0;
+	}
+	
+	.pp-validation-number {
+		padding: 9px;
+		border-radius: 20px;
+	}
 
-.pp-validation-button {
-	margin: -13px;
-	padding-left: 9px;
-}
+	.error {
+		background-color: $red-600;
+	}
+	
+	.pp-validation-button {
+		margin: -13px;
+		padding-left: 9px;
+	}
 
-card-panel-header > .pp-validation-progress {
-	position: absolute;
-	top:0;
-	left:0;
-}
+	.pg-setting-info {
+		padding: 5px;
+		background-color: $blue-100 ;
+		border-radius: 15px;
+	}
+} 
 
-.pg-setting-info {
-	padding: 5px;
-    background-color: $blue-100 ;
-    border-radius: 15px;
-}
-
-.pg-setting-name {
+input.pg-setting-name {
 	margin-top: 10px;
 }
 
-.pg-setting-info-wrapper {
-	margin: 10px 0px;
-    margin-left: -10px;
-    padding: 5px 0px;
-}
+card-panel-content {
+	.pg-setting-mini-card-wrapper {
+		background: $white ;
+		width: 100%;
+		height: 100%;
+		border: 5px solid $white ;
+		border-radius: 5px;
 
-.pg-setting-mini-card-wrapper {
-	background: $white ;
-	width: 100%;
-	height: 100%;
-	border: 5px solid $white ;
-	border-radius: 5px;
-}
+		.pg-setting-mini-card-title {
+			padding: 5px;
+			margin: 5px;
+			border-bottom: 1px $gray026   solid;
+		}
+	}
 
-.pg-setting-mini-card-title {
-	padding: 5px;
-	margin: 5px;
-	border-bottom: 1px $gray026   solid;
-}
+	.pg-setting-card-content {
+		background-color: $gray012;
+	}
 
-.pg-setting-wfm-list > md-content {
-	margin: -22px 0px -30px -2px;
-}
-
-.pg-setting-card-content {
-	background-color: $gray012;
+	.fake-radio-button{ 
+		position: relative;
+		margin: 8px 0px;
+		i{
+			position: absolute;
+			top: -5px;
+			left: 0;	
+			color: $gray026 ;	
+		}
+		i.check {
+			color: $blue-300  ;
+		}
+		i:before {
+			font-size: 25px!important;
+			
+		}
+		span{
+			margin-left: 30px;
+		}	
+	}
 }
 
 .pg-setting-priority-scale {
@@ -444,6 +461,7 @@ card-panel-header > .pp-validation-progress {
 	border-image: linear-gradient(90deg, rgb(128, 0, 128), rgba(156, 39, 176, 0.05 ));
 	border-right: 70px solid transparent!important;
 }
+
 .pg-setting-priority-scale:after{
 	position: absolute;
 	content: "";
@@ -477,59 +495,7 @@ card-panel-header > .pp-validation-progress {
 	}
 }
 
-.pg-setting-chip-list {
-	text-align: left;
-	padding: 0 5px;
-}
 
-.pg-setting-valid-text {
-	position: relative;
-	height: 15px;
-	padding: 5px;
-}
-
-.pg-setting-valid-text > span {
-	position: absolute;
-	top:0;
-}
-
-.fake-radio-button{ 
-	position: relative;
-	margin: 8px 0px;
-	i{
-		position: absolute;
-		top: -5px;
-		left: 0;	
-		color: $gray026 ;	
-	}
-	i.check {
-		color: $blue-300  ;
-	}
-	i:before {
-		font-size: 25px!important;
-		
-	}
-	span{
-		margin-left: 30px;
-	}	
-}
-
-.pp-calendar-wrapper {
-	display: table;
-    margin: 0 auto;
-}
-
-.pp-custom-input-wrapper {
-	margin: 10px 0px;
-}
-
-.pp-custom-buttons-wrapper {
-	margin: 0 20px;
-}
-
-md-content.pp-create-modal {
-	padding: 0 16px;
-}
 
 
 

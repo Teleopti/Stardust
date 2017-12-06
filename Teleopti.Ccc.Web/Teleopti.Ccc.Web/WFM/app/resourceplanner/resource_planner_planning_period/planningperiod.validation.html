@@ -8,7 +8,7 @@
                         <b>{{'PreSchedulingValidationIssues' | translate}} </b>
                     </div>
                     <div class="header-flex">
-                        <span class="pp-validation-number">{{vm.valData.totalPreValNum}} {{'IssuesText' | translate}}
+                        <span class="pp-validation-number error">{{vm.valData.totalPreValNum}} {{'IssuesText' | translate}}
                             <span class="pp-validation-button">
                                 <div tabindex=0 class="context-menu card-context" ng-disabled="vm.valLoading" ng-click="vm.getValidationByPpId();$event.stopPropagation();">
                                     <i class="mdi mdi-refresh"></i>

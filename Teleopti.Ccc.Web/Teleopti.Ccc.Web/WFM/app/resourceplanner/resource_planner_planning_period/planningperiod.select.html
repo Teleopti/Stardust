@@ -35,9 +35,9 @@
 		</div>
 	</div>
 </div>
-<div class="wfm-grid" ng-cloak>
-	<div class="grid-card planingperiod-container" ng-repeat="p in vm.planningPeriods track by p.Id | filter: vm.filterTime ">
-		<div class="list-content plan-group-pp">
+<div class="con-fluid-row">
+	<div class="con-fluid-flex planingperiod-container" ng-repeat="p in vm.planningPeriods track by p.Id | filter: vm.filterTime ">
+		<div class="list-content material-depth-1 plan-group-pp">
 			<div class="list-header" ng-class="{'pp-scheduled':p.State == 'Scheduled', 'pp-scheduled-failed':p.State == 'ScheduleFailed'|| p.State == 'IntradayOptimizationFailed'}">
 				<h1>{{p.StartDate | amDateFormat:"LL"}} - {{p.EndDate | amDateFormat:"LL"}}</h1>
 				<div class="subtext">{{p.Number}} {{p.Type | translate}}</div>
@@ -130,7 +130,6 @@
 							</md-tab>
 						</md-tabs>
 					</md-content>
-
 					<aside>
 						<button ng-click="vm.modifyLastPpModal=false" class="wfm-btn wfm-btn-invis-default" translate>
 							Cancel

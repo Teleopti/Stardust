@@ -73,14 +73,16 @@
 										<div class="pg-setting-mini-card-title line-center">
 											<b>{{'SelectedFilters' | translate}}</b>
 										</div>
-										<div class="pg-setting-chip-list inline-left">
-											<div class="wfm-chip-wrap" ng-repeat="filter in setting.Filters">
-												<span class="wfm-chip">
-													<span class="chip-handle">
-														{{filter.FilterType}}
+										<div class="con-row">
+											<div class="con-flex">
+												<div class="wfm-chip-wrap" ng-repeat="filter in setting.Filters">
+													<span class="wfm-chip">
+														<span class="chip-handle">
+															{{filter.FilterType}}
+														</span>
+														<span class="chip-text">{{filter.Name}}</span>
 													</span>
-													<span class="chip-text">{{filter.Name}}</span>
-												</span>
+												</div>
 											</div>
 										</div>
 									</div>

@@ -84,7 +84,7 @@
     }
 
     function isDisable() {
-      if (vm.schedulingPerformed || vm.optimizeRunning || vm.totalAgents == 0 || vm.clearRunning || vm.publishRunning)
+      if (vm.schedulingPerformed || vm.optimizeRunning || vm.clearRunning || vm.publishRunning)
         return true;
     }
 

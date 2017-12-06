@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[Then(@"I should not see '(.*)' in the planning group list")]
 		public void ThenIShouldNotSeeInThePlanningGroupList(string planningGroupName)
 		{
-			Browser.Interactions.AssertNoContains(".wfm-grid", ".plan-group > div.list-header h1", planningGroupName);
+			Browser.Interactions.AssertNoContains(".con-fluid-row", ".plan-group > div.list-header h1", planningGroupName);
 		}
 
 		private void searchAndSelect(string searchText, string selectItemText)
