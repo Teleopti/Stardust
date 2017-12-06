@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public IExternalPerformanceInfoFileProcessor Target;
 		public IStardustJobFeedback Feedback;
 		public FakeExternalPerformanceRepository PerformanceRepository;
-		public IPersonRepository PersonRepository;
+		public FakePersonRepository PersonRepository;
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
@@ -208,6 +209,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void ShouldFindAgentsByExternalLogon()
+		{
+			var per1 = Guid.NewGuid();
+			var per2 = Guid.NewGuid();
+			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo()
+			{
+				PersonId = per1,
+				PersonPeriod = new DateOnlyPeriod(new DateOnly(2017,11,01),new DateOnly(2017,11,30)),
+				ExternalLogonName = new List<string>() { "externalLogon"}
+			});
+			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo()
+			{
+				PersonId = per2,
+				PersonPeriod = new DateOnlyPeriod(new DateOnly(2017,11,01),new DateOnly(2017,11,30)),
+				ExternalLogonName = new List<string>() { "externalLogon"}
+			});
+			var agentsWith1ExternalLogonRecord = "20171120,externalLogon,Kalle,Pettersson,Quality Score,1,numeric,87";
+			var fileData = createFileData(agentsWith1ExternalLogonRecord);
+
+			var result = Target.Process(fileData, Feedback.SendProgress);
+			result.ValidRecords.Count.Should().Be.EqualTo(2);
+			result.ValidRecords[0].PersonId.Should().Be.EqualTo(per1);
+			result.ValidRecords[1].PersonId.Should().Be.EqualTo(per2);
 		}
 
 		[Test]

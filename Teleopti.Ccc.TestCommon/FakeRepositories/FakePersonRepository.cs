@@ -18,10 +18,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>, IWriteSideRepository<IPerson>, IProxyForId<IPerson>
 	{
 		private readonly IFakeStorage _storage;
+		private IList<PersonExternalLogonInfo> _externalLogonInfos;
 
 		public FakePersonRepository(IFakeStorage storage)
 		{
 			_storage = storage ?? new FakeStorageSimple();
+			_externalLogonInfos = new List<PersonExternalLogonInfo>();
 		}
 
 		public void Has(IPerson person)
@@ -315,6 +317,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Get(id);
 		}
 
+		public void SetPersonExternalLogonInfo(PersonExternalLogonInfo info)
+		{
+			_externalLogonInfos.Add(info);
+		}
+
 		public IList<PersonIdentityInfo> GetPersonIdentityInfos()
 		{
 			var persons = _storage.LoadAll<IPerson>();
@@ -323,7 +330,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<PersonExternalLogonInfo> GetPersonExternalLogonInfos()
 		{
-			return new List<PersonExternalLogonInfo>();
+			return _externalLogonInfos;
 		}
 	}
 }
