@@ -393,10 +393,6 @@
             if (this.calendarPlacement == 'left') {
                 this.picker.addClass('datepicker-left');
             }
-
-            if (this.calendarPlacement == 'center') {
-                this.picker.addClass('datepicker-center');
-            }
         }
     };
 
