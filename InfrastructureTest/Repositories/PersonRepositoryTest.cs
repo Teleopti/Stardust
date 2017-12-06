@@ -1796,20 +1796,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetPersonIdentityInfosCase1()
 		{
-			ISite site = SiteFactory.CreateSimpleSite("d");
+			var site = SiteFactory.CreateSimpleSite("d");
 			PersistAndRemoveFromUnitOfWork(site);
-			ITeam team = TeamFactory.CreateSimpleTeam();
+
+			var team = TeamFactory.CreateSimpleTeam("TestTeam");
 			team.Site = site;
-			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
-			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			var per1 = PersonFactory.CreatePerson("roger", "kratz");
 			per1.SetEmploymentNumber("employee1");
 			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
-
 			PersistAndRemoveFromUnitOfWork(per1);
 
-			var target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			var result = target.GetPersonIdentityInfos();
 
 			result.Count.Should().Be.EqualTo(1);

@@ -20,7 +20,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
@@ -754,11 +753,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<PersonIdentityInfo> GetPersonIdentityInfos()
 		{
-			return Session.CreateSQLQuery("Select p.Id, ApplicationLogonName, EmploymentNumber " +
-										  "From Person p " +
-										  "Left Join Tenant.PersonInfo pinfo on p.Id = pinfo.Id " +
-										  "where p.IsDeleted = 0")
-				.AddScalar("Id", NHibernateUtil.Guid)
+			const string sql = "Select Distinct p.Id PersonId, pinfo.ApplicationLogonName, p.EmploymentNumber\r\n"
+									   + "  From Person p\r\n"
+									   + " Inner Join PersonPeriod pp on pp.Parent = p.Id\r\n"
+									   + " Inner Join Team on pp.Team = Team.Id\r\n"
+									   + " Inner Join Site on Team.Site = Site.Id\r\n"
+									   + "  Left Join Tenant.PersonInfo pinfo on pinfo.Id = p.Id\r\n"
+									   + " Where Site.BusinessUnit = '{0}'\r\n"
+									   + "   And p.IsDeleted = 0\r\n"
+									   + "   And Team.IsDeleted = 0\r\n"
+									   + "   And Site.IsDeleted = 0";
+
+			return Session.CreateSQLQuery(string.Format(sql, getBusinessUnitId()))
+				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("ApplicationLogonName", NHibernateUtil.String)
 				.AddScalar("EmploymentNumber", NHibernateUtil.String)
 				.SetReadOnly(true)
@@ -774,12 +781,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<PersonExternalLogonInfo> GetPersonExternalLogonInfos()
 		{
-			var dbObjects = Session.CreateSQLQuery("Select pp.Parent as PersonId, el.AcdLogOnName, pp.StartDate, pp.EndDate " +
-												   "From Person p " +
-												   "Inner Join PersonPeriod pp on p.Id = pp.Parent " +
-												   "Inner Join ExternalLogOnCollection elc on pp.Id = elc.PersonPeriod " +
-												   "Inner Join ExternalLogOn el on elc.ExternalLogOn = el.Id " +
-												   "Where p.IsDeleted = 0")
+			const string sql = "SELECT pp.Parent AS PersonId, el.AcdLogOnName, pp.StartDate, pp.EndDate\r\n"
+									   + "  FROM Person p\r\n"
+									   + " INNER JOIN PersonPeriod pp ON p.Id = pp.Parent\r\n"
+									   + " INNER JOIN Team t on t.Id = pp.Team\r\n"
+									   + " INNER JOIN Site s on t.Site = s.Id\r\n"
+									   + " INNER JOIN ExternalLogOnCollection elc ON pp.Id = elc.PersonPeriod\r\n"
+									   + " INNER JOIN ExternalLogOn el ON elc.ExternalLogOn = el.Id\r\n"
+									   + " WHERE s.BusinessUnit = '{0}'\r\n"
+									   + "   AND p.IsDeleted = 0\r\n"
+									   + "   AND t.IsDeleted = 0\r\n"
+									   + "   AND s.IsDeleted = 0";
+
+			var dbObjects = Session.CreateSQLQuery(string.Format(sql, getBusinessUnitId()))
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("AcdLogOnName", NHibernateUtil.String)
 				.AddScalar("StartDate", NHibernateUtil.DateTime)
@@ -795,12 +809,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						EndDate = new DateOnly((DateTime) x[3])
 					}).ToList();
 
-			return dbObjects.GroupBy(o => new {o.PersonId, o.StartDate, o.EndDate}).Select(kv => new PersonExternalLogonInfo
-			{
-				PersonId = kv.Key.PersonId,
-				PersonPeriod = new DateOnlyPeriod(kv.Key.StartDate, kv.Key.EndDate),
-				ExternalLogonName = kv.Select(x => x.ExternalLogonName).ToList()
-			}).ToList();
+			return dbObjects.GroupBy(o => new {o.PersonId, o.StartDate, o.EndDate})
+				.Select(kv => new PersonExternalLogonInfo
+				{
+					PersonId = kv.Key.PersonId,
+					PersonPeriod = new DateOnlyPeriod(kv.Key.StartDate, kv.Key.EndDate),
+					ExternalLogonName = kv.Select(x => x.ExternalLogonName).ToList()
+				}).ToList();
+		}
+
+		private Guid getBusinessUnitId()
+		{
+			return ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 		}
 	}
 }
