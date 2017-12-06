@@ -45,73 +45,73 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
 	        _optionalColumnId = optionalColumnId;
         }
 
-        public void Execute()
-        {
-            var selectedPeriod = _personSelectorView.SelectedPeriod;
-            IList<IPersonSelectorBuiltIn> toNodes;
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
-            {
-	            toNodes = _personSelectorReadOnlyRepository.GetBuiltIn(selectedPeriod, _loadType, _optionalColumnId);    
-            }
-            
-            // rättigheter
-            var auth = PrincipalAuthorization.Current();
-            var toRemove = new List<IPersonSelectorBuiltIn>();
+		public void Execute()
+		{
+			var selectedPeriod = _personSelectorView.SelectedPeriod;
+			IList<IPersonSelectorBuiltIn> toNodes;
+			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				toNodes = _personSelectorReadOnlyRepository.GetBuiltIn(selectedPeriod, _loadType, _optionalColumnId);
+			}
+
+			// rättigheter
+			var auth = PrincipalAuthorization.Current();
+			var toRemove = new List<IPersonSelectorBuiltIn>();
 			if (_personSelectorView.VisiblePersonIds != null)
 			{
-				foreach (var toNode in toNodes)
-				{
-					if (!_personSelectorView.VisiblePersonIds.Contains(toNode.PersonId))
-						toRemove.Add(toNode);
-
-				}
+				toRemove.AddRange(toNodes.Where(toNode => !_personSelectorView.VisiblePersonIds.Contains(toNode.PersonId)));
 			}
 			foreach (var personSelectorOrganization in toRemove)
 			{
 				toNodes.Remove(personSelectorOrganization);
 			}
-            foreach (var toNode in toNodes)
-            {
-                if (toNode.PersonId != Guid.Empty)
-                {
-                    if (!auth.IsPermitted(_applicationFunction.FunctionPath, selectedPeriod.StartDate, toNode))
-                        toRemove.Add(toNode);
-                }
-            }
-            foreach (var personSelector in toRemove)
-            {
-                toNodes.Remove(personSelector);
-            }
-            //skapa treeviewnoder av det vi fått kvar
-            var nodes = new List<TreeNodeAdv>();
-            var root = new TreeNodeAdv(_rootNodeName) { LeftImageIndices = new[] { 1 }, Expanded = true, Tag =new List<Guid>() };
-            nodes.Add(root);
+			foreach (var toNode in toNodes)
+			{
+				if (toNode.PersonId == Guid.Empty) continue;
 
-            var currNode = new TreeNodeAdv("") { LeftImageIndices = new[] { 2 }, Tag = new List<Guid>() };
-            
-            foreach (var personSelectorBuiltin in toNodes)
-            {
-                //we could on these have a list of all persons guids underneath on the tag
-                if (!string.IsNullOrEmpty(personSelectorBuiltin.Node) && currNode.Text != personSelectorBuiltin.Node)
-                {
-                    currNode = new TreeNodeAdv(personSelectorBuiltin.Node) { LeftImageIndices = new[] { 2 }, Tag = new List<Guid>() };
-                    root.Nodes.Add(currNode);
-                }
-                    // and here have a list with one guid
-                    var personNode = new TreeNodeAdv(_commonAgentNameSettings.BuildFor(personSelectorBuiltin)) { Tag = new List<Guid> { personSelectorBuiltin.PersonId }, LeftImageIndices = new[] { 3 } };
-                    // how should we display and how should we sort ?? 
-                    // we have a setting for the display of person
-                    currNode.Nodes.Add(personNode);
-                    if (_personSelectorView.PreselectedPersonIds.Contains(personSelectorBuiltin.PersonId))
-                    {
-                        personNode.Checked = true;
-						if (_personSelectorView.ExpandSelected)
-							currNode.Expanded = true;
-                    }
-                
-                ((IList<Guid>)currNode.Tag).Add(personSelectorBuiltin.PersonId);
-            }
+				if (!auth.IsPermitted(_applicationFunction.FunctionPath, selectedPeriod.StartDate, toNode))
+					toRemove.Add(toNode);
+			}
+			foreach (var personSelector in toRemove)
+			{
+				toNodes.Remove(personSelector);
+			}
+			//skapa treeviewnoder av det vi fått kvar
+			var nodes = new List<TreeNodeAdv>();
+			var root = new TreeNodeAdv(_rootNodeName) {LeftImageIndices = new[] {1}, Expanded = true, Tag = new List<Guid>()};
+			nodes.Add(root);
 
+			var toNodesByNode = toNodes.GroupBy(t => t.Node.Trim());
+			foreach (var toNode in toNodesByNode)
+			{
+				var personNodes = toNode.Select(personSelectorBuiltin => new {
+					PersonId = personSelectorBuiltin.PersonId,
+					Node =
+					new TreeNodeAdv(_commonAgentNameSettings.BuildFor(personSelectorBuiltin))
+					{
+						Tag = new List<Guid> { personSelectorBuiltin.PersonId },
+						LeftImageIndices = new[] { 3 }
+					}
+				}).ToArray();
+
+				var currNode = new TreeNodeAdv(toNode.Key) {LeftImageIndices = new[] {2}, Tag = personNodes.Select(n => n.PersonId).ToList()};
+				root.Nodes.Add(currNode);
+
+				// and here have a list with one guid
+				
+				// how should we display and how should we sort ?? 
+				// we have a setting for the display of person
+				currNode.Nodes.AddRange(personNodes.Select(n => n.Node).ToArray());
+
+				var preselectPersonsInNode = personNodes.Where(n => _personSelectorView.PreselectedPersonIds.Contains(n.PersonId));
+				foreach (var personNode in preselectPersonsInNode)
+				{
+					personNode.Node.Checked = true;
+					if (_personSelectorView.ExpandSelected)
+						currNode.Expanded = true;
+				}
+			}
+			
             foreach (TreeNodeAdv nodeLevel1 in nodes)
             {
                 nodeLevel1.Nodes.Sort();
@@ -127,9 +127,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
             _personSelectorView.ResetTreeView(nodes.ToArray());
         }
 
-        public string Key
-        {
-            get { return _loadType.ToString(); }
-        }
-    }
+        public string Key => _loadType.ToString();
+	}
 }

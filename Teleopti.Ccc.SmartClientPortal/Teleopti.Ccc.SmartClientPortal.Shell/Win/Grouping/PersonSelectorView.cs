@@ -149,11 +149,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 
 		public bool ExpandSelected { get; set; }
 
-		public void ResetTreeView(object treeNodeAdv)
+		public void ResetTreeView(TreeNodeAdv[] treeNodeAdv)
 		{
 			if(InvokeRequired)
 			{
-				BeginInvoke(new Action<object>(ResetTreeView), treeNodeAdv);
+				BeginInvoke(new Action<TreeNodeAdv[]>(ResetTreeView), treeNodeAdv);
 			}
 			else
 			{
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 				if (!KeepInteractiveOnDuringLoad)
 					treeViewAdvMainTabTree.InteractiveCheckBoxes = false;
 				treeViewAdvMainTabTree.Nodes.Clear();
-				treeViewAdvMainTabTree.Nodes.AddRange((TreeNodeAdv[])treeNodeAdv);
+				treeViewAdvMainTabTree.Nodes.AddRange(treeNodeAdv);
 				if (ShowCheckBoxes)
 					treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
 

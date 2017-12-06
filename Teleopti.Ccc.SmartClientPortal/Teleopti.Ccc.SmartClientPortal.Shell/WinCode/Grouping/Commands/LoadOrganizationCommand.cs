@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
                 toNodes = _personSelectorReadOnlyRepository.GetOrganization(dateOnlyPeriod, loadUser);    
             }
             
-			
             toNodes = removeDuplicates(toNodes);
 			// Permissions
 			var auth = PrincipalAuthorization.Current();
@@ -61,25 +60,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
             var toRemove = new List<IPersonSelectorOrganization>();
 			if(_view.VisiblePersonIds != null)
 			{
-				foreach (var toNode in toNodes)
-				{
-					if (!_view.VisiblePersonIds.Contains(toNode.PersonId))
-						toRemove.Add(toNode);
-					
-				}
+				toRemove.AddRange(toNodes.Where(n => !_view.VisiblePersonIds.Contains(n.PersonId)));
 			}
+
 			foreach (var personSelectorOrganization in toRemove)
 			{
 				toNodes.Remove(personSelectorOrganization);
 			}
             foreach (var toNode in toNodes)
-            {
-                if (toNode.PersonId != Guid.Empty)
-                {
-                    if (!auth.IsPermitted(_applicationFunction.FunctionPath, dateOnlyPeriod.StartDate, toNode))
-                        toRemove.Add(toNode);
-                }
-            }
+			{
+				if (toNode.PersonId == Guid.Empty) continue;
+
+				if (!auth.IsPermitted(_applicationFunction.FunctionPath, dateOnlyPeriod.StartDate, toNode))
+					toRemove.Add(toNode);
+			}
             foreach (var personSelectorOrganization in toRemove)
             {
                 toNodes.Remove(personSelectorOrganization);
@@ -174,12 +168,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
     		return result.ToList();
     	}
 
-    	public string Key
-        {
-            get { return "Organization"; }
-        }
+    	public string Key => "Organization";
 
-	    public void Dispose()
+		public void Dispose()
 	    {
 		    _view = null;
 			_unitOfWorkFactory = null;

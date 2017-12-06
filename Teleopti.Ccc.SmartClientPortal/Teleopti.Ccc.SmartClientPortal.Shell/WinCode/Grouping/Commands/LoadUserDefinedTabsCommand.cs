@@ -155,14 +155,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
             _personSelectorView.ResetTreeView(nodes.ToArray());
         }
 
-        public Guid Id
-        {
-            get { return _value; }
-        }
+        public Guid Id => _value;
 
-        public string Key
-        {
-            get { return _value.ToString(); }
-        }
-    }
+		public string Key => _value.ToString();
+	}
 }
