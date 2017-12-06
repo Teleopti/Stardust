@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
@@ -9,6 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
@@ -189,7 +192,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			}
 			using (_mocks.Playback())
 			{
-				Assert.IsFalse(_target.IsSatisfied(new AbsenceRequstAndSchedules { SchedulingResultStateHolder = _schedulingResultStateHolder, AbsenceRequest = _absenceRequest }).IsValid);
+				var isSatisfied = _target.IsSatisfied(new AbsenceRequstAndSchedules
+				{
+					SchedulingResultStateHolder = _schedulingResultStateHolder,
+					AbsenceRequest = _absenceRequest
+				});
+
+				var validationError = string.Format(Resources.NotEnoughBudgetAllowanceForTheDay, budgetDay.Day.ToShortDateString());
+				isSatisfied.IsValid.Should().Be.False();
+				isSatisfied.ValidationErrors.Should().Be.EqualTo(validationError);
+
 			}
 		}
 

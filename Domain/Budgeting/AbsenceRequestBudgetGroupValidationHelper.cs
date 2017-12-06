@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 		public static IValidatedRequest InvalidDaysInBudgetDays(string invalidDays, string scenarioValidationError)
 		{
-			var logInfo = string.Format("There is not enough allowance for day {0}.", invalidDays);
-			var errorInfo = scenarioValidationError + invalidDays;
+			var logInfo = string.Format(scenarioValidationError, invalidDays);
+			var errorInfo = logInfo;
 			return logAndReturnValidatedRequest(logInfo, errorInfo);
 		}
 

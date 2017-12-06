@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Budgeting
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			var invalidDays = getInvalidDays(absenceRequestAndSchedules.AbsenceRequest, filteredBudgetDays, personPeriod, defaultScenario, culture, absenceRequestAndSchedules.SchedulingResultStateHolder);
 			if (!string.IsNullOrEmpty(invalidDays))
 			{
-				var underStaffingValidationError = UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingDays", language);
+				var underStaffingValidationError = Resources.ResourceManager.GetString("NotEnoughBudgetAllowanceForTheDay", language);
 				return AbsenceRequestBudgetGroupValidationHelper.InvalidDaysInBudgetDays(invalidDays, underStaffingValidationError);
 			}
 
