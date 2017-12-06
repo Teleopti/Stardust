@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -18,18 +17,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 {
 	public class CommandHandlerIncreaseIslandsTest : ResourcePlannerCommandHandlerTest
 	{
-		private readonly SUT _sut;
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
 		public ReduceIslandsLimits ReduceIslandsLimits;
-
-		public IntradayOptimizationCommandHandler IntradayOptimizationCommandHandler;
-		public SchedulingCommandHandler SchedulingCommandHandler;
-
-		public CommandHandlerIncreaseIslandsTest(SUT sut)
-		{
-			_sut = sut;
-		}
 
 		[TestCase(5, 1, ExpectedResult = 2)]
 		[TestCase(4, 1, ExpectedResult = 1)]
@@ -42,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			return EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count();
 		}
@@ -59,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			return EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count();
 		}
@@ -76,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillACagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillC).WithId());
 			skillAagents21.Union(skillABagents5).Union(skillACagents5).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be(2);
 		}
@@ -93,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillACagents = Enumerable.Range(0, 8).Select(x => new Person().WithPersonPeriod(skillA, skillC).WithId());
 			skillAagents.Union(skillABagents).Union(skillACagents).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			var events = EventPublisher.PublishedEvents.OfType<IIslandInfo>();
 
@@ -111,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be(1);
 		}
@@ -126,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be(1);
 		}
@@ -140,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			PersonRepository.Has(skill2);
 			PersonRepository.Has(skill1);
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be(1);
 		}
@@ -158,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			PersonRepository.Has(skill4, skill5, skill6);
 			PersonRepository.Has(skill3, skill4);
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be(1);
 		}
@@ -172,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			{
 				PersonRepository.Has(new Person().WithPersonPeriod(skill, new Skill(i.ToString())).WithId());
 			}
-			Assert.DoesNotThrow(executeTarget);
+			Assert.DoesNotThrow(() => ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod()));
 		}
 
 		[Test]
@@ -191,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillFEagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillF, skillE).WithId());
 			skillABCagents.Union(skillCEagents).Union(skillCDagents).Union(skillFEagents).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			var events = EventPublisher.PublishedEvents.OfType<IIslandInfo>();
 			events.Count().Should().Be.EqualTo(2);
@@ -212,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be.EqualTo(2);
 		}
@@ -229,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be.EqualTo(2);
 		}
@@ -246,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be.EqualTo(2);
 		}
@@ -259,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			PersonRepository.Has(new Person().WithPersonPeriod().WithId()); //has personperiod with no skill -> should not be included
 			PersonRepository.Has(new Person().WithId()); //has no personperiod -> should not be included
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().AgentsInIsland.Count().Should().Be.EqualTo(1);
 		}
@@ -279,7 +269,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			}
 			allAgents.ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count()
 				.Should().Be.EqualTo(numberOfAgents);
@@ -299,24 +289,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillDagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillD).WithId());
 			skillADagents.Union(skillBDagents).Union(skillCDagents).Union(skillDagents).ForEach(x => PersonRepository.Has(x));
 
-			executeTarget();
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be.EqualTo(3);
 		}
-
-		private void executeTarget()
+		
+		public CommandHandlerIncreaseIslandsTest(SUT sut) : base(sut)
 		{
-			switch (_sut)
-			{
-				case SUT.Scheduling:
-					SchedulingCommandHandler.Execute(new SchedulingCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
-					break;
-				case SUT.IntradayOptimization:
-					IntradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
-					break;
-				default:
-					throw new NotSupportedException();
-			}
 		}
 	}
 }

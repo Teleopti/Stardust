@@ -18,20 +18,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 {
 	public class CommandHandlerExternalStaffTest : ResourcePlannerCommandHandlerTest
 	{
-		private readonly SUT _sut;
-		public IntradayOptimizationCommandHandler IntradayOptimizationCommandHandler;
-		public SchedulingCommandHandler SchedulingCommandHandler;
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
-		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
-		public SchedulingOptionsProvider SchedulingOptionsProvider;
-
-		public CommandHandlerExternalStaffTest(SUT sut)
-		{
-			_sut = sut;
-		}
 
 		[Test]
 		public void ShouldConsiderExternalStaffWhenCreatingIslands()
@@ -49,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				new DateTimePeriod(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 					new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc)), skill1, skill2);
 
-			executeTarget(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10));
+			ExecuteTarget(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10));
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count()
 				.Should().Be.EqualTo(1);
@@ -68,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			SkillRepository.Has(skill);
 			SkillCombinationResourceReader.Has(1, period, skill);
 
-			executeTarget(period.ToDateOnlyPeriod(TimeZoneInfo.Utc), teamBlockType);
+			ExecuteTarget(period.ToDateOnlyPeriod(TimeZoneInfo.Utc), teamBlockType);
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().Agents
 				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
@@ -87,39 +77,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			SkillRepository.Has(skill);
 			SkillCombinationResourceReader.Has(1, period, skill);
 
-			executeTarget(period.ToDateOnlyPeriod(TimeZoneInfo.Utc), teamBlockType);
+			ExecuteTarget(period.ToDateOnlyPeriod(TimeZoneInfo.Utc), teamBlockType);
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().AgentsInIsland
 				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
 		}
 		
-		private void executeTarget(DateOnlyPeriod period, TeamBlockType? teamBlockType = null)
+		public CommandHandlerExternalStaffTest(SUT sut) : base(sut)
 		{
-			switch (_sut)
-			{
-				case SUT.Scheduling:
-					if (teamBlockType.HasValue)
-					{
-						SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
-						{
-							UseTeam = teamBlockType == TeamBlockType.Team
-						});
-					}
-					SchedulingCommandHandler.Execute(new SchedulingCommand { Period = period });
-					break;
-				case SUT.IntradayOptimization:
-					if (teamBlockType.HasValue)
-					{
-						OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
-						{
-							Extra = teamBlockType.Value.CreateExtraPreferences()
-						});
-					}
-					IntradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand { Period = period });
-					break;
-				default:
-					throw new NotSupportedException();
-			}
 		}
 	}
 }
