@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private readonly IComponentContext _container;
 		
 		private readonly SystemCheckerValidator _systemChecker;
-		private bool _lastSystemCheck = true;
+		//private bool _lastSystemCheck = true;
 		private readonly OutlookPanelContentWorker _outlookPanelContentWorker;
 		private readonly PortalSettings _portalSettings;
 		private readonly IToggleManager _toggleManager;
@@ -79,7 +79,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private bool showCustomerWebMenu = true;
 		private const string permissionModule = "/permissions";
 		private readonly WebUrlHolder _webUrlHolder;
-		private readonly List<string> validUrls;
 		private bool showDataProtectionWebPage;
 
 		protected SmartClientShellForm()
@@ -99,7 +98,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyDown += formKeyDown;
 			KeyPress += Form_KeyPress;
 
-			wfmWebView.RegisterJSExtensionFunction("errorStayingAlive",wfmWebViewJSerrorStayingAlive);
 			webViewDataProtection.RegisterJSExtensionFunction("yesResponseCallback", yesResponse);
 			webViewDataProtection.RegisterJSExtensionFunction("noOrNotNowResponseCallback", noResponse);
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
@@ -128,39 +126,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_customLogger.Info("SmartClientPortal: EoBrowser: " + message);
 		}
 
-		private void wfmWebViewJSerrorStayingAlive(object sender, JSExtInvokeArgs e)
-		{
-			notifyIcon.Icon = Resources.NotifyWarning;
-			notifyIcon.Text = UserTexts.Resources.CheckSystemWarning;
-			notifyIcon.BalloonTipIcon = ToolTipIcon.Warning;
-			notifyIcon.BalloonTipTitle = UserTexts.Resources.CheckSystemWarning;
-			notifyIcon.BalloonTipText = @"The web channel is disconnected." +
-										Environment.NewLine + 
-										@"You may require to relogon to use permissions.";
-			showBalloon();
-			logInfo("Session dropped in StayingAlive EO:URL " + wfmWebView.Url);
-			wfmWebView.LoadUrl(webServer + "start/Url/RedirectToWebLogin");
-		}		
-
-		private void setBusinessUnitInWfmWebView()
-		{
-			if (!wfmWebControl.Enabled) return;
-			var bu = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
-			var request = new Request(webServer + "Start/AuthenticationApi/Logon");
-			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
-			request.Method = "post";
-			wfmWebView.LoadCompleted += wfmWebViewOnLoadCompletedSetBusinessUnit;
-			logInfo("setBusinessUnitInWfmWebView: Setting the business unit");
-			wfmWebView.LoadRequest(request);
-		}
-
-		private void wfmWebViewOnLoadCompletedSetBusinessUnit(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
-		{
-			wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedSetBusinessUnit;
-			logInfo(" Setting the permissions url current URL is " + wfmWebView.Url);
-			setWfmWebUrl();
-		}
-
 		private void setBusinessUnitInDataProtectionWebView()
 		{		
 			var bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
@@ -179,39 +144,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			webControlDataProtection.WebView.Url = $"{webServer}WFM/index_desktop_client.html#/fdpa";
 		}
 
-		private int cnt;
-		private void keepWfmAlive()
-		{
-			if (!wfmWebControl.Enabled) return;
-			cnt ++;
-			if (cnt < 300) return;
-			cnt = 0;
-			// to see if this will help on bug 39438
-			if (!wfmWebView.IsCreated)
-			{
-				logInfo("keepWfmAlive: wfmWebView is not created");
-				return;
-			}
-			// but maybe we will get a login instead of permissions after some time instead
-			JSObject window = wfmWebView.GetDOMWindow();
-			if (wfmWebView.CanEvalScript)
-			{
-				try
-				{
-					logInfo("EvalScript(ahAhAhAhStayingAlive) EO:URL =" + wfmWebView.Url);
-					var ahAhAhAhStayingAlive = (JSFunction)wfmWebView.EvalScript("ahAhAhAhStayingAlive");
-					if (ahAhAhAhStayingAlive != null)
-					{
-						logInfo("Invoke StayingAlive EO:URL =" + wfmWebView.Url);
-						ahAhAhAhStayingAlive.Invoke(window, new object[] { });
-					}
-				}
-				catch (JSInvokeException)
-				{
-					logInfo("JSInvokeException");
-				}
-			}
-		}
+		
 
 		void formKeyDown(object sender, KeyEventArgs e)
 		{
@@ -269,24 +202,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_portalSettings = _container.Resolve<PortalSettings>();
 			_toggleManager = _container.Resolve<IToggleManager>();
 			_webUrlHolder = _container.Resolve<WebUrlHolder>();
-			
-			validUrls = new List<string>()
-			{
-				"WFM/index_desktop_client.html#" + permissionModule,
-				"start/Url/RedirectToWebLogin",
-				"SSO/",
-				"Authentication",
-				"/response?dnoa.userSuppliedIdentifier",
-				"/Start/Return/HandleReturn",
-				"sample-with-policyengine",
-				"authenticate?whr=urn:Windows",
-				"/OpenId/Provider?openid",
-				"/OpenId/TriggerWindowsAuthorization"
-			};
-
-			setBusinessUnitInWfmWebView();
-
-			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
 		}
 
 		void toolStripButtonHelpClick(object sender, EventArgs e)
@@ -406,19 +321,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_container.Resolve<HangfireClientStarter>().Start();
 		}
 
-		private void setWfmWebUrl()
-		{
-			logInfo(" URL before setting the permissions EO:URL " + wfmWebView.Url);
-			if (!wfmWebView.IsCreated)
-			{
-				logInfo(" wfmWebView is not created EO:URL " + wfmWebView.Url);
-				wfmWebView = new WebView();
-				wfmWebView.UrlChanged += wfmWebViewUrlChanged;
-				wfmWebControl.WebView = wfmWebView;
-			}
-			wfmWebView.LoadUrl(string.Format("{0}WFM/index_desktop_client.html#{1}", webServer, permissionModule));
-			logInfo(" Loaded permissions via load method EO:URL " + wfmWebView.Url);
-		}
+		
 
 		private string webServer
 		{
@@ -633,17 +536,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		private void notifyTimerTick(object sender, EventArgs e)
-		{
-			bool isOk = _systemChecker.IsOk();
-			if (_lastSystemCheck != isOk)
-			{
-				setNotifyData(isOk);
-				showBalloon();
-				_lastSystemCheck = isOk;
-			}
-			keepWfmAlive();
-		}
+		//private void notifyTimerTick(object sender, EventArgs e)
+		//{
+		//	bool isOk = _systemChecker.IsOk();
+		//	if (_lastSystemCheck != isOk)
+		//	{
+		//		setNotifyData(isOk);
+		//		showBalloon();
+		//		_lastSystemCheck = isOk;
+		//	}
+			
+		//}
 
 		private void showBalloon()
 		{
@@ -994,22 +897,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		private void wfmWebView_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
-		{
-			e.Menu.Items.Clear();
-		}
-
-		private void handlingCertificateErrorsWfmWebView(object sender, CertificateErrorEventArgs e)
-		{
-			handleCertificateError(e, () =>
-			{
-				wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedSetBusinessUnit;
-				wfmWebView.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
-				_customLogger.Error("The following url is missing a certificate. " + e.Url + "  EO:URL " + wfmWebView.Url);
-				_logger.Error("The following url is missing a certificate. " + e.Url);
-			});
-		}
-
 		private void handlingCertificateErrorsWebView1(object sender, CertificateErrorEventArgs e)
 		{
 			handleCertificateError(e, () =>
@@ -1024,7 +911,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			handleCertificateError(e, () =>
 			{
 				webViewDataProtection.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
-				_customLogger.Error("The following url is missing a certificate. " + e.Url + "  EO:URL " + wfmWebView.Url);
+				_customLogger.Error("The following url is missing a certificate. " + e.Url + "  EO:URL " + webViewDataProtection.Url);
 				_logger.Error("The following url is missing a certificate. " + e.Url);
 			});
 		}
@@ -1057,15 +944,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
 			return new Uri($"{wfmPath}{relativePath}");
-		}
-
-		private void wfmWebViewUrlChanged(object sender, EventArgs e)
-		{
-			if (!((wfmWebView.Url == "" || wfmWebView.Url == webServer) ||
-				validUrls.Any(x => wfmWebView.Url.Contains(x))))
-			{
-				setWfmWebUrl();
-			}
 		}
 	}
 }
