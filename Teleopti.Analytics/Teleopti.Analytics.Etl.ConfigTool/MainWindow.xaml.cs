@@ -26,7 +26,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			_baseConfiguration = baseConfiguration;
 			InitializeComponent();
 			_isEtlToolLoading = true;
-			_generalFunctions = new GeneralFunctions(startConnectionString, new BaseConfigurationRepository());
+			_generalFunctions = new GeneralFunctions(new GeneralInfrastructure(new BaseConfigurationRepository()));
+			_generalFunctions.SetConnectionString(startConnectionString);
 			loadDataSources();
 			manualEtl.InitialJobNowAvailable += manualEtl_InitialJobNowAvailable;
 			manualEtl.JobStartedRunning += manualEtl_JobStartedRunning;
@@ -85,7 +86,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 
 		private bool initializeDataSourceDialog(string connectionString)
 		{
-			_generalFunctions = new GeneralFunctions(connectionString, new BaseConfigurationRepository());
+			_generalFunctions = new GeneralFunctions(new GeneralInfrastructure(new BaseConfigurationRepository()));
+			_generalFunctions.SetConnectionString(connectionString);
 			loadDataSources();
 			_dataSourceConfigurationDialog = new DataSourceConfigurationView(new DataSourceConfigurationModel(_generalFunctions, _baseConfiguration), connectionString);
 			_dataSourceConfigurationDialog.TimeToStartInitialLoad += _timeZoneConfigurationForm_TimeToStartInitialLoad;

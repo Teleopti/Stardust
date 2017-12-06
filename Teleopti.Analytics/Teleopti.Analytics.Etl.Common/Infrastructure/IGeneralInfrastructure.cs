@@ -17,5 +17,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		IBaseConfiguration LoadBaseConfiguration();
 		void SaveBaseConfiguration(IBaseConfiguration configuration);
 		int LoadRowsInDimIntervalTable();
+		void SetDataMartConnectionString(string dataMartConnectionString);
 	}
 }

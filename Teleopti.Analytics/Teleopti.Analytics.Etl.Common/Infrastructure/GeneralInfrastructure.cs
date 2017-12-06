@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
@@ -14,14 +13,25 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class GeneralInfrastructure : IGeneralInfrastructure
 	{
-		private readonly string _dataMartConnectionString;
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
+		private string _connectionString;
 
-		public GeneralInfrastructure(string dataMartConnectionString, IBaseConfigurationRepository baseConfigurationRepository)
+		public GeneralInfrastructure(IBaseConfigurationRepository baseConfigurationRepository)
 		{
-			_dataMartConnectionString = dataMartConnectionString;
 			_baseConfigurationRepository = baseConfigurationRepository;
-			Trace.WriteLine(_dataMartConnectionString.Length.ToString(CultureInfo.InvariantCulture));
+		}
+
+		private string dataMartConnectionString
+		{
+			get
+			{
+				if (_connectionString == null)
+					throw new ArgumentException("You need to set the datamart connection string before using it.",
+						nameof(_connectionString));
+
+				return _connectionString;
+			}
+			set => _connectionString = value;
 		}
 
 		public IList<IDataSourceEtl> GetDataSourceList(bool getValidDataSources, bool includeOptionAll)
@@ -50,13 +60,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public int GetInitialLoadState()
 		{
 			return (int)HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.sys_initial_load_state_get", null,
-												 _dataMartConnectionString);
+				dataMartConnectionString);
 		}
 
 		public void LoadNewDataSourcesFromAggregationDatabase()
 		{
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_load", null,
-											_dataMartConnectionString);
+				dataMartConnectionString);
 		}
 
 		public IList<ITimeZoneDim> GetTimeZonesFromMart()
@@ -64,7 +74,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			IList<ITimeZoneDim> timeZoneList = new List<ITimeZoneDim>();
 
 			DataSet dataSet = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_dim_time_zone_get",
-															 null, _dataMartConnectionString);
+															 null, dataMartConnectionString);
 			if (dataSet != null && dataSet.Tables.Count == 1)
 			{
 				foreach (DataRow dataRow in dataSet.Tables[0].Rows)
@@ -111,30 +121,35 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			};
 
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_save",
-											parameterList, _dataMartConnectionString);
+											parameterList, dataMartConnectionString);
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_intraday_settings_load", null,
-											_dataMartConnectionString);
+				dataMartConnectionString);
 		}
 
 		public void SetUtcTimeZoneOnRaptorDataSource()
 		{
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_set_raptor_time_zone",
-											null, _dataMartConnectionString);
+											null, dataMartConnectionString);
 		}
 
 		public IBaseConfiguration LoadBaseConfiguration()
 		{
-			return _baseConfigurationRepository.LoadBaseConfiguration(_dataMartConnectionString);
+			return _baseConfigurationRepository.LoadBaseConfiguration(dataMartConnectionString);
 		}
 
 		public void SaveBaseConfiguration(IBaseConfiguration configuration)
 		{
-			_baseConfigurationRepository.SaveBaseConfiguration(_dataMartConnectionString, configuration);
+			_baseConfigurationRepository.SaveBaseConfiguration(dataMartConnectionString, configuration);
 		}
 
 		public int LoadRowsInDimIntervalTable()
 		{
-			return (int)HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.etl_dim_interval_check", _dataMartConnectionString);
+			return (int)HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.etl_dim_interval_check", dataMartConnectionString);
+		}
+
+		public void SetDataMartConnectionString(string connectionString)
+		{
+			dataMartConnectionString = connectionString;
 		}
 
 		private static T handleDbNullValue<T>(object value)
@@ -154,7 +169,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 												};
 
 			return HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_get_datasources", parameterList,
-												  _dataMartConnectionString);
+				dataMartConnectionString);
 		}
 	}
 

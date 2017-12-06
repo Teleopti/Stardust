@@ -26,7 +26,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			builder.RegisterModule(new EtlAppModule());
 			Container = builder.Build();
 
-			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(ConfigurationManager.AppSettings["datamartConnectionString"], new BaseConfigurationRepository()));
+			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(new BaseConfigurationRepository())));
+			configurationHandler.SetConnectionString(ConfigurationManager.AppSettings["datamartConnectionString"]);
 
 			if (!configurationHandler.IsConfigurationValid)
 			{

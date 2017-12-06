@@ -6,5 +6,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
 		IBaseConfiguration BaseConfiguration { get; }
 		int? IntervalLengthInUse { get; }
 		void SaveBaseConfiguration(IBaseConfiguration configuration);
+		void SetConnectionString(string dataMartConnectionString);
 	}
 }

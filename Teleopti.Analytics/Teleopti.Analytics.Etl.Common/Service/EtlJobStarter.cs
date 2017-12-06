@@ -61,7 +61,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private bool checkForEtlJob()
 		{
 			log.Debug("Checking configuration");
-			var configHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString, _baseConfigurationRepository));
+			var configHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)));
+			configHandler.SetConnectionString(_connectionString);
 			if (!configHandler.IsConfigurationValid)
 			{
 				log.Debug("Configuration not valid");

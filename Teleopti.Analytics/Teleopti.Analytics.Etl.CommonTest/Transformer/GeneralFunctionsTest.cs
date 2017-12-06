@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		public void Setup()
 		{
 			_generalInfrastructure = MockRepository.GenerateMock<IGeneralInfrastructure>();
-			_target = new GeneralFunctions(_generalInfrastructure, "yadayada");
+			_target = new GeneralFunctions(_generalInfrastructure);
 		}
 
 		[Test]

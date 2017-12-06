@@ -9,7 +9,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 	{
 		public DataSourceValidCollection(bool includeOptionAll, string datamartConnectionString)
 		{
-			var generalFunc = new GeneralFunctions(datamartConnectionString, new BaseConfigurationRepository());
+			var generalFunc = new GeneralFunctions(new GeneralInfrastructure(new BaseConfigurationRepository()));
+			generalFunc.SetConnectionString(datamartConnectionString);
 			AddRange(includeOptionAll ? generalFunc.DataSourceValidListIncludedOptionAll : generalFunc.DataSourceValidList);
 		}
 	}

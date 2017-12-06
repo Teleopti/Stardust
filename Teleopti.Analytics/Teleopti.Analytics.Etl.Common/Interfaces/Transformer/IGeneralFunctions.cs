@@ -21,5 +21,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		IBaseConfiguration LoadBaseConfiguration();
 		void SaveBaseConfiguration(IBaseConfiguration configuration);
 		int? LoadIntervalLengthInUse();
+		void SetConnectionString(string dataMartConnectionString);
 	}
 }

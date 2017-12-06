@@ -24,10 +24,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(_toggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_46880));
 		}
 
-		[HttpGet, Route("Etl/Jobs")]
-		public IHttpActionResult Jobs()
+		[HttpPost, Route("Etl/Jobs")]
+		public IHttpActionResult Jobs([FromBody] string tenantName)
 		{
-			return Json(_jobCollectionModelProvider.Create());
+			return Json(_jobCollectionModelProvider.Create(tenantName));
 		}
 	}
 }

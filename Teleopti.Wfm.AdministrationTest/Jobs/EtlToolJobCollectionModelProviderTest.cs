@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Wfm.Administration.Core.EtlTool;
 
 namespace Teleopti.Wfm.AdministrationTest.Jobs
@@ -8,11 +9,13 @@ namespace Teleopti.Wfm.AdministrationTest.Jobs
 	public class EtlToolJobCollectionModelProviderTest
 	{
 		public EtlToolJobCollectionModelProvider Target;
+		public FakeTenants AllTenants;
 
-		[Test, Ignore("under construction")]
+		[Test]
 		public void ShouldReturnJobCollection()
 		{
-			var result = Target.Create();
+			AllTenants.Has("Tenant");
+			var result = Target.Create("Tenant");
 			result.Count.Should().Be.GreaterThanOrEqualTo(13);
 		}
 

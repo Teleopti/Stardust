@@ -12,16 +12,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 	{
 		private readonly IGeneralInfrastructure _generalInfrastructure;
 
-		public GeneralFunctions(string dataMartConnectionString, IBaseConfigurationRepository baseConfigurationRepository)
-		{
-			_generalInfrastructure = new GeneralInfrastructure(dataMartConnectionString, baseConfigurationRepository);
-		}
-
-		// Used for test only
-		public GeneralFunctions(IGeneralInfrastructure generalInfrastructure, string dataMartConnectionString)
+		public GeneralFunctions(IGeneralInfrastructure generalInfrastructure)
 		{
 			_generalInfrastructure = generalInfrastructure;
-			string s = dataMartConnectionString;
 		}
 
 		public IList<IDataSourceEtl> DataSourceValidList
@@ -110,6 +103,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				return null;
 
 			return 1440 / dimIntervalRowCount;
+		}
+
+		public void SetConnectionString(string dataMartConnectionString)
+		{
+			_generalInfrastructure.SetDataMartConnectionString(dataMartConnectionString);
 		}
 	}
 }
