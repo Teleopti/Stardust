@@ -123,11 +123,15 @@
     <Compile Include="Code\Gui\StartupConfiguration\LookupStringItem.cs" />
     <Compile Include="Code\Gui\StartupConfiguration\StartupConfigurationModel.cs" />
     <Compile Include="Code\Gui\StartupConfiguration\StartupConfigurationPresenter.cs" />
-    <Compile Include="Gui\DataSourceConfiguration\DataSourceConfigurationView.cs" />
+    <Compile Include="Gui\DataSourceConfiguration\DataSourceConfigurationView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Gui\DataSourceConfiguration\DataSourceConfigurationView.Designer.cs">
       <DependentUpon>DataSourceConfigurationView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gui\SpinningProgress\SpinningProgressControl.cs" />
+    <Compile Include="Gui\SpinningProgress\SpinningProgressControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Gui\SpinningProgress\SpinningProgressControl.Designer.cs">
       <DependentUpon>SpinningProgressControl.cs</DependentUpon>
     </Compile>
@@ -153,7 +157,9 @@
     <Compile Include="Gui\View\JobHistoryTreeView.xaml.cs">
       <DependentUpon>JobHistoryTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Gui\StartupConfiguration\StartupConfigurationView.cs" />
+    <Compile Include="Gui\StartupConfiguration\StartupConfigurationView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Gui\StartupConfiguration\StartupConfigurationView.Designer.cs">
       <DependentUpon>StartupConfigurationView.cs</DependentUpon>
     </Compile>
@@ -167,7 +173,9 @@
     <Compile Include="Gui\Control\ManualEtl.xaml.cs">
       <DependentUpon>ManualEtl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Gui\JobSchedule.cs" />
+    <Compile Include="Gui\JobSchedule.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Gui\JobSchedule.Designer.cs">
       <DependentUpon>JobSchedule.cs</DependentUpon>
     </Compile>

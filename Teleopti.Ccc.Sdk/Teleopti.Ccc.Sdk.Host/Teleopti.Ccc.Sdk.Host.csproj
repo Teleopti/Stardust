@@ -195,6 +195,7 @@
     </Compile>
     <Compile Include="GetPayrollResultById.aspx.cs">
       <DependentUpon>GetPayrollResultById.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="GetPayrollResultById.aspx.designer.cs">
       <DependentUpon>GetPayrollResultById.aspx</DependentUpon>

@@ -106,11 +106,15 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ProjectInstaller.cs" />
+    <Compile Include="ProjectInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
-    <Compile Include="ServiceBusHost.cs" />
+    <Compile Include="ServiceBusHost.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ServiceBusHost.Designer.cs">
       <DependentUpon>ServiceBusHost.cs</DependentUpon>
     </Compile>
