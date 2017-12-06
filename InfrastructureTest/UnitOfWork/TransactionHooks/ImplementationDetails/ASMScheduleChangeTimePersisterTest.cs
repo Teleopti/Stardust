@@ -52,7 +52,25 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		}
 
 		[Test]
-		public void ShouldAddScheduleChangeTimeForPersonAssignmentIfNextDayInNotifyPeriod()
+		public void ShouldNotAddScheduleChangeTimeForPersonAssignmentIfNotInDefaultScenario()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				ScenarioFactory.CreateScenarioWithId("not default", false),
+				new DateTimePeriod(new DateTime(2017, 11, 24, 6, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc)));
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(pa, DomainUpdateType.Update)
+			};
+			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldAddScheduleChangeTimeIfNextDayInNotifyPeriod()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -92,7 +110,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
 		}
-
 
 		[Test]
 		public void ShouldNotAddScheduleChangeTimeIfTheDayAfterNextDayNotInNotifyPeriod()
@@ -139,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		}
 
 		[Test]
-		public void ShouldAddScheduleChangeTimeForPersonAssignmentThePreviousDayInNotifyPeriod()
+		public void ShouldAddScheduleChangeTimeIfThePreviousDayInNotifyPeriod()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -159,68 +176,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
 		}
-
-		[Test]
-		public void ShouldAddScheduleChangeTimeForPersonAssignmentInUserTimeZone()
-		{
-			var person = PersonFactory.CreatePerson().WithId();
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
-
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-				ScenarioFactory.CreateScenarioWithId("default", true),
-				new DateTimePeriod(new DateTime(2017, 12, 5, 23, 0, 0, DateTimeKind.Utc),
-				new DateTime(2017, 12, 5, 23, 30, 0, DateTimeKind.Utc)));
-
-			var roots = new IRootChangeInfo[]
-			{
-				new RootChangeInfo(pa, DomainUpdateType.Update)
-			};
-			var now = new DateTime(2017, 12, 6, 0, 0, 0, DateTimeKind.Utc);
-			Now.Is(now);
-			Target.AfterCompletion(roots);
-
-			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
-		}
-
-
-		[Test]
-		public void ShouldAddScheduleChangeTimeForPersonAbsence()
-		{
-			var person = PersonFactory.CreatePerson().WithId();
-			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			var period = new DateTimePeriod(new DateTime(2017, 11, 24, 6, 0, 0, DateTimeKind.Utc),
-				new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc));
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period);
-
-			var roots = new IRootChangeInfo[]
-			{
-				new RootChangeInfo(personAbsence, DomainUpdateType.Update)
-			};
-			var now = new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc);
-			Now.Is(now);
-
-			Target.AfterCompletion(roots);
-			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
-		}
-
-		[Test]
-		public void ShouldNotAddScheduleChangeTimeIfTheTypeIsNotAbsenceOrAssignment()
-		{
-			var person = PersonFactory.CreatePerson().WithId();
-			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
-
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-
-			var roots = new IRootChangeInfo[]
-			{
-						new RootChangeInfo(person, DomainUpdateType.Update)
-			};
-			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
-			Target.AfterCompletion(roots);
-			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
-		}
-
 
 		[Test]
 		public void ShouldNotAddScheduleChangeTimeForPersonAssignmentIfNotInASMNotifyPeriod()
@@ -243,7 +198,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
 		}
 
-		
 		[Test]
 		public void ShouldUpdateScheduleChangeTimeForPersonAssignment()
 		{
@@ -270,6 +224,131 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		}
 
 		[Test]
+		public void ShouldAddScheduleChangeTimeForPersonAssignmentInUserTimeZone()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				ScenarioFactory.CreateScenarioWithId("default", true),
+				new DateTimePeriod(new DateTime(2017, 12, 5, 23, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 12, 5, 23, 30, 0, DateTimeKind.Utc)));
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(pa, DomainUpdateType.Update)
+			};
+			var now = new DateTime(2017, 12, 6, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
+		}
+
+		[Test]
+		public void ShouldAddScheduleChangeTimeForPersonAbsence()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var period = new DateTimePeriod(new DateTime(2017, 11, 24, 6, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period);
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(personAbsence, DomainUpdateType.Update)
+			};
+			var now = new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(now);
+		}
+
+		[Test]
+		public void ShouldNotAddScheduleChangeTimeForPersonAbsenceIfNotInDefaultScenario()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", false);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var period = new DateTimePeriod(new DateTime(2017, 11, 24, 6, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period);
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(personAbsence, DomainUpdateType.Update)
+			};
+			var now = new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldAddScheduleChangeTimeForMultipleDaysPersonAbsenceIfInNotifyPeriod()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var period = new DateTimePeriod(new DateTime(2017, 12, 8, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 12, 9, 18, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period);
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(personAbsence, DomainUpdateType.Update)
+			};
+			var time = new DateTime(2017, 12, 10, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(time);
+
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(time);
+		}
+
+		[Test]
+		public void ShouldNotAddScheduleChangeTimeForMultipleDaysPersonAbsenceIfNotInNotifyPeriod()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var period = new DateTimePeriod(new DateTime(2017, 12, 8, 8, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 12, 9, 18, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period);
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(personAbsence, DomainUpdateType.Update)
+			};
+			var time = new DateTime(2017, 12, 10, 13, 0, 0, DateTimeKind.Utc);
+			Now.Is(time);
+
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldNotAddScheduleChangeTimeIfTheTypeIsNotAbsenceOrAssignmentOrMeeting()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var roots = new IRootChangeInfo[]
+			{
+						new RootChangeInfo(person, DomainUpdateType.Update)
+			};
+			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
+			Target.AfterCompletion(roots);
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
+		}
+
+		[Test]
 		public void ShouldUpdateScheduleChangeTimeForPersonAbsence()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
@@ -293,63 +372,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			Target.AfterCompletion(roots);
 
 			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).TimeStamp.Should().Be(newTime);
-		}
-		[Test]
-		public void ShouldNotUpdateScheduleChangeTimeIfTheTypeIsNotAbsenceOrAssignmentOrPersonMeeting()
-		{
-			var person = PersonFactory.CreatePerson().WithId();
-			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
-
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-
-			var roots = new IRootChangeInfo[]
-			{
-				new RootChangeInfo(person, DomainUpdateType.Update)
-			};
-			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
-			Target.AfterCompletion(roots);
-
-			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldNotAddScheduleChangeTimeForPersonAssignmentIfNotInDefaultScenario()
-		{
-			var person = PersonFactory.CreatePerson().WithId();
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-				ScenarioFactory.CreateScenarioWithId("not default", false),
-				new DateTimePeriod(new DateTime(2017, 11, 24, 6, 0, 0, DateTimeKind.Utc),
-				new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc)));
-			var roots = new IRootChangeInfo[]
-			{
-				new RootChangeInfo(pa, DomainUpdateType.Update)
-			};
-			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
-			Target.AfterCompletion(roots);
-			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
-		}
-
-
-		[Test]
-		public void ShouldNotAddScheduleChangeTimeForPersonAbsenceIfNotInDefaultScenario()
-		{
-			var person = PersonFactory.CreatePerson().WithId();
-			var scenario = ScenarioFactory.CreateScenarioWithId("default", false);
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			var period = new DateTimePeriod(new DateTime(2017, 11, 24, 6, 0, 0, DateTimeKind.Utc),
-				new DateTime(2017, 11, 24, 15, 0, 0, DateTimeKind.Utc));
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period);
-
-			var roots = new IRootChangeInfo[]
-			{
-				new RootChangeInfo(personAbsence, DomainUpdateType.Update)
-			};
-			var now = new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc);
-			Now.Is(now);
-
-			Target.AfterCompletion(roots);
-			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
 		}
 
 		[Test]
@@ -475,6 +497,24 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			};
 			Target.AfterCompletion(roots);
 			Repo.GetScheduleChangeTime(requiredPerson.Id.GetValueOrDefault()).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldNotUpdateScheduleChangeTimeIfTheTypeIsNotAbsenceOrAssignmentOrPersonMeeting()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(person, DomainUpdateType.Update)
+			};
+			Now.Is(new DateTime(2017, 11, 24, 13, 0, 0, DateTimeKind.Utc));
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
 		}
 
 	}
