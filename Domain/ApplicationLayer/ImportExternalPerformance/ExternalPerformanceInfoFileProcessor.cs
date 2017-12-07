@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		
 		private ExternalPerformanceInfoProcessResult extractFileWithoutSeperateSession(byte[] rawData, Action<string> sendProgress)
 		{
-			sendProgress($"ExternalPerformanceInfoFileProcessor: Start to extract file.");
+			sendProgress("ExternalPerformanceInfoFileProcessor: Start to extract file.");
 			var processResult = validateFileContent(rawData);
 
 			if (processResult.HasError)
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				return processResult;
 			}
 
-			sendProgress($"ExternalPerformanceInfoFileProcessor: Extract file succeed.");
+			sendProgress("ExternalPerformanceInfoFileProcessor: Extract file succeed.");
 			return processResult;
 		}
 
@@ -102,11 +102,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		{
 			var processResult = new ExternalPerformanceInfoProcessResult();
 			var allLines = byteArrayToString(content);
-			var existMeasures = _externalPerformanceRepository.FindAllExternalPerformances();
+			var existMeasures = _externalPerformanceRepository.FindAllExternalPerformances().ToList();
 			var allMeasures = new List<IExternalPerformance>();
 			allMeasures.AddRange(existMeasures);
-			var personIdentityInfos = _personRepository.GetPersonIdentityInfos();
-			var externalLogonInfos = _personRepository.GetPersonExternalLogonInfos();
 
 			foreach (var currentLine in allLines)
 			{
@@ -120,8 +118,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					continue;
 				}
 
-				DateTime dateTime;
-				if (!DateTime.TryParseExact(columns[0], "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
+				if (!DateTime.TryParseExact(columns[0], "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTime))
 				{
 					processResult.HasError = true;
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.ImportBpoWrongDateFormat}");
@@ -147,8 +144,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 				if (extractionResult.GameType == GAME_TYPE_NUMBERIC)
 				{
-					int score;
-					if (int.TryParse(columns.Last(), out score)) extractionResult.GameNumberScore = score;
+					if (int.TryParse(columns.Last(), out var score)) extractionResult.GameNumberScore = score;
 					else
 					{
 						processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidScore}");
@@ -157,8 +153,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 				else
 				{
-					Percent score;
-					if (Percent.TryParse(columns.Last(), out score)) extractionResult.GamePercentScore = score;
+					if (Percent.TryParse(columns.Last(), out var score)) extractionResult.GamePercentScore = score;
 					else
 					{
 						processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidScore}");
@@ -175,8 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 				extractionResult.AgentId = agentId;
 
-				int gameId;
-				if (!int.TryParse(columns[5], out gameId))
+				if (!int.TryParse(columns[5], out var gameId))
 				{
 					processResult.HasError = true;
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidGameId}");
@@ -202,7 +196,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 						processResult.InvalidRecords.Add($"{currentLine},{Resources.OutOfMaximumLimit}");
 						continue;
 					}
-					allMeasures.Add(new ExternalPerformance()
+					allMeasures.Add(new ExternalPerformance
 					{
 						DataType = convertMeasureToDataType(extractionResult.GameType),
 						ExternalId = extractionResult.GameId,
@@ -210,48 +204,51 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					});
 				}
 
+				var personIdentities = new Dictionary<string, IList<Guid>>();
+				var identify = extractionResult.AgentId.Trim();
 				var agentsWithSameExternalLogon = new List<PerformanceInfoExtractionResult>();
-				var personIdentity = personIdentityInfos.SingleOrDefault(
-					x => x.AppLogonName == extractionResult.AgentId || x.EmployeeNumber == extractionResult.AgentId);
-				if (personIdentity != null)
+
+				IList<Guid> personIdList;
+				if (personIdentities.ContainsKey(identify))
 				{
-					extractionResult.PersonId = personIdentity.PersonId;
-					agentsWithSameExternalLogon.Add(extractionResult);
+					personIdList = personIdentities[identify];
 				}
 				else
 				{
-					var externalLogonInfo = externalLogonInfos.Where(
-						x => x.ExternalLogonName.Any(o => string.Equals(extractionResult.AgentId, o, StringComparison.OrdinalIgnoreCase)
-														  && x.PersonPeriod.Contains(extractionResult.DateFrom)));
-					if (!externalLogonInfo.Any())
+					// TODO-xinfli: Should change to query with batch identity
+					personIdList = _personRepository.FindPersonByIdentity(identify);
+					if (!personIdList.Any())
 					{
 						processResult.HasError = true;
 						processResult.InvalidRecords.Add($"{currentLine},{Resources.AgentDoNotExist}");
 						continue;
 					}
-					foreach (var logonInfo in externalLogonInfo)
+					personIdentities.Add(identify, personIdList);
+				}
+
+				foreach (var personId in personIdList)
+				{
+					var eachExternalLogonInfo = new PerformanceInfoExtractionResult
 					{
-						var eachExternalLogonInfo = new PerformanceInfoExtractionResult()
-						{
-							AgentId = extractionResult.AgentId,
-							DateFrom = extractionResult.DateFrom,
-							GameId = extractionResult.GameId,
-							GameName = extractionResult.GameName,
-							GameNumberScore = extractionResult.GameNumberScore,
-							GamePercentScore = extractionResult.GamePercentScore,
-							GameType = extractionResult.GameType,
-							PersonId = logonInfo.PersonId
-						};
-						agentsWithSameExternalLogon.Add(eachExternalLogonInfo);
-					}
+						AgentId = extractionResult.AgentId,
+						DateFrom = extractionResult.DateFrom,
+						GameId = extractionResult.GameId,
+						GameName = extractionResult.GameName,
+						GameNumberScore = extractionResult.GameNumberScore,
+						GamePercentScore = extractionResult.GamePercentScore,
+						GameType = extractionResult.GameType,
+						PersonId = personId
+					};
+					agentsWithSameExternalLogon.Add(eachExternalLogonInfo);
 				}
 
 				processResult.ValidRecords.AddRange(agentsWithSameExternalLogon);
 			}
 
-			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom}).Select(x => x.Last()).ToList();
+			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom})
+				.Select(x => x.Last()).ToList();
 			processResult.ExternalPerformances =
-				allMeasures.Where(m => !existMeasures.Any(e => e.ExternalId == m.ExternalId)).ToList();
+				allMeasures.Where(m => existMeasures.All(e => e.ExternalId != m.ExternalId)).ToList();
 			return processResult;
 		}
 

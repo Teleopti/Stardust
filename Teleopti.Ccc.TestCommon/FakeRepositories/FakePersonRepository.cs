@@ -19,11 +19,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private readonly IFakeStorage _storage;
 		private IList<PersonExternalLogonInfo> _externalLogonInfos;
+		private IDictionary<Guid, string> _appLogonNames;
 
 		public FakePersonRepository(IFakeStorage storage)
 		{
 			_storage = storage ?? new FakeStorageSimple();
 			_externalLogonInfos = new List<PersonExternalLogonInfo>();
+			_appLogonNames = new Dictionary<Guid, string>();
 		}
 
 		public void Has(IPerson person)
@@ -31,7 +33,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_storage.Add(person);
 		}
 
-		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, IRuleSetBag ruleSetBag, params ISkill[] skills)
+		/// <summary>
+		/// Add a person with application logon name
+		/// </summary>
+		public void Has(IPerson person, string appLogonName)
+		{
+			_storage.Add(person);
+			_appLogonNames.Add(person.Id.Value, appLogonName);
+		}
+
+		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage,
+			ITeam team, ISchedulePeriod schedulePeriod, IRuleSetBag ruleSetBag, params ISkill[] skills)
 		{
 			var ppDate = new DateOnly(1950, 1, 1);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
@@ -52,44 +64,53 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return agent;
 		}
 
-		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
+		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage,
+			ITeam team, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
 		{
 			return Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, new RuleSetBag(ruleSet), skills);
 		}
 
-		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, params ISkill[] skills)
+		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage,
+			ITeam team, ISchedulePeriod schedulePeriod, params ISkill[] skills)
 		{
-			return Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, (IRuleSetBag)null, skills);
+			return Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, (IRuleSetBag) null, skills);
 		}
 
 		public Person Has(IContract contract, ISchedulePeriod schedulePeriod, params ISkill[] skills)
 		{
-			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, schedulePeriod, skills);
+			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team {Site = new Site("_")},
+				schedulePeriod, skills);
 		}
 
 		public Person Has(params ISkill[] skills)
 		{
-			return Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, new SchedulePeriod(DateOnly.MinValue, SchedulePeriodType.Day, 1), skills);
+			return Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"),
+				new Team {Site = new Site("_")}, new SchedulePeriod(DateOnly.MinValue, SchedulePeriodType.Day, 1), skills);
 		}
 
-		public Person Has(IContract contract, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
+		public Person Has(IContract contract, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet,
+			params ISkill[] skills)
 		{
-			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, schedulePeriod, ruleSet, skills);
+			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team {Site = new Site("_")},
+				schedulePeriod, ruleSet, skills);
 		}
 
 		public Person Has(ITeam team, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
 		{
-			return Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), team, schedulePeriod, new RuleSetBag(ruleSet), skills);
+			return Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), team,
+				schedulePeriod, new RuleSetBag(ruleSet), skills);
 		}
 
 		public Person Has(ISchedulePeriod schedulePeriod, IRuleSetBag ruleSetBag, params ISkill[] skills)
 		{
-			return Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, schedulePeriod, ruleSetBag, skills);
+			return Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"),
+				new Team {Site = new Site("_")}, schedulePeriod, ruleSetBag, skills);
 		}
 
 		public IPerson Has(IPerson person, ITeam team, DateOnly startDate)
 		{
-			person.AddPersonPeriod(new PersonPeriod(startDate, new PersonContract(new Contract("."), new PartTimePercentage("."), new ContractSchedule(".")), team));
+			person.AddPersonPeriod(new PersonPeriod(startDate,
+				new PersonContract(new Contract("."), new PartTimePercentage("."), new ContractSchedule(".")), team));
 			_storage.Add(person);
 			return person;
 		}
@@ -146,14 +167,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period)
 		{
-
 			var people = from per in _storage.LoadAll<IPerson>()
 						 let periods = per.PersonPeriods(period)
 						 where periods.Any(personPeriod => personPeriod.Team == team)
 						 select per;
 
 			return people.ToList();
-
 		}
 
 		public ICollection<IPerson> FindAllSortByName()
@@ -165,7 +184,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _storage.LoadAll<IPerson>().Where(p => p.PersonPeriods(period).Count > 0).ToList();
 		}
-
 		public ICollection<IPerson> FindPeopleByEmploymentNumber(string employmentNumber)
 		{
 			return _storage.LoadAll<IPerson>().Where(p => p.EmploymentNumber == employmentNumber).ToArray();
@@ -305,6 +323,23 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					}).ToList();
 		}
 
+		public IList<Guid> FindPersonByIdentity(string identity)
+		{
+			if (string.IsNullOrEmpty(identity)) return new List<Guid>();
+
+			var persons = _storage.LoadAll<IPerson>();
+			var personsMatchEmploymentNumber = persons.Where(p => p.EmploymentNumber == identity).ToList();
+			if (personsMatchEmploymentNumber.Any()) return personsMatchEmploymentNumber.Select(p=>p.Id.Value).ToList();
+
+			var personsMatchAppLogonName = _appLogonNames.Where(p => p.Value == identity);
+			if (personsMatchAppLogonName.Any()) return personsMatchAppLogonName.Select(p => p.Key).ToList();
+
+			var personsMatchExternalLogon = _externalLogonInfos.Where(x => x.ExternalLogonName.Contains(identity));
+			if (personsMatchExternalLogon.Any()) return personsMatchExternalLogon.Select(p => p.PersonId).ToList();
+
+			return new List<Guid>();
+		}
+
 		public void ReversedOrder()
 		{
 			var allAgents = _storage.LoadAll<IPerson>();
@@ -320,17 +355,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void SetPersonExternalLogonInfo(PersonExternalLogonInfo info)
 		{
 			_externalLogonInfos.Add(info);
-		}
-
-		public IList<PersonIdentityInfo> GetPersonIdentityInfos()
-		{
-			var persons = _storage.LoadAll<IPerson>();
-			return persons.ToList().Select(x => new PersonIdentityInfo() {EmployeeNumber = x.EmploymentNumber, PersonId = x.Id.Value}).ToList();
-		}
-
-		public IList<PersonExternalLogonInfo> GetPersonExternalLogonInfos()
-		{
-			return _externalLogonInfos;
 		}
 	}
 }

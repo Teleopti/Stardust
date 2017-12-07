@@ -9,6 +9,7 @@ using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -30,6 +31,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -1794,77 +1796,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldGetPersonIdentityInfoWithoutAppLogonName()
+		public void ShouldFindPersonMatchIdentity()
 		{
-			const string employmentNumber = "employeeNumber1";
-			var site = SiteFactory.CreateSimpleSite("d");
-			PersistAndRemoveFromUnitOfWork(site);
+			createPersonWithAppLogonData(out var personIdAshley, out var personIdJohn);
 
-			var team = TeamFactory.CreateSimpleTeam("TestTeam");
-			team.Site = site;
-			PersistAndRemoveFromUnitOfWork(team);
-
-			var per1 = PersonFactory.CreatePerson("roger", "kratz");
-			per1.SetEmploymentNumber(employmentNumber);
-			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
-			PersistAndRemoveFromUnitOfWork(per1);
-
-			var result = target.GetPersonIdentityInfos();
+			var result = target.FindPersonByIdentity("employmentNumber-js");
 
 			result.Count.Should().Be.EqualTo(1);
 			var personIdentity = result.First();
-			personIdentity.PersonId.Should().Be.EqualTo(per1.Id.Value);
-			personIdentity.EmployeeNumber.Should().Be.EqualTo(employmentNumber);
-			personIdentity.AppLogonName.Should().Be.Null();
-		}
-		
-		[Test]
-		public void ShouldGetPersonIdentityInfoWithAppLogonName()
-		{
-			const string employmentNumber = "employeeNumber1";
-			const string appLogonName = "appLogon1";
+			personIdentity.Should().Be.EqualTo(personIdJohn);
 
-			var site = SiteFactory.CreateSimpleSite("TestSite");
-			PersistAndRemoveFromUnitOfWork(site);
-
-			var team = TeamFactory.CreateSimpleTeam("TestTeam");
-			team.Site = site;
-			PersistAndRemoveFromUnitOfWork(team);
-
-			var per1 = PersonFactory.CreatePerson("roger", "kratz");
-			per1.SetEmploymentNumber(employmentNumber);
-			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
-			PersistAndRemoveFromUnitOfWork(per1);
-
-			var per2 = PersonFactory.CreatePerson("z", "balog");
-			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
-			PersistAndRemoveFromUnitOfWork(per2);
-
-			var tenant = new Tenant(RandomName.Make("bla"));
-
-			var personInfo = new PersonInfo(tenant, per2.Id.Value);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), appLogonName, RandomName.Make(), new OneWayEncryption());
-
-			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
-			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
-			tenantUnitOfWorkManager.CurrentSession().Save(tenant);
-
-			var personInfoPersister = new PersistPersonInfo(tenantUnitOfWorkManager);
-			personInfoPersister.Persist(personInfo);
-			tenantUnitOfWorkManager.CommitAndDisposeCurrent();
-
-			var result = target.GetPersonIdentityInfos();
-			result.Count.Should().Be.EqualTo(2);
-
-			var personIdentity1 = result.SingleOrDefault(x=>x.PersonId == per1.Id.Value);
-			personIdentity1.Should().Not.Be.Null();
-			personIdentity1.EmployeeNumber.Should().Be.EqualTo(employmentNumber);
-			personIdentity1.AppLogonName.Should().Be.Null();
-
-			var personIdentity2 = result.SingleOrDefault(x => x.PersonId == per2.Id.Value);
-			personIdentity2.Should().Not.Be.Null();
-			personIdentity2.AppLogonName.Should().Be.EqualTo(appLogonName);
-			personIdentity2.EmployeeNumber.Should().Be.EqualTo(string.Empty);
+			result = target.FindPersonByIdentity("appLogon-aa");
+			result.Count.Should().Be.EqualTo(1);
+			personIdentity = result.First();
+			personIdentity.Should().Be.EqualTo(personIdAshley);
 		}
 
 		[Test, TestCaseSource(nameof(planningGroupFilterTestCases))]
@@ -2123,6 +2068,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override Repository<IPerson> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new PersonRepository(currentUnitOfWork);
+		}
+
+		private void createPersonWithAppLogonData(out Guid personId1, out Guid personId2)
+		{
+			const string employmentNumber = "employmentNumber";
+			const string appLogonName = "appLogon";
+
+			var per1 = PersonFactory.CreatePerson("Ashley", "Andeen");
+			per1.SetEmploymentNumber(employmentNumber + "-aa");
+			PersistAndRemoveFromUnitOfWork(per1);
+			personId1 = per1.Id.Value;
+
+			var per2 = PersonFactory.CreatePerson("John", "Smith");
+			//per2.SetId(personId2);
+			per2.SetEmploymentNumber(employmentNumber + "-js");
+			PersistAndRemoveFromUnitOfWork(per2);
+			personId2 = per2.Id.Value;
+
+			var tenant = new Tenant(RandomName.Make("bla"));
+
+			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
+			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
+			tenantUnitOfWorkManager.CurrentSession().Save(tenant);
+
+			var personInfoPersister = new PersistPersonInfo(tenantUnitOfWorkManager);
+
+			var personInfo1 = new PersonInfo(tenant, per1.Id.Value);
+			personInfo1.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), appLogonName + "-aa", RandomName.Make(), new OneWayEncryption());
+			personInfoPersister.Persist(personInfo1);
+
+			var personInfo2 = new PersonInfo(tenant, per2.Id.Value);
+			personInfo2.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), appLogonName + "-js", RandomName.Make(), new OneWayEncryption());
+			personInfoPersister.Persist(personInfo2);
+
+			tenantUnitOfWorkManager.CommitAndDisposeCurrent();
 		}
 	}
 }

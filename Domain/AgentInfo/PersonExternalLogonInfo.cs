@@ -8,7 +8,5 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	{
 		public Guid PersonId { get; set; }
 		public List<string> ExternalLogonName { get; set; }
-
-		public DateOnlyPeriod PersonPeriod { get; set; }
 	}
 }

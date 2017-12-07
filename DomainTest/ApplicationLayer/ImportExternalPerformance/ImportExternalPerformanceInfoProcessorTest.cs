@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldNotAllowOtherFileTypeThanCSV()
 		{
-			var fileData = new ImportFileData(){FileName = "test.xls"};
+			var fileData = new ImportFileData {FileName = "test.xls"};
 			var result = Target.Process(fileData, Feedback.SendProgress);
 
 			result.HasError.Should().Be.True();
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldOnlyHave8FieldsForEachLine()
 		{
-			var invalidLine = "20171120,1,Kalle,Pettersson,Sales result,2,numeric,2000,extraline";
+			const string invalidLine = "20171120,1,Kalle,Pettersson,Sales result,2,numeric,2000,extraline";
 			var fileData = createFileData(invalidLine);
 
 			var expectedErrorMsg = invalidLine + "," + string.Format(Resources.InvalidNumberOfFields, 8, 9);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldNotAllowInvalidDate()
 		{
-			var invalidDateRecord = "20172020,1,Kalle,Pettersson,Sales result,2,numeric,2000";
+			const string invalidDateRecord = "20172020,1,Kalle,Pettersson,Sales result,2,numeric,2000";
 			var fileData = createFileData(invalidDateRecord);
 
 			var expectedErrorMsg = invalidDateRecord + "," + Resources.ImportBpoWrongDateFormat;
@@ -73,13 +73,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void AgentIdShouldBeWithin100Characters()
 		{
-			string agentId = new String('a', 101);
+			var agentId = new string('a', 101);
 			var invalidRecord =
 				"20170820,"+ agentId + ",Kalle,Pettersson,Sales result,2,numeric,2000";
 			var fileData = createFileData(invalidRecord);
 
-			string errorMsg = Resources.AgentIdIsTooLong;
-			var expectedErrorRecord = string.Format("{0},{1}", invalidRecord, errorMsg);
+			var errorMsg = Resources.AgentIdIsTooLong;
+			var expectedErrorRecord = $"{invalidRecord},{errorMsg}";
 			var result = Target.Process(fileData, Feedback.SendProgress);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void GameMeasureNameShouldBeWithin200Characters()
 		{
-			string measureName = new String('a', 201);
+			var measureName = new String('a', 201);
 			var invalidRecord = $"20170820,1,Kalle,Pettersson,{measureName},2,numeric,2000";
 			var fileData = createFileData(invalidRecord);
 
@@ -142,9 +142,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldNotAllowMoreThan10ExternalPerformancesCase1()
 		{
-			for (int i = 1; i < 11; ++i)
+			for (var i = 1; i < 11; ++i)
 			{
-				PerformanceRepository.Add(new ExternalPerformance(){ExternalId = i});
+				PerformanceRepository.Add(new ExternalPerformance {ExternalId = i});
 			}
 
 			var the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,11,Percent,87";
@@ -161,14 +161,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public void ShouldNotAllowMoreThan10ExternalPerformancesCase2()
 		{
 			setPerson(Guid.Empty);
-			for (int i = 1; i < 10; ++i)
+			for (var i = 1; i < 10; ++i)
 			{
-				PerformanceRepository.Add(new ExternalPerformance(){ExternalId = i});
+				PerformanceRepository.Add(new ExternalPerformance {ExternalId = i});
 			}
 
-			var the10thRecord = "20171120,1,Kalle,Pettersson,Quality Score,10,Percent,87";
-			var the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,11,Percent,87";
-			var records = new List<string>() {the10thRecord, the11thRecord};
+			const string the10thRecord = "20171120,1,Kalle,Pettersson,Quality Score,10,Percent,87";
+			const string the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,11,Percent,87";
+			var records = new List<string> {the10thRecord, the11thRecord};
 			var fileData = createFileData(records);
 
 			var expectedErrorRecord = $"{the11thRecord},{Resources.OutOfMaximumLimit}";
@@ -184,9 +184,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public void ShouldAllowExternalPerformancesWhenItWasExist()
 		{
 			setPerson(Guid.Empty);
-			for (int i = 1; i < 11; ++i)
+			for (var i = 1; i < 11; ++i)
 			{
-				PerformanceRepository.Add(new ExternalPerformance() { ExternalId = i, DataType = ExternalPerformanceDataType.Percentage});
+				PerformanceRepository.Add(new ExternalPerformance { ExternalId = i, DataType = ExternalPerformanceDataType.Percentage});
 			}
 
 			var theexistRecord = "20171120,1,Kalle,Pettersson,Quality Score,8,Percent,87";
@@ -216,17 +216,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		{
 			var per1 = Guid.NewGuid();
 			var per2 = Guid.NewGuid();
-			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo()
+			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
 			{
 				PersonId = per1,
-				PersonPeriod = new DateOnlyPeriod(new DateOnly(2017,11,01),new DateOnly(2017,11,30)),
-				ExternalLogonName = new List<string>() { "externalLogon"}
+				ExternalLogonName = new List<string> { "externalLogon"}
 			});
-			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo()
+			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
 			{
 				PersonId = per2,
-				PersonPeriod = new DateOnlyPeriod(new DateOnly(2017,11,01),new DateOnly(2017,11,30)),
-				ExternalLogonName = new List<string>() { "externalLogon"}
+				ExternalLogonName = new List<string> { "externalLogon"}
 			});
 			var agentsWith1ExternalLogonRecord = "20171120,externalLogon,Kalle,Pettersson,Quality Score,1,numeric,87";
 			var fileData = createFileData(agentsWith1ExternalLogonRecord);
@@ -284,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			var data = stringToArray(records);
 
-			var fileData = new ImportFileData() { FileName = "test.csv", Data = data };
+			var fileData = new ImportFileData { FileName = "test.csv", Data = data };
 			return fileData;
 		}
 
@@ -292,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		{
 			var data = stringToArray(records);
 
-			var fileData = new ImportFileData() { FileName = "test.csv", Data = data };
+			var fileData = new ImportFileData { FileName = "test.csv", Data = data };
 			return fileData;
 		}
 
@@ -300,14 +298,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		{
 			byte[] data;
 
-			using (MemoryStream ms = new MemoryStream())
+			using (var ms = new MemoryStream())
 			{
-				using (StreamWriter sw = new StreamWriter(ms))
+				using (var sw = new StreamWriter(ms))
 				{
 					foreach (var line in lines)
 					{
 						sw.WriteLine(line);
-
 					}
 					sw.Close();
 				}

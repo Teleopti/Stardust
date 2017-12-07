@@ -755,76 +755,44 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return results;
 		}
 
-		public IList<PersonIdentityInfo> GetPersonIdentityInfos()
+		public IList<Guid> FindPersonByIdentity(string identity)
 		{
-			const string sql = "Select Distinct p.Id PersonId, pinfo.ApplicationLogonName, p.EmploymentNumber\r\n"
-							   + "  From Person p\r\n"
-							   + " Inner Join PersonPeriod pp on pp.Parent = p.Id\r\n"
-							   + " Inner Join Team on pp.Team = Team.Id\r\n"
-							   + " Inner Join Site on Team.Site = Site.Id\r\n"
-							   + "  Left Join Tenant.PersonInfo pinfo on pinfo.Id = p.Id\r\n"
-							   + " Where Site.BusinessUnit = '{0}'\r\n"
-							   + "   And p.IsDeleted = 0\r\n"
-							   + "   And Team.IsDeleted = 0\r\n"
-							   + "   And Site.IsDeleted = 0";
+			if(string.IsNullOrEmpty(identity)) return new List<Guid>();
 
-			return Session.CreateSQLQuery(string.Format(sql, getBusinessUnitId()))
+			const string sql = "Select Id as PersonId, 1 as MatchField -- Match EmployeementNumber\r\n"
+							   + "  From Person\r\n"
+							   + " Where IsDeleted = 0\r\n"
+							   + "   And EmploymentNumber = '{0}'\r\n"
+							   + "Union\r\n"
+							   + "Select Id, 2 -- Match ApplicationLogonName\r\n"
+							   + "  From Tenant.PersonInfo\r\n"
+							   + " Where ApplicationLogonName = '{0}'\r\n"
+							   + "Union\r\n"
+							   + "Select Distinct PersonId, 3 -- Match ExternalLogon\r\n"
+							   + "  From ReadModel.ExternalLogon\r\n"
+							   + " Where Deleted = 0\r\n"
+							   + "   And UserCode = '{0}'";
+			var rawObjects = Session.CreateSQLQuery(string.Format(sql, identity.Trim()))
 				.AddScalar("PersonId", NHibernateUtil.Guid)
-				.AddScalar("ApplicationLogonName", NHibernateUtil.String)
-				.AddScalar("EmploymentNumber", NHibernateUtil.String)
+				.AddScalar("MatchField", NHibernateUtil.Int16)
 				.SetReadOnly(true)
 				.List<object[]>()
-				.Select(x =>
-					new PersonIdentityInfo
-					{
-						PersonId = (Guid) x[0],
-						AppLogonName = (string) x[1],
-						EmployeeNumber = (string) x[2]
-					}).ToList();
-		}
-
-		public IList<PersonExternalLogonInfo> GetPersonExternalLogonInfos()
-		{
-			const string sql = "SELECT pp.Parent AS PersonId, el.AcdLogOnName, pp.StartDate, pp.EndDate\r\n"
-							   + "  FROM Person p\r\n"
-							   + " INNER JOIN PersonPeriod pp ON p.Id = pp.Parent\r\n"
-							   + " INNER JOIN Team t on t.Id = pp.Team\r\n"
-							   + " INNER JOIN Site s on t.Site = s.Id\r\n"
-							   + " INNER JOIN ExternalLogOnCollection elc ON pp.Id = elc.PersonPeriod\r\n"
-							   + " INNER JOIN ExternalLogOn el ON elc.ExternalLogOn = el.Id\r\n"
-							   + " WHERE s.BusinessUnit = '{0}'\r\n"
-							   + "   AND p.IsDeleted = 0\r\n"
-							   + "   AND t.IsDeleted = 0\r\n"
-							   + "   AND s.IsDeleted = 0";
-
-			var dbObjects = Session.CreateSQLQuery(string.Format(sql, getBusinessUnitId()))
-				.AddScalar("PersonId", NHibernateUtil.Guid)
-				.AddScalar("AcdLogOnName", NHibernateUtil.String)
-				.AddScalar("StartDate", NHibernateUtil.DateTime)
-				.AddScalar("EndDate", NHibernateUtil.DateTime)
-				.SetReadOnly(true)
-				.List<object[]>()
-				.Select(x =>
-					new
-					{
-						PersonId = (Guid) x[0],
-						ExternalLogonName = (string) x[1],
-						StartDate = new DateOnly((DateTime) x[2]),
-						EndDate = new DateOnly((DateTime) x[3])
-					}).ToList();
-
-			return dbObjects.GroupBy(o => new {o.PersonId, o.StartDate, o.EndDate})
-				.Select(kv => new PersonExternalLogonInfo
+				.Select(x => new
 				{
-					PersonId = kv.Key.PersonId,
-					PersonPeriod = new DateOnlyPeriod(kv.Key.StartDate, kv.Key.EndDate),
-					ExternalLogonName = kv.Select(x => x.ExternalLogonName).ToList()
+					PersonId = (Guid) x[0],
+					MatchField = (short) x[1]
 				}).ToList();
-		}
 
-		private Guid getBusinessUnitId()
-		{
-			return ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
+			var personMatchEmployeeNumber = rawObjects.Where(o => o.MatchField == 1).ToList();
+			if (personMatchEmployeeNumber.Any()) return personMatchEmployeeNumber.Select(p=>p.PersonId).ToList();
+
+			var personMatchAppLogonName = rawObjects.Where(o => o.MatchField == 2).ToList();
+			if (personMatchAppLogonName.Any()) return personMatchAppLogonName.Select(p => p.PersonId).ToList();
+
+			var personMatchExternalLogon = rawObjects.Where(o => o.MatchField == 3).ToList();
+			if (personMatchExternalLogon.Any()) return personMatchExternalLogon.Select(p => p.PersonId).ToList();
+
+			return new List<Guid>();
 		}
 	}
 }
