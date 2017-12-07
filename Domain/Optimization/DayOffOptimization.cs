@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				agents = people.FixedStaffPeople(period);
 			}
 
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, agents, period); 
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, agents, period); 
 
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
 
