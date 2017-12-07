@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder(), _userTimeZone);
-				var teamInfoFactory = _teamInfoFactoryFactory.Create(stateHolder.ChoosenAgents, stateHolder.Schedules, optimizationPreferences.Extra.TeamGroupPage);
+				var teamInfoFactory = _teamInfoFactoryFactory.Create(selectedAgents, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 				_teamBlockDayOffOptimizer.OptimizeDaysOff(matrixList,
 					selectedPeriod,
