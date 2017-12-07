@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var result = Target.Process(fileData, Feedback.SendProgress);
 
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
-			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateTime(2017, 11, 20));
+			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateOnly(2017, 11, 20));
 			result.ValidRecords[0].GameName.Should().Be.EqualTo("Quality Score");
 			result.ValidRecords[0].GameType.Should().Be.EqualTo("percent");
 			result.ValidRecords[0].AgentId.Should().Be.EqualTo("1");
