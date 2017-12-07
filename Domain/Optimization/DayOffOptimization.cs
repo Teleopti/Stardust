@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
 			IOptimizationPreferences optimizationPreferences, 
-			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IBlockPreferenceProvider blockPreferenceProvider,
 			ISchedulingProgress backgroundWorker, 
@@ -73,6 +72,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var FATCLIENT_FLAG_SHOULD_BE_REMOVED = !runWeeklyRestSolver;
 			
 			var stateHolder = _schedulerStateHolder();
+			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);
 
 			using (_resourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, true, selectedPeriod.Inflate(1)))

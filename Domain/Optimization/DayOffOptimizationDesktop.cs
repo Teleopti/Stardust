@@ -22,10 +22,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var blockPreferenceProvider = new FixedBlockPreferenceProvider(optimizationPreferences.Extra);
 
-			_dayOffOptimization.Execute(selectedPeriod, selectedAgents, optimizationPreferences, schedulingOptions, 
+			_dayOffOptimization.Execute(selectedPeriod, selectedAgents, optimizationPreferences, 
 					dayOffOptimizationPreferenceProvider, blockPreferenceProvider, backgroundWorker, false, resourceOptimizerPersonOptimized);
 		}
 	}

@@ -82,12 +82,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
 				agents = people.FixedStaffPeople(period);
 			}
-			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
-
 			_dayOffOptimization.Execute(period,
 				agents.ToList(),
 				optimizationPreferences,
-				schedulingOptions,
 				dayOffOptimizationPreferenceProvider,
 				blockPreferenceProvider,
 				new NoSchedulingProgress(),
@@ -101,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				DateOnlyPeriod = period,
 				Persons = agents,
 				PlanningGroup = planningGroup,
-				UsePreferences = schedulingOptions.UsePreferences
+				UsePreferences = optimizationPreferences.General.UsePreferences
 			};
 		}
 	}
