@@ -113,7 +113,6 @@
     <Compile Include="Bindings\TestRun.cs" />
     <Compile Include="Core\CurrentScopeBusinessUnit.cs" />
     <Compile Include="Core\Extensions\DateOnlyForBehaviorTests.cs" />
-    <Compile Include="Core\Navigation\FakeClientTimeUsingSinonProvenWay.cs" />
     <Compile Include="Core\Navigation\FakeTimeUsingMyTimeMethod.cs" />
     <Compile Include="Core\Navigation\ApplicationStartupTimeout.cs" />
     <Compile Include="Core\Navigation\BustCache.cs" />

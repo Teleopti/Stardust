@@ -18,7 +18,6 @@
 		'rtaAgentsBuildService',
 		'rtaRouteService',
 		'rtaStateService',
-		'fakeTimeService',
 		'NoticeService'
 	];
 
@@ -34,7 +33,6 @@
 								 rtaAgentsBuildService,
 								 rtaRouteService,
 								 rtaStateService,
-								 fakeTimeService,
 								 NoticeService) {
 
 		var vm = this;

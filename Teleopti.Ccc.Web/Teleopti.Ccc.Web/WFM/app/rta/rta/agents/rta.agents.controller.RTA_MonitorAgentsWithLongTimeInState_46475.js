@@ -23,7 +23,6 @@
 		'rtaAgentsBuildService',
 		'rtaRouteService',
 		'rtaStateService',
-		'fakeTimeService',
 		'localeLanguageSortingService',
 		'Toggle',
 		'NoticeService'
@@ -46,7 +45,6 @@
 								 rtaAgentsBuildService,
 								 rtaRouteService,
 								 rtaStateService,
-								 fakeTimeService,
 								 localeLanguageSortingService,
 								 Toggle,
 								 NoticeService) {

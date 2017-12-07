@@ -1664,7 +1664,6 @@
     <Content Include="WFM\app\rta\rta\overview\controller.storeState.spec.js" />
     <Content Include="WFM\app\rta\rta\rta.adherence.service.js" />
     <Content Include="WFM\app\rta\rta\rta.backend.fake.js" />
-    <Content Include="WFM\app\rta\rta\rta.faketime.service.js" />
     <Content Include="WFM\app\rta\rta\rta.format.service.js" />
     <Content Include="WFM\app\rta\rta\rta.format.service.spec.js" />
     <Content Include="WFM\app\rta\rta\rta.html" />

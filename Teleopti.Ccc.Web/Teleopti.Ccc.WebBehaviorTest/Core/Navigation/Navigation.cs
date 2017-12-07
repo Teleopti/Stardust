@@ -22,11 +22,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			interceptors.Add(u => u == "", new BustCache());
 			interceptors.Add(u => u == "MyTime#Requests/Index", new BustCache());
 
-			interceptors.Add(u => u.Contains("/Anywhere#teamschedule"), new FakeClientTimeUsingSinonProvenWay());
-			interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new FakeClientTimeUsingSinonProvenWay());
 			interceptors.Add(u => u.Contains("/MyTime/Asm"), new FakeTimeUsingMyTimeMethod());
 			interceptors.Add(u => u.Contains("/MyTime#Schedule/Week"), new FakeTimeUsingMyTimeMethod());
-			interceptors.Add(u => u.Contains("/wfm/#/rta/agents"), new FakeClientTimeUsingSinonProvenWay());
+//			interceptors.Add(u => u.Contains("/wfm/#/rta/agents"), new FakeClientTimeUsingSinonProvenWay());
 
 			interceptors.Add(u => u.Contains("/wfm/#/rta"), new WaitUntilHangfireQueueIsProcessed());
 		}
