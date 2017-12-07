@@ -17,6 +17,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.FillWith("input#planningGroupName", planningGroupName);
 		}
 
+		[When(@"I input scheduling setting name '(.*)'")]
+		public void WhenIInputschedulingSettingName(string planningGroupName)
+		{
+			Browser.Interactions.FillWith("input#schedulingSettingName", planningGroupName);
+		}
+
 		[When(@"I select the team")]
 		public void WhenISelectTheTeam(Table table)
 		{
@@ -35,16 +41,40 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			}
 		}
 
+		[When(@"I open block scheduling panel")]
+		public void WhenIOpenTheBlockSchedulingPanel()
+		{
+			Browser.Interactions.Click(".block-scheduling-panel");
+		}
+
+		[When(@"I turn on block scheduling setting")]
+		public void WhenITurnOnTheBlockScheduling()
+		{
+			Browser.Interactions.Click("md-switch");
+		}
+
 		[When(@"I save planning group")]
 		public void WhenISavePlanningGroup()
 		{
 			Browser.Interactions.Click(".save-plan-group");
 		}
 
+		[When(@"I save scheduling setting")]
+		public void WhenISaveSchedulingSetting()
+		{
+			Browser.Interactions.Click(".save-scheduling-setting");
+		}
+
 		[Then(@"I should see '(.*)' in the planning group list")]
 		public void ThenIShouldSeeInThePlanningGroupList(string planningGroupName)
 		{
 			Browser.Interactions.AssertAnyContains(".plan-group > div.list-header h1", planningGroupName);
+		}
+
+		[Then(@"I should see '(.*)' in the scheduling setting list")]
+		public void ThenIShouldSeeInTheSchedulingSettingList(string planningGroupName)
+		{
+			Browser.Interactions.AssertAnyContains(".scheduling-setting-name > b", planningGroupName);
 		}
 
 		[Given(@"there is an planning group with")]

@@ -80,3 +80,52 @@ Scenario: Edit planning group
 	 | Team 2 | Site 2 |
 	And I save planning group
 	Then I should see 'PlanningGroup 2' in the planning group list
+
+Scenario: Add scheduling setting for planning group
+	Given there is a site named 'Site 1'
+	And there is a site named 'Site 2'
+	And there is a team named 'Team 1' on 'Site 1'
+	And there is a team named 'Team 2' on 'Site 2'
+	And I have a role with
+	| Field                     | Value            |
+	| Name                      | Resource Planner |
+	| Access to team            | Team 1, Team 2   |
+	| Access to resourceplanner | true             |
+	And there is an planning group with
+	| Field               | Value           |
+	| Planning group name | PlanningGroup 1 |
+	| Team                | Team 1          |
+	When I am viewing create scheduling setting page for planning group 'PlanningGroup 1'
+	And I input scheduling setting name 'PlanningGroupSetting 1'
+	And I select the team 
+	 | Team   | Site   |
+	 | Team 1 | Site 1 |
+	 | Team 2 | Site 2 |
+	And I save scheduling setting
+	Then I should see 'PlanningGroupSetting 1' in the scheduling setting list
+
+Scenario: Add block scheduling setting for planning group
+	Given there is a site named 'Site 1'
+	And there is a site named 'Site 2'
+	And there is a team named 'Team 1' on 'Site 1'
+	And there is a team named 'Team 2' on 'Site 2'
+	And I have a role with
+	| Field                     | Value            |
+	| Name                      | Resource Planner |
+	| Access to team            | Team 1, Team 2   |
+	| Access to resourceplanner | true             |
+	And there is an planning group with
+	| Field               | Value           |
+	| Planning group name | PlanningGroup 1 |
+	| Team                | Team 1          |
+	When I am viewing create scheduling setting page for planning group 'PlanningGroup 1'
+	And I input scheduling setting name 'PlanningGroupBlockSetting 1'
+	And I select the team 
+	 | Team   | Site   |
+	 | Team 1 | Site 1 |
+	 | Team 2 | Site 2 |
+	And I open block scheduling panel
+	And I turn on block scheduling setting
+	And I save scheduling setting
+	Then I should see 'PlanningGroupBlockSetting 1' in the scheduling setting list
+
