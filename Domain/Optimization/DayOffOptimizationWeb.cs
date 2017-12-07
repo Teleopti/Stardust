@@ -27,8 +27,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
-		private readonly IResourceCalculation _resourceOptimizationHelper;
-		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPersonRepository _personRepository;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
@@ -43,8 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult,
-			IResourceCalculation resourceOptimizationHelper,
-			IUserTimeZone userTimeZone,
 			IPersonRepository personRepository,
 			TeamInfoFactoryFactory teamInfoFactoryFactory, 
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
@@ -59,8 +55,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationResult = optimizationResult;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_userTimeZone = userTimeZone;
 			_personRepository = personRepository;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
@@ -103,7 +97,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, agents, period);
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences); 
-			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.SchedulingResultState, true, period.Inflate(1)))
 			{
@@ -111,7 +104,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					agents.ToList(),
 					optimizationPreferences,
 					schedulingOptions,
-					resourceCalcDelayer, 
 					dayOffOptimizationPreferenceProvider,
 					blockPreferenceProvider,
 					_teamInfoFactoryFactory.Create(agents, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer),

@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -15,42 +14,33 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationDesktopTeamBlock
 	{
-		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly DayOffOptimization _dayOffOptimization;
-		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
-		private readonly IUserTimeZone _userTimeZone;
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ScheduleBlankSpots _scheduleBlankSpots;
 		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 
-		public DayOffOptimizationDesktopTeamBlock(IResourceCalculation resourceOptimizationHelper,
-								DayOffOptimization dayOffOptimization,
-								Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
+		public DayOffOptimizationDesktopTeamBlock(DayOffOptimization dayOffOptimization,
 								MatrixListFactory matrixListFactory,
 								Func<ISchedulerStateHolder> schedulerStateHolder,
 								CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 								TeamInfoFactoryFactory teamInfoFactoryFactory,
-								IUserTimeZone userTimeZone,
 								DaysOffBackToLegalState daysOffBackToLegalState,
 								IScheduleDayEquator scheduleDayEquator,
 								ScheduleBlankSpots scheduleBlankSpots,
 								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
 								Func<IScheduleDayChangeCallback> scheduleDayChangeCallback)
 		{
-			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_dayOffOptimization = dayOffOptimization;
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_matrixListFactory = matrixListFactory;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
-			_userTimeZone = userTimeZone;
 			_daysOffBackToLegalState = daysOffBackToLegalState;
 			_scheduleDayEquator = scheduleDayEquator;
 			_scheduleBlankSpots = scheduleBlankSpots;
@@ -98,12 +88,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 					matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedAgents, selectedPeriod);
 				}
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder(), _userTimeZone);
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(selectedAgents, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 				var blockPreferenceProvider = new FixedBlockPreferenceProvider(optimizationPreferences.Extra); 
 				
 				_dayOffOptimization.Execute(matrixList, selectedPeriod, selectedPersons, optimizationPreferences, schedulingOptions, 
-					resourceCalculateDelayer, dayOffOptimizationPreferenceProvider, blockPreferenceProvider, teamInfoFactory, backgroundWorker, false);
+					dayOffOptimizationPreferenceProvider, blockPreferenceProvider, teamInfoFactory, backgroundWorker, false);
 			}
 		}
 	}
