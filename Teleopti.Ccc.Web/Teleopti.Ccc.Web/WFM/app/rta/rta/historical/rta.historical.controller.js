@@ -17,6 +17,9 @@
 				return '';
 			return time.format('HH:mm:ss');
 		};
+		
+		var shiftInfo;
+		
 		rtaService.getAgentHistoricalData(id)
 			.then(function (data) {
 
@@ -24,7 +27,7 @@
 				data.OutOfAdherences = data.OutOfAdherences || [];
 				data.Changes = data.Changes || [];
 
-				var shiftInfo = buildShiftInfo(data);
+				shiftInfo = buildShiftInfo(data);
 
 				vm.personId = data.PersonId;
 				vm.agentName = data.AgentName;
@@ -32,19 +35,19 @@
 
 				vm.currentTimeOffset = calculateWidth(shiftInfo.timeWindowStart, data.Now, shiftInfo.timeWindowSeconds);
 
-				vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules, shiftInfo);
+				vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
 
-				vm.outOfAdherences = buildAgentOutOfAdherences(data, shiftInfo);
+				vm.outOfAdherences = buildAgentOutOfAdherences(data);
 
 				vm.fullTimeline = buildTimeline(data.Timeline);
 
 				vm.cards = mapChanges(data.Changes, data.Schedules);
 
-				vm.diamonds = buildDiamonds(shiftInfo, data);
+				vm.diamonds = buildDiamonds(data);
 
 			});
 
-		function buildAgentOutOfAdherences(data, shiftInfo) {
+		function buildAgentOutOfAdherences(data) {
 			return data.OutOfAdherences.map(function (ooa) {
 				var startTime = moment(ooa.StartTime);
 				var startTimeFormatted = shiftInfo.timeWindowStart > startTime ?
@@ -61,7 +64,7 @@
 			});
 		}
 
-		function buildAgentsFullSchedule(schedules, shiftInfo) {
+		function buildAgentsFullSchedule(schedules) {
 			return schedules.map(function (layer) {
 				return {
 					Width: calculateWidth(layer.StartTime, layer.EndTime, shiftInfo.timeWindowSeconds),
@@ -75,35 +78,31 @@
 
 		function buildShiftInfo(data) {
 			data.Timeline = data.Timeline || {};
-			var start = moment(data.Timeline.StartTime)
-			var end = moment(data.Timeline.EndTime)
-			var result = {
-				start: start,
-				stop: end,
+			var start = moment(data.Timeline.StartTime);
+			var end = moment(data.Timeline.EndTime);
+			var shiftInfo = {
 				totalSeconds: end.diff(start, 'seconds')
 			};
 
 			var schedule = data.Schedules;
 			if (schedule.length > 0) {
-				var earliestStartTime = earliest(schedule);
-				var latestEndTime = latest(schedule);
-				var start = earliestStartTime.clone();
+				var shiftStartTime = moment(schedule[0].StartTime);
+				var shiftEndTime = moment(schedule[schedule.length - 1].EndTime);
+				start = shiftStartTime.clone();
 				start.startOf('minute');
-				var end = latestEndTime.clone();
+				end = shiftEndTime.clone();
 				end.endOf('minute');
 
-				result.start = start;
-				result.end = end;
-				result.totalSeconds = latestEndTime.diff(earliestStartTime, 'seconds');
+				shiftInfo.totalSeconds = shiftEndTime.diff(shiftStartTime, 'seconds');
 			}
 
-			result.timeWindowSeconds = result.totalSeconds % 3600 == 0 ? result.totalSeconds + 7200 : result.totalSeconds + (3600 - (result.totalSeconds % 3600)) + 7200;
-			result.timeWindowStart = result.start.clone().add(-1, 'hour');
+			shiftInfo.timeWindowSeconds = shiftInfo.totalSeconds % 3600 == 0 ? shiftInfo.totalSeconds + 7200 : shiftInfo.totalSeconds + (3600 - (shiftInfo.totalSeconds % 3600)) + 7200;
+			shiftInfo.timeWindowStart = start.clone().add(-1, 'hour');
 
-			return result;
+			return shiftInfo;
 		}
 
-		function buildDiamonds(shiftInfo, data) {
+		function buildDiamonds(data) {
 			return data.Changes.map(function (change, i) {
 				change.Offset = calculateWidth(shiftInfo.timeWindowStart, change.Time, shiftInfo.timeWindowSeconds);
 				change.RuleColor = !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor;
@@ -118,7 +117,7 @@
 		function highlightThis(change) {
 			vm.diamonds.forEach(function (d) {
 				d.highlight = false;
-			})
+			});
 			change.highlight = true;
 			change.parent.isOpen = true;
 		}
@@ -188,28 +187,5 @@
 			return timeline;
 		}
 
-		function earliest(arr) {
-			return arr
-				.map(function (el) {
-					return moment(el.StartTime);
-				})
-				.sort(sorter)[0];
-		}
-
-		function latest(arr) {
-			return arr
-				.map(function (el) {
-					return moment(el.EndTime);
-				})
-				.sort(reverseSorter)[0];
-		}
-
-		function sorter(first, second) {
-			return first.diff(second, 'seconds');
-		}
-
-		function reverseSorter(first, second) {
-			return sorter(second, first);
-		}
 	}
 })();
