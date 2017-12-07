@@ -17,23 +17,47 @@
 				return '';
 			return time.format('HH:mm:ss');
 		};
-		
+
 		var shiftInfo;
-		
+
+		function calculatePercentage(offsetTime, time, totalSeconds) {
+			var diff = moment(time).diff(moment(offsetTime), 'seconds');
+			return (diff / totalSeconds) * 100 + '%';
+		}
+
+		function makeOffsetCalculator(offsetTime, totalSeconds) {
+			return function (time) {
+				return calculatePercentage(offsetTime, time, totalSeconds);
+			}
+		}
+
+		function makeWidthCalculator(totalSeconds) {
+			return function (offsetTime, time) {
+				return calculatePercentage(offsetTime, time, totalSeconds);
+			}
+		}
+
+		var calculateWidth;
+		var calculateOffset;
+
 		rtaService.getAgentHistoricalData(id)
 			.then(function (data) {
 
 				data.Schedules = data.Schedules || [];
 				data.OutOfAdherences = data.OutOfAdherences || [];
 				data.Changes = data.Changes || [];
+				data.Timeline = data.Timeline || {};
 
 				shiftInfo = buildShiftInfo(data);
+
+				calculateWidth = makeWidthCalculator(shiftInfo.timeWindowSeconds);
+				calculateOffset = makeOffsetCalculator(shiftInfo.timeWindowStart, shiftInfo.timeWindowSeconds);
 
 				vm.personId = data.PersonId;
 				vm.agentName = data.AgentName;
 				vm.date = moment(data.Now);
 
-				vm.currentTimeOffset = calculateWidth(shiftInfo.timeWindowStart, data.Now, shiftInfo.timeWindowSeconds);
+				vm.currentTimeOffset = calculateOffset(data.Now);
 
 				vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
 
@@ -56,8 +80,8 @@
 				var endTime = ooa.EndTime != null ? ooa.EndTime : data.Now;
 				var endTimeFormatted = ooa.EndTime != null ? moment(ooa.EndTime).format('HH:mm:ss') : '';
 				return {
-					Width: calculateWidth(startTime, endTime, shiftInfo.timeWindowSeconds),
-					Offset: calculateWidth(shiftInfo.timeWindowStart, startTime, shiftInfo.timeWindowSeconds),
+					Width: calculateWidth(startTime, endTime),
+					Offset: calculateOffset(startTime),
 					StartTime: startTimeFormatted,
 					EndTime: endTimeFormatted
 				};
@@ -67,8 +91,8 @@
 		function buildAgentsFullSchedule(schedules) {
 			return schedules.map(function (layer) {
 				return {
-					Width: calculateWidth(layer.StartTime, layer.EndTime, shiftInfo.timeWindowSeconds),
-					Offset: calculateWidth(shiftInfo.timeWindowStart, layer.StartTime, shiftInfo.timeWindowSeconds),
+					Width: calculateWidth(layer.StartTime, layer.EndTime),
+					Offset: calculateOffset(layer.StartTime),
 					StartTime: moment(layer.StartTime),
 					EndTime: moment(layer.EndTime),
 					Color: layer.Color
@@ -77,7 +101,6 @@
 		}
 
 		function buildShiftInfo(data) {
-			data.Timeline = data.Timeline || {};
 			var start = moment(data.Timeline.StartTime);
 			var end = moment(data.Timeline.EndTime);
 			var shiftInfo = {
@@ -104,7 +127,7 @@
 
 		function buildDiamonds(data) {
 			return data.Changes.map(function (change, i) {
-				change.Offset = calculateWidth(shiftInfo.timeWindowStart, change.Time, shiftInfo.timeWindowSeconds);
+				change.Offset = calculateOffset(change.Time);
 				change.RuleColor = !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor;
 				change.Color = change.RuleColor;
 				change.click = function () {
@@ -119,7 +142,7 @@
 				return change;
 			});
 		}
-		
+
 		function mapChanges(changes, schedules) {
 
 			var makeCard = function (header, color, startTime, endTime) {
@@ -132,15 +155,15 @@
 					EndTime: endTime
 				}
 			};
-			
+
 			if (schedules.length === 0) {
 				var card = makeCard($translate.instant('NoShift'), 'black');
 				card.Items = changes;
 				return [card];
 			}
-			
+
 			var beforeShift = [makeCard($translate.instant('BeforeShiftStart'), 'black', '0000-01-01T00:00:00', schedules[0].StartTime)];
-			var afterShift = [makeCard($translate.instant('AfterShiftEnd'), 'black', schedules[schedules.length-1].EndTime, '9999-01-01T00:00:00')];
+			var afterShift = [makeCard($translate.instant('AfterShiftEnd'), 'black', schedules[schedules.length - 1].EndTime, '9999-01-01T00:00:00')];
 			return beforeShift
 				.concat(schedules.map(function (l) {
 					var activityStart = moment(l.StartTime);
@@ -155,15 +178,10 @@
 					});
 					return card
 				})
-				.filter(function(card) {
+				.filter(function (card) {
 					return card.Items.length > 0;
 				});
-			
-		}
 
-		function calculateWidth(startTime, endTime, totalSeconds) {
-			var diff = moment(endTime).diff(moment(startTime), 'seconds');
-			return (diff / totalSeconds) * 100 + '%';
 		}
 
 		function buildTimeline(times) {
