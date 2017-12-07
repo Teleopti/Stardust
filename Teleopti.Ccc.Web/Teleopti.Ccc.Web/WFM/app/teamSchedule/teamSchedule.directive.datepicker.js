@@ -13,14 +13,15 @@
 				onDateChange: '&',
 				options: '=?'
 			},
-			controller: ['$timeout', teamScheduleDatePickerCtrl],
+			controller: ['$timeout', '$locale', teamScheduleDatePickerCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function teamScheduleDatePickerCtrl($timeout) {
+	function teamScheduleDatePickerCtrl($timeout, $locale) {
 		var vm = this;
+		vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 		vm.step = parseInt(vm.step) || 1;
 
 		vm.onDateInputChange = function () {

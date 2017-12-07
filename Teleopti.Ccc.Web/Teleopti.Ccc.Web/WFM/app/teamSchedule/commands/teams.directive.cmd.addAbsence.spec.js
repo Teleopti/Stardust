@@ -69,8 +69,8 @@
 			endTimeString = result.container[0].querySelectorAll('.uib-timepicker input')[2].value
 				+ result.container[0].querySelectorAll('.uib-timepicker input')[3].value;
 
-		expect(startDateString).toBe('2015-01-01');
-		expect(endDateString).toBe('2015-01-01');
+		expect(moment(new Date(startDateString)).format("YYYY-MM-DD")).toBe('2015-01-01');
+		expect(moment(new Date(endDateString)).format("YYYY-MM-DD")).toBe('2015-01-01');
 
 		expect(startTimeString).toBe('1000');
 		expect(endTimeString).toBe('1100');

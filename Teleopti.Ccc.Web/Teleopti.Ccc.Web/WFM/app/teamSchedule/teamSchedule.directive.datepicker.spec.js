@@ -24,7 +24,7 @@
 
 		var dateStringInput = angular.element(result.container[0].querySelector(".teamschedule-datepicker #teamschedule-datepicker-input"));
 		expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-01');
-		expect(dateStringInput.val()).toBe('2016-06-01');
+		expect(moment(new Date(dateStringInput.val())).format('YYYY-MM-DD')).toBe('2016-06-01');
 	});
 
 	it('should update date string when selected day is changed', function () {
@@ -34,13 +34,13 @@
 		var dateStringInput = angular.element(result.container[0].querySelector(".teamschedule-datepicker #teamschedule-datepicker-input"));
 
 		expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-01');
-		expect(dateStringInput.val()).toBe('2016-06-01');
+		expect(moment(new Date(dateStringInput.val())).format('YYYY-MM-DD')).toBe('2016-06-01');
 
 		vm.selectedDate = moment('2016-06-02').toDate();
 		result.scope.$apply();
 
 		expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-02');
-		expect(dateStringInput.val()).toBe('2016-06-02');
+		expect(moment(new Date(dateStringInput.val())).format('YYYY-MM-DD')).toBe('2016-06-02');
 	});
 
 	function setUp(inputDate) {

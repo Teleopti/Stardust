@@ -2,10 +2,9 @@
 	<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoPreviousDate()" ng-hide="vm.isMiniMode">
 		<i class="mdi mdi-chevron-double-left"></i>
 	</button>
-
-	<input type="text" id="teamschedule-datepicker-input" uib-datepicker-popup is-open="vm.isCalendarOpened" class="pointer"
+	<input type="text" id="teamschedule-datepicker-input" uib-datepicker-popup="{{vm.dateFormat}}" is-open="vm.isCalendarOpened" class="pointer"
 		   ng-model="vm.selectedDate" ng-model-options="{ updateOn: 'blur change', allowInvalid: false }"
-		   placeholder="YYYY-MM-DD"
+		   placeholder="{{vm.dateFormat}}"
 		   ng-change="vm.onDateInputChange()"
 		   show-button-bar="false" />
 
