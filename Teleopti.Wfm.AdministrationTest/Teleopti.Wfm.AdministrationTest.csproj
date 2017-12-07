@@ -60,8 +60,10 @@
     </Compile>
     <Compile Include="AdministrationTestAttribute.cs" />
     <Compile Include="EtlTool\JobCollectionModelProviderTest.cs" />
-    <Compile Include="EtlTool\FakeBaseConfigurationRepository.cs" />
-    <Compile Include="EtlTool\FakePmInfoProvider.cs" />
+    <Compile Include="FakeData\FakeBaseConfigurationRepository.cs" />
+    <Compile Include="FakeData\FakePmInfoProvider.cs" />
+    <Compile Include="EtlTool\TenantLogDataSourcesProviderTest.cs" />
+    <Compile Include="FakeData\FakeGeneralInfrastructure.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

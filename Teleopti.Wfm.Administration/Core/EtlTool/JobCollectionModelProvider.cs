@@ -21,18 +21,22 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		private readonly IComponentContext _componentContext;
 		private readonly IPmInfoProvider _pmInfoProvider;
 		private readonly IConfigurationHandler _configurationHandler;
-		private readonly ILoadAllTenants _loadAllTenants;
+		private readonly AnalyticsConnectionsStringExtractor _analyticsConnectionsStringExtractor;
 
-		public JobCollectionModelProvider(IComponentContext componentContext, IPmInfoProvider pmInfoProvider, IConfigurationHandler configurationHandler, ILoadAllTenants loadAllTenants)
+		public JobCollectionModelProvider(
+			IComponentContext componentContext, 
+			IPmInfoProvider pmInfoProvider, 
+			IConfigurationHandler configurationHandler, 
+			AnalyticsConnectionsStringExtractor analyticsConnectionsStringExtractor)
 		{
 			_componentContext = componentContext;
 			_pmInfoProvider = pmInfoProvider;
 			_configurationHandler = configurationHandler;
-			_loadAllTenants = loadAllTenants;
+			_analyticsConnectionsStringExtractor = analyticsConnectionsStringExtractor;
 		}
 		public IList<JobCollectionModel> Create(string tenantName)
 		{
-			var dataMartConnectionString = extractConnectionString(tenantName);
+			var dataMartConnectionString = _analyticsConnectionsStringExtractor.Extract(tenantName);
 
 			_configurationHandler.SetConnectionString(dataMartConnectionString);
 			IJobParameters jobParameters = new JobParameters(null, 1,
@@ -53,17 +57,6 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 						.ToList()
 				})
 				.ToList();
-		}
-
-		private string extractConnectionString(string tenantName)
-		{
-			var currentTenant = _loadAllTenants.Tenants()
-				.SingleOrDefault(x => x.Name == tenantName);
-
-			if (currentTenant == null)
-				throw new ArgumentException($"A tenant with name '{tenantName}' could not be found.", nameof(tenantName));
-
-			return currentTenant.DataSourceConfiguration.AnalyticsConnectionString;
 		}
 	}
 }

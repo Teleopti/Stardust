@@ -15,6 +15,8 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<JobCollectionModelProvider>().SingleInstance();
+			builder.RegisterType<TenantLogDataSourcesProvider>().SingleInstance();
+			builder.RegisterType<AnalyticsConnectionsStringExtractor>().SingleInstance();
 			builder.RegisterType<EtlModule.TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<PmInfoProvider>().As<IPmInfoProvider>().SingleInstance();

@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Analytics.Etl.Common.Service;
 
-namespace Teleopti.Wfm.AdministrationTest.EtlTool
+namespace Teleopti.Wfm.AdministrationTest.FakeData
 {
 	public class FakePmInfoProvider : IPmInfoProvider
 	{

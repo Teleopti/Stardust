@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
-namespace Teleopti.Wfm.AdministrationTest.EtlTool
+namespace Teleopti.Wfm.AdministrationTest.FakeData
 {
 	public class FakeBaseConfigurationRepository : IBaseConfigurationRepository
 	{

@@ -12,11 +12,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		private readonly IToggleManager _toggleManager;
 		private readonly JobCollectionModelProvider _jobCollectionModelProvider;
+		private readonly TenantLogDataSourcesProvider _tenantLogDataSourcesProvider;
 
-		public EtlController(IToggleManager toggleManager, JobCollectionModelProvider jobCollectionModelProvider)
+		public EtlController(IToggleManager toggleManager, JobCollectionModelProvider jobCollectionModelProvider, TenantLogDataSourcesProvider tenantLogDataSourcesProvider)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
+			_tenantLogDataSourcesProvider = tenantLogDataSourcesProvider;
 		}
 
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
@@ -32,10 +34,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(_jobCollectionModelProvider.Create(tenantName));
 		}
 
+		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/TenantLogDataSources")]
 		public virtual IHttpActionResult TenantLogDataSources([FromBody] string tenantName)
 		{
-			return null;
+			return Json(_tenantLogDataSourcesProvider.Load(tenantName));
 		}
 	}
 }

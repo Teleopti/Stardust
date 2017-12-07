@@ -4,6 +4,7 @@ using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Wfm.Administration.Core.EtlTool;
+using Teleopti.Wfm.AdministrationTest.FakeData;
 
 namespace Teleopti.Wfm.AdministrationTest.EtlTool
 {

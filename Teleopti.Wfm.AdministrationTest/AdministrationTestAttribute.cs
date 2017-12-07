@@ -3,7 +3,7 @@ using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Administration.Core.Modules;
-using Teleopti.Wfm.AdministrationTest.EtlTool;
+using Teleopti.Wfm.AdministrationTest.FakeData;
 
 namespace Teleopti.Wfm.AdministrationTest
 {
