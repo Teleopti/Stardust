@@ -128,7 +128,6 @@
             var changeTime = moment(change.Time);
             var earliestStartTime = earliest(schedules);
             var latestEndTime = latest(schedules);
-
             var key;
             var cardColor = 'black';
             if (schedules.length === 0) {
@@ -136,7 +135,7 @@
             } else {
                 if (changeTime.isBefore(earliestStartTime)) {
                     key = $translate.instant('BeforeShiftStart');
-                } else if (changeTime.isAfter(latestEndTime)) {
+                } else if (changeTime.isAfter(latestEndTime) || changeTime.isSame(latestEndTime) ) {
                     key = $translate.instant('AfterShiftEnd');
                 } else {
                     var activityWhenChangeOccurred = schedules.find(function (layer) {

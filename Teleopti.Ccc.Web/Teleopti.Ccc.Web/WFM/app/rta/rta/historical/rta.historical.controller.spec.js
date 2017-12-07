@@ -380,7 +380,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(controller.cards[2].Items[0].Adherence).toEqual('In adherence');
 		expect(controller.cards[2].Items[0].AdherenceColor).toEqual('green');
 	});
-
+    
 	it('should display changes before shift start in its own card', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
@@ -456,7 +456,28 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(controller.cards[0].Items[0].Adherence).toEqual('Out adherence');
 		expect(controller.cards[0].Items[0].AdherenceColor).toEqual('red');
 	});
+	
+	it('should display changes on shift end in the after card', function (tester) {
+		tester.stateParams.personId = '1';
+		tester.backend
+			.withHistoricalAdherence({
+				Now: '2017-12-07T17:10:00',
+				PersonId: '1',
+				Schedules: [{
+					StartTime: '2017-12-07T08:00:00',
+					EndTime: '2017-12-07T17:00:00'
+				}],
+				Changes: [{
+					Time: '2017-12-07T17:00:00'
+				}]
+			});
 
+		var controller = tester.createController();
+
+		expect(controller.cards[0].Header).toEqual('AfterShiftEnd');
+		expect(controller.cards[0].Items[0].Time).toEqual('2017-12-07T17:00:00');
+	});
+	
 	it('should display closed cards by default', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
