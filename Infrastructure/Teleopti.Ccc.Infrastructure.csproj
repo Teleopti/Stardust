@@ -240,6 +240,7 @@
     <Compile Include="Foundation\TokenIdentityProvider.cs" />
     <Compile Include="Foundation\DatabaseConnectionLostException.cs" />
     <Compile Include="Foundation\WebRequestPrincipalContext.cs" />
+    <Compile Include="Repositories\ExternalPerformanceDataReadModelRepository.cs" />
     <Compile Include="Hangfire\AllowFailuresFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\HangfireClientStarter.cs" />
     <Compile Include="Hangfire\HangfireDashboardStarter.cs" />
@@ -258,7 +259,6 @@
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
-    <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\RequestPeriod.cs" />
     <Compile Include="Repositories\Stardust\IStardustRepository.cs" />

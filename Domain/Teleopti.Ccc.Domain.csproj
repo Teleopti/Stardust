@@ -172,6 +172,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplate.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersister.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportGamificationJobResultDetail.cs" />
+    <Compile Include="ApplicationLayer\ImportExternalPerformance\IExternalPerformanceDataReadModelRepository.cs" />
     <Compile Include="ApplicationLayer\ImportFileData.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\FileProcessor.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\IImportAgentDataProvider.cs" />
@@ -365,7 +366,6 @@
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />
     <Compile Include="Repositories\IAnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\IASMScheduleChangeTimeRepository.cs" />
-    <Compile Include="Repositories\IExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\IExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\PersonBudgetGroupName.cs" />
     <Compile Include="Reports\IScheduleAnalysisProvider.cs" />
@@ -4036,7 +4036,6 @@
     <EmbeddedResource Include="Common\ExternalPerformance.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="Common\ExternalPerformanceData.hbm.xml" />
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />

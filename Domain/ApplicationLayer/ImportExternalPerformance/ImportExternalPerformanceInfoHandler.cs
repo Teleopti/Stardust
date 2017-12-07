@@ -22,20 +22,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private readonly IImportJobArtifactValidator _validator;
 		private readonly IExternalPerformanceInfoFileProcessor _externalPerformanceInfoFileProcessor;
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
-		private readonly IExternalPerformanceDataRepository _externalPerformanceDataRepository;
+		private readonly IExternalPerformanceDataReadModelRepository _dataReadModelRepository;
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportExternalPerformanceInfoHandler));
 
 		public ImportExternalPerformanceInfoHandler(IJobResultRepository jobResultRepository, IStardustJobFeedback feedback, 
 			IImportJobArtifactValidator validator, IExternalPerformanceInfoFileProcessor externalPerformanceInfoFileProcessor, 
-			IExternalPerformanceRepository externalPerformanceRepository, IExternalPerformanceDataRepository externalPerformanceDataRepository)
+			IExternalPerformanceRepository externalPerformanceRepository, IExternalPerformanceDataReadModelRepository dataReadModelRepository)
 		{
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
 			_validator = validator;
 			_externalPerformanceInfoFileProcessor = externalPerformanceInfoFileProcessor;
 			_externalPerformanceRepository = externalPerformanceRepository;
-			_externalPerformanceDataRepository = externalPerformanceDataRepository;
+			_dataReadModelRepository = dataReadModelRepository;
 		}
 
 		[AsSystem]
@@ -116,17 +116,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private void saveRecords(IList<PerformanceInfoExtractionResult> validRecords)
 		{
 			var externalPerformanceSettings = _externalPerformanceRepository.FindAllExternalPerformances();
-			var allExistData = _externalPerformanceDataRepository.LoadAll();
 
 			foreach (var validRecord in validRecords)
 			{
 				var score = validRecord.GameNumberScore;
 				if (validRecord.GameType == "percent") score = Convert.ToInt32(validRecord.GamePercentScore.Value * 10000);
 
-				var existData = allExistData.FirstOrDefault(x => x.Person == validRecord.PersonId && x.DateFrom == validRecord.DateFrom);
-				if (existData == null)
-				{
-					_externalPerformanceDataRepository.Add(new ExternalPerformanceData()
+				_dataReadModelRepository.Add(new ExternalPerformanceData()
 					{
 						ExternalPerformance = externalPerformanceSettings.FirstOrDefault(x => x.ExternalId == validRecord.GameId).Id.Value,
 						DateFrom = validRecord.DateFrom,
@@ -135,11 +131,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 						Score = score
 					});
 				}
-				else
-				{
-					existData.Score = score;
-				}
-			}
 		}
 
 		private void saveErrorJobResultDetail(ImportExternalPerformanceInfoEvent @event, DetailLevel level, string message, Exception exception)
