@@ -3,7 +3,6 @@ Feature: Planning Period
 	As a resource planner
 	I want to work on planning periods
 
-@ignore
 Scenario: The first planning period suggestion should be the next upcoming schedule period
 	Given the time is '2016-06-07'
 	And I am swedish

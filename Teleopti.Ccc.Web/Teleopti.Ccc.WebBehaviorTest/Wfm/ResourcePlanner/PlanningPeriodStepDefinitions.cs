@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[When(@"I click apply planning period")]
 		public void WhenIClickApplyPlanningPeriod()
 		{
-			Browser.Interactions.ClickVisibleOnly(".apply-planning-period.wfm-btn-invis-primary");
+			Browser.Interactions.Click(".apply-planning-period");
 		}
 
 		[When(@"I click create next planning period")]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[Then(@"I should see planning period suggestions")]
 		public void ThenIShouldSeePlanningPeriodSuggestions()
 		{
-			Browser.Interactions.AssertExists(".wfm-chip-wrap");
+			Browser.Interactions.AssertExists(".planning-period-suggesions");
 		}
 
 		[Then(@"I should see a planning period between '(.*)' and '(.*)'" ), SetCulture("sv-SE")]
