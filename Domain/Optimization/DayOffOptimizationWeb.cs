@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
-		private readonly MatrixListFactory _matrixListFactory;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleDictionaryPersister persister, 
 			IPlanningPeriodRepository planningPeriodRepository,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
-			MatrixListFactory matrixListFactory,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult,
@@ -49,7 +47,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_persister = persister;
 			_planningPeriodRepository = planningPeriodRepository;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
-			_matrixListFactory = matrixListFactory;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationResult = optimizationResult;
@@ -91,20 +88,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
 				agents = people.FixedStaffPeople(period);
 			}
-
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, agents, period);
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.SchedulingResultState, true, period.Inflate(1)))
 			{
-				_dayOffOptimization.Execute(matrixListForDayOffOptimization, period,
+				_dayOffOptimization.Execute(period,
 					agents.ToList(),
 					optimizationPreferences,
 					schedulingOptions,
 					dayOffOptimizationPreferenceProvider,
 					blockPreferenceProvider,
 					new NoSchedulingProgress(),
-					true);
+					true,
+					null);
 			}
 
 			planningPeriod.Scheduled();
