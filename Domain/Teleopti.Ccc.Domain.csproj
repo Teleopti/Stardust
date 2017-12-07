@@ -359,6 +359,7 @@
     <Compile Include="Notification\RawPostNotificationSender.cs" />
     <Compile Include="Notification\RawPostNotificationWebClient.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePoller.cs" />
+    <Compile Include="Optimization\DayOffOptimization.cs" />
     <Compile Include="Optimization\EffectiveRestrictionStartTimeDecider.cs" />
     <Compile Include="Optimization\TeamBlock\BlockPreferencesMapper.cs" />
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />

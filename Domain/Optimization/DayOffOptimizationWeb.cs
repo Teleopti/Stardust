@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -18,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationWeb
 	{
+		private readonly DayOffOptimization _dayOffOptimization;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
-		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPersonRepository _personRepository;
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 
-		public DayOffOptimizationWeb(
+		public DayOffOptimizationWeb(DayOffOptimization dayOffOptimization,
 			FillSchedulerStateHolder fillSchedulerStateHolder, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IScheduleDictionaryPersister persister, 
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult,
-			TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			IResourceCalculation resourceOptimizationHelper,
 			IUserTimeZone userTimeZone,
 			IPersonRepository personRepository,
@@ -55,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			TeamInfoFactoryFactory teamInfoFactoryFactory, 
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
 		{
+			_dayOffOptimization = dayOffOptimization;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
 			_persister = persister;
@@ -65,7 +64,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationResult = optimizationResult;
-			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_userTimeZone = userTimeZone;
 			_personRepository = personRepository;
@@ -116,8 +114,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.SchedulingResultState, true, period.Inflate(1)))
 			{
 				_resourceCalculation.ResourceCalculate(period.Inflate(1), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, false));
-				_teamBlockDayOffOptimizer.OptimizeDaysOff(
-					matrixListForDayOffOptimization, period,
+				_dayOffOptimization.Execute(matrixListForDayOffOptimization, period,
 					agents.ToList(),
 					optimizationPreferences,
 					schedulingOptions,

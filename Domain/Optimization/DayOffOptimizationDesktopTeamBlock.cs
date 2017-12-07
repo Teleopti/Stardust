@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffOptimizationDesktopTeamBlock
 	{
 		private readonly IResourceCalculation _resourceOptimizationHelper;
-		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
+		private readonly DayOffOptimization _dayOffOptimization;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 
 		public DayOffOptimizationDesktopTeamBlock(IResourceCalculation resourceOptimizationHelper,
-								TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
+								DayOffOptimization dayOffOptimization,
 								Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 								MatrixListFactory matrixListFactory,
 								Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 								Func<IScheduleDayChangeCallback> scheduleDayChangeCallback)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
+			_dayOffOptimization = dayOffOptimization;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_matrixListFactory = matrixListFactory;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -105,17 +104,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder(), _userTimeZone);
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(selectedAgents, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+				var blockPreferenceProvider = new FixedBlockPreferenceProvider(optimizationPreferences.Extra); 
 
-				_teamBlockDayOffOptimizer.OptimizeDaysOff(matrixList,
-					selectedPeriod,
-					selectedPersons,
-					optimizationPreferences,
-					schedulingOptions,
-					resourceCalculateDelayer,
-					dayOffOptimizationPreferenceProvider,
-					new FixedBlockPreferenceProvider(optimizationPreferences.Extra), 
-					teamInfoFactory,
-					backgroundWorker);
+				_dayOffOptimization.Execute(matrixList, selectedPeriod, selectedPersons, optimizationPreferences, schedulingOptions, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider, blockPreferenceProvider, teamInfoFactory, backgroundWorker);
 			}
 		}
 	}
