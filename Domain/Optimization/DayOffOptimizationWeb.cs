@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPersonRepository _personRepository;
-		private readonly IResourceCalculation _resourceCalculation;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IResourceCalculation resourceOptimizationHelper,
 			IUserTimeZone userTimeZone,
 			IPersonRepository personRepository,
-			IResourceCalculation resourceCalculation,
 			TeamInfoFactoryFactory teamInfoFactoryFactory, 
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
 		{
@@ -64,7 +62,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_userTimeZone = userTimeZone;
 			_personRepository = personRepository;
-			_resourceCalculation = resourceCalculation;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
 		}
@@ -110,7 +107,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.SchedulingResultState, true, period.Inflate(1)))
 			{
-				_resourceCalculation.ResourceCalculate(period.Inflate(1), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, false));
 				_dayOffOptimization.Execute(matrixListForDayOffOptimization, period,
 					agents.ToList(),
 					optimizationPreferences,
