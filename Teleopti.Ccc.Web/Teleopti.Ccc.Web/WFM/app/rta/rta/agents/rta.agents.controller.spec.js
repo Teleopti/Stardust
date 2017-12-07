@@ -135,27 +135,6 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect($state.go).toHaveBeenCalledWith('rta');
 	});
 
-	it('should get adherence percentage for agent when clicked', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgentState({
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
-		}).withAdherence({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			AdherencePercent: 99,
-			LastTimestamp: "16:34"
-		});
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(function () {
-			vm.getAdherenceForAgent("11610fe4-0130-4568-97de-9b5e015b2564");
-		});
-
-		expect(vm.adherence.AdherencePercent).toEqual(99);
-		expect(vm.adherence.LastTimestamp).toEqual("16:34");
-	});
-
 	it('should stop polling when page is about to destroy', function () {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgentState({
@@ -181,74 +160,4 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect($state.go).not.toHaveBeenCalledWith('rta');
 	});
 
-	it('should select an agent', function () {
-		var personId = '11610fe4-0130-4568-97de-9b5e015b2564';
-		$fakeBackend.withAgentState({
-			PersonId: personId
-		});
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(function () {
-			vm.selectAgent(personId);
-		});
-
-		expect(vm.isSelected(personId)).toEqual(true);
-	});
-
-	it('should unselect an agent', function () {
-		var personId = '11610fe4-0130-4568-97de-9b5e015b2564';
-		$fakeBackend.withAgentState({
-			PersonId: personId
-		});
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-
-		c.apply(function () {
-			vm.selectAgent(personId);
-		})
-			.apply(function () {
-				vm.selectAgent(personId);
-			});
-
-		expect(vm.isSelected(personId)).toEqual(false);
-	});
-
-	it('should unselect previous selected agent', function () {
-		var personId1 = '11610fe4-0130-4568-97de-9b5e015b2564';
-		var personId2 = '6b693b41-e2ca-4ef0-af0b-9e06008d969b';
-		$fakeBackend.withAgentState({
-			PersonId: personId1
-		})
-			.withAgentState({
-				PersonId: personId2
-			});
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(function () {
-			vm.selectAgent(personId1);
-		})
-		c.apply(function () {
-			vm.selectAgent(personId2);
-		});
-
-		expect(vm.isSelected(personId1)).toEqual(false);
-	});
-
-	it('should not show adherence updated when there is no adherence value', function () {
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-
-		expect(vm.showAdherenceUpdates()).toEqual(false);
-	});
-
-	it('should display adherence updated when there is adherence value', function () {
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.adherencePercent = 0);
-
-		expect(vm.showAdherenceUpdates()).toEqual(true);
-	});
 });

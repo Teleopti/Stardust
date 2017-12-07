@@ -10,22 +10,15 @@
 		'$filter',
 		'$state',
 		'$stateParams',
-		'$interval',
 		'$sessionStorage',
-		'$q',
 		'$translate',
-		'$location',
-		'$timeout',
 		'rtaService',
 		'rtaPollingService',
-		'rtaGridService',
 		'rtaFormatService',
 		'rtaAgentsBuildService',
 		'rtaRouteService',
 		'rtaStateService',
 		'fakeTimeService',
-		'localeLanguageSortingService',
-		'Toggle',
 		'NoticeService'
 	];
 
@@ -33,22 +26,15 @@
 								 $filter,
 								 $state,
 								 $stateParams,
-								 $interval,
 								 $sessionStorage,
-								 $q,
 								 $translate,
-								 $location,
-								 $timeout,
 								 rtaService,
 								 rtaPollingService,
-								 rtaGridService,
 								 rtaFormatService,
 								 rtaAgentsBuildService,
 								 rtaRouteService,
 								 rtaStateService,
 								 fakeTimeService,
-								 localeLanguageSortingService,
-								 Toggle,
 								 NoticeService) {
 
 		var vm = this;
@@ -57,13 +43,6 @@
 
 		// duplication of state
 		vm.showInAlarm = !$stateParams.showAllAgents;
-
-		vm.allGrid = rtaGridService.makeAllGrid();
-		vm.inAlarmGrid = rtaGridService.makeInAlarmGrid();
-		vm.allGrid.data = 'vm.agentStates';
-		vm.inAlarmGrid.data = 'vm.agentStates';
-
-		var selectedPersonId;
 
 		var lastUpdate, notice;
 
@@ -76,21 +55,11 @@
 		// because angular cant handle an array of null in stateparams
 		var nullState = "No State";
 		var nullStateId = "noState";
-		vm.adherence = {};
-		vm.adherencePercent = null;
 		vm.filterText = null;
-		vm.timestamp = "";
-
 		vm.states = [];
 
-		vm.format = rtaFormatService.formatDateTime;
-		vm.formatDuration = rtaFormatService.formatDuration;
-		vm.formatToSeconds = rtaFormatService.formatToSeconds;
-		vm.hexToRgb = rtaFormatService.formatHexToRgb;
 		vm.pause = false;
 		vm.pausedAt = null;
-		vm.maxNumberOfAgents = 50;
-		vm.isLoading = angular.toJson($stateParams) !== '{}';
 
 		vm.displayNoAgentsMessage = function () {
 			return vm.agentStates.length === 0;
@@ -103,43 +72,6 @@
 		};
 		defaultSorting();
 
-		var toggles = {};
-		Toggle.togglesLoaded.then(function () {
-			toggles = Toggle;
-		});
-
-		vm.getTableHeight = function () {
-			var rowHeight = 30;
-			var headerHeight = 30;
-			var agentMenuHeight = 45;
-			return {
-				height: (vm.agentStates.length * rowHeight + headerHeight + agentMenuHeight + rowHeight / 2) + "px"
-			};
-		};
-
-		vm.getAdherenceForAgent = function (personId) {
-			if (!vm.isSelected(personId)) {
-				rtaService
-					.forToday({
-						personId: personId
-					})
-					.then(function (data) {
-						vm.adherence = data;
-						vm.adherencePercent = data.AdherencePercent;
-						vm.timestamp = data.LastTimestamp;
-					});
-			}
-		};
-
-		vm.selectAgent = function (personId) {
-			selectedPersonId = vm.isSelected(personId) ? '' : personId;
-		};
-		vm.isSelected = function (personId) {
-			return selectedPersonId === personId;
-		};
-		vm.showAdherenceUpdates = function () {
-			return vm.adherencePercent !== null;
-		};
 		vm.changeScheduleUrl = function (personId) {
 			return rtaRouteService.urlForChangingSchedule(personId);
 		};
@@ -237,7 +169,6 @@
 				vm.agentStates.push(rtaAgentsBuildService.buildAgentState(now, state));
 			});
 			vm.timeline = rtaFormatService.buildTimeline(states.Time);
-			vm.isLoading = false;
 			$state.go($state.current.name, {es: excludedStateIds()}, {notify: false});
 			return states;
 		}
@@ -365,6 +296,5 @@
 			vm.orderBy = column;
 			poller.force();
 		}
-
 	}
 })();
