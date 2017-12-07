@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
                 {
                     var evt = iCal.Create<Event>();
 
-                    evt.Start = new CalDateTime(layer.Start);
-                    evt.End = new CalDateTime(layer.End);
+                    evt.Start = new CalDateTime(layer.Start){ HasTime = true};
+                    evt.End = new CalDateTime(layer.End) { HasTime = true };
                     evt.Summary = layer.Description;
                 }
             }

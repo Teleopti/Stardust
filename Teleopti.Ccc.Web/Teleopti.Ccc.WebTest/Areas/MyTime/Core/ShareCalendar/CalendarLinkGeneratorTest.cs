@@ -231,5 +231,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			var target = new CheckCalendarActiveCommand(_repositoryFactory);
 			target.Execute(_unitOfWork, person);
 		}
+
+		[Test]
+		public void ShouldSerializeMidnightTimeAsUtcDateTimeString()
+		{
+			var target = new CalendarTransformer(new NewtonsoftJsonSerializer());
+			var result = target.Transform(new[]
+			{
+				new PersonScheduleDayReadModel
+				{
+					Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model
+					{
+						Shift = new Shift
+						{
+							Projection = new[]
+							{
+								new SimpleLayer
+								{
+									Start = new DateTime(2013, 7, 8, 6, 30, 0, DateTimeKind.Utc),
+									End = new DateTime(2013, 7, 9, 00, 00, 0, DateTimeKind.Utc),
+								}
+							}
+						}
+					}),
+				}
+			});
+
+			result.Should().Contain("DTSTART:20130708T063000Z");
+			result.Should().Contain("DTEND:20130709T000000Z");
+		}
 	}
 }
