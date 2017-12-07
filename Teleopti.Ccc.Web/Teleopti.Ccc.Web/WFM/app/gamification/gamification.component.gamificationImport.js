@@ -40,17 +40,17 @@
 		ctrl.upload = function () {
 			startSpinner();
 			setUploadingError(false);
-			dataService.uploadCsv().then(function () {
+			dataService.uploadCsv(ctrl.file).then(function () {
 				stopSpinner();
 				clearFile();
 				fetchJobs();
-			}, function(){
+			}, function () {
 				setUploadingError(true);
 				stopSpinner();
 			});
 		};
 
-		function setUploadingError(isError){
+		function setUploadingError(isError) {
 			ctrl.file.uploadingError = isError;
 		}
 

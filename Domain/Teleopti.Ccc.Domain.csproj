@@ -171,6 +171,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\AgentDataModel.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplate.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersister.cs" />
+    <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportGamificationJobResultDetail.cs" />
     <Compile Include="ApplicationLayer\ImportFileData.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\FileProcessor.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\IImportAgentDataProvider.cs" />

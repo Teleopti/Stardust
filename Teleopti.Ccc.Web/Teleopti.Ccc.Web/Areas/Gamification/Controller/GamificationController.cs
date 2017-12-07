@@ -56,6 +56,13 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			return Ok();
 		}
 
+
+		[Route("api/gamification/import-jobs"), HttpGet, UnitOfWork]
+		public virtual object GetJobList()
+		{
+			return _importExternalPerformanceInfoService.GetJobsForCurrentBusinessUnit();
+		}
+
 		[UnitOfWork]
 		protected virtual void createJob(ImportFileData fileData)
 		{

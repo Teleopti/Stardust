@@ -16,7 +16,6 @@
 		ctrl.getGamificationSettingsDescriptors = function () {
 			gamificationSettingService.getSettingsDescriptor().then(function (data) {
 				ctrl.settingDescriptors = data;
-				console.log(data);
 				if (ctrl.settingDescriptors && ctrl.settingDescriptors.length > 0) {
 					ctrl.getSettingById(ctrl.settingDescriptors[0].GamificationSettingId);
 				}
@@ -26,7 +25,6 @@
 		ctrl.getSettingById = function (id) {
 			gamificationSettingService.getSettingById(id).then(function (data) {
 				var settingData = ctrl.convertSettingToModel(data);
-				console.log(settingData);
 				if (!ctrl.findElementInArray(ctrl.allSettings, settingData.id)) {
 					ctrl.allSettings.push(settingData);
 				}
@@ -51,133 +49,132 @@
 
 		ctrl.saveData = function (apiKey, data) {
 			gamificationSettingService.saveData(apiKey, data).then(function (response) {
-				console.log('Save data successfully', apiKey);
+
 			}, function (error) {
-				// show message that says save failed
-				console.log('Fail to save data', error);
+
 			});
 		}
 
-		ctrl.convertSettingToModel = function(setting) {
+		ctrl.convertSettingToModel = function (setting) {
 			var result = {};
 			result.id = setting.Id;
 			result.name = setting.Name;
 			result.updated_by = setting.UpdatedBy;
 			result.updated_on = setting.UpdatedOn;
 			result.rules = [{
-					id: 0,
-					name: 'RuleWithDifferentThreshold'
+				id: 0,
+				name: 'RuleWithDifferentThreshold'
+			}, {
+				id: 1,
+				name: 'RuleWithRatioConvertor',
+				items: [{
+					id: 'SilverToBronzeBadgeRate',
+					name: 'OneSilverBadgeEqualsBronzeBadgeCount',
+					value: setting.SilverToBronzeBadgeRate
 				}, {
-					id: 1,
-					name: 'RuleWithRatioConvertor',
-					items: [{
-							id: 'SilverToBronzeBadgeRate',
-							name: 'OneSilverBadgeEqualsBronzeBadgeCount',
-							value: setting.SilverToBronzeBadgeRate
-						}, {
-							id: 'GoldToSilverBadgeRate',
-							name: 'OneGoldBadgeEqualsSilverBadgeCount',
-							value: setting.GoldToSilverBadgeRate
-						}			]
-				}];
+					id: 'GoldToSilverBadgeRate',
+					name: 'OneGoldBadgeEqualsSilverBadgeCount',
+					value: setting.GoldToSilverBadgeRate
+				}]
+			}];
 			result.rule_id = setting.GamificationSettingRuleSet;
 			result.settings = [{
-					id: 'UseBadgeForAnsweredCalls',
-					name: 'UseBadgeForAnsweredCalls',
-					enable: setting.AnsweredCallsBadgeEnabled,
-					is_buildin: true,
-					rule_settings: [{
-							rule_id: 0,
-							items: [{
-									id: 'AnsweredCallsGoldThreshold',
-									name: 'ThresholdForGoldBadge',
-									value: setting.AnsweredCallsGoldThreshold,
-									type: 'number'
-								}, {
-									id: 'AnsweredCallsSilverThreshold',
-									name: 'ThresholdForSilverBadge',
-									value: setting.AnsweredCallsSilverThreshold,
-									type: 'number'
-								}, {
-									id: 'AnsweredCallsBronzeThreshold',
-									name: 'ThresholdForBronzeBadge',
-									value: setting.AnsweredCallsBronzeThreshold,
-									type: 'number'
-								}]
-						}, {
-							rule_id: 1,
-							items: [{
-									id: 'AnsweredCallsThreshold',
-									name: 'ThresholdForBadge',
-									value: setting.AnsweredCallsThreshold,
-									type: 'number'
-								}]
-						}]
+				id: 'UseBadgeForAnsweredCalls',
+				name: 'UseBadgeForAnsweredCalls',
+				enable: setting.AnsweredCallsBadgeEnabled,
+				is_buildin: true,
+				rule_settings: [{
+					rule_id: 0,
+					items: [{
+						id: 'AnsweredCallsGoldThreshold',
+						name: 'ThresholdForGoldBadge',
+						value: setting.AnsweredCallsGoldThreshold,
+						type: 'number'
+					}, {
+						id: 'AnsweredCallsSilverThreshold',
+						name: 'ThresholdForSilverBadge',
+						value: setting.AnsweredCallsSilverThreshold,
+						type: 'number'
+					}, {
+						id: 'AnsweredCallsBronzeThreshold',
+						name: 'ThresholdForBronzeBadge',
+						value: setting.AnsweredCallsBronzeThreshold,
+						type: 'number'
+					}]
 				}, {
-					id: 'UseBadgeForAdherence',
-					name: 'UseBadgeforAdherence',
-					enable: setting.AdherenceBadgeEnabled,
-					is_buildin: true,
-					rule_settings: [{
-							rule_id: 0,
-							items: [{
-									id: 'AdherenceGoldThreshold',
-									name: 'ThresholdForGoldBadge',
-									value: setting.AdherenceGoldThreshold.Value,
-									type: 'percent'
-								}, {
-									id: 'AdherenceSilverThreshold',
-									name: 'ThresholdForSilverBadge',
-									value: setting.AdherenceSilverThreshold.Value,
-									type: 'percent'
-								}, {
-									id: 'AdherenceBronzeThreshold',
-									name: 'ThresholdForBronzeBadge',
-									value: setting.AdherenceBronzeThreshold.Value,
-									type: 'percent'
-								}]
-						}, {
-							rule_id: 1,
-							items: [{
-									id: 'AdherenceThreshold',
-									name: 'ThresholdForBadge',
-									value: setting.AdherenceThreshold.Value,
-									type: 'percent'
-								}]
-						}]
+					rule_id: 1,
+					items: [{
+						id: 'AnsweredCallsThreshold',
+						name: 'ThresholdForBadge',
+						value: setting.AnsweredCallsThreshold,
+						type: 'number'
+					}]
+				}]
+			}, {
+				id: 'UseBadgeForAdherence',
+				name: 'UseBadgeforAdherence',
+				enable: setting.AdherenceBadgeEnabled,
+				is_buildin: true,
+				rule_settings: [{
+					rule_id: 0,
+					items: [{
+						id: 'AdherenceGoldThreshold',
+						name: 'ThresholdForGoldBadge',
+						value: setting.AdherenceGoldThreshold.Value,
+						type: 'percent'
+					}, {
+						id: 'AdherenceSilverThreshold',
+						name: 'ThresholdForSilverBadge',
+						value: setting.AdherenceSilverThreshold.Value,
+						type: 'percent'
+					}, {
+						id: 'AdherenceBronzeThreshold',
+						name: 'ThresholdForBronzeBadge',
+						value: setting.AdherenceBronzeThreshold.Value,
+						type: 'percent'
+					}]
 				}, {
-					id: 'UseBadgeForAHT',
-					name: 'UseBadgeforAHT',
-					enable: setting.AHTBadgeEnabled,
-					is_buildin: true,
-					rule_settings: [{
-							rule_id: 0,
-							items: [{
-									id: 'AHTGoldThreshold',
-									name: 'ThresholdForGoldBadge',
-									value: setting.AHTGoldThreshold,
-									type: 'time'
-								}, {
-									id: 'AHTSilverThreshold',
-									name: 'ThresholdForSilverBadge',
-									value: setting.AHTSilverThreshold,
-									type: 'time'
-								}, {
-									id: 'AHTBronzeThreshold',
-									name: 'ThresholdForBronzeBadge',
-									value: setting.AHTBronzeThreshold,
-									type: 'time'
-								}]
-						}, {
-							rule_id: 1,
-							items: [{
-									id: 'AHTThreshold',
-									name: 'ThresholdForBadge',
-									value: setting.AHTThreshold,
-									type: 'time'
-								}]
-						}]
-				}];
+					rule_id: 1,
+					items: [{
+						id: 'AdherenceThreshold',
+						name: 'ThresholdForBadge',
+						value: setting.AdherenceThreshold.Value,
+						type: 'percent'
+					}]
+				}]
+			}, {
+				id: 'UseBadgeForAHT',
+				name: 'UseBadgeforAHT',
+				enable: setting.AHTBadgeEnabled,
+				is_buildin: true,
+				rule_settings: [{
+					rule_id: 0,
+					items: [{
+						id: 'AHTGoldThreshold',
+						name: 'ThresholdForGoldBadge',
+						value: setting.AHTGoldThreshold,
+						type: 'time'
+					}, {
+						id: 'AHTSilverThreshold',
+						name: 'ThresholdForSilverBadge',
+						value: setting.AHTSilverThreshold,
+						type: 'time'
+					}, {
+						id: 'AHTBronzeThreshold',
+						name: 'ThresholdForBronzeBadge',
+						value: setting.AHTBronzeThreshold,
+						type: 'time'
+					}]
+				}, {
+					rule_id: 1,
+					items: [{
+						id: 'AHTThreshold',
+						name: 'ThresholdForBadge',
+						value: setting.AHTThreshold,
+						type: 'time'
+					}]
+				}]
+			}];
 
 			if (!setting.ExternalBadgeSettings || setting.ExternalBadgeSettings.length <= 0) {
 				return result;
@@ -193,36 +190,36 @@
 					is_buildin: false,
 					larger_is_better: item.LargerIsBetter,
 					rule_settings: [{
-							rule_id: 0,
-							items: [{
-									id: 'ExternalBadgeSettingGoldThreshold',
-									name: 'ThresholdForGoldBadge',
-									value: item.GoldThreshold,
-									type: 'number',
-									unit_type: item.UnitType
-								}, {
-									id: 'ExternalBadgeSettingSilverThreshold',
-									name: 'ThresholdForSilverBadge',
-									value: item.SilverThreshold,
-									type: 'number',
-									unit_type: item.UnitType
-								}, {
-									id: 'ExternalBadgeSettingBronzeThreshold',
-									name: 'ThresholdForBronzeBadge',
-									value: item.BronzeThreshold,
-									type: 'number',
-									unit_type: item.UnitType
-								}]
+						rule_id: 0,
+						items: [{
+							id: 'ExternalBadgeSettingGoldThreshold',
+							name: 'ThresholdForGoldBadge',
+							value: item.GoldThreshold,
+							type: 'number',
+							unit_type: item.UnitType
 						}, {
-							rule_id: 1,
-							items: [{
-									id: 'ExternalBadgeSettingThreshold',
-									name: 'ThresholdForBadge',
-									value: item.Threshold,
-									type: 'number',
-									unit_type: item.UnitType
-								}]
+							id: 'ExternalBadgeSettingSilverThreshold',
+							name: 'ThresholdForSilverBadge',
+							value: item.SilverThreshold,
+							type: 'number',
+							unit_type: item.UnitType
+						}, {
+							id: 'ExternalBadgeSettingBronzeThreshold',
+							name: 'ThresholdForBronzeBadge',
+							value: item.BronzeThreshold,
+							type: 'number',
+							unit_type: item.UnitType
 						}]
+					}, {
+						rule_id: 1,
+						items: [{
+							id: 'ExternalBadgeSettingThreshold',
+							name: 'ThresholdForBadge',
+							value: item.Threshold,
+							type: 'number',
+							unit_type: item.UnitType
+						}]
+					}]
 				};
 
 				result.settings.push(aExternalSetting);
@@ -369,8 +366,6 @@
 					}
 				}
 
-				console.log('delete data successfully.');
-
 			}, function (error) {
 				console.log(error);
 			})
@@ -378,7 +373,6 @@
 
 		ctrl.resetBadges = function name() {
 			gamificationSettingService.resetBadge().then(function (response) {
-				console.log('reset badges successfully');
 			})
 		}
 

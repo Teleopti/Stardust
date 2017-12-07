@@ -7,7 +7,9 @@
 			owner: '<',
 			jobId: '<',
 			startingTime: '<',
-			status: '<'
+			status: '<',
+			category: '<'
+
 		},
 		controller: [ImportJobController]
 	});

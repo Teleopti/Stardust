@@ -74,35 +74,87 @@
 
 		var counter = 5;
 		svc.fetchJobs = function () {
+			var url = "../api/gamification/import-jobs";
+			var config = {
+				url: url,
+				method: 'GET',
+			};
+
 			return $q(function (resolve, reject) {
-				var jobs = [];
-				for (var i = 0; i < counter; i++) {
-					jobs.push(new Job(i, i + '.csv', 'Teleopti Demo', '2017-11-26T07:07:27.007Z', false));
-				}
-				counter++;
-				// resolve([
-				// 	new Job(4, '4.csv', 'Teleopti Demo', '2017-11-27T07:07:27.007Z', true),
-				// 	new Job(3, '3.csv', 'Teleopti Demo', '2017-11-26T07:07:27.007Z', false),
-				// 	new Job(2, '2.csv', 'Teleopti Demo', '2017-11-25T07:07:27.007Z', false),
-				// 	new Job(1, '1.csv', 'Teleopti Demo', '2017-11-24T07:07:27.007Z', false),
-				// 	new Job(0, '0.csv', 'Teleopti Demo', '2017-11-23T07:07:27.007Z', false)
-				// ]);
-				resolve(jobs);
+				$http(config).then(function (response) {
+					var jobs = [];
+					if (response.data) {
+						for (var index = 0; index < response.data.length; index++) {
+							var job = response.data[index];
+							jobs.push(new Job(job.Id, job.Name, job.Owner, job.CreateDateTime, job.Status, job.Category));
+						}
+					}
+					resolve(jobs);
+				}, function (response) {
+					reject(response);
+				});
+				// var jobs = [];
+				// for (var i = 0; i < counter; i++) {
+				// 	jobs.push(new Job(i, i + '.csv', 'Teleopti Demo', '2017-11-26T07:07:27.007Z', false));
+				// }
+				// counter++;
+
+				// resolve(jobs);
 			});
 		};
 
-		svc.uploadCsv = function () {
+		svc.uploadCsv = function (file) {
+			var url = "../api/Gamification/NewImportExternalPerformanceInfoJob"
+			var config = {
+				url: url,
+				method: 'POST',
+				file: file,
+				headers: {
+					'Accept': 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				}
+			};
+
+			config = overload(config);
+
+
 			return $q(function (resolve, reject) {
-				$timeout(function () {
-					var n = Math.floor(Math.random() * 2);
-					if (n === 0)
-						resolve()
-					else
-						reject()
-				}, 4000);
+				return $http(config).then(function (response) {
+					resolve(response);
+				}, function (response) {
+					reject(response);
+				});
 			});
 		};
 	}
+
+	function overload(config) {
+		config.headers = config.headers || {};
+		config.headers['Content-Type'] = undefined;
+		config.transformRequest = config.transformRequest ?
+			(angular.isArray(config.transformRequest) ?
+				config.transformRequest : [config.transformRequest]) : [];
+		config.transformRequest.push(function (data) {
+			var formData = new FormData();
+
+			if (config.file != null) {
+				var fileFormName = config.fileFormDataName || 'file';
+
+				if (angular.isArray(config.file)) {
+					var isFileFormNameString = angular.isString(fileFormName);
+					for (var i = 0; i < config.file.length; i++) {
+						formData.append(isFileFormNameString ? fileFormName : fileFormName[i], config.file[i],
+							(config.fileName && config.fileName[i]) || config.file[i].name);
+					}
+				} else {
+					formData.append(fileFormName, config.file, config.fileName || config.file.name);
+				}
+			}
+			return formData;
+		});
+
+		return config;
+	}
+
 
 	function Site(id, name) {
 		this.id = id;
@@ -120,11 +172,12 @@
 		this.name = name;
 	}
 
-	function Job(id, name, owner, startingTime, status) {
+	function Job(id, name, owner, startingTime, status, category) {
 		this.id = id;
 		this.name = name;
 		this.owner = owner;
 		this.startingTime = startingTime;
 		this.status = status;
+		this.category = category;
 	}
 })(angular);

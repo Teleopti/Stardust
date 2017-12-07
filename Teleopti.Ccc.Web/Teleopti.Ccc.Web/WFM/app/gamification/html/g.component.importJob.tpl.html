@@ -8,10 +8,13 @@
 	<span>{{$ctrl.startingTime}}</span>
 </div>
 <div class="status">
-	<div ng-if="$ctrl.status">
+	<div ng-if="$ctrl.status=='inprogress'">
 		<span>In Progress</span>
 	</div>
-	<div ng-if="!$ctrl.status">
-		<a href="">Errors{{$ctrl.jobId}}</a>
+	<div ng-if="$ctrl.status=='errored'">
+		<a target="_blank" href="../api/Gamification/job/{{$ctrl.jobId}}/artifact/{{$ctrl.category}}">Errors</a>
+	</div>
+	<div ng-if="$ctrl.status=='finished'">
+		<a target="_blank" href="">Finished</a>
 	</div>
 </div>
