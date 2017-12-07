@@ -16,14 +16,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	/* Running teamblock test with toggle teamBlockDayOffForIndividuals false
-	 * doesn't really make much sense here because web doesn't currently support teamblock-DO.
-	 * However, the test works also with toggle true (for wrong reason) so let's leave it for now.
-	 */
 	[DomainTest]
 	public class DayOffOptimizationTeamBlockTest : DayOffOptimizationScenario
 	{
-		public Domain.Optimization.DayOffOptimizationWeb Target;
+		public DayOffOptimizationWeb Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -39,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public void ShouldNotMoveDOsForOneAgentOnlyButChangeAfterEachPeriod([Values(true, false)] bool useTeams)
 		{
 			const int numberOfAttempts = 20;
-			var firstDay = new DateOnly(2015, 10, 12); //monday
+			var firstDay = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
