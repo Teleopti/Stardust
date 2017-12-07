@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
 		private readonly IPersonRepository _personRepository;
-		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 
 		public DayOffOptimizationWeb(DayOffOptimization dayOffOptimization,
@@ -42,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult,
 			IPersonRepository personRepository,
-			TeamInfoFactoryFactory teamInfoFactoryFactory, 
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
 		{
 			_dayOffOptimization = dayOffOptimization;
@@ -56,7 +54,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationResult = optimizationResult;
 			_personRepository = personRepository;
-			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
 		}
 
@@ -96,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 
 			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, agents, period);
-			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences); 
+			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.SchedulingResultState, true, period.Inflate(1)))
 			{
@@ -106,7 +103,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					schedulingOptions,
 					dayOffOptimizationPreferenceProvider,
 					blockPreferenceProvider,
-					_teamInfoFactoryFactory.Create(agents, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer),
 					new NoSchedulingProgress(),
 					true);
 			}

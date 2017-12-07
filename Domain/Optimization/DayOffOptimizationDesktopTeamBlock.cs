@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
-		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ScheduleBlankSpots _scheduleBlankSpots;
@@ -29,7 +27,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 								MatrixListFactory matrixListFactory,
 								Func<ISchedulerStateHolder> schedulerStateHolder,
 								CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-								TeamInfoFactoryFactory teamInfoFactoryFactory,
 								DaysOffBackToLegalState daysOffBackToLegalState,
 								IScheduleDayEquator scheduleDayEquator,
 								ScheduleBlankSpots scheduleBlankSpots,
@@ -40,7 +37,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrixListFactory = matrixListFactory;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
-			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_daysOffBackToLegalState = daysOffBackToLegalState;
 			_scheduleDayEquator = scheduleDayEquator;
 			_scheduleBlankSpots = scheduleBlankSpots;
@@ -88,10 +84,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 					matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedAgents, selectedPeriod);
 				}
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
-				var teamInfoFactory = _teamInfoFactoryFactory.Create(stateHolder.ChoosenAgents, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 				
 				_dayOffOptimization.Execute(matrixList, selectedPeriod, selectedPersons, optimizationPreferences, schedulingOptions, 
-					dayOffOptimizationPreferenceProvider, blockPreferenceProvider, teamInfoFactory, backgroundWorker, false);
+					dayOffOptimizationPreferenceProvider, blockPreferenceProvider, backgroundWorker, false);
 			}
 		}
 	}
