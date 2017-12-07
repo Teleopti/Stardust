@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
 		private readonly ScheduleBlankSpots _scheduleBlankSpots;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			DaysOffBackToLegalState daysOffBackToLegalState,
-			ScheduleBlankSpots scheduleBlankSpots)
+			ScheduleBlankSpots scheduleBlankSpots,
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -52,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_daysOffBackToLegalState = daysOffBackToLegalState;
 			_scheduleBlankSpots = scheduleBlankSpots;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_userTimeZone = userTimeZone;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixListFactory = matrixListFactory;
@@ -70,63 +73,66 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var FATCLIENT_FLAG_SHOULD_BE_REMOVED = !runWeeklyRestSolver;
 			
 			var stateHolder = _schedulerStateHolder();
-			
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);
-			
-			IEnumerable<IScheduleMatrixPro> matrixList;
-			if (FATCLIENT_FLAG_SHOULD_BE_REMOVED && optimizationPreferences.Extra.IsClassic())
-			{
-				//TO SIMULATE OLD CLASSIC BEHAVIOR (diff behavior between classic and teamblock)
-				var scheduleDays = _schedulerStateHolder().Schedules.SchedulesForPeriod(selectedPeriod, selectedAgents.ToArray());
-				var nonFullyScheduledAgents = scheduleDays.Where(x => !x.IsScheduled()).Select(x => x.Person);
-				var filteredAgents = selectedAgents.Except(nonFullyScheduledAgents).ToArray();
-				matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, filteredAgents, selectedPeriod);
-				var matrixListOriginalStateContainer = matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)).ToArray();
-				_daysOffBackToLegalState.Execute(matrixListOriginalStateContainer,
-					schedulingOptions,
-					dayOffOptimizationPreferenceProvider,
-					optimizationPreferences,
-					resourceOptimizerPersonOptimized);
-				var workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
-				foreach (var matrixOriginalStateContainer in matrixListOriginalStateContainer)
-				{
-					workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling)));
-				}
-				_scheduleBlankSpots.Execute(matrixListOriginalStateContainer, optimizationPreferences);
-				//////////////////
-			}
-			else
-			{
-				matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedAgents, selectedPeriod);
-			}
-			var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
-			
-			_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 
-			///////////////////////////////
-			//TODO: HACK! Verify what is right!!!!
-			var agentstoUseForTeamInfoFactory = FATCLIENT_FLAG_SHOULD_BE_REMOVED ? stateHolder.ChoosenAgents : selectedPersons;
-			/////////////////////////////////
-			var teamInfoFactory = _teamInfoFactoryFactory.Create(agentstoUseForTeamInfoFactory, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-		
-			_teamBlockDayOffOptimizer.OptimizeDaysOff(matrixList,
-				selectedPeriod,
-				selectedPersons,
-				optimizationPreferences,
-				schedulingOptions,
-				resourceCalcDelayer,
-				dayOffOptimizationPreferenceProvider,
-				blockPreferenceProvider,
-				teamInfoFactory,
-				backgroundWorker);
-			
-			if (runWeeklyRestSolver)
+			using (_resourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, true, selectedPeriod.Inflate(1)))
 			{
-				_weeklyRestSolverExecuter.Resolve(
-					optimizationPreferences, 
+				IEnumerable<IScheduleMatrixPro> matrixList;
+				if (FATCLIENT_FLAG_SHOULD_BE_REMOVED && optimizationPreferences.Extra.IsClassic())
+				{
+					//TO SIMULATE OLD CLASSIC BEHAVIOR (diff behavior between classic and teamblock)
+					//TODO: When this code is removed/rewritten for teamblock, a lot of these types and its children can be deleted (only used here)
+					var scheduleDays = _schedulerStateHolder().Schedules.SchedulesForPeriod(selectedPeriod, selectedAgents.ToArray());
+					var nonFullyScheduledAgents = scheduleDays.Where(x => !x.IsScheduled()).Select(x => x.Person);
+					var filteredAgents = selectedAgents.Except(nonFullyScheduledAgents).ToArray();
+					matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, filteredAgents, selectedPeriod);
+					var matrixListOriginalStateContainer = matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)).ToArray();
+					_daysOffBackToLegalState.Execute(matrixListOriginalStateContainer,
+						schedulingOptions,
+						dayOffOptimizationPreferenceProvider,
+						optimizationPreferences,
+						resourceOptimizerPersonOptimized);
+					var workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
+					foreach (var matrixOriginalStateContainer in matrixListOriginalStateContainer)
+					{
+						workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling)));
+					}
+					_scheduleBlankSpots.Execute(matrixListOriginalStateContainer, optimizationPreferences);
+					//////////////////
+				}
+				else
+				{
+					matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedAgents, selectedPeriod);
+				}
+				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
+				
+				_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
+	
+				///////////////////////////////
+				//TODO: HACK! Verify what is right!!!!
+				var agentstoUseForTeamInfoFactory = FATCLIENT_FLAG_SHOULD_BE_REMOVED ? stateHolder.ChoosenAgents : selectedPersons;
+				/////////////////////////////////
+				var teamInfoFactory = _teamInfoFactoryFactory.Create(agentstoUseForTeamInfoFactory, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+			
+				_teamBlockDayOffOptimizer.OptimizeDaysOff(matrixList,
 					selectedPeriod,
-					selectedPersons, 
-					dayOffOptimizationPreferenceProvider);
+					selectedPersons,
+					optimizationPreferences,
+					schedulingOptions,
+					resourceCalcDelayer,
+					dayOffOptimizationPreferenceProvider,
+					blockPreferenceProvider,
+					teamInfoFactory,
+					backgroundWorker);
+				
+				if (runWeeklyRestSolver)
+				{
+					_weeklyRestSolverExecuter.Resolve(
+						optimizationPreferences,
+						selectedPeriod,
+						selectedPersons,
+						dayOffOptimizationPreferenceProvider);
+				}	
 			}
 		}
 	}

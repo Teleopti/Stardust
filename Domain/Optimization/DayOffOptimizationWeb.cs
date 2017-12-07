@@ -5,12 +5,9 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -24,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
-		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
 		private readonly IPersonRepository _personRepository;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
@@ -36,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IPlanningPeriodRepository planningPeriodRepository,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
-			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult,
 			IPersonRepository personRepository,
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
@@ -48,7 +43,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_planningPeriodRepository = planningPeriodRepository;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
-			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationResult = optimizationResult;
 			_personRepository = personRepository;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
@@ -90,22 +84,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 
-			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.SchedulingResultState, true, period.Inflate(1)))
-			{
-				_dayOffOptimization.Execute(period,
-					agents.ToList(),
-					optimizationPreferences,
-					schedulingOptions,
-					dayOffOptimizationPreferenceProvider,
-					blockPreferenceProvider,
-					new NoSchedulingProgress(),
-					true,
-					null);
-			}
+			_dayOffOptimization.Execute(period,
+				agents.ToList(),
+				optimizationPreferences,
+				schedulingOptions,
+				dayOffOptimizationPreferenceProvider,
+				blockPreferenceProvider,
+				new NoSchedulingProgress(),
+				true,
+				null);
 
 			planningPeriod.Scheduled();
 
-			return new  OptimizationData
+			return new OptimizationData
 			{
 				DateOnlyPeriod = period,
 				Persons = agents,
