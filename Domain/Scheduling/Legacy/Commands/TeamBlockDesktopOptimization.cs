@@ -101,8 +101,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
 					optimizationPreferences.General.OptimizationStepDaysOff = false;
-					_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
-
 					_teamBlockDayOffOptimizer.OptimizeDaysOff(
 						allMatrixes,
 						selectedPeriod,
@@ -316,8 +314,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
 					optimizationPreferences.General.OptimizationStepDaysOff = false;
-					_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
-
 					_teamBlockDayOffOptimizer.OptimizeDaysOff(
 						allMatrixes,
 						selectedPeriod,

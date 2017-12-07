@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly DayOffOptimizerStandard _dayOffOptimizeStandard;
+		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 
 		public TeamBlockDayOffOptimizer(
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
@@ -27,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IOptimizerHelperHelper optimizerHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			DayOffOptimizerStandard dayOffOptimizeStandard)
+			DayOffOptimizerStandard dayOffOptimizeStandard,
+			IOptimizerHelperHelper optimizerHelperHelper)
 		{
 			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 			_teamBlockDaysOffSameDaysOffLockSyncronizer = teamBlockDaysOffSameDaysOffLockSyncronizer;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_optimizerHelper = optimizerHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_dayOffOptimizeStandard = dayOffOptimizeStandard;
+			_optimizerHelperHelper = optimizerHelperHelper;
 		}
 
 		[TestLog]
@@ -50,6 +53,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamInfoFactory teamInfoFactory,
 			ISchedulingProgress schedulingProgress)
 		{
+			_optimizerHelperHelper.LockDaysForDayOffOptimization(allPersonMatrixList, optimizationPreferences, selectedPeriod);
+			
 			var schedulerStateHolder = _schedulerStateHolder();
 			var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,

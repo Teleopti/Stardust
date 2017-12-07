@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
-		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
 		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			MatrixListFactory matrixListFactory,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
-			IOptimizerHelperHelper optimizerHelperHelper,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult,
 			TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
@@ -65,7 +63,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_matrixListFactory = matrixListFactory;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
-			_optimizerHelperHelper = optimizerHelperHelper;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationResult = optimizationResult;
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
@@ -112,10 +109,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				agents = people.FixedStaffPeople(period);
 			}
 
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, agents, period); 
-
-			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
-
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, agents, period);
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences); 
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 
