@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -119,7 +120,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				if (Owner.PermissionsEnabled)
 				{
-					throw new PermissionException("Cannot add " + persistableScheduleData + " to the collection.");
+					var availablePeriodsInfo =
+						string.Join(",", AvailablePeriods().Select(p => p.ToShortDateString(CultureInfo.CurrentCulture)));
+					throw new PermissionException("Cannot add " + persistableScheduleData +
+												  " to the collection.PersistableData period:" + persistableScheduleData.Period + "AvailablePeriods are" +
+												  availablePeriodsInfo + "Person timezone:" +
+												  persistableScheduleData.Person.PermissionInformation.DefaultTimeZone());
 				}
 				_scheduleObjectsWithNoPermissions.Add(persistableScheduleData);
 			}
