@@ -10,31 +10,51 @@
 
         vm.state = 'manual';
         vm.jobs = [];
-	    vm.tenants = [];
+        vm.tenants = [];
+	    vm.selectedTenant = '';
 
         vm.getJobs = getJobs;
-	    vm.getTennants = getTennants;
+        vm.getTennants = getTennants;
+	    vm.sendTennant = sendTennant;
 
 		//init
 	    vm.getManualData = function () { 
-            vm.getJobs();
-	        vm.getTennants();
+  
+            vm.getTennants();
         }
 	    vm.getManualData();
 
-        function getJobs() {
-            $http.get("./Etl/Jobs", tokenHeaderService.getHeaders())
-                .success(function (data) {
-                    vm.jobs = data;
-                });
+        function getJobs(data) {
+            $http.post("./Etl/Jobs", JSON.stringify(data), tokenHeaderService.getHeaders())
+		        .success(function (data) {
+		            vm.jobs = data;
+	            })
+                .error(function (data) {
+                    vm.jobs = [];
+			        console.log(data, 'failed to get jobs');
+		        });
         }
 
         function getTennants() {
             $http.get("./AllTenants", tokenHeaderService.getHeaders())
                 .success(function (data) {
                     vm.tenants = data;
+                    vm.selectedTenant = vm.tenants[0].Name;
+                    //vm.sendTennant(vm.selectedTenant);
+                    vm.getJobs(vm.selectedTenant);
 	            });
         }
+
+        function sendTennant(data) {
+	        console.log(data);
+            $http.post("./Etl/TenantLogDataSources", data, tokenHeaderService.getHeaders())
+                .success(function (data) {
+		            console.log('success ', data);
+	            })
+                .error(function (data) {
+		            console.log(data, 'fail');
+	            });
+	    }
 
 
 
