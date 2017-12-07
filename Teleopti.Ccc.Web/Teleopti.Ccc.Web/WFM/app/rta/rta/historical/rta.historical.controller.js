@@ -108,20 +108,18 @@
 				change.RuleColor = !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor;
 				change.Color = change.RuleColor;
 				change.click = function () {
-					highlightThis(change);
+					vm.diamonds.forEach(function (d) {
+						d.highlight = false;
+					});
+					change.highlight = true;
+					vm.cards.find(function (card) {
+						return card.Items.includes(change);
+					}).isOpen = true;
 				};
 				return change;
 			});
 		}
-
-		function highlightThis(change) {
-			vm.diamonds.forEach(function (d) {
-				d.highlight = false;
-			});
-			change.highlight = true;
-			change.parent.isOpen = true;
-		}
-
+		
 		function mapChanges(changes, schedules) {
 
 			var makeCard = function (header, color, startTime, endTime) {
@@ -141,19 +139,19 @@
 				return [card];
 			}
 			
-			return [makeCard($translate.instant('BeforeShiftStart'), 'black', '0000-01-01T00:00:00', schedules[0].StartTime)]
+			var beforeShift = [makeCard($translate.instant('BeforeShiftStart'), 'black', '0000-01-01T00:00:00', schedules[0].StartTime)];
+			var afterShift = [makeCard($translate.instant('AfterShiftEnd'), 'black', schedules[schedules.length-1].EndTime, '9999-01-01T00:00:00')];
+			return beforeShift
 				.concat(schedules.map(function (l) {
 					var activityStart = moment(l.StartTime);
 					var activityEnd = moment(l.EndTime);
 					var header = l.Name + ' ' + activityStart.format('HH:mm') + ' - ' + activityEnd.format('HH:mm');
 					return makeCard(header, l.Color, l.StartTime, l.EndTime);
-				})).concat([makeCard($translate.instant('AfterShiftEnd'), 'black', schedules[schedules.length-1].EndTime, '2018-01-01T00:00:00')])
+				}))
+				.concat(afterShift)
 				.map(function (card) {
 					card.Items = changes.filter(function (change) {
-						var match = change.Time >= card.StartTime && change.Time < card.EndTime;
-						if (match)
-							change.parent = card;
-						return match;
+						return change.Time >= card.StartTime && change.Time < card.EndTime;
 					});
 					return card
 				})
