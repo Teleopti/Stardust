@@ -11,9 +11,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class EtlController : ApiController
 	{
 		private readonly IToggleManager _toggleManager;
-		private readonly EtlToolJobCollectionModelProvider _jobCollectionModelProvider;
+		private readonly JobCollectionModelProvider _jobCollectionModelProvider;
 
-		public EtlController(IToggleManager toggleManager, EtlToolJobCollectionModelProvider jobCollectionModelProvider)
+		public EtlController(IToggleManager toggleManager, JobCollectionModelProvider jobCollectionModelProvider)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
@@ -30,6 +30,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual IHttpActionResult Jobs([FromBody] string tenantName)
 		{
 			return Json(_jobCollectionModelProvider.Create(tenantName));
+		}
+
+		[HttpPost, Route("Etl/TenantLogDataSources")]
+		public virtual IHttpActionResult TenantLogDataSources([FromBody] string tenantName)
+		{
+			return null;
 		}
 	}
 }
