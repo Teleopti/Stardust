@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, filteredAgents, selectedPeriod);
 					var matrixListOriginalStateContainer = matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)).ToArray();
 					_daysOffBackToLegalState.Execute(matrixListOriginalStateContainer,
-													backgroundWorker, stateHolder.CommonStateHolder.ActiveDayOffs.ToList()[0],
 													schedulingOptions,
 													dayOffOptimizationPreferenceProvider,
 													optimizationPreferences,

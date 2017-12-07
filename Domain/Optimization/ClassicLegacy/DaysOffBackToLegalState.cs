@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
@@ -14,12 +15,12 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 	{
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private readonly OptimizerHelperHelper _optimizerHelper; 
-		private readonly Func<ISchedulingResultStateHolder> _schedulerStateHolder;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public DaysOffBackToLegalState(IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
 																	OptimizerHelperHelper optimizerHelper,
-																	Func<ISchedulingResultStateHolder> schedulerStateHolder,
+																	Func<ISchedulerStateHolder> schedulerStateHolder,
 																	IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
@@ -29,8 +30,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 		}
 
 		public void Execute(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
-			ISchedulingProgress backgroundWorker,
-			IDayOffTemplate dayOffTemplate,
 			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IOptimizationPreferences optimizationPreferences,
@@ -66,11 +65,11 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 					{
 						_optimizerHelper.SyncSmartDayOffContainerWithMatrix(
 							backToLegalStateSolverContainer,
-							dayOffTemplate,
+							_schedulerStateHolder().CommonStateHolder.ActiveDayOffs.ToList()[0],
 							_scheduleDayChangeCallback,
 							new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling),
 							_scheduleMatrixLockableBitArrayConverterEx,
-							_schedulerStateHolder(),
+							_schedulerStateHolder().SchedulingResultState,
 							dayOffOptimizationPreferenceProvider
 							);
 
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 							overLimitCounts.StudentAvailabilitiesOverLimit > 0 ||
 							optimizationLimits.MoveMaxDaysOverLimit())
 						{
-							var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder(), _scheduleDayChangeCallback,
+							var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback,
 								new ScheduleTagSetter(
 									KeepOriginalScheduleTag.Instance));
 							rollbackMatrixChanges(originalStateContainer, rollbackService, resourceOptimizerPersonOptimized, optimizationPreferences.Advanced.RefreshScreenInterval);
