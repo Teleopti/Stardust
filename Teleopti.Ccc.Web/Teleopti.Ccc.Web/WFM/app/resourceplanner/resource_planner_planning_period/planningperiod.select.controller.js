@@ -102,24 +102,22 @@
 		}
 
 		function typeChanged(output) {
-			if (vm.intervalRange == 0)
-				vm.selectedIsValid = false;
-			vm.selectedIsValid = true;
 			vm.intervalType = output;
+			vm.selectedIsValid = isValidMaxWeeks() || isValidMaxMonths();
+			console.log(vm.selectedIsValid)
 			return autoUpdateEndDate();
 		}
 
 		function intervalChanged() {
-			if (vm.intervalRange == 0)
-				vm.selectedIsValid = false;
-			vm.selectedIsValid = true;
+			vm.selectedIsValid = isValidMaxWeeks() || isValidMaxMonths();
+			console.log(vm.selectedIsValid)
 			return autoUpdateEndDate();
 		}
 
 		function autoUpdateEndDate() {
 			if (vm.selectedSuggestion) {
 				var startDate = vm.selectedSuggestion.startDate;
-				vm.selectedSuggestion = {
+				return vm.selectedSuggestion = {
 					startDate: moment(startDate).toDate(),
 					endDate: moment(startDate).add(vm.intervalRange, vm.intervalType.toLowerCase()).subtract(1, 'day').toDate()
 				};
@@ -218,7 +216,7 @@
 		}
 
 		function isValidDaysNumber(value, limit) {
-			return isInteger(value) && value <= limit;
+			return isInteger(value) && value <= limit && value > 0;
 		}
 
 		function isInteger(value) {
@@ -229,12 +227,14 @@
 			if (vm.intervalType == 'Week') {
 				return isValidDaysNumber(vm.intervalRange, 8);
 			}
+			return false;
 		}
 
 		function isValidMaxMonths() {
 			if (vm.intervalType == 'Month') {
 				return isValidDaysNumber(vm.intervalRange, 2);
 			}
+			return false;
 		}
 	}
 })();
