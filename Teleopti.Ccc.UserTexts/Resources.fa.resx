@@ -12834,4 +12834,156 @@ Teleopti R&amp;D</value>
   <data name="DenyReasonSystemBusy" xml:space="preserve">
     <value>درخواست شما بخاطر مشغول بودن سیستم رد شد. لطفاً بعداً تلاش کنید</value>
   </data>
+  <data name="DenyReasonNoSkillCombinationsFound" xml:space="preserve">
+    <value>درخواست شما به خاطر اینکه سیستم نمیتواند اطلاعات میزان نیروها را پیدا کند رد شد</value>
+  </data>
+  <data name="YourScheduleHasChanged" xml:space="preserve">
+    <value>برنامه شما تغییر کرد</value>
+  </data>
+  <data name="AnErrorOccurredWhenUploadingTheFile" xml:space="preserve">
+    <value>خطای در هنگام اضافه کردن فایل اتفاق افتاد</value>
+  </data>
+  <data name="ImportExternalData" xml:space="preserve">
+    <value>اضافه کردن داده های خارجی</value>
+  </data>
+  <data name="UploadAndStart" xml:space="preserve">
+    <value>فایل را اضافه و شروع را بزنید</value>
+  </data>
+  <data name="InvalidNumberOfFields" xml:space="preserve">
+    <value>هر ردیفی باید {0} محل داده داشته باشد. این ردیف {1} تا دارد</value>
+  </data>
+  <data name="GameNameIsTooLong" xml:space="preserve">
+    <value>نام بازی بسیار طولانی است</value>
+  </data>
+  <data name="AgentIdIsTooLong" xml:space="preserve">
+    <value>شناسه پاسخگو بسیار طولانی است</value>
+  </data>
+  <data name="InvalidGameType" xml:space="preserve">
+    <value>نوع بازی باید عدد یا درصد باشد</value>
+  </data>
+  <data name="GameTypeChanged" xml:space="preserve">
+    <value>نوع بازی مثل گذشته نیست</value>
+  </data>
+  <data name="InvalidGameId" xml:space="preserve">
+    <value>شناسه نامعتبر بازی</value>
+  </data>
+  <data name="OutOfMaximumLimit" xml:space="preserve">
+    <value>تنها {0} معیار برای سرگرمی میتوان گذاشت، این ردیف بخاطرعدم رعایت این محدودیت اضافه نمیشود</value>
+  </data>
+  <data name="InvalidScore" xml:space="preserve">
+    <value>امتیاز نامعتبر</value>
+  </data>
+  <data name="AgentDoNotExist" xml:space="preserve">
+    <value>این پاسخگو وجود ندارد</value>
+  </data>
+  <data name="BusinessHierarchy" xml:space="preserve">
+    <value>چارت سازمانی</value>
+  </data>
+  <data name="GroupPages" xml:space="preserve">
+    <value>صفحه های گروهی</value>
+  </data>
+  <data name="OpenPlansPage" xml:space="preserve">
+    <value>برنامه ها</value>
+  </data>
+  <data name="RequestTypeOvertime" xml:space="preserve">
+    <value>فیلتر تیمها</value>
+  </data>
+  <data name="FilterTeams" xml:space="preserve">
+    <value>درخواست اضافه کاری</value>
+  </data>
+  <data name="OvertimeRequest" xml:space="preserve">
+    <value>نوع اضافه کاری</value>
+  </data>
+  <data name="OvertimeType" xml:space="preserve">
+    <value>نوع اضافه کاری</value>
+  </data>
+  <data name="RequestDenyReasonAutoPurge" xml:space="preserve">
+    <value>بخاطر اینکه درخواست در زمان پاسخ داده نشده، حذف میشود</value>
+  </data>
+  <data name="RequestWaitlistedReasonPersonAccount" xml:space="preserve">
+    <value>شما زمان مرخصی  کافی در حساب شخصی ندارید</value>
+  </data>
+  <data name="MaxSearchPersonCountExceeded" xml:space="preserve">
+    <value>حاصل این جستجو برای بیش از {0} نفر است. لطفاً جستجوی خود را محدودتر کنید</value>
+  </data>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>مجوز مرخصی کامل</value>
+  </data>
+  <data name="ShrinkedAllowance" xml:space="preserve">
+    <value>مجوز مرخصی بعد از آستانه</value>
+  </data>
+  <data name="OvertimeRequestAlreadyHasScheduleInPeriod" xml:space="preserve">
+    <value>برای دوره {0} تا {1} فعالیتی زمانبندی شده وجود دارد</value>
+  </data>
+  <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>درخواست اضافه کاری {0} رد شده است</value>
+  </data>
+  <data name="OvertimeRequestWasCancelled" xml:space="preserve">
+    <value>درخواست اضافه کاری لغو شده است</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonExpired" xml:space="preserve">
+    <value>درخواست اضافه کاری به طور خودکار رد شد. زمان شروع درخواست {0} است درحالیکه باید حداقل {1} دقیقه بعد از زمان حاضر باشد</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonOutOfSiteOpenHour" xml:space="preserve">
+    <value>درخواست اضافه کاری به طور خودکار رد شد. این درخواست برای {0} است اما ساعت کاری {1} است</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
+    <value>درخواست اضافه کاری به طور خودکار رد شد. این سایت طول زمان {0} بسته است</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>وب</value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>فیلتر سایت / تیم</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>فیلتر عملکردها</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>فیلتر نقشها</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>فیلتر مکانها</value>
+  </data>
+  <data name="ConfirmDeleteCampaign" xml:space="preserve">
+    <value>آیا میخواهید کمپین را حذف کنید؟</value>
+  </data>
+  <data name="InternalErrorMsg" xml:space="preserve">
+    <value>خطایی داخلی رخ داده است</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>فیاتر نقشها</value>
+  </data>
+  <data name="YouHaveSelectedXAgent" xml:space="preserve">
+    <value>شما تعداد {0} پاسخگو را انتخاب کرده اید</value>
+  </data>
+  <data name="OnlyAbsenceRequestCanBeCancelled" xml:space="preserve">
+    <value>تنها درخواست مرخصی قابل لغو کردن است</value>
+  </data>
+  <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>با توجه به قرارداد این سیستم تحت لیسانس {0} است
+کلید فعال سازیتا سقف {1} پاسخگو فعال را پوشش میدهد
+نسخه اصلی: {4}
+شمای کلید فعال سازی {2} است
+این امکانات فعال است:
+{3}</value>
+  </data>
+  <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>با توجه به قرارداد این سیستم تحت لیسانس {0} است
+کلید فعال سازیتا سقف {1} پاسخگو فعال را پوشش میدهد
+نسخه اصلی: {4}
+شمای کلید فعال سازی {2} است
+این امکانات فعال است:
+{3}</value>
+  </data>
+  <data name="DataProtectionQuestion" xml:space="preserve">
+    <value>لطفاً در پوتال مشتری Teleopti مشارکت کنید. شما میتوانید به نکات مفید، پستهای وبلاگ، آموزشها و اطلاعات مفید دیگری دسترسی داشته باشید. برای این منظور Teleopti از شما میخواهد که داده های از شما برای فعالسازی دسترسی شما داشته باشد:
+ایمیل: &lt;b&gt;{0}&lt;/b&gt;&lt;br&gt;
+نام: &lt;b&gt;{1}&lt;/b&gt;&lt;br&gt;
+نام خانوادگی: &lt;b&gt;{2}&lt;/b&gt;&lt;br&gt;
+زبان: &lt;b&gt;{3}&lt;/b&gt;&lt;br&gt;
+شرکت: &lt;b&gt;{4}&lt;/b&gt;&lt;br&gt;
+با ثبت این اطلاعات شما بطور خودکار وارد پورتل شده و از امکانات بهره میبرید.&lt;br&gt;&lt;br&gt;
+تمایل به مشارکت دارید؟</value>
+  </data>
 </root>
