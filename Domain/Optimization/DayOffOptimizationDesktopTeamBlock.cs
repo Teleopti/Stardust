@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedAgents, selectedPeriod);
 				}
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
-				var teamInfoFactory = _teamInfoFactoryFactory.Create(selectedAgents, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+				var teamInfoFactory = _teamInfoFactoryFactory.Create(stateHolder.ChoosenAgents, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 				
 				_dayOffOptimization.Execute(matrixList, selectedPeriod, selectedPersons, optimizationPreferences, schedulingOptions, 
 					dayOffOptimizationPreferenceProvider, blockPreferenceProvider, teamInfoFactory, backgroundWorker, false);
