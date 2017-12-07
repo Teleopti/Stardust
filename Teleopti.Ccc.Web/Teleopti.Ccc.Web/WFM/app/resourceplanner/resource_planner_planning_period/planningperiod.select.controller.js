@@ -104,13 +104,11 @@
 		function typeChanged(output) {
 			vm.intervalType = output;
 			vm.selectedIsValid = isValidMaxWeeks() || isValidMaxMonths();
-			console.log(vm.selectedIsValid)
 			return autoUpdateEndDate();
 		}
 
 		function intervalChanged() {
 			vm.selectedIsValid = isValidMaxWeeks() || isValidMaxMonths();
-			console.log(vm.selectedIsValid)
 			return autoUpdateEndDate();
 		}
 
