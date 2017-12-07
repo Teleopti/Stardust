@@ -58,7 +58,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AdministrationTestAttribute.cs" />
-    <Compile Include="EtlTool\EtlToolJobCollectionModelProviderTest.cs" />
+    <Compile Include="EtlTool\JobCollectionModelProviderTest.cs" />
     <Compile Include="EtlTool\FakeBaseConfigurationRepository.cs" />
     <Compile Include="EtlTool\FakePmInfoProvider.cs" />
   </ItemGroup>

@@ -16,14 +16,14 @@ using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core.EtlTool
 {
-	public class EtlToolJobCollectionModelProvider
+	public class JobCollectionModelProvider
 	{
 		private readonly IComponentContext _componentContext;
 		private readonly IPmInfoProvider _pmInfoProvider;
 		private readonly IConfigurationHandler _configurationHandler;
 		private readonly ILoadAllTenants _loadAllTenants;
 
-		public EtlToolJobCollectionModelProvider(IComponentContext componentContext, IPmInfoProvider pmInfoProvider, IConfigurationHandler configurationHandler, ILoadAllTenants loadAllTenants)
+		public JobCollectionModelProvider(IComponentContext componentContext, IPmInfoProvider pmInfoProvider, IConfigurationHandler configurationHandler, ILoadAllTenants loadAllTenants)
 		{
 			_componentContext = componentContext;
 			_pmInfoProvider = pmInfoProvider;

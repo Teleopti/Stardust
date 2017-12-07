@@ -8,9 +8,9 @@ using Teleopti.Wfm.Administration.Core.EtlTool;
 namespace Teleopti.Wfm.AdministrationTest.EtlTool
 {
 	[AdministrationTest]
-	public class EtlToolJobCollectionModelProviderTest
+	public class JobCollectionModelProviderTest
 	{
-		public EtlToolJobCollectionModelProvider Target;
+		public JobCollectionModelProvider Target;
 		public FakeTenants AllTenants;
 		public FakeBaseConfigurationRepository BaseConfigurationRepository;
 		public IGeneralInfrastructure GeneralInfrastructure;
