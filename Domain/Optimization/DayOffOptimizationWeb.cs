@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
-		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IScheduleDictionaryPersister persister, 
 			IPlanningPeriodRepository planningPeriodRepository,
-			WeeklyRestSolverExecuter weeklyRestSolverExecuter, 
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			MatrixListFactory matrixListFactory,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
@@ -58,7 +56,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulerStateHolder = schedulerStateHolder;
 			_persister = persister;
 			_planningPeriodRepository = planningPeriodRepository;
-			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_matrixListFactory = matrixListFactory;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
@@ -122,13 +119,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 					dayOffOptimizationPreferenceProvider,
 					blockPreferenceProvider,
 					_teamInfoFactoryFactory.Create(agents, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer),
-					new NoSchedulingProgress());
-
-				_weeklyRestSolverExecuter.Resolve(
-					optimizationPreferences, 
-					period,
-					agents.ToList(), 
-					dayOffOptimizationPreferenceProvider);
+					new NoSchedulingProgress(),
+					true);
 			}
 
 			planningPeriod.Scheduled();

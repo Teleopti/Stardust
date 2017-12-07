@@ -106,7 +106,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(selectedAgents, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 				var blockPreferenceProvider = new FixedBlockPreferenceProvider(optimizationPreferences.Extra); 
 
-				_dayOffOptimization.Execute(matrixList, selectedPeriod, selectedPersons, optimizationPreferences, schedulingOptions, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider, blockPreferenceProvider, teamInfoFactory, backgroundWorker);
+				_dayOffOptimization.Execute(matrixList, selectedPeriod, selectedPersons, optimizationPreferences, schedulingOptions, 
+					resourceCalculateDelayer, dayOffOptimizationPreferenceProvider, blockPreferenceProvider, teamInfoFactory, backgroundWorker, false);
 			}
 		}
 	}
