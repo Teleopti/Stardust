@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -50,12 +51,19 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		{
 			var contents = await ImportCommonAction.ReadAsMultipartAsync(Request.Content);
 			var fileData = _multipartHttpContentExtractor.ExtractFileData(contents).SingleOrDefault();
+
+			createJob(fileData);
+			return Ok();
+		}
+
+		[UnitOfWork]
+		protected virtual void createJob(ImportFileData fileData)
+		{
 			if (fileData?.Data?.Length == 0)
 			{
 				throw new ArgumentNullException(Resources.File, Resources.NoInput);
 			}
 			_importExternalPerformanceInfoService.CreateJob(fileData);
-			return Ok();
 		}
 
 		[HttpGet, Route("api/Gamification/job/{id}/artifact/{category}"), UnitOfWork]
