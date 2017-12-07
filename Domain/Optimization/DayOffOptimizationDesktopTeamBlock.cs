@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var stateHolder = _schedulerStateHolder();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
+			var blockPreferenceProvider = new FixedBlockPreferenceProvider(optimizationPreferences.Extra);
 
 			using (_resourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, true, selectedPeriod.Inflate(1)))
 			{
@@ -89,7 +90,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(selectedAgents, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-				var blockPreferenceProvider = new FixedBlockPreferenceProvider(optimizationPreferences.Extra); 
 				
 				_dayOffOptimization.Execute(matrixList, selectedPeriod, selectedPersons, optimizationPreferences, schedulingOptions, 
 					dayOffOptimizationPreferenceProvider, blockPreferenceProvider, teamInfoFactory, backgroundWorker, false);
