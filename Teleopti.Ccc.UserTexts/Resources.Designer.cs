@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -4634,6 +4634,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Business {
             get {
                 return ResourceManager.GetString("Business", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Hierarchy.
+        /// </summary>
+        public static string BusinessHierarchy {
+            get {
+                return ResourceManager.GetString("BusinessHierarchy", resourceCulture);
             }
         }
         
@@ -13688,6 +13697,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string GroupPagePreviewScreen {
             get {
                 return ResourceManager.GetString("GroupPagePreviewScreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group Pages.
+        /// </summary>
+        public static string GroupPages {
+            get {
+                return ResourceManager.GetString("GroupPages", resourceCulture);
             }
         }
         

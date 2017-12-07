@@ -16875,4 +16875,12 @@ Do you want to participate?</value>
     <value>This agent do not exist</value>
     <comment>use for gamification error info when import external performance csv file.</comment>
   </data>
+  <data name="BusinessHierarchy" xml:space="preserve">
+    <value>Business Hierarchy</value>
+    <comment>business hierarchy Title</comment>
+  </data>
+  <data name="GroupPages" xml:space="preserve">
+    <value>Group Pages</value>
+    <comment>group pages title</comment>
+  </data>
 </root>
