@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	public class DayOffOptimizationFakeDecisionMakerTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public DayOffOptimizationDesktopTeamBlock Target;
+		public DayOffOptimizationDesktop Target;
 
 		[Test]
 		[Timeout(3000)]

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	public class DayOffOptimizationTeamBlockDesktopTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public DayOffOptimizationDesktopTeamBlock Target;
+		public DayOffOptimizationDesktop Target;
 		public FakeRuleSetBagRepository RuleSetBagRepository; //needed also in Desktop tests becaused used in grouppagecreator
 
 		[Test]

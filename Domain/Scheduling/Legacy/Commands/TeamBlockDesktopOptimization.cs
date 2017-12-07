@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
-		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktopTeamBlock;
+		private readonly DayOffOptimizationDesktop _dayOffOptimizationDesktop;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly MaxSeatOptimization _maxSeatOptimization;
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
-			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
+			DayOffOptimizationDesktop dayOffOptimizationDesktop,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			MaxSeatOptimization maxSeatOptimization)
 		{
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
-			_dayOffOptimizationDesktopTeamBlock = dayOffOptimizationDesktopTeamBlock;
+			_dayOffOptimizationDesktop = dayOffOptimizationDesktop;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_maxSeatOptimization = maxSeatOptimization;
 		}
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.LoadedAgents, selectedPeriod);
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
-				_dayOffOptimizationDesktopTeamBlock.Execute(selectedPeriod, selectedPersons, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, null);
+				_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedPersons, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, null);
 			}
 
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().SchedulingResultState, false,
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
-		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktopTeamBlock;
+		private readonly DayOffOptimizationDesktop _dayOffOptimizationDesktop;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly MaxSeatOptimization _maxSeatOptimization;
 
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
-			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
+			DayOffOptimizationDesktop dayOffOptimizationDesktop,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			MaxSeatOptimization maxSeatOptimization)
 		{
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
-			_dayOffOptimizationDesktopTeamBlock = dayOffOptimizationDesktopTeamBlock;
+			_dayOffOptimizationDesktop = dayOffOptimizationDesktop;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_maxSeatOptimization = maxSeatOptimization;
 		}
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.LoadedAgents, selectedPeriod);
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
-				_dayOffOptimizationDesktopTeamBlock.Execute(selectedPeriod, selectedPersons, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, null);
+				_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedPersons, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, null);
 			}
 
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().SchedulingResultState, false, selectedPeriod.Inflate(1)))

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	public class DayOffOptimizationDesktopQualityTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public DayOffOptimizationDesktopTeamBlock Target;
+		public DayOffOptimizationDesktop Target;
 		public IScheduleResultDataExtractorProvider ScheduleResultDataExtractorProvider;
 		public IUserTimeZone UserTimeZone;
 

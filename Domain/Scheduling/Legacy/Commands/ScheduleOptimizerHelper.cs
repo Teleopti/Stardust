@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
-		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktop;
+		private readonly DayOffOptimizationDesktop _dayOffOptimizationDesktop;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationServiceFacade;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IResourceCalculation resourceOptimizationHelper,
 				IOptimizerHelperHelper optimizerHelperHelper,
 				CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory,
-				DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktop,
+				DayOffOptimizationDesktop dayOffOptimizationDesktop,
 				IUserTimeZone userTimeZone,
 				ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationServiceFacade,
 				IScheduleDayEquator scheduleDayEquator,

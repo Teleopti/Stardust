@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>().SingleInstance();
 
 			builder.RegisterType<DayOffOptimizationWeb>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<DayOffOptimizationDesktopTeamBlock>().InstancePerLifetimeScope(); 
+			builder.RegisterType<DayOffOptimizationDesktop>().InstancePerLifetimeScope(); 
 
 			builder.RegisterType<OptimizerHelperHelper>().SingleInstance();
 			builder.RegisterType<WorkShiftBackToLegalStateServiceProFactory>().InstancePerLifetimeScope();

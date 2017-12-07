@@ -6,11 +6,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffOptimizationDesktopTeamBlock
+	public class DayOffOptimizationDesktop
 	{
 		private readonly DayOffOptimization _dayOffOptimization;
 
-		public DayOffOptimizationDesktopTeamBlock(DayOffOptimization dayOffOptimization)
+		public DayOffOptimizationDesktop(DayOffOptimization dayOffOptimization)
 		{
 			_dayOffOptimization = dayOffOptimization;
 		}
