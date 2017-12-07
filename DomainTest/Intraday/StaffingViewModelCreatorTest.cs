@@ -1362,6 +1362,33 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(6);
 		}
 
+		[Test]
+		public void ShouldUseUserDateWhenAddingDateOffset()
+		{
+			TimeZone.IsNewYork();
+			var userNow = new DateTime(2016, 8, 26, 22, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+
+			var act = ActivityRepository.Has("act");
+			var skill = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false, act);
+			SkillRepository.Has(skill);
+
+			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime().AddDays(-1), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues());
+			SkillDayRepository.Has(skillDay);
+
+			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, 0);
+
+			var staffingIntervals = skillDay.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervals.First().Period.StartDateTime, TimeZone.TimeZone()));
+			vm.DataSeries.Time.Last().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervals.Last().Period.StartDateTime, TimeZone.TimeZone()));
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ForecastedStaffing.First().Should().Be.GreaterThan(0d);
+			vm.DataSeries.ForecastedStaffing.Last().Should().Be.GreaterThan(0d);
+			vm.StaffingHasData.Should().Be.EqualTo(true);
+		} 
 		
 		private ISkill createChatSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, int midnigthBreakOffset)
 		{

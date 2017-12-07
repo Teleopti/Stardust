@@ -71,7 +71,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public IntradayStaffingViewModel Load(Guid[] skillIdList, int dayOffset)
 		{
-			return Load(skillIdList, new DateOnly(_now.UtcDateTime().AddDays(dayOffset)));
+			var userDate = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).AddDays(dayOffset);
+			return Load(skillIdList, new DateOnly(userDate));
 		}
 
 		public IntradayStaffingViewModel Load(Guid[] skillIdList, DateOnly? dateOnly = null,  bool useShrinkage = false)
