@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -151,7 +150,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var dop = dateOnly.ToDateOnlyPeriod();
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var errorMessage = createErrorMessage(overlappingLayers);
+			var errorMessage = createErrorMessage(person, overlappingLayers);
 			IBusinessRuleResponse response = new BusinessRuleResponse(
 				typeof(NotOverwriteLayerRule),
 				errorMessage,
@@ -164,11 +163,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return response;
 		}
 
-		private static string createErrorMessage(OverlappingLayers overlappingLayers)
+		private static string createErrorMessage(IPerson person,  OverlappingLayers overlappingLayers)
 		{
 			var errorMessage = Resources.BusinessRuleOverlappingErrorMessage3;
 			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
-			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var loggedOnTimezone = person.PermissionInformation.DefaultTimeZone();
 
 			var layerBelowTimePeriod = overlappingLayers.LayerBelowPeriod.TimePeriod(loggedOnTimezone);
 			var layerAboveTimePeriod = overlappingLayers.LayerAbovePeriod.TimePeriod(loggedOnTimezone);

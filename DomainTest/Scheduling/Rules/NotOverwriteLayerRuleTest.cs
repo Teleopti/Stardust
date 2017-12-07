@@ -15,20 +15,32 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.IocCommon;
+using System.Threading;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
 	[DomainTestWithStaticDependenciesAvoidUse]
-	public class NotOverwriteLayerRuleTest
+	public class NotOverwriteLayerRuleTest : ISetup
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+		private NotOverwriteLayerRule _target;
+		private IScenario _scenario;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			_target = new NotOverwriteLayerRule();
+			_scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+		}
 
 		[Test]
 		public void ShouldShowValidationAlertIfIllegalOverWriteOfActivities()
 		{
 			var scenario = new Scenario("_");
 			var phoneActivity = new Activity("_") { AllowOverwrite = true };
-			var lunch = new Activity("_") {AllowOverwrite = false};
+			var lunch = new Activity("_") { AllowOverwrite = false };
 			var personalActivity = new Activity("_") { AllowOverwrite = true };
 			var dateOnly = new DateOnly(2016, 05, 23);
 			var shiftCategory1 = new ShiftCategory("_").WithId();
@@ -56,11 +68,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				new[] { agent }, new[] { ass1, ass2 }, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
-			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> {agent}, CultureInfo.InvariantCulture, bussinesRuleCollection);
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, CultureInfo.InvariantCulture, bussinesRuleCollection);
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(1);
-			scheduleDay.BusinessRuleResponseCollection.First().TypeOfRule.Should().Be.EqualTo(typeof (NotOverwriteLayerRule));
+			scheduleDay.BusinessRuleResponseCollection.First().TypeOfRule.Should().Be.EqualTo(typeof(NotOverwriteLayerRule));
 
 			scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly.AddDays(1));
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);
@@ -71,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
 
 			scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
-			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);		
+			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -215,5 +227,54 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);
 		}
+
+
+		[Test]
+		public void ShouldReturnCorrectTimeInfoInTheMessageOfBusinessRuleResponse()
+		{
+			var ranges = new Dictionary<IPerson, IScheduleRange>();
+			var timezone = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+
+			var scheduleDate = new DateOnly(2017, 12, 7);
+			var mainPeriod = scheduleDate.ToDateTimePeriod(new TimePeriod(8, 16), TimeZoneInfo.Utc);
+			var overlapPeriod = scheduleDate.ToDateTimePeriod(new TimePeriod(8, 9), TimeZoneInfo.Utc);
+
+			var person = PersonFactory.CreatePerson("person 1").WithId();
+			person.PermissionInformation.SetDefaultTimeZone(timezone);
+			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(person, new DateOnly(2017, 1, 1));
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, _scenario, scheduleDate);
+			personAssignment.AddActivity(new Activity("activity"), mainPeriod);
+			personAssignment.AddPersonalActivity(new Activity("activity"), overlapPeriod);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(_scenario, mainPeriod, personAssignment);
+			var personScheduleRange = new ScheduleRange(scheduleDictionary,
+				new ScheduleParameters(personAssignment.Scenario, person, mainPeriod), new PersistableScheduleDataPermissionChecker());
+			personScheduleRange.Add(personAssignment);
+			ranges.Add(person, personScheduleRange);
+
+			var person2 = PersonFactory.CreatePerson("person 2").WithId();
+			person.PermissionInformation.SetDefaultTimeZone(timezone);
+			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(person2, new DateOnly(2017, 1, 1));
+			var personAssignmentForPerson2 = PersonAssignmentFactory.CreatePersonAssignment(person2, _scenario, scheduleDate);
+			personAssignmentForPerson2.AddActivity(new Activity("activity"), mainPeriod);
+			var lunch = new Activity("Lunch");
+			lunch.AllowOverwrite = false;
+			personAssignmentForPerson2.AddActivity(lunch, overlapPeriod);
+			var scheduleDictionaryForPerson2 = ScheduleDictionaryForTest.WithPersonAssignment(_scenario, mainPeriod, personAssignmentForPerson2);
+			var personScheduleRangeForPerson2 = new ScheduleRange(scheduleDictionaryForPerson2,
+				new ScheduleParameters(personAssignmentForPerson2.Scenario, person2, mainPeriod), new PersistableScheduleDataPermissionChecker());
+			personScheduleRangeForPerson2.Add(personAssignmentForPerson2);
+			ranges.Add(person2, personScheduleRangeForPerson2);
+
+			var scheduleDays = new List<IScheduleDay> {
+				personScheduleRange.ScheduledDay(scheduleDate)
+			};
+
+			var result = _target.Validate(ranges, scheduleDays);
+
+			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
+
+			result.Single().Message.Should().Contain(overlapPeriod.TimePeriod(timezone).ToShortTimeString(currentUiCulture));
+		}
+
 	}
 }
