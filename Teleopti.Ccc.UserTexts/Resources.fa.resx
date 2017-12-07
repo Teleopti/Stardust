@@ -12531,4 +12531,307 @@ Teleopti R&amp;D</value>
   <data name="SkillsParenthesisS" xml:space="preserve">
     <value>مهارت</value>
   </data>
+  <data name="OverstaffingAfterOT" xml:space="preserve">
+    <value>نیروی مازاد بعد از تایید اضافه کاری</value>
+  </data>
+  <data name="ScheduledAgentsAfterOT" xml:space="preserve">
+    <value>پاسخگوهای اختصاص داده شده بعد از اضافه کاری</value>
+  </data>
+  <data name="UnderstaffingAfterOT" xml:space="preserve">
+    <value>کمبود نیرو بعد از تایید اضافه کاری</value>
+  </data>
+  <data name="InAlarmInSite" xml:space="preserve">
+    <value>در سایت و حالت هشدار</value>
+  </data>
+  <data name="SelectionTooLarge" xml:space="preserve">
+    <value>موارد انتخابی بسیار زیاد است</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>به صورت اکسل ذخیره شود</value>
+  </data>
+  <data name="SkillAreaNoSkillSelected" xml:space="preserve">
+    <value>باید حداقل یک مهارت انتخاب شود</value>
+  </data>
+  <data name="TotalAgentsInAlarm" xml:space="preserve">
+    <value>کل پاسخگوها در وضعیت هشدار</value>
+  </data>
+  <data name="ReportGeneratedTime" xml:space="preserve">
+    <value>گزارش تولید شد</value>
+  </data>
+  <data name="ExportGap" xml:space="preserve">
+    <value>ذخیره کاستی نیرو</value>
+  </data>
+  <data name="AbsenceRequestAlreadyInWaitlist" xml:space="preserve">
+    <value>فعلا درخواستهایی در حالت انتظار قرار دارد. لطفاً صبر کنید</value>
+  </data>
+  <data name="NoAgentsToBeDisplayed" xml:space="preserve">
+    <value>هیچ پاسخگویی نشان داده نمیشود</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteSchedulingSetting" xml:space="preserve">
+    <value>میخواهید تنطیمات زمانبندی {0} و تنظیمات وابسته به آن را تغییر دهید؟</value>
+  </data>
+  <data name="BlockSameShift" xml:space="preserve">
+    <value>شیفت یکسان</value>
+  </data>
+  <data name="BlockSameShiftCategory" xml:space="preserve">
+    <value>دسته شیفت یکسان</value>
+  </data>
+  <data name="BlockSameStartTime" xml:space="preserve">
+    <value>زمان شروع یکسان</value>
+  </data>
+  <data name="CreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>ایجاد تنظیمات زمانبندی</value>
+  </data>
+  <data name="DeletePlanGroupSchedullingSetting" xml:space="preserve">
+    <value>حذف تنظیمات زمانبندی</value>
+  </data>
+  <data name="EditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>ویرایش تنظیمات زمانبندی</value>
+  </data>
+  <data name="FilterPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>فیلتر تنظیمات زمانبندی</value>
+  </data>
+  <data name="GeneralSettingOfPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>نامها و فیلترها</value>
+  </data>
+  <data name="IndividualFlexible" xml:space="preserve">
+    <value>منعطف</value>
+  </data>
+  <data name="InfoOfSchedulingSetting" xml:space="preserve">
+    <value>تنظیمات زمانبندی برای گروه برنامه ریزی اعمال شده است</value>
+  </data>
+  <data name="ManagePlanningGroupSchedulingSetting" xml:space="preserve">
+    <value>مدیریت تنظیمات زمانبندی برای گروه برنامه ریزی {0}</value>
+  </data>
+  <data name="NewPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>تنظیمات جدید زمانبندی</value>
+  </data>
+  <data name="PlanGroupScheduling" xml:space="preserve">
+    <value>تنظیمات زمانبندی</value>
+  </data>
+  <data name="SelectedFilters" xml:space="preserve">
+    <value>فیلترهای انتخاب شده</value>
+  </data>
+  <data name="SelectScheduleMethod" xml:space="preserve">
+    <value>انتخاب روش زمانبندی</value>
+  </data>
+  <data name="TextOFCreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>اطلاعات مربوطه برای ایجاد تنظیمات جدید زمانبندی را پر کنید</value>
+  </data>
+  <data name="TextOfEditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>تغییر اطلاعات برای تنظیمات زمانبندی انتخاب شده</value>
+  </data>
+  <data name="TextOfNoBlockScheduling" xml:space="preserve">
+    <value>بدون زمانبندی بلوکی</value>
+  </data>
+  <data name="LoadingSkillGroups" xml:space="preserve">
+    <value>بارگذاری گروههای مهارت...</value>
+  </data>
+  <data name="NoSkillGroupsFound" xml:space="preserve">
+    <value>هیچ گروه مهارتی پیدا نشد</value>
+  </data>
+  <data name="SelectSkillGroup" xml:space="preserve">
+    <value>انتخاب گروه مهارت</value>
+  </data>
+  <data name="SkillGroupColon" xml:space="preserve">
+    <value>گروه مهارت:</value>
+  </data>
+  <data name="ViewAgents" xml:space="preserve">
+    <value>نمایش پاسخگوها</value>
+  </data>
+  <data name="ViewAgentsBySelection" xml:space="preserve">
+    <value>نمایش پاسخگوهای انتخاب شده</value>
+  </data>
+  <data name="AuditType" xml:space="preserve">
+    <value>نوع بررسی</value>
+  </data>
+  <data name="ModifiedAt" xml:space="preserve">
+    <value>تغییر یافته در</value>
+  </data>
+  <data name="ModifiedBy" xml:space="preserve">
+    <value>تغییر یافته توسط</value>
+  </data>
+  <data name="ScheduledAgent" xml:space="preserve">
+    <value>پاسخگوهای زمانبندی شده</value>
+  </data>
+  <data name="DeleteSchedulingSetting" xml:space="preserve">
+    <value>تنظیمات زمانبندی حذف شده</value>
+  </data>
+  <data name="MissingOvertimeType" xml:space="preserve">
+    <value>نوع اضافه کاری فراموش شده</value>
+  </data>
+  <data name="PlanningGroup" xml:space="preserve">
+    <value>گروه برنامه ریزی</value>
+  </data>
+  <data name="BreakPreferenceStartTimeByMaxColon" xml:space="preserve">
+    <value>رعایت نکردن ترجیجات زمان شروع تا حداکثر</value>
+  </data>
+  <data name="NoOvertimeType" xml:space="preserve">
+    <value>هیچ نوع اضافه کاری در قرار داد شما موجود نیست. لطفاً با سرپرست خود تماس بگیرید</value>
+  </data>
+  <data name="OvertimeShortName" xml:space="preserve">
+    <value>اضافه کاری</value>
+  </data>
+  <data name="ExportSchedule" xml:space="preserve">
+    <value>ذخیره زمانبندیها</value>
+  </data>
+  <data name="ExportSchedulesMaximumDays" xml:space="preserve">
+    <value>حداکثر 31 روز را میتوان انتخاب کرد</value>
+  </data>
+  <data name="ExportSchedulesMaximumOptionalColumns" xml:space="preserve">
+    <value>حداکثر 3 ستون اختیاری را میتوان انتخاب کرد</value>
+  </data>
+  <data name="ShiftTradeTargetTimeRuleName" xml:space="preserve">
+    <value>زمان آستانه قرارداد</value>
+  </data>
+  <data name="ShowStaffing" xml:space="preserve">
+    <value>نمایش میزان نیروها</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>اگر چیزی به ذهنتان میرسد به ما بگویید</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>تنظیمات کاربر</value>
+  </data>
+  <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
+    <value>{0:d}: شیفت از روز قبل یا روز بعد شروع میشود که قابل قبول نیست. این اشکال احتمالا بخاطر تغییر منطقه زمانی پاسخگو رخ داده است.از منوی مربوطه مطقه زمانی را به منطقه فعلی تغییر دهید. سپس شیفت را پاک و دوباره درست کنید</value>
+  </data>
+  <data name="MaximumAgentToExport" xml:space="preserve">
+    <value>شما حد اکثر میتوانید 1000 پاسخگو را هر بار ذخیره کنید. در حالیکه الان {0} پاسخگو را انتخاب کرده اید</value>
+  </data>
+  <data name="SelectedGroups" xml:space="preserve">
+    <value>گروههای انتخاب شده</value>
+  </data>
+  <data name="PriorityHigher" xml:space="preserve">
+    <value>اولویت بالا</value>
+  </data>
+  <data name="PriorityLower" xml:space="preserve">
+    <value>اوپلویت پایین</value>
+  </data>
+  <data name="MaxResultsReached" xml:space="preserve">
+    <value>نتیجه جستجوی کلیدواژه از مقدار {0} بیشتر شده است. لطفاً جستجوی خود را بهتر کنید.</value>
+  </data>
+  <data name="RequestDenyReasonNoPersonSkillOpen" xml:space="preserve">
+    <value>درخواست رد شد زیرا خارج از ساعات کاری مهارتهای مربوطه است</value>
+  </data>
+  <data name="OvertimeRequestDatePeriodError" xml:space="preserve">
+    <value>بازه معتبر از تاریخ {0} تا {1} است</value>
+  </data>
+  <data name="OvertimeRequestRollingPeriodError" xml:space="preserve">
+    <value>بازه معتبر 0 تا {0} است</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
+    <value>درخواست اضافه کاری نمیتواند تایید شود. برخی از تاریخها برای ثبت درخواست باز نشده است</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
+    <value>درخواست اضافه کاری بخاطر تنظیمات سرپرست بطور خودکار رد  شد</value>
+  </data>
+  <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
+    <value>زمان شروع {0} در {1:d} در کیسه شیفت شما وجود ندارد {2}</value>
+  </data>
+  <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
+    <value>شیفت {0:d} در کیسه شیفت {1} وجود ندارد</value>
+  </data>
+  <data name="OpenForOvertimeRequests" xml:space="preserve">
+    <value>درخواستهای اضافه کاری را باز کنید</value>
+  </data>
+  <data name="ExistingShiftNotMatchShift" xml:space="preserve">
+    <value>شیفت {0:d} با شیفت {1:d} سازگار نیست</value>
+  </data>
+  <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
+    <value>دسته شیفت {0} در {1:d} با دسته شیفت {2} در {3:d} سازگار نیست</value>
+  </data>
+  <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
+    <value>زمان شروع {0} در {1:d} با زمان شروع {2} در {3:d} سازگار نیست</value>
+  </data>
+  <data name="PreviousShiftNotMatchShift" xml:space="preserve">
+    <value>شیفت {0:d} با شیفت {1:d} سازگار نیست</value>
+  </data>
+  <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
+    <value>شیفت {0:d} دسته شیفت {1} سازگار نیست</value>
+  </data>
+  <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
+    <value>شیفت {0:d} زمان شروع {1} سازگار نیست</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>درخواست اضافه کاری رد شد. بعضی از روزها برای ثبت درخواست باز نیست. شما میتوانید درخواست خود را برای دوره {0} ارسال کنید</value>
+  </data>
+  <data name="ShiftCategoryNotMatchingShiftBag" xml:space="preserve">
+    <value>دسته شیفت {0} در {1:d} در کیسه شیفت {2} در {3:d} موجود نیست</value>
+  </data>
+  <data name="ContractWorkRuleValidation" xml:space="preserve">
+    <value>بررسی قانون کاری قرارداد</value>
+  </data>
+  <data name="GamificationSettings" xml:space="preserve">
+    <value>تنظیمات سرگرمی</value>
+  </data>
+  <data name="SelectOneOrMoreSites" xml:space="preserve">
+    <value>یک یا چند سایت را انتخاب کنید</value>
+  </data>
+  <data name="SetGamificationTargets" xml:space="preserve">
+    <value>اهداف سرگرمی را تعیین کنید</value>
+  </data>
+  <data name="AppliedSetting" xml:space="preserve">
+    <value>تنظیمات اعمال شده</value>
+  </data>
+  <data name="BlockSchedulingNotWorkingWhenUsingPreferences" xml:space="preserve">
+    <value>زمانبندی بلوکی ممکن است با ترجیحات حاضر کار نکند</value>
+  </data>
+  <data name="IntraDayChipNumberOf" xml:space="preserve">
+    <value>از</value>
+  </data>
+  <data name="AllSkillGroups" xml:space="preserve">
+    <value>همه گروههای مهارت</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
+    <value>مطمئن هستید که میخواهید گروه مهارت را حذف کنید؟</value>
+  </data>
+  <data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
+    <value>مطمئن هستید که میخواهید از پنل مدیریت گروه مهارت خارج شوید؟</value>
+  </data>
+  <data name="AvailableSkills" xml:space="preserve">
+    <value>مهارتهای موجود</value>
+  </data>
+  <data name="CreateNewSkillGroup" xml:space="preserve">
+    <value>ایجاد گروه مهارتی جدید</value>
+  </data>
+  <data name="DoYouWantToDeleteSkillGroup" xml:space="preserve">
+    <value>میخواهید گروه مهارتی را حذف کنید؟</value>
+  </data>
+  <data name="ManageSkillGroups" xml:space="preserve">
+    <value>مدیریت گروههای مهارتی</value>
+  </data>
+  <data name="MoveFromGroup" xml:space="preserve">
+    <value>جابجایی از گروه مهارتی</value>
+  </data>
+  <data name="MoveToGroup" xml:space="preserve">
+    <value>جابجایی به گروه مهارتی</value>
+  </data>
+  <data name="SelectSite" xml:space="preserve">
+    <value>انتخاب سایت</value>
+  </data>
+  <data name="SelectTeam" xml:space="preserve">
+    <value>انتخاب تیم</value>
+  </data>
+  <data name="UnselectSite" xml:space="preserve">
+    <value>سایت انتخاب نشده</value>
+  </data>
+  <data name="UnselectTeam" xml:space="preserve">
+    <value>تیم انتخاب نشده</value>
+  </data>
+  <data name="ThresholdForBadge" xml:space="preserve">
+    <value>آستانه برای مدال:</value>
+  </data>
+  <data name="ThresholdForGoldBadge" xml:space="preserve">
+    <value>آستانه برای مدال برنز:</value>
+  </data>
+  <data name="ThresholdForSilverBadge" xml:space="preserve">
+    <value>آستانه برای مدال طلا:</value>
+  </data>
+  <data name="ThresholdForBronzeBadge" xml:space="preserve">
+    <value>آستانه برای مدال نقره:</value>
+  </data>
+  <data name="DenyReasonSystemBusy" xml:space="preserve">
+    <value>درخواست شما بخاطر مشغول بودن سیستم رد شد. لطفاً بعداً تلاش کنید</value>
+  </data>
 </root>
