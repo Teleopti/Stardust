@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		IHandleEvent<WebDayoffOptimizationStardustEvent>,
 		IRunOnStardust
 	{
-		private readonly DayOffOptimization _dayOffOptimization;
+		private readonly DayOffOptimizationWeb _dayOffOptimizationWeb;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
 		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
 
-		public WebDayoffOptimizationStardustHandler(DayOffOptimization dayOffOptimization, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope, ILowThreadPriorityScope lowThreadPriorityScope)
+		public WebDayoffOptimizationStardustHandler(DayOffOptimizationWeb dayOffOptimizationWeb, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope, ILowThreadPriorityScope lowThreadPriorityScope)
 		{
-			_dayOffOptimization = dayOffOptimization;
+			_dayOffOptimizationWeb = dayOffOptimizationWeb;
 			_jobResultRepository = jobResultRepository;
 			_schedulingSourceScope = schedulingSourceScope;
 			_lowThreadPriorityScope = lowThreadPriorityScope;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				using (_lowThreadPriorityScope.OnThisThread())
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
-					var result = _dayOffOptimization.Execute(@event.PlanningPeriodId);
+					var result = _dayOffOptimizationWeb.Execute(@event.PlanningPeriodId);
 					SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
 				}
 			}
