@@ -40,13 +40,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		[Then(@"I should see group pages picker tab")]
 		public void ThenIShouldSeeGroupPagesPickerTab()
 		{
-			Browser.Interactions.AssertExists(".group-page-picker-menu i[title='GroupPages']");
+			Browser.Interactions.AssertExists(".group-page-picker-menu md-pagination-wrapper .md-tab > i.mdi.mdi-folder-account");
 		}
 
 		[Then(@"I click on group page picker icon")]
 		public void ThenIClickOnGroupPagePickerIcon()
 		{
-			Browser.Interactions.ClickVisibleOnly(".group-page-picker-menu i[title='GroupPages']");
+			Browser.Interactions.ClickVisibleOnly(".group-page-picker-menu md-pagination-wrapper .md-tab > i.mdi.mdi-folder-account");
 		}
 
 		[Then(@"I select all skills on group page picker")]
