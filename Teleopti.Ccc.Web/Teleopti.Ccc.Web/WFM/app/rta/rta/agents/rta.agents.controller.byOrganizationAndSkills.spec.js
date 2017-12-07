@@ -1,4 +1,5 @@
 'use strict';
+
 rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 													$fakeBackend,
 													$controllerBuilder,

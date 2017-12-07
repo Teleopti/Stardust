@@ -23,7 +23,7 @@
 
 		function createController() {
 
-			var vm = $controller(controllerName, { $scope: scope });
+			var controller = $controller(controllerName, { $scope: scope });
 
 			scope.$digest();
 			safeBackendFlush();
@@ -46,8 +46,9 @@
 					safeBackendFlush();
 					return callbacks;
 				},
-				
-				vm: vm
+
+				vm: controller, //backwards compatibility
+				controller: controller
 			};
 
 			return callbacks;

@@ -6,12 +6,12 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 													stateParams) {
 
 	it('should filter text', function (t) {
-		t.createController();
+		var c = t.createController();
 		t.apply(function () {
-			t.vm.filterText = 'Charley';
+			c.filterText = 'Charley';
 		}).wait(5000);
 
-		expect(t.backend().lastAgentStatesRequestParams.textFilter).toBe('Charley');
+		expect(t.backend.lastAgentStatesRequestParams.textFilter).toBe('Charley');
 	});
 
 	it('should not filter text immediately', function () {
