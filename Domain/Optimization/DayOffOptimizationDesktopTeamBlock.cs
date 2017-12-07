@@ -70,13 +70,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			var stateHolder = _schedulerStateHolder();
+			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
+
 			using (_resourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, true, selectedPeriod.Inflate(1)))
 			{
-				var matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, filterAgentsWithEmptyDaysIfClassic(optimizationPreferences, selectedAgents, selectedPeriod), selectedPeriod);
-				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
+				IEnumerable<IScheduleMatrixPro> matrixList;
 				if (optimizationPreferences.Extra.IsClassic())
 				{
 					//TO SIMULATE OLD CLASSIC BEHAVIOR (diff behavior between classic and teamblock)
+					var scheduleDays = _schedulerStateHolder().Schedules.SchedulesForPeriod(selectedPeriod, selectedAgents.ToArray());
+					var nonFullyScheduledAgents = scheduleDays.Where(x => !x.IsScheduled()).Select(x => x.Person);
+					var filteredAgents = selectedAgents.Except(nonFullyScheduledAgents).ToArray();
+					matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, filteredAgents, selectedPeriod);
 					var matrixListOriginalStateContainer = matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator)).ToArray();
 					_daysOffBackToLegalState.Execute(matrixListOriginalStateContainer,
 													backgroundWorker, stateHolder.CommonStateHolder.ActiveDayOffs.ToList()[0],
@@ -91,6 +96,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 					}
 					_scheduleBlankSpots.Execute(matrixListOriginalStateContainer, optimizationPreferences);
 					//////////////////
+				}
+				else
+				{
+					matrixList = _matrixListFactory.CreateMatrixListForSelection(stateHolder.Schedules, selectedAgents, selectedPeriod);
 				}
 				_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
@@ -108,17 +117,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					teamInfoFactory,
 					backgroundWorker);
 			}
-		}
-
-		private IEnumerable<IPerson> filterAgentsWithEmptyDaysIfClassic(IOptimizationPreferences optimizationPreferences, IEnumerable<IPerson> agents, DateOnlyPeriod period) 
-		{
-			if (optimizationPreferences.Extra.IsClassic())
-			{
-				var scheduleDays = _schedulerStateHolder().Schedules.SchedulesForPeriod(period, agents.ToArray());
-				var nonFullyScheduledAgents = scheduleDays.Where(x => !x.IsScheduled()).Select(x => x.Person);
-				return agents.Except(nonFullyScheduledAgents).ToArray();
-			}
-			return agents;
 		}
 	}
 }
