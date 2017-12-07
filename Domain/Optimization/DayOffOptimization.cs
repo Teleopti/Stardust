@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			bool runWeeklyRestSolver,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-			var FATCLIENT_FLAG_SHOULD_BE_REMOVED = !runWeeklyRestSolver;
+			var FATCLIENT_FLAG_THIS_SHOULD_BE_REMOVED = !runWeeklyRestSolver;
 			
 			var stateHolder = _schedulerStateHolder();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			using (_resourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, true, selectedPeriod.Inflate(1)))
 			{
 				IEnumerable<IScheduleMatrixPro> matrixList;
-				if (FATCLIENT_FLAG_SHOULD_BE_REMOVED && optimizationPreferences.Extra.IsClassic())
+				if (FATCLIENT_FLAG_THIS_SHOULD_BE_REMOVED && optimizationPreferences.Extra.IsClassic())
 				{
 					//TO SIMULATE OLD CLASSIC BEHAVIOR (diff behavior between classic and teamblock)
 					//TODO: When this code is removed/rewritten for teamblock, a lot of these types and its children can be deleted (only used here)
@@ -109,8 +109,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 	
 				///////////////////////////////
-				//TODO: HACK! Verify what is right!!!!
-				var agentstoUseForTeamInfoFactory = FATCLIENT_FLAG_SHOULD_BE_REMOVED ? stateHolder.ChoosenAgents : selectedPersons;
+				//TODO: HACK! Verify what is right here?
+				//(probably bug in web. test + fix there)
+				var agentstoUseForTeamInfoFactory = FATCLIENT_FLAG_THIS_SHOULD_BE_REMOVED ? stateHolder.ChoosenAgents : selectedPersons;
 				/////////////////////////////////
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(agentstoUseForTeamInfoFactory, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			
