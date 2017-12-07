@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<EtlToolJobCollectionModelProvider>().SingleInstance();
 			builder.RegisterType<EtlModule.TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
-			builder.RegisterType<PmInfoProvider>().SingleInstance();
+			builder.RegisterType<PmInfoProvider>().As<IPmInfoProvider>().SingleInstance();
 			builder.RegisterType<ConfigurationHandler>().As<IConfigurationHandler>().SingleInstance();
 			builder.RegisterType<GeneralFunctions>().As<IGeneralFunctions>().SingleInstance();
 			builder.RegisterType<GeneralInfrastructure>().As<IGeneralInfrastructure>().SingleInstance();

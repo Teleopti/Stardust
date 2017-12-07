@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.EtlTool;
@@ -24,8 +25,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(_toggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_46880));
 		}
 
+		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/Jobs")]
-		public IHttpActionResult Jobs([FromBody] string tenantName)
+		public virtual IHttpActionResult Jobs([FromBody] string tenantName)
 		{
 			return Json(_jobCollectionModelProvider.Create(tenantName));
 		}
