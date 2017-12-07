@@ -1817,7 +1817,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			personIdentity.EmployeeNumber.Should().Be.EqualTo(employmentNumber);
 			personIdentity.AppLogonName.Should().Be.Null();
 		}
-
+		
 		[Test]
 		public void ShouldGetPersonIdentityInfoWithAppLogonName()
 		{
@@ -1856,13 +1856,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = target.GetPersonIdentityInfos();
 			result.Count.Should().Be.EqualTo(2);
 
-			var personIdentity1 = result[0];
-			personIdentity1.PersonId.Should().Be.EqualTo(per1.Id.Value);
+			var personIdentity1 = result.SingleOrDefault(x=>x.PersonId == per1.Id.Value);
+			personIdentity1.Should().Not.Be.Null();
 			personIdentity1.EmployeeNumber.Should().Be.EqualTo(employmentNumber);
 			personIdentity1.AppLogonName.Should().Be.Null();
 
-			var personIdentity2 = result[1];
-			personIdentity2.PersonId.Should().Be.EqualTo(per2.Id.Value);
+			var personIdentity2 = result.SingleOrDefault(x => x.PersonId == per2.Id.Value);
+			personIdentity2.Should().Not.Be.Null();
 			personIdentity2.AppLogonName.Should().Be.EqualTo(appLogonName);
 			personIdentity2.EmployeeNumber.Should().Be.EqualTo(string.Empty);
 		}
