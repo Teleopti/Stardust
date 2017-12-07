@@ -5,7 +5,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should get agent', function (t) {
 		var id = Math.random() * 1000 + 1
 		t.stateParams.personId = id;
-		t.backend.withAgentState({
+		t.backend.withHistoricalAdherence({
 			PersonId: id,
 			AgentName: 'Mikkey Dee',
 			Schedules: [],
@@ -20,7 +20,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display schedule', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withAgentState({
+		tester.backend.withHistoricalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
@@ -42,7 +42,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display schedule', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withAgentState({
+		tester.backend.withHistoricalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
@@ -67,7 +67,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display schedule', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withAgentState({
+		tester.backend.withHistoricalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
@@ -92,7 +92,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display out of adherence', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withAgentState({
+		tester.backend.withHistoricalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
@@ -115,7 +115,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display out of adherence', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withAgentState({
+		tester.backend.withHistoricalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
@@ -141,7 +141,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display out of adherence start date when started a long time ago', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withAgentState({
+		tester.backend.withHistoricalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
@@ -161,7 +161,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display full timeline', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withAgentState({
+			.withHistoricalAdherence({
 				PersonId: '1',
 				AgentName: 'Mikkey Dee',
 				Schedules: [{
@@ -171,11 +171,11 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 					StartTime: '2016-10-10T15:00:00',
 					EndTime: '2016-10-10T17:00:00'
 				}],
-				OutOfAdherences: []
-			})
-			.withTimeline({
-				StartTime: '2016-10-10T07:00:00',
-				EndTime: '2016-10-10T18:00:00'
+				OutOfAdherences: [],
+				Timeline: {
+					StartTime: '2016-10-10T07:00:00',
+					EndTime: '2016-10-10T18:00:00'
+				}
 			});
 
 		var controller = tester.createController();
@@ -187,8 +187,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should handle out of adherence without end time', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				AgentName: 'Mikkey Dee',
 				Schedules: [{
@@ -205,7 +205,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			});
 
 		var controller = tester.createController();
-        
+
 		expect(controller.outOfAdherences.length).toEqual(1);
 		expect(controller.outOfAdherences[0].Offset).toEqual('0%');
 		expect(controller.outOfAdherences[0].Width).toEqual(8 / 11 * 100 + '%');
@@ -214,8 +214,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display current date', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Schedules: [],
 				OutOfAdherences: []
@@ -229,8 +229,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display diamonds', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Schedules: [],
 				OutOfAdherences: [],
@@ -248,8 +248,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display diamonds at offset', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Schedules: [],
 				OutOfAdherences: [],
@@ -259,11 +259,11 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 					Rule: 'In Call',
 					State: 'Ready',
 					Adherence: 'In adherence'
-				}]
-			})
-			.withTimeline({
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T17:00:00'
+				}],
+				Timeline: {
+					StartTime: '2016-10-10T08:00:00',
+					EndTime: '2016-10-10T17:00:00'
+				}
 			});
 
 		var controller = tester.createController();
@@ -274,8 +274,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display cards with changes', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Schedules: [{
 					Name: 'phone',
@@ -384,8 +384,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display changes before shift start in its own card', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Schedules: [{
 					Name: 'phone',
@@ -422,8 +422,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display changes after shift end in its own card', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Schedules: [{
 					Name: 'phone',
@@ -460,8 +460,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display closed cards by default', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Schedules: [{
 					StartTime: '2016-10-10T08:00:00',
@@ -480,8 +480,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should highlight diamond and card item on click', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Schedules: [{
 					StartTime: '2016-10-10T08:00:00',
@@ -504,8 +504,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should remove highlight from other diamond and card item on click', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Schedules: [{
 					StartTime: '2016-10-10T08:00:00',
@@ -541,8 +541,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should highlight diamond and card item on click', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Schedules: [{
 					StartTime: '2016-10-10T08:00:00',
@@ -564,13 +564,13 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should generate timeline from server times', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend
-			.withTime('2016-10-10T15:00:00')
-			.withAgentState({
-				PersonId: '1'
-			})
-			.withTimeline({
-				StartTime: '2016-10-10T00:00:00',
-				EndTime: '2016-10-11T00:00:00'
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
+				PersonId: '1',
+				Timeline: {
+					StartTime: '2016-10-10T00:00:00',
+					EndTime: '2016-10-11T00:00:00'
+				}
 			});
 
 		var controller = tester.createController();

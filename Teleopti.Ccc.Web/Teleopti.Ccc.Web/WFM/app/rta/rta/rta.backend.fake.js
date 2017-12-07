@@ -10,7 +10,6 @@
 
 		var serverTime = null;
 		var agentStates = [];
-		var adherenceForToday = [];
 		var sitesWithTeams = [];
 		var sitesWithTeamsOnSkills = [];
 		var siteAdherences = [];
@@ -18,27 +17,25 @@
 		var skills = [];
 		var skillAreas = [];
 		var phoneStates = [];
-		var timeline = {};
 		
 		var service = {
-			clear: clear,
 			withToggle: faker.withToggle,
 			withTime: withTime,
 			withAgentState: withAgentState,
 			clearAgentStates: clearAgentStates,
-			withAdherence: withAdherence,
-			withSite: withSite,
+			
 			withSiteAdherence: withSiteAdherence,
 			clearSiteAdherences: clearSiteAdherences,
-			withTeam: withTeam,
+			
 			withTeamAdherence: withTeamAdherence,
 			clearTeamAdherences: clearTeamAdherences,
+			
 			withSkill: withSkill,
 			withSkillAreas: withSkillAreas,
 			withPhoneState: withPhoneState,
 			withOrganization: withOrganization,
 			withOrganizationOnSkills: withOrganizationOnSkills,
-			withTimeline: withTimeline,
+			withHistoricalAdherence: withHistoricalAdherence,
 
 			get skills() { return skills; },
 			get skillAreas() { return skillAreas; },
@@ -136,14 +133,6 @@
 				return [200, sitesWithTeams];
 			});
 
-		faker.fake(/\.\.\/api\/Adherence\/ForToday(.*)/,
-			function (params) {
-				var result = adherenceForToday.find(function (a) {
-					return a.PersonId === params.personId;
-				});
-				return [200, result];
-			});
-
 		faker.fake(/\.\.\/api\/PhoneState\/InfoFor(.*)/,
 			function (data) {
 				if (data.ids.indexOf(null) > -1 || data.ids.indexOf("noState") > -1)
@@ -219,31 +208,16 @@
 				return [200, result];
 			});
 
+		var historicalAdherence = {};
+		function withHistoricalAdherence(data) {
+			historicalAdherence = data;
+		}
 		faker.fake(/\.\.\/api\/HistoricalAdherence\/For(.*)/,
-			function (params) {
-				var result = agentStates.find(function (agent) {
-					return params.personId == agent.PersonId;
-				});
-				if (result != null) {
-					result.Now = serverTime;
-					result.Timeline = timeline;
-				}
-
-				return [200, result];
+			function () {
+				return [200, historicalAdherence];
 			});
 
 		
-		function clear() {
-			serverTime = null;
-			adherenceForToday = [];
-			siteAdherences = [];
-			teamAdherences = [];
-			skillAreas = [];
-			phoneStates = [];
-			timeline = {};
-			faker.clear();
-		}
-
 		function withTime(time) {
 			serverTime = time;
 			return this;
@@ -256,11 +230,6 @@
 
 		function withAgentState(state) {
 			agentStates.push(state);
-			return this;
-		}
-
-		function withAdherence(adherence) {
-			adherenceForToday.push(adherence);
 			return this;
 		}
 
@@ -331,11 +300,16 @@
 			return this;
 		}
 
-		function withTimeline(tl) {
-			timeline = tl;
-			return this;
-		}
-
+		service.clear = function() {
+			serverTime = null;
+			siteAdherences = [];
+			teamAdherences = [];
+			skillAreas = [];
+			phoneStates = [];
+			historicalAdherence = {};
+			faker.clear();
+		};
+		
 		return service;
 	};
 })();

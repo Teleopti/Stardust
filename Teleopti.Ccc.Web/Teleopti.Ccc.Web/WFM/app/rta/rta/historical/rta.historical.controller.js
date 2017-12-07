@@ -74,6 +74,7 @@
         }
 
         function buildShiftInfo(data) {
+			data.Timeline = data.Timeline || {};
             var start = moment(data.Timeline.StartTime)
             var end = moment(data.Timeline.EndTime)
             var result = {
