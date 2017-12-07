@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						PersonRequestId = request.PersonRequest,
 						DenyReason = UserTexts.Resources.RequestedPeriodIsTooLong,
-						DenyOption = PersonRequestDenyOption.None
+						DenyOption = PersonRequestDenyOption.PeriodToLong
 					};
 					_commandDispatcher.Execute(command);
 				}

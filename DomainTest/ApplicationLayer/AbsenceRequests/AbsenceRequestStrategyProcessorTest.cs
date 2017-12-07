@@ -3,12 +3,15 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -28,12 +31,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private DateOnlyPeriod _initialPeriod;
 		private DateTime _now;
 		public FakeConfigReader ConfigReader;
-		public FakeCommandDispatcher CommandDispatcher;
+		public FakePersonRequestRepository PersonRequestRepository;
+		public MutableNow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
-			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			_windowSize = 3;
 			_now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
 			_pastThreshold = _now;
@@ -461,25 +464,68 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldDenyAbsenceThatAreLongerThanConfiguredDays()
 		{
 			ConfigReader.FakeSetting("MaximumDayLengthForAbsenceRequest", "20");
-			var id = Guid.NewGuid();
+
+			var longPeriodPersonRequest = createAbsenceRequest(new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc));
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc),
+				StartDateTime = longPeriodPersonRequest.Request.Period.StartDateTime,
+				EndDateTime = longPeriodPersonRequest.Request.Period.EndDateTime,
 				Created = _now.AddMinutes(-13),
-				PersonRequest = id
+				PersonRequest = longPeriodPersonRequest.Id.Value
 			});
 
+			var normalPersonRequest = createAbsenceRequest(new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc));
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc),
+				StartDateTime = normalPersonRequest.Request.Period.StartDateTime,
+				EndDateTime = normalPersonRequest.Request.Period.EndDateTime,
 				Created = _now.AddMinutes(-12),
-				PersonRequest = Guid.NewGuid()
+				PersonRequest = normalPersonRequest.Id.Value
 			});
 
 			Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
-			((DenyRequestCommand) CommandDispatcher.LatestCommand).PersonRequestId.Should().Be.EqualTo(id);
+			longPeriodPersonRequest.IsDenied.Should().Be(true);
+			longPeriodPersonRequest.DenyReason.Should().Be("The requested period is too long");
+			normalPersonRequest.IsPending.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldNotSetAbsenceRequestAsWaitlistedThatAreLongerThanConfiguredDays()
+		{
+			Now.Is(_now);
+
+			ConfigReader.FakeSetting("MaximumDayLengthForAbsenceRequest", "20");
+
+			var longPeriodPersonRequest = createAbsenceRequest(new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc));
+			var person = longPeriodPersonRequest.Person;
+
+			var workflowControlSet = new WorkflowControlSet()
+			{
+				AbsenceRequestWaitlistEnabled = true
+			};
+			var absence = (longPeriodPersonRequest.Request as IAbsenceRequest).Absence;
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				Period = new DateOnlyPeriod(new DateOnly(_now.Date), new DateOnly(_now.Date.AddDays(40))),
+				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(_now.Date), new DateOnly(_now.Date.AddDays(40)))
+			});
+
+			longPeriodPersonRequest.Person.WorkflowControlSet = workflowControlSet;
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = longPeriodPersonRequest.Request.Period.StartDateTime,
+				EndDateTime = longPeriodPersonRequest.Request.Period.EndDateTime,
+				Created = _now.AddMinutes(-13),
+				PersonRequest = longPeriodPersonRequest.Id.Value
+			});
+
+			Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			longPeriodPersonRequest.IsDenied.Should().Be(true);
+			longPeriodPersonRequest.DenyReason.Should().Be("The requested period is too long");
+			longPeriodPersonRequest.IsWaitlisted.Should().Be(false);
 		}
 
 		[Test]
@@ -529,6 +575,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
 			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 			queuedAbsenceRequests.First().Select(x => x.PersonRequest).Should().Contain(Guid.Empty);
+		}
+
+		private IPersonRequest createAbsenceRequest(DateTime startDateTime, DateTime endDateTime)
+		{
+			var personRequestFactory = new PersonRequestFactory();
+			var absenceRequest = personRequestFactory.CreateAbsenceRequest(new Absence().WithId()
+					, new DateTimePeriod(startDateTime, endDateTime))
+				.WithId();
+			var personRequest = (absenceRequest.Parent as IPersonRequest).WithId();
+			PersonRequestRepository.Add(personRequest);
+			return personRequest;
 		}
 	}
 }

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
@@ -36,6 +37,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private string _denyReason = string.Empty;
 		private DateTime _updatedOnServerUtc;	
 		private PersonRequestDenyOption _personRequestDenyOption = PersonRequestDenyOption.None;
+
+		private static readonly PersonRequestDenyOption[] _nonWaitlistedDenyOptions = new []
+		{
+			PersonRequestDenyOption.AlreadyAbsence,
+			PersonRequestDenyOption.RequestExpired,
+			PersonRequestDenyOption.InsufficientPersonAccount,
+			PersonRequestDenyOption.AllPersonSkillsClosed,
+			PersonRequestDenyOption.TechnicalIssues,
+			PersonRequestDenyOption.PeriodToLong
+		};
 
 		protected PersonRequest()
 		{
@@ -222,14 +233,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private bool canDeny(PersonRequestDenyOption personRequestDenyOption)
 		{
 			var isAutoDeny = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AutoDeny);
-			var alreadyAbsence = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence);
-			var isExpired = personRequestDenyOption.HasFlag(PersonRequestDenyOption.RequestExpired);
-			var hasInsufficientPersonAccount = personRequestDenyOption.HasFlag(PersonRequestDenyOption.InsufficientPersonAccount);
-			var allPersonSkillsClosed = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AllPersonSkillsClosed);
-			var technicalIssues = personRequestDenyOption.HasFlag(PersonRequestDenyOption.TechnicalIssues);
+			var nonWaitlistedDeny = _nonWaitlistedDenyOptions.Any(o=> personRequestDenyOption.HasFlag(o));
 			var isDeniedButNotWaitlisted = IsDenied && !IsWaitlisted;
-			return (!isAutoDeny && IsWaitlisted) || !IsDenied || alreadyAbsence || isExpired || isDeniedButNotWaitlisted
-				   || hasInsufficientPersonAccount || allPersonSkillsClosed || technicalIssues;
+			return (!isAutoDeny && IsWaitlisted) || !IsDenied || nonWaitlistedDeny || isDeniedButNotWaitlisted;
 		}
 
 		public virtual bool IsEditable
@@ -476,14 +482,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private void moveToDenied(PersonRequestDenyOption personRequestDenyOption)
 		{
 			var autoDenied = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AutoDeny);
-			var alreadyAbsent = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence);
-			var expired = personRequestDenyOption.HasFlag(PersonRequestDenyOption.RequestExpired);
-			var insufficientPersonAccount = personRequestDenyOption.HasFlag(PersonRequestDenyOption.InsufficientPersonAccount);
-			var technicalIssues = personRequestDenyOption.HasFlag(PersonRequestDenyOption.TechnicalIssues);
-			var allPersonSkillsClosed = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AllPersonSkillsClosed);
+			var nonWaitlistedDeny = _nonWaitlistedDenyOptions.Any(o => personRequestDenyOption.HasFlag(o));
 			if (autoDenied)
 			{
-				if (waitlistingIsEnabled() && !alreadyAbsent && !expired && !insufficientPersonAccount && !allPersonSkillsClosed && !technicalIssues)
+				if (waitlistingIsEnabled() && !nonWaitlistedDeny)
 				{
 					RequestState = new waitListedPersonRequest(this);
 				}
