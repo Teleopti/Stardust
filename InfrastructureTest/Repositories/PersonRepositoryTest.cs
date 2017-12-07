@@ -1794,8 +1794,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldGetPersonIdentityInfosCase1()
+		public void ShouldGetPersonIdentityInfoWithoutAppLogonName()
 		{
+			const string employmentNumber = "employeeNumber1";
 			var site = SiteFactory.CreateSimpleSite("d");
 			PersistAndRemoveFromUnitOfWork(site);
 
@@ -1804,54 +1805,66 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 
 			var per1 = PersonFactory.CreatePerson("roger", "kratz");
-			per1.SetEmploymentNumber("employee1");
+			per1.SetEmploymentNumber(employmentNumber);
 			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
 			PersistAndRemoveFromUnitOfWork(per1);
 
 			var result = target.GetPersonIdentityInfos();
 
 			result.Count.Should().Be.EqualTo(1);
-			result[0].EmployeeNumber.Should().Be.EqualTo("employee1");
-			result[0].AppLogonName.Should().Be.Null();
+			var personIdentity = result.First();
+			personIdentity.PersonId.Should().Be.EqualTo(per1.Id.Value);
+			personIdentity.EmployeeNumber.Should().Be.EqualTo(employmentNumber);
+			personIdentity.AppLogonName.Should().Be.Null();
 		}
 
-		[Ignore("cannot persist personInfo by this way now!"), Test]
-		public void ShouldGetPersonIdentityInfosCase2()
+		[Test]
+		public void ShouldGetPersonIdentityInfoWithAppLogonName()
 		{
-			ISite site = SiteFactory.CreateSimpleSite("d");
+			const string employmentNumber = "employeeNumber1";
+			const string appLogonName = "appLogon1";
+
+			var site = SiteFactory.CreateSimpleSite("TestSite");
 			PersistAndRemoveFromUnitOfWork(site);
-			ITeam team = TeamFactory.CreateSimpleTeam();
+
+			var team = TeamFactory.CreateSimpleTeam("TestTeam");
 			team.Site = site;
-			team.SetDescription(new Description("sdf"));
 			PersistAndRemoveFromUnitOfWork(team);
 
-			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
-			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
-			per1.SetEmploymentNumber("employee1");
+			var per1 = PersonFactory.CreatePerson("roger", "kratz");
+			per1.SetEmploymentNumber(employmentNumber);
 			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
-			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
 			PersistAndRemoveFromUnitOfWork(per1);
+
+			var per2 = PersonFactory.CreatePerson("z", "balog");
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team));
 			PersistAndRemoveFromUnitOfWork(per2);
 
 			var tenant = new Tenant(RandomName.Make("bla"));
+
 			var personInfo = new PersonInfo(tenant, per2.Id.Value);
-			personInfo.SetIdentity("appLogon");
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "appLogon", RandomName.Make(), new OneWayEncryption()); 
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), appLogonName, RandomName.Make(), new OneWayEncryption());
+
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
 			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 			tenantUnitOfWorkManager.CurrentSession().Save(tenant);
+
 			var personInfoPersister = new PersistPersonInfo(tenantUnitOfWorkManager);
 			personInfoPersister.Persist(personInfo);
+			tenantUnitOfWorkManager.CommitAndDisposeCurrent();
 
-			var target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			var result = target.GetPersonIdentityInfos();
-
 			result.Count.Should().Be.EqualTo(2);
-			result[0].EmployeeNumber.Should().Be.EqualTo("employee1");
-			result[0].AppLogonName.Should().Be.Null();
-			result[1].AppLogonName.Should().Be.EqualTo("appLogon");
-			result[1].EmployeeNumber.Should().Be.Null();
-			tenantUnitOfWorkManager.Dispose();
+
+			var personIdentity1 = result[0];
+			personIdentity1.PersonId.Should().Be.EqualTo(per1.Id.Value);
+			personIdentity1.EmployeeNumber.Should().Be.EqualTo(employmentNumber);
+			personIdentity1.AppLogonName.Should().Be.Null();
+
+			var personIdentity2 = result[1];
+			personIdentity2.PersonId.Should().Be.EqualTo(per2.Id.Value);
+			personIdentity2.AppLogonName.Should().Be.EqualTo(appLogonName);
+			personIdentity2.EmployeeNumber.Should().Be.EqualTo(string.Empty);
 		}
 
 		[Test, TestCaseSource(nameof(planningGroupFilterTestCases))]
