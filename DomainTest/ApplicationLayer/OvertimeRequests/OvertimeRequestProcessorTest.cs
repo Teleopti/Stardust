@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
 			var personRequest = createOvertimeRequest(18, 1);
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 15d);
 
 			var personRequest = createOvertimeRequest(18, 1);
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			personRequest.IsDenied.Should().Be.True();
 		}
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(18, 1);
 
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			ScheduleStorage.Add(pa);
 
 			var personRequest = createOvertimeRequest(11, 1);
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(8, 1);
-			Target.Process(personRequest, false);
+			getTarget().Process(personRequest, false);
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsPending.Should().Be.True();
@@ -155,8 +155,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var requestStartTime = Now.UtcDateTime().AddMinutes(MinimumApprovalThresholdTimeInMinutes - 1);
 			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
-			Target.CheckAndProcessDeny(personRequest);
-			Target.Process(personRequest, true);
+			getTarget().CheckAndProcessDeny(personRequest);
+			getTarget().Process(personRequest, true);
 
 			var timeZoneInfo = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			personRequest.IsApproved.Should().Be.False();
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(18, 1);
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			var timeZoneInfo = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			personRequest.IsApproved.Should().Be.False();
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(8, 1);
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			var timeZoneInfo = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			personRequest.IsApproved.Should().Be.False();
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 15d);
 
 			var personRequest = createOvertimeRequest(18, 1);
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 15d);
 
 			var personRequest = createOvertimeRequest(18, 1);
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
 
 			var personRequest = createOvertimeRequest(11, 1);
-			Target.CheckAndProcessDeny(personRequest);
+			getTarget().CheckAndProcessDeny(personRequest);
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(11, 1);
 
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(21, 1);
 
-			Target.CheckAndProcessDeny(personRequest);
+			getTarget().CheckAndProcessDeny(personRequest);
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson(8, 21);
 
 			var personRequest = createOvertimeRequest(18, 1);
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPersonSkill();
 
 			var personRequest = createOvertimeRequest(22, 1);
-			Target.CheckAndProcessDeny(personRequest);
+			getTarget().CheckAndProcessDeny(personRequest);
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPersonSkill();
 
 			var personRequest = createOvertimeRequest(22, 1);
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var requestStartTime = Now.UtcDateTime().AddMinutes(MinimumApprovalThresholdTimeInMinutes + 1);
 			var overtimeRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
 
-			Target.Process(overtimeRequest, true);
+			getTarget().Process(overtimeRequest, true);
 
 			Assert.AreEqual(overtimeRequest.IsDenied, true);
 		}
@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
-			Target.CheckAndProcessDeny(personRequest);
+			getTarget().CheckAndProcessDeny(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should()
@@ -387,7 +387,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
-			Target.Process(personRequest, true);
+			getTarget().Process(personRequest, true);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should()
@@ -405,7 +405,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(18, 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be(Resources.OvertimeRequestDenyReasonClosedPeriod);
@@ -426,7 +426,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 25, 8, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsPending.Should().Be.True();
 		}
@@ -446,7 +446,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 25, 8, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -472,9 +472,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 22, 8, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		public void ShouldDenyWhenStaffingDataOfRequestPeriodIsNotAvailable()
+		{
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod()
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(27)))
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 26, 8, 0, 0, DateTimeKind.Utc), 1);
+			getTarget().Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be("Your overtime request has been denied automatically. The valid request period is 7/12/2017 - 7/25/2017.");
 		}
 
 		[Test]
@@ -492,7 +513,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 26, 8, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be.EqualTo("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/25/2017.");
@@ -519,7 +540,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 26, 9, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 		}
@@ -553,7 +574,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 19, 9, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be.EqualTo(Resources.OvertimeRequestDenyReasonAutodeny);
@@ -588,7 +609,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 19, 9, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -622,7 +643,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 19, 9, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be.EqualTo(Resources.OvertimeRequestDenyReasonAutodeny);
@@ -657,7 +678,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 19, 9, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -677,7 +698,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 21, 0, 0, DateTimeKind.Utc), 6);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/13/2017.");
@@ -703,7 +724,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 17, 21, 0, 0, DateTimeKind.Utc), 6);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/12/2017,7/14/2017 - 7/16/2017.");
@@ -729,7 +750,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 15, 21, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/14/2017,7/16/2017 - 7/18/2017.");
@@ -755,7 +776,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 15, 21, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/14/2017,7/16/2017 - 7/18/2017.");
@@ -776,7 +797,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 15, 21, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be("Your overtime request cannot be granted. Some dates are not open for requests at this time.");
@@ -802,7 +823,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 18, 21, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/17/2017.");
@@ -835,7 +856,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			ScheduleStorage.Add(pa);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 2);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Trim().Should().Be("The week contains too much work time (10:00). Max is 09:00.");
@@ -867,7 +888,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			ScheduleStorage.Add(pa);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 2);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -899,7 +920,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			ScheduleStorage.Add(pa);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 2);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsPending.Should().Be.True();
 		}
@@ -931,7 +952,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			ScheduleStorage.Add(pa);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 2);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsPending.Should().Be.True();
 			personRequest.GetMessage(new NoFormatting()).Trim().Should().Be("The week contains too much work time (10:00). Max is 09:00.");
@@ -968,7 +989,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			}
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 1);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -1002,7 +1023,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			ScheduleStorage.Add(scheduleDataTwo);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 11);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.");
@@ -1035,7 +1056,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			ScheduleStorage.Add(createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 16, 8, 2017, 7, 16, 16)));
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 15, 0, 0, 0, DateTimeKind.Utc), 48);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 20:00 hours between 2 shifts. Between 7/15/2017 and 7/16/2017 there are only -16:00 hours.");
@@ -1070,7 +1091,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			ScheduleStorage.Add(scheduleDataTwo);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 10);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -1111,7 +1132,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var requestDate = TimeZoneHelper.ConvertToUtc(new DateTime(2017, 7, 13, 23, 0, 0), timezone);
 			var personRequest = createOvertimeRequest(requestDate, 4);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 
@@ -1145,7 +1166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 17, 4, 0, 0, DateTimeKind.Utc), 168);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Trim().Should().Be("The week does not have the stipulated (30:00) weekly rest.");
@@ -1180,7 +1201,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			ScheduleStorage.Add(scheduleDataTwo);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 16, 0, 0, DateTimeKind.Utc), 11);
-			Target.Process(personRequest);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be("The week contains too much work time (27:00). Max is 10:00.");
@@ -1364,6 +1385,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddHours(duration)));
 			return personRequest;
+		}
+
+		private IOvertimeRequestProcessor getTarget()
+		{
+			Target.StaffingDataAvailableDays = 13;
+			return Target;
 		}
 	}
 }

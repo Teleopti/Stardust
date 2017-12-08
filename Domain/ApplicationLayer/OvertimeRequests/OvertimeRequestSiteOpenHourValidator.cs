@@ -14,8 +14,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_siteOpenHoursSpecification = siteOpenHoursSpecification;
 		}
 
-		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest)
+		public OvertimeRequestValidationResult Validate(OvertimeRequestValidationContext context)
 		{
+			var personRequest = context.PersonRequest;
 			var result =
 				_siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
 				{

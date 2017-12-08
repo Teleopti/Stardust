@@ -2,6 +2,7 @@ using System;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -22,8 +23,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
 			_requestsMapper = requestsMapper;
-			_overtimeRequestProcessor = overtimeRequestProcessor;
 			_toggleManager = toggleManager;
+			_overtimeRequestProcessor = overtimeRequestProcessor;
+			_overtimeRequestProcessor.StaffingDataAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager);
 			_logonUser = logonUser;
 		}
 

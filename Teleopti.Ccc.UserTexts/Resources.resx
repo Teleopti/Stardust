@@ -10733,6 +10733,10 @@ These options are activated:
     <value>Your overtime request has been denied automatically. The site is closed during the request period {0}</value>
     <comment>used in mytime overtime request deny reason,when site is closed during the request period</comment>
   </data>
+  <data name="OvertimeRequestDenyReasonInvalidPeriod" xml:space="preserve">
+    <value>Your overtime request has been denied automatically. The valid request period is {0}.</value>
+    <comment>used in mytime overtime request deny reason,when request period is invalid</comment>
+  </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Hourly Availability Fulfillment</value>
     <comment>Student Availability Fulfillment</comment>

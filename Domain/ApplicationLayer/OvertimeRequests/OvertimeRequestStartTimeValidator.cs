@@ -17,8 +17,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest)
+		public OvertimeRequestValidationResult Validate(OvertimeRequestValidationContext context)
 		{
+			var personRequest = context.PersonRequest;
 			var span = personRequest.Request.Period.StartDateTime - _now.UtcDateTime();
 			if (Math.Ceiling(span.TotalMinutes) >= minimumApprovalThresholdTimeInMinutes)
 				return new OvertimeRequestValidationResult { IsValid = true };

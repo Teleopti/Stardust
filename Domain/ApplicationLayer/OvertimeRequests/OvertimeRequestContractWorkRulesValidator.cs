@@ -33,8 +33,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_now = now;
 		}
 
-		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest)
+		public OvertimeRequestValidationResult Validate(OvertimeRequestValidationContext context)
 		{
+			var personRequest = context.PersonRequest;
 			var person = personRequest.Person;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var overtimeRequestOpenPeriod = personRequest.Person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(

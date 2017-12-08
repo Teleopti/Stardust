@@ -22761,6 +22761,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your overtime request has been denied automatically. The valid request period is {0}..
+        /// </summary>
+        public static string OvertimeRequestDenyReasonInvalidPeriod {
+            get {
+                return ResourceManager.GetString("OvertimeRequestDenyReasonInvalidPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}..
         /// </summary>
         public static string OvertimeRequestDenyReasonNoPeriod {

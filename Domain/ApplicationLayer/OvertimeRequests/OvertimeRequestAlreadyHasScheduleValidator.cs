@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_currentScenario = currentScenario;
 		}
 
-		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest)
+		public OvertimeRequestValidationResult Validate(OvertimeRequestValidationContext context)
 		{
+			var personRequest = context.PersonRequest;
 			var person = _loggedOnUser.CurrentUser();
 			var period = personRequest.Request.Period;
 			var dic = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),

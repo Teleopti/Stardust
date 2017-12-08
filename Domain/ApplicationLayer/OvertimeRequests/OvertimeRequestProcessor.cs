@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_now = now;
 		}
 
+		public int StaffingDataAvailableDays { get; set; }
+
 		public void CheckAndProcessDeny(IPersonRequest personRequest)
 		{
 			var validateRulesResult = validateRules(personRequest);
@@ -144,7 +146,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			foreach (var overtimeRequestValidator in _overtimeRequestValidators)
 			{
-				var overtimeRequestValidationResult = overtimeRequestValidator.Validate(personRequest);
+				var overtimeRequestValidationResult = overtimeRequestValidator.Validate(
+					new OvertimeRequestValidationContext(personRequest) {StaffingDataAvailableDays = StaffingDataAvailableDays});
 				if (overtimeRequestValidationResult.IsValid) continue;
 				return overtimeRequestValidationResult;
 			}
