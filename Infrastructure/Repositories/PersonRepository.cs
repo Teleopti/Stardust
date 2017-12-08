@@ -759,22 +759,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			if(string.IsNullOrEmpty(identity)) return new List<Guid>();
 
-			const string sql = "Select Id as PersonId, 1 as MatchField -- Match EmployeementNumber\r\n"
-							   + "  From Person\r\n"
-							   + " Where IsDeleted = 0\r\n"
-							   + "   And EmploymentNumber = '{0}'\r\n"
-							   + "Union\r\n"
-							   + "Select Id, 2 -- Match ApplicationLogonName\r\n"
-							   + "  From Tenant.PersonInfo\r\n"
-							   + " Where ApplicationLogonName = '{0}'\r\n"
-							   + "Union\r\n"
-							   + "Select Distinct PersonId, 3 -- Match ExternalLogon\r\n"
-							   + "  From ReadModel.ExternalLogon\r\n"
-							   + " Where Deleted = 0\r\n"
-							   + "   And UserCode = '{0}'";
-			var rawObjects = Session.CreateSQLQuery(string.Format(sql, identity.Trim()))
+			var sql = $@"Select Id as PersonId, 1 as MatchField -- Match EmployeementNumber
+							     From Person
+							    Where IsDeleted = 0
+							      And EmploymentNumber = :{nameof(identity)}
+							   Union
+							   Select Id, 2 -- Match ApplicationLogonName
+							     From Tenant.PersonInfo
+							    Where ApplicationLogonName = :{nameof(identity)}
+							   Union
+							   Select Distinct PersonId, 3 -- Match ExternalLogon
+							     From ReadModel.ExternalLogon
+							    Where Deleted = 0
+							      And UserCode = :{nameof(identity)}";
+			var rawObjects = Session.CreateSQLQuery(sql)
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("MatchField", NHibernateUtil.Int16)
+				.SetString(nameof(identity), identity.Trim())
 				.SetReadOnly(true)
 				.List<object[]>()
 				.Select(x => new
