@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<CommandDispatcherModule>();
 			builder.RegisterModule(new CommandHandlersModule(_configuration));
 			builder.RegisterModule<PeopleAreaModule>();
+			builder.RegisterModule<GamificationAreaModule>();
 			builder.RegisterModule(new ReportModule(_configuration));
 		}
 

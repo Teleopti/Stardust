@@ -142,6 +142,7 @@
     <Compile Include="Configuration\DataSourceModule.cs" />
     <Compile Include="Configuration\EqualNumberOfCategoryFairnessModule.cs" />
     <Compile Include="Configuration\ForecasterModule.cs" />
+    <Compile Include="Configuration\GamificationAreaModule.cs" />
     <Compile Include="Configuration\HangfireModule.cs" />
     <Compile Include="Configuration\ForecastEventModule.cs" />
     <Compile Include="Configuration\IntradayWebModule.cs" />

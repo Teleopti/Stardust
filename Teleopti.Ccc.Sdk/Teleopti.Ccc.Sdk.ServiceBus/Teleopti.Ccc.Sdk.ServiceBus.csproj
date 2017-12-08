@@ -161,6 +161,7 @@
     <Compile Include="NodeHandlers\ExportMultisiteSkillsToSkillEventHandler.cs" />
     <Compile Include="NodeHandlers\FixReadModelsHandler.cs" />
     <Compile Include="NodeHandlers\ImportAgentHandler.cs" />
+    <Compile Include="NodeHandlers\ImportExternalPerformanceHandler.cs" />
     <Compile Include="NodeHandlers\IndexMaintenanceHandler.cs" />
     <Compile Include="NodeHandlers\ProcessWaitlistedRequestsHandler.cs" />
     <Compile Include="NodeHandlers\MultiAbsenceRequestsHandler.cs" />
