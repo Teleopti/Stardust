@@ -54,7 +54,9 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 					JobName = m.Name,
 					JobStepNames = m.StepList
 						.Select(y => y.Name)
-						.ToList()
+						.ToList(),
+					NeedsParameterDataSource = m.NeedsParameterDataSource,
+					NeededDatePeriod = m.JobCategoryCollection.Where(y => y != JobCategoryType.DoNotNeedDatePeriod).Select(y => y.ToString()).ToList()
 				})
 				.ToList();
 		}
