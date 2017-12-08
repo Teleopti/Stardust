@@ -22,6 +22,7 @@
 		vm.modifyLastPpModal = false;
 		vm.confirmDeletePpModal = false;
 		vm.selectedIsValid = false;
+		vm.typeIsWrong = false;
 		vm.textForDeletePp = '';
 		vm.textForChangeThisPpMeg = '';
 		vm.textForCreatePpMeg = '';
@@ -123,7 +124,9 @@
 			return vm.selectedSuggestion;
 		}
 
-		function openModifyModal() {
+		function openModifyModal(type) {
+			if (type == 'Day')
+				vm.typeIsWrong = true; 
 			return vm.modifyLastPpModal = true;
 		}
 

@@ -43,7 +43,7 @@
 				<div class="subtext">{{p.Number}} {{p.Type | translate}}</div>
 			</div>
 			<div class="list-header-content">
-				<div tabindex=0 class="context-menu card-context" ng-if="$first" ng-click="vm.openModifyModal();$event.stopPropagation();">
+				<div tabindex=0 class="context-menu card-context" ng-if="$first" ng-click="vm.openModifyModal(p.Type);$event.stopPropagation();">
 					<i class="mdi mdi-pencil"></i>
 					<md-tooltip>{{'ChangePlanningDuration' | translate}}</md-tooltip>
 				</div>
@@ -88,7 +88,8 @@
 				<div class="dialog material-depth-1">
 					<h1 class="modal-title">{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate
 						| amDateFormat:"L"}}</h1>
-					<md-content class="md-padding pp-create-modal">
+					<span class="modal-title" ng-if="vm.typeIsWrong"><i class="mdi mdi-information-outline" ></i> The planning period interval has wrong type.</span>
+					<md-content class="md-padding pp-create-modal" ng-hide="vm.typeIsWrong">
 						<md-tabs md-dynamic-height md-border-bottom>
 							<md-tab label="By Customs">
 								<md-content class="md-padding">
@@ -215,9 +216,9 @@
 						</md-tabs>
 					</md-content>
 					<aside>
-						<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.resetSelectedSuggestion()"  translate>Cancel</button>
-						<button class="wfm-btn apply-planning-period" ng-class="{'wfm-btn-invis-primary':vm.selectedIsValid, 'wfm-btn-invis-disabled': !vm.selectedIsValid}" ng-disabled="!vm.selectedIsValid"
-						 ng-click="vm.createFirstPp()" translate>
+						<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.resetSelectedSuggestion()" translate>Cancel</button>
+						<button class="wfm-btn apply-planning-period" ng-class="{'wfm-btn-invis-primary':vm.selectedIsValid, 'wfm-btn-invis-disabled': !vm.selectedIsValid}"
+						 ng-disabled="!vm.selectedIsValid" ng-click="vm.createFirstPp()" translate>
 							Apply
 						</button>
 					</aside>
