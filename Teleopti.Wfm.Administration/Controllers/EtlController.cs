@@ -1,9 +1,13 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.EtlTool;
+using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
@@ -31,14 +35,29 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost, Route("Etl/Jobs")]
 		public virtual IHttpActionResult Jobs([FromBody] string tenantName)
 		{
-			return Json(_jobCollectionModelProvider.Create(tenantName));
+			
+			try
+			{
+				return Ok(_jobCollectionModelProvider.Create(tenantName));
+			}
+			catch (ArgumentException e)
+			{
+				return Content(HttpStatusCode.NotFound, e.Message);
+			}
 		}
 
 		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/TenantLogDataSources")]
 		public virtual IHttpActionResult TenantLogDataSources([FromBody] string tenantName)
 		{
-			return Json(_tenantLogDataSourcesProvider.Load(tenantName));
+			try
+			{
+				return Ok(_tenantLogDataSourcesProvider.Load(tenantName));
+			}
+			catch (ArgumentException e)
+			{
+				return Content(HttpStatusCode.NotFound, e.Message);
+			}
 		}
 	}
 }

@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		public IBaseConfiguration LoadBaseConfiguration()
 		{
-			throw new NotImplementedException();
+			return new BaseConfiguration(1053,15,"UTC", false);
 		}
 
 		public void SaveBaseConfiguration(IBaseConfiguration configuration)
