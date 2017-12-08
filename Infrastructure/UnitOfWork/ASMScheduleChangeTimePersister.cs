@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var scheduleData = infos
 				.Select(r => r.Root)
 				.OfType<IPersistableScheduleData>()
-				.Where(s => s.Scenario.DefaultScenario && isWithinASMNotifyPeriod(s.Period.StartDateTime, s.Period.EndDateTime, s.Person))
+				.Where(s => s.Scenario.DefaultScenario && isWithinASMNotifyPeriod(s.Period, s.Person))
 				.Select(s => s.Person.Id.Value);
 
 			var meetingData = getPersonDataForMeeting(infos);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					var period = (change.Root as IPeriodized)?.Period;
 					if (person == null
 						|| period == null
-						|| !isWithinASMNotifyPeriod(period.Value.StartDateTime, period.Value.EndDateTime, person))
+						|| !isWithinASMNotifyPeriod(period.Value, person))
 						continue;
 
 					result.Add(person.Id.GetValueOrDefault());
@@ -87,16 +87,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return result.Distinct();
 		}
 
-		private bool isWithinASMNotifyPeriod(DateTime startDateTime, DateTime endDateTime, IPerson person)
+		private bool isWithinASMNotifyPeriod(DateTimePeriod period, IPerson person)
 		{
 			var nowInUtc = _now.UtcDateTime();
 			var personTimezone = person.PermissionInformation.DefaultTimeZone();
 			var nowInPersonTimezone = TimeZoneHelper.ConvertFromUtc(nowInUtc, personTimezone);
 			var nowStartDate = nowInPersonTimezone.AddHours(-1);
 			var nowEndDate = nowStartDate.AddDays(1);
-			var userStartDate = TimeZoneHelper.ConvertFromUtc(startDateTime, personTimezone).Date.AddDays(-1);
-			var userEndDate = TimeZoneHelper.ConvertFromUtc(endDateTime, personTimezone).Date.AddDays(1);
-			return nowStartDate < userEndDate && nowEndDate > userStartDate;
+		
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+
+			var changedInfoStartDateInPersonTimezone = dateOnlyPeriod.StartDate.AddDays(-1).Date;
+			var changedInfoEndDateInPersonTimezone = dateOnlyPeriod.EndDate.AddDays(1).Date;
+			return nowStartDate < changedInfoEndDateInPersonTimezone && nowEndDate > changedInfoStartDateInPersonTimezone;
 		}
 	}
 }

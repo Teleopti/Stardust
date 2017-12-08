@@ -134,6 +134,28 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		}
 
 		[Test]
+		public void ShouldNotAddScheduleChangeTimeIfYesterdaysScheduleChangedAndNowIsAfterOneOclockUnderAgentsTimezone()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				ScenarioFactory.CreateScenarioWithId("default", true),
+				new DateTimePeriod(new DateTime(2017, 12, 6, 23, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 12, 7, 23, 0, 0, DateTimeKind.Utc)));
+
+			var roots = new IRootChangeInfo[]
+			{
+				new RootChangeInfo(pa, DomainUpdateType.Insert)
+			};
+			var now = new DateTime(2017, 12, 8, 2, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			Target.AfterCompletion(roots);
+
+			Repo.GetScheduleChangeTime(person.Id.GetValueOrDefault()).Should().Be.Null();
+		}
+
+		[Test]
 		public void ShouldNotAddScheduleChangeTimeIfThePreviousDayNotInNotifyPeriod()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
