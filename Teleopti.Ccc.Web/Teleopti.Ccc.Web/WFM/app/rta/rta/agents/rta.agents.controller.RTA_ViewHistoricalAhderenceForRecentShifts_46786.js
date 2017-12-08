@@ -55,7 +55,7 @@
 		var nullStateId = "noState";
 		vm.filterText = null;
 		vm.states = [];
-
+		vm.hexToRgb = rtaFormatService.formatHexToRgb;
 		vm.pause = false;
 		vm.pausedAt = null;
 

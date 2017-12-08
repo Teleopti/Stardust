@@ -20,20 +20,20 @@
 
 		var shiftInfo;
 
-		function calculatePercentage(offsetTime, time, totalSeconds) {
+		function positionForTime(offsetTime, time, totalSeconds) {
 			var diff = moment(time).diff(moment(offsetTime), 'seconds');
 			return (diff / totalSeconds) * 100 + '%';
 		}
 
 		function makeOffsetCalculator(offsetTime, totalSeconds) {
 			return function (time) {
-				return calculatePercentage(offsetTime, time, totalSeconds);
+				return positionForTime(offsetTime, time, totalSeconds);
 			}
 		}
 
 		function makeWidthCalculator(totalSeconds) {
 			return function (offsetTime, time) {
-				return calculatePercentage(offsetTime, time, totalSeconds);
+				return positionForTime(offsetTime, time, totalSeconds);
 			}
 		}
 
@@ -56,7 +56,8 @@
 				vm.personId = data.PersonId;
 				vm.agentName = data.AgentName;
 				vm.date = moment(data.Now);
-
+				vm.adherencePercentage = data.AdherencePercentage;
+				
 				vm.currentTimeOffset = calculateOffset(data.Now);
 
 				vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
