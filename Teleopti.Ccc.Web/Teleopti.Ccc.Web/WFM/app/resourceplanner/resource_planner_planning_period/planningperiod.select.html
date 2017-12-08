@@ -105,11 +105,13 @@
 												<label for="workMin" translate>Week</label>
 												<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" ame="WeekInterval" placeholder="0" min="0"
 												/>
+												<p class="text-danger" ng-show="!vm.isValidMaxWeeks()" translate>InvalidInput</p>
 											</div>
 											<div class="wfm-option form-input-wrap con-flex" ng-if="vm.intervalType == 'Month'">
 												<label for="workMax" translate>Month</label>
 												<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="MonthInterval" placeholder="0" min="0"
 												/>
+												<p class="text-danger" ng-show="!vm.isValidMaxMonths()" translate>InvalidInput</p>
 											</div>
 										</div>
 									</div>
