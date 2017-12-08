@@ -74,7 +74,7 @@ IF @search_type <> 'All'
 	BEGIN
 		INSERT INTO #Result 
 		SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId 
-		FROM ReadModel.FindPerson with (nolock) 
+		FROM ReadModel.FindPerson 
 		CROSS JOIN #strings s 
 		WHERE ISNULL(TerminalDate, '2100-01-01') >= @leave_after 
 			AND SearchType=@search_type 
@@ -86,7 +86,7 @@ ELSE
 	BEGIN
 		INSERT INTO #Result 
 		SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId 
-		FROM ReadModel.FindPerson with (nolock) 
+		FROM ReadModel.FindPerson 
 		CROSS JOIN #strings s 
 		WHERE ISNULL(TerminalDate, '2100-01-01') >= @leave_after 
 			AND SearchValue like N'%' + s.SearchWord + '%'
