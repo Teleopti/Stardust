@@ -141,50 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			var peopleList = result.People;
 			peopleList.Count.Should().Be.EqualTo(0);
 		}
-
-		[Test]
-		public void ShouldSearchPermittedPeopleWithAbsence()
-		{
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today,
-				new Team().WithDescription(new Description("TestTeam")));
-			person.WithName(new Name("John", "Smith"));
-			person.Email = "john.smith@abc.com";
-			person.SetEmploymentNumber("1012");
-
-			var personId = person.Id.Value;
-			var personFinderDisplayRow = new PersonFinderDisplayRow
-			{
-				FirstName = "John",
-				LastName = "Smith",
-				EmploymentNumber = "1012",
-				PersonId = personId,
-				RowNumber = 1
-			};
-
-			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
-			{
-				c.SetRow(1, personFinderDisplayRow);
-				return true;
-			}));
-			personRepository.Add(person);
-
-			personAbsenceRepository.Add(createPersonAbsence(person));
-			target = new PeopleSearchProvider(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository,
-				loggedOnUser, currentBusinessUnit, currentScenario);
-
-			var searchCriteria = new Dictionary<PersonFinderField, string>
-			{
-				{
-					PersonFinderField.All, "John"
-				}
-			};
-
-			var permittedPeople = target.SearchPermittedPeople(searchCriteria, new DateOnly(2016, 3, 1),
-				DefinedRaptorApplicationFunctionPaths.WebPeople);
-			var result = target.SearchPermittedPeopleWithAbsence(permittedPeople, new DateOnly(2016, 3, 1));
-			result.Count().Should().Be.EqualTo(1);
-		}
-
+		
 		[Test]
 		public void ShouldSearchPermittedPeopleReturnMoreThan2Pages()
 		{
@@ -206,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				{
 					var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today);
 					person.SetId(Guid.NewGuid());
-					person.WithName(new Name(string.Format("Agent{0:000}", i), string.Format("Andeen{0:000}", i)));
+					person.WithName(new Name($"Agent{i:000}", $"Andeen{i:000}"));
 					person.SetEmploymentNumber(i.ToString("0000"));
 					personRepository.Add(person);
 
@@ -231,11 +188,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 
 			var result = target.SearchPermittedPeopleSummary(searchCriteria, 20, 1, DateOnly.Today, new Dictionary<string, bool>(), DefinedRaptorApplicationFunctionPaths.WebPeople);
 			result.TotalPages.Should().Be.GreaterThan(2);
-		}
-
-		private IPersonAbsence createPersonAbsence(IPerson person)
-		{
-			return PersonAbsenceFactory.CreatePersonAbsence(person, currentScenario.Current(), new DateTimePeriod(2016, 3, 1, 7, 2016, 3, 1, 15));
 		}
 	}
 }

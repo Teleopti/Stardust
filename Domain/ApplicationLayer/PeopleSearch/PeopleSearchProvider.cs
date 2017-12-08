@@ -71,22 +71,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		{
 			return _searchRepository.FindPersonIdsInDynamicOptionalGroupPages(period,groupPageId, dynamicValues, searchCriteria);
 		}
-
-
-		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
-			DateOnly dateInUserTimeZone, string function)
-		{
-			var searchCriteria = CreatePersonFinderSearchCriteria(criteriaDictionary, 9999, 1, dateInUserTimeZone,
-				null);
-			PopulateSearchCriteriaResult(searchCriteria);
-			var personIdList = GetPermittedPersonIdList(searchCriteria, dateInUserTimeZone, function);
-			return _personRepository.FindPeople(personIdList).ToList();
-		}
-
+		
 		public IEnumerable<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria,
 			DateOnly dateInUserTimeZone, string function)
 		{
-			var personIdList = GetPermittedPersonIdList(searchCriteria, dateInUserTimeZone, function);
+			var personIdList = getPermittedPersonIdList(searchCriteria, dateInUserTimeZone, function);
 			return _personRepository.FindPeople(personIdList).ToList();
 		}
 
@@ -100,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 			return personAbsences.Select(personAbsence => personAbsence.Person).ToList();
 		}
 
-		public IEnumerable<Guid> GetPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
+		private IEnumerable<Guid> getPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
 			string function)
 		{
 			var permittedPersonList =
