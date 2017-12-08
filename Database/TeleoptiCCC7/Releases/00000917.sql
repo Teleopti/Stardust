@@ -12,7 +12,7 @@ CREATE TABLE [ReadModel].[ExternalPerformanceData](
     [DateFrom] [smalldatetime] NOT NULL,
     [Person] [uniqueidentifier] NOT NULL,
     [OriginalPersonId] [nvarchar](130) NOT NULL,
-    [Score] [real] NOT NULL
+    [Score] [int] NOT NULL
  CONSTRAINT [PK_ReadModel_ExternalPerformanceData] PRIMARY KEY CLUSTERED
 (
     [ExternalPerformance] ASC,
