@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<HistoricalChangeViewModel> Changes { get; set; }
 		public string Now { get; set; }
 		public ScheduleTimeline Timeline { get; set; }
+		public int? AdherencePercentage { get; set; }
 	}
 
 	public class HistoricalAdherenceActivityViewModel

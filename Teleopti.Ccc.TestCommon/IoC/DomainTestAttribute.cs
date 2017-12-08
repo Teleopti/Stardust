@@ -47,6 +47,7 @@ using Teleopti.Ccc.TestCommon.Services;
 namespace Teleopti.Ccc.TestCommon.IoC
 {
 	[Toggle(Domain.FeatureFlags.Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";

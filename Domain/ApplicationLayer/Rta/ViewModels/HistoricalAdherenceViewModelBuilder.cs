@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IHistoricalChangeReadModelReader _changes;
+		private readonly IAdherencePercentageCalculator _calculator;
 
 		public HistoricalAdherenceViewModelBuilder(
 			IHistoricalAdherenceReadModelReader adherences,
@@ -28,7 +29,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			IPersonRepository persons,
 			INow now,
 			IUserTimeZone timeZone,
-			IHistoricalChangeReadModelReader changes)
+			IHistoricalChangeReadModelReader changes,
+			IAdherencePercentageCalculator calculator)
 		{
 			_adherences = adherences;
 			_scenario = scenario;
@@ -37,38 +39,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_now = now;
 			_timeZone = timeZone;
 			_changes = changes;
+			_calculator = calculator;
 		}
 
 		public HistoricalAdherenceViewModel Build(Guid personId)
 		{
 			var now = _now.UtcDateTime();
 			var person = _persons.Load(personId);
-			
-			var stuff = getSchedule(now, person);
-			
+
+			var displayInfo = getSchedule(now, person);
+
 			return new HistoricalAdherenceViewModel
 			{
 				Now = formatForUser(now),
 				PersonId = personId,
 				AgentName = person?.Name.ToString(),
-				Schedules = buildSchedules(stuff.Schedule),
-				Changes = buildChanges(personId, stuff.StartTime, stuff.EndTime),
-				OutOfAdherences = buildOutOfAdherences(personId, stuff.StartTime, stuff.EndTime),
+				Schedules = buildSchedules(displayInfo.Schedule),
+				Changes = buildChanges(personId, displayInfo.DisplayStartTime.Value, displayInfo.DisplayEndTime.Value),
+				OutOfAdherences = buildOutOfAdherences(personId, displayInfo.DisplayStartTime.Value, displayInfo.DisplayEndTime.Value),
 				Timeline = new ScheduleTimeline
 				{
-					StartTime = formatForUser(stuff.StartTime),
-					EndTime = formatForUser(stuff.EndTime)
-				}
+					StartTime = formatForUser(displayInfo.DisplayStartTime.Value),
+					EndTime = formatForUser(displayInfo.DisplayEndTime.Value)
+				},
+				AdherencePercentage = _calculator.CalculatePercetage(personId, displayInfo.ShiftStartTime, displayInfo.ShiftEndTime)
 			};
 		}
-
+		
 		private IEnumerable<AgentOutOfAdherenceViewModel> buildOutOfAdherences(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			var data = _adherences.Read(personId, startTime, endTime);
 			var first = data.FirstOrDefault();
 			if (first?.Adherence != HistoricalAdherenceReadModelAdherence.Out)
 			{
-				data = new[] { _adherences.ReadLastBefore(personId, first?.Timestamp ?? _now.UtcDateTime()) }
+				data = new[] {_adherences.ReadLastBefore(personId, first?.Timestamp ?? _now.UtcDateTime())}
 					.Concat(data)
 					.Where(x => x != null)
 					.ToArray();
@@ -102,8 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<HistoricalChangeViewModel> buildChanges(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			var changes = _changes.Read(personId, startTime, endTime)
-
-				.GroupBy(y => new {y.Timestamp,y.ActivityName, y.ActivityColor, y.StateName, y.RuleColor,y.RuleName, y.Adherence})
+				.GroupBy(y => new {y.Timestamp, y.ActivityName, y.ActivityColor, y.StateName, y.RuleColor, y.RuleName, y.Adherence})
 				.Select(x => new HistoricalChangeViewModel
 				{
 					Time = formatForUser(x.Key.Timestamp),
@@ -122,11 +125,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private class scheduleInfo
 		{
 			public IEnumerable<IVisualLayer> Schedule;
-			public DateTime StartTime;
-			public DateTime EndTime;
+			public DateTime? ShiftStartTime;
+			public DateTime? ShiftEndTime;
+			public DateTime? DisplayStartTime;
+			public DateTime? DisplayEndTime;
 		}
 
-		private scheduleInfo getSchedule( DateTime now , IPerson person)
+		private scheduleInfo getSchedule(DateTime now, IPerson person)
 		{
 			var timeZone = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
 			var timeZoneTime = TimeZoneInfo.ConvertTimeFromUtc(now, timeZone);
@@ -140,11 +145,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				var period = new DateOnlyPeriod(date.AddDays(-2), date.AddDays(2));
 
 				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-					new[] { person },
+					new[] {person},
 					new ScheduleDictionaryLoadOptions(false, false),
 					period,
 					scenario);
-				
+
 				var possibleShifts = (
 						from scheduleDay in schedules[person].ScheduledDayCollection(period)
 						where scheduleDay.DateOnlyAsPeriod.DateOnly == date.AddDays(-1)
@@ -166,13 +171,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var result = new scheduleInfo
 			{
 				Schedule = schedule,
-				StartTime = startTime,
-				EndTime = startTime.AddDays(1)
+				DisplayStartTime = startTime,
+				DisplayEndTime = startTime.AddDays(1)
 			};
 			if (result.Schedule.Any())
 			{
-				result.StartTime = result.Schedule.Min(x => x.Period.StartDateTime).AddHours(-1);
-				result.EndTime = result.Schedule.Max(x => x.Period.EndDateTime).AddHours(1);
+				result.ShiftStartTime = result.Schedule.Min(x => x.Period.StartDateTime);
+				result.ShiftEndTime = result.Schedule.Max(x => x.Period.EndDateTime);
+				result.DisplayStartTime = result.ShiftStartTime.Value.AddHours(-1);
+				result.DisplayEndTime = result.ShiftEndTime.Value.AddHours(1);
 			}
 
 			return result;
@@ -181,16 +188,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<internalHistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
 		{
 			return (
-				from layer in layers
-				select new internalHistoricalAdherenceActivityViewModel
-				{
-					Name = layer.DisplayDescription().Name,
-					Color = ColorTranslator.ToHtml(layer.DisplayColor()),
-					StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-					EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-					StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()),
-					EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
-				})
+					from layer in layers
+					select new internalHistoricalAdherenceActivityViewModel
+					{
+						Name = layer.DisplayDescription().Name,
+						Color = ColorTranslator.ToHtml(layer.DisplayColor()),
+						StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+						EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+						StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()),
+						EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
+					})
 				.ToArray();
 		}
 
@@ -199,7 +206,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			public DateTime StartDateTime { get; set; }
 			public DateTime EndDateTime { get; set; }
 		}
-		
+
 		private string nameForAdherence(HistoricalChangeInternalAdherence? adherence)
 		{
 			if (!adherence.HasValue)
@@ -242,4 +249,85 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return TimeZoneInfo.ConvertTimeFromUtc(time, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
 		}
 	}
+
+	public interface IAdherencePercentageCalculator
+	{
+		int? CalculatePercetage(Guid personId, DateTime? startTime, DateTime? endTime);
+	}
+	
+	public class NoAdherencePercentageCalculator :IAdherencePercentageCalculator
+	{
+		public int? CalculatePercetage(Guid personId, DateTime? startTime, DateTime? endTime)
+		{
+			return null;
+		}
+	}
+
+	public class AdherencePercentageCalculator :IAdherencePercentageCalculator
+	{
+		private readonly IHistoricalAdherenceReadModelReader _adherences;
+		private readonly INow _now;
+
+		public AdherencePercentageCalculator(IHistoricalAdherenceReadModelReader adherences, INow now)
+		{
+			_adherences = adherences;
+			_now = now;
+		}
+
+		public int? CalculatePercetage(Guid personId, DateTime? startTime, DateTime? endTime)
+		{
+			if (!startTime.HasValue)
+				return null;
+			
+			var totalTime = (endTime - startTime).Value.TotalSeconds;
+			var adherenceReadModels = _adherences.Read(personId, startTime.Value, endTime.Value);
+
+			var first = adherenceReadModels.FirstOrDefault();
+			if (first?.Adherence != HistoricalAdherenceReadModelAdherence.Out)
+			{
+				adherenceReadModels = new[] {_adherences.ReadLastBefore(personId, first?.Timestamp ?? _now.UtcDateTime())}
+					.Concat(adherenceReadModels)
+					.Where(x => x != null)
+					.ToArray();
+			}
+
+			DateTime? adherenceStartTime = null;
+
+			var adherences = adherenceReadModels as HistoricalAdherenceReadModel[] ?? adherenceReadModels.ToArray();
+
+			var lastAdherence = HistoricalAdherenceReadModelAdherence.Out;
+			
+			if (!adherences.IsNullOrEmpty())
+				lastAdherence = adherences.Last().Adherence == HistoricalAdherenceReadModelAdherence.Out 
+					? 
+					HistoricalAdherenceReadModelAdherence.In : HistoricalAdherenceReadModelAdherence.Out;
+			
+			var adherencesForShift = adherences
+				.Append(new HistoricalAdherenceReadModel()
+				{
+					Adherence = lastAdherence,
+					Timestamp = endTime.Value
+				});
+
+			var timeInAdherence = adherencesForShift.Aggregate(0.0, (total, model) =>
+			{
+				if (model.Adherence == HistoricalAdherenceReadModelAdherence.In)
+					adherenceStartTime = model.Timestamp;
+
+				else
+				{
+					if (adherenceStartTime != null)
+						total += (model.Timestamp - adherenceStartTime.Value).TotalSeconds;
+				}
+
+				return total;
+			});
+
+			return Convert.ToInt32(timeInAdherence) == 0
+				? 0
+				: Convert.ToInt32((timeInAdherence / totalTime) * 100);
+		}
+
+	}
+	
 }
