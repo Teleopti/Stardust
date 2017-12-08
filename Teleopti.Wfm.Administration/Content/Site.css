@@ -216,3 +216,15 @@ datepicker input {
 .modal-body input, .modal-body select, .modal-body textarea {
 	max-width: 100%!important;
 }
+
+.inline-flex {
+	display: inline-flex;
+}
+
+.disabled-date {
+	opacity: 0.5;
+	pointer-events: none;
+}
+.selected-job {
+	background: #e0e0e0;
+}

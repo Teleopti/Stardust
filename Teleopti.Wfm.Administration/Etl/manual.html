@@ -40,9 +40,9 @@
 
 		<div class="row">
 			<div class="col-md-4">
-				<fieldset>
+				<fieldset ng-class="{'disabled-date': !vm.selectedJob.Initial}">
 					<legend>Initial - data period</legend>
-					<div class="row">
+					<div class="row inline-flex">
 						<div class="col-md-6">
 							date from
 							<datepicker date-format="shortDate" ng-dblclick="vm.applyToAll(vm.manualInitial.StartDate)">
@@ -59,9 +59,9 @@
 				</fieldset>
 			</div>
 			<div class="col-md-4">
-				<fieldset>
+				<fieldset ng-class="{'disabled-date': !vm.selectedJob.QueueStatistics}">
 					<legend>Queue statistics - data period</legend>
-					<div class="row">
+					<div class="row inline-flex">
 						<div class="col-md-6">
 							date from
 							<datepicker date-format="shortDate" ng-dblclick="vm.applyToAll(vm.manualQueueStats.StartDate)">
@@ -78,9 +78,9 @@
 				</fieldset>
 			</div>
 			<div class="col-md-4">
-				<fieldset>
+				<fieldset ng-class="{'disabled-date': !vm.selectedJob.AgentStatistics}">
 					<legend>Agent statistics - data period</legend>
-					<div class="row">
+					<div class="row inline-flex">
 						<div class="col-md-6">
 							date from
 							<datepicker date-format="shortDate" ng-dblclick="vm.applyToAll(vm.manualAgentStats.StartDate)">
@@ -100,9 +100,9 @@
 
 		<div class="row">
 			<div class="col-md-4">
-				<fieldset>
+				<fieldset ng-class="{'disabled-date': !vm.selectedJob.Schedule}">
 					<legend>Schedule - data period</legend>
-					<div class="row">
+					<div class="row inline-flex">
 						<div class="col-md-6">
 							date from
 							<datepicker date-format="shortDate" ng-dblclick="vm.applyToAll(vm.manualSchedule.StartDate)">
@@ -119,9 +119,9 @@
 				</fieldset>
 			</div>
 			<div class="col-md-4">
-				<fieldset>
+				<fieldset ng-class="{'disabled-date': !vm.selectedJob.Forecast}">
 					<legend>Forecast - data period</legend>
-					<div class="row">
+					<div class="row inline-flex">
 						<div class="col-md-6">
 							date from
 							<datepicker date-format="shortDate" ng-dblclick="vm.applyToAll(vm.manualForecast.StartDate)">
@@ -167,23 +167,26 @@
 
 
 					<tbody ng-repeat="job in vm.jobs | filter:maualFilter">
-						<tr ng-click="job.Open = !job.Open">
+						<tr ng-click="vm.selectJob(job)" ng-class="{'selected-job': vm.selectedJob.JobName === job.JobName}">
 							<td>
-								<span ng-if="job.Open">
-									<svg style="width:14px;height:14px" viewBox="0 0 24 24">
-										<path fill="#000000" d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M17,11V13H7V11H17Z" />
-									</svg>
+								<span ng-click="job.Open = !job.Open">
+									<span ng-if="job.Open">
+										<svg style="width: 14px; height: 14px" viewBox="0 0 24 24">
+											<path fill="#000000" d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M17,11V13H7V11H17Z"/>
+										</svg>
+									</span>
+									<span ng-if="!job.Open">
+										<svg style="width: 14px; height: 14px" viewBox="0 0 24 24">
+											<path fill="#000000" d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M11,7H13V11H17V13H13V17H11V13H7V11H11V7Z"/>
+										</svg>
+									</span>
 								</span>
-								<span ng-if="!job.Open">
-									<svg style="width:14px;height:14px" viewBox="0 0 24 24">
-										<path fill="#000000" d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M11,7H13V11H17V13H13V17H11V13H7V11H11V7Z" />
-									</svg>
-								</span>
+
 								{{job.JobName}}
 							</td>
 							<td>{{job.Status}}</td>
 							<td>
-								<button ng-click="$event.stopPropagation();job.Status = 'Enqueued. will run 15:06'" type="button" class="btn btn-primary">Enqueue</button>
+								<button ng-if="vm.selectedJob.JobName === job.JobName" ng-click="$event.stopPropagation();job.Status = 'Enqueued. will run 15:06'" type="button" class="btn btn-primary">Enqueue</button>
 							</td>
 						</tr>
 						<tr ng-if="job.Open" ng-repeat="task in job.JobStepNames track by $index">

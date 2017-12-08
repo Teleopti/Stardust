@@ -11,11 +11,13 @@
         vm.state = 'manual';
         vm.jobs = [];
         vm.tenants = [];
-	    vm.selectedTenant = '';
+        vm.selectedTenant = '';
+	    vm.selectedJob = null;
 
         vm.getJobs = getJobs;
         vm.getTennants = getTennants;
-	    vm.sendTennant = sendTennant;
+        vm.sendTennant = sendTennant;
+	    vm.selectJob = selectJob;
 
 		//init
 	    vm.getManualData = function () { 
@@ -54,6 +56,13 @@
                 .error(function (data) {
 		            console.log(data, 'fail');
 	            });
+        }
+
+	    function selectJob(job) {
+            vm.selectedJob = job;
+            for (var i = 0; i < vm.selectedJob.NeededDatePeriod.length; i++) {
+	            vm.selectedJob[vm.selectedJob.NeededDatePeriod[i]] = true;
+            }
 	    }
 
 
