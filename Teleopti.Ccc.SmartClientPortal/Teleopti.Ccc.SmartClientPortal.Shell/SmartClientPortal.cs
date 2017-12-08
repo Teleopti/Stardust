@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
 			var request = new Request(webServer + "Start/AuthenticationApi/Logon");
 			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
-			request.Method = "post";
+			request.Method = "POST";
 			webViewDataProtection.LoadCompleted += dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
 			logInfo("setBusinessUnitInDataProtectionWebView: Setting the business unit");
 			webViewDataProtection.LoadRequest(request);
@@ -141,10 +141,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			logInfo(" Bu loaded for data protection EO:URL= " + webViewDataProtection.Url);
 			webViewDataProtection.LoadCompleted -= dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
-			webControlDataProtection.WebView.Url = $"{webServer}WFM/index_desktop_client.html#/fdpa";
+			webViewDataProtection.LoadUrl($"{webServer}WFM/index_desktop_client.tpl.html#/fdpa");
 		}
 
-		
 
 		void formKeyDown(object sender, KeyEventArgs e)
 		{
@@ -202,6 +201,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_portalSettings = _container.Resolve<PortalSettings>();
 			_toggleManager = _container.Resolve<IToggleManager>();
 			_webUrlHolder = _container.Resolve<WebUrlHolder>();
+			setBusinessUnitInDataProtectionWebView();
+
 		}
 
 		void toolStripButtonHelpClick(object sender, EventArgs e)
@@ -803,7 +804,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					wfmWebControl.Visible = false;
 					webControl1.Visible = false;
 					webControlDataProtection.Visible = true;
-					setBusinessUnitInDataProtectionWebView();
+					//setBusinessUnitInDataProtectionWebView();
 					break;
 			}
 		}
