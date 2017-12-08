@@ -228,3 +228,7 @@ datepicker input {
 .selected-job {
 	background: #e0e0e0;
 }
+.center-row {
+	display: flex;
+	align-items: center;
+}
