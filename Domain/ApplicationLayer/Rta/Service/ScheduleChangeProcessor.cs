@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public string QueueTo(ScheduleChangedEvent @event)
 		{
-			return _updater.ShouldInvalidate(@event.StartDateTime, @event.EndDateTime) ? Queues.ScheduleChangesToday : null;
+			return _updater.ShouldInvalidate(@event.StartDateTime, @event.EndDateTime) ? Queues.CriticalScheduleChangesToday : null;
 		}
 
 		public void Handle(TenantMinuteTickEvent @event)

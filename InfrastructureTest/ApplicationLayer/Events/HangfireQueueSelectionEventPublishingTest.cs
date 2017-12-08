@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Publisher.Publish(new DefaultQueueEvent());
 
 			Hangfire.NumberOfJobsInQueue(Queues.Default).Should().Be(1);
-			Hangfire.NumberOfJobsInQueue(Queues.ScheduleChangesToday).Should().Be(0);
+			Hangfire.NumberOfJobsInQueue(Queues.CriticalScheduleChangesToday).Should().Be(0);
 		}
 
 		[Test]
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Publisher.Publish(new OtherQueueEvent());
 
 			Hangfire.NumberOfJobsInQueue(Queues.Default).Should().Be(0);
-			Hangfire.NumberOfJobsInQueue(Queues.ScheduleChangesToday).Should().Be(1);
+			Hangfire.NumberOfJobsInQueue(Queues.CriticalScheduleChangesToday).Should().Be(1);
 		}
 
 		public class DefaultQueueEvent : IEvent
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			public string QueueTo(OtherQueueEvent @event)
 			{
-				return Queues.ScheduleChangesToday;
+				return Queues.CriticalScheduleChangesToday;
 			}
 		}
 
