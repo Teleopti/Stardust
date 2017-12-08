@@ -61,6 +61,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			@event.JobResultId.Should().Be(job.Id);
 		}
 
+		[Test]
+		public void ShouldGetImportedJobs()
+		{
+			setCurrentLoggedOnUser();
+			var job = createValidJob();
+
+			var result = Target.GetJobsForCurrentBusinessUnit();
+			result.Count.Should().Be(1);
+		}
+
 		private IPerson setCurrentLoggedOnUser()
 		{
 			var person = PersonFactory.CreatePersonWithId();
