@@ -73,12 +73,14 @@ wfm
         '$translateProvider',
         '$httpProvider',
         'RtaStateProvider',
+        '$mdGestureProvider',
         function(
             $stateProvider,
             $urlRouterProvider,
             $translateProvider,
             $httpProvider,
-            RtaStateProvider
+            RtaStateProvider,
+            $mdGestureProvider
         ) {
             $urlRouterProvider.otherwise('/#');
 
@@ -94,6 +96,7 @@ wfm
 
             $translateProvider.preferredLanguage('en');
             $httpProvider.interceptors.push('httpInterceptor');
+            $mdGestureProvider.skipClickHijack();
         }
     ])
     .run([
