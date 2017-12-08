@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 	[Binding]
 	public class IntradayStepDefinitions
 	{
-		[Given(@"There is a skill to monitor called '([^']*)' with queue id '([^']*)' and queue name '([^']*)' and activity '([^']*)'")]
+		[Given(
+			@"There is a skill to monitor called '([^']*)' with queue id '([^']*)' and queue name '([^']*)' and activity '([^']*)'")]
 		public void GivenThereIsASkillToMonitorCalled(string skill, int queueId, string queueName, string activity)
 		{
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				Name = skill,
 				Activity = activity
 			});
-			
+
 			DataMaker.Data().Analytics().Apply(new AQueue(datasourceData) { QueueId = queueId });
 
 			DataMaker.Data().Apply(new QueueSourceConfigurable
@@ -49,8 +50,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			});
 		}
 
-		
-		[Given(@"There is an email-like skill to monitor called '([^']*)' with queue id '([^']*)' and queue name '([^']*)' and activity '([^']*)'")]
+
+		[Given(
+			@"There is an email-like skill to monitor called '([^']*)' with queue id '([^']*)' and queue name '([^']*)' and activity '([^']*)'")]
 		public void GivenThereIsAnEmailSkillToMonitorCalled(string skill, int queueId, string queueName, string activity)
 		{
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
@@ -121,7 +123,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 
-
 		[Given(@"I name the Skill Area '(.*)'")]
 		public void GivenINameTheSkillArea(string skillAreaName)
 		{
@@ -132,10 +133,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I name the Skill Group '(.*)'")]
 		public void GivenINameTheSkillGroup(string skillGroupName)
 		{
-
-			Browser.Interactions.FillWith("#skillGroupNameBox", skillGroupName);
+			Browser.Interactions.TryUntil(
+				() => { Browser.Interactions.FillWith("#skillGroupNameBox", skillGroupName); },
+				() => Browser.Interactions.IsVisible("#confirmEditNameButton"),
+				TimeSpan.FromMilliseconds(1000));
 			Browser.Interactions.Click("#confirmEditNameButton");
-
 		}
 
 		[Given(@"I select the Skill Group '(.*)'")]
@@ -165,7 +167,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			var javascript = "var scope = angular.element(document.querySelector('.c3')).scope();" +
 							 "var skillet = scope.vm.skills.find(function(e){{return e.Name === '" + skillName + "'}});" +
 							 "scope.vm.selectedSkill = skillet;" +
-							 "scope.vm.selectedSkillChange(skillet);"; 
+							 "scope.vm.selectedSkillChange(skillet);";
+
 			Browser.Interactions.Javascript(javascript);
 		}
 
@@ -173,12 +176,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I pick the skillgroup '(.*)'")]
 		public void GivenIPickTheSkillGroup(string skillName)
 		{
+			//Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1));
 			Browser.Interactions.AssertExists("md-autocomplete");
 			var javascript = "var scope = angular.element(document.querySelector('md-autocomplete')).scope();" +
 							 "var sg = scope.vm.skillAreas.find(function(e){{return e.Name === '" + skillName + "'}});" +
 							 "scope.vm.selectedSkillArea = sg;" +
-							 "scope.vm.selectedSkillAreaChange(sg);"; 
-			Browser.Interactions.Javascript(javascript);
+							 "scope.vm.selectedSkillAreaChange(sg);";
+			Browser.Interactions.TryUntil(
+				() => { Browser.Interactions.Javascript(javascript); },
+				() => Browser.Interactions.IsVisible("md-autocomplete")
+				, TimeSpan.FromSeconds(1)
+			);
 		}
 
 		[Given(@"I select the skill '(.*)'")]
@@ -210,10 +218,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I close the Skill Manager")]
 		public void WhenICloseTheSkillManager()
 		{
-			Browser.Interactions.Click("#exit_sgm");
-			if (Browser.Interactions.IsVisible("#confirmExitButton"))
+			try
 			{
-				Browser.Interactions.Click("#confirmExitButton");
+				var n = 10;
+				while (Browser.Interactions.IsVisible("#exit_sgm"))
+				{
+					Browser.Interactions.Click("#exit_sgm");
+					n--;
+					if (n == 0)
+					{
+						break;
+					}
+				}
+				if (Browser.Interactions.IsVisible("#confirmExitButton"))
+					Browser.Interactions.Click("#confirmExitButton");
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				throw;
 			}
 		}
 
@@ -260,7 +283,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			var listId = "#" + Browser.Interactions.Javascript("return $('#skill-area-id input').attr(\"aria-owns\")");
 			Browser.Interactions.AssertFirstNotContains(listId, skillArea);
 		}
-		
+
 		[Then(@"I should monitor '(.*)'")]
 		public void ThenIShouldMonitor(string monitorItem)
 		{
@@ -278,17 +301,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"there is a Skill Area called '(.*)' that monitors skill '(.*)'")]
 		public void GivenThereIsASkillAreaCalledThatMonitorsSkill(string skillArea, string skill)
 		{
-			DataMaker.Data().Apply(new SkillGroupConfigurable()
+			DataMaker.Data().Apply(new SkillGroupConfigurable
 			{
 				Name = skillArea,
-				Skill = skill 
+				Skill = skill
 			});
 		}
 
 		[Given(@"there is a Skill Area called '(.*)' that monitors skills '(.*)'")]
 		public void GivenThereIsASkillAreaCalledThatMonitorsSkills(string skillArea, string skills)
 		{
-			DataMaker.Data().Apply(new SkillGroupConfigurable()
+			DataMaker.Data().Apply(new SkillGroupConfigurable
 			{
 				Name = skillArea,
 				Skills = skills
@@ -307,18 +330,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
 				"var calls = parseFloat(scope.vm.viewObj.actualCallsObj.series[1]);" +
-				"return (calls >= 0);" 
+				"return (calls >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
-							"var scope = angular.element(document.querySelector('.c3')).scope();" +
-							"var faht = parseFloat(scope.vm.viewObj.forecastedAverageHandleTimeObj.series[1]);" +
-							"return (faht >= 0);"
-							, "True");
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var faht = parseFloat(scope.vm.viewObj.forecastedAverageHandleTimeObj.series[1]);" +
+				"return (faht >= 0);"
+				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
-							"var scope = angular.element(document.querySelector('.c3')).scope();" +
-							"var aaht = parseFloat(scope.vm.viewObj.actualAverageHandleTimeObj.series[1]);" +
-							"return (aaht >= 0);"
-							, "True");
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var aaht = parseFloat(scope.vm.viewObj.actualAverageHandleTimeObj.series[1]);" +
+				"return (aaht >= 0);"
+				, "True");
 		}
 
 		[Given(@"I should see a summary of incoming traffic")]
@@ -371,13 +394,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				, "True");
 			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
 			if (toggleQuerier.IsEnabled(Toggles.Wfm_Intraday_ESL_41827))
-			{
 				Browser.Interactions.AssertJavascriptResultContains(
 					"var scope = angular.element(document.querySelector('.c3')).scope();" +
 					"var esl = parseFloat(scope.vm.viewObj.estimatedServiceLevelObj.series[1]);" +
 					"return (esl >= 0) + ' |scopeViewObjSeries: ' + scope.vm.viewObj.estimatedServiceLevelObj.series[1] + ' |esl: ' + esl;"
 					, "true");
-			}
 		}
 
 		[Then(@"I should see a summary of today's performance")]
@@ -386,11 +407,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertJavascriptResultContains("return $('.service-level').text().length > 0", "True");
 			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
 			if (toggleQuerier.IsEnabled(Toggles.Wfm_Intraday_ESL_41827))
-			{
 				Browser.Interactions.AssertJavascriptResultContains("return $('.esl').text().length > 0", "True");
-			}
 			Browser.Interactions.AssertJavascriptResultContains("return $('.abandoned-rate').text().length > 0", "True");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.average-speed-of-answer').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.average-speed-of-answer').text().length > 0",
+				"True");
 		}
 
 		[Given(@"there are scheduled agents for '(.*)' for date '(.*)'")]
@@ -423,8 +443,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
 				"var scheduledStaffing = parseFloat(scope.vm.viewObj.scheduledStaffing[1]);" +
-                "return (scheduledStaffing >= 0) + ' |sopeViewObjScheduledStaffing: ' + scope.vm.viewObj.scheduledStaffing[1] + ' |scheduledStaffing: ' + scheduledStaffing;"
-                , "true");
+				"return (scheduledStaffing >= 0) + ' |sopeViewObjScheduledStaffing: ' + scope.vm.viewObj.scheduledStaffing[1] + ' |scheduledStaffing: ' + scheduledStaffing;"
+				, "true");
 		}
 
 		[Then(@"I should see forecasted staffing data in the chart")]
@@ -441,7 +461,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I choose to look at statistics for '(.*)'")]
 		public void WhenIChooseToLookAtStatisticsFor(string offset)
 		{
-
 			ScenarioContext.Current.Pending();
 		}
 
@@ -483,6 +502,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertExists("#noAbandonRate");
 		}
+
 		[Then(@"I should see the no reforcasted warning")]
 		public void ThenIShouldSeeTheNoReforcastedWarning()
 		{
@@ -507,15 +527,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I Should see skill '(.*)' as selected skill")]
 		public void ThenIShouldSeeSkillAsSelectedSkill(string skill)
 		{
-			Browser.Interactions.AssertJavascriptResultContains("var scope = angular.element(document.querySelector('#skill-id')).scope();" +
-																$"return scope.vm.selectedItem.Name === '{skill}';", "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('#skill-id')).scope();" +
+				$"return scope.vm.selectedItem.Name === '{skill}';", "True");
 		}
 
 		[Then(@"I Should not see any skill group selected")]
 		public void ThenIShouldNotSeeAnySkillGroupSelected()
 		{
-			Browser.Interactions.AssertJavascriptResultContains("var scope = angular.element(document.querySelector('#skill-id')).scope();" +
-																$"return scope.vm.selectedSkillArea === null;", "True");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('#skill-id')).scope();" +
+				$"return scope.vm.selectedSkillArea === null;", "True");
 		}
 
 		[When(@"I return to skill group from skill '(.*)'")]

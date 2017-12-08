@@ -43,12 +43,12 @@ Scenario: Create Skill Group in SGM
 	And I select the skill 'Skill A' in SGM
 	And I save the Skill Groups
 	When I close the Skill Manager
-	Then I select to monitor skill area 'my Area'
-	And I should monitor 'my Area'
+	And I pick the skillgroup 'my Area'
+	Then I should monitor 'my Area'
 
 @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
 @OnlyRunIfEnabled('WFM_Modify_Skill_Groups_45727')
-Scenario: Rename Skill Group in SGM
+Scenario Outline: Rename Skill Group in SGM
 	Given I am viewing intraday page
 	And I select to manage Skill Groups
 	And I select to create a new Skill Group in SGM
@@ -60,8 +60,110 @@ Scenario: Rename Skill Group in SGM
 	When I name the Skill Group 'my Area 2'
 	And I save the Skill Groups
 	And I close the Skill Manager
-	Then I select to monitor skill area 'my Area 2'
-	And I should monitor 'my Area 2'
+	And I pick the skillgroup 'my Area 2'
+	Then I should monitor 'my Area 2'
+
+Examples: |1|
+|2|
+|3|
+|4|
+|5|
+|6|
+|7|
+|8|
+|9|
+|10|
+|11|
+|12|
+|13|
+|14|
+|15|
+|16|
+|17|
+|18|
+|19|
+|20|
+|21|
+|22|
+|23|
+|24|
+|25|
+|26|
+|27|
+|28|
+|29|
+|30|
+|31|
+|32|
+|33|
+|34|
+|35|
+|36|
+|37|
+|38|
+|39|
+|40|
+|41|
+|42|
+|43|
+|44|
+|45|
+|46|
+|47|
+|48|
+|49|
+|50|
+|51|
+|52|
+|53|
+|54|
+|55|
+|56|
+|57|
+|58|
+|59|
+|60|
+|61|
+|62|
+|63|
+|64|
+|65|
+|66|
+|67|
+|68|
+|69|
+|70|
+|71|
+|72|
+|73|
+|74|
+|75|
+|76|
+|77|
+|78|
+|79|
+|80|
+|81|
+|82|
+|83|
+|84|
+|85|
+|86|
+|87|
+|88|
+|89|
+|90|
+|91|
+|92|
+|93|
+|94|
+|95|
+|96|
+|97|
+|98|
+|99|
+|100|
+
 
 @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
 @OnlyRunIfEnabled('WFM_Modify_Skill_Groups_45727')
@@ -73,8 +175,8 @@ Scenario: Rename Skill Group in SGM
 	And I select 'Skill A' from available skill
 	When I save the Skill Groups
 	And I close the Skill Manager
-	Then I select to monitor skill area 'SkillArea A'
-	And I should see 'Skill A' as included skill
+	And I pick the skillgroup 'SkillArea A'
+	Then I should see 'Skill A' as included skill
 
 @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
 @OnlyRunIfEnabled('WFM_Modify_Skill_Groups_45727')
@@ -86,8 +188,8 @@ Scenario: Remove Skill from Skill Group in SGM
 	And I select 'Skill A' from SkillsInThisGroup
 	When I save the Skill Groups
 	And I close the Skill Manager
-	Then I select to monitor skill area 'SkillArea A'
-	And I should monitor 'SkillArea A'
+	And I pick the skillgroup 'SkillArea A'
+	Then I should monitor 'SkillArea A'
 	And I should not see 'Skill A' as included skill
 
 @OnlyRunIfDisabled('WFM_Modify_Skill_Groups_45727')
