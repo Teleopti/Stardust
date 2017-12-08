@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
@@ -79,7 +81,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_budgetDayRepository.Stub(x => x.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
 			_scheduleProjectionReadOnlyPersister.Stub(x => x.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.GetValueOrDefault(), personPeriod.StartDate)).Return(1);
 
-			Assert.IsFalse(_target.IsSatisfied(new AbsenceRequstAndSchedules { SchedulingResultStateHolder = _schedulingResultStateHolder, AbsenceRequest = absenceRequest }).IsValid);
+			var validationError = string.Format(Resources.NotEnoughBudgetAllowanceForTheDay, budgetDay.Day.ToShortDateString());
+
+			var isSatisfied = _target.IsSatisfied(new AbsenceRequstAndSchedules
+			{
+				SchedulingResultStateHolder = _schedulingResultStateHolder,
+				AbsenceRequest = absenceRequest
+			});
+
+			_target.IsSatisfied(new AbsenceRequstAndSchedules { SchedulingResultStateHolder = _schedulingResultStateHolder, AbsenceRequest = absenceRequest }).IsValid.Should().Be.False();
+			isSatisfied.ValidationErrors.Should().Be.EqualTo(validationError);
+
 		}
 
 		[Test]
