@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
@@ -20,12 +21,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly ISchedulePeriodTargetTimeCalculator _schedulePeriodTargetTimeCalculator;
+		private readonly WorkShiftMinMaxCalculatorSkipWeekCheck _workShiftMinMaxCalculatorSkipWeekCheck;
 
 		public RestrictionsAbleToBeScheduled(Func<ISchedulerStateHolder> schedulerStateHolder,
 			AdvanceDaysOffSchedulingService advanceDaysOffSchedulingService, MatrixListFactory matrixListFactory,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper, TeamInfoFactoryFactory teamInfoFactoryFactory,
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
-			ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator)
+			ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator,
+			WorkShiftMinMaxCalculatorSkipWeekCheck workShiftMinMaxCalculatorSkipWeekCheck)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_advanceDaysOffSchedulingService = advanceDaysOffSchedulingService;
@@ -34,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_schedulePeriodTargetTimeCalculator = schedulePeriodTargetTimeCalculator;
+			_workShiftMinMaxCalculatorSkipWeekCheck = workShiftMinMaxCalculatorSkipWeekCheck;
 		}
 
 		public bool Execute(IVirtualSchedulePeriod schedulePeriod)
@@ -74,14 +78,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var possibleMinMaxWorkShiftLengths =
 				_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix, new SchedulingOptions());
 			var weekCount = _workShiftMinMaxCalculator.WeekCount(matrix);
-			for (int i = 0; i < weekCount; i++)
+			for (int weekIndex = 0; weekIndex < weekCount; weekIndex++)
 			{
-				var currentMinMaxForWeek = currentMinMax(i, possibleMinMaxWorkShiftLengths, null, matrix);
+				if (weekIndex == 0) // || weekIndex == weekCount - 1)
+				{
+					var skipThisWeek = _workShiftMinMaxCalculatorSkipWeekCheck.SkipWeekCheck(matrix, firstDateInWeekIndex(weekIndex, matrix));
+					if (skipThisWeek)
+						return true;
+				}
+
+				var currentMinMaxForWeek = currentMinMax(weekIndex, possibleMinMaxWorkShiftLengths, null, matrix);
 				if(currentMinMaxForWeek.Minimum > virtualSchedulePeriod.Contract.WorkTimeDirective.MaxTimePerWeek)
 					return false;
 			}
 
 			return true;
+		}
+
+		private static DateOnly firstDateInWeekIndex(int weekIndex, IScheduleMatrixPro matrix)
+		{
+			return matrix.FullWeeksPeriodDays[weekIndex * 7].Day;
 		}
 
 		private static MinMax<TimeSpan> currentMinMax(int weekIndex, IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths, DateOnly? dayToSchedule, IScheduleMatrixPro matrix)

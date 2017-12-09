@@ -439,6 +439,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<CrossAgentsAndSkills>().SingleInstance();
 			builder.RegisterType<RestrictionsAbleToBeScheduled>().InstancePerLifetimeScope();
+			builder.RegisterType<WorkShiftMinMaxCalculatorSkipWeekCheck>().InstancePerLifetimeScope();
 
 			if (_configuration.Args().IsFatClient)
 			{

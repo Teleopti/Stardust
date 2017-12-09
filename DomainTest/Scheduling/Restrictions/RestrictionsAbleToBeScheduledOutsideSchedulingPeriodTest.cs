@@ -93,7 +93,39 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).TotalHours.Should().Be.LessThan(176);
 		}
 
-		//ShouldSkipFirstWeekWhenThisTheFirstPersonPeriod
+		[Test]
+		public void ShouldHandleFirstWeekWhenTheAgentIsOnBoardingThisPeriod()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			agent.Period(period.StartDate).StartDate = period.StartDate;
+			var extendedPeriod = new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(6));
+			var preferenceDaysOrAss = new List<IPersistableScheduleData>();
+			var shiftCategory = new ShiftCategory("_");
+			var activity = new Activity().WithId();
+			var firstWeekStartDate = new DateOnly(2017, 10, 30);
+			for (int i = 0; i < 2; i++)
+			{
+				var ass = new PersonAssignment(agent, scenario, firstWeekStartDate.AddDays(i));
+				ass.AddActivity(activity, new TimePeriod(8, 18));
+				ass.SetShiftCategory(shiftCategory);
+				preferenceDaysOrAss.Add(ass);
+			}
+
+			preferenceDaysOrAss.Add(new PreferenceDay(agent, new DateOnly(2017, 11, 1),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(10)) }));
+			preferenceDaysOrAss.Add(new PreferenceDay(agent, new DateOnly(2017, 11, 2),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(10)) }));
+			preferenceDaysOrAss.Add(new PreferenceDay(agent, new DateOnly(2017, 11, 3),
+				new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(10)) }));
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDaysOrAss, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.True();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, extendedPeriod);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).TotalHours.Should().Be.EqualTo(176);
+		}
 
 		[Test]
 		public void ShouldCheckOnWeekMaxTimeAndIncludeFullWeekBefore()
