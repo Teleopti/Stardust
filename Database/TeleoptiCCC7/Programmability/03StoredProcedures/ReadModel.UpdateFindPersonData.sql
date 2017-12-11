@@ -28,66 +28,91 @@ AS
 CREATE TABLE #ids(id uniqueidentifier)
 INSERT INTO #ids SELECT * FROM SplitStringString(@ids)
 
-UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] fp
-INNER JOIN PartTimePercentage WITH(NOLOCK) ON PartTimePercentage.Id = SearchValueId
-INNER JOIN #ids on #ids.id = SearchValueId
+if exists(select top(1) a.id from PartTimePercentage a inner join #ids on a.id=#ids.id)
+begin
+	UPDATE [ReadModel].[FindPerson]
+	SET SearchValue = Name
+	FROM [ReadModel].[FindPerson] fp
+	INNER JOIN PartTimePercentage WITH(NOLOCK) ON PartTimePercentage.Id = SearchValueId
+	INNER JOIN #ids on #ids.id = SearchValueId
+end
 
-UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] fp
-INNER JOIN RuleSetBag WITH(NOLOCK) ON RuleSetBag.Id = SearchValueId 
-INNER JOIN #ids on #ids.id = SearchValueId
+if exists(select top(1) a.id from RuleSetBag a inner join #ids on a.id=#ids.id)
+begin
+	UPDATE [ReadModel].[FindPerson]
+	SET SearchValue = Name
+	FROM [ReadModel].[FindPerson] fp
+	INNER JOIN RuleSetBag WITH(NOLOCK) ON RuleSetBag.Id = SearchValueId 
+	INNER JOIN #ids on #ids.id = SearchValueId
+end
 
-UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] fp 
-INNER JOIN [Contract] WITH(NOLOCK) ON [Contract].Id = SearchValueId
-INNER JOIN #ids on #ids.id = SearchValueId
+if exists(select top(1) a.id from Contract a inner join #ids on a.id=#ids.id)
+begin
+	UPDATE [ReadModel].[FindPerson]
+	SET SearchValue = Name
+	FROM [ReadModel].[FindPerson] fp 
+	INNER JOIN [Contract] WITH(NOLOCK) ON [Contract].Id = SearchValueId
+	INNER JOIN #ids on #ids.id = SearchValueId
+end
 
-UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] fp
-INNER JOIN ContractSchedule WITH(NOLOCK) ON ContractSchedule.Id = SearchValueId 
-INNER JOIN #ids on #ids.id = SearchValueId
+if exists(select top(1) a.id from ContractSchedule a inner join #ids on a.id=#ids.id)
+begin
+	UPDATE [ReadModel].[FindPerson]
+	SET SearchValue = Name
+	FROM [ReadModel].[FindPerson] fp
+	INNER JOIN ContractSchedule WITH(NOLOCK) ON ContractSchedule.Id = SearchValueId 
+	INNER JOIN #ids on #ids.id = SearchValueId
+end
 
-UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] fp
-INNER JOIN BudgetGroup WITH(NOLOCK) ON BudgetGroup.Id = SearchValueId 
-INNER JOIN #ids on #ids.id = SearchValueId
+if exists(select top(1) a.id from BudgetGroup a inner join #ids on a.id=#ids.id)
+begin
+	UPDATE [ReadModel].[FindPerson]
+	SET SearchValue = Name
+	FROM [ReadModel].[FindPerson] fp
+	INNER JOIN BudgetGroup WITH(NOLOCK) ON BudgetGroup.Id = SearchValueId 
+	INNER JOIN #ids on #ids.id = SearchValueId
+end
 
-UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] fp
-INNER JOIN Skill WITH(NOLOCK) ON Skill.Id = fp.SearchValueId
-INNER JOIN #ids on #ids.id = Skill.Id
+if exists(select top(1) a.id from Skill a inner join #ids on a.id=#ids.id)
+begin
+	UPDATE [ReadModel].[FindPerson]
+	SET SearchValue = Name
+	FROM [ReadModel].[FindPerson] fp
+	INNER JOIN Skill WITH(NOLOCK) ON Skill.Id = fp.SearchValueId
+	INNER JOIN #ids on #ids.id = Skill.Id
+end
 
-UPDATE [ReadModel].[FindPerson]
-SET SearchValue =  s.Name + ' ' + t.Name
-FROM [ReadModel].[FindPerson] 
-INNER JOIN Team t WITH(NOLOCK) ON SearchValueId = t.Id
-INNER JOIN Site s WITH(NOLOCK) ON s.Id = t.Site
-INNER JOIN #ids ids ON t.Id = ids.id
-WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
+if exists(select top(1) a.id from Team a inner join #ids on a.id=#ids.id)
+begin
+	UPDATE [ReadModel].[FindPerson]
+	SET SearchValue =  s.Name + ' ' + t.Name
+	FROM [ReadModel].[FindPerson] 
+	INNER JOIN Team t WITH(NOLOCK) ON SearchValueId = t.Id
+	INNER JOIN Site s WITH(NOLOCK) ON s.Id = t.Site
+	INNER JOIN #ids ids ON t.Id = ids.id
+	WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
+end
 
+if exists(select top(1) a.id from Site a inner join #ids on a.id=#ids.id)
+begin
+	UPDATE [ReadModel].[FindPerson]
+	SET SearchValue =  s.Name + ' ' + t.Name
+	FROM [ReadModel].[FindPerson] 
+	INNER JOIN Site s WITH(NOLOCK) ON s.Id = SearchValueId
+	INNER JOIN Team t WITH(NOLOCK) ON s.Id = t.Site
+	INNER JOIN #ids ids ON s.Id = ids.id
+	WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
+end
 
-UPDATE [ReadModel].[FindPerson]
-SET SearchValue =  s.Name + ' ' + t.Name
-FROM [ReadModel].[FindPerson] 
-INNER JOIN Site s WITH(NOLOCK) ON s.Id = SearchValueId
-INNER JOIN Team t WITH(NOLOCK) ON s.Id = t.Site
-INNER JOIN #ids ids ON s.Id = ids.id
-WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
-
-
-UPDATE [ReadModel].[FindPerson]
-SET SearchValue = CASE SUBSTRING( ar.DescriptionText ,1 , 2 )
-WHEN  'xx'    THEN ar.Name
- ELSE ar.DescriptionText
- END
-FROM [ReadModel].[FindPerson] 
-INNER JOIN ApplicationRole ar WITH(NOLOCK) ON ar.Id = SearchValueId 
-INNER JOIN #ids on #ids.id = SearchValueId
-WHERE ar.IsDeleted = 0
+if exists(select top(1) a.id from ApplicationRole a inner join #ids on a.id=#ids.id)
+begin
+	UPDATE [ReadModel].[FindPerson]
+	SET SearchValue = CASE SUBSTRING( ar.DescriptionText ,1 , 2 )
+	WHEN  'xx'    THEN ar.Name
+	 ELSE ar.DescriptionText
+	 END
+	FROM [ReadModel].[FindPerson] 
+	INNER JOIN ApplicationRole ar WITH(NOLOCK) ON ar.Id = SearchValueId 
+	INNER JOIN #ids on #ids.id = SearchValueId
+	WHERE ar.IsDeleted = 0
+end
