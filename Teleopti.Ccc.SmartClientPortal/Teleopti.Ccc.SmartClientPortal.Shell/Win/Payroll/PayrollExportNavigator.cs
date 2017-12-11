@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 		private void LoadSmartPart(Guid payrollExport, int smartPartId, string smartPartHeaderTitle, string smartPartName, int row, int col)
 		{
 			var smartPartInfo = new SmartPartInformation();
-			smartPartInfo.ContainingAssembly = GetType().Assembly.FullName;
+			smartPartInfo.ContainingAssembly = GetType().Assembly;
 			smartPartInfo.SmartPartName = smartPartName;
 			smartPartInfo.SmartPartHeaderTitle = smartPartHeaderTitle;
 			smartPartInfo.GridColumn = col;

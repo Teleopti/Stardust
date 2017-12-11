@@ -3,35 +3,10 @@ using System.Reflection;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
 {
-    /// <summary>
-    /// Represents a .
-    /// </summary>
     public class SmartPartWorker
     {
-        /// <summary>
-        /// Gets or sets the workspace.
-        /// </summary>
-        /// <value>The workspace.</value>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-08-04
-        /// </remarks>
         public GridWorkspace Workspace { get; set; }
-
-        /// <summary>
-        /// Holds the path to smartpart containing assemblies
-        /// </summary>
-        public string SmartPartAssemblyPath { get; set; }
-
-        /// <summary>
-        /// Shows the smart part.
-        /// </summary>
-        /// <param name="smartPartInfo">The smart part info.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-08-04
-        /// </remarks>
+		
         public void ShowSmartPart(SmartPartInformation smartPartInfo, IList<SmartPartParameter> parameters)
         {
             IList<SmartPartBase> loadedSmartPartCollection =
@@ -66,35 +41,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
                 }
             }
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SmartPartWorker"/> class.
-        /// </summary>
-        /// <param name="smartPartAssemblyPath">The smart part assembly path.</param>
-        /// <param name="workspace">The workspace.</param>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-08-05
-        /// </remarks>
-        public SmartPartWorker(string smartPartAssemblyPath, GridWorkspace workspace)
+		
+        public SmartPartWorker(GridWorkspace workspace)
         {
-            SmartPartAssemblyPath = smartPartAssemblyPath;
             Workspace = workspace;
         }
-
-        /// <summary>
-        /// Gets the smart part.
-        /// </summary>
-        /// <param name="smartPartInfo">The smart part info.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-08-04
-        /// </remarks>
+		
         private static SmartPartBase GetSmartPart(SmartPartInformation smartPartInfo)
         {
-            Assembly assembly = Assembly.Load(smartPartInfo.ContainingAssembly);
-            SmartPartBase smartPart = assembly.CreateInstance(smartPartInfo.SmartPartName) as SmartPartBase;
+            SmartPartBase smartPart = smartPartInfo.ContainingAssembly.CreateInstance(smartPartInfo.SmartPartName) as SmartPartBase;
             if (smartPart != null)
                 smartPart.SmartPartId = smartPartInfo.SmartPartId;
 

@@ -291,7 +291,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.gridWorkspace.Size = new System.Drawing.Size(669, 635);
 			this.gridWorkspace.TabIndex = 0;
 			this.gridWorkspace.Tag = "0";
-			this.gridWorkspace.WorkspaceGridSizeChanged += new System.EventHandler<System.EventArgs>(this.gridWorkspaceWorkspaceGridSizeChanged);
 			// 
 			// ribbonControlAdv1
 			// 

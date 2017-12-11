@@ -623,7 +623,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			var smartPartInfo = new SmartPartInformation
 			{
-				ContainingAssembly = GetType().Assembly.FullName,
+				ContainingAssembly = GetType().Assembly,
 				SmartPartName = smartPartName,
 				SmartPartHeaderTitle = smartPartHeaderTitle,
 				GridColumn = col,

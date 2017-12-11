@@ -63,10 +63,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll
 
 	    private void OnProgressChanged(object sender, EventMessageArgs e)
 	    {
-		    if (e == null || e.Message == null)
-			    return;
-
-		    var domainObject = e.Message.DomainObject;
+			var domainObject = e?.Message?.DomainObject;
 		    if (domainObject == null) 
 				return;
 		    
@@ -187,12 +184,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll
             _window = new WeakReference(window);
         }
 
-        public IntPtr Handle
-        {
-            get
-            {
-                return _window.IsAlive ? ((IWin32Window)_window.Target).Handle : IntPtr.Zero;
-            }
-        }
-    }
+        public IntPtr Handle => _window.IsAlive ? ((IWin32Window)_window.Target).Handle : IntPtr.Zero;
+	}
 }

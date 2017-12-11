@@ -55,25 +55,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
         {
             StartBackgroundWorker();
         }
-
-        public void SetFormHeaderImage(int smartPartBaseInageType)
-        {
-            switch (smartPartBaseInageType)
-            {
-                case 1: FormTitle.Image = Resources.win_apps;
-                    break;
-
-                case 2: FormTitle.Image = Resources.browser;
-                    break;
-
-                case 3: FormTitle.Image = Resources.WPF;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
+		
         public void AddSmartPartParameter(IList<SmartPartParameter> parameters)
         {
             if (parameters != null)

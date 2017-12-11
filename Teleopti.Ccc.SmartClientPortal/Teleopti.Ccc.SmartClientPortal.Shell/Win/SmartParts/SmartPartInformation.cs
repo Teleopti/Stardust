@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
 {
     /// <summary>
@@ -9,7 +11,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
         /// <summary>
         /// store the name of the assembly which contain the Smart Part
         /// </summary>
-        public string ContainingAssembly { get; set; }
+        public Assembly ContainingAssembly { get; set; }
 
         /// <summary>
         /// Name of the smartPart to be load

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -387,19 +386,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			toolStripStatusLabelRoger65.ForeColor = Color.Red;
 		}
 		
-		private void gridWorkspaceWorkspaceGridSizeChanged(object sender, EventArgs e)
-		{
-			gridWorkspace.RemoveAllSmartPart();
-			if (gridWorkspace.GridSize == GridSizeType.TwoByOne)
-			{
-				//Show Default smart parts
-				string url1 = ConfigurationManager.AppSettings.Get("SmartPartUrl1");
-				string url2 = ConfigurationManager.AppSettings.Get("SmartPartUrl2");
-				setSmartParts(url1, 1, 0, 0);
-				setSmartParts(url2, 2, 0, 1);
-			}
-		}
-
 		private void setPermissionOnToolStripButtonControls()
 		{
 			var authorization = PrincipalAuthorization.Current();
@@ -495,60 +481,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void initializeSmartPartInvoker()
 		{
-			string smartPartPath = ConfigurationManager.AppSettings["smartPartPath"];
-
-			var smartPartWorker = new SmartPartWorker(smartPartPath, gridWorkspace);
+			var smartPartWorker = new SmartPartWorker(gridWorkspace);
 			var smartPartCommand = new SmartPartCommand(smartPartWorker);
 			SmartPartInvoker.SmartPartCommand = smartPartCommand;
 			SmartPartEnvironment.MessageBroker = MessageBrokerInStateHolder.Instance;
 			SmartPartEnvironment.SmartPartWorkspace = gridWorkspace;
 		}
-
-		private void setSmartParts(string url, int smartPartId,int gridColumn, int gridRow)
-		{
-			var smartPartInfo = new SmartPartInformation
-									{
-										ContainingAssembly = "Teleopti.Common.UI.SmartPartControls.RaptorSmartParts",
-										SmartPartName =
-											"Teleopti.Common.UI.SmartPartControls.RaptorSmartParts.WebSmartPart",
-										SmartPartHeaderTitle = "Web Smart Part",
-										GridColumn = gridColumn,
-										GridRow = gridRow,
-										SmartPartId = smartPartId.ToString(CultureInfo.CurrentCulture)
-									};
-
-			// Create SmartPart Parameters  [optional]
-			IList<SmartPartParameter> parameters = new List<SmartPartParameter>();
-			var parameter = new SmartPartParameter("Url", url);
-			parameters.Add(parameter);
-
-			try
-			{
-				// Invoke SmartPart
-				SmartPartInvoker.ShowSmartPart(smartPartInfo, parameters);
-			}
-			catch (FileLoadException fileLoadException)
-			{
-				_logger.Error("File load exception when loading smart part.", fileLoadException);
-			}
-			catch (FileNotFoundException fileNotFoundException)
-			{
-				_logger.Error("File not found exception when loading smart part.", fileNotFoundException);
-			}
-		}
-
-		//private void notifyTimerTick(object sender, EventArgs e)
-		//{
-		//	bool isOk = _systemChecker.IsOk();
-		//	if (_lastSystemCheck != isOk)
-		//	{
-		//		setNotifyData(isOk);
-		//		showBalloon();
-		//		_lastSystemCheck = isOk;
-		//	}
-			
-		//}
-
+		
 		private void showBalloon()
 		{
 			notifyIcon.ShowBalloonTip(100);
