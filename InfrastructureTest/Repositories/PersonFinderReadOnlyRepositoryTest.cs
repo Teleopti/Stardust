@@ -179,6 +179,60 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldTreatEachSearchFieldAsAndTakeTwo()
+		{
+			var buid = CurrentBusinessUnit.Make().Current().Id.GetValueOrDefault();
+			team1Id = Guid.NewGuid();
+			team2Id = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+
+			Session.CreateSQLQuery(
+					"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType, TeamId, SiteId, BusinessUnitId, StartDateTime, EndDateTime, personPeriodTeamId)" +
+					" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Anna','Lutuori','108460','',NULL,'Anna', 'B0E35119-4661-4A1B-8772-9B5E015C2564','FirstName',:teamId, :siteId, :businessUnitId, :startDateTime, :endDateTime, :personPeriodTeamId)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
+				.SetGuid("businessUnitId", buid)
+				.SetGuid("teamId", team1Id)
+				.SetGuid("siteId", siteId)
+				.SetGuid("personPeriodTeamId", team1Id)
+				.ExecuteUpdate();
+			Session.CreateSQLQuery(
+					"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType, TeamId, SiteId, BusinessUnitId, StartDateTime, EndDateTime, personPeriodTeamId)" +
+					" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Anna','Lutuori','108460','',NULL,'Lutuori', 'B0E35119-4661-4A1B-8772-9B5E015D2564','LastName',:teamId, :siteId, :businessUnitId, :startDateTime, :endDateTime, :personPeriodTeamId)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
+				.SetGuid("businessUnitId", buid)
+				.SetGuid("teamId", team1Id)
+				.SetGuid("siteId", siteId)
+				.SetGuid("personPeriodTeamId", team1Id)
+				.ExecuteUpdate();
+			Session.CreateSQLQuery(
+					"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType, TeamId, SiteId, BusinessUnitId, StartDateTime, EndDateTime, personPeriodTeamId)" +
+					" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Arianna','Sanna','110654','',NULL,'Arianna', 'B0E35119-4661-4A1B-8772-9B5E015E2564','FirstName',:teamId, :siteId, :businessUnitId, :startDateTime, :endDateTime, :personPeriodTeamId)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
+				.SetGuid("businessUnitId", buid)
+				.SetGuid("teamId", team1Id)
+				.SetGuid("siteId", siteId)
+				.SetGuid("personPeriodTeamId", team1Id)
+				.ExecuteUpdate();
+			Session.CreateSQLQuery(
+					"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType, TeamId, SiteId, BusinessUnitId, StartDateTime, EndDateTime, personPeriodTeamId)" +
+					" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Arianna','Sanna','110654','',NULL,'Sanna', 'B0E35119-4661-4A1B-8772-9B5E015F2564','LastName',:teamId, :siteId, :businessUnitId, :startDateTime, :endDateTime, :personPeriodTeamId)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
+				.SetGuid("businessUnitId", buid)
+				.SetGuid("teamId", team1Id)
+				.SetGuid("siteId", siteId)
+				.SetGuid("personPeriodTeamId", team1Id)
+				.ExecuteUpdate();
+
+			var personFinderSearchCriteria = new PeoplePersonFinderSearchCriteria(PersonFinderField.All, "Anna L", 10, DateOnly.Today, 0, 0);
+			_target.FindPeople(personFinderSearchCriteria);
+			personFinderSearchCriteria.TotalRows.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldFindAllBasedOnOneWord()
 		{
 			var buid = CurrentBusinessUnit.Make().Current().Id.GetValueOrDefault();
