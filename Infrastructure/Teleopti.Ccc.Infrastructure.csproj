@@ -639,7 +639,6 @@
     <Compile Include="UnitOfWork\IEventInfrastructureInfoPopulator.cs" />
     <Compile Include="UnitOfWork\ITransactionHooksScope.cs" />
     <Compile Include="UnitOfWork\NoTransactionHooks.cs" />
-    <Compile Include="UnitOfWork\PersonCollectionChangedEventPublisherForTeamOrSite.cs" />
     <Compile Include="UnitOfWork\SetSourceOnPersonAssignment.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />

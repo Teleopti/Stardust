@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldFindGroupsWithGroupIdBasedOnPeroidFromReadModel()
+		public void ShouldFindGroupsWithGroupIdBasedOnPeriodFromReadModel()
 		{
 			var personToTest = PersonFactory.CreatePerson("dummyAgent0");
 			var personToTest1 = PersonFactory.CreatePerson("dummyAgent1");
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			WithUnitOfWork.Do(() =>
 			{
-				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+				Target.UpdateGroupingReadModel(new List<Guid> { personToTest.Id.Value,personToTest1.Id.Value });
 			});
 			
 			WithUnitOfWork.Do(() =>
@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				}, new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1));
 				
 				items.Count().Should().Be.EqualTo(2);
-
 			});
 		}
 

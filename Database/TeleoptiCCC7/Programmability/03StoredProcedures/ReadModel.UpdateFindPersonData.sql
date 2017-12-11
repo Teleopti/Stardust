@@ -85,12 +85,11 @@ end
 if exists(select top(1) a.id from Team a inner join #ids on a.id=#ids.id)
 begin
 	UPDATE [ReadModel].[FindPerson]
-	SET SearchValue =  s.Name + ' ' + t.Name
+	SET SearchValue =  s.Name + ' ' + t.Name, SiteId = t.Site
 	FROM [ReadModel].[FindPerson] 
-	INNER JOIN Team t WITH(NOLOCK) ON SearchValueId = t.Id
+	INNER JOIN Team t WITH(NOLOCK) ON TeamId = t.Id
 	INNER JOIN Site s WITH(NOLOCK) ON s.Id = t.Site
 	INNER JOIN #ids ids ON t.Id = ids.id
-	WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 end
 
 if exists(select top(1) a.id from Site a inner join #ids on a.id=#ids.id)
@@ -98,10 +97,9 @@ begin
 	UPDATE [ReadModel].[FindPerson]
 	SET SearchValue =  s.Name + ' ' + t.Name
 	FROM [ReadModel].[FindPerson] 
-	INNER JOIN Site s WITH(NOLOCK) ON s.Id = SearchValueId
-	INNER JOIN Team t WITH(NOLOCK) ON s.Id = t.Site
+	INNER JOIN Team t WITH(NOLOCK) ON TeamId = t.Id
+	INNER JOIN Site s WITH(NOLOCK) ON s.Id = t.Site
 	INNER JOIN #ids ids ON s.Id = ids.id
-	WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 end
 
 if exists(select top(1) a.id from ApplicationRole a inner join #ids on a.id=#ids.id)

@@ -71,7 +71,8 @@ END
 			t.id teamid,
 			s.id siteid,
 			s.businessunit as businessunitid,
-			t.id as groupid,s.name +'/'+t.name as groupname, --50+50+1 chars can never exceed 101. Column now has 200 so no issue.
+			t.id as groupid,
+			s.name +'/'+t.name as groupname, --50+50+1 chars can never exceed 101. Column now has 200 so no issue.
 			p.firstname,
 			p.lastname,
 			@mainId as pageid,

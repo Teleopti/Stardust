@@ -21,33 +21,49 @@ UPDATE [ReadModel].[GroupingReadOnly]
 SET GroupName  = Name
 FROM [ReadModel].[GroupingReadOnly] g
 INNER JOIN (SELECT i.Id, i.Name
-			FROM PartTimePercentage i
+			FROM PartTimePercentage i WITH(NOLOCK)
 			INNER JOIN #Remids on #Remids.remid = i.Id
 			UNION
 			SELECT i.Id, i.Name
-			FROM RuleSetBag i
+			FROM RuleSetBag i WITH(NOLOCK)
 			INNER JOIN #Remids on #Remids.remid = i.Id
 			UNION
 			SELECT i.Id, i.Name
-			FROM Contract i
+			FROM Contract i WITH(NOLOCK)
 			INNER JOIN #Remids on #Remids.remid = i.Id
 			UNION
 			SELECT i.Id, i.Name
-			FROM ContractSchedule i
+			FROM ContractSchedule i WITH(NOLOCK)
 			INNER JOIN #Remids on #Remids.remid = i.Id
 			UNION
 			SELECT i.Id, i.Name
-			FROM BudgetGroup i
+			FROM BudgetGroup i WITH(NOLOCK)
 			INNER JOIN #Remids on #Remids.remid = i.Id
 			UNION
 			SELECT i.Id, i.Name
-			FROM Skill i
-			INNER JOIN #Remids on #Remids.remid = i.Id
-			UNION
-			SELECT i.Id, i.Name
-			FROM Skill i
+			FROM Skill i WITH(NOLOCK)
 			INNER JOIN #Remids on #Remids.remid = i.Id
 			) as n ON g.GroupId = n.Id
+
+if exists(select top(1) a.id from Team a inner join #Remids on a.id=#Remids.remid)
+	begin
+		UPDATE [ReadModel].[GroupingReadOnly]
+		SET GroupName = s.Name + '/' + t.Name, SiteId = t.Site
+		FROM [ReadModel].[GroupingReadOnly]
+		INNER JOIN Team t WITH(NOLOCK) ON GroupId = t.Id
+		INNER JOIN Site s WITH(NOLOCK) ON s.Id = t.Site
+		INNER JOIN #Remids ids ON t.Id = ids.remid
+	end
+	
+if exists(select top(1) a.id from Site a inner join #Remids on a.id=#Remids.remid)
+	begin
+		UPDATE [ReadModel].[GroupingReadOnly]
+		SET GroupName = s.Name + '/' + t.Name
+		FROM [ReadModel].[GroupingReadOnly]
+		INNER JOIN Team t WITH(NOLOCK) ON GroupId = t.Id
+		INNER JOIN Site s WITH(NOLOCK) ON s.Id = t.Site
+		INNER JOIN #Remids ids ON s.Id = ids.remid
+	end
 
 END
 GO

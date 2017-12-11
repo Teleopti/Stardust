@@ -311,6 +311,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void UpdateFindPerson(ICollection<Guid> ids)
 		{
+			if (ids.Count == 1 && ids.First() == Guid.Empty)
+				throw new NotSupportedException("Not allowed to rebuild the entire search index from code.");
+
 			string inputIds = string.Join(",", from p in ids select p.ToString());
 			var uow = _currentUnitOfWork.Current();
 

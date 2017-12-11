@@ -506,6 +506,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			return new[] { phone, chat, email };
 		}
+
 		private void createAndSaveReadModel()
 		{
 			var buid = CurrentBusinessUnit.Make().Current().Id.GetValueOrDefault();
@@ -654,7 +655,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.SetGuid("siteId", siteId)
 				.SetGuid("personPeriodTeamId", Guid.NewGuid())
 				.ExecuteUpdate();
-
 		}
 	}
 }
