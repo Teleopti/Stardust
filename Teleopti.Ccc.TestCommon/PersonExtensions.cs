@@ -17,6 +17,12 @@ namespace Teleopti.Ccc.TestCommon
 			team.SetDescription(description);
 			return team;
 		}
+
+		public static Team WithDescription(this Team team, string description)
+		{
+			team.SetDescription(new Description(description));
+			return team;
+		}
 	}
 
 	public static class PersonExtensions

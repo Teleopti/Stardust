@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -78,6 +80,44 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			Assert.Fail(
 				$"Tried optimize {numberOfAttempts} number of times but always moving DOs from same agent. Giving up...");
+		}
+
+		[Test]
+		[Ignore("47139 to be fixed")]
+		public void ShouldNotMoveDayOffWhenUsingSameDayOffAndNotInPlanningGroup()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var team = new Team { Site = new Site("site") }.WithDescription("_").WithId();
+			var planningGroup = new PlanningGroup("_");
+			var contractToSchedule = new Contract("_").WithId();
+			var contractNotToSchedule = new Contract("_").WithId();
+			planningGroup.AddFilter(new ContractFilter(contractToSchedule));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, planningGroup);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory().WithId()));
+			var agentToSchedule = PersonRepository.Has(contractToSchedule, new ContractSchedule("_"), new PartTimePercentage("_"), team, schedulePeriod, ruleSet, skill);
+			var agentNotToSchedule = PersonRepository.Has(contractNotToSchedule, new ContractSchedule("_"), new PartTimePercentage("_"), team, schedulePeriod, ruleSet, skill);
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 5, 5, 5, 25, 5));
+			var dayOffTemplate = new DayOffTemplate();
+			PersonAssignmentRepository.Has(agentToSchedule, scenario, activity, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agentToSchedule).SetDayOff(dayOffTemplate);
+			PersonAssignmentRepository.Has(agentNotToSchedule, scenario, activity, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agentNotToSchedule).SetDayOff(dayOffTemplate);
+			var optPrefs = OptimizationPreferencesProvider.Fetch();
+			optPrefs.Extra.UseTeamSameDaysOff = true;
+			optPrefs.Extra.UseTeams = true;
+			optPrefs.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy);
+			optPrefs.Extra.UseTeamBlockOption = true;
+			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agentToSchedule).DayOff()
+				.Should().Not.Be.Null();
 		}
 
 		public DayOffOptimizationTeamBlockTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -30,6 +31,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				var ass = new PersonAssignment(agent, scenario, date).WithId();
 				ass.AddActivity(activity, timePeriod);
 				ass.SetShiftCategory(shiftCategory);
+				ass.Source = source;
+				_storage.Add(ass);
+			}
+		}
+
+		public void Has(IPerson agent, IScenario scenario, IActivity activity, DateOnlyPeriod period, TimePeriod timePeriod, string source = null)
+		{
+			foreach (var date in period.DayCollection())
+			{
+				var ass = new PersonAssignment(agent, scenario, date).WithId();
+				ass.AddActivity(activity, timePeriod);
+				ass.SetShiftCategory(new ShiftCategory().WithId());
 				ass.Source = source;
 				_storage.Add(ass);
 			}
