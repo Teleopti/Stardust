@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).TotalHours.Should().Be.LessThan(176);
 		}
 
-		[Test]
+		[Test, Ignore("#47013 Timezone issues")]
 		public void ShouldHandleFirstWeekWhenTheAgentIsOnBoardingThisPeriod()
 		{
 			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
