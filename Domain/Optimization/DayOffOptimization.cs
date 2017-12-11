@@ -69,8 +69,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			bool runWeeklyRestSolver,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-			var FATCLIENT_FLAG_THIS_SHOULD_BE_REMOVED = !runWeeklyRestSolver;
-			
 			var stateHolder = _schedulerStateHolder();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			using (_resourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, true, selectedPeriod.Inflate(1)))
 			{
 				IEnumerable<IScheduleMatrixPro> matrixList;
-				if (FATCLIENT_FLAG_THIS_SHOULD_BE_REMOVED && optimizationPreferences.Extra.IsClassic())
+				if (optimizationPreferences.Extra.IsClassic())
 				{
 					//TO SIMULATE OLD CLASSIC BEHAVIOR (diff behavior between classic and teamblock)
 					//TODO: When this code is removed/rewritten for teamblock, a lot of these types and its children can be deleted (only used here)
