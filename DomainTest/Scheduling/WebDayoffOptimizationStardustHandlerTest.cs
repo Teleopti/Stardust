@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			FakeSchedulingSourceScope.UsedToBe().Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 
-		public WebDayOffOptimizationStardustHandlerTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		public WebDayOffOptimizationStardustHandlerTest(RemoveImplicitResCalcContext removeImplicitResCalcContext, bool resourcePlannerDayOffOptimizationIslands47208) : base(removeImplicitResCalcContext, resourcePlannerDayOffOptimizationIslands47208)
 		{
 		}
 	}

@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Not.Be.Null();
 		}
 
-		public DayOffOptimizationTeamBlockTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
+		public DayOffOptimizationTeamBlockTest(RemoveImplicitResCalcContext removeImplicitResCalcContext, bool resourcePlannerDayOffOptimizationIslands47208) : base(removeImplicitResCalcContext, resourcePlannerDayOffOptimizationIslands47208)
 		{
 		}
 	}

@@ -9,15 +9,20 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue)]
-	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse)]
+	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, true)]
+	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, true)]
+	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, false)]
+	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, false)]
 	public abstract class DayOffOptimizationScenario : ISetup, IConfigureToggleManager
 	{
 		private readonly RemoveImplicitResCalcContext _removeImplicitResCalcContext;
+		private readonly bool _resourcePlannerDayOffOptimizationIslands47208;
 
-		protected DayOffOptimizationScenario(RemoveImplicitResCalcContext removeImplicitResCalcContext)
+		protected DayOffOptimizationScenario(RemoveImplicitResCalcContext removeImplicitResCalcContext,
+					bool resourcePlannerDayOffOptimizationIslands47208)
 		{
 			_removeImplicitResCalcContext = removeImplicitResCalcContext;
+			_resourcePlannerDayOffOptimizationIslands47208 = resourcePlannerDayOffOptimizationIslands47208;
 		}
 		
 		public virtual void Setup(ISystem system, IIocConfiguration configuration)
@@ -34,6 +39,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				toggleManager.Enable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680);
 			else
 				toggleManager.Disable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680);
+			if(_resourcePlannerDayOffOptimizationIslands47208)
+				toggleManager.Enable(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208);
 		}
 	}
 }
