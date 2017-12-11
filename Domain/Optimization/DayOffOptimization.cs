@@ -107,13 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
 				
 				_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
-	
-				///////////////////////////////
-				//TODO: HACK! Verify what is right here?
-				//(probably bug in web. test + fix there)
-				var agentstoUseForTeamInfoFactory = FATCLIENT_FLAG_THIS_SHOULD_BE_REMOVED ? stateHolder.ChoosenAgents : selectedPersons;
-				/////////////////////////////////
-				var teamInfoFactory = _teamInfoFactoryFactory.Create(agentstoUseForTeamInfoFactory, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+				var teamInfoFactory = _teamInfoFactoryFactory.Create(stateHolder.ChoosenAgents, stateHolder.Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			
 				_teamBlockDayOffOptimizer.OptimizeDaysOff(matrixList,
 					selectedPeriod,

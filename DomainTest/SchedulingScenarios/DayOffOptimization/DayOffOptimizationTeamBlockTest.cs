@@ -83,7 +83,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test]
-		[Ignore("47139 to be fixed")]
 		public void ShouldNotMoveDayOffWhenUsingSameDayOffAndNotInPlanningGroup()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
