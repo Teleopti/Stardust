@@ -338,10 +338,10 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 			var period = new ScheduleDateTimePeriod(new DateTimePeriod(2015, 3, 27, 2015, 3, 28));
 			var p1 = new Person().InTimeZone(TimeZoneInfo.Utc);
-			p1.TerminatePerson(new DateOnly(2015, 3, 28), personAccountUpdater);
+			p1.TerminatePerson(new DateOnly(new DateTime(2015, 3, 28, 0, 0, 0, DateTimeKind.Utc).ToLocalTime()), personAccountUpdater);
 
 			var p2 = new Person().InTimeZone(TimeZoneInfo.Utc);
-			p2.TerminatePerson(new DateOnly(2015, 3, 27), personAccountUpdater);
+			p2.TerminatePerson(new DateOnly(new DateTime(2015, 3, 27, 0, 0, 0, DateTimeKind.Utc).ToLocalTime()), personAccountUpdater);
 
 			var p3 = new Person().InTimeZone(TimeZoneInfo.Utc);
 
