@@ -105,10 +105,10 @@
         }
 
         function displayCalenderViewForDisableView(oldVal, newVal) {
-            if (!!(newVal[1] - oldVal[1]) && vm.disable == 'end-date') {
+            if ((!oldVal[1] || !!(newVal[1] - oldVal[1])) && vm.disable == 'end-date') {
                 vm.pickDate = vm.pickStartDate;
             }
-            if (!!(newVal[0] - oldVal[0]) && vm.disable == 'start-date') {
+            if ((!oldVal[0] || !!(newVal[0] - oldVal[0])) && vm.disable == 'start-date') {
                 vm.pickDate = vm.pickEndDate;
             }
             if (vm.disable == 'all') {
