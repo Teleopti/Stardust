@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test, Timeout(5000)]
-		public void ShouldFixWeeklyRestWithShiftsEndingAtMidnigth()
+		public void ShouldFixWeeklyRestWithShiftsEndingAtMidnight()
 		{
 			var weeklyRest = TimeSpan.FromHours(40).Add(TimeSpan.FromMinutes(15));
 			var firstSunday = new DateOnly(2015, 10, 11);
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var weekPeriod = new DateOnlyPeriod(monday, monday.AddDays(7));
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(monday, SchedulePeriodType.Week, 1);
-			schedulePeriod.SetDaysOff(2);
+			schedulePeriod.SetDaysOff(3);
 			var contract = new Contract("_")
 			{
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(48), TimeSpan.FromHours(16),
