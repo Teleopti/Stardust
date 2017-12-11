@@ -171,6 +171,8 @@
     <Compile Include="ApplicationLayer\ImportAgent\AgentDataModel.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplate.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersister.cs" />
+    <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformanceInfoProcessResult.cs" />
+    <Compile Include="ApplicationLayer\ImportExternalPerformance\IExternalPerformanceInfoFileProcessor.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportGamificationJobResultDetail.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\IExternalPerformanceDataReadModelRepository.cs" />
     <Compile Include="ApplicationLayer\ImportFileData.cs" />

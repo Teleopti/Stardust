@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
-		public void AgentIdShouldBeWithin100Characters()
+		public void AgentIdShouldBeWithinMaxCharacters()
 		{
-			var agentId = new string('a', 101);
+			var agentId = new string('a', 131);
 			var invalidRecord =
 				"20170820,"+ agentId + ",Kalle,Pettersson,Sales result,2,numeric,2000";
 			var fileData = createFileData(invalidRecord);

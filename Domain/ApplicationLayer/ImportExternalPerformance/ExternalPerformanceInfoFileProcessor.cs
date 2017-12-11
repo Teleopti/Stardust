@@ -11,45 +11,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
-	public interface IExternalPerformanceInfoFileProcessor
-	{
-		ExternalPerformanceInfoProcessResult Process(ImportFileData importFileData, Action<string> sendProgress);
-	}
-
-	public class PerformanceInfoExtractionResult
-	{
-		public DateOnly DateFrom { get; set; }
-		public string GameType { get; set; }
-		public string GameName { get; set; }
-		public int GameId { get; set; }
-		public string AgentId { get; set; }
-		public int GameNumberScore { get; set; }
-		public Percent GamePercentScore { get; set; }
-		public Guid PersonId { get; set; }
-	}
-
-	public class ExternalPerformanceInfoProcessResult
-	{
-		public ExternalPerformanceInfoProcessResult()
-		{
-			ValidRecords = new List<PerformanceInfoExtractionResult>();
-			InvalidRecords = new List<string>();
-			ExternalPerformances = new List<IExternalPerformance>();
-		}
-		public bool HasError { get; set; }
-		public string ErrorMessages { get; set; }
-			
-		public int TotalRecordCount => InvalidRecords.Count + ValidRecords.Count;
-		public IList<string> InvalidRecords { get; set; }
-
-		public List<PerformanceInfoExtractionResult> ValidRecords { get; set; }
-		public List<IExternalPerformance> ExternalPerformances { get; set; }
-	}
-
 	public class ExternalPerformanceInfoFileProcessor : IExternalPerformanceInfoFileProcessor
 	{
 		private readonly int CUSTOMIZED_FIELD_COUNT = 8;
-		private readonly int MAX_AGENT_ID_LENGTH = 100;
+		private readonly int MAX_AGENT_ID_LENGTH = 130;
 		private readonly int MAX_GAME_NAME_LENGTH = 200;
 		private readonly int MAX_MEASURE_COUNT = 10;
 		private readonly string GAME_TYPE_NUMBERIC = "numeric";
@@ -106,13 +71,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var allMeasures = new List<IExternalPerformance>();
 			allMeasures.AddRange(existMeasures);
 
-			foreach (var currentLine in allLines)
+			foreach (var roughCurrentLine in allLines)
 			{
+				var currentLine = roughCurrentLine.Replace("\"", string.Empty);
 				var extractionResult = new PerformanceInfoExtractionResult();
 				var columns = currentLine.Split(',');
 				if (columns.Length != CUSTOMIZED_FIELD_COUNT)
 				{
-					processResult.HasError = true;
 					var errorMessage = string.Format(Resources.InvalidNumberOfFields, CUSTOMIZED_FIELD_COUNT, columns.Length);
 					processResult.InvalidRecords.Add($"{currentLine},{errorMessage}");
 					continue;
@@ -120,7 +85,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 				if (!DateTime.TryParseExact(columns[0], "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTime))
 				{
-					processResult.HasError = true;
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.ImportBpoWrongDateFormat}");
 					continue;
 				}

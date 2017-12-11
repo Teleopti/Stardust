@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -9,12 +8,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeExternalPerformanceRepository : IExternalPerformanceRepository
 	{
-		private readonly List<ExternalPerformance> externalPerformances = new List<ExternalPerformance>();
-
-		public void Add(ExternalPerformance externalPerformance)
-		{
-			externalPerformances.Add(externalPerformance);
-		}
+		private readonly List<IExternalPerformance> externalPerformances = new List<IExternalPerformance>();
 
 		public IEnumerable<IExternalPerformance> FindAllExternalPerformances()
 		{
@@ -31,29 +25,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return externalPerformances.Count;
 		}
 
-		public void Add(IExternalPerformance root)
+		public void Add(IExternalPerformance externalPerformance)
 		{
-			throw new NotImplementedException();
+			externalPerformances.Add(externalPerformance);
 		}
 
-		public void Remove(IExternalPerformance root)
+		public void Remove(IExternalPerformance externalPerformance)
 		{
-			throw new NotImplementedException();
+			externalPerformances.Remove(Get(externalPerformance.Id.Value));
 		}
 
 		public IExternalPerformance Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return externalPerformances.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IExternalPerformance Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return Get(id);
 		}
 
 		public IList<IExternalPerformance> LoadAll()
 		{
-			throw new NotImplementedException();
+			return externalPerformances;
 		}
 	}
 }
