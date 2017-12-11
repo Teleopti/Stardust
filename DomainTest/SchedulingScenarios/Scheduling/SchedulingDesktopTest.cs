@@ -215,10 +215,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldValidateSolvedWeeklyRest()
 		{
 			var date = new DateOnly(2017, 5, 15);
-			var schedulePeriod = new DateOnlyPeriod(date, date.AddDays(6));
+			var schedulePeriod = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var activity = new Activity().WithId();
-			activity.InWorkTime = true;
+			var activity = new Activity{InWorkTime = true}.WithId();
 			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var scenario = new Scenario();
 			var weeklyRest = TimeSpan.FromHours(20);
@@ -233,7 +232,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				var ass = new PersonAssignment(agent, scenario, date.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
 				asses.Add(ass);
 			}
-			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date.AddDays(-1), date.AddDays(7)), new[] { agent }, asses, skillDays);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date.AddDays(-1), date.AddDays(7)), agent, asses, skillDays);
 			schedulerStateHolder.Schedules.ValidateBusinessRulesOnPersons(new []{agent}, NewBusinessRuleCollection.All(schedulerStateHolder.SchedulingResultState));
 
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, schedulePeriod);
