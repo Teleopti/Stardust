@@ -16,8 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-
-
 	[TestFixture, Category("BucketB")]
 	public class PersonFinderReadOnlyRepositoryTest : DatabaseTest
 	{
@@ -37,8 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.PersistAll();
 			CleanUpAfterTest();
 		}
-
-
+		
 		[Test]
 		public void ShouldNotLoadPersonsInGivenTeamsWithMultipleConflictingSimpleCriteria()
 		{
@@ -47,9 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target.FindInTeams(crit, new[] { team1Id, team2Id });
 			Assert.That(crit.TotalRows, Is.EqualTo(0));
 		}
-
-
-
+		
 		[Test]
 		public void ShouldMatchAllValuesInAllCriteria()
 		{
@@ -95,8 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
 		}
-
-
+		
 		[Test]
 		public void ShouldLoadPersonsWithOneWordQuotation()
 		{
@@ -114,8 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
 		}
-
-
+		
 		[Test]
 		public void ShouldLoadPersonsWithQuotationForOneWord()
 		{
@@ -253,8 +246,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(0));
 		}
-
-
+		
 		[Test]
 		public void ShouldNotFindPersonsIfNoSkillMatchedOnCorrectPeriodForOneDate()
 		{
@@ -291,17 +283,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod2.PersonContract.Contract);
 			PersistAndRemoveFromUnitOfWork(personToTest);
 		
-			Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
-				.SetString("inputIds", personToTest.Id.ToString())
-				.ExecuteUpdate();
+			_target.UpdateFindPerson(new []{ personToTest.Id.Value });
 			var date = new DateOnly(2017, 4, 1);
-			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnlyPeriod(date,date), new [] { team.Id.Value },
+			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(date.ToDateOnlyPeriod(), new [] { team.Id.Value },
 				new Dictionary<PersonFinderField, string> { { PersonFinderField.Skill, skills[1].Name } });
 
 			personIds.Count.Should().Be(0);
 		}
-
-
+		
 		[Test]
 		public void ShouldFindPersonsIfSkillMatchedMultipuleSearchTermsOnCorrectPeriodForOneDate()
 		{
@@ -338,16 +327,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod2.PersonContract.Contract);
 			PersistAndRemoveFromUnitOfWork(personToTest);
 
-			Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
-				.SetString("inputIds", personToTest.Id.ToString())
-				.ExecuteUpdate();
+			_target.UpdateFindPerson(new[] { personToTest.Id.Value });
 			var date = new DateOnly(2017, 4, 1);
 
-			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnlyPeriod(date, date), new[] { team.Id.Value },
+			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(date.ToDateOnlyPeriod(), new[] { team.Id.Value },
 				new Dictionary<PersonFinderField, string> { { PersonFinderField.Skill, $"{skills[0].Name},{skills[2].Name}" } });
 
 			personIds.Count.Should().Be(1);
-			
 		}
 
 		[Test]
@@ -386,12 +372,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod2.PersonContract.Contract);
 			PersistAndRemoveFromUnitOfWork(personToTest);
 
-			Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
-				.SetString("inputIds", personToTest.Id.ToString())
-				.ExecuteUpdate();
+			_target.UpdateFindPerson(new[] { personToTest.Id.Value });
 			var date = new DateOnly(2017, 4, 1);
 
-			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnlyPeriod(date, date), new[] { team.Id.Value },
+			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(date.ToDateOnlyPeriod(), new[] { team.Id.Value },
 				new Dictionary<PersonFinderField, string> { { PersonFinderField.All, $"dummyAgent2;{skills[0].Name}" } });
 
 			personIds.Count.Should().Be(0);
@@ -433,12 +417,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod2.PersonContract.Contract);
 			PersistAndRemoveFromUnitOfWork(personToTest);
 
-			Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
-				.SetString("inputIds", personToTest.Id.ToString())
-				.ExecuteUpdate();
+			_target.UpdateFindPerson(new[] { personToTest.Id.Value });
 			var date = new DateOnly(2017, 4, 1);
 
-			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnlyPeriod(date, date), new[] { team.Id.Value },
+			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(date.ToDateOnlyPeriod(), new[] { team.Id.Value },
 				new Dictionary<PersonFinderField, string> { { PersonFinderField.All, $"dummyAgent1;{skills[0].Name}" } });
 
 			personIds.Count.Should().Be(1);
