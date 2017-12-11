@@ -486,13 +486,6 @@
 		word-wrap: break-word;
 	}
 
-	//Jianfeng TODO: remove this when styleguide is updated. PR: https://github.com/Teleopti/styleguide/pull/351
-	working-hours-picker {
-		.working-hours-row .con-flex:first-child {
-			flex-grow: 1.5;
-		}
-	}
-
 	.requests-allowance {
 		#allowance_detail {
 			padding-top: 20px;

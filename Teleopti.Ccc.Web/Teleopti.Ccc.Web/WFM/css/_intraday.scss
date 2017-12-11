@@ -70,14 +70,6 @@
 		opacity: 0;
 		transform: translate(-50px, 0px);
 	}
-	.working-hour-dropdown {
-		position: absolute;
-		top: 55px;
-		left: 0;
-		right: 0;
-		z-index: 20;
-		background: $white;
-	}
 	.day-row {
 		flex-direction: row;
 	}
@@ -105,16 +97,4 @@
 		flex-wrap: wrap;
 	}
 }
-
-//old work hour picker
-.working-hours-radio {
-	margin-top: $full-padding;
-	display: flex;
-	display: -ms-flexbox;
-}
-
-.working-hours-row {
-	border-top: 1px solid $gray012;
-}
-
 //-------------------------------------------------------------------------------
