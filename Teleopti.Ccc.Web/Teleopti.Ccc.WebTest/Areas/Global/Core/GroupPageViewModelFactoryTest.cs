@@ -95,6 +95,36 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		}
 
 		[Test]
+		public void ShouldNotReturnAvailableDynamicOptionalColumnGroupPageWithValuesReferingToDeletedPersonOnly()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var personDeleted = PersonFactory.CreatePerson().WithId();
+			(personDeleted as Person).SetDeleted();
+			var optionalColumnNoValue = new OptionalColumn("test").WithId();
+			optionalColumnNoValue.AvailableAsGroupPage = true;
+			var optionalColumnWithValue = new OptionalColumn("another").WithId();
+			optionalColumnWithValue.AvailableAsGroupPage = true;
+			OptionalColumnRepository.Add(optionalColumnNoValue);
+			OptionalColumnRepository.Add(optionalColumnWithValue);
+
+			var valueForAnother = new OptionalColumnValue("another").WithId();
+			var valueDeletedForAnother = new OptionalColumnValue("deleted for another").WithId();
+			person.AddOptionalColumnValue(valueForAnother, optionalColumnWithValue);
+			personDeleted.AddOptionalColumnValue(valueDeletedForAnother, optionalColumnWithValue);
+			OptionalColumnRepository.AddPersonValues(valueForAnother);
+			OptionalColumnRepository.AddPersonValues(valueDeletedForAnother);
+
+			PersonRepository.Add(person);
+			PersonRepository.Add(personDeleted);
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var gps = result.GroupPages;
+
+			gps.Single().Name.Should().Be.EqualTo(optionalColumnWithValue.Name);
+			gps.Single().Children.Single().Name.Should().Be.EqualTo(valueForAnother.Description);
+		}
+
+		[Test]
 		public void ShouldReturnAvailableGroupPagesBasedOnPeriod()
 		{
 			var mainPage = new ReadOnlyGroupPage()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -67,6 +68,42 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var ret = repository.UniqueValuesOnColumn(col.Id.Value);
 			Assert.That(ret.Count, Is.EqualTo(3));
+			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			personRep.Remove(person1);
+			personRep.Remove(person2);
+			personRep.Remove(person3);
+			personRep.Remove(person4);
+			repository.Remove(col);
+			UnitOfWork.PersistAll();
+		}
+
+
+		[Test]
+		public void ShouldReturnUniqueValuesExcludeValueContainingDeletedPersonOnly()
+		{
+			var col = CreateAggregateWithCorrectBusinessUnit();
+			IPerson person1 = PersonFactory.CreatePerson("sdgf");
+			person1.AddOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
+			var person2 = PersonFactory.CreatePerson("s");
+			person2.AddOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
+			var person3 = PersonFactory.CreatePerson("gg");
+			person3.AddOptionalColumnValue(new OptionalColumnValue("VAL2"), col);
+			var person4 = PersonFactory.CreatePerson("hgyj");
+			(person4 as Person).SetDeleted();
+			person4.AddOptionalColumnValue(new OptionalColumnValue("VAL3"), col);
+
+			PersistAndRemoveFromUnitOfWork(col);
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+			PersistAndRemoveFromUnitOfWork(person3);
+			PersistAndRemoveFromUnitOfWork(person4);
+
+			UnitOfWork.PersistAll();
+			CleanUpAfterTest();
+
+			var ret = repository.UniqueValuesOnColumnWithValidPerson(col.Id.Value);
+			Assert.That(ret.Count, Is.EqualTo(2));
+			Assert.That(ret.Where(x => x.Description == "VAL3"), Is.Empty);
 			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			personRep.Remove(person1);
 			personRep.Remove(person2);

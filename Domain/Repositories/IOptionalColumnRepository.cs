@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         IList<IOptionalColumn> GetOptionalColumns<T>();
 
 		IList<IColumnUniqueValues> UniqueValuesOnColumn(Guid column);
+		IList<IColumnUniqueValues> UniqueValuesOnColumnWithValidPerson(Guid column);
 		IList<IOptionalColumnValue> OptionalColumnValues(IOptionalColumn optionalColumn);
     }
 

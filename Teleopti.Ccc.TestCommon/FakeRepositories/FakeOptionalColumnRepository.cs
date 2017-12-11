@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -45,6 +46,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<IColumnUniqueValues> UniqueValuesOnColumn(Guid column)
 		{
 			return _personValueList.Where(x => x.Parent.Id.Value == column).Distinct()
+				.Select(v => new ColumnUniqueValues
+				{
+					Description = v.Description
+				} as IColumnUniqueValues)
+				.ToList();
+		}
+
+		public IList<IColumnUniqueValues> UniqueValuesOnColumnWithValidPerson(Guid column)
+		{
+			return _personValueList
+				.Where(x => x.Parent.Id.Value == column 
+						&& x.ReferenceObject is Person 
+						&& !(x.ReferenceObject as Person).IsDeleted)
+				.Distinct()
 				.Select(v => new ColumnUniqueValues
 				{
 					Description = v.Description

@@ -18,6 +18,7 @@
 
 	function GroupPagePickerController($mdPanel, $element, $scope, $translate) {
 		var ctrl = this;
+		ctrl.isDataAvailable = false;
 		ctrl.groupsInView = {
 			BusinessHierarchy: [],
 			GroupPages: []
@@ -79,6 +80,7 @@
 				ctrl.setPickerData();
 				updateSelectedGroupsInView();
 				removeNotExistTeamsFromSelection();
+				ctrl.isDataAvailable = true;
 			}
 			if (!!changesObj.selectedGroups && !!changesObj.selectedGroups.currentValue && !!changesObj.selectedGroups.previousValue && changesObj.selectedGroups.currentValue !== changesObj.selectedGroups.previousValue) {
 				var currentValue = changesObj.selectedGroups.currentValue;
@@ -90,7 +92,6 @@
 				updateSelectedGroupsInView();
 			}
 		};
-
 		ctrl.groupPagesSelectedText = function () {
 			var text = '';
 			switch (ctrl.selectedGroups.groupIds.length) {

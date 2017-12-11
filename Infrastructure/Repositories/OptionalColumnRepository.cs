@@ -54,6 +54,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true).List<IColumnUniqueValues>();
 			}
 		}
+		public IList<IColumnUniqueValues> UniqueValuesOnColumnWithValidPerson(Guid column)
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+			{
+				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+					"SELECT DISTINCT Description FROM OptionalColumnValue ocv " +
+					"INNER JOIN Person WITH (NOLOCK) ON Person.Id = ocv.ReferenceId  AND Person.IsDeleted = 0 " +
+					"WHERE ocv.Parent =:columnId AND ltrim(ocv.Description) <> '' " +
+					"ORDER BY ocv.Description")
+					.SetGuid("columnId", column)
+					.SetResultTransformer(Transformers.AliasToBean<ColumnUniqueValues>())
+					.SetReadOnly(true).List<IColumnUniqueValues>();
+			}
+		}
 
 	    public IList<IOptionalColumnValue> OptionalColumnValues(IOptionalColumn optionalColumn)
 	    {

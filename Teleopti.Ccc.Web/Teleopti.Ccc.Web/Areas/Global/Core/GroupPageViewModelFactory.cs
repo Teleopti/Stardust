@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 					})
 					.OrderBy(c => c.Name, stringComparer)
 					.ToList();
+				;
 				if (!children.Any())
 				{
 					continue;
