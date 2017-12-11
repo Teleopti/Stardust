@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
@@ -78,6 +80,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				_scheduleHourlyStaffExecutor.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod);
 			}
+
+			_schedulerStateHolder().Schedules.ValidateBusinessRulesOnPersons(selectedAgents.FixedStaffPeople(selectedPeriod),
+				CultureInfo.InvariantCulture, NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState));
 
 			PostScheduling(selectedPeriod);
 		}
