@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -57,11 +58,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get 
             {
-                if (RequestStatus == 1 || RequestStatus == 4)
+                if (RequestStatus == (int)PersonRequestStatus.Denied || RequestStatus == (int)PersonRequestStatus.AutoDenied)
                     return UserTexts.Resources.Denied;
 
-	            if (RequestStatus == 5)
+	            if (RequestStatus == (int)PersonRequestStatus.Waitlisted)
 		            return UserTexts.Resources.Waitlisted;
+
+	            if (RequestStatus == (int) PersonRequestStatus.Cancelled)
+		            return UserTexts.Resources.Cancelled;
 
                 return UserTexts.Resources.Approved;
             }
