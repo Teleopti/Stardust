@@ -22,13 +22,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly ISchedulePeriodTargetTimeCalculator _schedulePeriodTargetTimeCalculator;
 		private readonly WorkShiftMinMaxCalculatorSkipWeekCheck _workShiftMinMaxCalculatorSkipWeekCheck;
+		private readonly IRestrictionExtractor _restrictionExtractor;
 
 		public RestrictionsAbleToBeScheduled(Func<ISchedulerStateHolder> schedulerStateHolder,
 			AdvanceDaysOffSchedulingService advanceDaysOffSchedulingService, MatrixListFactory matrixListFactory,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper, TeamInfoFactoryFactory teamInfoFactoryFactory,
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator,
-			WorkShiftMinMaxCalculatorSkipWeekCheck workShiftMinMaxCalculatorSkipWeekCheck)
+			WorkShiftMinMaxCalculatorSkipWeekCheck workShiftMinMaxCalculatorSkipWeekCheck,
+			IRestrictionExtractor restrictionExtractor)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_advanceDaysOffSchedulingService = advanceDaysOffSchedulingService;
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_schedulePeriodTargetTimeCalculator = schedulePeriodTargetTimeCalculator;
 			_workShiftMinMaxCalculatorSkipWeekCheck = workShiftMinMaxCalculatorSkipWeekCheck;
+			_restrictionExtractor = restrictionExtractor;
 		}
 
 		public bool Execute(IVirtualSchedulePeriod schedulePeriod)
@@ -64,20 +67,103 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var minMaxTime = _workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(matrixList.First(), schedulingOptions);
 			var targetTimePeriod = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrixList.First());
 
+			//TODO jump out as early as possible
 			var periodCheck = minMaxTime.Minimum <= targetTimePeriod.EndTime && minMaxTime.Maximum >= targetTimePeriod.StartTime;
-			var weekCheck = checkWeeks(matrixList.First(), schedulePeriod);
+			IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths =
+				_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrixList.First(), new SchedulingOptions());
+			var weekCheck = checkWeeks(matrixList.First(), schedulePeriod, possibleMinMaxWorkShiftLengths);
+			var nightlyCheck = checkNigthlyRest(matrixList.First());
 			schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
-			if (periodCheck && weekCheck)
+			if (periodCheck && weekCheck && nightlyCheck)
 				return true;
 
 			return false;
 		}
 
-		private bool checkWeeks(IScheduleMatrixPro matrix, IVirtualSchedulePeriod virtualSchedulePeriod)
+		//TODO simplify this code
+		private bool checkNigthlyRest(IScheduleMatrixPro matrix)
 		{
-			var possibleMinMaxWorkShiftLengths =
-				_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix, new SchedulingOptions());
+			var nightlyRest = matrix.SchedulePeriod.Contract.WorkTimeDirective.NightlyRest;
+			var workShiftLatestStart = TimeSpan.Zero;
+			var workShiftEarliestEnd = TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59));
+			var ruleSetBag = matrix.Person.Period(matrix.SchedulePeriod.DateOnlyPeriod.StartDate)?.RuleSetBag;
+			if (ruleSetBag != null)
+			{
+				foreach (var workShiftRuleSet in ruleSetBag.RuleSetCollection)
+				{
+					if(workShiftLatestStart < workShiftRuleSet.TemplateGenerator.StartPeriod.Period.EndTime)
+						workShiftLatestStart = workShiftRuleSet.TemplateGenerator.StartPeriod.Period.EndTime;
+
+					if (workShiftEarliestEnd > workShiftRuleSet.TemplateGenerator.EndPeriod.Period.StartTime)
+						workShiftEarliestEnd = workShiftRuleSet.TemplateGenerator.EndPeriod.Period.StartTime;
+				}
+			}
+			else
+			{
+				workShiftLatestStart = TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59));
+				workShiftEarliestEnd = TimeSpan.Zero;
+			}
+
+			// TODO this checks one day too much in the end
+			foreach (var dateOnly in matrix.SchedulePeriod.DateOnlyPeriod.Inflate(1).DayCollection())
+			{
+				var scheduleDay1 = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+				var significant1 = scheduleDay1.SignificantPart();
+				if (significant1 == SchedulePartView.FullDayAbsence || significant1 == SchedulePartView.ContractDayOff || significant1 == SchedulePartView.DayOff)
+					continue;
+
+				var scheduleDay2 = matrix.GetScheduleDayByKey(dateOnly.AddDays(1)).DaySchedulePart();
+				var significant2 = scheduleDay2.SignificantPart();
+				if (significant2 == SchedulePartView.FullDayAbsence || significant2 == SchedulePartView.ContractDayOff || significant2 == SchedulePartView.DayOff)
+					continue;
+
+				var earliestEnd = DateTime.MaxValue;
+				if (significant1 == SchedulePartView.MainShift)
+				{
+					earliestEnd = scheduleDay1.ProjectionService().CreateProjection().Period().Value.EndDateTime;
+				}
+				else
+				{
+					var effectiveRestriction = _restrictionExtractor.Extract(scheduleDay1).CombinedRestriction(new SchedulingOptions());
+					if (effectiveRestriction.EndTimeLimitation.StartTime.HasValue)
+					{
+						earliestEnd = dateOnly.Date.Add(effectiveRestriction.EndTimeLimitation.StartTime.Value);
+					}
+					else
+					{
+						earliestEnd = dateOnly.Date.Add(workShiftEarliestEnd);
+					}
+				}
+
+				var latestStart = DateTime.MinValue;
+				if (significant2 == SchedulePartView.MainShift)
+				{
+					latestStart = scheduleDay2.ProjectionService().CreateProjection().Period().Value.StartDateTime;
+				}
+				else
+				{
+					var effectiveRestriction = _restrictionExtractor.Extract(scheduleDay2).CombinedRestriction(new SchedulingOptions());
+					if(effectiveRestriction.StartTimeLimitation.EndTime.HasValue)
+					{
+						latestStart = dateOnly.AddDays(1).Date.Add(effectiveRestriction.StartTimeLimitation.EndTime.Value);
+					}
+					else
+					{
+						latestStart = dateOnly.AddDays(1).Date.Add(workShiftLatestStart);
+					}
+				}
+
+				if (latestStart.Subtract(earliestEnd).TotalHours < nightlyRest.TotalHours)
+					return false;
+			}
+
+			return true;
+		}
+
+		private bool checkWeeks(IScheduleMatrixPro matrix, IVirtualSchedulePeriod virtualSchedulePeriod, IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths)
+		{
 			var weekCount = _workShiftMinMaxCalculator.WeekCount(matrix);
+			var maxTimePerWeek = virtualSchedulePeriod.Contract.WorkTimeDirective.MaxTimePerWeek;
 			for (int weekIndex = 0; weekIndex < weekCount; weekIndex++)
 			{
 				if (weekIndex == 0) // || weekIndex == weekCount - 1)
@@ -87,8 +173,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 						return true;
 				}
 
-				var currentMinMaxForWeek = currentMinMax(weekIndex, possibleMinMaxWorkShiftLengths, null, matrix);
-				if(currentMinMaxForWeek.Minimum > virtualSchedulePeriod.Contract.WorkTimeDirective.MaxTimePerWeek)
+				var currentMinMaxForWeek = currentMinMax(weekIndex, possibleMinMaxWorkShiftLengths, matrix);
+				if(currentMinMaxForWeek.Minimum > maxTimePerWeek)
 					return false;
 			}
 
@@ -100,7 +186,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			return matrix.FullWeeksPeriodDays[weekIndex * 7].Day;
 		}
 
-		private static MinMax<TimeSpan> currentMinMax(int weekIndex, IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths, DateOnly? dayToSchedule, IScheduleMatrixPro matrix)
+		private static MinMax<TimeSpan> currentMinMax(int weekIndex, IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths, IScheduleMatrixPro matrix)
 		{
 			TimeSpan min = TimeSpan.Zero;
 			TimeSpan max = TimeSpan.Zero;
@@ -115,18 +201,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				IScheduleDayPro scheduleDayPro = matrix.GetScheduleDayByKey(firstDate.AddDays(dayIndex));
 
 				TimeSpan contractTime;
-				if (dayToSchedule.HasValue)
-				{
-					if (scheduleDayPro.Day == dayToSchedule.Value)
-					{
-						contractTime = TimeSpan.Zero;
-						min = min.Add(contractTime);
-						max = max.Add(contractTime);
-						continue;
-					}
-				}
-
-
 				var scheduleDay = scheduleDayPro.DaySchedulePart();
 				SchedulePartView significant = scheduleDay.SignificantPart();
 				if (significant == SchedulePartView.MainShift || significant == SchedulePartView.FullDayAbsence)

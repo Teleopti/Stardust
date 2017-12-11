@@ -160,8 +160,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).TotalHours.Should().Be.LessThan(176);
 		}
 
-		//night rest
-		//no shift found
+		[Test]
+		public void ShouldFindNightRestIssues()
+		{
+			var period = createSetupWithFixedShiftLengths(out var scenario, out var agent, out var skillDays);
+			var extendedPeriod = new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(6));
+			var preferenceDaysOrAss = new List<IPersistableScheduleData>();
+
+			agent.Period(period.StartDate).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero,
+				TimeSpan.FromHours(48), TimeSpan.FromHours(15), TimeSpan.FromHours(36));
+			preferenceDaysOrAss.Add(new PreferenceDay(agent, new DateOnly(2017, 11, 1),
+				new PreferenceRestriction { EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(18), TimeSpan.FromHours(18)) }));
+			preferenceDaysOrAss.Add(new PreferenceDay(agent, new DateOnly(2017, 11, 2),
+				new PreferenceRestriction { StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDaysOrAss, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.False();
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, extendedPeriod);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).TotalHours.Should().Be.LessThan(176);
+		}
 
 		[Test]
 		public void ShouldCheckOnWeekMaxTimeAndIncludeFullWeekAfter()
@@ -203,6 +223,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
 				new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
 				new ShiftCategory("_").WithId()));
+			agent = new Person().WithId()
+				.WithPersonPeriod(new RuleSetBag(ruleSet), skill)
+				.WithSchedulePeriodOneMonth(new DateOnly(2017, 10, 1));
+			agent.Period(period.StartDate).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"),
+				new ContractScheduleWorkingMondayToFriday());
+			skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			return period;
+		}
+
+		private static DateOnlyPeriod createSetupWithFixedShiftLengths(out Scenario scenario, out Person agent, out IList<ISkillDay> skillDays)
+		{
+			var period = new DateOnlyPeriod(2017, 11, 01, 2017, 11, 30);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
+			scenario = new Scenario();
+			var templateGenerator = new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
+				new ShiftCategory("_").WithId());
+			var ruleSet = new WorkShiftRuleSet(templateGenerator);
+			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(8, 8), TimeSpan.FromHours(1)));
 			agent = new Person().WithId()
 				.WithPersonPeriod(new RuleSetBag(ruleSet), skill)
 				.WithSchedulePeriodOneMonth(new DateOnly(2017, 10, 1));
