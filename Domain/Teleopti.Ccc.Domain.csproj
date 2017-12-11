@@ -263,7 +263,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IApproveRequestsWithValidatorsEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorOld.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidator.cs" />
-    <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceInfo.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceInfoHandler.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceInfoService.cs" />
     <Compile Include="ApplicationLayer\Intraday\ExtractSkillForecastIntervals.cs" />
