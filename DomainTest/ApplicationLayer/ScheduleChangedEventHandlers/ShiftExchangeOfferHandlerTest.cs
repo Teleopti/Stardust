@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var person = PersonFactory.CreatePerson();
 			person.SetId(personId);
 			var dateTime = new DateTime();
-			var date = new DateOnly(dateTime.Year, dateTime.Month, dateTime.Day);
+			var date = new DateOnly(dateTime);
 			personRequestRepository.Stub(x => x.FindOfferByStatus(person, date, 0)).Return(new[] { shiftExchangeOffer });
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(personId)).Return(person);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			person.SetId(personId);
 
 			var dateTime = new DateTime();
-			var date = new DateOnly(dateTime.Year, dateTime.Month, dateTime.Day);
+			var date = new DateOnly(dateTime);
 
 			personRequestRepository.Stub(x => x.FindOfferByStatus(person, date, 0)).Return(new[] { shiftExchangeOffer });
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();

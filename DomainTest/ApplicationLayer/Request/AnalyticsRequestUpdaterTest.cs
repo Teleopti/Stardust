@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 				ValidToDate = DateTime.UtcNow + TimeSpan.FromDays(10)
 			});
 
-			person.TerminatePerson(new DateOnly(DateTime.UtcNow + TimeSpan.FromDays(7)), new PersonAccountUpdaterDummy());
+			person.TerminatePerson(DateOnly.Today.AddDays(7), new PersonAccountUpdaterDummy());
 
 			Target.Handle(new PersonRequestChangedEvent
 			{

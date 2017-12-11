@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var cmd = new MoveActivityCommand
 			{
 				AgentId = agent.Id.Value,
-				ScheduleDate = new DateOnly(DateTime.UtcNow),
+				ScheduleDate = DateOnly.Today,
 				ActivityId = activity.Id.Value,
 				NewStartTime = new DateTime(2000, 1, 1, 4, 0, 0),
 				OldStartTime = new DateTime(2000,1,1),

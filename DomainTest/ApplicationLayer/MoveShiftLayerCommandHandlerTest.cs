@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var cmd = new MoveShiftLayerCommand
 			{
 				AgentId = agent.Id.Value,
-				ScheduleDate = new DateOnly(DateTime.UtcNow),
+				ScheduleDate = DateOnly.Today,
 				ShiftLayerId = Guid.NewGuid(),
 				NewStartTimeInUtc = new DateTime(2000, 1, 1, 4, 0, 0),
 				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }

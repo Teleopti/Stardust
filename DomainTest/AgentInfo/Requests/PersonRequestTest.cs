@@ -531,7 +531,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		public void ShouldSetShiftTradeFromOfferType()
 		{
 			var currentShift = ScheduleDayFactory.Create(DateOnly.Today.AddDays(1));
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(_person, PersonFactory.CreatePerson("Receiver"), new DateOnly(DateTime.UtcNow), new DateOnly(DateTime.UtcNow));
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(_person, PersonFactory.CreatePerson("Receiver"), DateOnly.Today, DateOnly.Today);
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
 			shiftTradeRequest.Offer = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
 			IRequest request = shiftTradeRequest;

@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			var tradeWithPerson = PersonFactory.CreatePerson("First1", "Last1");
 			var period = new List<DateOnly>();
 			for (var i = 0; i < reqeustedDays; i++)
-				period.Add(new DateOnly(DateTime.Now.AddDays(i)));
+				period.Add(DateOnly.Today.AddDays(i));
 			IList<IShiftTradeSwapDetail> shiftTradeSwapDetails = period.Select(dateOnly => new ShiftTradeSwapDetail(tradingPerson, tradeWithPerson, dateOnly, dateOnly)).Cast<IShiftTradeSwapDetail>().ToList();
 			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(shiftTradeSwapDetails);
 			var request = new PersonRequest(tradingPerson, shiftTradeRequest);

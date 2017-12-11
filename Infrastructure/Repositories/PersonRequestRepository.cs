@@ -883,7 +883,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.CreateCriteria("Parent", "req", JoinType.InnerJoin)
 						.Add(Restrictions.Eq("req.IsDeleted", false))
 						.Add(Restrictions.Eq("offer.Date", shiftTradeDate))
-						.Add(Restrictions.Ge("offer.Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))
+						.Add(Restrictions.Ge("offer.Criteria.ValidTo", DateOnly.Today))
 						.Add(Restrictions.Eq("offer.Status", ShiftExchangeOfferStatus.Pending))
 						.List<ShiftExchangeOffer>();
 		}
