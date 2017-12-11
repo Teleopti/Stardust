@@ -15,12 +15,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 	    private IMessageBrokerComposite _messageBroker;
         private IPayrollResult _payrollResult;
         private JobResultProgressEncoder _payrollResultProgressEncoder = new JobResultProgressEncoder();
+		private readonly IStardustJobFeedback _stardustJobFeedback;
         private static readonly ILog Logger = LogManager.GetLogger(typeof (PayrollExportFeedback));
 
-		public PayrollExportFeedback(ICurrentUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerComposite messageBroker)
+		public PayrollExportFeedback(ICurrentUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerComposite messageBroker, 
+			IStardustJobFeedback stardustJobFeedback)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_messageBroker = messageBroker;
+			_stardustJobFeedback = stardustJobFeedback;
 		}
 
 	    public void SetPayrollResult(IPayrollResult payrollResult)
@@ -44,7 +47,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			        GetValueOrDefault(), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty,
 		        Guid.Empty, typeof (IJobResultProgress), DomainUpdateType.NotApplicable,
 		        binaryData);
-        }
+
+			_stardustJobFeedback?.SendProgress(information);
+		}
 
 	    public void Error(string message)
         {
