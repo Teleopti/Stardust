@@ -238,14 +238,17 @@ function global:DropDatabase () {
 		$appDbExists = checkIfDbExists $AppDB
 		$martDbExists = checkIfDbExists $MartDB
 		
-		if ($appDbExists -or $martDbExists -gt 0) {
+		if ($appDbExists -gt 0) {
 
 			Log "Dropping Database: $AppDB on $SQLAzure"
 			RunAndRetryNonQuery $ConnectionString $Query_DropAzureDB_App        
+        } 
+    	if ($martDbExists -gt 0) {
+			
 			Log "Dropping Database: $MartDB on $SQLAzure"
 			RunAndRetryNonQuery $ConnectionString $Query_DropAzureDB_Mart
-        } 
-    }
+		}
+	}
 }
 
 function global:CreateInstallAndPatchSqlLoginCommandTarget () {
