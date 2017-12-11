@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationDesktop
 	{
-		private readonly DayOffOptimization _dayOffOptimization;
+		private readonly IDayOffOptimizationCommandHandler _dayOffOptimizationCommandHandler;
 
-		public DayOffOptimizationDesktop(DayOffOptimization dayOffOptimization)
+		public DayOffOptimizationDesktop(IDayOffOptimizationCommandHandler dayOffOptimizationCommandHandler)
 		{
-			_dayOffOptimization = dayOffOptimization;
+			_dayOffOptimizationCommandHandler = dayOffOptimizationCommandHandler;
 		}
 
 		public void Execute(DateOnlyPeriod selectedPeriod, 
@@ -24,8 +24,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var blockPreferenceProvider = new FixedBlockPreferenceProvider(optimizationPreferences.Extra);
 
-			_dayOffOptimization.Execute(selectedPeriod, selectedAgents, optimizationPreferences, 
-					dayOffOptimizationPreferenceProvider, blockPreferenceProvider, backgroundWorker, false, resourceOptimizerPersonOptimized);
+			_dayOffOptimizationCommandHandler.Execute(new DayOffOptimizationCommand
+				{
+					Period = selectedPeriod,
+					AgentsToOptimize = selectedAgents,
+					RunWeeklyRestSolver = false
+				},
+				optimizationPreferences,
+				dayOffOptimizationPreferenceProvider, 
+				blockPreferenceProvider, 
+				backgroundWorker, 
+				resourceOptimizerPersonOptimized);
 		}
 	}
 }

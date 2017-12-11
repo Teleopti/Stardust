@@ -327,6 +327,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionOverLimitValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<DayOffOptimization>().InstancePerLifetimeScope();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208))
+			{
+				//TODO: here "island command handler" should be registered
+				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope();
+			}
 			builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
 			builder.RegisterType<AffectedDayOffs>().SingleInstance();
 			builder.RegisterType<DayOffOptimizerPreMoveResultPredictor>().InstancePerLifetimeScope();

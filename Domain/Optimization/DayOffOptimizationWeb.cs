@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationWeb
 	{
-		private readonly DayOffOptimization _dayOffOptimization;
+		private readonly IDayOffOptimizationCommandHandler _dayOffOptimizationCommandHandler;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IPersonRepository _personRepository;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 
-		public DayOffOptimizationWeb(DayOffOptimization dayOffOptimization,
+		public DayOffOptimizationWeb(IDayOffOptimizationCommandHandler dayOffOptimizationCommandHandler,
 			FillSchedulerStateHolder fillSchedulerStateHolder, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IScheduleDictionaryPersister persister, 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IPersonRepository personRepository,
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
 		{
-			_dayOffOptimization = dayOffOptimization;
+			_dayOffOptimizationCommandHandler = dayOffOptimizationCommandHandler;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
 			_persister = persister;
@@ -82,13 +82,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
 				agents = people.FixedStaffPeople(period);
 			}
-			_dayOffOptimization.Execute(period,
-				agents.ToList(),
+			_dayOffOptimizationCommandHandler.Execute(new DayOffOptimizationCommand
+				{
+					Period = period,
+					AgentsToOptimize = agents,
+					RunWeeklyRestSolver = true
+				}, 
 				optimizationPreferences,
 				dayOffOptimizationPreferenceProvider,
 				blockPreferenceProvider,
 				new NoSchedulingProgress(),
-				true,
 				null);
 
 			planningPeriod.Scheduled();

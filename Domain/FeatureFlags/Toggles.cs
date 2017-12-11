@@ -108,6 +108,7 @@
 		ResourcePlanner_DoNotKillCache_46724,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 		ResourcePlanner_TimeZoneIssues_45818,
+		ResourcePlanner_DayOffOptimizationIslands_47208,
 
 		Wfm_DisplayOnlineHelp_39402,
 
