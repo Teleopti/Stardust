@@ -81,8 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_scheduleHourlyStaffExecutor.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod);
 			}
 
-			_schedulerStateHolder().Schedules.ValidateBusinessRulesOnPersons(selectedAgents.FixedStaffPeople(selectedPeriod),
-				CultureInfo.InvariantCulture, NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState));
+			_schedulerStateHolder().Schedules.ValidateBusinessRulesOnPersons(selectedAgents.FixedStaffPeople(selectedPeriod), NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState));
 
 			PostScheduling(selectedPeriod);
 		}

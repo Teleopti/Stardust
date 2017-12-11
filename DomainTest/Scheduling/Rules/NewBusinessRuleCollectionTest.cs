@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				new[] {agent}, Enumerable.Empty<IScheduleData>(), Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
-			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> {agent}, CultureInfo.InvariantCulture,
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> {agent},
 				bussinesRuleCollection);
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				new[] {agent}, new[] {ass1}, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
-			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> {agent}, CultureInfo.InvariantCulture,
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> {agent},
 				bussinesRuleCollection);
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);

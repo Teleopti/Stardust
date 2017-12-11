@@ -166,8 +166,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public void ValidateBusinessRulesOnPersons(IEnumerable<IPerson> people, CultureInfo cultureInfo,
-			INewBusinessRuleCollection newBusinessRuleCollection)
+		public void ValidateBusinessRulesOnPersons(IEnumerable<IPerson> people, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
 			throw new NotImplementedException();
 		}

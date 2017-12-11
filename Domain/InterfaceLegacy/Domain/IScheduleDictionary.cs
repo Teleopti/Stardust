@@ -176,18 +176,17 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
 	IPersistableScheduleData DeleteFromBroker(Guid id);
 
-        /// <summary>
-        /// Validates the business rules on persons.
-        /// </summary>
-        /// <param name="people">The persons.</param>
-        /// <param name="cultureInfo">The CultureInfo.</param>
-        /// <param name="newBusinessRuleCollection">The new business rule collection.</param>
-        /// ///
-        /// <remarks>
-        /// Created by: Ola
-        /// Created date: 2008-08-27
-        /// /// </remarks>
-        void ValidateBusinessRulesOnPersons(IEnumerable<IPerson> people, CultureInfo cultureInfo, INewBusinessRuleCollection newBusinessRuleCollection);
+		/// <summary>
+		/// Validates the business rules on persons.
+		/// </summary>
+		/// <param name="people">The persons.</param>
+		/// <param name="newBusinessRuleCollection">The new business rule collection.</param>
+		/// ///
+		/// <remarks>
+		/// Created by: Ola
+		/// Created date: 2008-08-27
+		/// /// </remarks>
+		void ValidateBusinessRulesOnPersons(IEnumerable<IPerson> people, INewBusinessRuleCollection newBusinessRuleCollection);
 
 
         /// <summary>

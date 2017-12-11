@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				asses.Add(ass);
 			}
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date.AddDays(-1), date.AddDays(7)), new[] { agent }, asses, skillDays);
-			schedulerStateHolder.Schedules.ValidateBusinessRulesOnPersons(new []{agent}, CultureInfo.InvariantCulture, NewBusinessRuleCollection.All(schedulerStateHolder.SchedulingResultState));
+			schedulerStateHolder.Schedules.ValidateBusinessRulesOnPersons(new []{agent}, NewBusinessRuleCollection.All(schedulerStateHolder.SchedulingResultState));
 
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, schedulePeriod);
 

@@ -486,7 +486,7 @@ namespace Teleopti.Ccc.Domain.Collection
             }
         }
 
-        public void ValidateBusinessRulesOnPersons(IEnumerable<IPerson> people, CultureInfo cultureInfo, INewBusinessRuleCollection newBusinessRuleCollection)
+        public void ValidateBusinessRulesOnPersons(IEnumerable<IPerson> people, INewBusinessRuleCollection newBusinessRuleCollection)
         {
             using (PerformanceOutput.ForOperation("Validating " + people.Count() + " person(s)"))
             {

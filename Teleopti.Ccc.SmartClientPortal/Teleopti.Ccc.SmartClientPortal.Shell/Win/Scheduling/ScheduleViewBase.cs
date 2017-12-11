@@ -969,7 +969,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         public void ValidatePersons(IEnumerable<IPerson> listPersons)
         {
             Presenter.SchedulerState.Schedules.ValidateBusinessRulesOnPersons(listPersons,
-                                                                              TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 																					Presenter.SchedulerState.SchedulingResultState.GetRulesToRun());
         }
 

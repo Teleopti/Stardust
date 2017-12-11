@@ -3709,7 +3709,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				backgroundWorkerLoadData.ReportProgress(0,
 					string.Format(CultureInfo.CurrentCulture, resolvedTranslatedString, validatedCount,
 						SchedulerState.ChoosenAgents.Count));
-				_schedulerState.Schedules.ValidateBusinessRulesOnPersons(batchedPeople, loggedOnCulture, rulesToRun);
+				_schedulerState.Schedules.ValidateBusinessRulesOnPersons(batchedPeople, rulesToRun);
 			}
 
 			_personsToValidate.Clear();

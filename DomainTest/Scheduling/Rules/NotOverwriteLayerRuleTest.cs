@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				new[] { agent }, new[] { ass1, ass2 }, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
-			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, CultureInfo.InvariantCulture, bussinesRuleCollection);
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, bussinesRuleCollection);
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(1);
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				new[] { agent, agent1 }, new[] { ass1, ass2, ass3, ass4 }, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
-			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, CultureInfo.InvariantCulture, bussinesRuleCollection);
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, bussinesRuleCollection);
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(1);
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				new[] { agent }, new[] { ass1 }, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
-			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, CultureInfo.InvariantCulture, bussinesRuleCollection);
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, bussinesRuleCollection);
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(1);
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				new[] { agent }, new[] { ass1 }, Enumerable.Empty<ISkillDay>());
 
 			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
-			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, CultureInfo.InvariantCulture, bussinesRuleCollection);
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, bussinesRuleCollection);
 
 			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);

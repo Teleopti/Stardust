@@ -418,7 +418,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var newRules = NewBusinessRuleCollection.Minimum();
 			newRules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
-            _dic.ValidateBusinessRulesOnPersons(new List<IPerson>{_agent} ,CultureInfo.CurrentUICulture, newRules);
+            _dic.ValidateBusinessRulesOnPersons(new List<IPerson>{_agent}, newRules);
 
             var parts = _scheduleRange.ScheduledDay(new DateOnly(2001,1,1));
 
