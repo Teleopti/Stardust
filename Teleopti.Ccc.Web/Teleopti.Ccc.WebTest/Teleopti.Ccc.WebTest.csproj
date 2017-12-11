@@ -274,6 +274,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestCheckerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMapperTest.cs" />
+    <Compile Include="Areas\Outbound\Core\CampaignListProviderNoMockTest.cs" />
+    <Compile Include="Areas\Outbound\IoC\OutboundTestAttribute.cs" />
     <Compile Include="Areas\People\ImportAgentControllerTest.cs" />
     <Compile Include="Areas\People\IoC\WebPeopleTestAttribute.cs" />
     <Compile Include="Areas\Global\Core\MultipartHttpContentExtractorTest.cs" />

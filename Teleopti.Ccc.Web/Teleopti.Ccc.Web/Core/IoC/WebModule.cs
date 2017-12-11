@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
 			builder.RegisterModule<SeatPlannerAreaModule>();
-			builder.RegisterModule<OutboundAreaModule>();
+			builder.RegisterModule(new OutboundAreaModule(true));
 			builder.RegisterModule<Web.Areas.People.Core.IoC.PeopleAreaModule>();
 			builder.RegisterModule<TeamScheduleAreaModule>();
 			builder.RegisterModule<RequestsAreaModule>();

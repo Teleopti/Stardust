@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using Autofac;
+using Autofac.Builder;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -11,6 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 {
 	public class OutboundAreaModule : Module
 	{
+		private readonly bool _supportPerRequest;
+
+		public OutboundAreaModule(bool supportPerRequest)
+		{
+			_supportPerRequest = supportPerRequest;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			//dependences
@@ -26,16 +35,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			builder.RegisterType<CampaignTaskManager>().As<IOutboundCampaignTaskManager>();
 			builder.RegisterType<OutboundScheduledResourcesCacher>().As<IOutboundScheduledResourcesCacher>();
 
-
-			builder.RegisterType<OutboundCampaignPersister>().As<IOutboundCampaignPersister>().InstancePerRequest();
-			builder.RegisterType<OutboundCampaignViewModelMapper>().As<IOutboundCampaignViewModelMapper>().InstancePerRequest();
-			builder.RegisterType<OutboundCampaignMapper>().As<IOutboundCampaignMapper>().InstancePerRequest();
-
-			builder.RegisterType<ProductionReplanHelper>().As<IProductionReplanHelper>().InstancePerRequest();
-
-			builder.RegisterType<CampaignListProvider>().As<ICampaignListProvider>().InstancePerRequest();
-			builder.RegisterType<CampaignVisualizationProvider>().As<ICampaignVisualizationProvider>().InstancePerRequest();
-			builder.RegisterType<OutboundThresholdSettingsPersistorAndProvider>().As<ISettingsPersisterAndProvider<OutboundThresholdSettings>>().InstancePerRequest();		
+			builder.RegisterType<OutboundCampaignViewModelMapper>().As<IOutboundCampaignViewModelMapper>().SingleInstance();
+			registerType<OutboundCampaignPersister, IOutboundCampaignPersister>(builder);
+			registerType<OutboundCampaignMapper, IOutboundCampaignMapper>(builder);
+			registerType<ProductionReplanHelper, IProductionReplanHelper>(builder);
+			registerType<CampaignListProvider, ICampaignListProvider>(builder);
+			registerType<CampaignVisualizationProvider, ICampaignVisualizationProvider>(builder);
+			registerType<OutboundThresholdSettingsPersistorAndProvider, ISettingsPersisterAndProvider<OutboundThresholdSettings>>(builder);
 		}
 
 		private void overwriteSchedulingCommonModule(ContainerBuilder builder)
@@ -43,6 +49,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>();
 			builder.RegisterType<OutboundScheduledResourcesProvider>().As<IOutboundScheduledResourcesProvider>();
 			builder.RegisterType<CreateOrUpdateSkillDays>().As<ICreateOrUpdateSkillDays>();			
+		}
+
+		private void registerType<TImplementer, TService>(ContainerBuilder builder)
+		{
+			var reg = builder.RegisterType<TImplementer>().As<TService>();
+			if (_supportPerRequest)
+				reg.InstancePerRequest();
 		}
 	}
 }

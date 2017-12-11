@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly OutboundAssignedStaffProvider _outboundAssignedStaffProvider;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public OutboundScheduledResourcesProvider(IResourceCalculation resourceOptimizationHelper,
 			IUserTimeZone userTimeZone, Func<ISchedulerStateHolder> schedulerStateHolder, IScenarioRepository scenarioRepository,
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			IPeopleAndSkillLoaderDecider decider,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IRepositoryFactory repositoryFactory,
 			OutboundAssignedStaffProvider outboundAssignedStaffProvider,
-			Func<IPersonSkillProvider> personSkillProvider)
+			Func<IPersonSkillProvider> personSkillProvider, CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_userTimeZone = userTimeZone;
@@ -56,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			_repositoryFactory = repositoryFactory;
 			_outboundAssignedStaffProvider = outboundAssignedStaffProvider;
 			_personSkillProvider = personSkillProvider;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
         public void Load(IList<IOutboundCampaign> campaigns, DateOnlyPeriod period)
@@ -89,9 +91,13 @@ namespace Teleopti.Ccc.Domain.Outbound
 				dateTimePeriod);
 
 			var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(true, false);
-			foreach (var dateOnly in period.DayCollection())
+			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills,
+				Enumerable.Empty<ExternalStaff>(), false, period))
 			{
-				_resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
+				foreach (var dateOnly in period.DayCollection())
+				{
+					_resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
+				}
 			}
 		}
 

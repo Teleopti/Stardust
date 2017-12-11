@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new WebAppModule(configuration));
-			_containerBuilder.RegisterModule(new OutboundAreaModule());
+			_containerBuilder.RegisterModule(new OutboundAreaModule(true));
 			_requestTag = "AutofacWebRequest";
 
 		}
