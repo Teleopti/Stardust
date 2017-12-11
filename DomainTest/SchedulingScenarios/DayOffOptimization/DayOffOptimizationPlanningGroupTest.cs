@@ -82,8 +82,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(agentNotToSchedule, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agentNotToSchedule).SetDayOff(new DayOffTemplate());
 			var optPrefs = OptimizationPreferencesProvider.Fetch();
-			optPrefs.Extra.UseTeamBlockOption = true;
 			optPrefs.Extra.UseTeamSameDaysOff = true;
+			optPrefs.Extra.UseTeams = true;
+			optPrefs.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.Contract);
 			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
 
 			Target.Execute(planningPeriod.Id.Value);
