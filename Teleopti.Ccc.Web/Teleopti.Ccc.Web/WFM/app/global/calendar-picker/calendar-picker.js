@@ -257,19 +257,11 @@
         function generateMonthsOnlyDateRangeInfo(a, b) {
             var a = moment(a);
             var b = moment(b);
-            var month = b.add(1, 'day').diff(a, 'month');
+            var month = b.add(1, 'day').diff(a, 'month', true).toFixed();
             var days = b.subtract(month, 'month').diff(a, 'day');
-            if (days > 6) {
-                var week = (days / 7).toString().split('.')[0];
-                var day = b.subtract(week * 7, 'day').diff(a, 'day');
-            } else {
-                var week = 0;
-                var day = days;
-            }
             return {
                 Month: month,
-                Week: week,
-                Day: day
+                Day: days
             }
         }
 
@@ -277,7 +269,7 @@
             var a = moment(a);
             var b = moment(b);
             var year = b.diff(a, 'year');
-            var month = b.subtract(year, 'year').add(1, 'day').diff(a, 'month');
+            var month = b.subtract(year, 'year').add(1, 'day').diff(a, 'month', true).toFixed();
             var days = b.subtract(month, 'month').diff(a, 'day');
             if (days > 6) {
                 var week = (days / 7).toString().split('.')[0];

@@ -255,4 +255,17 @@ describe('CalendarPickerControllerBasicFeature', function () {
         expect(range.length).toEqual(preSetLength / 2 + 4);
         expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Week4Day');
     });
+
+    it('should be able to understand the interval length between 2018-01-31 to 2018-02-27 is one month', function () {
+        vm.resetStartDate();
+        vm.resetEndDate();
+        vm.pickDate = moment([2018, 0, 31]);
+        vm.switchDate();
+        vm.pickDate = moment([2018, 1, 27]);
+        vm.switchDate();
+        var range = calendarView.getElementsByClassName('in-date-range');
+
+        expect(range.length).toEqual(28);
+        expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Month');
+    });
 });
