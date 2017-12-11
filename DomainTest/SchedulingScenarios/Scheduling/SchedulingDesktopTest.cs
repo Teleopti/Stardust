@@ -212,7 +212,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#47185 to be fixed")]
 		public void ShouldValidateSolvedWeeklyRest()
 		{
 			var date = new DateOnly(2017, 5, 15);

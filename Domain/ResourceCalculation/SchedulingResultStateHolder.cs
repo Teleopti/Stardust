@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			LoadedAgents = new List<IPerson>();
 			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
 			ExternalStaff = new List<ExternalStaff>();
+			AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
 		}
 
 		public SchedulingResultStateHolder(ICollection<IPerson> personsInOrganization, IScheduleDictionary schedules, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)

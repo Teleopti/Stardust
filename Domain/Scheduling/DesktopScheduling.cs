@@ -80,6 +80,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_scheduleHourlyStaffExecutor.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod);
 			}
 
+			_schedulerStateHolder().Schedules.ValidateBusinessRulesOnPersons(selectedAgents.FixedStaffPeople(selectedPeriod), NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState));
+
 			PostScheduling(selectedPeriod);
 		}
 
