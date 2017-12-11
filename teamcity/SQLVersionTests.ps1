@@ -263,11 +263,10 @@ function global:CreateInstallAndPatchSqlLoginCommandTarget () {
 			Log "Dropping login: [$global:InstallAndPatchSqlLogin] on [$global:SQLServerInstance]"
 			RunAndRetryNonQuery $ConnectionString $query_droplogin
         }
-        else {
-            
-			Log "Create login: [$global:InstallAndPatchSqlLogin] on [$global:SQLServerInstance]"
-			RunAndRetryNonQuery $ConnectionString $query_createlogin
-		}
+        
+        Log "Create login: [$global:InstallAndPatchSqlLogin] on [$global:SQLServerInstance]"
+		RunAndRetryNonQuery $ConnectionString $query_createlogin
+		
     }
 }
 
