@@ -68,8 +68,16 @@
 
 		function fetchJobs() {
 			dataService.fetchJobs().then(function (data) {
+
+				if (data && data.length > 0) {
+					for (var i = 0; i < data.length; i++) {
+						var j = data[i];
+						j.startingTime = moment.utc(j.startingTime).format('YYYY-MM-DD HH:mm:ss');
+					}
+				}
 				var lastFetch = ctrl.jobs;
 				ctrl.jobs = data;
+
 				if (lastFetch && lastFetch.length) highlightNewJobs(lastFetch, ctrl.jobs);
 			});
 		}
