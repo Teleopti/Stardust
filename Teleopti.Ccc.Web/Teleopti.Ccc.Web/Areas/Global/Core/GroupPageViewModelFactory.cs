@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 
 			foreach (var optionalColumn in allDynamicOptionalColumns)
 			{
-				var children = _optionalColumnRepository.UniqueValuesOnColumn(optionalColumn.Id.GetValueOrDefault())
+				var children = _optionalColumnRepository.UniqueValuesOnColumnWithValidPerson(optionalColumn.Id.GetValueOrDefault())
 					.Select(value => new GroupViewModel
 					{
 						Id = value.Description,
