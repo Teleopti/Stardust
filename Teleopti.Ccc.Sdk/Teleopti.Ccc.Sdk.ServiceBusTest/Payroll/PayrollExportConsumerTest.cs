@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml;
 using NUnit.Framework;
@@ -10,7 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			exportingPerson = new Person().WithName(new Name("Ex", "Porter"));
 			target = new PayrollExportHandler(currentUnitOfWork, payrollExportRepository, payrollResultRepository,
 				payrollDataExtractor, personBusAssembler, serviceBusReportProgress, payrollPeopleLoader, _resolver,
-				_tenantPeopleLoader);
+				_tenantPeopleLoader, new FakeStardustJobFeedback());
 		}
 
 		[Test] //Dont know what I am testing here anymore
@@ -99,50 +98,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 				target.Handle(exportMessage);
 				Assert.IsNotNull(payrollResult.XmlResult);
 			}
-		}
-
-		[Test]
-		public void ShouldLogErrorWhenRunningExport()
-		{
-			var payrollGuid = Guid.NewGuid();
-			var ownerGuid = Guid.NewGuid();
-			var buGuid = Guid.NewGuid();
-			var formatId = Guid.NewGuid();
-			var resultId = Guid.NewGuid();
-
-			IPayrollExport payrollExport = new PayrollExport();
-			payrollExport.SetId(payrollGuid);
-			payrollExport.PayrollFormatId = formatId;
-
-			IPayrollResult payrollResult = new PayrollResult(payrollExport, exportingPerson, DateTime.UtcNow);
-			payrollResult.SetId(resultId);
-
-			var exportMessage = GetExportMessage(payrollGuid, buGuid, ownerGuid, resultId);
-
-			using (mock.Record())
-			{
-				prepareUnitOfWork();
-				Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateOnlyPeriod(), unitOfWork)).Return(new List<IPerson>()).IgnoreArguments();
-				Expect.Call(payrollExportRepository.Get(payrollGuid)).Return(payrollExport);
-				Expect.Call(personBusAssembler.CreatePersonDto(new List<IPerson>(), _tenantPeopleLoader)).Return(new List<PersonDto>());
-				Expect.Call(payrollDataExtractor.Extract(payrollExport, exportMessage, new List<PersonDto>(), serviceBusReportProgress)).Throw(new Exception("For test"));
-				Expect.Call(payrollResultRepository.Get(resultId)).Return(payrollResult);
-				Expect.Call(() => serviceBusReportProgress.SetPayrollResult(null)).IgnoreArguments();
-				Expect.Call(() => serviceBusReportProgress.ReportProgress(0, string.Empty)).IgnoreArguments().Repeat.
-					 Twice();
-				Expect.Call(() => serviceBusReportProgress.Error(null, null)).IgnoreArguments();
-				Expect.Call(serviceBusReportProgress.Dispose);
-			}
-			using (mock.Playback())
-			{
-				target.Handle(exportMessage);
-			}
-		}
-
-		[Test]
-		public void ShouldNotConsumePayrollExportIfNull()
-		{
-			target.Handle(null);
 		}
 
 		private void prepareUnitOfWork()
