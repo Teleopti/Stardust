@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -24,8 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
 		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
 		private readonly ExtendSelectedPeriodForMonthlyScheduling _extendSelectedPeriodForMonthlyScheduling;
-		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
-		private readonly IPlanningPeriodRepository _planningPeriodRepository;
+		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						ISchedulingSourceScope schedulingSourceScope, 
 						ILowThreadPriorityScope lowThreadPriorityScope,
 						ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling,
-						BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory,
-						IPlanningPeriodRepository planningPeriodRepository)
+						IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -50,8 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingSourceScope = schedulingSourceScope;
 			_lowThreadPriorityScope = lowThreadPriorityScope;
 			_extendSelectedPeriodForMonthlyScheduling = extendSelectedPeriodForMonthlyScheduling;
-			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
-			_planningPeriodRepository = planningPeriodRepository;
+			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 		}
 
 		[TestLog]
@@ -90,18 +88,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var schedulingProgress = schedulingCallback is IConvertSchedulingCallbackToSchedulingProgress converter ? converter.Convert() : new NoSchedulingProgress();
 
 			var schedulingOptions = _schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate);
-			IBlockPreferenceProvider blockPreferenceProvider;
-			if (@event.FromWeb)
-			{
-				var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
-				var planningGroup = planningPeriod.PlanningGroup;
-				blockPreferenceProvider = planningGroup==null ? _blockPreferenceProviderUsingFiltersFactory.Create() : _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
-			}
-			else
-			{
-				blockPreferenceProvider = new FixedBlockPreferenceProvider(schedulingOptions);
-			}
 
+			var blockPreferenceProvider = @event.FromWeb ? 
+				_blockPreferenceProviderForPlanningPeriod.Fetch(@event.PlanningPeriodId) : 
+				new FixedBlockPreferenceProvider(schedulingOptions);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 
 			_scheduleExecutor.Execute(schedulingCallback,
