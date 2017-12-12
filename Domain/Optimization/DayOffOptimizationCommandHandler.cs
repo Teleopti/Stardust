@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var island in islands)
 			{
 				var agentsInIsland = island.AgentsInIsland().ToArray();
-				var agentsToOptimize = command.AgentsToOptimize?.Where(x => agentsInIsland.Contains(x)).ToArray() ?? agentsInIsland;
+				var agentsToOptimize = command.AgentsToOptimize.Where(x => agentsInIsland.Contains(x)).ToArray();
 				
 				evts.Add(new DayOffOptimizationWasOrdered
 				{
