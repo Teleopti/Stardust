@@ -174,6 +174,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var expectedErrorRecord = $"{the11thRecord},{Resources.OutOfMaximumLimit}";
 			var result = Target.Process(fileData, Feedback.SendProgress);
 
+			result.HasError.Should().Be.False();
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
 			result.ValidRecords[0].GameId.Should().Be.EqualTo(10);
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
@@ -258,6 +259,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			var result = Target.Process(fileData, Feedback.SendProgress);
 
+			result.HasError.Should().Be.False();
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
 			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateOnly(2017, 11, 20));
 			result.ValidRecords[0].GameName.Should().Be.EqualTo("Quality Score");

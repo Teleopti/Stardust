@@ -100,7 +100,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 				if (columns[6].ToLower() != GAME_TYPE_NUMBERIC && columns[6].ToLower() != GAME_TYPE_PERCENT)
 				{
-					processResult.HasError = true;
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidGameType}");
 					continue;
 				}
@@ -128,7 +127,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				var agentId = columns[1];
 				if (!verifyFieldLength(agentId, MAX_AGENT_ID_LENGTH))
 				{
-					processResult.HasError = true;
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.AgentIdIsTooLong}");
 					continue;
 				}
@@ -136,7 +134,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 				if (!int.TryParse(columns[5], out var gameId))
 				{
-					processResult.HasError = true;
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidGameId}");
 					continue;
 				}
@@ -147,7 +144,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				{
 					if (convertMeasureType(measure.DataType) != extractionResult.GameType)
 					{
-						processResult.HasError = true;
 						processResult.InvalidRecords.Add($"{currentLine},{Resources.GameTypeChanged}");
 						continue;
 					}
@@ -156,7 +152,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				{
 					if (allMeasures.Count == MAX_MEASURE_COUNT)
 					{
-						processResult.HasError = true;
 						processResult.InvalidRecords.Add($"{currentLine},{Resources.OutOfMaximumLimit}");
 						continue;
 					}
@@ -183,7 +178,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					personIdList = _personRepository.FindPersonByIdentity(identify);
 					if (!personIdList.Any())
 					{
-						processResult.HasError = true;
 						processResult.InvalidRecords.Add($"{currentLine},{Resources.AgentDoNotExist}");
 						continue;
 					}
