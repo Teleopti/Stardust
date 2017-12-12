@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	 * Just here until we make teamblock work the same as for individual
 	*/
 	[DomainTest]
+	[UseIocForFatClient]
 	public class DayOffOptimizationDesktopTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;

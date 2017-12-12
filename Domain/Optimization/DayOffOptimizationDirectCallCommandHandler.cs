@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -16,20 +17,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 		
 		public void Execute(DayOffOptimizationCommand command, 
-			IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IBlockPreferenceProvider blockPreferenceProvider,
 			ISchedulingProgress schedulingProgress,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-			_dayOffOptimization.Execute(command.Period, 
-				command.AgentsToOptimize, 
-				optimizationPreferences, 
-				dayOffOptimizationPreferenceProvider, 
-				blockPreferenceProvider, 
-				schedulingProgress, 
-				command.RunWeeklyRestSolver, 
-				resourceOptimizerPersonOptimized);
+			//temp - move to eventhandler
+			using (CommandScope.Create(command))
+			{
+				_dayOffOptimization.Execute(command.Period, 
+					command.AgentsToOptimize, 
+					dayOffOptimizationPreferenceProvider, 
+					blockPreferenceProvider, 
+					schedulingProgress, 
+					command.RunWeeklyRestSolver, 
+					resourceOptimizerPersonOptimized);
+			}			
 		}
 	}
 	
@@ -38,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		void Execute(DayOffOptimizationCommand command,
 			//these must be removed!
-			IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IBlockPreferenceProvider blockPreferenceProvider,
 			ISchedulingProgress schedulingProgress,

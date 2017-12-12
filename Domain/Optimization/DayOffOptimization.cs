@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
 		private readonly ScheduleBlankSpots _scheduleBlankSpots;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			DaysOffBackToLegalState daysOffBackToLegalState,
 			ScheduleBlankSpots scheduleBlankSpots,
-			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
+			IOptimizationPreferencesProvider optimizationPreferencesProvider)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_daysOffBackToLegalState = daysOffBackToLegalState;
 			_scheduleBlankSpots = scheduleBlankSpots;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_userTimeZone = userTimeZone;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixListFactory = matrixListFactory;
@@ -62,13 +65,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
-			IOptimizationPreferences optimizationPreferences, 
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IBlockPreferenceProvider blockPreferenceProvider,
 			ISchedulingProgress backgroundWorker, 
 			bool runWeeklyRestSolver,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
+			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			var stateHolder = _schedulerStateHolder();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);

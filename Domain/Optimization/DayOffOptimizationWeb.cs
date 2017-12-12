@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -88,7 +87,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					AgentsToOptimize = agents,
 					RunWeeklyRestSolver = true
 				}, 
-				optimizationPreferences,
 				dayOffOptimizationPreferenceProvider,
 				blockPreferenceProvider,
 				new NoSchedulingProgress(),

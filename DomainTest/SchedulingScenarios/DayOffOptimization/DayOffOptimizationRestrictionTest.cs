@@ -22,7 +22,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
+	//TODO: byt namn till Desktop
 	[DomainTest]
+	[UseIocForFatClient]
 	public class DayOffOptimizationRestrictionTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;

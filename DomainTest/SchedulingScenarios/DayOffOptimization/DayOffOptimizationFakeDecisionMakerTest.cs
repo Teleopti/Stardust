@@ -21,14 +21,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
+	//TODO: byt namn till Desktop
 	[DomainTest]
+	[UseIocForFatClient]
 	public class DayOffOptimizationFakeDecisionMakerTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public DayOffOptimizationDesktop Target;
 
 		[Test]
-		[Timeout(3000)]
+		[Timeout(10000)]
 		public void ShouldNotHangIfDecisionMakerReturnsTrueButBitArraysAreTheSame()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
