@@ -12,6 +12,7 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.WcfHost.Ioc;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -138,7 +139,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
 			system.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
 			system.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
-			system.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
+			system.UseTestDouble<FakeCurrentTenantCredentials>().For<ICurrentTenantCredentials>();
 
 			system.AddModule(new AssemblerModule());
 		}

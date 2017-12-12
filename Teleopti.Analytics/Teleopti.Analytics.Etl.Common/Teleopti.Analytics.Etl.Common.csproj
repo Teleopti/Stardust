@@ -216,7 +216,6 @@
     <Compile Include="Interfaces\Transformer\ISchedulePreferenceTransformer.cs" />
     <Compile Include="Interfaces\Transformer\IScheduleProjection.cs" />
     <Compile Include="Interfaces\Transformer\ITaskParameter.cs" />
-    <Compile Include="Interfaces\Transformer\ITenantLogonInfoLoader.cs" />
     <Compile Include="Interfaces\Transformer\JobCategoryType.cs" />
     <Compile Include="Service\EtlServiceHost.cs" />
     <Compile Include="Service\JobExtractor.cs" />

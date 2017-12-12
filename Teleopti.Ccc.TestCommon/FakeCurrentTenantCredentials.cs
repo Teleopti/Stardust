@@ -1,6 +1,8 @@
-﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+
+namespace Teleopti.Ccc.TestCommon
 {
-	public class CurrentTenantCredentialsFake : ICurrentTenantCredentials
+	public class FakeCurrentTenantCredentials : ICurrentTenantCredentials
 	{
 		private TenantCredentials _credentials;
 

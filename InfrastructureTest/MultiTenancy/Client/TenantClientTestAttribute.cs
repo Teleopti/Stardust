@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			system.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<LoadUserUnauthorizedFake>().For<ILoadUserUnauthorized>();
-			system.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
+			system.UseTestDouble<FakeCurrentTenantCredentials>().For<ICurrentTenantCredentials>();
 		}
 	}
 }

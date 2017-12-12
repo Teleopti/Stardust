@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
@@ -15,22 +15,15 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		public PostHttpRequestFake HttpRequestFake;
 		public GetHttpRequestFake GetRequestFake;
 		public ITenantLogonDataManager Target;
-		public CurrentTenantCredentialsFake CurrentTenantCredentials;
+		public FakeCurrentTenantCredentials CurrentTenantCredentials;
 
 		[Test]
 		public void ShouldBatchCallsToGetLogonInfoModelsForGuids()
 		{
-			var guids = new List<Guid>();
-			for (var i = 0; i < 400; i++)
-			{
-				guids.Add(Guid.NewGuid());
-			}
-			var returnVal = new List<LogonInfoModel>();
-			for (var i = 0; i < 200; i++)
-			{
-				returnVal.Add(new LogonInfoModel());
-			}
+			var guids = Enumerable.Repeat(0,400).Select(_ => Guid.NewGuid());
 
+			var returnVal = Enumerable.Repeat(0,200).Select(_ => new LogonInfoModel());
+			
 			HttpRequestFake.SetReturnValue(returnVal);
 
 			var result = Target.GetLogonInfoModelsForGuids(guids);

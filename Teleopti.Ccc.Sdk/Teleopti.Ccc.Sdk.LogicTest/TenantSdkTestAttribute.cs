@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.Sdk.LogicTest
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 
 			system.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
 			system.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
-			system.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
+			system.UseTestDouble<FakeCurrentTenantCredentials>().For<ICurrentTenantCredentials>();
 		}
 	}
 }

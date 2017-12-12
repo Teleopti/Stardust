@@ -210,7 +210,6 @@
     <Compile Include="OldTests\TeamDtoTest.cs" />
     <Compile Include="Payroll\PayrollFormatHandlerTest.cs" />
     <Compile Include="Payroll\PayrollResultServiceTest.cs" />
-    <Compile Include="QueryHandler\FakeTenantLogonDataManager.cs" />
     <Compile Include="QueryHandler\FindExternalLogOnQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetAllPersonPeriodsQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetAllRolesQueryHandlerTest.cs" />

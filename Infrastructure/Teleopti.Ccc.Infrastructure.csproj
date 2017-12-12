@@ -255,7 +255,7 @@
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
-    <Compile Include="MultiTenancy\Client\FakeTenantLogonDataManager.cs" />
+    <Compile Include="MultiTenancy\Server\ITenantLogonInfoLoader.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
@@ -323,7 +323,6 @@
     <Compile Include="MultiTenancy\Client\AuthenticationFromFileQuerier.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverter.cs" />
     <Compile Include="MultiTenancy\Client\ChangePassword.cs" />
-    <Compile Include="MultiTenancy\Client\CurrentTenantCredentialsFake.cs" />
     <Compile Include="MultiTenancy\Client\GetHttpRequest.cs" />
     <Compile Include="MultiTenancy\Client\GetHttpRequestFake.cs" />
     <Compile Include="MultiTenancy\Client\IAuthenticationQuerierResultConverter.cs" />

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		{
 			persons = new List<IPerson>();
 			var applicationFunction = ApplicationFunctionFactory.CreateApplicationFunction("dontknow?");
-			target = new PersonFinderService(new PersonIndexBuilder(applicationFunction, persons, new fakeTenantLogonDataManager()));
+			target = new PersonFinderService(new PersonIndexBuilder(applicationFunction, persons, new FakeTenantLogonDataManager()));
 		}
 
 		private void SetupPersons()
@@ -68,29 +67,6 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 
 			result.Length.Should().Be.EqualTo(1);
 			result.Should().Contain(findPerson3);
-		}
-	}
-
-	class fakeTenantLogonDataManager : ITenantLogonDataManager
-	{
-		public IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
-		{
-			return new List<LogonInfoModel>();
-		}
-
-		public LogonInfoModel GetLogonInfoForLogonName(string logonName)
-		{
-			throw new NotImplementedException();
-		}
-
-		public LogonInfoModel GetLogonInfoForIdentity(string identity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<LogonInfoModel> GetLogonInfoForIdentities(IEnumerable<string> identities)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

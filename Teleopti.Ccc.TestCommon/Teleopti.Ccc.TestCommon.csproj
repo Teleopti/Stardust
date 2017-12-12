@@ -179,6 +179,7 @@
     <Compile Include="FakeCancelSchedulingProgress.cs" />
     <Compile Include="FakeCloseSchedulingProgress.cs" />
     <Compile Include="FakeCommandDispatcher.cs" />
+    <Compile Include="FakeCurrentTenantCredentials.cs" />
     <Compile Include="FakeData\AnalyticsScenarioFactory.cs" />
     <Compile Include="FakeData\AnalyticsWorkloadFactory.cs" />
     <Compile Include="FakeData\ContractScheduleWorkingMondayToFriday.cs" />
@@ -297,6 +298,8 @@
     <Compile Include="FakeRepositories\Rta\FakeTeamCardReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaTracerPersister.cs" />
     <Compile Include="FakeSchedulingSourceScope.cs" />
+    <Compile Include="FakeTenantLogonDataManager.cs" />
+    <Compile Include="FakeTenantLogonInfoLoader.cs" />
     <Compile Include="FakeTransactionHook.cs" />
     <Compile Include="FakeUserUiCulture.cs" />
     <Compile Include="HangfireUtilitiesExtensions.cs" />

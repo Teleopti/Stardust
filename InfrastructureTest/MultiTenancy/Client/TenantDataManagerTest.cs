@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 	{
 		public PostHttpRequestFake HttpRequestFake;
 		public ITenantDataManager Target;
-		public CurrentTenantCredentialsFake CurrentTenantCredentials;
+		public FakeCurrentTenantCredentials CurrentTenantCredentials;
 
 		[Test]
 		public void ShouldDeleteTenantData()

@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
+namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeTenantLogonDataManager : ITenantLogonDataManager
 	{

@@ -183,7 +183,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ChangePersonPassword>().As<IChangePersonPassword>().SingleInstance();
 			builder.RegisterType<WebTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<CurrentTenantUser>().As<ICurrentTenantUser>().SingleInstance();
-			builder.RegisterType<WebCurrentTenantCredentials>().As<ICurrentTenantCredentials>().InstancePerLifetimeScope();
 			builder.RegisterType<TenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
 		}
 	}

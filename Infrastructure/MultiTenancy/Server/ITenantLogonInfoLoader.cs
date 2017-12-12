@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
-namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public interface ITenantLogonInfoLoader
 	{

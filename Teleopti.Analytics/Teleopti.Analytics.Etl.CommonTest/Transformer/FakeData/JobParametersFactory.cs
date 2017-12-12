@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using Autofac;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
@@ -10,6 +8,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 {
@@ -52,14 +51,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 			{
 				((FakeToggleManager)ToggleManager).Enable(toggle);
 			}
-		}
-	}
-
-	public class FakeTenantLogonInfoLoader : ITenantLogonInfoLoader
-	{
-		public IEnumerable<LogonInfo> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
-		{
-			return new List<LogonInfo>();
 		}
 	}
 }
