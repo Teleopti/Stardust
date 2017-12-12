@@ -211,7 +211,7 @@
     <Compile Include="FakeOvertimeRequestUnderStaffingSkillProvider.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeASMScheduleChangeTimeRepository.cs" />
-    <Compile Include="FakeRepositories\FakeExternalPerformanceDataReadModelRepository.cs" />
+    <Compile Include="FakeRepositories\FakeExternalPerformanceDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonFinderReadOnlyRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonScheduleChangeMessageRepository.cs" />

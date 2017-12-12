@@ -1,9 +1,11 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public interface IExternalPerformanceData 
+	public interface IExternalPerformanceData : IAggregateRoot
 	{
 		Guid ExternalPerformance { get; set; }
 		DateOnly DateFrom { get; set; }
@@ -12,19 +14,12 @@ namespace Teleopti.Ccc.Domain.Common
 		int Score { get; set; }
 	}
 
-	public class ExternalPerformanceData : IEquatable<ExternalPerformanceData>, IExternalPerformanceData
+	public class ExternalPerformanceData : SimpleAggregateRoot, IExternalPerformanceData
 	{
 		public Guid ExternalPerformance { get; set; }
 		public DateOnly DateFrom { get; set; }
 		public Guid Person { get; set; }
 		public string OriginalPersonId { get; set; }
 		public int Score { get; set; }
-		public bool Equals(ExternalPerformanceData other)
-		{
-			if (other == null) return false;
-			return ExternalPerformance == other.ExternalPerformance && DateFrom == other.DateFrom &&
-				   Person == other.Person && OriginalPersonId == other.OriginalPersonId &&
-				   Score == other.Score;
 	}
-}
 }

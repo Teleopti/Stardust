@@ -22,20 +22,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private readonly IImportJobArtifactValidator _validator;
 		private readonly IExternalPerformanceInfoFileProcessor _externalPerformanceInfoFileProcessor;
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
-		private readonly IExternalPerformanceDataReadModelRepository _dataReadModelRepository;
+		private readonly IExternalPerformanceDataRepository _externalDataRepository;
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportExternalPerformanceInfoHandler));
 
 		public ImportExternalPerformanceInfoHandler(IJobResultRepository jobResultRepository, IStardustJobFeedback feedback, 
 			IImportJobArtifactValidator validator, IExternalPerformanceInfoFileProcessor externalPerformanceInfoFileProcessor, 
-			IExternalPerformanceRepository externalPerformanceRepository, IExternalPerformanceDataReadModelRepository dataReadModelRepository)
+			IExternalPerformanceRepository externalPerformanceRepository, IExternalPerformanceDataRepository externalDataRepository)
 		{
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
 			_validator = validator;
 			_externalPerformanceInfoFileProcessor = externalPerformanceInfoFileProcessor;
 			_externalPerformanceRepository = externalPerformanceRepository;
-			_dataReadModelRepository = dataReadModelRepository;
+			_externalDataRepository = externalDataRepository;
 		}
 
 		[AsSystem]
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			catch (Exception e)
 			{
 				Logger.Error(e);
-				saveErrorJobResultDetail(@event, DetailLevel.Error, e.Message, e);
+				saveJobResultDetail(@event, DetailLevel.Error, e.Message, e);
 				throw;
 			}
 		}
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			{
 				var msg = string.Join(", ", processResult.ErrorMessages);
 				_feedback.SendProgress($"Extract file has error:{msg}.");
-				saveErrorJobResultDetail(@event, DetailLevel.Error, msg, null);
+				saveJobResultDetail(@event, DetailLevel.Error, msg, null);
 				return;
 			}
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			saveSettings(processResult.ExternalPerformances);
 			saveRecords(processResult.ValidRecords);
 
-			saveErrorJobResultDetail(@event, DetailLevel.Info, "", null);
+			saveJobResultDetail(@event, DetailLevel.Info, "", null);
 		}
 
 		private void saveSettings(IList<IExternalPerformance> externalPerformances )
@@ -116,13 +116,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private void saveRecords(IList<PerformanceInfoExtractionResult> validRecords)
 		{
 			var externalPerformanceSettings = _externalPerformanceRepository.FindAllExternalPerformances();
+			var allExistData = _externalDataRepository.LoadAll();
 
 			foreach (var validRecord in validRecords)
 			{
 				var score = validRecord.GameNumberScore;
 				if (validRecord.GameType == "percent") score = Convert.ToInt32(validRecord.GamePercentScore.Value * 10000);
 
-				_dataReadModelRepository.Add(new ExternalPerformanceData()
+				var existData = allExistData.FirstOrDefault(x => x.Person == validRecord.PersonId && x.DateFrom == validRecord.DateFrom);
+				if (existData == null)
+				{
+					_externalDataRepository.Add(new ExternalPerformanceData()
 					{
 						ExternalPerformance = externalPerformanceSettings.FirstOrDefault(x => x.ExternalId == validRecord.GameId).Id.Value,
 						DateFrom = validRecord.DateFrom,
@@ -131,9 +135,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 						Score = score
 					});
 				}
+				else
+				{
+					existData.Score = score;
+				}
+			}
 		}
 
-		private void saveErrorJobResultDetail(ImportExternalPerformanceInfoEvent @event, DetailLevel level, string message, Exception exception)
+		private void saveJobResultDetail(ImportExternalPerformanceInfoEvent @event, DetailLevel level, string message, Exception exception)
 		{
 			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);
 			var detail = new JobResultDetail(level, message, DateTime.UtcNow, exception);
