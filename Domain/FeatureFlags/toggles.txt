@@ -130,6 +130,7 @@ ResourcePlanner_RemoveImplicitResCalcContext_46680 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some issues
 ResourcePlanner_BpoScheduling_46265 = true
 ResourcePlanner_TimeZoneIssues_45818 = RC
+ResourcePlanner_DayOffOptimizationIslands_47208 = false # don't affect perf tests yet
 
 Wfm_DisplayOnlineHelp_39402 = true
 
