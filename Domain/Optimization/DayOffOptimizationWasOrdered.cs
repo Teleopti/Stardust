@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffOptimizationWasOrdered : IEvent, ICommandIdentifier
+	public class DayOffOptimizationWasOrdered : IEvent, ICommandIdentifier //,IIslandInfo
 	{
 		public DateOnly StartDate { get; set; }
 		public DateOnly EndDate { get; set; }

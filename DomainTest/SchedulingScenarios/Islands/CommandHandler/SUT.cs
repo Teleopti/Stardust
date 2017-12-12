@@ -3,6 +3,7 @@
 	public enum SUT
 	{
 		IntradayOptimization,
-		Scheduling
+		Scheduling,
+		DayOffOptimization
 	}
 }
