@@ -266,13 +266,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/planninggroup/{planningGroupId}/firstplanningperiod")]
-		public virtual IHttpActionResult CreateFirstPlanningPeriod(Guid planningGroupId, DateTime endDate, DateTime startDate)
+		public virtual IHttpActionResult CreateFirstPlanningPeriod(Guid planningGroupId, DateTime startDate, DateTime endDate, SchedulePeriodType schedulePeriodType, int numberOfThePeriodType)
 		{
 			var planningGroup = _planningGroupRepository.Get(planningGroupId);
 			if (planningGroup == null)
 				return BadRequest($"Invalid {nameof(planningGroupId)}");
 
-			var firstPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)), planningGroup);
+			var firstPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)), schedulePeriodType,numberOfThePeriodType, planningGroup);
 			_planningPeriodRepository.Add(firstPeriod);
 			
 			return planningPeriodCreatedResponse(firstPeriod);
@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[UnitOfWork, HttpPut, Route("api/resourceplanner/planninggroup/{planningGroupId}/lastperiod")]
-		public virtual IHttpActionResult ChangeLastPeriod(Guid planningGroupId, DateTime endDate, DateTime? startDate=null)
+		public virtual IHttpActionResult ChangeLastPeriod(Guid planningGroupId, DateTime endDate, SchedulePeriodType schedulePeriodType, int numberOfThePeriodType, DateTime? startDate=null)
 		{
 			var planningGroup = _planningGroupRepository.Get(planningGroupId);
 			if (planningGroup == null)
@@ -333,9 +333,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					return BadRequest($"Invalid {nameof(endDate)}");
 				periodToChange.ChangeRange(new SchedulePeriodForRangeCalculation
 				{
-					PeriodType = SchedulePeriodType.Day,
+					PeriodType = schedulePeriodType,
 					StartDate = new DateOnly(newStartDate),
-					Number = periodDays
+					Number = numberOfThePeriodType
 				}, true);
 				periodToChange.Reset();
 			}

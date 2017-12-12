@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -47,11 +48,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 		}
 
-		public PlanningPeriod(DateOnlyPeriod range, IPlanningGroup planningGroup=null) : this()
+		public PlanningPeriod(DateOnlyPeriod range, SchedulePeriodType periodType, int number, IPlanningGroup planningGroup = null) : this()
 		{
 			_range = range;
-			updateChangeFromDayType(_range);
-			_planningGroup = planningGroup;
+			_number = number;
+			_periodType = periodType;
+			_planningGroup = planningGroup;	
 		}
 
 		public virtual DateOnlyPeriod Range => _range;
@@ -75,35 +77,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (!updateTypeAndNumber) return;
 			_periodType = schedulePeriodForRangeCalculation.PeriodType;
 			_number = schedulePeriodForRangeCalculation.Number;
-			if (schedulePeriodForRangeCalculation.PeriodType == SchedulePeriodType.Day)
-			{
-				updateChangeFromDayType(_range);
-			}
-		}
-
-		private void updateChangeFromDayType(DateOnlyPeriod period)
-		{
-			var numberOfDays = period.DayCount();
-			if (numberOfDays % 7 == 0)
-			{
-				_periodType = SchedulePeriodType.Week;
-				_number = numberOfDays / 7;
-			}
-			else if (_range.StartDate.Day == 1 && _range.EndDate.Month != _range.EndDate.AddDays(1).Month)
-			{
-				_periodType = SchedulePeriodType.Month;
-				_number = 12 * (_range.EndDate.Year - _range.StartDate.Year) + (_range.EndDate.Month - _range.StartDate.Month) + 1;
-			}
-			else if (_range.StartDate.Day == _range.EndDate.AddDays(1).Day)
-			{
-				_periodType = SchedulePeriodType.Month;
-				_number = 12 * (_range.EndDate.Year - _range.StartDate.Year) + (_range.EndDate.Month - _range.StartDate.Month);
-			}
-			else
-			{
-				_periodType = SchedulePeriodType.Day;
-				_number = numberOfDays;
-			}
 		}
 
 		public virtual void Publish(params IPerson[] people)

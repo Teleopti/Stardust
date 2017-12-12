@@ -30,8 +30,8 @@
 				nextPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId" }, url: planningGroupBaseUrl + '/nextplanningperiod' },
 				getPlanningPeriods: { method: 'GET', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: planningGroupBaseUrl + '/planningperiods' },
 				deleteLastPlanningPeriod: { method: 'DELETE', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: planningGroupBaseUrl + '/lastperiod' },
-				changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate" }, isArray: true, url: planningGroupBaseUrl + '/lastperiod' },
-				firstPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate" }, url: planningGroupBaseUrl + '/firstplanningperiod' }
+				changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", schedulePeriodType: "@schedulePeriodType", numberOfThePeriodType: "@numberOfThePeriodType", endDate: "@endDate" }, isArray: true, url: planningGroupBaseUrl + '/lastperiod' },
+				firstPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate", schedulePeriodType: "@schedulePeriodType", numberOfThePeriodType:"@numberOfThePeriodType" }, url: planningGroupBaseUrl + '/firstplanningperiod' }
 			});
 
 		var service = {

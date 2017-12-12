@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override IPlanningPeriod CreateAggregateWithCorrectBusinessUnit()
 		{
-			var planningPeriod = new PlanningPeriod(DateOnlyPeriod.CreateWithNumberOfWeeks(new DateOnly(2015, 4, 1), 1));
+			var planningPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015,4,1), new DateOnly(2015,4,7)),SchedulePeriodType.Week, 1);
 			planningPeriod.JobResults.Add(jobResult);
 			return planningPeriod;
 		}

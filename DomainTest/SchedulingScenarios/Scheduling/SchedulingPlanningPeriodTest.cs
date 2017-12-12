@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				1,
 				1)
 			);
-			var planningPeriod = new PlanningPeriod(period, new PlanningGroup().WithId().AddFilter(new TeamFilter(team)));
+			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8, new PlanningGroup().WithId().AddFilter(new TeamFilter(team)));
 			PlanningPeriodRepository.Add(planningPeriod);
 
 			Target.DoScheduling(planningPeriod.Id.Value);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Month, 1);
 			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1));
-			var planningPeriod = new PlanningPeriod(period);
+			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Month,1);
 			PlanningPeriodRepository.Add(planningPeriod);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);

@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay.AddDays(3), firstDay.AddDays(4),SchedulePeriodType.Day, 2);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay.AddDays(3), firstDay.AddDays(4),SchedulePeriodType.Day, 2);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay, firstDay.AddDays(4)));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, firstDay.AddDays(4),SchedulePeriodType.Day, 5);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay.AddDays(3), firstDay.AddDays(4),SchedulePeriodType.Day, 2);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay.ToDateOnlyPeriod());
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay,firstDay,SchedulePeriodType.Day, 1);
 
 			Assert.DoesNotThrow(() =>
 			{

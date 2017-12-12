@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay, firstDay.AddDays(4)));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, firstDay.AddDays(4),SchedulePeriodType.Day, 5);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
+			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseTeam = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseShiftCategoryLimitations = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -497,7 +497,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -535,7 +535,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -571,7 +571,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -606,7 +606,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -642,7 +642,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 			
@@ -682,7 +682,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -714,7 +714,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -746,7 +746,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseTeam = true,
 				TeamSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -783,7 +783,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningGroup = new PlanningGroup();
 			planningGroup.AddFilter(new TeamFilter(team));
-			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(), planningGroup);
+			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(),SchedulePeriodType.Day, 1, planningGroup);
 			PlanningPeriodRepository.Add(planningPeriod);
 
 			Target.DoScheduling(planningPeriod.Id.Value);
@@ -811,7 +811,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				BlockSameShift = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod
 			});				
-			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
+			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -855,7 +855,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				UseAverageShiftLengths = true
 			});
 			
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 			

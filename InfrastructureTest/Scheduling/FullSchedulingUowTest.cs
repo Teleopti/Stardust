@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				.WithPersonPeriod(ruleSetBag, null, team).InTimeZone(TimeZoneInfo.Utc)
 				.WithSchedulePeriodOneWeek(date);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
-			var planningPeriod = new PlanningPeriod(period);
+			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Week, 1);
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{

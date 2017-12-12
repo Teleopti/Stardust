@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			};
 			PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, null, ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay.ToDateOnlyPeriod());
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay,firstDay, SchedulePeriodType.Day,1);
 			
 			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			};
 			var agent = PersonRepository.Has(contract, ContractScheduleFactory.CreateWorkingWeekContractSchedule(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
-			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay, firstDay.AddDays(6)));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, firstDay.AddDays(6),SchedulePeriodType.Week, 1);
 			
 			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agent = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Day, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
 			var period = firstDay.ToDateOnlyPeriod();
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay,firstDay,SchedulePeriodType.Day, 1);
 			
 			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
 			var period = firstDay.ToDateOnlyPeriod();
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay,firstDay,SchedulePeriodType.Day, 1);
 			
 			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agent = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Day, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
 			var period = firstDay.ToDateOnlyPeriod();
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, firstDay, SchedulePeriodType.Day, 1);
 			
 			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
@@ -202,8 +202,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			PreferenceDayRepository.Add(new PreferenceDay(agent, new DateOnly(2015, 10, 17), new PreferenceRestriction { DayOffTemplate = dayOffTemplate }).WithId());
 			PreferenceDayRepository.Add(new PreferenceDay(agent, new DateOnly(2015, 10, 18), new PreferenceRestriction { DayOffTemplate = dayOffTemplate }).WithId());
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1));
-			var period = new DateOnlyPeriod(firstDay, new DateOnly(2015, 10, 18));
-			var planningPeriod = PlanningPeriodRepository.Has(period);
+			var endDate = new DateOnly(2015, 10, 18);
+			var period = new DateOnlyPeriod(firstDay, endDate);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, endDate, SchedulePeriodType.Day, 1);
 			
 			var result = Target.DoScheduling(planningPeriod.Id.Value);
 

@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var planningGroup = new PlanningGroup("test group").WithId(planningGroupId);
 			PlanningGroupRepository.Add(planningGroup);
 
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31)), planningGroup).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14)), planningGroup).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28)), planningGroup).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31)),SchedulePeriodType.Week, 2, planningGroup).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14)),SchedulePeriodType.Week, 2,planningGroup).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28)), SchedulePeriodType.Week, 2, planningGroup).WithId());
 
 
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(planningGroupId);
@@ -241,9 +241,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnAvailablePlanningPeriods()
 		{
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31))).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14))).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28))).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31)), SchedulePeriodType.Week, 2).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14)), SchedulePeriodType.Week, 2).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28)), SchedulePeriodType.Week, 2).WithId());
 
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods();
 			result.Content.Count.Should().Be.EqualTo(3);
@@ -253,9 +253,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnAvailablePlanningPeriodsForRange()
 		{
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31))).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14))).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28))).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31)), SchedulePeriodType.Week, 2).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14)), SchedulePeriodType.Week, 2).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28)), SchedulePeriodType.Week, 2).WithId());
 
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)
 				Target.GetAllPlanningPeriods(new DateTime(2015, 06, 01), new DateTime(2015, 06, 16));
@@ -342,11 +342,10 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var periodStart = new DateOnly(2017, 04, 26);
 			var changedPeriod = PlanningPeriodRepository.Has(periodStart, 1, planningGroup);
 
-			Target.ChangeLastPeriod(planningGroupId, periodStart.Date + TimeSpan.FromDays(14));
+			Target.ChangeLastPeriod(planningGroupId, periodStart.Date + TimeSpan.FromDays(14), SchedulePeriodType.Day, 15);
 
 			Target.Request = new HttpRequestMessage();
 			var lastPeriod = (CreatedAtRouteNegotiatedContentResult<PlanningPeriodModel>) Target.GetNextPlanningPeriod(planningGroupId);
-
 			var periods = PlanningPeriodRepository.LoadForPlanningGroup(planningGroup).OrderBy(period => period.Range.StartDate);
 
 			periods.First(period => period.Id == firstPeriod.Id).Range.EndDate.Should().Be.EqualTo(new DateOnly(2017, 04, 25));
@@ -368,7 +367,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var periodStart = new DateOnly(2017, 04, 26);
 			PlanningPeriodRepository.Has(periodStart, 1, planningGroup);
 
-			var result = Target.ChangeLastPeriod(planningGroupId, periodStart.Date + TimeSpan.FromDays(14), periodStart.Date + TimeSpan.FromDays(1));
+			var result = Target.ChangeLastPeriod(planningGroupId, periodStart.Date + TimeSpan.FromDays(14), SchedulePeriodType.Week, 2, periodStart.Date + TimeSpan.FromDays(1));
 			(result as BadRequestErrorMessageResult).Should().Not.Be.Null();
 		}
 
@@ -386,7 +385,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			PlanningPeriodRepository.Has(periodStart, 1, planningGroup);
 
 			var newPeriodStart = periodStart.Date + TimeSpan.FromDays(1);
-			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.ChangeLastPeriod(planningGroupId, newPeriodStart.Date + TimeSpan.FromDays(14), newPeriodStart);
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.ChangeLastPeriod(planningGroupId, newPeriodStart.Date + TimeSpan.FromDays(14), SchedulePeriodType.Day, 15,newPeriodStart);
 			result.Content.First().StartDate.Should().Be.EqualTo(newPeriodStart);
 		}
 

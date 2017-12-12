@@ -95,7 +95,7 @@
 			vm.openCreatePpModal = false;
 			var startDate = moment(vm.selectedSuggestion.startDate).format('YYYY-MM-DD');
 			var newEndDate = moment(vm.selectedSuggestion.endDate).format('YYYY-MM-DD');
-			var firstPp = planningPeriodServiceNew.firstPlanningPeriod({ planningGroupId: planningGroupId, startDate: startDate, endDate: newEndDate });
+			var firstPp = planningPeriodServiceNew.firstPlanningPeriod({ planningGroupId: planningGroupId, startDate: startDate, endDate: newEndDate, schedulePeriodType: vm.intervalType, numberOfThePeriodType: vm.intervalRange  });
 			return firstPp.$promise.then(function (data) {
 				vm.planningPeriods.push(data);
 				return vm.planningPeriods;
@@ -161,7 +161,7 @@
 			vm.planningPeriods = [];
 			var startDate = moment(pp.startDate).format('YYYY-MM-DD');
 			var newEndDate = moment(pp.endDate).format('YYYY-MM-DD');
-			var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({ planningGroupId: planningGroupId, startDate: startDate, endDate: newEndDate });
+			var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({ planningGroupId: planningGroupId, startDate: startDate, schedulePeriodType: vm.intervalType, numberOfThePeriodType: vm.intervalRange, endDate: newEndDate });
 			return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
 				vm.planningPeriods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
 				vm.selectedIsValid = undefined;
