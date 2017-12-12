@@ -105,16 +105,14 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								var flag = false;
 								for (var i = 0; i < length - 1; i++)
 								{
-									var editableShift1 = scheduleDaysArray[i].GetEditorShift();
-									if (editableShift1 == null)
+									if (scheduleDaysArray[i].GetEditorShift() == null)
 										continue;
 									for (var j = i + 1; j < length; j++)
 									{
-										var editableShift2 = scheduleDaysArray[j].GetEditorShift();
-										if (editableShift2 == null)
+										if (scheduleDaysArray[j].GetEditorShift() == null)
 											continue;
 
-										if (!_scheduleDayEquator.MainShiftBasicEquals(editableShift1, editableShift2,TimeZoneInfo.Utc))
+										if (!_scheduleDayEquator.MainShiftBasicEquals(scheduleDaysArray[i].GetEditorShift(), scheduleDaysArray[j].GetEditorShift(), TimeZoneInfo.Utc))
 										{
 											addValidationResult(validationResult, person,
 												nameof(Resources.ExistingShiftNotMatchShift),
@@ -224,10 +222,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								}
 								else
 								{
-									var editableFirstShift = firstScheduleDay.GetEditorShift();
-									var editableSecondShift = scheduleDay.GetEditorShift();
-									if (editableFirstShift == null || editableSecondShift == null) continue;
-									if (!_scheduleDayEquator.MainShiftBasicEquals(editableFirstShift, editableSecondShift,TimeZoneInfo.Utc))
+									if (firstScheduleDay.GetEditorShift() == null || scheduleDay.GetEditorShift() == null) continue;
+									if (!_scheduleDayEquator.MainShiftBasicEquals(firstScheduleDay.GetEditorShift(), scheduleDay.GetEditorShift(), TimeZoneInfo.Utc))
 									{
 										addValidationResult(validationResult, person,
 											nameof(Resources.ExistingShiftNotMatchShift),
