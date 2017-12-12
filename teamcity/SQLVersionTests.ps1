@@ -314,16 +314,31 @@ function global:CreateDatabaseWithSQLAdmin () {
     $Params = "$global:DBManagerString -C -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
+	
+		if ($lastexitcode -ne 0) {
+-       	Write-Host "Something went wrong during creation of: '$MartDB'"
+-       	Write-Host "lastexitcode: $lastexitcode" 
+-       }
 
     $Params = "$global:DBManagerString -C -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
+		
+		if ($lastexitcode -ne 0) {
+-       	Write-Host "Something went wrong during creation of: '$AppDB'"
+-       	Write-Host "lastexitcode: $lastexitcode" 
+-       }
 
     if (!($SQLEdition -eq $SQLAzure)) {
 
 		$Params = "$global:DBManagerString -C -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
 		$Prms = $Params.Split(" ")
 		& "$DbManagerExe" $Prms
+			
+			if ($lastexitcode -ne 0) {
+-       		Write-Host "Something went wrong during creation of: '$global:AggDB'"
+-       		Write-Host "lastexitcode: $lastexitcode"
+			}
     }
 }
 
@@ -346,14 +361,29 @@ function global:PatchDatabaseWithDboOnly () {
 		$Params = "$global:DBManagerString -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
 		$Prms = $Params.Split(" ")
 		& "$DbManagerExe" $Prms
+			
+			if ($lastexitcode -ne 0) {
+-       		Write-Host "Something went wrong during creation of: '$MartDB'"
+-       		Write-Host "lastexitcode: $lastexitcode" 
+-       	}
        
 		$Params = "$global:DBManagerString -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
 		$Prms = $Params.Split(" ")
 		& "$DbManagerExe" $Prms
         
+			if ($lastexitcode -ne 0) {
+-       		Write-Host "Something went wrong during creation of: '$AppDB'"
+-       		Write-Host "lastexitcode: $lastexitcode" 
+-       	}
+
 		$Params = "$global:DBManagerString -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
 		$Prms = $Params.Split(" ")
 		& "$DbManagerExe" $Prms
+			
+			if ($lastexitcode -ne 0) {
+-       		Write-Host "Something went wrong during creation of: '$global:AggDB'"
+-       		Write-Host "lastexitcode: $lastexitcode" 
+-       	}		
     }
 }
 
@@ -362,6 +392,11 @@ function global:DataModifications () {
     $Params = "$global:SecurityExeString -AP$AppDB -AN$MartDB -CD$global:AggDB"
     $Prms = $Params.Split(" ")
     & "$SecurityExe" $Prms
+		
+		if ($lastexitcode -ne 0) {
+-       	Write-Host "Something went wrong during the running of security EXE..."
+-        	Write-Host "lastexitcode: $lastexitcode"
+-    	}
 }
 
 function global:ScriptedTestsRunOnAllDBs () {
