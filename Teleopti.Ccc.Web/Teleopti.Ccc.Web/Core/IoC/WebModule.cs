@@ -7,9 +7,11 @@ using Autofac.Integration.WebApi;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -181,7 +183,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ChangePersonPassword>().As<IChangePersonPassword>().SingleInstance();
 			builder.RegisterType<WebTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<CurrentTenantUser>().As<ICurrentTenantUser>().SingleInstance();
+			builder.RegisterType<WebCurrentTenantCredentials>().As<ICurrentTenantCredentials>().InstancePerLifetimeScope();
+			builder.RegisterType<TenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
 		}
 	}
-
 }

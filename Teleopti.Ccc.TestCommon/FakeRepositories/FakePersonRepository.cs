@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<PersonIdentityMatchResult> FindPersonByIdentities(IEnumerable<string> identities)
 		{
-			throw new NotImplementedException();
+			return new List<PersonIdentityMatchResult>();
 		}
 
 		public void ReversedOrder()
