@@ -131,7 +131,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private static void setDummyPrincipalBeforeContainerRegistrations()
 		{
-			AppDomain.CurrentDomain.SetThreadPrincipal(new TeleoptiPrincipal(new GenericIdentity(""), null));
+			var teleoptiPrincipal = new TeleoptiPrincipal(new GenericIdentity(""), null);
+			AppDomain.CurrentDomain.SetThreadPrincipal(teleoptiPrincipal);
+			Thread.CurrentPrincipal = teleoptiPrincipal;
 		}
 
 		private static void populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(IContainer container)
