@@ -1,5 +1,5 @@
 'use strict';
-xdescribe('planningPeriodSelectController', function () {
+describe('planningPeriodSelectController', function () {
     var $httpBackend,
         $controller,
         $injector,
@@ -108,7 +108,7 @@ xdescribe('planningPeriodSelectController', function () {
             }]]
         });
 
-        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?endDate=2018-02-25&startDate=2018-01-01').respond(function (method, url, data, headers) {
+        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?endDate=2018-02-25&numberOfThePeriodType=8&schedulePeriodType=Week&startDate=2018-01-01').respond(function (method, url, data, headers) {
             return [200, {
                 Id: "aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
                 StartDate: "2018-01-01T00:00:00",
@@ -122,7 +122,7 @@ xdescribe('planningPeriodSelectController', function () {
             }];
         });
 
-        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?endDate=2018-01-31&startDate=2018-01-01').respond(function (method, url, data, headers) {
+        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?endDate=2018-01-31&numberOfThePeriodType=1&schedulePeriodType=Month&startDate=2018-01-01').respond(function (method, url, data, headers) {
             return [200, {
                 Id: "aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
                 StartDate: "2018-01-01T00:00:00",
@@ -237,10 +237,13 @@ xdescribe('planningPeriodSelectController', function () {
         expect(vm2.planningPeriods[0].EndDate).toEqual("2018-02-25T00:00:00");
         expect(vm2.planningPeriods[0].Number).toEqual(8);
         expect(vm2.planningPeriods[0].Type).toEqual("Week");
-        expect(planningPeriodServiceNew.firstPlanningPeriod).toHaveBeenCalledWith({ 
-            planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', 
-            startDate: '2018-01-01', 
-            endDate: '2018-02-25' });
+        expect(planningPeriodServiceNew.firstPlanningPeriod).toHaveBeenCalledWith({
+            planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            startDate: '2018-01-01',
+            endDate: '2018-02-25',
+            schedulePeriodType: 'Week', 
+            numberOfThePeriodType: 8 
+        });
     });
 
     it('should be able to post valid custom month type and create first planning period', function () {
@@ -255,10 +258,13 @@ xdescribe('planningPeriodSelectController', function () {
         expect(vm2.planningPeriods[0].EndDate).toEqual("2018-01-31T00:00:00");
         expect(vm2.planningPeriods[0].Number).toEqual(1);
         expect(vm2.planningPeriods[0].Type).toEqual("Month");
-        expect(planningPeriodServiceNew.firstPlanningPeriod).toHaveBeenCalledWith({ 
-            planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', 
-            startDate: '2018-01-01', 
-            endDate: '2018-01-31' });
+        expect(planningPeriodServiceNew.firstPlanningPeriod).toHaveBeenCalledWith({
+            planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            startDate: '2018-01-01',
+            endDate: '2018-01-31',
+            schedulePeriodType: 'Month',
+            numberOfThePeriodType: 1
+        });
     });
 
     it('should modify date for last planning period and only planning period', function () {
@@ -280,7 +286,9 @@ xdescribe('planningPeriodSelectController', function () {
         expect(planningPeriodServiceNew.changeEndDateForLastPlanningPeriod).toHaveBeenCalledWith({
             planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             startDate: '2018-09-01',
-            endDate: '2018-09-30'
+            endDate: '2018-09-30',
+            schedulePeriodType: undefined, 
+            numberOfThePeriodType: undefined
         });
     });
 
