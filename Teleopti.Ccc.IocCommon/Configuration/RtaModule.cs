@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
+			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
 			if (_config.Toggle(Toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786))
 				builder.RegisterType<AdherencePercentageCalculator>().As<IAdherencePercentageCalculator>();
 			else

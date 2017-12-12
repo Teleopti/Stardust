@@ -276,6 +276,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithActivity(id, null, null);
 		}
 
+		public static FakeDatabase WithAssignedActivity(this FakeDatabase database, string startTime, string endTime)
+		{
+			return database.WithAssignedActivity(null, startTime, endTime);
+		}
+		
 		public static FakeDatabase WithDayOffTemplate(this FakeDatabase database, Guid? id)
 		{
 			return database.WithDayOffTemplate(id, null, null);
@@ -869,9 +874,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		[UnitOfWork]
-		public virtual FakeDatabase WithAssignedActivity(string startTime, string endTime)
+		public virtual FakeDatabase WithAssignedActivity(Guid? id, string startTime, string endTime)
 		{
-			ensureExists(_activities, null, () => this.WithActivity(null));
+			ensureExists(_activities, id, () => this.WithActivity(id));
 			_personAssignment.AddActivity(_activity, new DateTimePeriod(startTime.Utc(), endTime.Utc()));
 			return this;
 		}
