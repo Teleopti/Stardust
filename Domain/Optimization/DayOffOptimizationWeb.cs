@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 			OptimizationResult optimizationResult,
-			IPersonRepository personRepository,
-			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
+			IPersonRepository personRepository)
 		{
 			_dayOffOptimizationCommandHandler = dayOffOptimizationCommandHandler;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
