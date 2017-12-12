@@ -107,8 +107,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var startDate = new DateOnly(2017, 04, 01);
 			target.ChangeRange(new SchedulePeriodForRangeCalculation
 			{
-				Number = 30,
-				PeriodType = SchedulePeriodType.Day,
+				Number = 1,
+				PeriodType = SchedulePeriodType.Month,
 				StartDate = startDate
 			}, true);
 
