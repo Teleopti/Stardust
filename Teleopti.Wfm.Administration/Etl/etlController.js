@@ -13,12 +13,17 @@
         vm.tenants = [];
         vm.selectedTenant = '';
         vm.selectedJob = null;
+	    vm.selectedDataSource = null;
 
         vm.getJobs = getJobs;
         vm.getTennants = getTennants;
         vm.sendTennant = sendTennant;
         vm.selectJob = selectJob;
         vm.encueueJob = encueueJob;
+	    vm.selectDataSource = null;
+
+
+	    vm.dataSources = [];
 
         //manual inputs
         vm.manualInitial = {
@@ -68,7 +73,6 @@
         //init
 
         vm.getManualData = function () {
-
             vm.getTennants();
         }
         vm.getManualData();
@@ -89,28 +93,24 @@
                 .success(function (data) {
                     vm.tenants = data;
                     vm.selectedTenant = vm.tenants[0].Name;
-                    //vm.sendTennant(vm.selectedTenant);
+                    vm.sendTennant(vm.selectedTenant);
                     vm.getJobs(vm.selectedTenant);
                 });
         }
 
         function sendTennant(data) {
-            $http.post("./Etl/TenantLogDataSources", data, tokenHeaderService.getHeaders())
+            $http.post("./Etl/TenantLogDataSources", JSON.stringify(data), tokenHeaderService.getHeaders())
                 .success(function (data) {
-                    console.log('success ', data);
-                })
-                .error(function (data) {
-                    console.log(data, 'fail');
+		            vm.dataSources = data;
                 });
         }
 
         function encueueJob(job) {
-            console.log(job);
 
             var data = {
                 JobName: job.JobName,
                 JobPeriods: [],
-                LogDataSourceId: "-2",
+                LogDataSourceId: vm.selectDataSource,
                 TenantName: vm.selectedTenant
             };
 
@@ -147,15 +147,7 @@
                 });
             };
 
-	        console.log(data);
-
-	        $http.post("./Etl/EnqueueJob", data, tokenHeaderService.getHeaders())
-		        .success(function (data) {
-			        console.log('success ', data);
-		        })
-		        .error(function (data) {
-			        console.log(data, 'fail');
-		        });
+	        $http.post("./Etl/EnqueueJob", data, tokenHeaderService.getHeaders());
         }
 
         function selectJob(job) {
@@ -183,7 +175,6 @@
         }
 
         function resetDateInput(data) {
-            console.log(data);
             data.StartDate = null;
             data.EndDate = null;
         }

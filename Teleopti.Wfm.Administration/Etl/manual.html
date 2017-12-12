@@ -8,12 +8,8 @@
 				<form  ng-class="{'disabled-date': !vm.selectedJob.NeedsParameterDataSource}"> 
 					<div class="form-group">
 						<label for="exampleFormControlSelect1">Log data source</label>
-						<select class="form-control" id="exampleFormControlSelect1">
-							<option>All</option>
-							<option>2</option>
-							<option>3</option>
-							<option>4</option>
-							<option>5</option>
+						<select ng-model="vm.selectDataSource" class="form-control" id="exampleFormControlSelect1">
+							<option ng-repeat="data in vm.dataSources" ng-value="data.Id" >{{data.Name}}</option>
 						</select>
 					</div>
 				</form>
