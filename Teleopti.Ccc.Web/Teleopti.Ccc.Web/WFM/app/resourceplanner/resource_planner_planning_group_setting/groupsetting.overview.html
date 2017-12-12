@@ -166,7 +166,7 @@
 										<md-tooltip>{{'EditFilter' | translate }}</md-tooltip>
 									</i>
 								</div>
-								<div tabindex=0 class="context-menu card-context" ng-click="vm.getSchedulingSettingInfo(setting)" ng-show="!setting.Default">
+								<div tabindex=0 class="context-menu card-context delete-scheduling-setting" ng-click="vm.getSchedulingSettingInfo(setting)" ng-show="!setting.Default">
 									<i class=" mdi mdi-delete pointer">
 										<md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip>
 									</i>
@@ -190,7 +190,7 @@
 				<div class="modal-actions">
 					<aside>
 						<button ng-click="vm.confirmDeleteModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel' | translate }}</button>
-						<button ng-click="vm.confirmDeleteModal = false; vm.deleteSchedulingSetting(setting)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
+						<button ng-click="vm.confirmDeleteModal = false; vm.deleteSchedulingSetting(setting)" class="wfm-btn wfm-btn-invis-primary confirm-delete-scheduling-setting">{{'Delete' | translate }}</button>
 					</aside>
 				</div>
 			</div>

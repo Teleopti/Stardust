@@ -804,6 +804,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToPlanningPeriodListForPlanningGroup(planningGroupConfigurable.PlanningGroup.Id.GetValueOrDefault());
 		}
 
+		[When(@"I am viewing scheduling setting page for planning group '(.*)'")]
+		public void WhenIViewSchedulingSettingPageForPlanningGroup(string planningGroupName)
+		{
+			TestControllerMethods.Logon();
+			var planningGroupConfigurable = DataMaker.Data().UserDatasOfType<PlanningGroupSchedulingSettingConfigurable>().Single();
+			Navigation.GoToSchedulingSettingPageForPlanningGroup(planningGroupConfigurable.PlanningGroup.Id.GetValueOrDefault());
+		}
+
 		[When(@"I am viewing create scheduling setting page for planning group '(.*)'")]
 		public void WhenIViewCreateSchedulingSettingPageForPlanningGroup(string planningGroupName)
 		{

@@ -152,3 +152,25 @@ Scenario: Edit scheduling setting for planning group
 	And I save scheduling setting
 	Then I should see 'PlanningGroupBlockSetting 1 Update' in the scheduling setting list
 
+Scenario: Delete scheduling setting for planning group
+	Given there is a site named 'Site 1'
+	And there is a site named 'Site 2'
+	And there is a team named 'Team 1' on 'Site 1'
+	And there is a team named 'Team 2' on 'Site 2'
+	And I have a role with
+	| Field                     | Value            |
+	| Name                      | Resource Planner |
+	| Access to team            | Team 1, Team 2   |
+	| Access to resourceplanner | true             |
+	And there is an planning group and one custom scheduling setting with
+	| Field                   | Value                  |
+	| Scheduling setting name | PlanningGroupSetting 1 |
+	| Planning group name	  | PlanningGroup 1        |
+	| Team                    | Team 1		           |   
+	| Block scheduling        | default		           |        
+	When I am viewing scheduling setting page for planning group 'PlanningGroup 1'
+	And I open panel for scheduling setting 'PlanningGroupSetting 1' 
+	And I click delete scheduling setting 'PlanningGroupSetting 1' 
+	And I confirm delete scheduling setting
+	Then I should not see 'PlanningGroupSetting 1' in the scheduling setting list
+

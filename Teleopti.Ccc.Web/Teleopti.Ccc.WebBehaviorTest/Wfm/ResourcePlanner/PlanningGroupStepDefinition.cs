@@ -47,6 +47,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.Click(".block-scheduling-panel");
 		}
 
+		[When(@"I open panel for scheduling setting '(.*)'")]
+		public void WhenIOpenPanelForSchedulingSetting(string planningGroupSettingName)
+		{
+			Browser.Interactions.ClickContaining(".scheduling-setting-name", planningGroupSettingName);
+		}
+
+		[When(@"I click delete scheduling setting '(.*)'")]
+		public void WhenIClickDeleteSchedulingSetting(string planningGroupSettingName)
+		{
+			Browser.Interactions.ClickUsingJQuery("card-panel-list card-panel:has(b:contains('" + planningGroupSettingName + "')) div.card-context:has(i.mdi-delete)");
+		}
+
 		[When(@"I turn on block scheduling setting")]
 		public void WhenITurnOnTheBlockScheduling()
 		{
@@ -116,10 +128,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.Click(".confirm-delete-plan-group");
 		}
 
+		[When(@"I confirm delete scheduling setting")]
+		public void WhenIConfirmSchedulingSettingDeletion()
+		{
+			Browser.Interactions.Click(".confirm-delete-scheduling-setting");
+		}
+
 		[Then(@"I should not see '(.*)' in the planning group list")]
 		public void ThenIShouldNotSeeInThePlanningGroupList(string planningGroupName)
 		{
 			Browser.Interactions.AssertNoContains(".con-fluid-row", ".plan-group > div.list-header h1", planningGroupName);
+		}
+
+		[Then(@"I should not see '(.*)' in the scheduling setting list")]
+		public void ThenIShouldNotSeeInTheSchedulingSettingList(string planningGroupSettingName)
+		{
+			Browser.Interactions.AssertNoContains("card-panel-list", ".scheduling-setting-name", planningGroupSettingName);
 		}
 
 		private void searchAndSelect(string searchText, string selectItemText)
