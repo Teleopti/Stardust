@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 {
 	[DomainTest]
 	[TestFixture]
+	[ToggleOff(Toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)]
 	public class DeletedTest
 	{
 		public FakeAdherencePercentageReadModelPersister Persister;

@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 {
 	[DomainTest]
 	[TestFixture]
+	[ToggleOff(Toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)]
 	public class PackageTest
 	{
 		public FakeAdherencePercentageReadModelPersister Persister;
