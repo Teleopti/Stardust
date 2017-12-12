@@ -29,19 +29,21 @@ SET NOCOUNT ON
 
 --if empty input, then RETURN
 IF @search_criterias = '' RETURN
-SELECT @search_criterias = REPLACE(@search_criterias, '%', '[%]') --make '%' valuable search value
 
 --declare
 DECLARE @leave_after_ISO nvarchar(10)
 DECLARE @belongs_to_date_ISO nvarchar(10)
 DECLARE @dynamicSQL nvarchar(max)
-DECLARE @directDynamicSQL nvarchar(max)
-DECLARE @allQuery nvarchar(max)
+DECLARE @eternityDate datetime
+DECLARE @totalRows int
+DECLARE @countWords int
 DECLARE @isSearchInAll bit
 DECLARE @collation nvarchar(50)
+
+DECLARE @directDynamicSQL nvarchar(max)
+DECLARE @allQuery nvarchar(max)
 DECLARE @stringholder nvarchar(max)
 DECLARE @stringholder2 nvarchar(max)
-
 
 --Set collation
 SELECT @collation = cc.[Collation]
@@ -80,19 +82,27 @@ CREATE TABLE #result (
 SELECT @dynamicSQL=''
 
 -- Get searchString into temptable
-INSERT INTO #SearchStrings
-SELECT * FROM dbo.SplitStringString(@search_criterias)
+SELECT @search_criterias = REPLACE(@search_criterias, '%', '[%]') --make '%' valuable search value
+INSERT INTO #SearchCriteria SELECT LTRIM(RTRIM(SUBSTRING(c.string, 0, CHARINDEX(':',c.string)))),g.string FROM dbo.SplitStringString(@search_criterias) as c CROSS APPLY dbo.SplitStringByChar(LTRIM(RTRIM(SUBSTRING(c.string, CHARINDEX(':',c.string) + 1, LEN(c.string) - CHARINDEX(':',c.string)))), ';') as g
 
---select * from #SearchStrings
+if EXISTS (SELECT * FROM #SearchCriteria WHERE SearchValue = '')
+	BEGIN
+		SELECT * FROM #result
+		RETURN
+	END
 
-DECLARE @searchString nvarchar(max)
-DECLARE SearchStringCursor CURSOR FOR
-SELECT RTRIM(LTRIM(SearchString)) FROM #SearchStrings ORDER BY SearchString;
-OPEN SearchStringCursor;
+IF EXISTS (SELECT * FROM #SearchCriteria WHERE SearchType = 'ALL')
+	begin
+		SELECT @isSearchInAll = 1
+		INSERT INTO #DirectSearchCriteria SELECT * FROM #SearchCriteria
+	end
+ELSE
+	begin
+		SELECT @isSearchInAll = 0
+		INSERT INTO #DirectSearchCriteria SELECT * FROM #SearchCriteria WHERE SearchType IN ('FirstName', 'LastName', 'EmploymentNumber', 'Note')
+		DELETE FROM #SearchCriteria WHERE SearchType IN ('FirstName', 'LastName', 'EmploymentNumber', 'Note')
+	end
 
-FETCH NEXT FROM SearchStringCursor INTO @searchString
-
-SELECT @isSearchInAll = 0
 
 DECLARE @splitterIndex int
 select @splitterIndex = -1
@@ -101,54 +111,16 @@ Declare @searchType nvarchar(200)
 Declare @searchValue nvarchar(max)
 
 Declare @keywordSplitterIndex int
-Declare @searchKeyword nvarchar(max)
-Declare @notProcessedSearchValue nvarchar(100)
+
+--debug
+--SELECT * from #SearchCriteria
+--SELECT * from #DirectSearchCriteria
 
 --convert @leave_after to ISO-format string
 SELECT @leave_after_ISO = CONVERT(NVARCHAR(10), @leave_after,120)
 
 --convert @belongs_to_date to ISO-format string
 SELECT @belongs_to_date_ISO = CONVERT(NVARCHAR(10), @belongs_to_date,120)
-
-WHILE @@FETCH_STATUS = 0
-BEGIN
-	SELECT @splitterIndex = CHARINDEX(':', @searchString)
-	IF @splitterIndex > 0
-	BEGIN
-		SELECT @searchType = LTRIM(RTRIM(SUBSTRING(@searchString, 0, @splitterIndex)))
-		SELECT @searchValue = LTRIM(RTRIM(SUBSTRING(@searchString, @splitterIndex + 1, LEN(@searchString) - @splitterIndex)))
-		IF @searchValue = ''
-		BEGIN
-			SELECT * FROM #result
-			CLOSE SearchStringCursor
-			DEALLOCATE SearchStringCursor;
-			RETURN
-		END
-
-		IF @searchType = 'All' SELECT @isSearchInAll = 1
-		IF @searchType = 'All'
-		BEGIN
-			INSERT INTO #SearchCriteria SELECT 'All', [string] FROM SplitStringByChar(@searchValue, ';')
-			INSERT INTO #DirectSearchCriteria SELECT * FROM #SearchCriteria
-		END
-		ELSE
-		BEGIN
-			IF NOT EXISTS (SELECT * FROM (VALUES ('FirstName'), ('LastName'), ('EmploymentNumber'), ('Note')) as t(SearchType) WHERE SearchType = @searchType)		
-				INSERT INTO #SearchCriteria VALUES(@searchType, @searchValue)
-			ELSE
-				INSERT INTO #DirectSearchCriteria VALUES(@searchType, @searchValue)
-		END
-	END
-
-	FETCH NEXT FROM SearchStringCursor INTO @searchString
-END
-CLOSE SearchStringCursor
-DEALLOCATE SearchStringCursor;
-
---debug
---SELECT * from #SearchCriteria
---SELECT * from #DirectSearchCriteria
-
 
 IF @isSearchInAll = 1
 BEGIN	
@@ -280,8 +252,6 @@ END
 --insert into PersonId temp table
 INSERT INTO #PersonId
 EXEC sp_executesql @dynamicSQL
-
-
 
 --prepare restult
 INSERT INTO #result
