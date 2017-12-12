@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
@@ -20,6 +21,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 {
+	/// <summary>
+	/// TODO: Should be ExternalPerformanceInfoFileProcessorTest
+	/// </summary>
 	[TestFixture, DomainTest]
 	public class ImportExternalPerformanceInfoProcessorTest : ISetup
 	{
@@ -27,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public IStardustJobFeedback Feedback;
 		public FakeExternalPerformanceRepository PerformanceRepository;
 		public FakePersonRepository PersonRepository;
+		public FakeTenantLogonDataManager TenantLogonDataManager;
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
@@ -34,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
+			system.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
 		}
 
 		[Test]
@@ -159,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
 		}
 
-		[Test, Ignore("CurrentTenantCredentialsFake not works")]
+		[Test]
 		public void ShouldNotAllowMoreThan10ExternalPerformancesCase2()
 		{
 			setPerson(Guid.Empty);
@@ -183,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
 		}
 
-		[Test, Ignore("CurrentTenantCredentialsFake not works")]
+		[Test]
 		public void ShouldAllowExternalPerformancesWhenItWasExist()
 		{
 			setPerson(Guid.Empty);
@@ -192,8 +198,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				PerformanceRepository.Add(new ExternalPerformance { ExternalId = i, DataType = ExternalPerformanceDataType.Percentage});
 			}
 
-			var theexistRecord = "20171120,1,Kalle,Pettersson,Quality Score,8,Percent,87";
-			var fileData = createFileData(theexistRecord);
+			var theExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,8,Percent,87";
+			var fileData = createFileData(theExistRecord);
 
 			var result = Target.Process(fileData, Feedback.SendProgress);
 
@@ -214,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
 		}
 
-		[Test, Ignore("CurrentTenantCredentialsFake not works")]
+		[Test]
 		public void ShouldFindAgentsByExternalLogon()
 		{
 			var per1 = Guid.NewGuid();
@@ -238,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.ValidRecords[1].PersonId.Should().Be.EqualTo(per2);
 		}
 
-		[Test, Ignore("CurrentTenantCredentialsFake not works")]
+		[Test]
 		public void ShouldNotAllowWhenAgentDoNotExist()
 		{
 			var agentNotExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,numeric,87";
@@ -251,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
 		}
 
-		[Test, Ignore("CurrentTenantCredentialsFake not works")]
+		[Test]
 		public void ShouldGetCorrectRecord()
 		{
 			var personId = Guid.NewGuid();

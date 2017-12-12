@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>, IWriteSideRepository<IPerson>, IProxyForId<IPerson>
 	{
 		private readonly IFakeStorage _storage;
-		private IList<PersonExternalLogonInfo> _externalLogonInfos;
-		private IDictionary<Guid, string> _appLogonNames;
+		private readonly IList<PersonExternalLogonInfo> _externalLogonInfos;
+		private readonly IDictionary<Guid, string> _appLogonNames;
 
 		public FakePersonRepository(IFakeStorage storage)
 		{
@@ -325,7 +325,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<PersonIdentityMatchResult> FindPersonByIdentities(IEnumerable<string> identities)
 		{
-			return new List<PersonIdentityMatchResult>();
+			var identityList = identities.ToList();
+			var allPerson = _storage.LoadAll<IPerson>();
+
+			var result = new List<PersonIdentityMatchResult>();
+			result = allPerson.Where(p => identityList.Contains(p.EmploymentNumber)).Select(x =>
+				new PersonIdentityMatchResult
+				{
+					Identity = x.EmploymentNumber,
+					PersonId = x.Id.Value,
+					MatchField = IdentityMatchField.EmploymentNumber
+				}).ToList();
+
+			result.AddRange(from externalLogon in _externalLogonInfos
+				from acdLogonName in externalLogon.ExternalLogonName
+				where identityList.Contains(acdLogonName)
+				select new PersonIdentityMatchResult
+				{
+					Identity = acdLogonName,
+					PersonId = externalLogon.PersonId,
+					MatchField = IdentityMatchField.ExternalLogon
+				});
+
+			return result;
 		}
 
 		public void ReversedOrder()

@@ -255,6 +255,7 @@
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
+    <Compile Include="MultiTenancy\Client\FakeTenantLogonDataManager.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
