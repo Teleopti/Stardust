@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
+		private readonly IDayOffOptimizationPreferenceProviderForPlanningPeriod _dayOffOptimizationPreferenceProviderForPlanningPeriod;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
@@ -48,7 +49,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ScheduleBlankSpots scheduleBlankSpots,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
-			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod)
+			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
+			IDayOffOptimizationPreferenceProviderForPlanningPeriod dayOffOptimizationPreferenceProviderForPlanningPeriod)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
+			_dayOffOptimizationPreferenceProviderForPlanningPeriod = dayOffOptimizationPreferenceProviderForPlanningPeriod;
 			_userTimeZone = userTimeZone;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixListFactory = matrixListFactory;
@@ -69,7 +72,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			ISchedulingProgress backgroundWorker, 
 			bool runWeeklyRestSolver,
 			Guid planningPeriodId,
@@ -77,6 +79,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
+			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
 			var stateHolder = _schedulerStateHolder();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);

@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 		
 		public void Execute(DayOffOptimizationCommand command, 
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			ISchedulingProgress schedulingProgress,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				_dayOffOptimization.Execute(command.Period, 
 					command.AgentsToOptimize, 
-					dayOffOptimizationPreferenceProvider, 
 					schedulingProgress,
 					command.RunWeeklyRestSolver, 
 					command.PlanningPeriodId,
@@ -40,7 +38,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		void Execute(DayOffOptimizationCommand command,
 			//these must be removed!
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			ISchedulingProgress schedulingProgress, 
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized);
 	}

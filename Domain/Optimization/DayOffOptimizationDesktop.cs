@@ -36,10 +36,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				AgentsToOptimize = selectedAgents,
 				RunWeeklyRestSolver = false
 			};
-			using (_desktopOptimizationContext.Set(command, _schedulerStateHolder(), optimizationPreferences, null)) //TODO: nån callbackhistoria
+			using (_desktopOptimizationContext.Set(command, _schedulerStateHolder(), optimizationPreferences, dayOffOptimizationPreferenceProvider, null)) //TODO: nån callbackhistoria
 			{
 				_dayOffOptimizationCommandHandler.Execute(command,
-					dayOffOptimizationPreferenceProvider,
 					backgroundWorker,
 					resourceOptimizerPersonOptimized);
 			}

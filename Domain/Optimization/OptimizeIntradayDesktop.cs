@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				RunAsynchronously = false
 			};
 
-			using (_desktopOptimizationContext.Set(command, stateHolder, optimizerPreferences, intradayOptimizationCallback))
+			using (_desktopOptimizationContext.Set(command, stateHolder, optimizerPreferences, null, intradayOptimizationCallback))
 			{
 				_intradayOptimizationCommandHandler.Execute(command);
 			}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				RunAsynchronously = false
 			};
 
-			using (_desktopOptimizationContext.Set(command, _currentSchedulerStateHolder(), optimizerPreferences, intradayOptimizationCallback))
+			using (_desktopOptimizationContext.Set(command, _currentSchedulerStateHolder(), optimizerPreferences, null, intradayOptimizationCallback))
 			{
 				_intradayOptimizationCommandHandler.Execute(command);
 			}

@@ -458,6 +458,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IOptimizationPreferencesProvider>()
 					.As<ICurrentIntradayOptimizationCallback>()
 					.As<IBlockPreferenceProviderForPlanningPeriod>()
+					.As<IDayOffOptimizationPreferenceProviderForPlanningPeriod>()
 					.AsSelf()
 					.ApplyAspects()
 					.SingleInstance();
@@ -478,6 +479,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 			{
 				builder.RegisterType<BlockPreferenceProviderForPlanningPeriod>().As<IBlockPreferenceProviderForPlanningPeriod>().SingleInstance();
+				builder.RegisterType<DayOffOptimizationPreferenceProviderForPlanningPeriod>().As<IDayOffOptimizationPreferenceProviderForPlanningPeriod>().SingleInstance();
 				builder.RegisterType<PersistSchedulesAfterIsland>().As<ISynchronizeSchedulesAfterIsland>().SingleInstance();
 				if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
 				{
