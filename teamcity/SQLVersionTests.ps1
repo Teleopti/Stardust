@@ -316,18 +316,18 @@ function global:CreateDatabaseWithSQLAdmin () {
     & "$DbManagerExe" $Prms
 	
 		if ($lastexitcode -ne 0) {
--       	Log "Something went wrong during creation of: '$MartDB'"
--       	Log "lastexitcode: $lastexitcode" 
--       }
+			Log "Something went wrong during creation of: '$MartDB'"
+			Log "lastexitcode: $lastexitcode" 
+		}
 
     $Params = "$global:DBManagerString -C -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
     $Prms = $Params.Split(" ")
     & "$DbManagerExe" $Prms
 		
 		if ($lastexitcode -ne 0) {
--       	Log "Something went wrong during creation of: '$AppDB'"
--       	Log "lastexitcode: $lastexitcode" 
--       }
+			Log "Something went wrong during creation of: '$AppDB'"
+			Log "lastexitcode: $lastexitcode" 
+		}
 
     if (!($SQLEdition -eq $SQLAzure)) {
 
@@ -336,8 +336,8 @@ function global:CreateDatabaseWithSQLAdmin () {
 		& "$DbManagerExe" $Prms
 			
 			if ($lastexitcode -ne 0) {
--       		Log "Something went wrong during creation of: '$global:AggDB'"
--       		Log "lastexitcode: $lastexitcode"
+				Log "Something went wrong during creation of: '$global:AggDB'"
+				Log "lastexitcode: $lastexitcode"
 			}
     }
 }
@@ -363,27 +363,27 @@ function global:PatchDatabaseWithDboOnly () {
 		& "$DbManagerExe" $Prms
 			
 			if ($lastexitcode -ne 0) {
--       		Log "Something went wrong during creation of: '$MartDB'"
--       		Log "lastexitcode: $lastexitcode" 
--       	}
+				Log "Something went wrong during creation of: '$MartDB'"
+				Log "lastexitcode: $lastexitcode" 
+	       	}
        
 		$Params = "$global:DBManagerString -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
 		$Prms = $Params.Split(" ")
 		& "$DbManagerExe" $Prms
         
 			if ($lastexitcode -ne 0) {
--       		Log "Something went wrong during creation of: '$AppDB'"
--       		Log "lastexitcode: $lastexitcode" 
--       	}
+				Log "Something went wrong during creation of: '$AppDB'"
+	       		Log "lastexitcode: $lastexitcode" 
+			}
 
 		$Params = "$global:DBManagerString -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
 		$Prms = $Params.Split(" ")
 		& "$DbManagerExe" $Prms
 			
 			if ($lastexitcode -ne 0) {
--       		Log "Something went wrong during creation of: '$global:AggDB'"
--       		Log "lastexitcode: $lastexitcode" 
--       	}		
+				Log "Something went wrong during creation of: '$global:AggDB'"
+				Log "lastexitcode: $lastexitcode" 
+			}		
     }
 }
 
@@ -394,9 +394,9 @@ function global:DataModifications () {
     & "$SecurityExe" $Prms
 		
 		if ($lastexitcode -ne 0) {
--       	Log "Something went wrong during the running of security EXE..."
--        	Log "lastexitcode: $lastexitcode"
--    	}
+			Log "Something went wrong during the running of security EXE..."
+			Log "lastexitcode: $lastexitcode"
+    	}
 }
 
 function global:ScriptedTestsRunOnAllDBs () {
