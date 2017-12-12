@@ -3,8 +3,13 @@
 	var $compile,
 		$rootScope;
 
-	beforeEach(module('wfm.templates'));
-	beforeEach(module('wfm.teamSchedule'));
+	beforeEach(function () {
+		module('wfm.templates')
+		module('wfm.teamSchedule')
+		module(function ($provide) {
+			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
+		});
+	});
 
 	beforeEach(inject(function (_$rootScope_, _$compile_) {
 		$compile = _$compile_;
@@ -22,25 +27,25 @@
 		var result = setUp(moment('2016-06-01').toDate());
 		var vm = result.commandControl;
 
-		var dateStringInput = angular.element(result.container[0].querySelector(".teamschedule-datepicker #teamschedule-datepicker-input"));
+		var dateStringInput = angular.element(result.container[0].querySelector(".teamschedule-datepicker .teamschedule-datepicker-input"))[0];
 		expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-01');
-		expect(moment(new Date(dateStringInput.val())).format('YYYY-MM-DD')).toBe('2016-06-01');
+		expect(moment(new Date($(dateStringInput).val())).format('YYYY-MM-DD')).toBe('2016-06-01');
 	});
 
 	it('should update date string when selected day is changed', function () {
 		var result = setUp(moment('2016-06-01').toDate());
 		var vm = result.commandControl;
 
-		var dateStringInput = angular.element(result.container[0].querySelector(".teamschedule-datepicker #teamschedule-datepicker-input"));
+		var dateStringInput = angular.element(result.container[0].querySelector(".teamschedule-datepicker .teamschedule-datepicker-input"))[0];
 
 		expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-01');
-		expect(moment(new Date(dateStringInput.val())).format('YYYY-MM-DD')).toBe('2016-06-01');
+		expect(moment(new Date($(dateStringInput).val())).format('YYYY-MM-DD')).toBe('2016-06-01');
 
 		vm.selectedDate = moment('2016-06-02').toDate();
 		result.scope.$apply();
 
 		expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-02');
-		expect(moment(new Date(dateStringInput.val())).format('YYYY-MM-DD')).toBe('2016-06-02');
+		expect(moment(new Date($(dateStringInput).val())).format('YYYY-MM-DD')).toBe('2016-06-02');
 	});
 
 	function setUp(inputDate) {
@@ -70,5 +75,14 @@
 		};
 
 		return obj;
+	}
+	function setupMockCurrentUserInfoService() {
+		return {
+			CurrentUserInfo: function () {
+				return {
+					DateFormatLocale: 'en-us'
+				};
+			}
+		};
 	}
 });

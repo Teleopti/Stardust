@@ -2,11 +2,23 @@
 	<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoPreviousDate()" ng-hide="vm.isMiniMode">
 		<i class="mdi mdi-chevron-double-left"></i>
 	</button>
-	<input type="text" id="teamschedule-datepicker-input" uib-datepicker-popup="{{vm.dateFormat}}" is-open="vm.isCalendarOpened" class="pointer"
-		   ng-model="vm.selectedDate" ng-model-options="{ updateOn: 'blur change', allowInvalid: false }"
-		   placeholder="{{vm.dateFormat}}"
-		   ng-change="vm.onDateInputChange()"
-		   show-button-bar="false" />
+	<div ng-if="!vm.isJalaali" class="inline-block">
+		<input type="text" class="teamschedule-datepicker-input pointer" value="{{vm.selectedDate | date: vm.dateFormat }}" />
+		<div uib-datepicker
+			class="wfm-datepicker-wrap"
+			ng-show="vm.isCalendarOpened"
+			ng-model="vm.selectedDate"
+			ng-change="vm.onSelectedDateChange()">
+		</div>
+	</div>
+	<div ng-if="vm.isJalaali"  class="inline-block">
+		<input type="text" class="teamschedule-datepicker-input pointer" value="{{vm.selectedDate | persianDate:'shortDate' }}" />
+		<persian-datepicker class="wfm-datepicker-wrap"
+			ng-show="vm.isCalendarOpened"
+			ng-model="vm.selectedDate"
+			ng-change="vm.onSelectedDateChange()">
+		</persian-datepicker>
+	</div>
 
 	<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm toggle-datepicker" ng-click="vm.toggleCalendar()">
 		<i class="mdi mdi-calendar"></i>

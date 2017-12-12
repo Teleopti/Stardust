@@ -13,15 +13,18 @@
 				onDateChange: '&',
 				options: '=?'
 			},
-			controller: ['$timeout', '$locale', teamScheduleDatePickerCtrl],
+			controller: ['$timeout', '$locale', 'CurrentUserInfo', teamScheduleDatePickerCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function teamScheduleDatePickerCtrl($timeout, $locale) {
+	function teamScheduleDatePickerCtrl($timeout, $locale, CurrentUserInfo) {
 		var vm = this;
-		vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
+		vm.isJalaali = CurrentUserInfo.CurrentUserInfo().DateFormatLocale === 'fa-IR' ? true : false;
+
+		vm.dateFormat = vm.isJalaali ? "YYYY/MM/DD" : $locale.DATETIME_FORMATS.shortDate;
+
 		vm.step = parseInt(vm.step) || 1;
 
 		vm.onDateInputChange = function () {
@@ -29,6 +32,10 @@
 				return;
 			}
 			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }); });
+		};
+		vm.onSelectedDateChange = function () {
+			vm.isCalendarOpened = false;
+			vm.onDateInputChange();
 		};
 
 		vm.gotoPreviousDate = function () {
