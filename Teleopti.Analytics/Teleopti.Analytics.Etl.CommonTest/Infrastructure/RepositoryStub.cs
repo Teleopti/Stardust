@@ -57,6 +57,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			throw new NotImplementedException();
 		}
 
+		public void SetDataMartConnectionString(string connectionString)
+		{
+			throw new NotImplementedException();
+		}
+
 		public DataTable GetLog()
 		{
 			AddLog(1, 60);

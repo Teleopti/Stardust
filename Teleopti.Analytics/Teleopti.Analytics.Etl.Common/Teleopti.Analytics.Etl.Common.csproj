@@ -117,6 +117,7 @@
     <Compile Include="Entity\BusinessUnitItem.cs" />
     <Compile Include="EtlAppModule.cs" />
     <Compile Include="Infrastructure\BaseConfigurationRepository.cs" />
+    <Compile Include="Infrastructure\JobScheduleRepository.cs" />
     <Compile Include="Service\PmInfoProvider.cs" />
     <Compile Include="Tenants.cs" />
     <Compile Include="Service\EtlJobStarter.cs" />

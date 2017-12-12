@@ -74,10 +74,12 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			log.Debug("Configuration OK");
 
 			log.Debug("Getting scheduled schedule");
+			var jobScheduleRepository =  new JobScheduleRepository();
+			jobScheduleRepository.SetDataMartConnectionString(_connectionString);
 			var repository = new Repository(_connectionString);
 			var etlJobScheduleCollection =
 				 new EtlJobScheduleCollection(
-					  repository,
+					 jobScheduleRepository,
 					  new EtlJobLogCollection(repository),
 					  _serviceStartTime);
 

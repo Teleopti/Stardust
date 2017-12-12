@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -17,12 +16,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IToggleManager _toggleManager;
 		private readonly JobCollectionModelProvider _jobCollectionModelProvider;
 		private readonly TenantLogDataSourcesProvider _tenantLogDataSourcesProvider;
+		private readonly EtlJobScheduler _etlJobScheduler;
 
-		public EtlController(IToggleManager toggleManager, JobCollectionModelProvider jobCollectionModelProvider, TenantLogDataSourcesProvider tenantLogDataSourcesProvider)
+		public EtlController(IToggleManager toggleManager, 
+			JobCollectionModelProvider jobCollectionModelProvider,
+			TenantLogDataSourcesProvider tenantLogDataSourcesProvider,
+			EtlJobScheduler etlJobScheduler)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
 			_tenantLogDataSourcesProvider = tenantLogDataSourcesProvider;
+			_etlJobScheduler = etlJobScheduler;
 		}
 
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
@@ -59,5 +63,21 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Content(HttpStatusCode.NotFound, e.Message);
 			}
 		}
+
+		[TenantUnitOfWork]
+		[HttpPost, Route("Etl/EnqueueJob")]
+		public virtual IHttpActionResult EnqueueJob(JobEnqueModel jobEnqueModel)
+		{
+			try
+			{
+				_etlJobScheduler.ScheduleJob(jobEnqueModel);
+				return Ok();
+			}
+			catch (ArgumentException e)
+			{
+				return Content(HttpStatusCode.NotFound, e.Message);
+			}
+		}
 	}
 }
+

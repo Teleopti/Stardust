@@ -56,6 +56,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -71,6 +72,7 @@
     <Compile Include="AdministrationTestAttribute.cs" />
     <Compile Include="Controllers\EtlControllerTest.cs" />
     <Compile Include="FakeData\FakeBaseConfigurationRepository.cs" />
+    <Compile Include="FakeData\FakeJobScheduleRepository.cs" />
     <Compile Include="FakeData\FakePmInfoProvider.cs" />
     <Compile Include="FakeData\FakeGeneralInfrastructure.cs" />
   </ItemGroup>
@@ -103,6 +105,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
+      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Wfm.Administration\Teleopti.Wfm.Administration.csproj">
       <Project>{c7cfbe6b-f899-44fd-bb8d-7acd7131acd9}</Project>

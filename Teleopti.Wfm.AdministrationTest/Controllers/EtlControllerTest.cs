@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.EtlTool;
 using Teleopti.Wfm.Administration.Models;
@@ -29,6 +33,9 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public FakeGeneralInfrastructure GeneralInfrastructure;
 		public IConfigurationHandler ConfigurationHandler;
 		public FakePmInfoProvider PmInfoProvider;
+		public FakeJobScheduleRepository JobScheduleRepository;
+		public MutableNow Now;
+
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -103,6 +110,56 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var result = (NegotiatedContentResult<string>)Target.TenantLogDataSources("TenantNotFound");
 			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
 		}
+
+		[Test]
+		public void ShouldSaveManualJobScheduleForSingleTenant()
+		{
+			const string connectionString = "Server=.;DataBase=a";
+			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "W. Europe Standard Time", false));
+			AllTenants.HasWithAnalyticsConnectionsTring("Tenant", connectionString);
+			var localToday = new DateTime(2017,12,11);
+			Now.Is(TimeZoneHelper.ConvertToUtc(localToday, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+
+			var jobToEnqueue = new JobEnqueModel
+			{
+				JobName = "Initial",
+				JobPeriods = new List<JobPeriod>{new JobPeriod
+				{
+					Start = localToday.AddDays(-1),
+					End = localToday.AddDays(1),
+					JobCategoryName = "Initial",
+				}},
+				LogDataSourceId = -2,
+				TenantName = "Tenant"
+			};
+			var result = (OkResult)Target.EnqueueJob(jobToEnqueue);
+
+			var scheduledJob = JobScheduleRepository.GetEtlJobSchedules().First();
+			var scheduledPeriods = JobScheduleRepository.GetEtlJobSchedulePeriods(1);
+			result.Should().Be.OfType<OkResult>();
+			scheduledJob.JobName.Should().Be("Initial");
+			scheduledJob.ScheduleName.Should().Be("Manual ETL");
+			scheduledJob.DataSourceId.Should().Be(-2);
+			scheduledJob.Enabled.Should().Be(true);
+			scheduledJob.ScheduleId.Should().Be(1);
+			scheduledJob.ScheduleType.Should().Be(JobScheduleType.Manual);
+			scheduledJob.Description.Should().Be("Manual ETL");
+			scheduledPeriods.Count.Should().Be(1);
+			scheduledPeriods.First().JobCategoryName.Should().Be(nameof(JobCategoryType.Initial));
+			scheduledPeriods.First().RelativePeriod.Minimum.Should().Be(-1);
+			scheduledPeriods.First().RelativePeriod.Maximum.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldReturnNotFoundTenantForEnqueueJob()
+		{
+			const string connectionString = "Server=.;DataBase=a";
+			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
+			AllTenants.HasWithAnalyticsConnectionsTring("Tenant", connectionString);
+			var result = (NegotiatedContentResult<string>) Target.EnqueueJob(new JobEnqueModel(){ TenantName = "TenantNotFound" });
+			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+		}
+
 
 	}
 }

@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 	public partial class ScheduleControl : UserControl
 	{
 		private readonly ObservableCollection<IEtlJobSchedule> _observableCollection;
-		private readonly Repository _repository;
+		private readonly IJobScheduleRepository _repository;
 		private IBaseConfiguration _baseConfiguration;
 		private EtlControlTree _treeControl;
 
@@ -34,7 +34,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			if (connectionString != null)
 			{
 
-				_repository = new Repository(connectionString);
+				_repository = new JobScheduleRepository();
+				_repository.SetDataMartConnectionString(connectionString);
+
 				var etlScheduleCollection = new EtlJobScheduleCollection(_repository, null, DateTime.Now);
 
 				_observableCollection = new ObservableCollection<IEtlJobSchedule>(etlScheduleCollection);

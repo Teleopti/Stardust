@@ -9,5 +9,8 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
         void DeleteSchedule(int scheduleId);
         DataTable GetSchedulePeriods(int scheduleId);
         void SaveSchedulePeriods(IEtlJobSchedule etlJobScheduleItem);
-    }
+		void SetDataMartConnectionString(string connectionString);
+	}
+
+	
 }

@@ -15,7 +15,25 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
         private readonly DateTime _startTime;
         private readonly IList<IEtlJobRelativePeriod> _relativePeriodCollection;
 
-        public EtlJobSchedule(int scheduleId, String scheduleName, bool enabled, int occursDailyAt,
+		public EtlJobSchedule(
+			int scheduleId, 
+			string scheduleName, 
+			string jobName, 
+			int dataSourceId,
+			string description,
+			IList<IEtlJobRelativePeriod> relativePeriodCollection)
+		{
+			ScheduleId = scheduleId;
+			ScheduleType = JobScheduleType.Manual;
+			ScheduleName = scheduleName;
+			Enabled = true;
+			JobName = jobName;
+			DataSourceId = dataSourceId;
+			Description = description;
+			_relativePeriodCollection = relativePeriodCollection;
+		}
+
+		public EtlJobSchedule(int scheduleId, String scheduleName, bool enabled, int occursDailyAt,
                             string jobName, int relativePeriodStart, int relativePeriodEnd, int dataSourceId,
                             string description, IEtlJobLogCollection etlJobLogCollection, 
                             IList<IEtlJobRelativePeriod> relativePeriodCollection)

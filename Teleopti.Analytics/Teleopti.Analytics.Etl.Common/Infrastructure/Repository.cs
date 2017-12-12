@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
-	public class Repository : IJobScheduleRepository, IJobLogRepository, IRunControllerRepository, IJobHistoryRepository
+	public class Repository : IJobLogRepository, IRunControllerRepository, IJobHistoryRepository
 	{
 		private readonly string _connectionString;
 
@@ -17,21 +17,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			_connectionString = connectionString;
 		}
 
-		public DataTable GetSchedulePeriods(int scheduleId)
-		{
-			var parameterList = new[] { new SqlParameter("schedule_id", scheduleId) };
-			DataSet ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_job_get_schedule_periods",
-														parameterList,
-														_connectionString);
-			return ds.Tables[0];
-		}
-
-		public DataTable GetSchedules()
-		{
-			DataSet ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_job_get_schedules", null,
-														_connectionString);
-			return ds.Tables[0];
-		}
+		
 
 		public DataTable GetLog()
 		{
@@ -110,56 +96,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return ds.Tables[0];
 		}
 
-		public int SaveSchedule(IEtlJobSchedule etlJobScheduleItem)
-		{
-			var parameterList = new[]
-									{
-										new SqlParameter("schedule_id", etlJobScheduleItem.ScheduleId),
-										new SqlParameter("schedule_name", etlJobScheduleItem.ScheduleName),
-										new SqlParameter("enabled", etlJobScheduleItem.Enabled),
-										new SqlParameter("schedule_type", etlJobScheduleItem.ScheduleType),
-										new SqlParameter("occurs_daily_at", etlJobScheduleItem.OccursOnceAt),
-										new SqlParameter("occurs_every_minute", etlJobScheduleItem.OccursEveryMinute),
-										new SqlParameter("recurring_starttime", etlJobScheduleItem.OccursEveryMinuteStartingAt),
-										new SqlParameter("recurring_endtime", etlJobScheduleItem.OccursEveryMinuteEndingAt),
-										new SqlParameter("etl_job_name", etlJobScheduleItem.JobName),
-										new SqlParameter("etl_relative_period_start", etlJobScheduleItem.RelativePeriodStart),
-										new SqlParameter("etl_relative_period_end", etlJobScheduleItem.RelativePeriodEnd),
-										new SqlParameter("etl_datasource_id", etlJobScheduleItem.DataSourceId),
-										new SqlParameter("description", etlJobScheduleItem.Description)
-									};
+		
 
-			return
-				(int)
-				HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.etl_job_save_schedule", parameterList,
-											  _connectionString);
-		}
-
-		public void SaveSchedulePeriods(IEtlJobSchedule etlJobScheduleItem)
-		{
-			foreach (IEtlJobRelativePeriod relativePeriod in etlJobScheduleItem.RelativePeriodCollection)
-			{
-				var parameterList = new[]
-									{
-										new SqlParameter("schedule_id", etlJobScheduleItem.ScheduleId),
-										new SqlParameter("job_name", relativePeriod.JobCategoryName),
-										new SqlParameter("relative_period_start", relativePeriod.RelativePeriod.Minimum),
-										new SqlParameter("relative_period_end", relativePeriod.RelativePeriod.Maximum),
-									};
-
-
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_save_schedule_period", parameterList,
-												_connectionString);
-			}
-		}
-
-		public void DeleteSchedule(int scheduleId)
-		{
-			var parameterList = new[] { new SqlParameter("schedule_id", scheduleId) };
-
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_delete_schedule", parameterList,
-											_connectionString);
-		}
 
 		public bool IsAnotherEtlRunningAJob(out IEtlRunningInformation etlRunningInformation)
 		{

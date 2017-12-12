@@ -26,7 +26,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private IEtlJobSchedule _etlJobSchedule;
 		private readonly IEtlJobSchedule _etlJobScheduleToEdit;
 		private readonly IJobScheduleRepository _repository;
-		private readonly string _connectionString;
 		private bool _isScheduleSettingsValid;
 		private bool _isOkButtonClicked;
 		private IJob _selectedJob;
@@ -37,8 +36,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection, IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible)
 		{
 			InitializeComponent();
-			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
-			_repository = new Repository(_connectionString);
+			_repository = new JobScheduleRepository();
+			_repository.SetDataMartConnectionString(ConfigurationManager.AppSettings["datamartConnectionString"]);
 			_observableCollection = observableCollection;
 			_baseConfiguration = baseConfiguration;
 			_selectDataSourceIsPossible = selectDataSourceIsPossible;

@@ -5,6 +5,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Wfm.Administration.Core.EtlTool;
@@ -25,6 +26,9 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<GeneralFunctions>().As<IGeneralFunctions>().SingleInstance();
 			builder.RegisterType<GeneralInfrastructure>().As<IGeneralInfrastructure>().SingleInstance();
 			builder.RegisterType<BaseConfigurationRepository>().As<IBaseConfigurationRepository>().SingleInstance();
+			builder.RegisterType<EtlJobScheduler>().SingleInstance();
+			builder.RegisterType<JobScheduleRepository>().As<IJobScheduleRepository>().SingleInstance();
+			builder.RegisterType<Now>().As<INow>().SingleInstance();
 		}
 	}
 }
