@@ -1048,7 +1048,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!ScheduledMinutes.Value)/Sum(Fields!AvailableMinutes.Value)</Value>
+                              <Value>=Code.Utilization(Sum(Fields!ScheduledMinutes.Value), Sum(Fields!AvailableMinutes.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -1485,7 +1485,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!ScheduledMinutes.Value) / Sum(Fields!AvailableMinutes.Value)</Value>
+                              <Value>=Code.Utilization(Sum(Fields!ScheduledMinutes.Value), Sum(Fields!AvailableMinutes.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -2042,7 +2042,15 @@
   <Code>
     Public Function TimeString(i as integer)as string
     return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
-    End function</Code>
+    End function
+	Public Function Utilization(sumScheduledMinutes as Object, sumAvailableMinutes as Object)as Decimal
+	  If IsNothing(sumAvailableMinutes) Then
+	  Return 0
+	  Else
+	  Return sumScheduledMinutes / sumAvailableMinutes
+	  End If
+	End function
+  </Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
