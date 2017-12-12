@@ -2,11 +2,12 @@ using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class DesktopOptimizationContext : IOptimizationPreferencesProvider, ICurrentIntradayOptimizationCallback
+	public class DesktopOptimizationContext : IOptimizationPreferencesProvider, ICurrentIntradayOptimizationCallback, IBlockPreferenceProviderForPlanningPeriod
 	{
 		private readonly DesktopContext _desktopContext;
 
@@ -42,6 +43,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		public IOptimizationPreferences Fetch()
 		{
 			return contextData().OptimizationPreferences;
+		}
+		
+		public IBlockPreferenceProvider Fetch(Guid planningPeriodId)
+		{
+			return new FixedBlockPreferenceProvider(Fetch().Extra);
 		}
 
 		public IIntradayOptimizationCallback Current()

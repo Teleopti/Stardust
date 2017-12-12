@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ScheduleBlankSpots _scheduleBlankSpots;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
+		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
@@ -45,7 +47,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			DaysOffBackToLegalState daysOffBackToLegalState,
 			ScheduleBlankSpots scheduleBlankSpots,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			IOptimizationPreferencesProvider optimizationPreferencesProvider)
+			IOptimizationPreferencesProvider optimizationPreferencesProvider,
+			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -58,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleBlankSpots = scheduleBlankSpots;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
+			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_userTimeZone = userTimeZone;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixListFactory = matrixListFactory;
@@ -66,12 +70,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-			IBlockPreferenceProvider blockPreferenceProvider,
 			ISchedulingProgress backgroundWorker, 
 			bool runWeeklyRestSolver,
+			Guid planningPeriodId,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
+			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
 			var stateHolder = _schedulerStateHolder();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);

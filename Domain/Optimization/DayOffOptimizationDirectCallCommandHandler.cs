@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 	public class DayOffOptimizationDirectCallCommandHandler : IDayOffOptimizationCommandHandler
 	{
@@ -18,8 +19,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		
 		public void Execute(DayOffOptimizationCommand command, 
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-			IBlockPreferenceProvider blockPreferenceProvider,
 			ISchedulingProgress schedulingProgress,
+			Guid planningPeriodId,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			//temp - move to eventhandler
@@ -28,9 +29,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_dayOffOptimization.Execute(command.Period, 
 					command.AgentsToOptimize, 
 					dayOffOptimizationPreferenceProvider, 
-					blockPreferenceProvider, 
-					schedulingProgress, 
+					schedulingProgress,
 					command.RunWeeklyRestSolver, 
+					planningPeriodId,
 					resourceOptimizerPersonOptimized);
 			}			
 		}
@@ -42,8 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		void Execute(DayOffOptimizationCommand command,
 			//these must be removed!
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-			IBlockPreferenceProvider blockPreferenceProvider,
-			ISchedulingProgress schedulingProgress,
+			ISchedulingProgress schedulingProgress, Guid planningPeriodId,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized);
 	}
 }

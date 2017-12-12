@@ -30,8 +30,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-			var blockPreferenceProvider = new FixedBlockPreferenceProvider(optimizationPreferences.Extra);
-
 			var command = new DayOffOptimizationCommand
 			{
 				Period = selectedPeriod,
@@ -42,8 +40,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				_dayOffOptimizationCommandHandler.Execute(command,
 					dayOffOptimizationPreferenceProvider,
-					blockPreferenceProvider,
 					backgroundWorker,
+					Guid.Empty,
 					resourceOptimizerPersonOptimized);
 			}
 		}

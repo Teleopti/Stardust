@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly OptimizationResult _optimizationResult;
 		private readonly IPersonRepository _personRepository;
-		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 
 		public DayOffOptimizationWeb(IDayOffOptimizationCommandHandler dayOffOptimizationCommandHandler,
 			FillSchedulerStateHolder fillSchedulerStateHolder, 
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 			_optimizationResult = optimizationResult;
 			_personRepository = personRepository;
-			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -61,7 +59,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var schedulerStateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider;
-			IBlockPreferenceProvider blockPreferenceProvider;
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
 			var planningGroup = planningPeriod.PlanningGroup;
@@ -69,14 +66,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (planningGroup == null)
 			{
 				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
-				blockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create();
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
 				agents = schedulerStateHolder.ChoosenAgents.FixedStaffPeople(period);
 			}
 			else
 			{
 				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create(planningGroup);
-				blockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
 				var people = _personRepository.FindPeopleInPlanningGroup(planningGroup, period);
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
 				agents = people.FixedStaffPeople(period);
@@ -88,8 +83,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 					RunWeeklyRestSolver = true
 				}, 
 				dayOffOptimizationPreferenceProvider,
-				blockPreferenceProvider,
 				new NoSchedulingProgress(),
+				planningPeriodId,
 				null);
 
 			planningPeriod.Scheduled();

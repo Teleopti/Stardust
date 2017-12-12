@@ -34,6 +34,7 @@ using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -456,6 +457,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DesktopOptimizationContext>()
 					.As<IOptimizationPreferencesProvider>()
 					.As<ICurrentIntradayOptimizationCallback>()
+					.As<IBlockPreferenceProviderForPlanningPeriod>()
 					.AsSelf()
 					.ApplyAspects()
 					.SingleInstance();
@@ -475,6 +477,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
+				builder.RegisterType<BlockPreferenceProviderForPlanningPeriod>().As<IBlockPreferenceProviderForPlanningPeriod>().SingleInstance();
 				builder.RegisterType<PersistSchedulesAfterIsland>().As<ISynchronizeSchedulesAfterIsland>().SingleInstance();
 				if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
 				{
