@@ -121,6 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				if (significant1 == SchedulePartView.MainShift)
 				{
 					earliestEnd = scheduleDay1.ProjectionService().CreateProjection().Period().Value.EndDateTime;
+					earliestEnd = TimeZoneHelper.ConvertFromUtc(earliestEnd, matrix.Person.PermissionInformation.DefaultTimeZone());
 				}
 				else
 				{
@@ -139,6 +140,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				if (significant2 == SchedulePartView.MainShift)
 				{
 					latestStart = scheduleDay2.ProjectionService().CreateProjection().Period().Value.StartDateTime;
+					latestStart = TimeZoneHelper.ConvertFromUtc(latestStart, matrix.Person.PermissionInformation.DefaultTimeZone());
 				}
 				else
 				{
