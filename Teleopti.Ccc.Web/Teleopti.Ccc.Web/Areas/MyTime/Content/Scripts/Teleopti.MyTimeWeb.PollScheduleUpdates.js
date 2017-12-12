@@ -103,7 +103,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 		var noticeListeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours', -1).toDate();
 		return {
 			startDate: noticeListeningStartDate,
-			endDate: moment(new Date(new Date().getTeleoptiTime())).add('days', 1).toDate()
+			endDate: moment(new Date(noticeListeningStartDate.getTime())).add('days', 1).toDate()
 		};
 	}
 
