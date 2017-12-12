@@ -21,9 +21,9 @@
 			<div class="col-md-8 " style="display: inline-flex; align-items: center;">
 				<form>
 					<div class="form-group">
-						<label for="exampleFormControlSelect1">Tenant</label>
+						<label for="exampleFormControlSelect2">Tenant</label>
 						{{vm.selectedTenant}}
-						<select class="form-control" id="exampleFormControlSelect1" ng-model="vm.selectedTenant" ng-change="vm.getJobs(vm.selectedTenant)">
+						<select class="form-control" id="exampleFormControlSelect2" ng-model="vm.selectedTenant" ng-change="vm.getJobs(vm.selectedTenant)">
 							<option ng-repeat="tenant in vm.tenants">{{tenant.Name}}</option>
 						</select>
 					</div>
@@ -186,7 +186,7 @@
 							</td>
 							<td>{{job.Status}}</td>
 							<td>
-								<button ng-if="vm.selectedJob.JobName === job.JobName" ng-click="$event.stopPropagation();job.Status = 'Enqueued. will run 15:06'" type="button" class="btn btn-primary">Enqueue</button>
+								<button ng-if="vm.selectedJob.JobName === job.JobName" ng-click="$event.stopPropagation(); vm.encueueJob(job);" type="button" class="btn btn-primary">Enqueue</button>
 							</td>
 						</tr>
 						<tr ng-if="job.Open" ng-repeat="task in job.JobStepNames track by $index">
