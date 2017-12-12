@@ -399,6 +399,7 @@
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHint.cs" />
     <Compile Include="ResourcePlanner\Hints\HintInput.cs" />
     <Compile Include="ResourcePlanner\IBlockPreferenceProviderForPlanningPeriod.cs" />
+    <Compile Include="Scheduling\Restrictions\RestrictionNotAbleToBeScheduledReport.cs" />
     <Compile Include="ResourcePlanner\DayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="ResourcePlanner\IDayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduled.cs" />

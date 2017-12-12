@@ -315,6 +315,7 @@
     <Compile Include="SchedulingScenarios\SeperateWebRequest.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidationTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCheckerTest.cs" />
+    <Compile Include="Scheduling\Restrictions\RestrictionNotAbleToBeScheduledReportTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduledOutsideSchedulingPeriodTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduledTest.cs" />
     <Compile Include="Scheduling\SchedulerStateHolderLoadRequestsTest.cs" />

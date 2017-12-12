@@ -3078,6 +3078,12 @@
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsPreferencePainter.cs" />
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainter.cs" />
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsWarningDrawer.cs" />
+    <Compile Include="Win\Scheduling\AgentRestrictions\AgentsNotPossibleToSchedule.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Win\Scheduling\AgentRestrictions\AgentsNotPossibleToSchedule.Designer.cs">
+      <DependentUpon>AgentsNotPossibleToSchedule.cs</DependentUpon>
+    </Compile>
     <Compile Include="Win\Scheduling\AgentSkillExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -4848,6 +4854,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Scheduling\AgentPreferenceView.resx">
       <DependentUpon>AgentPreferenceView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Win\Scheduling\AgentRestrictions\AgentsNotPossibleToSchedule.resx">
+      <DependentUpon>AgentsNotPossibleToSchedule.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Scheduling\AgentSkillExplorer.resx">
       <DependentUpon>AgentSkillExplorer.cs</DependentUpon>
