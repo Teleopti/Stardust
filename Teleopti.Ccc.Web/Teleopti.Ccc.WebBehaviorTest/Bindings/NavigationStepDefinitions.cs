@@ -811,5 +811,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var planningGroupConfigurable = DataMaker.Data().UserDatasOfType<PlanningGroupConfigurable>().Single();
 			Navigation.GoToCreateSchedulingSettingPageForPlanningGroup(planningGroupConfigurable.PlanningGroup.Id.GetValueOrDefault());
 		}
+
+		[When(@"I am viewing edit scheduling setting page for planning group '(.*)'")]
+		public void WhenIViewEditSchedulingSettingPageForPlanningGroup(string planningGroupName)
+		{
+			TestControllerMethods.Logon();
+			var planningGroupSchedulingSettingConfigurable = DataMaker.Data().UserDatasOfType<PlanningGroupSchedulingSettingConfigurable>().Single();
+			Navigation.GoToEditSchedulingSettingPageForPlanningGroup(planningGroupSchedulingSettingConfigurable.PlanningGroup.Id.GetValueOrDefault(), planningGroupSchedulingSettingConfigurable.PlanningGroupSchedulingSetting.Id.GetValueOrDefault());
+		}
 	}
 }

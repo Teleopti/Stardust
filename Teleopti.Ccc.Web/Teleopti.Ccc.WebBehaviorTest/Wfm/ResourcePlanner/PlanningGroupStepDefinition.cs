@@ -53,6 +53,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.Click("md-switch");
 		}
 
+		[When(@"I turn off block scheduling setting")]
+		public void WhenITurnOffTheBlockScheduling()
+		{
+			Browser.Interactions.Click("md-switch");
+		}
+
 		[When(@"I save planning group")]
 		public void WhenISavePlanningGroup()
 		{
@@ -74,7 +80,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[Then(@"I should see '(.*)' in the scheduling setting list")]
 		public void ThenIShouldSeeInTheSchedulingSettingList(string planningGroupName)
 		{
-			Browser.Interactions.AssertAnyContains(".scheduling-setting-name > b", planningGroupName);
+			Browser.Interactions.AssertAnyContains(".scheduling-setting-name", planningGroupName);
 		}
 
 		[Given(@"there is an planning group with")]
@@ -82,6 +88,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		{
 			var planningGroupConfigurable = table.CreateInstance<PlanningGroupConfigurable>();
 			DataMaker.Data().Apply(planningGroupConfigurable);
+		}
+
+		[Given(@"there is an planning group and one custom scheduling setting with")]
+		public void GivenThereIsAnPlanningGroupSchedulingSettingNamedWith(Table table)
+		{
+			var planningGroupSchedulingSettingConfigurable = table.CreateInstance<PlanningGroupSchedulingSettingConfigurable>();
+			DataMaker.Data().Apply(planningGroupSchedulingSettingConfigurable);
 		}
 
 		[When(@"I click edit planning group '(.*)'")]

@@ -482,6 +482,7 @@
     <Compile Include="TestData\Setups\Configurable\ForecastConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ApplicationFunctionConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\PlanningGroupSchedulingSettingConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\SkillCombinationResourceReadModelConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\SkillDayConfigurable.cs" />
     <Compile Include="TestData\Setups\Default\DefaultAnalyticsDataCreator.cs" />

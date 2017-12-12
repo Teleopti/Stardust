@@ -614,5 +614,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage($"wfm/#/resourceplanner/planninggroup/{planningGroupId}/setting/");
 		}
+
+		public static void GoToEditSchedulingSettingPageForPlanningGroup(Guid planningGroupId, Guid planningGroupSchedulingSettingId)
+		{
+			GoToPage($"wfm/#/resourceplanner/planninggroup/{planningGroupId}/setting/{planningGroupSchedulingSettingId}");
+		}
 	}
 }

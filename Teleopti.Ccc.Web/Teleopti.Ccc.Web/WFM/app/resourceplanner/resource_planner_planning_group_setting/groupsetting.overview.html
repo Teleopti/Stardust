@@ -43,8 +43,8 @@
 			<card-panel ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" open="single" pre-open="setting.Name"
 			 id="$index">
 				<card-panel-header>
-					<div class="title header-flex scheduling-setting-name">
-						<b>{{setting.Name}}</b>
+					<div class="title header-flex">
+						<b class="scheduling-setting-name">{{setting.Name}}</b>
 					</div>
 					<div class="header-flex" ng-show="!setting.Default" ng-class="{'line-center': !vm.isDisable}">
 						<span>{{'SelectedFilters' | translate}}: {{setting.Filters.length}}</span>
