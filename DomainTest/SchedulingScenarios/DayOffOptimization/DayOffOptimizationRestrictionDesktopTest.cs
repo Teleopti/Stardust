@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var phoneActivity = new Activity("phone") {InContractTime = true, InWorkTime = true};
 			var shortBreakActivity = new Activity("break") { InContractTime = true, InWorkTime = false }; //common in US?
-			var skill = new Skill().For(phoneActivity).IsOpen();
+			var skill = new Skill().WithId().For(phoneActivity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet =
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var date = new DateOnly(2015, 10, 12);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var activity = new Activity();
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario();
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));

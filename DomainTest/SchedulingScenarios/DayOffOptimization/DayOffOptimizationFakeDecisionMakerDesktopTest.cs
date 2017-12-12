@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));

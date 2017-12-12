@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	public abstract class DayOffOptimizationScenario : ISetup, IConfigureToggleManager
 	{
 		private readonly RemoveImplicitResCalcContext _removeImplicitResCalcContext;
-		private readonly bool _resourcePlannerDayOffOptimizationIslands47208;
+		protected readonly bool _resourcePlannerDayOffOptimizationIslands47208;
 
 		protected DayOffOptimizationScenario(RemoveImplicitResCalcContext removeImplicitResCalcContext,
 					bool resourcePlannerDayOffOptimizationIslands47208)

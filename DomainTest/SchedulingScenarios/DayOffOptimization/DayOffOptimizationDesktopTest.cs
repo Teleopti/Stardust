@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_") {RequiresSeat = true};
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var skillMaxSeat = new Skill().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var contract = new ContractWithMaximumTolerance();
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var absence = new Absence();
 			var activity = new Activity("_");
 			var contract = new ContractWithMaximumTolerance();
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var contract = new ContractWithMaximumTolerance();
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(44), TimeSpan.FromHours(1), TimeSpan.FromHours(16)),
 				NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(4)
 			};
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var dayOffTemplate = new DayOffTemplate();
@@ -475,7 +475,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); 
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
-			var skill = new Skill().For(activity).IsOpen();
+			var skill = new Skill().WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var dayOffTemplate = new DayOffTemplate();

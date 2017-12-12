@@ -118,6 +118,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.InstancePerLifetimeScope()
 						.ApplyAspects();
 				})
+				.Except<DayOffOptimizationEventHandler>(ct =>
+				{
+					ct.As(typeof(IHandleEvent<DayOffOptimizationWasOrdered>))
+						.AsSelf()
+						.InstancePerLifetimeScope()
+						.ApplyAspects();
+				})
 				.ApplyAspects();
 
 
