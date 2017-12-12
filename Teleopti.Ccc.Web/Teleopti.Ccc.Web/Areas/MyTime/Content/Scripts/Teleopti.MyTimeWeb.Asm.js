@@ -190,7 +190,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
 			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("MyTimeAsm",
 				function (period) {
-					if (_validSchedulePeriod(period, false)) {
+					if (_validSchedulePeriod(period, true)) {
 						vm.loadViewModel();
 					}
 				});
@@ -223,9 +223,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 	}
 
-	function _validSchedulePeriod(notification, isNotification=true) {
-		var messageStartDate = isNotification ? moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).add('days', -1).toDate() : notification.startDate;
-		var messageEndDate = isNotification ?  moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).add('days', 1).toDate(): notification.endDate;
+	function _validSchedulePeriod(notification, isPeriod) {
+		var messageStartDate = isPeriod ?  notification.startDate : moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).add('days', -1).toDate();
+		var messageEndDate = isPeriod ? notification.endDate : moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).add('days', 1).toDate();
 		var listeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours', -1).toDate();
 		var listeningEndDate = moment(new Date(listeningStartDate.getTime())).add('days', 1).toDate();
 		if (messageStartDate < listeningEndDate && messageEndDate > listeningStartDate) {
