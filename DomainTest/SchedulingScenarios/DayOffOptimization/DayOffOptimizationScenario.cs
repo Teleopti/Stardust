@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -13,6 +14,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, true)]
 	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, false)]
 	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, false)]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
+	[LoggedOnAppDomain]
 	public abstract class DayOffOptimizationScenario : ISetup, IConfigureToggleManager
 	{
 		private readonly RemoveImplicitResCalcContext _removeImplicitResCalcContext;

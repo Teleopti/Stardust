@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized, int screenRefreshRate)
 		{
 			var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name, screenRefreshRate);
-			resourceOptimizerPersonOptimized(this, e);
+			resourceOptimizerPersonOptimized?.Invoke(this, e);
 			if (e.Cancel) return;
 
 			rollbackService.ClearModificationCollection();

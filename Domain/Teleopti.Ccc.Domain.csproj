@@ -366,7 +366,10 @@
     <Compile Include="Notification\ScheduleChangeMessagePoller.cs" />
     <Compile Include="Optimization\DayOffOptimization.cs" />
     <Compile Include="Optimization\DayOffOptimizationCommand.cs" />
+    <Compile Include="Optimization\DayOffOptimizationCommandHandler.cs" />
     <Compile Include="Optimization\DayOffOptimizationDirectCallCommandHandler.cs" />
+    <Compile Include="Optimization\DayOffOptimizationEventHandler.cs" />
+    <Compile Include="Optimization\DayOffOptimizationWasOrdered.cs" />
     <Compile Include="Optimization\EffectiveRestrictionStartTimeDecider.cs" />
     <Compile Include="Optimization\TeamBlock\BlockPreferencesMapper.cs" />
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />

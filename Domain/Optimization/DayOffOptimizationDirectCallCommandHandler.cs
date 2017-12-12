@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISchedulingProgress schedulingProgress,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-			//temp - move to eventhandler
+			//temp
 			using (CommandScope.Create(command))
 			{
 				_dayOffOptimization.Execute(command.Period, 
