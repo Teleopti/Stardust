@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_dayOffOptimizationCommandHandler.Execute(command,
 					dayOffOptimizationPreferenceProvider,
 					backgroundWorker,
-					Guid.Empty,
 					resourceOptimizerPersonOptimized);
 			}
 		}

@@ -80,11 +80,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					Period = period,
 					AgentsToOptimize = agents,
-					RunWeeklyRestSolver = true
+					RunWeeklyRestSolver = true,
+					PlanningPeriodId = planningPeriodId
 				}, 
 				dayOffOptimizationPreferenceProvider,
 				new NoSchedulingProgress(),
-				planningPeriodId,
 				null);
 
 			planningPeriod.Scheduled();
