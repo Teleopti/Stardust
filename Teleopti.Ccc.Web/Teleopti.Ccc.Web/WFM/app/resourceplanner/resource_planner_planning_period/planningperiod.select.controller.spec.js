@@ -108,7 +108,7 @@ describe('planningPeriodSelectController', function () {
             }]]
         });
 
-        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?endDate=2018-02-25&numberOfThePeriodType=8&schedulePeriodType=Week&startDate=2018-01-01').respond(function (method, url, data, headers) {
+        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?endDate=2018-02-25&lengthOfThePeriodType=8&schedulePeriodType=Week&startDate=2018-01-01').respond(function (method, url, data, headers) {
             return [200, {
                 Id: "aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
                 StartDate: "2018-01-01T00:00:00",
@@ -122,7 +122,7 @@ describe('planningPeriodSelectController', function () {
             }];
         });
 
-        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?endDate=2018-01-31&numberOfThePeriodType=1&schedulePeriodType=Month&startDate=2018-01-01').respond(function (method, url, data, headers) {
+        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?endDate=2018-01-31&lengthOfThePeriodType=1&schedulePeriodType=Month&startDate=2018-01-01').respond(function (method, url, data, headers) {
             return [200, {
                 Id: "aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
                 StartDate: "2018-01-01T00:00:00",
@@ -242,7 +242,7 @@ describe('planningPeriodSelectController', function () {
             startDate: '2018-01-01',
             endDate: '2018-02-25',
             schedulePeriodType: 'Week', 
-            numberOfThePeriodType: 8 
+            lengthOfThePeriodType: 8 
         });
     });
 
@@ -263,7 +263,7 @@ describe('planningPeriodSelectController', function () {
             startDate: '2018-01-01',
             endDate: '2018-01-31',
             schedulePeriodType: 'Month',
-            numberOfThePeriodType: 1
+            lengthOfThePeriodType: 1
         });
     });
 
@@ -288,7 +288,7 @@ describe('planningPeriodSelectController', function () {
             startDate: '2018-09-01',
             endDate: '2018-09-30',
             schedulePeriodType: undefined, 
-            numberOfThePeriodType: undefined
+            lengthOfThePeriodType: undefined
         });
     });
 
