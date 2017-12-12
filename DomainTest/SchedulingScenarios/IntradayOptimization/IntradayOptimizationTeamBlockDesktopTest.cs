@@ -52,9 +52,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodOneWeek(dateOnly);
 			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(phoneActivity, new TimePeriod(8, 17));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new[] { ass }, skillDay);
-			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
-			optimizationPreferences.General.OptimizationStepShiftsWithinDay = true;
-			optimizationPreferences.Extra.UseTeams = true;
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = new GeneralPreferences
+				{
+					ScheduleTag = NullScheduleTag.Instance,
+					OptimizationStepDaysOff = true,
+					OptimizationStepShiftsWithinDay = true
+				},
+				Extra = {UseTeams = true}
+			};
 			var daysOffPreferences = new DaysOffPreferences { UseKeepExistingDaysOff = true };
 
 			Assert.DoesNotThrow(() =>
