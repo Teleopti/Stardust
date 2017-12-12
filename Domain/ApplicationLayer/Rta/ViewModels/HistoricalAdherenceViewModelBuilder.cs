@@ -46,9 +46,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var now = _now.UtcDateTime();
 			var person = _persons.Load(personId);
-
 			var displayInfo = getSchedule(now, person);
-
+			var data = _adherences.Read(personId, displayInfo.DisplayStartTime.Value, displayInfo.DisplayEndTime.Value);
+			var dataBeforeDisplayStartTime = _adherences.ReadLastBefore(personId, displayInfo.DisplayStartTime.Value);
+			
+			if(dataBeforeDisplayStartTime != null)
+				data = new[]{dataBeforeDisplayStartTime}.Concat(data);
+			
 			return new HistoricalAdherenceViewModel
 			{
 				Now = formatForUser(now),
@@ -56,28 +60,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				AgentName = person?.Name.ToString(),
 				Schedules = buildSchedules(displayInfo.Schedule),
 				Changes = buildChanges(personId, displayInfo.DisplayStartTime.Value, displayInfo.DisplayEndTime.Value),
-				OutOfAdherences = buildOutOfAdherences(personId, displayInfo.DisplayStartTime.Value, displayInfo.DisplayEndTime.Value),
+				OutOfAdherences = buildOutOfAdherences(data),
 				Timeline = new ScheduleTimeline
 				{
 					StartTime = formatForUser(displayInfo.DisplayStartTime.Value),
 					EndTime = formatForUser(displayInfo.DisplayEndTime.Value)
 				},
-				AdherencePercentage = _calculator.CalculatePercetage(personId, displayInfo.ShiftStartTime, displayInfo.ShiftEndTime)
+				AdherencePercentage = _calculator.CalculatePercentage(displayInfo.ShiftStartTime, displayInfo.ShiftEndTime, data)
 			};
 		}
-		
-		private IEnumerable<AgentOutOfAdherenceViewModel> buildOutOfAdherences(Guid personId, DateTime startTime, DateTime endTime)
-		{
-			var data = _adherences.Read(personId, startTime, endTime);
-			var first = data.FirstOrDefault();
-			if (first?.Adherence != HistoricalAdherenceReadModelAdherence.Out)
-			{
-				data = new[] {_adherences.ReadLastBefore(personId, first?.Timestamp ?? _now.UtcDateTime())}
-					.Concat(data)
-					.Where(x => x != null)
-					.ToArray();
-			}
 
+		private IEnumerable<AgentOutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<HistoricalAdherenceReadModel> data)
+		{
 			var seed = Enumerable.Empty<AgentOutOfAdherenceViewModel>();
 			return data.Aggregate(seed, (x, model) =>
 				{
@@ -252,82 +246,65 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 	public interface IAdherencePercentageCalculator
 	{
-		int? CalculatePercetage(Guid personId, DateTime? startTime, DateTime? endTime);
+		int? CalculatePercentage(DateTime? startTime, DateTime? endTime, IEnumerable<HistoricalAdherenceReadModel> data);
 	}
-	
-	public class NoAdherencePercentageCalculator :IAdherencePercentageCalculator
+
+	public class NoAdherencePercentageCalculator : IAdherencePercentageCalculator
 	{
-		public int? CalculatePercetage(Guid personId, DateTime? startTime, DateTime? endTime)
+		public int? CalculatePercentage(DateTime? startTime, DateTime? endTime, IEnumerable<HistoricalAdherenceReadModel> data)
 		{
 			return null;
 		}
 	}
 
-	public class AdherencePercentageCalculator :IAdherencePercentageCalculator
+	public class AdherencePercentagesModel
 	{
-		private readonly IHistoricalAdherenceReadModelReader _adherences;
+		public HistoricalAdherenceReadModelAdherence? Adherence { get; set; }
+		public DateTime Timestamp { get; set; }
+	}
+
+	public class AdherencePercentageCalculator : IAdherencePercentageCalculator
+	{
 		private readonly INow _now;
 
-		public AdherencePercentageCalculator(IHistoricalAdherenceReadModelReader adherences, INow now)
+		public AdherencePercentageCalculator(INow now)
 		{
-			_adherences = adherences;
 			_now = now;
 		}
 
-		public int? CalculatePercetage(Guid personId, DateTime? startTime, DateTime? endTime)
+		public int? CalculatePercentage(DateTime? startTime, DateTime? endTime, IEnumerable<HistoricalAdherenceReadModel> data)
 		{
 			if (!startTime.HasValue)
 				return null;
+
+			var shiftEndTime = _now.UtcDateTime() > endTime.Value ? endTime.Value : _now.UtcDateTime();
+			var shiftTime = endTime.Value - startTime.Value;
 			
-			var totalTime = (endTime - startTime).Value.TotalSeconds;
-			var adherenceReadModels = _adherences.Read(personId, startTime.Value, endTime.Value);
-
-			var first = adherenceReadModels.FirstOrDefault();
-			if (first?.Adherence != HistoricalAdherenceReadModelAdherence.Out)
-			{
-				adherenceReadModels = new[] {_adherences.ReadLastBefore(personId, first?.Timestamp ?? _now.UtcDateTime())}
-					.Concat(adherenceReadModels)
-					.Where(x => x != null)
-					.ToArray();
-			}
-
-			DateTime? adherenceStartTime = null;
-
-			var adherences = adherenceReadModels as HistoricalAdherenceReadModel[] ?? adherenceReadModels.ToArray();
-
-			var lastAdherence = HistoricalAdherenceReadModelAdherence.Out;
-			
-			if (!adherences.IsNullOrEmpty())
-				lastAdherence = adherences.Last().Adherence == HistoricalAdherenceReadModelAdherence.Out 
-					? 
-					HistoricalAdherenceReadModelAdherence.In : HistoricalAdherenceReadModelAdherence.Out;
-			
-			var adherencesForShift = adherences
-				.Append(new HistoricalAdherenceReadModel()
+			var adherenceReadModels = data
+				.Select(a => new AdherencePercentagesModel()
 				{
-					Adherence = lastAdherence,
-					Timestamp = endTime.Value
-				});
+					Adherence = a.Adherence,
+					Timestamp = a.Timestamp < startTime.Value ? startTime.Value : a.Timestamp
+				})
+				.Append(new AdherencePercentagesModel() {Timestamp = shiftEndTime}).ToArray();
 
-			var timeInAdherence = adherencesForShift.Aggregate(0.0, (total, model) =>
-			{
-				if (model.Adherence == HistoricalAdherenceReadModelAdherence.In)
-					adherenceStartTime = model.Timestamp;
-
-				else
-				{
-					if (adherenceStartTime != null)
-						total += (model.Timestamp - adherenceStartTime.Value).TotalSeconds;
-				}
-
-				return total;
-			});
-
-			return Convert.ToInt32(timeInAdherence) == 0
-				? 0
-				: Convert.ToInt32((timeInAdherence / totalTime) * 100);
+			var timeInAdherence = timeIn(HistoricalAdherenceReadModelAdherence.In, adherenceReadModels);
+			var timeInNeutral = timeIn(HistoricalAdherenceReadModelAdherence.Neutral, adherenceReadModels);
+			
+			return Convert.ToInt32((timeInAdherence.TotalSeconds / (shiftTime - timeInNeutral).TotalSeconds) * 100);
 		}
 
+		private static TimeSpan timeIn(HistoricalAdherenceReadModelAdherence adherenceType, IEnumerable<AdherencePercentagesModel> data)
+		{
+			DateTime? adherenceStartTime = null;
+			return data.Aggregate(TimeSpan.Zero, (t, m) =>
+			{
+				if(adherenceStartTime != null)
+					t += (m.Timestamp - adherenceStartTime).Value;
+				adherenceStartTime = m.Adherence == adherenceType ? m?.Timestamp : null;
+				
+				return t;
+			});
+		}
 	}
-	
 }
