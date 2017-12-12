@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							.Add(Restrictions.IsNull("TerminalDate"))
 							.Add(Restrictions.Ge("TerminalDate", earliestTerminalDate)
 							)))
-
 					.Add(DetachedCriteria.For<Person>("per")
 						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
 						.Add(Subqueries.PropertyIn("per.Id", personSubQuery))
@@ -747,7 +746,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				results.AddRange(Session.CreateSQLQuery(
 						"exec ReadModel.GetBudgetGroupNamesForPeople @PersonIds	= :PersonIds, @StartDate = :StartDate")
 					.SetDateTime("StartDate", startDate)
-					.SetString("PersonIds", String.Join(",", personIdBatch))
+					.SetString("PersonIds", string.Join(",", personIdBatch))
 					.SetResultTransformer(Transformers.AliasToBean(typeof(PersonBudgetGroupName)))
 					.SetReadOnly(true)
 					.List<PersonBudgetGroupName>());
@@ -755,45 +754,53 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return results;
 		}
 
-		public IList<Guid> FindPersonByIdentity(string identity)
+		/// <summary>
+		/// Find person with EmplopymentNumber or ExternalLogon match identities
+		/// Since ApplicationLogonName exists in Tenant database on Azure environment, this method will not match ApplicationLogonName
+		/// </summary>
+		/// <param name="identities"></param>
+		/// <returns></returns>
+		public IList<PersonIdentityMatchResult> FindPersonByIdentities(IEnumerable<string> identities)
 		{
-			if(string.IsNullOrEmpty(identity)) return new List<Guid>();
+			const int batchSize = 100;
 
-			var sql = $@"Select Id as PersonId, 1 as MatchField -- Match EmployeementNumber
+			var result = new List<PersonIdentityMatchResult>();
+			if (identities == null) return result;
+
+			var identityList = identities.ToList();
+			if (!identityList.Any()) return result;
+
+			var paraName = nameof(identities);
+			foreach (var identitiesInBatch in identityList.Batch(batchSize))
+			{
+				//TODO: Try get EmploymentNumber from ReadModel.FindPerson and apply BusinessUnit filter
+				var sql = $@"Select EmploymentNumber as [Identity], Id as PersonId, {(int)IdentityMatchField.EmploymentNumber} as MatchField -- Match EmployeementNumber
 							     From Person
 							    Where IsDeleted = 0
-							      And EmploymentNumber = :{nameof(identity)}
+							      And EmploymentNumber in (:{paraName})
 							   Union
-							   Select Id, 2 -- Match ApplicationLogonName
-							     From Tenant.PersonInfo
-							    Where ApplicationLogonName = :{nameof(identity)}
-							   Union
-							   Select Distinct PersonId, 3 -- Match ExternalLogon
+							   Select Distinct UserCode, PersonId, {(int)IdentityMatchField.ExternalLogon} -- Match ExternalLogon
 							     From ReadModel.ExternalLogon
 							    Where Deleted = 0
-							      And UserCode = :{nameof(identity)}";
-			var rawObjects = Session.CreateSQLQuery(sql)
-				.AddScalar("PersonId", NHibernateUtil.Guid)
-				.AddScalar("MatchField", NHibernateUtil.Int16)
-				.SetString(nameof(identity), identity.Trim())
-				.SetReadOnly(true)
-				.List<object[]>()
-				.Select(x => new
-				{
-					PersonId = (Guid) x[0],
-					MatchField = (short) x[1]
-				}).ToList();
+							      And UserCode in (:{paraName})";
+				var batchResult = Session.CreateSQLQuery(sql)
+					.AddScalar("Identity", NHibernateUtil.String)
+					.AddScalar("PersonId", NHibernateUtil.Guid)
+					.AddScalar("MatchField", NHibernateUtil.Int32)
+					.SetParameterList(paraName, identitiesInBatch.ToArray())
+					.SetReadOnly(true)
+					.List<object[]>()
+					.Select(x => new PersonIdentityMatchResult
+					{
+						Identity = (string) x[0],
+						PersonId = (Guid) x[1],
+						MatchField = (IdentityMatchField) (int) x[2]
+					}).ToList();
 
-			var personMatchEmployeeNumber = rawObjects.Where(o => o.MatchField == 1).ToList();
-			if (personMatchEmployeeNumber.Any()) return personMatchEmployeeNumber.Select(p=>p.PersonId).ToList();
+				result.AddRange(batchResult);
+			}
 
-			var personMatchAppLogonName = rawObjects.Where(o => o.MatchField == 2).ToList();
-			if (personMatchAppLogonName.Any()) return personMatchAppLogonName.Select(p => p.PersonId).ToList();
-
-			var personMatchExternalLogon = rawObjects.Where(o => o.MatchField == 3).ToList();
-			if (personMatchExternalLogon.Any()) return personMatchExternalLogon.Select(p => p.PersonId).ToList();
-
-			return new List<Guid>();
+			return result;
 		}
 	}
 }

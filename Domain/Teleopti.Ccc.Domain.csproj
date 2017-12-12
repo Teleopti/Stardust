@@ -347,6 +347,7 @@
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestProcessor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserDevice.cs" />
+    <Compile Include="InterfaceLegacy\Domain\PersonIdentityMatchResult.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IRequeueHangfireRepository.cs" />
     <Compile Include="Intraday\IIntradaySkillProvider.cs" />
     <Compile Include="Intraday\IntradayExcelCreator.cs" />

@@ -6,6 +6,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -13,20 +14,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
 	public class ExternalPerformanceInfoFileProcessor : IExternalPerformanceInfoFileProcessor
 	{
-		private readonly int CUSTOMIZED_FIELD_COUNT = 8;
-		private readonly int MAX_AGENT_ID_LENGTH = 130;
-		private readonly int MAX_GAME_NAME_LENGTH = 200;
-		private readonly int MAX_MEASURE_COUNT = 10;
-		private readonly string GAME_TYPE_NUMBERIC = "numeric";
-		private readonly string GAME_TYPE_PERCENT = "percent";
+		private const int customizedFieldCount = 8;
+		private const int maxLengthOfAgentId = 130;
+		private const int maxLengthOfGameName = 200;
+		private const int maxCountOfMeasure = 10;
+		private const string gameTypeNumberic = "numeric";
+		private const string gameTypePercent = "percent";
+
+		private const int dateColumnIndex = 0;
+		private const int agentIdColumnIndex = 1;
+		private const int gameNameColumnIndex = 4;
+		private const int gameIdColumnIndex = 5;
+		private const int gameTypeColumnIndex = 6;
 
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
 		private readonly IPersonRepository _personRepository;
+		private readonly ITenantLogonDataManager _tenantLogonDataManager;
 
-		public ExternalPerformanceInfoFileProcessor(IExternalPerformanceRepository externalPerformanceRepository, IPersonRepository personRepository)
+		public ExternalPerformanceInfoFileProcessor(IExternalPerformanceRepository externalPerformanceRepository,
+			IPersonRepository personRepository, ITenantLogonDataManager tenantLogonDataManager)
 		{
 			_externalPerformanceRepository = externalPerformanceRepository;
 			_personRepository = personRepository;
+			_tenantLogonDataManager = tenantLogonDataManager;
 		}
 
 		public ExternalPerformanceInfoProcessResult Process(ImportFileData importFileData, Action<string> sendProgress)
@@ -46,8 +56,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var fileProcessResult = extractFileWithoutSeperateSession(importFileData.Data, sendProgress);
 			return fileProcessResult;
 		}
-		
-		private ExternalPerformanceInfoProcessResult extractFileWithoutSeperateSession(byte[] rawData, Action<string> sendProgress)
+
+		private ExternalPerformanceInfoProcessResult extractFileWithoutSeperateSession(byte[] rawData,
+			Action<string> sendProgress)
 		{
 			sendProgress("ExternalPerformanceInfoFileProcessor: Start to extract file.");
 			var processResult = validateFileContent(rawData);
@@ -67,45 +78,58 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		{
 			var processResult = new ExternalPerformanceInfoProcessResult();
 			var allLines = byteArrayToString(content);
+
 			var existMeasures = _externalPerformanceRepository.FindAllExternalPerformances().ToList();
 			var allMeasures = new List<IExternalPerformance>();
 			allMeasures.AddRange(existMeasures);
 
-			foreach (var roughCurrentLine in allLines)
+			var extractResultCollection = new List<PerformanceInfoExtractionResult>();
+			foreach (var currentLine in allLines)
 			{
-				var currentLine = roughCurrentLine.Replace("\"", string.Empty);
-				var extractionResult = new PerformanceInfoExtractionResult();
-				var columns = currentLine.Split(',');
-				if (columns.Length != CUSTOMIZED_FIELD_COUNT)
+				var extractionResult = new PerformanceInfoExtractionResult
 				{
-					var errorMessage = string.Format(Resources.InvalidNumberOfFields, CUSTOMIZED_FIELD_COUNT, columns.Length);
+					RawLine = currentLine
+				};
+
+				var columns = currentLine.Split(',').Select(x => x.TrimStart('"').TrimEnd('"')).ToArray();
+
+				// Verify columns count
+				if (columns.Length != customizedFieldCount)
+				{
+					var errorMessage = string.Format(Resources.InvalidNumberOfFields, customizedFieldCount, columns.Length);
 					processResult.InvalidRecords.Add($"{currentLine},{errorMessage}");
 					continue;
 				}
 
-				if (!DateTime.TryParseExact(columns[0], "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTime))
+				// Verify date
+				if (!DateTime.TryParseExact(columns[dateColumnIndex], "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None,
+					out var dateTime))
 				{
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.ImportBpoWrongDateFormat}");
 					continue;
 				}
 				extractionResult.DateFrom = new DateOnly(dateTime);
 
-				var measureName = columns[4];
-				if (!verifyFieldLength(measureName, MAX_GAME_NAME_LENGTH))
+				// Verify game name
+				var gameName = columns[gameNameColumnIndex];
+				if (!verifyFieldLength(gameName, maxLengthOfGameName))
 				{
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.GameNameIsTooLong}");
 					continue;
 				}
-				extractionResult.GameName = measureName;
+				extractionResult.GameName = gameName;
 
-				if (columns[6].ToLower() != GAME_TYPE_NUMBERIC && columns[6].ToLower() != GAME_TYPE_PERCENT)
+				// Verify game type
+				var gameType = columns[gameTypeColumnIndex].ToLower();
+				if (gameType != gameTypeNumberic && gameType != gameTypePercent)
 				{
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidGameType}");
 					continue;
 				}
-				extractionResult.GameType = columns[6].ToLower();
+				extractionResult.GameType = gameType;
 
-				if (extractionResult.GameType == GAME_TYPE_NUMBERIC)
+				// Verify score based on game type
+				if (extractionResult.GameType == gameTypeNumberic)
 				{
 					if (int.TryParse(columns.Last(), out var score)) extractionResult.GameNumberScore = score;
 					else
@@ -124,21 +148,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					}
 				}
 
-				var agentId = columns[1];
-				if (!verifyFieldLength(agentId, MAX_AGENT_ID_LENGTH))
+				// Verify agent id
+				var agentId = columns[agentIdColumnIndex].Trim();
+				if (!verifyFieldLength(agentId, maxLengthOfAgentId))
 				{
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.AgentIdIsTooLong}");
 					continue;
 				}
 				extractionResult.AgentId = agentId;
 
-				if (!int.TryParse(columns[5], out var gameId))
+				// Verify game id
+				if (!int.TryParse(columns[gameIdColumnIndex], out var gameId))
 				{
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidGameId}");
 					continue;
 				}
 				extractionResult.GameId = gameId;
 
+				// If external performance not exists yet, try add a new one
 				var measure = allMeasures.FirstOrDefault(g => g.ExternalId == extractionResult.GameId);
 				if (measure != null)
 				{
@@ -150,7 +177,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 				else
 				{
-					if (allMeasures.Count == MAX_MEASURE_COUNT)
+					if (allMeasures.Count == maxCountOfMeasure)
 					{
 						processResult.InvalidRecords.Add($"{currentLine},{Resources.OutOfMaximumLimit}");
 						continue;
@@ -163,44 +190,50 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					});
 				}
 
-				var personIdentities = new Dictionary<string, IList<Guid>>();
-				var identify = extractionResult.AgentId.Trim();
-				var agentsWithSameExternalLogon = new List<PerformanceInfoExtractionResult>();
+				extractResultCollection.Add(extractionResult);
+			}
 
-				IList<Guid> personIdList;
-				if (personIdentities.ContainsKey(identify))
+			if (extractResultCollection.Any())
+			{
+				// Try find person with EmploymentNumber or ExternalLogon match with identity first
+				var extractResultCollectionToBeMatchAppLogonName = new List<PerformanceInfoExtractionResult>();
+				var personIdentityList = extractResultCollection.Select(x => x.AgentId).Distinct();
+				var personIdentitiesByEmploymentNumberAndExternalLogon =
+					_personRepository.FindPersonByIdentities(personIdentityList);
+				foreach (var extractionResult in extractResultCollection)
 				{
-					personIdList = personIdentities[identify];
-				}
-				else
-				{
-					// TODO-xinfli: Should change to query with batch identity
-					personIdList = _personRepository.FindPersonByIdentity(identify);
-					if (!personIdList.Any())
+					var identify = extractionResult.AgentId;
+
+					if (personIdentitiesByEmploymentNumberAndExternalLogon.All(x => x.Identity != identify))
 					{
-						processResult.InvalidRecords.Add($"{currentLine},{Resources.AgentDoNotExist}");
+						extractResultCollectionToBeMatchAppLogonName.Add(extractionResult);
 						continue;
 					}
-					personIdentities.Add(identify, personIdList);
+
+					addMatchPerformanceData(extractionResult, personIdentitiesByEmploymentNumberAndExternalLogon, processResult);
 				}
 
-				foreach (var personId in personIdList)
+				// If not found, then try find person with ApplicationLogonName match with identity
+				if (extractResultCollectionToBeMatchAppLogonName.Any())
 				{
-					var eachExternalLogonInfo = new PerformanceInfoExtractionResult
+					personIdentityList = extractResultCollectionToBeMatchAppLogonName.Select(x => x.AgentId).Distinct();
+					var personIdentiesByAppLogonName = _tenantLogonDataManager.GetLogonInfoForIdentities(personIdentityList).ToList();
+					foreach (var extractionResult in extractResultCollectionToBeMatchAppLogonName)
 					{
-						AgentId = extractionResult.AgentId,
-						DateFrom = extractionResult.DateFrom,
-						GameId = extractionResult.GameId,
-						GameName = extractionResult.GameName,
-						GameNumberScore = extractionResult.GameNumberScore,
-						GamePercentScore = extractionResult.GamePercentScore,
-						GameType = extractionResult.GameType,
-						PersonId = personId
-					};
-					agentsWithSameExternalLogon.Add(eachExternalLogonInfo);
+						var identity = extractionResult.AgentId;
+						if (personIdentiesByAppLogonName.All(x => x.Identity != identity))
+						{
+							processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.AgentDoNotExist}");
+							continue;
+						}
+						addMatchPerformanceData(extractionResult, personIdentiesByAppLogonName.Select(x => new PersonIdentityMatchResult
+						{
+							Identity = x.Identity,
+							PersonId = x.PersonId,
+							MatchField = IdentityMatchField.ApplicationLogonName
+						}).ToList(), processResult);
+					}
 				}
-
-				processResult.ValidRecords.AddRange(agentsWithSameExternalLogon);
 			}
 
 			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom})
@@ -208,6 +241,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			processResult.ExternalPerformances =
 				allMeasures.Where(m => existMeasures.All(e => e.ExternalId != m.ExternalId)).ToList();
 			return processResult;
+		}
+
+		private static void addMatchPerformanceData(PerformanceInfoExtractionResult extractionResult,
+			IList<PersonIdentityMatchResult> personIdentities,
+			ExternalPerformanceInfoProcessResult processResult)
+		{
+			var matchPersonIdentities = personIdentities.Where(x =>
+				x.Identity == extractionResult.AgentId && x.MatchField == IdentityMatchField.EmploymentNumber).ToList();
+			if (!matchPersonIdentities.Any())
+			{
+				matchPersonIdentities = personIdentities.Where(x =>
+					x.Identity == extractionResult.AgentId && x.MatchField == IdentityMatchField.ExternalLogon).ToList();
+				if (!matchPersonIdentities.Any())
+				{
+					matchPersonIdentities = personIdentities.Where(x =>
+						x.Identity == extractionResult.AgentId && x.MatchField == IdentityMatchField.ApplicationLogonName).ToList();
+				}
+			}
+
+			if (!matchPersonIdentities.Any()) return;
+
+			var agentsWithSameExternalLogon = matchPersonIdentities.Select(x => x.PersonId)
+				.Select(personId => new PerformanceInfoExtractionResult
+				{
+					AgentId = extractionResult.AgentId,
+					DateFrom = extractionResult.DateFrom,
+					GameId = extractionResult.GameId,
+					GameName = extractionResult.GameName,
+					GameNumberScore = extractionResult.GameNumberScore,
+					GamePercentScore = extractionResult.GamePercentScore,
+					GameType = extractionResult.GameType,
+					PersonId = personId
+				});
+			processResult.ValidRecords.AddRange(agentsWithSameExternalLogon);
 		}
 
 		private ExternalPerformanceDataType convertMeasureToDataType(string type)
@@ -222,6 +289,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					return ExternalPerformanceDataType.Numeric;
 			}
 		}
+
 		private string convertMeasureType(ExternalPerformanceDataType type)
 		{
 			switch (type)
@@ -242,11 +310,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 		private bool isFileTypeValid(ImportFileData importFileData)
 		{
-			var fileName = importFileData.FileName;
-			if (!fileName.ToLower().EndsWith("csv"))
-				return false;
-			
-			return true;
+			var fileName = importFileData.FileName.ToLower();
+			return fileName.EndsWith("csv");
 		}
 
 		private IList<string> byteArrayToString(byte[] byteArray)

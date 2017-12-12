@@ -41,6 +41,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		int CountPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
 		IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
 		IList<PersonBudgetGroupName> FindBudgetGroupNameForPeople(IList<Guid> personIds, DateTime startDate);
-		IList<Guid> FindPersonByIdentity(string identity);
+		IList<PersonIdentityMatchResult> FindPersonByIdentities(IEnumerable<string> identities);
 	}
 }

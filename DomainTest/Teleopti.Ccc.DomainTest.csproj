@@ -278,6 +278,7 @@
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
+    <Compile Include="ImportExternalPerformance\ExternalPerformanceInfoFileProcessorTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePollerTest.cs" />

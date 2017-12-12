@@ -323,21 +323,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					}).ToList();
 		}
 
-		public IList<Guid> FindPersonByIdentity(string identity)
+		public IList<PersonIdentityMatchResult> FindPersonByIdentities(IEnumerable<string> identities)
 		{
-			if (string.IsNullOrEmpty(identity)) return new List<Guid>();
-
-			var persons = _storage.LoadAll<IPerson>();
-			var personsMatchEmploymentNumber = persons.Where(p => p.EmploymentNumber == identity).ToList();
-			if (personsMatchEmploymentNumber.Any()) return personsMatchEmploymentNumber.Select(p=>p.Id.Value).ToList();
-
-			var personsMatchAppLogonName = _appLogonNames.Where(p => p.Value == identity);
-			if (personsMatchAppLogonName.Any()) return personsMatchAppLogonName.Select(p => p.Key).ToList();
-
-			var personsMatchExternalLogon = _externalLogonInfos.Where(x => x.ExternalLogonName.Contains(identity));
-			if (personsMatchExternalLogon.Any()) return personsMatchExternalLogon.Select(p => p.PersonId).ToList();
-
-			return new List<Guid>();
+			throw new NotImplementedException();
 		}
 
 		public void ReversedOrder()

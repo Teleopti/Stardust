@@ -1798,18 +1798,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFindPersonMatchIdentity()
 		{
-			createPersonWithAppLogonData(out var personIdAshley, out var personIdJohn);
+			createPersonWithAppLogonData(out var _, out var personIdJohn);
 
-			var result = target.FindPersonByIdentity("employmentNumber-js");
+			var result = target.FindPersonByIdentities(new[] {"employmentNumber-js"});
 
 			result.Count.Should().Be.EqualTo(1);
 			var personIdentity = result.First();
-			personIdentity.Should().Be.EqualTo(personIdJohn);
+			personIdentity.PersonId.Should().Be.EqualTo(personIdJohn);
+			personIdentity.Identity.Should().Be.EqualTo("employmentNumber-js");
+			personIdentity.MatchField.Should().Be.EqualTo(IdentityMatchField.EmploymentNumber);
 
-			result = target.FindPersonByIdentity("appLogon-aa");
-			result.Count.Should().Be.EqualTo(1);
-			personIdentity = result.First();
-			personIdentity.Should().Be.EqualTo(personIdAshley);
+			// Should verify match external logon here
+			// But I did not find how to create external logon data.
 		}
 
 		[Test, TestCaseSource(nameof(planningGroupFilterTestCases))]
@@ -2081,7 +2081,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			personId1 = per1.Id.Value;
 
 			var per2 = PersonFactory.CreatePerson("John", "Smith");
-			//per2.SetId(personId2);
 			per2.SetEmploymentNumber(employmentNumber + "-js");
 			PersistAndRemoveFromUnitOfWork(per2);
 			personId2 = per2.Id.Value;
