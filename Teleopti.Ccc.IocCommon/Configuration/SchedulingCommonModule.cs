@@ -227,6 +227,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NumberOfAgentsKnowingSkill>().SingleInstance();
 			builder.RegisterType<ReduceSkillSets>().SingleInstance();
 			builder.RegisterType<CreateIslands>().SingleInstance();
+			builder.RegisterType<FetchIslands>().SingleInstance();
 			builder.RegisterType<MoveSkillSetToCorrectIsland>().SingleInstance();
 			builder.RegisterType<IslandModelFactory>().SingleInstance();
 			builder.RegisterType<CreateSkillSets>().SingleInstance();

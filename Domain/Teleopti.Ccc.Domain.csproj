@@ -356,6 +356,7 @@
     <Compile Include="Intraday\IntradaySkillProvider.cs" />
     <Compile Include="Intraday\ISkillTypeInfo.cs" />
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
+    <Compile Include="Islands\FetchIslands.cs" />
     <Compile Include="Notification\ASMScheduleChangeTime.cs" />
     <Compile Include="Notification\ClickatellNotificationSender.cs" />
     <Compile Include="Notification\ClickatellNotificationWebClient.cs">

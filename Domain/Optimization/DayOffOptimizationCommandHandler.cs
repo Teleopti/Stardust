@@ -4,8 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
@@ -16,22 +14,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffOptimizationCommandHandler : IDayOffOptimizationCommandHandler
 	{
 		private readonly IEventPublisher _eventPublisher;
-		private readonly CreateIslands _createIslands;
-		private readonly ReduceSkillSets _reduceSkillSets;
-		private readonly IAllStaff _allStaff;
-		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
+		private readonly FetchIslands _fetchIslands;
 
 		public DayOffOptimizationCommandHandler(IEventPublisher eventPublisher,
-			CreateIslands createIslands, 
-			ReduceSkillSets reduceSkillSets,
-			IAllStaff allStaff,
-			CrossAgentsAndSkills crossAgentsAndSkills)
+			FetchIslands fetchIslands)
 		{
 			_eventPublisher = eventPublisher;
-			_createIslands = createIslands;
-			_reduceSkillSets = reduceSkillSets;
-			_allStaff = allStaff;
-			_crossAgentsAndSkills = crossAgentsAndSkills;
+			_fetchIslands = fetchIslands;
 		}
 		
 		public void Execute(DayOffOptimizationCommand command, ISchedulingProgress schedulingProgress,
@@ -69,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			using (CommandScope.Create(command))
 			{
-				return _createIslands.Create(_reduceSkillSets, _allStaff.Agents(period), period);
+				return _fetchIslands.Execute(period);
 			}
 		}
 	}
