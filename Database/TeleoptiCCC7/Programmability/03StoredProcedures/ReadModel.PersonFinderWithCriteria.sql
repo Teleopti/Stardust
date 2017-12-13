@@ -91,7 +91,7 @@ if EXISTS (SELECT * FROM #SearchCriteria WHERE SearchValue = '')
 		RETURN
 	END
 
-IF EXISTS (SELECT * FROM #SearchCriteria WHERE SearchType = 'ALL')
+IF EXISTS (SELECT * FROM #SearchCriteria WHERE SearchType = 'All')
 	begin
 		SELECT @isSearchInAll = 1
 		INSERT INTO #DirectSearchCriteria SELECT * FROM #SearchCriteria
@@ -100,9 +100,9 @@ ELSE
 	begin
 		SELECT @isSearchInAll = 0
 		INSERT INTO #DirectSearchCriteria SELECT * FROM #SearchCriteria WHERE SearchType IN ('FirstName', 'LastName', 'EmploymentNumber', 'Note')
-		DELETE FROM #SearchCriteria WHERE SearchType IN ('FirstName', 'LastName', 'EmploymentNumber', 'Note')
 	end
 
+DELETE FROM #SearchCriteria WHERE SearchType IN ('FirstName', 'LastName', 'EmploymentNumber', 'Note')
 
 DECLARE @splitterIndex int
 select @splitterIndex = -1
@@ -169,6 +169,7 @@ BEGIN
 	DEALLOCATE SearchCriteriaCursor;	
 		
 	SELECT @allQuery = 'WITH TMP_P (PersonId) AS (' + @allQuery + ' ) ' + ' INSERT INTO #IntermediatePersonId SELECT PersonId FROM TMP_P '
+	--print @allQuery
     EXEC sp_executesql @allQuery
 	SELECT @dynamicSQL = 'SELECT PersonId FROM #IntermediatePersonId'
 END
@@ -219,10 +220,10 @@ BEGIN
 						+ ' ( (fp.StartDateTime IS NULL OR fp.StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
 
 		DECLARE SearchCriteriaCursor CURSOR FOR
-		SELECT SearchType, SearchValue FROM #SearchCriteria;
+		SELECT DISTINCT SearchType FROM #SearchCriteria;
 		OPEN SearchCriteriaCursor;
 
-		FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue
+		FETCH NEXT FROM SearchCriteriaCursor INTO @searchType
 						
 		WHILE @@FETCH_STATUS = 0
 		BEGIN					
@@ -230,7 +231,7 @@ BEGIN
 				SET @stringholder2 = @stringholder2 + ' INTERSECT '
 
 			SET @stringholder = ''			
-			SELECT @stringholder= @stringholder+ 'OR fp.SearchValue LIKE N''%' + [string]   + '%''  ' FROM SplitStringByChar(REPLACE(@searchValue, '''', ''''''), ';')
+			SELECT @stringholder= @stringholder+ 'OR fp.SearchValue LIKE N''%' + REPLACE(SearchValue, '''', '''''')   + '%''  ' FROM SearchCriteria WHERE SearchType = @SearchType
 				
 			IF @stringholder <> ''
 			BEGIN
@@ -238,7 +239,7 @@ BEGIN
 				SET @stringholder2 = @stringholder2 + '(' + @dynamicSQL + ' AND ( ' + @stringholder + ')  AND fp.SearchType = ''' + @searchType + ''' ) ' 
 			END
 	
-			FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue
+			FETCH NEXT FROM SearchCriteriaCursor INTO @searchType
 		END
 
 		SET @dynamicSQL = @stringholder2
