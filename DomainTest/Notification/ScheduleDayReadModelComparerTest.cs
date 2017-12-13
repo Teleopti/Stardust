@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				EndDateTime = new DateTime(2012, 08, 31, 09, 00, 00),
 				Date = new DateTime(2012, 08, 31),
 				Workday = false,
-				WorkTimeTicks = 0,
+				WorkTimeTicks = TimeSpan.FromHours(1).Ticks,
 				ContractTimeTicks = 0,
 				Label = "FP",
 				ColorCode = 0,

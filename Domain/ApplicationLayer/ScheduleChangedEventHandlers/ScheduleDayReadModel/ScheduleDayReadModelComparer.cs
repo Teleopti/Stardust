@@ -91,8 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		private static bool isNotWorkingDay(ScheduleDayReadModel scheduleDayReadModel)
 		{
-			return !scheduleDayReadModel.Workday && scheduleDayReadModel.ContractTimeTicks.Equals(0L)
-				   && scheduleDayReadModel.WorkTimeTicks.Equals(0L);
+			return !scheduleDayReadModel.Workday && scheduleDayReadModel.ContractTimeTicks.Equals(0L);
 		}
 	}
 }
