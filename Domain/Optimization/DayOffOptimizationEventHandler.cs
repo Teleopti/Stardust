@@ -14,16 +14,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
+		private readonly IGridlockManager _gridlockManager;
 
 		public DayOffOptimizationEventHandler(DayOffOptimization dayOffOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			FillSchedulerStateHolder fillSchedulerStateHolder,
-			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland)
+			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
+			IGridlockManager gridlockManager)
 		{
 			_dayOffOptimization = dayOffOptimization;
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_synchronizeSchedulesAfterIsland = synchronizeSchedulesAfterIsland;
+			_gridlockManager = gridlockManager;
 		}
 		
 		public void Handle(DayOffOptimizationWasOrdered @event)
@@ -32,8 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 			using (CommandScope.Create(@event))
 			{
-				//TODO: locks
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, @event.Agents, null, selectedPeriod, @event.Skills);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, @event.Agents, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate), 
 					schedulerStateHolder.ChoosenAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray(), 
 					new NoSchedulingProgress(), 

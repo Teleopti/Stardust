@@ -510,7 +510,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		[TestCase(true, ExpectedResult = true)]
 		[TestCase(false, ExpectedResult = false)]
-		[Ignore("#47208 to be fixed")]
 		public bool ShouldNotMoveLockedDayOff(bool locked)
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
