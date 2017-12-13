@@ -53,7 +53,21 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
                             Add(etlJobSchedule);
                         }
                         break;
-                }
+					case 2:
+					{
+						IEtlJobSchedule etlJobSchedule = new EtlJobSchedule(
+							(int)row["schedule_id"], 
+							(string)row["schedule_name"],
+							(string)row["etl_job_name"],
+							(bool)row["enabled"],
+							handleDBNull(row["etl_datasource_id"], -1),
+							handleDBNull(row["description"], string.Empty),
+							(DateTime) row["insert_date"],
+							GetSchedulePeriods((int)row["schedule_id"], rep));
+						Add(etlJobSchedule);
+					}
+						break;
+				}
             }
         }
 

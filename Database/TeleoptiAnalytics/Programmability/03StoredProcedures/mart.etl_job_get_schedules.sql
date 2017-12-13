@@ -7,6 +7,7 @@ GO
 -- Author:		JN
 -- Create date: 2008-06-03
 -- Description:	Get job schedules
+-- exec [mart].[etl_job_get_schedules]
 -- =============================================
 CREATE PROCEDURE [mart].[etl_job_get_schedules]
 AS
@@ -26,6 +27,7 @@ BEGIN
 		,[etl_relative_period_end]
 		,[etl_datasource_id]
 		,[description]
+		,[insert_date]
 	FROM Mart.[etl_job_schedule]
 	WHERE schedule_id > -1
 END

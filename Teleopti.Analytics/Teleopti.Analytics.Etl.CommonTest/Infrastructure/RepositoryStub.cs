@@ -28,6 +28,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			AddSchedule(1, 60);
 			AddSchedule(2, 15, 180, 1430);
 			AddSchedule(-1, 240); // -1 indicates new item not yet or newly persisted
+			AddSchedule(3);
 			return _scheduleTable;
 		}
 
@@ -114,6 +115,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			scheduleTable.Columns.Add("etl_relative_period_end", typeof(int));
 			scheduleTable.Columns.Add("etl_datasource_id", typeof(int));
 			scheduleTable.Columns.Add("description", typeof(string));
+			scheduleTable.Columns.Add("insert_date", typeof(DateTime));
 
 			return scheduleTable;
 		}
@@ -192,6 +194,20 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			dr["etl_datasource_id"] = 1;
 			dr["description"] = "Occurs daily every x minute.";
 
+			_scheduleTable.Rows.Add(dr);
+		}
+
+		public void AddSchedule(int scheduleId)
+		{
+			DataRow dr = _scheduleTable.NewRow();
+			dr["schedule_id"] = scheduleId;
+			dr["schedule_name"] = "Manual ETL";
+			dr["enabled"] = true;
+			dr["schedule_type"] = JobScheduleType.Manual;
+			dr["etl_job_name"] = "Intraday";
+			dr["etl_datasource_id"] = 1;
+			dr["description"] = "Manual ETL";
+			dr["insert_date"] = "2017-12-12 15:33:00";
 			_scheduleTable.Rows.Add(dr);
 		}
 

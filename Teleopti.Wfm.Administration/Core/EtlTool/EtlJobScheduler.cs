@@ -37,8 +37,8 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
 			IList<IEtlJobRelativePeriod> relativePeriodCollection =
 				GetRelativePeriods(jobEnqueModel.JobPeriods, baseConfig.TimeZoneCode);
-			var etlJobSchedule = new EtlJobSchedule(-1, "Manual ETL", jobEnqueModel.JobName, jobEnqueModel.LogDataSourceId,
-				"Manual ETL", relativePeriodCollection);
+			var etlJobSchedule = new EtlJobSchedule(-1, "Manual ETL", jobEnqueModel.JobName, true, jobEnqueModel.LogDataSourceId,
+				"Manual ETL", DateTime.MinValue, relativePeriodCollection);
 			_jobScheduleRepository.SetDataMartConnectionString(connectionString);
 			var scheduleId = _jobScheduleRepository.SaveSchedule(etlJobSchedule);
 			etlJobSchedule.SetScheduleIdOnPersistedItem(scheduleId);

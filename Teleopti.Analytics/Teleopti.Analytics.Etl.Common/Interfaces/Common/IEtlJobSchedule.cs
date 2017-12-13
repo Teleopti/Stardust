@@ -24,6 +24,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
         int DataSourceId { get; }
         string Description { get;  }
         JobScheduleType ScheduleType { get; }
-        void SetScheduleIdOnPersistedItem(int scheduleId);
+		DateTime InsertDate { get; }
+		void SetScheduleIdOnPersistedItem(int scheduleId);
     }
 }

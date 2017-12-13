@@ -52,7 +52,18 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
             Assert.AreEqual(7, jobSchedule.RelativePeriodEnd);
             Assert.AreEqual(1, jobSchedule.DataSourceId);
             Assert.AreEqual("Occurs daily every x minute.", jobSchedule.Description);
-        }
+
+			// Occurs Manually
+			jobSchedule = _etlJobScheduleCollection[3];
+			Assert.AreEqual(3, jobSchedule.ScheduleId);
+			Assert.AreEqual("Manual ETL", jobSchedule.ScheduleName);
+			Assert.AreEqual(true, jobSchedule.Enabled);
+			Assert.AreEqual(JobScheduleType.Manual, jobSchedule.ScheduleType);
+			Assert.AreEqual("Intraday", jobSchedule.JobName);
+			Assert.AreEqual(1, jobSchedule.DataSourceId);
+			Assert.AreEqual("Manual ETL", jobSchedule.Description);
+
+		}
 
         [Test]
         public void VerifyJobSchedulePeriod()

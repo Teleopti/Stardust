@@ -72,7 +72,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		}
 
 		[Test]
-		public void ShouldReturnPeriodicJobWithinValidTime()
+		public void ShouldReturnPeriodicJobWithinValidPeriod()
 		{
 			var target = new SchedulePriority();
 			var now = new DateTime(2017, 12, 12, 8, 0, 0);
@@ -178,5 +178,87 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 
 			result.Should().Be.Null();
 		}
+
+		[Test]
+		public void ShouldReturnManualJobFirstEnqueued()
+		{
+			var target = new SchedulePriority();
+			var now = new DateTime(2017, 12, 12, 8, 0, 0);
+
+			var jobSchedules = new List<IEtlJobSchedule>()
+			{
+				new EtlJobScheduleForTest
+				{
+					ScheduleId = 1,
+					Enabled = true,
+					ScheduleType = JobScheduleType.Manual,
+					InsertDate = now.AddMinutes(-1)
+				},
+				new EtlJobScheduleForTest
+				{
+					ScheduleId = 2,
+					Enabled = true,
+					ScheduleType = JobScheduleType.Manual,
+					InsertDate = now.AddMinutes(-2)
+				}
+			};
+			IEtlJobScheduleCollection jobScheduleCollection = new EtlJobScheduleCollectionForTest(jobSchedules);
+			var result = target.GetTopPriority(jobScheduleCollection, now, now.AddMinutes(-30));
+
+			result.ScheduleId.Should().Be(2);
+		}
+
+		[Test]
+		public void ShouldReturnManualJobFirstBeforeDailyAndPeriodic()
+		{
+			var target = new SchedulePriority();
+			var now = new DateTime(2017, 12, 12, 8, 0, 0);
+
+			var jobSchedules = new List<IEtlJobSchedule>()
+			{
+				new EtlJobScheduleForTest
+				{
+					ScheduleId = 1,
+					Enabled = true,
+					ScheduleType = JobScheduleType.Manual,
+					InsertDate = now.AddMinutes(-1)
+				},
+				new EtlJobScheduleForTest
+				{
+					ScheduleId = 2,
+					Enabled = true,
+					ScheduleType = JobScheduleType.OccursDaily,
+					LastTimeStarted = now.AddMinutes(-2),
+					TimeToRunNextJob = now.AddMinutes(-1)
+				}
+			};
+			IEtlJobScheduleCollection jobScheduleCollection = new EtlJobScheduleCollectionForTest(jobSchedules);
+			var result = target.GetTopPriority(jobScheduleCollection, now, now.AddMinutes(-30));
+
+			result.ScheduleId.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldNotReturnDisabledManualJob()
+		{
+			var target = new SchedulePriority();
+			var now = new DateTime(2017, 12, 12, 8, 0, 0);
+
+			var jobSchedules = new List<IEtlJobSchedule>()
+			{
+				new EtlJobScheduleForTest
+				{
+					ScheduleId = 1,
+					Enabled = false,
+					ScheduleType = JobScheduleType.Manual,
+					InsertDate = now.AddMinutes(-1)
+				}
+			};
+			IEtlJobScheduleCollection jobScheduleCollection = new EtlJobScheduleCollectionForTest(jobSchedules);
+			var result = target.GetTopPriority(jobScheduleCollection, now, now.AddMinutes(-30));
+
+			result.Should().Be.Null();
+		}
+
 	}
 }

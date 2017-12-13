@@ -19,17 +19,20 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
 			int scheduleId, 
 			string scheduleName, 
 			string jobName, 
+			bool enabled,
 			int dataSourceId,
 			string description,
+			DateTime insertDate,
 			IList<IEtlJobRelativePeriod> relativePeriodCollection)
 		{
 			ScheduleId = scheduleId;
 			ScheduleType = JobScheduleType.Manual;
 			ScheduleName = scheduleName;
-			Enabled = true;
+			Enabled = enabled;
 			JobName = jobName;
 			DataSourceId = dataSourceId;
 			Description = description;
+			InsertDate = insertDate;
 			_relativePeriodCollection = relativePeriodCollection;
 		}
 
@@ -203,5 +206,6 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
 
         public int DataSourceId { get; private set; }
         public string Description { get; private set; }
-    }
+		public DateTime InsertDate { get; }
+	}
 }

@@ -26,6 +26,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public int DataSourceId { get; set; }
 		public string Description { get; set; }
 		public JobScheduleType ScheduleType { get; set; }
+		public DateTime InsertDate { get; set; }
+
 		public void SetScheduleIdOnPersistedItem(int scheduleId)
 		{
 			throw new NotImplementedException();
