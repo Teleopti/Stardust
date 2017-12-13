@@ -2,6 +2,7 @@
 using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
@@ -31,6 +32,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		public void ThenIShouldSeePlanningPeriodSuggestions()
 		{
 			Browser.Interactions.AssertExists(".planning-period-suggesions");
+		}
+
+		[Then(@"I select the first suggestion")]
+		public void ThenISelectTheFirstSuggestion()
+		{
+			Browser.Interactions.AssertExists(".planning-period-suggesions");
+			Browser.Interactions.ClickUsingJQuery("div .planning-period-suggesions:first");
 		}
 
 		[Then(@"I should see a planning period between '(.*)' and '(.*)'" ), SetCulture("sv-SE")]

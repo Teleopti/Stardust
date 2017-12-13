@@ -28,6 +28,7 @@ Scenario: The first planning period suggestion should be the next upcoming sched
 	When I view planning periods for planning group 'PlanningGroup 1'
 	And I click create planning period
 	Then I should see planning period suggestions
+	And I select the first suggestion
 	When I click apply planning period
 	Then I should see a planning period between '2016-06-12' and '2016-06-18'
 
