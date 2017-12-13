@@ -24,17 +24,19 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_historicalAdherenceDate = historicalAdherenceDate;
 		}
 
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/HistoricalAdherence/PercentForToday")]
-		public virtual IHttpActionResult ForToday(Guid personId) =>
+		[ReadModelUnitOfWork, UnitOfWork]
+		[HttpGet, Route("api/HistoricalAdherence/PercentForToday")]
+		public virtual IHttpActionResult PercentForToday(Guid personId) =>
 			Ok(_adherencePercentageViewModelBuilder.Build(personId));
 
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/HistoricalAdherence/ForPerson")]
-		public virtual IHttpActionResult HistoricalFor(Guid personId) =>
+		[ReadModelUnitOfWork, UnitOfWork]
+		[HttpGet, Route("api/HistoricalAdherence/ForPerson")]
+		public virtual IHttpActionResult ForPerson(Guid personId) =>
 			Ok(_historicalAdherenceViewModelBuilder.Build(personId));
-		
-		[UnitOfWork, HttpGet, Route("api/HistoricalAdherence/MostRecentShiftDate")]
-		public virtual IHttpActionResult HistoricalAdherenceDateForPerson(Guid personId) =>
-			Ok(_historicalAdherenceDate.MostRecentShiftDate(personId));
 
+		[UnitOfWork]
+		[HttpGet, Route("api/HistoricalAdherence/MostRecentShiftDate")]
+		public virtual IHttpActionResult MostRecentShiftDate(Guid personId) =>
+			Ok(_historicalAdherenceDate.MostRecentShiftDate(personId).Date.ToString("yyyyMMdd"));
 	}
 }

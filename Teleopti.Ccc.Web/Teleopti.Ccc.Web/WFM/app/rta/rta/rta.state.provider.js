@@ -69,11 +69,27 @@ angular.module('wfm.rta').provider('RtaState', function() {
 					return 'RtaAgentsController as vm';
 				}
             })
-            .state('rta-historical', {
-                url: '/rta/agent-historical/:personId?open',
-                templateUrl: 'app/rta/rta/historical/rta-historical.html',
-                controller: 'RtaHistoricalController as vm'
-            })
+			.state('rta-historical-without-date', {
+				url: '/rta/agent-historical/:personId?open',
+				controller: function ($http, $state, $stateParams) {
+					if (!toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786){
+						$state.go('rta-historical', $stateParams);
+						return;
+					}
+
+					$http.get('../api/HistoricalAdherence/MostRecentShiftDate',
+						{params: {personId: $stateParams.personId}}
+					).then(function (response) {
+						$stateParams.date = response.data;
+						$state.go('rta-historical', $stateParams);
+					});
+				}
+			})
+			.state('rta-historical', {
+				url: '/rta/agent-historical/:personId/:date?open',
+				templateUrl: 'app/rta/rta/historical/rta-historical.html',
+				controller: 'RtaHistoricalController as vm'
+			})
             .state('rta-teams-legacy', {
                 url: '/rta/teams/?siteIds&skillIds&skillAreaId&open',
                 controller: function($state, $stateParams) {
