@@ -5,7 +5,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
-	internal class SchedulePriority
+	public class SchedulePriority
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(SchedulePriority));
 

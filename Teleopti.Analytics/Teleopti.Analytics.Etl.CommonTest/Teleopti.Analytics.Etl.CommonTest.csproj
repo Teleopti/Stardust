@@ -90,8 +90,11 @@
     <Compile Include="FakeBaseConfigurationRepository.cs" />
     <Compile Include="JobSchedule\PBI41857.cs" />
     <Compile Include="RunControllerTest.cs" />
+    <Compile Include="Service\EtlJobScheduleCollectionForTest.cs" />
+    <Compile Include="Service\EtlJobScheduleForTest.cs" />
     <Compile Include="Service\EtlServiceHangfireEventPublisherTest.cs" />
     <Compile Include="Service\ResolveTest.cs" />
+    <Compile Include="Service\SchedulePriorityTest.cs" />
     <Compile Include="Transformer\AbsenceTransformerTest.cs" />
     <Compile Include="Transformer\ActivityTransformerTest.cs" />
     <Compile Include="Transformer\BusinessUnitTransformerTest.cs" />
