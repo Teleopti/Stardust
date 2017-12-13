@@ -3,6 +3,6 @@
 	public enum SeperateWebRequest
 	{
 		SimulateSecondRequestOrScheduler,
-		SimulateFirstRequestOrScheduler
+		SimulateFirstRequest
 	}
 }

@@ -10,10 +10,10 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(SeperateWebRequest.SimulateFirstRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, false)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, true)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, true)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, false)]
 	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, true)]
 	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, true)]
 	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, false)]
