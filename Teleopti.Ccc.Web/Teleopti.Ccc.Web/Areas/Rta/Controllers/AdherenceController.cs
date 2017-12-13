@@ -12,13 +12,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	{
 		private readonly AdherencePercentageViewModelBuilder _adherencePercentageViewModelBuilder;
 		private readonly HistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
+		private readonly HistoricalAdherenceDate _historicalAdherenceDate;
 
 		public AdherenceController(
 			AdherencePercentageViewModelBuilder adherencePercentageViewModelBuilder,
-			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder)
+			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder,
+			HistoricalAdherenceDate historicalAdherenceDate)
 		{
 			_adherencePercentageViewModelBuilder = adherencePercentageViewModelBuilder;
 			_historicalAdherenceViewModelBuilder = historicalAdherenceViewModelBuilder;
+			_historicalAdherenceDate = historicalAdherenceDate;
 		}
 
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Adherence/ForToday")]
@@ -28,5 +31,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/HistoricalAdherence/For")]
 		public virtual IHttpActionResult HistoricalFor(Guid personId) =>
 			Ok(_historicalAdherenceViewModelBuilder.Build(personId));
+		
+		[UnitOfWork, HttpGet, Route("api/HistoricalAdherence/MostRecentShiftDate")]
+		public virtual IHttpActionResult HistoricalAdherenceDateForPerson(Guid personId) =>
+			Ok(_historicalAdherenceDate.MostRecentShiftDate(personId));
+
 	}
 }
