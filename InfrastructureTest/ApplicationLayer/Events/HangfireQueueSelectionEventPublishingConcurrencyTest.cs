@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 				});
 				Run.InParallel(() =>
 				{
-					Publisher.Publish(new OtherQueueEvent());
+					Publisher.Publish(new CriticalScheduleChangesTodayQueueEvent());
 				});
 			});
 			Run.Wait();
@@ -43,39 +41,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Hangfire.NumberOfJobsInQueue(Queues.Default).Should().Be(1000);
 			Hangfire.NumberOfJobsInQueue(Queues.CriticalScheduleChangesToday).Should().Be(1000);
 		}
-		
-		public class DefaultQueueEvent : IEvent
-		{
-		}
-
-		public class OtherQueueEvent : IEvent
-		{
-		}
-
-		public class QueuingHandler :
-			IHandleEvent<DefaultQueueEvent>,
-			IHandleEventOnQueue<DefaultQueueEvent>,
-			IHandleEvent<OtherQueueEvent>,
-			IHandleEventOnQueue<OtherQueueEvent>,
-			IRunOnHangfire
-		{
-			public void Handle(DefaultQueueEvent @event)
-			{
-			}
-
-			public string QueueTo(DefaultQueueEvent @event)
-			{
-				return null;
-			}
-
-			public void Handle(OtherQueueEvent @event)
-			{
-			}
-
-			public string QueueTo(OtherQueueEvent @event)
-			{
-				return Queues.CriticalScheduleChangesToday;
-			}
-		}
 	}
+
 }

@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
@@ -19,8 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddService<DefaultQueueHandler>();
-			system.AddService<OtherQueueHandler>();
+			system.AddService<QueuingHandler>();
 		}
 
 		[Test]
@@ -35,49 +32,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldEnqueueOnOtherQueue()
 		{
-			Publisher.Publish(new OtherQueueEvent());
+			Publisher.Publish(new CriticalScheduleChangesTodayQueueEvent());
 
 			Hangfire.NumberOfJobsInQueue(Queues.Default).Should().Be(0);
 			Hangfire.NumberOfJobsInQueue(Queues.CriticalScheduleChangesToday).Should().Be(1);
 		}
-
-		public class DefaultQueueEvent : IEvent
-		{
-		}
-
-		public class DefaultQueueHandler :
-			IHandleEvent<DefaultQueueEvent>,
-			IHandleEventOnQueue<DefaultQueueEvent>,
-			IRunOnHangfire
-		{
-			public void Handle(DefaultQueueEvent @event)
-			{
-			}
-
-			public string QueueTo(DefaultQueueEvent @event)
-			{
-				return null;
-			}
-		}
-
-		public class OtherQueueEvent : IEvent
-		{
-		}
-
-		public class OtherQueueHandler :
-			IHandleEvent<OtherQueueEvent>,
-			IHandleEventOnQueue<OtherQueueEvent>,
-			IRunOnHangfire
-		{
-			public void Handle(OtherQueueEvent @event)
-			{
-			}
-
-			public string QueueTo(OtherQueueEvent @event)
-			{
-				return Queues.CriticalScheduleChangesToday;
-			}
-		}
-
 	}
 }

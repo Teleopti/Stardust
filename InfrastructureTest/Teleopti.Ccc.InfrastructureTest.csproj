@@ -168,6 +168,8 @@
     <Compile Include="ApplicationLayer\Dates\AnalyticsPersonLocalDateUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireAllowRecurringFailuresEventPublishingConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireAllowRecurringFailuresEventPublishingTest.cs" />
+    <Compile Include="ApplicationLayer\Events\HangfireQueueOrderTest.cs" />
+    <Compile Include="ApplicationLayer\Events\QueuingHandler.cs" />
     <Compile Include="ApplicationLayer\Events\SyncEventPackagePublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventPackagePublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireQueueSelectionEventPublishingConcurrencyTest.cs" />
