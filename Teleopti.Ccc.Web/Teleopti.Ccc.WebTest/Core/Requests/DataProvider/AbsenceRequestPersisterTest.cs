@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IWorkflowControlSet _workflowControlSet;
 		private IAbsence _absence;
 		private IPerson _person;
+		private ThisIsNow _now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -64,13 +65,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var personRepository = new FakePersonRepositoryLegacy();
 			personRepository.Add(_person);
-
+			_now = new ThisIsNow(nowTime);
+			
 			system.UseTestDouble(personRepository).For<IPersonRepository>();
 			system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			system.UseTestDouble(new FakeLoggedOnUser(_person)).For<ILoggedOnUser>();
 			system.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
-			system.UseTestDouble(new ThisIsNow(nowTime)).For<INow>();
+			system.UseTestDouble(_now).For<INow>();
 			system.UseTestDouble<AbsenceRequestFormMapper>().For<AbsenceRequestFormMapper>();
 			system.UseTestDouble<RequestsViewModelMapper>().For<RequestsViewModelMapper>();
 			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
@@ -795,6 +797,41 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				.EqualTo(Resources.DenyReasonTechnicalIssues);
 		}
 
+		[Test]
+		public void ShouldUsePersonTimezoneWhenCheckingRequest47148()
+		{
+			_now = new ThisIsNow(new DateTime(2017,12,09,1,0,0, DateTimeKind.Utc));
+			ServiceLocatorForEntity.Now = _now;
+			var today = new DateOnly(2017,12,08);
+			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Hawaiian Standard Time"));
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			_absence = createAbsence();
+
+			var absenceRequestProcess = new GrantAbsenceRequest();
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = _absence,
+				AbsenceRequestProcess = absenceRequestProcess,
+				OpenForRequestsPeriod = new DateOnlyPeriod(2017,12,1,2017,12,31),
+				BetweenDays = new MinMax<int>(0,15),
+				PersonAccountValidator = new AbsenceRequestNoneValidator()
+			});
+			
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = today,
+				EndDate = today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(16)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+			
+			setupPersonSkills();
+			Persister.Persist(form);
+			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
+		}
+		
 		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoGrant = false
 			, bool usePersonAccountValidator = false, bool autoDeny = false, bool absenceRequestWaitlistEnabled = false)
 		{
