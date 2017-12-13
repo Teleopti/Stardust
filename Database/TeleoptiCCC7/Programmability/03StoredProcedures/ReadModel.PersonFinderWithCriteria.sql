@@ -177,18 +177,18 @@ BEGIN
 	IF EXISTS (SELECT * FROM #DirectSearchCriteria)
 	BEGIN
 		DECLARE DirectSearchCriteriaCursor CURSOR FOR
-		SELECT SearchType, SearchValue FROM #DirectSearchCriteria;
+		SELECT DISTINCT SearchType FROM #DirectSearchCriteria;
 		OPEN DirectSearchCriteriaCursor;
 
 		SELECT @directDynamicSQL = 'SELECT p.Id FROM dbo.Person p with (nolock) WHERE ' 
 								 + 'ISNULL(p.TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' '
 
-		FETCH NEXT FROM DirectSearchCriteriaCursor INTO @searchType, @searchValue
+		FETCH NEXT FROM DirectSearchCriteriaCursor INTO @searchType
 
 		WHILE @@FETCH_STATUS = 0
 		BEGIN			
 			SET @stringholder = ''
-			SELECT @stringholder= @stringholder+ 'OR (' + @searchType + ' LIKE N''%' + [string]   + '%'' ) ' FROM SplitStringByChar(REPLACE(@searchValue, '''', ''''''), ';')
+			SELECT @stringholder= @stringholder+ 'OR (' + @searchType + ' LIKE N''%' + REPLACE(SearchValue,'''', '''''') + '%'' ) ' FROM #DirectSearchCriteria WHERE SearchType = @SearchType
 	
 			IF @stringholder <> ''
 			BEGIN
@@ -196,14 +196,14 @@ BEGIN
 				SET @directDynamicSQL = @directDynamicSQL + ' AND ( ' + @stringholder + ') ' 
 			END
 	
-			FETCH NEXT FROM DirectSearchCriteriaCursor INTO @searchType, @searchValue
+			FETCH NEXT FROM DirectSearchCriteriaCursor INTO @searchType
 		END
 
 		CLOSE DirectSearchCriteriaCursor;
 		DEALLOCATE DirectSearchCriteriaCursor;
 	
 		SELECT @directDynamicSQL = 'INSERT INTO #IntermediatePersonId ' + @directDynamicSQL
-	
+	--print @directDynamicSQL
 		EXEC sp_executesql @directDynamicSQL
 		SELECT @dynamicSQL = 'SELECT fp.PersonId FROM #IntermediatePersonId t INNER JOIN ReadModel.FindPerson fp with (nolock) ON t.PersonId = fp.PersonId WHERE '					
 	END
@@ -248,7 +248,7 @@ BEGIN
 	ELSE
 		SELECT @dynamicSQL = 'SELECT PersonId FROM #IntermediatePersonId'
 END
-
+--print @dynamicSQL
 --insert into PersonId temp table
 INSERT INTO #PersonId
 EXEC sp_executesql @dynamicSQL
@@ -327,7 +327,7 @@ SELECT @dynamicSQL='SELECT ' + cast(@total as nvarchar(10)) + ' AS TotalCount, *
      + ' AND RowNumber < '+ cast(@end_row as nvarchar(10))
 
 --debug
---SELECT @dynamicSQL
+--print @dynamicSQL
 
 --return
 EXEC sp_executesql @dynamicSQL

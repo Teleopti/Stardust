@@ -44,7 +44,44 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target.FindInTeams(crit, new[] { team1Id, team2Id });
 			Assert.That(crit.TotalRows, Is.EqualTo(0));
 		}
-		
+
+		[Test]
+		public void ShouldMatchMultipleValuesForOneSearchType()
+		{
+			var personToTest = PersonFactory.CreatePerson("Ashley","Andeen");
+			PersistAndRemoveFromUnitOfWork(personToTest);
+
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+			PersistAndRemoveFromUnitOfWork(team.Site);
+			PersistAndRemoveFromUnitOfWork(team);
+
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var personPeriod = new PersonPeriod(new DateOnly(2011, 1, 1),
+				personContract,
+				team);
+			personToTest.AddPersonPeriod(personPeriod);
+			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.ContractSchedule);
+			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.PartTimePercentage);
+			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.Contract);
+			PersistAndRemoveFromUnitOfWork(personToTest);
+
+			var personToTest2 = PersonFactory.CreatePerson("Pierre","Baldi");
+			PersistAndRemoveFromUnitOfWork(personToTest2);
+			
+			var personPeriod2 = new PersonPeriod(new DateOnly(2011, 1, 1),
+				personContract,
+				team);
+			personToTest2.AddPersonPeriod(personPeriod2);
+			PersistAndRemoveFromUnitOfWork(personToTest2);
+
+			_target.UpdateFindPerson(new[] { personToTest.Id.Value, personToTest2.Id.Value });
+
+			var crit = new PersonFinderSearchCriteria(PersonFinderField.FirstName, "Ashley Pierre", 10,
+				new DateOnly(2016, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
+			_target.Find(crit);
+			Assert.That(crit.TotalRows, Is.EqualTo(2));
+		}
+
 		[Test]
 		public void ShouldMatchAllValuesInAllCriteria()
 		{
