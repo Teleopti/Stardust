@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
 
 			var personRequest = new PersonRequest(agentWithoutWaitlist, new AbsenceRequest(absence, period)).WithId();
-			Target.Process(personRequest, Now.UtcDateTime());
+			Target.Process(personRequest);
 
 			CommandDispatcher.AllComands.Count(x=>x.GetType()== typeof(ApproveRequestCommand)).Should().Be.EqualTo(1);
 		}
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.HasWaitlisted = true;
 
 			var personRequest = new PersonRequest(agentWithNewRequest, new AbsenceRequest(absence, period)).WithId();
-			Target.Process(personRequest, Now.UtcDateTime());
+			Target.Process(personRequest);
 
 			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(DenyRequestCommand)).Should().Be.EqualTo(1);
 		}
@@ -191,10 +191,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
 
 			var personRequest = new PersonRequest(agentWithNewRequest, new AbsenceRequest(absence, period)).WithId();
-			Target.Process(personRequest, Now.UtcDateTime());
+			Target.Process(personRequest);
 
 			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(ApproveRequestCommand)).Should().Be.EqualTo(1);
 		}
+
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
 		{
 			return new SkillCombinationResource

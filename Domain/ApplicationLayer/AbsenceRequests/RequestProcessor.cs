@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_now = now;
 		}
 
-		public void Process(IPersonRequest personRequest, DateTime startTime)
+		public void Process(IPersonRequest personRequest)
 		{
 			try
 			{
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 	public interface IRequestProcessor
 	{
-		void Process(IPersonRequest personRequest, DateTime startTime);
+		void Process(IPersonRequest personRequest);
 	}
 
 	public interface IAbsenceRequestSetting

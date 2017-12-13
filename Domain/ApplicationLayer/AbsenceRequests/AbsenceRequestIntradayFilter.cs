@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var isIntradayRequest = personRequest.Request.Period.ElapsedTime() <= TimeSpan.FromDays(1) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
 				if (isIntradayRequest && validators.Any(v => v is StaffingThresholdValidator))
 				{
-					_requestProcessor.Process(personRequest, startDateTime);
+					_requestProcessor.Process(personRequest);
 				}
 				else
 				{

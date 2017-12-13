@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_activityRepository = activityRepository;
 		}
 
-		public void Process(IPersonRequest personRequest, DateTime startTime)
+		public void Process(IPersonRequest personRequest)
 		{
 			try
 			{
