@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Resources;
 using System.Web.Http;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -15,7 +13,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -32,16 +29,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly CheckScheduleHints _basicCheckScheduleHints;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
-		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
-		private readonly ICurrentScenario _currentScenario;
-		private readonly IUserTimeZone _userTimeZone;
-		
+
 
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
 			IPlanningPeriodRepository planningPeriodRepository, IPlanningGroupStaffLoader planningGroupStaffLoader, INow now,
 			CheckScheduleHints basicCheckScheduleHints, IPlanningGroupRepository planningGroupRepository, 
-			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, IFindSchedulesForPersons findSchedulesForPersons,
-			ICurrentScenario currentScenario, IUserTimeZone userTimeZone)
+			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_planningPeriodRepository = planningPeriodRepository;
@@ -50,9 +43,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_basicCheckScheduleHints = basicCheckScheduleHints;
 			_planningGroupRepository = planningGroupRepository;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
-			_findSchedulesForPersons = findSchedulesForPersons;
-			_currentScenario = currentScenario;
-			_userTimeZone = userTimeZone;
 		}
 
 		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/result")]

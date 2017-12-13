@@ -377,6 +377,7 @@
     <Compile Include="Rta\Tracer\RtaTracerWriterTenantTest.cs" />
     <Compile Include="Rta\Tracer\RtaTracerWriterTest.cs" />
     <Compile Include="Rta\WithUnitOfWorkWithRecurringEvents.cs" />
+    <Compile Include="Scheduling\DayOffOptimizationWebUowTest.cs" />
     <Compile Include="Scheduling\FullSchedulingUowTest.cs" />
     <Compile Include="Scheduling\MoveAgentToNewTimeZoneTest.cs" />
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldOverwriteExternalDelete.cs" />

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -22,15 +23,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public OptimizationResult(Func<ISchedulerStateHolder> schedulerStateHolder, IFindSchedulesForPersons findSchedulesForPersons, 
 			IUserTimeZone userTimeZone, ICurrentScenario currentScenario,  
 			CheckScheduleHints checkScheduleHints, SuccessfulScheduledAgents successfulScheduledAgents, 
-			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
+			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, 
+			ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_checkScheduleHints = checkScheduleHints;
 			_successfulScheduledAgents = successfulScheduledAgents;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
+			_currentUnitOfWork = currentUnitOfWork;
 			_schedulerStateHolder = schedulerStateHolder;
 			_findSchedulesForPersons = findSchedulesForPersons;
 			_userTimeZone = userTimeZone;
@@ -42,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual OptimizationResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople, IPlanningGroup planningGroup, bool usePreferences)
 		{
 			var resultStateHolder = _schedulerStateHolder().SchedulingResultState;
+			_currentUnitOfWork.Current().Reassociate(fixedStaffPeople);
 			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(period, fixedStaffPeople, resultStateHolder);
 
 			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), fixedStaffPeople, 
