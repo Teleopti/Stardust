@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 			using (CommandScope.Create(@event))
 			{
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, @event.Agents, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate), 
 					schedulerStateHolder.ChoosenAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray(), 
 					new NoSchedulingProgress(), 

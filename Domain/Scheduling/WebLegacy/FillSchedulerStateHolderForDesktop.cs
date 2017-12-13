@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.SetRequestedScenario(_desktopContext.CurrentContext().SchedulerStateHolderFrom.Schedules.Scenario);
 		}
 
-		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, IEnumerable<Guid> choosenAgentIds, DateOnlyPeriod period)
+		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
 			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
 			schedulerStateHolderTo.SchedulingResultState.LoadedAgents = stateHolderFrom.SchedulingResultState.LoadedAgents.Where(x => agentIds.Contains(x.Id.Value)).ToList();
 			schedulerStateHolderTo.ChoosenAgents.Clear();
-			stateHolderFrom.ChoosenAgents.Where(x => choosenAgentIds.Contains(x.Id.Value))
+			stateHolderFrom.ChoosenAgents.Where(x => agentIds.Contains(x.Id.Value))
 				.ForEach(x => schedulerStateHolderTo.ChoosenAgents.Add(x));
 		}
 

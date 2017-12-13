@@ -120,8 +120,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		public DayOffOptimizationTeamBlockTest(SeperateWebRequest seperateWebRequest, RemoveImplicitResCalcContext removeImplicitResCalcContext, bool resourcePlannerDayOffOptimizationIslands47208) : base(seperateWebRequest, removeImplicitResCalcContext, resourcePlannerDayOffOptimizationIslands47208)
 		{
-			if(_resourcePlannerDayOffOptimizationIslands47208)
-				Assert.Ignore("Fix before #47208 is ready!");
 		}
 	}
 }

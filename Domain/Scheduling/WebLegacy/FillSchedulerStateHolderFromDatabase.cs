@@ -53,13 +53,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.SetRequestedScenario(_scenarioRepository.LoadDefaultScenario());
 		}
 
-		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, IEnumerable<Guid> choosenAgentIds, DateOnlyPeriod period)
+		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
 			var allPeople = _personRepository.FindAllAgentsLight(period);
-			schedulerStateHolderTo.SchedulingResultState.LoadedAgents = allPeople.ToList();
+			var allAgentsInIsland = agentIds == null ? 
+				allPeople : 
+				allPeople.Where(x => agentIds.Contains(x.Id.Value)).ToArray();
+			
+			schedulerStateHolderTo.SchedulingResultState.LoadedAgents = allAgentsInIsland.ToArray();
 			schedulerStateHolderTo.ChoosenAgents.Clear();
-			allPeople.Where(x => choosenAgentIds==null || choosenAgentIds.Contains(x.Id.Value))
-				.ForEach(x => schedulerStateHolderTo.ChoosenAgents.Add(x));
+			allAgentsInIsland.ToArray().ForEach(x => schedulerStateHolderTo.ChoosenAgents.Add(x));
 		}
 
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)

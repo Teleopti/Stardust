@@ -60,13 +60,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IEnumerable<IPerson> agents;
 			if (planningGroup == null)
 			{
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
 				agents = schedulerStateHolder.ChoosenAgents.FixedStaffPeople(period);
 			}
 			else
 			{
 				var people = _personRepository.FindPeopleInPlanningGroup(planningGroup, period);
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
 				agents = people.FixedStaffPeople(period);
 			}
 			_dayOffOptimizationCommandHandler.Execute(new DayOffOptimizationCommand
