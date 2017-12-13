@@ -174,7 +174,7 @@
 				return;
 			vm.planningPeriods = [];
 			var newEndDate = moment(pp.endDate).format('YYYY-MM-DD');
-			var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({ planningGroupId: planningGroupId, startDate: null, endDate: newEndDate });
+			var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({ planningGroupId: planningGroupId, startDate: null, schedulePeriodType: vm.intervalType, lengthOfThePeriodType: vm.intervalRange, endDate: newEndDate });
 			return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
 				vm.planningPeriods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
 				vm.selectedIsValid = undefined;

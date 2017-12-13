@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[UnitOfWork, HttpPut, Route("api/resourceplanner/planninggroup/{planningGroupId}/lastperiod")]
-		public virtual IHttpActionResult ChangeLastPeriod(Guid planningGroupId, DateTime endDate, SchedulePeriodType schedulePeriodType, int numberOfThePeriodType, DateTime? startDate=null)
+		public virtual IHttpActionResult ChangeLastPeriod(Guid planningGroupId, DateTime endDate, SchedulePeriodType schedulePeriodType, int lengthOfThePeriodType, DateTime? startDate=null)
 		{
 			var planningGroup = _planningGroupRepository.Get(planningGroupId);
 			if (planningGroup == null)
@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				{
 					PeriodType = schedulePeriodType,
 					StartDate = new DateOnly(newStartDate),
-					Number = numberOfThePeriodType
+					Number = lengthOfThePeriodType
 				}, true);
 				periodToChange.Reset();
 			}

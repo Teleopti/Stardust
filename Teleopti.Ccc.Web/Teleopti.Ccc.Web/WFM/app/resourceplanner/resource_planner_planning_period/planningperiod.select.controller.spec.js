@@ -16,30 +16,36 @@ describe('planningPeriodSelectController', function () {
         planningPeriods = [{
             PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             StartDate: "2018-07-16T00:00:00",
-            EndDate: "2018-08-04T00:00:00",
+            EndDate: "2018-08-05T00:00:00",
             HasNextPlanningPeriod: false,
             Id: '3ccd5519-8c92-4c2b-a75c-793ec9f7da56',
             State: "New",
-            ValidationResult: null
+            ValidationResult: null,
+            Number:3,
+            Type:'Week'
         }, {
             PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             StartDate: "2018-06-18T00:00:00",
-            EndDate: "2018-07-15T00:00:00",
+            EndDate: "2018-07-16T00:00:00",
             HasNextPlanningPeriod: true,
             Id: 'a557210b-99cc-4128-8ae0-138d812974b6',
             State: "Scheduled",
+            Number:4,
+            Type:'Week',
             ValidationResult: {
                 InvalidResources: []
             }
         }],
         planningPeriodOnlyFirst = [{
             PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            StartDate: "2018-07-16T00:00:00",
-            EndDate: "2018-08-04T00:00:00",
+            StartDate: "2018-09-01T00:00:00",
+            EndDate: "2018-09-14T00:00:00",
             HasNextPlanningPeriod: false,
             Id: '3ccd5519-8c92-4c2b-a75c-793ec9f7da56',
             State: "New",
-            ValidationResult: null
+            ValidationResult: null,
+            Number:2,
+            Type:'Week'
         }];
 
     beforeEach(function () {
@@ -61,7 +67,7 @@ describe('planningPeriodSelectController', function () {
         spyOn(planningPeriodServiceNew, 'firstPlanningPeriod').and.callThrough();
 
 
-        $httpBackend.whenPUT('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-09-30&startDate=2018-09-01').respond(function (method, url, data, headers) {
+        $httpBackend.whenPUT('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-09-30&lengthOfThePeriodType=1&schedulePeriodType=Month').respond(function (method, url, data, headers) {
             return [200, [{
                 PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 StartDate: "2018-09-01T00:00:00",
@@ -96,7 +102,7 @@ describe('planningPeriodSelectController', function () {
             }]];
         });
 
-        $httpBackend.whenPUT('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-07-30').respond(function (method, url, data, headers) {
+        $httpBackend.whenPUT('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-09-30&lengthOfThePeriodType=1&schedulePeriodType=Month&startDate=2018-09-01').respond(function (method, url, data, headers) {
             return [200, [{
                 PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 StartDate: "2018-09-01T00:00:00",
@@ -273,38 +279,44 @@ describe('planningPeriodSelectController', function () {
             planningGroupInfo: planningGroupInfo,
             planningPeriods: planningPeriodOnlyFirst
         });
-        vm.getLastPp(vm.planningPeriods[0]);
+        vm.getLastPp();
         vm.lastPp = {
             startDate: moment('2018-09-01T00:00:00').toDate(),
             endDate: moment('2018-09-30T00:00:00').toDate()
         };
+        vm.intervalType = 'Month'
+        vm.intervalRange = 1;
         vm.changeDateForLastPp(vm.lastPp);
 
         $httpBackend.flush();
 
         expect(vm.planningPeriods.length).toEqual(1);
         expect(planningPeriodServiceNew.changeEndDateForLastPlanningPeriod).toHaveBeenCalledWith({
-            planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            startDate: '2018-09-01',
-            endDate: '2018-09-30',
-            schedulePeriodType: undefined, 
-            lengthOfThePeriodType: undefined
+            planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', 
+            startDate: '2018-09-01', 
+            schedulePeriodType: 'Month', 
+            lengthOfThePeriodType: 1, 
+            endDate: '2018-09-30'
         });
     });
 
     it('should modify date for last planning period and it is not the only planning period', function () {
-        vm.getLastPp(vm.planningPeriods[1]);
+        vm.getLastPp(planningPeriods[1]);
         vm.lastPp = {
-            startDate: moment('2018-07-16T00:00:00').toDate(),
-            endDate: moment('2018-07-30T00:00:00').toDate()
+            startDate: moment('2018-09-01T00:00:00').toDate(),
+            endDate: moment('2018-09-30T00:00:00').toDate()
         };
+        vm.intervalType = 'Month'
+        vm.intervalRange = 1;
         vm.changeDateForLastPp(vm.lastPp);
         $httpBackend.flush();
 
         expect(planningPeriodServiceNew.changeEndDateForLastPlanningPeriod).toHaveBeenCalledWith({
-            planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-            startDate: null,
-            endDate: '2018-07-30'
+            planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', 
+            startDate: null, 
+            schedulePeriodType: 'Month', 
+            lengthOfThePeriodType: 1, 
+            endDate: '2018-09-30'
         });
     });
 });
