@@ -212,7 +212,7 @@
 		function withHistoricalAdherence(data) {
 			historicalAdherence = data;
 		}
-		faker.fake(/\.\.\/api\/HistoricalAdherence\/For(.*)/,
+		faker.fake(/\.\.\/api\/HistoricalAdherence\/ForPerson(.*)/,
 			function () {
 				return [200, historicalAdherence];
 			});

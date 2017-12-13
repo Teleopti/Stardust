@@ -8,13 +8,13 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
-	public class AdherenceController : ApiController
+	public class HistoricalAdherenceController : ApiController
 	{
 		private readonly AdherencePercentageViewModelBuilder _adherencePercentageViewModelBuilder;
 		private readonly HistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
 		private readonly HistoricalAdherenceDate _historicalAdherenceDate;
 
-		public AdherenceController(
+		public HistoricalAdherenceController(
 			AdherencePercentageViewModelBuilder adherencePercentageViewModelBuilder,
 			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder,
 			HistoricalAdherenceDate historicalAdherenceDate)
@@ -24,11 +24,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_historicalAdherenceDate = historicalAdherenceDate;
 		}
 
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Adherence/ForToday")]
+		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/HistoricalAdherence/PercentForToday")]
 		public virtual IHttpActionResult ForToday(Guid personId) =>
 			Ok(_adherencePercentageViewModelBuilder.Build(personId));
 
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/HistoricalAdherence/For")]
+		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/HistoricalAdherence/ForPerson")]
 		public virtual IHttpActionResult HistoricalFor(Guid personId) =>
 			Ok(_historicalAdherenceViewModelBuilder.Build(personId));
 		

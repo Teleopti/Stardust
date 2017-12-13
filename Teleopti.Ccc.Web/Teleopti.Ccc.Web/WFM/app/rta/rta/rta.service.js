@@ -111,7 +111,7 @@
         };
 
         function forToday(data) {
-            return $resource('../api/Adherence/ForToday', {}, {
+            return $resource('../api/HistoricalAdherence/PercentForToday', {}, {
                 query: {
                     method: 'GET',
                     isArray: false
@@ -122,7 +122,7 @@
         };
 
         function getAgentHistoricalData(id) {
-            return $resource('../api/HistoricalAdherence/For', {}, {
+            return $resource('../api/HistoricalAdherence/ForPerson', {}, {
                 query: {
                     method: 'GET',
                     isArray: false
