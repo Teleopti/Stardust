@@ -19,8 +19,7 @@
             getTeamCardsFor: getTeamCardsFor,
             getSkillArea: getSkillArea,
             getPhoneStates: getPhoneStates,
-            forToday: forToday,
-            getAgentHistoricalData: getAgentHistoricalData
+            forToday: forToday
         }
 
         return service;
@@ -118,17 +117,6 @@
                 }
             }).query({
                 personId: data.personId
-            }).$promise;
-        };
-
-        function getAgentHistoricalData(id) {
-            return $resource('../api/HistoricalAdherence/ForPerson', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: false
-                }
-            }).query({
-                personId: id
             }).$promise;
         };
     };

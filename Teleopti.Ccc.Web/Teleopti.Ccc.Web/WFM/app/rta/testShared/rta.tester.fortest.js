@@ -25,6 +25,12 @@ var rtaTester = (function () {
 				},
 				wait: function (a) {
 					return controllerTester.wait(a)
+				},
+				randomId: function () {
+					return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+						var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+						return v.toString(16);
+					});
 				}
 			}
 		};
@@ -156,15 +162,15 @@ var rtaTester = (function () {
 				legacyPolyfill,
 				legacyPolyfill);
 		}
-		
+
 	};
 
 	var agentsSetup = function (tests) {
 
 		var state = {
-			stateParams : {}
+			stateParams: {}
 		};
-		
+
 		beforeEach(module('wfm.rta'));
 		beforeEach(module('wfm.rtaTestShared'));
 
@@ -195,7 +201,7 @@ var rtaTester = (function () {
 		});
 
 		injectTester(state, tests, true);
-		
+
 	};
 
 	var historicalSetup = function (tests) {

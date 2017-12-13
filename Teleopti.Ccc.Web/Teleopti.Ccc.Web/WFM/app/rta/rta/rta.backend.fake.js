@@ -40,7 +40,8 @@
 			get skills() { return skills; },
 			get skillAreas() { return skillAreas; },
 
-			lastAgentStatesRequestParams: undefined
+			lastAgentStatesRequestParams: undefined,
+			lastHistoricalAdherenceForPersonRequestParams: undefined
 			
 		};
 
@@ -213,7 +214,8 @@
 			historicalAdherence = data;
 		}
 		faker.fake(/\.\.\/api\/HistoricalAdherence\/ForPerson(.*)/,
-			function () {
+			function (params) {
+				service.lastHistoricalAdherenceForPersonRequestParams = params;
 				return [200, historicalAdherence];
 			});
 

@@ -1,16 +1,15 @@
 ﻿(function () {
 	'use strict';
 	angular.module('wfm.rta').controller('RtaHistoricalController', RtaHistoricalController);
-	RtaHistoricalController.$inject = ['$stateParams', 'rtaService', '$translate', 'Toggle'];
+	RtaHistoricalController.$inject = ['$http', '$stateParams', 'rtaService', '$translate', 'Toggle'];
 
-	function RtaHistoricalController($stateParams, rtaService, $translate, toggles) {
+	function RtaHistoricalController($http, $stateParams, rtaService, $translate, toggles) {
 		var vm = this;
 
-		var id = $stateParams.personId;
 		vm.highlighted = {};
 		vm.diamonds = [];
 		vm.cards = [];
-		$stateParams.open = ($stateParams.open || "false")
+		$stateParams.open = ($stateParams.open || "false");
 
 		vm.ooaTooltipTime = function (time) {
 			if (time == null)
@@ -40,37 +39,42 @@
 		var calculateWidth;
 		var calculateOffset;
 
-		rtaService.getAgentHistoricalData(id)
-			.then(function (data) {
+		$http.get('../api/HistoricalAdherence/ForPerson', {
+			params: {
+				personId: $stateParams.personId,
+				date: $stateParams.date
+			}
+		}).then(function (response) {
+			var data = response.data;
+			
+			data.Schedules = data.Schedules || [];
+			data.OutOfAdherences = data.OutOfAdherences || [];
+			data.Changes = data.Changes || [];
+			data.Timeline = data.Timeline || {};
 
-				data.Schedules = data.Schedules || [];
-				data.OutOfAdherences = data.OutOfAdherences || [];
-				data.Changes = data.Changes || [];
-				data.Timeline = data.Timeline || {};
+			shiftInfo = buildShiftInfo(data);
 
-				shiftInfo = buildShiftInfo(data);
+			calculateWidth = makeWidthCalculator(shiftInfo.timeWindowSeconds);
+			calculateOffset = makeOffsetCalculator(shiftInfo.timeWindowStart, shiftInfo.timeWindowSeconds);
 
-				calculateWidth = makeWidthCalculator(shiftInfo.timeWindowSeconds);
-				calculateOffset = makeOffsetCalculator(shiftInfo.timeWindowStart, shiftInfo.timeWindowSeconds);
+			vm.personId = data.PersonId;
+			vm.agentName = data.AgentName;
+			vm.date = moment(data.Now);
+			vm.adherencePercentage = data.AdherencePercentage;
 
-				vm.personId = data.PersonId;
-				vm.agentName = data.AgentName;
-				vm.date = moment(data.Now);
-				vm.adherencePercentage = data.AdherencePercentage;
-				
-				vm.currentTimeOffset = calculateOffset(data.Now);
+			vm.currentTimeOffset = calculateOffset(data.Now);
 
-				vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
+			vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
 
-				vm.outOfAdherences = buildAgentOutOfAdherences(data);
+			vm.outOfAdherences = buildAgentOutOfAdherences(data);
 
-				vm.fullTimeline = buildTimeline(data.Timeline);
+			vm.fullTimeline = buildTimeline(data.Timeline);
 
-				vm.cards = mapChanges(data.Changes, data.Schedules);
+			vm.cards = mapChanges(data.Changes, data.Schedules);
 
-				vm.diamonds = buildDiamonds(data);
+			vm.diamonds = buildDiamonds(data);
 
-			});
+		});
 
 		function buildAgentOutOfAdherences(data) {
 			return data.OutOfAdherences.map(function (ooa) {

@@ -3,7 +3,7 @@
 rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should get agent', function (t) {
-		var id = Math.random() * 1000 + 1
+		var id = t.randomId();
 		t.stateParams.personId = id;
 		t.backend.withHistoricalAdherence({
 			PersonId: id,
