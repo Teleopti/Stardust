@@ -8,8 +8,8 @@
 			jobId: '<',
 			startingTime: '<',
 			status: '<',
-			category: '<'
-
+			category: '<',
+			dateTimeFormat: '<'
 		},
 		controller: [ImportJobController]
 	});

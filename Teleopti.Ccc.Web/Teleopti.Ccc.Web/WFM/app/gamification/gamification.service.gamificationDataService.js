@@ -72,34 +72,30 @@
 			});
 		};
 
-		var counter = 5;
 		svc.fetchJobs = function () {
-			var url = "../api/gamification/import-jobs";
-			var config = {
-				url: url,
-				method: 'GET',
-			};
-
 			return $q(function (resolve, reject) {
-				$http(config).then(function (response) {
+				$http({
+					method: 'GET',
+					url: '../api/gamification/import-jobs'
+				}).then(function (response) {
 					var jobs = [];
-					if (response.data) {
-						for (var index = 0; index < response.data.length; index++) {
-							var job = response.data[index];
-							jobs.push(new Job(job.Id, job.Name, job.Owner, job.CreateDateTime, job.Status, job.Category));
-						}
+					if (response.data && response.data.length) {
+						response.data.forEach(function (job) {
+							jobs.push(new Job(
+								job.Id,
+								job.Name,
+								job.Owner,
+								job.CreateDateTime,
+								job.Status,
+								job.Category
+							));
+						});
 					}
 					resolve(jobs);
 				}, function (response) {
+					$log.error('Gamification: failed to fetch import jobs');
 					reject(response);
 				});
-				// var jobs = [];
-				// for (var i = 0; i < counter; i++) {
-				// 	jobs.push(new Job(i, i + '.csv', 'Teleopti Demo', '2017-11-26T07:07:27.007Z', false));
-				// }
-				// counter++;
-
-				// resolve(jobs);
 			});
 		};
 

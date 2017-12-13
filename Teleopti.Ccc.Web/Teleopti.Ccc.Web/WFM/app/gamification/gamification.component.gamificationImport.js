@@ -3,13 +3,18 @@
 	angular.module('wfm.gamification')
 		.component('gamificationImport', {
 			templateUrl: 'app/gamification/html/g.component.gamificationImport.tpl.html',
-			controller: ['GamificationDataService', GamificationImportController]
+			controller: [
+				'GamificationDataService',
+				'$locale',
+				GamificationImportController
+			]
 		});
 
-	function GamificationImportController(dataService) {
+	function GamificationImportController(dataService, locale) {
 		var ctrl = this;
 
 		ctrl.fileSizeLimit = 5242880;
+		ctrl.dateTimeFormat = locale.DATETIME_FORMATS.medium;
 
 		ctrl.$onInit = function () {
 			fetchJobs();
@@ -67,25 +72,19 @@
 		}
 
 		function fetchJobs() {
-			dataService.fetchJobs().then(function (data) {
-
-				if (data && data.length > 0) {
-					for (var i = 0; i < data.length; i++) {
-						var j = data[i];
-						j.startingTime = moment.utc(j.startingTime).format('YYYY-MM-DD HH:mm:ss');
-					}
+			dataService.fetchJobs().then(function (jobs) {
+				if (!ctrl.jobs) {
+					ctrl.jobs = jobs;
+				} else {
+					insertNewJobsFrom(jobs);
 				}
-				var lastFetch = ctrl.jobs;
-				ctrl.jobs = data;
-
-				if (lastFetch && lastFetch.length) highlightNewJobs(lastFetch, ctrl.jobs);
 			});
 		}
 
-		function highlightNewJobs(prev, curr) {
-			var n = curr.length - prev.length;
+		function insertNewJobsFrom(jobs) {
+			var n = jobs.length - ctrl.jobs.length;
 			for (var i = 0; i < n; i++) {
-				curr[i].isNew = true;
+				ctrl.jobs.unshift(jobs[i]);
 			}
 		}
 	}

@@ -5,7 +5,7 @@
 	<span>{{$ctrl.owner}}</span>
 </div>
 <div class="started">
-	<span>{{$ctrl.startingTime}}</span>
+	<span>{{$ctrl.startingTime | date: $ctrl.dateTimeFormat}}</span>
 </div>
 <div class="status">
 	<div ng-if="$ctrl.status=='inprogress'">
