@@ -398,11 +398,26 @@ Try
         $con = New-Object System.Data.SqlClient.SqlConnection
         $con.ConnectionString = $VirginConnAnal
         $con.open()
-        GetAppLock -Connection $con -LockResource "VirginUpgrade"
-        InitDatabase -con $con -cmdText $CreateDatabaseVersion
-        $command = $PatchDBPath + "\DBManager.exe"
-        &"$command" $DBMSQLServer $DBManalDb "-OTeleoptiAnalytics" $DBMPATCHUSER $DBMPATCHPWD "-T" "-R" $SQLUserPwd
-        ReleaseAppLock -Connection $con -LockResource "VirginUpgrade"
+        log-info "Try Get Applock: VirginUpgrade" 
+        $gotLock = GetAppLock -Connection $con -LockResource "VirginUpgrade"
+        if ($gotLock -eq $true)
+        {
+            log-info "got VirginUpgrade lock!"
+            
+            log-info "create DB: " $CreateDatabaseVersion
+            InitDatabase -con $con -cmdText $CreateDatabaseVersion
+
+            log-info "Virgin patch of: " $DBManalDb
+            $command = $PatchDBPath + "\DBManager.exe"
+            &"$command" $DBMSQLServer $DBManalDb "-OTeleoptiAnalytics" $DBMPATCHUSER $DBMPATCHPWD "-T" "-R" $SQLUserPwd
+            log-info "DBManager came back as :" $command
+
+            log-info "Release Applock: VirginUpgrade" 
+            ReleaseAppLock -Connection $con -LockResource "VirginUpgrade"
+            log-info "Release Applock: VirginUpgrade. Done!"
+        } else {
+            log-info "Could not Get Applock VirginUpgrade for: $DBManalDb" 
+        }
         $con.Close()
     }
     if (Check-VirginDB -conStr $VirginConnApp)
@@ -410,11 +425,26 @@ Try
         $con = New-Object System.Data.SqlClient.SqlConnection
         $con.ConnectionString = $VirginConnApp
         $con.open()
-        GetAppLock -Connection $con -LockResource "VirginUpgrade"
-        InitDatabase -con $con -cmdText $CreateDatabaseVersion
-        $command = $PatchDBPath + "\DBManager.exe"
-        &"$command" $DBMSQLServer $DBMappDb "-OTeleoptiCCC7" $DBMPATCHUSER $DBMPATCHPWD "-T" "-R" $SQLUserPwd
-        ReleaseAppLock -Connection $con -LockResource "VirginUpgrade"
+        log-info "Try Get Applock: VirginUpgrade" 
+        $gotLock = GetAppLock -Connection $con -LockResource "VirginUpgrade"
+        if ($gotLock -eq $true)
+        {
+            log-info "got VirginUpgrade lock!"
+            
+            log-info "create DB: " $CreateDatabaseVersion
+            InitDatabase -con $con -cmdText $CreateDatabaseVersion
+
+            log-info "Virgin patch of: " $DBMappDb
+            $command = $PatchDBPath + "\DBManager.exe"
+            &"$command" $DBMSQLServer $DBMappDb "-OTeleoptiAnalytics" $DBMPATCHUSER $DBMPATCHPWD "-T" "-R" $SQLUserPwd
+            log-info "DBManager came back as :" $command
+
+            log-info "Release Applock: VirginUpgrade" 
+            ReleaseAppLock -Connection $con -LockResource "VirginUpgrade"
+            log-info "Release Applock: VirginUpgrade. Done!"
+        } else {
+            log-info "Could not Get Applock VirginUpgrade for: $DBMappDb" 
+        }
         $con.Close()
     }
 
