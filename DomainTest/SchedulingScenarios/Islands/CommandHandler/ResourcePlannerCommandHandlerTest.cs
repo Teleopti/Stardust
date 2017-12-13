@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 	[TestFixture(SUT.DayOffOptimization)]
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
-	public abstract class ResourcePlannerCommandHandlerTest : ISetup
+	public abstract class ResourcePlannerCommandHandlerTest
 	{
 		private readonly SUT _sut;
 		
@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 
 		protected ResourcePlannerCommandHandlerTest(SUT sut)
 		{
+			if(sut==SUT.DayOffOptimization)
+				Assert.Ignore("To be fixed");
 			_sut = sut;
 		}
 
@@ -90,12 +92,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				default:
 					throw new NotSupportedException();
 			}
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			if(_sut==SUT.DayOffOptimization)
-				Assert.Ignore("To be fixed");
 		}
 	}
 }

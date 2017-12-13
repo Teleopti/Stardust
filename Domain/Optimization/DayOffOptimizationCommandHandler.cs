@@ -31,10 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var island in islands)
 			{
 				var agentsInIsland = island.AgentsInIsland().ToArray();
-				//TODO: Without null check here, lots of commandhandler tests go red. 
-				// But is that what we want? Wrong test setup rather? Do we ever want AgentsTooptimize be null for DO optimization?
-				//probably not....
-				var agentsToOptimize = command.AgentsToOptimize.Where(x => agentsInIsland.Contains(x)).ToArray();
+				var agentsToOptimize = command.AgentsToOptimize?.Where(x => agentsInIsland.Contains(x)).ToArray() ?? agentsInIsland;
 				
 				evts.Add(new DayOffOptimizationWasOrdered
 				{
