@@ -166,7 +166,7 @@
 										<div class="con-flex">
 											<div class="wfm-chip-wrap planning-period-suggesions" ng-repeat="s in vm.suggestions | limitTo: 10">
 												<span class="wfm-chip" ng-click="vm.setSelectedDate(s)">
-													<span class="chip-handle">{{s.Number}}{{s.PeriodType}}</span>
+													<span class="chip-handle">{{s.Number}}&nbsp;{{s.PeriodType}}</span>
 													<span class="chip-text">{{s.StartDate | amDateFormat:"LL"}} - {{s.EndDate | amDateFormat:"LL"}}</span>
 												</span>
 											</div>
@@ -183,7 +183,7 @@
 								<md-content class="md-padding">
 									<div class="con-row">
 										<label>
-											<i class="mdi mdi-information-outline"></i>Set up the peroid interval length and select start date
+											<i class="mdi mdi-information-outline"></i>Set up the period interval length and select start date
 										</label>
 									</div>
 									<div class="con-row pp-custom-input-wrapper">
