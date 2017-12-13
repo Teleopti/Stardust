@@ -231,7 +231,7 @@ BEGIN
 				SET @stringholder2 = @stringholder2 + ' INTERSECT '
 
 			SET @stringholder = ''			
-			SELECT @stringholder= @stringholder+ 'OR fp.SearchValue LIKE N''%' + REPLACE(SearchValue, '''', '''''')   + '%''  ' FROM SearchCriteria WHERE SearchType = @SearchType
+			SELECT @stringholder= @stringholder+ 'OR fp.SearchValue LIKE N''%' + REPLACE(SearchValue, '''', '''''')   + '%''  ' FROM #SearchCriteria WHERE SearchType = @SearchType
 				
 			IF @stringholder <> ''
 			BEGIN
