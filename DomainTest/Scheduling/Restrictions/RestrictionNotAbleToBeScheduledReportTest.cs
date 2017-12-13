@@ -69,7 +69,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			result.Count().Should().Be.EqualTo(1);
 			result.First().Agent.Should().Be.EqualTo(agent2);
+		}
 
+		[Test]
+		public void ShouldReportFirstFoundIssue()
+		{
+			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
+				new ShiftCategory("_").WithId()));
+			var agent1 = new Person().WithId()
+				.WithPersonPeriod(new RuleSetBag(ruleSet), skill)
+				.WithSchedulePeriodOneMonth(period.StartDate);
+			agent1.Period(period.StartDate).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"),
+				new ContractScheduleWorkingMondayToFriday());
+			
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			var preferenceDays = new List<IPreferenceDay>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				preferenceDays.Add(new PreferenceDay(agent1, dateOnly,
+					new PreferenceRestriction { StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), null) }));
+			}
+
+			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, preferenceDays, skillDays);
+
+			var result = Target.Create(period.StartDate, new[] { agent1 });
+
+			result.Count().Should().Be.EqualTo(1);
+			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
 		}
 
 		public RestrictionNotAbleToBeScheduledReportTest(SeperateWebRequest seperateWebRequest, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680, bool resourcePlannerTimeZoneIssues45818) : base(seperateWebRequest, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680, resourcePlannerTimeZoneIssues45818)

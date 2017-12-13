@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_restrictionExtractor = restrictionExtractor;
 		}
 
-		public bool Execute(IVirtualSchedulePeriod schedulePeriod)
+		public RestrictionNotAbleToBeScheduledReason? Execute(IVirtualSchedulePeriod schedulePeriod)
 		{
 			var schedulingOptions = new SchedulingOptions { DayOffTemplate = new DayOffTemplate() };
 			var schedulingCallBack = new SchedulingCallbackForDesktop(new NoSchedulingProgress(), new SchedulingOptions());
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var matrixList =
 				_matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, extendedPeriod);
 			if (!matrixList.Any())
-				return false;
+				return null;
 
 			var schedulePartModifyAndRollbackServiceForContractDaysOff =
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, new DoNothingScheduleDayChangeCallBack(),
@@ -68,16 +68,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var targetTimePeriod = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrixList.First());
 
 			//TODO jump out as early as possible
-			var periodCheck = minMaxTime.Minimum <= targetTimePeriod.EndTime && minMaxTime.Maximum >= targetTimePeriod.StartTime;
+			//TooManyDaysOff?
+			if (minMaxTime.Minimum > targetTimePeriod.EndTime)
+			{
+				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
+				return RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod;
+			}
+			if (minMaxTime.Maximum < targetTimePeriod.StartTime)
+			{
+				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
+				return RestrictionNotAbleToBeScheduledReason.TooLittleWorkTimeInPeriod;
+			}
+
 			IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths =
 				_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrixList.First(), new SchedulingOptions());
 			var weekCheck = checkWeeks(matrixList.First(), schedulePeriod, possibleMinMaxWorkShiftLengths);
-			var nightlyCheck = checkNigthlyRest(matrixList.First());
-			schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
-			if (periodCheck && weekCheck && nightlyCheck)
-				return true;
+			if (!weekCheck)
+			{
+				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
+				return RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod;
+			}
 
-			return false;
+			var nightlyCheck = checkNigthlyRest(matrixList.First());
+			if (!nightlyCheck)
+			{
+				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
+				return RestrictionNotAbleToBeScheduledReason.NightlyRestMightBeBroken;
+			}
+
+			schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
+			return null;
 		}
 
 		//TODO simplify this code

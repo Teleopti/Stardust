@@ -12,22 +12,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		{
 			_restrictionsAbleToBeScheduled = restrictionsAbleToBeScheduled;
 		}
-		public IEnumerable<RestrictionsAbleToBeScheduledResult> Create(DateOnly date, IEnumerable<IPerson> persons)
+		public IEnumerable<RestrictionsNotAbleToBeScheduledResult> Create(DateOnly date, IEnumerable<IPerson> persons)
 		{
-			var report = new List<RestrictionsAbleToBeScheduledResult>();
+			var report = new List<RestrictionsNotAbleToBeScheduledResult>();
 			foreach (var person in persons)
 			{
-				var success = _restrictionsAbleToBeScheduled.Execute(person.VirtualSchedulePeriod(date));
-				if(!success)
-					report.Add(new RestrictionsAbleToBeScheduledResult{Agent = person});
+				RestrictionNotAbleToBeScheduledReason? failReason = _restrictionsAbleToBeScheduled.Execute(person.VirtualSchedulePeriod(date));
+				if(failReason.HasValue)
+					report.Add(new RestrictionsNotAbleToBeScheduledResult{Agent = person, Reason = failReason.Value});
 			}
 
 			return report;
 		}
 	}
 
-	public class RestrictionsAbleToBeScheduledResult
+	public class RestrictionsNotAbleToBeScheduledResult
 	{
 		public IPerson Agent { get; set; }
+		public RestrictionNotAbleToBeScheduledReason Reason { get; set; }
+	}
+
+	public enum RestrictionNotAbleToBeScheduledReason
+	{
+		TooManyDaysOff,
+		TooMuchWorkTimeInPeriod,
+		TooLittleWorkTimeInPeriod,
+		NightlyRestMightBeBroken
 	}
 }
