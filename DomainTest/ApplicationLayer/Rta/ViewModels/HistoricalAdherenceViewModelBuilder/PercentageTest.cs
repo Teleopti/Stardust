@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 
 			viewModel.AdherencePercentage.Should().Be(100);
 		}
-		
+
 		[Test]
 		public void ShouldCalculateWhenOutMultipleTimes()
 		{
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 
 			viewModel.AdherencePercentage.Should().Be(50);
 		}
-		
+
 		[Test]
 		public void ShouldCalculateWhenInInTheMorning()
 		{
@@ -195,6 +195,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 		}
 
 		[Test]
+		public void ShouldCalculateWhenOutBeforeShift()
+		{
+			Now.Is("2017-12-08 17:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person)
+				.WithAssignment(person, "2017-12-08")
+				.WithActivity(null, "phone")
+				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
+				;
+			ReadModel.AddIn(person, "2017-12-08 07:30".Utc());
+			ReadModel.AddOut(person, "2017-12-08 07:31".Utc());
+
+			var viewModel = Target.Build(person);
+
+			viewModel.AdherencePercentage.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldCalculateWhenInAfterShift()
+		{
+			Now.Is("2017-12-08 18:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person)
+				.WithAssignment(person, "2017-12-08")
+				.WithActivity(null, "phone")
+				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
+				;
+			ReadModel.AddOut(person, "2017-12-08 08:00".Utc());
+			ReadModel.AddIn(person, "2017-12-08 16:30".Utc());
+
+			var viewModel = Target.Build(person);
+
+			viewModel.AdherencePercentage.Should().Be(0);
+		}
+
+		[Test]
 		public void ShouldNotCalculateWhenNoShift()
 		{
 			Now.Is("2017-12-08 17:00");
@@ -263,7 +301,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 
 			viewModel.AdherencePercentage.Should().Be(50);
 		}
-		
+
 		[Test]
 		public void ShouldExcludeNeutralWhenNeutralMultipleTimes()
 		{
@@ -283,6 +321,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 
 			viewModel.AdherencePercentage.Should().Be(100);
 		}
-		
 	}
 }

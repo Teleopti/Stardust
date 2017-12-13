@@ -331,12 +331,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		}
 	}
 
-	public class AdherencePercentagesModel
-	{
-		public HistoricalAdherenceReadModelAdherence? Adherence { get; set; }
-		public DateTime Timestamp { get; set; }
-	}
-
 	public class AdherencePercentageCalculator : IAdherencePercentageCalculator
 	{
 		private readonly INow _now;
@@ -354,19 +348,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 			var onGoingShift = _now.UtcDateTime() < shiftEndTime.Value;
 			var calculateUntil = onGoingShift ? _now.UtcDateTime() : shiftEndTime.Value;
+			var adherenceAtStart = data.LastOrDefault(x => x.Timestamp <= shiftStartTime)?.Adherence ?? HistoricalAdherenceReadModelAdherence.Neutral;
 
 			var adherenceReadModels = data
-				.Select(a => new adherenceMoment()
+				.Select(a => new adherenceMoment {Time = a.Timestamp, Adherence = a.Adherence})
+				.Append(new adherenceMoment {Time = shiftStartTime.Value, Adherence = adherenceAtStart})
+				.Append(new adherenceMoment {Time = calculateUntil})
+				.Where(a =>
 				{
-					Adherence = a.Adherence,
-					Time = a.Timestamp < shiftStartTime.Value ? shiftStartTime.Value : a.Timestamp
+					var isOnShift = a.Time >= shiftStartTime.Value && a.Time <= shiftEndTime.Value;
+					return isOnShift;
 				})
-				.Append(new adherenceMoment() {Time = calculateUntil}).ToArray();
+				.OrderBy(x => x.Time)
+				.ToArray();
 
 			var timeInAdherence = timeIn(HistoricalAdherenceReadModelAdherence.In, adherenceReadModels);
+			if (Convert.ToInt32((timeInAdherence.TotalSeconds)) == 0)
+				return 0;
 			var timeInNeutral = timeIn(HistoricalAdherenceReadModelAdherence.Neutral, adherenceReadModels);
 			var shiftTime = shiftEndTime.Value - shiftStartTime.Value;
-
 			return Convert.ToInt32((timeInAdherence.TotalSeconds / (shiftTime - timeInNeutral).TotalSeconds) * 100);
 		}
 
