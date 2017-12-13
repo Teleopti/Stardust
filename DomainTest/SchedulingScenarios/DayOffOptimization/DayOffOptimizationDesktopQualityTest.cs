@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
@@ -35,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{
 			var targetStandardDeviation = 0.032;
 			var targetAchieved = false;
+			double standardDeviation = 0;
 			for (int i = 0; i < 10; i++)
 			{
 				var stateHolder = setupStandardState(out var period, out var agentList);
@@ -47,14 +47,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 						UseFullWeekendsOff = false,
 					}), (o, args) => { });
 
-				var standardDeviation = getResultingStandardDeviation(period, stateHolder);
+				standardDeviation = getResultingStandardDeviation(period, stateHolder);
 				if (standardDeviation <= targetStandardDeviation)
 				{
 					targetAchieved = true;
 					break;
 				}
 			}
-			
+
+			standardDeviation.Should().Be.GreaterThan(0.005);
 			targetAchieved.Should().Be.True();
 		}
 
@@ -63,6 +64,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{
 			var targetStandardDeviation = 0.032;
 			var targetAchieved = false;
+			double standardDeviation = 0;
 			for (int i = 0; i < 10; i++)
 			{
 				var stateHolder = setupStandardState(out var period, out var agentList);
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 						FullWeekendsOffValue = new MinMax<int>(1, 2)
 					}), (o, args) => { });
 
-				var standardDeviation = getResultingStandardDeviation(period, stateHolder);
+				standardDeviation = getResultingStandardDeviation(period, stateHolder);
 				if (standardDeviation <= targetStandardDeviation)
 				{
 					targetAchieved = true;
@@ -87,6 +89,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				}
 			}
 
+			standardDeviation.Should().Be.GreaterThan(0.005);
 			targetAchieved.Should().Be.True();
 		}
 
