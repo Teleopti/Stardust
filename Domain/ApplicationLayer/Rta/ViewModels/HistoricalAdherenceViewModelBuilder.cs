@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			build(personId, null);
 
 		public HistoricalAdherenceViewModel Build(Guid personId, DateOnly date) =>
-			build(personId, null);
+			build(personId, date);
 
 		private HistoricalAdherenceViewModel build(Guid personId, DateOnly? date)
 		{
@@ -168,31 +168,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private void loadScheduleInto(data data)
 		{
-			var date = data.Date;
-			var person = data.Person;
-			var projection = Enumerable.Empty<IVisualLayer>();
+			data.Schedule = Enumerable.Empty<IVisualLayer>();
 
 			var scenario = _scenario.Current();
 			if (scenario != null && data.Person != null)
 			{
-				var period = new DateOnlyPeriod(date.AddDays(-2), date.AddDays(2));
+				var period = new DateOnlyPeriod(data.Date, data.Date);
 
 				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-					new[] {person},
+					new[] {data.Person},
 					new ScheduleDictionaryLoadOptions(false, false),
 					period,
 					scenario);
 
-				var scheduleDay = schedules[person].ScheduledDayCollection(period)
-					.Single(x => x.DateOnlyAsPeriod.DateOnly == date);
-				projection = scheduleDay.ProjectionService().CreateProjection();
+				data.Schedule = schedules[data.Person]
+					.ScheduledDayCollection(period)
+					.Single()
+					.ProjectionService()
+					.CreateProjection();
 			}
 
-			data.Schedule = projection;
-			if (projection.Any())
+			if (data.Schedule.Any())
 			{
-				data.ShiftStartTime = projection.Min(x => x.Period.StartDateTime);
-				data.ShiftEndTime = projection.Max(x => x.Period.EndDateTime);
+				data.ShiftStartTime = data.Schedule.Min(x => x.Period.StartDateTime);
+				data.ShiftEndTime = data.Schedule.Max(x => x.Period.EndDateTime);
 			}
 		}
 
