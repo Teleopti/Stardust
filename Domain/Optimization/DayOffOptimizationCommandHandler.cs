@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -20,18 +21,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IAllStaff _allStaff;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
+		private readonly IGridlockManager _gridLockManager;
 
 		public DayOffOptimizationCommandHandler(IEventPublisher eventPublisher,
 			FetchIslands fetchIslands,
 			IAllStaff allStaff,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
-			CrossAgentsAndSkills crossAgentsAndSkills)
+			CrossAgentsAndSkills crossAgentsAndSkills,
+			IGridlockManager gridLockManager)
 		{
 			_eventPublisher = eventPublisher;
 			_fetchIslands = fetchIslands;
 			_allStaff = allStaff;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_crossAgentsAndSkills = crossAgentsAndSkills;
+			_gridLockManager = gridLockManager;
 		}
 		
 		public void Execute(DayOffOptimizationCommand command, ISchedulingProgress schedulingProgress,
@@ -53,7 +57,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 					Skills = crossAgentsAndSkillsResult.Skills,
 					RunWeeklyRestSolver = command.RunWeeklyRestSolver,
 					PlanningPeriodId = command.PlanningPeriodId,
-					CommandId = command.CommandId
+					CommandId = command.CommandId,
+					UserLocks = _gridLockManager.LockInfos()
 				});
 			}
 			else
@@ -73,7 +78,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 							Skills = island.SkillIds(),
 							RunWeeklyRestSolver = command.RunWeeklyRestSolver,
 							PlanningPeriodId = command.PlanningPeriodId,
-							CommandId = command.CommandId
+							CommandId = command.CommandId,
+							UserLocks = _gridLockManager.LockInfos()
 						});	
 					}
 				}
