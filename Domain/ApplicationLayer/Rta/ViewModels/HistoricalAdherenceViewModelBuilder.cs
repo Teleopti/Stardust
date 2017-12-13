@@ -5,8 +5,10 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
@@ -42,32 +44,180 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_calculator = calculator;
 		}
 
-		public HistoricalAdherenceViewModel Build(Guid personId)
+		public HistoricalAdherenceViewModel Build(Guid personId) =>
+			build(personId, null);
+
+		public HistoricalAdherenceViewModel Build(Guid personId, DateOnly date) =>
+			build(personId, null);
+
+		private HistoricalAdherenceViewModel build(Guid personId, DateOnly? date)
 		{
-			var now = _now.UtcDateTime();
-			var person = _persons.Load(personId);
-			var displayInfo = getSchedule(now, person);
-			var data = _adherences.Read(personId, displayInfo.DisplayStartTime.Value, displayInfo.DisplayEndTime.Value);
-			var dataBeforeDisplayStartTime = _adherences.ReadLastBefore(personId, displayInfo.DisplayStartTime.Value);
-			
-			if(dataBeforeDisplayStartTime != null)
-				data = new[]{dataBeforeDisplayStartTime}.Concat(data);
-			
+			var data = new data
+			{
+				Now = _now.UtcDateTime(),
+				PersonId = personId,
+				Person = _persons.Load(personId),
+			};
+
+			loadCommonInto(data);
+
+			if (date.HasValue)
+				data.Date = date.Value;
+			else
+				loadDateTheSillyWay(data);
+
+			loadScheduleInto(data);
+			loadDisplayInto(data);
+			loadAdherencesInto(data);
+
 			return new HistoricalAdherenceViewModel
 			{
-				Now = formatForUser(now),
+				Now = formatForUser(data.Now),
 				PersonId = personId,
-				AgentName = person?.Name.ToString(),
-				Schedules = buildSchedules(displayInfo.Schedule),
-				Changes = buildChanges(personId, displayInfo.DisplayStartTime.Value, displayInfo.DisplayEndTime.Value),
-				OutOfAdherences = buildOutOfAdherences(data),
+				AgentName = data.Person?.Name.ToString(),
+				Schedules = buildSchedules(data.Schedule),
+				Changes = buildChanges(personId, data.DisplayStartTime, data.DisplayEndTime),
+				OutOfAdherences = buildOutOfAdherences(data.Adherences),
 				Timeline = new ScheduleTimeline
 				{
-					StartTime = formatForUser(displayInfo.DisplayStartTime.Value),
-					EndTime = formatForUser(displayInfo.DisplayEndTime.Value)
+					StartTime = formatForUser(data.DisplayStartTime),
+					EndTime = formatForUser(data.DisplayEndTime)
 				},
-				AdherencePercentage = _calculator.CalculatePercentage(displayInfo.ShiftStartTime, displayInfo.ShiftEndTime, data)
+				AdherencePercentage = _calculator.CalculatePercentage(data.ShiftStartTime, data.ShiftEndTime, data.Adherences)
 			};
+		}
+
+		private class data
+		{
+			public DateTime Now;
+			public DateTime AgnentNow;
+			public DateOnly Date;
+			public Guid PersonId;
+			public IPerson Person;
+			public TimeZoneInfo TimeZone;
+
+			public DateTime DisplayStartTime;
+			public DateTime DisplayEndTime;
+
+			public IEnumerable<IVisualLayer> Schedule;
+			public DateTime? ShiftStartTime;
+			public DateTime? ShiftEndTime;
+
+			public IEnumerable<HistoricalAdherenceReadModel> Adherences;
+		}
+
+		[RemoveMeWithToggle(Toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)]
+		private void loadDateTheSillyWay(data data)
+		{
+			var date = new DateOnly(data.AgnentNow);
+			IScheduleDay day = null;
+
+			var scenario = _scenario.Current();
+			if (scenario != null && data.Person != null)
+			{
+				var period = new DateOnlyPeriod(date.AddDays(-2), date.AddDays(2));
+
+				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
+					new[] {data.Person},
+					new ScheduleDictionaryLoadOptions(false, false),
+					period,
+					scenario);
+
+				var possibleShifts = (
+						from scheduleDay in schedules[data.Person].ScheduledDayCollection(period)
+						where scheduleDay.DateOnlyAsPeriod.DateOnly == date.AddDays(-1)
+							  || scheduleDay.DateOnlyAsPeriod.DateOnly == date
+						let projection = scheduleDay.ProjectionService().CreateProjection()
+						select new
+						{
+							scheduleDay,
+							projection,
+						})
+					.ToArray();
+
+				var shift = possibleShifts.SingleOrDefault(s => s.projection.Any(l => l.Period.Contains(data.Now))) ??
+							possibleShifts.SingleOrDefault(s => s.scheduleDay.DateOnlyAsPeriod.DateOnly == date);
+
+				day = shift.scheduleDay;
+			}
+
+			if (day != null)
+				date = day.DateOnlyAsPeriod.DateOnly;
+
+			data.Date = date;
+		}
+
+		private void loadCommonInto(data data)
+		{
+			data.TimeZone = data.Person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
+			data.AgnentNow = TimeZoneInfo.ConvertTimeFromUtc(data.Now, data.TimeZone);
+		}
+
+		private void loadDisplayInto(data data)
+		{
+			var startTime = TimeZoneInfo.ConvertTimeToUtc(data.AgnentNow.Date, data.TimeZone);
+			data.DisplayStartTime = startTime;
+			data.DisplayEndTime = startTime.AddDays(1);
+
+			if (data.Schedule.Any())
+			{
+				data.DisplayStartTime = data.ShiftStartTime.Value.AddHours(-1);
+				data.DisplayEndTime = data.ShiftEndTime.Value.AddHours(1);
+			}
+		}
+
+		private void loadScheduleInto(data data)
+		{
+			var date = data.Date;
+			var person = data.Person;
+			var projection = Enumerable.Empty<IVisualLayer>();
+
+			var scenario = _scenario.Current();
+			if (scenario != null && data.Person != null)
+			{
+				var period = new DateOnlyPeriod(date.AddDays(-2), date.AddDays(2));
+
+				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
+					new[] {person},
+					new ScheduleDictionaryLoadOptions(false, false),
+					period,
+					scenario);
+
+				var scheduleDay = schedules[person].ScheduledDayCollection(period)
+					.Single(x => x.DateOnlyAsPeriod.DateOnly == date);
+				projection = scheduleDay.ProjectionService().CreateProjection();
+			}
+
+			data.Schedule = projection;
+			if (projection.Any())
+			{
+				data.ShiftStartTime = projection.Min(x => x.Period.StartDateTime);
+				data.ShiftEndTime = projection.Max(x => x.Period.EndDateTime);
+			}
+		}
+
+		private void loadAdherencesInto(data data) =>
+			data.Adherences =
+				new[] {_adherences.ReadLastBefore(data.PersonId, data.DisplayStartTime)}
+					.Concat(_adherences.Read(data.PersonId, data.DisplayStartTime, data.DisplayEndTime))
+					.Where(x => x != null);
+
+		private IEnumerable<internalHistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
+		{
+			return (
+					from layer in layers
+					select new internalHistoricalAdherenceActivityViewModel
+					{
+						Name = layer.DisplayDescription().Name,
+						Color = ColorTranslator.ToHtml(layer.DisplayColor()),
+						StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone())
+							.ToString("yyyy-MM-ddTHH:mm:ss"),
+						EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
+							.ToString("yyyy-MM-ddTHH:mm:ss"),
+						StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()),
+						EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
+					})
+				.ToArray();
 		}
 
 		private IEnumerable<AgentOutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<HistoricalAdherenceReadModel> data)
@@ -105,7 +255,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				{
 					Time = formatForUser(x.Key.Timestamp),
 					Activity = x.Key.ActivityName,
-					ActivityColor = x.Key.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.Key.ActivityColor.Value)) : null,
+					ActivityColor = x.Key.ActivityColor.HasValue
+						? ColorTranslator.ToHtml(Color.FromArgb(x.Key.ActivityColor.Value))
+						: null,
 					State = x.Key.StateName,
 					Rule = x.Key.RuleName,
 					RuleColor = x.Key.RuleColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.Key.RuleColor.Value)) : null,
@@ -114,85 +266,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				})
 				.ToArray();
 			return changes;
-		}
-
-		private class scheduleInfo
-		{
-			public IEnumerable<IVisualLayer> Schedule;
-			public DateTime? ShiftStartTime;
-			public DateTime? ShiftEndTime;
-			public DateTime? DisplayStartTime;
-			public DateTime? DisplayEndTime;
-		}
-
-		private scheduleInfo getSchedule(DateTime now, IPerson person)
-		{
-			var timeZone = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
-			var timeZoneTime = TimeZoneInfo.ConvertTimeFromUtc(now, timeZone);
-			var date = new DateOnly(timeZoneTime);
-
-			var schedule = Enumerable.Empty<IVisualLayer>();
-
-			var scenario = _scenario.Current();
-			if (scenario != null && person != null)
-			{
-				var period = new DateOnlyPeriod(date.AddDays(-2), date.AddDays(2));
-
-				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-					new[] {person},
-					new ScheduleDictionaryLoadOptions(false, false),
-					period,
-					scenario);
-
-				var possibleShifts = (
-						from scheduleDay in schedules[person].ScheduledDayCollection(period)
-						where scheduleDay.DateOnlyAsPeriod.DateOnly == date.AddDays(-1)
-							  || scheduleDay.DateOnlyAsPeriod.DateOnly == date
-						let projection = scheduleDay.ProjectionService().CreateProjection()
-						select new
-						{
-							scheduleDay,
-							projection,
-						})
-					.ToArray();
-
-				var shift = possibleShifts.SingleOrDefault(s => s.projection.Any(l => l.Period.Contains(now))) ?? possibleShifts.SingleOrDefault(s => s.scheduleDay.DateOnlyAsPeriod.DateOnly == date);
-
-				schedule = shift.projection;
-			}
-
-			var startTime = TimeZoneInfo.ConvertTimeToUtc(timeZoneTime.Date, timeZone);
-			var result = new scheduleInfo
-			{
-				Schedule = schedule,
-				DisplayStartTime = startTime,
-				DisplayEndTime = startTime.AddDays(1)
-			};
-			if (result.Schedule.Any())
-			{
-				result.ShiftStartTime = result.Schedule.Min(x => x.Period.StartDateTime);
-				result.ShiftEndTime = result.Schedule.Max(x => x.Period.EndDateTime);
-				result.DisplayStartTime = result.ShiftStartTime.Value.AddHours(-1);
-				result.DisplayEndTime = result.ShiftEndTime.Value.AddHours(1);
-			}
-
-			return result;
-		}
-
-		private IEnumerable<internalHistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
-		{
-			return (
-					from layer in layers
-					select new internalHistoricalAdherenceActivityViewModel
-					{
-						Name = layer.DisplayDescription().Name,
-						Color = ColorTranslator.ToHtml(layer.DisplayColor()),
-						StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-						EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-						StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()),
-						EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
-					})
-				.ToArray();
 		}
 
 		private class internalHistoricalAdherenceActivityViewModel : HistoricalAdherenceActivityViewModel
@@ -246,12 +319,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 	public interface IAdherencePercentageCalculator
 	{
-		int? CalculatePercentage(DateTime? shiftStartTime, DateTime? shiftEndTime, IEnumerable<HistoricalAdherenceReadModel> data);
+		int? CalculatePercentage(DateTime? shiftStartTime, DateTime? shiftEndTime,
+			IEnumerable<HistoricalAdherenceReadModel> data);
 	}
 
 	public class NoAdherencePercentageCalculator : IAdherencePercentageCalculator
 	{
-		public int? CalculatePercentage(DateTime? shiftStartTime, DateTime? shiftEndTime, IEnumerable<HistoricalAdherenceReadModel> data)
+		public int? CalculatePercentage(DateTime? shiftStartTime, DateTime? shiftEndTime,
+			IEnumerable<HistoricalAdherenceReadModel> data)
 		{
 			return null;
 		}
@@ -272,14 +347,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_now = now;
 		}
 
-		public int? CalculatePercentage(DateTime? shiftStartTime, DateTime? shiftEndTime, IEnumerable<HistoricalAdherenceReadModel> data)
+		public int? CalculatePercentage(DateTime? shiftStartTime, DateTime? shiftEndTime,
+			IEnumerable<HistoricalAdherenceReadModel> data)
 		{
 			if (!shiftStartTime.HasValue)
 				return null;
 
 			var onGoingShift = _now.UtcDateTime() < shiftEndTime.Value;
-			var calculateUntil = onGoingShift ? _now.UtcDateTime() : shiftEndTime.Value ;
-		
+			var calculateUntil = onGoingShift ? _now.UtcDateTime() : shiftEndTime.Value;
+
 			var adherenceReadModels = data
 				.Select(a => new adherenceMoment()
 				{
@@ -291,11 +367,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var timeInAdherence = timeIn(HistoricalAdherenceReadModelAdherence.In, adherenceReadModels);
 			var timeInNeutral = timeIn(HistoricalAdherenceReadModelAdherence.Neutral, adherenceReadModels);
 			var shiftTime = shiftEndTime.Value - shiftStartTime.Value;
-			
+
 			return Convert.ToInt32((timeInAdherence.TotalSeconds / (shiftTime - timeInNeutral).TotalSeconds) * 100);
 		}
 
-		private static TimeSpan timeIn(HistoricalAdherenceReadModelAdherence adherenceType, IEnumerable<adherenceMoment> data) =>
+		private static TimeSpan timeIn(HistoricalAdherenceReadModelAdherence adherenceType,
+			IEnumerable<adherenceMoment> data) =>
 			data.Aggregate(new timeAccumulated(), (t, m) =>
 			{
 				if (t.AccumulateSince != null)
@@ -315,6 +392,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			public HistoricalAdherenceReadModelAdherence? Adherence { get; set; }
 			public DateTime Time { get; set; }
 		}
-
 	}
 }
