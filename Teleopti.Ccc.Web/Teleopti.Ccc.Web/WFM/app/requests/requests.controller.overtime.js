@@ -48,6 +48,7 @@
 		vm.requests = [];
 		vm.period = {};
 		vm.filters = [];
+		vm.selectedTypes = [];
 		vm.subjectFilter = undefined;
 		vm.messageFilter = undefined;
 		vm.isLoading = false;
@@ -61,12 +62,26 @@
 			columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'];
 
 		vm.setDefaultStatuses = function() {
-			if (vm.defaultStatusesLoaded) {
-				return;
-			}
+			if (vm.defaultStatusesLoaded) return;
 
 			vm.selectedRequestStatuses = uiGridUtilitiesService.getDefaultStatus(vm.filters, requestsTabNames.overtime);
 			vm.defaultStatusesLoaded = true;
+		};
+
+		vm.setSelectedTypes = function() {
+			if (!vm.filters || vm.filters.length == 0) return;
+
+			var typeElement = vm.filters.filter(function(f) { return Object.keys(f)[0] == 'Type';})[0];
+			if (!typeElement) return;
+
+			requestFilterSvc.setFilter('Type', typeElement.Type, requestsTabNames.overtime);
+			angular.forEach(typeElement.Type.split(' '), function(value) {
+				if (value.trim() !== '') {
+					vm.selectedTypes.push({
+						Id: value.trim()
+					});
+				}
+			});
 		};
 
 		vm.subjectFilterChanged = function() {
@@ -228,10 +243,11 @@
 		function getOvertimeTypes() {
 			requestsDataService.getOvertimeTypes().then(function(result) {
 				vm.overtimeTypes = result.data;
-				angular.forEach(vm.OvertimeTypes,
-					function(type) {
-						type.Selected = false;
-					});
+				angular.forEach(vm.OvertimeTypes, function(type) {
+					type.Selected = false;
+				});
+
+				vm.setSelectedTypes();
 			});
 		}
 

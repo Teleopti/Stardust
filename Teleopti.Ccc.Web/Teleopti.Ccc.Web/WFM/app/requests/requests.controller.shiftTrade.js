@@ -84,10 +84,6 @@
 			setFilters(vm.selectedRequestStatuses, 'Status');
 		};
 
-		vm.typeFilterClose = function() {
-			setFilters(vm.SelectedTypes, 'Type');
-		};
-
 		vm.reload = function(params) {
 			if (params) {
 				vm.agentSearchTerm = params.agentSearchTerm || vm.agentSearchTerm;
@@ -110,7 +106,6 @@
 				function(column) {
 					column.filters[0].term = undefined;
 				});
-			vm.SelectedTypes = [];
 
 			angular.forEach(vm.allRequestStatuses,
 				function(status) {

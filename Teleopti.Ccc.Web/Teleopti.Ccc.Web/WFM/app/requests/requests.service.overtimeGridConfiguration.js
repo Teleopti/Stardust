@@ -73,7 +73,7 @@
 						headerCellClass: 'request-type-header',
 						enableSorting: false,
 						visible: true,
-						filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.typeFilterClose()\"' +
+						filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.typeFilterClose()\" ng-model-options=\"{trackBy: \'$value.Id\'}\"' +
 							'multiple ng-model=\"grid.appScope.selectedTypes\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Type\' | translate}}\" aria-label=\"{{\'Type\' | translate}}\">' +
 							'<md-option ng-repeat=\"item in grid.appScope.overtimeTypes\" ng-value=\"item\">' +
 							'<span>{{ item.Name | translate}}</span>' +

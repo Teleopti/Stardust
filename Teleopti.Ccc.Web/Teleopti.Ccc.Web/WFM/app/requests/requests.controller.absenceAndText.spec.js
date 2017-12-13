@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('Requests - absence and text controller tests',
+describe('Requests - absence and text controller tests: ',
 	function () {
 		var $rootScope,
 			$filter,
@@ -374,6 +374,21 @@ describe('Requests - absence and text controller tests',
 			expect(selectedStatus[0].Id).toEqual(status0.trim());
 			expect(selectedStatus[1].Id).toEqual(status1.trim());
 			expect(selectedStatus[2].Id).toEqual(status2.trim());
+		});
+
+		it('should select types', function () {
+			compileUIGridHtml(scope, controller.gridOptions);
+
+			var type1 = '47d9292f-ead6-40b2-ac4f-9b5e015ab330';
+			var type2 = '041db668-3185-4d7a-8781-9b5e015ab330';
+			controller.filters = [{ 'Type': type1 + ' ' + type2}];
+
+			controller.setSelectedTypes();
+			scope.$digest();
+
+			expect(controller.selectedTypes.length).toEqual(2);
+			expect(controller.selectedTypes[0].Id).toEqual(type1.trim());
+			expect(controller.selectedTypes[1].Id).toEqual(type2.trim());
 		});
 
 		it('should save the filters data in RequestsFilter service for absenceAndText', function() {

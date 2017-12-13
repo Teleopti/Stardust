@@ -378,6 +378,22 @@ describe('Requests - overtime controller tests',
 			expect(selectedStatus[2].Id).toEqual(status2.trim());
 		});
 
+		it('should select types', function() {
+			compileUIGridHtml(scope, controller.gridOptions);
+
+			var type1 = '29f7ece8-d340-408f-be40-9bb900b8a4cb';
+			var type2 = '9019d62f-0086-44b1-a977-9bb900b8c361';
+			controller.filters = [{
+				'Type': type1 + ' ' + type2
+			}];
+
+			controller.setSelectedTypes();
+			scope.$digest();
+
+			expect(controller.selectedTypes.length).toEqual(2);
+			expect(controller.selectedTypes[0].Id).toEqual(type1.trim());
+			expect(controller.selectedTypes[1].Id).toEqual(type2.trim());
+		});
 		it('should save the filters data in RequestsFilter service for overtime', function () {
 			compileUIGridHtml(scope, controller.gridOptions);
 			scope.$digest();
@@ -588,7 +604,7 @@ describe('Requests - overtime controller tests',
 				_getAllRequetsCallbackData = {
 					Requests: _requests,
 					TotalCount: _requests.length
-				}
+				};
 			};
 
 			this.setRequests = function (requests) {
@@ -616,7 +632,7 @@ describe('Requests - overtime controller tests',
 							data: _getAllRequetsCallbackData
 						});
 					}
-				}
+				};
 			};
 
 			this.getOvertimeTypes = function () {
@@ -629,8 +645,8 @@ describe('Requests - overtime controller tests',
 							]
 						});
 					}
-				}
-			}
+				};
+			};
 
 			this.getOvertimeRequestsStatuses = function () {
 				return [
