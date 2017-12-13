@@ -10,20 +10,29 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, true)]
-	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, true)]
-	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, false)]
-	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, true)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, true)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, false)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, true)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, true)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue, false)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse, false)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public abstract class DayOffOptimizationScenario : ISetup, IConfigureToggleManager
+	public abstract class DayOffOptimizationScenario : ISetup, IConfigureToggleManager, ITestInterceptor
 	{
+		private readonly SeperateWebRequest _seperateWebRequest;
 		private readonly RemoveImplicitResCalcContext _removeImplicitResCalcContext;
 		protected readonly bool _resourcePlannerDayOffOptimizationIslands47208;
+		
+		public IIoCTestContext IoCTestContext;
 
-		protected DayOffOptimizationScenario(RemoveImplicitResCalcContext removeImplicitResCalcContext,
+		protected DayOffOptimizationScenario(SeperateWebRequest seperateWebRequest,
+					RemoveImplicitResCalcContext removeImplicitResCalcContext,
 					bool resourcePlannerDayOffOptimizationIslands47208)
 		{
+			_seperateWebRequest = seperateWebRequest;
 			_removeImplicitResCalcContext = removeImplicitResCalcContext;
 			_resourcePlannerDayOffOptimizationIslands47208 = resourcePlannerDayOffOptimizationIslands47208;
 		}
@@ -44,6 +53,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				toggleManager.Disable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680);
 			if(_resourcePlannerDayOffOptimizationIslands47208)
 				toggleManager.Enable(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208);
+		}
+
+		public void OnBefore()
+		{
+			if (_seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler)
+				IoCTestContext.SimulateNewRequest();
 		}
 	}
 }

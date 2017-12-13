@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(0)).HasDayOff()).Should().Be.EqualTo(1); 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()).Should().Be.EqualTo(1);
 		}
-		
-		public DayOffOptimizationCascadingDesktopTest(RemoveImplicitResCalcContext removeImplicitResCalcContext, bool resourcePlannerDayOffOptimizationIslands47208) : base(removeImplicitResCalcContext, resourcePlannerDayOffOptimizationIslands47208)
+
+		public DayOffOptimizationCascadingDesktopTest(SeperateWebRequest seperateWebRequest, RemoveImplicitResCalcContext removeImplicitResCalcContext, bool resourcePlannerDayOffOptimizationIslands47208) : base(seperateWebRequest, removeImplicitResCalcContext, resourcePlannerDayOffOptimizationIslands47208)
 		{
 		}
 	}

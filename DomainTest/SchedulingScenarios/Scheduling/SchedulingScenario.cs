@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[LoggedOnAppDomain]
 	public abstract class SchedulingScenario : IConfigureToggleManager, ITestInterceptor, ISetup
 	{
-		protected readonly SeperateWebRequest SeperateWebRequest;
+		private readonly SeperateWebRequest _seperateWebRequest;
 		protected readonly RemoveClassicShiftCategory ResourcePlannerRemoveClassicShiftCat46582;
 		protected readonly RemoveImplicitResCalcContext RemoveImplicitResCalcContext46680;
 		protected readonly bool _resourcePlannerTimeZoneIssues45818;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			RemoveImplicitResCalcContext removeImplicitResCalcContext46680,
 			bool resourcePlannerTimeZoneIssues45818)
 		{
-			SeperateWebRequest = seperateWebRequest;
+			_seperateWebRequest = seperateWebRequest;
 			ResourcePlannerRemoveClassicShiftCat46582 = resourcePlannerRemoveClassicShiftCat46582;
 			RemoveImplicitResCalcContext46680 = removeImplicitResCalcContext46680;
 			_resourcePlannerTimeZoneIssues45818 = resourcePlannerTimeZoneIssues45818;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		public void OnBefore()
 		{
-			if (SeperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler)
+			if (_seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler)
 				IoCTestContext.SimulateNewRequest();
 		}
 
