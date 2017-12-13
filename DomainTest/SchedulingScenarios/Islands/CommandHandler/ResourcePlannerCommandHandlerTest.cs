@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 
 		protected ResourcePlannerCommandHandlerTest(SUT sut)
 		{
-			if(sut==SUT.DayOffOptimization)
-				Assert.Ignore("To be fixed");
 			_sut = sut;
 		}
 

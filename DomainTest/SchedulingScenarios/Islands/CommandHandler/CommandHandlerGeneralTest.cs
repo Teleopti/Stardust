@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Collection;
@@ -246,6 +247,39 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod(), new[] {agent1}, TeamBlockType.Team);
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().Agents.Count().Should().Be.EqualTo(1);
+		}
+		
+		[Test]
+		public void ShouldIncludeOtherAgentInIslandsIfSameTeam()
+		{
+			var team = new Team().WithId();
+			var skill = new Skill().WithId();
+			var agent1 = new Person().WithId().WithPersonPeriod(team, skill);
+			var agent2 = new Person().WithId().WithPersonPeriod(team, skill);
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			ExecuteTarget(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), new[] {agent1}, TeamBlockType.Team);
+			
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().AgentsInIsland
+				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
+		}
+		
+		[Test]
+		public void ShouldIncludeOtherAgentsSkillInIslandsIfSameTeam()
+		{
+			var team = new Team().WithId();
+			var skill1 = new Skill().WithId();
+			var skill2 = new Skill().WithId();
+			var agent1 = new Person().WithId().WithPersonPeriod(team, skill1);
+			var agent2 = new Person().WithId().WithPersonPeriod(team, skill1, skill2);
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			ExecuteTarget(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), new[] {agent1}, TeamBlockType.Team);
+			
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().Skills
+				.Should().Have.SameValuesAs(skill1.Id.Value, skill2.Id.Value);
 		}
 		
 		public CommandHandlerGeneralTest(SUT sut) : base(sut)
