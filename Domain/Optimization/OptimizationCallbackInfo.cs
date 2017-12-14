@@ -3,24 +3,24 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimizationCallbackInfo
+	public class OptimizationCallbackInfo
 	{
-		public IntradayOptimizationCallbackInfo(IPerson agent, bool wasSuccessful, int numberOfOptimizers)
+		public OptimizationCallbackInfo(IPerson agent, bool wasSuccessful, int number)
 		{
 			Name = agent.Name.ToString(NameOrderOption.FirstNameLastName);
 			WasSuccessful = wasSuccessful;
-			NumberOfOptimizers = numberOfOptimizers;
+			Number = number;
 		}
 
-		public IntradayOptimizationCallbackInfo(ITeamBlockInfo teamBlockInfo, bool wasSuccessful, int numberOfOptimizers)
+		public OptimizationCallbackInfo(ITeamBlockInfo teamBlockInfo, bool wasSuccessful, int number)
 		{
 			Name = teamBlockInfo.TeamInfo.Name;
 			WasSuccessful = wasSuccessful;
-			NumberOfOptimizers = numberOfOptimizers;
+			Number = number;
 		}
 
 		public string Name { get; }
 		public bool WasSuccessful { get; }
-		public int NumberOfOptimizers { get; }
+		public int Number { get; }
 	}
 }

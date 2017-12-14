@@ -4,11 +4,11 @@ using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
-	public class TrackIntradayOptimizationCallback : IIntradayOptimizationCallback
+	public class TrackOptimizationCallback : IOptimizationCallback
 	{
-		private readonly IList<IntradayOptimizationCallbackInfo> callbacks = new List<IntradayOptimizationCallbackInfo>();
+		private readonly IList<OptimizationCallbackInfo> callbacks = new List<OptimizationCallbackInfo>();
 
-		public void Optimizing(IntradayOptimizationCallbackInfo callbackInfo)
+		public void Optimizing(OptimizationCallbackInfo callbackInfo)
 		{
 			callbacks.Add(callbackInfo);
 		}

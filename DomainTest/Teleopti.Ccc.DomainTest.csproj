@@ -592,7 +592,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\ShiftCategoryLimitationTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\TeamBlockSchedulingTest.cs" />
-    <Compile Include="SchedulingScenarios\TrackIntradayOptimizationCallback.cs" />
+    <Compile Include="SchedulingScenarios\TrackOptimizationCallback.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizerTest.cs" />
     <Compile Include="ResourceCalculation\DoubleMatrixExtensions.cs" />
     <Compile Include="SchedulingScenarios\TrackSchedulingCallback.cs" />

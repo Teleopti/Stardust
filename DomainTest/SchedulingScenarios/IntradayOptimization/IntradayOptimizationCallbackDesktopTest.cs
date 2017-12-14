@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			using (ResourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, false, dateOnly.ToDateOnlyPeriod()))
 			{
-				var callbackTracker = new TrackIntradayOptimizationCallback();
+				var callbackTracker = new TrackOptimizationCallback();
 				Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
 				callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(10);
 			}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			using (ResourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, false, dateOnly.ToDateOnlyPeriod()))
 			{
-				var callbackTracker = new TrackIntradayOptimizationCallback();
+				var callbackTracker = new TrackOptimizationCallback();
 				Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
 				callbackTracker.UnSuccessfulOptimizations().Should().Be.EqualTo(10);
 			}

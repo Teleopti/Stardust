@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 		
-		public void Optimize(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizerPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
+		public void Optimize(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizerPreferences, IOptimizationCallback optimizationCallback)
 		{
 			var stateHolder = _schedulerStateHolder();
 			var command = new IntradayOptimizationCommand
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				RunAsynchronously = false
 			};
 
-			using (_desktopOptimizationContext.Set(command, stateHolder, optimizerPreferences, null, intradayOptimizationCallback))
+			using (_desktopOptimizationContext.Set(command, stateHolder, optimizerPreferences, null, optimizationCallback))
 			{
 				_intradayOptimizationCommandHandler.Execute(command);
 			}
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 	public interface IOptimizeIntradayDesktop
 	{
-		void Optimize(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizerPreferences, IIntradayOptimizationCallback intradayOptimizationCallback);
+		void Optimize(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizerPreferences, IOptimizationCallback optimizationCallback);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
-		public void Optimize(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizerPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
+		public void Optimize(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizerPreferences, IOptimizationCallback optimizationCallback)
 		{
 			var command = new IntradayOptimizationCommand
 			{
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				RunAsynchronously = false
 			};
 
-			using (_desktopOptimizationContext.Set(command, _currentSchedulerStateHolder(), optimizerPreferences, null, intradayOptimizationCallback))
+			using (_desktopOptimizationContext.Set(command, _currentSchedulerStateHolder(), optimizerPreferences, null, optimizationCallback))
 			{
 				_intradayOptimizationCommandHandler.Execute(command);
 			}

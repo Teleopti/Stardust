@@ -420,8 +420,8 @@
     <Compile Include="Optimization\FixedBlockPreferenceProvider.cs" />
     <Compile Include="Optimization\IBlockPreferenceProvider.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
-    <Compile Include="Optimization\IntradayOptimizationCallbackInfo.cs" />
-    <Compile Include="Optimization\NoIntradayOptimizationCallback.cs" />
+    <Compile Include="Optimization\OptimizationCallbackInfo.cs" />
+    <Compile Include="Optimization\NoOptimizationCallback.cs" />
     <Compile Include="Optimization\OptimizationData.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\RemoveShiftCategoryToBeInLegalState.cs" />
     <Compile Include="Reports\AuditTrailSearchParams.cs" />
@@ -1683,7 +1683,7 @@
     <Compile Include="Intraday\IncomingIntervalModel.cs" />
     <Compile Include="Optimization\DayOffOptimizationDesktop.cs" />
     <Compile Include="Optimization\ICurrentIntradayOptimizationCallback.cs" />
-    <Compile Include="Optimization\IntradayOptimizationCallback.cs" />
+    <Compile Include="Optimization\OptimizationCallback.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
     <Compile Include="Optimization\DayOffOptimizationWeb.cs" />
@@ -2205,7 +2205,7 @@
     <Compile Include="Optimization\IFetchPlanningGroupSettingsModel.cs" />
     <Compile Include="Optimization\IntradayOptimizationEventRunInProcessHandler.cs" />
     <Compile Include="Optimization\CurrentIntradayOptimizationCallback.cs" />
-    <Compile Include="Optimization\IIntradayOptimizationCallback.cs" />
+    <Compile Include="Optimization\IOptimizationCallback.cs" />
     <Compile Include="Optimization\ISynchronizeSchedulesAfterIsland.cs" />
     <Compile Include="Optimization\OptimizationPreferencesDefaultValueProvider.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />

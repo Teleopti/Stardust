@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			
 			if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
 			{
-				_optimizeIntradayIslandsDesktop.Optimize(selectedPersons, selectedPeriod, optimizationPreferences,new IntradayOptimizationCallback(_backgroundWorker));
+				_optimizeIntradayIslandsDesktop.Optimize(selectedPersons, selectedPeriod, optimizationPreferences,new OptimizationCallback(_backgroundWorker));
 			}
 			
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().SchedulingResultState, false, selectedPeriod.Inflate(1)))
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
 				{
-					_optimizeIntradayIslandsDesktop.Optimize(selectedPersons, selectedPeriod, optimizationPreferences, new IntradayOptimizationCallback(_backgroundWorker));
+					_optimizeIntradayIslandsDesktop.Optimize(selectedPersons, selectedPeriod, optimizationPreferences, new OptimizationCallback(_backgroundWorker));
 				}
 
 				if (optimizationPreferences.General.OptimizationStepTimeBetweenDays &&

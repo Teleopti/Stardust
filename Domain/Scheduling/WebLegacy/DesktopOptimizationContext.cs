@@ -22,18 +22,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private class desktopOptimizationContextData : IDesktopContextData
 		{
-			public desktopOptimizationContextData(ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, IIntradayOptimizationCallback intradayOptimizationCallback)
+			public desktopOptimizationContextData(ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, IOptimizationCallback optimizationCallback)
 			{
 				SchedulerStateHolderFrom = schedulerStateHolderFrom;
 				OptimizationPreferences = optimizationPreferences;
 				DayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProvider;
-				IntradayOptimizationCallback = intradayOptimizationCallback;
+				OptimizationCallback = optimizationCallback;
 			}
 
 			public ISchedulerStateHolder SchedulerStateHolderFrom { get; }
 			public IOptimizationPreferences OptimizationPreferences { get; }
 			public IDayOffOptimizationPreferenceProvider DayOffOptimizationPreferenceProvider { get; }
-			public IIntradayOptimizationCallback IntradayOptimizationCallback { get; }
+			public IOptimizationCallback OptimizationCallback { get; }
 		}
 
 		private desktopOptimizationContextData contextData()
@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			ISchedulerStateHolder schedulerStateHolderFrom, 
 			IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-			IIntradayOptimizationCallback intradayOptimizationCallback)
+			IOptimizationCallback optimizationCallback)
 		{
-			return _desktopContext.SetContextFor(commandIdentifier, new desktopOptimizationContextData(schedulerStateHolderFrom, optimizationPreferences, dayOffOptimizationPreferenceProvider, intradayOptimizationCallback));
+			return _desktopContext.SetContextFor(commandIdentifier, new desktopOptimizationContextData(schedulerStateHolderFrom, optimizationPreferences, dayOffOptimizationPreferenceProvider, optimizationCallback));
 		}
 
 		public IOptimizationPreferences Fetch()
@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return new FixedBlockPreferenceProvider(Fetch().Extra);
 		}
 
-		public IIntradayOptimizationCallback Current()
+		public IOptimizationCallback Current()
 		{
 			var ctxData = contextData();
-			return ctxData == null ? new NoIntradayOptimizationCallback() : ctxData.IntradayOptimizationCallback;
+			return ctxData == null ? new NoOptimizationCallback() : ctxData.OptimizationCallback;
 		}
 
 		IDayOffOptimizationPreferenceProvider IDayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(Guid planningPeriodId)

@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (_progressEvent != null && _progressEvent.Cancel) return;
 
-				_optimizeIntradayDesktop.Optimize(scheduleAgents, selectedPeriod, optimizerPreferences, new IntradayOptimizationCallback(_backgroundWorker));
+				_optimizeIntradayDesktop.Optimize(scheduleAgents, selectedPeriod, optimizerPreferences, new OptimizationCallback(_backgroundWorker));
 			}
 		}
 
