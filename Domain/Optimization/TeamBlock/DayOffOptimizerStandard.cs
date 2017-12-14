@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.UndoRedo;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
@@ -93,6 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var currentMatrixCounter = 0;
 			var allFailed = new Dictionary<ITeamInfo, bool>();
 			var matrixes = new List<Tuple<IScheduleMatrixPro, ITeamInfo>>();
+			var callback = _currentOptimizationCallback.Current();
 			foreach (var teamInfo in remainingInfoList)
 			{
 				allFailed[teamInfo] = true;
@@ -101,6 +103,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var matrix in matrixes.Randomize())
 			{
+				if (callback.IsCancelled())
+					return null;
 				var blockPreference = blockPreferenceProvider.ForAgent(matrix.Item1.Person, matrix.Item1.EffectivePeriodDays.First().Day);
 				_blockPreferencesMapper.UpdateOptimizationPreferencesFromExtraPreferences(optimizationPreferences, blockPreference);
 				_blockPreferencesMapper.UpdateSchedulingOptionsFromOptimizationPreferences(schedulingOptions, optimizationPreferences);
@@ -136,6 +140,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							allFailed[matrix.Item2] = false;
 							matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
 							matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
+							callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, false, matrixes.Count));
 							continue;
 						}
 					}
@@ -155,6 +160,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 					if (success)
 					{
+						previousPeriodValue = currentPeriodValue.Value;
 						allFailed[matrix.Item2] = false;
 					}
 					else
@@ -173,7 +179,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						}
 					}
 
-					_currentOptimizationCallback.Current().Optimizing(new OptimizationCallbackInfo(matrix.Item2, true, matrixes.Count));
+					callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, success, matrixes.Count));
+					
+					if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, previousPeriodValue, optimizationPreferences.Advanced.RefreshScreenInterval))
+					{
+						cancelAction();
+						return null;
+					}
 				}
 			}
 
@@ -251,6 +263,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 
 			return currentPeriodValue.Value < previousPeriodValue;
+		}
+
+		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, double periodValue, int screenRefreshRate)
+		{
+			if (schedulingProgress.CancellationPending)
+			{
+				return true;
+			}
+			var eventArgs = new ResourceOptimizerProgressEventArgs(0, 0,
+				Resources.OptimizingDaysOff + Resources.Colon + "(" + totalNumberOfTeamInfos.ToString("####") + ")(" +
+				teamInfoCounter.ToString("####") + ") " + currentTeamInfo.Name.DisplayString(20) + " (" + periodValue + ")", screenRefreshRate);
+			schedulingProgress.ReportProgress(1, eventArgs);
+			return false;
 		}
 
 		private bool reScheduleAllMovedDaysOff(SchedulingOptions schedulingOptions, ITeamInfo teamInfo,
