@@ -7,7 +7,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 	public class TrackOptimizationCallback : IOptimizationCallback
 	{
 		private readonly IList<OptimizationCallbackInfo> callbacks = new List<OptimizationCallbackInfo>();
-
+		private bool canceled; 
+		
 		public void Optimizing(OptimizationCallbackInfo callbackInfo)
 		{
 			callbacks.Add(callbackInfo);
@@ -15,7 +16,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 
 		public bool IsCancelled()
 		{
-			return false;
+			return canceled;
+		}
+
+		public void SetCancelled()
+		{
+			canceled = true;
 		}
 
 		public int SuccessfulOptimizations()

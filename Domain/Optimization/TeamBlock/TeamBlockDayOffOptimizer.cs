@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					},
 					dayOffOptimizationPreferenceProvider, blockPreferenceProvider, schedulingProgress);
 
-				if (cancelMe)
+				if (cancelMe || teamInfosToRemove==null)
 					break;
 
 				foreach (var teamInfo in teamInfosToRemove)
