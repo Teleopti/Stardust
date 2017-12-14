@@ -39,7 +39,7 @@ Wfm_MinimumScaffolding_32659 = RC
 RTA_RtaTracer_45597 = true
 RTA_MonitorAgentsWithLongTimeInState_46475 = true
 RTA_MobileFriendlyCheckboxes_46758 = RC
-RTA_ViewHistoricalAhderenceForRecentShifts_46786 = false
+RTA_ViewHistoricalAhderenceForRecentShifts_46786 = RC
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true
