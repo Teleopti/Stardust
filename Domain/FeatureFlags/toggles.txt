@@ -38,7 +38,7 @@ Wfm_MinimumScaffolding_32659 = RC
 
 RTA_RtaTracer_45597 = true
 RTA_MonitorAgentsWithLongTimeInState_46475 = true
-RTA_MobileFriendlyCheckboxes_46758 = RC
+RTA_MobileFriendlyCheckboxes_46758 = true
 RTA_ViewHistoricalAhderenceForRecentShifts_46786 = RC
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
@@ -129,7 +129,7 @@ ResourcePlanner_DoNotKillCache_46724 = true
 ResourcePlanner_RemoveImplicitResCalcContext_46680 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some issues
 ResourcePlanner_BpoScheduling_46265 = true
-ResourcePlanner_TimeZoneIssues_45818 = RC
+ResourcePlanner_TimeZoneIssues_45818 = true
 ResourcePlanner_DayOffOptimizationIslands_47208 = RC
 
 Wfm_DisplayOnlineHelp_39402 = true
