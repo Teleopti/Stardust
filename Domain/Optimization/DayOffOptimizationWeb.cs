@@ -46,28 +46,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[TestLog]
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
 		{
-			var optiData = SetupAndOptimize(planningPeriodId);
-			_persister.Persist(_schedulerStateHolder().Schedules);
-			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
-			return _optimizationResult.Create(optiData.DateOnlyPeriod, optiData.Persons, optiData.PlanningPeriod.PlanningGroup, optimizationPreferences.General.UsePreferences);
-		}
-
-		protected virtual OptimizationData SetupAndOptimize(Guid planningPeriodId)
-		{
-			var optData = Setup(planningPeriodId);
-			
+			var optiData = Setup(planningPeriodId);
 			_dayOffOptimizationCommandHandler.Execute(new DayOffOptimizationCommand
 				{
-					Period = optData.DateOnlyPeriod,
-					AgentsToOptimize = optData.Persons,
+					Period = optiData.Period,
+					AgentsToOptimize = optiData.Agents,
 					RunWeeklyRestSolver = true,
 					PlanningPeriodId = planningPeriodId
 				}, 
 				null);
-
-			optData.PlanningPeriod.Scheduled();
-
-			return optData;
+			optiData.PlanningPeriod.Scheduled();
+			_persister.Persist(_schedulerStateHolder().Schedules);
+			return _optimizationResult.Create(optiData.Period, optiData.Agents, 
+				optiData.PlanningPeriod.PlanningGroup, _optimizationPreferencesProvider.Fetch().General.UsePreferences);
 		}
 
 		[UnitOfWork]
@@ -91,16 +82,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			return new OptimizationData
 			{
-				DateOnlyPeriod = period,
-				Persons = agents,
+				Period = period,
+				Agents = agents,
 				PlanningPeriod = planningPeriod
 			};
 		}
 		
 		protected class OptimizationData
 		{
-			public DateOnlyPeriod DateOnlyPeriod { get; set; }
-			public IEnumerable<IPerson> Persons { get; set; }
+			public DateOnlyPeriod Period { get; set; }
+			public IEnumerable<IPerson> Agents { get; set; }
 			public IPlanningPeriod PlanningPeriod { get; set; }
 		}
 	}
