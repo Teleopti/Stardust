@@ -84,6 +84,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				foreach (var pRequest in requestsNotHandled)
 				{
+					if(!isRequestUsingStaffingValidation(pRequest))
+						continue;
 					var absenceRequest = pRequest.Request as IAbsenceRequest;
 					var personAbsenceAccount = dataHolder.PersonAbsenceAccounts[pRequest.Person].Find(absenceRequest.Absence);
 					var result = _absenceRequestSynchronousValidator.Validate(pRequest, dataHolder.PersonsSchedules[pRequest.Person], personAbsenceAccount);
@@ -137,6 +139,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				
 				_stardustJobFeedback.SendProgress($"Finished processing {dataHolder.AllRequests.Count} waitlisted requests.");
 			}
+		}
+
+		private bool isRequestUsingStaffingValidation(IPersonRequest pRequest)
+		{
+			var mergedPeriod = pRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)pRequest.Request);
+			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+			var useStaffing = validators.OfType<StaffingThresholdValidator>().Any();
+			
+			return useStaffing;
 		}
 
 		private void processRequests(WaitlistDataHolder dataHolder, List<IPersonRequest> requests)
@@ -263,7 +274,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			IEnumerable<IScheduleDay> scheduleDays, DateTimePeriod requestPeriod, List<IAbsenceRequestValidator> validators, IPersonRequest pRequest)
 		{
 			var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
-			if (staffingThresholdValidators.IsEmpty()) return new ValidatedRequest{IsValid = true};
+			//should not happen now but hängslen och livrem
+			if (staffingThresholdValidators.IsEmpty()) return new ValidatedRequest{IsValid = false};
 			var shiftPeriodList = new List<DateTimePeriod>();
 
 			foreach (var day in scheduleDays)
