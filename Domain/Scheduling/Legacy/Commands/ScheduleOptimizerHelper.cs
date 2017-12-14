@@ -418,7 +418,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (_progressEvent != null && _progressEvent.Cancel) return;
 
 			_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedAgents, _backgroundWorker, optimizerPreferences,
-				dayOffOptimizationPreferenceProvider, resourceOptimizerPersonOptimized, new NoOptimizationCallback());
+				dayOffOptimizationPreferenceProvider, resourceOptimizerPersonOptimized, new OptimizationCallback(_backgroundWorker));
 		}
 
 		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
