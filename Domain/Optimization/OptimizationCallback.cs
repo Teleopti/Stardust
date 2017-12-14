@@ -9,14 +9,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly ISchedulingProgress _backgroundWorker;
 		private int _counter;
-		private readonly string output = Resources.OptimizingIntraday + Resources.Colon + "({0}){1} {2} {3}";
+		private readonly string output;
 		private static readonly long waitBetweenCallbacks = TimeSpan.FromSeconds(0.2).Ticks;
+		
+		public static readonly string DayOffPreText = Resources.OptimizingDaysOff + Resources.Colon;
+		public static readonly string IntradayPreText = Resources.OptimizingIntraday + Resources.Colon;
 
-		public OptimizationCallback(ISchedulingProgress backgroundWorker, bool dayOff)
+		public OptimizationCallback(ISchedulingProgress backgroundWorker, string preText)
 		{
 			_backgroundWorker = backgroundWorker;
-			if(dayOff)
-				output = Resources.OptimizingDaysOff + Resources.Colon + "({0}){1} {2} {3}";
+			output = preText + "({0}){1} {2} {3}";
 		}
 
 		public void Optimizing(OptimizationCallbackInfo callbackInfo)
