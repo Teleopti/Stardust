@@ -1,5 +1,4 @@
 using System;
-using NPOI.OpenXmlFormats.Dml;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
