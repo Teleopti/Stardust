@@ -32,8 +32,7 @@
 					</md-tooltip>
 				</span>
 
-				<span class="rta-current-time"
-					  ng-attr-style="left: {{vm.currentTimeOffset}}; height: 70%; margin-top: 6px;">
+				<span class="rta-current-time" ng-if="vm.currentTimeOffset" ng-attr-style="left: {{vm.currentTimeOffset}};" style="height: 70%; margin-top: 6px;">
 					<md-tooltip md-direction="top">
 						{{vm.date | amDateFormat: "HH:mm:ss"}}
 					</md-tooltip>

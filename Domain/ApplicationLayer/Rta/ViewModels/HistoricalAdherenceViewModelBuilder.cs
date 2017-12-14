@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private void loadDisplayInto(data data)
 		{
-			var startTime = TimeZoneInfo.ConvertTimeToUtc(data.AgnentNow.Date, data.TimeZone);
+			var startTime = TimeZoneInfo.ConvertTimeToUtc(data.Date.Date, data.TimeZone);
 			data.DisplayStartTime = startTime;
 			data.DisplayEndTime = startTime.AddDays(1);
 

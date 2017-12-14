@@ -18,78 +18,50 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(c.agentName).toEqual('Mikkey Dee');
 	});
 
-	it('should display schedule', function (tester) {
+	it('should request with personid', function (t) {
+		var id = t.randomId();
+		t.stateParams.personId = id;
+
+		t.createController();
+
+		expect(t.backend.lastHistoricalAdherenceForPersonRequestParams.personId).toBe(id);
+	});
+
+	it('should request with date', function (t) {
+		t.stateParams.date = '20171213';
+
+		t.createController();
+
+		expect(t.backend.lastHistoricalAdherenceForPersonRequestParams.date).toBe('20171213');
+	});
+
+	it('should display current date', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
-			PersonId: '1',
-			AgentName: 'Mikkey Dee',
-			Schedules: [{
-				Color: 'lightgreen',
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T17:00:00'
-			}],
-			OutOfAdherences: []
-		});
+		tester.backend
+			.withHistoricalAdherence({
+				Now: '2016-10-10T15:00:00',
+				PersonId: '1',
+				Schedules: [],
+				OutOfAdherences: []
+			});
 
 		var controller = tester.createController();
 
-		expect(controller.agentsFullSchedule[0].Color).toEqual('lightgreen');
-		expect(controller.agentsFullSchedule[0].StartTime.format('HH:mm:ss')).toEqual('08:00:00');
-		expect(controller.agentsFullSchedule[0].EndTime.format('HH:mm:ss')).toEqual('17:00:00');
-		expect(controller.agentsFullSchedule[0].Width).toEqual((9 / 11 * 100) + '%');
-		expect(controller.agentsFullSchedule[0].Offset).toEqual((1 / 11 * 100) + '%');
+		expect(controller.date).toBe('2016-10-10');
 	});
 
-	it('should display schedule', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
-			PersonId: '1',
-			AgentName: 'Mikkey Dee',
-			Schedules: [{
-				Color: 'lightgreen',
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T12:00:00'
-			}, {
-				Color: 'lightgreen',
-				StartTime: '2016-10-10T12:00:00',
-				EndTime: '2016-10-10T18:00:00'
-			}],
-			OutOfAdherences: []
-		});
+	it('should display date', function (tester) {
+		tester.stateParams.date = '20171214';
+		tester.backend
+			.withHistoricalAdherence({
+				Now: '2017-12-15T15:00:00',
+			});
 
 		var controller = tester.createController();
 
-		expect(controller.agentsFullSchedule[0].Width).toEqual(4 / 12 * 100 + '%');
-		expect(controller.agentsFullSchedule[0].Offset).toEqual(1 / 12 * 100 + '%');
-		expect(controller.agentsFullSchedule[1].Width).toEqual(6 / 12 * 100 + '%');
-		expect(controller.agentsFullSchedule[1].Offset).toEqual(5 / 12 * 100 + '%');
+		expect(controller.date).toBe('2017-12-14');
 	});
-
-	it('should display schedule', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
-			PersonId: '1',
-			AgentName: 'Mikkey Dee',
-			Schedules: [{
-				Color: 'lightgreen',
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T12:30:00'
-			}, {
-				Color: 'lightgreen',
-				StartTime: '2016-10-10T12:30:00',
-				EndTime: '2016-10-10T18:30:00'
-			}],
-			OutOfAdherences: []
-		});
-
-		var controller = tester.createController();
-
-		expect(controller.agentsFullSchedule[0].Width).toEqual(4.5 / 13 * 100 + '%');
-		expect(controller.agentsFullSchedule[0].Offset).toEqual(1 / 13 * 100 + '%');
-		expect(controller.agentsFullSchedule[1].Width).toEqual(6 / 13 * 100 + '%');
-		expect(controller.agentsFullSchedule[1].Offset).toEqual(5.5 / 13 * 100 + '%');
-	});
-
+	
 	it('should display out of adherence', function (tester) {
 		tester.stateParams.personId = '1';
 		tester.backend.withHistoricalAdherence({
@@ -209,33 +181,6 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(controller.outOfAdherences.length).toEqual(1);
 		expect(controller.outOfAdherences[0].Offset).toEqual('0%');
 		expect(controller.outOfAdherences[0].Width).toEqual(8 / 11 * 100 + '%');
-	});
-
-	it('should display current date', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
-			.withHistoricalAdherence({
-				Now: '2016-10-10T15:00:00',
-				PersonId: '1',
-				Schedules: [],
-				OutOfAdherences: []
-			});
-
-		var controller = tester.createController();
-
-		expect(controller.date).toBe('2016-10-10');
-	});
-
-	it('should display date', function (tester) {
-		tester.stateParams.date = '20171214';
-		tester.backend
-			.withHistoricalAdherence({
-				Now: '2017-12-15T15:00:00',
-			});
-
-		var controller = tester.createController();
-
-		expect(controller.date).toBe('2017-12-14');
 	});
 
 	it('should display diamonds', function (tester) {
