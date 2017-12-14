@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var optiData = SetupAndOptimize(planningPeriodId);
 			_persister.Persist(_schedulerStateHolder().Schedules);
-			return _optimizationResult.Create(optiData.DateOnlyPeriod, optiData.Persons, optiData.PlanningPeriod.PlanningGroup, optiData.UsePreferences);
+			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
+			return _optimizationResult.Create(optiData.DateOnlyPeriod, optiData.Persons, optiData.PlanningPeriod.PlanningGroup, optimizationPreferences.General.UsePreferences);
 		}
 
 		protected virtual OptimizationData SetupAndOptimize(Guid planningPeriodId)
@@ -73,7 +74,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		protected virtual OptimizationData Setup(Guid planningPeriodId)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
 			var planningGroup = planningPeriod.PlanningGroup;
@@ -93,8 +93,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				DateOnlyPeriod = period,
 				Persons = agents,
-				PlanningPeriod = planningPeriod,
-				UsePreferences = optimizationPreferences.General.UsePreferences
+				PlanningPeriod = planningPeriod
 			};
 		}
 		
@@ -103,7 +102,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			public DateOnlyPeriod DateOnlyPeriod { get; set; }
 			public IEnumerable<IPerson> Persons { get; set; }
 			public IPlanningPeriod PlanningPeriod { get; set; }
-			public bool UsePreferences { get; set; }
 		}
 	}
 }
