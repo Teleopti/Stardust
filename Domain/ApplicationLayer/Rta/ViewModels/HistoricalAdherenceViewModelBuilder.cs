@@ -363,11 +363,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.ToArray();
 
 			var timeInAdherence = timeIn(HistoricalAdherenceReadModelAdherence.In, adherenceReadModels);
-			if (Convert.ToInt32((timeInAdherence.TotalSeconds)) == 0)
-				return 0;
 			var timeInNeutral = timeIn(HistoricalAdherenceReadModelAdherence.Neutral, adherenceReadModels);
 			var shiftTime = shiftEndTime.Value - shiftStartTime.Value;
-			return Convert.ToInt32((timeInAdherence.TotalSeconds / (shiftTime - timeInNeutral).TotalSeconds) * 100);
+			var timeToAdhere = shiftTime - timeInNeutral;
+
+			if (timeToAdhere == TimeSpan.Zero)
+				return 0;
+			return Convert.ToInt32((timeInAdherence.TotalSeconds / timeToAdhere.TotalSeconds) * 100);
 		}
 
 		private static TimeSpan timeIn(HistoricalAdherenceReadModelAdherence adherenceType,
