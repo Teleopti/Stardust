@@ -94,5 +94,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			dataMartConnectionString = connectionString;
 		}
+
+		public void DisableScheduleJob(int scheduleJobScheduleId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
