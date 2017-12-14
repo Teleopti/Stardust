@@ -223,7 +223,19 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		var controller = tester.createController();
 
-		expect(controller.date.format('YYYY-MM-DD')).toBe('2016-10-10');
+		expect(controller.date).toBe('2016-10-10');
+	});
+
+	it('should display date', function (tester) {
+		tester.stateParams.date = '20171214';
+		tester.backend
+			.withHistoricalAdherence({
+				Now: '2017-12-15T15:00:00',
+			});
+
+		var controller = tester.createController();
+
+		expect(controller.date).toBe('2017-12-14');
 	});
 
 	it('should display diamonds', function (tester) {

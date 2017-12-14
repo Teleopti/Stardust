@@ -9,8 +9,9 @@
 		vm.highlighted = {};
 		vm.diamonds = [];
 		vm.cards = [];
-		$stateParams.open = ($stateParams.open || "false");
 
+		$stateParams.open = ($stateParams.open || "false");
+		
 		vm.ooaTooltipTime = function (time) {
 			if (time == null)
 				return '';
@@ -46,7 +47,7 @@
 			}
 		}).then(function (response) {
 			var data = response.data;
-			
+
 			data.Schedules = data.Schedules || [];
 			data.OutOfAdherences = data.OutOfAdherences || [];
 			data.Changes = data.Changes || [];
@@ -59,7 +60,8 @@
 
 			vm.personId = data.PersonId;
 			vm.agentName = data.AgentName;
-			vm.date = moment(data.Now);
+			// remove the use of now when removing RTA_ViewHistoricalAhderenceForRecentShifts_46786
+			vm.date = moment($stateParams.date || data.Now).format('YYYY-MM-DD');
 			vm.adherencePercentage = data.AdherencePercentage;
 
 			vm.currentTimeOffset = calculateOffset(data.Now);
