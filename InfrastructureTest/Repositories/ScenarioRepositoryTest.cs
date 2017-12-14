@@ -1,6 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(scenario);
 			}
 
-			Assert.Throws<DataSourceException>(() => repository.LoadDefaultScenario());
+			Assert.Throws<NoDefaultScenarioException>(() => repository.LoadDefaultScenario());
 		}
 
 		[Test]
