@@ -76,7 +76,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					RunWeeklyRestSolver = true,
 					PlanningPeriodId = planningPeriodId
 				}, 
-				new NoSchedulingProgress(),
 				null);
 
 			planningPeriod.Scheduled();

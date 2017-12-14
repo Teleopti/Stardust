@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			for (int i = 0; i < 10; i++)
 			{
 				var stateHolder = setupStandardState(out var period, out var agentList);
-				Target.Execute(period, agentList, new NoSchedulingProgress(), new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } },
+				Target.Execute(period, agentList, new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } },
 					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences
 					{
 						UseConsecutiveDaysOff = false,
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			for (int i = 0; i < 10; i++)
 			{
 				var stateHolder = setupStandardState(out var period, out var agentList);
-				Target.Execute(period, agentList, new NoSchedulingProgress(), new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } },
+				Target.Execute(period, agentList, new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } },
 					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences
 					{
 						UseConsecutiveDaysOff = true,

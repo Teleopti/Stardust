@@ -38,8 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_gridLockManager = gridLockManager;
 		}
 		
-		public void Execute(DayOffOptimizationCommand command, ISchedulingProgress schedulingProgress,
-			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
+		public void Execute(DayOffOptimizationCommand command, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			var islands = CreateIslands(command.Period, command);
 			var evts = new List<DayOffOptimizationWasOrdered>();

@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new []{agent}, assesAndRestrictions, skillDays);
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag(), UseAvailabilities = true, AvailabilitiesValue = 1} };
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()
 				.Should().Be.False();//saturday
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agent, assesAndRestrictions, skillDays);
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag(), UseStudentAvailabilities = true, StudentAvailabilitiesValue = studentAvailabilityValue}};
 
-			Target.Execute(period, new[] {agent}, new NoSchedulingProgress(), optPrefs,
+			Target.Execute(period, new[] {agent}, optPrefs,
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()),
 				(o, args) => { }, new NoOptimizationCallback());
 

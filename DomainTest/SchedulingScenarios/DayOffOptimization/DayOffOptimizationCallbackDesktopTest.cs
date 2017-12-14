@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var optPrefs = new OptimizationPreferences {General = {ScheduleTag = new ScheduleTag()}};
 
 			var callbackTracker = new TrackOptimizationCallback();
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {}, callbackTracker);
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {}, callbackTracker);
 			callbackTracker.SuccessfulOptimizations()
 				.Should().Be.EqualTo(1);
 		}
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			var callbackTracker = new TrackOptimizationCallback();
 			callbackTracker.SetCancelled();
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {}, callbackTracker);
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {}, callbackTracker);
 			callbackTracker.SuccessfulOptimizations()
 				.Should().Be.EqualTo(0);
 			callbackTracker.UnSuccessfulOptimizations()
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var optPrefs = new OptimizationPreferences {General = {ScheduleTag = new ScheduleTag()}};
 
 			var callbackTracker = new TrackOptimizationCallback();
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {}, callbackTracker);
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {}, callbackTracker);
 			callbackTracker.UnSuccessfulOptimizations()
 				.Should().Be.EqualTo(1);
 		}

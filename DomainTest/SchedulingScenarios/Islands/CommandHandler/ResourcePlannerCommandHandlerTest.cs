@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 						});
 					}
 					var doCmd = new DayOffOptimizationCommand {Period = period, AgentsToOptimize = agents};
-					DayOffOptimizationCommandHandler.Execute(doCmd, new NoSchedulingProgress(), null);
+					DayOffOptimizationCommandHandler.Execute(doCmd, null);
 					return doCmd;
 				default:
 					throw new NotSupportedException();
