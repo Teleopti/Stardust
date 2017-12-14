@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		public virtual IHttpActionResult ForPerson(Guid personId, string date = null)
 		{
 			if (date == null)
-				return Ok(_historicalAdherenceViewModelBuilder.Build(personId));
+				return Ok(_historicalAdherenceViewModelBuilder.Build(personId, null));
 			var dateTime = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
 			return Ok(_historicalAdherenceViewModelBuilder.Build(personId, new DateOnly(dateTime)));
 		}

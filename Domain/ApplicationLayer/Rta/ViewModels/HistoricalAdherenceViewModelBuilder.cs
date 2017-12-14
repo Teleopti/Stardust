@@ -44,13 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_calculator = calculator;
 		}
 
-		public HistoricalAdherenceViewModel Build(Guid personId) =>
-			build(personId, null);
-
-		public HistoricalAdherenceViewModel Build(Guid personId, DateOnly date) =>
-			build(personId, date);
-
-		private HistoricalAdherenceViewModel build(Guid personId, DateOnly? date)
+		public HistoricalAdherenceViewModel Build(Guid personId, DateOnly? date)
 		{
 			var data = new data
 			{

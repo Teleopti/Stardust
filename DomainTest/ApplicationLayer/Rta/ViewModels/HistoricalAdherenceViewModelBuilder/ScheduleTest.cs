@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -110,9 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 		[Test]
 		public void ShouldGetOngoingNightShift()
 		{
-			Now.Is("2017-04-19 01:00");
 			var person = Guid.NewGuid();
-
 			Database
 				.WithAgent(person, "nicklas")
 				.WithAssignment(person, "2017-04-18")
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 				.WithAssignedActivity("2017-04-19 23:00", "2017-04-20 02:00")
 				;
 
-			var viewModel = Target.Build(person);
+			var viewModel = Target.Build(person, "2017-04-18".Date());
 
 			viewModel.Schedules.Single().StartTime.Should().Be("2017-04-18T23:00:00");
 		}
