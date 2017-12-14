@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					dayOffOptimizationPreferenceProvider,
 					blockPreferenceProvider,
 					teamInfoFactory,
-					backgroundWorker);
+					new NoSchedulingProgress());
 				
 				if (runWeeklyRestSolver)
 				{
