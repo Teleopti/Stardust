@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -40,17 +42,35 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizationResult = optimizationResult;
 			_personRepository = personRepository;
 		}
-
+		
+		[TestLog]
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
 		{
 			var optiData = SetupAndOptimize(planningPeriodId);
 			_persister.Persist(_schedulerStateHolder().Schedules);
-			return _optimizationResult.Create(optiData.DateOnlyPeriod, optiData.Persons, optiData.PlanningGroup, optiData.UsePreferences);
+			return _optimizationResult.Create(optiData.DateOnlyPeriod, optiData.Persons, optiData.PlanningPeriod.PlanningGroup, optiData.UsePreferences);
+		}
+
+		protected virtual OptimizationData SetupAndOptimize(Guid planningPeriodId)
+		{
+			var optData = Setup(planningPeriodId);
+			
+			_dayOffOptimizationCommandHandler.Execute(new DayOffOptimizationCommand
+				{
+					Period = optData.DateOnlyPeriod,
+					AgentsToOptimize = optData.Persons,
+					RunWeeklyRestSolver = true,
+					PlanningPeriodId = planningPeriodId
+				}, 
+				null);
+
+			optData.PlanningPeriod.Scheduled();
+
+			return optData;
 		}
 
 		[UnitOfWork]
-		[TestLog]
-		protected virtual OptimizationData SetupAndOptimize(Guid planningPeriodId)
+		protected virtual OptimizationData Setup(Guid planningPeriodId)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
@@ -69,24 +89,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
 				agents = people.FixedStaffPeople(period);
 			}
-			_dayOffOptimizationCommandHandler.Execute(new DayOffOptimizationCommand
-				{
-					Period = period,
-					AgentsToOptimize = agents,
-					RunWeeklyRestSolver = true,
-					PlanningPeriodId = planningPeriodId
-				}, 
-				null);
-
-			planningPeriod.Scheduled();
-
 			return new OptimizationData
 			{
 				DateOnlyPeriod = period,
 				Persons = agents,
-				PlanningGroup = planningGroup,
+				PlanningPeriod = planningPeriod,
 				UsePreferences = optimizationPreferences.General.UsePreferences
 			};
+		}
+		
+		protected class OptimizationData
+		{
+			public DateOnlyPeriod DateOnlyPeriod { get; set; }
+			public IEnumerable<IPerson> Persons { get; set; }
+			public IPlanningPeriod PlanningPeriod { get; set; }
+			public bool UsePreferences { get; set; }
 		}
 	}
 }

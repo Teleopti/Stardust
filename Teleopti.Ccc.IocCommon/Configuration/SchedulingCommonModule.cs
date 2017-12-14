@@ -331,11 +331,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DayOffOptimization>().InstancePerLifetimeScope();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208))
 			{
-				builder.RegisterType<DayOffOptimizationCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope();
+				builder.RegisterType<DayOffOptimizationCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			}
 			else
 			{
-				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope();
+				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			}
 			builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
 			builder.RegisterType<AffectedDayOffs>().SingleInstance();

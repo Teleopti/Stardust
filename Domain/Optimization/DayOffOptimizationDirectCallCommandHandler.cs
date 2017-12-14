@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -15,7 +16,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimization = dayOffOptimization;
 		}
 		
-		public void Execute(DayOffOptimizationCommand command, 
+		[UnitOfWork]
+		public virtual void Execute(DayOffOptimizationCommand command, 
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			//temp
@@ -34,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IDayOffOptimizationCommandHandler
 	{
 		void Execute(DayOffOptimizationCommand command,
-			//these must be removed!
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized);
 	}
 }
