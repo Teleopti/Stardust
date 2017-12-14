@@ -95,9 +95,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			dataMartConnectionString = connectionString;
 		}
 
-		public void DisableScheduleJob(int scheduleJobScheduleId)
+		public void DisableScheduleJob(int scheduleId)
 		{
-			throw new NotImplementedException();
+			var parameterList = new[] { new SqlParameter("schedule_id", scheduleId) };
+
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_disable_schedule", parameterList,
+				dataMartConnectionString);
 		}
 	}
 }

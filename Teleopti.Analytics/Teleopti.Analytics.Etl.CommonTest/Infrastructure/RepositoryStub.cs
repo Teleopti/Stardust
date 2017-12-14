@@ -63,6 +63,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			throw new NotImplementedException();
 		}
 
+		public void DisableScheduleJob(int scheduleId)
+		{
+			throw new NotImplementedException();
+		}
+
 		public DataTable GetLog()
 		{
 			AddLog(1, 60);

@@ -44,6 +44,11 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 			
 		}
 
+		public void DisableScheduleJob(int scheduleId)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IList<IEtlJobSchedule> GetEtlJobSchedules()
 		{
 			return _etlJobSchedules;

@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using log4net;
-using Microsoft.AnalysisServices;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
 namespace Teleopti.Analytics.Etl.Common.Service
@@ -12,13 +11,15 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		public IEtlJobSchedule GetTopPriority(IEtlJobScheduleCollection jobScheduleCollection, DateTime now, DateTime serviceStartTime)
 		{
-			var jobSchedules = jobScheduleCollection
+			var scheduledJobsRunnable = jobScheduleCollection
 				.Where(x => x.ScheduleType == JobScheduleType.Manual && x.Enabled)
-				.OrderBy(x => x.InsertDate);
+				.OrderBy(x => x.InsertDate)
+				.ToList();
 
-			if (!jobSchedules.Any())
+
+			if (!scheduledJobsRunnable.Any())
 			{
-				jobSchedules = from s in jobScheduleCollection
+				var jobs = from s in jobScheduleCollection
 					where s.Enabled
 						  && s.TimeToRunNextJob > s.LastTimeStarted
 						  && s.TimeToRunNextJob < now
@@ -26,27 +27,33 @@ namespace Teleopti.Analytics.Etl.Common.Service
 						  && (s.PeriodicStartingTodayAt < now && now < s.PeriodicEndingTodayAt || s.ScheduleType == JobScheduleType.OccursDaily)
 					orderby s.TimeToRunNextJob
 					select s;
-			}
-			
 
-			foreach (var etlSchedule in jobScheduleCollection)
+				scheduledJobsRunnable = jobs.ToList();
+			}
+
+			foreach (var etlSchedule in jobScheduleCollection
+				.Where(x => x.Enabled && x.ScheduleType == JobScheduleType.Manual)
+				.OrderBy(o => o.InsertDate))
 			{
-				if (etlSchedule.ScheduleType != JobScheduleType.Manual)
-					Console.WriteLine("Schedule: Next: {0} / Last: {1}", etlSchedule.TimeToRunNextJob, etlSchedule.LastTimeStarted);
-				else
-					Console.WriteLine("Schedule: Next: Manual Job: {0} Enqueued at {1}", etlSchedule.JobName, etlSchedule.InsertDate);
+				Console.WriteLine("{0} - Manual Job: '{1}', next run: ASAP, Enqueued at: '{2}'", now.ToLongTimeString(), etlSchedule.JobName, etlSchedule.InsertDate);
 			}
-
-			var first = jobSchedules.FirstOrDefault();
-			if (first!=null)
+			foreach (var etlSchedule in jobScheduleCollection
+				.Where(x => x.Enabled && x.ScheduleType != JobScheduleType.Manual)
+				.OrderBy(o => o.TimeToRunNextJob))
 			{
-				if(first.ScheduleType != JobScheduleType.Manual)
-					Console.WriteLine("Overdue: Next: {0} / Last: {1}", first.TimeToRunNextJob, first.LastTimeStarted);
-				else
-					Console.WriteLine("Overdue: Manual Job: {0} / Enqueued at: {1}", first.JobName, first.InsertDate);
+				Console.WriteLine("{0} - Scheduled job '{1}', next run: '{2}', Last time started: '{3}'", now.ToLongTimeString(), etlSchedule.JobName, etlSchedule.TimeToRunNextJob, etlSchedule.LastTimeStarted);
 			}
 
-			var count = jobSchedules.Count();
+			var first = scheduledJobsRunnable.FirstOrDefault();
+			if (first != null)
+			{
+				if (first.ScheduleType == JobScheduleType.Manual)
+					Console.WriteLine("{0} - *** Prioritized job to run: Manual Job: '{1}', Enqueued at: '{2}'", now.ToLongTimeString(), first.JobName, first.InsertDate);
+				else
+					Console.WriteLine("{0} - *** Prioritized job to run '{1}', time: '{2}', Last: '{3}'", now.ToLongTimeString(), first.ScheduleName, first.TimeToRunNextJob, first.LastTimeStarted);
+			}
+
+			var count = scheduledJobsRunnable.Count();
 
 			if (count < 2) return first;
 			var logText = "There are " + count + "enqueued jobs";
