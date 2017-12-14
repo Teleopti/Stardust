@@ -1,4 +1,5 @@
 ﻿@RTA
+@OnlyRunIfEnabled('RTA_ViewHistoricalAhderenceForRecentShifts_46786')
 Feature: Neutral adherence policy
 	In order to improve adherence with neutral alarm occured
 	As a real time analyst
@@ -44,6 +45,5 @@ Scenario: See adherence percentage with neutral adherence
 	And the time is '2015-03-02 09:00:00'
 	And 'Pierre Baldi' sets his phone state to 'SomeCode'
 	And the time is '2015-03-02 10:00:00'
-	And I view real time adherence for all agents on team 'Red'
-	And I click on an agent state
-	Then I should see adherence percentage for 'Pierre Baldi' at 100%
+	And I view historical adherence for 'Pierre Baldi'
+	Then I should see adherence percentage of 100%

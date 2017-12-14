@@ -1,4 +1,5 @@
 ﻿@RTA
+@OnlyRunIfEnabled('RTA_ViewHistoricalAhderenceForRecentShifts_46786')
 Feature: Adherence percentage
 	In order to ...
 	As a real time analyst
@@ -36,6 +37,5 @@ Scenario: See adherence percentage from agent state overview
 	And the time is '2014-10-06 09:00:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And the time is '2014-10-06 11:00:00'
-	And I view real time adherence for all agents on team 'Red'
-	And I click on an agent state
-	Then I should see adherence percentage for 'Pierre Baldi' at 50%
+	And I view historical adherence for 'Pierre Baldi'
+	Then I should see adherence percentage of 50%

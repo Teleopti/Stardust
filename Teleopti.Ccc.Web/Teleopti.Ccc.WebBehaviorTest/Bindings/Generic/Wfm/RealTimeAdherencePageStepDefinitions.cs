@@ -49,48 +49,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertUrlNotContains("Anywhere", "ids");
 			Browser.Interactions.CloseWindow("Messages");
 		}
-
-
-		[When(@"I click '([a-z-]*|[a-z]* [a-z]*)' in agent menu")]
-		public void WhenIClickInAgentMenu(CssClass cssClass)
+		
+		[Then(@"I should see the option to change schedule")]
+		public void ThenIShouldSeeTheOptionToChangeSchedule()
 		{
-			Browser.Interactions.Click($".{cssClass.Name}");
-		}
-
-		[Then(@"I can '(.*)' in agent menu")]
-		public void ThenICanInAgentMenu(CssClass cssClass)
-		{
-			Browser.Interactions.AssertExists($".{cssClass.Name}");
+			Browser.Interactions.AssertExists($".change-schedule");
 		}
 		
-		[Then(@"I should see adherence percentage for '(.*)' at (.*)%")]
-		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string person, string adherence)
+		[Then(@"I should see adherence percentage of (.*)%")]
+		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string adherence)
 		{
-			const string selector = ".historical-adherence";
-
-			Browser.Interactions.AssertAnyContains(selector, adherence);
-		}
-
-		[Then(@"I should see daily adherence for '(.*)' is (.*)%")]
-		public void ThenIShouldSeeDailyAdherenceForIs(string person, string adherence)
-		{
-			Browser.Interactions.AssertAnyContains(".agent-name", person);
-			Browser.Interactions.AssertAnyContains(".daily-percent", adherence);
-		}
-
-		[Then(@"I should see '(.*)' with adherence of (.*)%")]
-		public void ThenIShouldSeeWithAdherenceOf(string activity, string adherence)
-		{
-			Browser.Interactions.AssertAnyContains(".activity-name", activity);
-			Browser.Interactions.AssertAnyContains(".adherence-percent", adherence);
-		}
-
-		[Then(@"I should see '(.*)' without adherence")]
-		public void ThenIShouldSeeWithoutAdherence(string activity)
-		{
-			const string noAdherence = "-";
-			Browser.Interactions.AssertAnyContains(".activity-name", activity);
-			Browser.Interactions.AssertAnyContains(".adherence-percent", noAdherence);
+			Browser.Interactions.AssertFirstContains(".adherence-percent", adherence);
 		}
 
 		[When(@"I click the toggle to see all agents")]

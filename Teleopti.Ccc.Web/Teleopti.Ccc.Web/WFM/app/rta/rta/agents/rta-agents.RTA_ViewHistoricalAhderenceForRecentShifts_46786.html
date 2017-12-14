@@ -40,7 +40,8 @@
 				<div class="grid-tools">
 					<label for="filter-agents" class="input-icon">
 						<i class="mdi mdi-filter-outline">
-							<input type="text" id="filter-agents" ng-model="vm.filterText" placeholder="{{'FilterRtaShort'|translate}}">
+							<input type="text" id="filter-agents" ng-model="vm.filterText"
+								   placeholder="{{'FilterRtaShort'|translate}}">
 							<md-tooltip>{{'FilterRtaFull'|translate}}</md-tooltip>
 						</i>
 					</label>
@@ -57,7 +58,6 @@
 		</div>
 
 		<table class="wfm-table cursor-pointer">
-			<thead>
 			<tr>
 				<th style="width: 8.5%" ng-click="vm.sort('Name')">
 					{{'Name'|translate}}
@@ -105,9 +105,7 @@
 				</th>
 
 			</tr>
-			</thead>
-			<tbody ng-repeat="agentState in vm.agentStates">
-			<tr>
+			<tr ng-repeat="agentState in vm.agentStates" ng-attr-agentid="{{agentState.PersonId}}">
 				<td>
 					{{agentState.Name}}
 				</td>
@@ -138,7 +136,7 @@
 				</td>
 				<td style="border-left: none">
 					<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
-					   style="margin-left: 6px;" class="mdi mdi-calendar-clock flex-1">
+					   style="margin-left: 6px;" class="mdi mdi-calendar-clock flex-1 change-schedule">
 						<md-tooltip>{{'ModifySchedule'|translate}}</md-tooltip>
 					</a>
 					<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
@@ -164,7 +162,6 @@
 					{{agentState.State}}
 				</td>
 			</tr>
-			</tbody>
 		</table>
 
 		<wfm-right-panel ng-if="!vm.pause" panel-options="vm.rightPanelOptions">

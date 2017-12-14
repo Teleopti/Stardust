@@ -1,4 +1,5 @@
 ﻿@RTA
+@OnlyRunIfEnabled('RTA_ViewHistoricalAhderenceForRecentShifts_46786')
 Feature: Change schedule
 	In order to ...
 	As a real time analyst
@@ -30,5 +31,4 @@ Scenario: Change schedule
 	| End time       | 2014-09-09 17:00 |
 	When I view real time adherence for all agents on team 'Red'
 	And the time is '2014-09-09 12:45:00'
-	And I click agent state of 'Pierre Baldi'
-	Then I can 'change schedule' in agent menu
+	Then I should see the option to change schedule
