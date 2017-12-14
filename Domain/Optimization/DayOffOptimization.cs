@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrixListFactory = matrixListFactory;
 		}
 		
-		[RemoveMeWithToggle("remove Ischedulingprogress and action 'all the way down'", Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
+		[RemoveMeWithToggle("remove resourceOptimizerPersonOptimized param", Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
 			bool runWeeklyRestSolver,
