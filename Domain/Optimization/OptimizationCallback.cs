@@ -12,9 +12,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly string output = Resources.OptimizingIntraday + Resources.Colon + "({0}){1} {2} {3}";
 		private static readonly long waitBetweenCallbacks = TimeSpan.FromSeconds(0.2).Ticks;
 
-		public OptimizationCallback(ISchedulingProgress backgroundWorker)
+		public OptimizationCallback(ISchedulingProgress backgroundWorker, bool dayOff)
 		{
 			_backgroundWorker = backgroundWorker;
+			if(dayOff)
+				output = Resources.OptimizingDaysOff + Resources.Colon + "({0}){1} {2} {3}";
 		}
 
 		public void Optimizing(OptimizationCallbackInfo callbackInfo)

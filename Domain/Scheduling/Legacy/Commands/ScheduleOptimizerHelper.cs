@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (_progressEvent != null && _progressEvent.Cancel) return;
 
-				_optimizeIntradayDesktop.Optimize(scheduleAgents, selectedPeriod, optimizerPreferences, new OptimizationCallback(_backgroundWorker));
+				_optimizeIntradayDesktop.Optimize(scheduleAgents, selectedPeriod, optimizerPreferences, new OptimizationCallback(_backgroundWorker, false));
 			}
 		}
 
@@ -418,7 +418,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (_progressEvent != null && _progressEvent.Cancel) return;
 
 			_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedAgents, _backgroundWorker, optimizerPreferences,
-				dayOffOptimizationPreferenceProvider, resourceOptimizerPersonOptimized, new OptimizationCallback(_backgroundWorker));
+				dayOffOptimizationPreferenceProvider, resourceOptimizerPersonOptimized, new OptimizationCallback(_backgroundWorker, true));
 		}
 
 		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
