@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 	[Toggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
-	[Ignore("#47208 Fix this")]
 	public class DayOffOptimizationWebUowTestWithIsland : DayOffOptimizationWebUowTest
 	{
 	}
