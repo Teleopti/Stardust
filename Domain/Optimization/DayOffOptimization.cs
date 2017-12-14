@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrixListFactory = matrixListFactory;
 		}
 		
+		[RemoveMeWithToggle("remove Ischedulingprogress and action 'all the way down'", Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
 			ISchedulingProgress backgroundWorker, 
