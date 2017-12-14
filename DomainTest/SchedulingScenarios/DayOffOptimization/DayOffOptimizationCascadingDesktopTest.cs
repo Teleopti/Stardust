@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			if(beInResourceCalculatedStateAtStartup)
 				ResourceCalculation.ResourceCalculate(period, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 
-			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
+			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(3)).HasDayOff()).Should().Be.EqualTo(1);
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(4)).HasDayOff()).Should().Be.EqualTo(1);
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			if (beInResourceCalculatedStateAtStartup)
 				ResourceCalculation.ResourceCalculate(period, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 
-			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { });
+			Target.Execute(period, agents, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(0)).HasDayOff()).Should().Be.EqualTo(1); 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()).Should().Be.EqualTo(1);

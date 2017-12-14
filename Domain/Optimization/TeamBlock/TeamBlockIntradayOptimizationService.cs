@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly SetMainShiftOptimizeActivitySpecificationForTeamBlock _setMainShiftOptimizeActivitySpecificationForTeamBlock;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
-		private readonly ICurrentIntradayOptimizationCallback _currentIntradayOptimizationCallback;
+		private readonly ICurrentOptimizationCallback _currentOptimizationCallback;
 		private readonly BlockPreferencesMapper _blockPreferencesMapper;
 
 		public TeamBlockIntradayOptimizationService(TeamBlockScheduler teamBlockScheduler,
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			SetMainShiftOptimizeActivitySpecificationForTeamBlock setMainShiftOptimizeActivitySpecificationForTeamBlock,
 			IOptimizerHelperHelper optimizerHelperHelper,
-			ICurrentIntradayOptimizationCallback currentIntradayOptimizationCallback, 
+			ICurrentOptimizationCallback currentOptimizationCallback, 
 			BlockPreferencesMapper blockPreferencesMapper)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_setMainShiftOptimizeActivitySpecificationForTeamBlock = setMainShiftOptimizeActivitySpecificationForTeamBlock;
 			_optimizerHelperHelper = optimizerHelperHelper;
-			_currentIntradayOptimizationCallback = currentIntradayOptimizationCallback;
+			_currentOptimizationCallback = currentOptimizationCallback;
 			_blockPreferencesMapper = blockPreferencesMapper;
 		}
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			
 			while (teamBlocks.Count > 0)
 			{
-				if (_currentIntradayOptimizationCallback.Current().IsCancelled())
+				if (_currentOptimizationCallback.Current().IsCancelled())
 					return;
 
 				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, optimizationPreferences,
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
-			var callback = _currentIntradayOptimizationCallback.Current();
+			var callback = _currentOptimizationCallback.Current();
 			var sortedTeamBlockInfos = _teamBlockIntradayDecisionMaker.Decide(allTeamBlockInfos, schedulingOptions);
 			var totalTeamBlockInfos = sortedTeamBlockInfos.Count;
 			var runningTeamBlockCounter = 0;

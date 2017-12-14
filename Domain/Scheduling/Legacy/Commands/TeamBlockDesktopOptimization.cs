@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.LoadedAgents, selectedPeriod);
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
-				_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedPersons, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, null);
+				_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedPersons, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, null, new NoOptimizationCallback());
 			}
 
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().SchedulingResultState, false,
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.LoadedAgents, selectedPeriod);
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
-				_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedPersons, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, null);
+				_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedPersons, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, null, new NoOptimizationCallback());
 			}
 
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().SchedulingResultState, false, selectedPeriod.Inflate(1)))

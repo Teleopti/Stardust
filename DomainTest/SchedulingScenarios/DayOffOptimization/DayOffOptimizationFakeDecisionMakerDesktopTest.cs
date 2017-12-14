@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
 			var dayOffPrefs = new DaysOffPreferences {ConsecutiveDaysOffValue = new MinMax<int>(1, 10)};
 
-			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffPrefs), (o, args) => { });
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffPrefs), (o, args) => { }, new NoOptimizationCallback());
 
 			//"Assert" by timeout attribute
 		}

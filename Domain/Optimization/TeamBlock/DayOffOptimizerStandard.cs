@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
 		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
 		private readonly BlockPreferencesMapper _blockPreferencesMapper;
+		private readonly ICurrentOptimizationCallback _currentOptimizationCallback;
 
 		public DayOffOptimizerStandard(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -58,7 +59,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			AffectedDayOffs affectedDayOffs,
 			IShiftCategoryLimitationChecker shiftCategoryLimitationChecker,
 			INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory,
-			BlockPreferencesMapper blockPreferencesMapper)
+			BlockPreferencesMapper blockPreferencesMapper,
+			ICurrentOptimizationCallback currentOptimizationCallback)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -78,6 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
 			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
 			_blockPreferencesMapper = blockPreferencesMapper;
+			_currentOptimizationCallback = currentOptimizationCallback;
 		}
 
 		public IEnumerable<ITeamInfo> Execute(IPeriodValueCalculator periodValueCalculatorForAllSkills, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
@@ -172,6 +175,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						}
 					}
 
+					_currentOptimizationCallback.Current().Optimizing(new OptimizationCallbackInfo(matrix.Item2, true, matrixes.Count));
+					
 					if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, previousPeriodValue, optimizationPreferences.Advanced.RefreshScreenInterval))
 					{
 						cancelAction();

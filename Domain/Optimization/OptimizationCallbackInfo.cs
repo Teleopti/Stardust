@@ -18,6 +18,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			WasSuccessful = wasSuccessful;
 			Number = number;
 		}
+		
+		public OptimizationCallbackInfo(ITeamInfo teamInfo, bool wasSuccessful, int number)
+		{
+			Name = teamInfo.Name;
+			WasSuccessful = wasSuccessful;
+			Number = number;
+		}
 
 		public string Name { get; }
 		public bool WasSuccessful { get; }

@@ -23,12 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulerStateHolder = schedulerStateHolder;
 		}
 
-		public void Execute(DateOnlyPeriod selectedPeriod, 
-			IEnumerable<IPerson> selectedAgents, 
-			ISchedulingProgress backgroundWorker,
-			IOptimizationPreferences optimizationPreferences, 
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
+		public void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents, ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized, IOptimizationCallback optimizationCallback)
 		{
 			var command = new DayOffOptimizationCommand
 			{
@@ -36,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				AgentsToOptimize = selectedAgents,
 				RunWeeklyRestSolver = false
 			};
-			using (_desktopOptimizationContext.Set(command, _schedulerStateHolder(), optimizationPreferences, dayOffOptimizationPreferenceProvider, null)) //TODO: nån callbackhistoria
+			using (_desktopOptimizationContext.Set(command, _schedulerStateHolder(), optimizationPreferences, dayOffOptimizationPreferenceProvider, optimizationCallback))
 			{
 				_dayOffOptimizationCommandHandler.Execute(command,
 					backgroundWorker,

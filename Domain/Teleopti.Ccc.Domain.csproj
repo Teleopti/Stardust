@@ -1682,7 +1682,7 @@
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Intraday\IncomingIntervalModel.cs" />
     <Compile Include="Optimization\DayOffOptimizationDesktop.cs" />
-    <Compile Include="Optimization\ICurrentIntradayOptimizationCallback.cs" />
+    <Compile Include="Optimization\ICurrentOptimizationCallback.cs" />
     <Compile Include="Optimization\OptimizationCallback.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
@@ -2204,7 +2204,7 @@
     <Compile Include="Optimization\IPlanningGroupSettingsModelPersister.cs" />
     <Compile Include="Optimization\IFetchPlanningGroupSettingsModel.cs" />
     <Compile Include="Optimization\IntradayOptimizationEventRunInProcessHandler.cs" />
-    <Compile Include="Optimization\CurrentIntradayOptimizationCallback.cs" />
+    <Compile Include="Optimization\CurrentOptimizationCallback.cs" />
     <Compile Include="Optimization\IOptimizationCallback.cs" />
     <Compile Include="Optimization\ISynchronizeSchedulesAfterIsland.cs" />
     <Compile Include="Optimization\OptimizationPreferencesDefaultValueProvider.cs" />

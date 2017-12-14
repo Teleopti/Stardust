@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public class DesktopOptimizationContext : IOptimizationPreferencesProvider, 
-		ICurrentIntradayOptimizationCallback, 
+		ICurrentOptimizationCallback, 
 		IBlockPreferenceProviderForPlanningPeriod,
 		IDayOffOptimizationPreferenceProviderForPlanningPeriod
 	{

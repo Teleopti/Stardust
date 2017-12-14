@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class CurrentIntradayOptimizationCallback : ICurrentIntradayOptimizationCallback
+	public class CurrentOptimizationCallback : ICurrentOptimizationCallback
 	{
 		public IOptimizationCallback Current()
 		{
