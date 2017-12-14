@@ -3,6 +3,7 @@ using System.Globalization;
 using NHibernate.Criterion;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (defaultScenario == null)
 			{
 				var businessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id;
-				throw new DataSourceException(string.Format(CultureInfo.CurrentCulture, "Business unit '{0}' has no default scenario", businessUnitId));
+				throw new NoDefaultScenarioException(string.Format(CultureInfo.CurrentCulture, "Business unit '{0}' has no default scenario", businessUnitId));
 			}
 	        return defaultScenario;
         }

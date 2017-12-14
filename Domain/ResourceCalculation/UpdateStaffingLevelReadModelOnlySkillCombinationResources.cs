@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using log4net;
+using log4net.Repository.Hierarchy;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -15,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(UpdateStaffingLevelReadModelOnlySkillCombinationResources));
 
 		public UpdateStaffingLevelReadModelOnlySkillCombinationResources(INow now, 
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, 
@@ -31,24 +36,34 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void Update(DateTimePeriod period)
 		{
-			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
-			_stardustJobFeedback.SendProgress($"Start running resource calculation for period {periodDateOnly}");
-			var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
-			_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
-			var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(periodDateOnly, false);
-			_stardustJobFeedback.SendProgress($"Preloaded data for {resCalcData.Skills.Count()} skills.");
-			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills, Enumerable.Empty<ExternalStaff>(), true, periodDateOnly))
+			try
 			{
-				_resourceCalculation.ResourceCalculate(periodDateOnly, resCalcData);
+				var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
+				_stardustJobFeedback.SendProgress($"Start running resource calculation for period {periodDateOnly}");
+				var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
+				_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
+				var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(periodDateOnly, false);
+				_stardustJobFeedback.SendProgress($"Preloaded data for {resCalcData.Skills.Count()} skills.");
+				using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills,
+					Enumerable.Empty<ExternalStaff>(), true, periodDateOnly))
+				{
+					_resourceCalculation.ResourceCalculate(periodDateOnly, resCalcData);
+				}
+				_stardustJobFeedback.SendProgress(
+					$"Filtering combinations resources between {period.StartDateTime} and {period.EndDateTime}");
+				var filteredCombinations =
+					resCalcData.SkillCombinationHolder?.SkillCombinationResources.Where(
+						x =>
+							x.StartDateTime >= period.StartDateTime &&
+							x.StartDateTime < period.EndDateTime);
+				_skillCombinationResourceRepository.PersistSkillCombinationResource(timeWhenResourceCalcDataLoaded,
+					filteredCombinations);
 			}
-			_stardustJobFeedback.SendProgress($"Filtering combinations resources between {period.StartDateTime} and {period.EndDateTime}");
-			var filteredCombinations =
-				resCalcData.SkillCombinationHolder?.SkillCombinationResources.Where(
-					x =>
-						x.StartDateTime >= period.StartDateTime &&
-						x.StartDateTime < period.EndDateTime);
-			_skillCombinationResourceRepository.PersistSkillCombinationResource(timeWhenResourceCalcDataLoaded,
-																				filteredCombinations);
+			catch (NoDefaultScenarioException ex)
+			{
+				Logger.Warn(ex.Message);
+				_stardustJobFeedback.SendProgress(ex.Message);
+			}
 		}
 	}
 }
