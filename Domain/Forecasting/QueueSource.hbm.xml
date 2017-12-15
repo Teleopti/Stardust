@@ -54,12 +54,6 @@
 				  type="string"
 				  length="50"
 				  not-null="false"/>
-
-    <property name="IsDeleted"
-          type="boolean"
-          not-null="true"/>
-    <filter name="deletedFlagFilter"
-      condition="IsDeleted = 0" />
 	</class>
 </hibernate-mapping>
 

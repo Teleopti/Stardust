@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// <summary>
     /// Source class
     /// </summary>
-    public class QueueSource : VersionedAggregateRoot, IQueueSource, IDeleteTag
+    public class QueueSource : VersionedAggregateRoot, IQueueSource
     {
         private string _name = string.Empty;
         private string _description = string.Empty;
@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private string _logObjectName = string.Empty;
         private int _dataSourceId;
         private int _queueMartId;
-        private bool _isDeleted;
 
         /// <summary>
         /// For Hibernate
@@ -145,14 +144,5 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set { _dataSourceId = value; }
         }
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
-
-        public virtual void SetDeleted()
-        {
-            _isDeleted = true;
-        }
     }
 }
