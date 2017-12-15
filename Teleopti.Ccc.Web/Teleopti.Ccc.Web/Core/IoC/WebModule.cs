@@ -123,13 +123,13 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerRequestContextTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<SessionPrincipalFactory>().As<ISessionPrincipalFactory>();
-			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();
-			builder.RegisterType<SessionSpecificWfmCookieProvider>().As<ISessionSpecificWfmCookieProvider>();
-			builder.RegisterType<SessionSpecificTeleoptiCookieProvider>().As<ISessionSpecificTeleoptiCookieProvider>();
-			builder.RegisterType<SessionAuthenticationModule>().As<ISessionAuthenticationModule>();
+			builder.RegisterType<SessionPrincipalFactory>().As<ISessionPrincipalFactory>().SingleInstance();
+			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>().SingleInstance();
+			builder.RegisterType<SessionSpecificWfmCookieProvider>().As<ISessionSpecificWfmCookieProvider>().SingleInstance();
+			builder.RegisterType<SessionSpecificTeleoptiCookieProvider>().As<ISessionSpecificTeleoptiCookieProvider>().SingleInstance();
+			builder.RegisterType<SessionAuthenticationModule>().As<ISessionAuthenticationModule>().SingleInstance();
 			builder.RegisterType<SessionSpecificCookieSettingsProvider>().SingleInstance();
-			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>();
+			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>().SingleInstance();
 
 			builder.RegisterType<AreaWithPermissionPathProvider>().As<IAreaWithPermissionPathProvider>();
 			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>();
