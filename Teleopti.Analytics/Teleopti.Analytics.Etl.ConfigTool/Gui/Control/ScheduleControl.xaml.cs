@@ -39,7 +39,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 				var etlScheduleCollection = new EtlJobScheduleCollection(_repository, null, DateTime.Now);
 
-				_observableCollection = new ObservableCollection<IEtlJobSchedule>(etlScheduleCollection);
+				_observableCollection = new ObservableCollection<IEtlJobSchedule>(etlScheduleCollection.Where(x => x.ScheduleType != JobScheduleType.Manual));
 				DataContext = _observableCollection;
 			}
 		}
