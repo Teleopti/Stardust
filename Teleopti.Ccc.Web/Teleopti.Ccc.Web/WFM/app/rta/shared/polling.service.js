@@ -12,6 +12,7 @@
 		return {
 
 			create: function (call, interval) {
+				var _httpPermissionOk = false;
 				var _destroyed = false;
 				var _scheduledCall;
 
@@ -56,13 +57,24 @@
 
 				function callAndScheduleCall() {
 					_scheduledCall = null;
-					call().finally(function () {
-						// dont reschedule if there's already one scheduled
-						// this can happen because cancelation doesnt always prevent the call from occurring
-						if (_scheduledCall) 
-							return;
-						scheduleCall();
-					});
+					call()
+						.then(function () {
+							_httpPermissionOk = true;
+						})
+						.catch(function (httpResponse) {
+							if (httpResponse && httpResponse.status !== 403)
+								_httpPermissionOk = true;
+						})
+						.finally(function () {
+							// dont reschedule if there's already one scheduled
+							// this can happen because cancelation doesnt always prevent the call from occurring
+							if (_scheduledCall)
+								return;
+							if (!_httpPermissionOk)
+								return;
+							scheduleCall();
+						})
+					;
 				}
 
 				function scheduleCall(timeout) {
