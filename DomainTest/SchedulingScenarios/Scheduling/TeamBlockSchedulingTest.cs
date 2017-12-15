@@ -867,7 +867,45 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(5).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
 			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(6).ToDateOnlyPeriod(), scenario).Single().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
 		}
-		
+
+		[TestCase(true)]
+		[TestCase(false)]
+		[Ignore("#47183 to be fixed")]
+		public void ShouldHandleMasterActivityBetweenExtenderActivities(bool useMasterActivity)
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = ActivityRepository.Has("_");
+			var extenderActivity = ActivityRepository.Has("_");
+			extenderActivity.RequiresSkill = false;
+			var masterActivity = new MasterActivity().WithId();
+			masterActivity.ActivityCollection.Add(activity);
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var activityToUse = useMasterActivity ? masterActivity : activity;
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityToUse, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
+			ruleSet.AddExtender(new ActivityRelativeEndExtender(extenderActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(0, 0, 1, 0, 15)));
+			ruleSet.AddExtender(new ActivityRelativeStartExtender(extenderActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(0, 0, 0, 0, 15)));
+			var agent = PersonRepository.Has(new Contract("_"), contractSchedule, new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				DayOffTemplate = dayOffTemplate,
+				TagToUseOnScheduling = NullScheduleTag.Instance,
+				UseBlock = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
+			});
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
+
+			Target.DoScheduling(planningPeriod.Id.Value);
+
+			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
+		}
+
 		public TeamBlockSchedulingTest(SeperateWebRequest seperateWebRequest, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680, bool resourcePlannerTimeZoneIssues45818) : base(seperateWebRequest, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680, resourcePlannerTimeZoneIssues45818)
 		{
 		}
