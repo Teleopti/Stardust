@@ -22,16 +22,12 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 		{
 			var teleoptiPrincipal = _sessionPrincipalFactory.Generate();
 			if (teleoptiPrincipal == null) return;
-			
+
 			_currentPrincipalContext.SetCurrentPrincipal(teleoptiPrincipal);
-			
+
 			teleoptiPrincipal.Regional.ForceUseGregorianCalendar = forceUseGregorianCalendar;
 
 			_setThreadCulture.SetCulture(teleoptiPrincipal.Regional);
-		
-
 		}
-		
-		
 	}
 }
