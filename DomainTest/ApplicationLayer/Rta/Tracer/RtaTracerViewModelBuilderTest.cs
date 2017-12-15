@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -121,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 			Target.Build().Tracers.Single(x => x.Process == "process1").Tracing.Should().Be("userCode1");
 		}
-
+		
 		[Test]
 		public void ShouldContainDataReceivedAt()
 		{
@@ -132,6 +135,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 				});
 
 			Target.Build().Tracers.Single().DataReceivedAt.Should().Be("08:00:01");
+		}
+
+		[Test]
+		[SetCulture("en-US")]
+		public void ShouldContainDataReceivedAtInUSA()
+		{
+			RtaTracers
+				.Has(new RtaTracerLog<ProcessReceivedLog>
+				{
+					Log = new ProcessReceivedLog {ReceivedAt = "2017-10-04 13:00:01".Utc()}
+				});
+
+			Target.Build().Tracers.Single().DataReceivedAt.Should().Be("13:00:01");
 		}
 
 		[Test]
@@ -202,7 +218,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 		[Test]
 		[SetCulture("sv-SE")]
-		public void ShouldContainAcitivtyCheckAt()
+		public void ShouldContainActivtyCheckAt()
+		{
+			RtaTracers
+				.Has(new RtaTracerLog<ActivityCheckLog>
+				{
+					Log = new ActivityCheckLog
+					{
+						ActivityCheckAt = "2017-10-04 08:00:01".Utc()
+					}
+				});
+
+			Target.Build().Tracers.Single().ActivityCheckAt.Should().Be("08:00:01");
+		}
+		
+		[Test]
+		[SetCulture("en-US")]
+		public void ShouldContainActivtyCheckAtInUSA()
 		{
 			RtaTracers
 				.Has(new RtaTracerLog<ActivityCheckLog>

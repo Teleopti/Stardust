@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Helper;
@@ -29,13 +30,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var tracers = from process in processes
 				let tracing = tracings[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Tracing
 				let dataReceived = dataReceivedAts[process].OrderBy(r => r.Log?.ReceivedAt).LastOrDefault()?.Log
-				let activityCheckAt = activityCheckerAts[process].Max(r => r.Log?.ActivityCheckAt)?.ToString("T")
+				let activityCheckAt = activityCheckerAts[process].Max(r => Convert.ToString(r.Log?.ActivityCheckAt?.TimeOfDay, System.Globalization.CultureInfo.InvariantCulture))
 				let exception = exceptions[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Type
 				select new Tracer
 				{
 					Process = process,
 					Tracing = tracing,
-					DataReceivedAt = dataReceived?.ReceivedAt?.ToString("T"),
+					DataReceivedAt = Convert.ToString(dataReceived?.ReceivedAt?.TimeOfDay, 
+						System.Globalization.CultureInfo.InvariantCulture),
 					DataReceivedBy = dataReceived?.ReceivedBy,
 					DataReceivedCount = dataReceived?.ReceivedCount,
 					ActivityCheckAt = activityCheckAt,
