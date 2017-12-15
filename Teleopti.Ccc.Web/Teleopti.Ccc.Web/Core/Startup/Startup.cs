@@ -18,6 +18,7 @@ using Owin;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup
@@ -66,6 +67,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				var pathToToggle = Startup.pathToToggle();
 				var container = _containerConfiguration.Configure(pathToToggle, config);
 
+				ApplicationStartModule.RequestContextInitializer = container.Resolve<IRequestContextInitializer>();
+				
 				AutofacHostFactory.Container = container;
 				if (!_testMode)
 				{

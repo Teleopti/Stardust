@@ -16,24 +16,15 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	{
 		public static void RegisterModule()
 		{
-			DynamicModuleUtility.RegisterModule(typeof (ApplicationStartModule));
+			DynamicModuleUtility.RegisterModule(typeof(ApplicationStartModule));
 		}
 
 		public static Exception ErrorAtStartup { get; set; }
 		public static Task[] TasksFromStartup { get; set; }
+
 		private readonly object _taskWaitLockObject = new object();
 		private bool _noStartupErrors;
 
-		private static readonly string[] keyWords = {
-			"/togglehandler/",
-			"/test/",
-			"/content/",
-			"/signalr/ping",
-			"/js/",
-			"/css/",
-			"/html/",
-			"/vendor/"
-		};
 
 		private bool _isDisposed;
 
@@ -44,21 +35,30 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			application.BeginRequest += checkForStartupErrors;
 		}
 
+		public static IRequestContextInitializer RequestContextInitializer { get; set; }
+
 		private void setupPrincipal(object sender, EventArgs e)
+		{
+			if (requestWithoutPrincipal()) return;
+			if (_isDisposed) return;
+			RequestContextInitializer.SetupPrincipalAndCulture(onlyUseGregorianCalendar(HttpContext.Current));
+		}
+
+		private static bool requestWithoutPrincipal()
 		{
 			// exclude TestController from principal stuff
 			var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
-			if (isTestController(url)) return;
-			if (_isDisposed) return;
-
-			var requestContextInitializer = DependencyResolver.Current.GetService<IRequestContextInitializer>();
-
-			requestContextInitializer.SetupPrincipalAndCulture(onlyUseGregorianCalendar(HttpContext.Current));
-		}
-
-		private static bool isTestController(string url)
-		{
-			return keyWords.Any(url.Contains);
+			return new[]
+			{
+				"/togglehandler/",
+				"/test/",
+				"/content/",
+				"/signalr/ping",
+				"/js/",
+				"/css/",
+				"/html/",
+				"/vendor/"
+			}.Any(url.Contains);
 		}
 
 		private void checkForStartupErrors(object sender, EventArgs e)
