@@ -192,6 +192,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.IsApproved.Should().Be(true);
 		}
 
+		[SetCulture("en-US")]
 		[Test]
 		public void ShouldDenyAbsenceRequestWhenOnlyOneAgentIsScheduled()
 		{
