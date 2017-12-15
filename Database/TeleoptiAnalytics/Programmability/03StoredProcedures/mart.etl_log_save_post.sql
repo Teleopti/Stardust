@@ -25,6 +25,9 @@ BEGIN
 
 	SELECT @job_id=job_id FROM Mart.etl_job WHERE job_name= @job_name
 
+	-- Manual jobs history will be saved with the schedule id = -1
+	IF EXISTS(SELECT 1 FROM mart.etl_job_schedule WHERE schedule_id = @schedule_id AND schedule_type = 2)
+		SET @schedule_id = -1
 
     UPDATE Mart.etl_job_execution
 	SET job_id = @job_id,
