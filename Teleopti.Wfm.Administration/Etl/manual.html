@@ -180,7 +180,9 @@
 
 								{{job.JobName}}
 							</td>
-							<td>{{job.Status}}</td>
+							<td>
+								<div class="status" ng-class="{'show-status': job.Status}">Job enqueued</div>
+							</td>
 							<td>
 								<button ng-if="vm.selectedJob.JobName === job.JobName" ng-click="$event.stopPropagation(); vm.encueueJob(job);" type="button" class="btn btn-primary">Enqueue</button>
 							</td>

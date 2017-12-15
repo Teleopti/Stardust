@@ -3,9 +3,9 @@
 
     angular
         .module('adminApp')
-        .controller('etlController', etlController, ['$http']);
+        .controller('etlController', etlController, ['$http', '$timeout']);
 
-    function etlController($http, tokenHeaderService) {
+    function etlController($http, tokenHeaderService, $timeout) {
         var vm = this;
 
         vm.state = 'manual';
@@ -147,7 +147,13 @@
                 });
             };
 
-	        $http.post("./Etl/EnqueueJob", data, tokenHeaderService.getHeaders());
+            $http.post("./Etl/EnqueueJob", data, tokenHeaderService.getHeaders())
+                .success(function() {
+                    job.Status = true;
+		            $timeout(function () {
+			            job.Status = false;
+		            }, 5000);
+	            });
         }
 
         function selectJob(job) {
