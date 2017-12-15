@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -70,7 +71,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScenario LoadDefaultScenario()
 		{
-			return _scenario.Single(s => s.DefaultScenario);
+			var defaultScenario = _scenario.SingleOrDefault(s => s.DefaultScenario);
+			if (defaultScenario == null)
+				throw new NoDefaultScenarioException();
+			return defaultScenario;
 		}
 
 		public IScenario LoadDefaultScenario(IBusinessUnit businessUnit)

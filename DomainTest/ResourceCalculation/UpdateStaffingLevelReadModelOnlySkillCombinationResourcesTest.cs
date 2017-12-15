@@ -316,5 +316,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
 			persistedCombinationResources.Count().Should().Be.EqualTo(4);
 		}
+		
+		[Test]
+		public void ShouldSkipBusinessUnitIfDefaultScenarioIsMissing()
+		{
+			Now.Is("2016-12-19 00:00");
+			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
+			
+			Assert.DoesNotThrow(() => Target.Update(period));
+		}
 	}
 }

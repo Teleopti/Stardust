@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(scenario);
 			}
 
-			Assert.Throws<NoDefaultScenarioException>(() => repository.LoadDefaultScenario());
+			var ex = Assert.Throws<NoDefaultScenarioException>(() => repository.LoadDefaultScenario());
+			ex.Message.Should().Contain("has no default scenario");
 		}
 
 		[Test]
