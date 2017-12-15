@@ -610,7 +610,6 @@
     <Compile Include="Core\Portal\ViewModelFactory\CultureSpecificViewModelDataFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\ProjectionProviderTest.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingTest.cs" />
-    <Compile Include="Core\Startup\ApplicationStartModuleTest.cs" />
     <Compile Include="Core\Startup\RegisterModelBindersTaskTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\TokenIdentityProviderTest.cs" />
     <Compile Include="Core\IoC\BootstrapperModuleTest.cs" />
