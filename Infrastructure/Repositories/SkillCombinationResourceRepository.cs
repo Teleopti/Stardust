@@ -399,7 +399,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private IEnumerable<SkillCombinationResource> skillCombinationResourcesWithBpo(DateTimePeriod period)
 		{
 			var combinationResources = skillCombinationResourcesWithoutBpo(period).ToList();
-			combinationResources.AddRange(Execute(period));
+			
+			var bpoResources = Execute(period).ToList();
+			if (!bpoResources.Any())
+			{
+				return combinationResources;
+			}
+
+			combinationResources.AddRange(bpoResources);
 		
 			var newList = new List<SkillCombinationResourceWithCombinationId>();
 			newList.AddRange(combinationResources.Select(x=> new SkillCombinationResourceWithCombinationId
