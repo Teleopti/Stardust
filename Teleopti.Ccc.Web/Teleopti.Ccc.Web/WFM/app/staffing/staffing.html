@@ -5,7 +5,7 @@
       <h1><i class="mdi mdi-account-switch"></i> {{'Staffing' | translate}}</h1>
     </div>
     <div class="fab-wrapper" ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
-      <button class="wfm-fab grow-out material-depth-1" ng-click="vm.goToImportExports()">
+      <button class="wfm-fab grow-out material-depth-1" id="bpoExchangeBtn" ng-click="vm.goToImportExports()">
         <i class="mdi mdi-source-fork"></i>
         <md-tooltip>{{'BpoExchange' | translate}}</md-tooltip>
       </button>
@@ -89,7 +89,7 @@
           </div>
         </div>
         <div class="con-footer">
-          <button class="wfm-btn" ng-show="vm.isOvertimeSuggestionEnabled()" ng-class="vm.showOverstaffSettings ? 'wfm-btn-invis-default' : 'wfm-btn-invis-primary'"
+          <button class="wfm-btn" id="overstaffBtn" ng-show="vm.isOvertimeSuggestionEnabled()" ng-class="vm.showOverstaffSettings ? 'wfm-btn-invis-default' : 'wfm-btn-invis-primary'"
           ng-click="vm.toggleOverstaffSettings()">
           <span ng-if="!vm.showOverstaffSettings">{{'GetSuggestionsForOvertime' | translate}}</span>
           <span ng-if="vm.showOverstaffSettings">{{'CloseOvertimeSettings' | translate}}</span>

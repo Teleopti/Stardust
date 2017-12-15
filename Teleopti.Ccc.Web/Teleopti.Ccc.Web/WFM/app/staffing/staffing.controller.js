@@ -9,6 +9,7 @@
 	function StaffingController(staffingService, $state, toggleService, utilService, chartService, $filter, NoticeService, $translate, $scope) {
 		var vm = this;
 
+		vm.skills;
 		vm.selectedSkill;
 		vm.selectedSkillArea;
 		vm.selectedSkillChange = selectedSkillChange;
@@ -212,6 +213,7 @@
 			query.$promise.then(function (skills) {
 				selectSkillOrArea(skills[0]);
 				allSkills = skills;
+				vm.allSkills = skills;
 			})
 		}
 
@@ -220,6 +222,7 @@
 			query.$promise.then(function (response) {
 				vm.HasPermissionToModifySkillArea = response.HasPermissionToModifySkillArea;
 				allSkillAreas = response.SkillAreas;
+				vm.allSkillAreas = response.SkillAreas;
 			})
 		}
 

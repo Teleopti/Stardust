@@ -768,6 +768,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToIntraday();
 		}
 
+		[Given(@"I am viewing staffing page")]
+		[When(@"I am viewing staffing page")]
+		public void GivenIAmViewingStaffingPage()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToStaffing();
+		}
+
 		[When(@"I am viewing archive schedule page")]
 		public void GivenIViewArchiveSchedule()
 		{
