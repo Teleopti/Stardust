@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 				}
 				else
 				{
-					if(originalLayer.Payload.Equals(firstPayLoad))
+					if(originalLayer.Payload.Equals(firstPayLoad) &&  firstLayer.Period.Contains(originalLayer.Period))
 						continue;
 
 					newLayer = new WorkShiftActivityLayer(originalLayer.Payload, originalLayer.Period);

@@ -870,7 +870,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("#47183 to be fixed")]
 		public void ShouldHandleMasterActivityBetweenExtenderActivities(bool useMasterActivity)
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
