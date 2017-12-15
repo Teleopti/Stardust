@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -25,6 +26,22 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private readonly object _taskWaitLockObject = new object();
 		private bool _noStartupErrors;
 
+		private static IEnumerable<string> withoutPrincipal()
+		{
+			yield return "/togglehandler/";
+			yield return "/test/";
+			yield return "/content/";
+			yield return "/signalr/ping/";
+			yield return "/js/";
+			yield return "/css/";
+			yield return "/html/";
+			yield return "/vendor/";
+		}
+
+		private static IEnumerable<string> ignoreStartupErrors()
+		{
+			yield return "/togglehandler/";
+		}
 
 		private bool _isDisposed;
 
@@ -39,34 +56,23 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		private void setupPrincipal(object sender, EventArgs e)
 		{
-			if (requestWithoutPrincipal()) return;
+			if (requestMatching(withoutPrincipal())) return;
 			if (_isDisposed) return;
 			RequestContextInitializer.SetupPrincipalAndCulture(onlyUseGregorianCalendar(HttpContext.Current));
 		}
 
-		private static bool requestWithoutPrincipal()
+		private static bool requestMatching(IEnumerable<string> patterns)
 		{
-			// exclude TestController from principal stuff
 			var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
-			return new[]
-			{
-				"/togglehandler/",
-				"/test/",
-				"/content/",
-				"/signalr/ping",
-				"/js/",
-				"/css/",
-				"/html/",
-				"/vendor/"
-			}.Any(url.Contains);
+			return patterns.Any(url.Contains);
 		}
 
 		private void checkForStartupErrors(object sender, EventArgs e)
 		{
 			if (_noStartupErrors) return;
 
-			var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
-			if (url.Contains("/togglehandler/")) return;
+			if (requestMatching(ignoreStartupErrors()))
+				return;
 
 			if (TasksFromStartup != null)
 			{
