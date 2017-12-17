@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var minMaxTime = _workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(matrixList.First(), schedulingOptions);
 			var targetTimePeriod = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrixList.First());
 
+
 			//ToDo TooManyDaysOff?
 			if (minMaxTime.Minimum > targetTimePeriod.EndTime)
 			{
