@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var report = new List<RestrictionsNotAbleToBeScheduledResult>();
 			foreach (var person in persons)
 			{
-				RestrictionNotAbleToBeScheduledReason? failReason = _restrictionsAbleToBeScheduled.Execute(person.VirtualSchedulePeriod(date));
-				if(failReason.HasValue)
-					report.Add(new RestrictionsNotAbleToBeScheduledResult{Agent = person, Reason = failReason.Value});
+				RestrictionsNotAbleToBeScheduledResult failReason = _restrictionsAbleToBeScheduled.Execute(person.VirtualSchedulePeriod(date));
+				if(failReason != null)
+					report.Add(failReason);
 			}
 
 			return report;
@@ -30,11 +30,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	{
 		public IPerson Agent { get; set; }
 		public RestrictionNotAbleToBeScheduledReason Reason { get; set; }
+		public DateOnlyPeriod Period { get; set; }
 	}
 
 	public enum RestrictionNotAbleToBeScheduledReason
 	{
-		TooManyDaysOff,
+		//TooManyDaysOff,
 		TooMuchWorkTimeInPeriod,
 		TooLittleWorkTimeInPeriod,
 		NightlyRestMightBeBroken
