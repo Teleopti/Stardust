@@ -112,7 +112,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
 
 			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
-			result.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result.Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result.Period.Should().Be.EqualTo(period);
 
 			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
 			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
@@ -136,7 +137,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
 
 			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
-			result.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result.Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result.Period.Should().Be.EqualTo(period);
 
 			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
 			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
@@ -160,7 +162,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
 
 			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
-			result.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooLittleWorkTimeInPeriod);
+			result.Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooLittleWorkTimeInPeriod);
+			result.Period.Should().Be.EqualTo(period);
 
 			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
 			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
@@ -184,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
 
 			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
-			result.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooLittleWorkTimeInPeriod);
+			result.Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooLittleWorkTimeInPeriod);
 
 			foreach (var dateOnly in period.DayCollection())
 			{

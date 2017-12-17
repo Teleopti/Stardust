@@ -34,6 +34,7 @@
 			this.listViewResult = new System.Windows.Forms.ListView();
 			this.columnHeaderAgent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeaderReason = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeaderPeriod = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -61,7 +62,8 @@
 			// 
 			this.listViewResult.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderAgent,
-            this.columnHeaderReason});
+            this.columnHeaderReason,
+            this.columnHeaderPeriod});
 			this.listViewResult.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewResult.Location = new System.Drawing.Point(0, 25);
 			this.listViewResult.Name = "listViewResult";
@@ -79,6 +81,11 @@
 			// 
 			this.columnHeaderReason.Text = "xxReason";
 			this.columnHeaderReason.Width = 300;
+			// 
+			// columnHeaderPeriod
+			// 
+			this.columnHeaderPeriod.Text = "xxPeriod";
+			this.columnHeaderPeriod.Width = 250;
 			// 
 			// AgentsNotPossibleToSchedule
 			// 
@@ -102,5 +109,6 @@
 		private System.Windows.Forms.ListView listViewResult;
 		private System.Windows.Forms.ColumnHeader columnHeaderAgent;
 		private System.Windows.Forms.ColumnHeader columnHeaderReason;
+		private System.Windows.Forms.ColumnHeader columnHeaderPeriod;
 	}
 }

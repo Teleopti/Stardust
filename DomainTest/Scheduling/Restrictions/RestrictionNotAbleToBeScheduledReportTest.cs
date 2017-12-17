@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			result.Count().Should().Be.EqualTo(1);
 			result.First().Agent.Should().Be.EqualTo(agent2);
+			
 		}
 
 		[Test]
@@ -101,6 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			result.Count().Should().Be.EqualTo(1);
 			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result.First().Period.Should().Be.EqualTo(period);
 		}
 
 		public RestrictionNotAbleToBeScheduledReportTest(SeperateWebRequest seperateWebRequest, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680, bool resourcePlannerTimeZoneIssues45818) : base(seperateWebRequest, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680, resourcePlannerTimeZoneIssues45818)
