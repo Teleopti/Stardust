@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			{
 				var item = new ListViewItem(restrictionsAbleToBeScheduledResult.Agent.Name.ToString());
 				item.SubItems[0].Text = restrictionsAbleToBeScheduledResult.Reason.ToString();
-				item.SubItems[1].Text = restrictionsAbleToBeScheduledResult.Period.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 				listViewResult.Items.Add(item);
 			}
 
