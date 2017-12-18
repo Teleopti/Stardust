@@ -63,6 +63,7 @@
 			// remove the use of now when removing RTA_ViewHistoricalAhderenceForRecentShifts_46786
 			vm.date = moment($stateParams.date || data.Now).format('YYYY-MM-DD');
 			vm.adherencePercentage = data.AdherencePercentage;
+			vm.showAdherencePercentage = data.AdherencePercentage != null;
 
 			vm.currentTimeOffset = calculateOffset(data.Now);
 
