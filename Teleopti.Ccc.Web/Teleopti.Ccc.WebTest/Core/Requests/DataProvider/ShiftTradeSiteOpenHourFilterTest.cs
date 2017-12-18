@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeToggleManager ToggleManager;
 		public IShiftTradeSiteOpenHourFilter Target;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public ICurrentScenario CurrentScenario;
 
 		private readonly DateOnly _periodStartDate = new DateOnly(2016, 1, 1);
 		private readonly DateOnly _shiftTradeDate = new DateOnly(2016, 8, 8);

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 	public class RequestsShiftTradeScheduleViewModelFactoryTest
 	{
 		public FakePersonRepository PersonRepository;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public ICurrentScenario CurrentScenario;
 		public ITeamRepository TeamRepository;
 		public IScheduleStorage ScheduleStorage;
 		public FakeLoggedOnUser LoggedOnUser;

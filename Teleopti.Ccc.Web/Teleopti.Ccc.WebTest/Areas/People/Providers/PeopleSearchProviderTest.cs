@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		private FakePersonAbsenceRepository personAbsenceRepository;
 		private ILoggedOnUser loggedOnUser;
 		private FakeCurrentBusinessUnit currentBusinessUnit;
-		private FakeCurrentScenario_DoNotUse currentScenario;
+		private ICurrentScenario currentScenario;
 
 		[SetUp]
 		public void Setup()
@@ -39,7 +39,9 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			personAbsenceRepository = new FakePersonAbsenceRepository(null);
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			loggedOnUser = new FakeLoggedOnUser();
-			currentScenario = new FakeCurrentScenario_DoNotUse();
+			var scenarioRepository = new FakeScenarioRepository();
+			scenarioRepository.Has("Default");
+			currentScenario = new DefaultScenarioFromRepository(scenarioRepository);
 
 			currentBusinessUnit = new FakeCurrentBusinessUnit();
 

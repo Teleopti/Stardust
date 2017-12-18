@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakeSchedulePersonProvider>().For<ISchedulePersonProvider>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
@@ -57,7 +56,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<FullPermission>().For<IAuthorization>();
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
+			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
+			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
+			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
+			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			system.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
+			system.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
+			system.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
+			system.UseTestDouble<FakeAgentDayScheduleTagRepository>().For<IAgentDayScheduleTagRepository>();
 			system.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
 
 			system.UseTestDouble<TeamScheduleViewModelFactory>().For<ITeamScheduleViewModelFactory>();

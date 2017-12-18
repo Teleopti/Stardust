@@ -35,7 +35,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		{
 			_permissionProvider = new FakePermissionProvider();
 			_commonAgentNameProvider = new FakeCommonAgentNameProvider();
-			_currentScenario = new FakeCurrentScenario_DoNotUse();
+			var scenarioRepository = new FakeScenarioRepository();
+			scenarioRepository.Has("Default");
+			_currentScenario = new DefaultScenarioFromRepository(scenarioRepository);
 		}
 
 		private static IPerson FakePerson()

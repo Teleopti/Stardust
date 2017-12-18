@@ -17,7 +17,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 	{
 		public FakePeopleForShiftTradeFinder PeopleForShiftTradeFinder;
 		public FakePersonRepository PersonRepository;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public ICurrentScenario CurrentScenario;
 		public ITeamRepository TeamRepository;
 		public IScheduleStorage ScheduleStorage;
 		public FakeLoggedOnUser LoggedOnUser;

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public FakePersonRepository PersonRepository;
 		public Global.FakePermissionProvider PermissionProvider;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public FakeScenarioRepository CurrentScenario;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
 
@@ -463,12 +463,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldNotMoveActivityWhenNoMoveActivityPermission()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			PermissionProvider.Enable();
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
 			PersonRepository.Has(person);
 			var date = new DateOnly(2016, 4, 16);
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
@@ -499,13 +498,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldNotMoveOvertimeWhenNoMoveOvertimePermission()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			PermissionProvider.Enable();
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
 			PersonRepository.Has(person);
 			var date = new DateOnly(2016, 4, 16);
-
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
@@ -578,7 +576,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			CurrentScenario.Has(scenario);
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
@@ -617,7 +615,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			CurrentScenario.Has(scenario);
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.AddActivity(ActivityFactory.CreateActivity("ac"), new DateTimePeriod(2016, 4, 16, 2, 2016, 4, 17, 13));
@@ -645,6 +643,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 			result.First().ErrorMessages.Contains(Resources.ShiftLengthExceed36Hours).Should().Be.True();
 		}
+
 		[Test]
 		public void ShouldInvokeMoveShiftLayerCommandWhenMoveToTimeMakeShiftLengthIs36Hours()
 		{
@@ -657,7 +656,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			CurrentScenario.Has(scenario);
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.AddActivity(ActivityFactory.CreateActivity("ac"), new DateTimePeriod(2016, 4, 16, 2, 2016, 4, 17, 13));
@@ -679,7 +678,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				StartTime = new DateTime(2016, 4, 17, 6, 0, 0)
 			};
 			ActivityCommandHandler.ResetCalledCount();
-			var result = Target.MoveActivity(input);
+			Target.MoveActivity(input);
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
 		}
@@ -696,7 +695,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			CurrentScenario.Has(scenario);
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
@@ -735,7 +734,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			CurrentScenario.Has(scenario);
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.AddActivity(personAss.ShiftLayers.First().Payload, new DateTimePeriod(2016, 4, 16, 7, 2016, 4, 16, 10));
@@ -1023,7 +1022,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.EditShiftCategory, person, date);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			CurrentScenario.Has(scenario);
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			PersonAssignmentRepo.Add(personAss);
@@ -1056,7 +1055,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2016, 6, 1);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			CurrentScenario.Has(scenario);
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			PersonAssignmentRepo.Add(personAss);
@@ -1089,7 +1088,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			CurrentScenario.Has(scenario);
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.ShiftLayers.ForEach(x => x.WithId());
@@ -1106,7 +1105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			Target.MoveShift(input);
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
-			((MoveShiftCommand)(ActivityCommandHandler.CalledCommands.First())).NewStartTimeInUtc.Should().Be(input.NewShiftStart);
+			((MoveShiftCommand)ActivityCommandHandler.CalledCommands.First()).NewStartTimeInUtc.Should().Be(input.NewShiftStart);
 		}
 
 		[Test]
@@ -1120,7 +1119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var date = new DateOnly(2016, 4, 16);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
+			CurrentScenario.Has(scenario);
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
 			personAss.ShiftLayers.ForEach(x => x.WithId());

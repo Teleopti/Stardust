@@ -1,7 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			var scenario = new FakeCurrentScenario_DoNotUse();
 			var principalAuthorization = new FullPermission();
 
 			CurrentAuthorization.DefaultTo(principalAuthorization);
@@ -39,11 +37,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
-			system.UseTestDouble(scenario).For<ICurrentScenario>();
 			system.UseTestDouble(principalAuthorization).For<IAuthorization>();
 			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
 			system.UseTestDouble<FakeSeatBookingRepository>().For<ISeatBookingRepository>();
-			system.UseTestDouble(new FakeScenarioRepository(scenario.Current())).For<IScenarioRepository>();
+			var scenarioRepository = new FakeScenarioRepository();
+			scenarioRepository.Has("Default");
+			system.UseTestDouble(scenarioRepository).For<IScenarioRepository>();
 			system.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
 			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
 			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();

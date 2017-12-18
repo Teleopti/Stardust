@@ -12,7 +12,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
@@ -97,8 +96,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void VerifyAccrued()
         {
 			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
-			var scenario = new FakeCurrentScenario_DoNotUse();
-			
+			var scenarioRepository = new FakeScenarioRepository();
+			scenarioRepository.Has("Default");
+			var scenario = new DefaultScenarioFromRepository(scenarioRepository);
+
 			_targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
             ((PersonAccountChildModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
 			
@@ -142,7 +143,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void VerifyBalanceIn()
         {
             var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
-			var scenario = new FakeCurrentScenario_DoNotUse();
+			var scenarioRepository = new FakeScenarioRepository();
+			scenarioRepository.Has("Default");
+			var scenario = new DefaultScenarioFromRepository(scenarioRepository);
+
 			var targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
 			var targetTime = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account2, null, _personAccountUpdater);
 			
@@ -166,7 +170,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void VerifyBalanceOut()
         {
 			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
-			var scenario = new FakeCurrentScenario_DoNotUse();
+			var scenarioRepository = new FakeScenarioRepository();
+			scenarioRepository.Has("Default");
+			var scenario = new DefaultScenarioFromRepository(scenarioRepository);
 
 			var targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
 			var targetTime = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account2, null, _personAccountUpdater);
@@ -218,9 +224,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void VerifyExtra()
         {
 			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
-	        var scenario = new FakeCurrentScenario_DoNotUse();
-			
-            _targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
+			var scenarioRepository = new FakeScenarioRepository();
+			scenarioRepository.Has("Default");
+			var scenario = new DefaultScenarioFromRepository(scenarioRepository);
+
+			_targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
             ((PersonAccountChildModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
             _targetDay.Extra = 10;
             Assert.AreEqual(10, _targetDay.Extra);
@@ -276,7 +284,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
         private void SetTargetDayWithoutAccount()
         {
-            var scenario = new FakeCurrentScenario_DoNotUse();
+			var scenarioRepository = new FakeScenarioRepository();
+			scenarioRepository.Has("Default");
+			var scenario = new DefaultScenarioFromRepository(scenarioRepository);
             var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
 	        
 	        _targetDay = new PersonAccountChildModel(new TraceableRefreshService(scenario, new FakeScheduleStorage_DoNotUse()), _acc, account, null, null);

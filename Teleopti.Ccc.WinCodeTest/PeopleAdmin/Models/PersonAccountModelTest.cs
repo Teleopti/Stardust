@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -12,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
@@ -325,8 +325,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         {
             using (GridControl grid = new GridControl())
             {
-				var currentScenario = new FakeCurrentScenario_DoNotUse();
-	            var scheduleStorage = new FakeScheduleStorage_DoNotUse();
+				var scenarioRepository = new FakeScenarioRepository();
+				scenarioRepository.Has("Default");
+				var currentScenario = new DefaultScenarioFromRepository(scenarioRepository);
+				var scheduleStorage = new FakeScheduleStorage_DoNotUse();
 
 								IPersonAccountChildModel adapter1 = new PersonAccountChildModel
                     (new TraceableRefreshService(currentScenario, scheduleStorage), _collection, _account1, null, null);
