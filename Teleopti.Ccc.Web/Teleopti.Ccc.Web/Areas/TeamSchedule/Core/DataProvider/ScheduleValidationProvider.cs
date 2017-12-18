@@ -85,12 +85,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var people = _personRepository.FindPeople(personIds).ToLookup(p => p.Id);
 			var timezone = _timeZone.TimeZone();
 			var activity = _activityForId.Load(input.ActivityId);
+			var periodInUtc = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.StartTime, timezone), TimeZoneHelper.ConvertToUtc(input.EndTime, timezone));
 
 			foreach (var personDate in input.PersonDates)
 			{
 				var person = people[personDate.PersonId].SingleOrDefault();
-				
-				var periodInUtc = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.StartTime, timezone), TimeZoneHelper.ConvertToUtc(input.EndTime, timezone));
 				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenAddingActivity(person, personDate.Date, activity, periodInUtc);
 
 				if(overlapLayers.IsEmpty()) continue;
@@ -111,12 +110,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			CheckMoveActivityLayerOverlapFormData input)
 		{
 			var results = new List<ActivityLayerOverlapCheckingResult>();
+			var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.StartTime, _timeZone.TimeZone());
 
 			foreach (var personActivity in input.PersonActivities)
 			{
 				var person = _personRepository.Get(personActivity.PersonId);
 
-				var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.StartTime, _timeZone.TimeZone());
 				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenMovingActivity(person, personActivity.Date,
 					personActivity.ShiftLayerIds.ToArray(), newStartTimeInUtc);
 

@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -33,10 +32,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 	[TestFixture, DomainTest]
 	public class ScheduleValidationProviderTest : ISetup
 	{
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public FakeScenarioRepository ScenarioRepository;
+		public IScheduleStorage ScheduleStorage;
 		public FakePersonRepository PersonRepository;
-		public ScheduleValidationProvider Target;
+		public IScheduleValidationProvider Target;
 		public FakeWriteSideRepository<IActivity> ActivityForId;
 		public FakeUserTimeZone UserTimeZone;
 		public FakeWriteSideRepository<IAbsence> AbsenceRepository;
@@ -44,29 +43,20 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<ScheduleValidationProvider>().For<IScheduleValidationProvider>();
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeWriteSideRepository<IAbsence>>().For<IProxyForId<IAbsence>>();
-			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
-			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<AbsenceCommandConverter>().For<IAbsenceCommandConverter>();
-			system.UseTestDouble<PersonAccountUpdaterDummy>().For<IPersonAccountUpdater>();
 			system.UseTestDouble<PersonNameProvider>().For<IPersonNameProvider>();
 			system.UseTestDouble<NameFormatSettingsPersisterAndProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
 			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
-
-			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
-			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 		}
 
 		[Test]
 		public void ShouldGetResultForNightlyRestRuleCheckBetweenYesterdayAndToday()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var team = TeamFactory.CreateSimpleTeam();
 
 			var contract = PersonContractFactory.CreatePersonContract();
@@ -111,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldGetResultForNightlyRestRuleCheckBetweenTodayAndTomorrow()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var team = TeamFactory.CreateSimpleTeam();
 
 			var contract = PersonContractFactory.CreatePersonContract();
@@ -155,7 +145,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldGetWarningForExceedingMaxWeeklyWorkTime()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var team = TeamFactory.CreateSimpleTeam();
 			var contract = PersonContractFactory.CreatePersonContract();
 			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(2), TimeSpan.FromHours(8), TimeSpan.FromHours(40));
@@ -191,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldGetWarningForNotMeetingMinWeeklyWorkTime()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var team = TeamFactory.CreateSimpleTeam();
 			var contract = PersonContractFactory.CreatePersonContract();
 			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.FromHours(40), TimeSpan.FromHours(8), TimeSpan.FromHours(40));
@@ -240,7 +230,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldGetWarningForViolatingDayOffRule()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			var team = TeamFactory.CreateSimpleTeam();
 			var contract = PersonContractFactory.CreatePersonContract();
@@ -272,7 +262,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldGetWarningForNotMeetingMinWeeklyRestTimeWithDayOff()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var team = TeamFactory.CreateSimpleTeam();
 			var contract = PersonContractFactory.CreatePersonContract();
 			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.FromHours(40), TimeSpan.FromHours(8), TimeSpan.FromHours(36));
@@ -326,7 +316,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldGetWarningForNotMeetingMinWeeklyRestTimeWithoutDayOff()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var team = TeamFactory.CreateSimpleTeam();
 			var contract = PersonContractFactory.CreatePersonContract();
 			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.FromHours(40), TimeSpan.FromHours(8), TimeSpan.FromHours(11));
@@ -394,7 +384,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ActivityForId.Add(stickyActivity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
@@ -445,7 +435,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ActivityForId.Add(stickyActivity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
@@ -489,7 +479,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ActivityForId.Add(stickyActivity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
@@ -538,7 +528,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ActivityForId.Add(stickyActivity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, stickyActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13), shiftCategory);
@@ -581,7 +571,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ActivityForId.Add(stickyActivity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, stickyActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13), shiftCategory);
@@ -624,7 +614,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ActivityForId.Add(stickyActivity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 17), shiftCategory);
 
@@ -666,7 +656,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			stickyActivity.AllowOverwrite = false;
 			ActivityForId.Add(stickyActivity);
 
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(
 				person,
@@ -698,6 +688,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldNotReturnOverlappedActivityWhenAddingActivityForEmptyDay()
 		{
+			ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
 			PersonRepository.Has(person);
 
@@ -743,7 +734,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			ActivityForId.Add(stickyActivity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 		
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,17), shiftCategory);
@@ -786,7 +777,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			stickyActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
@@ -837,7 +828,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			stickyActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
@@ -887,7 +878,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			stickyActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, stickyActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13), shiftCategory);
@@ -934,7 +925,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			stickyActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
@@ -980,7 +971,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			lunchActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,16), shiftCategory);
@@ -1026,7 +1017,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			lunchActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				person,scenario, mainActivity, new DateTimePeriod(2013,11,14,8,2013,11,14,17), shiftCategory);
@@ -1060,7 +1051,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldGetResultForNotOverwriteLayerRuleCheckWhenStickyActivityIsOverlappedByAnotherActivity()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var team = TeamFactory.CreateSimpleTeam();
 
 			var contract = PersonContractFactory.CreatePersonContract();
@@ -1119,7 +1110,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldGetResultForNotOverwriteLayerRuleCheckWhenStickyActivityIsOverlappedByPersonalActivity()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var team = TeamFactory.CreateSimpleTeam();
 
 			var contract = PersonContractFactory.CreatePersonContract();
@@ -1200,7 +1191,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldReturnPeopleWhosePersonAccountWillBeExceededWhenAddingAbsenceToNormalShift()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
 
@@ -1236,7 +1227,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldReturnPeopleWhosePersonAccountWillBeExceededWhenAddingAbsenceToNormalShiftWithMultipleExceededAccount()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
 
@@ -1289,7 +1280,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldReturnPeopleWhosePersonAccountWillBeExceededWhenAddingAbsenceToOvernightShift()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
 
@@ -1326,7 +1317,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldReturnPeopleWhosePersonAccountWillBeExceededWhenAddingMulitDayAbsenceToOvernightShift()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
 
@@ -1363,7 +1354,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		[Test]
 		public void ShouldNotReturnPeopleWhosePersonAccountHasBeExceededWhenAddingDifferentAbsence()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = ScenarioRepository.Has("Default");
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
 			var absence = AbsenceFactory.CreateAbsence("abs").WithId();
