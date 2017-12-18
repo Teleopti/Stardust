@@ -138,9 +138,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var personScheduleRange = schedulesDictionary[person];
 				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person.Id.GetValueOrDefault());
 				list.AddRange(from date in dates
-					let scheduleDay = personScheduleRange.ScheduledDay(scheduleDate)
+					let scheduleDay = personScheduleRange.ScheduledDay(date)
 					where scheduleDay != null
-					select _teamScheduleProjectionProvider.MakeViewModel(person, scheduleDate, scheduleDay, canViewConfidential,
+					select _teamScheduleProjectionProvider.MakeViewModel(person, date, scheduleDay, canViewConfidential,
 						canSeeUnpublishedSchedules, date == scheduleDate, agentNameSetting));
 			}
 
