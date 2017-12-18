@@ -161,6 +161,7 @@
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestPeriodSetting_46417,
 		OvertimeRequestPeriodWorkRuleSetting_46638,
+		OvertimeRequestCheckCalendarMonthMaximumOvertime_47024,
 		ETL_SpeedUpNightlyDayOff_38213,
 		MyTimeWeb_MobileResponsive_43826,
 		Staffing_ReadModel_BetterAccuracy_Step3_44331,
