@@ -40,6 +40,7 @@ RTA_RtaTracer_45597 = true
 RTA_MonitorAgentsWithLongTimeInState_46475 = true
 RTA_MobileFriendlyCheckboxes_46758 = true
 RTA_ViewHistoricalAhderenceForRecentShifts_46786 = RC
+RTA_ViewHistoricalAhderence7DaysBack_46826 = DEV
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true
