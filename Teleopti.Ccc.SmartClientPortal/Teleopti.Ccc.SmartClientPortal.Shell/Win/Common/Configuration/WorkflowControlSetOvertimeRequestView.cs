@@ -66,6 +66,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				tableLayoutPanelOpenForOvertimeRequests.Visible = false;
 				gridControlOvertimeRequestOpenPeriods.Visible = false;
 			}
+
+			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024))
+			{
+				tableLayoutPanelOvertimeMaximumSetting.Visible = false;
+				tableLayoutPanelETOTRequest.RowStyles[tableLayoutPanelETOTRequest.Controls.IndexOf(tableLayoutPanelOvertimeMaximumSetting)].Height = 0;
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

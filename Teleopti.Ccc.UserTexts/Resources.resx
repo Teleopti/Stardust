@@ -16700,6 +16700,14 @@ Do you want to participate?</value>
     <value>Open for overtime requests</value>
     <comment>Open for overtime requests</comment>
   </data>
+  <data name="OvertimeRequestMaximum" xml:space="preserve">
+    <value>Maximum overtime per calandar month:</value>
+    <comment>Label name of maximum overtime setting</comment>
+  </data>
+  <data name="OvertimeRequestMaximumTimeHandleType" xml:space="preserve">
+    <value>When validation fails:</value>
+    <comment>Label name of maximum time validation fails option</comment>
+  </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
     <value>The shift on {0:d} is not matching the shift on {1:d}.</value>
     <comment>Scheduleing validation message in web scheduling and client. Both {0} and {1} are dates</comment>

@@ -22815,6 +22815,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum overtime per calandar month:.
+        /// </summary>
+        public static string OvertimeRequestMaximum {
+            get {
+                return ResourceManager.GetString("OvertimeRequestMaximum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When validation fails:.
+        /// </summary>
+        public static string OvertimeRequestMaximumTimeHandleType {
+            get {
+                return ResourceManager.GetString("OvertimeRequestMaximumTimeHandleType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to valid range is 0 - {0}.
         /// </summary>
         public static string OvertimeRequestRollingPeriodError {
