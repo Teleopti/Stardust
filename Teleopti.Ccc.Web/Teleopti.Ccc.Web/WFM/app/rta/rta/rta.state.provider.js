@@ -87,7 +87,11 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			})
 			.state('rta-historical', {
 				url: '/rta/agent-historical/:personId/:date?open',
-				templateUrl: 'app/rta/rta/historical/rta-historical.html',
+				templateUrl: function () {
+					if (toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)
+						return 'app/rta/rta/historical/rta-historical.adherence7DaysBack_46826.html';
+					return 'app/rta/rta/historical/rta-historical.html';
+				},
 				controller: 'RtaHistoricalController as vm'
 			})
 			.state('rta-agents-historical-prototype', {
