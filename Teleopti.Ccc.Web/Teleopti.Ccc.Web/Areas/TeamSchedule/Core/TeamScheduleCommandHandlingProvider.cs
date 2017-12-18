@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			};
 
 			var result = new List<ActionResult>();
+			var people = _personRepository.FindPeople(input.PersonDates.Select(x => x.PersonId)).ToLookup(p => p.Id);
 
 			foreach (var personDate in input.PersonDates)
 			{
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var date = personDate.Date;
 
 				var actionResult = new ActionResult();
-				var person = _personRepository.Get(personId);
+				var person = people[personId].SingleOrDefault();
 				actionResult.PersonId = personId;
 				actionResult.ErrorMessages = new List<string>();
 				actionResult.WarningMessages = new List<string>();
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				{
 					var command = new AddActivityCommand
 					{
-						PersonId = personId,
+						Person = person,
 						ActivityId = input.ActivityId,
 						Date = date,
 						StartTime = input.StartTime,

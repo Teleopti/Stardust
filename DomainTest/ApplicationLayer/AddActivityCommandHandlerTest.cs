@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var trackId = Guid.NewGuid();
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				ActivityId = activity.Id.GetValueOrDefault(),
 				StartTime = new DateTime(2013, 11, 14, 9, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 10, 0, 0),
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 14, 00, 00),
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.Value,
+				Person = person,
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 14, 00, 00),
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = date,
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 14, 00, 00),
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = date,
 				ActivityId = activity.Id.Value,
 				StartTime = new DateTime(2016,7, 26, 14, 00, 00),
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 5, 0, 0),
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.Value,
+				Person = person,
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 12, 0, 0),
@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			PersonAssignmentRepository.Add(pa);
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 12, 0, 0),
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			var command = new AddActivityCommand
 			{
-				PersonId =  person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 9, 0, 0),
@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var trackId = Guid.NewGuid();
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				ActivityId = activity.Id.GetValueOrDefault(),
 				StartTime = new DateTime(2013, 11, 14, 9, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 10, 0, 0),
@@ -457,7 +457,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var trackId = Guid.NewGuid();
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				ActivityId = activity.Id.GetValueOrDefault(),
 				StartTime = new DateTime(2013, 11, 14, 9, 0, 0),
 				EndTime = new DateTime(2013, 11, 14, 10, 0, 0),

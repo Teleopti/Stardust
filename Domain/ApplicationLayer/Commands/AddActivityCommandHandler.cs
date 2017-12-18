@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(AddActivityCommand command)
 		{
 			var activity = _activityForId.Load(command.ActivityId);
-			var person = _personForId.Load(command.PersonId);
+			var person = command.Person;
 			var timeZone = _timeZone.TimeZone();
 			var scenario = _currentScenario.Current();
 			var periodForPerson = command.Date.ToDateOnlyPeriod().Inflate(1).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
