@@ -127,6 +127,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()).Should().Be.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldBeInShoveledStateAfterDoOpt()
+		{
+			var date = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+			var activity = new Activity("_");
+			var skillA = new Skill("A").For(activity).WithId().CascadingIndex(1).IsOpenBetween(8, 16);
+			var skillB = new Skill("B").For(activity).WithId().CascadingIndex(2).IsOpenBetween(8, 16);
+			var scenario = new Scenario("_");
+			var agent1 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB).WithSchedulePeriodOneDay(date);
+			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB).WithSchedulePeriodOneDay(date);
+			var ass1 = new PersonAssignment(agent1, scenario, date).WithLayer(activity, new TimePeriod(8, 16));
+			var ass2 = new PersonAssignment(agent2, scenario, date).WithLayer(activity, new TimePeriod(8, 16));
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, date, 1);
+			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, date, 1);
+			SchedulerStateHolder.Fill(scenario, period, new[]{agent1, agent2}, new []{ass1, ass2}, new[]{skillDayA, skillDayB});
+
+			Target.Execute(period, new[]{agent1, agent2}, new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } }, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
+			
+			skillDayA.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(1); 
+			skillDayB.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(1); 
+		}
+
 		public DayOffOptimizationCascadingDesktopTest(SeperateWebRequest seperateWebRequest, RemoveImplicitResCalcContext removeImplicitResCalcContext, bool resourcePlannerDayOffOptimizationIslands47208) : base(seperateWebRequest, removeImplicitResCalcContext, resourcePlannerDayOffOptimizationIslands47208)
 		{
 		}
