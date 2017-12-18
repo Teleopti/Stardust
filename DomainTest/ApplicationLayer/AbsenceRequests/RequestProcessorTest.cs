@@ -1,18 +1,14 @@
 using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -197,12 +193,59 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[SetCulture("en-US")]
-		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
+		[SetCulture("en-US")]
+		[Test]
+		[Ignore("Need to be taken into account for bug #47215")]
+		public void ShouldDenyAbsenceRequestWhenOnlyOneAgentIsScheduledOverMidnight()
+		{
+			Now.Is(new DateTime(2017, 12, 1, 6, 0, 0, DateTimeKind.Utc));
+
+			var period = new DateTimePeriod(2017, 12, 4, 23, 2017, 12, 5, 1);  
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var activity = ActivityRepository.Has("phone");
+			var skill = SkillRepository.Has("skillA", activity).WithId().DefaultResolution(60);
+
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+
+			var agent = PersonRepository.Has(skill);
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2017, 1, 1, 2017, 12, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2017, 1, 1, 2017, 12, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			agent.WorkflowControlSet = workflowControlSet;
+
+			var scenario = ScenarioRepository.Has("scenario");
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(new DateTimePeriod(2017, 12,4,23,2017,12,5,0), new[] {skill.Id.GetValueOrDefault()}, 1),
+				createSkillCombinationResource(new DateTimePeriod(2017, 12,5,0,2017,12,5,1), new[] {skill.Id.GetValueOrDefault()}, 1)
+			});
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2017,12,4), 0.5));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2017,12,5), 0.5));
+
+			var personRequest = createPersonRequest(agent, absence, period);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be(true);
+			personRequest.DenyReason.Should().Be("Insufficient staffing for : 12/4/2017 11:00:00 PM - 12/5/2017 1:00:00 AM"); //Not sure if the string is 100% correct, but now it is failing due to system is busy (crashing)
+		}
+
+		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod interval, Guid[] skillCombinations, double resource)
 		{
 			return new SkillCombinationResource
 			{
-				StartDateTime = period1.StartDateTime,
-				EndDateTime = period1.EndDateTime,
+				StartDateTime = interval.StartDateTime,
+				EndDateTime = interval.EndDateTime,
 				Resource = resource,
 				SkillCombination = skillCombinations
 			};
