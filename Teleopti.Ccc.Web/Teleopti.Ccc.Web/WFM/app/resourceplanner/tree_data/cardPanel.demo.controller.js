@@ -41,6 +41,7 @@
 
 
         var today = new Date();
+        var fourDayLater = new Date().setDate(new Date().getDate() + 4)
 
         vm.data2 = {
             startDate: today
@@ -51,11 +52,18 @@
         }
 
         vm.data4 = {
-            endDate: today.setDate(today.getDate() + 4)
+            endDate: fourDayLater
         }
 
         vm.customValid = function (data) {
             return "this is custom validate";
         }
+
+        vm.data6 = {
+            startDate: today,
+            endDate: fourDayLater
+        }
+
+        console.log(vm.data6)
     }
 })();
