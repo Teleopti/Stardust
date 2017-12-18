@@ -206,7 +206,7 @@
 			var nextPlanningPeriod = planningPeriodServiceNew.nextPlanningPeriod({ planningGroupId: planningGroupId });
 			return nextPlanningPeriod.$promise.then(function (data) {
 				vm.planningPeriods.splice(0, 0, data);
-				return vm.planningPeriods;
+				return getLastPp();
 			});
 		}
 
