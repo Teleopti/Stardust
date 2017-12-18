@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
-			
+
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
@@ -832,7 +832,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldIndicateOvertimeActivityForScheduleSearch()
 		{
-			
+
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
 			var scenario = CurrentScenario.Current();
@@ -1180,7 +1180,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateTime(2015, 01, 01, 00, 00, 00, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 			setUpPersonAndCulture(true);
-			
+
 			var scenario = CurrentScenario.Current();
 
 			var personAssignment1 = new PersonAssignment(personInUtc, scenario, scheduleDateOnly);
@@ -1331,7 +1331,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldIndicateTerminationForTerminatedPerson()
 		{
-			
+
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
@@ -1378,7 +1378,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldShowPersonScheduleOnTheTerminationDate()
 		{
-			
+
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 			var scenario = CurrentScenario.Current();
@@ -1470,7 +1470,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForPermittedConfidentialAbs()
 		{
-			
+
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
@@ -1520,7 +1520,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForNotPermittedUnpublishedSchedule()
 		{
-			
+
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
@@ -1778,7 +1778,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			setUpPersonAndCulture();
-			
+
 			var result = Target.CreateViewModelForPeople(new[] { personInUtc.Id.Value }, scheduleDate);
 
 			result.Total.Should().Be.EqualTo(1);
@@ -1792,7 +1792,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			var person = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
-			
+
 			var contract = ContractFactory.CreateContract("Contract").WithId();
 			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("mds", MultiplicatorType.Overtime).WithId();
 			contract.AddMultiplicatorDefinitionSetCollection(mds);
@@ -1821,7 +1821,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			team = TeamFactory.CreateSimpleTeam().WithId();
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
-			
+
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
 			person1.AddPersonPeriod(personPeriod);
@@ -1881,7 +1881,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			team = TeamFactory.CreateSimpleTeam().WithId();
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
-			
+
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
 			person1.AddPersonPeriod(personPeriod);
@@ -2517,9 +2517,48 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			schedules[9].Name.Should().Be.EqualTo("p4@p4");
 		}
 
+		[Test]
+		public void ShouldReturnCorrectProjectionForThreeScheduleDayForOnePerson()
+		{
+			var date = new DateTime(2017, 12, 18, 00, 00, 00, DateTimeKind.Utc);
+			var scheduleDate = new DateOnly(date);
+
+			setUpPersonAndCulture(true);
+			var scenario = CurrentScenario.Current();
+
+			var personAssignment = new PersonAssignment(personInUtc, scenario, scheduleDate);
+			personAssignment.AddActivity(new Activity("activity"), new DateTimePeriod(date.AddHours(7), date.AddHours(18)));
+			ScheduleStorage.Add(personAssignment);
+
+			var previousDate = date.AddDays(-1);
+			var previousDay = new DateOnly(previousDate);
+			var personAssignmentPreviousDay = new PersonAssignment(personInUtc, scenario, previousDay);
+			personAssignmentPreviousDay.AddActivity(new Activity("activity for previous day"), new DateTimePeriod(previousDate.AddHours(7), previousDate.AddHours(18)));
+			ScheduleStorage.Add(personAssignmentPreviousDay);
+
+
+			var nextDate = date.AddDays(1);
+			var nextDay = new DateOnly(nextDate);
+			var personAssignmentNextDay = new PersonAssignment(personInUtc, scenario, nextDay);
+			personAssignmentNextDay.AddActivity(new Activity("activity for next day"), new DateTimePeriod(nextDate.AddHours(7), nextDate.AddHours(18)));
+			ScheduleStorage.Add(personAssignmentNextDay);
+
+			var result = Target.CreateViewModelForPeople(
+				new[] { personInUtc.Id.Value }, scheduleDate);
+
+			result.Total.Should().Be(1);
+			var schedules = result.Schedules.ToArray();
+			schedules.First().PersonId.Should().Be(personInUtc.Id.Value.ToString());
+
+			schedules.First().Projection.First().Description.Should().Be("activity");
+			schedules[1].Projection.First().Description.Should().Be("activity for previous day");
+			schedules[2].Projection.First().Description.Should().Be("activity for next day");
+		}
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
 		}
+
 	}
 }
