@@ -5,10 +5,10 @@
 			<generator class="guid.comb" />
 		</id>
 
-		<property name="ExternalPerformance" type="guid" not-null="true" />
-		<property name="DateFrom" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure" not-null ="true" />
-		<property name="Person" type="guid" not-null="true" />
-		<property name="OriginalPersonId" type="guid" not-null="true" />
+		<many-to-one name="ExternalPerformance" class="Teleopti.Ccc.Domain.Common.ExternalPerformance" foreign-key="FK_ExternalPerformanceData_ExternalPerformance" not-null="true" />
+		<property name="DateFrom" type="UtcDateTime" not-null ="true" />
+		<property name="PersonId" type="guid" not-null="true" />
+		<property name="OriginalPersonId" type="string" length="130" not-null="true" />
 		<property name="Score" type="int" not-null="true" />
 	</class>
 </hibernate-mapping>

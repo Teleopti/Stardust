@@ -45,8 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ImportExternalPerformance
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 
 			tenantLogonDataManager = MockRepository.GenerateMock<ITenantLogonDataManager>();
-			target = new ExternalPerformanceInfoFileProcessor(externalPerformanceRepository, personRepository,
-				tenantLogonDataManager);
+			target = new ExternalPerformanceInfoFileProcessor(externalPerformanceRepository, personRepository, tenantLogonDataManager);
 		}
 
 		[Test]

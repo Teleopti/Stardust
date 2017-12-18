@@ -4052,7 +4052,9 @@
     <EmbeddedResource Include="Common\ExternalPerformance.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="Common\ExternalPerformanceData.hbm.xml" />
+    <EmbeddedResource Include="Common\ExternalPerformanceData.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />

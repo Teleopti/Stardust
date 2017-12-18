@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.ImportBpoWrongDateFormat}");
 					continue;
 				}
-				extractionResult.DateFrom = new DateOnly(dateTime);
+				extractionResult.DateFrom = new DateTime(dateTime.Ticks, DateTimeKind.Utc);
 
 				// Verify game name
 				var gameName = columns[gameNameColumnIndex];
@@ -281,9 +281,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		{
 			switch (type)
 			{
-				case "number":
+				case gameTypeNumberic:
 					return ExternalPerformanceDataType.Numeric;
-				case "percent":
+				case gameTypePercent:
 					return ExternalPerformanceDataType.Percentage;
 				default:
 					return ExternalPerformanceDataType.Numeric;
@@ -295,9 +295,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			switch (type)
 			{
 				case ExternalPerformanceDataType.Numeric:
-					return "number";
+					return gameTypeNumberic;
 				case ExternalPerformanceDataType.Percentage:
-					return "percent";
+					return gameTypePercent;
 				default:
 					return "";
 			}

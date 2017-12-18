@@ -84,25 +84,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				return;
 			}
 
-			saveJobArtifactsAndUpdateRecords(@event, processResult);
+			saveJobArtifactsAndUpdateRecords(@event, processResult, inputFile.Name);
 		}
 
-		private void saveJobArtifactsAndUpdateRecords(ImportExternalPerformanceInfoEvent @event, ExternalPerformanceInfoProcessResult processResult)
+		private void saveJobArtifactsAndUpdateRecords(ImportExternalPerformanceInfoEvent @event, ExternalPerformanceInfoProcessResult processResult, string fileName)
 		{
 			var jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
 
 			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Start to save job artifact!");
 			if (processResult.InvalidRecords.Any())
 			{
-				jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "InvalidRecords.csv", stringToArray(processResult.InvalidRecords)));
+				jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.OutputError, "InvalidRecords"+fileName, stringToArray(processResult.InvalidRecords)));
 				_jobResultRepository.Add(jobResult);
 			}
 			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Save job artifact success!");
 
 			saveSettings(processResult.ExternalPerformances);
-			saveRecords(processResult.ValidRecords);
+			saveRecords(processResult);
+			cleanImportedCsvFile(@event, fileName);
 
-			saveJobResultDetail(@event, DetailLevel.Info, "", null);
+			saveJobResultDetail(@event, DetailLevel.Info, "Uploaded external performance info", null);
 		}
 
 		private void saveSettings(IList<IExternalPerformance> externalPerformances )
@@ -113,25 +114,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 		}
 
-		private void saveRecords(IList<PerformanceInfoExtractionResult> validRecords)
+		private void cleanImportedCsvFile(ImportExternalPerformanceInfoEvent @event, string fileName)
 		{
-			var externalPerformanceSettings = _externalPerformanceRepository.FindAllExternalPerformances();
+			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);
+			var artifact = result.Artifacts.FirstOrDefault(x => x.Name == fileName);
+			result.Artifacts.Remove(artifact);
+		}
+
+		private void saveRecords(ExternalPerformanceInfoProcessResult processResult)
+		{
+			if (processResult == null) return;
+			var externalPerformances = processResult.ExternalPerformances;
+			externalPerformances.AddRange(_externalPerformanceRepository.FindAllExternalPerformances());
+			if (!externalPerformances.Any()) return;
+
 			var allExistData = _externalDataRepository.LoadAll();
 
-			foreach (var validRecord in validRecords)
+			foreach (var validRecord in processResult.ValidRecords)
 			{
 				var score = validRecord.GameNumberScore;
 				if (validRecord.GameType == "percent") score = Convert.ToInt32(validRecord.GamePercentScore.Value * 10000);
 
-				var existData = allExistData.FirstOrDefault(x => x.Person == validRecord.PersonId && x.DateFrom == validRecord.DateFrom);
+				var existData = allExistData.FirstOrDefault(x => x.PersonId == validRecord.PersonId && x.DateFrom == validRecord.DateFrom);
 				if (existData == null)
 				{
 					_externalDataRepository.Add(new ExternalPerformanceData()
 					{
-						ExternalPerformance = externalPerformanceSettings.FirstOrDefault(x => x.ExternalId == validRecord.GameId).Id.Value,
+						ExternalPerformance = externalPerformances.FirstOrDefault(x => x.ExternalId == validRecord.GameId),
 						DateFrom = validRecord.DateFrom,
 						OriginalPersonId = validRecord.AgentId,
-						Person = validRecord.PersonId,
+						PersonId = validRecord.PersonId,
 						Score = score
 					});
 				}

@@ -213,6 +213,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepositoryTest.cs" />
     <Compile Include="Repositories\ASMScheduleChangeTimeRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReportTest.cs" />
+    <Compile Include="Repositories\ExternalPerformanceDataRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingReadOnlyBug46991Test.cs" />
     <Compile Include="Repositories\PersonFinderBug46991Test.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepositoryWithGroupsTest.cs" />

@@ -77,66 +77,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public void ShouldSaveValidRecord()
 		{
 			var expectedAgentId = "Ashley";
-			var expectedDate = DateOnly.Today;
+			var expectedDate = DateTime.Today;
 			var expectedScore = 200;
 			var expectedPersonId = Guid.NewGuid();
 			var gameId = 1;
-			var expectedExternalPerformanceId = Guid.NewGuid();
-			var externalPerformance = new ExternalPerformance() {ExternalId = gameId};
-			externalPerformance.WithId(expectedExternalPerformanceId);
-			_externalPerformanceRepository.Add(externalPerformance);
-			var processResult = new ExternalPerformanceInfoProcessResult(){ValidRecords = new List<PerformanceInfoExtractionResult>()
+			var expectedExternalPerformance = new ExternalPerformance(){ExternalId = gameId};
+			expectedExternalPerformance.WithId(Guid.NewGuid());
+			setPerformanceInfoExtractionResult(expectedExternalPerformance, new PerformanceInfoExtractionResult
 			{
-				new PerformanceInfoExtractionResult()
-				{
-					AgentId = expectedAgentId, DateFrom = expectedDate, PersonId = expectedPersonId,GameId = gameId, GameNumberScore = expectedScore, GameType = "numuric"
-				}
-			}};
-			_externalPerformanceInfoFileProcessor.Stub(x => x.Process(null, null)).IgnoreArguments().Return(processResult);
-
-			var target = new ImportExternalPerformanceInfoHandler(_jobResultRepository, _stardustJobFeedback, _importJobArtifactValidator, 
-				_externalPerformanceInfoFileProcessor,_externalPerformanceRepository, _externalPerformanceDataRepository);
-
-			target.Handle(getEvent());
-
-			var result = _externalPerformanceDataRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(1);
-			result.ToList()[0].OriginalPersonId.Should().Be.EqualTo(expectedAgentId);
-			result.ToList()[0].Score.Should().Be.EqualTo(expectedScore);
-			result.ToList()[0].DateFrom.Should().Be.EqualTo(expectedDate);
-			result.ToList()[0].Person.Should().Be.EqualTo(expectedPersonId);
-			result.ToList()[0].ExternalPerformance.Should().Be.EqualTo(expectedExternalPerformanceId);
-		}
-
-		[Test]
-		public void ShouldUpdateValidRecord()
-		{
-			var existOriginalAgentId = "Ashley";
-			var existDate = DateOnly.Today;
-			var expectedScore = 200;
-			var existPersonId = Guid.NewGuid();
-			var gameId = 1;
-			var existExternalPerformanceId = Guid.NewGuid();
-			var existExternalPerformance = new ExternalPerformance() { ExternalId = gameId };
-			existExternalPerformance.WithId(existExternalPerformanceId);
-			_externalPerformanceRepository.Add(existExternalPerformance);
-			var processResult = new ExternalPerformanceInfoProcessResult
-			{
-				ValidRecords = new List<PerformanceInfoExtractionResult>
-				{
-					new PerformanceInfoExtractionResult
-					{
-						AgentId = existOriginalAgentId, DateFrom = existDate, PersonId = existPersonId,GameId = gameId,
-						GameNumberScore = expectedScore, GameType = "numuric"
-					}
-				}
-			};
-			_externalPerformanceInfoFileProcessor.Stub(x => x.Process(null, null)).IgnoreArguments().Return(processResult);
-			_externalPerformanceDataRepository.Add(new ExternalPerformanceData
-			{
-				DateFrom = existDate, ExternalPerformance = existExternalPerformanceId,
-				Person = existPersonId,
-				OriginalPersonId = existOriginalAgentId,Score = 100
+				AgentId = expectedAgentId,
+				DateFrom = expectedDate,
+				PersonId = expectedPersonId,
+				GameId = gameId,
+				GameNumberScore = expectedScore,
+				GameType = "numuric"
 			});
 
 			var target = new ImportExternalPerformanceInfoHandler(_jobResultRepository, _stardustJobFeedback, _importJobArtifactValidator,
@@ -146,8 +100,64 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			var result = _externalPerformanceDataRepository.LoadAll();
 			result.Count.Should().Be.EqualTo(1);
-			result.ToList()[0].Person.Should().Be.EqualTo(existPersonId);
+			result.ToList()[0].OriginalPersonId.Should().Be.EqualTo(expectedAgentId);
 			result.ToList()[0].Score.Should().Be.EqualTo(expectedScore);
+			result.ToList()[0].DateFrom.Should().Be.EqualTo(expectedDate);
+			result.ToList()[0].PersonId.Should().Be.EqualTo(expectedPersonId);
+			result.ToList()[0].ExternalPerformance.Should().Be.EqualTo(expectedExternalPerformance);
+		}
+
+		[Test]
+		public void ShouldUpdateValidRecord()
+		{
+			var existOriginalAgentId = "Ashley";
+			var existDate = DateTime.Today;
+			var expectedScore = 200;
+			var existPersonId = Guid.NewGuid();
+			var gameId = 1;
+			var existExternalPerformance = new ExternalPerformance { ExternalId = gameId };
+			existExternalPerformance.WithId(Guid.NewGuid());
+			setPerformanceInfoExtractionResult(existExternalPerformance, new PerformanceInfoExtractionResult
+			{
+				AgentId = existOriginalAgentId,
+				DateFrom = existDate,
+				PersonId = existPersonId,
+				GameId = gameId,
+				GameNumberScore = expectedScore,
+				GameType = "numuric"
+			});
+
+			_externalPerformanceDataRepository.Add(new ExternalPerformanceData
+			{
+				DateFrom = existDate,
+				ExternalPerformance = existExternalPerformance,
+				PersonId = existPersonId,
+				OriginalPersonId = existOriginalAgentId,
+				Score = 100
+			});
+
+			var target = new ImportExternalPerformanceInfoHandler(_jobResultRepository, _stardustJobFeedback, _importJobArtifactValidator,
+				_externalPerformanceInfoFileProcessor, _externalPerformanceRepository, _externalPerformanceDataRepository);
+
+			target.Handle(getEvent());
+
+			var result = _externalPerformanceDataRepository.LoadAll();
+			result.Count.Should().Be.EqualTo(1);
+			result.ToList()[0].PersonId.Should().Be.EqualTo(existPersonId);
+			result.ToList()[0].Score.Should().Be.EqualTo(expectedScore);
+		}
+
+		private void setPerformanceInfoExtractionResult(ExternalPerformance existExternalPerformance, PerformanceInfoExtractionResult infoExtractionResult)
+		{
+			_externalPerformanceRepository.Add(existExternalPerformance);
+			var processResult = new ExternalPerformanceInfoProcessResult
+			{
+				ValidRecords = new List<PerformanceInfoExtractionResult>
+				{
+					infoExtractionResult
+				}
+			};
+			_externalPerformanceInfoFileProcessor.Stub(x => x.Process(null, null)).IgnoreArguments().Return(processResult);
 		}
 
 		private ImportExternalPerformanceInfoEvent getEvent()

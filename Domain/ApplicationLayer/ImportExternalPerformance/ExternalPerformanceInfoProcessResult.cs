@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 	public class PerformanceInfoExtractionResult
 	{
 		public string RawLine { get; set; }
-		public DateOnly DateFrom { get; set; }
+		public DateTime DateFrom { get; set; }
 		public string GameType { get; set; }
 		public string GameName { get; set; }
 		public int GameId { get; set; }
