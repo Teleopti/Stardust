@@ -145,7 +145,7 @@
 					</a>
 				</td>
 				<td>
-					<div class="label" ng-attr-style="background-color: {{vm.hexToRgb(agentState.Color)}}">
+					<div ng-if="agentState.Rule" class="label" ng-attr-style="background-color: {{vm.hexToRgb(agentState.Color)}}">
 						{{agentState.Rule}}
 					</div>
 				</td>
