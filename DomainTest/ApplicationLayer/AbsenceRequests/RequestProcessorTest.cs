@@ -237,7 +237,52 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Process(personRequest);
 
 			personRequest.IsDenied.Should().Be(true);
-			personRequest.DenyReason.Should().Be("Insufficient staffing for : 12/4/2017 11:00:00 PM - 12/5/2017 1:00:00 AM"); //Not sure if the string is 100% correct, but now it is failing due to system is busy (crashing)
+			personRequest.DenyReason.Should().Be("Insufficient staffing for : 12/4/2017 11:00:00 PM - 12/5/2017 1:00:00 AM"); //Not sure if the string is 100% correct should be picked from resources, but now it is failing due to system is busy (crashing)
+		}
+		
+		[Test]
+		[Ignore("Need to be taken into account for bug #47215")]
+		public void ShouldBeApprovedWithCascadingSetup()
+		{
+			Now.Is(new DateTime(2017, 12, 1, 6, 0, 0, DateTimeKind.Utc));
+
+			var period = new DateTimePeriod(2017, 12, 4, 8, 2017, 12, 4, 9);  // one hour
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var activity = ActivityRepository.Has("phone");
+			var skill = SkillRepository.Has("skillA", activity).WithId().DefaultResolution(60).CascadingIndex(1); //primary
+			var skill2 = SkillRepository.Has("skillB", activity).WithId().DefaultResolution(60).CascadingIndex(2); //secondary
+
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = skill2.StaffingThresholds = threshold;
+
+			var agent = PersonRepository.Has(skill, skill2);
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2017, 1, 1, 2017, 12, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2017, 1, 1, 2017, 12, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			agent.WorkflowControlSet = workflowControlSet;
+
+			var scenario = ScenarioRepository.Has("scenario");
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(new DateTimePeriod(2017, 12,4,8,2017,12,4,9), new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 100), //very overstaffed - everyone have both skills
+			});
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2017, 12, 4), 1));  //low demand
+			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, new DateOnly(2017, 12, 4), 1));  //low demand
+
+			var personRequest = createPersonRequest(agent, absence, period);
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be(false);
 		}
 
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod interval, Guid[] skillCombinations, double resource)
