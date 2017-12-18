@@ -1594,6 +1594,8 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\resourceplanner\web_performance_tests\temp.html" />
+    <Content Include="WFM\app\rta\rta\agents-historical\controller.js" />
+    <Content Include="WFM\app\rta\rta\agents-historical\view.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_MobileFriendlyCheckboxes_46758.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_MonitorAgentsWithLongTimeInState_46475.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_UnifiedSkillGroupManagement_45417.html" />
