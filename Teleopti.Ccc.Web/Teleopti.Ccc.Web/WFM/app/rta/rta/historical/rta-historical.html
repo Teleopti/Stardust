@@ -32,7 +32,8 @@
 					</md-tooltip>
 				</span>
 
-				<span class="rta-current-time" ng-if="vm.currentTimeOffset" ng-attr-style="left: {{vm.currentTimeOffset}};" style="height: 70%; margin-top: 6px;">
+				<span class="rta-current-time" ng-if="vm.currentTimeOffset"
+					  ng-attr-style="left: {{vm.currentTimeOffset}};" style="height: 70%; margin-top: 6px;">
 					<md-tooltip md-direction="top">
 						{{vm.date | amDateFormat: "HH:mm:ss"}}
 					</md-tooltip>
@@ -80,15 +81,24 @@
 						ng-click="item.click()">
 						<div class="con-row rta-change-row">
 							<div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss' }}</div>
-							<div class="con-flex"><span class="historical-label"
-														ng-attr-style="border: 1px solid {{item.ActivityColor}}; border-left: 10px solid {{item.ActivityColor}};">{{item.Activity}}</span>
+							<div class="con-flex">
+								<span ng-if="item.Activity" class="historical-label"
+									  ng-attr-style="border: 1px solid {{item.ActivityColor}}; border-left: 10px solid {{item.ActivityColor}};">
+									{{item.Activity}}
+								</span>
 							</div>
 							<div class="con-flex">{{item.State}}</div>
-							<div class="con-flex"><span class="historical-label"
-														ng-attr-style="border: 1px solid {{item.RuleColor}}; border-left: 10px solid {{item.RuleColor}};">{{item.Rule}}</span>
+							<div class="con-flex">
+								<span ng-if="item.Rule" class="historical-label"
+									  ng-attr-style="border: 1px solid {{item.RuleColor}}; border-left: 10px solid {{item.RuleColor}};">
+									{{item.Rule}}
+								</span>
 							</div>
-							<div class="con-flex"><span class="historical-label"
-														ng-attr-style="border: 1px solid {{item.AdherenceColor}}; border-left: 10px solid {{item.AdherenceColor}};">{{item.Adherence}}</span>
+							<div class="con-flex">
+								<span ng-if="item.Adherence" class="historical-label"
+									  ng-attr-style="border: 1px solid {{item.AdherenceColor}}; border-left: 10px solid {{item.AdherenceColor}};">
+									{{item.Adherence}}
+								</span>
 							</div>
 						</div>
 					</li>
