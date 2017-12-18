@@ -30,14 +30,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly IUserUiCulture _userUiCulture;
-		private IUserTextTranslator _userTextTranslator;
+		private readonly IUserTextTranslator _userTextTranslator;
+		private readonly IScheduleDayProvider _scheduleDayProvider;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider,
 			ITeamScheduleProjectionProvider teamScheduleProjectionProvider, IProjectionProvider projectionProvider,
 			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
 			IPersonRepository personRepository, IIanaTimeZoneProvider ianaTimeZoneProvider,
 			IToggleManager toggleManager,
-			IUserUiCulture userUiCulture, IUserTextTranslator userTextTranslator)
+			IUserUiCulture userUiCulture,
+			IUserTextTranslator userTextTranslator,
+			IScheduleDayProvider scheduleDayProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
@@ -50,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_toggleManager = toggleManager;
 			_userUiCulture = userUiCulture;
 			_userTextTranslator = userTextTranslator;
+			_scheduleDayProvider = scheduleDayProvider;
 		}
 
 		public GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input)
@@ -65,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var personIds = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552) ||
 							_toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057)
 							? !input.IsDynamic ? _searchProvider.FindPersonIdsInPeriodWithGroup(period, input.GroupIds, input.CriteriaDictionary)
-												: _searchProvider.FindPersonIdsInPeriodWithDynamicGroup(period,input.GroupPageId.GetValueOrDefault(), input.DynamicOptionalValues, input.CriteriaDictionary)
+												: _searchProvider.FindPersonIdsInPeriodWithDynamicGroup(period, input.GroupPageId.GetValueOrDefault(), input.DynamicOptionalValues, input.CriteriaDictionary)
 							: _searchProvider.FindPersonIds(input.DateInUserTimeZone, input.GroupIds, input.CriteriaDictionary);
 
 
@@ -89,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				_toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057))
 			{
 				personIds = !input.IsDynamic ? _searchProvider.FindPersonIdsInPeriodWithGroup(week, input.GroupIds, input.CriteriaDictionary)
-												: _searchProvider.FindPersonIdsInPeriodWithDynamicGroup(week,input.GroupPageId.GetValueOrDefault(), input.DynamicOptionalValues, input.CriteriaDictionary);
+												: _searchProvider.FindPersonIdsInPeriodWithDynamicGroup(week, input.GroupPageId.GetValueOrDefault(), input.DynamicOptionalValues, input.CriteriaDictionary);
 			}
 			else
 			{
@@ -120,32 +124,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					scheduleDate, person))
 				.Select(person => person.Id.GetValueOrDefault()).ToArray();
 
-			var scheduleDays = _scheduleProvider.GetScheduleForPersons(scheduleDate, people, true).ToLookup(d => d.Person);
 			var previousDay = scheduleDate.AddDays(-1);
-			var scheduleDaysForPreviousDayLookup =
-				_scheduleProvider.GetScheduleForPersons(scheduleDate.AddDays(-1), people).ToLookup(p => p.Person);
 			var nextDay = scheduleDate.AddDays(1);
-			var scheduleDaysForNextDayLookup =
-				_scheduleProvider.GetScheduleForPersons(nextDay, people).ToLookup(p => p.Person);
+
+			var schedulesDictionary =
+				_scheduleDayProvider.GetScheduleDictionary(scheduleDate, people, new ScheduleDictionaryLoadOptions(false, true));
 
 			var list = new List<GroupScheduleShiftViewModel>();
 			var agentNameSetting = _commonAgentNameProvider.CommonAgentNameSettings;
+			var dates = new[] {scheduleDate, previousDay, nextDay};
 			foreach (var person in people)
 			{
-				var currentScheduleDay = scheduleDays[person].SingleOrDefault();
+				var personScheduleRange = schedulesDictionary[person];
 				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person.Id.GetValueOrDefault());
-
-				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, scheduleDate, currentScheduleDay, canViewConfidential, canSeeUnpublishedSchedules, true, agentNameSetting));
-				if (scheduleDaysForPreviousDayLookup.Contains(person))
-				{
-					list.AddRange(scheduleDaysForPreviousDayLookup[person]
-						.Select(sd => _teamScheduleProjectionProvider.MakeViewModel(person, previousDay, sd, canViewConfidential, canSeeUnpublishedSchedules, false, agentNameSetting)));
-				}
-				if (scheduleDaysForNextDayLookup.Contains(person))
-				{
-					list.AddRange(scheduleDaysForNextDayLookup[person]
-						.Select(sd => _teamScheduleProjectionProvider.MakeViewModel(person, nextDay, sd, canViewConfidential, canSeeUnpublishedSchedules, false, agentNameSetting)));
-				}
+				list.AddRange(from date in dates
+					let scheduleDay = personScheduleRange.ScheduledDay(scheduleDate)
+					where scheduleDay != null
+					select _teamScheduleProjectionProvider.MakeViewModel(person, scheduleDate, scheduleDay, canViewConfidential,
+						canSeeUnpublishedSchedules, date == scheduleDate, agentNameSetting));
 			}
 
 			return new GroupScheduleViewModel
@@ -341,8 +337,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							DayOfWeek = (int)d.DayOfWeek
 						};
 
-						IScheduleDay scheduleDay;
-						if (!scheduleDays.TryGetValue(pd, out scheduleDay) || dayScheduleViewModel.IsTerminated)
+						if (!scheduleDays.TryGetValue(pd, out var scheduleDay) || dayScheduleViewModel.IsTerminated)
 						{
 							return dayScheduleViewModel;
 						}

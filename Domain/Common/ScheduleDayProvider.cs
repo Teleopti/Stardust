@@ -27,6 +27,18 @@ namespace Teleopti.Ccc.Domain.Common
 			return dictionary;
 		}
 
+		public IScheduleDictionary GetScheduleDictionary(DateOnly date, IEnumerable<IPerson> persons, ScheduleDictionaryLoadOptions loadOptions = null)
+		{
+			var period = date.ToDateOnlyPeriod().Inflate(1);
+			var scheduleDicLoadOption = loadOptions ?? new ScheduleDictionaryLoadOptions(false, false);
+			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
+				persons.ToArray(),
+				scheduleDicLoadOption,
+				period,
+				_currentScenario.Current());
+			return dictionary;
+		}
+
 		public IScheduleDay GetScheduleDay(DateOnly date, IPerson person, ScheduleDictionaryLoadOptions loadOptions = null)
 		{
 			var scheduleDicLoadOption = loadOptions ?? new ScheduleDictionaryLoadOptions(false, false);

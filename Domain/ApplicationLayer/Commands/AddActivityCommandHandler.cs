@@ -135,9 +135,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 				_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
 			}
-
-
-
 		}
 	}
 }
