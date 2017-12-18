@@ -18,6 +18,20 @@ using static Teleopti.Interfaces.Domain.DateHelper;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
+	public interface IScheduleValidationProvider
+	{
+		IList<BusinessRuleValidationResult> GetBusinessRuleValidationResults(FetchRuleValidationResultFormData input,
+			BusinessRuleFlags ruleFlags);
+
+		IList<ActivityLayerOverlapCheckingResult> GetActivityLayerOverlapCheckingResult(
+			CheckActivityLayerOverlapFormData input);
+
+		IList<ActivityLayerOverlapCheckingResult> GetMoveActivityLayerOverlapCheckingResult(
+			CheckMoveActivityLayerOverlapFormData input);
+
+		IList<string> GetAllValidationRuleTypes(BusinessRuleFlags ruleFlags);
+		IList<CheckingResult> CheckPersonAccounts(CheckPersonAccountFormData input);
+	}
 	public class ScheduleValidationProvider : IScheduleValidationProvider
 	{
 		private readonly IScheduleStorage _scheduleStorage;
@@ -34,11 +48,19 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPersonAccountUpdater _personAccountUpdater;
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public ScheduleValidationProvider(IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
-			IPersonRepository personRepository, IPersonWeekViolatingWeeklyRestSpecification personWeekViolating,
-			IUserTimeZone timeZone, IPersonNameProvider personNameProvider, IProxyForId<IActivity> activityForId, 
-			INonoverwritableLayerChecker nonoverwritableLayerChecker, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
-			IProxyForId<IAbsence> absenceRepository, IAbsenceCommandConverter absenceCommandConverter, IPersonAccountUpdater personAccountUpdater, ICurrentUnitOfWork unitOfWork)
+		public ScheduleValidationProvider(IScheduleStorage scheduleStorage, 
+											ICurrentScenario currentScenario,
+											IPersonRepository personRepository, 
+											IPersonWeekViolatingWeeklyRestSpecification personWeekViolating,
+											IUserTimeZone timeZone, 
+											IPersonNameProvider personNameProvider, 
+											IProxyForId<IActivity> activityForId, 
+											INonoverwritableLayerChecker nonoverwritableLayerChecker, 
+											IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
+											IProxyForId<IAbsence> absenceRepository, 
+											IAbsenceCommandConverter absenceCommandConverter, 
+											IPersonAccountUpdater personAccountUpdater, 
+											ICurrentUnitOfWork unitOfWork)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
@@ -62,11 +84,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var personIds = input.PersonDates.Select(x => x.PersonId).ToArray();
 			var people = _personRepository.FindPeople(personIds).ToLookup(p => p.Id);
 			var timezone = _timeZone.TimeZone();
+			var activity = _activityForId.Load(input.ActivityId);
 
 			foreach (var personDate in input.PersonDates)
 			{
 				var person = people[personDate.PersonId].SingleOrDefault();
-				var activity = _activityForId.Load(input.ActivityId);
+				
 				var periodInUtc = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.StartTime, timezone), TimeZoneHelper.ConvertToUtc(input.EndTime, timezone));
 				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenAddingActivity(person, personDate.Date, activity, periodInUtc);
 
@@ -303,19 +326,5 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		}
 	}
 
-	public interface IScheduleValidationProvider
-	{
-		IList<BusinessRuleValidationResult> GetBusinessRuleValidationResults(FetchRuleValidationResultFormData input,
-			BusinessRuleFlags ruleFlags);
-
-		IList<ActivityLayerOverlapCheckingResult> GetActivityLayerOverlapCheckingResult(
-			CheckActivityLayerOverlapFormData input);
-
-		IList<ActivityLayerOverlapCheckingResult> GetMoveActivityLayerOverlapCheckingResult(
-			CheckMoveActivityLayerOverlapFormData input);
-
-		IList<string> GetAllValidationRuleTypes(BusinessRuleFlags ruleFlags);
-		IList<CheckingResult> CheckPersonAccounts(CheckPersonAccountFormData input);
-	}
 
 }
