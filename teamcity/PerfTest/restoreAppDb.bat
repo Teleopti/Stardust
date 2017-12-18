@@ -38,8 +38,6 @@ SQLCMD -S%dbServer% -E -Q "if exists(select 1 from sys.databases where name=""%a
 SQLCMD -S%dbServer% -E -d"%appDb%" -i"%RepoRoot%\.debug-Setup\database\tsql\DemoDatabase\SetTenantActive.sql"
 %securityExe% -DS%dbServer% -AP"%appDb%" -AN"%analDb%" -CD"%aggDb%" -EE 
 
-::kind of hack - fix this some other way later?
-SQLCMD -S%dbServer% -E -dmaster -i"%RepoRoot%\.debug-Setup\database\tsql\SetScenarioInAnalytics.sql" -v APPDB="%appDb%" ANALDB="%analDb%"
 
 ::copy app.config
 COPY "%sourceFolder%\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\app.config" /Y
