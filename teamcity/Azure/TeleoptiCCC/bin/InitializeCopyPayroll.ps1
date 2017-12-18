@@ -5,6 +5,7 @@ $scriptLog = "$path\$scriptName.log"
 $admin = 'ScheduleTaskAdmin'
 $taskName = 'CopyPayrollDll'
 #$taskName2 = 'ClickOnceSign'
+$FailedTaskSetup = "This means that customized Payroll Exports will not function at all and that is a CRITICAL issue."
 
 function New-RandomPassword() {
     [CmdletBinding()]
@@ -64,7 +65,7 @@ Try
     if ($lastexitcode -ne 0) {
         
         New-EventLog -LogName Application -Source "InitilizeCopyPayroll" -ErrorAction SilentlyContinue
-        Write-EventLog -LogName Application -Source "InitilizeCopyPayroll" -EntryType Warning -EventId 666 -Message "$setupTask"
+        Write-EventLog -LogName Application -Source "InitilizeCopyPayroll" -EntryType Error -EventId 666 -Message "$setupTask `n$FailedTaskSetup"
         Write-Output $setupTask   
     }
     
