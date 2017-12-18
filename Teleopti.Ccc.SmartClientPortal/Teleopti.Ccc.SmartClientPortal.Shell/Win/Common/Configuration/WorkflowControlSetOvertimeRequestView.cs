@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			overtimeRequestPeriodModel.WorkRuleValidationHandleType = oldCheckBoxValue
 				? null
 				: OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews[
-					OvertimeWorkRuleValidationHandleType.Pending];
+					OvertimeValidationHandleType.Pending];
 
 			gridControlOvertimeRequestOpenPeriods.RefreshRange(GridRangeInfo.Cell(e.RowIndex, e.ColIndex + 1));
 		}

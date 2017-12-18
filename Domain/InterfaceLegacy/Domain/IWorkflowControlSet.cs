@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -311,6 +312,11 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool OvertimeProbabilityEnabled { get; set; }
 
 		bool AutoGrantOvertimeRequest { get; set; }
+
+		TimeSpan? OvertimeRequestMaximumTime { get; set; }
+
+		OvertimeValidationHandleType? OvertimeRequestMaximumTimeHandleType { get; set; }
+
 		ReadOnlyCollection<IOvertimeRequestOpenPeriod> OvertimeRequestOpenPeriods { get; }
 		void InsertOvertimePeriod(IOvertimeRequestOpenPeriod newOvertimeRequestOpenPeriod, int currentIndex);
 		IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest, DateOnly viewpointDate);

@@ -3515,6 +3515,7 @@
     <Compile Include="WorkflowControl\ExpiredRequestValidator.cs" />
     <Compile Include="WorkflowControl\OvertimeRequestPeriodProjection.cs" />
     <Compile Include="WorkflowControl\OvertimeRequestOpenPeriod.cs" />
+    <Compile Include="WorkflowControl\OvertimeValidationHandleType.cs" />
     <Compile Include="WorkflowControl\RequestExpirationValidator.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecificationForAbsence.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequest.cs" />

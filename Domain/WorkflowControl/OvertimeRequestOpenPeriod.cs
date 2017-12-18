@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private int _orderIndex;
 		private OvertimeRequestAutoGrantType _autoGrantType;
 		private bool _enableWorkRuleValidation;
-		private OvertimeWorkRuleValidationHandleType? _workRuleValidationHandleType;
+		private OvertimeValidationHandleType? _workRuleValidationHandleType;
 		public abstract DateOnlyPeriod GetPeriod(DateOnly viewpointDateOnly);
 
 		public virtual OvertimeRequestAutoGrantType AutoGrantType
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			set => _enableWorkRuleValidation = value;
 		}
 
-		public virtual OvertimeWorkRuleValidationHandleType? WorkRuleValidationHandleType
+		public virtual OvertimeValidationHandleType? WorkRuleValidationHandleType
 		{
 			get => _workRuleValidationHandleType;
 			set => _workRuleValidationHandleType = value;
@@ -66,12 +66,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	{
 		No,
 		Yes,
-		Deny
-	}
-
-	public enum OvertimeWorkRuleValidationHandleType
-	{
-		Pending,
 		Deny
 	}
 

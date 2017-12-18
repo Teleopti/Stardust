@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using HandleOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopti.Ccc.Domain.WorkflowControl.OvertimeWorkRuleValidationHandleType, Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings.OvertimeRequestWorkRuleValidationHandleOptionView>;
+using HandleOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopti.Ccc.Domain.WorkflowControl.OvertimeValidationHandleType, Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings.OvertimeRequestWorkRuleValidationHandleOptionView>;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
@@ -19,13 +19,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				= new HandleOptionViewDictionary
 				{
 					{
-						OvertimeWorkRuleValidationHandleType.Pending,
-						new OvertimeRequestWorkRuleValidationHandleOptionView(OvertimeWorkRuleValidationHandleType.Pending,
+						OvertimeValidationHandleType.Pending,
+						new OvertimeRequestWorkRuleValidationHandleOptionView(OvertimeValidationHandleType.Pending,
 							Resources.SendToAdministrator)
 					},
 					{
-						OvertimeWorkRuleValidationHandleType.Deny,
-						new OvertimeRequestWorkRuleValidationHandleOptionView(OvertimeWorkRuleValidationHandleType.Deny, Resources.Deny)
+						OvertimeValidationHandleType.Deny,
+						new OvertimeRequestWorkRuleValidationHandleOptionView(OvertimeValidationHandleType.Deny, Resources.Deny)
 					}
 				};
 

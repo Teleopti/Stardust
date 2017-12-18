@@ -157,6 +157,10 @@
 
         <property name="OvertimeProbabilityEnabled" type="bool" not-null="true" />
 
+        <property name="OvertimeRequestMaximumTimeHandleType"/>
+
+        <property name="OvertimeRequestMaximumTime" type="TimeSpan"/>
+
         <filter name="businessUnitFilter"
                 condition=":businessUnitParameter = BusinessUnit" />
         <filter name="deletedFlagFilter"

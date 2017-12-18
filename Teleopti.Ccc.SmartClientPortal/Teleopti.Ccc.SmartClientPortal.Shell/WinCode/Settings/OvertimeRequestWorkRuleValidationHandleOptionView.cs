@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
 	{
 		public string Description { get; }
 
-		public OvertimeWorkRuleValidationHandleType WorkRuleValidationHandleType { get; }
+		public OvertimeValidationHandleType WorkRuleValidationHandleType { get; }
 
-		public OvertimeRequestWorkRuleValidationHandleOptionView(OvertimeWorkRuleValidationHandleType workRuleValidationHandleType, string description)
+		public OvertimeRequestWorkRuleValidationHandleOptionView(OvertimeValidationHandleType workRuleValidationHandleType, string description)
 		{
 			WorkRuleValidationHandleType = workRuleValidationHandleType;
 			Description = description;

@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var org = CreateAggregateWithCorrectBusinessUnit();
 			org.AddOpenOvertimeRequestPeriod(
-				new OvertimeRequestOpenDatePeriod { Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3)), AutoGrantType = OvertimeRequestAutoGrantType.Yes,EnableWorkRuleValidation = true, WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny });
+				new OvertimeRequestOpenDatePeriod { Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3)), AutoGrantType = OvertimeRequestAutoGrantType.Yes,EnableWorkRuleValidation = true, WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny });
 			PersistAndRemoveFromUnitOfWork(org);
 
 			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
@@ -199,7 +199,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(result.Count, Is.EqualTo(1));
 			Assert.That(result[0].OvertimeRequestOpenPeriods.Count, Is.EqualTo(1));
 			Assert.That(result[0].OvertimeRequestOpenPeriods[0].EnableWorkRuleValidation, Is.EqualTo(true));
-			Assert.That(result[0].OvertimeRequestOpenPeriods[0].WorkRuleValidationHandleType, Is.EqualTo(OvertimeWorkRuleValidationHandleType.Deny));
+			Assert.That(result[0].OvertimeRequestOpenPeriods[0].WorkRuleValidationHandleType, Is.EqualTo(OvertimeValidationHandleType.Deny));
+		}
+
+		[Test]
+		public void ShouldSaveOvertimeRequestMaximumTimeSettings()
+		{
+			var org = CreateAggregateWithCorrectBusinessUnit();
+			org.OvertimeRequestMaximumTime = TimeSpan.FromHours(10);
+			org.OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny;
+			PersistAndRemoveFromUnitOfWork(org);
+
+			var repository = new WorkflowControlSetRepository(UnitOfWork);
+			var result = repository.LoadAllSortByName();
+
+			Assert.That(result.Count, Is.EqualTo(1));
+			Assert.That(result[0].OvertimeRequestMaximumTime, Is.EqualTo(TimeSpan.FromHours(10)));
+			Assert.That(result[0].OvertimeRequestMaximumTimeHandleType, Is.EqualTo(OvertimeValidationHandleType.Deny));
 		}
 
 		protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)

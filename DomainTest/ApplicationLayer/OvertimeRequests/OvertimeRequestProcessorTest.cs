@@ -845,7 +845,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;
@@ -877,7 +877,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;
@@ -909,7 +909,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Pending,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Pending,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;
@@ -941,7 +941,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Pending,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Pending,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;
@@ -974,7 +974,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;
@@ -1010,7 +1010,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;
@@ -1045,7 +1045,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;
@@ -1078,7 +1078,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;
@@ -1113,7 +1113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;
@@ -1158,7 +1158,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;
@@ -1188,7 +1188,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
 			});
 			person.WorkflowControlSet = workflowControlSet;

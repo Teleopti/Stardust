@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			public OvertimeRequestAutoGrantType AutoGrantType { get; set; }
 			public DateOnlyPeriod Period { get; set; }
 			public bool EnableWorkRuleValidation { get; set; }
-			public OvertimeWorkRuleValidationHandleType? WorkRuleValidationHandleType { get; set; }
+			public OvertimeValidationHandleType? WorkRuleValidationHandleType { get; set; }
 		}
 	}
 

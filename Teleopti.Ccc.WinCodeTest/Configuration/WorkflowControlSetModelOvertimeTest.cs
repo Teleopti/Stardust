@@ -118,13 +118,13 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			{
 				Period = new DateOnlyPeriod(2010, 6, 1, 2010, 8, 31),
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Deny
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny
 			});
 			_target.DomainEntity.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
 			{
 				BetweenDays = new MinMax<int>(2, 14),
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeWorkRuleValidationHandleType.Pending
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Pending
 			});
 
 			var OvertimeRequestPeriodList = _target.OvertimeRequestPeriodModels;
@@ -132,10 +132,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var rollingPeriod = OvertimeRequestPeriodList[1];
 
 			Assert.AreEqual(true, datePeriod.EnableWorkRuleValidation);
-			Assert.AreEqual(OvertimeWorkRuleValidationHandleType.Deny, datePeriod.WorkRuleValidationHandleType.WorkRuleValidationHandleType);
+			Assert.AreEqual(OvertimeValidationHandleType.Deny, datePeriod.WorkRuleValidationHandleType.WorkRuleValidationHandleType);
 
 			Assert.AreEqual(true, rollingPeriod.EnableWorkRuleValidation);
-			Assert.AreEqual(OvertimeWorkRuleValidationHandleType.Pending, rollingPeriod.WorkRuleValidationHandleType.WorkRuleValidationHandleType);
+			Assert.AreEqual(OvertimeValidationHandleType.Pending, rollingPeriod.WorkRuleValidationHandleType.WorkRuleValidationHandleType);
 		}
 	}
 }

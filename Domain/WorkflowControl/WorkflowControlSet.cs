@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private bool _overtimeProbabilityEnabled;
 		private bool _autoGrantOvertimeRequest;
 		private IList<IOvertimeRequestOpenPeriod> _overtimeRequestOpenPeriods;
+		private TimeSpan? _overtimeRequestMaximumTime;
+		private OvertimeValidationHandleType? _overtimeRequestMaximumTimeHandleType;
 
 		public WorkflowControlSet()
 		{
@@ -416,6 +418,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			set { _absenceProbabilityEnabled = value; }
 		}
 
+		public virtual bool OvertimeProbabilityEnabled
+		{
+			get { return _overtimeProbabilityEnabled; }
+			set { _overtimeProbabilityEnabled = value; }
+		}
+
 		public virtual bool AutoGrantOvertimeRequest
 		{
 			get { return _autoGrantOvertimeRequest; }
@@ -425,6 +433,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public virtual ReadOnlyCollection<IOvertimeRequestOpenPeriod> OvertimeRequestOpenPeriods
 		{
 			get { return new ReadOnlyCollection<IOvertimeRequestOpenPeriod>(_overtimeRequestOpenPeriods); }
+		}
+
+		public virtual TimeSpan? OvertimeRequestMaximumTime
+		{
+			get { return _overtimeRequestMaximumTime; }
+			set { _overtimeRequestMaximumTime = value; }
+		}
+
+		public virtual OvertimeValidationHandleType? OvertimeRequestMaximumTimeHandleType
+		{
+			get { return _overtimeRequestMaximumTimeHandleType; }
+			set { _overtimeRequestMaximumTimeHandleType = value; }
 		}
 
 		public virtual void AddAllowedAbsenceForReport(IAbsence absence)
@@ -480,12 +500,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var validator = validOpenPeriods[0].StaffingThresholdValidator;
 			return validator != null && (validator is StaffingThresholdWithShrinkageValidator ||
 										 validator is StaffingThresholdValidator);
-		}
-
-		public virtual bool OvertimeProbabilityEnabled
-		{
-			get { return _overtimeProbabilityEnabled; }
-			set { _overtimeProbabilityEnabled = value; }
 		}
 
 		private static bool isValidOpenPeriod(IAbsenceRequestOpenPeriod openPeriod, DateOnly today, DateOnly date)
