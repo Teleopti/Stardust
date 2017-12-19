@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				PersonId = expectedPersonId,
 				GameId = gameId,
 				GameNumberScore = expectedScore,
-				GameType = "numuric"
+				GameType =  ExternalPerformanceDataType.Number
 			});
 
 			var target = new ImportExternalPerformanceInfoHandler(_jobResultRepository, _stardustJobFeedback, _importJobArtifactValidator,
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				PersonId = existPersonId,
 				GameId = gameId,
 				GameNumberScore = expectedScore,
-				GameType = "numuric"
+				GameType = ExternalPerformanceDataType.Number
 			});
 
 			_externalPerformanceDataRepository.Add(new ExternalPerformanceData

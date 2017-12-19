@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 			{
 				ExternalId = 9,
 				Name = "New External Performance Info",
-				DataType = ExternalPerformanceDataType.Numeric
+				DataType = ExternalPerformanceDataType.Number
 			};
 
 			var externalPerformanceRepositoryWithExternalPerformance = new FakeExternalPerformanceRepository();

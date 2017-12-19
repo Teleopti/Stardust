@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			foreach (var validRecord in processResult.ValidRecords)
 			{
 				var score = validRecord.GameNumberScore;
-				if (validRecord.GameType == "percent") score = Convert.ToInt32(validRecord.GamePercentScore.Value * 10000);
+				if (validRecord.GameType == ExternalPerformanceDataType.Percentage) score = Convert.ToInt32(validRecord.GamePercentScore.Value * 10000);
 
 				var existData = allExistData.FirstOrDefault(x => x.PersonId == validRecord.PersonId && x.DateFrom == validRecord.DateFrom);
 				if (existData == null)

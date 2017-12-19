@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 	{
 		public string RawLine { get; set; }
 		public DateTime DateFrom { get; set; }
-		public string GameType { get; set; }
+		public ExternalPerformanceDataType GameType { get; set; }
 		public string GameName { get; set; }
 		public int GameId { get; set; }
 		public string AgentId { get; set; }

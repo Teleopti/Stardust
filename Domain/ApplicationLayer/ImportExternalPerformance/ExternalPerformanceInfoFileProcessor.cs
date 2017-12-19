@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private const int maxLengthOfAgentId = 130;
 		private const int maxLengthOfGameName = 200;
 		private const int maxCountOfMeasure = 10;
-		private const string gameTypeNumberic = "numeric";
-		private const string gameTypePercent = "percent";
 
 		private const int dateColumnIndex = 0;
 		private const int agentIdColumnIndex = 1;
@@ -121,15 +119,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 				// Verify game type
 				var gameType = columns[gameTypeColumnIndex].ToLower();
-				if (gameType != gameTypeNumberic && gameType != gameTypePercent)
+
+				ExternalPerformanceDataType gamificationType;
+				if (!Enum.TryParse(gameType, true, out gamificationType))
 				{
 					processResult.InvalidRecords.Add($"{currentLine},{Resources.InvalidGameType}");
 					continue;
 				}
-				extractionResult.GameType = gameType;
+
+				extractionResult.GameType = gamificationType;
 
 				// Verify score based on game type
-				if (extractionResult.GameType == gameTypeNumberic)
+				if (extractionResult.GameType == ExternalPerformanceDataType.Number)
 				{
 					if (int.TryParse(columns.Last(), out var score)) extractionResult.GameNumberScore = score;
 					else
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				var measure = allMeasures.FirstOrDefault(g => g.ExternalId == extractionResult.GameId);
 				if (measure != null)
 				{
-					if (convertMeasureType(measure.DataType) != extractionResult.GameType)
+					if (measure.DataType != extractionResult.GameType)
 					{
 						processResult.InvalidRecords.Add($"{currentLine},{Resources.GameTypeChanged}");
 						continue;
@@ -184,7 +185,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					}
 					allMeasures.Add(new ExternalPerformance
 					{
-						DataType = convertMeasureToDataType(extractionResult.GameType),
+						DataType = extractionResult.GameType,
 						ExternalId = extractionResult.GameId,
 						Name = extractionResult.GameName
 					});
@@ -213,7 +214,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					addMatchPerformanceData(extractionResult, personIdentitiesByEmploymentNumberAndExternalLogon, processResult);
 				}
 
-				// If not found, then try find person with ApplicationLogonName match with identity
+				//If not found, then try find person with ApplicationLogonName match with identity
 				if (extractResultCollectionToBeMatchAppLogonName.Any())
 				{
 					personIdentityList = extractResultCollectionToBeMatchAppLogonName.Select(x => x.AgentId).Distinct();
@@ -234,7 +235,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 						}).ToList(), processResult);
 					}
 				}
-			}
+				}
 
 			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom})
 				.Select(x => x.Last()).ToList();
@@ -275,32 +276,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					PersonId = personId
 				});
 			processResult.ValidRecords.AddRange(agentsWithSameExternalLogon);
-		}
-
-		private ExternalPerformanceDataType convertMeasureToDataType(string type)
-		{
-			switch (type)
-			{
-				case gameTypeNumberic:
-					return ExternalPerformanceDataType.Numeric;
-				case gameTypePercent:
-					return ExternalPerformanceDataType.Percentage;
-				default:
-					return ExternalPerformanceDataType.Numeric;
-			}
-		}
-
-		private string convertMeasureType(ExternalPerformanceDataType type)
-		{
-			switch (type)
-			{
-				case ExternalPerformanceDataType.Numeric:
-					return gameTypeNumberic;
-				case ExternalPerformanceDataType.Percentage:
-					return gameTypePercent;
-				default:
-					return "";
-			}
 		}
 
 		private bool verifyFieldLength(string field, int maxLength)
