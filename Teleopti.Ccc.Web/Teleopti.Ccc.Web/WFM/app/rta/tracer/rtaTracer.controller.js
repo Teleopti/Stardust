@@ -14,14 +14,14 @@
 		vm.trace = function () {
 			$http.get('../api/RtaTracer/Trace', {params: {userCode: vm.userCode}});
 		};
-		
+
 		if ($stateParams.trace)
 			vm.trace();
-		
+
 		vm.stop = function () {
 			$http.get('../api/RtaTracer/Stop');
 		};
-		
+
 		vm.clear = function () {
 			$http.get('../api/RtaTracer/Clear');
 		};
@@ -32,10 +32,13 @@
 					.map(function (tracer) {
 						return {
 							process: tracer.Process,
-							dataReceived: Number.isInteger(tracer.DataReceivedCount), 
-							dataReceivedAt: tracer.DataReceivedAt,
-							dataReceivedBy: tracer.DataReceivedBy,
-							dataReceivedCount: tracer.DataReceivedCount,
+							dataReceived: (tracer.DataReceived || []).map(function (d) {
+								return {
+									at: d.At,
+									by: d.By,
+									count: d.Count
+								}
+							}),
 							activityCheckAt: tracer.ActivityCheckAt,
 							tracing: tracer.Tracing,
 							exception: tracer.Exception

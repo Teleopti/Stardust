@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe('RtaTracerController', function () {
+fdescribe('RtaTracerController', function () {
 	var
 		$controllerBuilder,
 		$fakeBackend,
@@ -68,25 +68,25 @@ describe('RtaTracerController', function () {
 	it('should display 2 tracers', function () {
 		$fakeBackend
 			.withTracer({
-				DataReceivedAt: '2017-10-02 08:00'
+				Process: 'box1'
 			})
 			.withTracer({
-				DataReceivedAt: '2017-10-02 07:00'
+				Process: 'box2'
 			});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.tracers[0].dataReceivedAt).toBe('2017-10-02 08:00');
-		expect(vm.tracers[1].dataReceivedAt).toBe('2017-10-02 07:00');
+		expect(vm.tracers[0].process).toBe('box1');
+		expect(vm.tracers[1].process).toBe('box2');
 
 	});
-
+	
 	it('should display tracer properties', function () {
 		var random = Math.random().toString().substring(2, 4);
 		$fakeBackend.withTracer({
 			Process: 'box1:hej',
-			DataReceivedAt: '2017-10-02 07:00:' + random,
+			DataReceived: [{At: '2017-10-02 07:00:' + random}],
 			ActivityCheckAt: '2017-10-02 09:21:' + random,
 			Tracing: 'usercode34, Ashley Andeen' + random
 		});
@@ -95,7 +95,7 @@ describe('RtaTracerController', function () {
 		var vm = c.vm;
 
 		expect(vm.tracers[0].process).toBe('box1:hej');
-		expect(vm.tracers[0].dataReceivedAt).toBe('2017-10-02 07:00:' + random);
+		expect(vm.tracers[0].dataReceived[0].at).toBe('2017-10-02 07:00:' + random);
 		expect(vm.tracers[0].activityCheckAt).toBe('2017-10-02 09:21:' + random);
 		expect(vm.tracers[0].tracing).toBe('usercode34, Ashley Andeen' + random);
 	});
@@ -113,70 +113,84 @@ describe('RtaTracerController', function () {
 
 	it('should display tracer received by and count', function () {
 		$fakeBackend.withTracer({
-			DataReceivedBy: 'method',
-			DataReceivedCount: 123
+			DataReceived: [{
+				By: 'method',
+				Count: 123
+			}]
 		});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.tracers[0].dataReceivedBy).toBe('method');
-		expect(vm.tracers[0].dataReceivedCount).toBe(123);
+		expect(vm.tracers[0].dataReceived[0].by).toBe('method');
+		expect(vm.tracers[0].dataReceived[0].count).toBe(123);
+	});
+
+	it('should display tracer received 2 times', function () {
+		$fakeBackend.withTracer({
+			DataReceived: [
+				{
+					By: 'method1',
+					Count: 1
+				},
+				{
+					By: 'method2',
+					Count: 2
+				}
+			]
+		});
+
+		var c = $controllerBuilder.createController();
+		var vm = c.vm;
+
+		expect(vm.tracers[0].dataReceived[0].by).toBe('method1');
+		expect(vm.tracers[0].dataReceived[0].count).toBe(1);
+		expect(vm.tracers[0].dataReceived[1].by).toBe('method2');
+		expect(vm.tracers[0].dataReceived[1].count).toBe(2);
 	});
 
 	it('should display tracer received something', function () {
 		$fakeBackend.withTracer({
-			DataReceivedCount: 1
+			DataReceived: [{Count: 1}]
 		});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.tracers[0].dataReceived).toBe(true);
+		expect(vm.tracers[0].dataReceived[0].count).toBe(1);
 	});
 
 	it('should display tracer received something', function () {
 		$fakeBackend.withTracer({
-			DataReceivedCount: 0
+			DataReceived: [{Count: 0}]
 		});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.tracers[0].dataReceived).toBe(true);
+		expect(vm.tracers[0].dataReceived[0].count).toBe(0);
 	});
 
 	it('should display tracer received nothing', function () {
 		$fakeBackend.withTracer({
-			DataReceivedCount: null
+			DataReceived: null
 		});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.tracers[0].dataReceived).toBe(false);
+		expect(vm.tracers[0].dataReceived.length).toBe(0);
 	});
 
 	it('should display tracer received nothing', function () {
 		$fakeBackend.withTracer({
-			DataReceivedCount: undefined
+			DataReceived: undefined
 		});
 
 		var c = $controllerBuilder.createController();
 		var vm = c.vm;
 
-		expect(vm.tracers[0].dataReceived).toBe(false);
-	});
-
-	it('should display tracer received nothing', function () {
-		$fakeBackend.withTracer({
-			DataReceivedBy: 'asdasd'
-		});
-
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
-
-		expect(vm.tracers[0].dataReceived).toBe(false);
+		expect(vm.tracers[0].dataReceived.length).toBe(0);
 	});
 
 	it('should display user codes', function () {

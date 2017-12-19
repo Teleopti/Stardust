@@ -32,12 +32,16 @@
 			<div class="panel material-depth-1">
 				<table class="wfm-table">
 					<tr ng-repeat="tracer in vm.tracers" class="process">
-						<td width="200px">{{tracer.process}}</td>
-						<td width="400px" ng-if="tracer.dataReceived">Received {{tracer.dataReceivedCount}} states by {{tracer.dataReceivedBy}} at {{tracer.dataReceivedAt}}</td>
-						<td width="400px" ng-if="!tracer.dataReceived">Received nothing yet</td>
-						<td width="200px">Checked at {{tracer.activityCheckAt}}</td>
-						<td>Tracing {{tracer.tracing}}</td>
-						<td width="400px">Last exception: {{tracer.exception}}</td>
+						<td width="200px" style="vertical-align: top">{{tracer.process}}</td>
+						<td width="400px" style="vertical-align: top" ng-if="tracer.dataReceived.length > 0">
+							<span ng-repeat="recevied in tracer.dataReceived">
+								Received {{recevied.count}} states by {{recevied.by}} at {{recevied.at}}<br/>
+							</span>
+						</td>
+						<td width="400px" style="vertical-align: top" ng-if="tracer.dataReceived.length === 0">Received nothing yet</td>
+						<td width="200px" style="vertical-align: top">Checked at {{tracer.activityCheckAt}}</td>
+						<td style="vertical-align: top">Tracing {{tracer.tracing}}</td>
+						<td width="400px" style="vertical-align: top">Last exception: {{tracer.exception}}</td>
 					</tr>
 				</table>
 			</div>
@@ -53,7 +57,9 @@
 						<tr ng-repeat="state in tracedUser.states" class="trace">
 							<td width="200px" style="vertical-align: top">{{state.stateCode}}</td>
 							<!-- track by $index cant be tested -->
-							<td><span ng-repeat="trace in state.traces track by $index">{{trace}}<br/></span></td>
+							<td>
+								<span ng-repeat="trace in state.traces track by $index">{{trace}}<br/></span>
+							</td>
 						</tr>
 					</table>
 				</div>

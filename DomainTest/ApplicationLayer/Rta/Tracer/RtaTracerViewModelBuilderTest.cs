@@ -124,17 +124,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 
 			Target.Build().Tracers.Single(x => x.Process == "process1").Tracing.Should().Be("userCode1");
 		}
-		
+
 		[Test]
+		[SetCulture("sv-SE")]
 		public void ShouldContainDataReceivedAt()
 		{
 			RtaTracers
 				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
-					Log = new ProcessReceivedLog {ReceivedAt = "2017-10-04 08:00:01".Utc()}
+					Log = new ProcessReceivedLog {ReceivedAt = "2017-10-04 08:00:01.123".Utc()}
 				});
 
-			Target.Build().Tracers.Single().DataReceivedAt.Should().Be("08:00:01");
+			Target.Build().Tracers.Single().DataReceived.Single().At.Should().Be("08:00:01");
 		}
 
 		[Test]
@@ -147,11 +148,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 					Log = new ProcessReceivedLog {ReceivedAt = "2017-10-04 13:00:01".Utc()}
 				});
 
-			Target.Build().Tracers.Single().DataReceivedAt.Should().Be("13:00:01");
+			Target.Build().Tracers.Single().DataReceived.Single().At.Should().Be("13:00:01");
 		}
 
 		[Test]
-		public void ShouldOnlyContainLatestDataReceivedAt()
+		public void ShouldContainLatestDataReceivedFirst()
 		{
 			RtaTracers
 				.Has(new RtaTracerLog<ProcessReceivedLog>
@@ -171,7 +172,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 					}
 				});
 
-			Target.Build().Tracers.Single().DataReceivedAt.Should().Be("08:00:11");
+			Target.Build().Tracers.Single().DataReceived.First().At.Should().Be("08:00:11");
+		}
+
+		[Test]
+		public void ShouldContain5LatestDataReceivals()
+		{
+			var times = "2017-12-19 12:00".Utc().TimeRange("2017-12-19 13:00".Utc(), TimeSpan.FromMinutes(1));
+			var logs = times.Select(x => new RtaTracerLog<ProcessReceivedLog>
+			{
+				Log = new ProcessReceivedLog {ReceivedAt = x}
+			});
+			RtaTracers.Has(logs.ToArray());
+
+			Target.Build().Tracers.Single().DataReceived.Should().Have.Count.EqualTo(5);
+			Target.Build().Tracers.Single().DataReceived.ElementAt(0).At.Should().Be("13:00:00");
+			Target.Build().Tracers.Single().DataReceived.ElementAt(1).At.Should().Be("12:59:00");
+			Target.Build().Tracers.Single().DataReceived.ElementAt(2).At.Should().Be("12:58:00");
+			Target.Build().Tracers.Single().DataReceived.ElementAt(3).At.Should().Be("12:57:00");
+			Target.Build().Tracers.Single().DataReceived.ElementAt(4).At.Should().Be("12:56:00");
 		}
 
 		[Test]
@@ -195,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 					}
 				});
 
-			Target.Build().Tracers.Single(x => x.Process == "p1").DataReceivedAt
+			Target.Build().Tracers.Single(x => x.Process == "p1").DataReceived.Single().At
 				.Should().Be("08:00:00");
 		}
 
@@ -212,8 +231,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 					}
 				});
 
-			Target.Build().Tracers.Single().DataReceivedBy.Should().Be("method");
-			Target.Build().Tracers.Single().DataReceivedCount.Should().Be(123);
+			Target.Build().Tracers.Single().DataReceived.Single().By.Should().Be("method");
+			Target.Build().Tracers.Single().DataReceived.Single().Count.Should().Be(123);
 		}
 
 		[Test]
@@ -225,13 +244,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 				{
 					Log = new ActivityCheckLog
 					{
-						ActivityCheckAt = "2017-10-04 08:00:01".Utc()
+						ActivityCheckAt = "2017-10-04 08:00:01.123".Utc()
 					}
 				});
 
 			Target.Build().Tracers.Single().ActivityCheckAt.Should().Be("08:00:01");
 		}
-		
+
 		[Test]
 		[SetCulture("en-US")]
 		public void ShouldContainActivtyCheckAtInUSA()

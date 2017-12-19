@@ -29,17 +29,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 			var tracers = from process in processes
 				let tracing = tracings[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Tracing
-				let dataReceived = dataReceivedAts[process].OrderBy(r => r.Log?.ReceivedAt).LastOrDefault()?.Log
-				let activityCheckAt = activityCheckerAts[process].Max(r => Convert.ToString(r.Log?.ActivityCheckAt?.TimeOfDay, System.Globalization.CultureInfo.InvariantCulture))
+				let dataReceiveds = dataReceivedAts[process].OrderByDescending(r => r.Log?.ReceivedAt).Take(5).Select(x => x.Log)
+				let dataReceived = (
+					from dataReceived in dataReceiveds
+					select
+						new DataReceived
+						{
+							At = dataReceived?.ReceivedAt?.ToString("HH:mm:ss"),
+							By = dataReceived?.ReceivedBy,
+							Count = dataReceived?.ReceivedCount ?? 0,
+						})
+				let activityCheckAt = activityCheckerAts[process].Max(r => r.Log?.ActivityCheckAt?.ToString("HH:mm:ss"))
 				let exception = exceptions[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Type
 				select new Tracer
 				{
 					Process = process,
 					Tracing = tracing,
-					DataReceivedAt = Convert.ToString(dataReceived?.ReceivedAt?.TimeOfDay, 
-						System.Globalization.CultureInfo.InvariantCulture),
-					DataReceivedBy = dataReceived?.ReceivedBy,
-					DataReceivedCount = dataReceived?.ReceivedCount,
+					DataReceived = dataReceived.ToArray(),
 					ActivityCheckAt = activityCheckAt,
 					Exception = exception
 				};
@@ -85,12 +91,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	public class Tracer
 	{
 		public string Process;
-		public string DataReceivedAt;
-		public string DataReceivedBy;
-		public int? DataReceivedCount;
+		public IEnumerable<DataReceived> DataReceived;
 		public string ActivityCheckAt;
 		public string Tracing;
 		public string Exception;
+	}
+
+	public class DataReceived
+	{
+		public string At;
+		public string By;
+		public int Count;
 	}
 
 	public class TracedUser
