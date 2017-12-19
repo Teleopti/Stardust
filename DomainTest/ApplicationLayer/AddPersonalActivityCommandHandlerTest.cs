@@ -105,6 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			theEvent.EndDateTime.Should().Be.EqualTo(command.EndTime);
 			theEvent.ScenarioId.Should().Be.EqualTo(scenario.Id.GetValueOrDefault());
 			theEvent.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
+			theEvent.CommandId.Should().Be(command.TrackedCommandInfo.TrackId);
 
 		}
 

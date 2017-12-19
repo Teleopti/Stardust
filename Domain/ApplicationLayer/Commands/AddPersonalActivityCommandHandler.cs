@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), loadPeriod, new[] { person }, false);
 			var scheduleRange = dic[person];
-			
+
 			command.ErrorMessages = new List<string>();
 
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
-			scheduleDay.CreateAndAddPersonalActivity(activity, period, false);
+			scheduleDay.CreateAndAddPersonalActivity(activity, period, false, command.TrackedCommandInfo);
 			dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
 

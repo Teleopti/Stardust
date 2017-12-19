@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <summary>
 		/// Creates and adds personal activity
 		/// </summary>
-		void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true);
+		void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 
 		/// <summary>
 		/// Creates the and add note.
