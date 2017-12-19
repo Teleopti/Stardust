@@ -14137,9 +14137,6 @@ Teleopti R&amp;D</value>
   <data name="OvertimeShortName" xml:space="preserve">
     <value>加班</value>
   </data>
-  <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
-    <value>之前在日期 {0:d} 的班次与班次开始时间 {1} 不匹配</value>
-  </data>
   <data name="NoSkillGroupsFound" xml:space="preserve">
     <value>没有找到技能组</value>
   </data>
@@ -14167,14 +14164,8 @@ Teleopti R&amp;D</value>
   <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>您的加班申请无法被满足. 当前某些日期没有开放申请.</value>
   </data>
-  <data name="PreviousShiftNotMatchShift" xml:space="preserve">
-    <value>之前在日期 {0:d} 的班次与日期 {1:d} 的班次不匹配</value>
-  </data>
   <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
     <value>{0:d}: 一个班次不允许开始于前一天或后一天. 该问题可能是由于在人员模块中变更了座席代表的时区. 请选择正确的时区或删除此日期以修正问题.</value>
-  </data>
-  <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>之前在日期 {0:d} 的班次与日期 {1} 的班次类别不匹配</value>
   </data>
   <data name="NotShowingAbandonRate" xml:space="preserve">
     <value>当前选项无法显示放弃率</value>

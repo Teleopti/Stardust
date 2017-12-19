@@ -62,9 +62,12 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseBlockSameStartTime = true
 					}), false)).InvalidResources;
 
-			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.PreviousShiftNotMatchStartTime)).Should().Be.EqualTo(1);
+			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.ExistingShiftNotMatchStartTime)).Should().Be.EqualTo(1);
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
-				.Should().Be.EqualTo(string.Format(Resources.PreviousShiftNotMatchStartTime, startDate.AddDays(-1).Date, personAssignment.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm")));
+				.Should()
+				.Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchStartTime,
+					personAssignment.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), startDate.Date,
+					personAssignment2.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), startDate.AddDays(-1).Date));
 		}
 
 		[Test]
@@ -99,9 +102,9 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseBlockSameShift = true
 					}), false)).InvalidResources;
 
-			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.PreviousShiftNotMatchShift)).Should().Be.EqualTo(1);
+			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.ExistingShiftNotMatchShift)).Should().Be.EqualTo(1);
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
-				.Should().Be.EqualTo(string.Format(Resources.PreviousShiftNotMatchShift, startDate.AddDays(-1).ToShortDateString(), personAssignment.Date.ToShortDateString()));
+				.Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchShift, personAssignment.Date.ToShortDateString(), startDate.AddDays(-1).ToShortDateString()));
 		}
 
 		[Test]
@@ -140,7 +143,9 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint));
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
-				.Should().Be.EqualTo(string.Format(Resources.PreviousShiftNotMatchShiftCategory, startDate.AddDays(-1).ToShortDateString(), shiftCategory.Description.Name));
+				.Should()
+				.Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchShiftCategory, shiftCategory.Description.ShortName,
+					startDate.ToShortDateString(), anotherSshiftCategory.Description.ShortName, startDate.AddDays(-1).ToShortDateString()));
 		}
 		
 		[Test]
@@ -179,7 +184,10 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint));
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
-				.Should().Be.EqualTo(string.Format(Resources.PreviousShiftNotMatchShiftCategory, startDate.AddDays(-2).ToShortDateString(), shiftCategory.Description.Name));
+				.Should()
+				.Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchShiftCategory, shiftCategory.Description.ShortName,
+					startDate.AddDays(-1).ToShortDateString(), anotherSshiftCategory.Description.ShortName,
+					startDate.AddDays(-2).ToShortDateString()));
 		}
 
 		[Test]
@@ -218,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint));
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
-				.Should().Be.EqualTo(string.Format(Resources.PreviousShiftNotMatchShift, startDate.AddDays(-2).ToShortDateString(),	personAssignment.Date.ToShortDateString()));
+				.Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchShift, personAssignment.Date.ToShortDateString(), startDate.AddDays(-2).ToShortDateString()));
 		}
 
 		[Test]
@@ -256,7 +264,10 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint));
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
-				.Should().Be.EqualTo(string.Format(Resources.PreviousShiftNotMatchStartTime, startDate.AddDays(-2).Date, personAssignment.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm")));
+				.Should()
+				.Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchStartTime,
+					personAssignment.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), startDate.AddDays(-1).Date,
+					personAssignment2.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), startDate.AddDays(-2).Date));
 		}
 		
 		[Test]

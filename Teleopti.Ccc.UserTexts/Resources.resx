@@ -16709,7 +16709,7 @@ Do you want to participate?</value>
     <comment>Label name of maximum time validation fails option</comment>
   </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
-    <value>The shift on {0:d} is not matching the shift on {1:d}.</value>
+    <value>The shift on {0:d} does not match the shift on {1:d}.</value>
     <comment>Scheduleing validation message in web scheduling and client. Both {0} and {1} are dates</comment>
   </data>
   <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
@@ -16719,18 +16719,6 @@ Do you want to participate?</value>
   <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
     <value>The start time {0} on {1:d} does not match the start time {2} on {3:d}.</value>
     <comment>Scheduling validation message in web scheduling and client. {0} and {2} are start times and {1} and {3} are dates.</comment>
-  </data>
-  <data name="PreviousShiftNotMatchShift" xml:space="preserve">
-    <value>The shift on {0:d} is not maching the shift on {1:d}</value>
-    <comment>Scheduling validation message in web scheduling and client. {0} and {1} are dates</comment>
-  </data>
-  <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>The shift on {0:d} is not maching the  shift category {1}</value>
-    <comment>Scheduling validation message in web scheduling and client. {0} is a date and {1} a shift category</comment>
-  </data>
-  <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
-    <value>The shift on {0:d} is not maching the start time {1}</value>
-    <comment>Scheduling validation message in web scheduling and client. {0} is a date and {1} a start time</comment>
   </data>
   <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>

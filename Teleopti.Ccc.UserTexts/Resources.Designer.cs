@@ -11279,7 +11279,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift on {0:d} is not matching the shift on {1:d}..
+        ///   Looks up a localized string similar to The shift on {0:d} does not match the shift on {1:d}..
         /// </summary>
         public static string ExistingShiftNotMatchShift {
             get {
@@ -24859,33 +24859,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PreviousSavedOvertimeAvailabilityColon {
             get {
                 return ResourceManager.GetString("PreviousSavedOvertimeAvailabilityColon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The shift on {0:d} is not maching the shift on {1:d}.
-        /// </summary>
-        public static string PreviousShiftNotMatchShift {
-            get {
-                return ResourceManager.GetString("PreviousShiftNotMatchShift", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The shift on {0:d} is not maching the  shift category {1}.
-        /// </summary>
-        public static string PreviousShiftNotMatchShiftCategory {
-            get {
-                return ResourceManager.GetString("PreviousShiftNotMatchShiftCategory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The shift on {0:d} is not maching the start time {1}.
-        /// </summary>
-        public static string PreviousShiftNotMatchStartTime {
-            get {
-                return ResourceManager.GetString("PreviousShiftNotMatchStartTime", resourceCulture);
             }
         }
         
