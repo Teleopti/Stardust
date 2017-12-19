@@ -4,6 +4,7 @@
 	angular.module("wfm.teamSchedule").service("ActivityService", ['$http', '$q', ActivityService]);
 
 	function ActivityService($http, $q) {
+		var activities = [];
 
 		var getAllActivitiesUrl = '../api/TeamScheduleData/FetchActivities';
 		var addActivityUrl = '../api/TeamScheduleCommand/AddActivity';
@@ -59,7 +60,14 @@
 
 		function fetchAvailableActivities() {
 			var deferred = $q.defer();
-			$http.get(getAllActivitiesUrl).success(function (data) {
+			if (activities.length > 0) {
+				console.log(activities);
+				deferred.resolve(activities);
+				return deferred.promise;
+			}
+
+			$http.get(getAllActivitiesUrl).success(function(data) {
+				activities = data;
 				deferred.resolve(data);
 			});
 			return deferred.promise;
