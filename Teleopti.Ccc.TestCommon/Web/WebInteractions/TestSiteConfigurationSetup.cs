@@ -21,41 +21,16 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public static string UrlWindowsIdentityProvider;
 
 		private static IISExpress _server;
-		private static Process _stardustProcess;
 		private static IDisposable _portsConfiguration;
 
 		private static readonly SettingsFileManager settingsFile = new SettingsFileManager();
 
-		public static void Setup(bool runStardust = false)
+		public static void Setup()
 		{
 			_portsConfiguration = RandomPortsAndUrls();
 			writeWebConfigs();
-			killProcess("killAllIISExpress", "iisexpress");
-			killProcess("killStardustConsoleHost", "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost");
+			killAllIISExpress();
 			StartIISExpress();
-
-			if (runStardust)
-			{
-				writeStardustConfig();
-				startStardust();
-			}
-		}
-
-		private static void writeStardustConfig()
-		{
-			WriteConfig("ServiceBusHost.config", Paths.StardustConsoleHostFolderPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe.config");
-		}
-
-		private static void startStardust()
-		{
-			var starDustConsoleHostPath = $"{Paths.StardustConsoleHostFolderPath()}\\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe";
-
-			if (!File.Exists(starDustConsoleHostPath))
-				throw new ArgumentException("Stardust console host executable not found", starDustConsoleHostPath);
-			_stardustProcess = Process.Start(new ProcessStartInfo
-			{
-				FileName = starDustConsoleHostPath
-			});
 		}
 
 		private static IDisposable RandomPortsAndUrls()
@@ -135,7 +110,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		{
 			try
 			{
-				_stardustProcess?.Dispose();
 				_server?.Dispose();
 			}
 			catch (NullReferenceException)
@@ -144,43 +118,41 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				//https://github.com/ElemarJR/IISExpress.Automation/blob/master/src/IISExpress.Automation/ProcessEnvelope.cs
 			}
 			
-			killProcess("killAllIISExpress", "iisexpress");
-			waitToBeKilled("waittobekilled", "iisexpress");
-			killProcess("killStardustConsoleHost", "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost");
-			waitToBeKilled("waitStardustConsoleHostToBeKilled", "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost");
+			killAllIISExpress();
+			waitToBeKilled();
 
 			_portsConfiguration?.Dispose();
 			writeWebConfigs();
 		}
 
-		private static void waitToBeKilled(string logName, string processName)
+		private static void waitToBeKilled()
 		{
-			TestLog.Static.Debug(logName);
-			Process.GetProcessesByName(processName)
+			TestLog.Static.Debug("waittobekilled");
+			Process.GetProcessesByName("iisexpress")
 				.ForEach(p =>
 				{
-					TestLog.Static.Debug($"{logName}/wait");
+					TestLog.Static.Debug("waittobekilled/wait");
 					if (!p.WaitForExit(2000))
 					{
 						TestLog.Static.Debug("Couldn't kill one of iisexpress processes!!");
 					}
 				});
-			TestLog.Static.Debug($"/{logName}");
+			TestLog.Static.Debug("/waittobekilled");
 		}
 
-		private static void killProcess(string logName, string processName)
+		private static void killAllIISExpress()
 		{
-			TestLog.Static.Debug(logName);
-			Process.GetProcessesByName(processName)
+			TestLog.Static.Debug("killAllIISExpress");
+			Process.GetProcessesByName("iisexpress")
 				.ForEach(p =>
 				{
 					if (!p.HasExited)
 					{
-						TestLog.Static.Debug($"{logName}/kill");
+						TestLog.Static.Debug("killAllIISExpress/kill");
 						p.Kill();
 					}
 				});
-			TestLog.Static.Debug($"/{logName}");
+			TestLog.Static.Debug("/killAllIISExpress");
 		}
 
 		private static void writeWebConfigs()
@@ -192,19 +164,14 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		
 		private static void writeWebConfig(string sourceFileName, string targetFolder)
 		{
-			WriteConfig(sourceFileName, targetFolder, "web.config");
-		}
-
-		private static void WriteConfig(string sourceFileName, string targetFolder, string targetFileName)
-		{
 			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), sourceFileName);
-			var targetFile = Path.Combine(targetFolder, targetFileName);
+			var targetFile = Path.Combine(targetFolder, "web.config");
 
 			new FileConfigurator().Configure(
 				sourceFile,
 				targetFile,
 				searchReplaces()
-			);
+				);
 		}
 
 		public static void StartApplicationAsync()

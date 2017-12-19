@@ -19,7 +19,7 @@
 			<div class="con-row">
 				<div class="con-flex">
 					<div class="wfm-toolbar-group-container">
-						<button tabindex=0 class="schedule-button context-menu card-context icon-botton-primary" ng-disabled="vm.isDisable()" ng-click="vm.launchSchedule()">
+						<button tabindex=0 class="context-menu card-context icon-botton-primary" ng-disabled="vm.isDisable()" ng-click="vm.launchSchedule()">
 							<i class="mdi mdi-play"></i>
 							<md-tooltip>{{'ScheduleVerb' | translate}}</md-tooltip>
 						</button>
@@ -96,7 +96,7 @@
 			</div>
 			<div class="con-row">
 				<div class="con-flex result-container ">
-					<div class="legends heatmap" ng-show="vm.dayNodes">
+					<div class="legends" ng-show="vm.dayNodes">
 						<h1>Scheduled Skills Heatmap</h1>
 						<span>
 							<div class="legend critUnderstaffed"></div>
