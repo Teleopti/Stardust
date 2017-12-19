@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 			var requestFilter = _requestFilterCreator.Create(input, new[] { RequestType.ShiftTradeRequest });
 
-			if (requestFilter.Persons != null && requestFilter.Persons.Count() > maxSearchPersonCount)
+			if (requestFilter.Persons != null && requestFilter.Persons.Distinct().Count() > maxSearchPersonCount)
 			{
 				return new ShiftTradeRequestListViewModel
 				{

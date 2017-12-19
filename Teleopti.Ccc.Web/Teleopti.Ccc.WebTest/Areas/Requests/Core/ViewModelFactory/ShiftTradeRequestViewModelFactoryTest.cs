@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakePersonRepository PersonRepository;
 		public IUserTimeZone UserTimeZone;
+		public FakeToggleManager ToggleManager;
 
 		private ITeam team;
 		private IPersonPeriod personPeriod;
@@ -499,6 +502,65 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			requestListViewModel.Requests.Count().Should().Be(0);
 			requestListViewModel.IsSearchPersonCountExceeded.Should().Be(true);
 			requestListViewModel.MaxSearchPersonCount.Should().Be(5000);
+		}
+
+		[Test]
+		public void ShouldCalculatePersonCountOnlyBasedOnPersonId()
+		{
+			ToggleManager.Enable(Toggles.Wfm_GroupPages_45057);
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
+			var site = new Site("site").WithId(Guid.NewGuid());
+			var team = new Team().WithDescription(new Description("from team")).WithId(Guid.NewGuid());
+			team.Site = site;
+			var personrequest = createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom,
+				personTo);
+			((ShiftTradeRequest)personrequest.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts,
+				new PersonRequestAuthorizationCheckerConfigurable());
+			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
+				new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(2016, 03, 01, 2016, 03, 03), Scenario.Current());
+			setShiftTradeSwapDetailsToAndFrom((IShiftTradeRequest)personrequest.Request, schedule, personTo, personFrom);
+			personrequest.Pending();
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2016, 3, 1),
+				EndDate = new DateOnly(2016, 3, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>
+				{
+					{ PersonFinderField.Organization, "test" }
+				},
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var groupDetail = new List<ReadOnlyGroupDetail>();
+			for (var i = 0; i < 5001; i++)
+			{
+				var group = new Team().WithDescription(new Description($"from team {i}")).WithId(Guid.NewGuid());
+				group.Site = site;
+				groupDetail.Add(new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					PersonId = personFrom.Id.Value,
+					SiteId = site.Id.Value,
+					TeamId = group.Id.Value,
+					GroupName = group.SiteAndTeam
+				});
+			}
+
+			GroupingReadOnlyRepository.Has(new[]
+			{
+				new ReadOnlyGroupPage
+				{
+					PageId = Group.PageMainId
+				}
+			}, groupDetail);
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
+			requestListViewModel.Requests.Count().Should().Be(1);
+			requestListViewModel.IsSearchPersonCountExceeded.Should().Be(false);
+			requestListViewModel.MaxSearchPersonCount.Should().Be(0);
 		}
 
 		private static void setShiftTradeSwapDetailsToAndFrom(IShiftTradeRequest shiftTradeRequest, IScheduleDictionary schedule, IPerson personTo, IPerson personFrom)
