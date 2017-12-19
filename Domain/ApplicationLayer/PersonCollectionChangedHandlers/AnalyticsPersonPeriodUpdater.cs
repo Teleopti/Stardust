@@ -55,21 +55,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		[Attempts(10)]
 		public virtual void Handle(PersonCollectionChangedEvent @event)
 		{
-			var persons = _personRepository.FindPeople(@event.PersonIdCollection);
+			var persons = _personRepository.FindPeople(@event.PersonIdCollection).ToDictionary(p => p.Id.GetValueOrDefault());
 
 			var changedPeople = new List<Guid>();
 			var peopleWithUnlinkedPersonPeriod = new HashSet<Guid>();
 			foreach (var personCodeGuid in @event.PersonIdCollection)
 			{
 				// Check if person does exists => if not it is deleted and handled by other handle-method
-				var person = persons.FirstOrDefault(a => a.Id == personCodeGuid);
-				if (person == null)
+				if (!persons.TryGetValue(personCodeGuid, out var person))
 				{
 					logger.Debug($"Person '{personCodeGuid}' was not found in application.");
 					continue;
 				}
 				var personPeriodsInAnalytics = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
-				var personPeriods = _personPeriodFilter.GetFiltered(person.PersonPeriodCollection).ToList();
+				var personPeriods = _personPeriodFilter.GetFiltered(person.PersonPeriodCollection).ToArray();
 				if (!personPeriods.Any())
 				{
 					// Make sure the timezone is added even though there are no periods #43986
