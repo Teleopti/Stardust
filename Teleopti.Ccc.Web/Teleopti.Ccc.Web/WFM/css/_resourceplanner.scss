@@ -22,7 +22,7 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	margin: 5px;
 	min-width:20rem;
 	border-top:8px solid;
- 
+
 	.head-actions{
 		margin-top:0;
 		float: none;
@@ -47,7 +47,7 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	background: 0 0;
     /* outline: gray solid 1px; */
     text-align: center;
-    height: auto; 
+    height: auto;
     width: auto;
 	position: relative;
     cursor: pointer;
@@ -249,7 +249,7 @@ table.overview {
 	.pp-scheduled-failed {
 		background-color: $orange-400  !important;
 	}
-	
+
 	.pp-scheduled-label {
 		color: $green-100  !important;
 	}
@@ -262,22 +262,9 @@ table.overview {
 }
 
 .pp-modal>.modal-box .modalbg .dialog {
-	max-height: 90%;
-	overflow-y: auto!important;	
-
 	md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar {
 		color: $blue-500 ;
 		background: $blue-500;
-	}
-
-	@media (min-width: 768px) and (max-width: 1199px) {
-		margin: 3% auto;
-		width: 90%;
-	}
-	
-	@media (min-width: 1200px) {
-		margin: 10% auto;
-		width: 60%;
 	}
 
 	.pp-create-modal {
@@ -288,11 +275,11 @@ table.overview {
 		display: table;
 		margin: 0 auto;
 	}
-	
+
 	.pp-custom-input-wrapper {
 		margin: 10px 0px;
 	}
-	
+
 	.pp-custom-buttons-wrapper {
 		margin: 0 20px;
 	}
@@ -342,7 +329,7 @@ table.overview {
 	.pp-scheduling-setting-open{
 		border-left: 1px solid $gray-500 ;
 		margin: 5px;
-		padding: 5px 5px 5px 10px; 
+		padding: 5px 5px 5px 10px;
 		color: $gray054;
 	}
 }
@@ -385,7 +372,7 @@ card-panel-header {
 		top:0;
 		left:0;
 	}
-	
+
 	.pp-validation-number {
 		padding: 9px;
 		border-radius: 20px;
@@ -394,7 +381,7 @@ card-panel-header {
 	.error {
 		background-color: $red-600;
 	}
-	
+
 	.pp-validation-button {
 		margin: -13px;
 		padding-left: 9px;
@@ -405,7 +392,7 @@ card-panel-header {
 		background-color: $blue-100 ;
 		border-radius: 15px;
 	}
-} 
+}
 
 input.pg-setting-name {
 	margin-top: 10px;
@@ -430,25 +417,25 @@ card-panel-content {
 		background-color: $gray012;
 	}
 
-	.fake-radio-button{ 
+	.fake-radio-button{
 		position: relative;
 		margin: 8px 0px;
 		i{
 			position: absolute;
 			top: -5px;
-			left: 0;	
-			color: $gray026 ;	
+			left: 0;
+			color: $gray026 ;
 		}
 		i.check {
 			color: $blue-300  ;
 		}
 		i:before {
 			font-size: 25px!important;
-			
+
 		}
 		span{
 			margin-left: 30px;
-		}	
+		}
 	}
 }
 
@@ -479,7 +466,7 @@ card-panel-content {
 	border-radius: 5px;
 }
 
-.pg-list-card-animate {	
+.pg-list-card-animate {
 	-webkit-animation: pgListCardAnimate 2s 1;
 	-moz-animation: pgListCardAnimate 2s 1;
 	-o-animation: pgListCardAnimate 2s 1;
@@ -494,16 +481,3 @@ card-panel-content {
 		transform: perspective(1px) scale(1.01);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
