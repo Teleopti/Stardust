@@ -80,7 +80,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 				application.UseAutofacMiddleware(container);
 				application.UseAutofacMvc();
-				application.UseAutofacWebApi(config);
 			}
 
 			catch (Exception ex)
