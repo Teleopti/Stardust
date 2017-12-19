@@ -12,16 +12,22 @@
 		this.fetchShiftCategories = fetchShiftCategories;
 		this.modifyShiftCategories = modifyShiftCategories;
 
-		function fetchShiftCategories(){
-			var deferred = $q.defer();
-
-			$http.get(fetchShiftCategoriesUrl).then(function(data){
-				deferred.resolve(data);
-			}, function(error){
-				deferred.reject(error);
+		var shiftCategories = null;
+		function fetchShiftCategories() {
+			return $q(function (resolve, reject) {
+				if (!!shiftCategories) {
+					resolve(shiftCategories);
+					return;
+				}
+				$http.get(fetchShiftCategoriesUrl).then
+					(function (data) {
+						shiftCategories = data;
+						resolve(shiftCategories);
+					},
+					function (err) {
+						reject(err);
+					});
 			});
-
-			return deferred.promise;
 		}
 
 		function modifyShiftCategories(requestData){

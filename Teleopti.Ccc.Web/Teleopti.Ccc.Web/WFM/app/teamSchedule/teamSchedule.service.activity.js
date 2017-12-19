@@ -29,10 +29,10 @@
 		this.moveInvalidOverlappedActivity = moveInvalidOverlappedActivity;
 
 		function addOvertimeActivity(input) {
-			return $q(function(resolve, reject) {
-				$http.post(addOvertimeActivityUrl, input).then(function(data) {
+			return $q(function (resolve, reject) {
+				$http.post(addOvertimeActivityUrl, input).then(function (data) {
 					resolve(data);
-				}, function(err) {
+				}, function (err) {
 					reject(err);
 				});
 			});
@@ -40,7 +40,7 @@
 
 		function moveShift(input) {
 			return $q(function (resolve, reject) {
-				$http.post(moveShiftUrl, input).then(function(data) {
+				$http.post(moveShiftUrl, input).then(function (data) {
 					resolve(data);
 				}, function (err) {
 					reject(err);
@@ -65,7 +65,7 @@
 				return deferred.promise;
 			}
 
-			$http.get(getAllActivitiesUrl).success(function(data) {
+			$http.get(getAllActivitiesUrl).success(function (data) {
 				activities = data;
 				deferred.resolve(data);
 			});
@@ -128,15 +128,21 @@
 			return deffered.promise;
 		}
 
+		var definitionSets = [];
 		function fetchAvailableDefinitionSets() {
-			return $q(function(resolve, reject) {
+			return $q(function (resolve, reject) {
+				if (definitionSets.length) {
+					resolve(definitionSets);
+					return;
+				}
 				$http.get(getAllMultiplicatorDefinitionSetsUrl).then
-					(function(data) {
-							resolve(data.data);
-						},
-						function(err) {
-							reject(err);
-						});
+					(function (data) {
+						definitionSets = data.data;
+						resolve(definitionSets);
+					},
+					function (err) {
+						reject(err);
+					});
 			});
 		}
 	}
