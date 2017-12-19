@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
@@ -29,12 +30,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IActivityRepository _activityRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly INow _now;
+		private readonly SmartDeltaDoer _smartDeltaDoer;
+
 		public RequestProcessor(ICommandDispatcher commandDispatcher,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository,
 			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator,
 			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, SkillStaffingIntervalProvider skillStaffingIntervalProvider,
-			IActivityRepository activityRepository, IPersonRequestRepository personRequestRepository, INow now)
+			IActivityRepository activityRepository, IPersonRequestRepository personRequestRepository, INow now, SmartDeltaDoer smartDeltaDoer)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -47,6 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_activityRepository = activityRepository;
 			_personRequestRepository = personRequestRepository;
 			_now = now;
+			_smartDeltaDoer = smartDeltaDoer;
 		}
 
 		public void Process(IPersonRequest personRequest)
@@ -60,10 +64,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var periods = personRequest.Person.PersonPeriods(personRequest.Request.Period.ToDateOnlyPeriod(timeZone));
 					var absenceReqThresh = personRequest.Person.WorkflowControlSet.AbsenceRequestExpiredThreshold.GetValueOrDefault();
 					var skills = periods.SelectMany(x => x.PersonSkillCollection.Select(y => y.Skill.Id.GetValueOrDefault())).Distinct();
-					
+
 					var hasWaitlisted = _personRequestRepository.HasWaitlistedRequestsOnSkill(skills,
 						personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime, _now.UtcDateTime().AddMinutes(absenceReqThresh));
-					
+
 					if (hasWaitlisted)
 					{
 						sendDenyCommand(personRequest, Resources.AbsenceRequestAlreadyInWaitlist, PersonRequestDenyOption.None);
@@ -90,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				_activityRepository.LoadAll();
 				var allSkills = _skillRepository.LoadAll();
-				
+
 				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
 
 				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(timeZone);
@@ -126,6 +130,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 
 					shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime, projection.OriginalProjectionPeriod.Value.EndDateTime));
+					_smartDeltaDoer.Do(layers, personRequest.Person, dateOnlyPeriod.StartDate, combinationResources);
 				}
 
 				var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
@@ -225,4 +230,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public int ImmediatePeriodInHours => 24 * 14 + 1;
 	}
 
+	public class SmartDeltaDoer 
+	{
+		private readonly IPersonSkillProvider _personSkillProvider;
+
+		public SmartDeltaDoer(IPersonSkillProvider personSkillProvider)
+		{
+			_personSkillProvider = personSkillProvider;
+		}
+
+		public void Do(IEnumerable<ResourceLayer> layers, IPerson person, DateOnly startDate, IEnumerable<SkillCombinationResource> combinationResources)
+		{
+			foreach (var layer in layers)
+			{
+				var skillCombination = _personSkillProvider.SkillsOnPersonDate(person, startDate).ForActivity(layer.PayloadId);
+				if(!skillCombination.Skills.Any()) continue;
+				distributeSmartly(combinationResources, skillCombination, layer);
+			}
+
+		}
+
+		private void distributeSmartly(IEnumerable<SkillCombinationResource> combinationResources,
+													 SkillCombination skillCombination, ResourceLayer layer)
+		{
+			var skillCombinationResourceByAgentAndLayer =
+combinationResources.SingleOrDefault(x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
+						&& layer.Period.StartDateTime >= x.StartDateTime && layer.Period.EndDateTime <= x.EndDateTime);
+
+			if (skillCombinationResourceByAgentAndLayer == null) return;
+
+			var part = layer.Period.ElapsedTime().TotalMinutes / skillCombinationResourceByAgentAndLayer.GetTimeSpan().TotalMinutes;
+			var resource = skillCombinationResourceByAgentAndLayer.Resource - part;
+			if (resource < 0) resource = 0;
+
+			skillCombinationResourceByAgentAndLayer.Resource = resource;
+		}
+	}
+
+	
 }

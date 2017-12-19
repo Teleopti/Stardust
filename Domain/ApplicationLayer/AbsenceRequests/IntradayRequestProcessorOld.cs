@@ -27,13 +27,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 		private readonly IActivityRepository _activityRepository;
-		
+		private readonly SmartDeltaDoer _smartDeltaDoer;
+
 		public IntradayRequestProcessorOld(ICommandDispatcher commandDispatcher,
 												 ISkillCombinationResourceRepository skillCombinationResourceRepository,
 												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 												 ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, 
 												 IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, SkillStaffingIntervalProvider skillStaffingIntervalProvider, 
-												 IActivityRepository activityRepository)
+												 IActivityRepository activityRepository, SmartDeltaDoer smartDeltaDoer)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 			_activityRepository = activityRepository;
+			_smartDeltaDoer = smartDeltaDoer;
 		}
 
 		public void Process(IPersonRequest personRequest)
@@ -106,6 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 
 					shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime, projection.OriginalProjectionPeriod.Value.EndDateTime));
+					_smartDeltaDoer.Do(layers, personRequest.Person, dateOnlyPeriod.StartDate, combinationResources);
 				}
 
 				var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();

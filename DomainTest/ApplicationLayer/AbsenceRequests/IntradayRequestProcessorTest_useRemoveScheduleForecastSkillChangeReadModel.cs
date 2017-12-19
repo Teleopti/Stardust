@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 		}
 
-		[Test, Ignore("Need review, Amanda")]
+		[Test]
 		public void ShouldApproveRequestIfEnoughResourcesOnSkill()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -76,11 +75,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Process(personRequest);
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
-			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First();
-			skillCombinations.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
-			skillCombinations.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
-			skillCombinations.Resource.Should().Be.EqualTo(9);
-			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault()});
 		}
 
 		[Test]
@@ -117,11 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
 			denyCommand.DenyReason.Should().StartWith(UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingHours", agent.PermissionInformation.UICulture()).Substring(0, 10));
-			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First();
-			skillCombinations.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
-			skillCombinations.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
-			skillCombinations.Resource.Should().Be.EqualTo(0);
-			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault()});
+			
 		}
 
 		private static void createWfcs(WorkflowControlSet wfcs, IAbsence absence)
@@ -176,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
 
-		[Test, Ignore("Need review, Amanda")]
+		[Test]
 		public void ShouldDenyRequestIfShrinkage()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -337,7 +327,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
 
-		[Test, Ignore("Need review, Amanda")]
+		[Test]
 		public void ShouldDenyWithShrinkageAndCascading()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -393,7 +383,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 		}
 
-		[Test, Ignore("Need review, Amanda")]
+		[Test]
 		public void ShouldApproveRequestIfEnoughResourcesOnSkills()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -428,12 +418,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Process(personRequest);
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
-
-			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First();
-			skillCombinations.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
-			skillCombinations.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
-			skillCombinations.Resource.Should().Be.EqualTo(9);
-			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()});
 		}
 
 		[Test]
@@ -518,7 +502,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault()});
 		}
 
-		[Test, Ignore("Need review, Amanda")]
+		[Test]
 		public void ShouldDenyRequestIfRequestCausesUnderStaffedOnSkill()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -561,8 +545,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()});
 		}
 
-
-		[Test,Ignore("Need review, Amanda")]
+		[Test]
 		public void ShouldApproveIfEnoughStaffingForBothActivities()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -608,13 +591,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Process(personRequest);
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
-
-			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period1.StartDateTime, period2.EndDateTime)).ToList();
-			skillCombinations.Count().Should().Be.EqualTo(4);
-			skillCombAsserts(skillCombinations[0], period1, new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 9);
-			skillCombAsserts(skillCombinations[1], period2, new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 10);
-			skillCombAsserts(skillCombinations[2], period1, new[] {skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault()}, 10);
-			skillCombAsserts(skillCombinations[3], period2, new[] {skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault()}, 9);
 		}
 
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
@@ -628,7 +604,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 		}
 
-		[Test, Ignore("Need review, Amanda")]
+		[Test]
 		public void ShouldDenyIfEnoughStaffingOnASkillWithTwoActivities()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -676,7 +652,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 		}
 
-		[Test, Ignore("Need review, Amanda")]
+		[Test]
 		public void ShouldApproveRequestIfShovel()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -714,11 +690,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Process(personRequest);
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
-
-			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
-			skillCombinations.Count().Should().Be.EqualTo(2);
-			skillCombAsserts(skillCombinations[0], period, new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 1);
-			skillCombAsserts(skillCombinations[1], period, new[] {skill2.Id.GetValueOrDefault()}, 0);
 		}
 
 		[Test]
@@ -899,7 +870,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
 
-		[Test, Ignore("Need review, Amanda")]
+		[Test]
 		public void ShouldDenyRequestIfOnlyUnsortedSkills()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -1000,44 +971,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
 
-		[Test, Ignore("Need review, Amanda")]
-		public void ShouldUpdateDeltaIfRequestIsApproved()
-		{
-			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
-
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skillA", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			skill.DefaultResolution = 60;
-
-			var agent = PersonRepository.Has(skill);
-			var wfcs = new WorkflowControlSet().WithId();
-			createWfcs(wfcs, absence);
-			agent.WorkflowControlSet = wfcs;
-			var period1 = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
-			var period2 = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 10);
-			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 10);
-
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				createSkillCombinationResource(period1, new[] {skill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(period2, new[] {skill.Id.GetValueOrDefault()}, 10)
-			});
-
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
-
-			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
-
-			Target.Process(personRequest);
-
-			SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First().Resource.Should().Be.EqualTo(9);
-			SkillCombinationResourceRepository.LoadSkillCombinationResources(period).Second().Resource.Should().Be.EqualTo(9);
-		}
 
 		[Test, SetCulture("en-US")]
 		public void DenyIfReadModelDataIsTooOld()
@@ -1234,7 +1167,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
 
-		[Test, Ignore("Need review, Amanda")]
+		[Test]
 		public void ShouldRemoveResourceOnScheduledInterval()
 		{
 			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
@@ -1275,11 +1208,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Process(personRequest);
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
-
-			var skillCombinationResources =
-				SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9)).ToList();
-			skillCombinationResources.Count().Should().Be.EqualTo(2);
-			skillCombAsserts(skillCombinationResources[0], new DateTimePeriod(emailPerod.StartDateTime, emailPerod.StartDateTime.AddMinutes(60)), new[] {emailSkill.Id.GetValueOrDefault()}, 9.5);
 		}
 
 		[Test]
@@ -1366,20 +1294,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Process(personRequest);
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
-			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First();
-			skillCombinations.Resource.Should().Be.EqualTo(100);
-
 		}
 
-		private void skillCombAsserts(SkillCombinationResource skillCombinationResource, DateTimePeriod period, Guid[] skillCombinationResources, double resource)
-		{
-			skillCombinationResource.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
-			skillCombinationResource.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
-			skillCombinationResource.Resource.Should().Be.EqualTo(resource);
-			CollectionAssert.AreEqual(skillCombinationResource.SkillCombination, skillCombinationResources);
-		}
-
-
+		
 		/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
 
 		[Test]

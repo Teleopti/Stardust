@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeBudgetGroupRepository BudgetGroupRepository;
 		public FakeBudgetDayRepository BudgetDayRepository;
-
+		
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
@@ -65,14 +65,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var wfcs = new WorkflowControlSet().WithId();
 			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
-											 {
-												 Absence = absence,
-												 PersonAccountValidator = new AbsenceRequestNoneValidator(),
-												 StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
-												 Period = new DateOnlyPeriod(2016, 12, 1, 2016, 12, 2),
-												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 11, 30),
-												 AbsenceRequestProcess = new GrantAbsenceRequest()
-											 });
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				Period = new DateOnlyPeriod(2016, 12, 1, 2016, 12, 2),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2016, 11, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
 
 			var person = PersonFactory.CreatePerson(wfcs).WithId();
 
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
 
-			Target.UpdateAbsenceRequest(new List<Guid> {personRequest.Id.GetValueOrDefault()});
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
 			personRequest.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonClosedPeriod);
 		}
 
@@ -97,14 +97,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var wfcs = new WorkflowControlSet().WithId();
 			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
-											 {
-												 Absence = absence,
-												 PersonAccountValidator = new AbsenceRequestNoneValidator(),
-												 StaffingThresholdValidator = new StaffingThresholdValidator(),
-												 Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
-												 AbsenceRequestProcess = new GrantAbsenceRequest()
-											 });
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
 
 			var person = PersonFactory.CreatePerson(wfcs).WithId();
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
 
-			Target.UpdateAbsenceRequest(new List<Guid> {personRequest.Id.GetValueOrDefault()});
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
 			personRequest.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonAlreadyAbsent);
 		}
 
@@ -165,14 +165,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var wfcs = new WorkflowControlSet().WithId();
 			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
-											 {
-												 Absence = absence,
-												 PersonAccountValidator = new AbsenceRequestNoneValidator(),
-												 StaffingThresholdValidator = new StaffingThresholdValidator(),
-												 Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-												 OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
-												 AbsenceRequestProcess = new GrantAbsenceRequest()
-											 });
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
 			wfcs.AbsenceRequestExpiredThreshold = 15;
 			wfcs.AbsenceRequestWaitlistEnabled = true;
 
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
 
-			Target.UpdateAbsenceRequest(new List<Guid>() {personRequest.Id.GetValueOrDefault()});
+			Target.UpdateAbsenceRequest(new List<Guid>() { personRequest.Id.GetValueOrDefault() });
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.IsWaitlisted.Should().Be.False();
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var contractSchedule = new ContractSchedule("_");
 			var partTimePercentage = new PartTimePercentage("_");
-			var team = new Team {Site = new Site("site")};
+			var team = new Team { Site = new Site("site") };
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var category = new ShiftCategory("shiftCategory");
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150, 150));
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var contractSchedule = new ContractSchedule("_");
 			var partTimePercentage = new PartTimePercentage("_");
-			var team = new Team {Site = new Site("site")};
+			var team = new Team { Site = new Site("site") };
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var category = new ShiftCategory("shiftCategory");
 			SkillDayRepository.Has(skill1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150));
@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequestRepository.Add(personRequest1);
 				PersonRequestRepository.Add(personRequest2);
 
-				return new[] {personRequest1, personRequest2};
+				return new[] { personRequest1, personRequest2 };
 			}).ToArray();
 
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var contractSchedule = new ContractSchedule("_");
 			var partTimePercentage = new PartTimePercentage("_");
-			var team = new Team {Site = new Site("site")};
+			var team = new Team { Site = new Site("site") };
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var category = new ShiftCategory("shiftCategory");
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150, 170));
@@ -555,7 +555,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var contractSchedule = new ContractSchedule("_");
 			var partTimePercentage = new PartTimePercentage("_");
-			var team = new Team {Site = new Site("site")};
+			var team = new Team { Site = new Site("site") };
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var category = new ShiftCategory("shiftCategory");
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 150, 150));
@@ -618,7 +618,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var contractSchedule = new ContractSchedule("_");
 			var partTimePercentage = new PartTimePercentage("_");
-			var team = new Team {Site = new Site("site")};
+			var team = new Team { Site = new Site("site") };
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var category = new ShiftCategory("shiftCategory");
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
@@ -680,7 +680,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var contractSchedule = new ContractSchedule("_");
 			var partTimePercentage = new PartTimePercentage("_");
-			var team = new Team {Site = new Site("site")};
+			var team = new Team { Site = new Site("site") };
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var category = new ShiftCategory("shiftCategory");
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 1, 1, 2));
@@ -744,7 +744,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var contractSchedule = new ContractSchedule("_");
 			var partTimePercentage = new PartTimePercentage("_");
-			var team = new Team {Site = new Site("site")};
+			var team = new Team { Site = new Site("site") };
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var category = new ShiftCategory("shiftCategory");
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 2));
@@ -829,16 +829,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var scenario = ScenarioRepository.Has("scenario");
 			var activity = ActivityRepository.Has("activity");
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var skillA = SkillRepository.Has("skillA", activity).WithId().CascadingIndex(1).IsOpenBetween(8,9);
-			var skillB = SkillRepository.Has("skillB", activity).WithId().CascadingIndex(1).IsOpenBetween(8,9);
-			var skillC = SkillRepository.Has("skillB", activity).WithId().CascadingIndex(2).IsOpenBetween(8,9);
+			var skillA = SkillRepository.Has("skillA", activity).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var skillB = SkillRepository.Has("skillB", activity).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var skillC = SkillRepository.Has("skillB", activity).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
 			Now.Is(new DateTime(2016, 12, 1, 7, 0, 0));
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 			SkillDayRepository.Has(skillA.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, new DateOnly(period.StartDateTime), 0.08));
 			SkillDayRepository.Has(skillB.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, new DateOnly(period.StartDateTime), 0.08));
 			SkillDayRepository.Has(skillC.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, new DateOnly(period.StartDateTime), 1));
-			
+
 
 			var agent = PersonRepository.Has(skillA, skillB, skillC);
 			var agent2 = PersonRepository.Has(skillA, skillB, skillC);
@@ -858,7 +858,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 			agent.WorkflowControlSet = wfcs;
-			
+
 			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
@@ -885,8 +885,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillDayRepository.Has(skillday);
 
 
-			var agent = PersonRepository.Has(skillA, skillB );
-			var agent2 = PersonRepository.Has(skillA, skillB );
+			var agent = PersonRepository.Has(skillA, skillB);
+			var agent2 = PersonRepository.Has(skillA, skillB);
 			var agent3 = PersonRepository.Has(skillA, skillB);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent2, scenario, activity, period, new ShiftCategory("category")));
@@ -1051,7 +1051,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
 
-			Target.UpdateAbsenceRequest(new List<Guid> {personRequest.Id.GetValueOrDefault()});
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
 			personRequest.IsApproved.Should().Be(true);
 
 		}
@@ -1196,6 +1196,51 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.UpdateAbsenceRequest(new List<Guid> { personRequestTwo.Id.GetValueOrDefault() });
 			personRequestTwo.IsApproved.Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldDenyAbsenceRequestWhenOnlyOneAgentIsScheduled()
+		{
+			Now.Is(new DateTime(2017, 12, 1, 6, 00, 00, DateTimeKind.Utc));
+
+			var period = new DateTimePeriod(2017, 12, 4, 8, 2017, 12, 4, 9);
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var activity = ActivityRepository.Has("phone");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			var agent = PersonRepository.Has(skill);
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2017, 1, 1, 2017, 12, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2017, 1, 1, 2017, 12, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+			agent.WorkflowControlSet = workflowControlSet;
+
+			var scenario = ScenarioRepository.Has("scenario");
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+			
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 1));
+
+			var personRequest = createPersonRequest(agent, absence, period);
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
+
+			personRequest.IsDenied.Should().Be(true);
+			personRequest.DenyReason.Should().Be("Insufficient staffing for : 12/4/2017 8:00:00 AM - 12/4/2017 9:00:00 AM");
+
+		}
+		
+		private PersonRequest createPersonRequest(Person agent, IAbsence absence, DateTimePeriod period)
+		{
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+			return personRequest;
 		}
 
 		private static IBudgetGroup getBudgetGroup()

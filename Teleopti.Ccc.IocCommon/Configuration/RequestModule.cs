@@ -99,8 +99,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OvertimeRequestSkillProvider>().As<IOvertimeRequestSkillProvider>();
 			builder.RegisterType<SkillOpenHourFilter>().As<ISkillOpenHourFilter>();
 			builder.RegisterType<WaitlistPreloadService>().AsSelf().InstancePerLifetimeScope();
+			builder.RegisterType<SmartDeltaDoer>().AsSelf().SingleInstance();
 			
-	
 			registerType
 				<IAnyPersonSkillsOpenValidator, AnyPersonSkillsOpenValidator, AnyPersonSkillOpenTrueValidator>(builder,
 					Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384
