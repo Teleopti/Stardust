@@ -79,7 +79,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					new MachineKeySessionSecurityTokenHandler());
 
 				application.UseAutofacMiddleware(container);
-				application.UseAutofacMvc();
 			}
 
 			catch (Exception ex)
