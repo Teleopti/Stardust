@@ -195,8 +195,7 @@
 			vm.confirmDeletePpModal = false;
 			var deletePlanningPeriod = planningPeriodServiceNew.deleteLastPlanningPeriod({ planningGroupId: planningGroupId });
 			return deletePlanningPeriod.$promise.then(function (data) {
-				vm.planningPeriods = data;
-				return vm.planningPeriods;
+				return vm.planningPeriods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
 			});
 		}
 
