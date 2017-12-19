@@ -22815,7 +22815,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum overtime per calandar month:.
+        ///   Looks up a localized string similar to Maximum overtime per calendar month:.
         /// </summary>
         public static string OvertimeRequestMaximum {
             get {
