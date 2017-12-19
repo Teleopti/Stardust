@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	public class IntrdayRequestFilterWithNoValidatorTest : ISetup
+	public class IntradayRequestFilterWithNoValidatorTest : ISetup
 	{
 		public IAbsenceRequestIntradayFilter Target;
 		public FakePersonRepository PersonRepository;
