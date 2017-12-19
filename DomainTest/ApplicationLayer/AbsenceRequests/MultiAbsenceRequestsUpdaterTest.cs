@@ -14,14 +14,12 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -50,7 +48,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeBudgetGroupRepository BudgetGroupRepository;
 		public FakeBudgetDayRepository BudgetDayRepository;
-		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -1199,70 +1196,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.UpdateAbsenceRequest(new List<Guid> { personRequestTwo.Id.GetValueOrDefault() });
 			personRequestTwo.IsApproved.Should().Be(false);
-		}
-
-		[Test]
-		public void ShouldDenyAbsenceRequestWhenOnlyOneAgentIsScheduled()
-		{
-			Now.Is(new DateTime(2017, 12, 1, 6, 00, 00, DateTimeKind.Utc));
-
-			var period = new DateTimePeriod(2017, 12, 4, 8, 2017, 12, 4, 9);
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var activity = ActivityRepository.Has("phone");
-			var skill = SkillRepository.Has("skillA", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			var agent = PersonRepository.Has(skill);
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
-			{
-				Absence = absence,
-				PersonAccountValidator = new AbsenceRequestNoneValidator(),
-				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2017, 1, 1, 2017, 12, 31),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2017, 1, 1, 2017, 12, 31),
-				AbsenceRequestProcess = new GrantAbsenceRequest()
-			});
-			agent.WorkflowControlSet = workflowControlSet;
-
-			var scenario = ScenarioRepository.Has("scenario");
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
-
-			var skillCombinationResources = new List<SkillCombinationResource>();
-			var resolution = skill.DefaultResolution;
-			for (var dateTime = period.StartDateTime;
-				dateTime.CompareTo(period.EndDateTime) <= 0;
-				dateTime = dateTime.AddMinutes(resolution))
-			{
-				skillCombinationResources.Add(createSkillCombinationResource(new DateTimePeriod(dateTime, dateTime.AddMinutes(resolution)), new[] { skill.Id.GetValueOrDefault() }, 1));
-			}
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), skillCombinationResources.ToArray());
-
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 1));
-
-			var personRequest = createPersonRequest(agent, absence, period);
-			Target.UpdateAbsenceRequest(new List<Guid>{personRequest.Id.Value});
-
-			personRequest.IsDenied.Should().Be(true);
-			personRequest.DenyReason.Should().Be("Insufficient staffing for : 12/4/2017 8:00:00 AM - 12/4/2017 9:00:00 AM");
-
-		}
-		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
-		{
-			return new SkillCombinationResource
-			{
-				StartDateTime = period1.StartDateTime,
-				EndDateTime = period1.EndDateTime,
-				Resource = resource,
-				SkillCombination = skillCombinations
-			};
-		}
-		private PersonRequest createPersonRequest(Person agent, IAbsence absence, DateTimePeriod period)
-		{
-			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
-			personRequest.Pending();
-			PersonRequestRepository.Add(personRequest);
-			return personRequest;
 		}
 
 		private static IBudgetGroup getBudgetGroup()

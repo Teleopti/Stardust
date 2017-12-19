@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using System.Globalization;
-using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
@@ -122,7 +121,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 
 				var shiftPeriodList = new List<DateTimePeriod>();
-				var personAssignmentDictionary = new Dictionary<DateOnly, IPersonAssignment>();
 				foreach (var day in scheduleDays)
 				{
 					var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
@@ -134,7 +132,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 
 					shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime, projection.OriginalProjectionPeriod.Value.EndDateTime));
-					personAssignmentDictionary.Add(day.DateOnlyAsPeriod.DateOnly, day.PersonAssignment());
 				}
 
 				var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
@@ -147,7 +144,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						skillStaffingIntervalsToValidate.AddRange(skillStaffingIntervals.Where(x => x.StartDateTime >= projectionPeriod.StartDateTime && x.StartDateTime < projectionPeriod.EndDateTime));
 					}
-					substractRequestAgentsSchedule(skillStaffingIntervalsToValidate, personAssignmentDictionary, allSkills);
 					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest)personRequest.Request, skillStaffingIntervalsToValidate);
 					if (validatedRequest.IsValid)
 					{
@@ -209,43 +205,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return !command.ErrorMessages.Any();
 		}
 
-		private void substractRequestAgentsSchedule(List<SkillStaffingInterval> skillStaffingIntervalsToValidate
-			, IDictionary<DateOnly, IPersonAssignment> personAssignmentDictionary
-			, IEnumerable<ISkill> allSkills)
+		private static IDisposable getContext(List<SkillCombinationResource> combinationResources, List<ISkill> skills, bool useAllSkills)
 		{
-			var skillDictionary = allSkills.ToDictionary(a => a.Id.Value);
-			foreach (var skillStaffingInterval in skillStaffingIntervalsToValidate)
-			{
-				var personAssignment = personAssignmentDictionary[new DateOnly(skillStaffingInterval.StartDateTime)];
-				var skillScheduled = isSkillScheduled(personAssignment, new DateTimePeriod(skillStaffingInterval.StartDateTime, skillStaffingInterval.EndDateTime),
-					skillDictionary[skillStaffingInterval.SkillId]);
-				if (!skillScheduled) return;
-				// we can't calculate current user's schedule for a skill in a specific period
-				// so we just substract 1 which means user's schedule is removed(#44607)
-				skillStaffingInterval.StaffingLevel -= 1;
-			}
-		}
-
-		private static bool isSkillScheduled(IPersonAssignment personAssignment, DateTimePeriod period, ISkill skill)
-		{
-			if (isPersonAssignmentNullOrEmpty(personAssignment))
-				return false;
-
-			var mainActivities = personAssignment.MainActivities();
-			var overtimeActivities = personAssignment.OvertimeActivities();
-
-			var isSkillScheduled =
-				mainActivities
-					.Any(m => m.Payload.RequiresSkill && m.Payload == skill.Activity && m.Period.Intersect(period))
-				|| overtimeActivities
-					.Any(m => m.Payload.RequiresSkill && m.Payload == skill.Activity && m.Period.Intersect(period));
-
-			return isSkillScheduled;
-		}
-
-		private static bool isPersonAssignmentNullOrEmpty(IPersonAssignment personAssignment)
-		{
-			return personAssignment == null || personAssignment.ShiftLayers.IsEmpty();
+			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataContainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
 		}
 	}
 
