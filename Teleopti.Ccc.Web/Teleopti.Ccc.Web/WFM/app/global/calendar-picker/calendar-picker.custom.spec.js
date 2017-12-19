@@ -4,6 +4,7 @@ describe('CalendarPickerControllerCustomFeature', function () {
         $compile,
         $rootScope,
         $timeout,
+        currentUserInfo = new FakeCurrentUserInfo(),
         attachedElements = [],
         monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
@@ -14,6 +15,11 @@ describe('CalendarPickerControllerCustomFeature', function () {
 
     beforeEach(function () {
         module('wfm.templates', 'wfm.calendarPicker', 'externalModules');
+        module(function ($provide) {
+            $provide.service('CurrentUserInfo', function () {
+                return currentUserInfo;
+            });
+        });
         inject(function (_$controller_, _$compile_, _$rootScope_, _$timeout_) {
             $controller = _$controller_;
             $compile = _$compile_;
@@ -53,6 +59,14 @@ describe('CalendarPickerControllerCustomFeature', function () {
         attachedElements.push(el);
 
         return el;
+    }
+
+    function FakeCurrentUserInfo() {
+        this.CurrentUserInfo = function () {
+            return {
+                DateFormatLocale: "en-US"
+            };
+        };
     }
 
     it('should be able to pass custom validate function', function () {

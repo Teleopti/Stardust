@@ -302,26 +302,26 @@ wfm-calendar-picker-body > .date-info-calendar-wrapper{
 		background-color:$blue-100 !important;
 	}
 
-	.uib-datepicker {
+	.uib-daypicker:focus, *:focus{
+		outline:none!important;
+	}
+
+	button.btn-default {
+		border:none;
+		box-shadow:none;
+		background-color: $white;
+		color: $text-color-standard;
+	}
+
+	tbody button.btn-info.active {
+		background-color: $blue-500 !important;
+		color: $white !important;
+	}
+	
+	.uib-datepicker{
 		min-height: 248px;
 		max-width: 260px;
 		overflow: hidden;
-
-		button.btn-default {
-			border:none;
-			box-shadow:none;
-			background-color: $white;
-			color: $text-color-standard;
-		}
-
-		tbody button.btn-info.active {
-			background-color: $blue-500 !important;
-			color: $white !important;
-		}
-
-		.uib-daypicker:focus{
-			outline:none!important;
-		}
 
 		.uib-monthpicker, .uib-yearpicker {
 			table {

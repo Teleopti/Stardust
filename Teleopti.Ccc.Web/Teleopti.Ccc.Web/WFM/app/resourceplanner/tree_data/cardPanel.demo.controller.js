@@ -63,7 +63,5 @@
             startDate: today,
             endDate: fourDayLater
         }
-
-        console.log(vm.data6)
     }
 })();

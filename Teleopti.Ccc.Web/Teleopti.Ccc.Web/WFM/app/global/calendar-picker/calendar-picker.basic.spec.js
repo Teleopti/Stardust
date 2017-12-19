@@ -3,6 +3,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
         $controller,
         $compile,
         $rootScope,
+        currentUserInfo = new FakeCurrentUserInfo(),
         attachedElements = [],
         monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
@@ -14,6 +15,12 @@ describe('CalendarPickerControllerBasicFeature', function () {
 
     beforeEach(function () {
         module('wfm.templates', 'wfm.calendarPicker', 'externalModules');
+        module(function ($provide) {
+            $provide.service('CurrentUserInfo', function () {
+                return currentUserInfo;
+            });
+        });
+
         inject(function (_$controller_, _$compile_, _$rootScope_) {
             $controller = _$controller_;
             $compile = _$compile_;
@@ -53,6 +60,14 @@ describe('CalendarPickerControllerBasicFeature', function () {
         attachedElements.push(el);
 
         return el;
+    }
+
+    function FakeCurrentUserInfo() {
+        this.CurrentUserInfo = function () {
+            return {
+                DateFormatLocale: "en-US"
+            };
+        };
     }
 
     it('should be able to prepare data form other controller to component while picker was init', function () {

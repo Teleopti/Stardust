@@ -4,7 +4,14 @@
     angular
         .module('wfm.calendarPicker')
         .component('wfmCalendarPicker', {
-            templateUrl: 'app/global/calendar-picker/calendar-picker.template.tpl.html',
+            templateUrl: function (CurrentUserInfo) {
+                var dateFormat = CurrentUserInfo.CurrentUserInfo().DateFormatLocale == 'fa-IR' ? 'jalaali' : 'gregorian';
+                var templates = {
+                    'jalaali': 'app/global/calendar-picker/calendar-picker.jalaali.template.tpl.html',
+                    'gregorian': 'app/global/calendar-picker/calendar-picker.gregorian.template.tpl.html'
+                }
+                return templates[dateFormat];
+            },
             require: {
                 ngModel: 'ngModel'
             },
@@ -20,9 +27,9 @@
         })
         .controller('PpDateRangeController', PpDateRangeController);
 
-    PpDateRangeController.$inject = ['$scope', '$element', '$attrs'];
+    PpDateRangeController.$inject = ['$scope', '$element', '$attrs', '$timeout'];
 
-    function PpDateRangeController($scope, $element, $attrs) {
+    function PpDateRangeController($scope, $element, $attrs, $timeout) {
         var vm = this;
 
         vm.resetStartDate = resetStartDate;
@@ -101,7 +108,7 @@
         }
 
         function onChangeForSingleDatePicker() {
-            return vm.pickDate = !vm.ngModel.$modelValue ? moment() : vm.ngModel.$modelValue;
+            return vm.pickDate = !vm.ngModel.$modelValue ? new Date() : vm.ngModel.$modelValue;
         }
 
         function displayCalenderViewForDisableView(oldVal, newVal) {
