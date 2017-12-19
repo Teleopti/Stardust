@@ -1,5 +1,4 @@
-﻿/// <reference path="C:\Data\Main2\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Content/amplify/amplify.min.js" />
-var requireconfiguration = {
+﻿var requireconfiguration = {
 	paths: {
 		jquery: '../../../../Content/jquery/jquery-1.12.4',
 		jqueryui: '../../../../Content/jqueryui/jquery-ui-1.10.2.custom.min',
@@ -20,14 +19,8 @@ var requireconfiguration = {
 		select2: '../../../../Content/select2/select2',
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
 		buster: '../../../../Content/busterjs/buster-test',
-		amplify: '../../../../Content/amplify/amplify.min',
 		momentTimezoneData: '../../../../Content/moment-timezone/moment-timezone-with-data',
-		xregexp: '../../../../Content/xregexp/xregexp-all-min',
-
-		//depends on eve, hardcoded in  justgage.20130410.js
-		justgage: '../../../../Content/justgage/justgage.20130410',
-		raphael: '../../../../Content/justgage/raphael-min',
-
+		
 		knockoutBindings: 'knockout.bindings',
 
 		noext: '../../../../Content/require/noext',
@@ -60,13 +53,6 @@ var requireconfiguration = {
 		'momentLanguages': ['moment'],
 		'momentDatepicker': ['momentLanguages', 'jquery'],
 		'momentDatepickerKo': ['momentDatepicker'],
-		'swipeListener': ['jquery'],
-		'justgage': {
-			exports: 'JustGage',
-			deps: ['require/raphaelloader']
-		},
-		'amplify': {
-			exports: 'amplify'
-		}
+		'swipeListener': ['jquery']
 	}
 };

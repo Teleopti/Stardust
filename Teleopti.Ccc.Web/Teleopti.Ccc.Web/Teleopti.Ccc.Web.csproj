@@ -2034,7 +2034,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\notifications.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.started.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-current.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-display.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.trackingmessages.js" />
@@ -2176,7 +2175,6 @@
     <Content Include="Areas\Reporting\images\right_all_light.gif" />
     <Content Include="Areas\Reporting\images\right_light.gif" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\xregexp\xregexp-all-min.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\business_unit.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
@@ -2443,7 +2441,6 @@
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.js" />
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.css" />
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.js" />
-    <Content Include="Content\amplify\amplify.min.js" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker.js" />
@@ -2514,9 +2511,6 @@
     <Content Include="Areas\MyTime\Content\Images\view_top_wide_bg.png" />
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
-    <Content Include="Content\justgage\justgage.20130410.js" />
-    <Content Include="Content\justgage\justgage.1.0.1.min.js" />
-    <Content Include="Content\justgage\raphael-min.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko-amd.js" />
     <Content Include="Content\moment-datepicker\moment.i18n\all.min.js" />
     <Content Include="Content\moment-datepicker\moment.i18n\bg.js" />
