@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 			catch (Exception e)
 			{
-				_logger.Write(string.Format("An error occurred: {0}", e), "ERROR");
+				_logger.Write(string.Format("An error occurred: {0}\n{1}", e, e.StackTrace), "ERROR");
 				return -1;
 			}
 			finally

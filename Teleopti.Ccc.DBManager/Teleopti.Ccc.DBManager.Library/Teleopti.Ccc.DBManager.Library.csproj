@@ -79,6 +79,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -118,9 +119,7 @@
     <Compile Include="ScriptPathExtensions.cs" />
     <Compile Include="ServerVersionHelper.cs" />
     <Compile Include="SignalRSqlBackplaneSchemaCreator.cs" />
-    <Compile Include="SqlAzureTransientErrorDetectionStrategyWithTimeouts.cs" />
-    <Compile Include="SqlTransientErrorChecker.cs" />
-    <Compile Include="SqlTransientErrorDetectionStrategyWithTimeouts.cs" />
+    <Compile Include="SqlDatabaseTransientErrorDetectionStrategyEx.cs" />
     <Compile Include="SqlVersion.cs" />
     <Compile Include="Timeouts.cs" />
   </ItemGroup>
