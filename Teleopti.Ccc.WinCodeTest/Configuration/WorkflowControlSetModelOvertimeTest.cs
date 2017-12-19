@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
@@ -136,6 +137,16 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			Assert.AreEqual(true, rollingPeriod.EnableWorkRuleValidation);
 			Assert.AreEqual(OvertimeValidationHandleType.Pending, rollingPeriod.WorkRuleValidationHandleType.WorkRuleValidationHandleType);
+		}
+
+		[Test]
+		public void VerifyCanGetAndSetOvertimeRequestMaximumSettingFromModel()
+		{
+			_target.DomainEntity.OvertimeRequestMaximumTime = TimeSpan.FromHours(10);
+			_target.DomainEntity.OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny;
+
+			Assert.AreEqual(_target.OvertimeRequestMaximumTime, TimeSpan.FromHours(10));
+			Assert.AreEqual(_target.OvertimeRequestValidationHandleOptionView.WorkRuleValidationHandleType, OvertimeValidationHandleType.Deny);
 		}
 	}
 }

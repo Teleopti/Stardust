@@ -4,8 +4,10 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
+using HandleOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopti.Ccc.Domain.WorkflowControl.OvertimeValidationHandleType, Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings.OvertimeRequestValidationHandleOptionView>;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
@@ -35,6 +37,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		IEnumerable<IAbsence> AllowedAbsencesForReport { get; }
 		IEnumerable<ISkill> MustMatchSkills { get; }
 		bool AutoGrantShiftTradeRequest { get; set; }
+		TimeSpan? OvertimeRequestMaximumTime { get; set; }
+		OvertimeRequestValidationHandleOptionView OvertimeRequestValidationHandleOptionView { get; set; }
 
 		void AddAllowedPreferenceDayOff(IDayOffTemplate dayOff);
 		void RemoveAllowedPreferenceDayOff(IDayOffTemplate dayOff);
@@ -70,6 +74,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		private static IList<OvertimeRequestPeriodTypeModel> _defaultOvertimeRequestPeriodAdapters;
 		private readonly List<AbsenceRequestPeriodModel> _absenceRequestPeriodModels = new List<AbsenceRequestPeriodModel>();
 		private readonly List<OvertimeRequestPeriodModel> _overtimeRequestPeriodModels = new List<OvertimeRequestPeriodModel>();
+		internal static readonly HandleOptionViewDictionary
+			OvertimeRequestWorkRuleValidationHandleOptionViews
+				= new HandleOptionViewDictionary
+				{
+					{
+						OvertimeValidationHandleType.Pending,
+						new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Pending,
+							Resources.SendToAdministrator)
+					},
+					{
+						OvertimeValidationHandleType.Deny,
+						new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny, Resources.Deny)
+					}
+				};
 
 		public WorkflowControlSetModel(IWorkflowControlSet domainEntity)
 			: this(domainEntity, domainEntity.EntityClone()) { }
@@ -259,6 +277,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public IEnumerable<ISkill> MustMatchSkills => DomainEntity.MustMatchSkills;
 
+		public OvertimeRequestValidationHandleOptionView OvertimeRequestValidationHandleOptionView
+		{
+			get => DomainEntity.OvertimeRequestMaximumTimeHandleType != null ? OvertimeRequestWorkRuleValidationHandleOptionViews[DomainEntity.OvertimeRequestMaximumTimeHandleType.Value] : null;
+			set
+			{
+				if (DomainEntity.OvertimeRequestMaximumTimeHandleType == value?.WorkRuleValidationHandleType) return;
+				DomainEntity.OvertimeRequestMaximumTimeHandleType = value?.WorkRuleValidationHandleType;
+				IsDirty = true;
+			}
+		}
+
 		public virtual void AddAllowedPreferenceDayOff(IDayOffTemplate dayOff)
 		{
 			DomainEntity.AddAllowedPreferenceDayOff(dayOff);
@@ -394,6 +423,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				if (DomainEntity.AutoGrantShiftTradeRequest == value) return;
 				DomainEntity.AutoGrantShiftTradeRequest = value;
+				IsDirty = true;
+			}
+		}
+
+		public TimeSpan? OvertimeRequestMaximumTime
+		{
+			get => DomainEntity.OvertimeRequestMaximumTime;
+			set
+			{
+				if (DomainEntity.OvertimeRequestMaximumTime == value) return;
+				DomainEntity.OvertimeRequestMaximumTime = value;
 				IsDirty = true;
 			}
 		}

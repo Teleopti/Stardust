@@ -13,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -90,6 +91,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetAbsenceProbability(_selectedModel.AbsenceProbabilityEnabled);
 			_view.SetOvertimeProbability(_selectedModel.IsOvertimeProbabilityEnabled);
 			_view.SetAutoGrantOvertimeRequest(_selectedModel.AutoGrantOvertimeRequest);
+			_view.SetOverTimeRequestMaximumTimeHandleType(_selectedModel.OvertimeRequestValidationHandleOptionView);
+			_view.SetOverTimeRequestMaximumTime(_selectedModel.OvertimeRequestMaximumTime);
 		}
 
 		public IWorkflowControlSetModel SelectedModel
@@ -709,5 +712,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			_selectedModel.AutoGrantOvertimeRequest = autoGrantOvertimeRequest;
 		}
+
+		public void SetOvertimeRequestMaximumTime(TimeSpan overtimeRequestMaximumTime)
+		{
+			_selectedModel.OvertimeRequestMaximumTime = overtimeRequestMaximumTime;
+		}
+
+		public void SetOvertimeRequestMaximumTimeHandleType(
+			OvertimeRequestValidationHandleOptionView overtimeRequestValidationHandleOption)
+		{
+			if (_selectedModel != null)
+			{
+				_selectedModel.OvertimeRequestValidationHandleOptionView = overtimeRequestValidationHandleOption;
+			}
+		}
+
 	}
 }

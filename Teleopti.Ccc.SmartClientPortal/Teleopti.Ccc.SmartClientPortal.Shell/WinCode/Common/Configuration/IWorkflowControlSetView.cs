@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
@@ -206,5 +208,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		void RefreshOvertimeOpenPeriodsGrid();
 
 		void SetOvertimeOpenPeriodsGridRowCount(int rowCount);
+		void SetOverTimeRequestMaximumTimeHandleType(OvertimeRequestValidationHandleOptionView overtimeRequestValidationHandleOptionView);
+		void SetOverTimeRequestMaximumTime(TimeSpan? selectedModelOvertimeRequestMaximumTime);
 	}
 }

@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using HandleOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopti.Ccc.Domain.WorkflowControl.OvertimeValidationHandleType, Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings.OvertimeRequestWorkRuleValidationHandleOptionView>;
+using HandleOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopti.Ccc.Domain.WorkflowControl.OvertimeValidationHandleType, Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings.OvertimeRequestValidationHandleOptionView>;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public WorkflowControlSetModel Owner { get; set; }
 		private IOvertimeRequestOpenPeriod _overtimeRequestOpenPeriod;
 		private OvertimeRequestPeriodTypeModel _periodType;
-		private OvertimeRequestWorkRuleValidationHandleOptionView _workRuleValidationHandleType;
+		private OvertimeRequestValidationHandleOptionView _workRuleValidationHandleType;
 
 		internal static readonly HandleOptionViewDictionary
 			OvertimeRequestWorkRuleValidationHandleOptionViews
@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				{
 					{
 						OvertimeValidationHandleType.Pending,
-						new OvertimeRequestWorkRuleValidationHandleOptionView(OvertimeValidationHandleType.Pending,
+						new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Pending,
 							Resources.SendToAdministrator)
 					},
 					{
 						OvertimeValidationHandleType.Deny,
-						new OvertimeRequestWorkRuleValidationHandleOptionView(OvertimeValidationHandleType.Deny, Resources.Deny)
+						new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny, Resources.Deny)
 					}
 				};
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			}
 		}
 
-		public OvertimeRequestWorkRuleValidationHandleOptionView WorkRuleValidationHandleType
+		public OvertimeRequestValidationHandleOptionView WorkRuleValidationHandleType
 		{
 			get => _workRuleValidationHandleType;
 			set

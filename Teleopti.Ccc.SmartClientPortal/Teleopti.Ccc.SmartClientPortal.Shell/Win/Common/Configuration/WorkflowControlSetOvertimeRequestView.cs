@@ -22,6 +22,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private static readonly int _enableWorkRuleColumnIndex = 3;
 		private static readonly int _overtimeRequestOpenPeriodDataStartRowIndex = 2;
 
+		internal static readonly List<OvertimeRequestValidationHandleOptionView> overtimeRequestValidationHandleOptionList =
+			new List<OvertimeRequestValidationHandleOptionView>
+			{
+				new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Pending,
+					Resources.SendToAdministrator),
+				new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny, Resources.Deny)
+			};
+
 		public void SetOvertimeOpenPeriodsGridRowCount(int rowCount)
 		{
 			gridControlOvertimeRequestOpenPeriods.RowCount = 0;
@@ -45,6 +53,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged -= checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged;
 			checkBoxAdvAutoGrantOvertimeRequest.Checked = autoGrantOvertimeRequest;
 			checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged += checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged;
+		}
+
+		public void SetOverTimeRequestMaximumTimeHandleType(OvertimeRequestValidationHandleOptionView overtimeRequestValidationHandleOptionView)
+		{
+			comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem = overtimeRequestValidationHandleOptionView;
+		}
+
+		public void SetOverTimeRequestMaximumTime(TimeSpan? selectedModelOvertimeRequestMaximumTime)
+		{
+			if (selectedModelOvertimeRequestMaximumTime.HasValue && selectedModelOvertimeRequestMaximumTime.Value != TimeSpan.Zero) { 
+				timeSpanTextBoxOvertimeRequestMaximumTime.SetInitialResolution(selectedModelOvertimeRequestMaximumTime.Value);
+				comboBoxOvertimeRequestMaximumTimeHandleType.Enabled = true;
+			}
 		}
 
 		private void setOvertimeRequestVisibility()
@@ -72,6 +93,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				tableLayoutPanelOvertimeMaximumSetting.Visible = false;
 				tableLayoutPanelETOTRequest.RowStyles[tableLayoutPanelETOTRequest.Controls.IndexOf(tableLayoutPanelOvertimeMaximumSetting)].Height = 0;
 			}
+		}
+
+		private void initOvertimeRequestMaximumTimeHandleType()
+		{
+			comboBoxOvertimeRequestMaximumTimeHandleType.DataSource = overtimeRequestValidationHandleOptionList;
+			comboBoxOvertimeRequestMaximumTimeHandleType.DisplayMember = "Description";
+		}
+
+		private void timeSpanTextBoxOvertimeRequestMaximumTime_Leave(object sender, System.EventArgs e)
+		{
+			comboBoxOvertimeRequestMaximumTimeHandleType.Enabled = timeSpanTextBoxOvertimeRequestMaximumTime.Value != TimeSpan.Zero;
+			if (!comboBoxOvertimeRequestMaximumTimeHandleType.Enabled)
+				comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem = null;
+			_presenter.SetOvertimeRequestMaximumTime(timeSpanTextBoxOvertimeRequestMaximumTime.Value);
+		}
+
+		private void ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged(object sender, System.EventArgs e)
+		{
+			_presenter.SetOvertimeRequestMaximumTimeHandleType(
+				(OvertimeRequestValidationHandleOptionView) comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -109,8 +150,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638))
 			{
 				columnList.Add(new SFGridCheckBoxColumn<OvertimeRequestPeriodModel>("EnableWorkRuleValidation", Resources.Enabled, Resources.ContractWorkRuleValidation));
-				columnList.Add(new SFGridDropDownColumn<OvertimeRequestPeriodModel, OvertimeRequestWorkRuleValidationHandleOptionView>("WorkRuleValidationHandleType",
-					Resources.WhenValidationFails, Resources.ContractWorkRuleValidation, OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description", typeof(OvertimeRequestWorkRuleValidationHandleOptionView)));
+				columnList.Add(new SFGridDropDownColumn<OvertimeRequestPeriodModel, OvertimeRequestValidationHandleOptionView>("WorkRuleValidationHandleType",
+					Resources.WhenValidationFails, Resources.ContractWorkRuleValidation, OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description", typeof(OvertimeRequestValidationHandleOptionView)));
 			}
 
 			
