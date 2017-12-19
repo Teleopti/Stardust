@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				Date = new DateOnly(agentDateTime),
 				MultiplicatorDefinitionSetId = overtimeRequest.MultiplicatorDefinitionSet.Id.GetValueOrDefault(),
 				Period = overtimeRequest.Period,
-				PersonId = overtimeRequest.Person.Id.GetValueOrDefault()
+				Person = overtimeRequest.Person
 			});
 		}
 

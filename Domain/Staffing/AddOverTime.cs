@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 											   Date = new DateOnly(overTimeModel.StartDateTime),
 											   MultiplicatorDefinitionSetId = multiplicationDefinitionId,
 											   Period = new DateTimePeriod(overTimeModel.StartDateTime.Utc(), overTimeModel.EndDateTime.Utc()),
-											   PersonId = overTimeModel.PersonId
+											   Person = _personRepository.Get(overTimeModel.PersonId)
 										   });
 				
 			}

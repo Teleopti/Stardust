@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				
 			var command = new AddPersonalActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = _date,
 				PersonalActivityId = activity.Id.GetValueOrDefault(),
 				StartTime = _startTime,
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				.Single(e => e.ActivityId == command.PersonalActivityId);
 
 			theEvent.Date.Should().Be.EqualTo(new DateTime(2016, 05, 17));
-			theEvent.PersonId.Should().Be.EqualTo(command.PersonId);
+			theEvent.PersonId.Should().Be.EqualTo(command.Person.Id.GetValueOrDefault());
 			theEvent.StartDateTime.Should().Be.EqualTo(command.StartTime);
 			theEvent.EndDateTime.Should().Be.EqualTo(command.EndTime);
 			theEvent.ScenarioId.Should().Be.EqualTo(scenario.Id.GetValueOrDefault());
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddPersonalActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = _date,
 				PersonalActivityId = activity.Id.GetValueOrDefault(),
 				StartTime = _startTime,
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddPersonalActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = _date,
 				PersonalActivityId = activity.Id.GetValueOrDefault(),
 				StartTime = new DateTime(2016, 05, 17, 07, 0, 0, DateTimeKind.Utc),
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			var command = new AddPersonalActivityCommand
 			{
-				PersonId = _personRepository.Single().Id.Value,
+				Person = _personRepository.Single(),
 				Date = _date,
 				PersonalActivityId = _personalActivity.Id.Value,
 				StartTime = _startTime,
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddPersonalActivityCommand
 			{
-				PersonId = _personRepository.Single().Id.Value,
+				Person = _personRepository.Single(),
 				Date = _date,
 				PersonalActivityId = _personalActivity.Id.Value,
 				StartTime = _startTime,
@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddPersonalActivityCommand
 			{
-				PersonId = _personRepository.Single().Id.Value,
+				Person = _personRepository.Single(),
 				Date = _date,
 				PersonalActivityId = _personalActivity.Id.Value,
 				StartTime = new DateTime(2016, 05, 17, 07, 0 , 0, DateTimeKind.Utc),

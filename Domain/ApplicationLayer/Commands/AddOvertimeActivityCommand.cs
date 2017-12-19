@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class AddOvertimeActivityCommand:ITrackableCommand, IErrorAttachedCommand
 	{
-		public Guid PersonId { get; set; }
+		public IPerson Person { get; set; }
 		public DateOnly Date { get; set; }
 		public DateTimePeriod Period { get; set; }
 		public Guid ActivityId { get; set; }

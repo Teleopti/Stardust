@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class AddPersonalActivityCommand : IErrorAttachedCommand, ITrackableCommand
 	{
-		public Guid PersonId { get; set; }
+		public IPerson Person { get; set; }
 		public DateOnly Date { get; set; }
 		public Guid PersonalActivityId { get; set; }
 		public DateTime StartTime { get; set; }

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(AddOvertimeActivityCommand command)
 		{
 			var activity = _activityForId.Load(command.ActivityId);
-			var person = _personForId.Load(command.PersonId);
+			var person = command.Person;
 			var scenario = _currentScenario.Current();
 			var multiplicatorDefinitionSet = _multiplicatorDefinitionSetForId.Load(command.MultiplicatorDefinitionSetId);
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(AddOvertimeActivityCommand command)
 		{
 			var activity = _activityForId.Load(command.ActivityId);
-			var person = _personForId.Load(command.PersonId);			
+			var person = command.Person;			
 			var scenario = _currentScenario.Current();
 			var multiplicatorDefinitionSet = _multiplicatorDefinitionSetForId.Load(command.MultiplicatorDefinitionSetId);
 

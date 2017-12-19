@@ -38,21 +38,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(AddPersonalActivityCommand command)
 		{
 			var activity = _activityForId.Load(command.PersonalActivityId);
-			var person = _personForId.Load(command.PersonId);
+			var person = command.Person;
 			var scenario = _currentScenario.Current();
-			
+
 			var loadPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime.AddDays(-1), _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
 
 			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), loadPeriod, new[] { person }, false);
-			
 			var scheduleRange = dic[person];
 			
-			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
-			var schedulePreviousDay = scheduleRange.ScheduledDay(command.Date.AddDays(-1));
 			command.ErrorMessages = new List<string>();
 
+			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			var personAssignment = scheduleDay.PersonAssignment();
+			if (personAssignment == null)
+			{
+				command.ErrorMessages.Add(Resources.FailedMessageForAddingActivity);
+				return;
+			}
+
+			var schedulePreviousDay = scheduleRange.ScheduledDay(command.Date.AddDays(-1));
 			var personAssignmentOfPreviousDay = schedulePreviousDay.PersonAssignment();
 			if (personAssignmentOfPreviousDay != null && personAssignmentOfPreviousDay.Period.EndDateTime >= period.StartDateTime)
 			{
@@ -60,16 +65,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
-			if (personAssignment == null)
-			{
-				command.ErrorMessages.Add(Resources.FailedMessageForAddingActivity);
-			}
-			else
-			{
-				scheduleDay.CreateAndAddPersonalActivity(activity, period, false);
-				dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
-				_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
-			}
+			scheduleDay.CreateAndAddPersonalActivity(activity, period, false);
+			dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
+			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
+
 		}
 	}
 
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(AddPersonalActivityCommand command)
 		{
 			var activity = _activityForId.Load(command.PersonalActivityId);
-			var person = _personForId.Load(command.PersonId);
+			var person = command.Person;
 			var scenario = _currentScenario.Current();
 			var personAssignment = _personAssignmentRepository.LoadAggregate(new PersonAssignmentKey
 			{

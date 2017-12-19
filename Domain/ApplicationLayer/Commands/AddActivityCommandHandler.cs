@@ -57,13 +57,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var periodForPerson = command.Date.ToDateOnlyPeriod().Inflate(1).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), periodForPerson, new[] { person }, false);
 			var scheduleRange = dic[person];
-			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
-			var personAssignment = scheduleDay.PersonAssignment();
 			
 			command.ErrorMessages = new List<string>();
 
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, timeZone), TimeZoneHelper.ConvertToUtc(command.EndTime, timeZone));
-
 			var previousScheduleDay = scheduleRange.ScheduledDay(command.Date.AddDays(-1));
 			var personAssignmentOfPreviousDay = previousScheduleDay.PersonAssignment();
 			
@@ -72,7 +69,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				command.ErrorMessages.Add(Resources.ActivityConflictsWithOvernightShiftsFromPreviousDay);
 				return;
 			}
-
+			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
+			var personAssignment = scheduleDay.PersonAssignment();
 			if (personAssignment == null)
 			{
 				var shiftCategories = _shiftCategoryRepository.FindAll().ToList();

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddOvertimeActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = activity.Id.GetValueOrDefault(),
 				Period = new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 12),
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddOvertimeActivityCommand
 			{
-				PersonId = person.Id.GetValueOrDefault(),
+				Person = person,
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = activity.Id.GetValueOrDefault(),
 				Period = new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 12),
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				.Single(e => e.ActivityId == command.ActivityId);
 		
 			addOvertimeEvent.Date.Should().Be.EqualTo(new DateTime(2013, 11, 14));
-			addOvertimeEvent.PersonId.Should().Be.EqualTo(command.PersonId);
+			addOvertimeEvent.PersonId.Should().Be.EqualTo(command.Person.Id.GetValueOrDefault());
 			addOvertimeEvent.StartDateTime.Should().Be.EqualTo(command.Period.StartDateTime);
 			addOvertimeEvent.EndDateTime.Should().Be.EqualTo(command.Period.EndDateTime);
 			addOvertimeEvent.ScenarioId.Should().Be.EqualTo(scenario.Id.GetValueOrDefault());
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddOvertimeActivityCommand
 			{
-				PersonId = person.Id.Value,
+				Person = person,
 				Date = new DateOnly(2013,11,14),
 				ActivityId = activity.Id.Value,
 				Period = new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 12),
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddOvertimeActivityCommand
 			{
-				PersonId = person.Id.Value,
+				Person = person,
 				Date = new DateOnly(2013,11,14),
 				ActivityId = activity.Id.Value,
 				Period = new DateTimePeriod(2013,11,14,8,2013,11,14,12),
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				.Single(e => e.ActivityId == command.ActivityId);
 
 			addOvertimeEvent.Date.Should().Be.EqualTo(new DateTime(2013, 11, 14));
-			addOvertimeEvent.PersonId.Should().Be.EqualTo(command.PersonId);
+			addOvertimeEvent.PersonId.Should().Be.EqualTo(command.Person.Id.GetValueOrDefault());
 			addOvertimeEvent.StartDateTime.Should().Be.EqualTo(command.Period.StartDateTime);
 			addOvertimeEvent.EndDateTime.Should().Be.EqualTo(command.Period.EndDateTime);
 			addOvertimeEvent.ScenarioId.Should().Be.EqualTo(scenario.Id.Value);
