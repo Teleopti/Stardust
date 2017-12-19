@@ -61,7 +61,6 @@
 		function fetchAvailableActivities() {
 			var deferred = $q.defer();
 			if (activities.length > 0) {
-				console.log(activities);
 				deferred.resolve(activities);
 				return deferred.promise;
 			}
