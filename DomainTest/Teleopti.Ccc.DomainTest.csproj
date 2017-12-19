@@ -196,7 +196,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentSummaryTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\WorkbookHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceInfoHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceInfoProcessorTest.cs" />
+    <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformanceInfoProcessorTest.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceInfoServiceTest.cs" />
     <Compile Include="ApplicationLayer\ImportJobArtifactValidatorTest.cs" />
     <Compile Include="ApplicationLayer\MoveShiftCommandHandlerTest.cs" />
@@ -282,7 +282,6 @@
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
-    <Compile Include="ImportExternalPerformance\ExternalPerformanceInfoFileProcessorTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePollerTest.cs" />
