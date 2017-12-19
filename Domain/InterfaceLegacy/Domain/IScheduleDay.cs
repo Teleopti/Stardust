@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <summary>
 		/// Creates and adds overtime.
 		/// </summary>
-		void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet, bool muteEvent = false);
+		void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null);
 
 		/// <summary>
 		/// Adds or replaces the mainShift in the PersonAssignment returned by AssignmenHighZOrder.

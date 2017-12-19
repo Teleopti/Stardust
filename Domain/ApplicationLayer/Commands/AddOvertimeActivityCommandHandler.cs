@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new []{person}, new ScheduleDictionaryLoadOptions(false, false), command.Period, new[] {person}, false);
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
-			scheduleDay.CreateAndAddOvertime(activity,command.Period,multiplicatorDefinitionSet,false);
+			scheduleDay.CreateAndAddOvertime(activity,command.Period,multiplicatorDefinitionSet,false, command.TrackedCommandInfo);
 			dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange) scheduleRange);
 		}

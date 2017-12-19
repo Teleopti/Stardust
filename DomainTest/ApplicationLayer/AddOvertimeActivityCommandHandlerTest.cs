@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				MultiplicatorDefinitionSetId = mds.Id.GetValueOrDefault(),
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
-					OperatedPersonId = new Guid(),
-					TrackId = new Guid()
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
 				}
 			};
 			Target.Handle(command);
