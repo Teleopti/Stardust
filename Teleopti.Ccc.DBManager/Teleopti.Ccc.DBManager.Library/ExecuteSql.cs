@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			_retryPolicy = new RetryPolicy<SqlTransientErrorDetectionStrategyWithTimeouts>(retryStrategy);
 			_retryPolicy.Retrying += (sender, args) =>
 			{
-				var msg = string.Format("Retrying - Count: {0}, Delay: {1}, Exception: {2}", args.CurrentRetryCount, args.Delay, args.LastException);
+				var msg = $"Retrying - Count: {args.CurrentRetryCount}, Delay: {args.Delay}, Exception: {args.LastException}";
 				_upgradeLog.Write(msg, "WARN");
 			};
 		}
