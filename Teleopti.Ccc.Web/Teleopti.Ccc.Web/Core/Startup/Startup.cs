@@ -77,8 +77,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					WSFederationAuthenticationModule_SignInError;
 				FederatedAuthentication.FederationConfiguration.IdentityConfiguration.SecurityTokenHandlers.AddOrReplace(
 					new MachineKeySessionSecurityTokenHandler());
-
-				application.UseAutofacMiddleware(container);
 			}
 
 			catch (Exception ex)
