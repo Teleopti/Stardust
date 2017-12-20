@@ -2389,7 +2389,6 @@
     <Compile Include="GroupPageCreator\Group.cs" />
     <Compile Include="GroupPageCreator\GroupCreator.cs" />
     <Compile Include="GroupPageCreator\GroupPageOptions.cs" />
-    <Compile Include="GroupPageCreator\IGroupingsCreator.cs" />
     <Compile Include="GroupPageCreator\PersonFinderService.cs" />
     <Compile Include="GroupPageCreator\PersonGroupPage.cs" />
     <Compile Include="GroupPageCreator\GroupingsCreator.cs" />

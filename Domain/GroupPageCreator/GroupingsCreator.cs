@@ -4,7 +4,7 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.GroupPageCreator
 {
-	public class GroupingsCreator : IGroupingsCreator
+	public class GroupingsCreator
 	{
 		private readonly IGroupPageDataProvider _groupPageDataProvider;
 
