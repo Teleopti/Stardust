@@ -91,7 +91,7 @@ WHERE
 			var query = _unitOfWork.Current().Session()
 					.CreateSQLQuery(sql)
 					.SetParameter("PersonId", model.PersonId)
-					.SetParameter("SnapshotId", model.SnapshotId)
+					.SetParameter("SnapshotId", model.SnapshotId.GetValueOrDefault().Ticks)
 					.SetParameter("SnapshotDataSourceId", model.SnapshotDataSourceId)
 					.SetParameter("ReceivedTime", model.ReceivedTime)
 					.SetParameter("StateGroupId", model.StateGroupId)
@@ -146,7 +146,7 @@ WHERE SnapshotDataSourceId = :SnapshotDataSourceId
 AND (SnapshotId < :SnapshotId OR SnapshotId IS NULL)
 AND StateGroupId {stateGroups}")
 				.SetParameter("SnapshotDataSourceId", snapshotDataSourceId)
-				.SetParameter("SnapshotId", snapshotId)
+				.SetParameter("SnapshotId", snapshotId.Ticks)
 				.SetParameterListIf(loggedOutStateGroupIds.Any(), "StateGroupIds", loggedOutStateGroupIds)
 				.SetReadOnly(true)
 				.List<Guid>();

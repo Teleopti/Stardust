@@ -105,7 +105,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 		}
 
 		[Test]
-		[Ignore("Failing test for #47282")]
 		public void ShouldFindPersonsForLogoutNotInSnapshotWithPrecision_47282()
 		{
 			var person = Guid.NewGuid();
@@ -117,8 +116,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 			snapshotIds.ForEach(snapshotId =>
 			{
 				Persister.Delete(person, DeadLockVictim.Yes);
-				// CLEAN UP
-				Console.WriteLine(snapshotId.ToString("HH.mm.ss.fffffff"));
 				Persister.Upsert(new AgentStateForUpsert
 				{
 					PersonId = person,
@@ -127,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 					StateGroupId = Guid.NewGuid(),
 					SnapshotId = snapshotId
 				});
-
+				
 				Persister.FindForClosingSnapshot(snapshotId, 1, new[] {Guid.NewGuid()})
 					.Should().Be.Empty();
 			});
