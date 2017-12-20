@@ -1964,11 +1964,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.BackColor = System.Drawing.Color.White;
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.BeforeTouchSize = new System.Drawing.Size(220, 23);
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.BeforeTouchSize = new System.Drawing.Size(150, 23);
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Location = new System.Drawing.Point(545, 6);
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Name = "comboBoxOvertimeRequestMaximumTimeHandleType";
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.Size = new System.Drawing.Size(220, 23);
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.Size = new System.Drawing.Size(150, 23);
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.TabIndex = 1;
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Enabled = false;

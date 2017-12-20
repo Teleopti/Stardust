@@ -42,6 +42,12 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
 		}
 
+		[TearDown]
+		public void Clean()
+		{
+			_view?.Dispose();
+		}
+
 		[Test]
 		public void VerifyInitializeWithExistingModels()
 		{
@@ -264,12 +270,12 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			workflowControlSet.AddOpenAbsenceRequestPeriod(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item);
 
-			_view.SetOpenPeriodsGridRowCount(0);
-			_view.RefreshOpenPeriodsGrid();
-
 			_target = new WorkflowControlSetPresenter(null, UnitOfWorkFactory, RepositoryFactory, ToggleManager);
 			_view = new FixConfirmResultWorkflowControlSetView(ToggleManager, _target, true);
 			_target.Initialize();
+
+			_view.SetOpenPeriodsGridRowCount(0);
+			_view.RefreshOpenPeriodsGrid();
 
 			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 

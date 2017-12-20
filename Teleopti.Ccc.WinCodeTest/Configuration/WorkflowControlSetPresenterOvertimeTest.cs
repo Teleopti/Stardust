@@ -40,6 +40,12 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
 		}
 
+		[TearDown]
+		public void Clean()
+		{
+			_view?.Dispose();
+		}
+
 		[DatapointSource]
 		public Toggles[] ToggleList =
 		{
