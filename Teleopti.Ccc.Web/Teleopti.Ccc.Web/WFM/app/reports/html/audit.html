@@ -33,11 +33,11 @@
 								<div tabindex=0 class="context-menu card-context">
 									<i class="mdi mdi-calendar"></i>
 								</div>
-								<div ng-if="vm.dateModifyRange.startDate">From: {{vm.dateModifyRange.startDate | amDateFormat:"YYYY/MM/DD"}}</div>
+								<div ng-if="vm.dateModifyRange.startDate">{{'From'| translate}}: {{vm.dateModifyRange.startDate | amDateFormat:"L"}}</div>
 								&nbsp;
 								&nbsp;
 								&nbsp;
-								<div ng-if="vm.dateModifyRange.endDate"> To: {{vm.dateModifyRange.endDate | amDateFormat:"YYYY/MM/DD"}}</div>
+								<div ng-if="vm.dateModifyRange.endDate">{{'To'|translate}}: {{vm.dateModifyRange.endDate | amDateFormat:"L"}}</div>
 								<div ng-if="!vm.dateModifyRange.endDate && !vm.dateModifyRange.startDate" class="text-warning"> No selected date</div>
 							</div>
 
@@ -52,11 +52,11 @@
 								<div tabindex=0 class="context-menu card-context">
 									<i class="mdi mdi-calendar"></i>
 								</div>
-								<div ng-if="vm.dateChangeRange.startDate">From: {{vm.dateChangeRange.startDate | amDateFormat:"YYYY/MM/DD"}}</div>
+								<div ng-if="vm.dateChangeRange.startDate">{{'From'| translate}}: {{vm.dateChangeRange.startDate | amDateFormat:"L"}}</div>
 								&nbsp;
 								&nbsp;
 								&nbsp;
-								<div ng-if="vm.dateChangeRange.endDate"> To: {{vm.dateChangeRange.endDate | amDateFormat:"YYYY/MM/DD"}}</div>
+								<div ng-if="vm.dateChangeRange.endDate">{{'To'|translate}}: {{vm.dateChangeRange.endDate | amDateFormat:"L"}}</div>
 								<div ng-if="!vm.dateChangeRange.endDate && !vm.dateChangeRange.startDate" class="text-warning"> No selected date</div>
 							</div>
 

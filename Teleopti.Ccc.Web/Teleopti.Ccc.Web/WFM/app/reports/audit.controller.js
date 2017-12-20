@@ -5,10 +5,12 @@
 	.module('wfm.reports')
 	.controller('AuditTrailController', AuditTrailController);
 
-	AuditTrailController.$inject = ['$filter', 'Toggle', 'uiGridConstants', 'ReportsService', 'NoticeService', '$translate', 'localeLanguageSortingService'];
+	AuditTrailController.$inject = ['$filter', 'Toggle', 'uiGridConstants', 'ReportsService', 'NoticeService', '$translate', 'localeLanguageSortingService', 'CurrentUserInfo'];
 
-	function AuditTrailController($filter, ToggleSvc, uiGridConstants, ReportsService, NoticeService, $translate, localeLanguageSortingService) {
+	function AuditTrailController($filter, ToggleSvc, uiGridConstants, ReportsService, NoticeService, $translate, localeLanguageSortingService, CurrentUserInfo) {
 		var vm = this;
+
+		var local = CurrentUserInfo.CurrentUserInfo().DateFormatLocale;
 
 		vm.changedBy = [];
 		vm.searchData = null;
@@ -17,12 +19,12 @@
 		vm.gridOptions = {};
 		vm.dateRangeCustomValidators = [];
 		vm.dateChangeRange = {
-			startDate: moment().utc().subtract(1, 'days'),
-			endDate: moment().utc()
+			startDate: moment().locale(JSON.stringify(local)).subtract(1, 'days'),
+			endDate: moment().locale(JSON.stringify(local))
 		};
 		vm.dateModifyRange = {
-			startDate: moment().utc().subtract(1, 'days'),
-			endDate: moment().utc()
+			startDate: moment().locale(JSON.stringify(local)).subtract(1, 'days'),
+			endDate: moment().locale(JSON.stringify(local))
 		};
 		vm.changesData = [];
 
