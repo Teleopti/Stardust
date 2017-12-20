@@ -106,6 +106,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			comboBoxOvertimeRequestMaximumTimeHandleType.Enabled = timeSpanTextBoxOvertimeRequestMaximumTime.Value != TimeSpan.Zero;
 			if (!comboBoxOvertimeRequestMaximumTimeHandleType.Enabled)
 				comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem = null;
+			else
+			{
+				if (comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem == null)
+					comboBoxOvertimeRequestMaximumTimeHandleType.SelectedIndex = 0;
+			}
 			_presenter.SetOvertimeRequestMaximumTime(timeSpanTextBoxOvertimeRequestMaximumTime.Value);
 		}
 
