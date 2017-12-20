@@ -6,7 +6,8 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
-	public class TeamScheduleActivityCommandController {
+	public class TeamScheduleActivityCommandController : ApiController
+	{
 		private readonly TeamScheduleActivityCommandService _activityCommandService;
 
 		public TeamScheduleActivityCommandController(TeamScheduleActivityCommandService activityCommandService)
