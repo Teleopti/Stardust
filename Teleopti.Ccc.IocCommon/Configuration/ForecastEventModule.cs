@@ -25,15 +25,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<WorkloadDayHelper>();
-			builder.RegisterType<ForecastsFileContentProvider>().As<IForecastsFileContentProvider>();
+			
+			if (_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
+			{
+				builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
+				builder.RegisterType<ForecastsFileContentProvider>().As<IForecastsFileContentProvider>();
+			}
+			else
+			{
+				builder.RegisterType<ForecastsRowExtractorOld>().As<IForecastsRowExtractor>();
+				builder.RegisterType<ForecastsFileContentProviderOld>().As<IForecastsFileContentProvider>();
+			}
+			
 			builder.RegisterType<ForecastsAnalyzeQuery>().As<IForecastsAnalyzeQuery>();
-			builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
 			builder.Register(getThreadJobResultFeedback).As<IJobResultFeedback>().SingleInstance();
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().SingleInstance();
 			builder.RegisterType<SaveForecastToSkill>().As<ISaveForecastToSkill>();
 			builder.RegisterType<MultisiteForecastToSkillAnalyzer>().As<IMultisiteForecastToSkillCommand>();
 			builder.RegisterType<OpenAndSplitSkillCommand>().As<IOpenAndSplitSkillCommand>();
-			//builder.RegisterType<ImportForecastToSkillCommand>().As<IImportForecastToSkillCommand>();
 			builder.RegisterType<SplitImportForecastMessage>().As<ISplitImportForecastMessage>();
 			builder.RegisterType<ForecastClassesCreator>().As<IForecastClassesCreator>();
 			builder.RegisterType<StatisticLoader>().As<IStatisticLoader>();

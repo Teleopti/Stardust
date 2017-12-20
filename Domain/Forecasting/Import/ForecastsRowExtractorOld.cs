@@ -8,21 +8,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
-    public interface IForecastsRowExtractor
-    {
-        IForecastsRow Extract(string value, TimeZoneInfo timeZone);
-		bool IsValidHeaderRow(string content);
-		string HeaderRow { get; }
-	}
-
-    public class ForecastsRowExtractor : IForecastsRowExtractor
+    public class ForecastsRowExtractorOld : IForecastsRowExtractor
     {
         private readonly ISpecification<string[]> _columnsInRowValidSpecification = new IsColumnCountInRowValid();
         private readonly ForecastsFileSkillNameValidator _skillNameValidator = new ForecastsFileSkillNameValidator();
-        private readonly ForecastsFileDateTimeUnifiedValidator _dateTimeValidator = new ForecastsFileDateTimeUnifiedValidator();
+        private readonly ForecastsFileDateTimeValidator _dateTimeValidator = new ForecastsFileDateTimeValidator();
         private readonly ForecastsFileIntegerValueValidator _integerValidator = new ForecastsFileIntegerValueValidator();
         private readonly ForecastsFileDoubleValueValidator _doubleValidator = new ForecastsFileDoubleValueValidator();
-			
+		
         public IForecastsRow Extract(string value, TimeZoneInfo timeZone)
         {
             var content = value.Split(',');
@@ -32,13 +25,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
             }
             var newRow = new ForecastsRow();
 
-			if (!_skillNameValidator.TryParse(content[0], out var stringResult))
+            ForecastParseResult<string> stringResult;
+            if (!_skillNameValidator.TryParse(content[0], out stringResult))
             {
                 throw new ValidationException(stringResult.ErrorMessage);
             }
             newRow.SkillName = stringResult.Value;
 
-			if (!_dateTimeValidator.TryParse(content[1], out var dateTimeResult))
+            ForecastParseResult<DateTime> dateTimeResult;
+            if (!_dateTimeValidator.TryParse(content[1], out dateTimeResult))
             {
                 throw new ValidationException(dateTimeResult.ErrorMessage);
             }
@@ -61,13 +56,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
             newRow.UtcDateTimeFrom = timeZone.SafeConvertTimeToUtc(newRow.LocalDateTimeFrom);
             newRow.UtcDateTimeTo = timeZone.SafeConvertTimeToUtc(newRow.LocalDateTimeTo);
 
-			if (!_integerValidator.TryParse(content[3], out var integerResult))
+            ForecastParseResult<int> integerResult;
+            if (!_integerValidator.TryParse(content[3], out integerResult))
             {
                 throw new ValidationException(integerResult.ErrorMessage);
             }
             newRow.Tasks = integerResult.Value;
 
-			if (!_doubleValidator.TryParse(content[4], out var doubleResult))
+            ForecastParseResult<double> doubleResult;
+            if (!_doubleValidator.TryParse(content[4], out doubleResult))
             {
                 throw new ValidationException(doubleResult.ErrorMessage);
             }
@@ -93,9 +90,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 		
 		public bool IsValidHeaderRow(string content)
 		{
-			return content.Equals(HeaderRow);
+			return false;
 		}
 
-		public string HeaderRow => "skillname,startdatetime,enddatetime,tasks,tasktime,aftertasktime,agents";
-	}
+		public string HeaderRow => "";
+    }
 }

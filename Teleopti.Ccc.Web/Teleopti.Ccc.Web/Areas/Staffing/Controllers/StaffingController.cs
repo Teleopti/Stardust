@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ISkillGroupRepository _skillGroupRepository;
 		private readonly ScheduledStaffingViewModelCreator _staffingViewModelCreator;
 		private readonly ImportBpoFile _bpoFile;
-		private readonly ExportBpoFile _exportBpoFile;
+		private readonly IExportBpoFile _exportBpoFile;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IAuthorization _authorization;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillGroupRepository skillGroupRepository,
-								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, ExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization)
+								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, IExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;

@@ -281,6 +281,7 @@
     <Compile Include="Common\PublishPersonTeamChangedEventTest.cs" />
     <Compile Include="Common\TimePassingSimulatorTest.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportModelCreatorTest.cs" />
+    <Compile Include="Forecasting\Import\ForecastsFileContentProviderTest.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPageTest.cs" />
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
@@ -795,7 +796,7 @@
     <Compile Include="Forecasting\Export\SaveForecastToSkillCommandTest.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidatorTest.cs" />
     <Compile Include="Forecasting\Import\ForecastFileTest.cs" />
-    <Compile Include="Forecasting\Import\ForecastsFileContentProviderTest.cs" />
+    <Compile Include="Forecasting\Import\ForecastsFileContentProviderOldTest.cs" />
     <Compile Include="Forecasting\Import\ForecastsRowTest.cs" />
     <Compile Include="Forecasting\Import\ForecastsRowExtractorTest.cs" />
     <Compile Include="Forecasting\Import\IsColumnCountInRowValidTest.cs" />
@@ -1633,6 +1634,7 @@
     <Compile Include="Scheduling\Overtime\AddOvertimeTest.cs" />
     <Compile Include="SiteOpenHours\SiteWithOpenHourProviderTest.cs" />
     <Compile Include="Staffing\CompareProjectionTest.cs" />
+    <Compile Include="Staffing\ExportBpoFileOldTest.cs" />
     <Compile Include="Staffing\ExportBpoFileTest.cs" />
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
     <Compile Include="Staffing\RequiredStaffingProviderTest.cs" />

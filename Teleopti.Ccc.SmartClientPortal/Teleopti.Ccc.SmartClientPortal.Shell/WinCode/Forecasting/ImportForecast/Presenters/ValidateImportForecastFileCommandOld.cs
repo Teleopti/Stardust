@@ -5,12 +5,12 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Mo
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Presenters
 {
-    public class ValidateImportForecastFileCommand : IValidateImportForecastFileCommand
+    public class ValidateImportForecastFileCommandOld : IValidateImportForecastFileCommand
     {
         private readonly IForecastsRowExtractor _rowExtractor;
         private readonly ImportForecastModel _model;
 
-        public ValidateImportForecastFileCommand(IForecastsRowExtractor rowExtractor, ImportForecastModel model)
+        public ValidateImportForecastFileCommandOld(IForecastsRowExtractor rowExtractor, ImportForecastModel model)
         {
             _rowExtractor = rowExtractor;
             _model = model;
@@ -38,10 +38,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecas
                         if (rowNumber > 100) break;
 
                         var line = streamReader.ReadLine();
-						if (rowNumber == 1 && _rowExtractor.IsValidHeaderRow(line))
-							continue;
-						
-						_rowExtractor.Extract(line, _model.SelectedSkill.TimeZone);
+                        _rowExtractor.Extract(line, _model.SelectedSkill.TimeZone);
                         rowNumber++;
                     }
                 }

@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ImportForecast;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.JobHistory;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
@@ -15,16 +17,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
 {
     public class ForecasterModule : Module
     {
+		private static IIocConfiguration _configuration;
+
+		public ForecasterModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+		
         protected override void Load(ContainerBuilder builder)
         {
             jobHistoryView(builder);
             importForecastView(builder);
         }
 
-        private static  void importForecastView(ContainerBuilder builder)
+        //private static void importForecastView(ContainerBuilder builder)
+		private static void importForecastView(ContainerBuilder builder)
         {
             builder.RegisterType<SaveImportForecastFileCommand>().As<ISaveImportForecastFileCommand>();
-            builder.RegisterType<ValidateImportForecastFileCommand>().As<IValidateImportForecastFileCommand>();
+			
+			if (_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
+				builder.RegisterType<ValidateImportForecastFileCommand>().As<IValidateImportForecastFileCommand>();
+			else
+				builder.RegisterType<ValidateImportForecastFileCommandOld>().As<IValidateImportForecastFileCommand>();
 
             builder.RegisterType<ImportForecastView>()
                 .As<IImportForecastView>()
@@ -46,7 +60,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
                 .InstancePerLifetimeScope();
             builder.RegisterType<HandleJobHistoryScope>().As<IJobHistoryViewFactory>();
             builder.RegisterType<JobHistoryPresenter>().InstancePerLifetimeScope();
-            builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
+			
+			if (_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
+            	builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
+			else
+				builder.RegisterType<ForecastsRowExtractorOld>().As<IForecastsRowExtractor>();
         }
 
         private class HandleJobHistoryScope : IJobHistoryViewFactory

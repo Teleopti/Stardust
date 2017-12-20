@@ -4,12 +4,14 @@ using Teleopti.Ccc.Domain.Forecasting.Import;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
 {
-    public class ForecastsFileDateTimeValidator : IForecastsFileValidator<DateTime>
+    public class ForecastsFileDateTimeUnifiedValidator : IForecastsFileValidator<DateTime>
     {
         public bool TryParse(string value, out ForecastParseResult<DateTime> result)
         {
             result = new ForecastParseResult<DateTime>();
-			if (DateTime.TryParseExact(value, "yyyyMMdd HH:mm", null, DateTimeStyles.None, out var parseResult))
+            DateTime parseResult;
+			if (DateTime.TryParseExact(value, "yyyyMMdd HH:mm", null, DateTimeStyles.None, out parseResult) ||
+				DateTime.TryParse(value, out parseResult))
 			{
 				result.Value = parseResult;
 				result.Success = true;

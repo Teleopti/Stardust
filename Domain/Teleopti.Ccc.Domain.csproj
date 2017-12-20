@@ -342,6 +342,9 @@
     <Compile Include="Forecasting\Export\Web\ForecastExportModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportDailyModelCreator.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportModelCreator.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsFileDateTimeUnifiedValidator.cs" />
+    <Compile Include="Forecasting\Import\ForecastsFileContentProvider.cs" />
+    <Compile Include="Forecasting\Import\ForecastsRowExtractor.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
     <Compile Include="Infrastructure\Events\PublishInitializeReadModelEvent.cs" />
@@ -462,6 +465,8 @@
     <Compile Include="Security\LicenseOptions\TeleoptiWfmBpoExchangeLicenseOption.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroupInput.cs" />
     <Compile Include="Staffing\ExportBpoFile.cs" />
+    <Compile Include="Staffing\ExportBpoFileOld.cs" />
+    <Compile Include="Staffing\IExportBpoFile.cs" />
     <Compile Include="Staffing\ImportBpoFile.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\IScheduleHint.cs" />
@@ -2366,8 +2371,8 @@
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidator.cs" />
     <Compile Include="Forecasting\Import\ForecastFile.cs" />
     <Compile Include="Forecasting\Import\ForecastParseResult.cs" />
-    <Compile Include="Forecasting\Import\ForecastsFileContentProvider.cs" />
-    <Compile Include="Forecasting\Import\ForecastsRowExtractor.cs" />
+    <Compile Include="Forecasting\Import\ForecastsFileContentProviderOld.cs" />
+    <Compile Include="Forecasting\Import\ForecastsRowExtractorOld.cs" />
     <Compile Include="Forecasting\Import\IForecastFile.cs" />
     <Compile Include="Forecasting\Import\IsColumnCountInRowValid.cs" />
     <Compile Include="Forecasting\IntervalLengthServiceLevelSpecification.cs" />

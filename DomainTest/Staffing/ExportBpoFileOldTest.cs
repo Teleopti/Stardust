@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,8 +25,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
-	[DomainTest, Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585)]
-	public class ExportBpoFileTest : ISetup
+	[DomainTest, ToggleOff(Toggles.Forecast_FileImport_UnifiedFormat_46585)]
+	public class ExportBpoFileOldTest : ISetup
 	{
 		public IExportBpoFile Target;
 		public FakeSkillRepository SkillRepository;
@@ -39,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeUserTimeZone UserTimeZone;
 		private readonly ForecastsRowExtractor ForecastsRowExtractor = new ForecastsRowExtractor();
 
+	
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
@@ -70,10 +70,9 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
 			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split( new[]{"\r\n"},StringSplitOptions.None);
-			rows.Length.Should().Be(3);
-			rows[0].Should().Be(ForecastsRowExtractor.HeaderRow);
-			rows[1].Split(',').Length.Should().Be(7);
-			rows[2].Split(',').Length.Should().Be(7);
+			rows.Length.Should().Be.EqualTo(2);
+			rows.First().Split(',').Length.Should().Be.EqualTo(7);
+			rows.Second().Split(',').Length.Should().Be.EqualTo(7);
 		}
 
 		[Test]
@@ -106,9 +105,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
 			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
-			rows[0].Should().Be(ForecastsRowExtractor.HeaderRow);
-			rows[1].Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,7.7");
-			rows[2].Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,9.7");
+			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,7.7");
+			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,9.7");
 		}
 
 		[Test]
@@ -123,9 +121,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
 			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
-			rows[0].Should().Be(ForecastsRowExtractor.HeaderRow);
-			rows[1].Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,15.7");
-			rows[2].Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,15.7");
+			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,15.7");
+			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,15.7");
 		}
 
 		[Test]
@@ -151,9 +148,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
 			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
-			rows[0].Should().Be(ForecastsRowExtractor.HeaderRow);
-			rows[1].Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,7.7");
-			rows[2].Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,15.7");
+			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,7.7");
+			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,15.7");
 		}
 
 		[Test]
@@ -186,9 +182,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
 			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
-			rows[0].Should().Be(ForecastsRowExtractor.HeaderRow);
-			rows[1].Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,0");
-			rows[2].Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,0");
+			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,0");
+			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,0");
 		}
 
 		[Test]
@@ -234,9 +229,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
 			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
-			rows[0].Should().Be(ForecastsRowExtractor.HeaderRow);
-			rows[1].Should().Be.EqualTo("Direct sales,20170815 13:00,20170815 13:15,0,0,0,11.7");
-			rows[2].Should().Be.EqualTo("Direct sales,20170815 13:15,20170815 13:30,0,0,0,5.7");
+			rows.First().Should().Be.EqualTo("Direct sales,20170815 13:00,20170815 13:15,0,0,0,11.7");
+			rows.Second().Should().Be.EqualTo("Direct sales,20170815 13:15,20170815 13:30,0,0,0,5.7");
 		}
 
 		//if we have data in bpo then dont consider it
@@ -289,27 +283,12 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
 			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
-			rows[0].Should().Be(ForecastsRowExtractor.HeaderRow);
-			rows[1].Should().Be("skill,20170815 08:00,20170815 08:15,0,0,0,11.7");
-			rows[2].Should().Be("skill,20170815 08:15,20170815 08:30,0,0,0,12.7");
+			
+			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,11.7");
+			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,12.7");
 		}
 		
-		[Test]
-		public void ShouldIncludeHeaderOnFirstRow()
-		{
-			var skill = createSkill(15, "skill", new TimePeriod(8, 0, 8, 30));
-			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
-			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(8, 0, 8, 30), 15.7);
-			SkillRepository.Add(skill);
-			SkillDayRepository.Add(skillDay);
-			
-			var period = new DateOnlyPeriod(new DateOnly(2017,8,15), new DateOnly(2017, 8, 16));
-			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
-			var firstRow = forecastedData.Split(new[] {Environment.NewLine}, StringSplitOptions.None)[0];
-			ForecastsRowExtractor.IsValidHeaderRow(firstRow).Should().Be.True();
-		}
-
-		protected ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)
+		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
 			var skill =
 				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony))

@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
-	public class ExportBpoFile : IExportBpoFile
+	public class ExportBpoFileOld : IExportBpoFile
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ICurrentScenario _currentScenario;
@@ -20,7 +20,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IForecastsRowExtractor _forecastsRowExtractor;
 
-		public ExportBpoFile(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, 
+		public ExportBpoFileOld() {}
+
+		public ExportBpoFileOld(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, 
 			ScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, IForecastsRowExtractor forecastsRowExtractor)
 		{
 			_skillDayRepository = skillDayRepository;
@@ -42,15 +44,13 @@ namespace Teleopti.Ccc.Domain.Staffing
 			if (!skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out var skillStaffPeriods))
 				return forecastedData.ToString().Trim();
 			
-			forecastedData.AppendLine(_forecastsRowExtractor.HeaderRow);
-			
 			foreach (var skillStaffPeriod in skillStaffPeriods.Values)
 			{
 				var ssiStartDate = skillStaffPeriod.Period.StartDateTime;
 				var ssiEndDate = skillStaffPeriod.Period.EndDateTime;
 				var staffingInterval =
 					allIntervals.Where(
-						x => x.StartDateTime == ssiStartDate && x.EndDateTime == ssiEndDate && x.SkillId == skill.Id.GetValueOrDefault());
+						x => x.StartDateTime == ssiStartDate && x.EndDateTime == ssiEndDate && x.SkillId == skill.Id.GetValueOrDefault()).ToList();
 				var staffing = 0d;
 				if (staffingInterval.Any())
 				{

@@ -5,13 +5,12 @@ using System.Text;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Import
 {
 	[TestFixture]
-	public class ForecastsFileContentProviderTest
+	public class ForecastsFileContentProviderOldTest
 	{
 		private IForecastsFileContentProvider _target;
 		private byte[] _fileContent;
@@ -21,8 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
 		public void Setup()
 		{
 			_timeZone = (TimeZoneInfo.Utc);
-			_target = new ForecastsFileContentProvider(new ForecastsRowExtractor());
-			//_target = new ForecastsFileContentProviderOld(new ForecastsRowExtractorOld());
+			_target = new ForecastsFileContentProviderOld(new ForecastsRowExtractor());
 		}
 
 		[Test]
@@ -103,51 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
 			var forecastRows = _target.LoadContent(_fileContent, _timeZone).ToArray();
 			forecastRows[0].SkillName.Should().Be.EqualTo("Insurance");
 		}
-
-		[Test]
-		public void ShouldHandleHeaders()
-		{
-			_fileContent = Encoding.UTF8.GetBytes(@"skillname,startdatetime,enddatetime,tasks,tasktime,agents
-Insurance,20121028 02:00,20121028 02:15,17,179,0,4.05
-Insurance,20121028 02:45,20121028 03:00,17,179,0,4.05");
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
-		}
 		
-		[Test]
-		public void ShouldHandleIsoDate()
-		{
-			_fileContent = Encoding.UTF8.GetBytes(@"Insurance,2012-10-28 02:00,2012-10-28 02:15,17,179,0,4.05");
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
-
-		}
 		
-		[Test]
-		public void ShouldHandleUsDateTimeFormat()
-		{
-			var ci = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-			var dt = new DateTime(2012, 10, 28, 2, 0, 0);
-			_fileContent = Encoding.UTF8.GetBytes($"Insurance,{dt.ToString(ci.DateTimeFormat)},{dt.AddMinutes(15).ToString(ci.DateTimeFormat)},17,179,0,4.05");
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
-		}
-		
-		[Test]
-		public void ShouldHandleOtherDateTimeFormat()
-		{
-			_fileContent = Encoding.UTF8.GetBytes(@"Insurance,28/10/12 02:00,2012-10-28 02:15,17,179,0,4.05");
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
-		}
-		
-		[Test]
-		public void ShouldHandleOldDateTimeFormat()
-		{
-			_fileContent = Encoding.UTF8.GetBytes(@"Insurance,20121028 02:00,20121028 02:15,17,179,0,4.05");
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
-
-		}
 	}
 }

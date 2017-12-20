@@ -40,8 +40,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillStaffingDataLoader>().As<ISkillStaffingDataLoader>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingViewModelCreator>().SingleInstance();
 			builder.RegisterType<ImportBpoFile>().SingleInstance();
-			builder.RegisterType<ExportBpoFile>().SingleInstance();
-
+			
+			if(_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
+				builder.RegisterType<ExportBpoFile>().As<IExportBpoFile>();
+			else
+				builder.RegisterType<ExportBpoFileOld>().As<IExportBpoFile>();
+			
 			if (_configuration.Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686))
 			{
 				builder.RegisterType<PrimaryPersonSkillFilter>().As<IPrimaryPersonSkillFilter>().SingleInstance();

@@ -651,6 +651,7 @@
     <Compile Include="WinCode\Forecasting\ImportForecast\Presenters\ISaveImportForecastFileCommand.cs" />
     <Compile Include="WinCode\Forecasting\ImportForecast\Presenters\IValidateImportForecastFileCommand.cs" />
     <Compile Include="WinCode\Forecasting\ImportForecast\Presenters\SaveImportForecastFileCommand.cs" />
+    <Compile Include="WinCode\Forecasting\ImportForecast\Presenters\ValidateImportForecastFileCommandOld.cs" />
     <Compile Include="WinCode\Forecasting\ImportForecast\Presenters\ValidateImportForecastFileCommand.cs" />
     <Compile Include="WinCode\Forecasting\ImportForecast\Views\IImportForecastView.cs" />
     <Compile Include="WinCode\Forecasting\IsPossibleTargetSkillForCopy.cs" />

@@ -9,23 +9,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
-	public interface IForecastsFileContentProvider
-	{
-		ICollection<IForecastsRow> LoadContent(byte[] fileContent, TimeZoneInfo timeZone);
-	}
-
-	public class ForecastsFileContentProvider : IForecastsFileContentProvider
+	public class ForecastsFileContentProviderOld : IForecastsFileContentProvider
 	{
 		private readonly IForecastsRowExtractor _rowExtractor;
 
-		public ForecastsFileContentProvider(IForecastsRowExtractor rowExtractor)
+		public ForecastsFileContentProviderOld(IForecastsRowExtractor rowExtractor)
 		{
 			_rowExtractor = rowExtractor;
-		}
-
-		private static bool isValidHeaderRow(string content)
-		{
-			return content.Equals("skillname,startdatetime,enddatetime,tasks,tasktime,agents");
 		}
 
 		public ICollection<IForecastsRow> LoadContent(byte[] fileContent, TimeZoneInfo timeZone)
@@ -35,13 +25,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 			try
 			{
 				var fileContentString = Encoding.UTF8.GetString(fileContent).TrimStart('\uFEFF');
-				var fileRows = fileContentString.Split(new[] {Environment.NewLine},
-					StringSplitOptions.RemoveEmptyEntries).ToList();
 
-				if (isValidHeaderRow(fileRows[0]))
-					fileRows = fileRows.Skip(1).ToList();
-				
-				foreach (var line in fileRows)
+				foreach (var line in fileContentString.Split(new[] { Environment.NewLine },
+																				StringSplitOptions.RemoveEmptyEntries))
 				{
 					var forecastsRow = _rowExtractor.Extract(line, timeZone);
 					if (timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeFrom))
