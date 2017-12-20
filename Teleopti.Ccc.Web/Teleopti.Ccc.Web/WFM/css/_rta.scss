@@ -461,15 +461,22 @@ wfm-right-panel.rta-right-panel-wrapper .panel-menu {
 .rta-view {
 
   .wfm-table {
+	border-collapse: separate;
 
 	th.blank-header {
-	  background-color: $white;
+		background-color: $white;
+	}
+	
+	th {
+		border-right-width: 0px;
 	}
 	
 	td {
 	  overflow: hidden;
 	  white-space: nowrap;
-	  text-overflow: ellipsis
+		text-overflow: ellipsis;
+		border-top-width: 0px;
+		border-right-width: 0px;
 	}
 	
 	a.mdi {
