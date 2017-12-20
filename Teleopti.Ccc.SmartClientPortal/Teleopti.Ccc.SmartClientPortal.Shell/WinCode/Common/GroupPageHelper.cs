@@ -219,12 +219,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			}
 		}
 
-		public IGroupingsCreator CreateGroupingsCreator()
-		{
-			return new GroupingsCreator(this);
-		}
-
-
 		public void Dispose()
 		{
 			Dispose(true);

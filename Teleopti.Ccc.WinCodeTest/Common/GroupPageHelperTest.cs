@@ -235,12 +235,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
         [Test]
-        public void ShouldCreateGroupingsCreator()
-        {
-            Assert.IsNotNull(_target.CreateGroupingsCreator());
-        }
-
-        [Test]
         public void ShouldRequireLoadAllBeforeCollectionsAreUsed()
         {
 	        Assert.Throws<InvalidOperationException>(() =>

@@ -49,8 +49,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
     	IEnumerable<IRootChangeInfo> AddOrUpdateGroupPage(IGroupPage groupPage);
 
         void SetSelectedPeriod(DateOnlyPeriod dateOnlyPeriod);
-
-        IGroupingsCreator CreateGroupingsCreator();
         void RemoveGroupPageById(Guid id);
         void SetCurrentGroupPageById(Guid groupPageId);
         void RenameGroupPage(Guid groupPageId, string newName);
