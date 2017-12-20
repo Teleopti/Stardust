@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldOnlyHave8FieldsForEachLine()
 		{
-			const string invalidLine = "20171120,1,Kalle,Pettersson,Sales result,2,number,2000,extraline";
+			const string invalidLine = "20171120,1,Kalle,Pettersson,Sales result,2,Numeric,2000,extraline";
 			var fileData = createFileData(invalidLine);
 
 			var expectedErrorMsg = invalidLine + "," + string.Format(Resources.InvalidNumberOfFields, 8, 9);
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldNotAllowInvalidDate()
 		{
-			const string invalidDateRecord = "20172020,1,Kalle,Pettersson,Sales result,2,number,2000";
+			const string invalidDateRecord = "20172020,1,Kalle,Pettersson,Sales result,2,Numeric,2000";
 			var fileData = createFileData(invalidDateRecord);
 
 			var expectedErrorMsg = invalidDateRecord + "," + Resources.ImportBpoWrongDateFormat;
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		{
 			var agentId = new string('a', 131);
 			var invalidRecord =
-				"20170820,"+ agentId + ",Kalle,Pettersson,Sales result,2,number,2000";
+				"20170820,"+ agentId + ",Kalle,Pettersson,Sales result,2,Numeric,2000";
 			var fileData = createFileData(invalidRecord);
 
 			var errorMsg = Resources.AgentIdIsTooLong;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public void ShouldRejectRecordIfExternalPerformanceTypeNameIsLongerThan200Characters()
 		{
 			var measureName = new String('a', 201);
-			var invalidRecord = $"20170820,1,Kalle,Pettersson,{measureName},2,number,2000";
+			var invalidRecord = $"20170820,1,Kalle,Pettersson,{measureName},2,Numeric,2000";
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.GameNameIsTooLong}";
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldRejectRecordIfScoreNumberIsInvalid()
 		{
-			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,number,InvalidScore";
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Numeric,InvalidScore";
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidScore}";
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldRejectRecordIfScorePercentageIsInvalid()
 		{
-			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Percentage,InvalidScore";
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Percent,InvalidScore";
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidScore}";
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				PerformanceRepository.Add(new ExternalPerformance {ExternalId = i});
 			}
 
-			var the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,11,Percentage,87";
+			var the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,11,Percent,87";
 			var fileData = createFileData(the11thRecord);
 
 			var expectedErrorRecord = $"{the11thRecord},{Resources.OutOfMaximumLimit}";
@@ -168,8 +168,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				PerformanceRepository.Add(new ExternalPerformance {ExternalId = i});
 			}
 
-			const string the10thRecord = "20171120,1,Kalle,Pettersson,Quality Score,10,Percentage,87";
-			const string the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,11,Percentage,87";
+			const string the10thRecord = "20171120,1,Kalle,Pettersson,Quality Score,10,Percent,87";
+			const string the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,11,Percent,87";
 			var records = new List<string> {the10thRecord, the11thRecord};
 			var fileData = createFileData(records);
 
@@ -189,10 +189,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			setPerson(Guid.Empty);
 			for (var i = 1; i < 11; ++i)
 			{
-				PerformanceRepository.Add(new ExternalPerformance { ExternalId = i, DataType = ExternalPerformanceDataType.Percentage});
+				PerformanceRepository.Add(new ExternalPerformance { ExternalId = i, DataType = ExternalPerformanceDataType.Percent});
 			}
 
-			var theExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,8,Percentage,87";
+			var theExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,8,Percent,87";
 			var fileData = createFileData(theExistRecord);
 
 			var result = Target.Process(fileData, Feedback.SendProgress);
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldNotAllowInvalidExternalPerformanceTypeId()
 		{
-			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,invalidId,number,87";
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,invalidId,Numeric,87";
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidGameId}";
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				PersonId = per2,
 				ExternalLogonName = new List<string> { "externalLogon"}
 			});
-			var agentsWith1ExternalLogonRecord = "20171120,externalLogon,Kalle,Pettersson,Quality Score,1,number,87";
+			var agentsWith1ExternalLogonRecord = "20171120,externalLogon,Kalle,Pettersson,Quality Score,1,Numeric,87";
 			var fileData = createFileData(agentsWith1ExternalLogonRecord);
 
 			var result = Target.Process(fileData, Feedback.SendProgress);
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test, Ignore("temp ignore")]
 		public void ShouldRejectRecordIfAgentDoesNotExist()
 		{
-			var agentNotExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,number,87";
+			var agentNotExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Numeric,87";
 			var fileData = createFileData(agentNotExistRecord);
 
 			var expectedErrorRecord = $"{agentNotExistRecord},{Resources.AgentDoNotExist}";
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		{
 			var personId = Guid.NewGuid();
 			setPerson(personId);
-			var validRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Percentage,87";
+			var validRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Percent,87";
 			var fileData = createFileData(validRecord);
 
 			var result = Target.Process(fileData, Feedback.SendProgress);
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
 			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateTime(2017, 11, 20));
 			result.ValidRecords[0].GameName.Should().Be.EqualTo("Quality Score");
-			result.ValidRecords[0].GameType.Should().Be.EqualTo(ExternalPerformanceDataType.Percentage);
+			result.ValidRecords[0].GameType.Should().Be.EqualTo(ExternalPerformanceDataType.Percent);
 			result.ValidRecords[0].AgentId.Should().Be.EqualTo("1");
 			result.ValidRecords[0].GameId.Should().Be.EqualTo(1);
 			result.ValidRecords[0].GamePercentScore.Should().Be.EqualTo(new Percent(0.87));

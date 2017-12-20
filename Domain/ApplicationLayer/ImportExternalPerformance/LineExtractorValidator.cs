@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 			result.GameType = gtype;
 
-			if (result.GameType == ExternalPerformanceDataType.Number)
+			if (result.GameType == ExternalPerformanceDataType.Numeric)
 			{
 				if (GameTypeIsValidNumber(columns[GAME_SCORE_COLUMN_INDEX], out var score))
 				{

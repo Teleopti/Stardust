@@ -101,10 +101,10 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 			BadgeUnitType result;
 			switch (dataType)
 			{
-				case ExternalPerformanceDataType.Number:
+				case ExternalPerformanceDataType.Numeric:
 					result = BadgeUnitType.Count;
 					break;
-				case ExternalPerformanceDataType.Percentage:
+				case ExternalPerformanceDataType.Percent:
 					result = BadgeUnitType.Percentage;
 					break;
 				default:

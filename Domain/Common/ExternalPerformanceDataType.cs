@@ -2,7 +2,7 @@
 {
 	public enum ExternalPerformanceDataType
 	{
-		Number = 0,
-		Percentage = 1
+		Numeric = 0,
+		Percent = 1
 	}
 }

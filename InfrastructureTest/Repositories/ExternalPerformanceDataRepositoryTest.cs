@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				ExternalId = 1,
 				Name = "test",
-				DataType = ExternalPerformanceDataType.Number
+				DataType = ExternalPerformanceDataType.Numeric
 			};
 			WithUnitOfWork.Do(() =>
 			{

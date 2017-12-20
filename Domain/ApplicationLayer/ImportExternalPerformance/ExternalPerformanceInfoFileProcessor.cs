@@ -20,14 +20,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private readonly IPersonRepository _personRepository;
 		private readonly ITenantLogonDataManager _tenantLogonDataManager;
 		private readonly ILineExtractor _lineExtractor;
+		private readonly IExternalPerformanceDataRepository _externalDataRepository;
 
 		public ExternalPerformanceInfoFileProcessor(IExternalPerformanceRepository externalPerformanceRepository,
-			IPersonRepository personRepository, ITenantLogonDataManager tenantLogonDataManager, ILineExtractor lineExtractor)
+			IPersonRepository personRepository, 
+			ITenantLogonDataManager tenantLogonDataManager, 
+			ILineExtractor lineExtractor,
+			IExternalPerformanceDataRepository externalDataRepository)
 		{
 			_externalPerformanceRepository = externalPerformanceRepository;
 			_personRepository = personRepository;
 			_tenantLogonDataManager = tenantLogonDataManager;
 			_lineExtractor = lineExtractor;
+			_externalDataRepository = externalDataRepository;
 		}
 
 		public ExternalPerformanceInfoProcessResult Process(ImportFileData importFileData, Action<string> sendProgress)
@@ -257,7 +262,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			foreach (var validRecord in result.ValidRecords)
 			{
 				var score = validRecord.GameNumberScore;
-				if (validRecord.GameType == ExternalPerformanceDataType.Percentage) score = Convert.ToInt32(validRecord.GamePercentScore.Value * 10000);
+				if (validRecord.GameType == ExternalPerformanceDataType.Percent) score = Convert.ToInt32(validRecord.GamePercentScore.Value * 10000);
 
 				var existData = allExistData.FirstOrDefault(x => x.PersonId == validRecord.PersonId && x.DateFrom == validRecord.DateFrom);
 				if (existData == null)

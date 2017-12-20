@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		{
 			var expectedId = 1;
 			var expectedName = "externalSetting";
-			var expectedDataType = ExternalPerformanceDataType.Percentage;
+			var expectedDataType = ExternalPerformanceDataType.Percent;
 			var processResult = new ExternalPerformanceInfoProcessResult(){ExternalPerformances = new List<IExternalPerformance>()
 			{
 				new ExternalPerformance(){ExternalId = expectedId, Name = expectedName, DataType = expectedDataType}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				PersonId = expectedPersonId,
 				GameId = gameId,
 				GameNumberScore = expectedScore,
-				GameType =  ExternalPerformanceDataType.Number
+				GameType =  ExternalPerformanceDataType.Numeric
 			});
 
 			var target = new ImportExternalPerformanceInfoHandler(_jobResultRepository, _stardustJobFeedback, _importJobArtifactValidator,
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				PersonId = existPersonId,
 				GameId = gameId,
 				GameNumberScore = expectedScore,
-				GameType = ExternalPerformanceDataType.Number
+				GameType = ExternalPerformanceDataType.Numeric
 			});
 
 			_externalPerformanceDataRepository.Add(new ExternalPerformanceData

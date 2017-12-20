@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Core.DataProvider
 			_fakegamificationSettingRepository = new FakeGamificationSettingRepository();
 
 			var externalPerformance1 = new ExternalPerformance { ExternalId = 1, Name = "qi1", };
-			_externalPerformance = new ExternalPerformance { ExternalId = 2, Name = "qi2", DataType = ExternalPerformanceDataType.Percentage };
+			_externalPerformance = new ExternalPerformance { ExternalId = 2, Name = "qi2", DataType = ExternalPerformanceDataType.Percent };
 			_performanceRepository = new FakeExternalPerformanceRepository();
 			_performanceRepository.Add(externalPerformance1);
 			_performanceRepository.Add(_externalPerformance);
