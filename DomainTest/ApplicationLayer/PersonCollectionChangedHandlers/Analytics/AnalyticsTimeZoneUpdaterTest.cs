@@ -18,15 +18,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public IAnalyticsTimeZoneRepository AnalyticsTimeZoneRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public AnalyticsTimeZoneUpdater Target;
+		private Guid _businessUnitId;
 
+		[SetUp]
+		public void Setup()
+		{
+			_businessUnitId = Guid.NewGuid();
+		}
 
 		[Test]
 		public void ShouldUpdateUtcInUse()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(Guid.NewGuid()));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 
-			Target.Handle(new PossibleTimeZoneChangeEvent());
+			Target.Handle(new PossibleTimeZoneChangeEvent
+			{
+				LogOnBusinessUnitId = _businessUnitId
+			});
 
 			var utcTimeZone = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == "UTC");
 			var estAnalyticsTimeZone = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == "W. Europe Standard Time");
@@ -40,12 +49,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			const string timeZoneInUse = "W. Europe Standard Time";
 			const string timeZoneTobeDeleted = "GTB Standard Time";
 
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(Guid.NewGuid()));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timeZoneInUse));
 
 			AnalyticsTimeZoneRepository.Get(timeZoneTobeDeleted);
 
-			Target.Handle(new PossibleTimeZoneChangeEvent());
+			Target.Handle(new PossibleTimeZoneChangeEvent
+			{
+				LogOnBusinessUnitId = _businessUnitId
+			});
 
 			var inUse = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == timeZoneInUse);
 			var deleted = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == timeZoneTobeDeleted);
@@ -61,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			const string timeZoneInUse = "W. Europe Standard Time";
 			const string timeZoneDeleted = "GTB Standard Time";
 
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(Guid.NewGuid()));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			
 			AnalyticsTimeZoneRepository.Get(timeZoneDeleted);
 			AnalyticsTimeZoneRepository.SetToBeDeleted(timeZoneDeleted, true);
@@ -72,7 +84,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timeZoneInUse));
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timeZoneDeleted));
 
-			Target.Handle(new PossibleTimeZoneChangeEvent());
+			Target.Handle(new PossibleTimeZoneChangeEvent
+			{
+				LogOnBusinessUnitId = _businessUnitId
+			});
 
 			var readdedTimeZone = AnalyticsTimeZoneRepository.Get(timeZoneDeleted);
 			readdedTimeZone.ToBeDeleted.Should().Be.False();
