@@ -257,6 +257,7 @@
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
     <Compile Include="MultiTenancy\Server\ITenantLogonInfoLoader.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerier.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />

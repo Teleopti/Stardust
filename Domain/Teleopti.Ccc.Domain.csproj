@@ -362,6 +362,7 @@
     <Compile Include="Intraday\ISkillTypeInfo.cs" />
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
     <Compile Include="Islands\FetchIslands.cs" />
+    <Compile Include="MultiTenancy\TenantLogonPersonProvider.cs" />
     <Compile Include="Notification\ASMScheduleChangeTime.cs" />
     <Compile Include="Notification\ClickatellNotificationSender.cs" />
     <Compile Include="Notification\ClickatellNotificationWebClient.cs">

@@ -1805,7 +1805,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.Count.Should().Be.EqualTo(1);
 			var personIdentity = result.First();
 			personIdentity.PersonId.Should().Be.EqualTo(personIdJohn);
-			personIdentity.Identity.Should().Be.EqualTo("employmentNumber-js");
+			personIdentity.LogonName.Should().Be.EqualTo("employmentNumber-js");
 			personIdentity.MatchField.Should().Be.EqualTo(IdentityMatchField.EmploymentNumber);
 
 			// Should verify match external logon here

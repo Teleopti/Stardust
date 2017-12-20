@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
@@ -18,21 +16,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
 		private readonly IPersonRepository _personRepository;
-		private readonly ITenantLogonDataManager _tenantLogonDataManager;
 		private readonly ILineExtractor _lineExtractor;
 		private readonly IExternalPerformanceDataRepository _externalDataRepository;
+		private readonly ITenantLogonPersonProvider _tenantLogonPersonProvider;
 
 		public ExternalPerformanceInfoFileProcessor(IExternalPerformanceRepository externalPerformanceRepository,
 			IPersonRepository personRepository, 
-			ITenantLogonDataManager tenantLogonDataManager, 
 			ILineExtractor lineExtractor,
-			IExternalPerformanceDataRepository externalDataRepository)
+			IExternalPerformanceDataRepository externalDataRepository, ITenantLogonPersonProvider tenantLogonPersonProvider)
 		{
 			_externalPerformanceRepository = externalPerformanceRepository;
 			_personRepository = personRepository;
-			_tenantLogonDataManager = tenantLogonDataManager;
 			_lineExtractor = lineExtractor;
 			_externalDataRepository = externalDataRepository;
+			_tenantLogonPersonProvider = tenantLogonPersonProvider;
 		}
 
 		public ExternalPerformanceInfoProcessResult Process(ImportFileData importFileData, Action<string> sendProgress)
@@ -107,24 +104,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				ValidateAgentId(processResult, extractResultCollection);
 			}
 
-			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom})
-				.Select(x => x.Last()).ToList();
-			processResult.ExternalPerformances =
-				allMeasures.Where(m => existMeasures.All(e => e.ExternalId != m.ExternalId)).ToList();
+			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom}).Select(x => x.Last()).ToList();
+			processResult.ExternalPerformances = allMeasures.Where(m => existMeasures.All(e => e.ExternalId != m.ExternalId)).ToList();
 			return processResult;
 		}
 
 		private void ValidateAgentId(ExternalPerformanceInfoProcessResult processResult, List<PerformanceInfoExtractionResult> extractResultCollection)
 		{
 			var extractResultCollectionToBeMatchAppLogonName = new List<PerformanceInfoExtractionResult>();
-			var personIdentityList = extractResultCollection.Select(x => x.AgentId).Distinct();
-			var personIdentitiesByEmploymentNumberAndExternalLogon =
-				_personRepository.FindPersonByIdentities(personIdentityList);
+			var logonNames = extractResultCollection.Select(x => x.AgentId).Distinct();
+			var personIdentitiesByEmploymentNumberAndExternalLogon = _personRepository.FindPersonByIdentities(logonNames);
 			foreach (var extractionResult in extractResultCollection)
 			{
-				var identify = extractionResult.AgentId;
-
-				if (personIdentitiesByEmploymentNumberAndExternalLogon.All(x => x.Identity != identify))
+				if (personIdentitiesByEmploymentNumberAndExternalLogon.All(x => x.LogonName != extractionResult.AgentId))
 				{
 					extractResultCollectionToBeMatchAppLogonName.Add(extractionResult);
 					continue;
@@ -136,19 +128,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			//If not found, then try find person with ApplicationLogonName match with identity
 			if (extractResultCollectionToBeMatchAppLogonName.Any())
 			{
-				personIdentityList = extractResultCollectionToBeMatchAppLogonName.Select(x => x.AgentId).Distinct();
-				var personIdentiesByAppLogonName = _tenantLogonDataManager.GetLogonInfoForIdentities(personIdentityList).ToList();
+				logonNames = extractResultCollectionToBeMatchAppLogonName.Select(x => x.AgentId).Distinct();
+				var personInfoModels = _tenantLogonPersonProvider.GetByLogonNames(logonNames).ToList();
 				foreach (var extractionResult in extractResultCollectionToBeMatchAppLogonName)
 				{
-					var identity = extractionResult.AgentId;
-					if (personIdentiesByAppLogonName.All(x => x.Identity != identity))
+					if (personInfoModels.All(x => x.ApplicationLogonName != extractionResult.AgentId))
 					{
 						processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.AgentDoNotExist}");
 						continue;
 					}
-					addMatchPerformanceData(extractionResult, personIdentiesByAppLogonName.Select(x => new PersonIdentityMatchResult
+					addMatchPerformanceData(extractionResult, personInfoModels.Select(x => new PersonIdentityMatchResult
 					{
-						Identity = x.Identity,
+						LogonName = x.ApplicationLogonName,
 						PersonId = x.PersonId,
 						MatchField = IdentityMatchField.ApplicationLogonName
 					}).ToList(), processResult);
@@ -188,15 +179,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			ExternalPerformanceInfoProcessResult processResult)
 		{
 			var matchPersonIdentities = personIdentities.Where(x =>
-				x.Identity == extractionResult.AgentId && x.MatchField == IdentityMatchField.EmploymentNumber).ToList();
+				x.LogonName == extractionResult.AgentId && x.MatchField == IdentityMatchField.EmploymentNumber).ToList();
 			if (!matchPersonIdentities.Any())
 			{
 				matchPersonIdentities = personIdentities.Where(x =>
-					x.Identity == extractionResult.AgentId && x.MatchField == IdentityMatchField.ExternalLogon).ToList();
+					x.LogonName == extractionResult.AgentId && x.MatchField == IdentityMatchField.ExternalLogon).ToList();
 				if (!matchPersonIdentities.Any())
 				{
 					matchPersonIdentities = personIdentities.Where(x =>
-						x.Identity == extractionResult.AgentId && x.MatchField == IdentityMatchField.ApplicationLogonName).ToList();
+						x.LogonName == extractionResult.AgentId && x.MatchField == IdentityMatchField.ApplicationLogonName).ToList();
 				}
 			}
 

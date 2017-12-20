@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			result = allPerson.Where(p => identityList.Contains(p.EmploymentNumber)).Select(x =>
 				new PersonIdentityMatchResult
 				{
-					Identity = x.EmploymentNumber,
+					LogonName = x.EmploymentNumber,
 					PersonId = x.Id.Value,
 					MatchField = IdentityMatchField.EmploymentNumber
 				}).ToList();
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				where identityList.Contains(acdLogonName)
 				select new PersonIdentityMatchResult
 				{
-					Identity = acdLogonName,
+					LogonName = acdLogonName,
 					PersonId = externalLogon.PersonId,
 					MatchField = IdentityMatchField.ExternalLogon
 				});

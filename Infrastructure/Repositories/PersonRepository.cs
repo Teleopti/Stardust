@@ -792,7 +792,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<object[]>()
 					.Select(x => new PersonIdentityMatchResult
 					{
-						Identity = (string) x[0],
+						LogonName = (string) x[0],
 						PersonId = (Guid) x[1],
 						MatchField = (IdentityMatchField) (int) x[2]
 					}).ToList();

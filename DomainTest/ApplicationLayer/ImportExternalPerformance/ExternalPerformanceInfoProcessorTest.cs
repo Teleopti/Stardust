@@ -8,8 +8,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 {
@@ -27,13 +28,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public IStardustJobFeedback Feedback;
 		public FakeExternalPerformanceRepository PerformanceRepository;
 		public FakePersonRepository PersonRepository;
+		public FakeTenantPersonLogonQuerier TenantPersonLogonQuerier;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
-			system.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
+			system.UseTestDouble<FakeTenantPersonLogonQuerier>().For<ITenantPersonLogonQuerier>();
 		}
 
 		[Test]
@@ -252,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
-		public void ShouldGetCorrectRecord()
+		public void ShouldGetCorrectRecordByEmployeeNumber()
 		{
 			var personId = Guid.NewGuid();
 			setPerson(personId);
@@ -267,6 +269,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.ValidRecords[0].GameName.Should().Be.EqualTo("Quality Score");
 			result.ValidRecords[0].GameType.Should().Be.EqualTo(ExternalPerformanceDataType.Percent);
 			result.ValidRecords[0].AgentId.Should().Be.EqualTo("1");
+			result.ValidRecords[0].GameId.Should().Be.EqualTo(1);
+			result.ValidRecords[0].GamePercentScore.Should().Be.EqualTo(new Percent(0.87));
+			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personId);
+		}
+
+		[Test]
+		public void ShouldGetCorrectRecordByPersonInfo()
+		{
+			var personId = Guid.NewGuid();
+			var tenantLogonName = "tenantAgent";
+			var personInfoModel = new PersonInfoModel(){PersonId = personId, ApplicationLogonName = tenantLogonName };
+			TenantPersonLogonQuerier.Add(personInfoModel);
+			var validRecord = "20171120,tenantAgent,Kalle,Pettersson,Quality Score,1,Percent,87";
+			var fileData = createFileData(validRecord);
+
+			var result = Target.Process(fileData, Feedback.SendProgress);
+
+			result.HasError.Should().Be.False();
+			result.ValidRecords.Count.Should().Be.EqualTo(1);
+			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateTime(2017, 11, 20));
+			result.ValidRecords[0].GameName.Should().Be.EqualTo("Quality Score");
+			result.ValidRecords[0].GameType.Should().Be.EqualTo(ExternalPerformanceDataType.Percent);
+			result.ValidRecords[0].AgentId.Should().Be.EqualTo(tenantLogonName);
 			result.ValidRecords[0].GameId.Should().Be.EqualTo(1);
 			result.ValidRecords[0].GamePercentScore.Should().Be.EqualTo(new Percent(0.87));
 			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personId);

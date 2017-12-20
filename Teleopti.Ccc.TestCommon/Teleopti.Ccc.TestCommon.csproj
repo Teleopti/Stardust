@@ -277,6 +277,7 @@
     <Compile Include="FakeRepositories\FakeSkillCombinationResourceReader.cs" />
     <Compile Include="FakeRepositories\FakeSkillTypeRepository.cs" />
     <Compile Include="FakeRepositories\FakeStorage.cs" />
+    <Compile Include="FakeRepositories\FakeTenantPersonLogonQuerier.cs" />
     <Compile Include="FakeRepositories\FakeUserDeviceRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkShiftRuleSetRepository.cs" />
     <Compile Include="FakeRepositories\FakeWriteSideRepository.cs" />

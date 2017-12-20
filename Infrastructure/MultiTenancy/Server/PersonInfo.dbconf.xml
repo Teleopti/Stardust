@@ -63,6 +63,14 @@ from PersonInfo pi
 where pi.Identity in (:identities) and pi.Tenant=:tenant
 ]]>
 	</query>
+	
+	<query name="findIPersonInfoModelByLogonNames">
+		<![CDATA[
+select pi.Id as "PersonId", pi.ApplicationLogonInfo.LogonName as "ApplicationLogonName", pi.ApplicationLogonInfo.LogonPassword as "Password", pi.Identity as "Identity"
+from PersonInfo pi
+where pi.ApplicationLogonInfo.LogonName in (:logonNames) and pi.Tenant=:tenant
+]]>
+	</query>
 
 	<query name="findLogonInfoByIdentity">
 		<![CDATA[
