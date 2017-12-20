@@ -16883,4 +16883,24 @@ Do you want to participate?</value>
     <value>Group Pages</value>
     <comment>group pages title</comment>
   </data>
+  <data name="SelectEndDate" xml:space="preserve">
+    <value>Please select end date</value>
+    <comment>web date range picker SelectEndDate</comment>
+  </data>
+  <data name="SelectStartDate" xml:space="preserve">
+    <value>Please select start date</value>
+    <comment>web date range picker SelectStartDate</comment>
+  </data>
+  <data name="SelectStartDateAndEndDate" xml:space="preserve">
+    <value>Please select start date and end date</value>
+    <comment>web date range picker SelectStartDateAndEndDate</comment>
+  </data>
+  <data name="ValidateEndDate" xml:space="preserve">
+    <value>End date should be later than start date</value>
+    <comment>web date range picker ValidateEndDate</comment>
+  </data>
+  <data name="ValidateStartDate" xml:space="preserve">
+    <value>Start date should be earlier than end date</value>
+    <comment>web date range picker ValidateStartDate</comment>
+  </data>
 </root>
