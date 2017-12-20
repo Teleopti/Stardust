@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 
 	public class GroupWeekScheduleViewModel
 	{
-		public List<PersonWeekScheduleViewModel> PersonWeekSchedules { get; set; } 
+		public List<PersonWeekScheduleViewModel> PersonWeekSchedules { get; set; }
 		public int Total { get; set; }
 		public string Keyword { get; set; }
 	}
@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public DateTime Start { get; set; }
 		public DateTime End { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
-	}	
-	
+	}
+
 	public class IntradayAbsenceForm
 	{
 		public IEnumerable<Guid> PersonIds { get; set; }
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	}
 
 	public class RemovePersonAbsenceForm
-	{	
+	{
 		public SelectedPersonAbsence[] SelectedPersonAbsences { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
@@ -93,9 +93,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 
 	public class ActionResult
 	{
+		public ActionResult(Guid personId)
+		{
+			PersonId = personId;
+			ErrorMessages = new List<string>();
+			WarningMessages = new List<string>();
+		}
 		public IList<string> ErrorMessages { get; set; }
 		public IList<string> WarningMessages { get; set; }
-		public Guid PersonId { get; set; }
+		public Guid PersonId { get; }
 	}
 
 	public class AgentsPerPageSettingViewModel

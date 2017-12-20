@@ -17,36 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_commandHandlingProvider = commandHandlingProvider;
 		}
 
-		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/AddActivity")]
-		public virtual List<ActionResult> AddActivityCommand([FromBody]AddActivityFormData input)
-		{
-			return _commandHandlingProvider.AddActivity(input);
-		}
-		
-		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/AddPersonalActivity")]
-		public virtual List<ActionResult> AddPersonalActivityCommand([FromBody]AddPersonalActivityFormData input)
-		{
-			return _commandHandlingProvider.AddPersonalActivity(input);
-		}
-
-		[UnitOfWork, HttpPost, Route("api/TeamSchedule/AddOvertimeActivity")]
-		public virtual IList<ActionResult> AddOvertimeActivity([FromBody] AddOvertimeActivityForm input)
-		{
-			return _commandHandlingProvider.AddOvertimeActivity(input);
-		}
-
-		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/RemoveActivity")]
-		public virtual List<ActionResult> RemoveActivityCommand([FromBody]RemoveActivityFormData input)
-		{
-			return _commandHandlingProvider.RemoveActivity(input);
-		}
-
-		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/MoveActivity")]
-		public virtual List<ActionResult> MoveActivityCommand([FromBody] MoveActivityFormData input)
-		{
-			return _commandHandlingProvider.MoveActivity(input);
-		}
-
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/BackoutScheduleChange")]
 		public virtual List<ActionResult> BackoutScheduleChangeCommand([FromBody] BackoutScheduleChangeFormData input)
 		{
@@ -81,12 +51,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual IList<ActionResult> RemoveAbsence([FromBody] RemovePersonAbsenceForm input)
 		{
 			return _commandHandlingProvider.RemoveAbsence(input);
-		}
-
-		[UnitOfWork, HttpPost, Route("api/TeamSchedule/MoveShift")]
-		public virtual IList<ActionResult> MoveShift([FromBody] MoveShiftForm input)
-		{
-			return _commandHandlingProvider.MoveShift(input);
 		}
 	}
 }

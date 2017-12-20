@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 			builder.RegisterType<SwapMainShiftForTwoPersonsCommandHandler>().As<ISwapMainShiftForTwoPersonsCommandHandler>().SingleInstance();
 			builder.RegisterType<MoveShiftLayerCommandHelper>().As<IMoveShiftLayerCommandHelper>().SingleInstance();
 			builder.RegisterType<TeamScheduleCommandHandlingProvider>().As<ITeamScheduleCommandHandlingProvider>().SingleInstance();
+			builder.RegisterType<TeamScheduleActivityCommandService>().SingleInstance();
 			builder.RegisterType<AbsenceCommandConverter>().As<IAbsenceCommandConverter>();
 			builder.RegisterType<ScheduleValidationProvider>().As<IScheduleValidationProvider>().SingleInstance();
 			builder.RegisterType<ProjectionSplitter>().As<IProjectionSplitter>().SingleInstance();

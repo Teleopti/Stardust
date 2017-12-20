@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
 using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -21,162 +20,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IMoveShiftLayerCommandHelper _helper;
+		private readonly IDictionary<string, string> _permissionDic = new Dictionary<string, string>
+		{
+			{DefinedRaptorApplicationFunctionPaths.RemoveAbsence, Resources.NoPermissionRemoveAgentAbsence},
+			{ DefinedRaptorApplicationFunctionPaths.EditShiftCategory, Resources.NoPermissionToEditShiftCategory },
+			{ DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, Resources.NoPermissionToMoveInvalidOverlappedActivity }
+		};
 
-		public TeamScheduleCommandHandlingProvider(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, IPersonRepository personRepository, IPermissionProvider permissionProvider, IMoveShiftLayerCommandHelper helper)
+		public TeamScheduleCommandHandlingProvider(
+			ICommandDispatcher commandDispatcher,
+			ILoggedOnUser loggedOnUser,
+			IPersonRepository personRepository,
+			IPermissionProvider permissionProvider)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;
-			_helper = helper;
-		}
-
-		public List<ActionResult> AddActivity(AddActivityFormData input)
-		{
-			var permissions = new Dictionary<string, string>
-			{
-				{  DefinedRaptorApplicationFunctionPaths.AddActivity,  Resources.NoPermissionAddAgentActivity}
-			};
-
-			var result = new List<ActionResult>();
-			var people = _personRepository.FindPeople(input.PersonDates.Select(x => x.PersonId)).ToLookup(p => p.Id);
-
-			foreach (var personDate in input.PersonDates)
-			{
-				var personId = personDate.PersonId;
-				var date = personDate.Date;
-
-				var actionResult = new ActionResult();
-				var person = people[personId].SingleOrDefault();
-				actionResult.PersonId = personId;
-				actionResult.ErrorMessages = new List<string>();
-				actionResult.WarningMessages = new List<string>();
-
-				if (checkPermissionFn(permissions, date, person, actionResult.ErrorMessages))
-				{
-					var command = new AddActivityCommand
-					{
-						Person = person,
-						ActivityId = input.ActivityId,
-						Date = date,
-						StartTime = input.StartTime,
-						EndTime = input.EndTime,
-						MoveConflictLayerAllowed = input.MoveConflictLayerAllowed,
-						TrackedCommandInfo =
-							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
-					};
-					_commandDispatcher.Execute(command);
-					if (command.ErrorMessages != null && command.ErrorMessages.Any())
-					{
-						actionResult.ErrorMessages.AddRange(command.ErrorMessages);
-					}
-					if (command.WarningMessages != null && command.WarningMessages.Any())
-					{
-						actionResult.WarningMessages.AddRange(command.WarningMessages);
-					}
-				}
-
-				if (actionResult.ErrorMessages.Any() || actionResult.WarningMessages.Any())
-					result.Add(actionResult);
-			}
-
-			return result;
-		}
-
-		public List<ActionResult> AddPersonalActivity(AddPersonalActivityFormData input)
-		{
-			var permissions = new Dictionary<string, string>
-			{
-				{  DefinedRaptorApplicationFunctionPaths.AddPersonalActivity,  Resources.NoPermissionAddPersonalActivity}
-			};
-
-			var result = new List<ActionResult>();
-			var people = _personRepository.FindPeople(input.PersonDates.Select(x => x.PersonId)).ToLookup(p => p.Id);
-			foreach (var personDate in input.PersonDates)
-			{
-				var personId = personDate.PersonId;
-				var date = personDate.Date;
-
-				var actionResult = new ActionResult();
-				var person = people[personId].SingleOrDefault();
-				actionResult.PersonId = personId;
-				actionResult.ErrorMessages = new List<string>();
-
-				if (checkPermissionFn(permissions, date, person, actionResult.ErrorMessages))
-				{
-					var command = new AddPersonalActivityCommand
-					{
-						Person = person,
-						PersonalActivityId = input.ActivityId,
-						Date = date,
-						StartTime = input.StartTime,
-						EndTime = input.EndTime,
-						TrackedCommandInfo =
-							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
-					};
-					_commandDispatcher.Execute(command);
-					if (command.ErrorMessages != null && command.ErrorMessages.Any())
-					{
-						actionResult.ErrorMessages.AddRange(command.ErrorMessages);
-					}
-				}
-
-				if (actionResult.ErrorMessages.Any())
-					result.Add(actionResult);
-			}
-
-			return result;
-		}
-
-		public IList<ActionResult> AddOvertimeActivity(AddOvertimeActivityForm input)
-		{
-			var permissions = new Dictionary<string, string>
-			{
-				{  DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity,  Resources.NoPermissionAddOvertimeActivity}
-			};
-
-			var result = new List<ActionResult>();
-			var people = _personRepository.FindPeople(input.PersonDates.Select(x => x.PersonId)).ToLookup(p => p.Id);
-
-			foreach (var personDate in input.PersonDates)
-			{
-				var personId = personDate.PersonId;
-				var date = personDate.Date;
-
-				var actionResult = new ActionResult();
-				var person = people[personId].SingleOrDefault();
-				actionResult.PersonId = personId;
-				actionResult.ErrorMessages = new List<string>();
-
-				var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-				var startDateTimeUtc = TimeZoneHelper.ConvertToUtc(input.StartDateTime, userTimezone);
-				var endDateTimeUtc = TimeZoneHelper.ConvertToUtc(input.EndDateTime, userTimezone);
-
-				if (checkPermissionFn(permissions, date, person, actionResult.ErrorMessages))
-				{
-					var command = new AddOvertimeActivityCommand
-					{
-						Person = person,
-						ActivityId = input.ActivityId,
-						Date = date,
-						Period = new DateTimePeriod(startDateTimeUtc, endDateTimeUtc),
-						MultiplicatorDefinitionSetId = input.MultiplicatorDefinitionSetId,
-						TrackedCommandInfo =
-							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
-					};
-					_commandDispatcher.Execute(command);
-					if (command.ErrorMessages != null && command.ErrorMessages.Any())
-					{
-						actionResult.ErrorMessages.AddRange(command.ErrorMessages);
-					}
-				}
-
-				if (actionResult.ErrorMessages.Any())
-					result.Add(actionResult);
-			}
-
-			return result;
 		}
 
 		public IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds)
@@ -185,56 +45,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return agents.Where(agent => agentScheduleIsWriteProtected(date, agent)).Select(x => x.Id.GetValueOrDefault()).ToList();
 		}
 
-		public List<ActionResult> RemoveActivity(RemoveActivityFormData input)
-		{
-			var result = new List<ActionResult>();
-			foreach (var personActivity in input.PersonActivities)
-			{
-				var actionResult = new ActionResult();
-				var person = _personRepository.Get(personActivity.PersonId);
-				actionResult.PersonId = personActivity.PersonId;
-				actionResult.ErrorMessages = new List<string>();
-				foreach (var shiftLayerDate in personActivity.ShiftLayers)
-				{
-					if (checkRemoveActivityPermission(shiftLayerDate, person, actionResult.ErrorMessages))
-					{
-						var command = new RemoveActivityCommand
-						{
-							PersonId = personActivity.PersonId,
-							ShiftLayerId = shiftLayerDate.ShiftLayerId,
-							Date = shiftLayerDate.Date,
-							TrackedCommandInfo =
-								input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
-						};
-
-						_commandDispatcher.Execute(command);
-						if (command.ErrorMessages != null && command.ErrorMessages.Any())
-						{
-							actionResult.ErrorMessages.AddRange(command.ErrorMessages);
-						}
-					}
-				}
-
-				actionResult.ErrorMessages.ForEach(e =>
-				{
-					result.Add(new ActionResult
-					{
-						ErrorMessages = new List<string> { e },
-						PersonId = personActivity.PersonId
-					});
-				});
-			}
-
-			return result;
-		}
-
 		public List<ActionResult> RemoveAbsence(RemovePersonAbsenceForm input)
 		{
-			var permissions = new Dictionary<string, string>
-			{
-				{  DefinedRaptorApplicationFunctionPaths.RemoveAbsence, Resources.NoPermissionRemoveAgentAbsence}
-			};
-
 			var result = new List<ActionResult>();
 
 			var people = _personRepository.FindPeople(input.SelectedPersonAbsences.Select(p => p.PersonId)).ToDictionary(p => p.Id.GetValueOrDefault());
@@ -245,13 +57,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 				foreach (var absenceGroup in absenceDateGroups)
 				{
-					var actionResult = new ActionResult();
+					var actionResult = new ActionResult(selectedPersonAbsence.PersonId);
 					var date = absenceGroup.Key;
 
-					actionResult.PersonId = selectedPersonAbsence.PersonId;
-					actionResult.ErrorMessages = new List<string>();
-
-					if (checkPermissionFn(permissions, date, person, actionResult.ErrorMessages))
+					if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.RemoveAbsence, date, person, actionResult.ErrorMessages))
 					{
 						var command = new RemoveSelectedPersonAbsenceCommand
 						{
@@ -276,47 +85,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					if (actionResult.ErrorMessages.Any())
 						result.Add(actionResult);
 				}
-
-			}
-
-			return result;
-		}
-
-		public IList<ActionResult> MoveShift(MoveShiftForm input)
-		{
-			var permission = new Dictionary<string, string>
-			{
-				{DefinedRaptorApplicationFunctionPaths.MoveActivity, Resources.NoPermissionMoveAgentActivity}
-			};
-			var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.NewShiftStart, userTimezone);
-			var result = new List<ActionResult>();
-
-			var people = _personRepository.FindPeople(input.PersonIds);
-			foreach (var person in people)
-			{
-				var personError = new ActionResult { PersonId = person.Id.GetValueOrDefault(), ErrorMessages = new List<string>() };
-				if (!checkPermissionFn(permission, input.Date, person, personError.ErrorMessages))
-				{
-					result.Add(personError);
-					continue;
-				}
-
-				var command = new MoveShiftCommand
-				{
-					PersonId = person.Id.GetValueOrDefault(),
-					ScheduleDate = input.Date,
-					NewStartTimeInUtc = newStartTimeInUtc,
-					TrackedCommandInfo =
-							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
-				};
-				_commandDispatcher.Execute(command);
-				if (command.ErrorMessages != null && command.ErrorMessages.Any())
-				{
-					personError.ErrorMessages.AddRange(command.ErrorMessages);
-				}
-				if (personError.ErrorMessages.Any())
-					result.Add(personError);
 			}
 
 			return result;
@@ -324,8 +92,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public List<ActionResult> BackoutScheduleChange(BackoutScheduleChangeFormData input)
 		{
-			var permissions = new Dictionary<string, string>();
-
 			var result = new List<ActionResult>();
 
 			var personDateGroups = input.PersonDates.GroupBy(personDate => personDate.PersonId, personDate => personDate.Date);
@@ -333,12 +99,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			foreach (var dates in personDateGroups)
 			{
 				var personId = dates.Key;
-
-				var actionResult = new ActionResult();
 				var person = _personRepository.Get(personId);
-				actionResult.PersonId = personId;
-				actionResult.ErrorMessages = new List<string>();
-				if (dates.All(date => checkPermissionFn(permissions, date, person, actionResult.ErrorMessages)))
+				var actionResult = new ActionResult(personId);
+				if (dates.All(date =>
+									{
+										if (agentScheduleIsWriteProtected(date, person))
+										{
+											actionResult.ErrorMessages.Add(Resources.WriteProtectSchedule);
+											return false;
+										}
+										return true;
+									}))
 				{
 					var command = new BackoutScheduleChangeCommand
 					{
@@ -361,86 +132,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
-
-		public List<ActionResult> MoveActivity(MoveActivityFormData input)
-		{
-
-			var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.StartTime, userTimezone);
-			var result = new List<ActionResult>();
-
-			foreach (var personActivity in input.PersonActivities)
-			{
-				var person = _personRepository.Get(personActivity.PersonId);
-				var personError = new ActionResult { PersonId = person.Id.GetValueOrDefault(), ErrorMessages = new List<string>() };
-
-				List<string> permissionErrors;
-				if (!_helper.CheckPermission(personActivity.ShiftLayerIds, person, personActivity.Date, out permissionErrors))
-				{
-					personError.ErrorMessages.AddRange(permissionErrors);
-					result.Add(personError);
-					continue;
-				}
-				var layerToMoveTimeMap = _helper.GetCorrectNewStartForLayersForPerson(person, personActivity.Date, personActivity.ShiftLayerIds,
-					newStartTimeInUtc);
-				if (personActivity.ShiftLayerIds.Any(x => !layerToMoveTimeMap.ContainsKey(x)))
-				{
-					personError.ErrorMessages.Add(Resources.NoShiftsFound);
-				}
-
-				if (_helper.ValidateLayerMoveToTime(layerToMoveTimeMap, person, personActivity.Date))
-				{
-					layerToMoveTimeMap
-						.ForEach(
-							pl =>
-							{
-								var command = new MoveShiftLayerCommand
-								{
-									AgentId = personActivity.PersonId,
-									NewStartTimeInUtc = pl.Value,
-									ScheduleDate = personActivity.Date,
-									ShiftLayerId = pl.Key,
-									TrackedCommandInfo =
-										input.TrackedCommandInfo ??
-										new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault() }
-								};
-								_commandDispatcher.Execute(command);
-								if (command.ErrorMessages != null && command.ErrorMessages.Any())
-								{
-									personError.ErrorMessages.AddRange(command.ErrorMessages);
-								}
-							});
-
-				}
-				else
-				{
-					personError.ErrorMessages.Add(Resources.ShiftLengthExceed36Hours);
-				}
-				if (personError.ErrorMessages.Any())
-				{
-					result.Add(personError);
-				}
-			}
-
-			return result;
-		}
-
 		public List<ActionResult> ChangeShiftCategory(ChangeShiftCategoryFormData input)
 		{
-			var permissions = new Dictionary<string, string>
-			{
-				{ DefinedRaptorApplicationFunctionPaths.EditShiftCategory, Resources.NoPermissionToEditShiftCategory }
-			};
-
 			var result = new List<ActionResult>();
 			var people = _personRepository.FindPeople(input.PersonIds);
 			foreach (var person in people)
 			{
-				var actionResult = new ActionResult();
-				actionResult.PersonId = person.Id.GetValueOrDefault();
-				actionResult.ErrorMessages = new List<string>();
+				var actionResult = new ActionResult(person.Id.GetValueOrDefault());
 
-				if (checkPermissionFn(permissions, input.Date, person, actionResult.ErrorMessages))
+				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.EditShiftCategory, input.Date, person, actionResult.ErrorMessages))
 				{
 					var command = new ChangeShiftCategoryCommand
 					{
@@ -467,20 +167,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public IList<ActionResult> MoveNonoverwritableLayers(MoveNonoverwritableLayersFormData input)
 		{
-			var permissions = new Dictionary<string, string>
-			{
-				{ DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, Resources.NoPermissionToMoveInvalidOverlappedActivity }
-			};
-
 			var result = new List<ActionResult>();
 			var people = _personRepository.FindPeople(input.PersonIds);
 			foreach (var person in people)
 			{
-				var actionResult = new ActionResult();
-				actionResult.PersonId = person.Id.GetValueOrDefault();
-				actionResult.ErrorMessages = new List<string>();
+				var actionResult = new ActionResult(person.Id.GetValueOrDefault());
 
-				if (checkPermissionFn(permissions, input.Date, person, actionResult.ErrorMessages))
+				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, input.Date, person, actionResult.ErrorMessages))
 				{
 					var command = new FixNotOverwriteLayerCommand
 					{
@@ -506,20 +199,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public IList<ActionResult> EditScheduleNote(EditScheduleNoteFormData input)
 		{
-			var actionResult = new ActionResult
-			{
-				PersonId = input.PersonId
-			};
+			var actionResult = new ActionResult(input.PersonId);
 
 			var retResult = new List<ActionResult>();
 			var person = _personRepository.Get(input.PersonId);
 
 			if (agentScheduleIsWriteProtected(input.SelectedDate, person))
 			{
-				actionResult.ErrorMessages = new List<string>
-				{
-					Resources.WriteProtectSchedule
-				};
+				actionResult.ErrorMessages.Add(Resources.WriteProtectSchedule);
 				retResult.Add(actionResult);
 				return retResult;
 			}
@@ -535,9 +222,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 
 			if (command.ErrorMessages != null && command.ErrorMessages.Any())
-				retResult.Add(new ActionResult
+				retResult.Add(new ActionResult(input.PersonId)
 				{
-					PersonId = input.PersonId,
 					ErrorMessages = command.ErrorMessages
 				});
 
@@ -550,8 +236,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				&& agent.PersonWriteProtection.IsWriteProtected(date);
 		}
 
-
-		private bool checkPermissionFn(Dictionary<string, string> permissions, DateOnly date, IPerson agent, IList<string> messages)
+		private bool checkFunctionPermission(string path, DateOnly date, IPerson agent, IList<string> messages)
 		{
 			var newMessages = new List<string>();
 
@@ -559,53 +244,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				newMessages.Add(Resources.WriteProtectSchedule);
 			}
-
-			newMessages.AddRange(
-				from permission in permissions
-				where !_permissionProvider.HasPersonPermission(permission.Key, date, agent)
-				select permission.Value);
-
-			messages.AddRange(newMessages);
-			return !newMessages.Any();
-		}
-		private bool checkRemoveActivityPermission(ShiftLayerDate layerDate, IPerson agent, IList<string> messages)
-		{
-			var date = layerDate.Date;
-			var newMessages = new List<string>();
-
-			if (agentScheduleIsWriteProtected(date, agent))
+			if (!_permissionProvider.HasPersonPermission(path, date, agent))
 			{
-				newMessages.Add(Resources.WriteProtectSchedule);
-			}
-
-			if (layerDate.IsOvertime && !_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.RemoveOvertime, date, agent))
-			{
-				newMessages.Add(Resources.NoPermissionRemoveOvertimeActivity);
-			}
-			else if (!layerDate.IsOvertime && !_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.RemoveActivity, date, agent))
-			{
-				newMessages.Add(Resources.NoPermissionRemoveAgentActivity);
+				newMessages.Add(_permissionDic[path]);
 			}
 
 			messages.AddRange(newMessages);
 			return !newMessages.Any();
 		}
-		
-	}
-
-	public interface ITeamScheduleCommandHandlingProvider
-	{
-		List<ActionResult> AddActivity(AddActivityFormData formData);
-		List<ActionResult> AddPersonalActivity(AddPersonalActivityFormData formData);
-		IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds);
-		List<ActionResult> RemoveActivity(RemoveActivityFormData input);
-		List<ActionResult> MoveActivity(MoveActivityFormData input);
-		List<ActionResult> BackoutScheduleChange(BackoutScheduleChangeFormData input);
-		List<ActionResult> ChangeShiftCategory(ChangeShiftCategoryFormData input);
-		IList<ActionResult> MoveNonoverwritableLayers(MoveNonoverwritableLayersFormData input);
-		IList<ActionResult> EditScheduleNote(EditScheduleNoteFormData input);
-		List<ActionResult> RemoveAbsence(RemovePersonAbsenceForm input);
-		IList<ActionResult> MoveShift(MoveShiftForm input);
-		IList<ActionResult> AddOvertimeActivity(AddOvertimeActivityForm input);
 	}
 }

@@ -94,9 +94,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		private IEnumerable<ActionResult> parseErrorResponses(IBusinessRuleResponse[] errorResponses)
 		{
-			return errorResponses.Select(r => new ActionResult
+			return errorResponses.Select(r => new ActionResult(r.Person.Id.GetValueOrDefault())
 			{
-				PersonId = r.Person.Id.GetValueOrDefault(),
 				ErrorMessages = new List<string> {r.Message}
 			});
 		}

@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForFullDayAbsence(command);
 
 			var checkResult = _permissionChecker.CheckAddFullDayAbsenceForPerson(absenceCreatorInfo.Person, new DateOnly(command.StartDate));
-			if (checkResult != null) return getFailActionResult(absenceCreatorInfo.Person.Id.GetValueOrDefault(), new List<string>{checkResult});
-			
+			if (checkResult != null) return getFailActionResult(absenceCreatorInfo.Person.Id.GetValueOrDefault(), new List<string> { checkResult });
+
 			var createResult = _personAbsenceCreator.Create(absenceCreatorInfo, true);
 			if (createResult != null) return getFailActionResult(absenceCreatorInfo.Person.Id.GetValueOrDefault(), createResult);
 
@@ -48,9 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 
 		private ActionResult getFailActionResult(Guid personId, IList<string> message)
 		{
-			return new ActionResult
+			return new ActionResult(personId)
 			{
-				PersonId = personId,
 				ErrorMessages = message
 			};
 		}
