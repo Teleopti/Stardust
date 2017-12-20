@@ -12,6 +12,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -66,7 +67,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Assert.AreEqual(DateOnly.Today, _target.SelectedModel.OvertimeRequestPeriodModels[0].PeriodStartDate);
 			Assert.AreEqual(DateOnly.Today.AddDays(staffingInfoAvailableDays), _target.SelectedModel.OvertimeRequestPeriodModels[0].PeriodEndDate);
 		}
-
 
 		[Theory]
 		public void VerifyAddNewRollingOpenPeriod(Toggles toggles)
@@ -163,6 +163,32 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
 			_target.DeleteOvertimeRequestPeriod(_target.SelectedModel.OvertimeRequestPeriodModels);
 			Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
+		}
+
+		[Test]
+		public void VerifyCanSetOvertimeRequestMaximumTimeHandleType()
+		{
+			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
+			WorkflowControlSetRepository.Add(workflowControlSet);
+
+			initialize();
+			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+			_target.SelectedModel.OvertimeRequestValidationHandleOptionView = new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny,"deny");
+
+			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumTimeHandleType,_target.SelectedModel.OvertimeRequestValidationHandleOptionView.WorkRuleValidationHandleType);
+		}
+
+		[Test]
+		public void VerifyCanSetOvertimeRequestMaximumTime()
+		{
+			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
+			WorkflowControlSetRepository.Add(workflowControlSet);
+
+			initialize();
+			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+			_target.SelectedModel.OvertimeRequestMaximumTime = TimeSpan.MaxValue;
+
+			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumTime, _target.SelectedModel.OvertimeRequestMaximumTime);
 		}
 
 		[Test]

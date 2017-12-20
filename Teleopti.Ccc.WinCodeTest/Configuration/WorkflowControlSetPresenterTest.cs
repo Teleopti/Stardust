@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 {
 	[TestFixture]
 	[DomainTest]
-	public partial class WorkflowControlSetPresenterTest : ISetup
+	public class WorkflowControlSetPresenterTest : ISetup
 	{
 		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
 		public FakeUnitOfWorkFactory UnitOfWorkFactory;
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			IWorkflowControlSet workflowControlSet2 = new WorkflowControlSet("to edit");
 			workflowControlSet2.SetId(Guid.NewGuid());
 			IWorkflowControlSet workflowControlSet5 = workflowControlSet2.EntityClone();
-			
+
 			WorkflowControlSetRepository.Add(workflowControlSet1);
 			WorkflowControlSetRepository.Add(workflowControlSet2);
 
@@ -208,13 +208,13 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
 			WorkflowControlSetRepository.Add(workflowControlSet);
-			
+
 			AbsenceRepository.Add(AbsenceFactory.CreateRequestableAbsence("Holiday", "Ho", Color.Red));
 
 			initialize();
 
 			_view.RefreshOpenPeriodsGrid();
-			
+
 			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 
 			Assert.AreEqual(0, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
@@ -347,11 +347,11 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			WorkflowControlSetRepository.Add(workflowControlSet);
 
 			var openDatePeriod =
-				(AbsenceRequestOpenDatePeriod) WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-			((IEntity) openDatePeriod).SetId(Guid.NewGuid());
+				(AbsenceRequestOpenDatePeriod)WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
+			((IEntity)openDatePeriod).SetId(Guid.NewGuid());
 			var openRollingPeriod =
-				(AbsenceRequestOpenRollingPeriod) WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
-			((IEntity) openRollingPeriod).SetId(Guid.NewGuid());
+				(AbsenceRequestOpenRollingPeriod)WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
+			((IEntity)openRollingPeriod).SetId(Guid.NewGuid());
 			workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod);
 			workflowControlSet.AddOpenAbsenceRequestPeriod(openRollingPeriod);
 
@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			initialize();
 
 			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
-			
+
 			IActivity activity = ActivityFactory.CreateActivity("Lunch");
 			Assert.IsNull(_target.SelectedModel.AllowedPreferenceActivity);
 			_target.SetSelectedAllowedPreferenceActivity(activity);
@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			initialize();
 
 			DateTime publishedToDate = DateTime.Today;
-			
+
 			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 			_target.SetPublishedToDate(publishedToDate);
 
@@ -558,7 +558,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			result = _target.BasicVisualizerWriteProtectionPeriods(new DateOnly(2010, 6, 1));
 			Assert.AreEqual(1, result.Count);
 			Assert.AreEqual(expected, result[0]);
-			}
+		}
 
 		[Test]
 		public void VerifyBasicVisualizerPreferencePeriods()
