@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IPersonPeriodFilter _personPeriodFilter;
 		private readonly IPersonPeriodTransformer _personPeriodTransformer;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
-		private readonly AnalyticsTimeZoneUpdater _analyticsTimeZoneUpdater;
 
 		public AnalyticsPersonPeriodUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
@@ -34,8 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
 			IPersonPeriodFilter personPeriodFilter,
 			IPersonPeriodTransformer personPeriodTransformer, 
-			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
-			AnalyticsTimeZoneUpdater analyticsTimeZoneUpdater)
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -44,7 +42,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_personPeriodFilter = personPeriodFilter;
 			_personPeriodTransformer = personPeriodTransformer;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
-			_analyticsTimeZoneUpdater = analyticsTimeZoneUpdater;
 
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
@@ -171,11 +168,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				}
 			}
 
-
 			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
-				_analyticsTimeZoneUpdater.SetUtcInUse();
-				_analyticsTimeZoneUpdater.SetTimeZonesTobeDeleted();
+				if (!changedPeople.Any()) return;
+				_eventPublisher.Publish(new PossibleTimeZoneChangeEvent());
 			});
 			
 			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>

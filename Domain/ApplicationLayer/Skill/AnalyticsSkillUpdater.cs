@@ -1,7 +1,6 @@
 using System;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Exceptions;
@@ -21,20 +20,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
-		private readonly AnalyticsTimeZoneUpdater _analyticsTimeZoneUpdater;
+		private readonly IEventPopulatingPublisher _eventPublisher;
+		private readonly ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsSkillUpdater));
 
 		public AnalyticsSkillUpdater(ISkillRepository skillRepository, 
 			IAnalyticsSkillRepository analyticsSkillRepository, 
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, 
 			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
-			AnalyticsTimeZoneUpdater analyticsTimeZoneUpdater)
+			IEventPopulatingPublisher eventPublisher,
+			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
 		{
 			_skillRepository = skillRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
-			_analyticsTimeZoneUpdater = analyticsTimeZoneUpdater;
+			_eventPublisher = eventPublisher;
+			_currentAnalyticsUnitOfWork = currentAnalyticsUnitOfWork;
 		}
 		
 		public virtual void Handle(Guid skillId)
@@ -63,8 +65,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 				IsDeleted = deleteTag != null && deleteTag.IsDeleted
 			};
 			_analyticsSkillRepository.AddOrUpdateSkill(analyticsSkill);
-			_analyticsTimeZoneUpdater.SetUtcInUse();
-			_analyticsTimeZoneUpdater.SetTimeZonesTobeDeleted();
+
+			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
+			{
+				_eventPublisher.Publish(new PossibleTimeZoneChangeEvent
+				{
+					LogOnBusinessUnitId = skill.BusinessUnit.Id.GetValueOrDefault()
+				});
+			});
 		}
 
 		[ImpersonateSystem]

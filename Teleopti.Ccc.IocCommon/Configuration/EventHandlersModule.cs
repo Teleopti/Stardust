@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -185,8 +186,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AnalyticsTimeZoneRepositoryWithCreation>().As<IAnalyticsTimeZoneRepository>().SingleInstance();
 			else
 				builder.RegisterType<AnalyticsTimeZoneRepository>().As<IAnalyticsTimeZoneRepository>().SingleInstance();
-
-			builder.RegisterType<AnalyticsTimeZoneUpdater>().SingleInstance();
 		}
 
 	}
