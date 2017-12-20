@@ -17,7 +17,10 @@
 		vm.intervalRange = 0;
 		vm.intervalType = vm.types[0];
 		vm.originLastPp = undefined;
-		vm.selectedSuggestion = undefined;
+		vm.selectedSuggestion = {
+			startDate: null,
+			endDate: null
+		}
 		vm.openCreatePpModal = false;
 		vm.modifyLastPpModal = false;
 		vm.confirmDeletePpModal = false;
@@ -104,12 +107,12 @@
 
 		function typeChanged(output) {
 			vm.intervalType = output;
-			vm.selectedIsValid = CheckSelectedIsValid();
+			vm.selectedIsValid = checkSelectedIsValid();
 			return autoUpdateEndDate();
 		}
 
 		function intervalChanged() {
-			vm.selectedIsValid = CheckSelectedIsValid();
+			vm.selectedIsValid = checkSelectedIsValid();
 			return autoUpdateEndDate();
 		}
 
@@ -138,14 +141,14 @@
 		}
 
 		function isSelectedChanged() {
-			vm.selectedIsValid = CheckSelectedIsValid();
+			vm.selectedIsValid = checkSelectedIsValid();
 			autoUpdateEndDate();
 		}
 
-		function CheckSelectedIsValid() {
-			if (!vm.selectedSuggestion.startDate || !vm.selectedSuggestion.endDate || !isValidMaxWeeks() || !isValidMaxMonths())
-				return false;
-			return true
+		function checkSelectedIsValid() {
+			if (!!vm.selectedSuggestion.startDate && !!vm.selectedSuggestion.endDate && (isValidMaxWeeks() || isValidMaxMonths()))
+				return true;
+			return false
 		}
 
 		function changeDateForLastPp(pp) {
