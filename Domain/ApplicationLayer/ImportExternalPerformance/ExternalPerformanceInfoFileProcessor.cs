@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			Action<string> sendProgress)
 		{
 			sendProgress("ExternalPerformanceInfoFileProcessor: Start to extract file.");
-			var processResult = validateFileContent(rawData);
+			var processResult = ExtractFileContent(rawData);
 
 			if (processResult.HasError)
 			{
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			return processResult;
 		}
 
-		private ExternalPerformanceInfoProcessResult validateFileContent(byte[] content)
+		private ExternalPerformanceInfoProcessResult ExtractFileContent(byte[] content)
 		{
 			var processResult = new ExternalPerformanceInfoProcessResult();
 			var allLines = byteArrayToString(content);
@@ -239,6 +239,43 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 			}
 			return records;
+		}
+
+		public void Persist(ExternalPerformanceInfoProcessResult result)
+		{
+			foreach (var externalPerformance in result.ExternalPerformances)
+			{
+				_externalPerformanceRepository.Add(externalPerformance);
+			}
+
+			var externalPerformances = result.ExternalPerformances;
+			externalPerformances.AddRange(_externalPerformanceRepository.FindAllExternalPerformances());
+			if (!externalPerformances.Any()) return;
+
+			var allExistData = _externalDataRepository.LoadAll();
+
+			foreach (var validRecord in result.ValidRecords)
+			{
+				var score = validRecord.GameNumberScore;
+				if (validRecord.GameType == ExternalPerformanceDataType.Percentage) score = Convert.ToInt32(validRecord.GamePercentScore.Value * 10000);
+
+				var existData = allExistData.FirstOrDefault(x => x.PersonId == validRecord.PersonId && x.DateFrom == validRecord.DateFrom);
+				if (existData == null)
+				{
+					_externalDataRepository.Add(new ExternalPerformanceData()
+					{
+						ExternalPerformance = externalPerformances.FirstOrDefault(x => x.ExternalId == validRecord.GameId),
+						DateFrom = validRecord.DateFrom,
+						OriginalPersonId = validRecord.AgentId,
+						PersonId = validRecord.PersonId,
+						Score = score
+					});
+				}
+				else
+				{
+					existData.Score = score;
+				}
+			}
 		}
 	}
 }
