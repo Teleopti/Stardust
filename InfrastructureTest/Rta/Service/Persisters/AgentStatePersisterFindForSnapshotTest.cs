@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Castle.Core.Internal;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 			};
 			Persister.Upsert(state);
 
-			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), 6, new [] { Guid.NewGuid() });
+			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), 6, new[] {Guid.NewGuid()});
 			Persister.ReadForTest(logons)
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
 		}
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 			};
 			Persister.Upsert(state);
 
-			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), 6, new Guid[] {});
+			var logons = Persister.FindForClosingSnapshot("2015-03-06 15:20".Utc(), 6, new Guid[] { });
 			var result = Persister.ReadForTest(logons)
 				.Single(x => x.PersonId == personId);
 
@@ -81,10 +82,55 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 				StateGroupId = state
 			});
 
-			Persister.FindForClosingSnapshot("2016-09-12 13:01".Utc(), 1, new[] { loggedout })
+			Persister.FindForClosingSnapshot("2016-09-12 13:01".Utc(), 1, new[] {loggedout})
 				.Single()
 				.Should().Be(person2);
 		}
 
+		[Test]
+		public void ShouldFindPersonsForLogoutNotInSnapshot()
+		{
+			var snapshotId = "2017-12-19 15:28:08".Utc();
+			Persister.Upsert(new AgentStateForUpsert
+			{
+				PersonId = Guid.NewGuid(),
+				ReceivedTime = snapshotId,
+				SnapshotDataSourceId = 1,
+				StateGroupId = Guid.NewGuid(),
+				SnapshotId = snapshotId
+			});
+
+			Persister.FindForClosingSnapshot(snapshotId, 1, new[] {Guid.NewGuid()})
+				.Should().Be.Empty();
+		}
+
+		[Test]
+		[Ignore("Failing test for #47282")]
+		public void ShouldFindPersonsForLogoutNotInSnapshotWithPrecision_47282()
+		{
+			var person = Guid.NewGuid();
+			var snapshotIds = from i in Enumerable.Range(0, 30) // measured 100% failure rate with 30 random numbers
+				let m = new Random().Next(0, 9999999)
+				let id = $"2017-12-19 15:28:08.{m}".Utc()
+				select id;
+
+			snapshotIds.ForEach(snapshotId =>
+			{
+				Persister.Delete(person, DeadLockVictim.Yes);
+				// CLEAN UP
+				Console.WriteLine(snapshotId.ToString("HH.mm.ss.fffffff"));
+				Persister.Upsert(new AgentStateForUpsert
+				{
+					PersonId = person,
+					ReceivedTime = snapshotId,
+					SnapshotDataSourceId = 1,
+					StateGroupId = Guid.NewGuid(),
+					SnapshotId = snapshotId
+				});
+
+				Persister.FindForClosingSnapshot(snapshotId, 1, new[] {Guid.NewGuid()})
+					.Should().Be.Empty();
+			});
+		}
 	}
 }
