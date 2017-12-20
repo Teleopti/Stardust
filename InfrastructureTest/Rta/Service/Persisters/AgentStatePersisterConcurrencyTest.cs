@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 				Thread.Sleep(TimeSpan.FromMilliseconds(100));
 				model.ReceivedTime = (model.ReceivedTime ?? "2016-03-15 00:00:00".Utc()).AddSeconds(1);
 				model.StateGroupId = model.StateGroupId ?? stateGroupId;
-				model.SnapshotId = model.SnapshotId ?? snapshotId;
+				model.SnapshotId = model.SnapshotId ?? snapshotId?.Ticks;
 				model.SnapshotDataSourceId = 0;
 				_persister.Update(model);
 			}

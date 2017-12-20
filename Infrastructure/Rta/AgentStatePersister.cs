@@ -91,7 +91,7 @@ WHERE
 			var query = _unitOfWork.Current().Session()
 					.CreateSQLQuery(sql)
 					.SetParameter("PersonId", model.PersonId)
-					.SetParameter("SnapshotId", model.SnapshotId.GetValueOrDefault().Ticks)
+					.SetParameter("SnapshotId", model.DateSnapshotId.GetValueOrDefault().Ticks)
 					.SetParameter("SnapshotDataSourceId", model.SnapshotDataSourceId)
 					.SetParameter("ReceivedTime", model.ReceivedTime)
 					.SetParameter("StateGroupId", model.StateGroupId)

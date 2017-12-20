@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return true;
 			if (Schedule.TimeWindowCheckSum() != Stored.TimeWindowCheckSum)
 				return true;
-			if (SnapshotId != Stored.SnapshotId)
+			if (SnapshotId != Stored.DateSnapshotId)
 				return true;
 			return false;
 		}
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public string InputStateCode() => _input?.StateCode;
 		public string InputStateDescription() => _input?.StateDescription;
 
-		public DateTime? SnapshotId => _input?.SnapshotId ?? Stored.SnapshotId;
+		public DateTime? SnapshotId => _input?.SnapshotId ?? Stored.DateSnapshotId;
 		public int? SnapshotDataSourceId => _input?.SnapshotDataSourceId ??  Stored.SnapshotDataSourceId;
 		public DateTime? StateStartTime => State.StateChanged() ? Time : Stored.StateStartTime;
 		public DateTime? RuleStartTime => State.RuleChanged() ? Time : Stored.RuleStartTime;
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				BusinessUnitId = BusinessUnitId,
 				SiteId = SiteId,
 				TeamId = TeamId,
-				SnapshotId = SnapshotId,
+				SnapshotId = SnapshotId?.Ticks,
 				SnapshotDataSourceId = SnapshotDataSourceId,
 
 				ReceivedTime = Time,

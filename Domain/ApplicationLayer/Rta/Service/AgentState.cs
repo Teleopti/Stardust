@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class AgentState
 	{
-		public DateTime? SnapshotId { get; set; }
+		public long? SnapshotId { get; set; }
+		public DateTime? DateSnapshotId => SnapshotId.HasValue ? new DateTime(SnapshotId.Value) : (DateTime?) null;
 		public int? SnapshotDataSourceId { get; set; }
 
 		public Guid PersonId { get; set; }
