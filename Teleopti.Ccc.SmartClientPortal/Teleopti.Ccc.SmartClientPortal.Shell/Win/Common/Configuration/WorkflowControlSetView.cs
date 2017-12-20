@@ -62,6 +62,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			loadOvertimeRequestAutoGrantTypeAdapterCollection();
 		}
 
+		public WorkflowControlSetView(IToggleManager toggleManager, WorkflowControlSetPresenter presenter) : this(toggleManager)
+		{
+			_presenter = presenter;
+			_presenter.SetParentView(this);
+		}
+
 		private void setAbsenceRequestVisibilityOptions(IToggleManager toggleManager)
 		{
 			if (!toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687))

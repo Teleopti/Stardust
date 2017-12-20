@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IWorkflowControlSet root)
 		{
-			throw new NotImplementedException();
+			_storage.Remove(root);
 		}
 
 		public IWorkflowControlSet Get(Guid id)
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IWorkflowControlSet> LoadAllSortByName()
 		{
-			throw new NotImplementedException();
+			return LoadAll().OrderBy(w => w.Name).ToList();
 		}
 	}
 }

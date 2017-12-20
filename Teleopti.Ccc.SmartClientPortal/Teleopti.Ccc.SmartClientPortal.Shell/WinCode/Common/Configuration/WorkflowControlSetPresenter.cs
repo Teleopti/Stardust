@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
 	public class WorkflowControlSetPresenter
 	{
-		private readonly IWorkflowControlSetView _view;
+		private IWorkflowControlSetView _view;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private IList<IActivity> _activityCollection;
@@ -44,6 +44,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			var startDate = DateHelper.GetFirstDateInMonth(DateTime.Today, CultureInfo.CurrentCulture);
 			var endDate = CultureInfo.CurrentCulture.Calendar.AddMonths(startDate, 3).AddDays(-1);
 			ProjectionPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
+		}
+
+		public void SetParentView(IWorkflowControlSetView view)
+		{
+			_view = view;
 		}
 
 		public IEnumerable<IWorkflowControlSetModel> WorkflowControlSetModelCollection
