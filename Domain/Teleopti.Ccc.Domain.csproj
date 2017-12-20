@@ -173,7 +173,9 @@
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersister.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformanceInfoProcessResult.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\IExternalPerformanceInfoFileProcessor.cs" />
+    <Compile Include="ApplicationLayer\ImportExternalPerformance\ILineExtractor.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportGamificationJobResultDetail.cs" />
+    <Compile Include="ApplicationLayer\ImportExternalPerformance\LineExtractorValidator.cs" />
     <Compile Include="ApplicationLayer\ImportFileData.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\FileProcessor.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\IImportAgentDataProvider.cs" />

@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<TenantUserPersister>().As<ITenantUserPersister>().SingleInstance().ApplyAspects();
+			builder.RegisterType<LineExtractor>().As<ILineExtractor>().SingleInstance();
 			builder.RegisterType<ExternalPerformanceInfoFileProcessor>().As<IExternalPerformanceInfoFileProcessor>().SingleInstance();
 			builder.RegisterType<ImportExternalPerformanceInfoService>().As<IImportExternalPerformanceInfoService>();
 			builder.RegisterType<ImportJobArtifactValidator>().As<IImportJobArtifactValidator>().ApplyAspects();

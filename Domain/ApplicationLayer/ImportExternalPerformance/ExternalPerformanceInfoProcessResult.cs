@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 	public class PerformanceInfoExtractionResult
 	{
 		public string RawLine { get; set; }
+		public string Error { get; set; }
 		public DateTime DateFrom { get; set; }
 		public ExternalPerformanceDataType GameType { get; set; }
 		public string GameName { get; set; }
@@ -17,6 +18,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		public int GameNumberScore { get; set; }
 		public Percent GamePercentScore { get; set; }
 		public Guid PersonId { get; set; }
+		public bool HasError()
+		{
+			return !string.IsNullOrEmpty(Error);
+		}
 	}
 
 	public class ExternalPerformanceInfoProcessResult
