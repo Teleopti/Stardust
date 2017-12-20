@@ -3,6 +3,7 @@ describe('AuditTrailCtrl', function () {
   var $httpBackend,
   $controller,
   NoticeService,
+  currentUserInfo = new FakeCurrentUserInfo(),
   fakeChanges = [
     {
       Id: '123',
@@ -14,6 +15,11 @@ describe('AuditTrailCtrl', function () {
     module('wfm.reports');
     module('externalModules');
     module('localeLanguageSortingService');
+    module(function ($provide) {
+        $provide.service('CurrentUserInfo', function () {
+            return currentUserInfo;
+        });
+    });
   });
 
   beforeEach(inject(function (_$httpBackend_, _$controller_, _NoticeService_) {
@@ -51,6 +57,14 @@ describe('AuditTrailCtrl', function () {
       ];
     });
   }));
+
+  function FakeCurrentUserInfo() {
+      this.CurrentUserInfo = function () {
+          return {
+              DateFormatLocale: "en-US"
+          };
+      };
+  }
 
   it('should respond to search data', function () {
     var vm = $controller('AuditTrailController');
