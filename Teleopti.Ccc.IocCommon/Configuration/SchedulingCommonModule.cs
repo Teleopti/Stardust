@@ -332,9 +332,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208))
 			{
 				builder.RegisterType<DayOffOptimizationCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<DayOffOptimizationWeb>().InstancePerLifetimeScope().ApplyAspects();
 			}
 			else
 			{
+				builder.RegisterType<DayOffOptimizationWeb.DayOffOptimizationWebToggleOff>().As<DayOffOptimizationWeb>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			}
 			builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
@@ -415,7 +417,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().SingleInstance();
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>().SingleInstance();
 
-			builder.RegisterType<DayOffOptimizationWeb>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<DayOffOptimizationDesktop>().InstancePerLifetimeScope(); 
 
 			builder.RegisterType<OptimizerHelperHelper>().SingleInstance();

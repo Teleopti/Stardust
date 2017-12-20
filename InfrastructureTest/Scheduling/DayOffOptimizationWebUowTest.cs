@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -48,9 +49,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public ISkillRepository SkillRepository;
 		public ISkillTypeRepository SkillTypeRepository;
 		public IWorkloadRepository WorkloadRepository;
+		public IPersonAssignmentRepository PersonAssignmentRepository;
 
 		[Test]
-		public void ShouldDayOffOptimizationForPlanningPeriod()
+		public void ShouldDoDayOffOptimizationForPlanningPeriod()
 		{
 			var planningPeriod = fillDatabaseWithEnoughDataToRunScheduling();
 			Target.Execute(planningPeriod.Id.Value);
@@ -69,8 +71,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			var agent = new Person()
 				.WithPersonPeriod(ruleSetBag, new Contract("_"), skill).InTimeZone(TimeZoneInfo.Utc)
 				.WithSchedulePeriodOneWeek(date);
-			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
-			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Week, 1);
+			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
+			var period = date.ToDateOnlyPeriod();
+			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Day, 1);
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -89,6 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				WorkShiftRuleSetRepository.Add(agent.Period(date).RuleSetBag.RuleSetCollection.Single());
 				RuleSetBagRepository.Add(agent.Period(date).RuleSetBag);
 				PersonRepository.Add(agent);
+				PersonAssignmentRepository.Add(ass);
 				var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow);
 				JobResultRepository.Add(jobResult);
 				PlanningPeriodRepository.Add(planningPeriod);

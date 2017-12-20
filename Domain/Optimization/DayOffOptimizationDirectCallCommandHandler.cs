@@ -16,11 +16,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimization = dayOffOptimization;
 		}
 		
-		[UnitOfWork]
-		public virtual void Execute(DayOffOptimizationCommand command, 
-			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
+		public virtual void Execute(DayOffOptimizationCommand command, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-			//temp
 			using (CommandScope.Create(command))
 			{
 				_dayOffOptimization.Execute(command.Period, 
