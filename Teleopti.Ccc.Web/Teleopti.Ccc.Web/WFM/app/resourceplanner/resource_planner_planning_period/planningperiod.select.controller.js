@@ -95,7 +95,7 @@
 			vm.openCreatePpModal = false;
 			var startDate = moment(vm.selectedSuggestion.startDate).format('YYYY-MM-DD');
 			var newEndDate = moment(vm.selectedSuggestion.endDate).format('YYYY-MM-DD');
-			var firstPp = planningPeriodServiceNew.firstPlanningPeriod({ planningGroupId: planningGroupId, startDate: startDate, endDate: newEndDate, schedulePeriodType: vm.intervalType, lengthOfThePeriodType: vm.intervalRange  });
+			var firstPp = planningPeriodServiceNew.firstPlanningPeriod({ planningGroupId: planningGroupId, startDate: startDate, endDate: newEndDate, schedulePeriodType: vm.intervalType, lengthOfThePeriodType: vm.intervalRange });
 			return firstPp.$promise.then(function (data) {
 				vm.planningPeriods.push(data);
 				return vm.planningPeriods;
@@ -104,29 +104,28 @@
 
 		function typeChanged(output) {
 			vm.intervalType = output;
-			vm.selectedIsValid = isValidMaxWeeks() || isValidMaxMonths();
+			vm.selectedIsValid = CheckSelectedIsValid();
 			return autoUpdateEndDate();
 		}
 
 		function intervalChanged() {
-			vm.selectedIsValid = isValidMaxWeeks() || isValidMaxMonths();
+			vm.selectedIsValid = CheckSelectedIsValid();
 			return autoUpdateEndDate();
 		}
 
 		function autoUpdateEndDate() {
-			if (vm.selectedSuggestion) {
+			if (!vm.selectedSuggestion.endDate) {
 				var startDate = vm.selectedSuggestion.startDate;
 				return vm.selectedSuggestion = {
 					startDate: moment(startDate).toDate(),
 					endDate: moment(startDate).add(vm.intervalRange, vm.intervalType.toLowerCase()).subtract(1, 'day').toDate()
 				};
 			}
-			return vm.selectedSuggestion;
 		}
 
 		function openModifyModal(type) {
 			if (type == 'Day')
-				vm.typeIsWrong = true; 
+				vm.typeIsWrong = true;
 			return vm.modifyLastPpModal = true;
 		}
 
@@ -139,11 +138,14 @@
 		}
 
 		function isSelectedChanged() {
-			if (!vm.selectedSuggestion.startDate || !vm.selectedSuggestion.endDate)
-				return vm.selectedIsValid = false;
-			if (vm.selectedSuggestion.endDate)
-				autoUpdateEndDate();
-			return vm.selectedIsValid = true;
+			vm.selectedIsValid = CheckSelectedIsValid();
+			autoUpdateEndDate();
+		}
+
+		function CheckSelectedIsValid() {
+			if (!vm.selectedSuggestion.startDate || !vm.selectedSuggestion.endDate || !isValidMaxWeeks() || !isValidMaxMonths())
+				return false;
+			return true
 		}
 
 		function changeDateForLastPp(pp) {
