@@ -20708,6 +20708,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You do not have permission to view {0}..
+        /// </summary>
+        public static string NoPermissionToViewWFMModuleErrorMessage {
+            get {
+                return ResourceManager.GetString("NoPermissionToViewWFMModuleErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No person period found for this user.
         /// </summary>
         public static string NoPersonPeriodFoundForUser {

@@ -105,6 +105,8 @@ var wfm = angular.module('wfm', [
 		'CurrentUserInfo',
 		'Toggle',
 		'RtaState',
+		'areasService',
+		'NoticeService',
 		function(
 			$rootScope,
 			$state,
@@ -114,6 +116,8 @@ var wfm = angular.module('wfm', [
 			currentUserInfo,
 			toggleService,
 			RtaState,
+			areasService,
+			noticeService
 		) {
 			$rootScope.isAuthenticated = false;
 
@@ -143,6 +147,7 @@ var wfm = angular.module('wfm', [
 			});
 
 			$rootScope._ = window._;
+			setupPermissionCheckForModules();
 
 			RtaState(toggleService);
 
@@ -152,6 +157,42 @@ var wfm = angular.module('wfm', [
 					$rootScope.isAuthenticated = true;
 					$translate.use(data.Language).then(function() {
 						$state.go(next, toParams);
+					});
+				});
+			}
+
+			function setupPermissionCheckForModules() {
+				areasService.getAreasWithPermission().then(function(areasWithPermission) {
+					areasService.getAreasList().then(function(areasList) {
+						$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
+							var areaName, moduleName,
+								hasModulePermission = false,
+								name = next.name.split('.')[0],
+								url = next.url && next.url.split('/')[1];
+
+							areasWithPermission.forEach(function(area) {
+								if (name && area.InternalName.indexOf(name) > -1) {
+									hasModulePermission = true;
+								} else if (url && area.InternalName.indexOf(url) > -1) {
+									hasModulePermission = true;
+								}
+							});
+
+							if (!hasModulePermission && name != 'main') {
+								event.preventDefault();
+								$state.go('main');
+
+								areasList.forEach(function(area) {
+									if (name && (area.InternalName.indexOf(name) > -1 || name.indexOf(area.InternalName) > -1) ) {
+										moduleName = area.Name;
+									} else if (url && (area.InternalName.indexOf(url) > -1 || url.indexOf(area.InternalName) > -1)) {
+										moduleName = area.Name;
+									}
+								});
+
+								noticeService.error("<span class='test-alert'></span>" + $translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', moduleName), null, false);
+							}
+						});
 					});
 				});
 			}

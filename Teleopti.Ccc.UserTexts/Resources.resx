@@ -16907,4 +16907,8 @@ Do you want to participate?</value>
     <value>Start date should be earlier than end date</value>
     <comment>web date range picker ValidateStartDate</comment>
   </data>
+  <data name="NoPermissionToViewWFMModuleErrorMessage" xml:space="preserve">
+    <value>You do not have permission to view {0}.</value>
+    <comment>Error message of no permission to view modules under WFM web.</comment>
+  </data>
 </root>
