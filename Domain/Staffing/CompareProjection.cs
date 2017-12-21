@@ -12,16 +12,13 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class CompareProjection
 	{
-		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
 		private readonly IPersonSkillProvider _personSkillProvider;
 
-		public CompareProjection(IActivityRepository activityRepository,
-			IDisableDeletedFilter disableDeletedFilter, IPersonSkillProvider personSkillProvider,
+		public CompareProjection(IDisableDeletedFilter disableDeletedFilter, IPersonSkillProvider personSkillProvider,
 			ISkillRepository skillRepository)
 		{
-			_activityRepository = activityRepository;
 			_disableDeletedFilter = disableDeletedFilter;
 			_personSkillProvider = personSkillProvider;
 			_skillRepository = skillRepository;
@@ -34,33 +31,28 @@ namespace Teleopti.Ccc.Domain.Staffing
 			if (scheduleDayBefore.Period != scheduleDayAfter.Period)
 				throw new Exception("ScheduleDays must be for the same date!");
 			var resolution = 15;
-			IEnumerable<IActivity> allActivities;
 			IEnumerable<ISkill> allSkills;
 			using (_disableDeletedFilter.Disable())
 			{
-				allActivities = _activityRepository.LoadAll();
 				allSkills = _skillRepository.LoadAll();
 			}
 			var personSkills = _personSkillProvider.SkillsOnPersonDate(scheduleDayBefore.Person, scheduleDayAfter.DateOnlyAsPeriod.DateOnly);
-			var allNotDeletedSkill = allSkills.Where(x => !((IDeleteTag) x).IsDeleted).ToList();
+			var allNotDeletedSkill = allSkills.Where(x => !((IDeleteTag) x).IsDeleted).ToArray();
 
 			if(allNotDeletedSkill.Any())
 				resolution = allNotDeletedSkill.Select(x => x.DefaultResolution).Min();
 
-			var beforeIntervals = getActivityIntervals(scheduleDayBefore, resolution).ToList();
-			var afterIntervals = getActivityIntervals(scheduleDayAfter, resolution).ToList();
+			var beforeIntervals = getActivityIntervals(scheduleDayBefore, resolution).ToArray();
+			var afterIntervals = getActivityIntervals(scheduleDayAfter, resolution).ToArray();
 			
-			var allIntervals = new List<ActivityResourceInterval>();
-			allIntervals.AddRange(beforeIntervals);
-			allIntervals.AddRange(afterIntervals);
+			var allIntervals = beforeIntervals.Concat(afterIntervals).ToArray();
 
 			if (!allIntervals.Any()) return new List<SkillCombinationResource>();
 
 			var output = new List<ActivityResourceInterval>();
 			var totalStart = allIntervals.Min(x => x.Interval.StartDateTime);
 			var totaltEnd = allIntervals.Max(x => x.Interval.EndDateTime);
-
-
+			
 			var intervalStart = totalStart;
 			while (intervalStart < totaltEnd)
 			{
@@ -71,8 +63,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				var intervalOutput = new List<ActivityResourceInterval>();
 				foreach (var activityResourceInterval in before)
 				{
-					var activity = allActivities.First(x => x.Id == activityResourceInterval.Activity);
-					var aSkill = allNotDeletedSkill.FirstOrDefault(x => x.Activity.Equals(activity));
+					var aSkill = allNotDeletedSkill.FirstOrDefault(x => x.Activity.Id == activityResourceInterval.Activity);
 					if(aSkill == null)
 						continue;
 					var skillResolution = aSkill.DefaultResolution;
@@ -83,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 					var startOnInterval = new DateTime(splittedStart.Year, splittedStart.Month, splittedStart.Day, splittedStart.Hour,
 						minute, 0, DateTimeKind.Utc);
 					var interval = new DateTimePeriod(startOnInterval, startOnInterval.AddMinutes(skillResolution));
-					if (activity.RequiresSkill && personSkills.Skills.Select(x => x.Activity).Contains(activity))
+					if (aSkill.Activity.RequiresSkill && personSkills.Skills.Select(x => x.Activity).Contains(aSkill.Activity))
 						intervalOutput.Add(new ActivityResourceInterval
 						{
 							Interval = interval,
@@ -94,8 +85,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 				foreach (var activityResourceInterval in after)
 				{
-					var activity = allActivities.First(x => x.Id == activityResourceInterval.Activity);
-					var aSkill = allNotDeletedSkill.FirstOrDefault(x => x.Activity.Equals(activity));
+					var aSkill = allNotDeletedSkill.FirstOrDefault(x => x.Activity.Id == activityResourceInterval.Activity);
 					if (aSkill == null)
 						continue;
 					var skillResolution = aSkill.DefaultResolution;
@@ -106,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 					var startOnInterval = new DateTime(splittedStart.Year, splittedStart.Month, splittedStart.Day, splittedStart.Hour,
 						minute, 0, DateTimeKind.Utc);
 					var interval = new DateTimePeriod(startOnInterval, startOnInterval.AddMinutes(skillResolution));
-					if (activity.RequiresSkill && personSkills.Skills.Select(x => x.Activity).Contains(activity))
+					if (aSkill.Activity.RequiresSkill && personSkills.Skills.Select(x => x.Activity).Contains(aSkill.Activity))
 						intervalOutput.Add(new ActivityResourceInterval
 						{
 							Interval = interval,
@@ -131,30 +121,22 @@ namespace Teleopti.Ccc.Domain.Staffing
 				StartDateTime = activityResourceInterval.Interval.StartDateTime,
 				EndDateTime = activityResourceInterval.Interval.EndDateTime,
 				Resource = activityResourceInterval.Resource,
-				SkillCombination = personSkills.Skills.Where(x => x.Activity.Id.GetValueOrDefault() == activityResourceInterval.Activity).Select(x => x.Id.GetValueOrDefault())
-			}).ToList();
+				SkillCombination = personSkills.Skills.Where(x => x.Activity.Id == activityResourceInterval.Activity).Select(x => x.Id.GetValueOrDefault())
+			}).ToArray();
 			//Test from Denver
 		}
 
 		private IEnumerable<ActivityResourceInterval> getActivityIntervals(IScheduleDay scheduleDay, int resolution)
 		{
-			var activityResouceIntervals = new List<ActivityResourceInterval>();
 			var projection = scheduleDay.ProjectionService().CreateProjection();
 
-			var layers = projection.ToResourceLayers(resolution).ToList();
-			foreach (var layer in layers)
+			return projection.ToResourceLayers(resolution).Select(layer => new ActivityResourceInterval
 			{
-				activityResouceIntervals.Add(new ActivityResourceInterval
-				{
-					Activity = layer.PayloadId,
-					Interval = layer.Period,
-					Resource = layer.Resource
-				});
-			}
-			return activityResouceIntervals;
+				Activity = layer.PayloadId,
+				Interval = layer.Period,
+				Resource = layer.Resource
+			}).ToArray();
 		}
-
-		
 	}
 
 	public class ActivityResourceInterval
