@@ -16708,6 +16708,10 @@ Do you want to participate?</value>
     <value>When validation fails:</value>
     <comment>Label name of maximum time validation fails option</comment>
   </data>
+  <data name="OvertimeRequestMaximumTimeDenyReason" xml:space="preserve">
+    <value>{0} contains too much over time ({1}). Max is {2}.</value>
+    <comment>error message for maximum overtime validation</comment>
+  </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
     <value>The shift on {0:d} does not match the shift on {1:d}.</value>
     <comment>Scheduleing validation message in web scheduling and client. Both {0} and {1} are dates</comment>

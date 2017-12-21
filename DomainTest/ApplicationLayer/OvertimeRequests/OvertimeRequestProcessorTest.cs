@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public const int MinimumApprovalThresholdTimeInMinutes = 15;
-		public INow Now;
+		public MutableNow Now;
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 		public IScheduleStorage ScheduleStorage;
 		public FakeSkillRepository SkillRepository;
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
 			system.UseTestDouble<ScheduleStorage>().For<IScheduleStorage>();
-			system.UseTestDouble(new ThisIsNow(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
+			system.UseTestDouble(new MutableNow(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
 			_intervals = createIntervals();
 		}
 
@@ -1208,6 +1208,273 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var requestMessageFrom = personRequest.GetMessage(new NoFormatting()).Trim();
 			var requestMessageTo = "The week contains too much work time (27:00). Max is 10:00.\r\nThere must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.";
 			requestMessageFrom.Should().Be(requestMessageTo);
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldApproveWhenOvertimeRequestMaximumTimeIsZero()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = null,
+					OvertimeRequestMaximumTime = TimeSpan.Zero
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(18, 3);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldApproveWhenOvertimeRequestMaximumTimeIsNull()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = null,
+					OvertimeRequestMaximumTime = null
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(18, 3);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldApproveWhenRequestTimeIsLessThanMaximumTime()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMaximumTime = TimeSpan.FromHours(10)
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(18, 3);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldApproveWhenRequestTimeEqualToMaximumTime()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMaximumTime = TimeSpan.FromHours(3)
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(18, 3);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldDenyWhenViolateOvertimeRequestMaximumTime()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMaximumTime = TimeSpan.FromHours(2)
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(18, 3);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be("July contains too much over time (03:00). Max is 02:00.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldNoDenyWhenOvertimeRequestMaximumTimeHandleTypeIsSendToAdministrator()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Pending,
+					OvertimeRequestMaximumTime = TimeSpan.FromHours(2)
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(18, 3);
+			personRequest.Pending();
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsPending.Should().Be.True();
+			personRequest.GetMessage(new NoFormatting()).Trim().Should()
+				.Be("July contains too much over time (03:00). Max is 02:00.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldDenyWhenTotalOvertimeOfMonthExceedsMaximumTime()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMaximumTime = TimeSpan.FromHours(10)
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+			var period = new DateTimePeriod(2017, 7, 2, 8, 2017, 7, 2, 18);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(),period);
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			main.InWorkTime = true;
+			assignment.AddOvertimeActivity(main,period,new MultiplicatorDefinitionSet("ot",MultiplicatorType.Overtime));
+			ScheduleStorage.Add(assignment);
+
+			var personRequest = createOvertimeRequest(18, 3);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be("July contains too much over time (13:00). Max is 10:00.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldApproveWhenRequestTimeIsCrossMonth()
+		{
+			Now.Is(new DateTime(2017, 7, 30, 22, 0, 0, DateTimeKind.Utc));
+			setupPerson(0, 24);
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMaximumTime = TimeSpan.FromHours(13)
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+			var period = new DateTimePeriod(2017, 7, 2, 8, 2017, 7, 2, 18);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			main.InWorkTime = true;
+			assignment.AddOvertimeActivity(main, period, new MultiplicatorDefinitionSet("ot", MultiplicatorType.Overtime));
+			ScheduleStorage.Add(assignment);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 31, 22, 0, 0, DateTimeKind.Utc), 4);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldDenyWhenOvertimeOfSecondMonthExceedsMaximumTime()
+		{
+			Now.Is(new DateTime(2017, 7, 30, 22, 0, 0, DateTimeKind.Utc));
+			setupPerson(0, 24);
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMaximumTime = TimeSpan.FromHours(13)
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+			var period = new DateTimePeriod(2017, 7, 2, 8, 2017, 7, 2, 18);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			main.InWorkTime = true;
+			assignment.AddOvertimeActivity(main, period, new MultiplicatorDefinitionSet("ot", MultiplicatorType.Overtime));
+			ScheduleStorage.Add(assignment);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 31, 22, 0, 0, DateTimeKind.Utc), 16);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be("August contains too much over time (14:00). Max is 13:00.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldDenyWhenOvertimeOfBothMonthsExceedsMaximumTime()
+		{
+			Now.Is(new DateTime(2017, 7, 30, 22, 0, 0, DateTimeKind.Utc));
+			setupPerson(0, 24);
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMaximumTime = TimeSpan.FromHours(11)
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+			var period = new DateTimePeriod(2017, 7, 2, 8, 2017, 7, 2, 18);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			main.InWorkTime = true;
+			assignment.AddOvertimeActivity(main, period, new MultiplicatorDefinitionSet("ot", MultiplicatorType.Overtime));
+			ScheduleStorage.Add(assignment);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 31, 22, 0, 0, DateTimeKind.Utc), 16);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.GetMessage(new NoFormatting()).Trim().Should()
+				.Contain(
+					"July contains too much over time (12:00). Max is 11:00.");
+			personRequest.GetMessage(new NoFormatting()).Trim().Should()
+				.Contain(
+					"August contains too much over time (14:00). Max is 11:00.");
 		}
 
 		private IPersonAssignment createMainPersonAssignment(IPerson person, DateTimePeriod period)

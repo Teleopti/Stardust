@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly INow _now;
 
-		public OvertimeRequestContractWorkRulesValidator(ICurrentScenario scenarioRepository, 
-			ISchedulingResultStateHolder schedulingResultStateHolder, 
-			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, 
+		public OvertimeRequestContractWorkRulesValidator(ICurrentScenario scenarioRepository,
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			INow now)
 		{
