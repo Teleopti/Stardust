@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             if (skills == null || scenario==null) return new Dictionary<ISkill, IEnumerable<ISkillDay>>();
             
-		    var skillsToLoad = skills.Where(skill => !(skill is IChildSkill)).ToList();
+		    var skillsToLoad = skills.Where(skill => !(skill is IChildSkill)).ToArray();
 		    return calculateSkillSkillDayDictionary(period, scenario, skillsToLoad);
         }
 
@@ -132,24 +132,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					}
 				}
 	        }
+			
+			var calculatorsForAllSkills = calculators.OfType<MultisiteSkillDayCalculator>().SelectMany(c =>
+				c.MultisiteSkill.ChildSkills.Select(s => new Tuple<ISkill, IEnumerable<ISkillDay>>(s, c.GetVisibleChildSkillDays(s))));
 
-	        var skillSkillDayDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
-	        foreach (ISkillDayCalculator calculator in calculators)
-	        {
-	            var multisiteSkillDayCalculator = calculator as MultisiteSkillDayCalculator;
-	            if (multisiteSkillDayCalculator != null)
-	            {
-	                foreach (var childSkill in multisiteSkillDayCalculator.MultisiteSkill.ChildSkills)
-	                {
-	                    if (!skillSkillDayDictionary.ContainsKey(childSkill))
-	                        skillSkillDayDictionary.Add(childSkill,
-	                                                    multisiteSkillDayCalculator.GetVisibleChildSkillDays(childSkill));
-	                }
-	            }
-	            if (!skillSkillDayDictionary.ContainsKey(calculator.Skill))
-	                skillSkillDayDictionary.Add(calculator.Skill, calculator.SkillDays.ToList());
-	        }
-	        return skillSkillDayDictionary;
+			return calculators.Select(c => new Tuple<ISkill, IEnumerable<ISkillDay>>(c.Skill, c.SkillDays))
+				.Concat(calculatorsForAllSkills).ToDictionary(c => c.Item1, v => (IEnumerable<ISkillDay>)v.Item2.ToList());
 	    }
 	}
 
