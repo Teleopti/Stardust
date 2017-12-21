@@ -230,7 +230,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phoneActivity, new TimePeriod(8, 17));
 			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phoneActivity, new TimePeriod(8, 17));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent, agent2 }, new[] { ass, ass2 }, skillDay);
-			schedulerStateHolderFrom.Schedules.TakeSnapshot();
 			var optimizationPreferences = new OptimizationPreferences { General = { ScheduleTag = NullScheduleTag.Instance, OptimizationStepShiftsWithinDay = true } };
 
 			Target.Execute(new NoSchedulingProgress(), schedulerStateHolderFrom, new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, null);
@@ -656,7 +655,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				General = {ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true},
 				Shifts = {KeepStartTimes = true, KeepEndTimes = true },
 				Advanced = {UseAverageShiftLengths = useAvaregeShiftLength}
-		};
+			};
 
 			Target.Execute(new NoSchedulingProgress(), schedulerStateHolderFrom, new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, null);
 
