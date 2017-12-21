@@ -361,6 +361,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.AssertExists(".warning-icon .mdi-account-alert");
 		}
 
+		
+
+
 		[When(@"I click on a shift category label")]
 		public void WhenIClickOnAShiftCategoryLabel()
 		{
@@ -445,6 +448,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenIOpenTeamscheduleSettingPanel()
 		{
 			Browser.Interactions.Click(".team-schedule .settings-container");
+		}
+
+		[When(@"I close teamschedule setting panel")]
+		public void WhenICloseTeamscheduleSettingPanel()
+		{
+			Browser.Interactions.Click(".team-schedule md-backdrop");
 		}
 
 		[When(@"I choose not to view '(.*)' validation result")]

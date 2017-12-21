@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfDisabled('Wfm_GroupPages_45057')
 Feature: Show business rules warning
 	As a team leader
 	I want to see warnings on business rules
@@ -53,8 +52,8 @@ Scenario: Should see no warnings if the validation rule type is not set to be vi
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
-	And I switch on show warnings toggle
 	And I open teamschedule setting panel
+	And I switch on show warnings toggle
 	And I choose not to view 'NewNightlyRestRuleName' validation result
 	Then I should not see business rule warning
 
@@ -63,7 +62,8 @@ Scenario: Should see the warnings if the validation rule type is set to be viewa
 	And I set schedule date to '2016-10-10'
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
-	And I switch on show warnings toggle
 	And I open teamschedule setting panel
+	And I switch on show warnings toggle
 	And I choose to view 'NewNightlyRestRuleName' validation result
+	And I close teamschedule setting panel
 	Then I should see business rule warning
