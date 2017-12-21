@@ -1,14 +1,16 @@
 using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Domain.GroupPageCreator
+namespace Teleopti.Analytics.Etl.Common.Transformer
 {
 	public class GroupingsCreatorOptionalColumn
 	{
-		private readonly IGroupPageDataProvider _groupPageDataProvider;
+		private readonly ICommonStateHolder _groupPageDataProvider;
 
-		public GroupingsCreatorOptionalColumn(IGroupPageDataProvider groupPageDataProvider)
+		public GroupingsCreatorOptionalColumn(ICommonStateHolder groupPageDataProvider)
 		{
 			_groupPageDataProvider = groupPageDataProvider;
 		}

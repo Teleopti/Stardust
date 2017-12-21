@@ -240,6 +240,7 @@
     <Compile Include="EtlModule.cs" />
     <Compile Include="Transformer\ForecastWorkloadTransformer.cs" />
     <Compile Include="Transformer\GeneralFunctions.cs" />
+    <Compile Include="Transformer\GroupingsCreatorOptionalColumn.cs" />
     <Compile Include="Transformer\GroupPagePersonTransformer.cs" />
     <Compile Include="Transformer\HourlyAvailabilityTransformer.cs" />
     <Compile Include="Transformer\Interval.cs" />

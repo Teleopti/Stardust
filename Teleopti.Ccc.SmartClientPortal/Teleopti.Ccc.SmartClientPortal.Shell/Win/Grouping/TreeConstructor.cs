@@ -2,6 +2,7 @@ using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {
@@ -14,9 +15,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
     /// </remarks>
     public class TreeConstructor
     {
-        private readonly IGroupPageDataProvider _groupPageDataProvider;
+        private readonly IGroupPageHelper _groupPageDataProvider;
 
-        public TreeConstructor(IGroupPageDataProvider groupPageDataProvider)
+        public TreeConstructor(IGroupPageHelper groupPageDataProvider)
         {
             _groupPageDataProvider = groupPageDataProvider;
         }

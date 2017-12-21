@@ -340,7 +340,6 @@
     <Compile Include="Forecasting\Export\Web\ForecastExportModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportDailyModelCreator.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportModelCreator.cs" />
-    <Compile Include="GroupPageCreator\GroupingsCreatorOptionalColumn.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
     <Compile Include="Infrastructure\Events\PublishInitializeReadModelEvent.cs" />

@@ -9,11 +9,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     public interface IGroupPageDataProvider
     {
         ///<summary>
-        /// Get Person collection
-        ///</summary>
-        IEnumerable<IPerson> PersonCollection { get; }
-
-        ///<summary>
         /// Get Contract collection
         ///</summary>
         IEnumerable<IContract> ContractCollection { get; }

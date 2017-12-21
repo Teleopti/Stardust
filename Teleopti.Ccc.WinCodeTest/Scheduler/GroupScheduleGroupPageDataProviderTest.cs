@@ -106,12 +106,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void VerifyPersonCollection()
-		{
-			Assert.AreEqual(_person1, _target.PersonCollection.FirstOrDefault());
-		}
-
-		[Test]
 		public void VerifyRuleSetBagCollection()
 		{
 			var repository = MockRepository.GenerateMock<IRuleSetBagRepository>();

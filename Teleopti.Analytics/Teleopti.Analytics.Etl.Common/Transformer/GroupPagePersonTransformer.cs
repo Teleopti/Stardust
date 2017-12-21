@@ -4,23 +4,18 @@ using System.Data;
 using System.Globalization;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
 	public class GroupPagePersonTransformer : IGroupPagePersonTransformer
 	{
-		private readonly Func<IGroupPageDataProvider> _getGroupPageDataProvider;
-		private readonly IToggleManager _toggleManager;
+		private readonly Func<ICommonStateHolder> _getGroupPageDataProvider;
 
-		public GroupPagePersonTransformer(Func<IGroupPageDataProvider> getGroupPageDataProvider, IToggleManager toggleManager)
+		public GroupPagePersonTransformer(Func<ICommonStateHolder> getGroupPageDataProvider)
 		{
 			_getGroupPageDataProvider = getGroupPageDataProvider;
-			_toggleManager = toggleManager;
 		}
 
 		public IEnumerable<IGroupPage> UserDefinedGroupings

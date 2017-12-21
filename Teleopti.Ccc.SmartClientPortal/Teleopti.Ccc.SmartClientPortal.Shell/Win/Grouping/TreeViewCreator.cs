@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {
@@ -16,11 +17,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
     /// </summary>
     public class TreeViewCreator
     {
-        private readonly IGroupPageDataProvider _groupPageDataProvider;
+        private readonly IGroupPageHelper _groupPageDataProvider;
         private IList<IPerson> _remainingPersonList;
         private ICommonNameDescriptionSetting _commonNameDescription;
 
-        public TreeViewCreator(IGroupPageDataProvider groupPageDataProvider)
+        public TreeViewCreator(IGroupPageHelper groupPageDataProvider)
         {
             _groupPageDataProvider = groupPageDataProvider;
         }

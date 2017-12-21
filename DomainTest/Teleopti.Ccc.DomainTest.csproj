@@ -990,7 +990,6 @@
     <Compile Include="Optimization\MoveTimeOptimizerContainerTest.cs" />
     <Compile Include="GroupPageCreator\ContractGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\ContractScheduleGroupPageTest.cs" />
-    <Compile Include="GroupPageCreator\GroupingsCreatorTest.cs" />
     <Compile Include="GroupPageCreator\PartTimePercentageGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\PersonNoteGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\RuleSetBagGroupPageTest.cs" />

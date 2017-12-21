@@ -6,12 +6,13 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.ReadModel;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
@@ -24,14 +25,14 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 	{
 
 		private GroupPagePersonTransformer _target;
-		private IGroupPageDataProvider _groupPageDataProvider;
+		private ICommonStateHolder _groupPageDataProvider;
 		CultureInfo _englishCulture;
 
 		[SetUp]
 		public void Setup()
 		{
 			_groupPageDataProvider = new GroupingsProviderForTest();
-			_target = new GroupPagePersonTransformer(() => _groupPageDataProvider, new FakeToggleManager());
+			_target = new GroupPagePersonTransformer(() => _groupPageDataProvider);
 			_englishCulture = CultureInfo.GetCultureInfo("en-GB");
 		}
 
@@ -285,7 +286,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		}
 	}
 
-	internal class GroupingsProviderForTest : IGroupPageDataProvider
+	internal class GroupingsProviderForTest : ICommonStateHolder
 	{
 		private IList<IPerson> _personCollection;
 		private IList<IContract> _contractCollection;
@@ -335,6 +336,104 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 				}
 				return _personCollection;
 			}
+		}
+
+		public IList<IScenario> ScenarioCollection { get; }
+		public IScenario DefaultScenario { get; }
+		public IList<TimeZoneInfo> TimeZonesUsedByClient { get; }
+		public IList<TimeZoneInfo> TimeZonesUsedByDataSources { get; }
+		public IList<TimeZonePeriod> PeriodToLoadBridgeTimeZone { get; }
+		public IScheduleDictionary GetSchedules(DateTimePeriod period, IScenario scenario)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario,
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck,
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario,
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IPerson> UserCollection { get; }
+		public IList<IActivity> ActivityCollection { get; }
+		public IList<IAbsence> AbsenceCollection { get; }
+		public IList<IDayOffTemplate> DayOffTemplateCollection { get; }
+		public IList<IShiftCategory> ShiftCategoryCollection { get; }
+		public IList<IApplicationFunction> ApplicationFunctionCollection { get; }
+		public IList<IApplicationRole> ApplicationRoleCollection { get; }
+		public IList<IAvailableData> AvailableDataCollection { get; }
+		public IList<IScenario> ScenarioCollectionDeletedExcluded { get; }
+		public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(IScheduleDictionary scheduleDictionary)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection { get; }
+		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDictionary<DateTimePeriod, IScheduleDictionary> GetSchedules(IList<IScheduleChangedReadModel> changed, IScenario scenario)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDictionary<DateOnly, IScheduleDictionary> GetSchedules(HashSet<IStudentAvailabilityDay> days, IScenario scenario)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCache()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(IDictionary<DateTimePeriod, IScheduleDictionary> dictionary)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IPerson> PersonsWithIds(List<Guid> ids)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetThisTime(ILastChangedReadModel lastTime, string step)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UpdateThisTime(string step, IBusinessUnit businessUnit)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool PermissionsMustRun()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetLoadBridgeTimeZonePeriod(DateTimePeriod period, string timeZoneCode)
+		{
+			throw new NotImplementedException();
 		}
 
 		public IEnumerable<IContract> ContractCollection

@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private IList<IGroupPage> _groupPageCollection;
         private IBusinessUnit _businessUnit;
         private IList<ISkill> _skillCollection;
-        private IList<IPerson> _personCollection;
 		private IList<IPerson> _allPersons;
 		private readonly object _lockObject = new Object();
 
@@ -32,19 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
 			_disableDeletedFilter = disableDeletedFilter;
-        }
-
-        public IEnumerable<IPerson> PersonCollection
-        {
-            get {
-	            lock (_lockObject)
-	            {
-					if (_personCollection == null)
-						_personCollection = new List<IPerson>(_stateHolder().ChoosenAgents);
-	            }
-                
-                return _personCollection;
-            }
         }
 
         public IEnumerable<IContract> ContractCollection

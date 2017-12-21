@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     public interface IGroupPageHelper : IDisposable, IGroupPageDataProvider
     {
+		IEnumerable<IPerson> PersonCollection { get; }
+		
         /// <summary>
         /// Gets or sets the current group page.
         /// </summary>

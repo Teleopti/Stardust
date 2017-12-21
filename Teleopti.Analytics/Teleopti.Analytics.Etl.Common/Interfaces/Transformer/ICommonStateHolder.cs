@@ -9,6 +9,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 {
     public interface ICommonStateHolder : IGroupPageDataProvider
     {
+		IEnumerable<IPerson> PersonCollection { get; }
         IList<IScenario> ScenarioCollection { get; }
         IScenario DefaultScenario { get; }
         IList<TimeZoneInfo> TimeZonesUsedByClient { get; }
