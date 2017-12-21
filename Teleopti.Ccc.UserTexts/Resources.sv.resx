@@ -15226,4 +15226,88 @@ Vill du registrera dig?</value>
   <data name="DenyReasonNoSkillCombinationsFound" xml:space="preserve">
     <value>Din förfrågan har avslagits. Systemet hittar inget schemadata för perioden.</value>
   </data>
+  <data name="OvertimeRequestMaximum" xml:space="preserve">
+    <value>Maximal övertid per kalendermånad:</value>
+  </data>
+  <data name="OvertimeRequestMaximumTimeHandleType" xml:space="preserve">
+    <value>När valideringen fallerar:</value>
+  </data>
+  <data name="GamificationSettings" xml:space="preserve">
+    <value>Spelifieringsinställningar</value>
+  </data>
+  <data name="SetGamificationTargets" xml:space="preserve">
+    <value>Ange mål för spelifiering</value>
+  </data>
+  <data name="AppliedSetting" xml:space="preserve">
+    <value>Använd inställning</value>
+  </data>
+  <data name="BlockSchedulingNotWorkingWhenUsingPreferences" xml:space="preserve">
+    <value>Blockschemaläggning fungerar eventuellt inte vid användning av önskemål. </value>
+  </data>
+  <data name="IntraDayChipNumberOf" xml:space="preserve">
+    <value>av</value>
+  </data>
+  <data name="AllSkillGroups" xml:space="preserve">
+    <value>Alla kompetensgrupper</value>
+  </data>
+  <data name="AvailableSkills" xml:space="preserve">
+    <value>Tillgängliga kompetenser</value>
+  </data>
+  <data name="CreateNewSkillGroup" xml:space="preserve">
+    <value>Skapa en ny kompetensgrupp</value>
+  </data>
+  <data name="ManageSkillGroups" xml:space="preserve">
+    <value>Hantera kompetensgrupper</value>
+  </data>
+  <data name="SelectSite" xml:space="preserve">
+    <value>Välj enhet</value>
+  </data>
+  <data name="SelectTeam" xml:space="preserve">
+    <value>Välj team</value>
+  </data>
+  <data name="UnselectSite" xml:space="preserve">
+    <value>Avmarkera enhet</value>
+  </data>
+  <data name="UnselectTeam" xml:space="preserve">
+    <value>Avmarkera team</value>
+  </data>
+  <data name="ThresholdForBadge" xml:space="preserve">
+    <value>Tröskelvärde för medalj:</value>
+  </data>
+  <data name="ThresholdForGoldBadge" xml:space="preserve">
+    <value>Tröskelvärde för bronsmedalj:</value>
+  </data>
+  <data name="ThresholdForSilverBadge" xml:space="preserve">
+    <value>Tröskelvärde för guldmedalj:</value>
+  </data>
+  <data name="ThresholdForBronzeBadge" xml:space="preserve">
+    <value>Tröskelvärde för silvermedalj:</value>
+  </data>
+  <data name="AnErrorOccurredWhenUploadingTheFile" xml:space="preserve">
+    <value>Ett feluppstod vid uppladdning av filen</value>
+  </data>
+  <data name="ImportExternalData" xml:space="preserve">
+    <value>Importera extern data</value>
+  </data>
+  <data name="UploadAndStart" xml:space="preserve">
+    <value>Ladda upp och starta</value>
+  </data>
+  <data name="GroupPages" xml:space="preserve">
+    <value>Grupperingar</value>
+  </data>
+  <data name="SelectEndDate" xml:space="preserve">
+    <value>Ange slutdatum</value>
+  </data>
+  <data name="SelectStartDate" xml:space="preserve">
+    <value>Ange startdatum</value>
+  </data>
+  <data name="SelectStartDateAndEndDate" xml:space="preserve">
+    <value>Ange start- och slutdatum</value>
+  </data>
+  <data name="ValidateEndDate" xml:space="preserve">
+    <value>Slutdatum måste vara efter startdatum</value>
+  </data>
+  <data name="ValidateStartDate" xml:space="preserve">
+    <value>Startdatum måste vara tidigare än slutdatum</value>
+  </data>
 </root>
