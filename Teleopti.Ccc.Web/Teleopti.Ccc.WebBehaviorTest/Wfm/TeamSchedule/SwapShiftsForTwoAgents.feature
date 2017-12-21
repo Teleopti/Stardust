@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfDisabled('Wfm_GroupPages_45057')
 Feature: SwapShiftsForTwoAgents
 	As a team leader
 	I want to be able to easily swap shifts between two agents
