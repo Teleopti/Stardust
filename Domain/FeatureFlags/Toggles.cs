@@ -111,6 +111,7 @@
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 		ResourcePlanner_TimeZoneIssues_45818,
 		ResourcePlanner_DayOffOptimizationIslands_47208,
+		ResourcePlanner_XXL_47258,
 
 		Wfm_DisplayOnlineHelp_39402,
 
