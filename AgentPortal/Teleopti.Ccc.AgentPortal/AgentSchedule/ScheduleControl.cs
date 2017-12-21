@@ -770,7 +770,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                     scheduleControlMain.Visible = true;
                     scheduleTeamView.Visible = false;
                     scheduleControlMain.PerformSwitchToScheduleViewTypeClick(ScheduleViewType.Day);
-                    //scheduleControlMain.GetScheduleHost().SwitchTo(ScheduleViewType.Day, true);
                     scheduleControlMain.Appearance.ScheduleAppointmentTipsEnabled = true;
                     break;
                 case ScheduleViewType.Week:
@@ -781,7 +780,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                 case ScheduleViewType.Month:
                     scheduleControlMain.Visible = true;
                     scheduleTeamView.Visible = false;
-                    //scheduleControlMain.GetScheduleHost().SwitchTo(ScheduleViewType.Month, true);
                     scheduleControlMain.PerformSwitchToScheduleViewTypeClick(ScheduleViewType.Month);
                     scheduleControlMain.Appearance.ScheduleAppointmentTipsEnabled = false;
                     break;

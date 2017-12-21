@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
                 firstDay.AddDays(4), firstDay.AddDays(5), firstDay.AddDays(6)});
             Calendar.SelectedDates.EndUpdate(true);
 
-            GetScheduleHost().SwitchTo(ScheduleViewType.CustomWeek, true);
+            GetScheduleHost().SwitchTo(ScheduleViewType.CustomWeek,false);
 			Appearance.ScheduleAppointmentTipsEnabled = true;
             _previousButton.Visible = true;
             _nextButton.Visible = true;
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
             Calendar.SelectedDates.AddRange(navigatedDays);
             Calendar.SelectedDates.EndUpdate(true);
 
-            GetScheduleHost().SwitchTo(ScheduleViewType.CustomWeek, true);
+            GetScheduleHost().SwitchTo(ScheduleViewType.CustomWeek, false);
             _nextButton.Visible = true;
             _previousButton.Visible = true;
             GetScheduleHost().SelectCellsMouseButtonsMask = MouseButtons.Left | MouseButtons.Right;

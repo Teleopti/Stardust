@@ -219,7 +219,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         /// <param name="period">The period.</param>
         public void LoadAgentSchedules(DateTimePeriodDto period)
         {
-            _loadedPeriod = period;
+	        if (period.LocalEndDateTime.Subtract(period.LocalStartDateTime).TotalDays < 45)
+	        {
+		        _loadedPeriod = period;
+	        }
             Presenter.LoadAgentSchedules(period);
         }
 

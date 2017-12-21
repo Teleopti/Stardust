@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
         private void IndividualPages(bool rightToLeft, IList<PersonDto> persons, DateOnlyPeriod fullWeekPeriod, AgentScheduleStateHolder stateHolder, ScheduleReportDetail details, Control owner, bool singleFile, string path)
         {
             var doc = new PdfDocument();
+	        var cache = new CommonCache();
+
             PdfPage page;
             if (singleFile)
             {
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                 while (offset < fullWeekPeriod.DayCount())
                 {
                     //skapa en PdfSchedule per dag hela veckan
-                    IList<IPdfScheduleTemplate> weekList = CreateWeek(rightToLeft, fullWeekPeriod, offset, stateHolder, details);
+                    IList<IPdfScheduleTemplate> weekList = CreateWeek(rightToLeft, fullWeekPeriod, offset, stateHolder, details, cache);
                     float height = GetHeight(weekList);
 
                     if (top + height > page.GetClientSize().Height)
@@ -167,7 +169,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
         }
 
         private IList<IPdfScheduleTemplate> CreateWeek(bool rtl, DateOnlyPeriod fullWeekPeriod, int offset,
-            AgentScheduleStateHolder stateHolder, ScheduleReportDetail details)
+            AgentScheduleStateHolder stateHolder, ScheduleReportDetail details, CommonCache commonCache)
         {
             IList<IPdfScheduleTemplate> weekList = new List<IPdfScheduleTemplate>();
             for (int i = 0; i < 7; i++)
@@ -192,7 +194,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                 {
                     case SchedulePartView.MainShift:
                 		IPdfScheduleTemplate schedule = new PdfScheduleAssignment(_scheduleColumnWidth,
-                		                                                          part, rtl, details, _culture);
+                		                                                          part, rtl, details, _culture, commonCache);
                         weekList.Add(schedule);
                         break;
 
@@ -205,7 +207,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                         }
                         else
                         {
-                            IPdfScheduleTemplate dayOff = new PdfScheduleDayOffOvertime(_scheduleColumnWidth, part, rtl, _culture);
+                            IPdfScheduleTemplate dayOff = new PdfScheduleDayOffOvertime(_scheduleColumnWidth, part, rtl, _culture, commonCache);
                             weekList.Add(dayOff);
                         }
 

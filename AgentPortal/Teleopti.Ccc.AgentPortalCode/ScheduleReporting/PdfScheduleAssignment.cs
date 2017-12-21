@@ -11,13 +11,13 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 {
     public class PdfScheduleAssignment : PdfScheduleTemplate
     {
-    	ICollection<ActivityDto> _arrActivityDto;
-        ICollection<ShiftCategoryDto> _arrShiftCategoryDto;
+	    private readonly CommonCache _cache;
 
-        public PdfScheduleAssignment(float columnWidth, SchedulePartDto schedulePart, bool rightToLeft, ScheduleReportDetail details, CultureInfo culture):base(culture)
+	    public PdfScheduleAssignment(float columnWidth, SchedulePartDto schedulePart, bool rightToLeft, ScheduleReportDetail details, CultureInfo culture, CommonCache cache):base(culture)
         {
         	if (schedulePart == null) throw new ArgumentNullException("schedulePart");
-        	Brush = new PdfSolidBrush(Color.DimGray);
+	        _cache = cache;
+	        Brush = new PdfSolidBrush(Color.DimGray);
 
             Template = new PdfTemplate(columnWidth, Height);
             Graphics = Template.Graphics;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 			if (schedulePart.PersonAssignmentCollection.Count > 0 && schedulePart.PersonAssignmentCollection.First().MainShift != null)
 			{
 				ShiftCategoryDto shiftCategoryDto =
-					GetShiftCategory(schedulePart.PersonAssignmentCollection.First().MainShift.ShiftCategoryId);
+					_cache.GetShiftCategory(schedulePart.PersonAssignmentCollection.First().MainShift.ShiftCategoryId);
 
 				category = shiftCategoryDto.Name;
 				categoryColor = shiftCategoryDto.DisplayColor;
@@ -53,33 +53,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                              categoryColor, headerTop, schedulePart.ProjectedLayerCollection, details, schedulePart.PersonMeetingCollection);
 
         }
-
-        private ActivityDto GetActivity(Guid activityId)
-        {
-            if (_arrActivityDto == null)
-                _arrActivityDto = SdkServiceHelper.SchedulingService.GetActivities(new LoadOptionDto{LoadDeleted = true});
-
-            foreach (ActivityDto activityDto in _arrActivityDto)
-            {
-                if (activityDto.Id == activityId)
-                    return activityDto;
-            }
-            return null;
-        }
-
-        private ShiftCategoryDto GetShiftCategory(Guid categoryId)
-        {
-            if (_arrShiftCategoryDto == null)
-                _arrShiftCategoryDto = SdkServiceHelper.SchedulingService.GetShiftCategories(new LoadOptionDto { LoadDeleted = true });
-
-            foreach (ShiftCategoryDto shiftCategoryDto in _arrShiftCategoryDto)
-            {
-                if (shiftCategoryDto.Id == categoryId)
-                    return shiftCategoryDto;
-            }
-            return null;
-        }
-
+		
         private float Render(float top, DateTime startDateTime, string category, DateTime endDateTime, TimeSpan contractTime, ColorDto categoryColor, float headerTop, ICollection<ProjectedLayerDto> payLoads, ScheduleReportDetail details, ICollection<PersonMeetingDto> personMeetingDtos)
         {
             top = RenderDate(startDateTime, top);
@@ -103,7 +77,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                 {
                     if(details == ScheduleReportDetail.Break)
                     {
-                        ActivityDto activty = GetActivity(visualLayer.PayloadId);
+                        ActivityDto activty = _cache.GetActivity(visualLayer.PayloadId);
                         if (activty != null)
                         {
                             //if (activty.ReportLevelDetail != ReportLevelDetail.None)
@@ -216,4 +190,38 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             return dt.ToShortTimeString();
         }
     }
+
+	public class CommonCache
+	{
+		ICollection<ActivityDto> _arrActivityDto;
+		ICollection<ShiftCategoryDto> _arrShiftCategoryDto;
+
+		public ActivityDto GetActivity(Guid activityId)
+		{
+			if (_arrActivityDto == null)
+				_arrActivityDto = SdkServiceHelper.SchedulingService.GetActivities(new LoadOptionDto {LoadDeleted = true});
+
+			foreach (ActivityDto activityDto in _arrActivityDto)
+			{
+				if (activityDto.Id == activityId)
+					return activityDto;
+			}
+			return null;
+		}
+
+		public ShiftCategoryDto GetShiftCategory(Guid categoryId)
+		{
+			if (_arrShiftCategoryDto == null)
+				_arrShiftCategoryDto =
+					SdkServiceHelper.SchedulingService.GetShiftCategories(new LoadOptionDto {LoadDeleted = true});
+
+			foreach (ShiftCategoryDto shiftCategoryDto in _arrShiftCategoryDto)
+			{
+				if (shiftCategoryDto.Id == categoryId)
+					return shiftCategoryDto;
+			}
+
+			return null;
+		}
+	}
 }

@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using Syncfusion.Pdf.Graphics;
-using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 {
     public class PdfScheduleDayOffOvertime : PdfScheduleTemplate
     {
-        ICollection<ActivityDto> _arrActivityDto;
+	    private readonly CommonCache _commonCache;
         private const int MAX_NUMBER_OF_CHARACTERS = 20;
 
-        public PdfScheduleDayOffOvertime(float columnWidth, SchedulePartDto schedulePartDto, bool rightToLeft, CultureInfo culture):base(culture)
+        public PdfScheduleDayOffOvertime(float columnWidth, SchedulePartDto schedulePartDto, bool rightToLeft, CultureInfo culture, CommonCache commonCache):base(culture)
         {
         	if (schedulePartDto == null) throw new ArgumentNullException("schedulePartDto");
-        	Brush = new PdfSolidBrush(Color.DimGray);
+	        _commonCache = commonCache;
+	        Brush = new PdfSolidBrush(Color.DimGray);
 
             Template = new PdfTemplate(columnWidth, Height);
             Graphics = Template.Graphics;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                 {
                     if (details == ScheduleReportDetail.Break)
                     {
-                        ActivityDto activty = GetActivity(visualLayer.PayloadId);
+                        ActivityDto activty = _commonCache.GetActivity(visualLayer.PayloadId);
                         if (activty != null)
                         {
                             top = RenderPayLoad(visualLayer, top);
@@ -78,20 +78,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
             return top + RowSpace + 21;
         }
-
-        private ActivityDto GetActivity(Guid activityId)
-        {
-            if (_arrActivityDto == null)
-                _arrActivityDto = SdkServiceHelper.SchedulingService.GetActivities(new LoadOptionDto{LoadDeleted = true});
-
-            foreach (ActivityDto activityDto in _arrActivityDto)
-            {
-                if (activityDto.Id == activityId)
-                    return activityDto;
-            }
-            return null;
-        }
-
+		
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private float RenderPayLoad(ProjectedLayerDto visualLayer, float top)
         {
