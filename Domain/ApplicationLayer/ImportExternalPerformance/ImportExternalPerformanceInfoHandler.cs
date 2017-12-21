@@ -45,11 +45,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			catch (Exception e)
 			{
 				Logger.Error(e);
-				SaveJobResultDetail(@event, e);
+				saveJobResultDetail(@event, DetailLevel.Error, e.Message, e);
 				throw;
 			}
 		}
 
+		[UnitOfWork]
 		protected virtual void HandleJob(ImportExternalPerformanceInfoEvent @event)
 		{
 			var jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
@@ -69,21 +70,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}, 
 				_feedback.SendProgress);
 
-			_feedback.SendProgress($"Done processing input file: {inputFile.FileName} ({processResult.TotalRecordCount} lines)");
+			_feedback.SendProgress($"Done agent persist {processResult.TotalRecordCount}.");
 
 			if (processResult.HasError)
 			{
 				var msg = string.Join(", ", processResult.ErrorMessages);
 				_feedback.SendProgress($"Extract file has error:{msg}.");
-				SaveJobResultDetail(@event, msg, DetailLevel.Error, null);
+				saveJobResultDetail(@event, DetailLevel.Error, msg, null);
 				return;
 			}
 
-			SaveJobArtifactsAndUpdateRecords(@event, processResult, inputFile.Name);
+			saveJobArtifactsAndUpdateRecords(@event, processResult, inputFile.Name);
 		}
 
-		[UnitOfWork]
-		protected virtual void SaveJobArtifactsAndUpdateRecords(ImportExternalPerformanceInfoEvent @event, ExternalPerformanceInfoProcessResult processResult, string fileName)
+		private void saveJobArtifactsAndUpdateRecords(ImportExternalPerformanceInfoEvent @event, ExternalPerformanceInfoProcessResult processResult, string fileName)
 		{
 			var jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 			cleanImportedCsvFile(@event, fileName);
 
-			SaveJobResultDetailInternal(@event, DetailLevel.Info, "Uploaded external performance info", null);
+			saveJobResultDetail(@event, DetailLevel.Info, "Uploaded external performance info", null);
 		}
 
 		private void cleanImportedCsvFile(ImportExternalPerformanceInfoEvent @event, string fileName)
@@ -108,20 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			result.Artifacts.Remove(artifact);
 		}
 
-		[UnitOfWork]
-		protected virtual void SaveJobResultDetail(ImportExternalPerformanceInfoEvent @event, string message, DetailLevel level = DetailLevel.Info,
-			Exception exception = null)
-		{
-			SaveJobResultDetailInternal(@event, level, message, exception);
-		}
-
-		[UnitOfWork]
-		protected virtual void SaveJobResultDetail(ImportExternalPerformanceInfoEvent @event, Exception ex)
-		{
-			SaveJobResultDetailInternal(@event, DetailLevel.Error, ex.Message, ex);
-		}
-
-		private void SaveJobResultDetailInternal(ImportExternalPerformanceInfoEvent @event, DetailLevel level, string message, Exception exception)
+		private void saveJobResultDetail(ImportExternalPerformanceInfoEvent @event, DetailLevel level, string message, Exception exception)
 		{
 			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);
 			var detail = new JobResultDetail(level, message, DateTime.UtcNow, exception);
