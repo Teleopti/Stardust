@@ -196,6 +196,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentSummaryTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\WorkbookHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformancePersisterTest.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceInfoHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformanceInfoProcessorTest.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceInfoServiceTest.cs" />

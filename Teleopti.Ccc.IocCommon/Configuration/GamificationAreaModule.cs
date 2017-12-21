@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExternalPerformanceInfoFileProcessor>().As<IExternalPerformanceInfoFileProcessor>().SingleInstance();
 			builder.RegisterType<ImportExternalPerformanceInfoService>().As<IImportExternalPerformanceInfoService>();
 			builder.RegisterType<ImportJobArtifactValidator>().As<IImportJobArtifactValidator>().ApplyAspects();
+			builder.RegisterType<ExternalPerformancePersister>().As<IExternalPerformancePersister>().SingleInstance();
 		}
 	}
 }

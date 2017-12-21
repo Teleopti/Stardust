@@ -21,17 +21,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private readonly IStardustJobFeedback _feedback;
 		private readonly IImportJobArtifactValidator _validator;
 		private readonly IExternalPerformanceInfoFileProcessor _externalPerformanceInfoFileProcessor;
+		private readonly IExternalPerformancePersister _persister;
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportExternalPerformanceInfoHandler));
 
 		public ImportExternalPerformanceInfoHandler(IJobResultRepository jobResultRepository, IStardustJobFeedback feedback, 
-			IImportJobArtifactValidator validator, IExternalPerformanceInfoFileProcessor externalPerformanceInfoFileProcessor, 
-			IExternalPerformanceRepository externalPerformanceRepository, IExternalPerformanceDataRepository externalDataRepository)
+			IImportJobArtifactValidator validator, IExternalPerformanceInfoFileProcessor externalPerformanceInfoFileProcessor,
+			IExternalPerformancePersister externalPerformancePersister)
 		{
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
 			_validator = validator;
 			_externalPerformanceInfoFileProcessor = externalPerformanceInfoFileProcessor;
+			_persister = externalPerformancePersister;
 		}
 
 		[AsSystem]
@@ -70,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}, 
 				_feedback.SendProgress);
 
-			_feedback.SendProgress($"Done agent persist {processResult.TotalRecordCount}.");
+			_feedback.SendProgress($"Done processing input file: {inputFile.FileName} ({processResult.TotalRecordCount} lines)");
 
 			if (processResult.HasError)
 			{
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Save job artifact success!");
 
-			_externalPerformanceInfoFileProcessor.Persist(processResult);
+			_persister.Persist(processResult);
 
 			cleanImportedCsvFile(@event, fileName);
 
