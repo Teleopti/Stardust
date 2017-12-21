@@ -124,6 +124,18 @@ namespace Stardust.Manager
 					Thread.Sleep(500);
 				}
 			}
+			catch (SqlException exp)
+			{
+				if (exp.Message.Contains("PK_Job"))
+				{
+					// just skip it some other Manager picked it up just before I did
+					this.Log().WarningWithLineNumber(exp.Message);
+				}
+				else
+				{
+					this.Log().ErrorWithLineNumber(exp.Message, exp);
+				}
+			}
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
@@ -416,10 +428,9 @@ namespace Stardust.Manager
 						}
 					}
 				}
-				catch (Exception exp)
+				catch 
 				{
 					this.Log().Info($"Failed for node {availableNode}");
-					this.Log().ErrorWithLineNumber(exp.Message, exp);
 					throw;
 				}
 			}
