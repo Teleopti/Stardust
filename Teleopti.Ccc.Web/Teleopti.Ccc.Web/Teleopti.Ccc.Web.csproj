@@ -1608,6 +1608,8 @@
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_MobileFriendlyCheckboxes_46758.html" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.RTA_MobileFriendlyCheckboxes_46758.js" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.adherence7DaysBack_46826.html" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adherence7DaysBack_46826.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adherence7DaysBack_46826.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adherencepercentage.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.currenttime.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.schedule.spec.js" />

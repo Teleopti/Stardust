@@ -229,7 +229,7 @@ var rtaTester = (function () {
 			state.$fakeBackend = _FakeRtaBackend_;
 			state.$controllerBuilder = _ControllerBuilder_;
 			state.$translate = _$translate_;
-			state.$controllerBuilder.setup('RtaHistoricalController');
+			state.$controllerBuilder.setup('RtaHistoricalController46826');
 		}));
 
 		afterEach(function () {
