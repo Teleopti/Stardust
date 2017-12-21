@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(gmtTimeZone);
 			analyticsDataFactory.Persist();
 		}
-
+		
 		[Test]
 		public void ShouldGet()
 		{
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			result.IsUtcInUse.Should().Be.False();
 			result.ToBeDeleted.Should().Be.False();
 		}
-
+		
 		[Test]
 		public void ShouldGetAll()
 		{
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			result.Where(x => x.TimeZoneCode == "W. Europe Standard Time").Should().Not.Be.Empty();
 			result.Where(x => x.TimeZoneCode == "UTC").Should().Not.Be.Empty();
 		}
-
+		
 		[Test]
 		public void ShouldUpdateUtcInUse()
 		{
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var result = WithAnalyticsUnitOfWork.Get(() => Target.Get("UTC"));
 			result.IsUtcInUse.Should().Be.True();
 		}
-
+		
 		[Test]
 		public void ShouldMarkDeletedTimeZones()
 		{
@@ -69,6 +69,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			WithAnalyticsUnitOfWork.Do(() => Target.SetToBeDeleted("W. Europe Standard Time", true));
 			result = WithAnalyticsUnitOfWork.Get(() => Target.Get("W. Europe Standard Time"));
 			result.ToBeDeleted.Should().Be.True();
+		}
+	}
+	
+	[Category("BucketB")]
+	[TestFixture]
+	[AnalyticsDatabaseTest]
+	[ToggleOff(Toggles.ETL_EventbasedTimeZone_40870)]
+	public class AnalyticsTimeZoneRepositoryForBug47311Test
+	{
+		public IAnalyticsTimeZoneRepository Target;
+		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
+
+		[SetUp]
+		public void Setup()
+		{
+			var timeZones = new UtcAndCetTimeZones();
+			var gmtTimeZone = new SpecificTimeZone(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), 3);
+			var brasilTimeZone = new BrasilTimeZone { TimeZoneId = 2 };
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(brasilTimeZone);
+			analyticsDataFactory.Setup(new DataSource { DataSourceId = 2, TimeZoneId = brasilTimeZone.TimeZoneId });
+			analyticsDataFactory.Setup(new SysConfiguration("TimeZoneCode", "GMT Standard Time"));
+			analyticsDataFactory.Setup(timeZones);
+			analyticsDataFactory.Setup(gmtTimeZone);
+			analyticsDataFactory.Persist();
 		}
 
 		[Test]
@@ -82,3 +107,4 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 	}
 }
+ 
