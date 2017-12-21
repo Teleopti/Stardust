@@ -42,6 +42,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
@@ -3842,6 +3843,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (IsDisposed)
 					return;
 
+				if (_scheduleView is AgentRestrictionsDetailView)
+				{
+					if(_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReport_47013))
+						return;
+				}
 
 				if (_selectedPeriod.Contains(e.ModifiedPeriod))
 					_totalScheduled++;
@@ -4427,6 +4433,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_schedulerState);
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredCombinedAgentsDictionary.Values);
 			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
+			schedulerSplitters1.InsertRestrictionNotAbleToBeScheduledReportModel(_container.Resolve<RestrictionNotAbleToBeScheduledReport>(), _container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReport_47013));
 			schedulerSplitters1.InsertValidationAlertsModel(new	ValidationAlertsModel(_schedulerState.Schedules, NameOrderOption.LastNameFirstName, _schedulerState.RequestedPeriod.DateOnlyPeriod));
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
@@ -4495,12 +4502,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (persons.Count == 0) return;
 			var selectedPerson = persons.FirstOrDefault();
 			if (schedulePart != null) selectedPerson = schedulePart.Person;
+			var selectedDate = schedulePart != null
+				? schedulePart.DateOnlyAsPeriod.DateOnly
+				: _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
 
 			var schedulingOptions = schedulerSplitters1.SchedulingOptions;
 			var view = (AgentRestrictionsDetailView) detailView;
 			_splitContainerLessIntellegentRestriction.SplitterDistance = 300;
 			schedulerSplitters1.AgentRestrictionGrid.MergeHeaders();
 			schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, selectedPerson, view, schedulePart, _container);
+			schedulerSplitters1.SetSelectedAgentsOnAgentsNotPossibleToSchedule(persons, selectedDate);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),

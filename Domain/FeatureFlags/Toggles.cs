@@ -96,6 +96,7 @@
 		Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,
 		Scheduler_ShowSkillPrioLevels_41980,
+		Scheduler_RestrictionReport_47013,
 
 		WfmGlobalLayout_personalOptions_37114,
 		

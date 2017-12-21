@@ -6,9 +6,11 @@ using System.Windows.Forms.Integration;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel;
@@ -18,6 +20,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Vie
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
@@ -30,6 +33,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private bool _useSchedules = true;
         private readonly PinnedSkillHelper _pinnedSkillHelper;
 		IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
+		private bool _schedulerRestrictionReport47013;
 
 
 		public SchedulerSplitters()
@@ -251,6 +255,37 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			var validationAlertsControl = (ValidationAlertsView)tabInfoPanels.TabPages[2].Controls[0];
 			validationAlertsControl.SetModel(model);
+		}
+
+		public void SetSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons, DateOnly selectedDate)
+		{
+			if (_schedulerRestrictionReport47013)
+			{
+				var newPanel = (AgentsNotPossibleToSchedule)teleoptiLessIntellegentSplitContainerView.Panel1.Controls[0];
+				newPanel.SetSelected(selectedPersons, selectedDate);
+			}
+		}
+		[RemoveMeWithToggle(Toggles.Scheduler_RestrictionReport_47013)]
+		public void InsertRestrictionNotAbleToBeScheduledReportModel(RestrictionNotAbleToBeScheduledReport reportModel, bool schedulerRestrictionReport47013)
+		{
+			_schedulerRestrictionReport47013 = schedulerRestrictionReport47013;
+			var oldPanel = (TableLayoutPanel)teleoptiLessIntellegentSplitContainerView.Panel1.Controls[1];
+			var newPanel = (AgentsNotPossibleToSchedule)teleoptiLessIntellegentSplitContainerView.Panel1.Controls[0];
+			if (schedulerRestrictionReport47013)
+			{	
+				oldPanel.Dock = DockStyle.None;
+				oldPanel.Visible = false;
+				newPanel.Dock = DockStyle.Fill;
+				newPanel.Visible = true;
+				newPanel.InitAgentsNotPossibleToSchedule(reportModel);
+			}
+			else
+			{
+				newPanel.Dock = DockStyle.None;
+				newPanel.Visible = false;
+				oldPanel.Dock = DockStyle.Fill;
+				oldPanel.Visible = true;
+			}
 		}
 
 		public void DisableViewShiftCategoryDistribution()

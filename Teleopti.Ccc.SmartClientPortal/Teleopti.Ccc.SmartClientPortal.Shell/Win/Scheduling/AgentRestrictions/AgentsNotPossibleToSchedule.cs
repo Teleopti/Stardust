@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			foreach (var restrictionsAbleToBeScheduledResult in reportResult)
 			{
 				var item = new ListViewItem(restrictionsAbleToBeScheduledResult.Agent.Name.ToString());
-				item.SubItems[0].Text = restrictionsAbleToBeScheduledResult.Reason.ToString();
-				item.SubItems[1].Text = restrictionsAbleToBeScheduledResult.Period.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+				item.SubItems.Add(restrictionsAbleToBeScheduledResult.Reason.ToString());
+				item.SubItems.Add(restrictionsAbleToBeScheduledResult.Period.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture));
 				listViewResult.Items.Add(item);
 			}
 
