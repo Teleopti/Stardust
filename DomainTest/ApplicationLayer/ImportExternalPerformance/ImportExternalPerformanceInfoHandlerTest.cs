@@ -1,72 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 {
-	[TestFixture, Ignore("Ignore temporarily")]
-	public class ImportExternalPerformanceInfoHandlerTest
+	[TestFixture, DomainTest]
+	public class ImportExternalPerformanceInfoHandlerTest : ISetup
 	{
-		private FakeJobResultRepository _jobResultRepository;
-		private FakeStardustJobFeedback _stardustJobFeedback;
-		private IImportJobArtifactValidator _importJobArtifactValidator;
-		private IExternalPerformanceInfoFileProcessor _externalPerformanceInfoFileProcessor;
-		private FakeExternalPerformanceRepository _externalPerformanceRepository;
-		private FakeExternalPerformanceDataRepository _externalPerformanceDataRepository;
+		public ImportExternalPerformanceInfoHandler Target;
+		public FakeJobResultRepository JobResultRepository;
+		public FakeExternalPerformanceRepository ExternalPerformanceTypeRepository;
+		public FakeExternalPerformanceDataRepository ExternalPerformanceDataRepository;
+		public FakePersonRepository PersonRepository;
 
-		private ImportFileData _importFileData;
-		private JobResultArtifact _jobResultArtifact;
-		private JobResult _jobResult;
-		private Guid _jobResultId;
-
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			var currentUser = new FakeLoggedOnUser();
-			_importFileData = new ImportFileData() { FileName = "test.csv" };
-			_jobResultArtifact = new JobResultArtifact(JobResultArtifactCategory.Input, _importFileData.FileName, _importFileData.Data);
-			_jobResult = new JobResult(JobCategory.WebImportExternalGamification, DateOnly.Today.ToDateOnlyPeriod(), currentUser.CurrentUser(), DateTime.UtcNow);
-			_jobResultId = Guid.NewGuid();
-			_jobResult.WithId(_jobResultId);
-
-			_jobResultRepository = new FakeJobResultRepository();
-			_stardustJobFeedback = new FakeStardustJobFeedback();
-			_importJobArtifactValidator = MockRepository.GenerateMock<IImportJobArtifactValidator>();
-			_importJobArtifactValidator.Stub(x=>x.ValidateJobArtifact(_jobResult, _stardustJobFeedback.SendProgress)).Return(_jobResultArtifact);
-			_externalPerformanceInfoFileProcessor = MockRepository.GenerateMock<IExternalPerformanceInfoFileProcessor>();
-			_externalPerformanceRepository = new FakeExternalPerformanceRepository();
-			_externalPerformanceDataRepository = new FakeExternalPerformanceDataRepository();
+			system.UseTestDouble<ImportExternalPerformanceInfoHandler>().For<IHandleEvent<ImportExternalPerformanceInfoEvent>>();
+			system.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
+			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
+			system.UseTestDouble<ImportJobArtifactValidator>().For<IImportJobArtifactValidator>();
+			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			system.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
+			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
+			system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
 		}
 
 		[Test]
-		public void ShouldSaveSettingData()
+		public void ShouldResolveTarget()
 		{
-			var expectedId = 1;
-			var expectedName = "externalSetting";
+			Target.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldSaveNewExternalPerformanceType()
+		{
+			var expectedId = 8;
+			var expectedName = "Quality Score";
 			var expectedDataType = ExternalPerformanceDataType.Percent;
-			var processResult = new ExternalPerformanceInfoProcessResult(){ExternalPerformances = new List<IExternalPerformance>()
+			var processResult = new ExternalPerformanceInfoProcessResult()
+			{
+				ExternalPerformances = new List<IExternalPerformance>()
 			{
 				new ExternalPerformance(){ExternalId = expectedId, Name = expectedName, DataType = expectedDataType}
-			}};
-			_externalPerformanceInfoFileProcessor.Stub(x => x.Process(null, null)).IgnoreArguments().Return(processResult);
-			var target = new ImportExternalPerformanceInfoHandler(_jobResultRepository, _stardustJobFeedback, _importJobArtifactValidator, 
-				_externalPerformanceInfoFileProcessor,_externalPerformanceRepository, _externalPerformanceDataRepository);
+			}
+			};
 
-			target.Handle(getEvent());
+			Target.Handle(NewEvent());
 
-			var result = _externalPerformanceRepository.FindAllExternalPerformances();
+			var result = ExternalPerformanceTypeRepository.FindAllExternalPerformances();
 			result.Count().Should().Be.EqualTo(1);
 			result.ToList()[0].ExternalId.Should().Be.EqualTo(expectedId);
 			result.ToList()[0].Name.Should().Be.EqualTo(expectedName);
@@ -76,99 +75,91 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldSaveValidRecord()
 		{
-			var expectedAgentId = "Ashley";
-			var expectedDate = DateTime.Today;
-			var expectedScore = 200;
+			IPerson person = PersonFactory.CreatePerson("Kalle").WithId();
+			const string employmentNum = "1";
+			person.SetEmploymentNumber(employmentNum);
+			PersonRepository.Add(person);
+
+			var expectedDate = new DateTime(2017, 11, 20);
+			var expectedScore = 87;
 			var expectedPersonId = Guid.NewGuid();
-			var gameId = 1;
-			var expectedExternalPerformance = new ExternalPerformance(){ExternalId = gameId};
+			var gameId = 8;
+			var expectedExternalPerformance = new ExternalPerformance() { ExternalId = gameId, DataType = ExternalPerformanceDataType.Percent };
 			expectedExternalPerformance.WithId(Guid.NewGuid());
-			setPerformanceInfoExtractionResult(expectedExternalPerformance, new PerformanceInfoExtractionResult
-			{
-				AgentId = expectedAgentId,
-				DateFrom = expectedDate,
-				PersonId = expectedPersonId,
-				GameId = gameId,
-				GameNumberScore = expectedScore,
-				GameType =  ExternalPerformanceDataType.Numeric
-			});
+			ExternalPerformanceTypeRepository.Add(expectedExternalPerformance);
 
-			var target = new ImportExternalPerformanceInfoHandler(_jobResultRepository, _stardustJobFeedback, _importJobArtifactValidator,
-				_externalPerformanceInfoFileProcessor, _externalPerformanceRepository, _externalPerformanceDataRepository);
+			Target.Handle(NewEvent());
 
-			target.Handle(getEvent());
 
-			var result = _externalPerformanceDataRepository.LoadAll();
+			var result = ExternalPerformanceDataRepository.LoadAll();
 			result.Count.Should().Be.EqualTo(1);
-			result.ToList()[0].OriginalPersonId.Should().Be.EqualTo(expectedAgentId);
+			result.ToList()[0].OriginalPersonId.Should().Be.EqualTo(employmentNum);
 			result.ToList()[0].Score.Should().Be.EqualTo(expectedScore);
 			result.ToList()[0].DateFrom.Should().Be.EqualTo(expectedDate);
-			result.ToList()[0].PersonId.Should().Be.EqualTo(expectedPersonId);
-			result.ToList()[0].ExternalPerformance.Should().Be.EqualTo(expectedExternalPerformance);
+			result.ToList()[0].PersonId.Should().Be.EqualTo(person.Id.Value);
+			result.ToList()[0].ExternalPerformance.ExternalId.Should().Be.EqualTo(expectedExternalPerformance.ExternalId);
 		}
 
 		[Test]
-		public void ShouldUpdateValidRecord()
+		public void ShouldUpdateExistingDataWithValidRecord()
 		{
-			var existOriginalAgentId = "Ashley";
-			var existDate = DateTime.Today;
-			var expectedScore = 200;
-			var existPersonId = Guid.NewGuid();
-			var gameId = 1;
-			var existExternalPerformance = new ExternalPerformance { ExternalId = gameId };
-			existExternalPerformance.WithId(Guid.NewGuid());
-			setPerformanceInfoExtractionResult(existExternalPerformance, new PerformanceInfoExtractionResult
+			IPerson person = PersonFactory.CreatePerson("Kalle").WithId();
+			const string employmentNum = "1";
+			person.SetEmploymentNumber(employmentNum);
+			PersonRepository.Add(person);
+
+			var originalAgentId = "1";
+			var date = new DateTime(2017, 11, 20);
+			var oldScore = 100;
+			var newScore = 87;
+			var personId = person.Id.Value;
+			var gameId = 8;
+
+			var extPerfType = new ExternalPerformance { ExternalId = gameId, DataType = ExternalPerformanceDataType.Percent };
+			extPerfType.WithId(Guid.NewGuid());
+
+			ExternalPerformanceTypeRepository.Add(extPerfType);
+
+			ExternalPerformanceDataRepository.Add(new ExternalPerformanceData
 			{
-				AgentId = existOriginalAgentId,
-				DateFrom = existDate,
-				PersonId = existPersonId,
-				GameId = gameId,
-				GameNumberScore = expectedScore,
-				GameType = ExternalPerformanceDataType.Numeric
+				DateFrom = date,
+				ExternalPerformance = extPerfType,
+				PersonId = personId,
+				OriginalPersonId = originalAgentId,
+				Score = oldScore
 			});
 
-			_externalPerformanceDataRepository.Add(new ExternalPerformanceData
-			{
-				DateFrom = existDate,
-				ExternalPerformance = existExternalPerformance,
-				PersonId = existPersonId,
-				OriginalPersonId = existOriginalAgentId,
-				Score = 100
-			});
+			Target.Handle(NewEvent());
 
-			var target = new ImportExternalPerformanceInfoHandler(_jobResultRepository, _stardustJobFeedback, _importJobArtifactValidator,
-				_externalPerformanceInfoFileProcessor, _externalPerformanceRepository, _externalPerformanceDataRepository);
-
-			target.Handle(getEvent());
-
-			var result = _externalPerformanceDataRepository.LoadAll();
+			var result = ExternalPerformanceDataRepository.LoadAll();
 			result.Count.Should().Be.EqualTo(1);
-			result.ToList()[0].PersonId.Should().Be.EqualTo(existPersonId);
-			result.ToList()[0].Score.Should().Be.EqualTo(expectedScore);
+			result.ToList()[0].PersonId.Should().Be.EqualTo(personId);
+			result.ToList()[0].Score.Should().Be.EqualTo(newScore);
 		}
 
-		private void setPerformanceInfoExtractionResult(ExternalPerformance existExternalPerformance, PerformanceInfoExtractionResult infoExtractionResult)
+		private ImportExternalPerformanceInfoEvent NewEvent()
 		{
-			_externalPerformanceRepository.Add(existExternalPerformance);
-			var processResult = new ExternalPerformanceInfoProcessResult
-			{
-				ValidRecords = new List<PerformanceInfoExtractionResult>
-				{
-					infoExtractionResult
-				}
-			};
-			_externalPerformanceInfoFileProcessor.Stub(x => x.Process(null, null)).IgnoreArguments().Return(processResult);
-		}
-
-		private ImportExternalPerformanceInfoEvent getEvent()
-		{
-			_jobResult.AddArtifact(_jobResultArtifact);
-			_jobResultRepository.Add(_jobResult);
-
 			return new ImportExternalPerformanceInfoEvent()
 			{
-				JobResultId = _jobResultId
+				JobResultId = NewJobResult().Id.Value
 			};
+		}
+
+		private IJobResult NewJobResult()
+		{
+			var currentUser = new FakeLoggedOnUser();
+			var importFileData = new ImportFileData() { FileName = "test.csv" };
+
+			importFileData.Data = Encoding.UTF8.GetBytes("20171120,1,Kalle,Pettersson,Quality Score,8,Percent,0.87");
+
+			var jobResultArtifact = new JobResultArtifact(JobResultArtifactCategory.Input, importFileData.FileName, importFileData.Data);
+			var jobResult = new JobResult(JobCategory.WebImportExternalGamification, DateOnly.Today.ToDateOnlyPeriod(), currentUser.CurrentUser(), DateTime.UtcNow).WithId();
+
+			jobResult.AddArtifact(jobResultArtifact);
+			jobResult.SetVersion(1);
+			JobResultRepository.Add(jobResult);
+
+			return JobResultRepository.Get(jobResult.Id.Value);
 		}
 	}
 }

@@ -91,7 +91,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			if (processResult.InvalidRecords.Any())
 			{
 				jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.OutputError, "InvalidRecords"+fileName, stringToArray(processResult.InvalidRecords)));
-				_jobResultRepository.Add(jobResult);
 			}
 			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Save job artifact success!");
 
