@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<AnalyticsTimeZone> GetAll();
 		void SetUtcInUse(bool isUtcInUse);
 		void SetToBeDeleted(string timeZoneCode, bool tobeDeleted);
+		IList<AnalyticsTimeZone> GetAllUsedByLogDataSourcesAndBaseConfig();
 	}
 }

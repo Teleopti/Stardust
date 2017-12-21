@@ -7,7 +7,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsTimeZoneRepository : IAnalyticsTimeZoneRepository
 	{
-		private readonly List<AnalyticsTimeZone> timeZones = new List<AnalyticsTimeZone>
+		IList<AnalyticsTimeZone> _dataSourceAndBaseConfigTimeZones = new List<AnalyticsTimeZone>();
+
+		private readonly List<AnalyticsTimeZone> dimTimeZones = new List<AnalyticsTimeZone>
 		{
 			new AnalyticsTimeZone {TimeZoneId = 1, TimeZoneCode = "UTC"},
 			new AnalyticsTimeZone {TimeZoneId = 2, TimeZoneCode = "W. Europe Standard Time"}
@@ -15,39 +17,53 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public AnalyticsTimeZone Get(string timeZoneCode)
 		{
-			var analyticsTimeZone = timeZones.FirstOrDefault(x => x.TimeZoneCode == timeZoneCode);
+			var analyticsTimeZone = dimTimeZones.FirstOrDefault(x => x.TimeZoneCode == timeZoneCode);
 			if (analyticsTimeZone == null)
 			{
 				analyticsTimeZone = new AnalyticsTimeZone
 				{
 					TimeZoneCode = timeZoneCode,
-					TimeZoneId = timeZones.Max(t => t.TimeZoneId) + 1 
+					TimeZoneId = dimTimeZones.Max(t => t.TimeZoneId) + 1 
 				};
-				timeZones.Add(analyticsTimeZone);
+				dimTimeZones.Add(analyticsTimeZone);
 			}
 			return analyticsTimeZone;
 		}
 
 		public IList<AnalyticsTimeZone> GetAll()
 		{
-			return timeZones;
+			return dimTimeZones;
 		}
 
 		public void SetUtcInUse(bool isUtcInUse)
 		{
-			var timeZone = timeZones.FirstOrDefault(x => x.TimeZoneCode == "UTC");
+			var timeZone = dimTimeZones.FirstOrDefault(x => x.TimeZoneCode == "UTC");
 			timeZone.IsUtcInUse = isUtcInUse;
 		}
 
 		public void SetToBeDeleted(string timeZoneCode, bool tobeDeleted)
 		{ 
-			var timeZone = timeZones.FirstOrDefault(x => x.TimeZoneCode == timeZoneCode);
+			var timeZone = dimTimeZones.FirstOrDefault(x => x.TimeZoneCode == timeZoneCode);
 			timeZone.ToBeDeleted = tobeDeleted;
+		}
+
+		public IList<AnalyticsTimeZone> GetAllUsedByLogDataSourcesAndBaseConfig()
+		{
+			return _dataSourceAndBaseConfigTimeZones;
 		}
 
 		public void SetToBeDeleted(string timeZoneCode)
 		{
 			throw new System.NotImplementedException();
+		}
+
+		public void HasLogDataSourceOrBaseConfigTimeZone(string timeZoneCode)
+		{
+			_dataSourceAndBaseConfigTimeZones.Add(new AnalyticsTimeZone
+			{
+				TimeZoneCode = timeZoneCode,
+				TimeZoneId = _dataSourceAndBaseConfigTimeZones.Any() ? _dataSourceAndBaseConfigTimeZones.Max(t => t.TimeZoneId) + 1 : 1
+			});
 		}
 	}
 }

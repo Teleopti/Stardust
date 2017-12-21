@@ -38,9 +38,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		public virtual void SetTimeZonesTobeDeleted()
 		{
 			var timeZonesInUse = _businessUnitRepository.LoadAllTimeZones().Select(x => x.Id).ToList();
-			var analyticsTimeZones = _analyticsTimeZoneRepository.GetAll().Select(x => x.TimeZoneCode);
+			timeZonesInUse.AddRange(_analyticsTimeZoneRepository.GetAllUsedByLogDataSourcesAndBaseConfig().Select(x => x.TimeZoneCode));
+			var analyticsDimTimeZones = _analyticsTimeZoneRepository.GetAll().Select(x => x.TimeZoneCode);
 
-			var timeZonesNotInUse = analyticsTimeZones.Except(timeZonesInUse);
+			var timeZonesNotInUse = analyticsDimTimeZones.Except(timeZonesInUse);
 			foreach (var timeZone in timeZonesNotInUse.Where(x => x != "UTC" ))
 			{
 				_analyticsTimeZoneRepository.SetToBeDeleted(timeZone, true);

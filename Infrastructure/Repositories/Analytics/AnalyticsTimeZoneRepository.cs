@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public AnalyticsTimeZoneRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork) : base(analyticsUnitOfWork)
 		{
 		}
-
 	}
 
 	public abstract class AnalyticsTimeZoneRepositoryBase
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetBoolean(nameof(isUtcInUse), isUtcInUse)
 				.ExecuteUpdate();
 		}
-
 
 		public void SetToBeDeleted(string timeZoneCode, bool tobeDeleted)
 		{
@@ -64,6 +62,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					utc_in_use {nameof(AnalyticsTimeZone.IsUtcInUse)},
 					to_be_deleted {nameof(AnalyticsTimeZone.ToBeDeleted)}
 				from mart.dim_time_zone WITH (NOLOCK)")
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsTimeZone)))
+				.List<AnalyticsTimeZone>();
+		}
+
+		public IList<AnalyticsTimeZone> GetAllUsedByLogDataSourcesAndBaseConfig()
+		{
+			return AnalyticsUnitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(@"exec mart.sys_get_timezones_used_by_datasource_and_base_config")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsTimeZone)))
 				.List<AnalyticsTimeZone>();
 		}

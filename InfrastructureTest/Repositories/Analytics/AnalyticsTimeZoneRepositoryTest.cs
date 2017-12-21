@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -23,15 +24,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public void Setup()
 		{
 			var timeZones = new UtcAndCetTimeZones();
+			var gmtTimeZone = new SpecificTimeZone(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), 3);
+			var brasilTimeZone = new BrasilTimeZone { TimeZoneId = 2 };
 			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(brasilTimeZone);
+			analyticsDataFactory.Setup(new DataSource { DataSourceId = 2, TimeZoneId = brasilTimeZone.TimeZoneId });
+			analyticsDataFactory.Setup(new SysConfiguration("TimeZoneCode", "GMT Standard Time"));
 			analyticsDataFactory.Setup(timeZones);
+			analyticsDataFactory.Setup(gmtTimeZone);
 			analyticsDataFactory.Persist();
 		}
 
 		[Test]
 		public void ShouldGet()
 		{
-			
 			var result = WithAnalyticsUnitOfWork.Get(() => Target.Get("W. Europe Standard Time"));
 			result.TimeZoneId.Should().Be.EqualTo(1);
 			result.IsUtcInUse.Should().Be.False();
@@ -64,7 +70,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			result = WithAnalyticsUnitOfWork.Get(() => Target.Get("W. Europe Standard Time"));
 			result.ToBeDeleted.Should().Be.True();
 		}
-		
-			
+
+		[Test]
+		public void ShouldGetAllTimeZonesUsedByDataSourceAndBaseConfiguration()
+		{
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetAllUsedByLogDataSourcesAndBaseConfig());
+			result.Should().Not.Be.Empty();
+			result.Count.Should().Be(2);
+			result.Any(x => x.TimeZoneCode == "E. South America Standard Time").Should().Be.True();
+			result.Any(x => x.TimeZoneCode == "GMT Standard Time").Should().Be.True();
+		}
 	}
 }

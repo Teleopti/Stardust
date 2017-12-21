@@ -446,6 +446,7 @@
     <Compile Include="SkillDayExtensions.cs" />
     <Compile Include="SkillExtensions.cs" />
     <Compile Include="TestConnectionStrings.cs" />
+    <Compile Include="TestData\Analytics\DataSource.cs" />
     <Compile Include="TestData\Analytics\DatesFromPeriod.cs" />
     <Compile Include="TestData\Analytics\DefaultAcdLogin.cs" />
     <Compile Include="TestData\Analytics\DefaultSkillset.cs" />
