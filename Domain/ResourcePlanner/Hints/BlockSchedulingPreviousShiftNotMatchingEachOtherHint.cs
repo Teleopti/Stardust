@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		{
 			var personAssignment = firstDayAfterPeriod.PersonAssignment();
 			var shiftCategory = personAssignment.ShiftCategory;
-			var startTime = personAssignment.Period.StartDateTime.TimeOfDay;
+			var startTime = personAssignment.Period.StartDateTime;
 			foreach (var scheduleDay in period)
 			{
 				if (scheduleDay.HasDayOff() || scheduleDay.PersonAssignment() == null || !scheduleDay.PersonAssignment().ShiftLayers.Any())
@@ -77,11 +77,11 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						 scheduleDay.PersonAssignment().ShiftCategory.Description.ShortName, scheduleDay.DateOnlyAsPeriod.DateOnly.Date);
 					break;
 				}
-				if (blockOption.UseBlockSameStartTime && scheduleDay.PersonAssignment().Period.StartDateTime.TimeOfDay != startTime)
+				if (blockOption.UseBlockSameStartTime && scheduleDay.PersonAssignment().Period.StartDateTime.TimeOfDay != startTime.TimeOfDay)
 				{
 					addValidationError(validationResult, person, nameof(Resources.ExistingShiftNotMatchStartTime),
-						startTime.ToString(@"hh\:mm"), firstDayAfterPeriod.DateOnlyAsPeriod.DateOnly.Date,
-					    scheduleDay.PersonAssignment().Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm") , scheduleDay.DateOnlyAsPeriod.DateOnly.Date);
+						startTime, firstDayAfterPeriod.DateOnlyAsPeriod.DateOnly.Date,
+					    scheduleDay.PersonAssignment().Period.StartDateTime , scheduleDay.DateOnlyAsPeriod.DateOnly.Date);
 					break;
 				}
 				if (blockOption.UseBlockSameShift && !_scheduleDayEquator.MainShiftEquals(scheduleDay, firstDayAfterPeriod))

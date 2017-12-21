@@ -13985,7 +13985,7 @@ Teleopti R&amp;D</value>
     <value>填入信息以创建一个新的排班设置</value>
   </data>
   <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
-    <value>{1:d} 的开始时间{0} 与 {3:d}的开始时间{2} 不匹配.</value>
+    <value>{1:d} 的开始时间{0:HH:mm} 与 {3:d}的开始时间{2} 不匹配.</value>
   </data>
   <data name="InfoOfSchedulingSetting" xml:space="preserve">
     <value>排班设置已应用于计划组</value>

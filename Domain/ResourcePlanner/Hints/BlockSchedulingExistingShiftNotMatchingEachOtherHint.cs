@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 										{
 											addValidationResult(validationResult, person,
 												nameof(Resources.ExistingShiftNotMatchStartTime),
-												assignmenti.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly.Date,
-												assignmentj.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.Date);
+												assignmenti.Period.StartDateTime, scheduleDaysArray[i].DateOnlyAsPeriod.DateOnly.Date,
+												assignmentj.Period.StartDateTime, scheduleDaysArray[j].DateOnlyAsPeriod.DateOnly.Date);
 											flag = true;
 											break;
 										}
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						continue;
 
 					IShiftCategory firstShiftCategory = null;
-					TimeSpan? firstStartTime = null;
+					DateTime? firstStartTime = null;
 					IScheduleDay firstScheduleDay = null;
 					DateOnly? firstDate = null;
 					foreach (var scheduleDay in scheduleDays)
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						if (personAssignment != null && personAssignment.ShiftLayers.Count() != 0)
 						{
 							var shiftCategory = personAssignment.ShiftCategory;
-							var startTime = personAssignment.Period.StartDateTime.TimeOfDay;
+							var startTime = personAssignment.Period.StartDateTime;
 							if (blockOption.UseBlockSameShiftCategory)
 							{
 								if (firstShiftCategory == null)
@@ -200,13 +200,13 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 								}
 								else
 								{
-									if (firstStartTime.Value != startTime)
+									if (firstStartTime.Value.TimeOfDay != startTime.TimeOfDay)
 									{
 										addValidationResult(validationResult, person,
 											nameof(Resources.ExistingShiftNotMatchStartTime),
-											firstStartTime.Value.ToString(@"hh\:mm"),
+											firstStartTime.Value,
 											firstDate.Value.Date,
-											startTime.ToString(@"hh\:mm"),
+											startTime,
 											personAssignment.Date.Date);
 										break;
 									}

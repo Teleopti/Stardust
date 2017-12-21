@@ -66,8 +66,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
 				.Should()
 				.Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchStartTime,
-					personAssignment.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), startDate.Date,
-					personAssignment2.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), startDate.AddDays(-1).Date));
+					personAssignment.Period.StartDateTime, startDate.Date,
+					personAssignment2.Period.StartDateTime, startDate.AddDays(-1).Date));
 		}
 
 		[Test]
@@ -266,8 +266,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First())
 				.Should()
 				.Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchStartTime,
-					personAssignment.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), startDate.AddDays(-1).Date,
-					personAssignment2.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), startDate.AddDays(-2).Date));
+					personAssignment.Period.StartDateTime, startDate.AddDays(-1).Date,
+					personAssignment2.Period.StartDateTime, startDate.AddDays(-2).Date));
 		}
 		
 		[Test]

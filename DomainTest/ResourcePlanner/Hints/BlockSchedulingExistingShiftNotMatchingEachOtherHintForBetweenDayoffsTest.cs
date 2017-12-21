@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 					}), false)).InvalidResources;
 
 			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.ExistingShiftNotMatchStartTime)).Should().Be.EqualTo(1);
-			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchStartTime, personAssignment.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), startDate.Date, personAssignment2.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), startDate.AddDays(1).Date));
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchStartTime, personAssignment.Period.StartDateTime, startDate.Date, personAssignment2.Period.StartDateTime, startDate.AddDays(1).Date));
 		}
 
 		[Test]

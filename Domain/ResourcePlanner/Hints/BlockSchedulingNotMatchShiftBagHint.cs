@@ -63,15 +63,15 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 					if (blockOption.UseBlockSameStartTime)
 					{
-						var timeOfDay = scheduleDay.PersonAssignment().Period.StartDateTimeLocal(timezone).TimeOfDay;
-						if (allStartTime.All(x=> x != timeOfDay))
+						var timeOfDay = scheduleDay.PersonAssignment().Period.StartDateTimeLocal(timezone);
+						if (allStartTime.All(x=> x != timeOfDay.TimeOfDay))
 						{
 							hintResult.Add(new PersonHintError
 							{
 								PersonName = person.Name.ToString(),
 								PersonId = person.Id.Value,
 								ErrorResource = nameof(Resources.StartTimeNotMatchingShiftBag),
-								ErrorResourceData = new object[] { timeOfDay.ToString(@"hh\:mm"), scheduleDay.DateOnlyAsPeriod.DateOnly.Date, shiftBag.Description.Name }.ToList()
+								ErrorResourceData = new object[] { timeOfDay, scheduleDay.DateOnlyAsPeriod.DateOnly.Date, shiftBag.Description.Name }.ToList()
 							}, GetType(), ValidationResourceType.BlockScheduling);
 							break;
 						}

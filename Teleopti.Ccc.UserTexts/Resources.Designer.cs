@@ -11297,7 +11297,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The start time {0} on {1:d} does not match the start time {2} on {3:d}..
+        ///   Looks up a localized string similar to The start time {0:HH:mm} on {1:d} does not match the start time {2:HH:mm} on {3:d}..
         /// </summary>
         public static string ExistingShiftNotMatchStartTime {
             get {
@@ -32774,7 +32774,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The start time {0} on {1:d} doesn&apos;t exist in the shift bag {2}.
+        ///   Looks up a localized string similar to The start time {0:HH:mm} on {1:d} doesn&apos;t exist in the shift bag {2}.
         /// </summary>
         public static string StartTimeNotMatchingShiftBag {
             get {

@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));
-			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.StartTimeNotMatchingShiftBag, personAssignment.Period.StartDateTime.TimeOfDay.ToString(@"hh\:mm"), personAssignment.Date.Date,
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.StartTimeNotMatchingShiftBag, personAssignment.Period.StartDateTime, personAssignment.Date.Date,
 				agent.PersonPeriodCollection.First().RuleSetBag.Description.Name));
 		}
 

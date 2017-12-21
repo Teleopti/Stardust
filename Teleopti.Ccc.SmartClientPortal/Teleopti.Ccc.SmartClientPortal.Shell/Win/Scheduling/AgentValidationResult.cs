@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					dataRow[0] = validationResultInvalidResource.ResourceName;
 					try
 					{
-						dataRow[1] = string.Format(UserTexts.Resources.ResourceManager.GetString(validationError.ErrorResource), validationError.ErrorResourceData.ToArray());
+						dataRow[1] = HintsHelper.BuildErrorMessage(validationError);
 					}
 					catch (System.Exception)
 					{

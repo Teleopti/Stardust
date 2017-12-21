@@ -68,11 +68,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 					foreach (var schedulingHintError in schedulingResult.BusinessRulesValidationResults)
 					{
-						localizeValidationError(schedulingHintError.ValidationErrors);
+						HintsHelper.BuildErrorMessages(schedulingHintError.ValidationErrors);
 					}
 					foreach (var schedulingHintError in optimizationResult.BusinessRulesValidationResults)
 					{
-						localizeValidationError(schedulingHintError.ValidationErrors);
+						HintsHelper.BuildErrorMessages(schedulingHintError.ValidationErrors);
 					}
 
 					mergeScheduleResultIntoOptimizationResult(schedulingResult, optimizationResult);
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					new HintInput(null, people, planningPeriod.Range, _blockPreferenceProviderUsingFiltersFactory.Create(planningPeriod.PlanningGroup), true));
 				foreach (var res in validationResult.InvalidResources)
 				{
-					localizeValidationError(res.ValidationErrors);
+					HintsHelper.BuildErrorMessages(res.ValidationErrors);
 				}
 			}
 			return Ok(validationResult);
@@ -392,14 +392,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var allPlanningPeriods = _planningPeriodRepository.LoadAll();
 			return allPlanningPeriods.Any(p => p.Range.StartDate >= dateOnly);
-		}
-
-		private static void localizeValidationError(ICollection<ValidationError> validationErrors)
-		{
-			foreach (var validationError in validationErrors)
-			{
-				validationError.ErrorMessageLocalized = HintsHelper.BuildErrorMessage(validationError);
-			}
 		}
 
 		private static void mergeScheduleResultIntoOptimizationResult(SchedulingResultModel schedulingResult, OptimizationResultModel optimizationResult)

@@ -15194,7 +15194,7 @@ Vill du registrera dig?</value>
     <value>Din övertidsförfrågan har avslagits automatiskt, pga. en regel som administratören satt upp. </value>
   </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
-    <value>Starttiden {0} den {1:d} finns inte i skiftpåsen {2}.</value>
+    <value>Starttiden {0:HH:mm} den {1:d} finns inte i skiftpåsen {2}.</value>
   </data>
   <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
     <value>Skiftet den {0:d} finns inte i skiftpåsen {1}</value>

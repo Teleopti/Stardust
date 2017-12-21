@@ -2237,6 +2237,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					var validationResult = _container.Resolve<CheckScheduleHints>()
 						.Execute(new HintInput(_schedulerState.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()), 
 							selectedPeriod, new FixedBlockPreferenceProvider(_schedulingOptions), _schedulingOptions.UsePreferences));
+
+					foreach (var result in validationResult.InvalidResources)
+					{
+						HintsHelper.BuildErrorMessages(result.ValidationErrors);
+					}
+
 					if (validationResult.InvalidResources.Any())
 						new AgentValidationResult(validationResult).Show(this);
 				}
