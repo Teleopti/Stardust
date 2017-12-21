@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfDisabled('Wfm_GroupPages_45057')
 Feature: ActivityActions
 	As a team leader
 	I want to modify agent's activities
