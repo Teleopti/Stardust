@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				startDateTime = startDateTime.AddMinutes(resolution);
 			}
 			var taskList = new List<Task>();
-			var r2 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			var r2 = Task.Run(() => WithUnitOfWork.Do(() =>
 			{
 				StardustJobFeedback.SendProgress($"Starting processing for update readmodel R2");
 				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			}));
 			foreach (var intervalIndex in Enumerable.Range(0, 9))
 			{
-				taskList.Add(Task.Factory.StartNew(() =>
+				taskList.Add(Task.Run(() =>
 				{
 					WithUnitOfWork.Do(() =>
 					{
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			}
 
 
-			var r3 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			var r3 = Task.Run(() => WithUnitOfWork.Do(() =>
 			{
 				StardustJobFeedback.SendProgress($"Starting processing for update readmodel R3");
 				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			}
 			var taskList = new List<Task>();
 
-			var r2 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			var r2 = Task.Run(() => WithUnitOfWork.Do(() =>
 			{
 				StardustJobFeedback.SendProgress($"Starting processing for update readmodel R2");
 				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 			foreach (var intervalIndex in Enumerable.Range(0, 9))
 			{
-				taskList.Add(Task.Factory.StartNew(() =>
+				taskList.Add(Task.Run(() =>
 				{
 					WithUnitOfWork.Do(() =>
 					{
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			}
 			foreach (var intervalIndex in Enumerable.Range(0, 9))
 			{
-				taskList.Add(Task.Factory.StartNew(() =>
+				taskList.Add(Task.Run(() =>
 				{
 					WithUnitOfWork.Do(() =>
 					{
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			}
 
 
-			var r3 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			var r3 = Task.Run(() => WithUnitOfWork.Do(() =>
 			{
 				StardustJobFeedback.SendProgress($"Starting processing for update readmodel R3");
 				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				startDateTime = startDateTime.AddMinutes(resolution);
 			}
 			var taskList = new List<Task>();
-			var r2 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			var r2 = Task.Run(() => WithUnitOfWork.Do(() =>
 			{
 				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
 			}));
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			var absenceId = new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E");
 			foreach (var intervalIndex in Enumerable.Range(0, 9))
 			{
-				taskList.Add(Task.Factory.StartNew(() =>
+				taskList.Add(Task.Run(() =>
 				{
 					WithUnitOfWork.Do(() =>
 					{
@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				}));
 			}
 
-			taskList.Add(Task.Factory.StartNew(() =>
+			taskList.Add(Task.Run(() =>
 			{
 				foreach (var request in requests)
 				{
@@ -300,12 +300,12 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				}
 			}));
 
-			var r4 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			var r4 = Task.Run(() => WithUnitOfWork.Do(() =>
 			{
 				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
 			}));
 
-			var r3 = Task.Factory.StartNew(() => WithUnitOfWork.Do(() =>
+			var r3 = Task.Run(() => WithUnitOfWork.Do(() =>
 			{
 				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
 			}));

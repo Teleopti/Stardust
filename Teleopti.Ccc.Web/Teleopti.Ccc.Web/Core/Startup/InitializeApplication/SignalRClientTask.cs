@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		public Task Execute(IAppBuilder application)
 		{
-			return Task.Factory.StartNew(() => _signalSender.StartBrokerService());
+			return Task.Run(() => _signalSender.StartBrokerService());
 		}
 	}
 }

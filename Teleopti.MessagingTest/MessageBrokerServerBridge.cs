@@ -32,14 +32,14 @@ namespace Teleopti.MessagingTest
 
 		public Task<HttpResponseMessage> Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
+			var headers = customHeadersFunc?.Invoke(thing.ToString());
 			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
 			return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
 		}
 
 		public void PostOrThrow(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
+			var headers = customHeadersFunc?.Invoke(thing.ToString());
 			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
 			if (_exception != null)
 				throw _exception;
@@ -47,10 +47,10 @@ namespace Teleopti.MessagingTest
 
 		public Task PostOrThrowAsync(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
+			var headers = customHeadersFunc?.Invoke(thing.ToString());
 			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
 			if (_exception != null)
-				return Task.Factory.StartNew(() => { throw _exception; });
+				return Task.FromException(_exception);
 
 			return Task.FromResult(false);
 		}

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Filters
 
 			asyncManager.OutstandingOperations.Increment();
 			asyncManager.Parameters["task"] =
-				Task.Factory.StartNew(() =>
+				Task.Run(() =>
 				                      	{
 				                      		try
 				                      		{

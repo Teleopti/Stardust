@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		public Task Execute(IAppBuilder application)
 		{
 			_messageBroker.ServerUrl = ConnectionString();
-			return Task.Factory.StartNew(() => _messageBroker.StartBrokerService(_settings.MessageBrokerLongPolling()));
+			return Task.Run(() => _messageBroker.StartBrokerService(_settings.MessageBrokerLongPolling()));
 		}
 
 		private string ConnectionString()

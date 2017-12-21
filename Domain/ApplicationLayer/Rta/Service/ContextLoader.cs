@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			var tasks = transactions
 				.Batch(taskTransactionCount)
-				.Select(transactionBatch => { return Task.Factory.StartNew(() => { transactionBatch.ForEach(transaction => { ProcessTransaction(tenant, strategy, transaction, exceptions); }); }); })
+				.Select(transactionBatch => { return Task.Run(() => { transactionBatch.ForEach(transaction => { ProcessTransaction(tenant, strategy, transaction, exceptions); }); }); })
 				.ToArray();
 
 			Task.WaitAll(tasks);

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			target.FeedbackTask(DateOnly.Today);
 			var result = target.FeedbackCompleted(
 				target.AsyncManager.Parameters["model"] as PreferenceDayFeedbackViewModel,
-				Task.Factory.StartNew(() => { })
+				Task.FromResult(false)
 				);
 
 			result.Data.Should().Be(model);
@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			target.PeriodFeedbackTask(DateOnly.Today);
 			var result = target.PeriodFeedbackCompleted(
 				target.AsyncManager.Parameters["model"] as PreferencePeriodFeedbackViewModel,
-				Task.Factory.StartNew(() => { })
-				);
+				Task.FromResult(false)
+			);
 
 			result.Data.Should().Be(model);
 		}
