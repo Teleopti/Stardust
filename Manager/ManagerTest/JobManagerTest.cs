@@ -348,6 +348,7 @@ namespace ManagerTest
 				CreatedBy = "CreatedBy",
 				Created = DateTime.Now
 			};
+
 			NodeManager.AddWorkerNode(_workerNode.Url);
 
 			using (var sqlConnection = new SqlConnection(ManagerConfiguration.ConnectionString))
