@@ -1,36 +1,53 @@
 (function() {
-    'use strict';
+	'use strict';
 
-    angular
-        .module('wfm.areas')
-        .factory('areasService', areasService);
+	angular
+		.module('wfm.areas')
+		.factory('areasService', areasService);
 
-    areasService.$inject = ['$resource'];
+	areasService.$inject = ['$resource'];
 
-    function areasService($resource) {
-      	var areas;
-        var service = {
-            getAreas: getAreas
-        };
+	function areasService($resource) {
+		var areasWithPermission, areasList;
+		var service = {
+			getAreasWithPermission: getAreasWithPermission,
+			getAreasList: getAreasList
+		};
 
-        return service;
+		return service;
 
-        function getAreas(){
-    			if(!areas){
-    				areas = getAreasFromServer();
-    			}
-    			return areas;
-    		}
+		function getAreasWithPermission() {
+			if (!areasWithPermission) {
+				areasWithPermission = getAreasWithPermissionFromServer();
+			}
+			return areasWithPermission;
+		}
 
-        function getAreasFromServer(){
-          return $resource('../api/Global/Application/Areas', {}, {
-      			query: {
-      				method: 'GET',
-      				params: {},
-      				isArray: true
-      			}
-      		}).query().$promise;
+		function getAreasList() {
+			if (!areasList) {
+				areasList = getAreasListFromServer();
+			}
+			return areasList;
+		}
 
-        }
-    }
+		function getAreasWithPermissionFromServer() {
+			return $resource('../api/Global/Application/WfmAreasWithPermission', {}, {
+				query: {
+					method: 'GET',
+					params: {},
+					isArray: true
+				}
+			}).query().$promise;
+		}
+
+		function getAreasListFromServer () {
+			return $resource('../api/Global/Application/WfmAreasList', {}, {
+				query: {
+					method: 'GET',
+					params: {},
+					isArray: true
+				}
+			}).query().$promise;
+		}
+	}
 })();

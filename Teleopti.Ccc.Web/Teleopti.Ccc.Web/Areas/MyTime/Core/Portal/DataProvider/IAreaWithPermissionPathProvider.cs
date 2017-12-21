@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 	{
 		IEnumerable<AreaWithPermissionPath> GetWfmAreasWithPermissions();
 		IEnumerable<object> GetAreasWithPermissions();
+		IEnumerable<AreaWithPermissionPath> GetWfmAreasList();
 	}
 }

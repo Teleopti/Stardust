@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			var target = new ApplicationController(areaPathProvider, globalSettingDataRepository);
 
-			var result = target.GetAreas();
+			var result = target.GetWfmAreasWithPermission();
 			result.Count().Should().Be.EqualTo(0);
 		}
 
@@ -35,8 +35,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			var target = new ApplicationController(areaPathProvider, globalSettingDataRepository);
 
-			var result = target.GetAreas();
+			var result = target.GetWfmAreasWithPermission();
 			result.Any(x=>((dynamic)(x)).InternalName == "resourceplanner" ).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldGetWfmAreasList()
+		{
+			var toggleManager = new FakeToggleManager();
+			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider(), new FakeApplicationFunctionsToggleFilter());
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			var target = new ApplicationController(areaPathProvider, globalSettingDataRepository);
+
+			var results = target.GetWfmAreasList();
+
+			results.Any(x => ((dynamic)(x)).InternalName == "forecasting").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "resourceplanner").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "permissions").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "outbound").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "people").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "requests").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "seatPlan").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "seatMap").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "rta").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "intraday").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "teams").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "reports").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "staffing").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "myTime").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "gamification").Should().Be.True();
 		}
 
 		[Test]

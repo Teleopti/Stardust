@@ -4,11 +4,11 @@ describe('AreasController', function() {
 		$controller,
 		$q;
 
-	beforeEach(function () {
+	beforeEach(function() {
 		module('wfm.areas');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$controller_, _$q_) {
+	beforeEach(inject(function(_$httpBackend_, _$controller_, _$q_) {
 		$httpBackend = _$httpBackend_;
 		$controller = _$controller_;
 		$q = _$q_;
@@ -16,11 +16,14 @@ describe('AreasController', function() {
 
 	it('should get an area', inject(function() {
 		var vm = $controller('AreasController');
-		var areas = [{ Name: 'Forecaster', internalName: "Forecaster", _links: [] }];
-    $httpBackend.whenGET('../api/Global/Application/Areas').respond(function(method,url,data)
-		{
-	    return [200, areas, {}];
-  	});
+		var areas = [{
+			Name: 'Forecaster',
+			internalName: "Forecaster",
+			_links: []
+		}];
+		$httpBackend.whenGET('../api/Global/Application/WfmAreasWithPermission').respond(function(method, url, data) {
+			return [200, areas, {}];
+		});
 		vm.loadAreas();
 		$httpBackend.flush();
 
@@ -29,11 +32,18 @@ describe('AreasController', function() {
 
 	it('contains correct area', inject(function() {
 		var vm = $controller('AreasController');
-		var areas = [{ Name: 'Forecaster', internalName: "Forecaster", _links: [] },{Name:"Schedules",InternalName:"resourceplanner", _links: []}];
-    $httpBackend.whenGET('../api/Global/Application/Areas').respond(function(method,url,data)
-		{
-	    return [200, areas, {}];
-  	});
+		var areas = [{
+			Name: 'Forecaster',
+			internalName: "Forecaster",
+			_links: []
+		}, {
+			Name: "Schedules",
+			InternalName: "resourceplanner",
+			_links: []
+		}];
+		$httpBackend.whenGET('../api/Global/Application/WfmAreasWithPermission').respond(function(method, url, data) {
+			return [200, areas, {}];
+		});
 		vm.loadAreas();
 		$httpBackend.flush();
 

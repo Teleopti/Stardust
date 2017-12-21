@@ -11,7 +11,7 @@
 		var vm = this;
 		vm.areas = [];
 		vm.loadAreas = function() {
-			areasService.getAreas().then(function(result) {
+			areasService.getAreasWithPermission().then(function(result) {
 				for (var i = 0; i < result.length; i++) {
 					result[i].filters = [];
 				}
