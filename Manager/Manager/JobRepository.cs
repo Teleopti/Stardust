@@ -129,7 +129,7 @@ namespace Stardust.Manager
 				if (exp.Message.Contains("PK_Job"))
 				{
 					// just skip it some other Manager picked it up just before I did
-					this.Log().WarningWithLineNumber(exp.Message);
+					this.Log().WarningWithLineNumber("Could not assign job to a Node. It was already assigned, probably by another Manager.");
 				}
 				else
 				{

@@ -358,7 +358,7 @@ namespace ManagerTest
 			}
 			
 			JobManager.AssignJobToWorkerNodes();
-			var assertSQL = "SELECT COUNT(*) FROM Stardust.Logging WHERE [Level] = 'WARN' AND [Message] like '%PK_Job%'";
+			var assertSQL = "SELECT COUNT(*) FROM Stardust.Logging WHERE [Level] = 'WARN' AND [Message] like '%It was already assigned, probably by another Manager.%'";
 			using (var sqlConnection = new SqlConnection(ManagerConfiguration.ConnectionString))
 			{
 				using (var getAllJobsCommand = new SqlCommand(assertSQL, sqlConnection))
