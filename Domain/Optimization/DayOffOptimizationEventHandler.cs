@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland,
 				new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
 			_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
-				schedulerStateHolder.ChoosenAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray(),
+				schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray(),
 				@event.RunWeeklyRestSolver,
 				@event.PlanningPeriodId,
 				null);

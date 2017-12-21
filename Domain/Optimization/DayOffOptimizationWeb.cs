@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (planningGroup == null)
 			{
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
-				agents = schedulerStateHolder.ChoosenAgents.FixedStaffPeople(period);
+				agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.FixedStaffPeople(period);
 			}
 			else
 			{
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				if (planningGroup == null)
 				{
 					_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
-					agents = schedulerStateHolder.ChoosenAgents.FixedStaffPeople(period);
+					agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.FixedStaffPeople(period);
 				}
 				else
 				{

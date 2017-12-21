@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, new LockInfoForStateHolder(_gridlockManager, locks), period, onlyUseSkills);
-			_intradayOptimization.Execute(period, schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize), runResolveWeeklyRestRule, GetBlockPreferenceProvider(planningPeriodId));
+			_intradayOptimization.Execute(period, schedulerStateHolder.SchedulingResultState.LoadedAgents.Filter(agentsToOptimize), runResolveWeeklyRestRule, GetBlockPreferenceProvider(planningPeriodId));
 		}
 
 		protected abstract IBlockPreferenceProvider GetBlockPreferenceProvider(Guid? planningPeriodId);
