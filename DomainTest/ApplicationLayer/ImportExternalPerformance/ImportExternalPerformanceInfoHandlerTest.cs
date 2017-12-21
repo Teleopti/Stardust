@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddService<FakeDatabase>();
-			system.AddService<FakeStorage>();
 			system.UseTestDouble<ImportExternalPerformanceInfoHandler>().For<IHandleEvent<ImportExternalPerformanceInfoEvent>>();
 			system.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
 			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
