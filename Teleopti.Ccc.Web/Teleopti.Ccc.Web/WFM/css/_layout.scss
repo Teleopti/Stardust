@@ -81,6 +81,23 @@ md-progress-circular {
 	height: 99% !important;
 }
 
+// Interned explorer and Edge - "_:-ms-lang(x)"
+_:-ms-lang(x),.wfm-popup-wrap {
+	min-width: 300px;
+}
+_:-ms-lang(x),.con-fluid-row {
+	display: -ms-flexbox;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+_:-ms-lang(x),.con-fluid-flex {
+	-ms-flex: 1;
+	flex:1;
+	flex-basis: 30%;
+	max-width: 33.3%;
+}
+
 /*Mobile view Query*/
 @media screen and (max-width:768px) {
 	.con-flex.split-3-1 {
@@ -89,6 +106,12 @@ md-progress-circular {
 
 	.c3 svg {
 		font: .6em sans-serif;
+	}
+
+	_:-ms-lang(x),.con-fluid-flex {
+		-ms-flex: 1;
+		flex-basis: 100%;
+		max-width: none;
 	}
 }
 
@@ -101,30 +124,6 @@ md-progress-circular {
 
 /*Firefox Query*/
 @-moz-document url-prefix() {
-	.navbar .navbar-search {
-		padding: 1px;
-	}
-}
-
-/*Internet explorer Query*/
-/*Internet explorer Query*/
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-	.navbar .navbar-search {
-		padding-left: 1px;
-	}
-
-	.permission-radio-buttons > .wfm-radio {
-		width: auto !important;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.wfm-popup-wrap { //move to styleguide
-		min-width: 300px;
-	}
-}
-
-@supports (-ms-accelerator: true) {
 	.navbar .navbar-search {
 		padding: 1px;
 	}
@@ -317,7 +316,7 @@ wfm-calendar-picker-body > .date-info-calendar-wrapper{
 		background-color: $blue-500 !important;
 		color: $white !important;
 	}
-	
+
 	.uib-datepicker{
 		min-height: 248px;
 		max-width: 260px;
