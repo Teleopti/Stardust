@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				try
 				{
-					_logger.Write("Applying Release " + scriptFile.number + "...");
+					_logger.Write($"Applying Release {scriptFile.number}...");
 					var sql = File.ReadAllText(scriptFile.file.FullName);
 					if (scriptFile.number >= buildNumberWhenTrunkDisappeared)
 					{
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				var scriptsDirectoryInfo = new DirectoryInfo(directory);
 				var scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
 
-				_logger.Write(string.Format("Applying programmability directory '{0}'", scriptsDirectoryInfo.Name));
+				_logger.Write($"Applying programmability directory '{scriptsDirectoryInfo.Name}'");
 
 				foreach (var scriptFile in scriptFiles)
 				{
