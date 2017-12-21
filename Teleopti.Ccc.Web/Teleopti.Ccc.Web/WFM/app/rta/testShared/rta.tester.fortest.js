@@ -20,6 +20,9 @@ var rtaTester = (function () {
 				get controller() {
 					return controllerTester.controller;
 				},
+				get lastGoParams(){
+					return sharedTestState.lastGoParams;	
+				},
 				apply: function (a) {
 					return controllerTester.apply(a)
 				},
@@ -209,6 +212,8 @@ var rtaTester = (function () {
 		var state = {
 			stateParams: {}
 		};
+		
+		var lastGoParams;
 
 		beforeEach(module('wfm.rta'));
 		beforeEach(module('wfm.rtaTestShared'));
@@ -230,6 +235,10 @@ var rtaTester = (function () {
 			state.$controllerBuilder = _ControllerBuilder_;
 			state.$translate = _$translate_;
 			state.$controllerBuilder.setup('RtaHistoricalController46826');
+
+			spyOn(state.$state, 'go').and.callFake(function (_, params) {
+				state.lastGoParams = params;
+			});
 		}));
 
 		afterEach(function () {

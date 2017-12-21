@@ -92,7 +92,11 @@ angular.module('wfm.rta').provider('RtaState', function () {
 						return 'app/rta/rta/historical/rta-historical.adherence7DaysBack_46826.html';
 					return 'app/rta/rta/historical/rta-historical.html';
 				},
-				controller: 'RtaHistoricalController as vm'
+				controllerProvider: function () {
+					if (toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)
+						return 'RtaHistoricalController46826 as vm';
+					return 'RtaHistoricalController as vm';
+				}
 			})
 			.state('rta-agents-historical-prototype', {
 				url: '/rta/agents-historical-prototype',

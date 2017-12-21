@@ -1,20 +1,6 @@
 ﻿'use strict';
 
 rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
-
-	it('should display interval', function (t) {
-		t.stateParams.personId = '1';
-		t.backend.withHistoricalAdherence({
-			PersonId: '1',
-			Interval: { StartDate:'20171215', EndDate: '20171221'}
-		});
-
-		var c = t.createController();
-
-		expect(c.interval.StartDate).toEqual("20171215");
-		expect(c.interval.EndDate).toEqual("20171221");
-	});
-
 	it('should display active buttons when in interval', function (t) {
 		t.stateParams.personId = '1';
 		t.stateParams.date = '20171217';
@@ -80,5 +66,61 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		expect(c.disabledPrev).toEqual(true);
 	});
+
+	it('should display next day', function (t) {
+		t.stateParams.personId = '1';
+		t.stateParams.date = '20171220';
+		t.backend.withHistoricalAdherence({
+			PersonId: '1',
+			Interval: { StartDate:'20171215', EndDate: '20171221'}
+		});
+
+		var c = t.createController();
+
+		expect(c.nextDay).toEqual('2017-12-21');
+	});
+
+	it('should display previous day', function (t) {
+		t.stateParams.personId = '1';
+		t.stateParams.date = '20171220';
+		t.backend.withHistoricalAdherence({
+			PersonId: '1',
+			Interval: { StartDate:'20171215', EndDate: '20171221'}
+		});
+
+		var c = t.createController();
+
+		expect(c.previousDay).toEqual('2017-12-19');
+	});
+
+
+	it('should go to next day', function (t) {
+		t.stateParams.personId = '1';
+		t.stateParams.date = '20171217';
+		t.backend.withHistoricalAdherence({
+			PersonId: '1',
+			Interval: { StartDate:'20171215', EndDate: '20171221'}
+		});
+
+		var c = t.createController();
+		t.apply(function () {
+			c.goToNext();
+		});
+		expect(t.lastGoParams.date).toBe('20171218');
+	});
 	
+	it('should go to previous day', function (t) {
+		t.stateParams.personId = '1';
+		t.stateParams.date = '20171217';
+		t.backend.withHistoricalAdherence({
+			PersonId: '1',
+			Interval: { StartDate:'20171215', EndDate: '20171221'}
+		});
+
+		var c = t.createController();
+		t.apply(function () {
+			c.goToPrevious();
+		});
+		expect(t.lastGoParams.date).toBe('20171216');
+	});
 });

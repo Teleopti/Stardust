@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 	angular.module('wfm.rta').controller('RtaHistoricalController46826', RtaHistoricalController);
-	RtaHistoricalController.$inject = ['$http', '$stateParams', 'rtaService', '$translate', 'Toggle'];
+	RtaHistoricalController.$inject = ['$http', '$state', '$stateParams', 'rtaService', '$translate', 'Toggle'];
 
-	function RtaHistoricalController($http, $stateParams, rtaService, $translate, toggles) {
+	function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate, toggles) {
 		var vm = this;
 
 		vm.highlighted = {};
@@ -11,6 +11,9 @@
 		vm.cards = [];
 
 		$stateParams.open = ($stateParams.open || "false");
+
+		var nextDayInParams = moment($stateParams.date).add(1, 'day').format('YYYYMMDD');
+		var previousDayInParams = moment($stateParams.date).subtract(1, 'day').format('YYYYMMDD');
 		
 		vm.ooaTooltipTime = function (time) {
 			if (time == null)
@@ -77,13 +80,22 @@
 			vm.cards = mapChanges(data.Changes, data.Schedules);
 
 			vm.diamonds = buildDiamonds(data);
-			
-			vm.interval = data.Interval;
-			
+	
 			vm.disabledNext = $stateParams.date >= data.Interval.EndDate;
 			vm.disabledPrev = $stateParams.date <= data.Interval.StartDate;
+			vm.nextDay = moment($stateParams.date).add(1, 'day').format('YYYY-MM-DD');
+			vm.previousDay = moment($stateParams.date).subtract(1, 'day').format('YYYY-MM-DD');
 		});
+		
+		vm.goToNext = function (){
+			$state.go($state.current.name, {date: nextDayInParams,  personId: $stateParams.personId});
+		};
 
+		vm.goToPrevious = function (){
+			$state.go($state.current.name, {date: previousDayInParams,  personId: $stateParams.personId});
+		};
+
+		
 		function buildAgentOutOfAdherences(data) {
 			return data.OutOfAdherences.map(function (ooa) {
 				var startTime = moment(ooa.StartTime);
