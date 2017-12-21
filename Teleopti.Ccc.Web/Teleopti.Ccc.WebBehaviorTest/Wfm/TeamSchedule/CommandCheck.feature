@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfDisabled('Wfm_GroupPages_45057')
 Feature: CommandCheck
 	There should be command check after user have add activity over NOT ALLOW MEETING activities
 
