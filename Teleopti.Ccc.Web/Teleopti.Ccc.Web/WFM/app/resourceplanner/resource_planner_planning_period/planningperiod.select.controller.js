@@ -117,13 +117,11 @@
 		}
 
 		function autoUpdateEndDate() {
-			if (!vm.selectedSuggestion.endDate) {
-				var startDate = vm.selectedSuggestion.startDate;
-				return vm.selectedSuggestion = {
-					startDate: moment(startDate).toDate(),
-					endDate: moment(startDate).add(vm.intervalRange, vm.intervalType.toLowerCase()).subtract(1, 'day').toDate()
-				};
-			}
+			var startDate = vm.selectedSuggestion.startDate;
+			return vm.selectedSuggestion = {
+				startDate: moment(startDate).toDate(),
+				endDate: moment(startDate).add(vm.intervalRange, vm.intervalType.toLowerCase()).subtract(1, 'day').toDate()
+			};
 		}
 
 		function openModifyModal(type) {
