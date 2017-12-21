@@ -181,12 +181,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created date: 2008-04-02
         /// </remarks>
         public IList<IWorkloadDayBase> GetWorkloadDaysFromSkillDays(IEnumerable<ISkillDay> skillDays, IWorkload workload)
-        {
-            return (from sd in skillDays
-                    from wd in sd.WorkloadDayCollection
-                    where wd.Workload.Equals(workload)
-                    orderby wd.CurrentDate
-                    select (IWorkloadDayBase)wd).ToList();
+		{
+			return skillDays.SelectMany(sd => sd.WorkloadDayCollection)
+				.Where(wd => wd.Workload.Equals(workload))
+				.OrderBy(wd => wd.CurrentDate)
+				.OfType<IWorkloadDayBase>()
+				.ToArray();
         }
 
         /// <summary>
