@@ -273,8 +273,6 @@
     <Compile Include="Common\OpenPeriodModeTest.cs" />
     <Compile Include="Common\OpenPeriodSpecificationTest.cs" />
     <Compile Include="Common\OptionalColumnProviderTest.cs" />
-    <Compile Include="Common\PeopleLoaderForTeamLeaderModeTest.cs" />
-    <Compile Include="Common\PeopleLoaderTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesNoRootTest.cs" />
     <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />

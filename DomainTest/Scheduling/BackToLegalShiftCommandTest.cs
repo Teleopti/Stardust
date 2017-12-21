@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2))
 			};
-			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState, stateHolder.ChoosenAgents);
+			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState, stateHolder.SchedulingResultState.LoadedAgents);
 
 			var newAssignment = stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2)).PersonAssignment();
 			newAssignment.ShiftLayers.Count().Should().Be.EqualTo(2);
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2))
 			};
 
-			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState, stateHolder.ChoosenAgents);
+			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState, stateHolder.SchedulingResultState.LoadedAgents);
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2)).PersonAssignment(true).OvertimeActivities()
 				.Should().Not.Be.Empty();
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2))
 			};
 
-			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState, stateHolder.ChoosenAgents);
+			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState, stateHolder.SchedulingResultState.LoadedAgents);
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2)).
 				PersonAssignment(true).
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2))
 			};
 
-			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState, stateHolder.ChoosenAgents);
+			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState, stateHolder.SchedulingResultState.LoadedAgents);
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2)).
 				PersonAssignment(true).

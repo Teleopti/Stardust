@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void FilterPersons(HashSet<Guid> selectedGuids)
 		{
 			var selectedPersons = new Dictionary<Guid, IPerson>();
-			foreach (var person in ChoosenAgents)
+			foreach (var person in SchedulingResultState.LoadedAgents)
 			{
 				if (selectedGuids.Contains(person.Id.Value) && !selectedPersons.ContainsKey(person.Id.Value))
 				{
