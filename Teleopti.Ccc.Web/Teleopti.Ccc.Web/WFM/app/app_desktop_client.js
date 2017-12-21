@@ -1,6 +1,6 @@
 'use strict';
 
-var externalModules = angular.module('externalModules', ['ui.router',
+angular.module('externalModules', ['ui.router',
 	'ui.bootstrap',
 	'ui.tree',
 	'ngMaterial',
@@ -47,11 +47,9 @@ var wfm = angular.module('wfm', [
 	'wfm.utilities',
 	'wfm.dataProtection',
 	'wfm.gamification'
-]);
-
-wfm.config([
+]).config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', 'RtaStateProvider',
-	function ($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider) {
+	function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider) {
 
 		$urlRouterProvider.otherwise("/#");
 
@@ -69,33 +67,16 @@ wfm.config([
 	}
 ]).run([
 	'$rootScope', '$state', '$translate', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'WfmShortcuts', '$locale',
-	function ($rootScope, $state, $translate, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts, $locale) {
+	function($rootScope, $state, $translate, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts, $locale) {
 		$rootScope.isAuthenticated = false;
 
-		(function broadcastEventOnToggle() {
-			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function () {
-				$timeout(function () {
-					$rootScope.$broadcast('sidenav:toggle');
-				}, 500);
-			});
-		})();
+		$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
+			$timeout(function() {
+				$rootScope.$broadcast('sidenav:toggle');
+			}, 500);
+		});
 
-		function refreshContext(event, next, toParams) {
-			currentUserInfo.initContext().then(function (data) {
-				$rootScope.isAuthenticated = true;
-				$translate.use(data.Language).then(function () {
-					$state.go(next, toParams);
-				});
-
-				$rootScope.$on('$localeChangeSuccess', function () {
-					if ($locale.id === 'zh-cn')
-						$locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
-				});
-			});
-		};
-
-		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
-
+		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
 			if (!currentUserInfo.isConnected()) {
 				event.preventDefault();
 				refreshContext(event, next, toParams);
@@ -103,14 +84,26 @@ wfm.config([
 			}
 			if (!toggleService.togglesLoaded.$$state.status) {
 				event.preventDefault();
-				toggleService.togglesLoaded.then(function () {
+				toggleService.togglesLoaded.then(function() {
 					$state.go(next, toParams);
 				});
 				return;
 			}
 		});
-
 		RtaState(toggleService);
-	}
 
+		function refreshContext(event, next, toParams) {
+			currentUserInfo.initContext().then(function(data) {
+				$rootScope.isAuthenticated = true;
+				$translate.use(data.Language).then(function() {
+					$state.go(next, toParams);
+				});
+
+				$rootScope.$on('$localeChangeSuccess', function() {
+					if ($locale.id === 'zh-cn')
+						$locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
+				});
+			});
+		};
+	}
 ]);
