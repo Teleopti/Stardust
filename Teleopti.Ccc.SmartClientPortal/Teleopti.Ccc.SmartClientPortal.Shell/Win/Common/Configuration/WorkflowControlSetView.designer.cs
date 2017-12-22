@@ -1370,7 +1370,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestPeriods.AutoSize = true;
 			this.tableLayoutPanelAbsenceRequestPeriods.ColumnCount = 1;
 			this.tableLayoutPanelAbsenceRequestPeriods.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelAbsenceRequestPeriods.Controls.Add(this.panel1, 0, 0);
+			this.tableLayoutPanelAbsenceRequestPeriods.Controls.Add(this.panel1, 0, 20);
 			this.tableLayoutPanelAbsenceRequestPeriods.Controls.Add(this.gridControlVisualisation, 0, 1);
 			this.tableLayoutPanelAbsenceRequestPeriods.Controls.Add(this.tableLayoutPanelNextPreviousPeriod, 0, 2);
 			this.tableLayoutPanelAbsenceRequestPeriods.Controls.Add(this.tableLayoutPanelAbsenceRequestMiscellaneous, 0, 3);
@@ -1561,14 +1561,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.gridControlVisualisation.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlVisualisation.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlVisualisation.Size = new System.Drawing.Size(959, 51);
+			this.gridControlVisualisation.Size = new System.Drawing.Size(959, 115);
 			this.gridControlVisualisation.SmartSizeBox = false;
 			this.gridControlVisualisation.TabIndex = 21;
-			this.gridControlVisualisation.TabStop = false;
 			this.gridControlVisualisation.Text = "gridControl1";
 			this.gridControlVisualisation.ThemesEnabled = true;
 			this.gridControlVisualisation.UseRightToLeftCompatibleTextBox = true;
 			this.gridControlVisualisation.VScrollPixel = true;
+
 			// 
 			// tableLayoutPanelNextPreviousPeriod
 			// 
