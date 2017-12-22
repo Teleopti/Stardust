@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			inputFile = jobResult.Artifacts.FirstOrDefault(a => a.Category == JobResultArtifactCategory.Input);
 			if ((inputFile?.Content?.Length ?? 0) == 0)
 			{
-				return Resources.InvalidInput;
+				return Resources.EmptyFile;
 			}
 			return string.Empty;
 		}

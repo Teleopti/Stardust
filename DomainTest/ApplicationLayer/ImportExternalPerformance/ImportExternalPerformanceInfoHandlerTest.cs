@@ -18,6 +18,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
@@ -41,125 +42,160 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			system.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
 			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
 			system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 		}
 
 		[Test]
-		public void ShouldResolveTarget()
+		public void ShouldResolveHandler()
 		{
 			Target.Should().Not.Be.Null();
 		}
 
-		[Test, Ignore("for now")]
-		public void ShouldSaveNewExternalPerformanceType()
+		[Test]
+		public void ShouldHandleEventWithNoAtifact()
 		{
-			var expectedId = 8;
-			var expectedName = "Quality Score";
-			var expectedDataType = ExternalPerformanceDataType.Percent;
-			var processResult = new ExternalPerformanceInfoProcessResult()
+			var updated = NewJobResult();
+
+			Target.Handle(new ImportExternalPerformanceInfoEvent
 			{
-				ExternalPerformances = new List<IExternalPerformance>()
-			{
-				new ExternalPerformance(){ExternalId = expectedId, Name = expectedName, DataType = expectedDataType}
-			}
-			};
-
-			Target.Handle(NewEvent());
-
-			var result = ExternalPerformanceTypeRepository.FindAllExternalPerformances();
-			result.Count().Should().Be.EqualTo(1);
-			result.ToList()[0].ExternalId.Should().Be.EqualTo(expectedId);
-			result.ToList()[0].Name.Should().Be.EqualTo(expectedName);
-			result.ToList()[0].DataType.Should().Be.EqualTo(expectedDataType);
-		}
-
-		[Test, Ignore("for now")]
-		public void ShouldSaveValidRecord()
-		{
-			IPerson person = PersonFactory.CreatePerson("Kalle").WithId();
-			const string employmentNum = "1";
-			person.SetEmploymentNumber(employmentNum);
-			PersonRepository.Add(person);
-
-			var expectedDate = new DateTime(2017, 11, 20);
-			var expectedScore = 87;
-			var expectedPersonId = Guid.NewGuid();
-			var gameId = 8;
-			var expectedExternalPerformance = new ExternalPerformance() { ExternalId = gameId, DataType = ExternalPerformanceDataType.Percent };
-			expectedExternalPerformance.WithId(Guid.NewGuid());
-			ExternalPerformanceTypeRepository.Add(expectedExternalPerformance);
-
-			Target.Handle(NewEvent());
-
-
-			var result = ExternalPerformanceDataRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(1);
-			result.ToList()[0].OriginalPersonId.Should().Be.EqualTo(employmentNum);
-			result.ToList()[0].Score.Should().Be.EqualTo(expectedScore);
-			result.ToList()[0].DateFrom.Should().Be.EqualTo(expectedDate);
-			result.ToList()[0].PersonId.Should().Be.EqualTo(person.Id.Value);
-			result.ToList()[0].ExternalPerformance.ExternalId.Should().Be.EqualTo(expectedExternalPerformance.ExternalId);
-		}
-
-		[Test, Ignore("for now")]
-		public void ShouldUpdateExistingDataWithValidRecord()
-		{
-			IPerson person = PersonFactory.CreatePerson("Kalle").WithId();
-			const string employmentNum = "1";
-			person.SetEmploymentNumber(employmentNum);
-			PersonRepository.Add(person);
-
-			var originalAgentId = "1";
-			var date = new DateTime(2017, 11, 20);
-			var oldScore = 100;
-			var newScore = 87;
-			var personId = person.Id.Value;
-			var gameId = 8;
-
-			var extPerfType = new ExternalPerformance { ExternalId = gameId, DataType = ExternalPerformanceDataType.Percent };
-			extPerfType.WithId(Guid.NewGuid());
-
-			ExternalPerformanceTypeRepository.Add(extPerfType);
-
-			ExternalPerformanceDataRepository.Add(new ExternalPerformanceData
-			{
-				DateFrom = date,
-				ExternalPerformance = extPerfType,
-				PersonId = personId,
-				OriginalPersonId = originalAgentId,
-				Score = oldScore
+				JobResultId = updated.Id.Value
 			});
 
-			Target.Handle(NewEvent());
-
-			var result = ExternalPerformanceDataRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(1);
-			result.ToList()[0].PersonId.Should().Be.EqualTo(personId);
-			result.ToList()[0].Score.Should().Be.EqualTo(newScore);
+			updated.Details.Count().Should().Be(1);
+			updated.FinishedOk.Should().Be.True();
 		}
 
-		private ImportExternalPerformanceInfoEvent NewEvent()
+		[Test]
+		public void ShouldHandleEventWhenThereAreMultipleInputArtifacts()
 		{
-			return new ImportExternalPerformanceInfoEvent()
+			var updated = NewJobResult();
+			updated.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test.csv", null));
+			updated.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.Input, "test1.csv", null));
+
+			Target.Handle(new ImportExternalPerformanceInfoEvent
 			{
-				JobResultId = NewJobResult().Id.Value
-			};
+				JobResultId = updated.Id.Value
+			});
+
+			updated.Details.Count().Should().Be(1);
+			updated.FinishedOk.Should().Be.True();
+			updated.Details.Single().Message.Should().Be(Resources.InvalidInput);
+		}
+
+		[Test]
+		public void ShouldHandleEventWithEmptyInputArtifact()
+		{
+			var jobResult = NewJobResult();
+
+			var fileContent = Encoding.UTF8.GetBytes("");
+			var artifact = new JobResultArtifact(JobResultArtifactCategory.Input, "test.csv", fileContent);
+			jobResult.AddArtifact(artifact);
+
+			Target.Handle(new ImportExternalPerformanceInfoEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+
+			jobResult.Details.Single().DetailLevel.Should().Be.EqualTo(DetailLevel.Error);
+			var message = jobResult.Details.Single().Message;
+			message.Should().Be.EqualTo(Resources.EmptyFile);
+		}
+
+		[Test]
+		public void ShouldHandleEventWhenRecordsAreValid()
+		{
+			IPerson person = PersonFactory.CreatePerson("Kalle").WithId();
+			const string employmentNum = "1";
+			person.SetEmploymentNumber(employmentNum);
+			PersonRepository.Add(person);
+
+			var jobResult = NewJobResult();
+			string stringContent = "20171120,1,Kalle,Pettersson,Quality Score,1,Percent,87\n" + "20171120,1,Kalle,Pettersson,Sales Result,2,Numeric,2000";
+			var fileContent = Encoding.UTF8.GetBytes(stringContent);
+			var artifact = new JobResultArtifact(JobResultArtifactCategory.Input, "test.csv", fileContent);
+			jobResult.AddArtifact(artifact);
+
+			Target.Handle(new ImportExternalPerformanceInfoEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+
+			jobResult.Artifacts.Count.Should().Be.EqualTo(1);
+			jobResult.Artifacts[0].Name.Should().Be.EqualTo("test.csv");
+		}
+
+		[Test]
+		public void ShouldNotHandleEventWhenThereAreInvalidRecords()
+		{
+			IPerson person = PersonFactory.CreatePerson("Kalle").WithId();
+			const string employmentNum = "1";
+			person.SetEmploymentNumber(employmentNum);
+			PersonRepository.Add(person);
+
+			var jobResult = NewJobResult();
+			string stringContent = "20171120,1,Kalle,Pettersson,Quality Score,1,Percent,87\n" + "20171120,137727,Kalle,Pettersson,Sales Result,2,aa,2000";
+			var fileContent = Encoding.UTF8.GetBytes(stringContent);
+			var artifact = new JobResultArtifact(JobResultArtifactCategory.Input, "test.csv", fileContent);
+			jobResult.AddArtifact(artifact);
+
+			Target.Handle(new ImportExternalPerformanceInfoEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+
+			jobResult.Artifacts.Count.Should().Be.EqualTo(2);
+			jobResult.Artifacts.Count(ar => ar.Category == JobResultArtifactCategory.Input).Should().Be(1);
+			jobResult.Artifacts.Count(ar => ar.Category == JobResultArtifactCategory.OutputError).Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldHandleJobOnlyOnce()
+		{
+			var jobResult = NewJobResult();
+
+			Target.Handle(new ImportExternalPerformanceInfoEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+
+			Target.Handle(new ImportExternalPerformanceInfoEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+
+			jobResult.Version.GetValueOrDefault().Should().Be(2);
+			jobResult.Details.Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldJobDetailLevelBeInfoIfJobExecuteSucceed()
+		{
+			IPerson person = PersonFactory.CreatePerson("Kalle").WithId();
+			const string employmentNum = "1";
+			person.SetEmploymentNumber(employmentNum);
+			PersonRepository.Add(person);
+
+			var jobResult = NewJobResult();
+			var fileContent = Encoding.UTF8.GetBytes("20171120,1,Kalle,Pettersson,Quality Score,1,Percent,87");
+			var artifact = new JobResultArtifact(JobResultArtifactCategory.Input, "test.csv", fileContent);
+			jobResult.AddArtifact(artifact);
+
+			Target.Handle(new ImportExternalPerformanceInfoEvent
+			{
+				JobResultId = jobResult.Id.Value
+			});
+
+			jobResult.Details.Single().DetailLevel.Should().Be.EqualTo(DetailLevel.Info);
 		}
 
 		private IJobResult NewJobResult()
 		{
-			var currentUser = new FakeLoggedOnUser();
-			var importFileData = new ImportFileData() { FileName = "test.csv" };
-
-			importFileData.Data = Encoding.UTF8.GetBytes("20171120,1,Kalle,Pettersson,Quality Score,8,Percent,0.87");
-
-			var jobResultArtifact = new JobResultArtifact(JobResultArtifactCategory.Input, importFileData.FileName, importFileData.Data);
-			var jobResult = new JobResult(JobCategory.WebImportExternalGamification, DateOnly.Today.ToDateOnlyPeriod(), currentUser.CurrentUser(), DateTime.UtcNow).WithId();
-
-			jobResult.AddArtifact(jobResultArtifact);
+			var person = PersonFactory.CreatePerson().WithId();
+			var jobResult = new JobResult(JobCategory.WebImportExternalGamification, DateOnly.Today.ToDateOnlyPeriod(), person, DateTime.UtcNow).WithId();
 			jobResult.SetVersion(1);
 			JobResultRepository.Add(jobResult);
-
-			return JobResultRepository.Get(jobResult.Id.Value);
+			var updated = JobResultRepository.Get(jobResult.Id.Value);
+			return updated;
 		}
 	}
 }
