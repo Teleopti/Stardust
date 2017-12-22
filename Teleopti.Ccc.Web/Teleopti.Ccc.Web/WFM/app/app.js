@@ -183,7 +183,7 @@ var wfm = angular.module('wfm', [
 								$state.go('main');
 
 								areasList.forEach(function(area) {
-									if (name && (area.InternalName.indexOf(name) > -1 || name.indexOf(area.InternalName) > -1) ) {
+									if (name && (area.InternalName.indexOf(name) > -1 || name.indexOf(area.InternalName) > -1)) {
 										moduleName = area.Name;
 									} else if (url && (area.InternalName.indexOf(url) > -1 || url.indexOf(area.InternalName) > -1)) {
 										moduleName = area.Name;
