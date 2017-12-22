@@ -55,6 +55,20 @@ Scenario: Sign in with a user with one business unit by user name and I should b
 	When I sign in by user name
 	Then I should be signed in
 
+Scenario: Sign in with a user with an email address as user name
+	Given I have user logon details with
+	| Field    | Value |
+	| IsLocked | false  |
+	And I have user credential with
+	| Field    | Value     |
+	| UserName | ashley.andeen@insurance.com |
+	| Password | P@ssword1 |
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | ashley.andeen@insurance.com |
+	| Password | P@ssword1 |
+	Then I should be signed in
+
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Sign in with a user with multiple business units by Windows credentials
 	Given I have the role 'Role for business unit 1'
