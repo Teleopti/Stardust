@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfEnabled('Wfm_People_PrepareForRelease_39040')
 Feature: AdjustSkillsAfterTraining
 	In order to let new employed agents work with new skills after training
 	As a resource planner

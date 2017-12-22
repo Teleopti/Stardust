@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfEnabled('Wfm_People_PrepareForRelease_39040')
 Feature: ImportUsers
 	In order to easily create large amount of users
 	As a IT administrator
