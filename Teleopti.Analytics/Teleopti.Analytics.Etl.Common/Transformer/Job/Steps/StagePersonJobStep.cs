@@ -36,8 +36,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 											BulkInsertDataTable1,
 											BulkInsertDataTable2,
 											commonNameDescriptionSetting,
-											logonInfos.ToList(),
-											_jobParameters.ToggleManager);
+											logonInfos.ToList());
 
 			int affectedPersonRows = _jobParameters.Helper.Repository.PersistPerson(BulkInsertDataTable1);
 			int affectedAcdLoginRows = _jobParameters.Helper.Repository.PersistAcdLogOnPerson(BulkInsertDataTable2);

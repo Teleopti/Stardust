@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
@@ -15,7 +14,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 	{
 		public static void Transform(IEnumerable<IPerson> personCollection, int intervalsPerDay, DateOnly insertDate,
 			DataTable personTable, DataTable acdLogOnTable, ICommonNameDescriptionSetting commonNameDescriptionSetting,
-			IEnumerable<LogonInfo> logonInfos, IToggleManager toggleManager)
+			IEnumerable<LogonInfo> logonInfos)
 		{
 			InParameter.NotNull("personCollection", personCollection);
 
