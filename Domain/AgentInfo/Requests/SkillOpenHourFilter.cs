@@ -18,10 +18,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public IEnumerable<ISkill> Filter(DateTimePeriod requestPeriod, IEnumerable<ISkill> skills)
 		{
 			var openSkills = new List<ISkill>();
-			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var dayTimePeriods = getDayTimePeriods(requestPeriod, timezone);
 			foreach (var skill in skills)
 			{
+				var dayTimePeriods = getDayTimePeriods(requestPeriod, skill.TimeZone);
 				var isSkillOpenInDays = dayTimePeriods.All(day => isSkillOpen(skill, (int)day.Key.DayOfWeek, day.Value));
 				if (isSkillOpenInDays)
 				{

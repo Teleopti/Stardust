@@ -238,9 +238,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var activity1 = createActivity("activity1");
 			var activity2 = createActivity("activity2");
-
-			var notUnderStaffingSkill = createSkill("notUnderStaffingSkill");
-			var criticalUnderStaffingSkill = createSkill("criticalUnderStaffingSkill");
+			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var notUnderStaffingSkill = createSkill("notUnderStaffingSkill", null,timeZone);
+			var criticalUnderStaffingSkill = createSkill("criticalUnderStaffingSkill",null, timeZone);
 
 			var personSkill1 = createPersonSkill(activity1, notUnderStaffingSkill);
 			var personSkill2 = createPersonSkill(activity2, criticalUnderStaffingSkill);
@@ -333,6 +333,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should()
 				.Be.EqualTo(Resources.PeriodIsOutOfSkillOpenHours);
+		}
+
+		[Test]
+		public void ShouldApproveOvertimeRequestWhenWithinSkillOpenHour()
+		{
+			setupPerson(8, 23);
+			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");//GMT-3
+			
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(8, 19), timeZoneInfo), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(21, 1);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
 		}
 
 		[Test]
@@ -1555,13 +1569,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return personPeriod;
 		}
 
-		private static StaffingThresholds createStaffingThresholds()
+		private StaffingThresholds createStaffingThresholds()
 		{
 			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
 		}
-		private ISkill createSkill(string name, TimePeriod? skillOpenHourPeriod = null)
+
+		private ISkill createSkill(string name, TimePeriod? skillOpenHourPeriod = null,TimeZoneInfo timeZone = null)
 		{
-			var skill = SkillFactory.CreateSkill(name).WithId();
+			var skill = SkillFactory.CreateSkill(name,timeZone).WithId();
 			skill.SkillType.Description = new Description("SkillTypeInboundTelephony");
 			skill.StaffingThresholds = createStaffingThresholds();
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, skillOpenHourPeriod ?? _defaultOpenPeriod);
@@ -1569,10 +1584,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return skill;
 		}
 
-		private ISkill setupPersonSkill(TimePeriod? skillOpenHourPeriod = null)
+		private ISkill setupPersonSkill(TimePeriod? skillOpenHourPeriod = null, TimeZoneInfo timeZone = null)
 		{
+			if (timeZone == null) timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var activity1 = createActivity("activity1");
-			var skill1 = createSkill("skill1", skillOpenHourPeriod);
+			var skill1 = createSkill("skill1", skillOpenHourPeriod, timeZone);
 			var personSkill1 = createPersonSkill(activity1, skill1);
 			addPersonSkillsToPersonPeriod(personSkill1);
 			return skill1;
