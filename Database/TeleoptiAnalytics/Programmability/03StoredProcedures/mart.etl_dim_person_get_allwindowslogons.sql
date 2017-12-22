@@ -9,7 +9,8 @@ BEGIN
 SET NOCOUNT ON
 	
 SELECT DISTINCT person_code, windows_domain, windows_username
-  FROM [mart].[dim_person] WITH (NOLOCK)
+  FROM [mart].[dim_person] WITH (NOLOCK) 
+  where windows_domain <> '' and windows_username <> ''
 
 END
 
