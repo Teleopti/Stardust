@@ -63,6 +63,7 @@ Scenario: Sign in with a user with an email address as user name
 	| Field    | Value     |
 	| UserName | ashley.andeen@insurance.com |
 	| Password | P@ssword1 |
+	And I have the role 'Role for business unit 1'
 	When I try to sign in with
 	| Field    | Value     |
 	| UserName | ashley.andeen@insurance.com |
