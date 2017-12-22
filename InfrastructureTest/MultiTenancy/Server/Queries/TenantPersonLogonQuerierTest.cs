@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 	{
 		private Tenant tenantPresentInDatabase;
 		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
-		private string _tenantName = RandomName.Make();
+
+		private readonly string _tenantName = RandomName.Make();
 
 		[SetUp]
 		public void InsertPreState()

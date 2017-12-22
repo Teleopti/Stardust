@@ -17,18 +17,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly ILineExtractor _lineExtractor;
-		private readonly IExternalPerformanceDataRepository _externalDataRepository;
 		private readonly ITenantLogonPersonProvider _tenantLogonPersonProvider;
 
 		public ExternalPerformanceInfoFileProcessor(IExternalPerformanceRepository externalPerformanceRepository,
 			IPersonRepository personRepository, 
 			ILineExtractor lineExtractor,
-			IExternalPerformanceDataRepository externalDataRepository, ITenantLogonPersonProvider tenantLogonPersonProvider)
+			ITenantLogonPersonProvider tenantLogonPersonProvider)
 		{
 			_externalPerformanceRepository = externalPerformanceRepository;
 			_personRepository = personRepository;
 			_lineExtractor = lineExtractor;
-			_externalDataRepository = externalDataRepository;
 			_tenantLogonPersonProvider = tenantLogonPersonProvider;
 		}
 
@@ -100,8 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 			if (extractResultCollection.Any())
 			{
-				// Try find person with EmploymentNumber or ExternalLogon match with identity first
-				ValidateAgentId(processResult, extractResultCollection);
+				filterExistAgents(processResult, extractResultCollection);
 			}
 
 			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom}).Select(x => x.Last()).ToList();
@@ -109,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			return processResult;
 		}
 
-		private void ValidateAgentId(ExternalPerformanceInfoProcessResult processResult, List<PerformanceInfoExtractionResult> extractResultCollection)
+		private void filterExistAgents(ExternalPerformanceInfoProcessResult processResult, List<PerformanceInfoExtractionResult> extractResultCollection)
 		{
 			var extractResultCollectionToBeMatchAppLogonName = new List<PerformanceInfoExtractionResult>();
 			var logonNames = extractResultCollection.Select(x => x.AgentId).Distinct();
@@ -125,25 +122,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				addMatchPerformanceData(extractionResult, personIdentitiesByEmploymentNumberAndExternalLogon, processResult);
 			}
 
-			//If not found, then try find person with ApplicationLogonName match with identity
-			if (extractResultCollectionToBeMatchAppLogonName.Any())
+			if (!extractResultCollectionToBeMatchAppLogonName.Any()) return;
+
+			logonNames = extractResultCollectionToBeMatchAppLogonName.Select(x => x.AgentId).Distinct();
+			var personInfoModels = _tenantLogonPersonProvider.GetByLogonNames(logonNames).ToList();
+			foreach (var extractionResult in extractResultCollectionToBeMatchAppLogonName)
 			{
-				logonNames = extractResultCollectionToBeMatchAppLogonName.Select(x => x.AgentId).Distinct();
-				var personInfoModels = _tenantLogonPersonProvider.GetByLogonNames(logonNames).ToList();
-				foreach (var extractionResult in extractResultCollectionToBeMatchAppLogonName)
+				if (personInfoModels.All(x => x.ApplicationLogonName != extractionResult.AgentId))
 				{
-					if (personInfoModels.All(x => x.ApplicationLogonName != extractionResult.AgentId))
-					{
-						processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.AgentDoNotExist}");
-						continue;
-					}
-					addMatchPerformanceData(extractionResult, personInfoModels.Select(x => new PersonIdentityMatchResult
-					{
-						LogonName = x.ApplicationLogonName,
-						PersonId = x.PersonId,
-						MatchField = IdentityMatchField.ApplicationLogonName
-					}).ToList(), processResult);
+					processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.AgentDoNotExist}");
+					continue;
 				}
+				addMatchPerformanceData(extractionResult, personInfoModels.Select(x => new PersonIdentityMatchResult
+				{
+					LogonName = x.ApplicationLogonName,
+					PersonId = x.PersonId,
+					MatchField = IdentityMatchField.ApplicationLogonName
+				}).ToList(), processResult);
 			}
 		}
 
@@ -206,11 +201,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					PersonId = personId
 				});
 			processResult.ValidRecords.AddRange(agentsWithSameExternalLogon);
-		}
-
-		private bool verifyFieldLength(string field, int maxLength)
-		{
-			return field.Length <= maxLength;
 		}
 
 		private bool isFileTypeValid(ImportFileData importFileData)
