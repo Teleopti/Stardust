@@ -1,13 +1,74 @@
 ##===========
 ## Functions
 ##===========
+function Virgin-Database {
+    param (
+        $connection,
+        $ExePath,
+        $DBmanagerParams,
+        $DatabaseName
+    ) 
+
+    $CreateDatabaseVersion = (Get-Content "$scriptPath\..\Tools\Database\Create\CreateDatabaseVersion.sql") -join "`n"
+    $lockResource = "VirginUpgrade"
+
+    log-info "Try Get Applock: VirginUpgrade for $DatabaseName" 
+    $gotLock = GetAppLock -Connection $connection -LockResource $lockResource
+    if ($gotLock -eq $true)
+    {
+        log-info "got VirginUpgrade lock for $DatabaseName"
+        if (Check-VirginDB -connection $connection)
+        {
+            log-info "Got a Virgin - create DB: " $CreateDatabaseVersion
+            ExecuteNonQuery -connection $connection -cmdText $CreateDatabaseVersion
+
+            log-info "Virgin patch"
+            &"$ExePath" $DBmanagerParams[0] $DBmanagerParams[1] $DBmanagerParams[2] $DBmanagerParams[3] $DBmanagerParams[4] $DBmanagerParams[5] $DBmanagerParams[6] $DBmanagerParams[7] 
+            log-info "DBManager came back as : $lastExitCode"
+
+            log-info "Release Applock: Virgin Upgrade for $DatabaseName" 
+            ReleaseAppLock -Connection $connection -LockResource $lockResource
+            log-info "Release Applock: VirginUpgrade. Done!"
+        }
+        else
+        {
+        log-info "DB is already created and holds +1 tables"
+        }
+    }
+    else
+    {
+        log-info "Could not Get Applock VirginUpgrade for: $DatabaseName" 
+        $maxRetries = 40  ## 6min 40 secs
+        log-info "Another process had the distributed lock for the virgin patch. Awaiting it to finish..."
+        do
+        {
+            log-info "."
+            Start-Sleep 10
+            $maxRetries--
+            $gotLock = GetAppLock -Connection $connection -LockResource $lockResource
+        } until ($gotLock -or $maxRetries -lt 1)
+		
+        if ($gotLock)
+        {
+            log-info "VirginUpgrade lock on other process was released. Continuing without patching."
+            ReleaseAppLock -Connection $connection -LockResource $lockResource
+        }
+        else
+        {
+            log-info "Warning, maximum wait time reached. Bailing out..."
+            Return;
+        }
+    }
+}
+
+
 function Check-VirginDB {
-    param ($conStr) 
-    if (!$conStr) 
+    param ($connection) 
+    if (!$connection) 
     { 
         write-Host "Check-VirginDB function called with no connection string" 
     }
-    $ds = ExecQuery -conStr $conStr -cmdText "select count(*) as'TableCount' from sys.sysobjects where [type]='U'"
+    $ds = ExecQuery -connection $connection -cmdText "select count(*) as'TableCount' from sys.sysobjects where [type]='U'"
     $TableCount = $ds.Tables[0].Rows[0].TableCount
 
     if ($TableCount -eq 0)
@@ -20,14 +81,13 @@ function Check-VirginDB {
     }
 }
 
-function InitDatabase
+function ExecuteNonQuery
 {
-    param ($con, $cmdText)
+    param ($connection, $cmdText)
         try 
         { 
-            write-Host "Creating SQL Command..." 
             $Command = New-Object System.Data.SQLClient.SQLCommand 
-            $Command.Connection = $con 
+            $Command.Connection = $connection 
             $Command.CommandText = $cmdText
              
             write-Host "Executing SQL Command..." 
@@ -35,48 +95,33 @@ function InitDatabase
         } 
 
         finally { 
-            $Command = $null
         } 
 }
 
 function ExecQuery 
 { 
-    param ($conStr, $cmdText) 
-    if (!$conStr -or !$cmdText) 
+    param ($connection, $cmdText) 
+    if (!$connection -or !$cmdText) 
     { 
-        write-Host "ExecQuery function called with no connection string and/or command text." 
+        write-Host "ExecQuery function called with no connection and/or command text." 
     } 
     else 
     { 
-        write-Host "Creating SQL Connection..." 
-        # Instantiate new SqlConnection object. 
-        $Connection = New-Object System.Data.SQLClient.SQLConnection 
-         
-        # Set the SqlConnection object's connection string to the passed value. 
-        $Connection.ConnectionString = $conStr 
-         
-        # Perform database operations in try-catch-finally block since database operations often fail. 
         try 
         { 
-            $Connection.Open() 
+
             $Command = New-Object System.Data.SQLClient.SQLCommand 
-            $Command.Connection = $Connection 
+            $Command.Connection = $connection 
             $Command.CommandText = $cmdText
              
             $adapter = New-Object System.Data.sqlclient.sqlDataAdapter $command
             $dataset = New-Object System.Data.DataSet
             $adapter.Fill($dataSet) | Out-Null
 
-            $connection.Close()
             return $dataSet
         } 
 
-        finally { 
-            # Determine if the connection was opened. 
-            if ($Connection.State -eq "Open") 
-            { 
-                $Connection.Close() 
-            } 
+        finally {
         } 
     } 
 }
@@ -385,68 +430,51 @@ Try
     $VirginConnApp = "Data Source=$SQLServer;Initial Catalog=$CCC7DB;User Id=$PATCHUSER;Password=$PATCHPWD;Current Language=us_english;Encrypt=True;trustServerCertificate=false"
     $VirginConnAnal = "Data Source=$SQLServer;Initial Catalog=$AnalyticsDB;User Id=$PATCHUSER;Password=$PATCHPWD;Current Language=us_english;Encrypt=True;trustServerCertificate=false"
     $command = $PatchDBPath + "\DBManager.exe"
-    $CreateDatabaseVersion = (Get-Content "$scriptPath\..\Tools\Database\Create\CreateDatabaseVersion.sql") -join "`n"
 
     $DBMSQLServer="-S"+$SQLServer
     $DBMPATCHUSER = "-U"+$PATCHUSER
     $DBMPATCHPWD= "-P"+$PATCHPWD
     $DBMappDb = "-D"+$CCC7DB
     $DBManalDb =  "-D"+$AnalyticsDB
+    $ExePath = $PatchDBPath + "\DBManager.exe"
 
-    if (Check-VirginDB -conStr $VirginConnAnal)
-    {
-        $con = New-Object System.Data.SqlClient.SqlConnection
-        $con.ConnectionString = $VirginConnAnal
-        $con.open()
-        log-info "Try Get Applock: VirginUpgrade" 
-        $gotLock = GetAppLock -Connection $con -LockResource "VirginUpgrade"
-        if ($gotLock -eq $true)
-        {
-            log-info "got VirginUpgrade lock!"
-            
-            log-info "create DB: " $CreateDatabaseVersion
-            InitDatabase -con $con -cmdText $CreateDatabaseVersion
+    ##Analytics
+    $connection = $null
+    $connection = New-Object System.Data.SqlClient.SqlConnection
+    $connection.ConnectionString = $VirginConnAnal
+    $DBmanagerParams = @(
+        $DBMSQLServer,
+        $DBManalDb,
+        "-OTeleoptiAnalytics",
+        $DBMPATCHUSER,
+        $DBMPATCHPWD,
+        "-T",
+        "-R",
+        $SQLUserPwd
+    )
 
-            log-info "Virgin patch of: " $DBManalDb
-            $command = $PatchDBPath + "\DBManager.exe"
-            &"$command" $DBMSQLServer $DBManalDb "-OTeleoptiAnalytics" $DBMPATCHUSER $DBMPATCHPWD "-T" "-R" $SQLUserPwd
-            log-info "DBManager came back as :" $command
+    $connection.open()
+        Virgin-Database -connection $connection -ExePath $ExePath -DBmanagerParams $DBmanagerParams -DatabaseName $AnalyticsDB
+    $connection.Close()
 
-            log-info "Release Applock: VirginUpgrade" 
-            ReleaseAppLock -Connection $con -LockResource "VirginUpgrade"
-            log-info "Release Applock: VirginUpgrade. Done!"
-        } else {
-            log-info "Could not Get Applock VirginUpgrade for: $DBManalDb" 
-        }
-        $con.Close()
-    }
-    if (Check-VirginDB -conStr $VirginConnApp)
-    {
-        $con = New-Object System.Data.SqlClient.SqlConnection
-        $con.ConnectionString = $VirginConnApp
-        $con.open()
-        log-info "Try Get Applock: VirginUpgrade" 
-        $gotLock = GetAppLock -Connection $con -LockResource "VirginUpgrade"
-        if ($gotLock -eq $true)
-        {
-            log-info "got VirginUpgrade lock!"
-            
-            log-info "create DB: " $CreateDatabaseVersion
-            InitDatabase -con $con -cmdText $CreateDatabaseVersion
+    ##App
+    $connection = $null
+    $connection = New-Object System.Data.SqlClient.SqlConnection
+    $connection.ConnectionString = $VirginConnApp
+    $DBmanagerParams = @(
+        $DBMSQLServer,
+        $DBMappDb,
+        "-OTeleoptiCCC7",
+        $DBMPATCHUSER,
+        $DBMPATCHPWD,
+        "-T",
+        "-R",
+        $SQLUserPwd
+    )
 
-            log-info "Virgin patch of: " $DBMappDb
-            $command = $PatchDBPath + "\DBManager.exe"
-            &"$command" $DBMSQLServer $DBMappDb "-OTeleoptiAnalytics" $DBMPATCHUSER $DBMPATCHPWD "-T" "-R" $SQLUserPwd
-            log-info "DBManager came back as :" $command
-
-            log-info "Release Applock: VirginUpgrade" 
-            ReleaseAppLock -Connection $con -LockResource "VirginUpgrade"
-            log-info "Release Applock: VirginUpgrade. Done!"
-        } else {
-            log-info "Could not Get Applock VirginUpgrade for: $DBMappDb" 
-        }
-        $con.Close()
-    }
+    $connection.open()
+        Virgin-Database -connection $connection -ExePath $ExePath -DBmanagerParams $DBmanagerParams -DatabaseName $CCC7DB
+    $connection.Close()
 
     #log-info "Check so one tenant points to itself"
     $CCC7DB = $CCC7DB.Trim()
