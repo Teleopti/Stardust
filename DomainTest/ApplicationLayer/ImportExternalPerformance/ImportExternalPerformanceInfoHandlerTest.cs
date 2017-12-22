@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			jobResult.Details.Single().DetailLevel.Should().Be.EqualTo(DetailLevel.Error);
 			var message = jobResult.Details.Single().Message;
-			message.Should().Be.EqualTo(Resources.EmptyFile);
+			message.Should().Be.EqualTo(Resources.InvalidInput);
 		}
 
 		[Test]
