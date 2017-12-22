@@ -9,7 +9,8 @@
 			startingTime: '<',
 			status: '<',
 			category: '<',
-			dateTimeFormat: '<'
+			dateTimeFormat: '<',
+			hasError: '<'
 		},
 		controller: [ImportJobController]
 	});

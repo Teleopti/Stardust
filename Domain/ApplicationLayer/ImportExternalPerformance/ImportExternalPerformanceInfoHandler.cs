@@ -47,9 +47,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			catch (Exception e)
 			{
 				Logger.Error(e);
-				saveJobResultDetail(@event, DetailLevel.Error, e.Message, e);
+				SaveJobResultDetail(@event, e);
 				throw;
 			}
+		}
+
+
+		[UnitOfWork]
+		protected virtual void SaveJobResultDetail(ImportExternalPerformanceInfoEvent @event, Exception e)
+		{
+			SaveJobResultDetailInternal(@event, DetailLevel.Error, e.Message, e);
 		}
 
 		[UnitOfWork]
@@ -78,14 +85,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			{
 				var msg = string.Join(", ", processResult.ErrorMessages);
 				_feedback.SendProgress($"Extract file has error:{msg}.");
-				saveJobResultDetail(@event, DetailLevel.Error, msg, null);
+				SaveJobResultDetailInternal(@event, DetailLevel.Error, msg, null);
 				return;
 			}
 
-			saveJobArtifactsAndUpdateRecords(@event, processResult, inputFile.Name);
+			SaveJobArtifactsAndUpdateRecords(@event, processResult, inputFile.Name);
 		}
 
-		private void saveJobArtifactsAndUpdateRecords(ImportExternalPerformanceInfoEvent @event, ExternalPerformanceInfoProcessResult processResult, string fileName)
+		private void SaveJobArtifactsAndUpdateRecords(ImportExternalPerformanceInfoEvent @event, ExternalPerformanceInfoProcessResult processResult, string fileName)
 		{
 			var jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
 
@@ -98,19 +105,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 			_persister.Persist(processResult);
 
-			cleanImportedCsvFile(@event, fileName);
-
-			saveJobResultDetail(@event, DetailLevel.Info, "Uploaded external performance info", null);
+			SaveJobResultDetailInternal(@event, DetailLevel.Info, "Uploaded external performance info", null);
 		}
 
-		private void cleanImportedCsvFile(ImportExternalPerformanceInfoEvent @event, string fileName)
-		{
-			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);
-			var artifact = result.Artifacts.FirstOrDefault(x => x.Name == fileName);
-			result.Artifacts.Remove(artifact);
-		}
-
-		private void saveJobResultDetail(ImportExternalPerformanceInfoEvent @event, DetailLevel level, string message, Exception exception)
+		private void SaveJobResultDetailInternal(ImportExternalPerformanceInfoEvent @event, DetailLevel level, string message, Exception exception)
 		{
 			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);
 			var detail = new JobResultDetail(level, message, DateTime.UtcNow, exception);

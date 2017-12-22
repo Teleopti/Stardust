@@ -87,7 +87,8 @@
 								job.Owner,
 								job.CreateDateTime,
 								job.Status,
-								job.Category
+								job.Category,
+								job.HasError
 							));
 						});
 					}
@@ -168,12 +169,13 @@
 		this.name = name;
 	}
 
-	function Job(id, name, owner, startingTime, status, category) {
+	function Job(id, name, owner, startingTime, status, category, hasError) {
 		this.id = id;
 		this.name = name;
 		this.owner = owner;
 		this.startingTime = startingTime;
 		this.status = status;
 		this.category = category;
+		this.hasError = hasError;
 	}
 })(angular);

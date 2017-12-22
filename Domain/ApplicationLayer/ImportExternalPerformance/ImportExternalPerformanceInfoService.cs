@@ -49,40 +49,44 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				.Where(r => r.JobCategory == JobCategory.WebImportExternalGamification)
 				.OrderByDescending(r => r.Timestamp)
 				.ToList();
-			return resultList.Select(jr => new ImportGamificationJobResultDetail() {
+			return resultList.Select(jr => new ImportGamificationJobResultDetail()
+			{
 				Id = jr.Id.Value,
 				Owner = jr.Owner.Name.ToString(),
 				CreateDateTime = jr.Artifacts.First().CreateTime,
 				Name = jr.Artifacts.First().FileName,
 				Status = GetJobStatus(jr),
-				Category = jr.JobCategory
-
+				Category = jr.JobCategory,
+				HasError = HasInvalidRecords(jr)
 			}).ToList();
+		}
+
+		private bool HasInvalidRecords(IJobResult job)
+		{
+			bool result = false;
+
+			if (job.Artifacts != null)
+			{
+				result = job.Artifacts.Any(a => a.Category == JobResultArtifactCategory.OutputError);
+			}
+
+			return result;
 		}
 
 		private string GetJobStatus(IJobResult job)
 		{
-			if (!job.Details.Any())
+			ImportExternalPerformanceJobStatus status = ImportExternalPerformanceJobStatus.InProgress;
+			if (job.HasError())
 			{
-				return "errored";
+				status = ImportExternalPerformanceJobStatus.Failed;
 			}
-
+			else
 			if (job.FinishedOk)
 			{
-				return "finished";
+				status = ImportExternalPerformanceJobStatus.Finished;
 			}
 
-			if (job.HasError() || !string.IsNullOrEmpty( job.Details.First().ExceptionMessage)|| !string.IsNullOrEmpty(job.Details.First().InnerExceptionMessage))
-			{
-				return "errord";
-			}
-
-			if (job.IsWorking())
-			{
-				return "inprogress";
-			}
-
-			return "errord";
+			return status.ToString().ToLower();
 		}
 
 
