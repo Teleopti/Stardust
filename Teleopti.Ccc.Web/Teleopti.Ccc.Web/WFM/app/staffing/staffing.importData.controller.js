@@ -31,11 +31,11 @@
         }
 
         function getFileTemplate() {
-            var templateFile = 'source,skillgroup,startdatetime,enddatetime,resources\n' +
-                'Generic,Email,2017-08-01 11:00,2017-08-01 11:15,8.75\n' +
-                'Generic,Channel Sales|Directsales,2017-08-01 10:00,2017-08-01 10:15,12.5\n' +
-                'Generic,Channel Sales,2017-08-01 10:00,2017-08-01 10:15,8.75'
-            utilService.saveToFs(templateFile, "template.csv", 'text/csv')
+	        var templateFile = 'source,skillgroup,startdatetime,enddatetime,resources\r\n' +
+		        'Generic,Email,2017-08-01 11:00,2017-08-01 11:15,8.75\r\n' +
+		        'Generic,Channel Sales|Directsales,2017-08-01 10:00,2017-08-01 10:15,12.5\r\n' +
+		        'Generic,Channel Sales,2017-08-01 10:00,2017-08-01 10:15,8.75';
+	        utilService.saveToFs(templateFile, "template.csv", 'text/csv');
 
         }
 
