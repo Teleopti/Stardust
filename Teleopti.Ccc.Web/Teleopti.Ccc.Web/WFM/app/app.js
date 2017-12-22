@@ -171,9 +171,9 @@ var wfm = angular.module('wfm', [
 								url = next.url && next.url.split('/')[1];
 
 							areasWithPermission.forEach(function(area) {
-								if (name && area.InternalName.indexOf(name) > -1) {
+								if (name && (area.InternalName.indexOf(name) > -1 || name.indexOf(area.InternalName) > -1)) {
 									hasModulePermission = true;
-								} else if (url && area.InternalName.indexOf(url) > -1) {
+								} else if (url && (area.InternalName.indexOf(url) > -1 || url.indexOf(area.InternalName) > -1)) {
 									hasModulePermission = true;
 								}
 							});
