@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
-	public class LineExtractor : ILineExtractor
+	public class LineExtractorValidator : ILineExtractorValidator
 	{
 		private const int NUM_COLUMN = 8;
 

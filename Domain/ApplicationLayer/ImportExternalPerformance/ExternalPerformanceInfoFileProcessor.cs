@@ -16,17 +16,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
 		private readonly IPersonRepository _personRepository;
-		private readonly ILineExtractor _lineExtractor;
+		private readonly ILineExtractorValidator _lineExtractorValidator;
 		private readonly ITenantLogonPersonProvider _tenantLogonPersonProvider;
 
 		public ExternalPerformanceInfoFileProcessor(IExternalPerformanceRepository externalPerformanceRepository,
 			IPersonRepository personRepository, 
-			ILineExtractor lineExtractor,
+			ILineExtractorValidator lineExtractorValidator,
 			ITenantLogonPersonProvider tenantLogonPersonProvider)
 		{
 			_externalPerformanceRepository = externalPerformanceRepository;
 			_personRepository = personRepository;
-			_lineExtractor = lineExtractor;
+			_lineExtractorValidator = lineExtractorValidator;
 			_tenantLogonPersonProvider = tenantLogonPersonProvider;
 		}
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var extractResultCollection = new List<PerformanceInfoExtractionResult>();
 			foreach (var line in allLines)
 			{
-				var extractionResult = _lineExtractor.ExtractAndValidate(line);
+				var extractionResult = _lineExtractorValidator.ExtractAndValidate(line);
 
 				if (extractionResult.HasError())
 				{

@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
-	public interface ILineExtractor
+	public interface ILineExtractorValidator
 	{
 		PerformanceInfoExtractionResult ExtractAndValidate(string line);
 	}
