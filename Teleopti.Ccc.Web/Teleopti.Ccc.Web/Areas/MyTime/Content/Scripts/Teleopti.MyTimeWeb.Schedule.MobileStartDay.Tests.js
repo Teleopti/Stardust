@@ -1,19 +1,18 @@
 ﻿$(document).ready(function () {
-	var hash = "";
-	var startDayData;
-	var ajax;
-	var templates = [];
-	var fetchDayDataRequestCount;
-	var requestSuccessData;
-	var constants = Teleopti.MyTimeWeb.Common.Constants;
-	var propabilities = [];
-
-	var templateConfig = {
-		default: "add-new-request-detail-template",
-		absenceReporting: "add-absence-report-detail-template",
-		postShiftForTrade: "shift-exchange-offer-template",
-		overtimeAvailability: "add-overtime-availability-template"
-	}
+	var hash = "",
+		startDayData,
+		ajax,
+		templates = [],
+		fetchDayDataRequestCount,
+		requestSuccessData,
+		constants = Teleopti.MyTimeWeb.Common.Constants,
+		propabilities = [],
+		templateConfig = {
+			default: "add-new-request-detail-template",
+			absenceReporting: "add-absence-report-detail-template",
+			postShiftForTrade: "shift-exchange-offer-template",
+			overtimeAvailability: "add-overtime-availability-template"
+		};
 
 	module("Teleopti.MyTimeWeb.Schedule.MobileStartDay",
 		{
@@ -92,7 +91,7 @@
 		var currentUserDate = moment().zone(-startDayData.BaseUtcOffsetInMinutes);
 		startDayData.Date = currentUserDate.format(constants.serviceDateTimeFormat.dateOnly);
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm(); 
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
 		vm.nextDay();
 		equal(vm.selectedDate().format(constants.serviceDateTimeFormat.dateOnly), currentUserDate.add('days', 1).format(constants.serviceDateTimeFormat.dateOnly));
@@ -104,7 +103,7 @@
 		var currentUserDate = moment().zone(-startDayData.BaseUtcOffsetInMinutes);
 		startDayData.Date = currentUserDate.format(constants.serviceDateTimeFormat.dateOnly);
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm(); 
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
 		vm.navigateToMonthView();
 		equal(hash, 'Schedule/MobileMonth');
@@ -219,7 +218,7 @@
 
 		Teleopti.MyTimeWeb.Request.RequestDetail.Init(ajax);
 
-		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, null, moment("2017-04-28"));
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.showAddTextRequestForm();
 
@@ -282,7 +281,7 @@
 
 		Teleopti.MyTimeWeb.Request.RequestDetail.Init(ajax);
 
-		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, null, moment('2017-04-28'));
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.showAddAbsenceRequestForm();
 
@@ -345,7 +344,7 @@
 
 		Teleopti.MyTimeWeb.Common.DateFormat = "DD/MM/YYYY";
 
-		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, null, moment('2017-04-28'));
 
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
@@ -362,14 +361,14 @@
 		equal(vm.requestViewModel().model.Template, templateConfig.overtimeAvailability);
 	});
 
-	test("should show overtime availability form with specific value when  overtime availability is available", function () {
+	test("should show overtime availability form with specific value when overtime availability is available", function () {
 
 		setupAddRequestTemplate(templateConfig.overtimeAvailability);
 		Teleopti.MyTimeWeb.Common.DateFormat = "DD/MM/YYYY";
 
 		startDayData.Schedule.OvertimeAvailabililty.HasOvertimeAvailability = true;
 
-		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, null, moment('2017-04-28'));
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
 		vm.showOvertimeAvailabilityForm(vm);
@@ -418,7 +417,7 @@
 
 	test("should post shift for trade", function() {
 		setupAddRequestTemplate(templateConfig.postShiftForTrade);
-		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, null, moment('2017-04-28'));
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.showPostShiftForTradeForm();
 

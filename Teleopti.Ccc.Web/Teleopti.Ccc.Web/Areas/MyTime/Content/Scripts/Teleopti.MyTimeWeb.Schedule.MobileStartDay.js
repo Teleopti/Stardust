@@ -71,14 +71,14 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		});
 	}
 
-	function registerUserInfoLoadedCallback() {
+	function registerUserInfoLoadedCallback(initialMomentDate) {
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 			$(".moment-datepicker").attr("data-bind",
 				"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'center', autoHide: true, weekStart: " + data.WeekStart + "}");
 
 			initViewModel(data.WeekStart);
 
-			fetchData();
+			fetchData(initialMomentDate);
 		});
 	}
 
@@ -95,10 +95,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		vm.unreadMessageCount(data);
 	}
 
-	function fetchData() {
-		dataService.fetchData(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash,
-			vm.selectedProbabilityOptionValue(),
-			fetchDataSuccessCallback);
+	function fetchData(momentDate) {
+		dataService.fetchData((momentDate || vm.selectedDate()).format('YYYY/MM/DD'), vm.selectedProbabilityOptionValue(),fetchDataSuccessCallback);
 	}
 
 	function fetchDataSuccessCallback(data) {
@@ -139,11 +137,11 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 					Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialDispose);
 			}
 		},
-		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxobj, mywindow) {
+		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxobj, mywindow, initialMomentDate) {
 			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
 			dataService = new Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService(ajax);
 			completelyLoaded = completelyLoadedCallback;
-			registerUserInfoLoadedCallback();
+			registerUserInfoLoadedCallback(initialMomentDate);
 			registerSwipeEvent();
 			mywindow = mywindow || window;
 			setUpLogoClickFn(mywindow);
@@ -172,11 +170,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		ReloadSchedule: function (date) {
 			vm.isLoading(true);
 			var requestDate = date || vm.selectedDate();
-			dataService.fetchData(requestDate.format("YYYY/MM/DD"),
-				vm.selectedProbabilityOptionValue(),
-				function (data) {
-					vm.readData(data);
-				});
+			dataService.fetchData(requestDate.format("YYYY/MM/DD"), vm.selectedProbabilityOptionValue(), vm.readData);
 		},
 		Ajax: function () { return ajax; }
 	};
