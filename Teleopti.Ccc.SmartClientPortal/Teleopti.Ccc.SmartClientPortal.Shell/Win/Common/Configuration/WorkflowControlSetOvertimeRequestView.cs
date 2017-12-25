@@ -22,14 +22,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private static readonly int _enableWorkRuleColumnIndex = 3;
 		private static readonly int _overtimeRequestOpenPeriodDataStartRowIndex = 2;
 
-		internal static readonly List<OvertimeRequestValidationHandleOptionView> overtimeRequestValidationHandleOptionList =
-			new List<OvertimeRequestValidationHandleOptionView>
-			{
-				new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Pending,
-					Resources.SendToAdministrator),
-				new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny, Resources.Deny)
-			};
-
 		public void SetOvertimeOpenPeriodsGridRowCount(int rowCount)
 		{
 			gridControlOvertimeRequestOpenPeriods.RowCount = 0;
@@ -97,7 +89,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void initOvertimeRequestMaximumTimeHandleType()
 		{
-			comboBoxOvertimeRequestMaximumTimeHandleType.DataSource = overtimeRequestValidationHandleOptionList;
+			comboBoxOvertimeRequestMaximumTimeHandleType.DataSource =
+				WorkflowControlSetModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Select(s => s.Value).ToList();
 			comboBoxOvertimeRequestMaximumTimeHandleType.DisplayMember = "Description";
 		}
 
