@@ -92,6 +92,9 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.readData = function (data) {
 		self.requestDay = moment(data.Date);
 
+		disposeSelectedDateSubscription();
+		self.selectedDate(moment(data.Date));
+
 		self.overtimeAvailabililty = data.Schedule.OvertimeAvailabililty;
 
 		self.displayDate(moment(data.Date).format(Teleopti.MyTimeWeb.Common.DateFormat));
@@ -198,6 +201,11 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.selectedDateSubscription = self.selectedDate.subscribe(function (date) {
 			parent.ReloadSchedule(date);
 		});
+	};
+
+	function disposeSelectedDateSubscription() {
+		if (self.selectedDateSubscription)
+			self.selectedDateSubscription.dispose();
 	};
 
 	function fillRequestFormData(requestViewModel) {
