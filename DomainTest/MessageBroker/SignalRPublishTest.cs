@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.TestCommon;
@@ -20,6 +21,18 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			var notification = new Message();
 			Server.NotifyClients(notification);
 			SignalR.SentMessage.Should().Be(notification);
+		}
+
+		[Test]
+		public void ShouldNotPublishMessagesNotInDefaultScenarioForScheduleChangeInDefaultScenarioTypeToSignalR()
+		{
+			var notification = new Message
+			{
+				IsDefaultScenario = false,
+				DomainType = nameof(IScheduleChangedInDefaultScenario)
+			};
+			Server.NotifyClients(notification);
+			SignalR.SentMessage.Should().Be.Null();
 		}
 
 		[Test]

@@ -534,7 +534,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId,
-				businessUnit.Id.GetValueOrDefault(), new[] { model }, false);
+				businessUnit.Id.GetValueOrDefault(), new[] { model }, false, false);
 		}
 
 

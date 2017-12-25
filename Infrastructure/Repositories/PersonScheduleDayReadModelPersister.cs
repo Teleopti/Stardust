@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentDataSource = currentDataSource;
 		}
 
-		public void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool initialLoad)
+		public void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool initialLoad, bool isDefaultScenario)
 		{
 			logger.Debug("Persisting model PersonScheduleDayReadModel");
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					logger.Debug("Sending notification for persisted model IPersonScheduleDayReadModel");
 					_messageBroker.Send(_currentDataSource.CurrentName(), businessUnitId, period.StartDate.Date, period.EndDate.Date,
 						Guid.Empty, personId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel),
-						DomainUpdateType.NotApplicable, null);
+						DomainUpdateType.NotApplicable, null, isDefaultScenario);
 				});
 		}
 

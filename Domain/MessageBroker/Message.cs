@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		public int DomainUpdateType { get; set; }
 		public string BinaryData { get; set; }
 		public string TrackId { get; set; }
+		public bool IsDefaultScenario { get; set; }
 
 
 		public Guid DomainIdAsGuid()

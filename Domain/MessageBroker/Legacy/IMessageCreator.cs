@@ -17,8 +17,20 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Legacy
 			Type domainObjectType,
 			DomainUpdateType updateType,
 			byte[] domainObject,
+			bool isDefaultScenario,
 			Guid? trackId = null);
 
+		void Send(
+			string dataSource,
+			Guid businessUnitId,
+			DateTime eventStartDate,
+			DateTime eventEndDate,
+			Guid moduleId,
+			Guid domainObjectId,
+			Type domainObjectType,
+			DomainUpdateType updateType,
+			byte[] domainObject,
+			bool isDefaultScenario);
 		void Send(
 			string dataSource,
 			Guid businessUnitId,

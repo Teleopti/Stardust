@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), new DoNotSend(), new FakeCurrentDatasource("asd"));
 
-			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, null, false);
+			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, null, false, false);
 		}
 
 		private void createAndSaveReadModel(Guid personId, Guid businessUnitId, DateTime date, int shiftStartHour, int? shiftEndHour = null)
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 				var persister = new PersonScheduleDayReadModelPersister(uow, new DoNotSend(), new FakeCurrentDatasource("asd"));
 
-				persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] { model }, false);
+				persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] { model }, false, false);
 			});
 		}
 

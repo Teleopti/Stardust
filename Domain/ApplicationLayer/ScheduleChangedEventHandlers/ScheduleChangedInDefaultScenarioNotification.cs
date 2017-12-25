@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				typeof (IScheduleChangedInDefaultScenario),
 				DomainUpdateType.NotApplicable, 
 				null,
+				message.IsDefaultScenario,
 				message.CommandId == Guid.Empty ? Guid.NewGuid(): message.CommandId);
 		}
 	}
