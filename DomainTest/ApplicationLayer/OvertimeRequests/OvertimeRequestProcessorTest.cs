@@ -1491,6 +1491,71 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 					"August contains too much over time (14:00). Max is 11:00.");
 		}
 
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldAddCrossMonthOvertimeStartsFromLastMonth()
+		{
+			Now.Is(new DateTime(2017, 12, 25, 08, 0, 0, DateTimeKind.Utc));
+			setupPerson(0, 24);
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMaximumTime = TimeSpan.FromHours(1)
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+			var period = new DateTimePeriod(2017, 12, 31, 8, 2017, 12, 31, 18);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			ScheduleStorage.Add(assignment);
+
+			var corssMonthPersonRequest = createOvertimeRequest(new DateTime(2017, 12, 31, 23, 0, 0, DateTimeKind.Utc), 2);
+			getTarget().Process(corssMonthPersonRequest, true);
+
+			corssMonthPersonRequest.IsApproved.Should().Be.True();
+			
+			var nextMonthPersonRequest = createOvertimeRequest(new DateTime(2018, 1, 1, 1, 0, 0, DateTimeKind.Utc), 1);
+			getTarget().Process(nextMonthPersonRequest, true);
+
+			nextMonthPersonRequest.IsDenied.Should().Be.True();
+			nextMonthPersonRequest.DenyReason.Should().Be("January contains too much over time (02:00). Max is 01:00.");
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
+		public void ShouldSubtractCrossMonthOvertimeEndsInNextMonth()
+		{
+			Now.Is(new DateTime(2017, 12, 25, 08, 0, 0, DateTimeKind.Utc));
+			setupPerson(0, 24);
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMaximumTime = TimeSpan.FromHours(2)
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+			var period = new DateTimePeriod(2017, 12, 31, 8, 2017, 12, 31, 18);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			ScheduleStorage.Add(assignment);
+
+			var corssMonthPersonRequest = createOvertimeRequest(new DateTime(2017, 12, 31, 23, 0, 0, DateTimeKind.Utc), 2);
+			getTarget().Process(corssMonthPersonRequest, true);
+
+			corssMonthPersonRequest.IsApproved.Should().Be.True();
+
+			var nextMonthPersonRequest = createOvertimeRequest(new DateTime(2017, 12, 31, 22, 0, 0, DateTimeKind.Utc), 1);
+			getTarget().Process(nextMonthPersonRequest, true);
+
+			nextMonthPersonRequest.IsApproved.Should().Be.True();
+		}
+
 		private IPersonAssignment createMainPersonAssignment(IPerson person, DateTimePeriod period)
 		{
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
@@ -1537,6 +1602,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			var activity = ActivityFactory.CreateActivity(name);
 			activity.RequiresSkill = true;
+			activity.InWorkTime = true;
 			ActivityRepository.Add(activity);
 			return activity;
 		}

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var firstMonthSchedulePeriod = new DateOnlyPeriod(
 				new DateOnly(DateHelper.GetFirstDateInMonth(localStartTime, culture)),
 				new DateOnly(DateHelper.GetLastDateInMonth(localStartTime, culture)));
-			result.Add(firstMonthSchedulePeriod.StartDate, getOvertimeInSchedule(dic[person], firstMonthSchedulePeriod));
+			result.Add(firstMonthSchedulePeriod.StartDate, getOvertimeInSchedule(dic[person], firstMonthSchedulePeriod, timeZone));
 
 			if (!isCrossMonth(requestPeriod))
 			{
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				var secondMonthRequestOverTime = localEndTime - DateHelper.GetFirstDateInMonth(localEndTime, culture);
 
 				result.Add(secondMonthSchedulePeriod.StartDate,
-					secondMonthRequestOverTime + getOvertimeInSchedule(dic[person], secondMonthSchedulePeriod));
+					secondMonthRequestOverTime + getOvertimeInSchedule(dic[person], secondMonthSchedulePeriod, timeZone));
 			}
 
 			return result;
@@ -119,23 +119,47 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 					new DateOnly(DateHelper.GetLastDateInMonth(requestPeriod.EndDate.Date, culture)));
 			}
 
+			schedulePeriod = schedulePeriod.Inflate(1);
+
 			var dic = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false),
 				schedulePeriod, _currentScenario.Current());
 			return dic;
 		}
 
-		private TimeSpan getOvertimeInSchedule(IScheduleRange scheduleRange, DateOnlyPeriod period)
+		private TimeSpan getOvertimeInSchedule(IScheduleRange scheduleRange, DateOnlyPeriod period, TimeZoneInfo timezone)
 		{
-			var totalTime = TimeSpan.Zero;
+			var overtimeWithinThisMonth = TimeSpan.Zero;
 			var schedules = scheduleRange.ScheduledDayCollection(period);
 			foreach (IScheduleDay scheduleDay in schedules)
 			{
 				var projSvc = scheduleDay.ProjectionService();
 				var visualLayerCollection = projSvc.CreateProjection();
-				totalTime += visualLayerCollection.Overtime();
+				overtimeWithinThisMonth += visualLayerCollection.Overtime();
 			}
-			return totalTime;
+
+			var overtimeStartsFromLastMonth = getOvertimeStartsFromLastMonth(scheduleRange, period.StartDate, timezone);
+			var overtimeEndsInNextMonth = getOvertimeEndsInNextMonth(scheduleRange, period.EndDate, timezone);
+
+			return overtimeStartsFromLastMonth + overtimeWithinThisMonth - overtimeEndsInNextMonth;
+		}
+
+		private TimeSpan getOvertimeStartsFromLastMonth(IScheduleRange scheduleRange, DateOnly firstDayOfThisMonth, TimeZoneInfo timezone)
+		{
+			var lastDayOfLastMonth = firstDayOfThisMonth.AddDays(-1);
+			var lastScheduleDayOfLastMonth = scheduleRange.ScheduledDay(lastDayOfLastMonth);
+			var projSvc = lastScheduleDayOfLastMonth.ProjectionService();
+			var visualLayerCollection = projSvc.CreateProjection();
+			return visualLayerCollection.Overtime(firstDayOfThisMonth.ToDateTimePeriod(timezone));
+		}
+
+		private TimeSpan getOvertimeEndsInNextMonth(IScheduleRange scheduleRange, DateOnly lastDayOfThisMonth, TimeZoneInfo timezone)
+		{
+			var lastScheduleDayOfLastMonth = scheduleRange.ScheduledDay(lastDayOfThisMonth);
+			var projSvc = lastScheduleDayOfLastMonth.ProjectionService();
+			var visualLayerCollection = projSvc.CreateProjection();
+			var firstDayOfNextMonth = lastDayOfThisMonth.AddDays(1);
+			return visualLayerCollection.Overtime(firstDayOfNextMonth.ToDateTimePeriod(timezone));
 		}
 
 		private bool isCrossMonth(DateOnlyPeriod requestPeriod)
