@@ -104,16 +104,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			}
 
 			var openHourList = new List<TimePeriod>();
+			var agentTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			foreach (var skill in skills)
 			{
 				foreach (var workload in skill.WorkloadCollection)
 				{
 					foreach (var templateWeek in workload.TemplateWeekCollection)
 					{
-						if (templateWeek.Value.DayOfWeek == date.DayOfWeek)
-						{
-							openHourList.AddRange(templateWeek.Value.OpenHourList);
-						}
+						if (templateWeek.Value.DayOfWeek != date.DayOfWeek) continue;
+						openHourList.AddRange(templateWeek.Value.OpenHourList
+							.Select(openHourPeriod => toAgentTimeZonePeriod(date, openHourPeriod, skill.TimeZone, agentTimezone)));
 					}
 				}
 			}
@@ -123,6 +123,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var startTime = openHourList.Min(a => a.StartTime);
 			var endTime = openHourList.Max(a => a.EndTime);
 			return new TimePeriod(startTime, endTime);
+		}
+
+		private static TimePeriod toAgentTimeZonePeriod(DateOnly date, TimePeriod openHourPeriod, TimeZoneInfo skillTimeZoneInfo,
+			TimeZoneInfo agentTimeZoneInfo)
+		{
+			if (skillTimeZoneInfo.Equals(agentTimeZoneInfo))
+				return openHourPeriod;
+			var utcTimePeriod = date.ToDateTimePeriod(openHourPeriod, skillTimeZoneInfo);
+			return new TimePeriod(utcTimePeriod.StartDateTimeLocal(agentTimeZoneInfo).TimeOfDay,
+				utcTimePeriod.EndDateTimeLocal(agentTimeZoneInfo).TimeOfDay);
 		}
 	}
 }

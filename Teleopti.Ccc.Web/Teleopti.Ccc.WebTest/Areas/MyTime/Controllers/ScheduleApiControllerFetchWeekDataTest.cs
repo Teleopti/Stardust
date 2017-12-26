@@ -910,6 +910,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldGetSkillOpenHourPeriodInUsersTimeZoneForDayView()
+		{
+			var skill = addSkill();
+			skill.TimeZone = TimeZoneInfoFactory.MountainTimeZoneInfo();
+
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.NewYorkTimeZoneInfo());
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+			addAssignment(period, skill.Activity);
+
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+			result.Days.ElementAt(3).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(9));
+			result.Days.ElementAt(3).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(20));
+		}
+
+		[Test]
 		public void ShouldReturnFalseForCheckStaffingByIntradayWhenIntradayAbsencePeriodIsInLowPriority()
 		{
 			var intradayAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
