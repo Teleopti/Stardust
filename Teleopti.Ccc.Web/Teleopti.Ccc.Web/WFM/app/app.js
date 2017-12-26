@@ -164,6 +164,8 @@ var wfm = angular.module('wfm', [
 			function setupPermissionCheckForModules() {
 				areasService.getAreasWithPermission().then(function(areasWithPermission) {
 					areasService.getAreasList().then(function(areasList) {
+						if(window.location.href.indexOf('index_desktop_client.html') > -1) return;
+
 						$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
 							var areaName, moduleName,
 								hasModulePermission = false,
