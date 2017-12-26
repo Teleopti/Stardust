@@ -1,4 +1,4 @@
-ALTER TABLE WorkflowControlSet 
+ALTER TABLE [dbo].[WorkflowControlSet]
 ADD  OvertimeRequestMaximumTimeHandleType INT,
 OvertimeRequestMaximumTime BIGINT
 GO
