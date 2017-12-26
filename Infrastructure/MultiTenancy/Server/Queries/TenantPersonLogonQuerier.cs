@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 {
 	public class TenantPersonLogonQuerier : ITenantPersonLogonQuerier
 	{
+		private const int BatchSize = 500;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly IFindTenantByName _findTenant;
 		private readonly ICurrentTenantSession _currentTenantSession;
@@ -27,12 +29,19 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			var currentTenant = _findTenant.Find(_currentDataSource.CurrentName());
 			if (currentTenant == null) return new List<PersonInfoModel>();
 
-			return _currentTenantSession.CurrentSession()
-				.GetNamedQuery("findIPersonInfoModelByLogonNames")
-				.SetResultTransformer(Transformers.AliasToBean<PersonInfoModel>())
-				.SetParameterList("logonNames", logonNames)
-				.SetEntity("tenant", currentTenant)
-				.List<PersonInfoModel>();
+			var results = new List<PersonInfoModel>();
+
+			foreach (var names in logonNames.Batch(BatchSize))
+			{
+				var p = _currentTenantSession.CurrentSession()
+					.GetNamedQuery("findIPersonInfoModelByLogonNames")
+					.SetResultTransformer(Transformers.AliasToBean<PersonInfoModel>())
+					.SetParameterList("logonNames", names)
+					.SetEntity("tenant", currentTenant)
+					.List<PersonInfoModel>();
+				results.AddRange(p);
+			}
+			return results;
 		}
 	}
 }
