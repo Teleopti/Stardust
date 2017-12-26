@@ -46,7 +46,8 @@ var wfm = angular.module('wfm', [
 	'wfm.culturalDatepicker',
 	'wfm.utilities',
 	'wfm.dataProtection',
-	'wfm.gamification'
+	'wfm.templates',
+	'wfm.gamification',
 ]).config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', 'RtaStateProvider',
 	function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider) {
@@ -66,8 +67,8 @@ var wfm = angular.module('wfm', [
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$state', '$translate', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'WfmShortcuts', '$locale',
-	function($rootScope, $state, $translate, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts, $locale) {
+	'$rootScope', '$state', '$translate', '$timeout', '$locale', 'CurrentUserInfo', 'Toggle', 'RtaState',
+	function($rootScope, $state, $translate, $timeout, $locale, currentUserInfo, toggleService, RtaState) {
 		$rootScope.isAuthenticated = false;
 
 		$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {

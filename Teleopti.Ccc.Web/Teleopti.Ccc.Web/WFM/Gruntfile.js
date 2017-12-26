@@ -217,7 +217,7 @@ module.exports = function (grunt) {
                     '../Content/signalr/broker-hubs.js',
 					'node_modules/lodash/lodash.min.js'
                 ],
-                dest: 'dist/modulesForDesktop.js'
+                dest: 'dist/resources/modulesForDesktop.js'
             },
             distCss: {
                 src: [
@@ -268,7 +268,14 @@ module.exports = function (grunt) {
             },
             distForDesktop: {
                 files: {
-                    'dist/mainForDesktop.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app.js']
+                    'dist/mainForDesktop.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app.js'],
+                    'dist/resources/modulesForDesktop.min.js': ['dist/resources/modulesForDesktop.js'],
+                    'dist/templatesForDesktop.min.js': ['dist/templates.js']
+                },
+                options: {
+                    sourceMap: false,
+                    beautify: false,
+                    mangle: false
                 }
             }
         },
@@ -367,7 +374,7 @@ module.exports = function (grunt) {
         },
         clean: {
             dist: {
-                src: ['dist/**.js', 'dist/**.css', '!dist/**.min.js', '!dist/**.min.css']
+                src: ['dist/**/*.js', 'dist/**/*.css', '!dist/**/*.min.js', '!dist/**/*.min.css']
             }
         },
 
@@ -465,13 +472,12 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['msbuild:build']); // build the solution
     grunt.registerTask('buildWeb', ['msbuild:buildWeb']); // build the web project
     grunt.registerTask('rebuild', ['msbuild:rebuild']); // rebuild the solution
-    grunt.registerTask('generateIndex', ['processhtml:dist','cacheBust:dist']);
+    grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist', 'processhtml:distForDesktop', 'cacheBust:distForDesktop']);
     grunt.registerTask('generateIndexDev', ['processhtml:dev','cacheBust:dist']);
     grunt.registerTask('eslint-beta', ['eslint']);
     grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
-    grunt.registerTask('dist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:extras', 'copy:bootstrap', 'generateIndex', 'clean:dist','cacheBust:dist']); // this task should only be used by the build. It's kind of packaging for production.
+    grunt.registerTask('dist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:distJsForDesktop', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'uglify:distForDesktop', 'copy:extras', 'copy:bootstrap', 'generateIndex', 'clean']); // this task should only be used by the build. It's kind of packaging for production.
 
     // for desktop client
-    grunt.registerTask('buildForDesktop', ['copy:sourceMaps', 'processhtml:distForDesktop','cacheBust:dist']);
-
+    grunt.registerTask('buildForDesktop', ['copy:sourceMaps', 'processhtml:distForDesktop','cacheBust:distForDesktop']);
 };
