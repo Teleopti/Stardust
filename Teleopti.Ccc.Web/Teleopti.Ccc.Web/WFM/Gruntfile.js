@@ -372,11 +372,6 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        clean: {
-            dist: {
-                src: ['dist/**/*.js', 'dist/**/*.css', '!dist/**/*.min.js', '!dist/**/*.min.css']
-            }
-        },
 
         ngtemplates: {
             'wfm.templates': {
@@ -449,7 +444,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-iisexpress');
@@ -476,7 +470,7 @@ module.exports = function (grunt) {
     grunt.registerTask('generateIndexDev', ['processhtml:dev','cacheBust:dist']);
     grunt.registerTask('eslint-beta', ['eslint']);
     grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
-    grunt.registerTask('dist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:distJsForDesktop', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'uglify:distForDesktop', 'copy:extras', 'copy:bootstrap', 'generateIndex', 'clean']); // this task should only be used by the build. It's kind of packaging for production.
+    grunt.registerTask('dist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:distJsForDesktop', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'uglify:distForDesktop', 'copy:extras', 'copy:bootstrap', 'generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
 
     // for desktop client
     grunt.registerTask('buildForDesktop', ['copy:sourceMaps', 'processhtml:distForDesktop','cacheBust:distForDesktop']);
