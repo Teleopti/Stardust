@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 							var localEndDateTime = TimeZoneInfo.ConvertTimeFromUtc(personAssignment.Period.EndDateTime, timeZone);
 
 							var startTime = localStartDateTime.TimeOfDay;
-							var endTime = localEndDateTime.Subtract(localStartDateTime.Date);
+							var endTime = localEndDateTime.Date <= localStartDateTime.Date.AddDays(1) ? localEndDateTime.Subtract(localStartDateTime.Date): localEndDateTime.TimeOfDay.Add(TimeSpan.FromDays(1)) ;
 
 							personPreferenceDayOccupation.StartTimeLimitation = new StartTimeLimitation(startTime, startTime);
 							personPreferenceDayOccupation.EndTimeLimitation = new EndTimeLimitation(endTime, endTime);

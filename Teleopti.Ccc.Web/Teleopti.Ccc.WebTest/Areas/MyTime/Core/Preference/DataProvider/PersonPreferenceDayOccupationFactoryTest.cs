@@ -28,11 +28,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var date2 = new DateOnly(2029, 1, 3);
 			var date3 = new DateOnly(2029, 1, 5);
 			var date4 = new DateOnly(2029, 1, 7);
+			var date5 = new DateOnly(2029, 1, 9);
 
 			person = PersonFactory.CreatePersonWithGuid("a", "a");
 			var schedule = ScheduleDayFactory.Create(date1, person);
 			var schedule2 = ScheduleDayFactory.Create(date2, person);
 			var schedule3 = ScheduleDayFactory.Create(date3, person);
+			var schedule5 = ScheduleDayFactory.Create(date5, person);
 			var bag = new RuleSetBag();
 			var provider = MockRepository.GenerateMock<IPersonRuleSetBagProvider>();
 
@@ -45,7 +47,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			var pa2 = new PersonAssignment(schedule2.Person, schedule2.Scenario, date2);
 			schedule2.Add(pa2);
-			scheduleProvider = new FakeScheduleProvider(schedule, schedule2, schedule3);
+
+			var pa5 = new PersonAssignment(person, schedule5.Scenario, date4);
+			var assOvernightPeriod = new DateTimePeriod(new DateTime(2029, 1, 9, 20, 0, 0, DateTimeKind.Utc), new DateTime(2029, 1, 11, 5, 0, 0, DateTimeKind.Utc));
+			pa5.AddActivity(new Activity("activity"), assOvernightPeriod);
+			schedule5.Add(pa5);
+			scheduleProvider = new FakeScheduleProvider(schedule, schedule2, schedule3, schedule5);
 
 			var preferenceRestriction1 = new PreferenceRestriction
 			{
@@ -158,6 +165,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldReturnCorrectOccupationForPeriod()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2029, 1, 1), new DateOnly(2029, 1, 7));
+			var test = new TimeSpan(2, 06, 15, 0 );
 			var occupations = target.GetPreferencePeriodOccupation(person, period);
 
 			Assert.IsTrue(scheduleProvider.LatestScheduleLoadOptions.LoadRestrictions);
@@ -202,6 +210,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 1));
 			Assert.IsTrue(scheduleProvider.LatestScheduleLoadOptions.LoadRestrictions);
 			shouldBeOccupationWithShift(occupation);
+		}
+
+		[Test]
+		public void ShouldReturnCorrectOccupationWithOvernightShiftEndOnDayAfterNextDay()
+		{
+			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 9));
+
+			Assert.IsTrue(scheduleProvider.LatestScheduleLoadOptions.LoadRestrictions);
+			occupation.HasShift.Should().Be.EqualTo(true);
+			occupation.StartTimeLimitation.StartTime.Should().Be.EqualTo(new TimeSpan(20, 0, 0));
+			occupation.StartTimeLimitation.EndTime.Should().Be.EqualTo(new TimeSpan(20, 0, 0));
+
+			occupation.EndTimeLimitation.StartTime.Should().Be.EqualTo(new TimeSpan(29, 0, 0));
+			occupation.EndTimeLimitation.EndTime.Should().Be.EqualTo(new TimeSpan(29, 0, 0));
 		}
 
 		[Test]
