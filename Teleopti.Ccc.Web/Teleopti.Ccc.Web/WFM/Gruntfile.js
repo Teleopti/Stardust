@@ -142,7 +142,7 @@ module.exports = function (grunt) {
                     'node_modules/jquery/dist/jquery.min.js',
                     'node_modules/hammerjs/hammer.min.js',
                     'node_modules/angular-material/angular-material.min.js',
-					'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
+                    'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
                     'vendor/fabricjs/fabric.min.js',
                     'vendor/fabricjs/fabricjs_viewport.js',
                     'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
@@ -157,7 +157,7 @@ module.exports = function (grunt) {
                     'vendor/angular-bootstrap-persian-datepicker-master/persian-datepicker-tpls.js',
                     '../Content/signalr/jquery.signalR-2.2.2.js',
                     '../Content/signalr/broker-hubs.js',
-					'node_modules/lodash/lodash.min.js'
+                    'node_modules/lodash/lodash.min.js'
                 ],
                 dest: 'dist/resources/modules.js'
             },
@@ -194,13 +194,13 @@ module.exports = function (grunt) {
                     'node_modules/angular-gantt/assets/angular-gantt-plugins.js',
                     'node_modules/angular-gantt/assets/angular-gantt-table-plugin.js',
                     'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.js',
-                    'node_modules/teleopti-styleguide/dist/wfmdirectives.min.js',
-                    'node_modules/teleopti-styleguide/dist/templates.js',
+                    'node_modules/teleopti-styleguide/styleguide/dist/wfmdirectives.min.js',
+                    'node_modules/teleopti-styleguide/styleguide/dist/templates.js',
                     'node_modules/filesaver.js/FileSaver.min.js',
                     'node_modules/jquery/dist/jquery.min.js',
                     'node_modules/hammerjs/hammer.min.js',
                     'node_modules/angular-material/angular-material.min.js',
-					'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
+                    'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
                     'vendor/fabricjs/fabric.min.js',
                     'vendor/fabricjs/fabricjs_viewport.js',
                     'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
@@ -215,7 +215,7 @@ module.exports = function (grunt) {
                     'vendor/angular-bootstrap-persian-datepicker-master/persian-datepicker-tpls.js',
                     '../Content/signalr/jquery.signalR-2.2.2.js',
                     '../Content/signalr/broker-hubs.js',
-					'node_modules/lodash/lodash.min.js'
+                    'node_modules/lodash/lodash.min.js'
                 ],
                 dest: 'dist/resources/modulesForDesktop.js'
             },
