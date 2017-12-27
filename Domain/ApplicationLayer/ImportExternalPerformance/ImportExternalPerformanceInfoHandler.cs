@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using log4net;
@@ -42,7 +43,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		{
 			try
 			{
+				var stopwatch = new Stopwatch();
+				stopwatch.Start();
+
 				HandleJob(@event);
+
+				stopwatch.Stop();
+				var t = stopwatch.Elapsed;
+				var elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+					t.Hours, t.Minutes, t.Seconds,
+					t.Milliseconds / 10);
+				_feedback.SendProgress($"Time elapsed: {elapsedTime}");
 			}
 			catch (Exception e)
 			{
@@ -71,51 +82,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				return;
 			}
 
-			var processResult = _externalPerformanceInfoFileProcessor.Process(
-				new ImportFileData
-				{
-					Data = inputFile.Content,
-					FileName = inputFile.Name
-				}, 
-				_feedback.SendProgress);
+			_feedback.SendProgress($"Starting to process {inputFile.Name}");
 
-			_feedback.SendProgress($"Done processing input file: {inputFile.FileName} ({processResult.TotalRecordCount} lines)");
+			var processResult = _externalPerformanceInfoFileProcessor.Process(new ImportFileData
+			{
+				Data = inputFile.Content,
+				FileName = inputFile.Name
+			});
 
 			if (processResult.HasError)
 			{
 				var msg = string.Join(", ", processResult.ErrorMessages);
-				_feedback.SendProgress($"Extract file has error:{msg}.");
+				_feedback.SendProgress($"An error occurred while extracting: {msg}");
 				SaveJobResultDetailInternal(@event, DetailLevel.Error, msg, null);
 				return;
 			}
+
+			_feedback.SendProgress($"Extracted {processResult.ValidRecords.Count()} valid record(s), {processResult.InvalidRecords.Count()} invalid record(s). Starting to save data");
 
 			SaveJobArtifactsAndUpdateRecords(@event, processResult, inputFile.Name);
 		}
 
 		private void SaveJobArtifactsAndUpdateRecords(ImportExternalPerformanceInfoEvent @event, ExternalPerformanceInfoProcessResult processResult, string fileName)
 		{
-			var jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
-
-			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Start to save job artifact!");
 			if (processResult.InvalidRecords.Any())
 			{
-				jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.OutputError, "InvalidRecords"+fileName, stringToArray(processResult.InvalidRecords)));
+				var jobResult = _jobResultRepository.FindWithNoLock(@event.JobResultId);
+				jobResult.AddArtifact(new JobResultArtifact(JobResultArtifactCategory.OutputError, "invalid_records_" + fileName, stringToArray(processResult.InvalidRecords)));
+				_feedback.SendProgress($"Saved csv file of invalid records");
 			}
-			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Save job artifact success!");
 
 			_persister.Persist(processResult);
 
-			SaveJobResultDetailInternal(@event, DetailLevel.Info, "Uploaded external performance info", null);
+			SaveJobResultDetailInternal(@event, DetailLevel.Info, "Updated External Performance Data", null);
 		}
 
-		private void SaveJobResultDetailInternal(ImportExternalPerformanceInfoEvent @event, DetailLevel level, string message, Exception exception)
+		private void SaveJobResultDetailInternal(ImportExternalPerformanceInfoEvent @event, DetailLevel level, string message, Exception ex)
 		{
 			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);
-			var detail = new JobResultDetail(level, message, DateTime.UtcNow, exception);
+			var detail = new JobResultDetail(level, message, DateTime.UtcNow, ex);
 			result.AddDetail(detail);
 			result.FinishedOk = true;
 
-			_feedback.SendProgress($"ImportExternalPerformanceInfoHandler Done with adding job process detail, detail level:{level}, message:{message}, exception: {exception}.");
+			_feedback.SendProgress($"Added Job Result Detail. Detail level: {level}, message: {message}, exception: {ex?.ToString() ?? "null"}");
 		}
 
 		private byte[] stringToArray(IList<string> lines)

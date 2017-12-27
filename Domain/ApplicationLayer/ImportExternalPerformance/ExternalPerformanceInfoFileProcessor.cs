@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			_tenantLogonPersonProvider = tenantLogonPersonProvider;
 		}
 
-		public ExternalPerformanceInfoProcessResult Process(ImportFileData importFileData, Action<string> sendProgress)
+		public ExternalPerformanceInfoProcessResult Process(ImportFileData importFileData)
 		{
 			var processResult = new ExternalPerformanceInfoProcessResult();
 
@@ -38,30 +38,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			{
 				processResult.HasError = true;
 				processResult.ErrorMessages = Resources.InvalidInput;
-
-				var msg = string.Join(", ", processResult.ErrorMessages);
-				sendProgress($"ExternalPerformanceInfoFileProcessor: Extract file has error:{msg}.");
 				return processResult;
 			}
 
-			var fileProcessResult = extractFileWithoutSeperateSession(importFileData.Data, sendProgress);
+			var fileProcessResult = ExtractFileWithoutSeperateSession(importFileData.Data);
 			return fileProcessResult;
 		}
 
-		private ExternalPerformanceInfoProcessResult extractFileWithoutSeperateSession(byte[] rawData,
-			Action<string> sendProgress)
+		private ExternalPerformanceInfoProcessResult ExtractFileWithoutSeperateSession(byte[] rawData)
 		{
-			sendProgress("ExternalPerformanceInfoFileProcessor: Start to extract file.");
 			var processResult = ExtractFileContent(rawData);
-
-			if (processResult.HasError)
-			{
-				var msg = string.Join(", ", processResult.ErrorMessages);
-				sendProgress($"ExternalPerformanceInfoFileProcessor: Extract file has error:{msg}.");
-				return processResult;
-			}
-
-			sendProgress("ExternalPerformanceInfoFileProcessor: Extract file succeed.");
 			return processResult;
 		}
 
