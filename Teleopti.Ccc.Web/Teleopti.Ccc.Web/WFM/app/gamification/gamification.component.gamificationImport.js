@@ -13,7 +13,7 @@
 	function GamificationImportController(dataService, locale) {
 		var ctrl = this;
 
-		ctrl.fileSizeLimit = 5242880;
+		ctrl.fileSizeLimit = 2097152;
 		ctrl.dateTimeFormat = locale.DATETIME_FORMATS.medium;
 
 		ctrl.$onInit = function () {
