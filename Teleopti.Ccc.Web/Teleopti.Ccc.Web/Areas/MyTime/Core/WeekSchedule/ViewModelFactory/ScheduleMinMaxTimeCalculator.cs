@@ -137,7 +137,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var maxTime = scheduleMinMaxTime.EndTime;
 
 			var margin = TimeSpan.FromMinutes(ScheduleConsts.TimelineMarginInMinute);
-			var early = openHourPeriod.StartTime.Ticks > TimeSpan.Zero.Add(margin).Ticks ? openHourPeriod.StartTime.Subtract(margin) : TimeSpan.Zero;
+			var openHourPeriodStartTime = openHourPeriod.StartTime;
+			if (openHourPeriod.EndTime.Days > 0)
+				openHourPeriodStartTime = TimeSpan.Zero;
+			var early = openHourPeriodStartTime.Ticks > TimeSpan.Zero.Add(margin).Ticks ? openHourPeriodStartTime.Subtract(margin) : TimeSpan.Zero;
 			var late = openHourPeriod.EndTime.Ticks < new TimeSpan(23, 59, 59).Subtract(margin).Ticks ? openHourPeriod.EndTime.Add(margin) : new TimeSpan(23, 59, 59);
 
 			var adjustedOpenHourPeriod = new TimePeriod(early, late);

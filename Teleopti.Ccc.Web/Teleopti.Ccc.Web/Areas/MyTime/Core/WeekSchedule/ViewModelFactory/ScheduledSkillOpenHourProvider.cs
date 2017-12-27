@@ -125,14 +125,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return new TimePeriod(startTime, endTime);
 		}
 
-		private static TimePeriod toAgentTimeZonePeriod(DateOnly date, TimePeriod openHourPeriod, TimeZoneInfo skillTimeZoneInfo,
+		private static TimePeriod toAgentTimeZonePeriod(DateOnly date, TimePeriod openHourPeriod,
+			TimeZoneInfo skillTimeZoneInfo,
 			TimeZoneInfo agentTimeZoneInfo)
 		{
 			if (skillTimeZoneInfo.Equals(agentTimeZoneInfo))
 				return openHourPeriod;
 			var utcTimePeriod = date.ToDateTimePeriod(openHourPeriod, skillTimeZoneInfo);
-			return new TimePeriod(utcTimePeriod.StartDateTimeLocal(agentTimeZoneInfo).TimeOfDay,
-				utcTimePeriod.EndDateTimeLocal(agentTimeZoneInfo).TimeOfDay);
+			var startDateTimeLocal = utcTimePeriod.StartDateTimeLocal(agentTimeZoneInfo);
+			var endDateTimeLocal = utcTimePeriod.EndDateTimeLocal(agentTimeZoneInfo);
+			var endTimeSpan = endDateTimeLocal.TimeOfDay;
+			if (!startDateTimeLocal.Date.Equals(endDateTimeLocal.Date))
+			{
+				endTimeSpan = endTimeSpan.Add(TimeSpan.FromDays(1));
+			}
+			return new TimePeriod(startDateTimeLocal.TimeOfDay, endTimeSpan);
 		}
 	}
 }

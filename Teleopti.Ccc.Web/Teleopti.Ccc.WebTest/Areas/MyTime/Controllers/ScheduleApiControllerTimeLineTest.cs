@@ -308,6 +308,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			AssertTimeLine(result.TimeLine.ToList(),6,45,18,15);
 		}
 
+		[Test]
+		public void ShouldAdjustTimeLineStartTimeToZeroWhenSkillOpenHourIsCrossDay()
+		{
+			var skill = addSkill();
+			skill.TimeZone = TimeZoneInfoFactory.MountainTimeZoneInfo();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+			addAssignment(period, skill.Activity);
+
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 0, 0, 23, 59);
+		}
 
 		[Test]
 		public void ShouldNotAdjustTimeLineBySkillOpenHourWhenSchedulePeriodContainsSkillOpenHour()

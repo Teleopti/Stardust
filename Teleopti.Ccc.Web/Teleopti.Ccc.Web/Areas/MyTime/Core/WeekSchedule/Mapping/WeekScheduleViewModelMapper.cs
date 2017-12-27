@@ -399,6 +399,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			if (!openHour.HasValue)
 			{
 				openHour = _scheduledSkillOpenHourProvider.GetSkillOpenHourPeriod(weekScheduleDayDomainData.ScheduleDay);
+				if (openHour != null && openHour.Value.EndTime.Days > 0)
+				{
+					return new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1));
+				}
 			}
 			return openHour;
 		}

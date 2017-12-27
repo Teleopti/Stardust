@@ -926,6 +926,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldGetSkillOpenHourPeriodInUsersTimeZoneWhenSkillOpenHourIsCrossDay()
+		{
+			var skill = addSkill();
+			skill.TimeZone = TimeZoneInfoFactory.MountainTimeZoneInfo();
+
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Cape Verde Standard Time"));
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
+			addAssignment(period, skill.Activity);
+
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+			result.Days.ElementAt(3).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.Zero);
+			result.Days.ElementAt(3).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(24));
+		}
+
+		[Test]
 		public void ShouldReturnFalseForCheckStaffingByIntradayWhenIntradayAbsencePeriodIsInLowPriority()
 		{
 			var intradayAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
@@ -948,7 +964,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchWeekData(null);
 			result.CheckStaffingByIntraday.Should().Be(false);
 		}
-
 
 		[Test]
 		public void ShouldReturnTrueForCheckStaffingByIntradayWhenAnyIntradayAbsencePeriodIsAvailable()
