@@ -387,6 +387,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
+		public void ShouldDenyForEditWhenThereIsCrossDayScheduleWithinRequestPeriod()
+		{
+			Now.Is(new DateTime(2017, 12, 25, 08, 0, 0, DateTimeKind.Utc));
+			setupPerson(0, 24);
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
+
+			var workflowControlSet = new WorkflowControlSet();
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+			var period = new DateTimePeriod(2017, 12, 31, 8, 2017, 12, 31, 18);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			ScheduleStorage.Add(assignment);
+
+			var corssMonthPersonRequest = createOvertimeRequest(new DateTime(2017, 12, 31, 23, 0, 0, DateTimeKind.Utc), 2);
+			getTarget().Process(corssMonthPersonRequest, true);
+
+			corssMonthPersonRequest.IsApproved.Should().Be.True();
+
+			var personRequest = createOvertimeRequest(new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Utc), 1);
+
+			getTarget().CheckAndProcessDeny(personRequest);
+			var timeZoneInfo = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should()
+				.Be.EqualTo(string.Format(Resources.OvertimeRequestAlreadyHasScheduleInPeriod,
+					personRequest.Request.Period.StartDateTimeLocal(timeZoneInfo),
+					personRequest.Request.Period.EndDateTimeLocal(timeZoneInfo)));
+		}
+
+		[Test]
 		public void ShouldDenyWhenThereIsScheduleWithinRequestPeriod()
 		{
 			var timeZoneInfo = TimeZoneInfo.Utc;
