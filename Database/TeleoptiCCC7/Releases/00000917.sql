@@ -5,7 +5,9 @@
 ----------------  
 
 
-DROP TABLE [Dbo].[ExternalPerformanceData]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[ExternalPerformanceData]') AND type in (N'U'))
+   DROP TABLE [ReadModel].[ExternalPerformanceData]
+GO
 
 CREATE TABLE [ReadModel].[ExternalPerformanceData](
     [ExternalPerformance] [uniqueidentifier] NOT NULL,

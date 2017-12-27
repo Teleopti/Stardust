@@ -4,8 +4,13 @@
 --Desc: Use dbo instead of read model for ExternalPerformanceData 
 ----------------  
 
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[ExternalPerformanceData]') AND type in (N'U'))
+   DROP TABLE [ReadModel].[ExternalPerformanceData]
+GO
 
-DROP TABLE [ReadModel].[ExternalPerformanceData]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ExternalPerformanceData]') AND type in (N'U'))
+   DROP TABLE [dbo].[ExternalPerformanceData]
+GO
 
 CREATE TABLE [dbo].[ExternalPerformanceData](
 	[Id] [uniqueidentifier] NOT NULL,

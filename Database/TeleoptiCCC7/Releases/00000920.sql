@@ -4,8 +4,9 @@
 --Desc: Use PersonId instead of Person
 ----------------  
 
-
-DROP TABLE [dbo].[ExternalPerformanceData]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ExternalPerformanceData]') AND type in (N'U'))
+   DROP TABLE [dbo].[ExternalPerformanceData]
+GO
 
 CREATE TABLE [dbo].[ExternalPerformanceData](
 	[Id] [uniqueidentifier] NOT NULL,
