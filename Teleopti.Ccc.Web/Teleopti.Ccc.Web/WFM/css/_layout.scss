@@ -203,9 +203,7 @@ tree-data-one, tree-data-two, tree-data-three {
 		border:none;
 	}
 
-	.md-select-menu-container {
-		z-index: 1000;
-	}
+	
 }
 
 
@@ -373,4 +371,8 @@ wfm-calendar-picker-body > .date-info-calendar-wrapper{
 			right:1%!important;
 		}
 	}
+}
+
+.md-select-menu-container {
+	z-index: 1000;
 }
