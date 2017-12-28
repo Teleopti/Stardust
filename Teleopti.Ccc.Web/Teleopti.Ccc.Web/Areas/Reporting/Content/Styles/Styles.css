@@ -4,6 +4,11 @@ body
 	font-family:"Open Sans", Calibri, Candara, Segoe UI, Tahoma, Verdana, Arial, Sans-Serif;
 }
 
+#report-list {
+	max-height: 500px;
+	overflow: auto;
+}
+
 .Panel
 {
 	font-size:14px;

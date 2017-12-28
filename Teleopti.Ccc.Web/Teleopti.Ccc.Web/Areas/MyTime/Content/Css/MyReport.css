@@ -1,4 +1,9 @@
-﻿.fixed-non-responsive.container {
+﻿#report-list{
+	max-height: 500px;
+	overflow: auto;
+}
+
+.fixed-non-responsive.container {
 	width: 99%;
 }
 
