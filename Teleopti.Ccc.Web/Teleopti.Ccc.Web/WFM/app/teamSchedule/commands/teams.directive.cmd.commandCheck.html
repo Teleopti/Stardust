@@ -21,7 +21,7 @@
             <ul>
                 <li class="cursor-pointer" ng-repeat="agent in vm.checkFailedAgentList">
                     <span>{{agent.scheduleVm.Name}}</span>
-                    <md-tooltip class="multiline-tooltip margin-top-22">
+                    <md-tooltip class="multiline-tooltip margin-top-22" ng-if="agent.tooltips && agent.tooltips.length > 0">
                         <span ng-bind-html="agent.tooltips| br"></span>
                     </md-tooltip>
                 </li>
