@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I switch on show warnings toggle")]
 		public void WhenISwitchOnShowWarningsToggle()
 		{
-			Browser.Interactions.Click("#show-warnings .wfm-switch-toggle");
+			Browser.Interactions.ClickUsingJQuery("#show-warnings .wfm-switch-toggle");
 		}
 
 		[Then(@"I should see business rule warning")]
@@ -360,9 +360,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.AssertExists(".warning-icon .mdi-account-alert");
 		}
-
-		
-
 
 		[When(@"I click on a shift category label")]
 		public void WhenIClickOnAShiftCategoryLabel()
@@ -453,7 +450,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I close teamschedule setting panel")]
 		public void WhenICloseTeamscheduleSettingPanel()
 		{
-			Browser.Interactions.Click(".team-schedule md-backdrop");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>
+			{
+				Browser.Interactions.Click(".team-schedule md-backdrop");
+			});
+			
 		}
 
 		[When(@"I choose not to view '(.*)' validation result")]
