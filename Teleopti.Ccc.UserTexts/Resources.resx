@@ -16875,9 +16875,9 @@ Do you want to participate?</value>
     <value>Invalid score</value>
     <comment>use for gamification error info when import external performance csv file.</comment>
   </data>
-  <data name="AgentDoNotExist" xml:space="preserve">
-    <value>This agent do not exist</value>
-    <comment>use for gamification error info when import external performance csv file.</comment>
+  <data name="PersonIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
+    <value>The person ID could not be matched to any agent</value>
+    <comment>Error message used in parsing Gamification external performance data file</comment>
   </data>
   <data name="BusinessHierarchy" xml:space="preserve">
     <value>Business Hierarchy</value>

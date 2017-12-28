@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var agentNotExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Numeric,87";
 			var fileData = createFileData(agentNotExistRecord);
 
-			var expectedErrorRecord = $"{agentNotExistRecord},{Resources.AgentDoNotExist}";
+			var expectedErrorRecord = $"{agentNotExistRecord},{Resources.PersonIdCouldNotBeMatchedToAnyAgent}";
 			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);

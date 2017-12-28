@@ -1817,15 +1817,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This agent do not exist.
-        /// </summary>
-        public static string AgentDoNotExist {
-            get {
-                return ResourceManager.GetString("AgentDoNotExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Agent has {0} days without any schedule..
         /// </summary>
         public static string AgentHasDaysWithoutAnySchedule {
@@ -3331,7 +3322,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete the skill-group.
+        ///   Looks up a localized string similar to Are you sure you want to delete the skill group.
         /// </summary>
         public static string AreYouSureYouWantToDeleteTheSkillGroup {
             get {
@@ -3349,7 +3340,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to exit the skill-group manager?.
+        ///   Looks up a localized string similar to Are you sure you want to exit the skill group manager?.
         /// </summary>
         public static string AreYouSureYouWantToExitSGM {
             get {
@@ -7544,7 +7535,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new skill-group.
+        ///   Looks up a localized string similar to Create new skill group.
         /// </summary>
         public static string CreateNewSkillGroup {
             get {
@@ -9947,7 +9938,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to delete skill-group.
+        ///   Looks up a localized string similar to Do you want to delete skill group.
         /// </summary>
         public static string DoYouWantToDeleteSkillGroup {
             get {
@@ -16942,7 +16933,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage skill-groups.
+        ///   Looks up a localized string similar to Manage skill groups.
         /// </summary>
         public static string ManageSkillGroups {
             get {
@@ -18482,7 +18473,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move from skill-group.
+        ///   Looks up a localized string similar to Move from skill group.
         /// </summary>
         public static string MoveFromGroup {
             get {
@@ -18662,7 +18653,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move to skill-group.
+        ///   Looks up a localized string similar to Move to skill group.
         /// </summary>
         public static string MoveToGroup {
             get {
@@ -24038,6 +24029,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PersonFromGroupingDeletionQuestion {
             get {
                 return ResourceManager.GetString("PersonFromGroupingDeletionQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The person ID could not be matched to any agent.
+        /// </summary>
+        public static string PersonIdCouldNotBeMatchedToAnyAgent {
+            get {
+                return ResourceManager.GetString("PersonIdCouldNotBeMatchedToAnyAgent", resourceCulture);
             }
         }
         
