@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			{
 				if (personInfoModels.All(x => x.ApplicationLogonName != extractionResult.AgentId))
 				{
-					processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.PersonIdCouldNotBeMatchedToAnyAgent}");
+					processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.AgentDoNotExist}");
 					continue;
 				}
 				addMatchPerformanceData(extractionResult, personInfoModels.Select(x => new PersonIdentityMatchResult

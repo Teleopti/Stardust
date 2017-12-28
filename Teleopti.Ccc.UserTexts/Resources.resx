@@ -16764,28 +16764,28 @@ Do you want to participate?</value>
     <value>All skill groups</value>
   </data>
   <data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
-    <value>Are you sure you want to delete the skill-group</value>
+    <value>Are you sure you want to delete the skill group</value>
   </data>
   <data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
-    <value>Are you sure you want to exit the skill-group manager?</value>
+    <value>Are you sure you want to exit the skill group manager?</value>
   </data>
   <data name="AvailableSkills" xml:space="preserve">
     <value>Available skills</value>
   </data>
   <data name="CreateNewSkillGroup" xml:space="preserve">
-    <value>Create new skill-group</value>
+    <value>Create new skill group</value>
   </data>
   <data name="DoYouWantToDeleteSkillGroup" xml:space="preserve">
-    <value>Do you want to delete skill-group</value>
+    <value>Do you want to delete skill group</value>
   </data>
   <data name="ManageSkillGroups" xml:space="preserve">
-    <value>Manage skill-groups</value>
+    <value>Manage skill groups</value>
   </data>
   <data name="MoveFromGroup" xml:space="preserve">
-    <value>Move from skill-group</value>
+    <value>Move from skill group</value>
   </data>
   <data name="MoveToGroup" xml:space="preserve">
-    <value>Move to skill-group</value>
+    <value>Move to skill group</value>
   </data>
   <data name="SelectSite" xml:space="preserve">
     <value>Select site</value>
@@ -16875,9 +16875,9 @@ Do you want to participate?</value>
     <value>Invalid score</value>
     <comment>use for gamification error info when import external performance csv file.</comment>
   </data>
-  <data name="PersonIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
-    <value>The person ID could not be matched to any agent</value>
-    <comment>Error message used in parsing Gamification external performance data file</comment>
+  <data name="AgentDoNotExist" xml:space="preserve">
+    <value>This agent do not exist</value>
+    <comment>use for gamification error info when import external performance csv file.</comment>
   </data>
   <data name="BusinessHierarchy" xml:space="preserve">
     <value>Business Hierarchy</value>
