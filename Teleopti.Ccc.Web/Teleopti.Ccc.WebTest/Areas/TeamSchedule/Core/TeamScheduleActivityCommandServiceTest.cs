@@ -231,42 +231,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
-		[Ignore("This is probably what's triggering #46753")]
-		public void ShouldAddOvertimeWhenTimeZoneForAgentAndSupervisorDoesntMatch()
-		{
-			var date = new DateOnly(2016, 4, 16);
-			var person1 = PersonFactory.CreatePersonWithGuid("a", "b");
-			person1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
-			PersonRepository.Has(person1);
-
-			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity, person1, date);
-
-			var input = new AddOvertimeActivityForm
-			{
-				StartDateTime = new DateTime(2016, 4, 16, 2, 0, 0),
-				EndDateTime = new DateTime(2016, 4, 16, 2, 30, 0),
-				PersonDates = new[]
-				{
-					new PersonDate
-					{
-						PersonId = person1.Id.Value,
-						Date = date
-					}
-				},
-				TrackedCommandInfo = new TrackedCommandInfo()
-			};
-
-			ActivityCommandHandler.ResetCalledCount();
-
-			Target.AddOvertimeActivity(input);
-
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
-			var command = ActivityCommandHandler.CalledCommands.OfType<AddOvertimeActivityCommand>().Single();
-			command.Date.Date.Should().Be
-				.EqualTo(command.Period.StartDateTimeLocal(person1.PermissionInformation.DefaultTimeZone()));
-		}
-
-		[Test]
 		public void ShouldNotInvokeAddOvertimeActivityCommandHandlerWithoutPermission()
 		{
 			PermissionProvider.Enable();
@@ -302,7 +266,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 		}
-
 
 		[Test]
 		public void ShouldNotRemoveActivityWithoutPermission()

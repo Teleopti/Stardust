@@ -123,9 +123,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					var availablePeriodsInfo =
 						string.Join(",", AvailablePeriods().Select(p => p.ToShortDateString(CultureInfo.CurrentCulture)));
 					throw new PermissionException("Cannot add " + persistableScheduleData +
-												  " to the collection.PersistableData period:" + persistableScheduleData.Period + "AvailablePeriods are" +
-												  availablePeriodsInfo + "Person timezone:" +
-												  persistableScheduleData.Person.PermissionInformation.DefaultTimeZone());
+												  " to the collection.PersistableData period:" + persistableScheduleData.Period + " AvailablePeriods are" +
+												  availablePeriodsInfo + " Person timezone:" +
+												  persistableScheduleData.Person.PermissionInformation.DefaultTimeZone() + " PersonId:" + persistableScheduleData.Person.Id);
 				}
 				_scheduleObjectsWithNoPermissions.Add(persistableScheduleData);
 			}

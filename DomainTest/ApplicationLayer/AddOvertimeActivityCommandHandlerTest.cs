@@ -14,6 +14,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -124,6 +125,167 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			addOvertimeEvent.CommandId.Should().Be.EqualTo(command.TrackedCommandInfo.TrackId);
 			addOvertimeEvent.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
 		}
+
+		[Test]
+		public void ShouldNotAddOvertimeActivityWhenActivityPeriodStartDateAndScheduleDateDontMatch()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var  mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			ActivityRepository.Add(activity);
+			ActivityRepository.Add(mainActivity);
+
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 14, 9));
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("double pay", MultiplicatorType.Overtime);
+			mds.WithId();
+			MultiplicatorDefinitionSetRepository.Add(mds);
+
+			var command = new AddOvertimeActivityCommand
+			{
+				Person = person,
+				Date = new DateOnly(2013, 11, 14),
+				ActivityId = activity.Id.GetValueOrDefault(),
+				Period = new DateTimePeriod(2013, 11, 13, 8, 2013, 11, 13, 12),
+				MultiplicatorDefinitionSetId = mds.Id.GetValueOrDefault(),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+			Target.Handle(command);
+
+			command.ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		
+		}
+
+		[Test]
+		public void ShouldNotAddOvertimeActivityWhenActivityPeriodStartDateBeforeScheduleDateAndIntersectedWithAssPeriod()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var  mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			ActivityRepository.Add(activity);
+			ActivityRepository.Add(mainActivity);
+
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 14, 9));
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("double pay", MultiplicatorType.Overtime);
+			mds.WithId();
+			MultiplicatorDefinitionSetRepository.Add(mds);
+
+			var command = new AddOvertimeActivityCommand
+			{
+				Person = person,
+				Date = new DateOnly(2013, 11, 14),
+				ActivityId = activity.Id.GetValueOrDefault(),
+				Period = new DateTimePeriod(2013, 11, 13, 22, 2013, 11, 14, 6),
+				MultiplicatorDefinitionSetId = mds.Id.GetValueOrDefault(),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+			Target.Handle(command);
+
+			command.ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		}
+
+		[Test]
+		public void ShouldAddOvertimeActivityWhenActivityPeriodStartDateAfterScheduleDateAndIntersectedWithAssPeriod()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			ActivityRepository.Add(activity);
+			ActivityRepository.Add(mainActivity);
+
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 15, 2));
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("double pay", MultiplicatorType.Overtime);
+			mds.WithId();
+			MultiplicatorDefinitionSetRepository.Add(mds);
+
+			var command = new AddOvertimeActivityCommand
+			{
+				Person = person,
+				Date = new DateOnly(2013, 11, 14),
+				ActivityId = activity.Id.GetValueOrDefault(),
+				Period = new DateTimePeriod(2013, 11, 15, 2, 2013, 11, 15, 3),
+				MultiplicatorDefinitionSetId = mds.Id.GetValueOrDefault(),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+			Target.Handle(command);
+
+			command.ErrorMessages.Count.Should().Be.EqualTo(0);
+			var assignment = PersonAssignmentRepository.LoadAll().Single();
+
+			assignment.Date.Should().Be.EqualTo(command.Date);
+			assignment.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 15, 3));
+			var overtimeLayer = assignment.ShiftLayers.Single(l => l is OvertimeShiftLayer) as OvertimeShiftLayer;
+			overtimeLayer.Should().Not.Be.Null();
+			overtimeLayer.DefinitionSet.Should().Be.EqualTo(mds);
+		}
+
+		[Test]
+		public void ShouldAddOvertimeActivityWhenActivityPeriodStartOnScheduleDateInAgentTimezone()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var  mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			ActivityRepository.Add(activity);
+			ActivityRepository.Add(mainActivity);
+
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 14, 9));
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("double pay", MultiplicatorType.Overtime);
+			mds.WithId();
+			MultiplicatorDefinitionSetRepository.Add(mds);
+
+			var command = new AddOvertimeActivityCommand
+			{
+				Person = person,
+				Date = new DateOnly(2013, 11, 14),
+				ActivityId = activity.Id.GetValueOrDefault(),
+				Period = new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 12),
+				MultiplicatorDefinitionSetId = mds.Id.GetValueOrDefault(),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+			Target.Handle(command);
+
+			var assignment = PersonAssignmentRepository.LoadAll().Single();
+
+			assignment.Date.Should().Be.EqualTo(command.Date);
+			assignment.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 14, 12));
+			var overtimeLayer = assignment.ShiftLayers.Single(l => l is OvertimeShiftLayer) as OvertimeShiftLayer;
+			overtimeLayer.Should().Not.Be.Null();
+			overtimeLayer.DefinitionSet.Should().Be.EqualTo(mds);
+			command.ErrorMessages.Count.Should().Be.EqualTo(0);
+		}
+
+
 	}
 
 	[TestFixture]

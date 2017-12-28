@@ -722,7 +722,7 @@
     <Compile Include="Areas\TeamSchedule\Controllers\TeamScheduleActivityCommandController.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\FavoriteSearchProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Core\ITeamScheduleCommandHandlingProvider.cs" />
-    <Compile Include="Areas\TeamSchedule\Core\TeamScheduleActivityService.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\TeamScheduleActivityCommandService.cs" />
     <Compile Include="Areas\TeamSchedule\Models\FavoriteSearchViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\MoveNonoverwritableLayersFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\CheckingResult.cs" />
