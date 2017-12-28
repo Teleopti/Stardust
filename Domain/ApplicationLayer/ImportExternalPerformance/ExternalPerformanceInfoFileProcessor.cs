@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
@@ -84,12 +85,59 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 			if (extractResultCollection.Any())
 			{
-				filterExistAgents(processResult, extractResultCollection);
+				//filterExistAgents(processResult, extractResultCollection);
+				ConvertToRecordsByMatchingPersonId(extractResultCollection, processResult);
 			}
 
 			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom}).Select(x => x.Last()).ToList();
 			processResult.ExternalPerformances = allMeasures.Where(m => existMeasures.All(e => e.ExternalId != m.ExternalId)).ToList();
 			return processResult;
+		}
+
+		private void ConvertToRecordsByMatchingPersonId(IList<PerformanceInfoExtractionResult> allExtractionResults,
+			ExternalPerformanceInfoProcessResult processResult)
+		{
+			var allPersonIds = allExtractionResults.Select(x => x.AgentId).ToList();
+			var allEmploymentNumberAndExternalLogonMatches = _personRepository.FindPersonByIdentities(allPersonIds);
+			var allApplicationLogonNameMatches = new List<IPersonInfoModel>();
+			foreach (var extractionResult in allExtractionResults)
+			{
+				var personIds = new List<Guid>();
+
+				var employmentNumberAndExternalLogonMatches = allEmploymentNumberAndExternalLogonMatches.Where(x => x.LogonName == extractionResult.AgentId);
+
+				personIds.AddRange(employmentNumberAndExternalLogonMatches.Select(x => x.PersonId));
+
+				if (!personIds.Any())
+				{
+					if (!allApplicationLogonNameMatches.Any())
+					{
+						allApplicationLogonNameMatches.AddRange(_tenantLogonPersonProvider.GetByLogonNames(allPersonIds));
+					}
+					var applicationLogonNameMatches = allApplicationLogonNameMatches.Where(x => x.ApplicationLogonName == extractionResult.AgentId);
+					personIds.AddRange(applicationLogonNameMatches.Select(x => x.PersonId));
+				}
+
+				if (!personIds.Any())
+				{
+					processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.PersonIdCouldNotBeMatchedToAnyAgent}");
+					continue;
+				}
+
+				var validRecords = personIds.Select(personId => new PerformanceInfoExtractionResult
+				{
+					AgentId = extractionResult.AgentId,
+					DateFrom = extractionResult.DateFrom,
+					GameId = extractionResult.GameId,
+					GameName = extractionResult.GameName,
+					GameNumberScore = extractionResult.GameNumberScore,
+					GamePercentScore = extractionResult.GamePercentScore,
+					GameType = extractionResult.GameType,
+					PersonId = personId
+				});
+
+				processResult.ValidRecords.AddRange(validRecords);
+			}
 		}
 
 		private void filterExistAgents(ExternalPerformanceInfoProcessResult processResult, List<PerformanceInfoExtractionResult> extractResultCollection)
