@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 	public class ExternalPerformanceInfoProcessorTest : ISetup
 	{
 		public IExternalPerformanceInfoFileProcessor Target;
-		public IStardustJobFeedback Feedback;
 		public FakeExternalPerformanceRepository PerformanceRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeTenantPersonLogonQuerier TenantPersonLogonQuerier;
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
-			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
 			system.UseTestDouble<FakeTenantPersonLogonQuerier>().For<ITenantPersonLogonQuerier>();
 		}
@@ -42,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public void ShouldAcceptOnlyCsvFile()
 		{
 			var fileData = new ImportFileData {FileName = "test.xls"};
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.HasError.Should().Be.True();
 			result.ErrorMessages.Should().Be.Equals(Resources.InvalidInput);
@@ -55,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var fileData = createFileData(invalidLine);
 
 			var expectedErrorMsg = invalidLine + "," + string.Format(Resources.InvalidNumberOfFields, 8, 9);
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorMsg);
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var fileData = createFileData(invalidDateRecord);
 
 			var expectedErrorMsg = invalidDateRecord + "," + Resources.ImportBpoWrongDateFormat;
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorMsg);
@@ -84,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			var errorMsg = Resources.AgentIdIsTooLong;
 			var expectedErrorRecord = $"{invalidRecord},{errorMsg}";
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
@@ -98,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.GameNameIsTooLong}";
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidGameType}";
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
@@ -124,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidScore}";
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
@@ -137,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidScore}";
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
@@ -155,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var fileData = createFileData(the11thRecord);
 
 			var expectedErrorRecord = $"{the11thRecord},{Resources.OutOfMaximumLimit}";
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
@@ -176,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var fileData = createFileData(records);
 
 			var expectedErrorRecord = $"{the11thRecord},{Resources.OutOfMaximumLimit}";
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.HasError.Should().Be.False();
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
@@ -197,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var theExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,8,Percent,87";
 			var fileData = createFileData(theExistRecord);
 
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
 			result.ValidRecords[0].GamePercentScore.Should().Be.EqualTo(new Percent(0.87));
@@ -210,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidGameId}";
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
@@ -234,7 +232,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var agentsWith1ExternalLogonRecord = "20171120,externalLogon,Kalle,Pettersson,Quality Score,1,Numeric,87";
 			var fileData = createFileData(agentsWith1ExternalLogonRecord);
 
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 			result.ValidRecords.Count.Should().Be.EqualTo(2);
 			result.ValidRecords[0].PersonId.Should().Be.EqualTo(per1);
 			result.ValidRecords[1].PersonId.Should().Be.EqualTo(per2);
@@ -247,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var fileData = createFileData(agentNotExistRecord);
 
 			var expectedErrorRecord = $"{agentNotExistRecord},{Resources.AgentDoNotExist}";
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
@@ -261,7 +259,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var validRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Percent,87";
 			var fileData = createFileData(validRecord);
 
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.HasError.Should().Be.False();
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
@@ -284,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var validRecord = "20171120,tenantAgent,Kalle,Pettersson,Quality Score,1,Percent,87";
 			var fileData = createFileData(validRecord);
 
-			var result = Target.Process(fileData, Feedback.SendProgress);
+			var result = Target.Process(fileData);
 
 			result.HasError.Should().Be.False();
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
