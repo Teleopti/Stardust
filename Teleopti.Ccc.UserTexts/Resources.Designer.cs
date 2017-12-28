@@ -1817,15 +1817,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This agent do not exist.
-        /// </summary>
-        public static string AgentDoNotExist {
-            get {
-                return ResourceManager.GetString("AgentDoNotExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Agent has {0} days without any schedule..
         /// </summary>
         public static string AgentHasDaysWithoutAnySchedule {
@@ -24038,6 +24029,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PersonFromGroupingDeletionQuestion {
             get {
                 return ResourceManager.GetString("PersonFromGroupingDeletionQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The person ID could not be matched to any agent.
+        /// </summary>
+        public static string PersonIdCouldNotBeMatchedToAnyAgent {
+            get {
+                return ResourceManager.GetString("PersonIdCouldNotBeMatchedToAnyAgent", resourceCulture);
             }
         }
         
