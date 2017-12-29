@@ -83,7 +83,6 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports,
 				DefinedRaptorApplicationFunctionPaths.ViewStaffingInfo,
 				DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration,
-				DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb,
 
 				DefinedRaptorApplicationFunctionPaths.WebPermissions,
 				DefinedRaptorApplicationFunctionPaths.WebRequests,

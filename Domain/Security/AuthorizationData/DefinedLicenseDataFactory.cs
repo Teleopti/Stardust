@@ -80,7 +80,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 				new TeleoptiCccPilotCustomersIntradayLicenseOption(),
 				new TeleoptiCccPilotCustomersPermissionsLicenseOption(),
 				new TeleoptiCccPilotCustomersReportsLicenseOption(),
-				new TeleoptiWfmBpoExchangeLicenseOption(), 
+				new TeleoptiWfmBpoExchangeLicenseOption(),
+				new TeleoptiCccOvertimeRequestsLicenseOption(),
 				new AllLicenseOption()
 			};
 			
