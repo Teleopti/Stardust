@@ -324,6 +324,116 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personId);
 		}
 
+		[Test]
+		public void ShouldLookUpEmploymentNumberFirstWhenMatchingPersonIdAndAgent()
+		{
+			const string personid = "1";
+			var row = $"20171120,{personid},x,x,Quality Score,1,Percent,87";
+			var file = createFileData(row);
+
+			var personid1 = Guid.NewGuid();
+			var personid2 = Guid.NewGuid();
+			var personid3 = Guid.NewGuid();
+
+			var person1 = new Person();
+			var person2 = new Person();
+			var person3 = new Person();
+
+			person1.WithId(personid1);
+			person2.WithId(personid2);
+			person3.WithId(personid3);
+
+			person1.SetEmploymentNumber(personid);
+			PersonRepository.Add(person1);
+
+			PersonRepository.Add(person2);
+			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
+			{
+				ExternalLogonName = new List<string> {personid},
+				PersonId = personid2
+			});
+
+			PersonRepository.Add(person3);
+			TenantPersonLogonQuerier.Add(new PersonInfoModel
+			{
+				ApplicationLogonName = personid,
+				PersonId = personid3
+			});
+
+			var result = Target.Process(file);
+			result.InvalidRecords.Count.Should().Be.EqualTo(0);
+			result.ValidRecords.Count.Should().Be.EqualTo(1);
+			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personid1);
+		}
+
+		[Test]
+		public void ShouldLookUpExternalLogonIfEmploymentNumberHasNoMatchWhenMatchingPersonIdAndAgent()
+		{
+			const string personid = "1";
+			var row = $"20171120,{personid},x,x,Quality Score,1,Percent,87";
+			var file = createFileData(row);
+
+			var personid1 = Guid.NewGuid();
+			var personid2 = Guid.NewGuid();
+
+			var person1 = new Person();
+			var person2 = new Person();
+
+			person1.WithId(personid1);
+			person2.WithId(personid2);
+
+			person1.SetEmploymentNumber(personid + "x");
+			PersonRepository.Add(person1);
+
+			PersonRepository.Add(person2);
+			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
+			{
+				ExternalLogonName = new List<string> { personid },
+				PersonId = personid2
+			});
+
+			var result = Target.Process(file);
+			result.InvalidRecords.Count.Should().Be.EqualTo(0);
+			result.ValidRecords.Count.Should().Be.EqualTo(1);
+			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personid2);
+		}
+
+		[Test]
+		public void ShouldLookUpExternalLogonBeforeApplicationLogonWhenMatchingPersonIdAndAgent()
+		{
+			const string personid = "1";
+			var row = $"20171120,{personid},x,x,Quality Score,1,Percent,87";
+			var file = createFileData(row);
+
+			var personid1 = Guid.NewGuid();
+			var personid2 = Guid.NewGuid();
+
+			var person1 = new Person();
+			var person2 = new Person();
+
+			person1.WithId(personid1);
+			person2.WithId(personid2);
+
+			PersonRepository.Add(person1);
+			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
+			{
+				ExternalLogonName = new List<string> { personid },
+				PersonId = personid1
+			});
+
+			PersonRepository.Add(person2);
+			TenantPersonLogonQuerier.Add(new PersonInfoModel
+			{
+				ApplicationLogonName = personid,
+				PersonId = personid2
+			});
+
+			var result = Target.Process(file);
+			result.InvalidRecords.Count.Should().Be.EqualTo(0);
+			result.ValidRecords.Count.Should().Be.EqualTo(1);
+			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personid1);
+		}
+
 		private void setPerson(Guid personId)
 		{
 			var person = new Person();
