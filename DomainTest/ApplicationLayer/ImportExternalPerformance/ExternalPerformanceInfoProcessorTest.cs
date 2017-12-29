@@ -238,7 +238,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.ValidRecords[1].PersonId.Should().Be.EqualTo(per2);
 		}
 
-		[Test, Ignore("temp ignore")]
+		[Test]
+		public void ShouldReturnOnlyOneValidRecordWhenOnePersonIdMatchesTwoAgents()
+		{
+			PerformanceRepository.Add(new ExternalPerformance {ExternalId = 1, DataType = ExternalPerformanceDataType.Numeric});
+			const string row = "20171120,1,John,Watson,Quality Score,1,Numeric,87";
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var person1 = new Person();
+			person1.SetEmploymentNumber("1");
+			person1.WithId(personId1);
+			var person2 = new Person();
+			person2.SetEmploymentNumber("2");
+			person2.WithId(personId2);
+			PersonRepository.Add(person1);
+			PersonRepository.Add(person2);
+			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
+			{
+				ExternalLogonName = new List<string> {"1"},
+				PersonId = personId2
+			});
+			var file = createFileData(row);
+
+			var result = Target.Process(file);
+
+			result.ValidRecords.Count.Should().Be.EqualTo(1);
+			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personId1);
+			result.InvalidRecords.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldRejectRecordIfAgentDoesNotExist()
 		{
 			var agentNotExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Numeric,87";

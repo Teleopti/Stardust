@@ -104,9 +104,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			{
 				var personIds = new List<Guid>();
 
-				var employmentNumberAndExternalLogonMatches = allEmploymentNumberAndExternalLogonMatches.Where(x => x.LogonName == extractionResult.AgentId);
+				var employmentNumberAndExternalLogonMatches = allEmploymentNumberAndExternalLogonMatches
+					.Where(x => x.LogonName == extractionResult.AgentId).ToList();
 
-				personIds.AddRange(employmentNumberAndExternalLogonMatches.Select(x => x.PersonId));
+				personIds.AddRange(employmentNumberAndExternalLogonMatches
+					.Where(x => x.MatchField == IdentityMatchField.EmploymentNumber).Select(x => x.PersonId));
+
+				if (!personIds.Any())
+				{
+					personIds.AddRange(employmentNumberAndExternalLogonMatches
+						.Where(x => x.MatchField == IdentityMatchField.ExternalLogon).Select(x => x.PersonId));
+				}
 
 				if (!personIds.Any())
 				{
@@ -114,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					{
 						allApplicationLogonNameMatches.AddRange(_tenantLogonPersonProvider.GetByLogonNames(allPersonIds));
 					}
-					var applicationLogonNameMatches = allApplicationLogonNameMatches.Where(x => x.ApplicationLogonName == extractionResult.AgentId);
+					var applicationLogonNameMatches = allApplicationLogonNameMatches.Where(x => x?.ApplicationLogonName == extractionResult.AgentId);
 					personIds.AddRange(applicationLogonNameMatches.Select(x => x.PersonId));
 				}
 
