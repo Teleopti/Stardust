@@ -33,6 +33,9 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		self.addOvertimeRequestActive = ko.observable(false);
 		self.menuIsVisible = ko.observable(false);
 		self.addOvertimeRequestEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequest_44558');
+		self.overtimeRequestsLicenseAvailable = ko.observable(false);
+
+		checkOvertimeRequestsLicenseAvailability(self);
 
 		self.enableMenu = function (blah, e) {
 			self.menuIsVisible(true);
@@ -107,7 +110,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			self.addOvertimeRequestActive(false);
 		};
 
-		self.closeDatePickers = function(){
+		self.closeDatePickers = function () {
 			$('.datepicker').hide();
 		};
 	}
@@ -121,6 +124,22 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		ko.applyBindings(requestNavigationViewModel, elementToBind);
 	}
 
+	function checkOvertimeRequestsLicenseAvailability(self) {
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
+		ajax.Ajax({
+			url: 'OvertimeRequests/GetLicenseAvailability',
+			dataType: "json",
+			type: 'GET',
+			success: function (response) {
+				self.overtimeRequestsLicenseAvailable(response.IsLicenseAvailable && response.HasPermissionForOvertimeRequests);
+			},
+			error: function (error) {
+				self.overtimeRequestsLicenseAvailable(false);
+				throw error;
+			}
+		});
+	}
+
 	return {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Requests/Index',
@@ -132,9 +151,8 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 
 			if (!$('#Requests-body-inner').length) {
-				readyForInteraction();
-				readyForInteraction();
-				completelyLoaded();
+				readyForInteraction && readyForInteraction();
+				completelyLoaded && completelyLoaded();
 				return;
 			}
 
@@ -170,6 +188,9 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			if (requestNavigationViewModel !== null) {
 				return requestNavigationViewModel.menuIsVisible();
 			}
+		},
+		RequestNavigationViewModel: function() {
+			return requestNavigationViewModel;
 		}
 	};
 
