@@ -51,7 +51,9 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 				function (period) {
 					var startDate = moment(moment(period.startDate).format('YYYY-MM-DD')).toDate();
 					var endDate = moment(moment(period.endDate).format('YYYY-MM-DD')).toDate();
-					if (vm.isWithinSelected(startDate, endDate)) {
+					var listeningStartDate = moment(vm.selectedDate()).add(-1, "days").toDate();
+					var listeningEndDate = moment(vm.selectedDate()).add(1, "days").toDate();
+					if (startDate <= listeningEndDate && endDate >= listeningStartDate) {
 						fetchData(vm.selectedDate());
 					}
 				});
@@ -97,9 +99,9 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 
 	function fetchData(momentDate) {
 		var dateStr = (momentDate && momentDate.format('YYYY/MM/DD'))
-					|| Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
-					|| vm.selectedDate().format('YYYY/MM/DD');
-		dataService.fetchData(dateStr, vm.selectedProbabilityOptionValue(),fetchDataSuccessCallback);
+			|| Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+			|| vm.selectedDate().format('YYYY/MM/DD');
+		dataService.fetchData(dateStr, vm.selectedProbabilityOptionValue(), fetchDataSuccessCallback);
 	}
 
 	function fetchDataSuccessCallback(data) {
