@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 {
 	public class ShiftsFromMasterActivityBaseActivityService : IShiftFromMasterActivityService
 	{
-		public IList<IWorkShift> ExpandWorkShiftsWithMasterActivity(IWorkShift workShift)
+		public IList<IWorkShift> ExpandWorkShiftsWithMasterActivity(IWorkShift workShift, bool baseIsMaster)
 		{
 			if (!hasMasterActivity(workShift))
 				return new[] {workShift};
@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 			using (PerformanceOutput.ForOperation("Creating shifts from master activity"))
 			{
 				var finalList = new List<IWorkShift>();
-				Stack<IWorkShift> stack = new Stack<IWorkShift>(createShiftsFromShift(workShift, true));
+				Stack<IWorkShift> stack = new Stack<IWorkShift>(createShiftsFromShift(workShift, true, baseIsMaster));
 				while (stack.Count > 0)
 				{
 					var shiftToTest = stack.Pop();
-					var thisResult = createShiftsFromShift(shiftToTest, false);
+					var thisResult = createShiftsFromShift(shiftToTest, false, false);
 					if (!thisResult.Any())
 						finalList.Add(cleanWorkShiftFromRedundantLayers(shiftToTest));
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 			}
 		}
 
-		private List<IWorkShift> createShiftsFromShift(IWorkShift workShift, bool firstRun)
+		private List<IWorkShift> createShiftsFromShift(IWorkShift workShift, bool firstRun, bool baseIsMaster)
 		{
 			if (!hasMasterActivity(workShift))
 				return new List<IWorkShift>();
@@ -55,6 +55,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 				var masterActivity = layer.Payload as MasterActivity;
 				if (masterActivity == null)
 				{
+					if (!baseIsMaster)
+						firstRun = false;
+
 					continue;
 				}
 
