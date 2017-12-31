@@ -653,8 +653,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
 			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener("WeekScheduleWeb",
 				function (period) {
-					var startDate = moment(moment(period.StartDate).format('YYYY-MM-DD')).toDate();
-					var endDate = moment(moment(period.EndDate).format('YYYY-MM-DD')).toDate();
+					var startDate = moment(moment(period.startDate).format('YYYY-MM-DD')).toDate();
+					var endDate = moment(moment(period.endDate).format('YYYY-MM-DD')).toDate();
 					if (vm.isWithinSelected(startDate, endDate)) {
 						_fetchData(vm.selectedProbabilityType);
 					}
