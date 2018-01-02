@@ -6,15 +6,17 @@
 			controller: [
 				'GamificationDataService',
 				'$locale',
+				'$state',
 				GamificationImportController
 			]
 		});
 
-	function GamificationImportController(dataService, locale) {
+	function GamificationImportController(dataService, locale, state) {
 		var ctrl = this;
 
 		ctrl.fileSizeLimit = 2097152;
 		ctrl.dateTimeFormat = locale.DATETIME_FORMATS.medium;
+		ctrl.fileFormatWikiLink = 'https://wiki.teleopti.com/TeleoptiWFM/' + state.current.name;
 
 		ctrl.$onInit = function () {
 			fetchJobs();

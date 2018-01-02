@@ -21,8 +21,7 @@
 				<button class="wfm-btn wfm-btn-primary" ng-disabled="$ctrl.fileIsInvalid()" ng-click="$ctrl.upload()">{{'UploadAndStart'|translate}}</button>
 			</div>
 			<div>
-				<button id="downloadTmpl" class="wfm-btn wfm-btn-invis-default">
-					<i class="mdi mdi-help-circle-outline"></i>&nbsp;Import File Format</button>
+				<a class="detail_link" target="_blank" href="{{$ctrl.fileFormatWikiLink}}">&nbsp;{{'GamificationViewImportFileFormat'|translate}}</a>
 			</div>
 		</div>
 		<div ng-if="$ctrl.uploading" class="loading-mask">
@@ -37,8 +36,8 @@
 			<div class="started">{{'TimeStarted'|translate}}</div>
 			<div class="status">{{'Status'|translate}}</div>
 		</header>
-		<import-job ng-repeat="job in $ctrl.jobs" job-id="job.id" owner="job.owner" starting-time="job.startingTime"
-		 status="job.status" name="job.name" category="job.category" date-time-format="::$ctrl.dateTimeFormat" has-error="job.hasError"></import-job>
+		<import-job ng-repeat="job in $ctrl.jobs" job-id="job.id" owner="job.owner" starting-time="job.startingTime" status="job.status"
+		 name="job.name" category="job.category" date-time-format="::$ctrl.dateTimeFormat" has-error="job.hasError"></import-job>
 	</div>
 
 </div>

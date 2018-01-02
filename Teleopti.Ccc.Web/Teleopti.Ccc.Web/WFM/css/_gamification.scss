@@ -285,6 +285,12 @@
 				.pointer {
 					cursor: pointer;
 				}
+
+				.detail_link{
+					color: #09f;
+					text-decoration: none;					
+					transition: all ease 0.1s;
+				}
 			}
 		}
 
