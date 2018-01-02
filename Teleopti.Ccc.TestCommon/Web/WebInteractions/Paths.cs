@@ -12,6 +12,12 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			return new DirectoryInfo(path).FullName;
 		});
 
+		private static readonly Lazy<string> _stardustConsoleHostPath = new Lazy<string>(() =>
+		{
+			var path = FindProjectPath(@"Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\");
+			return new DirectoryInfo(path).FullName;
+		});
+
 		public static string WebPath()
 		{
 			return _webPath.Value;
@@ -49,6 +55,18 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 					" not found. Has it been built? Tried with paths: " +
 					string.Join(Environment.NewLine, possiblePaths));
 			return new DirectoryInfo(path).FullName;
+		}
+
+		public static string StardustConsoleHostFolderPath()
+		{
+
+			var path = Path.Combine(_stardustConsoleHostPath.Value, "bin\\Debug");
+			if(Directory.Exists(path))
+				return new DirectoryInfo(path).FullName;
+			path = Path.Combine(_stardustConsoleHostPath.Value, "bin\\Release");
+			if (Directory.Exists(path)) 
+				return new DirectoryInfo(path).FullName;
+			throw new ArgumentException("Stardust console doesn't exist!");
 		}
 	}
 }

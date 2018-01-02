@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		public void Setup()
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
-			TestSiteConfigurationSetup.Setup();
+			TestSiteConfigurationSetup.Setup(true);
 		}
 
 		[OneTimeTearDown]
