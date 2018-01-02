@@ -93,31 +93,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 		}
 
 		[Test]
-		public void ShouldHandleMasterActivityAsBaseButCoveredWithOtherActivityOnFirstInterval()
-		{
-			var phoneActivity = new Activity("Phone") { InContractTime = true, RequiresSkill = true }.WithId();
-			var emailActivity = new Activity("Email") { InContractTime = true, RequiresSkill = true }.WithId();
-			var logonActivity = new Activity("logon") { InContractTime = true, RequiresSkill = false }.WithId();
-			var lunchActivity = new Activity("lunch") { InContractTime = false, RequiresSkill = false }.WithId();
-			var masterActivity = new MasterActivity();
-			masterActivity.UpdateActivityCollection(new List<IActivity> { phoneActivity, emailActivity });
-			var ruleSet =
-				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(masterActivity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
-					new TimePeriodWithSegment(17, 0, 17, 0, 15), new ShiftCategory("_")));
-			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(logonActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15),
-				new TimePeriodWithSegment(8, 0, 8, 0, 15)));
-			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(lunchActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15),
-				new TimePeriodWithSegment(13, 0, 13, 0, 15)));
-			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(8, 8), TimeSpan.FromMinutes(15)));
-			var shiftCollectionFromSpecificStart = ShiftCreatorService.Generate(ruleSet, new WorkShiftAddStopperCallback());
-			var firstGenaratedShiftCollection = shiftCollectionFromSpecificStart[0];
-
-			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0]);
-			workShifts.Count.Should().Be.EqualTo(4);
-			workShifts[0].LayerCollection[1].Period.Should().Be.EqualTo(new DateTimePeriod(1800, 1, 1, 8, 1800, 1, 1, 17));
-		}
-
-		[Test]
 		public void ShouldAssignOneOfTheMasterActivitiesAsBaseActivityForTheShiftsBasic()
 		{
 			var phoneActivity = new Activity { InContractTime = true, RequiresSkill = true }.WithId();

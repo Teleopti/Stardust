@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 				var masterActivity = layer.Payload as MasterActivity;
 				if (masterActivity == null)
 				{
+					firstRun = false;
 					continue;
 				}
 
@@ -65,7 +66,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 						continue;
 
 					var newLength = firstRun ? workShift.Projection.Period().GetValueOrDefault() : layer.Period;
-
 					var newShift = localCloneWithNewActivityOnLayer(workShift.LayerCollection, layer, replaceActivity, newLength,
 						workShift.ShiftCategory);
 					resultForOneLayer.Add(newShift);
