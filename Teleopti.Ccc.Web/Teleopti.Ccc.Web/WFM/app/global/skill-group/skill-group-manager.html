@@ -40,7 +40,7 @@
 								<span class="list-item-container">
 									{{skillGroup.Name}}
 								</span>
-								<span ng-cloak ng-show="vm.selectedSkillGroup.Id === skillGroup.Id" class="list-dot grow-out">
+								<span ng-cloak ng-show="vm.selectedSkillGroup.Id === skillGroup.Id" class="list-dot">
 									<b class="mdi mdi-check list-mark"></b>
 								</span>
 								<div class="wfm-leave-behind wfm-leave-behind-3" style="top:3px">
@@ -186,7 +186,7 @@
 							</div>
 							<div class="con-row">
 								<div class="con-flex">
-									<input id="groupNameBox" type="text" autofocus="true" placeholder="{{'Name'|translate}}" ng-model="vm.selectedSkillGroup.Name" maxlength="50"
+									<input id="groupNameBox" type="text" ng-focus="vm.editGroupNameBox" placeholder="{{'Name'|translate}}" ng-model="vm.selectedSkillGroup.Name" maxlength="50"
 									 ng-maxlength="50" id="skillGroupNameBox" ng-keypress="vm.nameBoxKeyPress($event)" />
 								</div>
 							</div>

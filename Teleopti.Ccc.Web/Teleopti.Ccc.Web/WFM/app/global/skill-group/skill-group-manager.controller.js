@@ -209,8 +209,6 @@
 			} else {
 				vm.selectedSkillGroup = group;
 			}
-			console.log('vm.selectedSkillGroup', vm.selectedSkillGroup);
-
 			vm.skills = _.sortBy(
 				_.differenceBy(vm.allSkills, vm.selectedSkillGroup.Skills, function(skill) {
 					return skill.Id;
@@ -267,8 +265,6 @@
 		}
 
 		function setSaveableState() {
-			console.log('hasEmptySkillList()', hasEmptySkillList());
-
 			vm.canSave = hasChanges() && !hasEmptySkillList();
 		}
 
