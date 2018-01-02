@@ -113,10 +113,6 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 
 			foreach (var route in routes)
 			{
-				if (!message.IsDefaultScenario && message.DomainType == nameof(IScheduleChangedInDefaultScenario))
-				{
-					continue;
-				}
 				_signalR.CallOnEventMessage(RouteToGroupName(route), route, message);
 			}
 

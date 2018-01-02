@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -17,8 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldSendBrokerMessageOnScheduleChange()
 		{
 			var broker = MockRepository.GenerateMock<IMessageCreator>();
-			var scenarioRepo = MockRepository.GenerateMock<IScenarioRepository>();
-			var handler = new ScheduleChangedNotifierHangfire(broker, scenarioRepo);
+			var handler = new ScheduleChangedNotifierHangfire(broker);
 
 			var message = new ScheduleChangedEvent
 				{
@@ -30,9 +28,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 					PersonId = Guid.NewGuid(),
 					ScenarioId = Guid.NewGuid()
 				};
-			var messageScenario = new Scenario("test");
-			scenarioRepo.Stub(x => x.Get(message.ScenarioId)).Return(messageScenario);
-
 			handler.Handle(message);
 
 			broker.AssertWasCalled(x => x.Send(
@@ -46,15 +41,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				message.PersonId,
 				typeof (IScheduleChangedEvent),
 				DomainUpdateType.NotApplicable,
-				null, messageScenario.DefaultScenario));
+				null));
 		}
 
 		[Test]
 		public void ShouldNotSendBrokerMessageOnScheduleChangeOnInitialLoad()
 		{
 			var broker = MockRepository.GenerateMock<IMessageCreator>();
-			var scenarioRepo = MockRepository.GenerateMock<IScenarioRepository>();
-			var handler = new ScheduleChangedNotifierHangfire(broker, scenarioRepo);
+			var handler = new ScheduleChangedNotifierHangfire(broker);
 
 			var message = new ScheduleChangedEvent
 			{
@@ -67,9 +61,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = Guid.NewGuid(),
 				SkipDelete = true
 			};
-			var messageScenario = new Scenario("test");
-			scenarioRepo.Stub(x => x.Get(message.ScenarioId)).Return(messageScenario);
-
 			handler.Handle(message);
 
 			broker.AssertWasNotCalled(x => x.Send(
@@ -83,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				message.PersonId,
 				typeof(IScheduleChangedEvent),
 				DomainUpdateType.NotApplicable,
-				null, messageScenario.DefaultScenario ));
+				null));
 		}
 	}
 }

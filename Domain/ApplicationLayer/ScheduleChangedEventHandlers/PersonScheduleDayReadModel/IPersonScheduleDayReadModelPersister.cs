@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 	public interface IPersonScheduleDayReadModelPersister
 	{
 		bool IsInitialized();
-		void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool initialLoad, bool isDefaultScenario);
+		void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool initialLoad);
 		int SaveReadModel(PersonScheduleDayReadModel model, bool initialLoad);
 		void DeleteReadModel(Guid personId, DateOnly date);
 	}

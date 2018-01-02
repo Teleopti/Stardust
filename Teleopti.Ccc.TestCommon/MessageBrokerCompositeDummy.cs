@@ -23,13 +23,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
 			Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType,
-			DomainUpdateType updateType, byte[] domainObject, bool isDefaultScenario, Guid? trackId = null)
-		{
-			_sentCount++;
-		}
-
-		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
-			Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject, bool isDefaultScenario)
+			DomainUpdateType updateType, byte[] domainObject, Guid? trackId = null)
 		{
 			_sentCount++;
 		}
@@ -37,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon
 		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
 			Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
-			throw new NotImplementedException();
+			_sentCount++;
 		}
 
 		public void Send(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)

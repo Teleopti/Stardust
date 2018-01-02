@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -12,12 +11,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IRunOnHangfire
 	{
 		private readonly IMessageCreator _broker;
-		private readonly IScenarioRepository _scenarioRepository;
 
-		public ScheduleChangedNotifierHangfire(IMessageCreator broker, IScenarioRepository scenarioRepository)
+		public ScheduleChangedNotifierHangfire(IMessageCreator broker)
 		{
 			_broker = broker;
-			_scenarioRepository = scenarioRepository;
 		}
 
 		[ImpersonateSystem]
@@ -37,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				@event.PersonId,
 				typeof(IScheduleChangedEvent),
 				DomainUpdateType.NotApplicable,
-				null, _scenarioRepository.Get(@event.ScenarioId).DefaultScenario);
+				null);
 		}
 	}
 }

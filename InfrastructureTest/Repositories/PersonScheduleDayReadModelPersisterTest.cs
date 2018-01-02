@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(target.IsInitialized(), Is.False);
 
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId,
-				new[] {model}, false, false);
+				new[] {model}, false);
 
 			Assert.That(target.IsInitialized(), Is.True);
 		}
@@ -71,7 +71,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					Version = 1
 			};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), personId,Guid.NewGuid(), new[] { model }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), personId,Guid.NewGuid(), new[] { model }, false);
 		}
 
 		[Test]
@@ -92,7 +92,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				Version = 1
 			};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId,Guid.NewGuid(), new[] { model }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId,Guid.NewGuid(), new[] { model }, false);
 
 			new PersonScheduleDayReadModelFinder(uow)
 				.ForPerson(new DateOnly(model.Date), model.PersonId)
@@ -116,7 +116,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				Version = 1
 			};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, Guid.NewGuid(), new[] { readModel }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, Guid.NewGuid(), new[] { readModel }, false);
 
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(readModel.Date), readModel.PersonId)
@@ -152,7 +152,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				Version = 1
 			};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, buId, new[] { readModel, anotherReadModel }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, buId, new[] { readModel, anotherReadModel }, false);
 
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(readModel.Date), personId)
@@ -196,13 +196,13 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var buId = Guid.NewGuid();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId,buId, new[] { oldReadModel }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId,buId, new[] { oldReadModel }, false);
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(oldReadModel.Date), oldReadModel.PersonId)
 				.IsDayOff.Should()
 				.Be.False();
 			
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId,buId, new[] { newerReadModel }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId,buId, new[] { newerReadModel }, false);
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(newerReadModel.Date), newerReadModel.PersonId)
 				.IsDayOff.Should()
@@ -243,13 +243,13 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var buId = Guid.NewGuid();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId, buId, new[] { oldReadModel }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId, buId, new[] { oldReadModel }, false);
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(oldReadModel.Date), oldReadModel.PersonId)
 				.IsDayOff.Should()
 				.Be.False();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId, buId, new[] { newerReadModel }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId, buId, new[] { newerReadModel }, false);
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(newerReadModel.Date), newerReadModel.PersonId)
 				.IsDayOff.Should()
@@ -291,9 +291,9 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var buId = Guid.NewGuid();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newTimestampReadModel.PersonId, buId, new[] { newTimestampReadModel }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newTimestampReadModel.PersonId, buId, new[] { newTimestampReadModel }, false);
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldTimestampReadModel.PersonId,buId, new[] { oldTimestampReadModel }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldTimestampReadModel.PersonId,buId, new[] { oldTimestampReadModel }, false);
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(oldTimestampReadModel.Date), oldTimestampReadModel.PersonId)
 				.IsDayOff.Should()
@@ -341,14 +341,14 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var buId = Guid.NewGuid();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newTimestampReadModel.PersonId, buId, new[] { newTimestampReadModel }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newTimestampReadModel.PersonId, buId, new[] { newTimestampReadModel }, false);
 			uow.Current().PersistAll();
 
 			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
 			
 			messageBroker.ResetSendInvokedCount();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldTimestampReadModel.PersonId, buId, new[] { oldTimestampReadModel }, false, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldTimestampReadModel.PersonId, buId, new[] { oldTimestampReadModel }, false);
 			uow.Current().PersistAll();
 			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(0);
 			CleanUpAfterTest();
@@ -393,14 +393,14 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var buId = Guid.NewGuid();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId, buId, new[] { oldReadModel }, false, true);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId, buId, new[] { oldReadModel }, false);
 			uow.Current().PersistAll();
 
 			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
 
 			messageBroker.ResetSendInvokedCount();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId, buId, new[] { newerReadModel }, false, true);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId, buId, new[] { newerReadModel }, false);
 			uow.Current().PersistAll();
 			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
 			CleanUpAfterTest();
@@ -445,13 +445,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
 			Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType,
-			DomainUpdateType updateType, byte[] domainObject, bool isDefaultScenario, Guid? trackId = null)
-		{
-			if (!_disabled) _sendInvokedCount++;
-		}
-
-		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
-			Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject, bool isDefaultScenario)
+			DomainUpdateType updateType, byte[] domainObject, Guid? trackId = null)
 		{
 			if (!_disabled) _sendInvokedCount++;
 		}

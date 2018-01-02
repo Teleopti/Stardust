@@ -30,8 +30,7 @@ namespace Teleopti.Messaging.Client.Composite
 			Type domainObjectType,
 			DomainUpdateType updateType, 
 			byte[] domainObject,
-			Guid trackId,
-			bool isDefaultScenario)
+			Guid trackId)
 		{
 			if (_messageFilterManager.HasType(domainObjectType))
 			{
@@ -56,13 +55,12 @@ namespace Teleopti.Messaging.Client.Composite
 					DataSource = dataSource,
 					BusinessUnitId = businessUnitId,
 					BinaryData = domainObjectString,
-					TrackId = trackIdString,
-					IsDefaultScenario = isDefaultScenario
+					TrackId = trackIdString
 				};
 			}
 		}
 
-		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject, bool isDefaultScenario, Guid? trackId = null)
+		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject, Guid? trackId = null)
 		{
 			var notificationList = createNotifications(
 				dataSource,
@@ -75,19 +73,13 @@ namespace Teleopti.Messaging.Client.Composite
 				domainObjectType,
 				updateType,
 				domainObject, 
-				trackId.GetValueOrDefault(Guid.Empty),
-				isDefaultScenario);
-
+				trackId.GetValueOrDefault(Guid.Empty));
 			_messageSender.SendMultiple(notificationList);
 		}
 
 		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
-			Send(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject, false);
-		}
-		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject, bool isDefaultScenario)
-		{
-			Send(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject, isDefaultScenario);
+			Send(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject);
 		}
 
 		public void Send(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
@@ -106,7 +98,7 @@ namespace Teleopti.Messaging.Client.Composite
 					eventMessage.DomainObjectId,
 					eventMessage.DomainObjectTypeCache,
 					eventMessage.DomainUpdateType,
-					eventMessage.DomainObject, Guid.Empty, true));
+					eventMessage.DomainObject, Guid.Empty));
 
 				if (notificationList.Count > MessagesPerBatch)
 				{
