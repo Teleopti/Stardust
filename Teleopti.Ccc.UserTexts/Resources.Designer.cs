@@ -13296,15 +13296,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The game type is not same as before.
-        /// </summary>
-        public static string GameTypeChanged {
-            get {
-                return ResourceManager.GetString("GameTypeChanged", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Gamification.
         /// </summary>
         public static string Gamification {
@@ -17389,6 +17380,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MeasureTypeMustBeEitherNumericOrPercent {
             get {
                 return ResourceManager.GetString("MeasureTypeMustBeEitherNumericOrPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measure type does not match the existing definition.
+        /// </summary>
+        public static string MeasureTypeNotMatchExistingDefinition {
+            get {
+                return ResourceManager.GetString("MeasureTypeNotMatchExistingDefinition", resourceCulture);
             }
         }
         

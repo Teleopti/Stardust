@@ -191,8 +191,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			{
 				if (type.DataType != extractionResult.GameType)
 				{
-					extractionResult.Error = $"{extractionResult.RawLine},{Resources.GameTypeChanged}";
-					return;
+					extractionResult.Error = $"{extractionResult.RawLine},{Resources.MeasureTypeNotMatchExistingDefinition}";
 				}
 			}
 			else
