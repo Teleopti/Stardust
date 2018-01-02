@@ -15187,15 +15187,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InvalidGameId.
-        /// </summary>
-        public static string InvalidGameId {
-            get {
-                return ResourceManager.GetString("InvalidGameId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The game type must be &quot;number&quot; or &quot;percent&quot;..
         /// </summary>
         public static string InvalidGameType {
@@ -17398,6 +17389,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Me {
             get {
                 return ResourceManager.GetString("Me", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measure ID must contain an integer.
+        /// </summary>
+        public static string MeasureIdMustContainAnInteger {
+            get {
+                return ResourceManager.GetString("MeasureIdMustContainAnInteger", resourceCulture);
             }
         }
         

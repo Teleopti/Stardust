@@ -16863,9 +16863,9 @@ Do you want to participate?</value>
     <value>The game type is not same as before</value>
     <comment>use for gamification error info when import external performance csv file.</comment>
   </data>
-  <data name="InvalidGameId" xml:space="preserve">
-    <value>InvalidGameId</value>
-    <comment>use for gamification error info when import external performance csv file.</comment>
+  <data name="MeasureIdMustContainAnInteger" xml:space="preserve">
+    <value>Measure ID must contain an integer</value>
+    <comment>Error message used in importing an external performance csv file.</comment>
   </data>
   <data name="OutOfMaximumLimit" xml:space="preserve">
     <value>There is a limit of {0} gamification measures, this record can not be imported as it would exceed this limit. </value>

@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,invalidId,Numeric,87";
 			var fileData = createFileData(invalidRecord);
 
-			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidGameId}";
+			var expectedErrorRecord = $"{invalidRecord},{Resources.MeasureIdMustContainAnInteger}";
 			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);

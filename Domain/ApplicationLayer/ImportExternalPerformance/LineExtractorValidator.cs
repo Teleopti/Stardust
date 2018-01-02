@@ -92,9 +92,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 			result.AgentId = agentId;
 
-			if (!GameIdFieldIsValid(columns[GAME_ID_COLUMN_INDEX], out var gameId))
+			if (!measureIdContainsInteger(columns[GAME_ID_COLUMN_INDEX], out var gameId))
 			{
-				result.Error = $"{line},{Resources.InvalidGameId}";
+				result.Error = $"{line},{Resources.MeasureIdMustContainAnInteger}";
 				return result;
 			}
 			result.GameId = gameId;
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			return VerifyFieldLength(id, AGENT_ID_MAX_LENGTH);
 		}
 
-		private bool GameIdFieldIsValid(string id, out int result)
+		private bool measureIdContainsInteger(string id, out int result)
 		{
 			return int.TryParse(id, out result);
 		}
