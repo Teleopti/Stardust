@@ -98,11 +98,6 @@ angular.module('wfm.rta').provider('RtaState', function () {
 					return 'RtaHistoricalController as vm';
 				}
 			})
-			.state('rta-agents-historical-prototype', {
-				url: '/rta/agents-historical-prototype',
-				templateUrl: 'app/rta/rta/agents-historical/view.html',
-				controller: 'RtaAgentsHistoricalController as vm'
-			})
 			.state('rta-teams-legacy', {
 				url: '/rta/teams/?siteIds&skillIds&skillAreaId&open',
 				controller: function ($state, $stateParams) {
