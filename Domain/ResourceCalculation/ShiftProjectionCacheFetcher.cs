@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 		}
 		
-		public IEnumerable<ShiftProjectionCache> Execute(IWorkShiftRuleSet ruleSet)
+		public virtual IEnumerable<ShiftProjectionCache> Execute(IWorkShiftRuleSet ruleSet)
 		{
 			var callback = new WorkShiftAddStopperCallback();
 			callback.StartNewRuleSet(ruleSet);
