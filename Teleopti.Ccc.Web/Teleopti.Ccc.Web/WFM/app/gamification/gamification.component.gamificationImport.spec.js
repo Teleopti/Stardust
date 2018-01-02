@@ -48,7 +48,7 @@ describe('<gamification-import>', function () {
 
 	it('should render', function () {
 		var cmp = setupComponent();
-		var downloadBtn = cmp[0].querySelector('button#downloadTmpl');
+		var downloadBtn = cmp[0].querySelector('a#importFileDetailLink');
 		expect(downloadBtn).not.toBe(null);
 	});
 

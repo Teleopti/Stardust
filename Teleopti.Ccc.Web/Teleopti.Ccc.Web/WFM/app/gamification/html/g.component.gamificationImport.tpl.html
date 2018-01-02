@@ -21,7 +21,7 @@
 				<button class="wfm-btn wfm-btn-primary" ng-disabled="$ctrl.fileIsInvalid()" ng-click="$ctrl.upload()">{{'UploadAndStart'|translate}}</button>
 			</div>
 			<div>
-				<a class="detail_link" target="_blank" href="{{$ctrl.fileFormatWikiLink}}">&nbsp;{{'GamificationViewImportFileFormat'|translate}}</a>
+				<a class="detail_link" id="importFileDetailLink" target="_blank" href="{{$ctrl.fileFormatWikiLink}}">&nbsp;{{'GamificationViewImportFileFormat'|translate}}</a>
 			</div>
 		</div>
 		<div ng-if="$ctrl.uploading" class="loading-mask">
