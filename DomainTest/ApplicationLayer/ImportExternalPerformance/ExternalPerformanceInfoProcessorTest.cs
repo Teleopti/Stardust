@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var the11thRecord = "20171120,1,Kalle,Pettersson,Quality Score,11,Percent,87";
 			var fileData = createFileData(the11thRecord);
 
-			var expectedErrorRecord = $"{the11thRecord},{Resources.OutOfMaximumLimit}";
+			var expectedErrorRecord = $"{the11thRecord},{string.Format(Resources.RowExceedsLimitOfGamificationMeasures, 10)}";
 			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var records = new List<string> {the10thRecord, the11thRecord};
 			var fileData = createFileData(records);
 
-			var expectedErrorRecord = $"{the11thRecord},{Resources.OutOfMaximumLimit}";
+			var expectedErrorRecord = $"{the11thRecord},{string.Format(Resources.RowExceedsLimitOfGamificationMeasures, 10)}";
 			var result = Target.Process(fileData);
 
 			result.HasError.Should().Be.False();

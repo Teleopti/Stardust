@@ -199,7 +199,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			{
 				if (existingTypes.Count == MAX_MEASURE_COUNT)
 				{
-					extractionResult.Error = $"{extractionResult.RawLine},{Resources.OutOfMaximumLimit}";
+					extractionResult.Error =
+						$"{extractionResult.RawLine},{string.Format(Resources.RowExceedsLimitOfGamificationMeasures, MAX_MEASURE_COUNT)}";
 					return;
 				}
 				existingTypes.Add(new ExternalPerformance

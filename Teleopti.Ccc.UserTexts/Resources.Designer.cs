@@ -22482,15 +22482,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is a limit of {0} gamification measures, this record can not be imported as it would exceed this limit. .
-        /// </summary>
-        public static string OutOfMaximumLimit {
-            get {
-                return ResourceManager.GetString("OutOfMaximumLimit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Output.
         /// </summary>
         public static string Output {
@@ -27728,6 +27719,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RotationsCouldNotBeLoaded {
             get {
                 return ResourceManager.GetString("RotationsCouldNotBeLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is a limit of {0} gamification measures. This row cannot be imported as it would exceed this limit. .
+        /// </summary>
+        public static string RowExceedsLimitOfGamificationMeasures {
+            get {
+                return ResourceManager.GetString("RowExceedsLimitOfGamificationMeasures", resourceCulture);
             }
         }
         
