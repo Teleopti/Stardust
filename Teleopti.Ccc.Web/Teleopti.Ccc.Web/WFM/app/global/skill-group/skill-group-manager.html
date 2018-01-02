@@ -36,7 +36,7 @@
 				<div class="con-row">
 					<div class="con-flex">
 						<ul class="wfm-list" id="available_skill_groups_list">
-							<li ng-repeat="skillGroup in vm.skillGroups track by skillGroup.Id" ng-click="vm.selectSkillGroup($index)">
+							<li ng-repeat="skillGroup in vm.skillGroups track by skillGroup.Id" style="max-width: 90%;" ng-click="vm.selectSkillGroup($index)">
 								<span class="list-item-container">
 									{{skillGroup.Name}}
 								</span>
@@ -186,7 +186,7 @@
 							</div>
 							<div class="con-row">
 								<div class="con-flex">
-									<input type="text" autofocus="true" placeholder="{{'Name'|translate}}" ng-model="vm.selectedSkillGroup.Name" maxlength="50"
+									<input id="groupNameBox" type="text" autofocus="true" placeholder="{{'Name'|translate}}" ng-model="vm.selectedSkillGroup.Name" maxlength="50"
 									 ng-maxlength="50" id="skillGroupNameBox" ng-keypress="vm.nameBoxKeyPress($event)" />
 								</div>
 							</div>

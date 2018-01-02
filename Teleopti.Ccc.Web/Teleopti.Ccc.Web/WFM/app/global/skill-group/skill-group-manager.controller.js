@@ -133,7 +133,8 @@
 					return item.Name;
 				}
 			);
-			vm.canSave = true;
+			setSaveableState();
+//			vm.canSave = true;
 			unselectAllSkills();
 		};
 
