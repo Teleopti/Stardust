@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			result.HasError.Should().Be.False();
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
-			result.ValidRecords[0].GameId.Should().Be.EqualTo(10);
+			result.ValidRecords[0].MeasureId.Should().Be.EqualTo(10);
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);
 			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
 		}
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var result = Target.Process(fileData);
 
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
-			result.ValidRecords[0].GamePercentScore.Should().Be.EqualTo(new Percent(0.87));
+			result.ValidRecords[0].MeasurePercentScore.Should().Be.EqualTo(new Percent(0.87));
 		}
 
 		[Test]
@@ -293,11 +293,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.HasError.Should().Be.False();
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
 			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateTime(2017, 11, 20));
-			result.ValidRecords[0].GameName.Should().Be.EqualTo("Quality Score");
-			result.ValidRecords[0].GameType.Should().Be.EqualTo(ExternalPerformanceDataType.Percent);
+			result.ValidRecords[0].MeasureName.Should().Be.EqualTo("Quality Score");
+			result.ValidRecords[0].MeasureType.Should().Be.EqualTo(ExternalPerformanceDataType.Percent);
 			result.ValidRecords[0].AgentId.Should().Be.EqualTo("1");
-			result.ValidRecords[0].GameId.Should().Be.EqualTo(1);
-			result.ValidRecords[0].GamePercentScore.Should().Be.EqualTo(new Percent(0.87));
+			result.ValidRecords[0].MeasureId.Should().Be.EqualTo(1);
+			result.ValidRecords[0].MeasurePercentScore.Should().Be.EqualTo(new Percent(0.87));
 			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personId);
 		}
 
@@ -316,11 +316,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.HasError.Should().Be.False();
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
 			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateTime(2017, 11, 20));
-			result.ValidRecords[0].GameName.Should().Be.EqualTo("Quality Score");
-			result.ValidRecords[0].GameType.Should().Be.EqualTo(ExternalPerformanceDataType.Percent);
+			result.ValidRecords[0].MeasureName.Should().Be.EqualTo("Quality Score");
+			result.ValidRecords[0].MeasureType.Should().Be.EqualTo(ExternalPerformanceDataType.Percent);
 			result.ValidRecords[0].AgentId.Should().Be.EqualTo(tenantLogonName);
-			result.ValidRecords[0].GameId.Should().Be.EqualTo(1);
-			result.ValidRecords[0].GamePercentScore.Should().Be.EqualTo(new Percent(0.87));
+			result.ValidRecords[0].MeasureId.Should().Be.EqualTo(1);
+			result.ValidRecords[0].MeasurePercentScore.Should().Be.EqualTo(new Percent(0.87));
 			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personId);
 		}
 

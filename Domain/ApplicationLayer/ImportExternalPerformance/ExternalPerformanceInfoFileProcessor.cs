@@ -136,11 +136,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				{
 					AgentId = extractionResult.AgentId,
 					DateFrom = extractionResult.DateFrom,
-					GameId = extractionResult.GameId,
-					GameName = extractionResult.GameName,
-					GameNumberScore = extractionResult.GameNumberScore,
-					GamePercentScore = extractionResult.GamePercentScore,
-					GameType = extractionResult.GameType,
+					MeasureId = extractionResult.MeasureId,
+					MeasureName = extractionResult.MeasureName,
+					MeasureNumberScore = extractionResult.MeasureNumberScore,
+					MeasurePercentScore = extractionResult.MeasurePercentScore,
+					MeasureType = extractionResult.MeasureType,
 					PersonId = personId
 				});
 
@@ -186,10 +186,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 		private void CreateOrValidatePerformanceType(PerformanceInfoExtractionResult extractionResult, IList<IExternalPerformance> existingTypes)
 		{
-			var type = existingTypes.FirstOrDefault(g => g.ExternalId == extractionResult.GameId);
+			var type = existingTypes.FirstOrDefault(g => g.ExternalId == extractionResult.MeasureId);
 			if (type != null)
 			{
-				if (type.DataType != extractionResult.GameType)
+				if (type.DataType != extractionResult.MeasureType)
 				{
 					extractionResult.Error = $"{extractionResult.RawLine},{Resources.MeasureTypeNotMatchExistingDefinition}";
 				}
@@ -204,9 +204,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 				existingTypes.Add(new ExternalPerformance
 				{
-					DataType = extractionResult.GameType,
-					ExternalId = extractionResult.GameId,
-					Name = extractionResult.GameName
+					DataType = extractionResult.MeasureType,
+					ExternalId = extractionResult.MeasureId,
+					Name = extractionResult.MeasureName
 				});
 			}
 		}
@@ -235,11 +235,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				{
 					AgentId = extractionResult.AgentId,
 					DateFrom = extractionResult.DateFrom,
-					GameId = extractionResult.GameId,
-					GameName = extractionResult.GameName,
-					GameNumberScore = extractionResult.GameNumberScore,
-					GamePercentScore = extractionResult.GamePercentScore,
-					GameType = extractionResult.GameType,
+					MeasureId = extractionResult.MeasureId,
+					MeasureName = extractionResult.MeasureName,
+					MeasureNumberScore = extractionResult.MeasureNumberScore,
+					MeasurePercentScore = extractionResult.MeasurePercentScore,
+					MeasureType = extractionResult.MeasureType,
 					PersonId = personId
 				});
 			processResult.ValidRecords.AddRange(agentsWithSameExternalLogon);

@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		public string RawLine { get; set; }
 		public string Error { get; set; }
 		public DateTime DateFrom { get; set; }
-		public ExternalPerformanceDataType GameType { get; set; }
-		public string GameName { get; set; }
-		public int GameId { get; set; }
+		public ExternalPerformanceDataType MeasureType { get; set; }
+		public string MeasureName { get; set; }
+		public int MeasureId { get; set; }
 		public string AgentId { get; set; }
-		public int GameNumberScore { get; set; }
-		public Percent GamePercentScore { get; set; }
+		public int MeasureNumberScore { get; set; }
+		public Percent MeasurePercentScore { get; set; }
 		public Guid PersonId { get; set; }
 		public bool HasError()
 		{

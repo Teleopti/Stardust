@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				result.Error = $"{line},{Resources.GameNameIsTooLong}";
 				return result;
 			}
-			result.GameName = measureName;
+			result.MeasureName = measureName;
 
 			var measureType = columns[measureTypeColumnIndex].ToLower();
 			if (!measureTypeIsEitherNumericOrPercent(measureType, out var mtype))
@@ -57,13 +57,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				result.Error = $"{line},{Resources.MeasureTypeMustBeEitherNumericOrPercent}";
 				return result;
 			}
-			result.GameType = mtype;
+			result.MeasureType = mtype;
 
-			if (result.GameType == ExternalPerformanceDataType.Numeric)
+			if (result.MeasureType == ExternalPerformanceDataType.Numeric)
 			{
 				if (measureTypeIsValidDecimalNumber(columns[measureScoreColumnIndex], out var score))
 				{
-					result.GameNumberScore = score;
+					result.MeasureNumberScore = score;
 				}
 				else
 				{
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			{
 				if (measureTypeIsValidPercentage(columns[measureScoreColumnIndex], out var score))
 				{
-					result.GamePercentScore = score;
+					result.MeasurePercentScore = score;
 				}
 				else
 				{
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				result.Error = $"{line},{Resources.MeasureIdMustContainAnInteger}";
 				return result;
 			}
-			result.GameId = gameId;
+			result.MeasureId = gameId;
 
 			return result;
 		}

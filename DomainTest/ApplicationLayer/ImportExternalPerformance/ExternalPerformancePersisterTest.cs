@@ -47,10 +47,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var extractionInfo = new PerformanceInfoExtractionResult {
 				AgentId = "1",
 				DateFrom = DateTime.UtcNow,
-				GameId = perfExtId,
-				GameName = perfName,
-				GameNumberScore = 100,
-				GameType = numeric,
+				MeasureId = perfExtId,
+				MeasureName = perfName,
+				MeasureNumberScore = 100,
+				MeasureType = numeric,
 				PersonId = Guid.NewGuid()
 			};
 
@@ -88,10 +88,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			{
 				AgentId = "1",
 				DateFrom = DateTime.UtcNow,
-				GameId = perfExtId,
-				GameName = perfName,
-				GameNumberScore = 100,
-				GameType = numeric,
+				MeasureId = perfExtId,
+				MeasureName = perfName,
+				MeasureNumberScore = 100,
+				MeasureType = numeric,
 				PersonId = personId
 			};
 
