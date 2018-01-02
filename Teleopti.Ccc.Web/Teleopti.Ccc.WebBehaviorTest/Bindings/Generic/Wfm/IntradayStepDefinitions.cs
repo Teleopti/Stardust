@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void GivenINameTheSkillGroup(string skillGroupName)
 		{
 			Browser.Interactions.TryUntil(
-				() => { Browser.Interactions.FillWith("#skillGroupNameBox", skillGroupName); },
+				() => { Browser.Interactions.FillWith("#groupNameBox", skillGroupName); },
 				() => Browser.Interactions.IsVisible("#confirmEditNameButton"),
 				TimeSpan.FromMilliseconds(1000));
 			Browser.Interactions.Click("#confirmEditNameButton");
