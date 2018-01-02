@@ -1,6 +1,30 @@
 //This is the SGM used in PBI #43727 (the new one as of november 2017)
 (function() {
 	'use strict';
+
+	angular.module('wfm.skillGroup').directive('focusMe', ['$timeout', '$parse', setTheFocus]);
+
+	function setTheFocus($timeout, $parse) {
+		return {
+			//scope: true,   // optionally create a child scope
+			link: function(scope, element, attrs) {
+				var model = $parse(attrs.focusMe);
+				scope.$watch(model, function(value) {
+					if (value === true) {
+						$timeout(function() {
+							element[0].focus();
+						});
+					}
+				});
+				// to address @blesh's comment, set attribute value to 'false'
+				// on blur event:
+				element.bind('blur', function() {
+					scope.$apply(model.assign(scope, false));
+				});
+			}
+		};
+	}
+
 	angular.module('wfm.skillGroup').controller('SkillGroupManagerController', SkillGroupManagerController);
 
 	SkillGroupManagerController.$inject = [
@@ -134,7 +158,7 @@
 				}
 			);
 			setSaveableState();
-//			vm.canSave = true;
+			//			vm.canSave = true;
 			unselectAllSkills();
 		};
 
