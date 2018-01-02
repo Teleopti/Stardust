@@ -1,10 +1,14 @@
+using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	[EnabledBy(Toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)]
 	public class HistoricalAdherenceMaintainer :
 		IHandleEvent<TenantDayTickEvent>,
 		IRunOnHangfire
@@ -12,8 +16,53 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IHistoricalAdherenceReadModelPersister _historicalAdherencePersister;
 		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
 		private readonly INow _now;
+		private readonly int _keepDays;
 
 		public HistoricalAdherenceMaintainer(
+			IHistoricalAdherenceReadModelPersister historicalAdherencePersister,
+			IHistoricalChangeReadModelPersister historicalChangePersister,
+			INow now,
+			IConfigReader config)
+		{
+			_historicalAdherencePersister = historicalAdherencePersister;
+			_historicalChangePersister = historicalChangePersister;
+			_now = now;
+			var keepDays = config.ReadValue("HistoricalAdherenceKeepDays", 7);
+			const int weekendExtraForInitialAdherenceValueMondayMorning = 2;
+			const int timeZoneDifferenceExtra = 2;
+			_keepDays = keepDays + weekendExtraForInitialAdherenceValueMondayMorning + timeZoneDifferenceExtra;
+		}
+
+		public void Handle(TenantDayTickEvent tenantDayTickEvent)
+		{
+			var removeUntil = _now.UtcDateTime().Date.AddDays(_keepDays * -1);
+			purgeHistoricalAdherence(removeUntil);
+			purgeHistoricalChange(removeUntil);
+		}
+
+		[ReadModelUnitOfWork]
+		protected virtual void purgeHistoricalChange(DateTime removeUntil)
+		{
+			_historicalChangePersister.Remove(removeUntil);
+		}
+
+		[ReadModelUnitOfWork]
+		protected virtual void purgeHistoricalAdherence(DateTime removeUntil)
+		{
+			_historicalAdherencePersister.Remove(removeUntil);
+		}
+	}
+
+	[DisabledBy(Toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)]
+	public class HistoricalAdherenceMaintainerLegacy :
+		IHandleEvent<TenantDayTickEvent>,
+		IRunOnHangfire
+	{
+		private readonly IHistoricalAdherenceReadModelPersister _historicalAdherencePersister;
+		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
+		private readonly INow _now;
+
+		public HistoricalAdherenceMaintainerLegacy(
 			IHistoricalAdherenceReadModelPersister historicalAdherencePersister,
 			IHistoricalChangeReadModelPersister historicalChangePersister,
 			INow now)
