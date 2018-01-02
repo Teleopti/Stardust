@@ -6,11 +6,11 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
 
 namespace Teleopti.Ccc.Scheduling.PerformanceTest
 {
-	public class FullSchedulingTest
+	public class FullSchedulingStardustTest
 	{
 		[Test]
-		[Category("ScheduleOptimization")]
-		public void MeasurePerformanceInIisProcess()
+		[Category("ScheduleOptimizationStardust")]
+		public void MeasurePerformanceOnStardust()
 		{
 			using (var browserActivator = new CoypuChromeActivator())
 			{
@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 
 				WebAction.Logon(browserInteractions, AppConfigs.BusinessUnitName, AppConfigs.UserName, AppConfigs.Password);
 
-				scheduleAndOptimize(browserInteractions, AppConfigs.PlanningPeriodId);
+				scheduleAndOptimize(browserInteractions, AppConfigs.PlanningGroupId, AppConfigs.PlanningPeriodId);
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
-					browserInteractions.AssertExists(".test-scheduling-result, .test-errorMessage, .server-busy, #Login-container, .test-alert");
+					browserInteractions.AssertExistsUsingJQuery(".heatmap:visible, .test-errorMessage, .server-busy, #Login-container, .test-alert");
 				}
 				//no server error
 				browserInteractions.AssertNotExists("body", ".test-errorMessage");
@@ -34,14 +34,14 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				browserInteractions.AssertNotExists("body", ".server-busy");
 				//not redirected to logon page
 				browserInteractions.AssertNotExists("body", "#Login-container");
-				browserInteractions.AssertExists(".test-scheduling-result");
+				browserInteractions.AssertExistsUsingJQuery(".heatmap:visible");
 			}
 		}
 
-		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningPeriodId)
+		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningGroupId, string planningPeriodId)
 		{
-			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId, "?runForTest=true"));
-			browserInteractions.Click(".test-schedule-button:enabled");
+			browserInteractions.GoTo($"{TestSiteConfigurationSetup.URL}wfm/#/resourceplanner/planninggroup/{planningGroupId}/detail/{planningPeriodId}");
+			browserInteractions.Click(".schedule-button:enabled");
 			browserInteractions.AssertExists(".test-schedule-is-running");
 		}
 	}

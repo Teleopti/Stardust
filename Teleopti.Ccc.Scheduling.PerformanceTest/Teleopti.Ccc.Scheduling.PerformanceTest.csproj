@@ -55,6 +55,7 @@
     </Compile>
     <Compile Include="AppConfigs.cs" />
     <Compile Include="AssertConfigurationTest.cs" />
+    <Compile Include="FullSchedulingStardustTest.cs" />
     <Compile Include="FullSchedulingTest.cs" />
     <Compile Include="IntradayOptTest.cs" />
     <Compile Include="NUnitSetup.cs" />
