@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -12,11 +13,49 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class FillSchedulerStateHolderForDesktop : FillSchedulerStateHolder
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_XXL_47258)]
+	public class FillSchedulerStateHolderForDesktop : FillSchedulerStateHolderForDesktopOLD
+	{
+		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider) : base(desktopContext, personalSkillsProvider)
+		{
+		}
+
+		protected override void moveSchedules(ISchedulerStateHolder schedulerStateHolderFrom, IScheduleDictionary toDic, IEnumerable<IPerson> agents)
+		{
+			DateOnlyPeriod period;
+			var scheduleRanges = new List<IScheduleRange>();
+			lock (moveSchedulesInOneThreadOnly)
+			{
+				period = schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(schedulerStateHolderFrom.TimeZoneInfo);
+				scheduleRanges.AddRange(agents.Select(agent => schedulerStateHolderFrom.Schedules[agent]));
+			}
+
+			var toScheduleDays = new List<IScheduleDay>();
+			foreach (ScheduleRange range in scheduleRanges)
+			{
+				foreach (var fromScheduleDay in range.ScheduledDayCollection(period))
+				{
+					var toScheduleDay = range.ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly, true);
+					var persistableScheduleDataCollection = fromScheduleDay.PersistableScheduleDataCollection();
+					persistableScheduleDataCollection.OfType<IPersonAssignment>().ForEach(x => toScheduleDay.Add(x));
+					persistableScheduleDataCollection.OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
+					fromScheduleDay.PersonMeetingCollection().ForEach(x => range.Add(x));
+					fromScheduleDay.PersonRestrictionCollection().ForEach(x => range.Add(x));
+					persistableScheduleDataCollection.OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
+					persistableScheduleDataCollection.OfType<IAgentDayScheduleTag>().ForEach(x => toScheduleDay.Add(x));
+					persistableScheduleDataCollection.OfType<IStudentAvailabilityDay>().ForEach(x => toScheduleDay.Add(x));
+					toScheduleDays.Add(toScheduleDay);
+				}
+			}
+			toDic.Modify(ScheduleModifier.Scheduler, toScheduleDays, NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter(), true);	
+		}
+	}
+	
+	public class FillSchedulerStateHolderForDesktopOLD : FillSchedulerStateHolder
 	{
 		private readonly DesktopContext _desktopContext;
 
-		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider) : base(personalSkillsProvider)
+		public FillSchedulerStateHolderForDesktopOLD(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider) : base(personalSkillsProvider)
 		{
 			_desktopContext = desktopContext;
 		}
@@ -73,8 +112,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.ConsiderShortBreaks = false; //TODO check if this is the wanted behaviour in other cases than intraday optimization
 		}
 
-		private readonly object moveSchedulesInOneThreadOnly = new object(); //fix smaller lock if this makes things to slow
-		private void moveSchedules(ISchedulerStateHolder schedulerStateHolderFrom,
+		[RemoveMeWithToggle("Make private", Toggles.ResourcePlanner_XXL_47258)]
+		protected readonly object moveSchedulesInOneThreadOnly = new object();
+		[RemoveMeWithToggle("Make private", Toggles.ResourcePlanner_XXL_47258)]
+		protected virtual void moveSchedules(ISchedulerStateHolder schedulerStateHolderFrom,
 			IScheduleDictionary toDic,
 			IEnumerable<IPerson> agents)
 		{

@@ -464,10 +464,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.AsSelf()
 					.ApplyAspects()
 					.SingleInstance();
-				builder.RegisterType<FillSchedulerStateHolderForDesktop>()
-					.As<FillSchedulerStateHolder>()
-					.ApplyAspects()
-					.SingleInstance();
+				if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_47258))
+				{
+					builder.RegisterType<FillSchedulerStateHolderForDesktop>()
+						.As<FillSchedulerStateHolder>()
+						.ApplyAspects()
+						.SingleInstance();
+				}
+				else
+				{
+					builder.RegisterType<FillSchedulerStateHolderForDesktopOLD>()
+						.As<FillSchedulerStateHolder>()
+						.ApplyAspects()
+						.SingleInstance();	
+				}
 				builder.RegisterType<DesktopContext>().SingleInstance();
 				builder.RegisterType<DesktopSchedulingContext>()
 					.As<ISchedulingOptionsProvider>()
