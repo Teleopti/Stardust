@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			setAbsenceRequestVisibilityOptions(toggleManager);
-			setOvertimeRequestVisibility();
+			checkOvertimeRequestsLicense();
 			loadOvertimeRequestAutoGrantTypeAdapterCollection();
 		}
 

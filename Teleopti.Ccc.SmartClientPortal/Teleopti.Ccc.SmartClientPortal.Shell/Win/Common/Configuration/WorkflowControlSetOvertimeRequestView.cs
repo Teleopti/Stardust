@@ -6,7 +6,9 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
@@ -60,13 +62,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			}
 		}
 
-		private void setOvertimeRequestVisibility()
+		private void checkOvertimeRequestsLicense()
 		{
-			if (!_toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687))
+			var dataSource = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().Name;
+			var toggleEnabled = _toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687);
+			var hasLicense = DefinedLicenseDataFactory.HasLicense(dataSource) &&
+							DefinedLicenseDataFactory.GetLicenseActivator(dataSource)
+							.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccOvertimeRequests);
+
+			var visible = hasLicense && toggleEnabled;
+			if (visible)
+			{
+				setOvertimeRequestVisibility();
+			}
+			else
 			{
 				tabPageAdvETOTRequest.Hide();
 			}
+		}
 
+		private void setOvertimeRequestVisibility()
+		{
 			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_OvertimeRequestHandling_45177) 
 				|| _toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSetting_46417))
 			{
