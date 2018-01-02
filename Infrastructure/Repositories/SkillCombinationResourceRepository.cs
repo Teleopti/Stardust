@@ -1,11 +1,12 @@
-﻿using System;
+﻿using log4net;
+using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using NHibernate.SqlAzure;
+using NHibernate.Transform;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using NHibernate.SqlAzure;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -471,13 +472,17 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 			return mergedResult;
 		}
+		private static readonly object lockObject = new object();
 
 		public void PersistChanges(IEnumerable<SkillCombinationResource> deltas)
 		{
 			if (!deltas.Any()) return;
 			_retryPolicy.ExecuteAction(() =>
 			{
-				tryPersistChanges(deltas);
+				lock (lockObject)
+				{
+					tryPersistChanges(deltas);
+				}
 			});
 		}
 
@@ -521,18 +526,21 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 				if (numberResources.HasValue) continue;
 
 				var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
-				var lastUpdated = GetLastCalculatedTime();
-				if(lastUpdated == DateTime.MinValue)
-					lastUpdated = DateTime.UtcNow;
 				_currentUnitOfWork.Current().Session()
 					.CreateSQLQuery(@"
-					               		INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
-					               		VALUES (:SkillCombinationId, :StartDateTime, :EndDateTime, :Resource, :InsertedOn, :BusinessUnit)")
+										INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
+										SELECT :SkillCombinationId, :StartDateTime, :EndDateTime, :Resource, 
+										(SELECT CASE 
+												   WHEN InsertedOn IS NULL 
+													THEN GETUTCDATE()
+												   ELSE InsertedOn 
+												END as InsertedOn
+										 FROM (SELECT top(1) InsertedOn from [ReadModel].SkillCombinationResource Where BusinessUnit = :BusinessUnit order by InsertedOn desc) as temp)
+										, :BusinessUnit")
 					.SetParameter("SkillCombinationId", id)
 					.SetParameter("StartDateTime", delta.StartDateTime)
 					.SetParameter("EndDateTime", delta.EndDateTime)
 					.SetParameter("Resource", 0)
-					.SetParameter("InsertedOn", lastUpdated)
 					.SetParameter("BusinessUnit", bu)
 					.ExecuteUpdate();
 			}
@@ -548,8 +556,8 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 	            }
 	        }
 	    }
-
-	    public DateTime GetLastCalculatedTime()
+		
+		public DateTime GetLastCalculatedTime()
 		{
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var latest = _currentUnitOfWork.Current().Session()
@@ -557,7 +565,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 				.SetParameter("bu", bu)
 				.UniqueResult<DateTime>();
 			return latest;
-		}		
+		}
 	}
 
 	public class RawSkillCombinationResource
