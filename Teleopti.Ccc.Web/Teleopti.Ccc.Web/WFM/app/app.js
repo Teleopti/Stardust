@@ -175,6 +175,8 @@ var wfm = angular.module('wfm', [
 									hasModulePermission = true;
 								} else if (url && (area.InternalName.indexOf(url) > -1 || url.indexOf(area.InternalName) > -1)) {
 									hasModulePermission = true;
+								} else if ('resourceplanner.importschedule' === next.name || 'resourceplanner.archiveschedule' === next.name) {
+									hasModulePermission = true;
 								}
 							});
 

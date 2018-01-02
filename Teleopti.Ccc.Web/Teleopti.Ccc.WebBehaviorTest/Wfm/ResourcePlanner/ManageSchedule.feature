@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfEnabled('Wfm_WebPlan_Pilot_46815')
 Feature: ManageSchedule
 	As a resource planner
 	I want to be able to archive schedules from default scenario to another scenario
