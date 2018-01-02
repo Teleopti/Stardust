@@ -9,19 +9,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
 	public class LineExtractorValidator : ILineExtractorValidator
 	{
-		private const int NUM_COLUMN = 8;
+		private const int numColumn = 8;
 
-		private const int AGENT_ID_MAX_LENGTH = 130;
-		private const int GAME_NAME_MAX_LENGTH = 200;
+		private const int personIdMaxLength = 130;
+		private const int measureNameMaxLength = 200;
 
-		private const int DATE_COLUMN_INDEX = 0;
-		private const int AGENT_ID_COLUMN_INDEX = 1;
-		private const int GAME_NAME_COLUMN_INDEX = 4;
-		private const int GAME_ID_COLUMN_INDEX = 5;
-		private const int GAME_TYPE_COLUMN_INDEX = 6;
-		private const int GAME_SCORE_COLUMN_INDEX = 7;
+		private const int dateColumnIndex = 0;
+		private const int personIdColumnIndex = 1;
+		private const int measureNameColumnIndex = 4;
+		private const int measureIdColumnIndex = 5;
+		private const int measureTypeColumnIndex = 6;
+		private const int measureScoreColumnIndex = 7;
 
-		private const string DATE_FORMAT = "yyyyMMdd";
+		private const string dateFormat = "yyyyMMdd";
 
 		public PerformanceInfoExtractionResult ExtractAndValidate(string line)
 		{
@@ -29,29 +29,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 			var columns = line.Split(',').Select(x => x.TrimStart('"').TrimEnd('"')).ToArray();
 
-			if (!LineHasEnoughColumns(columns.Length, NUM_COLUMN))
+			if (!lineHasEnoughColumns(columns.Length, numColumn))
 			{
-				var errorMessage = string.Format(Resources.InvalidNumberOfFields, NUM_COLUMN, columns.Length);
+				var errorMessage = string.Format(Resources.InvalidNumberOfFields, numColumn, columns.Length);
 				result.Error = $"{line},{errorMessage}";
 				return result;
 			}
 
-			if (!DateFieldIsValid(columns[DATE_COLUMN_INDEX], DATE_FORMAT, out var dateTime))
+			if (!dateFieldIsValid(columns[dateColumnIndex], dateFormat, out var dateTime))
 			{
 				result.Error = $"{line},{Resources.ImportBpoWrongDateFormat}";
 				return result;
 			}
 			result.DateFrom = new DateTime(dateTime.Ticks, DateTimeKind.Utc);
 
-			var gameName = columns[GAME_NAME_COLUMN_INDEX];
-			if (!GameNameFieldIsValid(gameName))
+			var measureName = columns[measureNameColumnIndex];
+			if (!measureNameLengthIsValid(measureName))
 			{
 				result.Error = $"{line},{Resources.GameNameIsTooLong}";
 				return result;
 			}
-			result.GameName = gameName;
+			result.GameName = measureName;
 
-			var measureType = columns[GAME_TYPE_COLUMN_INDEX].ToLower();
+			var measureType = columns[measureTypeColumnIndex].ToLower();
 			if (!measureTypeIsEitherNumericOrPercent(measureType, out var mtype))
 			{
 				result.Error = $"{line},{Resources.MeasureTypeMustBeEitherNumericOrPercent}";
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 			if (result.GameType == ExternalPerformanceDataType.Numeric)
 			{
-				if (GameTypeIsValidNumber(columns[GAME_SCORE_COLUMN_INDEX], out var score))
+				if (measureTypeIsValidDecimalNumber(columns[measureScoreColumnIndex], out var score))
 				{
 					result.GameNumberScore = score;
 				}
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 			else
 			{
-				if (GameTypeIsValidPercentage(columns[GAME_SCORE_COLUMN_INDEX], out var score))
+				if (measureTypeIsValidPercentage(columns[measureScoreColumnIndex], out var score))
 				{
 					result.GamePercentScore = score;
 				}
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 			}
 
-			var personId = columns[AGENT_ID_COLUMN_INDEX].Trim();
+			var personId = columns[personIdColumnIndex].Trim();
 			if (!personIdLengthIsValid(personId))
 			{
 				result.Error = $"{line},{Resources.PersonIdIsTooLong}";
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 			result.AgentId = personId;
 
-			if (!measureIdContainsInteger(columns[GAME_ID_COLUMN_INDEX], out var gameId))
+			if (!measureIdContainsInteger(columns[measureIdColumnIndex], out var gameId))
 			{
 				result.Error = $"{line},{Resources.MeasureIdMustContainAnInteger}";
 				return result;
@@ -102,24 +102,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			return result;
 		}
 
-		private bool VerifyFieldLength(string field, int maxLength)
+		private bool verifyFieldLength(string field, int maxLength)
 		{
 			return field.Length <= maxLength;
 		}
 
-		private bool LineHasEnoughColumns(int line, int required)
+		private bool lineHasEnoughColumns(int line, int required)
 		{
 			return line == required;
 		}
 
-		private bool DateFieldIsValid(string value, string format, out DateTime result)
+		private bool dateFieldIsValid(string value, string format, out DateTime result)
 		{
 			return DateTime.TryParseExact(value, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
 		}
 
-		private bool GameNameFieldIsValid(string name)
+		private bool measureNameLengthIsValid(string name)
 		{
-			return VerifyFieldLength(name, GAME_NAME_MAX_LENGTH);
+			return verifyFieldLength(name, measureNameMaxLength);
 		}
 
 		private bool measureTypeIsEitherNumericOrPercent(string value, out ExternalPerformanceDataType result)
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 		private bool personIdLengthIsValid(string id)
 		{
-			return VerifyFieldLength(id, AGENT_ID_MAX_LENGTH);
+			return verifyFieldLength(id, personIdMaxLength);
 		}
 
 		private bool measureIdContainsInteger(string id, out int result)
@@ -137,12 +137,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			return int.TryParse(id, out result);
 		}
 
-		private bool GameTypeIsValidNumber(string value, out int result)
+		private bool measureTypeIsValidDecimalNumber(string value, out int result)
 		{
 			return int.TryParse(value, out result);
 		}
 
-		private bool GameTypeIsValidPercentage(string value, out Percent result)
+		private bool measureTypeIsValidPercentage(string value, out Percent result)
 		{
 			return Percent.TryParse(value, out result);
 		}
