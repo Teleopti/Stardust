@@ -10,7 +10,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
         ],
         preSetLength = 14,
         calendarView,
-        fakeToday = moment("12-06-2017", "MM-DD-YYYY"),
+        fakeToday = moment("01-01-2018", "MM-DD-YYYY"),
         data;
 
     beforeEach(function () {
