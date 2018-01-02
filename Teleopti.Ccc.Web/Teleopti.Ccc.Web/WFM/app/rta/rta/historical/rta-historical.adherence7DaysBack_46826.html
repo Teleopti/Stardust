@@ -12,8 +12,8 @@
 	</div>
 
 	<div class="panel material-depth-1">
-		<div class="con-row" ng-if="vm.showAdherencePercentage">
-			<div class="con-flex adherence-percent" style="padding-top:10px">
+		<div class="con-row">
+			<div class="con-flex adherence-percent" style="padding-top:10px" ng-show="vm.showAdherencePercentage">
 				{{'Adherence' | translate}} {{vm.adherencePercentage}}%
 			</div>
 			<div class="con-flex" style="padding-top:10px;">
