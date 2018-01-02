@@ -84,13 +84,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 			}
 
-			var agentId = columns[AGENT_ID_COLUMN_INDEX].Trim();
-			if (!AgentIdFieldIsValid(agentId))
+			var personId = columns[AGENT_ID_COLUMN_INDEX].Trim();
+			if (!personIdLengthIsValid(personId))
 			{
-				result.Error = $"{line},{Resources.AgentIdIsTooLong}";
+				result.Error = $"{line},{Resources.PersonIdIsTooLong}";
 				return result;
 			}
-			result.AgentId = agentId;
+			result.AgentId = personId;
 
 			if (!measureIdContainsInteger(columns[GAME_ID_COLUMN_INDEX], out var gameId))
 			{
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			return Enum.TryParse(value, true, out result);
 		}
 
-		private bool AgentIdFieldIsValid(string id)
+		private bool personIdLengthIsValid(string id)
 		{
 			return VerifyFieldLength(id, AGENT_ID_MAX_LENGTH);
 		}

@@ -16851,9 +16851,9 @@ Do you want to participate?</value>
     <value>Game name is too long</value>
     <comment>use for gamification error info when import external performance csv file.</comment>
   </data>
-  <data name="AgentIdIsTooLong" xml:space="preserve">
-    <value>Agent id is too long.</value>
-    <comment>use for gamification error info when import external performance csv file.</comment>
+  <data name="PersonIdIsTooLong" xml:space="preserve">
+    <value>Person ID is too long</value>
+    <comment>Error message used in importing an external performance csv file.</comment>
   </data>
   <data name="MeasureTypeMustBeEitherNumericOrPercent" xml:space="preserve">
     <value>Measure type must be either "Numeric" or "Percent"</value>

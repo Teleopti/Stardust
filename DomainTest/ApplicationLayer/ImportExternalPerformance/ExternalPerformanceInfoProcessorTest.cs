@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				"20170820,"+ agentId + ",Kalle,Pettersson,Sales result,2,Numeric,2000";
 			var fileData = createFileData(invalidRecord);
 
-			var errorMsg = Resources.AgentIdIsTooLong;
+			var errorMsg = Resources.PersonIdIsTooLong;
 			var expectedErrorRecord = $"{invalidRecord},{errorMsg}";
 			var result = Target.Process(fileData);
 

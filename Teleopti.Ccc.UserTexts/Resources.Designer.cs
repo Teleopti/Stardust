@@ -1835,15 +1835,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agent id is too long..
-        /// </summary>
-        public static string AgentIdIsTooLong {
-            get {
-                return ResourceManager.GetString("AgentIdIsTooLong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string AgentInfo {
@@ -24029,6 +24020,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PersonIdCouldNotBeMatchedToAnyAgent {
             get {
                 return ResourceManager.GetString("PersonIdCouldNotBeMatchedToAnyAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person ID is too long.
+        /// </summary>
+        public static string PersonIdIsTooLong {
+            get {
+                return ResourceManager.GetString("PersonIdIsTooLong", resourceCulture);
             }
         }
         
