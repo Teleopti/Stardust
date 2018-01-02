@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_activityChecker.Stub(x => x.ContainsDeletedActivity(workShiftRuleSet)).Return(false);
 			_shiftCategoryChecker.Stub(x => x.ContainsDeletedShiftCategory(workShiftRuleSet)).Return(false);
 			_ruleSetProjectionEntityService.Stub(x => x.ProjectionCollection(workShiftRuleSet, callback)).Return(getWorkShiftsInfo()).IgnoreArguments();
-			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0], false)).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
-			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0], false)).IgnoreArguments().Return(getWorkShifts()).Repeat.Once();
-			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0], false)).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(getWorkShifts()).Repeat.Once();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
 
 			var ret = _target.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(dateOnly, timeZoneInfo), new [] {workShiftRuleSet}, true);
 			Assert.IsNotNull(ret);
@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		    _activityChecker.Stub(x => x.ContainsDeletedActivity(workShiftRuleSet)).Return(false);
 		    _shiftCategoryChecker.Stub(x => x.ContainsDeletedShiftCategory(workShiftRuleSet)).Return(false);
 		    _ruleSetProjectionEntityService.Stub(x => x.ProjectionCollection(workShiftRuleSet, callback)).Return(getWorkShiftsInfo()).IgnoreArguments();
-		    _shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0], false)).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
-			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0], false)).IgnoreArguments().Return(getWorkShifts()).Repeat.Once();
-			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0], false)).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
+		    _shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(getWorkShifts()).Repeat.Once();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
 
 		    var ret = _target.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(dateOnly, timeZoneInfo), _ruleSetBag, false, true);
 		    Assert.IsNotNull(ret);
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_activityChecker.Stub(x => x.ContainsDeletedActivity(workShiftRuleSet)).Return(false);
 			_shiftCategoryChecker.Stub(x => x.ContainsDeletedShiftCategory(workShiftRuleSet)).Return(false);
 			_ruleSetProjectionEntityService.Stub(x => x.ProjectionCollection(workShiftRuleSet, callback)).Return(getWorkShiftsInfo()).IgnoreArguments();
-			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0], false)).IgnoreArguments().Return(new List<IWorkShift>());
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
 
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, timeZoneInfo);
 			_target.ShiftProjectionCachesFromRuleSets(dateOnlyAsDateTimePeriod, _ruleSetBag, false, true);
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_activityChecker.Stub(x => x.ContainsDeletedActivity(validWorkShiftRuleSet)).Return(false);
 			_shiftCategoryChecker.Stub(x => x.ContainsDeletedShiftCategory(validWorkShiftRuleSet)).Return(false);
 			_ruleSetProjectionEntityService.Stub(x => x.ProjectionCollection(validWorkShiftRuleSet, callback)).Return(infos).IgnoreArguments();
-			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(workShift, false)).Return(new List<IWorkShift>());
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(workShift)).Return(new List<IWorkShift>());
 
 			var ret = _target.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(dateOnly, timeZoneInfo), _ruleSetBag, true, true);
 			Assert.IsNotNull(ret);
@@ -175,9 +175,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_activityChecker.Stub(x => x.ContainsDeletedActivity(workShiftRuleSet)).Return(false);
 			_shiftCategoryChecker.Stub(x => x.ContainsDeletedShiftCategory(workShiftRuleSet)).Return(false);
 			_ruleSetProjectionEntityService.Stub(x => x.ProjectionCollection(workShiftRuleSet, callback)).Return(getWorkShiftsInfo()).IgnoreArguments();
-			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0], false)).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
-			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0], false)).IgnoreArguments().Return(getWorkShifts()).Repeat.Once();
-			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0], false)).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(getWorkShifts()).Repeat.Once();
+			_shiftFromMasterActivityService.Stub(x => x.ExpandWorkShiftsWithMasterActivity(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>()).Repeat.Once();
 
 			var ret = _target.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(dateOnly, timeZoneInfo), _ruleSetBag, false, false);
 			Assert.IsNotNull(ret);

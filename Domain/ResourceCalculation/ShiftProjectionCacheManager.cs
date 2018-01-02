@@ -81,9 +81,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var callback = new WorkShiftAddStopperCallback();
 				callback.StartNewRuleSet(ruleSet);
 				var tmpList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, callback).Select(s => s.WorkShift).ToArray();
-
-				var baseIsMasterActivity = ruleSet.TemplateGenerator.BaseActivity is IMasterActivity;
-				shiftProjectionCacheList = tmpList.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift, baseIsMasterActivity))
+                
+				shiftProjectionCacheList = tmpList.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift))
 			            .Select(workShift => new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker)).ToList();
 	            _ruleSetListDictionary.Add(ruleSet, shiftProjectionCacheList);
             }

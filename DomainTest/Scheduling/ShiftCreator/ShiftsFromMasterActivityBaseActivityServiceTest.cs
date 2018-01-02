@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var shiftCollectionFromSpecificStart = ShiftCreatorService.Generate(ruleSet, new WorkShiftAddStopperCallback());
 			var firstGenaratedShiftCollection = shiftCollectionFromSpecificStart[0];
 
-			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0], ruleSet.TemplateGenerator.BaseActivity is IMasterActivity);
+			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0]);
 			foreach (var workShift in workShifts)
 			{
 				var firstLayer = workShift.LayerCollection.First();
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var shiftCollectionFromSpecificStart = ShiftCreatorService.Generate(ruleSet, new WorkShiftAddStopperCallback());
 			var firstGenaratedShiftCollection = shiftCollectionFromSpecificStart[0];
 
-			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0], ruleSet.TemplateGenerator.BaseActivity is IMasterActivity);
+			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0]);
 			workShifts.Count.Should().Be.EqualTo(2);
 			workShifts[0].LayerCollection[0].Period.Should().Be.EqualTo(new DateTimePeriod(1800, 1, 1, 8, 1800, 1, 1, 11));
 		}
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var shiftCollectionFromSpecificStart = ShiftCreatorService.Generate(ruleSet, new WorkShiftAddStopperCallback());
 			var firstGenaratedShiftCollection = shiftCollectionFromSpecificStart[0];
 
-			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0], ruleSet.TemplateGenerator.BaseActivity is IMasterActivity);
+			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0]);
 			workShifts.Count.Should().Be.EqualTo(4);
 			workShifts[0].LayerCollection[0].Period.Should().Be.EqualTo(new DateTimePeriod(1800, 1, 1, 8, 1800, 1, 1, 11));
 		}
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var shiftCollectionFromSpecificStart = ShiftCreatorService.Generate(ruleSet, new WorkShiftAddStopperCallback());
 			var firstGenaratedShiftCollection = shiftCollectionFromSpecificStart[0];
 
-			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0], ruleSet.TemplateGenerator.BaseActivity is IMasterActivity);
+			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0]);
 			workShifts.Count.Should().Be.EqualTo(4);
 			workShifts[0].LayerCollection[1].Period.Should().Be.EqualTo(new DateTimePeriod(1800, 1, 1, 8, 1800, 1, 1, 17));
 		}
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var shiftCollectionFromSpecificStart = ShiftCreatorService.Generate(ruleSet, new WorkShiftAddStopperCallback());
 			var firstGenaratedShiftCollection = shiftCollectionFromSpecificStart[0];
 
-			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0], ruleSet.TemplateGenerator.BaseActivity is IMasterActivity);
+			var workShifts = Target.ExpandWorkShiftsWithMasterActivity(firstGenaratedShiftCollection[0]);
 			workShifts.Count.Should().Be.EqualTo(2);
 			workShifts[0].LayerCollection[0].Period.Should().Be.EqualTo(new DateTimePeriod(1800, 1, 1, 8, 1800, 1, 1, 11));
 		}
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var workShift = new WorkShift(new ShiftCategory("shiftCategory"));
 			workShift.LayerCollection.Add(layer);
 
-			IList<IWorkShift> workShifts = Target.ExpandWorkShiftsWithMasterActivity(workShift, false);
+			IList<IWorkShift> workShifts = Target.ExpandWorkShiftsWithMasterActivity(workShift);
 			workShifts.Single().Should().Be.SameInstanceAs(workShift);
 		}
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var workShift = new WorkShift(new ShiftCategory("shiftCategory"));
 			workShift.LayerCollection.Add(layer);
 
-			 var workShiftList = Target.ExpandWorkShiftsWithMasterActivity(workShift, false);
+			 var workShiftList = Target.ExpandWorkShiftsWithMasterActivity(workShift);
 
 			Assert.AreEqual(0, workShiftList.Count);
 		}
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var workShift = new WorkShift(new ShiftCategory("shiftCategory"));
 			workShift.LayerCollection.Add(layer);
 
-			var workShiftList = Target.ExpandWorkShiftsWithMasterActivity(workShift, false);
+			var workShiftList = Target.ExpandWorkShiftsWithMasterActivity(workShift);
 
 			Assert.AreEqual(0, workShiftList.Count);
 		}
