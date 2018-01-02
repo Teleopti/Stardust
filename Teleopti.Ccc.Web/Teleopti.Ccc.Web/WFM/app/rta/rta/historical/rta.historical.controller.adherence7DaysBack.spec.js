@@ -1,12 +1,12 @@
 ﻿'use strict';
 
 rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
-	it('should display active buttons when in interval', function (t) {
+	it('should display active buttons when in period', function (t) {
 		t.stateParams.personId = '1';
 		t.stateParams.date = '20171217';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Interval: { StartDate:'20171215', EndDate: '20171221'}
+			Period: { StartDate:'20171215', EndDate: '20171221'}
 		});
 
 		var c = t.createController();
@@ -20,7 +20,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20171221';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Interval: { StartDate:'20171215', EndDate: '20171221'}
+			Period: { StartDate:'20171215', EndDate: '20171221'}
 		});
 
 		var c = t.createController();
@@ -33,7 +33,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20171222';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Interval: { StartDate:'20171215', EndDate: '20171221'}
+			Period: { StartDate:'20171215', EndDate: '20171221'}
 		});
 
 		var c = t.createController();
@@ -46,7 +46,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20171215';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Interval: { StartDate:'20171215', EndDate: '20171221'}
+			Period: { StartDate:'20171215', EndDate: '20171221'}
 		});
 
 		var c = t.createController();
@@ -59,7 +59,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20171214';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Interval: { StartDate:'20171215', EndDate: '20171221'}
+			Period: { StartDate:'20171215', EndDate: '20171221'}
 		});
 
 		var c = t.createController();
@@ -72,7 +72,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20171220';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Interval: { StartDate:'20171215', EndDate: '20171221'}
+			Period: { StartDate:'20171215', EndDate: '20171221'}
 		});
 
 		var c = t.createController();
@@ -85,7 +85,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20171220';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Interval: { StartDate:'20171215', EndDate: '20171221'}
+			Period: { StartDate:'20171215', EndDate: '20171221'}
 		});
 
 		var c = t.createController();
@@ -99,7 +99,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20171217';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Interval: { StartDate:'20171215', EndDate: '20171221'}
+			Period: { StartDate:'20171215', EndDate: '20171221'}
 		});
 
 		var c = t.createController();
@@ -114,7 +114,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20171217';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Interval: { StartDate:'20171215', EndDate: '20171221'}
+			Period: { StartDate:'20171215', EndDate: '20171221'}
 		});
 
 		var c = t.createController();

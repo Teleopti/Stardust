@@ -55,7 +55,7 @@
 			data.OutOfAdherences = data.OutOfAdherences || [];
 			data.Changes = data.Changes || [];
 			data.Timeline = data.Timeline || {};
-			data.Interval = data.Interval || {};
+			data.Period = data.Period || {};
 			
 			shiftInfo = buildShiftInfo(data);
 
@@ -81,8 +81,8 @@
 
 			vm.diamonds = buildDiamonds(data);
 	
-			vm.disabledNext = $stateParams.date >= data.Interval.EndDate;
-			vm.disabledPrev = $stateParams.date <= data.Interval.StartDate;
+			vm.disabledNext = $stateParams.date >= data.Period.EndDate;
+			vm.disabledPrev = $stateParams.date <= data.Period.StartDate;
 			vm.nextDay = moment($stateParams.date).add(1, 'day').format('YYYY-MM-DD');
 			vm.previousDay = moment($stateParams.date).subtract(1, 'day').format('YYYY-MM-DD');
 		});
