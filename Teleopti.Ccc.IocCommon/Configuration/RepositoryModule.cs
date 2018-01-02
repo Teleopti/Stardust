@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Autofac;
@@ -19,14 +18,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class RepositoryModule : Module
 	{
-		private static readonly Type repositoryConstructorType = typeof (ICurrentUnitOfWork);
-
-		private static readonly Lazy<Type[]> repositoryTypes = new Lazy<Type[]>(() =>
-			typeof(PersonRepository).Assembly.GetExportedTypes().Where(t => isRepository(t) && hasCorrectCtor(t)).ToArray());
+		private readonly Type repositoryConstructorType = typeof (ICurrentUnitOfWork);
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			foreach (var type in repositoryTypes.Value)
+			foreach (var type in typeof(PersonRepository).Assembly.GetExportedTypes().Where(t => isRepository(t) && hasCorrectCtor(t)))
 			{
 				if (type.GetConstructors().Length == 1)
 				{
@@ -93,7 +89,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).As<IStardustRepository>().SingleInstance();
 		}
 
-		private static bool hasCorrectCtor(Type repositoryType)
+		private bool hasCorrectCtor(Type repositoryType)
 		{
 			var constructors = repositoryType.GetConstructors();
 			if (constructors.Length == 1)

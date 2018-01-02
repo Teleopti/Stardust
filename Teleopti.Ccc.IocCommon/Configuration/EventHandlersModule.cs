@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -191,19 +192,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 	public static class EventHandlerTypeExtensions
 	{
-		private static readonly Dictionary<Type,bool> isEventHandlerCache = new Dictionary<Type, bool>();
-		private static readonly Dictionary<Type, HandlerInfo[]> handleInterfacesCache = new Dictionary<Type, HandlerInfo[]>();
-
 		public static bool IsEventHandler(this Type t)
 		{
-			if (isEventHandlerCache.TryGetValue(t, out var result))
-				return result;
-
 			if (!t.HandleInterfaces().Any())
-			{
-				isEventHandlerCache.Add(t,false);
 				return false;
-			}
 
 			var runOnHangfire = typeof(IRunOnHangfire).IsAssignableFrom(t);
 			var runOnStardust = typeof(IRunOnStardust).IsAssignableFrom(t);
@@ -212,21 +204,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (!(runOnHangfire ^ runOnStardust ^ runInSync ^ runInSyncInFatClientProcess))
 				throw new Exception($"All event handlers need to implement an IRunOn* interface. {t.Name} does not.");
 
-			isEventHandlerCache.Add(t, true);
 			return true;
 		}
 
 		public static IEnumerable<HandlerInfo> HandleInterfaces(this Type t)
-		{
-			if (handleInterfacesCache.TryGetValue(t, out var result))
-				return result;
-
-			var newResult = innerHandlerInfos(t).ToArray();
-			handleInterfacesCache.Add(t,newResult);
-			return newResult;
-		}
-
-		private static IEnumerable<HandlerInfo> innerHandlerInfos(Type t)
 		{
 			foreach (var i in t.GetInterfaces())
 			{
