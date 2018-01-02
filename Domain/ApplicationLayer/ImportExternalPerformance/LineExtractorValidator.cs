@@ -51,13 +51,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 			result.GameName = gameName;
 
-			var gameType = columns[GAME_TYPE_COLUMN_INDEX].ToLower();
-			if (!GameTypeFieldIsValid(gameType, out var gtype))
+			var measureType = columns[GAME_TYPE_COLUMN_INDEX].ToLower();
+			if (!measureTypeIsEitherNumericOrPercent(measureType, out var mtype))
 			{
-				result.Error = $"{line},{Resources.InvalidGameType}";
+				result.Error = $"{line},{Resources.MeasureTypeMustBeEitherNumericOrPercent}";
 				return result;
 			}
-			result.GameType = gtype;
+			result.GameType = mtype;
 
 			if (result.GameType == ExternalPerformanceDataType.Numeric)
 			{
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			return VerifyFieldLength(name, GAME_NAME_MAX_LENGTH);
 		}
 
-		private bool GameTypeFieldIsValid(string value, out ExternalPerformanceDataType result)
+		private bool measureTypeIsEitherNumericOrPercent(string value, out ExternalPerformanceDataType result)
 		{
 			return Enum.TryParse(value, true, out result);
 		}
