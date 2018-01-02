@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Collection;
@@ -76,10 +77,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					StartTime = formatForUser(data.DisplayStartTime),
 					EndTime = formatForUser(data.DisplayEndTime)
 				},
-				AdherencePercentage = _calculator.CalculatePercentage(data.ShiftStartTime, data.ShiftEndTime, data.Adherences)
+				AdherencePercentage = _calculator.CalculatePercentage(data.ShiftStartTime, data.ShiftEndTime, data.Adherences),
+				Period = new HistoricalAdherencePeriod
+				{
+					StartDate = formatDateForUser(data.Now.AddDays(-6)),
+					EndDate = formatDateForUser(data.Now)
+				}
 			};
 		}
-
+		
 		private class data
 		{
 			public DateTime Now;
@@ -306,6 +312,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private string formatForUser(DateTime time)
 		{
 			return TimeZoneInfo.ConvertTimeFromUtc(time, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
+		}
+		
+		private string formatDateForUser(DateTime time)
+		{
+			return TimeZoneInfo.ConvertTimeFromUtc(time, _timeZone.TimeZone()).ToString("yyyyMMdd");
 		}
 	}
 
