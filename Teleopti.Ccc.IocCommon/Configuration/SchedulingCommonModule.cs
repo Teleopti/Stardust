@@ -238,11 +238,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_47258))
 			{
-				builder.RegisterType<ShiftProjectionCacheFetcher>().SingleInstance();
+				builder.CacheByClassProxy<ShiftProjectionCacheFetcher>().SingleInstance();
+				_configuration.Cache().This<ShiftProjectionCacheFetcher>(b => b
+						.CacheMethod(m => m.Execute(null))
+					, "SPCF");
+				builder.RegisterType<ShiftProjectionCacheManagerNew>().As<IShiftProjectionCacheManager>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<ShiftProjectionCacheFetcher>().InstancePerLifetimeScope();
+				builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<ShiftsFromMasterActivityBaseActivityService>().As<IShiftFromMasterActivityService>().SingleInstance();			
 			builder.RegisterType<RuleSetDeletedActivityChecker>().As<IRuleSetDeletedActivityChecker>().SingleInstance();
