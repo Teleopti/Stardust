@@ -7,28 +7,25 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class ShiftProjectionCacheManager : IShiftProjectionCacheManager, IDisposable
+	public class ShiftProjectionCacheManager : IShiftProjectionCacheManager, IDisposable
     {
         private readonly IDictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>>();
-        private readonly IShiftFromMasterActivityService _shiftFromMasterActivityService;
         private readonly IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
-        private readonly IRuleSetProjectionEntityService _ruleSetProjectionEntityService;
 	    private readonly IWorkShiftFromEditableShift _workShiftFromEditableShift;
+		private readonly ShiftProjectionCacheFetcher _shiftProjectionCacheFetcher;
 		private readonly IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
 
-	    public ShiftProjectionCacheManager(IShiftFromMasterActivityService shiftFromMasterActivityService, 
-            IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
+	    public ShiftProjectionCacheManager(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
 			IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker,
-            IRuleSetProjectionEntityService ruleSetProjectionEntityService,
-			IWorkShiftFromEditableShift workShiftFromEditableShift)
+			IWorkShiftFromEditableShift workShiftFromEditableShift,
+			ShiftProjectionCacheFetcher shiftProjectionCacheFetcher)
         {
-            _shiftFromMasterActivityService = shiftFromMasterActivityService;
             _ruleSetDeletedActivityChecker = ruleSetDeletedActivityChecker;
 			_rulesSetDeletedShiftCategoryChecker = rulesSetDeletedShiftCategoryChecker;
-		    _ruleSetProjectionEntityService = ruleSetProjectionEntityService;
 	        _workShiftFromEditableShift = workShiftFromEditableShift;
-        }
+			_shiftProjectionCacheFetcher = shiftProjectionCacheFetcher;
+		}
 
 	    public ShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 	    {
@@ -78,12 +75,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			if (!_ruleSetListDictionary.TryGetValue(ruleSet, out shiftProjectionCacheList))
             {
-				var callback = new WorkShiftAddStopperCallback();
-				callback.StartNewRuleSet(ruleSet);
-				var tmpList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, callback).Select(s => s.WorkShift).ToArray();
-                
-				shiftProjectionCacheList = tmpList.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift))
-			            .Select(workShift => new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker)).ToList();
+				shiftProjectionCacheList = _shiftProjectionCacheFetcher.Execute(ruleSet).ToList();
 	            _ruleSetListDictionary.Add(ruleSet, shiftProjectionCacheList);
             }
 			return shiftProjectionCacheList;
