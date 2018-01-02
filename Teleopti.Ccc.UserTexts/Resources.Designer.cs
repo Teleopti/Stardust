@@ -13332,7 +13332,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View Detail of Import File Format.
+        ///   Looks up a localized string similar to View detail of import file format.
         /// </summary>
         public static string GamificationViewImportFileFormat {
             get {

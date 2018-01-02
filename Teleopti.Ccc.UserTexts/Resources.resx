@@ -16912,7 +16912,7 @@ Do you want to participate?</value>
     <comment>Error message of no permission to view modules under WFM web.</comment>
   </data>
   <data name="GamificationViewImportFileFormat" xml:space="preserve">
-    <value>View Detail of Import File Format</value>
+    <value>View detail of import file format</value>
     <comment>View detail of import file format for gamification</comment>
   </data>
 </root>
