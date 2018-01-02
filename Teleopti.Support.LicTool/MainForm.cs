@@ -123,6 +123,7 @@ namespace Teleopti.Support.LicTool
 			chkVNextPilot.Checked = false;
 			chkOutbound.Checked = false;
 			chkSeatPlanner.Checked = false;
+			chkOvertimeRequests.Checked = false;
 			chkBPOExchange.Checked = false;
 		}
 
@@ -232,6 +233,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("MyTeam")) chkMyTeam.Checked = true;
 						if (options.Contains("VNext")) chkVNextPilot.Checked = true;
 						if (options.Contains("Outbound")) chkOutbound.Checked = true;
+						if (options.Contains("OvertimeRequests")) chkOvertimeRequests.Checked = true;
 						if (options.Contains("SeatPlanner")) chkSeatPlanner.Checked = true;
 						if (options.Contains("BPOExchange")) chkBPOExchange.Checked = true;
 						
@@ -322,6 +324,8 @@ namespace Teleopti.Support.LicTool
 					elmOptions.AppendChild(xdoc.CreateElement("VNext")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkOutbound.Checked)
 					elmOptions.AppendChild(xdoc.CreateElement("Outbound")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkOvertimeRequests.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("OvertimeRequests")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkSeatPlanner.Checked)
 					elmOptions.AppendChild(xdoc.CreateElement("SeatPlanner")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkBPOExchange.Checked)

@@ -55,6 +55,7 @@
 			this.chkVNextPilot = new System.Windows.Forms.CheckBox();
 			this.chkSeatPlanner = new System.Windows.Forms.CheckBox();
 			this.chkOutbound = new System.Windows.Forms.CheckBox();
+			this.chkOvertimeRequests = new System.Windows.Forms.CheckBox();
 			this.chkMyTeam = new System.Windows.Forms.CheckBox();
 			this.chkCalendarLink = new System.Windows.Forms.CheckBox();
 			this.chkNotify = new System.Windows.Forms.CheckBox();
@@ -339,6 +340,7 @@
 			this.grpBoxModules.Controls.Add(this.chkBPOExchange);
 			this.grpBoxModules.Controls.Add(this.chkVNextPilot);
 			this.grpBoxModules.Controls.Add(this.chkSeatPlanner);
+			this.grpBoxModules.Controls.Add(this.chkOvertimeRequests);
 			this.grpBoxModules.Controls.Add(this.chkOutbound);
 			this.grpBoxModules.Controls.Add(this.chkMyTeam);
 			this.grpBoxModules.Controls.Add(this.chkCalendarLink);
@@ -389,6 +391,16 @@
 			this.chkOutbound.TabIndex = 41;
 			this.chkOutbound.Text = "Outbound";
 			this.chkOutbound.UseVisualStyleBackColor = true;
+			// 
+			// chkOvertimeRequests
+			// 
+			this.chkOvertimeRequests.AutoSize = true;
+			this.chkOvertimeRequests.Location = new System.Drawing.Point(6, 287);
+			this.chkOvertimeRequests.Name = "chkOvertimeRequests";
+			this.chkOvertimeRequests.Size = new System.Drawing.Size(67, 17);
+			this.chkOvertimeRequests.TabIndex = 19;
+			this.chkOvertimeRequests.Text = "Overtime Requests";
+			this.chkOvertimeRequests.UseVisualStyleBackColor = true;
 			// 
 			// chkMyTeam
 			// 
@@ -839,6 +851,7 @@
 		private System.Windows.Forms.CheckBox chkOutbound;
 		private System.Windows.Forms.CheckBox chkSeatPlanner;
 		private System.Windows.Forms.CheckBox chkVNextPilot;
+		private System.Windows.Forms.CheckBox chkOvertimeRequests;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.ComboBox comboBoxMajor;
 		private System.Windows.Forms.CheckBox chkPerpetual;
