@@ -15223,7 +15223,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Each record must have {0} fields, this record has {1}..
+        ///   Looks up a localized string similar to Each row must have {0} fields. This row has {1}..
         /// </summary>
         public static string InvalidNumberOfFields {
             get {
