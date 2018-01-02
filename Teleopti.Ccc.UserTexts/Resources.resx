@@ -16781,12 +16781,6 @@ Do you want to participate?</value>
   <data name="ManageSkillGroups" xml:space="preserve">
     <value>Manage skill groups</value>
   </data>
-  <data name="MoveFromGroup" xml:space="preserve">
-    <value>Move from skill group</value>
-  </data>
-  <data name="MoveToGroup" xml:space="preserve">
-    <value>Move to skill group</value>
-  </data>
   <data name="SelectSite" xml:space="preserve">
     <value>Select site</value>
     <comment>Tooltip to be displayed on hovering the site cards in RTA overview when unselected</comment>
