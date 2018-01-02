@@ -1,5 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -33,7 +34,14 @@ namespace Teleopti.Ccc.IocCommon
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterModule(new RuleSetModule(_configuration));
+			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_47258))
+			{
+				builder.RegisterModule(new RuleSetModule(_configuration));
+			}
+			else
+			{
+				builder.RegisterModule(new RuleSetModuleOLD(_configuration));
+			}
 			builder.RegisterModule(new MbCacheModule(_configuration));
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<ServiceLocatorModule>();
