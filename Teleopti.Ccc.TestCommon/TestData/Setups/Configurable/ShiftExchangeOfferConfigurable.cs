@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var criteria = new ScheduleDayFilterCriteria(WishShiftType, shiftWithin);
 			var shiftExchangeCrie = new ShiftExchangeCriteria(new DateOnly(ValidTo), criteria);
 
-			var date = new DateOnly(startTimeUtc.Year, startTimeUtc.Month, startTimeUtc.Day);
+			var date = new DateOnly(startTimeUtc);
 			var scheduleDay = ScheduleDayFactory.Create(date);
 			scheduleDay.Person.SetId(user.Id);
 

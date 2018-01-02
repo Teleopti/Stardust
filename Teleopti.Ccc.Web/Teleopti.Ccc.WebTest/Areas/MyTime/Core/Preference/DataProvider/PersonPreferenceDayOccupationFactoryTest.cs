@@ -222,8 +222,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			occupation.StartTimeLimitation.StartTime.Should().Be.EqualTo(new TimeSpan(20, 0, 0));
 			occupation.StartTimeLimitation.EndTime.Should().Be.EqualTo(new TimeSpan(20, 0, 0));
 
-			occupation.EndTimeLimitation.StartTime.Should().Be.EqualTo(new TimeSpan(29, 0, 0));
-			occupation.EndTimeLimitation.EndTime.Should().Be.EqualTo(new TimeSpan(29, 0, 0));
+			occupation.EndTimeLimitation.StartTime.Should().Be.EqualTo(new TimeSpan(47, 59, 59));
+			occupation.EndTimeLimitation.EndTime.Should().Be.EqualTo(new TimeSpan(47, 59, 59));
 		}
 
 		[Test]

@@ -119,10 +119,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				DateTime personAssignmentEndTime;
 				if (!personAssignment.ShiftLayers.Any())
 				{
-					personAssignmentStartTime = new DateTime(scheduleDay.DateOnlyAsPeriod.DateOnly.Year, scheduleDay.DateOnlyAsPeriod.DateOnly.Month, scheduleDay.DateOnlyAsPeriod.DateOnly.Day);
-					personAssignmentStartTime = TimeZoneHelper.ConvertToUtc(personAssignmentStartTime, scheduleDay.TimeZone);
-					personAssignmentEndTime = new DateTime(scheduleDay.DateOnlyAsPeriod.DateOnly.Year, scheduleDay.DateOnlyAsPeriod.DateOnly.Month, scheduleDay.DateOnlyAsPeriod.DateOnly.Day, 23, 59, 0);
-					personAssignmentEndTime = TimeZoneHelper.ConvertToUtc(personAssignmentEndTime, scheduleDay.TimeZone);
+					var period = scheduleDay.DateOnlyAsPeriod.Period();
+					personAssignmentStartTime = period.StartDateTime;
+					personAssignmentEndTime = period.EndDateTime.AddMinutes(-1);
 				}
 				else
 				{

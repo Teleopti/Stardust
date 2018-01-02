@@ -56,16 +56,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 					personPreferenceDayOccupation.HasShift = true;
 
 					var timeZone = _userTimezone.TimeZone();
-					var localStartDateTime = TimeZoneInfo.ConvertTimeFromUtc(personAssignment.Period.StartDateTime,
-						timeZone);
-					var localEndDateTime = TimeZoneInfo.ConvertTimeFromUtc(personAssignment.Period.EndDateTime,
-						timeZone);
-
-					var startTime = localStartDateTime.TimeOfDay;
-					var endTime = localEndDateTime.Subtract(localStartDateTime.Date);
+					var localPeriod = personAssignment.Period.TimePeriod(timeZone);
 					
-					personPreferenceDayOccupation.StartTimeLimitation = new StartTimeLimitation(startTime, startTime);
-					personPreferenceDayOccupation.EndTimeLimitation = new EndTimeLimitation(endTime, endTime);
+					personPreferenceDayOccupation.StartTimeLimitation = new StartTimeLimitation(localPeriod.StartTime, localPeriod.StartTime);
+					personPreferenceDayOccupation.EndTimeLimitation = new EndTimeLimitation(localPeriod.EndTime, localPeriod.EndTime);
 
 					var personAbsence = schedule.PersonAbsenceCollection()
 						.FirstOrDefault(pa => pa.Period.Contains(personAssignment.Period));
@@ -136,14 +130,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 						{
 							personPreferenceDayOccupation.HasShift = true;
 
-							var localStartDateTime = TimeZoneInfo.ConvertTimeFromUtc(personAssignment.Period.StartDateTime, timeZone);
-							var localEndDateTime = TimeZoneInfo.ConvertTimeFromUtc(personAssignment.Period.EndDateTime, timeZone);
-
-							var startTime = localStartDateTime.TimeOfDay;
-							var endTime = localEndDateTime.Date <= localStartDateTime.Date.AddDays(1) ? localEndDateTime.Subtract(localStartDateTime.Date): localEndDateTime.TimeOfDay.Add(TimeSpan.FromDays(1)) ;
-
-							personPreferenceDayOccupation.StartTimeLimitation = new StartTimeLimitation(startTime, startTime);
-							personPreferenceDayOccupation.EndTimeLimitation = new EndTimeLimitation(endTime, endTime);
+							var localTimePeriod = personAssignment.Period.TimePeriod(timeZone);
+							var endTimeLimitationLimit = TimeSpan.FromDays(2);
+							if (localTimePeriod.EndTime >= endTimeLimitationLimit)
+							{
+								localTimePeriod = new TimePeriod(localTimePeriod.StartTime, endTimeLimitationLimit.Subtract(TimeSpan.FromSeconds(1)));
+							}
+							
+							personPreferenceDayOccupation.StartTimeLimitation = new StartTimeLimitation(localTimePeriod.StartTime, localTimePeriod.StartTime);
+							personPreferenceDayOccupation.EndTimeLimitation = new EndTimeLimitation(localTimePeriod.EndTime, localTimePeriod.EndTime);
 
 							var personAbsence =
 								schedule.PersonAbsenceCollection().FirstOrDefault(pa => pa.Period.Contains(personAssignment.Period));

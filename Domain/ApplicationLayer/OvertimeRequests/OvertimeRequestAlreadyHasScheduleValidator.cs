@@ -29,24 +29,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var dic = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
 				scheduleperiod, _currentScenario.Current());
 
-			var agentDate = TimeZoneHelper.ConvertFromUtc(period.StartDateTime, person.PermissionInformation.DefaultTimeZone());
-			var scheduleDay = dic[person].ScheduledDay(new DateOnly(agentDate));
+			var agentDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, person.PermissionInformation.DefaultTimeZone()));
+			var scheduleDays = dic[person].ScheduledDayCollection(new DateOnlyPeriod(agentDate.AddDays(-1),agentDate));
 
-			var personAssignment = scheduleDay.PersonAssignment();
-			var personAssignmentYesterDay = dic[person].ScheduledDay(new DateOnly(agentDate.AddDays(-1))).PersonAssignment();
+			var personAssignment = scheduleDays.Last().PersonAssignment();
+			var personAssignmentYesterDay = scheduleDays.First().PersonAssignment();
 
 			if (hasActivity(personAssignment, period) || hasActivity(personAssignmentYesterDay, period))
 			{
+				var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 				return new OvertimeRequestValidationResult
 				{
 					IsValid = false,
 					InvalidReasons = new[]
 					{
 						string.Format(Resources.OvertimeRequestAlreadyHasScheduleInPeriod,
-							TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.StartDateTime,
-								_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()),
-							TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.EndDateTime,
-								_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()))
+							personRequest.Request.Period.StartDateTimeLocal(timeZone),
+							personRequest.Request.Period.EndDateTimeLocal(timeZone))
 					}
 				};
 			}

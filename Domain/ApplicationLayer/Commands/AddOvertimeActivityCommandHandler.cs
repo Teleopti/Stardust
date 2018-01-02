@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var multiplicatorDefinitionSet = _multiplicatorDefinitionSetForId.Load(command.MultiplicatorDefinitionSetId);
 
 			command.ErrorMessages = new List<string>();
-			var dateTime = new DateTime(command.Date.Year, command.Date.Month, command.Date.Day, 0, 0, 0, DateTimeKind.Utc);
+			var dateTime = DateTime.SpecifyKind(command.Date.Date,DateTimeKind.Utc);
 			var loadedPeriod = new DateTimePeriod(dateTime, dateTime);
 
 			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), loadedPeriod, new[] { person }, false);

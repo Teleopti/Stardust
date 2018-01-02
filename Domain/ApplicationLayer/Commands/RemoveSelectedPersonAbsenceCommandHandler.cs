@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var startTimeLocal = period.StartDateTimeLocal(timezone);
 			var endTimeLocal = period.EndDateTimeLocal(timezone);
-			var startOfDay = new DateTime(startTimeLocal.Year, startTimeLocal.Month, startTimeLocal.Day, 0, 0, 0);
+			var startOfDay = startTimeLocal.Date;
 			var endOfDay = startOfDay.AddDays(1);
 
 			var overnight = endTimeLocal.CompareTo(endOfDay) > 0;

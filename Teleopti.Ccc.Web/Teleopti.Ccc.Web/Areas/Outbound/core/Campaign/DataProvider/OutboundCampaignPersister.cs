@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public CampaignViewModel Persist(CampaignForm form)
 		{
+			var period = new DateOnlyPeriod(form.StartDate,form.EndDate);
 			var campaign = new Campaign()
 			{
 				Name = form.Name,
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				ConnectAverageHandlingTime = form.ConnectAverageHandlingTime,
 				RightPartyAverageHandlingTime = form.RightPartyAverageHandlingTime,
 				UnproductiveTime = form.UnproductiveTime,
-				BelongsToPeriod = new DateOnlyPeriod(form.StartDate, form.EndDate)
+				BelongsToPeriod = period
 			};
 
 			if (form.WorkingHours != null)
@@ -79,14 +80,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var skill = _outboundSkillCreator.CreateSkill(activity, campaign);
 			_outboundSkillPersister.PersistSkill(skill);
 			campaign.Skill = skill;
-			var startDateTime = new DateTime(form.StartDate.Year, form.StartDate.Month, form.StartDate.Day);
-			startDateTime = TimeZoneHelper.ConvertToUtc(startDateTime, campaign.Skill.TimeZone);
-			var endDateTime = new DateTime(form.EndDate.Year, form.EndDate.Month, form.EndDate.Day, 23, 59, 59);
-			endDateTime = TimeZoneHelper.ConvertToUtc(endDateTime, campaign.Skill.TimeZone);
-			campaign.SpanningPeriod = new DateTimePeriod(startDateTime, endDateTime);
+			var spanningPeriod = period.ToDateTimePeriod(campaign.Skill.TimeZone).ChangeEndTime(TimeSpan.FromSeconds(-1));
+			campaign.SpanningPeriod = spanningPeriod;
 
 			_outboundCampaignRepository.Add(campaign);
-			_createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone), campaign.CampaignTasks(),
+			_createOrUpdateSkillDays.Create(campaign.Skill, period, campaign.CampaignTasks(),
 				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
 
 			return _outboundCampaignViewModelMapper.Map(campaign);

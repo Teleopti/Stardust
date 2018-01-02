@@ -177,13 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				_message.RequestedDate.Day, fullDayTimeSpanEnd.Hours, fullDayTimeSpanEnd.Minutes,
 				fullDayTimeSpanEnd.Seconds);
 			var timezone = _person.PermissionInformation.DefaultTimeZone();
-			var expectedPeriod = new DateTimePeriod(
-				DateTime.SpecifyKind(
-					TimeZoneHelper.ConvertToUtc(startDateTime, timezone),
-					DateTimeKind.Utc),
-				DateTime.SpecifyKind(
-					TimeZoneHelper.ConvertToUtc(endDateTime, timezone),
-					DateTimeKind.Utc));
+			var expectedPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, timezone);
 			return expectedPeriod;
 		}
 
