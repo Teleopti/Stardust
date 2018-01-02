@@ -12,14 +12,14 @@
 	</div>
 
 	<div class="panel material-depth-1">
-		<div class="con-row">
-			<div class="con-flex adherence-percent" style="padding-top:10px" ng-show="vm.showAdherencePercentage">
+		<div class="con-row" style="align-items:center">
+			<div class="con-flex adherence-percent" ng-show="vm.showAdherencePercentage">
 				{{'Adherence' | translate}} {{vm.adherencePercentage}}%
 			</div>
-			<div class="con-flex" style="padding-top:10px;">
+			<div class="con-flex">
 				<span class="pull-right">
-					<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.goToPrevious()" style="margin-right:20px; text-decoration:none;" ng-disabled="vm.disabledPrev"><md-tooltip>{{vm.previousDay}}</md-tooltip><i class="mdi mdi-chevron-left" style="font-size: 14px !important;"></i>Previous</button>
-					<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.goToNext()" style="text-decoration: none;" ng-disabled="vm.disabledNext">Next<md-tooltip>{{vm.nextDay}}</md-tooltip><i class="mdi mdi-chevron-right" style="font-size: 14px !important;"></i></button>
+					<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.goToPrevious()" ng-disabled="vm.disabledPrev"><md-tooltip>{{vm.previousDay}}</md-tooltip><i class="mdi mdi-chevron-left" style="font-size: 14px !important;"></i>Previous</button>
+					<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.goToNext()" ng-disabled="vm.disabledNext">Next<md-tooltip>{{vm.nextDay}}</md-tooltip><i class="mdi mdi-chevron-right" style="font-size: 14px !important;"></i></button>
 				</span>
 			</div>
 		</div>
