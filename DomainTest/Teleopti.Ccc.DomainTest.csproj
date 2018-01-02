@@ -1256,7 +1256,6 @@
     <Compile Include="Optimization\ScheduleMatrixProTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleMatrixValueCalculatorProTest.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryOnBestDateServiceTest.cs" />
-    <Compile Include="ResourceCalculation\ShiftProjectionCacheManagerTest.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFilterTest.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHelperTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSetZeroValues.cs" />
@@ -1382,7 +1381,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftPeriodValueCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftSelectorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftValueCalculatorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftFilterServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRestrictionsShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\BusinessRulesShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\CommonActivityFilterTest.cs" />
