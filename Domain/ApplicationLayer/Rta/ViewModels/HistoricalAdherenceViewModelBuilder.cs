@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			loadScheduleInto(data);
 			loadDisplayInto(data);
 			loadAdherencesInto(data);
-
+			
 			return new HistoricalAdherenceViewModel
 			{
 				Now = formatForUser(data.Now),
@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				AdherencePercentage = _calculator.CalculatePercentage(data.ShiftStartTime, data.ShiftEndTime, data.Adherences),
 				Navigation = new HistoricalAdherenceNavigationViewModel
 				{
-					First = formatDateForUser(data.Now.AddDays(-6)),
-					Last = formatDateForUser(data.Now)
+					First = data.AgentNow.AddDays(-6).ToString("yyyyMMdd"),
+					Last = data.AgentNow.ToString("yyyyMMdd")
 				}
 			};
 		}
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private class data
 		{
 			public DateTime Now;
-			public DateTime AgnentNow;
+			public DateTime AgentNow;
 			public DateOnly Date;
 			public Guid PersonId;
 			public IPerson Person;
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		[RemoveMeWithToggle(Toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)]
 		private void loadDateTheSillyWay(data data)
 		{
-			var date = new DateOnly(data.AgnentNow);
+			var date = new DateOnly(data.AgentNow);
 			IScheduleDay day = null;
 
 			var scenario = _scenario.Current();
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private void loadCommonInto(data data)
 		{
 			data.TimeZone = data.Person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
-			data.AgnentNow = TimeZoneInfo.ConvertTimeFromUtc(data.Now, data.TimeZone);
+			data.AgentNow = TimeZoneInfo.ConvertTimeFromUtc(data.Now, data.TimeZone);
 		}
 
 		private void loadDisplayInto(data data)
@@ -314,10 +314,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return TimeZoneInfo.ConvertTimeFromUtc(time, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
 		}
 		
-		private string formatDateForUser(DateTime time)
-		{
-			return TimeZoneInfo.ConvertTimeFromUtc(time, _timeZone.TimeZone()).ToString("yyyyMMdd");
-		}
 	}
 
 	public interface IAdherencePercentageCalculator

@@ -259,7 +259,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\DateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\HistoricalAdherenceViewModelBuilderEx.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\PercentageTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\PeriodTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\NavigationTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\TimelineTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilderPermissionTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
