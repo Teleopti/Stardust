@@ -1585,7 +1585,6 @@
     <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
     <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
     <Compile Include="Scheduling\IFindSchedulesForPersons.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\DoFullResourceOptimizationOneTime.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleOptimizerHelper.cs" />
     <Compile Include="Scheduling\Overtime\PersonSkillsUseAllForScheduleDaysOvertimeProvider.cs" />
@@ -1638,7 +1637,6 @@
     <Compile Include="ResourceCalculation\PersonalSkillsProvider.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationCurrent.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationData.cs" />
-    <Compile Include="ResourceCalculation\SharedResourceContextOldSchedulingScreenBehavior.cs" />
     <Compile Include="ResourceCalculation\SkillCombination.cs" />
     <Compile Include="Scheduling\Assignment\ByPassPersistableScheduleDataPermissionChecker.cs" />
     <Compile Include="Scheduling\Assignment\IIsDayScheduled.cs" />
@@ -2612,7 +2610,6 @@
     <Compile Include="Scheduling\Legacy\Commands\RequiredScheduleHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ISchedulerStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ITeamBlockMoveTimeBetweenDaysCommand.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\IWeeklyRestSolverCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MatrixListFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MatrixUserLockLocker.cs" />
     <Compile Include="Scheduling\Legacy\Commands\OptimizationDesktopExecuter.cs" />

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 	[DomainTestWithStaticDependenciesAvoidUse]
 	public class WeeklyRestSolverLaterTest
 	{
-		public IWeeklyRestSolverCommand Target;
+		public WeeklyRestSolverCommand Target;
 		public MatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
 		public IResourceCalculation CascadingResourceCalculation;

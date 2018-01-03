@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -11,68 +9,38 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
-	public class OptimizationDesktopExecuterNew : OptimizationDesktopExecuter
-	{
-		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
-		private readonly IResourceCalculation _resourceCalculation;
-
-		public OptimizationDesktopExecuterNew(CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory, IGroupPageCreator groupPageCreator, IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider, IResourceCalculation resourceCalculation, IScheduleDayChangeCallback scheduleDayChangeCallback, ITeamBlockDesktopOptimization teamBlockOptimization, Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IUserTimeZone userTimeZone, IGroupPagePerDateHolder groupPagePerDateHolder, ScheduleOptimizerHelper scheduleOptimizerHelper, DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime) 
-			: base(groupPageCreator, groupScheduleGroupPageDataProvider, resourceCalculation, scheduleDayChangeCallback, teamBlockOptimization, resourceOptimizationHelperExtended, userTimeZone, groupPagePerDateHolder, scheduleOptimizerHelper, doFullResourceOptimizationOneTime)
-		{
-			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
-			_resourceCalculation = resourceCalculation;
-		}
-
-		protected override void PreOptimize(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, bool lastCalculationState, bool doIntraIntervalCalculation)
-		{
-			if (!schedulerStateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade())
-			{
-				using (_cascadingResourceCalculationContextFactory.Create(schedulerStateHolder.SchedulingResultState, false, selectedPeriod))
-				{
-					_resourceCalculation.ResourceCalculate(selectedPeriod, new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, doIntraIntervalCalculation));
-				}			
-			}
-		}
-	}
-	
-	
 	//legacy class - to be used from fat client only
 	public class OptimizationDesktopExecuter
 	{
+		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
 		private readonly IGroupPageCreator _groupPageCreator;
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly ITeamBlockDesktopOptimization _teamBlockOptimization;
-		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
+		private readonly TeamBlockDesktopOptimization _teamBlockOptimization;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 		private readonly ScheduleOptimizerHelper _scheduleOptimizerHelper;
-		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
-		[RemoveMeWithToggle("Remove unnecessary params", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
-		public OptimizationDesktopExecuter(IGroupPageCreator groupPageCreator,
+		public OptimizationDesktopExecuter(CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory,
+			IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 			IResourceCalculation resourceCalculation,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			ITeamBlockDesktopOptimization teamBlockOptimization,
-			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
+			TeamBlockDesktopOptimization teamBlockOptimization,
 			IUserTimeZone userTimeZone,
 			IGroupPagePerDateHolder groupPagePerDateHolder,
-			ScheduleOptimizerHelper scheduleOptimizerHelper,
-			DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime)
+			ScheduleOptimizerHelper scheduleOptimizerHelper)
 		{
+			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
 			_resourceCalculation = resourceCalculation;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_teamBlockOptimization = teamBlockOptimization;
-			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_userTimeZone = userTimeZone;
 			_groupPagePerDateHolder = groupPagePerDateHolder;
 			_scheduleOptimizerHelper = scheduleOptimizerHelper;
-			_doFullResourceOptimizationOneTime = doFullResourceOptimizationOneTime;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker,
@@ -85,7 +53,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 
-			PreOptimize(schedulerStateHolder, selectedPeriod, backgroundWorker, lastCalculationState, optimizationPreferences.General.OptimizationStepIntraInterval);
+			if (!schedulerStateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade())
+			{
+				using (_cascadingResourceCalculationContextFactory.Create(schedulerStateHolder.SchedulingResultState, false, selectedPeriod))
+				{
+					_resourceCalculation.ResourceCalculate(selectedPeriod, new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, false, optimizationPreferences.General.OptimizationStepIntraInterval));
+				}			
+			}
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation,
@@ -109,18 +83,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
-		}
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
-		protected virtual void PreOptimize(ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, bool lastCalculationState, bool doIntraIntervalCalculation)
-		{
-			if (lastCalculationState)
-			{
-				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
-			}
-#pragma warning disable 618
-			_doFullResourceOptimizationOneTime.ExecuteIfNecessary();
-#pragma warning restore 618
 		}
 	}
 }

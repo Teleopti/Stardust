@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseIocForFatClient]
 	public class IntradayOptimizationCallbackDesktopTest : IntradayOptimizationScenarioTest
 	{
-		public IOptimizeIntradayDesktop Target; //should be OptimizationDesktopExecuter but there is no way to inject TrackIntradayOptimizationCallback from there currently. fix if problematic in the future!
+		public OptimizeIntradayDesktop Target; //should be OptimizationDesktopExecuter but there is no way to inject TrackIntradayOptimizationCallback from there currently. fix if problematic in the future!
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public CascadingResourceCalculationContextFactory ResourceCalculationContextFactory; //should not be needed if using OptimizationDesktopExecuter instead
 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			}
 		}
 
-		public IntradayOptimizationCallbackDesktopTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002, RemoveImplicitResCalcContext resourcePlannerRemoveImplicitResCalcContext46680) : base(resourcePlannerBreakPreferenceStartTimeByMax46002, resourcePlannerRemoveImplicitResCalcContext46680)
+		public IntradayOptimizationCallbackDesktopTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)
 		{
 		}
 	}

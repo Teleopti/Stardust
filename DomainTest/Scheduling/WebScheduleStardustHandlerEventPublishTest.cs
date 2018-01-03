@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
-		public WebScheduleStardustHandlerEventPublishTest(SeperateWebRequest seperateWebRequest, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, RemoveImplicitResCalcContext removeImplicitResCalcContext46680, bool resourcePlannerTimeZoneIssues45818, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerRemoveClassicShiftCat46582, removeImplicitResCalcContext46680, resourcePlannerTimeZoneIssues45818, resourcePlannerXxl47258)
+		public WebScheduleStardustHandlerEventPublishTest(SeperateWebRequest seperateWebRequest, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, bool resourcePlannerTimeZoneIssues45818, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerRemoveClassicShiftCat46582, resourcePlannerTimeZoneIssues45818, resourcePlannerXxl47258)
 		{
 		}
 	}

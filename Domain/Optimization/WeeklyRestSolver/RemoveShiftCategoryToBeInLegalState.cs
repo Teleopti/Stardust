@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly TeamBlockRetryRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
 
-		public RemoveShiftCategoryToBeInLegalStateAlwaysTeamBlock(Func<ISchedulerStateHolder> schedulerStateHolder, RequiredScheduleHelper requiredScheduleOptimizerHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, MatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation,
+		public RemoveShiftCategoryToBeInLegalStateAlwaysTeamBlock(Func<ISchedulerStateHolder> schedulerStateHolder, RequiredScheduleHelper requiredScheduleOptimizerHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, MatrixListFactory matrixListFactory, WeeklyRestSolverCommand weeklyRestSolverCommand, IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation,
 			TeamBlockRetryRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService) 
 			: base(schedulerStateHolder, requiredScheduleOptimizerHelper, scheduleDayChangeCallback, matrixListFactory, weeklyRestSolverCommand, userTimeZone, resourceCalculation)
 		{
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly RequiredScheduleHelper _requiredScheduleOptimizerHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly MatrixListFactory _matrixListFactory;
-		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
+		private readonly WeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IResourceCalculation _resourceCalculation;
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			RequiredScheduleHelper requiredScheduleOptimizerHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			MatrixListFactory matrixListFactory,
-			IWeeklyRestSolverCommand weeklyRestSolverCommand,
+			WeeklyRestSolverCommand weeklyRestSolverCommand,
 			IUserTimeZone userTimeZone,
 			IResourceCalculation resourceCalculation)
 		{

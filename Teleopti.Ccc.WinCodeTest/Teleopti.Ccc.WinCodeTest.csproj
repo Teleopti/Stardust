@@ -182,7 +182,6 @@
     </Compile>
     <Compile Include="AddAbsenceCommandTest.cs" />
     <Compile Include="AddOvertimeCommandTest.cs" />
-    <Compile Include="Autofac\BackToLegalShiftModuleTest.cs" />
     <Compile Include="Autofac\EqualNumberOfCategoryFairnessModuleTest.cs" />
     <Compile Include="Autofac\IntraIntervalSolverServiceModuleTest.cs" />
     <Compile Include="Autofac\WeeklyRestSolverModuleTest.cs" />

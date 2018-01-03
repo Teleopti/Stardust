@@ -314,7 +314,6 @@
     <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />
     <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationScenarioTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeSchedulingScenario.cs" />
-    <Compile Include="SchedulingScenarios\RemoveImplicitResCalcContext.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculateWithNewContext.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\IllegalResourceCalculationTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithExternalStaffTest.cs" />

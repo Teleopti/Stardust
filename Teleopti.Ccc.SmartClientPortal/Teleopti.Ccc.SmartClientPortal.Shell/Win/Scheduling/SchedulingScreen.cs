@@ -2147,7 +2147,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (!_schedulerState.DaysToRecalculate.Any()) return;
 			if (_schedulerState.SchedulingResultState.SkillDays == null) return;
 
-			using (_container.Resolve<ISharedResourceContextOldSchedulingScreenBehavior>().MakeSureExists(new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min(), _schedulerState.DaysToRecalculate.Max())))
+			using (_container.Resolve<CascadingResourceCalculationContextFactory>().Create(SchedulerState.SchedulingResultState, false, new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min(), _schedulerState.DaysToRecalculate.Max())))
 			{
 				_optimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
 			}
@@ -3414,7 +3414,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 
-			_container.Resolve<IScheduleOvertime>()
+			_container.Resolve<ScheduleOvertime>()
 				.Execute(argument.OvertimePreferences, new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling),
 								_gridLockManager.UnlockedDays(scheduleDays));
 
@@ -3584,7 +3584,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));
 				var requestPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
-				using (_container.Resolve<ISharedResourceContextOldSchedulingScreenBehavior>().MakeSureExists(requestPeriod))
+				using (_container.Resolve<CascadingResourceCalculationContextFactory>().Create(SchedulerState.SchedulingResultState, false, requestPeriod))
 				{
 					_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData), true);
 				}

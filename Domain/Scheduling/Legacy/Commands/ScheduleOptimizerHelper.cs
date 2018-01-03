@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly MoveTimeOptimizerCreator _moveTimeOptimizerCreator;
 		private readonly RuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairnessService;
-		private readonly IOptimizeIntradayDesktop _optimizeIntradayDesktop;
+		private readonly OptimizeIntradayDesktop _optimizeIntradayDesktop;
 		private readonly ExtendReduceTimeHelper _extendReduceTimeHelper;
 		private readonly ExtendReduceDaysOffHelper _extendReduceDaysOffHelper;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
 		private readonly IntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 		private readonly MaxSeatOptimization _maxSeatOptimization;
-		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
+		private readonly WeeklyRestSolverCommand _weeklyRestSolverCommand;
 
 		public ScheduleOptimizerHelper(MatrixListFactory matrixListFactory,
 				MoveTimeOptimizerCreator moveTimeOptimizerCreator,
 				RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak,
 				IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairnessService,
-				IOptimizeIntradayDesktop optimizeIntradayIslandsDesktop,
+				OptimizeIntradayDesktop optimizeIntradayIslandsDesktop,
 				ExtendReduceTimeHelper extendReduceTimeHelper,
 				ExtendReduceDaysOffHelper extendReduceDaysOffHelper,
 				Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
 				IntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
 				MaxSeatOptimization maxSeatOptimization,
-				IWeeklyRestSolverCommand weeklyRestSolverCommand)
+				WeeklyRestSolverCommand weeklyRestSolverCommand)
 		{
 			_matrixListFactory = matrixListFactory;
 			_moveTimeOptimizerCreator = moveTimeOptimizerCreator;

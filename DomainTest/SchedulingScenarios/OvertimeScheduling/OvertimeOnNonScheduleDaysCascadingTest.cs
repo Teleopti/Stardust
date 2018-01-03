@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 	[DomainTest]
 	public class OvertimeOnNonScheduleDaysCascadingTest : OvertimeSchedulingScenario
 	{
-		public IScheduleOvertime Target;
+		public ScheduleOvertime Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
@@ -117,11 +117,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 			var overtimeWasPlaced = stateHolder.Schedules[agentAandB].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Any();
 			overtimeWasPlaced.Should().Be.True();
-		}
-
-		public OvertimeOnNonScheduleDaysCascadingTest(RemoveImplicitResCalcContext removeImplicitResCalcContext46680) : base(removeImplicitResCalcContext46680)
-		{
-			
 		}
 	}
 }

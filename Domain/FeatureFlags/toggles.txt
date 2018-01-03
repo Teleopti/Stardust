@@ -137,7 +137,6 @@ ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_BlockSchedulingValidation_46092 = RC
 ResourcePlanner_RemoveClassicShiftCat_46582 = true
-ResourcePlanner_RemoveImplicitResCalcContext_46680 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some test issues
 ResourcePlanner_TimeZoneIssues_45818 = true
 ResourcePlanner_DayOffOptimizationIslands_47208 = RC

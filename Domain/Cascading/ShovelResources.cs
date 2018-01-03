@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -33,14 +32,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 			_addBpoResourcesToContext = addBpoResourcesToContext;
 		}
 
-		[RemoveMeWithToggle("Simplify getting bpoResources below, always in context when toggle is gone", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 		public void Execute(IShovelResourceData shovelResourceData, IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period, IShovelingCallback shovelingCallback, Func<IDisposable> resCalcContext)
 		{
 			var cascadingSkills = new CascadingSkills(allSkills); 
 			if (!cascadingSkills.Any())
 				return;
 
-			var bpoResources = ResourceCalculationContext.InContext ? ResourceCalculationContext.Fetch().BpoResources : Enumerable.Empty<ExternalStaff>();
+			var bpoResources = ResourceCalculationContext.Fetch().BpoResources;
 			var activitiesAndIntervalLengths = cascadingSkills.AffectedActivities().ToArray();
 			shovelingCallback.BeforeShoveling(shovelResourceData);
 			using (ResourceCalculationCurrent.PreserveContext())

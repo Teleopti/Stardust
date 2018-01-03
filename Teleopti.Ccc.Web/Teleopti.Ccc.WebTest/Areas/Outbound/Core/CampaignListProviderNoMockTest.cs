@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public FakeSkillRepository SkillRepository;
 
 		[Test]
-		[Toggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 		public void ShouldLoadDataWithoutThrowingNoCurrentResourceCalculationContextException()
 		{
 			var skill = new Skill("test").WithId();

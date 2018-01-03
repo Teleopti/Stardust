@@ -6,23 +6,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 {
 	[DomainTest]
-	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextFalse)]
-	[TestFixture(RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue)]
-	public class IntraIntervalOptimizationScenarioTest : IConfigureToggleManager
+	public abstract class IntraIntervalOptimizationScenarioTest
 	{
-		private readonly RemoveImplicitResCalcContext _removeImplicitResCalcContext;
-
-		public IntraIntervalOptimizationScenarioTest(RemoveImplicitResCalcContext removeImplicitResCalcContext)
-		{
-			_removeImplicitResCalcContext = removeImplicitResCalcContext;
-		}
-		
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if(_removeImplicitResCalcContext==RemoveImplicitResCalcContext.RemoveImplicitResCalcContextTrue)
-				toggleManager.Enable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680);
-			else
-				toggleManager.Disable(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680);
-		}
 	}
 }

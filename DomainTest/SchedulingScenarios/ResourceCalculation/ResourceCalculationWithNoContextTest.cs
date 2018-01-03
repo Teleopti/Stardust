@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		public IResourceCalculation Target;
 		
 		[Test]
-		[Toggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
 		public void ShouldConsiderBpoResourceWhenResourceCalculate()
 		{
 			var scenario = new Scenario();

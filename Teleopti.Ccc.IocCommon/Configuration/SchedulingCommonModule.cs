@@ -111,32 +111,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
 			}
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680))
-			{
-				builder.RegisterType<CascadingResourceCalculationNew>().As<IResourceCalculation>().SingleInstance();
-				builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects();
-				builder.RegisterType<ResourceOptimizationHelperNew>().As<ResourceOptimizationHelper>().SingleInstance();
-				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehaviorNew>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
-				builder.RegisterType<OptimizeIntradayDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
-				builder.RegisterType<OptimizationDesktopExecuterNew>().As<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
-				builder.RegisterType<DesktopSchedulingNew>().As<DesktopScheduling>().InstancePerLifetimeScope();
-				builder.RegisterType<BackToLegalShiftService>().As<IBackToLegalShiftService>();
-				builder.RegisterType<ScheduleOvertimeNew>().As<IScheduleOvertime>();
-				builder.RegisterType<TeamBlockDesktopOptimization>().As<ITeamBlockDesktopOptimization>();
-			}
-			else
-			{
-				builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();		
-				builder.RegisterType<WeeklyRestSolverCommandOld>().As<IWeeklyRestSolverCommand>().ApplyAspects();
-				builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
-				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().As<ISharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
-				builder.RegisterType<OptimizeIntradayIslandsDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
-				builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
-				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
-				builder.RegisterType<BackToLegalShiftServiceOLD>().As<IBackToLegalShiftService>();
-				builder.RegisterType<ScheduleOvertime>().As<IScheduleOvertime>();
-				builder.RegisterType<TeamBlockDesktopOptimizationOLD>().As<ITeamBlockDesktopOptimization>();
-			}
+			builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();
+			builder.RegisterType<WeeklyRestSolverCommand>().ApplyAspects();
+			builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
+			builder.RegisterType<OptimizeIntradayDesktop>().InstancePerLifetimeScope();
+			builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
+			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
+			builder.RegisterType<BackToLegalShiftService>();
+			builder.RegisterType<ScheduleOvertime>();
+			builder.RegisterType<TeamBlockDesktopOptimization>();
 			builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
@@ -147,7 +130,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
 			builder.RegisterModule(new ScheduleOvertimeModule(_configuration));
-			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_RemoveClassicShiftCat_46582))
 			{
 				builder.RegisterType<RemoveShiftCategoryToBeInLegalStateAlwaysTeamBlock>().As<RemoveShiftCategoryToBeInLegalState>().InstancePerLifetimeScope();				

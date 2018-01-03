@@ -78,9 +78,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 			stateHolder.Schedules[agent1].ScheduledDay(date).PersonAssignment().OvertimeActivities().Any()
 				.Should().Be.True();
 		}
-
-		public IntraIntervalOptimizationDesktopTest(RemoveImplicitResCalcContext removeImplicitResCalcContext) : base(removeImplicitResCalcContext)
-		{
-		}
 	}
 }

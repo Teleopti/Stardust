@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly AdvanceDaysOffSchedulingService _advanceDaysOffSchedulingService;
 		private readonly MatrixListFactory _matrixListFactory;
-		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
+		private readonly WeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IUserTimeZone _userTimeZone;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			AdvanceDaysOffSchedulingService advanceDaysOffSchedulingService,
 			MatrixListFactory matrixListFactory,
-			IWeeklyRestSolverCommand weeklyRestSolverCommand,
+			WeeklyRestSolverCommand weeklyRestSolverCommand,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IResourceCalculation resourceCalculation,
 			IUserTimeZone userTimeZone,

@@ -1,28 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_RemoveImplicitResCalcContext_46680)]
-	public class CascadingResourceCalculationNew : CascadingResourceCalculation
-	{
-		public CascadingResourceCalculationNew(ResourceOptimizationHelper resourceOptimizationHelper, ShovelResources shovelResources) : base(resourceOptimizationHelper, shovelResources)
-		{
-		}
-
-		public override void ResourceCalculate(DateOnlyPeriod period, ResourceCalculationData resourceCalculationData,
-			Func<IDisposable> getResourceCalculationContext = null)
-		{
-			if (!ResourceCalculationContext.InContext)
-				throw new NoCurrentResourceCalculationContextException();
-			base.ResourceCalculate(period, resourceCalculationData, getResourceCalculationContext);
-		}
-	}
-	
 	public class CascadingResourceCalculation : IResourceCalculation
 	{
 		private readonly ResourceOptimizationHelper _resourceOptimizationHelper;
@@ -34,8 +17,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 			_shovelResources = shovelResources;
 		}
 
+		//TODO: always in context here. Put needed data (from resourceCalculationData) on context instead and grab the data from there...)
 		public virtual void ResourceCalculate(DateOnlyPeriod period, ResourceCalculationData resourceCalculationData, Func< IDisposable> getResourceCalculationContext = null )
 		{
+			if (!ResourceCalculationContext.InContext)
+				throw new NoCurrentResourceCalculationContextException();
+			
 			if (resourceCalculationData.SkipResourceCalculation|| !resourceCalculationData.Skills.Any())
 				return;
 
