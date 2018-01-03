@@ -1,20 +1,19 @@
 ﻿(function () {
 	'use strict';
 	angular.module('wfm.rta').controller('RtaHistoricalController46826', RtaHistoricalController);
-	RtaHistoricalController.$inject = ['$http', '$state', '$stateParams', 'rtaService', '$translate', 'Toggle'];
+	RtaHistoricalController.$inject = ['$http', '$state', '$stateParams', 'rtaService', '$translate'];
 
-	function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate, toggles) {
+	function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate) {
 		var vm = this;
 
 		vm.highlighted = {};
 		vm.diamonds = [];
 		vm.cards = [];
+		vm.previousHref = null;
+		vm.nextHref = null;
 
 		$stateParams.open = ($stateParams.open || "false");
 
-		var nextDayInParams = moment($stateParams.date).add(1, 'day').format('YYYYMMDD');
-		var previousDayInParams = moment($stateParams.date).subtract(1, 'day').format('YYYYMMDD');
-		
 		vm.ooaTooltipTime = function (time) {
 			if (time == null)
 				return '';
@@ -56,7 +55,7 @@
 			data.Changes = data.Changes || [];
 			data.Timeline = data.Timeline || {};
 			data.Period = data.Period || {};
-			
+
 			shiftInfo = buildShiftInfo(data);
 
 			calculateWidth = makeWidthCalculator(shiftInfo.timeWindowSeconds);
@@ -67,7 +66,7 @@
 			// remove the use of now when removing RTA_ViewHistoricalAhderenceForRecentShifts_46786
 			vm.date = moment($stateParams.date || data.Now).format('YYYY-MM-DD');
 			vm.adherencePercentage = data.AdherencePercentage;
-			vm.showAdherencePercentage = data.AdherencePercentage != null;
+			vm.showAdherencePercentage = data.AdherencePercentage !== null;
 
 			vm.currentTimeOffset = calculateOffset(data.Now);
 
@@ -80,22 +79,20 @@
 			vm.cards = mapChanges(data.Changes, data.Schedules);
 
 			vm.diamonds = buildDiamonds(data);
-	
-			vm.disabledNext = $stateParams.date >= data.Period.EndDate;
-			vm.disabledPrev = $stateParams.date <= data.Period.StartDate;
-			vm.nextDay = moment($stateParams.date).add(1, 'day').format('YYYY-MM-DD');
-			vm.previousDay = moment($stateParams.date).subtract(1, 'day').format('YYYY-MM-DD');
+
+			if ($stateParams.date > data.Period.StartDate) {
+				var previousDay = moment($stateParams.date).subtract(1, 'day');
+				vm.previousHref = $state.href($state.current.name, {personId: vm.personId, date: previousDay.format('YYYYMMDD')});
+				vm.previousTooltip = previousDay.format('YYYY-MM-DD');
+			}
+
+			if ($stateParams.date < data.Period.EndDate) {
+				var nextDay = moment($stateParams.date).add(1, 'day');
+				vm.nextHref = $state.href($state.current.name, {personId: vm.personId, date: nextDay.format('YYYYMMDD')});
+				vm.nextTooltip = nextDay.format('YYYY-MM-DD');
+			}
 		});
-		
-		vm.goToNext = function (){
-			$state.go($state.current.name, {date: nextDayInParams,  personId: $stateParams.personId});
-		};
 
-		vm.goToPrevious = function (){
-			$state.go($state.current.name, {date: previousDayInParams,  personId: $stateParams.personId});
-		};
-
-		
 		function buildAgentOutOfAdherences(data) {
 			return data.OutOfAdherences.map(function (ooa) {
 				var startTime = moment(ooa.StartTime);
