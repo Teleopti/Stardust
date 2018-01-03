@@ -35,11 +35,11 @@
             EndDate: new Date().toLocaleDateString('en-US')
         }
         vm.manualAgentStats = {
-            StartDate: new Date().toLocaleDateString('en-USi'),
-            EndDate: new Date().toLocaleDateString('en-USi')
+            StartDate: new Date().toLocaleDateString('en-US'),
+            EndDate: new Date().toLocaleDateString('en-US')
         }
         vm.manualSchedule = {
-            StartDate: new Date().toLocaleDateString('ien-US'),
+            StartDate: new Date().toLocaleDateString('en-US'),
             EndDate: new Date().toLocaleDateString('en-US')
         }
         vm.manualForecast = {
@@ -149,11 +149,18 @@
 
             $http.post("./Etl/EnqueueJob", data, tokenHeaderService.getHeaders())
                 .success(function() {
-                    job.Status = true;
+                    job.Status = 'Job enqueued';
 		            $timeout(function () {
-			            job.Status = false;
+			            job.Status = null;
 		            }, 5000);
-	            });
+                }).error(function () {
+						job.Status = 'Failed. Check inputs and network';
+			            $timeout(function () {
+				            job.Status = null;
+			            }, 5000);
+		            })
+
+                ;
         }
 
         function selectJob(job) {
