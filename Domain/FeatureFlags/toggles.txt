@@ -139,7 +139,6 @@ ResourcePlanner_BlockSchedulingValidation_46092 = RC
 ResourcePlanner_RemoveClassicShiftCat_46582 = true
 ResourcePlanner_RemoveImplicitResCalcContext_46680 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some test issues
-ResourcePlanner_BpoScheduling_46265 = true
 ResourcePlanner_TimeZoneIssues_45818 = true
 ResourcePlanner_DayOffOptimizationIslands_47208 = RC
 ResourcePlanner_XXL_47258 = DEV

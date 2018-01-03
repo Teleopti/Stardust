@@ -106,7 +106,6 @@
 		ResourcePlanner_BreakPreferenceStartTimeByMax_46002,
 		ResourcePlanner_RemoveClassicShiftCat_46582,
 		ResourcePlanner_BlockSchedulingValidation_46092,
-		ResourcePlanner_BpoScheduling_46265,
 		ResourcePlanner_RemoveImplicitResCalcContext_46680,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 		ResourcePlanner_TimeZoneIssues_45818,

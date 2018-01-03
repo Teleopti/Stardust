@@ -401,7 +401,6 @@
     <Compile Include="ResourceCalculation\ExternalStaffProvider.cs" />
     <Compile Include="ResourceCalculation\ISkillCombinationResourceReader.cs" />
     <Compile Include="ResourceCalculation\NoCurrentResourceCalculationContextException.cs" />
-    <Compile Include="ResourceCalculation\NoSkillCombinationResourceReader.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationContextFactoryExtensions.cs" />
     <Compile Include="ResourceCalculation\SkillCombinationToBpoResourceMapper.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHint.cs" />
