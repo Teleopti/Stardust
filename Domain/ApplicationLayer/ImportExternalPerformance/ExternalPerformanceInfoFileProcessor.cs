@@ -42,17 +42,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				return processResult;
 			}
 
-			var fileProcessResult = ExtractFileWithoutSeperateSession(importFileData.Data);
+			var fileProcessResult = extractFileWithoutSeperateSession(importFileData.Data);
 			return fileProcessResult;
 		}
 
-		private ExternalPerformanceInfoProcessResult ExtractFileWithoutSeperateSession(byte[] rawData)
+		private ExternalPerformanceInfoProcessResult extractFileWithoutSeperateSession(byte[] rawData)
 		{
-			var processResult = ExtractFileContent(rawData);
+			var processResult = extractFileContent(rawData);
 			return processResult;
 		}
 
-		private ExternalPerformanceInfoProcessResult ExtractFileContent(byte[] content)
+		private ExternalPerformanceInfoProcessResult extractFileContent(byte[] content)
 		{
 			var processResult = new ExternalPerformanceInfoProcessResult();
 			var allLines = byteArrayToString(content);
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					continue;
 				}
 
-				CreateOrValidatePerformanceType(extractionResult, allMeasures);
+				createOrValidatePerformanceType(extractionResult, allMeasures);
 
 				if (extractionResult.HasError())
 				{
@@ -85,8 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 			if (extractResultCollection.Any())
 			{
-				//filterExistAgents(processResult, extractResultCollection);
-				ConvertToRecordsByMatchingPersonId(extractResultCollection, processResult);
+				convertToRecordsByMatchingPersonId(extractResultCollection, processResult);
 			}
 
 			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom}).Select(x => x.Last()).ToList();
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			return processResult;
 		}
 
-		private void ConvertToRecordsByMatchingPersonId(IList<PerformanceInfoExtractionResult> allExtractionResults,
+		private void convertToRecordsByMatchingPersonId(IList<PerformanceInfoExtractionResult> allExtractionResults,
 			ExternalPerformanceInfoProcessResult processResult)
 		{
 			var allPersonIds = allExtractionResults.Select(x => x.AgentId).ToList();
@@ -148,43 +147,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 		}
 
-		private void filterExistAgents(ExternalPerformanceInfoProcessResult processResult, List<PerformanceInfoExtractionResult> extractResultCollection)
-		{
-			var extractResultCollectionToBeMatchAppLogonName = new List<PerformanceInfoExtractionResult>();
-			var logonNames = extractResultCollection.Select(x => x.AgentId).Distinct();
-			var personIdentitiesByEmploymentNumberAndExternalLogon = _personRepository.FindPersonByIdentities(logonNames);
-			foreach (var extractionResult in extractResultCollection)
-			{
-				if (personIdentitiesByEmploymentNumberAndExternalLogon.All(x => x.LogonName != extractionResult.AgentId))
-				{
-					extractResultCollectionToBeMatchAppLogonName.Add(extractionResult);
-					continue;
-				}
-
-				addMatchPerformanceData(extractionResult, personIdentitiesByEmploymentNumberAndExternalLogon, processResult);
-			}
-
-			if (!extractResultCollectionToBeMatchAppLogonName.Any()) return;
-
-			logonNames = extractResultCollectionToBeMatchAppLogonName.Select(x => x.AgentId).Distinct();
-			var personInfoModels = _tenantLogonPersonProvider.GetByLogonNames(logonNames).ToList();
-			foreach (var extractionResult in extractResultCollectionToBeMatchAppLogonName)
-			{
-				if (personInfoModels.All(x => x.ApplicationLogonName != extractionResult.AgentId))
-				{
-					processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.PersonIdCouldNotBeMatchedToAnyAgent}");
-					continue;
-				}
-				addMatchPerformanceData(extractionResult, personInfoModels.Select(x => new PersonIdentityMatchResult
-				{
-					LogonName = x.ApplicationLogonName,
-					PersonId = x.PersonId,
-					MatchField = IdentityMatchField.ApplicationLogonName
-				}).ToList(), processResult);
-			}
-		}
-
-		private void CreateOrValidatePerformanceType(PerformanceInfoExtractionResult extractionResult, IList<IExternalPerformance> existingTypes)
+		private void createOrValidatePerformanceType(PerformanceInfoExtractionResult extractionResult, IList<IExternalPerformance> existingTypes)
 		{
 			var type = existingTypes.FirstOrDefault(g => g.ExternalId == extractionResult.MeasureId);
 			if (type != null)
@@ -209,40 +172,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					Name = extractionResult.MeasureName
 				});
 			}
-		}
-
-		private static void addMatchPerformanceData(PerformanceInfoExtractionResult extractionResult,
-			IList<PersonIdentityMatchResult> personIdentities,
-			ExternalPerformanceInfoProcessResult processResult)
-		{
-			var matchPersonIdentities = personIdentities.Where(x =>
-				x.LogonName == extractionResult.AgentId && x.MatchField == IdentityMatchField.EmploymentNumber).ToList();
-			if (!matchPersonIdentities.Any())
-			{
-				matchPersonIdentities = personIdentities.Where(x =>
-					x.LogonName == extractionResult.AgentId && x.MatchField == IdentityMatchField.ExternalLogon).ToList();
-				if (!matchPersonIdentities.Any())
-				{
-					matchPersonIdentities = personIdentities.Where(x =>
-						x.LogonName == extractionResult.AgentId && x.MatchField == IdentityMatchField.ApplicationLogonName).ToList();
-				}
-			}
-
-			if (!matchPersonIdentities.Any()) return;
-
-			var agentsWithSameExternalLogon = matchPersonIdentities.Select(x => x.PersonId)
-				.Select(personId => new PerformanceInfoExtractionResult
-				{
-					AgentId = extractionResult.AgentId,
-					DateFrom = extractionResult.DateFrom,
-					MeasureId = extractionResult.MeasureId,
-					MeasureName = extractionResult.MeasureName,
-					MeasureNumberScore = extractionResult.MeasureNumberScore,
-					MeasurePercentScore = extractionResult.MeasurePercentScore,
-					MeasureType = extractionResult.MeasureType,
-					PersonId = personId
-				});
-			processResult.ValidRecords.AddRange(agentsWithSameExternalLogon);
 		}
 
 		private bool isFileTypeValid(ImportFileData importFileData)
