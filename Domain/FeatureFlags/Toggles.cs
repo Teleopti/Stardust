@@ -67,6 +67,7 @@
 		WfmTeamSchedule_DisplayAndEditPublicNote_44783,
 		WfmTeamSchedule_ShowStaffingInfo_45206,
 		WfmTeamSchedule_ExportSchedulesToExcel_45795,
+		WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202,
 
 		WebByPassDefaultPermissionCheck_37984,
 
