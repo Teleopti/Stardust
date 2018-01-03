@@ -148,6 +148,10 @@ wfm-card > md-card {
 	align-items: baseline;
 }
 
+.main-menu .main-menu-link-active>.main-menu-link {
+	color: $text-color-standard;
+}
+
 //new tree-picker
 tree-data-one, tree-data-two, tree-data-three {
 	.tree-toggle-group{
@@ -203,7 +207,7 @@ tree-data-one, tree-data-two, tree-data-three {
 		border:none;
 	}
 
-	
+
 }
 
 

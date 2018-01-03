@@ -1,4 +1,4 @@
-<div ui-view> 
+<div ui-view>
 
   <div class="view-header with-fab">
     <div class="view-title">
@@ -15,7 +15,7 @@
   <div class="con-row">
     <div class="con-flex">
       <div class="panel material-depth-1">
-        <div class="con-row" style="align-items: baseline; flex-wrap:wrap">
+        <div class="con-row baseline" style="flex-wrap:wrap">
           <div class="con-flex">
             <md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="vm.selectedSkill" md-search-text="searchSkillText" md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)" md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
               <md-item-template>
