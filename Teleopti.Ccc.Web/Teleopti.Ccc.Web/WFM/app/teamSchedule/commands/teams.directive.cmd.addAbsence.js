@@ -64,15 +64,23 @@
 		};
 	}
 
-	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'ScheduleHelper', 'teamScheduleNotificationService', '$locale', 'CommandCheckService', 'belongsToDateDecider'];
+	addAbsenceCtrl.$inject = ['PersonAbsence',
+		'PersonSelection',
+		'ScheduleHelper',
+		'teamScheduleNotificationService',
+		'$locale',
+		'CommandCheckService',
+		'belongsToDateDecider',
+		'teamsToggles'];
 
-	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider) {
+	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider, teamsToggles) {
 		var vm = this;
 
 		vm.label = 'AddAbsence';
 		vm.runningCommand = false;
 		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 		vm.invalidAgents = [];
+		var toggles = teamsToggles.all();
 
 		PersonAbsenceSvc.loadAbsences().then(function (absences) {
 			vm.availableAbsenceTypes = absences;
@@ -134,11 +142,13 @@
 			}
 			vm.selectedAgents.forEach(function (agent) {
 				var personSchedule = vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
-				if (!belongsToDateDecider
+
+				if (!toggles.WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 && !belongsToDateDecider
 					.checkTimeRangeAllowedForIntradayAbsence(timeRangeMoment,
 					belongsToDateDecider.normalizePersonScheduleVm(personSchedule, vm.getCurrentTimezone())))
 					vm.invalidAgents.push(agent);
 			});
+
 			var invalidAgentNameList = vm.invalidAgents.map(function (agent) {
 				return agent.Name;
 			});
