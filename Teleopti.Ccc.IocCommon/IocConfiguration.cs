@@ -15,6 +15,12 @@ namespace Teleopti.Ccc.IocCommon
 			_toggleManager = toggleManager;
 		}
 
+		public void FillToggles()
+		{
+			var toggleQuerier = _toggleManager as ToggleQuerier;
+			toggleQuerier?.FillAllToggles();
+		}
+
 		public bool Toggle(Toggles toggle)
 		{
 			return _toggleManager != null && _toggleManager.IsEnabled(toggle);

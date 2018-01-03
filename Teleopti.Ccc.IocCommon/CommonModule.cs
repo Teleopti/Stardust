@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.IocCommon
 		public CommonModule(IIocConfiguration configuration)
 		{
 			_configuration = configuration;
+			_configuration.FillToggles();
 		}
 
 		protected override void Load(ContainerBuilder builder)
