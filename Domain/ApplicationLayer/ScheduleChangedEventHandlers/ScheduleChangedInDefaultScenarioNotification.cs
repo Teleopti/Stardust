@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 		public void Handle(ProjectionChangedEvent message)
 		{
-			if (!message.ScheduleDays.Any())
+			if (!message.ScheduleDays.Any() || !message.IsDefaultScenario)
 				return;
 			var firstDate = message.ScheduleDays.Min(d => d.Date).AddDays(1);
 			var lastDate = message.ScheduleDays.Max(d => d.Date);
