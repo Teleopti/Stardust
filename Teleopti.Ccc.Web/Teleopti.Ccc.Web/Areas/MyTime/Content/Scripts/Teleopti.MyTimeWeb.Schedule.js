@@ -181,6 +181,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.absenceProbabilityEnabled = ko.observable();
 		self.overtimeProbabilityEnabled = ko.observable();
 		self.isOvertimeRequestAvailable = ko.observable();
+		self.overtimeRequestsLicenseAvailable = ko.observable(false);
 		self.showProbabilityToggle = ko.observable();
 		self.loadingProbabilityData = ko.observable(false);
 
@@ -495,8 +496,25 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.showAddRequestForm = function (day) {
+			self.checkOvertimeRequestsLicenseAvailability(self);
 			self.showAddRequestFormWithData(day.fixedDate(), day.overtimeAvailability());
 		};
+
+		self.checkOvertimeRequestsLicenseAvailability = function (self) {
+			var ajax = new Teleopti.MyTimeWeb.Ajax();
+			ajax.Ajax({
+				url: 'OvertimeRequests/GetLicenseAvailability',
+				dataType: "json",
+				type: 'GET',
+				success: function (response) {
+					self.overtimeRequestsLicenseAvailable(response.IsLicenseAvailable && response.HasPermissionForOvertimeRequests);
+				},
+				error: function (error) {
+					self.overtimeRequestsLicenseAvailable(false);
+					throw error;
+				}
+			});
+		}
 
 		self.showAddOvertimeRequestForm = function (data) {
 			if (!self.isOvertimeRequestAvailable()) {

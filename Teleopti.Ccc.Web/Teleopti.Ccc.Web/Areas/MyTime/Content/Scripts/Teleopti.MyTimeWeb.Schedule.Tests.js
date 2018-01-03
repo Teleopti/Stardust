@@ -5,13 +5,23 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js" />
 
 $(document).ready(function () {
-	module("Teleopti.MyTimeWeb.Schedule");
+	module("Teleopti.MyTimeWeb.Schedule", {
+			setup: function() {
+				setUpFunctionsBeforeRun();
+			},
+			teardown: function() {
+				restoreFuntionsAfterRun();
+			}
+		});
 
 	var hash = "";
 	var fakeAddRequestViewModel = Teleopti.MyTimeWeb.Schedule.FakeData.fakeAddRequestViewModel;
 	var momentWithLocale = function (date) { return moment(date).locale('en-gb'); };
 	var basedDate = momentWithLocale(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD');
 	var userTexts = Teleopti.MyTimeWeb.Schedule.FakeData.userTexts;
+
+	var fakeLicenseAvailabilityData = false;
+	var tempAjax;
 
 	function getFakeScheduleData() {
 		return Teleopti.MyTimeWeb.Schedule.FakeData.getFakeScheduleData();
@@ -201,4 +211,37 @@ $(document).ready(function () {
 
 		equal(scheduleDayViewModel.requestsCount(), 1);
 	});
+
+	test('should not show overtime request tab when has no license availability', function () {
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		fakeLicenseAvailabilityData = false;
+		vm.checkOvertimeRequestsLicenseAvailability(vm);
+
+		equal(vm.overtimeRequestsLicenseAvailable(), false);
+	});
+
+	test('should not show overtime request tab when has no license availability', function () {
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		fakeLicenseAvailabilityData = true;
+		vm.checkOvertimeRequestsLicenseAvailability(vm);
+
+		equal(vm.overtimeRequestsLicenseAvailable(), true);
+	});
+
+	function setUpFunctionsBeforeRun() {
+		tempAjax = Teleopti.MyTimeWeb.Ajax;
+		Teleopti.MyTimeWeb.Ajax = function () {
+			return {
+				Ajax: function (option) {
+					if (option.url === 'OvertimeRequests/GetLicenseAvailability') {
+						return option.success(fakeLicenseAvailabilityData);
+					}
+				}
+			};
+		};
+	}
+
+	function restoreFuntionsAfterRun() {
+		Teleopti.MyTimeWeb.Ajax = tempAjax;
+	}
 });
