@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		public string MeasureName { get; set; }
 		public int MeasureId { get; set; }
 		public string AgentId { get; set; }
-		public int MeasureNumberScore { get; set; }
+		public double MeasureNumberScore { get; set; }
 		public Percent MeasurePercentScore { get; set; }
 		public Guid PersonId { get; set; }
 		public bool HasError()

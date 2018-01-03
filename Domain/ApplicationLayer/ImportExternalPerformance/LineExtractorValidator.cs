@@ -137,9 +137,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			return int.TryParse(id, out result);
 		}
 
-		private bool measureTypeIsValidDecimalNumber(string value, out int result)
+		private bool measureTypeIsValidDecimalNumber(string value, out double result)
 		{
-			return int.TryParse(value, out result);
+			return double.TryParse(value, out result);
 		}
 
 		private bool measureTypeIsValidPercentage(string value, out Percent result)

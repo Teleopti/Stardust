@@ -9,6 +9,6 @@
 		<property name="DateFrom" type="UtcDateTime" not-null ="true" />
 		<property name="PersonId" type="guid" not-null="true" />
 		<property name="OriginalPersonId" type="string" length="130" not-null="true" />
-		<property name="Score" type="int" not-null="true" />
+		<property name="Score" type="double" not-null="true" />
 	</class>
 </hibernate-mapping>

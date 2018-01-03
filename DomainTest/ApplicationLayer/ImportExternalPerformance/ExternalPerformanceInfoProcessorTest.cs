@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldRejectRecordIfScoreNumberIsInvalid()
 		{
-			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Numeric,InvalidScore";
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1.5,Numeric,InvalidScore";
 			var fileData = createFileData(invalidRecord);
 
 			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidScore}";

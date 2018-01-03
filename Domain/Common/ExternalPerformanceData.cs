@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Common
 		DateTime DateFrom { get; set; }
 		Guid PersonId { get; set; }
 		string OriginalPersonId { get; set; }
-		int Score { get; set; }
+		double Score { get; set; }
 	}
 
 	public class ExternalPerformanceData : SimpleAggregateRoot, IExternalPerformanceData
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private Guid _personId;
 		private DateTime _dateFrom;
 		private string _originalPersonId;
-		private int _score;
+		private double _score;
 
 		public virtual IExternalPerformance ExternalPerformance
 		{
@@ -54,6 +54,6 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 		public virtual string OriginalPersonId { get { return _originalPersonId; } set { _originalPersonId = value; } }
-		public virtual int Score { get { return _score; } set { _score = value; } }
+		public virtual double Score { get { return _score; } set { _score = value; } }
 	}
 }
