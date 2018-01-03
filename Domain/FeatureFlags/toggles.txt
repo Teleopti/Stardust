@@ -143,7 +143,7 @@ ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some t
 ResourcePlanner_BpoScheduling_46265 = true
 ResourcePlanner_TimeZoneIssues_45818 = true
 ResourcePlanner_DayOffOptimizationIslands_47208 = RC
-ResourcePlanner_XXL_47258 = false
+ResourcePlanner_XXL_47258 = DEV
 
 # From old Kittens team... #
 ETL_SpeedUpPersonPeriodNightly_38097 = true
