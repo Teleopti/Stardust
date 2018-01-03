@@ -104,6 +104,7 @@
 				Skills: []
 			};
 			vm.selectedSkillGroup = vm.newGroup;
+			vm.skillGroups.push(vm.newGroup);
 			vm.skills = vm.allSkills.slice();
 			vm.canSave = false;
 			vm.editGroupNameBox = true;
@@ -281,6 +282,9 @@
 		}
 
 		function hasChanges() {
+			console.log('originalGroups', originalGroups);
+			console.log('vm.skillGroups', vm.skillGroups);
+
 			return !_.isEqual(originalGroups, vm.skillGroups);
 		}
 
@@ -289,6 +293,11 @@
 		}
 
 		function setSaveableState() {
+			console.log('hasChanges(), hasEmptySkillList()', {
+				hasChanges: hasChanges(),
+				hasEmptySkillList: hasEmptySkillList()
+			});
+
 			vm.canSave = hasChanges() && !hasEmptySkillList();
 		}
 

@@ -34,9 +34,9 @@
 					</div>
 				</div>
 				<div class="con-row">
-					<div class="con-flex">
+					<div class="con-flex" style="max-width: 100%;">
 						<ul class="wfm-list" id="available_skill_groups_list">
-							<li ng-repeat="skillGroup in vm.skillGroups track by skillGroup.Id" style="max-width: 90%;" ng-click="vm.selectSkillGroup($index)">
+							<li ng-repeat="skillGroup in vm.skillGroups track by skillGroup.Id" ng-click="vm.selectSkillGroup($index)">
 								<span class="list-item-container">
 									{{skillGroup.Name}}
 								</span>
