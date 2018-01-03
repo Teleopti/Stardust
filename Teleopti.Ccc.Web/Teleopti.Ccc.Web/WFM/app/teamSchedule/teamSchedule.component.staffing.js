@@ -12,9 +12,9 @@
 		}
 	});
 
-	StaffingInfoController.$inject = ['$scope', '$timeout', 'TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService'];
+	StaffingInfoController.$inject = ['$scope', '$timeout', 'TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService', 'teamsToggles', 'skillIconService'];
 
-	function StaffingInfoController($scope, $timeout, SkillService, StaffingInfoService, ChartService) {
+	function StaffingInfoController($scope, $timeout, SkillService, StaffingInfoService, ChartService, teamsToggles, skillIconService) {
 		var vm = this;
 
 		vm.skills = [];
@@ -24,12 +24,22 @@
 		var staffingDataAvailable = false;
 
 		vm.useShrinkage = false;
+		vm.selectedSkillGroup = null;
+		vm.toggleShowSkillsForSelectedSkillGroup = teamsToggles.all().WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202;
 		var selectedSkill = null;
-		var selectedSkillGroup = null;
+
+
 		var chart = null;
 		vm.$onInit = function () {
 			vm.preselectedSkills = vm.preselectedSkills || {};
-			loadChartForPreselection();
+			SkillService.getAllSkills().then(function (data) {
+				vm.skills = data;
+			});
+
+			SkillService.getAllSkillGroups().then(function (data) {
+				vm.skillGroups = data.SkillAreas;
+				loadChartForPreselection();
+			});
 		}
 
 		vm.$onChanges = function (changeObj) {
@@ -43,32 +53,27 @@
 			return generateChart();
 		}
 		vm.showStaffingInfo = function () {
-			return staffingDataAvailable && (!!selectedSkill || !!selectedSkillGroup);
+			return staffingDataAvailable && (!!selectedSkill || !!vm.selectedSkillGroup);
 		}
+
 		vm.setSkill = function (selectedItem) {
 			selectedSkill = null;
-			selectedSkillGroup = null;
-			if (!angular.isDefined(selectedItem)) {
+			vm.selectedSkillGroup = null;
+			if (!selectedItem) {
 				return;
 			}
 			var isSelectedSkillArea = selectedItem.hasOwnProperty('Skills');
 			if (isSelectedSkillArea) {
-				selectedSkillGroup = selectedItem;
+				vm.selectedSkillGroup = selectedItem;
 			} else {
 				selectedSkill = selectedItem;
 			}
 			generateChart();
 			var skillChanged;
-			vm.onSelectedSkillChanged && (skillChanged = vm.onSelectedSkillChanged()) && skillChanged(selectedSkill, selectedSkillGroup);
+			vm.onSelectedSkillChanged && (skillChanged = vm.onSelectedSkillChanged()) && skillChanged(selectedSkill, vm.selectedSkillGroup);
 		}
 
-		SkillService.getAllSkills().then(function (data) {
-			vm.skills = data;
-		});
-
-		SkillService.getAllSkillGroups().then(function (data) {
-			vm.skillGroups = data.SkillAreas;
-		});
+		vm.getSkillIcon = skillIconService.get;
 
 		$scope.$on('teamSchedule.dateChanged',
 			function () {
@@ -83,14 +88,18 @@
 			if (!vm.preselectedSkills) return;
 			var skillId = (vm.preselectedSkills.skillIds || [])[0];
 			selectedSkill = !!skillId ? { Id: skillId } : undefined;
-			selectedSkillGroup = !!vm.preselectedSkills.skillAreaId ? { Id: vm.preselectedSkills.skillAreaId } : undefined;
+
+			vm.selectedSkillGroup = !!vm.preselectedSkills.skillAreaId ?
+				vm.skillGroups.filter(function (s) {
+					return s.Id === vm.preselectedSkills.skillAreaId;
+				})[0] : undefined;
 			generateChart();
 		}
 
 		function generateChart() {
-			if (!selectedSkill && !selectedSkillGroup) return;
+			if (!selectedSkill && !vm.selectedSkillGroup) return;
 			vm.isLoading = true;
-			var query = StaffingInfoService.getStaffingByDate(selectedSkill, selectedSkillGroup, vm.selectedDate, vm.useShrinkage);
+			var query = StaffingInfoService.getStaffingByDate(selectedSkill, vm.selectedSkillGroup, vm.selectedDate, vm.useShrinkage);
 			query.then(function (result) {
 				vm.isLoading = false;
 				if (staffingPrecheck(result.DataSeries)) {

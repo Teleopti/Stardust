@@ -1,12 +1,14 @@
-﻿describe('teamSchedule staffing info component tests', function () {
+﻿describe('[teamSchedule staffing info component tests]', function () {
 
-	var $componentController, $q, $compile, $rootScope, $document, _staffingInfoService;
+	var $componentController, $q, $compile, $rootScope, $document, _staffingInfoService, toggles;
 	beforeEach(module('wfm.templates', 'wfm.teamSchedule', 'ngMaterial', 'ngMaterial-mock'));
 	beforeEach(function () {
 		module(function ($provide) {
+			toggles = new FakeToggles();
 			_staffingInfoService = setUpStaffingInfoService();
 			$provide.service('TeamScheduleSkillService', setUpTeamScheduleSkillService);
 			$provide.service('StaffingInfoService', function () { return _staffingInfoService; });
+			$provide.service('teamsToggles', function () { return toggles; });
 		});
 	});
 	beforeEach(inject(function ($injector) {
@@ -15,7 +17,10 @@
 		$compile = $injector.get('$compile');
 		$rootScope = $injector.get('$rootScope');
 		$document = $injector.get('$document');
+		$httpBackend = $injector.get('$httpBackend');
+		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
+
 
 	it('should view no available data by default',
 		function () {
@@ -83,11 +88,75 @@
 
 	it('should load chart data depend on the skill group preselection', function () {
 		var scope = $rootScope.$new();
-		scope.preselectedSkills = { skillAreaId: 'XYZ' };
+		scope.preselectedSkills = { skillAreaId: 'SkillArea1' };
 		setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
-		expect(_staffingInfoService.selectedSkillGroup.Id).toEqual('XYZ');
+		expect(_staffingInfoService.selectedSkillGroup.Id).toEqual('SkillArea1');
 		expect(!!_staffingInfoService.selectedSkill).toEqual(false);
 	});
+
+
+	it("should show skills for the preselected skill group", function () {
+		enableShowSkillsToggle();
+		var scope = $rootScope.$new();
+		scope.preselectedSkills = { skillAreaId: 'SkillArea1' };
+		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
+		var skillsRow = panel[0].querySelectorAll('.skills-row');
+		var skills = panel[0].querySelectorAll('.skill');
+		expect(skillsRow.length).toEqual(1);
+		expect(skills.length).toEqual(3);
+		expect(skills[0].innerText.trim()).toEqual('skill1');
+		expect(skills[1].innerText.trim()).toEqual('skill2');
+		expect(skills[2].innerText.trim()).toEqual('skill3');
+	});
+
+	it("should change skills after change the selected skill group", function () {
+		enableShowSkillsToggle();
+		var scope = $rootScope.$new();
+		scope.preselectedSkills = { skillAreaId: 'SkillArea1' };
+		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
+		var ctrl = panel.isolateScope().vm;
+
+		ctrl.setSkill(skillGroups[1]);
+		scope.$apply();
+
+		var skillsRow = panel[0].querySelectorAll('.skills-row');
+		var skills = panel[0].querySelectorAll('.skill');
+		expect(skillsRow.length).toEqual(1);
+		expect(skills.length).toEqual(1);
+		expect(skills[0].innerText.trim()).toEqual('skill1');
+	});
+
+	it("should hide skills if no selected skill group", function () {
+		enableShowSkillsToggle();
+		var scope = $rootScope.$new();
+		scope.preselectedSkills = { skillAreaId: 'SkillArea1' };
+		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
+		var ctrl = panel.isolateScope().vm;
+
+		ctrl.setSkill(null);
+		scope.$apply();
+		var skillsRow = panel[0].querySelectorAll('.skills-row');
+		expect(skillsRow.length).toEqual(0);
+	});
+
+	it("should hide skills when select skill", function () {
+		enableShowSkillsToggle();
+		var scope = $rootScope.$new();
+		scope.preselectedSkills = { skillAreaId: 'SkillArea1' };
+		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
+		var ctrl = panel.isolateScope().vm;
+
+		ctrl.setSkill({ Id: 'XYZ' });
+		scope.$apply();
+		var skillsRow = panel[0].querySelectorAll('.skills-row');
+		expect(skillsRow.length).toEqual(0);
+	});
+
+	function enableShowSkillsToggle() {
+		toggles.set({
+			WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202: true
+		});
+	}
 
 	function setupComponent(attrs, scope) {
 		var el;
@@ -104,6 +173,34 @@
 		return el;
 	}
 
+	var skillGroups = [{
+		Name: 'SkillArea1',
+		Id: 'SkillArea1',
+		Skills: [
+			{
+				Id: 'skill1',
+				Name: 'skill1'
+			},
+			{
+				Id: 'skill2',
+				Name: 'skill2'
+			},
+			{
+				Id: 'skill3',
+				Name: 'skill3'
+			}
+		]
+	},
+	{
+		Name: 'SkillArea2',
+		Id: '321',
+		Skills: [
+			{
+				Id: 'skill1',
+				Name: 'skill1'
+			}
+		]
+	}];
 	function setUpTeamScheduleSkillService() {
 		return {
 			getAllSkills: function () {
@@ -125,28 +222,9 @@
 			getAllSkillGroups: function () {
 				return {
 					then: function (callback) {
-						callback([
-							{
-								Name: 'SkillArea1',
-								Id: '123',
-								Skills: [
-									{
-										Id: 'XYZ',
-										Name: 'skill1'
-									}
-								]
-							},
-							{
-								Name: 'SkillArea2',
-								Id: '321',
-								Skills: [
-									{
-										Id: 'ABC',
-										Name: 'skill2'
-									}
-								]
-							}
-						]);
+						callback({
+							SkillAreas: skillGroups
+						});
 					}
 				};
 			},
@@ -202,6 +280,16 @@
 					}
 				};
 			}
+		}
+	}
+
+	function FakeToggles() {
+		var _toggles = {};
+		this.set = function (toggles) {
+			_toggles = toggles;
+		}
+		this.all = function () {
+			return _toggles;
 		}
 	}
 
