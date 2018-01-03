@@ -70,10 +70,6 @@ function MenuController($state) {
 		{
 			i: 'mdi mdi-trophy',
 			name: 'gamification'
-		},
-		{
-			i: 'mdi mdi-source-fork',
-			name: 'bpo-gatekeeper'
 		}
 	];
 	function setMenuItem() {
