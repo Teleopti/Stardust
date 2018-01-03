@@ -28,20 +28,28 @@
 #
 ############################################################################
 
+# Front End #
+Wfm_DisplayOnlineHelp_39402 = true
+Wfm_MinimumScaffolding_32659 = RC # Set this to true to enable first page link to the new WFM web #
+
+# China, can any of these be removed? #
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true
 Settings_SetAgentDescription_23257 = true
-#Cannot be relreased yet due to performance and IO #
 Gamification_NewBadgeCalculation_31185 = true
-# Set this to true to enable first page link to the new WFM web #
-Wfm_MinimumScaffolding_32659 = RC
+WfmReportPortal_Basic_38825 = true
+WfmReportPortal_LeaderBoard_39440 = true
+WebByPassDefaultPermissionCheck_37984 = true
+Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 
+# LevelUp #
 RTA_RtaTracer_45597 = true
 RTA_MonitorAgentsWithLongTimeInState_46475 = true
 RTA_MobileFriendlyCheckboxes_46758 = true
 RTA_ViewHistoricalAhderenceForRecentShifts_46786 = RC
 RTA_ViewHistoricalAhderence7DaysBack_46826 = DEV
 
+# Dumplings, can any of these be removed? #
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true
 WfmTeamSchedule_DisplayAndEditPublicNote_44783 = true
@@ -49,13 +57,13 @@ WfmTeamSchedule_ShowStaffingInfo_45206 = RC
 WfmTeamSchedule_ExportSchedulesToExcel_45795 = true
 WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202 = DEV
 WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 = DEV
+Wfm_HideUnusedTeamsAndSites_42690 = true
+Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
+Wfm_AddMyTimeLink_45088 = true
+Wfm_GroupPages_45057 = true
+Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
 
-WfmReportPortal_Basic_38825 = true
-WfmReportPortal_LeaderBoard_39440 = true
-
-WebByPassDefaultPermissionCheck_37984 = true
-
-Report_UseOpenXmlFormat_35797 = true
+# Code Monkeys, can any of these be removed? #
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Approve_Based_On_Intraday_39868 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it until function 'Approve based on business rules' is ready
@@ -64,21 +72,21 @@ Wfm_Requests_OvertimeRequestHandling_45177 = RC
 Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = true
 Wfm_Requests_HandleFourteenDaysFast_43390 = true
 Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = true
+OvertimeRequestPeriodSetting_46417 = RC
+OvertimeRequestPeriodWorkRuleSetting_46638 = RC
+OvertimeRequestCheckCalendarMonthMaximumOvertime_47024 = RC
 
+# Ziggy #
 Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = true
-
+Report_UseOpenXmlFormat_35797 = true
+Scheduler_LoadWithoutRequests_38567 = true
 
 Wfm_People_PrepareForRelease_39040 = RC #Was not ready enough
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = true
 
-Wfm_HideUnusedTeamsAndSites_42690 = true
-Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
-Wfm_AddMyTimeLink_45088 = true
-Wfm_GroupPages_45057 = true
-Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
-
+# China, can any of these be removed? #
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = true
 MyTimeWeb_ShiftTradeBoardNoReadModel_36662 = true
 MyTimeWeb_MakeRequestsResponsiveOnMobile_40266 = true
@@ -103,6 +111,7 @@ MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 
 MyTimeWeb_WaitListPositionEnhancement_46301 = true
 MyTimeWeb_PollToCheckScheduleChanges_46595 = RC
 
+# China, can any of these be removed? #
 QRCodeForMobileApps_42695 = true
 ConfigQRCodeURLForMobileApps_43224 = true
 MobileApps_EnableMobileNotifications_44476 = true
@@ -111,6 +120,7 @@ MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 Staffing_Info_Configuration_44687 = true
 
+# Kittens, Bugs&Roses and Micke #
 Scheduler_IntradayOptimization_36617 = true
 Scheduler_ShowSkillPrioLevels_41980 = true
 Scheduler_RestrictionReport_47013 = false
@@ -121,8 +131,7 @@ Wfm_ImportSchedule_41247 = true
 WFM_WebScheduling_LowPriority_44320 = RC
 Wfm_WebPlan_Pilot_46815 = RC
 
-Scheduler_LoadWithoutRequests_38567 = true
-
+# Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
@@ -136,8 +145,7 @@ ResourcePlanner_TimeZoneIssues_45818 = true
 ResourcePlanner_DayOffOptimizationIslands_47208 = RC
 ResourcePlanner_XXL_47258 = false
 
-Wfm_DisplayOnlineHelp_39402 = true
-
+# From old Kittens team... #
 ETL_SpeedUpPersonPeriodNightly_38097 = true
 ETL_SpeedUpNightlyReloadDatamart_38131 = true
 ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304 and 41393 is done 
@@ -166,6 +174,7 @@ ETL_FixScheduleForPersonPeriod_41393 = true
 ETL_SpeedUpNightlyDayOff_38213 = true
 ETL_Show_Web_Based_ETL_Tool_46880 = DEV
 
+# DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
 Wfm_Intraday_OptimalStaffing_40921 = true
 Wfm_Intraday_ScheduledStaffing_41476 = true
@@ -175,33 +184,31 @@ WFM_Intraday_Show_For_Other_Days_43504 = true
 WFM_Intraday_SupportMultisiteSkill_43874 = true
 WFM_Intraday_Export_To_Excel_44892 = true
 WFM_Intraday_SupportOtherSkillsLikeEmail_44026 = true
+WFM_Unified_Skill_Group_Management_45417 = true
+WFM_Modify_Skill_Groups_45727 = RC
 
+# China, can any of these be removed? #
 HealthCheck_ValidateReadModelPersonScheduleDay_39421 = true
 HealthCheck_ValidateReadModelScheduleDay_39423 = true
 HealthCheck_EasyValidateAndFixReadModels_39696 = true
 HealthCheck_ReinitializeReadModels_39697 = true
 
+# Ziggy #
 Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 WfmStaffing_AddOvertime_42524 = RC 
-OvertimeRequestPeriodSetting_46417 = RC
-OvertimeRequestPeriodWorkRuleSetting_46638 = RC
-OvertimeRequestCheckCalendarMonthMaximumOvertime_47024 = RC
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = true
 Staffing_ReadModel_BetterAccuracy_Step4_43389 = true
 Staffing_BPOExchangeImport_45202 = true
 Forecast_FileImport_UnifiedFormat_46585 = true
 
+# Squids #
 WFM_Forecaster_Refact_44480 = true
-Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 WFM_Export_Forecast_44716 = true
 WFM_TrainingPlanner_44780 = RC
-
 Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Remove_Realtime_Scheduled_Time_vs_Target_45559 = true
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
 Report_Remove_Realtime_AuditTrail_44006 = true
 Report_Show_Utc_In_Report_Selection_When_In_Use_45079 = true
-
-WFM_Unified_Skill_Group_Management_45417 = true
-WFM_Modify_Skill_Groups_45727 = RC
 WFM_AuditTrail_44006 = true
+
