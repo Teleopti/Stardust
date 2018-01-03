@@ -47,7 +47,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		var controller = tester.createController();
 
-		expect(controller.date).toBe('2016-10-10');
+		expect(controller.date).toBe(moment('2016-10-10').format('L'));
 	});
 
 	it('should display date', function (tester) {
@@ -59,12 +59,12 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		var controller = tester.createController();
 
-		expect(controller.date).toBe('2017-12-14');
+		expect(controller.date).toBe(moment('2017-12-14').format('L'));
 	});
 	
-	it('should display out of adherence', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
+	it('should display out of adherence', function (t) {
+		t.stateParams.personId = '1';
+		t.backend.withHistoricalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
@@ -77,10 +77,10 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			}]
 		});
 
-		var controller = tester.createController();
+		var controller = t.createController();
 
-		expect(controller.outOfAdherences[0].StartTime).toEqual('08:00:00');
-		expect(controller.outOfAdherences[0].EndTime).toEqual('08:15:00');
+		expect(controller.outOfAdherences[0].StartTime).toEqual(moment('2016-10-10T08:00:00').format('LTS'));
+		expect(controller.outOfAdherences[0].EndTime).toEqual(moment('2016-10-10T08:15:00').format('LTS'));
 		expect(controller.outOfAdherences[0].Width).toEqual((15 * 60) / (12 * 3600) * 100 + '%');
 		expect(controller.outOfAdherences[0].Offset).toEqual(1 / 12 * 100 + '%');
 	});
@@ -127,7 +127,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		var controller = tester.createController();
 
-		expect(controller.outOfAdherences[0].StartTime).toEqual('2016-10-09 17:00:00');
+		expect(controller.outOfAdherences[0].StartTime).toEqual(moment('2016-10-09 17:00:00').format('LLL'));
 	});
 
 	it('should display full timeline', function (tester) {

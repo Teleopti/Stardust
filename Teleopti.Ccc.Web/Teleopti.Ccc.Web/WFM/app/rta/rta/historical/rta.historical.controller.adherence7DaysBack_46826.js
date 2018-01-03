@@ -64,7 +64,7 @@
 			vm.personId = data.PersonId;
 			vm.agentName = data.AgentName;
 			// remove the use of now when removing RTA_ViewHistoricalAhderenceForRecentShifts_46786
-			vm.date = moment($stateParams.date || data.Now).format('YYYY-MM-DD');
+			vm.date = moment($stateParams.date || data.Now).format('L');
 			vm.adherencePercentage = data.AdherencePercentage;
 			vm.showAdherencePercentage = data.AdherencePercentage !== null;
 
@@ -83,13 +83,13 @@
 			if ($stateParams.date > data.Navigation.First) {
 				var previousDay = moment($stateParams.date).subtract(1, 'day');
 				vm.previousHref = $state.href($state.current.name, {personId: vm.personId, date: previousDay.format('YYYYMMDD')});
-				vm.previousTooltip = previousDay.format('YYYY-MM-DD');
+				vm.previousTooltip = previousDay.format('L');
 			}
 
 			if ($stateParams.date < data.Navigation.Last) {
 				var nextDay = moment($stateParams.date).add(1, 'day');
 				vm.nextHref = $state.href($state.current.name, {personId: vm.personId, date: nextDay.format('YYYYMMDD')});
-				vm.nextTooltip = nextDay.format('YYYY-MM-DD');
+				vm.nextTooltip = nextDay.format('L');
 			}
 		});
 
@@ -97,10 +97,10 @@
 			return data.OutOfAdherences.map(function (ooa) {
 				var startTime = moment(ooa.StartTime);
 				var startTimeFormatted = shiftInfo.timeWindowStart > startTime ?
-					startTime.format('YYYY-MM-DD HH:mm:ss') :
-					startTime.format('HH:mm:ss');
+					startTime.format('LLL') :
+					startTime.format('LTS');
 				var endTime = ooa.EndTime != null ? ooa.EndTime : data.Now;
-				var endTimeFormatted = ooa.EndTime != null ? moment(ooa.EndTime).format('HH:mm:ss') : '';
+				var endTimeFormatted = ooa.EndTime != null ? moment(ooa.EndTime).format('LTS') : '';
 				return {
 					Width: calculateWidth(startTime, endTime),
 					Offset: calculateOffset(startTime),

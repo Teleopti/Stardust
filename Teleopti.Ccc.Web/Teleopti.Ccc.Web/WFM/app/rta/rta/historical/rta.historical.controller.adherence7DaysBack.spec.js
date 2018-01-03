@@ -63,7 +63,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		var c = t.createController();
 
-		expect(c.nextTooltip).toEqual('2017-12-21');
+		expect(c.nextTooltip).toEqual(moment('2017-12-21').format('L'));
 	});
 
 	it('should display previous day in tooltip', function (t) {
@@ -76,7 +76,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		var c = t.createController();
 
-		expect(c.previousTooltip).toEqual('2017-12-19');
+		expect(c.previousTooltip).toEqual(moment('2017-12-19').format('L'));
 	});
 
 });
