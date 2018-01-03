@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			if (applicationSkillCodes.IsEmpty())
 				return AnalyticsDate.NotDefined.DateId;
 
-			var allAnalyticsSkills = _analyticsSkillRepository.Skills(businessUnitId).ToList();
+			var allAnalyticsSkills = _analyticsSkillRepository.Skills(businessUnitId).ToArray();
 			mappedAnalyticsSkills = allAnalyticsSkills.Where(a => applicationSkillCodes.Contains(a.SkillCode)).ToList();
 
 			if (allAnalyticsSkills.Count(a => applicationSkillCodes.Contains(a.SkillCode)) != applicationSkillCodes.Count)

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
 	public class ExternalPerformanceInfoFileProcessor : IExternalPerformanceInfoFileProcessor
 	{
-		private const int MAX_MEASURE_COUNT = 10;
+		private const int maxMeasureCount = 10;
 
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
 		private readonly IPersonRepository _personRepository;
@@ -57,9 +57,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var processResult = new ExternalPerformanceInfoProcessResult();
 			var allLines = byteArrayToString(content);
 
-			var existMeasures = _externalPerformanceRepository.FindAllExternalPerformances().ToList();
-			var allMeasures = new List<IExternalPerformance>();
-			allMeasures.AddRange(existMeasures);
+			var existMeasures = _externalPerformanceRepository.FindAllExternalPerformances().ToArray();
+			var allMeasures = existMeasures.ToList();
 
 			var extractResultCollection = new List<PerformanceInfoExtractionResult>();
 			foreach (var line in allLines)
@@ -96,37 +95,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private void convertToRecordsByMatchingPersonId(IList<PerformanceInfoExtractionResult> allExtractionResults,
 			ExternalPerformanceInfoProcessResult processResult)
 		{
-			var allPersonIds = allExtractionResults.Select(x => x.AgentId).ToList();
-			var allEmploymentNumberAndExternalLogonMatches = _personRepository.FindPersonByIdentities(allPersonIds);
-			var allApplicationLogonNameMatches = new List<IPersonInfoModel>();
-			var hasFetchedAppLogons = false;
+			var allPersonIds = allExtractionResults.Select(x => x.AgentId).ToArray();
+			var allEmploymentNumberAndExternalLogonMatches = _personRepository.FindPersonByIdentities(allPersonIds).ToLookup(x => x.LogonName);
+			var allApplicationLogonNameMatches = new Lazy<IPersonInfoModel[]>(() => _tenantLogonPersonProvider.GetByLogonNames(allPersonIds).ToArray());
 			foreach (var extractionResult in allExtractionResults)
 			{
-				var personIds = new List<Guid>();
-
-				var employmentNumberAndExternalLogonMatches = allEmploymentNumberAndExternalLogonMatches
-					.Where(x => x.LogonName == extractionResult.AgentId).ToList();
-
-				personIds.AddRange(employmentNumberAndExternalLogonMatches
-					.Where(x => x.MatchField == IdentityMatchField.EmploymentNumber).Select(x => x.PersonId));
+				var employmentNumberAndExternalLogonMatches = allEmploymentNumberAndExternalLogonMatches[extractionResult.AgentId].ToLookup(t => t.MatchField, a => a.PersonId);
+				var personIds = employmentNumberAndExternalLogonMatches[IdentityMatchField.EmploymentNumber].ToList();
 
 				if (!personIds.Any())
 				{
-					personIds.AddRange(employmentNumberAndExternalLogonMatches
-						.Where(x => x.MatchField == IdentityMatchField.ExternalLogon).Select(x => x.PersonId));
+					personIds.AddRange(employmentNumberAndExternalLogonMatches[IdentityMatchField.ExternalLogon]);
 				}
 
 				if (!personIds.Any())
 				{
-					if (!allApplicationLogonNameMatches.Any() && !hasFetchedAppLogons)
+					if (allApplicationLogonNameMatches.Value.Any())
 					{
-						allApplicationLogonNameMatches.AddRange(_tenantLogonPersonProvider.GetByLogonNames(allPersonIds));
-						hasFetchedAppLogons = true;
-					}
-
-					if (allApplicationLogonNameMatches.Any())
-					{
-						var applicationLogonNameMatches = allApplicationLogonNameMatches.Where(x => x?.ApplicationLogonName == extractionResult.AgentId);
+						var applicationLogonNameMatches = allApplicationLogonNameMatches.Value.Where(x => x?.ApplicationLogonName == extractionResult.AgentId);
 						personIds.AddRange(applicationLogonNameMatches.Select(x => x.PersonId));
 					}
 				}
@@ -165,10 +151,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 			else
 			{
-				if (existingTypes.Count == MAX_MEASURE_COUNT)
+				if (existingTypes.Count == maxMeasureCount)
 				{
 					extractionResult.Error =
-						$"{extractionResult.RawLine},{string.Format(Resources.RowExceedsLimitOfGamificationMeasures, MAX_MEASURE_COUNT)}";
+						$"{extractionResult.RawLine},{string.Format(Resources.RowExceedsLimitOfGamificationMeasures, maxMeasureCount)}";
 					return;
 				}
 				existingTypes.Add(new ExternalPerformance
@@ -182,8 +168,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 		private bool isFileTypeValid(ImportFileData importFileData)
 		{
-			var fileName = importFileData.FileName.ToLower();
-			return fileName.EndsWith("csv");
+			return importFileData.FileName.EndsWith("csv",StringComparison.InvariantCultureIgnoreCase);
 		}
 
 		private IList<string> byteArrayToString(byte[] byteArray)
@@ -193,7 +178,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			{
 				using (var sr = new StreamReader(ms))
 				{
-
 					while (!sr.EndOfStream)
 					{
 						var record = sr.ReadLine();
