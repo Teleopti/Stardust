@@ -21,6 +21,7 @@
 		var getBudgetGroupsUrl = "../api/RequestAllowance/budgetGroups";
 		var getBudgetAllowanceUrl = "../api/RequestAllowance/allowances";
 		var overtimeTypesUrl = "../api/MultiplicatorDefinitionSet/Overtime";
+		var overtimeLicenseUrl = "../api/Requests/GetOvertimeRequestsLicenseAvailability";
 		var hierarchyUrl;
 
 		if (toggleSvc.Wfm_HideUnusedTeamsAndSites_42690) {
@@ -105,6 +106,12 @@
 
 		this.getOvertimeTypes  = function () {
 			return $http.get(overtimeTypesUrl).then(function (result) {
+				return result;
+			});
+		};
+
+		this.getOvertimeLicense = function () {
+			return $http.get(overtimeLicenseUrl).then(function (result) {
 				return result;
 			});
 		};

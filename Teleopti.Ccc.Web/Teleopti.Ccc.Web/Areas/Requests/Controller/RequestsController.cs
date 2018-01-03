@@ -1,10 +1,13 @@
 using System;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
@@ -26,9 +29,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		private readonly ITeamsProvider _teamsProvider;
 		private readonly IToggleManager _toggleManager;
 
+		private readonly ICurrentDataSource _currentDataSource;
+		private readonly IAuthorization _authorization;
+
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			IRequestCommandHandlingProvider commandHandlingProvider,
-			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider, IToggleManager toggleManager)
+			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider, IToggleManager toggleManager, ICurrentDataSource currentDataSource, IAuthorization authorization)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_commandHandlingProvider = commandHandlingProvider;
@@ -36,6 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			_shiftTradeRequestViewModelFactory = shiftTradeRequestViewModelFactory;
 			_teamsProvider = teamsProvider;
 			_toggleManager = toggleManager;
+			_currentDataSource = currentDataSource;
+			_authorization = authorization;
 		}
 
 		[HttpPost, Route("api/Requests/requests"), UnitOfWork]
@@ -112,6 +120,21 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 				: _teamsProvider.GetOrganizationBasedOnRawData(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
 					DefinedRaptorApplicationFunctionPaths.WebRequests);
 
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Requests/GetOvertimeRequestsLicenseAvailability")]
+		public virtual OvertimeRequestLicenseAvailabilityResult GetLicenseAvailability()
+		{
+			var currentName = _currentDataSource.CurrentName();
+			var isLicenseAvailible = DefinedLicenseDataFactory.HasLicense(currentName) &&
+									 DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
+										 DefinedLicenseOptionPaths.TeleoptiCccOvertimeRequests);
+
+			return new OvertimeRequestLicenseAvailabilityResult
+			{
+				IsLicenseAvailable = isLicenseAvailible,
+				HasPermissionForOvertimeRequests = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb)
+			};
 		}
 	}
 }

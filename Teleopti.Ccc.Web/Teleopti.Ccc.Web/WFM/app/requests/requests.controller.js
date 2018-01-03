@@ -46,6 +46,10 @@
 		vm.isUsingRequestSubmitterTimeZone = false;
 		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
 		vm.isOvertimeEnabled = toggleService.Wfm_Requests_OvertimeRequestHandling_45177;
+		vm.overtimeRequestsLicenseAvailable = false;
+		requestsDataService.getOvertimeLicense().then(function (result) {
+			vm.overtimeRequestsLicenseAvailable = result.data.IsLicenseAvailable && result.data.HasPermissionForOvertimeRequests;
+		});
 		vm.teamNameMap = {};
 
 		vm.selectedGroups = {
