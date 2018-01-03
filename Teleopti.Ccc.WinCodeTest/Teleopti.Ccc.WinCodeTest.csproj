@@ -531,7 +531,6 @@
     <Compile Include="Scheduler\AuditHistory\PreviousPageCommandTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
-    <Compile Include="Scheduler\CalculateMinMaxCacheDeciderTest.cs" />
     <Compile Include="Scheduler\Editor\Bug26842.cs" />
     <Compile Include="Scheduler\ExportToScenarioAbsenceFinderTest.cs" />
     <Compile Include="Scheduler\ExportToScenarioAccountPersisterTest.cs" />

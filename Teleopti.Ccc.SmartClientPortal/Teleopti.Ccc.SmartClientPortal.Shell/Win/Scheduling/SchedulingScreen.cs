@@ -208,7 +208,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly SchedulerGroupPagesProvider _groupPagesProvider;
 		public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
 		private SkillResultViewSetting _skillResultViewSetting;
-		private const int maxCalculatMinMaxCacheEnries = 100000;
 		private DateTimePeriod _selectedPeriod;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
@@ -3196,7 +3195,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
 			var selectedPeriod = new PeriodExtractorFromScheduleParts().ExtractPeriod(scheduleDays).Value;
-			turnOffCalculateMinMaxCacheIfNeeded(_schedulingOptions);
 			_schedulingOptions.NotAllowedShiftCategories.Clear();
 
 			AdvanceLoggingService.LogSchedulingInfo(_schedulingOptions,
@@ -3223,27 +3221,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var selectedAgents = argument.SelectedScheduleDays.Select(x => x.Person).Distinct();
 				var backgroundWrapper = new BackgroundWorkerWrapper(_backgroundWorkerScheduling);
 				desktopScheduling.Execute(new SchedulingCallbackForDesktop(backgroundWrapper, _schedulingOptions), _schedulingOptions, backgroundWrapper, selectedAgents, selectedPeriod);
-			}
-		}
-
-		private void turnOffCalculateMinMaxCacheIfNeeded(SchedulingOptions schedulingOptions)
-		{
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_DoNotKillCache_46724))
-			{
-				_container.Resolve<IMbCacheFactory>().EnableCache<IWorkShiftWorkTime>();
-				return;
-			}
-			var calculateMinMaxCacheDecider = new CalculateMinMaxCacheDecider();
-			bool turnOfCache = calculateMinMaxCacheDecider.ShouldCacheBeDisabled(_schedulerState, schedulingOptions,
-				_container.Resolve<IEffectiveRestrictionCreator>
-					(), maxCalculatMinMaxCacheEnries);
-			if (turnOfCache)
-			{
-				_container.Resolve<IMbCacheFactory>().DisableCache<IWorkShiftWorkTime>();
-			}
-			else
-			{
-				_container.Resolve<IMbCacheFactory>().EnableCache<IWorkShiftWorkTime>();
 			}
 		}
 
@@ -3429,9 +3406,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
 			_totalScheduled = 0;
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
-
-			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
-
 			var scheduleDays = argument.SelectedScheduleDays;
 
 			var matrixesOfSelectedScheduleDays = _container.Resolve<MatrixListFactory>().CreateMatrixListForSelection(_schedulerState.Schedules, scheduleDays);
@@ -3508,7 +3482,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 			var schedulingOptions = _container.Resolve<ISchedulingOptionsCreator>().CreateSchedulingOptions(optimizerPreferences);
 			schedulingOptions.NotAllowedShiftCategories.Clear();
-			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
 			AdvanceLoggingService.LogOptimizationInfo(optimizerPreferences, scheduleDays.Select(x => x.Person).Distinct().Count(),
 				dateOnlyList.Count, () => runBackgroupWorkerOptimization(e));
 			_undoRedo.CommitBatch();
@@ -4411,12 +4384,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			_agentInfoControl = new AgentInfoControl(_groupPagesProvider, _container, outerPeriod,
 				requestedPeriod, _restrictionExtractor, _schedulerState, _optionalColumns);
-
-			int? maxCacheEnries = maxCalculatMinMaxCacheEnries;
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_DoNotKillCache_46724))
-				maxCacheEnries = null;
-			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl, _schedulerState,
-				_container.Resolve<IEffectiveRestrictionCreator>(), maxCacheEnries);
+			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
 
 			//container can fix this to one row
 			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson =

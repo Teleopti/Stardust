@@ -223,23 +223,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	        }
         }
 
-	    public void InsertAgentInfoControl(AgentInfoControl agentInfoControl, ISchedulerStateHolder schedulerState,
-		    IEffectiveRestrictionCreator effectiveRestrictionCreator, int? maxCalculatedMinMaxCacheEntries)
+	    public void InsertAgentInfoControl(AgentInfoControl agentInfoControl)
 	    {
-		    var schedulingOptions = new SchedulingOptions
-		    {
-			    UseAvailability = true,
-			    UsePreferences = true,
-			    UseRotations = true,
-			    UseStudentAvailability = true
-		    };
-
-			if(maxCalculatedMinMaxCacheEntries.HasValue)
-			{
-				var calculateMinMaxCacheDecider = new CalculateMinMaxCacheDecider();
-				agentInfoControl.MbCacheDisabled = calculateMinMaxCacheDecider.ShouldCacheBeDisabled(schedulerState, schedulingOptions,
-					effectiveRestrictionCreator, maxCalculatedMinMaxCacheEntries.Value);
-			}
 		    tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
 		    agentInfoControl.Dock = DockStyle.Fill;
 		    tabInfoPanels.Refresh();

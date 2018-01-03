@@ -993,7 +993,6 @@
     <Compile Include="WinCode\Scheduling\BestShiftChooser.cs" />
     <Compile Include="WinCode\Scheduling\BusinessRuleResponseListViewModel.cs" />
     <Compile Include="WinCode\Scheduling\BusinessRuleResponseViewModel.cs" />
-    <Compile Include="WinCode\Scheduling\CalculateMinMaxCacheDecider.cs" />
     <Compile Include="WinCode\Scheduling\ColumnType.cs" />
     <Compile Include="WinCode\Scheduling\DateDateTimePeriodDictionary.cs" />
     <Compile Include="WinCode\Scheduling\DateTimePeriodViewModel.cs" />

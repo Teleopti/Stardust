@@ -108,7 +108,6 @@
 		ResourcePlanner_BlockSchedulingValidation_46092,
 		ResourcePlanner_BpoScheduling_46265,
 		ResourcePlanner_RemoveImplicitResCalcContext_46680,
-		ResourcePlanner_DoNotKillCache_46724,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 		ResourcePlanner_TimeZoneIssues_45818,
 		ResourcePlanner_DayOffOptimizationIslands_47208,

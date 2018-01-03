@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 	    private readonly IRestrictionExtractor _restrictionExtractor;
 	    private IList<GroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
-	    private bool _mbCacheDisabled;
 	    private GroupPageLight _lastSelectedGroupPage;
 
         public AgentInfoControl()
@@ -75,24 +74,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 		    _stateHolder = stateHolder;
 			_optionalColumns = optionalColumns;
 		}
-
-	    public bool MbCacheDisabled
-	    {
-		    get { return _mbCacheDisabled; }
-		    set
-		    {
-			    _mbCacheDisabled = value;
-			    if (_mbCacheDisabled)
-			    {
-					toolStrip1.Visible = true;
-				    listViewSchedulePeriod.Top = toolStrip1.Height;
-			    }
-			    else
-			    {
-				    listViewSchedulePeriod.Dock = DockStyle.Fill;
-			    }
-		    }
-	    }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void UpdateData(IDictionary<IPerson, IScheduleRange> personDictionary, 
@@ -123,7 +104,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 
             if (tabControlAgentInfo.SelectedTab == tabPageAdvSchedulePeriod && _dateIsSelected)
             {
-                updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState, !MbCacheDisabled);
+                updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
                 return;
             }
 
@@ -663,7 +644,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
             listViewPersonPeriod.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
-        private void updateSchedulePeriodData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state, bool calculateLegalState)
+        private void updateSchedulePeriodData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
         {
             listViewSchedulePeriod.Items.Clear();
 
@@ -680,7 +661,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 			};
 
 			var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _container.Resolve<MatrixListFactory>(), _container.Resolve<IWorkShiftMinMaxCalculator>());
-			helper.SchedulePeriodData(calculateLegalState);
+			helper.SchedulePeriodData(true);
 			if (nullOrZeroPeriod(helper.Period))
 			{
 				var noPeriodPresentItem = new ListViewItem(Resources.NoPeriodPresent);
@@ -771,20 +752,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
             if (employmentType != EmploymentType.HourlyStaff)
             {
 				listViewSchedulePeriod.Items.Add("");
-				if(calculateLegalState)
-	            {
-		            createAndAddItem(listViewSchedulePeriod, Resources.PeriodInLegalState,
-			            helper.PeriodInLegalState.ToString(CultureInfo.CurrentCulture), 2);
-		            createAndAddItem(listViewSchedulePeriod, Resources.WeekInLegalState,
-			            helper.WeekInLegalState.ToString(CultureInfo.CurrentCulture), 2);
-	            }
-				else
-	            {
-					createAndAddItem(listViewSchedulePeriod, Resources.PeriodInLegalState,
-						Resources.NA, 2);
-					createAndAddItem(listViewSchedulePeriod, Resources.WeekInLegalState,
-						Resources.NA, 2);
-	            }
+	            createAndAddItem(listViewSchedulePeriod, Resources.PeriodInLegalState,
+		            helper.PeriodInLegalState.ToString(CultureInfo.CurrentCulture), 2);
+	            createAndAddItem(listViewSchedulePeriod, Resources.WeekInLegalState,
+		            helper.WeekInLegalState.ToString(CultureInfo.CurrentCulture), 2);
+
             }
         }
 
@@ -923,7 +895,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState, true);
+			updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
 		}
     }
 }
