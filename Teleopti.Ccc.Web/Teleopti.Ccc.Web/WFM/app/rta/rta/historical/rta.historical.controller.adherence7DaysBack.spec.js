@@ -6,7 +6,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20180103';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Period: {StartDate: '20180101'}
+			Navigation: {First: '20180101'}
 		});
 
 		var c = t.createController();
@@ -19,7 +19,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20180103';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Period: {EndDate: '20180104'}
+			Navigation: {Last: '20180104'}
 		});
 
 		var c = t.createController();
@@ -32,7 +32,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20180103';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Period: {StartDate: '20180103'}
+			Navigation: {First: '20180103'}
 		});
 
 		var c = t.createController();
@@ -45,7 +45,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20180103';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Period: {EndDate: '20180103'}
+			Navigation: {Last: '20180103'}
 		});
 
 		var c = t.createController();
@@ -58,7 +58,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20171220';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Period: {StartDate: '20171215', EndDate: '20171221'}
+			Navigation: {First: '20171215', Last: '20171221'}
 		});
 
 		var c = t.createController();
@@ -71,7 +71,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.stateParams.date = '20171220';
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
-			Period: {StartDate: '20171215', EndDate: '20171221'}
+			Navigation: {First: '20171215', Last: '20171221'}
 		});
 
 		var c = t.createController();

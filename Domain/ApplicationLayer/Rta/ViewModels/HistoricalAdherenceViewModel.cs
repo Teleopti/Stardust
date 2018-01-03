@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string Now { get; set; }
 		public ScheduleTimeline Timeline { get; set; }
 		public int? AdherencePercentage { get; set; }
-		public HistoricalAdherencePeriod Period { get; set; }
+		public HistoricalAdherenceNavigationViewModel Navigation { get; set; }
 	}
 
-	public class HistoricalAdherencePeriod
+	public class HistoricalAdherenceNavigationViewModel
 	{
-		public string StartDate { get; set; }
-		public string EndDate { get; set; }
+		public string First { get; set; }
+		public string Last { get; set; }
 	}
 
 	public class HistoricalAdherenceActivityViewModel

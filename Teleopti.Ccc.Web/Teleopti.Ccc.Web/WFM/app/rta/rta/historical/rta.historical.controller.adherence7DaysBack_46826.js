@@ -54,7 +54,7 @@
 			data.OutOfAdherences = data.OutOfAdherences || [];
 			data.Changes = data.Changes || [];
 			data.Timeline = data.Timeline || {};
-			data.Period = data.Period || {};
+			data.Navigation = data.Navigation || {};
 
 			shiftInfo = buildShiftInfo(data);
 
@@ -80,13 +80,13 @@
 
 			vm.diamonds = buildDiamonds(data);
 
-			if ($stateParams.date > data.Period.StartDate) {
+			if ($stateParams.date > data.Navigation.First) {
 				var previousDay = moment($stateParams.date).subtract(1, 'day');
 				vm.previousHref = $state.href($state.current.name, {personId: vm.personId, date: previousDay.format('YYYYMMDD')});
 				vm.previousTooltip = previousDay.format('YYYY-MM-DD');
 			}
 
-			if ($stateParams.date < data.Period.EndDate) {
+			if ($stateParams.date < data.Navigation.Last) {
 				var nextDay = moment($stateParams.date).add(1, 'day');
 				vm.nextHref = $state.href($state.current.name, {personId: vm.personId, date: nextDay.format('YYYYMMDD')});
 				vm.nextTooltip = nextDay.format('YYYY-MM-DD');

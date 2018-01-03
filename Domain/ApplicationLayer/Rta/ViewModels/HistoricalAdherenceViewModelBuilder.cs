@@ -78,10 +78,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					EndTime = formatForUser(data.DisplayEndTime)
 				},
 				AdherencePercentage = _calculator.CalculatePercentage(data.ShiftStartTime, data.ShiftEndTime, data.Adherences),
-				Period = new HistoricalAdherencePeriod
+				Navigation = new HistoricalAdherenceNavigationViewModel
 				{
-					StartDate = formatDateForUser(data.Now.AddDays(-6)),
-					EndDate = formatDateForUser(data.Now)
+					First = formatDateForUser(data.Now.AddDays(-6)),
+					Last = formatDateForUser(data.Now)
 				}
 			};
 		}

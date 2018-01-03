@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 
 			var viewModel = Target.Build(person);
 
-			viewModel.Period.StartDate.Should().Be("20171227");
-			viewModel.Period.EndDate.Should().Be("20180102");
+			viewModel.Navigation.First.Should().Be("20171227");
+			viewModel.Navigation.Last.Should().Be("20180102");
 		}
 	}
 }
