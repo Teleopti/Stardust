@@ -99,6 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var allPersonIds = allExtractionResults.Select(x => x.AgentId).ToList();
 			var allEmploymentNumberAndExternalLogonMatches = _personRepository.FindPersonByIdentities(allPersonIds);
 			var allApplicationLogonNameMatches = new List<IPersonInfoModel>();
+			var hasFetchedAppLogons = false;
 			foreach (var extractionResult in allExtractionResults)
 			{
 				var personIds = new List<Guid>();
@@ -117,12 +118,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 				if (!personIds.Any())
 				{
-					if (!allApplicationLogonNameMatches.Any())
+					if (!allApplicationLogonNameMatches.Any() && !hasFetchedAppLogons)
 					{
 						allApplicationLogonNameMatches.AddRange(_tenantLogonPersonProvider.GetByLogonNames(allPersonIds));
+						hasFetchedAppLogons = true;
 					}
-					var applicationLogonNameMatches = allApplicationLogonNameMatches.Where(x => x?.ApplicationLogonName == extractionResult.AgentId);
-					personIds.AddRange(applicationLogonNameMatches.Select(x => x.PersonId));
+
+					if (allApplicationLogonNameMatches.Any())
+					{
+						var applicationLogonNameMatches = allApplicationLogonNameMatches.Where(x => x?.ApplicationLogonName == extractionResult.AgentId);
+						personIds.AddRange(applicationLogonNameMatches.Select(x => x.PersonId));
+					}
 				}
 
 				if (!personIds.Any())
