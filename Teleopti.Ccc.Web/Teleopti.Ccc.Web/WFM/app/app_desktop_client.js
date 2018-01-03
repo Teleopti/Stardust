@@ -49,8 +49,8 @@ var wfm = angular.module('wfm', [
 	'wfm.templates',
 	'wfm.gamification',
 ]).config([
-	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', 'RtaStateProvider',
-	function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider) {
+	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', 
+	function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider) {
 
 		$urlRouterProvider.otherwise("/#");
 
@@ -58,8 +58,6 @@ var wfm = angular.module('wfm', [
 			url: '/',
 			templateUrl: 'html/main.html'
 		});
-
-		RtaStateProvider.config($stateProvider);
 
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 		$translateProvider.useUrlLoader('../api/Global/Language');

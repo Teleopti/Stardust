@@ -69,14 +69,12 @@ var wfm = angular.module('wfm', [
 		'$urlRouterProvider',
 		'$translateProvider',
 		'$httpProvider',
-		'RtaStateProvider',
 		'$mdGestureProvider',
 		function(
 			$stateProvider,
 			$urlRouterProvider,
 			$translateProvider,
 			$httpProvider,
-			RtaStateProvider,
 			$mdGestureProvider
 		) {
 			$urlRouterProvider.otherwise('/#');
@@ -85,8 +83,6 @@ var wfm = angular.module('wfm', [
 				url: '/',
 				templateUrl: 'html/main.html'
 			});
-
-			RtaStateProvider.config($stateProvider);
 
 			$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 			$translateProvider.useUrlLoader('../api/Global/Language');
@@ -104,7 +100,6 @@ var wfm = angular.module('wfm', [
 		'$locale',
 		'CurrentUserInfo',
 		'Toggle',
-		'RtaState',
 		'areasService',
 		'NoticeService',
 		function(
@@ -115,7 +110,6 @@ var wfm = angular.module('wfm', [
 			$locale,
 			currentUserInfo,
 			toggleService,
-			RtaState,
 			areasService,
 			noticeService
 		) {
@@ -148,8 +142,6 @@ var wfm = angular.module('wfm', [
 
 			$rootScope._ = window._;
 			setupPermissionCheckForModules();
-
-			RtaState(toggleService);
 
 			function refreshContext(event, next, toParams) {
 				var localLang = '';

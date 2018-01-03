@@ -1680,7 +1680,7 @@
     <Content Include="WFM\app\rta\rta\rta.route.service.js" />
     <Content Include="WFM\app\rta\rta\rta.route.service.spec.js" />
     <Content Include="WFM\app\rta\rta\rta.service.js" />
-    <Content Include="WFM\app\rta\rta\rta.state.provider.js" />
+    <Content Include="WFM\app\rta\rta\rta.routes.js" />
     <Content Include="WFM\app\rta\rta\rta.state.service.js" />
     <Content Include="WFM\app\rta\rta\_modules.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.js" />
