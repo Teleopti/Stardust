@@ -130,14 +130,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
 			builder.RegisterModule(new ScheduleOvertimeModule(_configuration));
-			if (_configuration.Toggle(Toggles.ResourcePlanner_RemoveClassicShiftCat_46582))
-			{
-				builder.RegisterType<RemoveShiftCategoryToBeInLegalStateAlwaysTeamBlock>().As<RemoveShiftCategoryToBeInLegalState>().InstancePerLifetimeScope();				
-			}
-			else
-			{
-				builder.RegisterType<RemoveShiftCategoryToBeInLegalState>().InstancePerLifetimeScope();
-			}
+			builder.RegisterType<RemoveShiftCategoryToBeInLegalState>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleHourlyStaffExecutor>().InstancePerLifetimeScope();
 		
 			builder.RegisterType<ScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();
@@ -294,7 +287,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().SingleInstance();
 			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().SingleInstance();
-			builder.RegisterType<SchedulePeriodListShiftCategoryBackToLegalStateService>().As<ISchedulePeriodListShiftCategoryBackToLegalStateService>().InstancePerLifetimeScope();
 
 			builder.RegisterType<WorkTimeStartEndExtractor>().As<IWorkTimeStartEndExtractor>().SingleInstance();
 			builder.RegisterType<DayOffOptimizerValidator>().As<IDayOffOptimizerValidator>().InstancePerLifetimeScope();

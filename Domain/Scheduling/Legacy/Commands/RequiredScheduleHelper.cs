@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
@@ -14,60 +12,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class RequiredScheduleHelper
 	{
-		private readonly ISchedulePeriodListShiftCategoryBackToLegalStateService _shiftCategoryBackToLegalState;
 		private readonly RuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 		private readonly IStudentSchedulingService _studentSchedulingService;
 		private readonly Func<IOptimizationPreferences> _optimizationPreferences;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly TeamBlockRetryRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
 
-		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, 
-				RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, 
+		public RequiredScheduleHelper(RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, 
 				Func<ISchedulingResultStateHolder> resultStateHolder, 
 				IStudentSchedulingService studentSchedulingService, 
 				Func<IOptimizationPreferences> optimizationPreferences, 
 				IGridlockManager gridlockManager, 
-				IScheduleDayChangeCallback scheduleDayChangeCallback, 
-				TeamBlockRetryRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService)
+				IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
-			_shiftCategoryBackToLegalState = shiftCategoryBackToLegalState;
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 			_resultStateHolder = resultStateHolder;
 			_studentSchedulingService = studentSchedulingService;
 			_optimizationPreferences = optimizationPreferences;
 			_gridlockManager = gridlockManager;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_teamBlockRemoveShiftCategoryBackToLegalService = teamBlockRemoveShiftCategoryBackToLegalService;
-		}
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveClassicShiftCat_46582)]
-		public void RemoveShiftCategoryBackToLegalState(
-			IEnumerable<IScheduleMatrixPro> matrixList,
-			ISchedulingProgress backgroundWorker,
-			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
-		{
-			if (matrixList == null)
-				throw new ArgumentNullException(nameof(matrixList));
-			if (backgroundWorker == null)
-				throw new ArgumentNullException(nameof(backgroundWorker));
-			if (schedulingOptions == null)
-				throw new ArgumentNullException(nameof(schedulingOptions));
-			using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
-			{
-				if (backgroundWorker.CancellationPending)
-					return;
-
-				if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
-				{
-					_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, _resultStateHolder(), matrixList, backgroundWorker);
-				}
-				else
-				{
-					_shiftCategoryBackToLegalState.Execute(matrixList, schedulingOptions);
-				}
-			}
 		}
 
 		public void ScheduleSelectedStudents(IEnumerable<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,

@@ -104,7 +104,6 @@
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_BreakPreferenceStartTimeByMax_46002,
-		ResourcePlanner_RemoveClassicShiftCat_46582,
 		ResourcePlanner_BlockSchedulingValidation_46092,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 		ResourcePlanner_TimeZoneIssues_45818,

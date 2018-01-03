@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			callbackTracker.NumberOfScheduleAttempts.Should().Be.LessThanOrEqualTo(1);
 		}
 
-		public SchedulingCallbackTest(SeperateWebRequest seperateWebRequest, RemoveClassicShiftCategory resourcePlannerRemoveClassicShiftCat46582, bool resourcePlannerTimeZoneIssues45818, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerRemoveClassicShiftCat46582, resourcePlannerTimeZoneIssues45818, resourcePlannerXxl47258)
+		public SchedulingCallbackTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerTimeZoneIssues45818, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerTimeZoneIssues45818, resourcePlannerXxl47258)
 		{
 		}
 	}

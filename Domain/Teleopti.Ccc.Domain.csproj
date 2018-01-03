@@ -1002,7 +1002,6 @@
     <Compile Include="InterfaceLegacy\Domain\ISchedulePartExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePartModifyAndRollbackService.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriod.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetCalculator.cs" />
@@ -2223,7 +2222,6 @@
     <Compile Include="Optimization\OptimizationResult.cs" />
     <Compile Include="Optimization\OptimizeIntradayDesktop.cs" />
     <Compile Include="Optimization\PersistSchedulesAfterIsland.cs" />
-    <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
     <Compile Include="Optimization\OptimizationResultModel.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverExecuter.cs" />
