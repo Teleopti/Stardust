@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -22,12 +21,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		
 		public virtual IEnumerable<ShiftProjectionCache> Execute(IWorkShiftRuleSet ruleSet)
 		{
-			var callback = new WorkShiftAddStopperCallback();
-			callback.StartNewRuleSet(ruleSet);
-			var tmpList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, callback).Select(s => s.WorkShift).ToArray();
-                
-			return tmpList.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift))
-				.Select(workShift => new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker)).ToList();
+			return _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, null)
+				.Select(s => s.WorkShift)
+				.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift))
+				.Select(workShift => new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker));
 		}
 	}
 }
