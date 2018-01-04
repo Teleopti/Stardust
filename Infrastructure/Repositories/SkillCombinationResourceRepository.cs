@@ -514,29 +514,51 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 				dt.Rows.Add(row);
 
-				var numberResources =
-					_currentUnitOfWork.Current()
-						.Session()
-						.CreateSQLQuery(
-							"SELECT 1 FROM [ReadModel].[SkillCombinationResource] WHERE StartDateTime = :StartDateTime AND SkillCombinationId = :id")
-						.SetParameter("StartDateTime", delta.StartDateTime)
-						.SetParameter("id", id)
-						.UniqueResult<int?>();
-
-				if (numberResources.HasValue) continue;
-
 				var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 				_currentUnitOfWork.Current().Session()
 					.CreateSQLQuery(@"
-										INSERT INTO [ReadModel].[SkillCombinationResource] (SkillCombinationId, StartDateTime, EndDateTime, Resource, InsertedOn, BusinessUnit)
-										SELECT :SkillCombinationId, :StartDateTime, :EndDateTime, :Resource, 
+										MERGE INTO [ReadModel].[SkillCombinationResource] as r
+				USING (
+					VALUES 
+					(
+						:SkillCombinationId, :StartDateTime, :EndDateTime, :Resource, 
 										(SELECT CASE 
 												   WHEN InsertedOn IS NULL 
 													THEN GETUTCDATE()
 												   ELSE InsertedOn 
 												END as InsertedOn
 										 FROM (SELECT top(1) InsertedOn from [ReadModel].SkillCombinationResource Where BusinessUnit = :BusinessUnit order by InsertedOn desc) as temp)
-										, :BusinessUnit")
+										, :BusinessUnit
+				)) AS S (
+					SkillCombinationId,
+					StartDateTime, 
+					EndDateTime, 
+					Resource, 
+					InsertedOn, 
+					BusinessUnit
+				) 
+				ON 
+					r.StartDateTime = S.StartDateTime AND r.SkillCombinationId = S.SkillCombinationId 
+				WHEN NOT MATCHED THEN 
+					INSERT 
+					(
+						SkillCombinationId,
+						StartDateTime, 
+						EndDateTime, 
+						Resource, 
+						InsertedOn, 
+						BusinessUnit
+					) VALUES (
+						S.SkillCombinationId,
+						S.StartDateTime, 
+						S.EndDateTime, 
+						S.Resource, 
+						S.InsertedOn, 
+						S.BusinessUnit
+					) 
+				WHEN MATCHED THEN 
+					UPDATE SET
+						Resource = S.Resource + r.Resource;")
 					.SetParameter("SkillCombinationId", id)
 					.SetParameter("StartDateTime", delta.StartDateTime)
 					.SetParameter("EndDateTime", delta.EndDateTime)
@@ -584,3 +606,4 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 	}
 
 }
+ 
