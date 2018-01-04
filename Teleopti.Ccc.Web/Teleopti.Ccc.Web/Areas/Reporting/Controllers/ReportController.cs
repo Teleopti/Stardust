@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 						HelpUrl = helpUrl,
 						CurrentLogonAgentName = reportContext.PersonName,
 						CurrentBuName = reportContext.BusinessUnitName,
-						UseOpenXml = _toggleManager.IsEnabled(Toggles.Report_UseOpenXmlFormat_35797)
+						UseOpenXml = true
 					});
 			}
 		}

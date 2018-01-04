@@ -93,8 +93,7 @@
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
 		Wfm_People_SetFallbackValuesForImporting_43289,
 		Wfm_People_MoveImportJobToBackgroundService_43582,
-
-		Report_UseOpenXmlFormat_35797,
+		
 		Scheduler_IntradayOptimization_36617,
 		Scheduler_ShowSkillPrioLevels_41980,
 		Scheduler_RestrictionReport_47013,

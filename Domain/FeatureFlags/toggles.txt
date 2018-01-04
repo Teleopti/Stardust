@@ -184,12 +184,12 @@ HealthCheck_EasyValidateAndFixReadModels_39696 = true
 HealthCheck_ReinitializeReadModels_39697 = true
 
 # Ziggy #
-Report_UseOpenXmlFormat_35797 = true
 Scheduler_LoadWithoutRequests_38567 = true
 
 Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 WfmStaffing_AddOvertime_42524 = RC 
 Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = true
+Wfm_Staffing_StaffingReadModel49DaysStep2_45109 = RC
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = true
 Staffing_ReadModel_BetterAccuracy_Step4_43389 = true
 Wfm_Requests_HandleFourteenDaysFast_43390 = true
