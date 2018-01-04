@@ -16,7 +16,7 @@
 		var teamAdherences = [];
 		var skills = [];
 		var skillAreas = [];
-		var phoneStates = [];
+		var excludedPhoneStates = [];
 		
 		var service = {
 			withToggle: faker.withToggle,
@@ -32,7 +32,7 @@
 			
 			withSkill: withSkill,
 			withSkillAreas: withSkillAreas,
-			withPhoneState: withPhoneState,
+			withExcludedPhoneState: withExcludedPhoneState,
 			withOrganization: withOrganization,
 			withOrganizationOnSkills: withOrganizationOnSkills,
 			withHistoricalAdherence: withHistoricalAdherence,
@@ -136,29 +136,28 @@
 
 		faker.fake(/\.\.\/api\/PhoneState\/InfoFor(.*)/,
 			function (data) {
-				if (data.ids.indexOf(null) > -1 || data.ids.indexOf("noState") > -1)
-					throw new Error('Nope, dont ask server for that')
-
-				var result = phoneStates.filter(function (s) {
-					return data.ids.indexOf(s.Id) > -1
-				});
-
-				if (result.length === 0) {
-					result = agentStates
-						.filter(function (s) {
-							if (data.ids.indexOf(s.StateId) > -1)
-								return true;
-						})
-						.map(function (s) {
-							return {
-								Name: s.State,
-								Id: s.StateId
-							}
-						});
-				}
-				return [200, {
-					PhoneStates: result
-				}]
+				// if (data.ids.indexOf(null) > -1 || data.ids.indexOf("noState") > -1)
+				// 	throw new Error('Nope, dont ask server for that')
+                //
+				// var result = phoneStates.filter(function (s) {
+				// 	return data.ids.indexOf(s.Id) > -1
+				// });
+                //
+				// if (result.length === 0) {
+				// 	result = agentStates
+				// 		.filter(function (s) {
+				// 			if (data.ids.indexOf(s.StateId) > -1)
+				// 				return true;
+				// 		})
+				// 		.map(function (s) {
+				// 			return {
+				// 				Name: s.State,
+				// 				Id: s.StateId
+				// 			}
+				// 		});
+				// }
+				//
+				return [200, excludedPhoneStates]
 			});
 
 		faker.fake(/\.\.\/api\/Overview\/SiteCards(.*)/,
@@ -267,8 +266,8 @@
 			return this;
 		}
 
-		function withPhoneState(phoneState) {
-			phoneStates.push(phoneState);
+		function withExcludedPhoneState(phoneState) {
+			excludedPhoneStates.push(phoneState);
 			return this;
 		}
 
@@ -307,7 +306,7 @@
 			siteAdherences = [];
 			teamAdherences = [];
 			skillAreas = [];
-			phoneStates = [];
+			excludedPhoneStates = [];
 			historicalAdherence = {};
 			faker.clear();
 		};

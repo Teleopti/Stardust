@@ -102,7 +102,8 @@
         function getPhoneStates(data) {
             return $resource('../api/PhoneState/InfoFor', {}, {
                 query: {
-                    method: 'GET'
+                    method: 'GET',
+					isArray: true
                 }
             }).query({
                 ids: data

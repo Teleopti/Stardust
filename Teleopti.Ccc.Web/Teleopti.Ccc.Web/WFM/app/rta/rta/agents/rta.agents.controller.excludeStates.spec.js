@@ -1,9 +1,9 @@
 'use strict';
-rtaTester.describe('RtaAgentsController', function(it, fit, xit, _, 
-													$state,
-												   $fakeBackend,
-												   $controllerBuilder,
-												   stateParams) {
+rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
+													 $state,
+													 $fakeBackend,
+													 $controllerBuilder,
+													 stateParams) {
 	var vm;
 
 	it('should include state id in agent states', function () {
@@ -82,15 +82,16 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 		expect(vm.states[0].Selected).toEqual(false);
 	});
 
-	it('should order states by name', function () {
-		stateParams.teamIds = ["teamGuid"];
-		$fakeBackend.withAgentState({
-			PersonId: "personGuid1",
-			TeamId: "teamGuid",
-			State: "B",
-			StateId: 'StateGuid1',
-			TimeInAlarm: 15
-		})
+	it('should order states by name', function (t) {
+		t.stateParams.teamIds = ["teamGuid"];
+		t.backend
+			.withAgentState({
+				PersonId: "personGuid1",
+				TeamId: "teamGuid",
+				State: "B",
+				StateId: 'StateGuid1',
+				TimeInAlarm: 15
+			})
 			.withAgentState({
 				PersonId: "personGuid2",
 				TeamId: "teamGuid",
@@ -99,40 +100,39 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 				TimeInAlarm: 10
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = true);
+		var c = t.createController();
 
-		expect(vm.states[0].Name).toEqual("A");
-		expect(vm.states[1].Name).toEqual("B");
+		expect(c.states[0].Name).toEqual("A");
+		expect(c.states[1].Name).toEqual("B");
 	});
 
-	it('should order with stateParam', function () {
-		stateParams.teamIds = ["teamGuid"];
-		stateParams.es = ["guid2"];
-		$fakeBackend.withAgentState({
-			PersonId: "personGuid1",
-			TeamId: "teamGuid",
-			State: "B",
-			StateId: 'guid1',
-			TimeInAlarm: 15
-		})
-			.withPhoneState(({
+	it('should order with stateParam', function (t) {
+		t.stateParams.teamIds = ["teamGuid"];
+		t.stateParams.es = ["guid2"];
+		t.backend
+			.withAgentState({
+				PersonId: "personGuid1",
+				TeamId: "teamGuid",
+				State: "B",
+				StateId: 'guid1',
+				TimeInAlarm: 15
+			})
+			.withExcludedPhoneState(({
 				Name: "A",
 				Id: "guid2"
 			}));
 
-		vm = $controllerBuilder.createController().vm;
+		var c = t.createController();
 
-		expect(vm.states[0].Name).toEqual("A");
-		expect(vm.states[1].Name).toEqual("B");
+		expect(c.states[0].Name).toEqual("A");
+		expect(c.states[1].Name).toEqual("B");
 	});
 
-	it('should get names for hidden states sent through stateParams', function () {
-		stateParams.teamIds = ["teamGuid"];
-		stateParams.es = ["loggedOutGuid"];
-		$fakeBackend
-			.withPhoneState({
+	it('should get names for hidden states sent through stateParams', function (t) {
+		t.stateParams.teamIds = ["teamGuid"];
+		t.stateParams.es = ["loggedOutGuid"];
+		t.backend
+			.withExcludedPhoneState({
 				Name: "LoggedOut",
 				Id: "loggedOutGuid"
 			})
@@ -141,18 +141,18 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 				TeamId: "teamGuid",
 			});
 
-		vm = $controllerBuilder.createController().vm;
+		var c = t.createController();
 
-		expect(vm.states[0].Name).toEqual('LoggedOut');
-		expect(vm.states[0].Id).toEqual('loggedOutGuid');
-		expect(vm.states[0].Selected).toBeFalsy();
+		expect(c.states[0].Name).toEqual('LoggedOut');
+		expect(c.states[0].Id).toEqual('loggedOutGuid');
+		expect(c.states[0].Selected).toBeFalsy();
 	});
 
-	it('should still get phone state information when deselect multiple from stateParam', function () {
-		stateParams.teamIds = ["teamGuid"];
-		stateParams.es = ["noState", "loggedOutGuid"];
-		$fakeBackend
-			.withPhoneState({
+	it('should still get phone state information when deselect multiple from stateParam', function (t) {
+		t.stateParams.teamIds = ["teamGuid"];
+		t.stateParams.es = ["noState", "loggedOutGuid"];
+		t.backend
+			.withExcludedPhoneState({
 				Name: "LoggedOut",
 				Id: "loggedOutGuid"
 			})
@@ -161,18 +161,17 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 				TeamId: "teamGuid",
 			});
 
-		vm = $controllerBuilder.createController().vm;
+		var c = t.createController();
 
-		var result = vm.states.filter(function (s) {
+		var result = c.states.filter(function (s) {
 			return s.Id === 'loggedOutGuid'
-		})[0]
-		expect(vm.states.length).toEqual(2);
+		})[0];
+
+		expect(c.states.length).toEqual(2);
 		expect(result.Name).toEqual('LoggedOut');
 		expect(result.Id).toEqual('loggedOutGuid');
 		expect(result.Selected).toBeFalsy();
 	});
-
-
 
 
 	[{
@@ -219,19 +218,19 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 			stateParams[selection.type] = [selection.id];
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person1",
-					State: "Training",
-					StateId: 'TrainingGuid',
-					TimeInAlarm: 15
-				}))
+					selection.createAgent({
+						PersonId: "person1",
+						State: "Training",
+						StateId: 'TrainingGuid',
+						TimeInAlarm: 15
+					}))
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person2",
-					State: "LoggedOut",
-					StateId: 'LoggedOutGuid',
-					TimeInAlarm: 10
-				}));
+					selection.createAgent({
+						PersonId: "person2",
+						State: "LoggedOut",
+						StateId: 'LoggedOutGuid',
+						TimeInAlarm: 10
+					}));
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
@@ -252,19 +251,19 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 			stateParams.es = ["StateGuid2"];
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person1",
-					State: "StateGuid1",
-					StateId: 'StateGuid1',
-					TimeInAlarm: 15
-				}))
+					selection.createAgent({
+						PersonId: "person1",
+						State: "StateGuid1",
+						StateId: 'StateGuid1',
+						TimeInAlarm: 15
+					}))
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person2",
-					State: "StateGuid2",
-					StateId: 'StateGuid2',
-					TimeInAlarm: 10
-				}));
+					selection.createAgent({
+						PersonId: "person2",
+						State: "StateGuid2",
+						StateId: 'StateGuid2',
+						TimeInAlarm: 10
+					}));
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
@@ -279,19 +278,19 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 			stateParams[selection.type] = [selection.id];
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person1",
-					State: "Training",
-					StateId: 'TrainingGuid',
-					TimeInAlarm: 15
-				}))
+					selection.createAgent({
+						PersonId: "person1",
+						State: "Training",
+						StateId: 'TrainingGuid',
+						TimeInAlarm: 15
+					}))
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person2",
-					State: "LoggedOut",
-					StateId: 'LoggedOutGuid',
-					TimeInAlarm: 10
-				}));
+					selection.createAgent({
+						PersonId: "person2",
+						State: "LoggedOut",
+						StateId: 'LoggedOutGuid',
+						TimeInAlarm: 10
+					}));
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
@@ -306,73 +305,73 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 			expect($state.go).toHaveBeenCalledWith($state.current.name, {
 				es: ['LoggedOutGuid']
 			}, {
-					notify: false
-				});
+				notify: false
+			});
 		});
 
-		it('should be able to deselect if sending in excluded state in param ' + selection.name, function () {
-			stateParams[selection.type] = [selection.id];
-			stateParams.es = ["LoggedOutGuid"];
-			$fakeBackend
+		it('should be able to deselect if sending in excluded state in param ' + selection.name, function (t) {
+			t.stateParams[selection.type] = [selection.id];
+			t.stateParams.es = ["LoggedOutGuid"];
+			t.backend
+				.withExcludedPhoneState({Id: "LoggedOutGuid"})
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person1",
-					State: "Training",
-					StateId: 'TrainingGuid',
-					TimeInAlarm: 15
-				}))
+					selection.createAgent({
+						PersonId: "person1",
+						State: "Training",
+						StateId: 'TrainingGuid',
+						TimeInAlarm: 15
+					}))
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person2",
-					State: "Logged out",
-					StateId: 'LoggedOutGuid',
-					TimeInAlarm: 10
-				}))
+					selection.createAgent({
+						PersonId: "person2",
+						State: "Logged out",
+						StateId: 'LoggedOutGuid',
+						TimeInAlarm: 10
+					}))
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person3",
-					State: "Phone",
-					StateId: 'PhoneGuid',
-					TimeInAlarm: 5
-				}));
+					selection.createAgent({
+						PersonId: "person3",
+						State: "Phone",
+						StateId: 'PhoneGuid',
+						TimeInAlarm: 5
+					}));
 
-			var c = $controllerBuilder.createController();
-			vm = c.vm;
-			c.apply(vm.showInAlarm = true)
+			var c = t.createController();
+			t.apply(c.showInAlarm = true)
 				.apply(function () {
-					vm.states.filter(function (s) {
+					c.states.filter(function (s) {
 						return s.Id === 'LoggedOutGuid';
 					})[0].Selected = true;
 				})
 				.apply(function () {
-					vm.states.filter(function (s) {
+					c.states.filter(function (s) {
 						return s.Id === 'PhoneGuid';
 					})[0].Selected = false;
 				});
-			c.wait(5000);
+			t.wait(5000);
 
-			expect(vm.agentStates.length).toEqual(2);
-			expect(vm.agentStates[0].PersonId).toEqual("person1");
-			expect(vm.agentStates[1].PersonId).toEqual("person2");
+			expect(c.agentStates.length).toEqual(2);
+			expect(c.agentStates[0].PersonId).toEqual("person1");
+			expect(c.agentStates[1].PersonId).toEqual("person2");
 		});
 
 		it('should deselect No State for ' + selection.name, function () {
 			stateParams[selection.type] = [selection.id];
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person1",
-					State: "Training",
-					StateId: 'TrainingGuid',
-					TimeInAlarm: 15
-				}))
+					selection.createAgent({
+						PersonId: "person1",
+						State: "Training",
+						StateId: 'TrainingGuid',
+						TimeInAlarm: 15
+					}))
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person2",
-					State: "",
-					StateId: null,
-					TimeInAlarm: 10
-				}));
+					selection.createAgent({
+						PersonId: "person2",
+						State: "",
+						StateId: null,
+						TimeInAlarm: 10
+					}));
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
@@ -393,19 +392,19 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 			stateParams.es = ["noState"];
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person1",
-					State: "Training",
-					StateId: 'TrainingGuid',
-					TimeInAlarm: 15
-				}))
+					selection.createAgent({
+						PersonId: "person1",
+						State: "Training",
+						StateId: 'TrainingGuid',
+						TimeInAlarm: 15
+					}))
 				.withAgentState(
-				selection.createAgent({
-					PersonId: "person2",
-					State: "",
-					StateId: null,
-					TimeInAlarm: 10
-				}));
+					selection.createAgent({
+						PersonId: "person2",
+						State: "",
+						StateId: null,
+						TimeInAlarm: 10
+					}));
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
@@ -423,11 +422,7 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 	});
 
 
-
-
-
-
-/**********************************************************/
+	/**********************************************************/
 
 	it('should hide states when unselecting state for skill area', function () {
 		stateParams.skillAreaId = "skillAreaGuid";
@@ -541,14 +536,15 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 		expect($state.go).toHaveBeenCalledWith($state.current.name, {
 			es: ['LoggedOutGuid']
 		}, {
-				notify: false
-			});
+			notify: false
+		});
 	});
 
-	it('should be able to deselect if sending in excluded state in param skil area', function () {
-		stateParams.skillAreaId = "skillAreaGuid";
-		stateParams.es = ["LoggedOutGuid"];
-		$fakeBackend
+	it('should be able to deselect if sending in excluded state in param skill area', function (t) {
+		t.stateParams.skillAreaId = "skillAreaGuid";
+		t.stateParams.es = ["LoggedOutGuid"];
+		t.backend
+			.withExcludedPhoneState({Id: "LoggedOutGuid"})
 			.withSkillAreas([{
 				Id: "skillAreaGuid",
 				Skills: [{
@@ -578,24 +574,23 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 				SkillId: "phoneGuid"
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = true)
+		var c = t.createController();
+		t
 			.apply(function () {
-				vm.states.filter(function (s) {
+				c.states.filter(function (s) {
 					return s.Id === 'LoggedOutGuid';
 				})[0].Selected = true;
 			})
 			.apply(function () {
-				vm.states.filter(function (s) {
+				c.states.filter(function (s) {
 					return s.Id === 'PhoneGuid';
 				})[0].Selected = false;
 			});
-		c.wait(5000);
+		t.wait(5000);
 
-		expect(vm.agentStates.length).toEqual(2);
-		expect(vm.agentStates[0].PersonId).toEqual("person1");
-		expect(vm.agentStates[1].PersonId).toEqual("person2");
+		expect(c.agentStates.length).toEqual(2);
+		expect(c.agentStates[0].PersonId).toEqual("person1");
+		expect(c.agentStates[1].PersonId).toEqual("person2");
 	});
 
 	it('should deselect No State for skill area', function () {
@@ -676,5 +671,15 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 		expect(vm.agentStates.length).toEqual(2);
 	});
 
+	it('should not add duplicate excluded states for each poll', function (t) {
+		t.stateParams.es = ["state"];
+		t.backend.withExcludedPhoneState({Id: "state"});
+
+		var c = t.createController();
+		t.wait(5000);
+
+		expect(c.states.length).toEqual(1);
+		expect(c.states[0].Id).toEqual('state');
+	});
 
 });

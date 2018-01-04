@@ -211,7 +211,11 @@
 			if (stateIdsWithoutNull.length !== 0) {
 				rtaService.getPhoneStates(stateIdsWithoutNull)
 					.then(function (states) {
-						vm.states = vm.states.concat(states.PhoneStates);
+						vm.states = vm.states.concat(states.filter(function (excluded) {
+							return !vm.states.some(function (state) {
+								return state.Id === excluded.Id;
+							})
+						}));
 						sortPhoneStatesByName();
 					});
 			}
@@ -286,7 +290,7 @@
 		vm.sort = function (column) {
 			if (vm.showInAlarm)
 				return;
-			
+
 			if (vm.orderBy !== column)
 				vm.direction = 'asc';
 			else

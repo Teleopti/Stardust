@@ -18,16 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/PhoneState/InfoFor")]
-		public virtual IHttpActionResult InfoFor([FromUri] Query query)
+		public virtual IHttpActionResult InfoFor([FromUri] Params @params)
 		{
-			return Ok(_build.Build(query.Ids));
+			return Ok(_build.Build(@params.Ids).PhoneStates);
 		}
-
-		public class Query
+		
+		public class Params
 		{
 			public Guid[] Ids { get; set; }
 		}
 	}
-
-
+	
 }
