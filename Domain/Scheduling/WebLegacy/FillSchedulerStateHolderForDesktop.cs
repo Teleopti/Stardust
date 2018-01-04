@@ -29,10 +29,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				period = schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(schedulerStateHolderFrom.TimeZoneInfo);
 				fromScheduleRanges.AddRange(agents.Select(agent => schedulerStateHolderFrom.Schedules[agent]));
 			}
+
 			var toScheduleDays = new List<IScheduleDay>();
-			foreach (var fromScheduleRange in fromScheduleRanges)
+			foreach (ScheduleRange fromScheduleRange in fromScheduleRanges)
 			{
-				toScheduleDays.AddRange(fromScheduleRange.ScheduledDayCollection(period).Select(fromScheduleDay => fromScheduleDay.CloneTo(toDic)));
+				foreach (var fromScheduleDay in fromScheduleRange.ScheduledDayCollection(period))
+				{
+					var toScheduleDay = toDic[fromScheduleDay.Person].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly, true);
+					var persistableScheduleDataCollection = fromScheduleDay.PersistableScheduleDataCollection();
+					persistableScheduleDataCollection.OfType<IPersonAssignment>().ForEach(x => toScheduleDay.Add(x));
+					persistableScheduleDataCollection.OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
+					//TODO: green without these... Needed? (I guess at least meetings) If so, add tests...
+					//fromScheduleDay.PersonMeetingCollection().ForEach(x => range.Add(x));
+					//fromScheduleDay.PersonRestrictionCollection().ForEach(x => range.Add(x));
+					persistableScheduleDataCollection.OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
+					persistableScheduleDataCollection.OfType<IAgentDayScheduleTag>().ForEach(x => toScheduleDay.Add(x));
+					persistableScheduleDataCollection.OfType<IStudentAvailabilityDay>().ForEach(x => toScheduleDay.Add(x));
+					toScheduleDays.Add(toScheduleDay);
+				}
 			}
 			toDic.Modify(ScheduleModifier.Scheduler, toScheduleDays, NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter(), true);	
 		}

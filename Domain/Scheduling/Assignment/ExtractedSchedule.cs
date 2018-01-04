@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Interfaces.Domain;
 using System;
-using System.Runtime.Remoting.Messaging;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -785,16 +784,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IPreferenceDay PreferenceDay()
 		{
 			return PersistableScheduleDataCollection().OfType<IPreferenceDay>().SingleOrDefault();
-		}
-
-		public IScheduleDay CloneTo(IScheduleDictionary newOwner)
-		{
-			var ret = (ExtractedSchedule)CreateScheduleDay(newOwner, Person, DateOnlyAsPeriod);
-			foreach (var scheduleData in ScheduleDataInternalCollection())
-			{
-				ret.Add(scheduleData);
-			}
-			return ret;
 		}
 	}
 }
