@@ -11,9 +11,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeScheduleRange : Schedule, IScheduleRange, IUnvalidatedScheduleRangeUpdate
+	public class FakeScheduleRange_DoNotUse : Schedule, IScheduleRange, IUnvalidatedScheduleRangeUpdate
 	{
-		public FakeScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters) : base(owner, parameters)
+		public FakeScheduleRange_DoNotUse(IScheduleDictionary owner, IScheduleParameters parameters) : base(owner, parameters)
 		{
 			Period = parameters.Period;
 			Person = parameters.Person;

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scenario = new Scenario();
 			var parameters = new ScheduleParameters(scenario, _person, new DateTimePeriod(2017, 10, 19, 0, 2017, 10, 24, 23));
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, DateTime.Now);
-			_scheduleRange = new FakeScheduleRange(scheduleDictionary, parameters);
+			_scheduleRange = new FakeScheduleRange_DoNotUse(scheduleDictionary, parameters);
 		}
 		
 		[Test]
