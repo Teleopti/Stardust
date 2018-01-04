@@ -163,5 +163,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	    TargetScheduleSummary CalculatedTargetTimeSummary(DateOnlyPeriod periodToCheck);
 	    CurrentScheduleSummary CalculatedCurrentScheduleSummary(DateOnlyPeriod periodToCheck);
-    }
+		void CopyTo(IScheduleRange scheduleRangeToModify, DateOnlyPeriod period);
+	}
 }

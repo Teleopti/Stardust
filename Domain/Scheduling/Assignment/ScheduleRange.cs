@@ -204,6 +204,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _currentScheduleSummary;
 		}
 
+		public void CopyTo(IScheduleRange scheduleRangeToModify, DateOnlyPeriod period)
+		{
+			foreach (var scheduleData in ScheduleDataInternalCollection()
+				.Where(x => x.BelongsToPeriod(period))
+				.Select(x => (IScheduleData)x.Clone()))
+			{
+				((ScheduleRange)scheduleRangeToModify).Add(scheduleData);
+			}
+		}
+
 		public TargetScheduleSummary CalculatedTargetTimeSummary(DateOnlyPeriod periodToCheck)
 		{
 			if (_targetScheduleSummary?.TargetTime == null)

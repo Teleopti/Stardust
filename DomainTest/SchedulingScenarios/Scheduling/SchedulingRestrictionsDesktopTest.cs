@@ -152,7 +152,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(true, ExpectedResult = 7)]
 		[TestCase(false, ExpectedResult = 8)]
-		[Ignore("To be fixed")]
 		public int ShouldConsiderRotations(bool useRotations)
 		{
 			var activity = new Activity().WithId();

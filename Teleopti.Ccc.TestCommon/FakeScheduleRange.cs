@@ -97,6 +97,12 @@ namespace Teleopti.Ccc.TestCommon
 				NumberOfDaysOff = CalculatedScheduleDaysOffOnPeriod(periodToCheck)
 			};
 		}
+
+		public void CopyTo(IScheduleRange scheduleRangeToModify, DateOnlyPeriod period)
+		{
+			throw new NotImplementedException();
+		}
+
 		public int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck)
 		{
 			return 8;
