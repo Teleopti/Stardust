@@ -3,7 +3,6 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -15,13 +14,11 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
-	[Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step3_44331)]
 	public class AddOverTimePerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
