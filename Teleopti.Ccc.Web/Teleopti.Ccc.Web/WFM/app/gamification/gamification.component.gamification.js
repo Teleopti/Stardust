@@ -4,14 +4,31 @@
 	angular.module('wfm.gamification')
 		.component('gamification', {
 			templateUrl: 'app/gamification/html/g.component.gamification.tpl.html',
-			controller: ['$element', '$scope', GamificationController]
+			controller: ['$element', '$scope', '$state', GamificationController]
 		});
 
-	function GamificationController($element, $scope) {
+	function GamificationController($element, $scope, $state) {
 
 		var ctrl = this;
 
 		var element = $element[0];
+
+		ctrl.tabSelected = function (tab) {
+			$state.go('gamification.' + tab);
+		}
+
+		ctrl.$onInit = function () {
+			var currentState = $state.current.name;
+			if (currentState.indexOf('targets') > -1) {
+				ctrl.selectedTab = 1;
+			} else
+				if (currentState.indexOf('import') > -1) {
+					ctrl.selectedTab = 2;
+				}
+				else {
+					ctrl.selectedTab = 0;
+				}
+		}
 
 		ctrl.setElementHeightToCoverRestOfViewport = function () {
 
