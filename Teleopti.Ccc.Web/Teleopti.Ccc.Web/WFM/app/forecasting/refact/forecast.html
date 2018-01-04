@@ -103,23 +103,6 @@
   </div>
 </div>
 
-
-<!-- <wfm-card-list ng-if="vm.skillMaster.Skills.length > 0">
-  <wfm-card ng-repeat="skill in vm.skillMaster.Skills | orderBy: 'Workload.Name'">
-    <card-header tabindex="-1">
-      <div tabindex="0" ng-click="vm.getWorkloadForecastData(skill)">
-        <b>{{skill.Workload.Name}}</b>
-        <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
-      </div>
-    </card-header>
-    <card-body class="panel">
-
-    </card-body>
-  </wfm-card>
-</wfm-card-list> -->
-
-<!-- {{'ExportWorkload'|translate}} -->
-
 <modal-dialog show='vm.forecastModal' ng-cloak>
   <div ng-if="vm.forecastModalObj">
     <div class="con-row">
@@ -131,7 +114,7 @@
 
     <div class="modal-inner-content" style="text-align:center;">
       <label>{{'ForecastPeriod' | translate}}: </label><br/>
-      <date-range-picker ng-model="vm.forecastPeriod"></date-range-picker>
+		    <wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
       <div class="text-warning" ng-cloak class="animate-show" ng-show="vm.disableMoreThanOneYear()">
         <i class='mdi mdi-alert'></i>
         {{ 'ForecastPeriodLength' | translate }}.
@@ -154,8 +137,7 @@
       </div>
     </div>
     <div class="modal-inner-content" style="text-align:center;">
-      <!-- <label>{{'ForecastPeriod' | translate}}: </label><br/> -->
-      <date-range-picker ng-model="vm.forecastPeriod"></date-range-picker>
+      <wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
     </div>
     <div class="modal-actions">
       <aside>
