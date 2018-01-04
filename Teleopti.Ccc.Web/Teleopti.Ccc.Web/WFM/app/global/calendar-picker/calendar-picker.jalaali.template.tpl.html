@@ -4,7 +4,7 @@
                 <i class="mdi mdi-calendar-range"></i>
                 <md-tooltip>Display Today</md-tooltip>
             </div>
-            <span ng-if="vm.dateRangeText.length > 0">{{vm.dateRangeText | translate}}</span>    
+            <span ng-if="vm.dateRangeText.length > 0">{{vm.dateRangeText | translate}}</span>
         </div>
     </wfm-calendar-picker-header>
     <wfm-calendar-picker-body class="con-row">
@@ -34,6 +34,6 @@
             </div>
         </div>
         <div class="con-flex date-info-calendar-wrapper">
-            <persian-datepicker ng-model="vm.pickDate" ng-change="vm.switchDate()" show-weeks="vm.showWeek" custom-class="vm.options.customClass()"></persian-datepicker>
+            <persian-datepicker ng-model="vm.pickDate" ng-class="{'non-pointer':vm.disable === 'all'}" ng-change="vm.switchDate()" show-weeks="vm.showWeek" custom-class="vm.options.customClass()"></persian-datepicker>
         </div>
     </wfm-calendar-picker-body>
