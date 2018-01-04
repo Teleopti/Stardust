@@ -27,24 +27,24 @@
 
         //manual inputs
         vm.manualInitial = {
-            StartDate: new Date().toLocaleDateString('en-US'),
-            EndDate: new Date().toLocaleDateString('en-US')
+            StartDate: new Date().toLocaleDateString('sv-se'),
+            EndDate: new Date().toLocaleDateString('sv-se')
         }
         vm.manualQueueStats = {
-            StartDate: new Date().toLocaleDateString('en-US'),
-            EndDate: new Date().toLocaleDateString('en-US')
+            StartDate: new Date().toLocaleDateString('sv-se'),
+            EndDate: new Date().toLocaleDateString('sv-se')
         }
         vm.manualAgentStats = {
-            StartDate: new Date().toLocaleDateString('en-US'),
-            EndDate: new Date().toLocaleDateString('en-US')
+            StartDate: new Date().toLocaleDateString('sv-se'),
+            EndDate: new Date().toLocaleDateString('sv-se')
         }
         vm.manualSchedule = {
-            StartDate: new Date().toLocaleDateString('en-US'),
-            EndDate: new Date().toLocaleDateString('en-US')
+            StartDate: new Date().toLocaleDateString('sv-se'),
+            EndDate: new Date().toLocaleDateString('sv-se')
         }
         vm.manualForecast = {
-            StartDate: new Date().toLocaleDateString('ien-US'),
-            EndDate: new Date().toLocaleDateString('en-US')
+            StartDate: new Date().toLocaleDateString('sv-se'),
+            EndDate: new Date().toLocaleDateString('sv-se')
         }
 
         vm.applyToAll = function (param, input) {
@@ -177,27 +177,27 @@
             if (!vm.selectedJob.Initial) {
 	            setDateInput(vm.manualInitial, null);
             } else {
-                setDateInput(vm.manualInitial, new Date().toLocaleDateString('en-US'));
+                setDateInput(vm.manualInitial, new Date().toLocaleDateString('sv-se'));
             }
             if (!vm.selectedJob.QueueStatistics) {
 	            setDateInput(vm.manualQueueStats, null);
             } else {
-                setDateInput(vm.manualQueueStats, new Date().toLocaleDateString('en-US'));
+                setDateInput(vm.manualQueueStats, new Date().toLocaleDateString('sv-se'));
             }
             if (!vm.selectedJob.AgentStatistics) {
                 setDateInput(vm.manualAgentStats, null);
             } else {
-	            setDateInput(vm.manualAgentStats, new Date().toLocaleDateString('en-US'));
+                setDateInput(vm.manualAgentStats, new Date().toLocaleDateString('sv-se'));
             }
             if (!vm.selectedJob.Schedule) {
                 setDateInput(vm.manualSchedule, null);
             } else {
-	            setDateInput(vm.manualSchedule, new Date().toLocaleDateString('en-US'));
+                setDateInput(vm.manualSchedule, new Date().toLocaleDateString('sv-se'));
             }
             if (!vm.selectedJob.Forecast) {
                 setDateInput(vm.manualForecast, null);
             } else {
-	            setDateInput(vm.manualForecast, new Date().toLocaleDateString('en-US'));
+                setDateInput(vm.manualForecast, new Date().toLocaleDateString('sv-se'));
             }
 
         }
@@ -209,8 +209,8 @@
 
         //history inputs
         vm.historyWorkPeriod = {
-            StartDate: new Date().toLocaleDateString("en-US"),
-            EndDate: new Date().toLocaleDateString("en-US")
+            StartDate: new Date().toLocaleDateString("sv-se"),
+            EndDate: new Date().toLocaleDateString("sv-se")
         }
 
         //schedule inputs
