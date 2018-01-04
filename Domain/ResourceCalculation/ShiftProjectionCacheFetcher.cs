@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				.Select(s => s.WorkShift)
 				.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift))
 				.Select(workShift => new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker));
+			var baseIsMasterActivity = ruleSet.TemplateGenerator.BaseActivity is IMasterActivity;
+			return tmpList.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift, baseIsMasterActivity))
 		}
 	}
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -93,7 +92,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (!_ruleSetListDictionary.TryGetValue(ruleSet, out shiftProjectionCacheList))
             {
 				shiftProjectionCacheList = _shiftProjectionCacheFetcher.Execute(ruleSet).ToList();
-	            _ruleSetListDictionary.Add(ruleSet, shiftProjectionCacheList);
+
+				_ruleSetListDictionary.Add(ruleSet, shiftProjectionCacheList);
             }
 			return shiftProjectionCacheList;
         }
