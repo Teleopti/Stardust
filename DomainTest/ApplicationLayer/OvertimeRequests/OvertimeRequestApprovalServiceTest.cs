@@ -10,10 +10,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public FakeWriteSideRepository<IPerson> PersonProxyForId;
 		public FakeWriteSideRepository<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetProxyForId;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentWriteSideRepository;
+		public ICurrentUnitOfWork CurrentUnitOfWork;
 
 
 		private OvertimeRequestApprovalService _target;
@@ -86,6 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(skill1, 10d, 6d);
 			addPersonSkillsToPersonPeriod(personSkill1);
 			createAssignment(person, activity1);
+			CurrentUnitOfWork.Current().Clear(); 
 
 			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -119,6 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(skill1, 10d, 6d);
 			addPersonSkillsToPersonPeriod(personSkill1);
 			createAssignment(person, activity1);
+
 
 			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
 			var personRequest = createOvertimeRequest(person, requestPeriod);

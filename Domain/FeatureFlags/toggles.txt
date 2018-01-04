@@ -188,7 +188,6 @@ Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 WfmStaffing_AddOvertime_42524 = RC 
 Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = true
 Wfm_Staffing_StaffingReadModel49DaysStep2_45109 = RC
-Staffing_ReadModel_BetterAccuracy_Step4_43389 = true
 Wfm_Requests_HandleFourteenDaysFast_43390 = true
 Staffing_BPOExchangeImport_45202 = true
 Forecast_FileImport_UnifiedFormat_46585 = true

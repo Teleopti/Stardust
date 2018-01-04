@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -15,12 +14,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	[EnabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step4_43389)]
 	public class AddActivityCommandHandler : IHandleCommand<AddActivityCommand>
 	{
 		private readonly IProxyForId<IActivity> _activityForId;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly IProxyForId<IPerson> _personForId;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
 		private readonly INonoverwritableLayerMovabilityChecker _movabilityChecker;
@@ -31,15 +28,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public AddActivityCommandHandler(ICurrentScenario currentScenario,
 			IProxyForId<IActivity> activityForId,
-			IProxyForId<IPerson> personForId,
 			IUserTimeZone timeZone,
 			IShiftCategoryRepository shiftCategoryRepository,
 			INonoverwritableLayerMovabilityChecker movabilityChecker,
-			INonoverwritableLayerMovingHelper movingHelper, IScheduleStorage scheduleStorage, IScheduleDifferenceSaver scheduleDifferenceSaver)
+			INonoverwritableLayerMovingHelper movingHelper, IScheduleStorage scheduleStorage, 
+			IScheduleDifferenceSaver scheduleDifferenceSaver)
 		{
 			_activityForId = activityForId;
 			_currentScenario = currentScenario;
-			_personForId = personForId;
 			_timeZone = timeZone;
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_movabilityChecker = movabilityChecker;

@@ -2,14 +2,12 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -24,10 +22,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[TestFixture]
 	[DomainTest]
-	[EnabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step4_43389)]
-	public class RemoveActivityCommandHandlerTest  :ISetup
+	public class RemoveActivityCommandHandlerTest : ISetup
 	{
 		public RemoveActivityCommandHandler Target;
 		public IScheduleStorage ScheduleStorage;
