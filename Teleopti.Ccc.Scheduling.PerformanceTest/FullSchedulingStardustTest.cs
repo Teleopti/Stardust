@@ -24,8 +24,11 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
-					browserInteractions.AssertExistsUsingJQuery(".heatmap:visible, .test-errorMessage, .server-busy, #Login-container, .test-alert");
+					browserInteractions.AssertExistsUsingJQuery(".heatmap:visible, .test-errorMessage, .server-busy, #Login-container, .test-alert, .notice-warning");
 				}
+
+				//no server error
+				browserInteractions.AssertNotExists("body", ".notice-warning");
 				//no server error
 				browserInteractions.AssertNotExists("body", ".test-errorMessage");
 				//no failing request
