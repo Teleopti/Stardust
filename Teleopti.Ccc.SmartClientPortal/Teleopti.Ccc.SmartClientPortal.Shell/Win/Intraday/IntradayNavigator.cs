@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -39,8 +38,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 
 		public IntradayNavigator(IComponentContext container, PortalSettings portalSettings,
 			IIntradayViewFactory intradayViewFactory, ICurrentScenario scenarioRepos, IPersonRepository personRepository,
-			IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler, IToggleManager toggleManager)
-			: base(container, portalSettings, personRepository, unitOfWorkFactory, gracefulDataSourceExceptionHandler, toggleManager)
+			IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
+			: base(container, portalSettings, personRepository, unitOfWorkFactory, gracefulDataSourceExceptionHandler)
 		{
 			_intradayViewFactory = intradayViewFactory;
 			_scenarioRepos = scenarioRepos;

@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly IPersonRepository _personRepository;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IGracefulDataSourceExceptionHandler _gracefulDataSourceExceptionHandler;
-		private readonly IToggleManager _toggleManager;
 		private IScheduleNavigatorPresenter _myPresenter;
 		private readonly IEventAggregator _localEventAggregator;
 		private Form _mainWindow;
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public SchedulerNavigator(IComponentContext componentContext, PortalSettings portalSettings,
 			IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory,
-			IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler, IToggleManager toggleManager)
+			IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
 			: this()
 		{
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
@@ -65,7 +64,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_personRepository = personRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_gracefulDataSourceExceptionHandler = gracefulDataSourceExceptionHandler;
-			_toggleManager = toggleManager;
 			SetTexts();
 			toolStripButtonOpen.Click += onOpenScheduler;
 		}
@@ -175,7 +173,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				return;
 			}
 
-			using (var openSchedule = new OpenScenarioForPeriod(OpenPeriodMode, entityList, _toggleManager))
+			using (var openSchedule = new OpenScenarioForPeriod(OpenPeriodMode, entityList))
 			{
 				if (openSchedule.ShowDialog() != DialogResult.Cancel)
 				{

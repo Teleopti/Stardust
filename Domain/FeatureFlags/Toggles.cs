@@ -116,7 +116,6 @@
 		ETL_SpeedUpNightlyReloadDatamart_38131,
 		ETL_SpeedUpNightlySkill_37543,
 		ETL_SpeedUpScenarioNightly_38300,
-		Scheduler_LoadWithoutRequests_38567,
 		ETL_SpeedUpNightlyActivity_38303,
 		ETL_SpeedUpNightlyOvertime_38304,
 		ETL_SpeedUpNightlyAbsence_38301,

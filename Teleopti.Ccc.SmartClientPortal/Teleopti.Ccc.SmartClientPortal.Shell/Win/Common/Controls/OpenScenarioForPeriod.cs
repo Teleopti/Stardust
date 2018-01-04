@@ -4,14 +4,12 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using log4net;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -51,12 +49,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 			
 		}
 
-		public OpenScenarioForPeriod(IOpenPeriodMode openMode, IList<IEntity> selectedEntityList, IToggleManager toggleManager)
+		public OpenScenarioForPeriod(IOpenPeriodMode openMode, IList<IEntity> selectedEntityList)
 			:this(openMode)
 		{
 			_selectedEntityList = new List<IEntity>(selectedEntityList);
-			checkBoxRequests.Visible = toggleManager.IsEnabled(Toggles.Scheduler_LoadWithoutRequests_38567) &&
-												PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
+			checkBoxRequests.Visible = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
 		}
 
 		private bool validateSelectedDatesControl(ICollection<DateOnlyPeriod> periods)

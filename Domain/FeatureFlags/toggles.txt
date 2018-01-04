@@ -184,8 +184,6 @@ HealthCheck_EasyValidateAndFixReadModels_39696 = true
 HealthCheck_ReinitializeReadModels_39697 = true
 
 # Ziggy #
-Scheduler_LoadWithoutRequests_38567 = true
-
 Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 WfmStaffing_AddOvertime_42524 = RC 
 Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = true
