@@ -1,44 +1,24 @@
 ﻿using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-    /// <summary>
-    /// SkillTypeFactory
-    /// </summary>
     public static class SkillTypeFactory
     {
-        /// <summary>
-        /// Creates a SkillType for Inbound Telephony
-        /// </summary>
-        /// <returns></returns>
         public static SkillType CreateSkillType()
         {
-            Description desc = new Description("My Phone skill type");
-
-            return new SkillTypePhone(desc, ForecastSource.InboundTelephony);
+            return new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony);
         }
 
-        /// <summary>
-        /// Creates a SkillType for Backoffice
-        /// </summary>
-        /// <returns></returns>
         public static SkillType CreateSkillTypeBackoffice()
         {
-            Description desc = new Description("My Backoffice skill type");
-
-            return new SkillTypePhone(desc, ForecastSource.Backoffice);
+            return new SkillTypePhone(new Description(SkillTypeIdentifier.BackOffice), ForecastSource.Backoffice);
         }
 
-        /// <summary>
-        /// Creates a SkillType for Email
-        /// </summary>
-        /// <returns></returns>
         public static SkillType CreateSkillTypeEmail()
         {
-            Description desc = new Description("My Email skill type");
-
-            return new SkillTypeEmail(desc, ForecastSource.Email);
-        }
+			return new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email);
+		}
     }
 }
