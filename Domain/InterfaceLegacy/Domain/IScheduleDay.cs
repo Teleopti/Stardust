@@ -381,6 +381,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void RemoveActivity(ShiftLayer shiftLayer, bool b, TrackedCommandInfo commandTrackedCommandInfo);
 
 		IPreferenceDay PreferenceDay();
+
+		IScheduleDay CloneTo(IScheduleDictionary newOwner);
 	}
 
 }

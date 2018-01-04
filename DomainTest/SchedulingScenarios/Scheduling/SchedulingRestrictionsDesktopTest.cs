@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -147,6 +148,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
 
 			schedulerStateHolder.Schedules[agent].ScheduledDayCollection(period).ForEach(x => x.IsScheduled().Should().Be.True());
+		}
+
+		[TestCase(true, ExpectedResult = 7)]
+		[TestCase(false, ExpectedResult = 8)]
+		public int ShouldConsiderRotations(bool useRotations)
+		{
+			var activity = new Activity().WithId();
+			var date = new DateOnly(2016, 10, 25);
+			var scenario = new Scenario();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), shiftCategory));
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 1);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date);
+			var alreadyScheduledAgent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill);
+			var alreadyScheduledAgentAss = new PersonAssignment(alreadyScheduledAgent, scenario, date).WithLayer(activity, new TimePeriod(7, 8));
+			var rotationRestriction = new RotationRestriction { StartTimeLimitation = new StartTimeLimitation(new TimeSpan(7, 0, 0), new TimeSpan(7, 0, 0)) };
+			var personRestriction = new ScheduleDataRestriction(agent, rotationRestriction, date);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, date, new[]{agent, alreadyScheduledAgent}, new IScheduleData[]{ personRestriction, alreadyScheduledAgentAss}, skillDay);
+			var schedulingOptions = new SchedulingOptions { UseRotations = useRotations };
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, date.ToDateOnlyPeriod());
+			
+			return schedulerStateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().Period.StartDateTime.TimeOfDay.Hours;
 		}
 
 		public SchedulingRestrictionsDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerTimeZoneIssues45818, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerTimeZoneIssues45818, resourcePlannerXxl47258)
