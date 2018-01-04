@@ -48,7 +48,7 @@
 		vm.isOvertimeEnabled = toggleService.Wfm_Requests_OvertimeRequestHandling_45177;
 		vm.overtimeRequestsLicenseAvailable = false;
 		requestsDataService.getOvertimeLicense().then(function (result) {
-			vm.overtimeRequestsLicenseAvailable = result.data.IsLicenseAvailable && result.data.HasPermissionForOvertimeRequests;
+			vm.overtimeRequestsLicenseAvailable = result.data;
 		});
 		vm.teamNameMap = {};
 

@@ -5,10 +5,11 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
@@ -64,11 +65,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void checkOvertimeRequestsLicense()
 		{
-			var dataSource = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().Name;
 			var toggleEnabled = _toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687);
-			var hasLicense = DefinedLicenseDataFactory.HasLicense(dataSource) &&
-							DefinedLicenseDataFactory.GetLicenseActivator(dataSource)
-							.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccOvertimeRequests);
+			var hasLicense = new OvertimeRequestAvailability(CurrentDataSource.Make(), PrincipalAuthorization.Current()).IsLicenseEnabled();
 
 			var visible = hasLicense && toggleEnabled;
 			if (visible)

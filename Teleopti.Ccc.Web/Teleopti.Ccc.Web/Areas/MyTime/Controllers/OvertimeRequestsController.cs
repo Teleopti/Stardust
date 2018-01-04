@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
@@ -13,19 +11,17 @@ using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	public partial class OvertimeRequestsController : Controller
+	public class OvertimeRequestsController : Controller
 	{
 		private readonly IOvertimeRequestPersister _overtimeRequestPersister;
 		private readonly IToggleManager _toggleManager;
-		private readonly ICurrentDataSource _currentDataSource;
-		private readonly IAuthorization _authorization;
+		private readonly IOvertimeRequestAvailability _overtimeRequestLicense;
 
-		public OvertimeRequestsController(IOvertimeRequestPersister overtimeRequestPersister, IToggleManager toggleManager, ICurrentDataSource currentDataSource, IAuthorization authorization)
+		public OvertimeRequestsController(IOvertimeRequestPersister overtimeRequestPersister, IToggleManager toggleManager, IOvertimeRequestAvailability overtimeRequestLicense)
 		{
 			_overtimeRequestPersister = overtimeRequestPersister;
 			_toggleManager = toggleManager;
-			_currentDataSource = currentDataSource;
-			_authorization = authorization;
+			_overtimeRequestLicense = overtimeRequestLicense;
 		}
 
 		[UnitOfWork, HttpPost]
@@ -58,17 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork, HttpGet]
 		public virtual JsonResult GetLicenseAvailability()
 		{
-			var currentName = _currentDataSource.CurrentName();
-			var isLicenseAvailible = DefinedLicenseDataFactory.HasLicense(currentName) &&
-									 DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
-										 DefinedLicenseOptionPaths.TeleoptiCccOvertimeRequests);
-
-			var returnVal = new OvertimeRequestLicenseAvailabilityResult
-			{
-				IsLicenseAvailable = isLicenseAvailible,
-				HasPermissionForOvertimeRequests = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb)
-			};
-			return Json(returnVal, JsonRequestBehavior.AllowGet);
+			return Json(_overtimeRequestLicense.IsEnabled(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

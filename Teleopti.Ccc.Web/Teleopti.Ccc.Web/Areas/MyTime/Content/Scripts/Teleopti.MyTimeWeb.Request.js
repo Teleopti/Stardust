@@ -131,7 +131,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			dataType: "json",
 			type: 'GET',
 			success: function (response) {
-				self.overtimeRequestsLicenseAvailable(response.IsLicenseAvailable && response.HasPermissionForOvertimeRequests);
+				self.overtimeRequestsLicenseAvailable(response);
 			},
 			error: function (error) {
 				self.overtimeRequestsLicenseAvailable(false);

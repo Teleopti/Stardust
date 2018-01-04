@@ -11,10 +11,7 @@ $(document).ready(function () {
 	});
 
 	var overtimeRequestsToggle = false,
-		fakeLicenseAvailabilityData = {
-			IsLicenseAvailable: false,
-			HasPermissionForOvertimeRequests: false
-		};
+		fakeLicenseAvailabilityData = false;
 
 	var tempToggleFn,
 		tempList,
@@ -29,29 +26,8 @@ $(document).ready(function () {
 		equal(target.overtimeRequestsLicenseAvailable(), false);
 	});
 
-	test('should not show overtime request tab when has permission but no license availability', function () {
-		fakeLicenseAvailabilityData.IsLicenseAvailable = true;
-		fakeLicenseAvailabilityData.HasPermissionForOvertimeRequests = false;
-
-		Teleopti.MyTimeWeb.Request.RequestPartialInit(null, null);
-		var target = Teleopti.MyTimeWeb.Request.RequestNavigationViewModel();
-
-		equal(target.overtimeRequestsLicenseAvailable(), false);
-	});
-
-	test('should show overtime request tab when has license but no permission', function () {
-		fakeLicenseAvailabilityData.IsLicenseAvailable = true;
-		fakeLicenseAvailabilityData.HasPermissionForOvertimeRequests = false;
-
-		Teleopti.MyTimeWeb.Request.RequestPartialInit(null, null);
-		var target = Teleopti.MyTimeWeb.Request.RequestNavigationViewModel();
-
-		equal(target.overtimeRequestsLicenseAvailable(), false);
-	});
-
 	test('should show overtime request tab when has license availability and permission', function () {
-		fakeLicenseAvailabilityData.IsLicenseAvailable = true;
-		fakeLicenseAvailabilityData.HasPermissionForOvertimeRequests = true;
+		fakeLicenseAvailabilityData = true;
 
 		Teleopti.MyTimeWeb.Request.RequestPartialInit(null, null);
 		var target = Teleopti.MyTimeWeb.Request.RequestNavigationViewModel();

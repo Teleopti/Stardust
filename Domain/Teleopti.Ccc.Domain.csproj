@@ -157,6 +157,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformancePersister.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\IExternalPerformancePersister.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\ IOvertimeRequestAvailability.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAvailability.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestMaximumtimeValidator.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceJobStatus.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsTimeZoneUpdater.cs" />
