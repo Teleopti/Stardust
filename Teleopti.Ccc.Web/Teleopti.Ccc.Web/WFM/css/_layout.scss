@@ -134,22 +134,13 @@ _:-ms-lang(x),.con-fluid-flex {
 }
 
 //Temp move us to styleguide
-.locked {
-	color: $text-color-muted !important;
-	cursor: not-allowed;
-	pointer-events: none;
+
+.modalbg{
+	z-index: 40!important;
 }
 
 wfm-card > md-card {
 	background-color: $white !important;
-}
-
-.baseline{
-	align-items: baseline;
-}
-
-.main-menu .main-menu-link-active>.main-menu-link {
-	color: $text-color-standard;
 }
 
 //new tree-picker
@@ -341,42 +332,4 @@ wfm-calendar-picker-body > .date-info-calendar-wrapper{
 			}
 		}
 	}
-}
-
-
-// fix modal once and for all - move to styleguide
-.modal-box {
-	.modalbg {
-		position: fixed;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		z-index: 50;
-	}
-	.dialog, .dialog-mini {
-		max-height: 85%!important;
-		z-index: 50;
-		position: fixed;
-		margin: 0!important;
-		top: 10%;
-		left: 15%;
-		right: 15%;
-		width: auto!important;
-	}
-	.dialog-mini {
-		left: 30%;
-		right: 30%;
-	}
-	/*Dialog*/
-	@media only screen and (max-width:768px){
-		.dialog, .dialog-mini {
-			left:1%!important;
-			right:1%!important;
-		}
-	}
-}
-
-.md-select-menu-container {
-	z-index: 1000;
 }
