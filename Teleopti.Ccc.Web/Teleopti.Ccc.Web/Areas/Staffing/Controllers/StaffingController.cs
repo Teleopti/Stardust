@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Web.Http;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -16,6 +18,8 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
@@ -34,11 +38,16 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IAuthorization _authorization;
+		private readonly IStaffingSettingsReader _staffingSettingsReader;
+		private readonly INow _now;
+		private readonly IUserUiCulture _userUiCulture;
 
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillGroupRepository skillGroupRepository,
-								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, IExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization)
+								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, 
+								  IExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization,
+								  IStaffingSettingsReader staffingSettingsReader, INow now, IUserUiCulture userUiCulture)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -52,6 +61,9 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_exportBpoFile = exportBpoFile;
 			_skillRepository = skillRepository;
 			_authorization = authorization;
+			_staffingSettingsReader = staffingSettingsReader;
+			_now = now;
+			_userUiCulture = userUiCulture;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillareastaffing")]
@@ -125,13 +137,58 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/exportStaffingDemand")]
-		public virtual IHttpActionResult ExportBpo(Guid skillId)
+		public virtual IHttpActionResult ExportBpo(Guid skillId, DateTime exportStartDateTime, DateTime exportEndDateTime)
 		{
-			var exportedContent = _exportBpoFile.ExportDemand(_skillRepository.Get(skillId),
-				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(14)), CultureInfo.InvariantCulture);
-			exportReturnObject returnVal = new exportReturnObject();
+			var returnVal = new exportReturnObject();
+			var exportStartDate = new DateOnly(exportStartDateTime);
+			var exportEndDate = new DateOnly(exportEndDateTime);
+			var readModelNumberOfDays = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14);
+
+			var utcNowDate = new DateOnly(_now.UtcDateTime());
+			var exportPeriodMaxDate = utcNowDate.AddDays(readModelNumberOfDays);
+			if (exportStartDate > exportEndDate)
+			{
+				returnVal.ErrorMessage = Resources.BpoExportPeriodStartDateBeforeEndDate;
+				return Ok(returnVal);
+			}
+			if (exportStartDate < utcNowDate || exportEndDate > exportPeriodMaxDate)
+			{
+				var validExportPeriodText = getExportPeriodMessageString();
+				returnVal.ErrorMessage = validExportPeriodText;
+				return Ok(returnVal);
+			}
+
+			var skill = _skillRepository.Get(skillId);
+			if (skill == null)
+			{
+				returnVal.ErrorMessage = $"Cannot find skill with id: {skillId}";
+				return Ok(returnVal);
+			}
+			var exportedContent = _exportBpoFile.ExportDemand(skill,
+				new DateOnlyPeriod(exportStartDate, exportEndDate), CultureInfo.InvariantCulture);
+		
 			returnVal.Content = exportedContent;
+			returnVal.ErrorMessage = "";
 			return Ok(returnVal);
+		}
+
+		private string getExportPeriodMessageString()
+		{
+			var readModelNumberOfDays = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14);
+
+			var utcNowDate = new DateOnly(_now.UtcDateTime());
+			var exportPeriodMaxDate = utcNowDate.AddDays(readModelNumberOfDays);
+
+			var validExportPeriodText =
+				$"{utcNowDate.ToShortDateString(_userUiCulture.GetUiCulture())} - {exportPeriodMaxDate.ToShortDateString(_userUiCulture.GetUiCulture())}";
+			var exportPeriodMessage = string.Format(Resources.BpoOnlyExportPeriodBetweenDates, validExportPeriodText);
+			return exportPeriodMessage;
+		}
+
+		[HttpGet, Route("api/staffing/exportPeriodMessage")]
+		public virtual IHttpActionResult GetExportPeriodMessage()
+		{
+			return Ok(new ExportPeriodInfo {ExportPeriodMessage = getExportPeriodMessageString()});
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/staffingSettings")]
@@ -147,6 +204,11 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 				HasPermissionForBpoExchange = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.BpoExchange)
 			};
 			return Ok(returnVal);
+		}
+
+		class ExportPeriodInfo
+		{
+			public string ExportPeriodMessage;
 		}
 
 		
@@ -217,6 +279,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		internal class exportReturnObject
 		{
 			public string Content { get; set; }
+			public string ErrorMessage { get; set; }
 		}
 
 	}

@@ -8,28 +8,44 @@
     ImportexportController.inject = [
         '$state',
         'staffingService',
-        'UtilService'
+		'UtilService',
+		'$translate'
     ];
-    function ImportexportController($state, staffingService, UtilService) {
+	function ImportexportController($state, staffingService, UtilService, $translate) {
         var vm = this;
         vm.selected;
         vm.openImportData;
         vm.selectedSkill;
+		vm.exportPeriod  = {
+			startDate: {},
+			endDate: {}
+		};
         vm.selectedSkillChange = selectedSkillChange;
         vm.querySearchSkills = querySearchSkills;
-        vm.exportFile = exportFile;
+		vm.exportFile = exportFile;
+		vm.ErrorMessage = "";
+		vm.ExportPeriodMessage = "DefaultHejsan";
 
         var skills;
-        getSkills()
+		getSkills();
+		getMessage();
+		resetExportPeriod();
         ////////////////
 
         function getSkills() {
             var query = staffingService.getSkills.query();
-            query.$promise.then(function (response) {
-                selectSkill(response[0]);
-                skills = response;
-            })
-        }
+			query.$promise.then(function(response) {
+				selectSkill(response[0]);
+				skills = response;
+			});
+		}
+
+		function getMessage() {
+			var query = staffingService.getExportPeriodMessage.get();
+			query.$promise.then(function (response) {
+				vm.ExportPeriodMessage = response.ExportPeriodMessage;
+			});
+		}
 
         function selectedSkillChange(skill) {
             if (skill == null) return;
@@ -53,14 +69,33 @@
             return results;
         };
 
-        function exportFile() {
-            var request = staffingService.postFileExport.get({ skillId: vm.selectedSkill.Id })
-            request.$promise.then(function (response) {
-                var data = angular.toJson(response.Content);
-                UtilService.saveToFs(response.Content, vm.selectedSkill.Name + ".csv", 'text/csv');
-            })
-        }
+		function exportFile() {
+			if ((vm.exportPeriod.startDate === null) || (vm.exportPeriod.endDate === null)) {
+				vm.ErrorMessage = $translate.instant('DiscardSuggestionData');
+				//vm.ErrorMessage = "You must set both start date and end date for export period";
+				return;
+			}
+			if (vm.selectedSkill === null)
+			{
+				vm.ErrorMessage = $translate.instant('BpoExportYouMustSelectASkill');
+				return;
+			}
+			var request = staffingService.postFileExport.get({ skillId: vm.selectedSkill.Id, exportStartDateTime: vm.exportPeriod.startDate, exportEndDateTime: vm.exportPeriod.endDate });
+			request.$promise.then(function(response) {
+					vm.ErrorMessage = response.ErrorMessage;
+					if (vm.ErrorMessage !== "")
+						return;
+					var data = angular.toJson(response.Content);
+					UtilService.saveToFs(response.Content, vm.selectedSkill.Name + ".csv", 'text/csv');
+				});
+		}
 
+		function resetExportPeriod() {
+			vm.exportPeriod = {
+				startDate:  moment().utc().toDate(),
+				endDate: moment().utc().add(7, 'days').toDate()
+			};
+		}
 
     }
 })();

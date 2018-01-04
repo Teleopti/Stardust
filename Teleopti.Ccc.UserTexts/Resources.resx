@@ -16909,4 +16909,13 @@ Do you want to participate?</value>
     <value>View detail of import file format</value>
     <comment>View detail of import file format for gamification</comment>
   </data>
+  <data name="BpoExportPeriodStartDateBeforeEndDate" xml:space="preserve">
+    <value>Export period start date must be a date before Export period end date.</value>
+  </data>
+  <data name="BpoOnlyExportPeriodBetweenDates" xml:space="preserve">
+    <value>Only export periods within dates: {0} can be selected.</value>
+  </data>
+  <data name="BpoExportYouMustSelectASkill" xml:space="preserve">
+    <value>A skill must be selected.</value>
+  </data>
 </root>

@@ -17,9 +17,9 @@
     };
     vm.selectedScenario = {};
     vm.forecastPeriod = {
-      startDate: {},
-      endDate: {}
-    };
+		  startDate: {},
+		  endDate: {}
+	  };
     vm.skillMaster = {
       IsPermittedToModify: false,
       IsForecastRunning: false,

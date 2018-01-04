@@ -284,6 +284,7 @@
     <Compile Include="Areas\Reporting\Controller\ScheduleAuditTrailControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningGroupControllerTest.cs" />
+    <Compile Include="Areas\Staffing\StaffingControllerTest.cs" />
     <Compile Include="Areas\Start\Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleActivityCommandServiceTest.cs" />
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />

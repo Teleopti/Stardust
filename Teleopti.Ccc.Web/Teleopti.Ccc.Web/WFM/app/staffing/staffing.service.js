@@ -16,21 +16,23 @@
         var compensations = $resource('../api/staffing/GetCompensations');
         var savebpo = $resource('../api/staffing/importBpo');
         var staffingSettings = $resource('../api/staffing/staffingSettings');
-        var fileExport = $resource('../api/staffing/exportStaffingDemand');
+		var fileExport = $resource('../api/staffing/exportStaffingDemand');
+		var exportPeriodMessage = $resource('../api/staffing/exportPeriodMessage');
         ////////////////
 
-        var service = {
-            getSkillAreaStaffingByDate: monitorskillareastaffingByDate, //skillAreasByDate
-            getSkillStaffingByDate: monitorskillstaffingByDate, //skillsStaffingByDate
-            getSkills: skills,
-            getSkillAreas: areas,
-            addOvertime: overtime,
-            getSuggestion: suggestion,
-            getCompensations: compensations,
-            importbpo: savebpo,
-            staffingSettings: staffingSettings,
-            postFileExport: fileExport
-        };
+		var service = {
+			getSkillAreaStaffingByDate: monitorskillareastaffingByDate, //skillAreasByDate
+			getSkillStaffingByDate: monitorskillstaffingByDate, //skillsStaffingByDate
+			getSkills: skills,
+			getSkillAreas: areas,
+			addOvertime: overtime,
+			getSuggestion: suggestion,
+			getCompensations: compensations,
+			importbpo: savebpo,
+			staffingSettings: staffingSettings,
+			postFileExport: fileExport,
+			getExportPeriodMessage : exportPeriodMessage
+	};
 
         return service;
 

@@ -4422,11 +4422,38 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export period start date must be a date before Export period end date..
+        /// </summary>
+        public static string BpoExportPeriodStartDateBeforeEndDate {
+            get {
+                return ResourceManager.GetString("BpoExportPeriodStartDateBeforeEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A skill must be selected..
+        /// </summary>
+        public static string BpoExportYouMustSelectASkill {
+            get {
+                return ResourceManager.GetString("BpoExportYouMustSelectASkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Line has {0} parameters but expected {1} parameters..
         /// </summary>
         public static string BpoLineHasIncorrectParameterCount {
             get {
                 return ResourceManager.GetString("BpoLineHasIncorrectParameterCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only export periods within dates: {0} can be selected..
+        /// </summary>
+        public static string BpoOnlyExportPeriodBetweenDates {
+            get {
+                return ResourceManager.GetString("BpoOnlyExportPeriodBetweenDates", resourceCulture);
             }
         }
         

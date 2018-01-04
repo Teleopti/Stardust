@@ -15310,4 +15310,13 @@ Vill du registrera dig?</value>
   <data name="ValidateStartDate" xml:space="preserve">
     <value>Startdatum måste vara tidigare än slutdatum</value>
   </data>
+  <data name="BpoExportYouMustSelectASkill" xml:space="preserve">
+    <value>En kompetens måste väljas.</value>
+  </data>
+  <data name="BpoExportPeriodStartDateBeforeEndDate" xml:space="preserve">
+    <value>Exportperiodens startdatum måste vara mindre än slutdatum</value>
+  </data>
+  <data name="BpoOnlyExportPeriodBetweenDates" xml:space="preserve">
+    <value>Endast exportperioder mellan datumen: {0} kan väljas.</value>
+  </data>
 </root>
