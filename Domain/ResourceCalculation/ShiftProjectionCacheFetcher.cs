@@ -18,15 +18,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_ruleSetProjectionEntityService = ruleSetProjectionEntityService;
 			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 		}
-		
+
 		public virtual IEnumerable<ShiftProjectionCache> Execute(IWorkShiftRuleSet ruleSet)
 		{
+			var baseIsMasterActivity = ruleSet.TemplateGenerator.BaseActivity is IMasterActivity;
 			return _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, null)
 				.Select(s => s.WorkShift)
-				.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift))
+				.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift, baseIsMasterActivity))
 				.Select(workShift => new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker));
-			var baseIsMasterActivity = ruleSet.TemplateGenerator.BaseActivity is IMasterActivity;
-			return tmpList.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift, baseIsMasterActivity))
 		}
 	}
 }
