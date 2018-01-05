@@ -33,5 +33,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			model.BeforeReducing.Islands.Count()
 				.Should().Be.EqualTo(1);
 		}
+		
+		[Test]
+		public void ShouldKeepOldNumberOfAgentsOnSkill()
+		{
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 2);
+			var skillA = new Skill("A");
+			var skillB = new Skill("B");
+			Enumerable.Range(0, 3).Select(x => new Person().WithPersonPeriod(skillA))
+				.ForEach(x => PersonRepository.Has(x));
+			PersonRepository.Has(new Person().WithPersonPeriod(skillA, skillB));
+			PersonRepository.Has(new Person().WithPersonPeriod(skillB));
+
+			var model = IslandModelFactory.Create();
+			foreach (var island in model.BeforeReducing.Islands)
+			{
+				foreach (var skillSet in island.SkillSets)
+				{
+					var skillModel = skillSet.Skills.SingleOrDefault(x => x.Name.Equals(skillA.Name));
+					if (skillModel != null)
+					{
+						skillModel.NumberOfAgentsOnSkill.Should().Be.EqualTo(4);
+						return;
+					}
+				}
+			}
+			Assert.Fail("SkillA is gone!");
+		}
 	}
 }

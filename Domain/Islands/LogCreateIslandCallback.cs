@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Islands
 		{
 			if (IslandsBasic == null)
 			{
-				var islands = basicIslands.Select(skillSetInIsland => new Island(skillSetInIsland, noAgentsKnowingSkill));
+				var islands = basicIslands.Select(skillSetInIsland => new Island(skillSetInIsland, new Dictionary<ISkill, int>(noAgentsKnowingSkill))).ToArray();
 				IslandsBasic = new LogCreateIslandInfo(islands, _stopwatch.Elapsed);
 			}
 		}
