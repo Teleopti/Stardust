@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private CampaignForm _campaignInput;	
 		private ICreateOrUpdateSkillDays _createOrUpdateSkillDays;
 		private FakeOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
-		private IUserTimeZone _userTimeZone;
 
 		[SetUp]
 		public void Init()
@@ -62,7 +60,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				}
 			};
 
-			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.Utc);
 			var skillCreator = MockRepository.GenerateMock<IOutboundSkillCreator>();
 			skillCreator.Stub(x => x.CreateSkill(null, null)).IgnoreArguments().Return(SkillFactory.CreateSkillWithWorkloadAndSources());
 			_createOrUpdateSkillDays = MockRepository.GenerateMock<ICreateOrUpdateSkillDays>();
@@ -75,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundScheduledResourcesCacher = new FakeOutboundScheduledResourcesCacher();
 			
 			_outboundCampaignPersister = new OutboundCampaignPersister(_fakeCampaignRepository,
-				new OutboundCampaignMapper(_fakeCampaignRepository, _userTimeZone), new OutboundCampaignViewModelMapper(),
+				new OutboundCampaignMapper(_fakeCampaignRepository), new OutboundCampaignViewModelMapper(),
 				skillCreator, _fakeActivityRepository,
 				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays, null, null, null, null, _outboundScheduledResourcesCacher);
 		}

@@ -9,12 +9,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 	public class OutboundCampaignMapper : IOutboundCampaignMapper
 	{
 		private readonly IOutboundCampaignRepository _outboundCampaignRepository;
-		private readonly IUserTimeZone _userTimeZone;
 
-		public OutboundCampaignMapper(IOutboundCampaignRepository outboundCampaignRepository, IUserTimeZone userTimeZone)
+		public OutboundCampaignMapper(IOutboundCampaignRepository outboundCampaignRepository)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
-			_userTimeZone = userTimeZone;
 		}
 
 		public IOutboundCampaign Map(CampaignViewModel campaignViewModel)
@@ -22,11 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 			var campaign = _outboundCampaignRepository.Get(campaignViewModel.Id.Value);
 			if (campaign == null) return null;
 
-			var timezone = _userTimeZone.TimeZone();
-			if (campaign.Skill != null)
-			{
-				timezone = campaign.Skill.TimeZone;
-			}
+			var timezone = campaign.Skill.TimeZone;
 
 			var startDateTime = TimeZoneHelper.ConvertToUtc(campaignViewModel.StartDate.Date, timezone);
 			var endDateTime = TimeZoneHelper.ConvertToUtc(campaignViewModel.EndDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59), timezone);
@@ -53,7 +47,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 					if (days > 0 && offset < pureTime) offset = pureTime;
 				}
 			}
-			if (campaign.Skill != null) campaign.Skill.MidnightBreakOffset = offset;
+			campaign.Skill.MidnightBreakOffset = offset;
+			foreach (var workload in campaign.Skill.WorkloadCollection)
+			{
+				workload.Skill.MidnightBreakOffset = offset;
+			}
 			return campaign;
 		}
 	}
