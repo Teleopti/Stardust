@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var iocArgs = new IocArgs(new ConfigReader())
 			{
-				OptimizeScheduleChangedEvents_DontUseFromWeb = true
+				OptimizeScheduleChangedEvents_DontUseFromWeb = false
 			};
 
 			var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);

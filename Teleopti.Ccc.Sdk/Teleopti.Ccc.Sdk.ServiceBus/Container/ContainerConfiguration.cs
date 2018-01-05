@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			{
 				SharedContainer = sharedContainer,
 				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForServiceBus(),
-				OptimizeScheduleChangedEvents_DontUseFromWeb = true
+				OptimizeScheduleChangedEvents_DontUseFromWeb = false
 			}, _toggleManager)));
 			
 			build.RegisterModule<AuthorizationModule>();

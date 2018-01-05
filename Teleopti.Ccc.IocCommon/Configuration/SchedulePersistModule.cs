@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ScheduleRangePersisterWithConflictSolve>().As<IScheduleRangePersister>().SingleInstance();
-			builder.RegisterType<KeepScheduleEvents>().As<IClearScheduleEvents>().SingleInstance();
+			builder.RegisterType<ClearScheduleEvents>().As<IClearScheduleEvents>().SingleInstance();
 			builder.RegisterGeneric(typeof (DifferenceEntityCollectionService<>)).As(typeof (IDifferenceCollectionService<>)).SingleInstance();
 			builder.RegisterType<ScheduleRangeConflictCollector>().As<IScheduleRangeConflictCollector>().SingleInstance();
 			builder.RegisterType<ScheduleDifferenceSaver>().As<IScheduleDifferenceSaver>().SingleInstance();
