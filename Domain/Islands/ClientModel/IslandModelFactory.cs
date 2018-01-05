@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 			{
 				BeforeReducing = createIslandModel(createIslandsCallback.IslandsBasic),
 				AfterReducing = createIslandModel(createIslandsCallback.IslandsAfterReducing),
+				Complete = createIslandModel(createIslandsCallback.IslandsComplete)
 			};
 		}
 

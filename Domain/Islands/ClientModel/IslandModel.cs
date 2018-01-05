@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 	{
 		public IslandsModel AfterReducing { get; set; }
 		public IslandsModel BeforeReducing { get; set; }
+		public IslandsModel Complete { get; set; }
 	}
 
 	public class IslandsModel

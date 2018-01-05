@@ -29,9 +29,15 @@ namespace Teleopti.Ccc.Domain.Islands
 			var timeToReduce = _stopwatch.Elapsed - IslandsBasic.TimeToGenerate;
 			IslandsAfterReducing = new LogCreateIslandInfo(islands, timeToReduce);
 		}
-		
+
+		void ICreateIslandsCallback.Complete(IEnumerable<Island> islands)
+		{
+			var timeToReduce = _stopwatch.Elapsed - IslandsAfterReducing.TimeToGenerate;
+			IslandsComplete = new LogCreateIslandInfo(islands, timeToReduce);
+		}
+
 		public LogCreateIslandInfo IslandsBasic { get; private set; }
 		public LogCreateIslandInfo IslandsAfterReducing { get; private set; }
-	//	public LogCreateIslandInfo IslandsComplete { get; private set; }
+		public LogCreateIslandInfo IslandsComplete { get; private set; }
 	}
 }

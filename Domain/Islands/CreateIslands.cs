@@ -36,7 +36,9 @@ namespace Teleopti.Ccc.Domain.Islands
 			var callback = passedCallback ?? new NullCreateIslandsCallback();
 			var allSkillSets = _createSkillSets.Create(_allStaff.Agents(period), period).ToList();
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillSets);
-			return _mergeIslands.Execute(islandsAfterReducing(allSkillSets, callback, noAgentsKnowingSkill));
+			var ret = _mergeIslands.Execute(islandsAfterReducing(allSkillSets, callback, noAgentsKnowingSkill));
+			callback.Complete(ret);
+			return ret;
 		}
 
 		private IEnumerable<Island> islandsAfterReducing(ICollection<SkillSet> allSkillSets, ICreateIslandsCallback callback, IDictionary<ISkill, int> noAgentsKnowingSkill)
