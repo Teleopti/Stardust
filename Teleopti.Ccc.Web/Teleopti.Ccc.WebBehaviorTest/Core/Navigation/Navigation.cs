@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		private static void innerGoto(Uri url, params INavigationInterceptor[] interceptors)
 		{
-			var args = new GotoArgs { Uri = url };
+			var args = new GotoArgs {Uri = url};
 
 			if (_nested)
 			{
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		public static void GotoWeekSchedulePage(DateTime date)
 		{
 			GoToPage($"MyTime#Schedule/Week/{date.Year:0000}/{date.Month:00}/{date.Day:00}",
-				 new WaitUntilCompletelyLoaded());
+				new WaitUntilCompletelyLoaded());
 		}
 
 		public static void GotoAvailability()
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 				GoToPage("wfm/#/seatPlan");
 			}
 		}
-		
+
 		public static void GoToMyReport()
 		{
 			GoToPage("MyTime#MyReport/Index");
@@ -338,27 +338,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage(string.Format("MyTime#MyReport/Adherence/{0}/{1}/{2}",
 					date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-					 new WaitUntilCompletelyLoaded());
+				new WaitUntilCompletelyLoaded());
 		}
 
 		public static void GotoMonthSchedulePage(DateTime date)
 		{
 			GoToPage(string.Format("MyTime#Schedule/Month/{0}/{1}/{2}",
 					date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-					 new WaitUntilCompletelyLoaded());
+				new WaitUntilCompletelyLoaded());
 		}
 
 		public static void GotoMobileDaySchedulePage(DateTime date)
 		{
 			GoToPage(string.Format("MyTime#Schedule/MobileDay/{0}/{1}/{2}",
 					date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-					 new WaitUntilCompletelyLoaded());
+				new WaitUntilCompletelyLoaded());
 		}
 
 		public static void GotoMonthSchedulePage()
 		{
 			GoToPage("MyTime#Schedule/Month",
-					 new WaitUntilCompletelyLoaded());
+				new WaitUntilCompletelyLoaded());
 		}
 
 		public static void GoToMyReport(DateTime date)
@@ -380,14 +380,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		public static void GotoMobileWeekSchedulePage(DateTime date)
 		{
 			GoToPage(string.Format("MyTime#Schedule/MobileWeek/{0}/{1}/{2}",
-				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				 new WaitUntilCompletelyLoaded());
+					date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+				new WaitUntilCompletelyLoaded());
 		}
 
 		public static void GoToMyQueueMetrics(DateTime date)
 		{
 			GoToPage(string.Format("MyTime#MyReport/QueueMetrics/{0}/{1}/{2}",
-					date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")));
+				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")));
 		}
 
 		public static void GotoMessageTool(IEnumerable<Guid> ids)
@@ -405,7 +405,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/rtaTool");
 		}
-			
+
 		public static void GoToRtaTracer(string userCode)
 		{
 			GoToPage($"wfm/#/rtaTracer?userCode={userCode}&trace");
@@ -432,8 +432,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		}
 
 		public static void GoToOutboundCampaign(Guid id)
-		{	
-			GoToPage("wfm/#/outbound/campaign/" + id );
+		{
+			GoToPage("wfm/#/outbound/campaign/" + id);
 		}
 
 		public static void GoToForecasting()
@@ -493,7 +493,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillAreaId=" + skillAreaId + "&pollingInterval=100&open");
 		}
 
-		public static void GotoRealTimeAdherenceAgentsOnTeam( Guid teamId)
+		public static void GotoRealTimeAdherenceAgentsOnTeam(Guid teamId)
 		{
 			GoToPage("wfm/#/rta/agents/?teamIds=" + teamId + "&pollingInterval=100");
 		}
@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/rta/agents/?teamIds=" + teamId + "&es=" + state + "&pollingInterval=100");
 		}
-		
+
 		public static void GotoRealTimeAdherenceAllAgentsWithSkill(Guid skillId)
 		{
 			GoToPage("wfm/#/rta/agents/?skillIds=" + skillId + "&pollingInterval=100");
@@ -546,13 +546,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		}
 
 		public static void GoToAgentDetails(Guid personId)
-        {
-            GoToPage("wfm/#/rta/agent-details/" + personId);
-        }
+		{
+			GoToPage("wfm/#/rta/agent-details/" + personId);
+		}
 
-        public static void GoToAgentHistoricalAdherence(Guid personId)
+		public static void GoToAgentHistoricalAdherence(Guid personId)
 		{
 			GoToPage($"wfm/#/rta/agent-historical/{personId}?open");
+		}
+
+		public static void GoToAgentHistoricalAdherence(Guid personId, DateTime date)
+		{
+			GoToPage($"wfm/#/rta/agent-historical/{personId}/{date:yyyyMMdd}?open");
 		}
 
 		public static void GotoPageCiscoFinesse()
@@ -571,14 +576,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		}
 
 		public static void GoToWfmReports()
-        {
-            GoToPage("wfm/#/reports");
-        }
+		{
+			GoToPage("wfm/#/reports");
+		}
 
 		public static void GoToWfmLeaderBoardReports()
-        {
-            GoToPage("wfm/#/reports/leaderboard");
-        }
+		{
+			GoToPage("wfm/#/reports/leaderboard");
+		}
 
 		public static void GoToStaffing()
 		{
