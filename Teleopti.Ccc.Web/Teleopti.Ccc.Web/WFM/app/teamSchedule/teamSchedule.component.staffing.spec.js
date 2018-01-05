@@ -22,6 +22,14 @@
 	}));
 
 
+	afterEach(function () {
+		var body = $document[0].body;
+		var children = body.querySelectorAll('.staffing-panel');
+		for (var i = 0; i < children.length; i++) {
+			angular.element(children[i]).remove();
+		}
+	});
+
 	it('should view no available data by default',
 		function () {
 			var panel = setupComponent();
@@ -158,6 +166,7 @@
 		});
 	}
 
+
 	function setupComponent(attrs, scope) {
 		var el;
 		var template = '' +
@@ -165,6 +174,7 @@
 			'</staffing-info>';
 
 		el = $compile(template)(scope || $rootScope);
+		$document[0].body.append(el[0]);
 		if (scope) {
 			scope.$apply();
 		} else {
