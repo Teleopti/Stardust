@@ -76,6 +76,9 @@ function MenuController($state) {
 		var match = menuItems.find(function (icon) {
 			return icon.name === ctrl.data.InternalName;
 		});
+
+		if(!match) return;
+		
 		match.displayName = ctrl.data.Name;
 		match.class = function () {
 			if ($state.current.name.indexOf(match.name) == 0)
