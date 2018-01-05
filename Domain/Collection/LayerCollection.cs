@@ -38,37 +38,7 @@ namespace Teleopti.Ccc.Domain.Collection
         {
 	        return Items.OuterPeriod();
         }
-
-        public DateTime? FirstStart()
-        {
-	        var count = Count;
-            if (count == 0) return null;
-
-	        DateTime firstStart = Items[0].Period.StartDateTime;
-	        for (int i = 0; i < count; i++)
-	        {
-		        DateTime startDateTime = Items[i].Period.StartDateTime;
-		        if (startDateTime < firstStart)
-			        firstStart = startDateTime;
-	        }
-	        return firstStart;
-        }
-
-        public DateTime? LatestEnd()
-        {
-			var count = Count;
-			if (count == 0) return null;
-
-			DateTime firstEnd = Items[0].Period.EndDateTime;
-			for (int i = 0; i < count; i++)
-			{
-				DateTime startDateTime = Items[i].Period.EndDateTime;
-				if (startDateTime > firstEnd)
-					firstEnd = startDateTime;
-			}
-			return firstEnd;
-        }
-
+		
         public void Clear()
         {
             Items.Clear();

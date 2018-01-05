@@ -46,14 +46,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IVisualLayerCollection CreateProjection()
 		{
 			IList<IVisualLayer> workingColl = new List<IVisualLayer>();
-			var startTimeTemp = _layerCollectionOriginal.FirstStart();
-			var endTimeTemp = _layerCollectionOriginal.LatestEnd();
+			var boundariesTemp = _layerCollectionOriginal.Period();
 
-			if (!startTimeTemp.HasValue || !endTimeTemp.HasValue)
+			if (!boundariesTemp.HasValue)
 				return new VisualLayerCollection(_person, workingColl, new ProjectionPayloadMerger());
 
-			var currentTime = startTimeTemp.Value;
-			var endTime = endTimeTemp.Value;
+			var currentTime = boundariesTemp.Value.StartDateTime;
+			var endTime = boundariesTemp.Value.EndDateTime;
 			while (currentTime < endTime)
 			{
 				var layerFound = false;

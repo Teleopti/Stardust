@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -15,12 +16,17 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public static DateTimePeriod? OuterPeriod(this IEnumerable<IPeriodized> periods)
 		{
-			DateTimePeriod? maxPeriod = null;
+			if (!periods.Any()) return null;
+			DateTime max = DateTime.MinValue;
+			DateTime min = DateTime.MaxValue;
 			foreach (var period in periods)
 			{
-				maxPeriod = DateTimePeriod.MaximumPeriod(maxPeriod, period.Period);
+				if (period.Period.StartDateTime < min)
+					min = period.Period.StartDateTime;
+				if (period.Period.EndDateTime > max)
+					max = period.Period.EndDateTime;
 			}
-			return maxPeriod;
+			return new DateTimePeriod(min,max);
 		}
 	}
 }

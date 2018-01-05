@@ -15,25 +15,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <returns></returns>
         DateTimePeriod? Period();
-
-        /// <summary>
-        /// Gets the first start.
-        /// </summary>
-        /// <value>The first start.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-18
-        /// </remarks>
-        DateTime? FirstStart();
-
-        /// <summary>
-        /// Gets the latest end.
-        /// </summary>
-        /// <value>The latest end.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-18
-        /// </remarks>
-        DateTime? LatestEnd();
     }
 }
