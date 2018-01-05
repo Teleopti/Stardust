@@ -12,6 +12,7 @@
 		'$stateParams',
 		'$sessionStorage',
 		'$translate',
+		'$http',
 		'rtaService',
 		'rtaPollingService',
 		'rtaFormatService',
@@ -27,6 +28,7 @@
 								 $stateParams,
 								 $sessionStorage,
 								 $translate,
+								 $http,
 								 rtaService,
 								 rtaPollingService,
 								 rtaFormatService,
@@ -48,7 +50,7 @@
 		var teamIds = $stateParams.teamIds || [];
 		var skillIds = $stateParams.skillIds || [];
 		var skillAreaId = $stateParams.skillAreaId || undefined;
-		var excludedStatesFromUrl = $stateParams.es || [];
+		$stateParams.es = $stateParams.es || [];
 
 		// because angular cant handle an array of null in stateparams
 		var nullState = "No State";
@@ -89,6 +91,10 @@
 			showPopupButton: true
 		};
 
+		var phoneStates = [];
+		var phoneStatesLoaded;
+		loadPhoneStates();
+
 		var poller;
 		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
 
@@ -125,13 +131,11 @@
 					.then(skillIdsForSkillArea)
 					.then(loadAgentStates)
 					.then(updateAgentStates)
-					.then(updateStatesFromAgentStates)
-					.then(loadExcludedStates);
+					.then(updatePhoneStates);
 			} else {
 				return loadAgentStates()
 					.then(updateAgentStates)
-					.then(updateStatesFromAgentStates)
-					.then(loadExcludedStates);
+					.then(updatePhoneStates);
 			}
 		}
 
@@ -150,7 +154,7 @@
 				teamIds: teamIds,
 				skillIds: skillIds,
 				inAlarm: vm.showInAlarm,
-				excludedStateIds: excludedStateIds().map(function (s) {
+				excludedStateIds: excludedPhoneStateIds().map(function (s) {
 					return s === nullStateId ? null : s;
 				}),
 				textFilter: vm.filterText || undefined,
@@ -167,64 +171,82 @@
 				vm.agentStates.push(rtaAgentsBuildService.buildAgentState(now, state));
 			});
 			vm.timeline = rtaFormatService.buildTimeline(states.Time);
-			$state.go($state.current.name, {es: excludedStateIds()}, {notify: false});
 			return states;
 		}
 
-		function updateStatesFromAgentStates(data) {
-			data.States.forEach(function (agentState) {
-				var stateId = agentState.StateId || nullStateId;
-				var addIt = (vm.states
-					.map(function (s) {
-						return s.Id;
+		function loadPhoneStates() {
+
+			phoneStates.push({
+				Id: nullStateId,
+				Name: nullState,
+				Selected: !$stateParams.es.some(function (id) {
+					return id === nullStateId
+				})
+			});
+
+			$stateParams.es
+				.filter(function (id) {
+					return id !== nullStateId
+				})
+				.forEach(function (id) {
+					phoneStates.push({
+						Id: id,
+						Name: '<unknown>',
+						Selected: false
 					})
-					.indexOf(stateId) === -1);
-				if (addIt) {
-					vm.states.push({
-						Id: stateId,
-						Name: agentState.State || nullState,
-						Selected: excludedStatesFromUrl.indexOf(agentState.StateId) === -1
-					});
-				}
-			});
-			addMissingNoState();
-			sortPhoneStatesByName();
-		}
-
-		function addMissingNoState() {
-			if (excludedStatesFromUrl.indexOf(nullStateId) > -1 &&
-				vm.states.filter(function (s) {
-					return s.Id === nullStateId;
-				}).length === 0) {
-				vm.states.push({
-					Id: nullStateId,
-					Name: nullState,
-					Selected: false
 				});
-			}
-		}
 
-		function loadExcludedStates() {
-			var stateIdsWithoutNull = excludedStatesFromUrl.filter(function (s) {
-				return s !== nullStateId;
-			});
-			if (stateIdsWithoutNull.length !== 0) {
-				rtaService.getPhoneStates(stateIdsWithoutNull)
-					.then(function (states) {
-						vm.states = vm.states.concat(states.filter(function (excluded) {
-							return !vm.states.some(function (state) {
-								return state.Id === excluded.Id;
-							})
-						}));
-						sortPhoneStatesByName();
+			$http.get('../api/PhoneStates')
+				.then(function (response) {
+					response.data.forEach(function (phoneState) {
+						var existing = phoneStates.find(function (s) {
+							return s.Id === phoneState.Id;
+						});
+						if (existing)
+							existing.Name = phoneState.Name;
+						else {
+							phoneStates.push({
+								Id: phoneState.Id,
+								Name: phoneState.Name,
+								Selected: true
+							});
+						}
 					});
-			}
+					phoneStatesLoaded = true;
+				});
+
 		}
 
-		function sortPhoneStatesByName() {
+		function updatePhoneStates(states) {
+
+			$state.go($state.current.name, {es: excludedPhoneStateIds()}, {notify: false});
+
+			if (!phoneStatesLoaded)
+				return;
+
+			vm.states = phoneStates.filter(function (phoneState) {
+				var stateInView = states.States.some(function (agentState) {
+					if (agentState.StateId === null && phoneState.Id === nullStateId)
+						return true;
+					return agentState.StateId === phoneState.Id;
+				});
+				return stateInView || !phoneState.Selected;
+			});
+
 			vm.states = $filter('orderBy')(vm.states, function (state) {
 				return state.Name;
 			});
+
+		}
+
+		function excludedPhoneStateIds() {
+			return phoneStates
+				.filter(function (phoneState) {
+					return !phoneState.Selected
+				})
+				.map(function (phoneState) {
+					return phoneState.Id;
+				});
 		}
 
 		$scope.$watch(
@@ -260,32 +282,6 @@
 					rtaRouteService.goToOverview();
 			}
 		);
-
-		function excludedStateIds() {
-			var included = vm.states
-				.filter(function (s) {
-					return s.Selected === true;
-				})
-				.map(function (s) {
-					return s.Id;
-				});
-			var excludedViaUrlAndNotManuallyIncluded = excludedStatesFromUrl
-				.filter(function (s) {
-					return included.indexOf(s) === -1;
-				});
-			var excluded = vm.states
-				.filter(function (s) {
-					return s.Selected === false;
-				})
-				.map(function (s) {
-					return s.Id;
-				});
-			var excludedUnique = excludedViaUrlAndNotManuallyIncluded
-				.filter(function (s) {
-					return excluded.indexOf(s) === -1;
-				});
-			return excludedUnique.concat(excluded);
-		}
 
 		vm.sort = function (column) {
 			if (vm.showInAlarm)

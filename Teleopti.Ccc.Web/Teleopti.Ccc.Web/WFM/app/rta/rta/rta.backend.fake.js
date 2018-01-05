@@ -16,7 +16,7 @@
 		var teamAdherences = [];
 		var skills = [];
 		var skillAreas = [];
-		var excludedPhoneStates = [];
+		var phoneStates = [];
 		
 		var service = {
 			withToggle: faker.withToggle,
@@ -32,7 +32,7 @@
 			
 			withSkill: withSkill,
 			withSkillAreas: withSkillAreas,
-			withExcludedPhoneState: withExcludedPhoneState,
+			withPhoneState: withPhoneState,
 			withOrganization: withOrganization,
 			withOrganizationOnSkills: withOrganizationOnSkills,
 			withHistoricalAdherence: withHistoricalAdherence,
@@ -134,30 +134,9 @@
 				return [200, sitesWithTeams];
 			});
 
-		faker.fake(/\.\.\/api\/PhoneState\/InfoFor(.*)/,
+		faker.fake(/\.\.\/api\/PhoneStates/,
 			function (data) {
-				// if (data.ids.indexOf(null) > -1 || data.ids.indexOf("noState") > -1)
-				// 	throw new Error('Nope, dont ask server for that')
-                //
-				// var result = phoneStates.filter(function (s) {
-				// 	return data.ids.indexOf(s.Id) > -1
-				// });
-                //
-				// if (result.length === 0) {
-				// 	result = agentStates
-				// 		.filter(function (s) {
-				// 			if (data.ids.indexOf(s.StateId) > -1)
-				// 				return true;
-				// 		})
-				// 		.map(function (s) {
-				// 			return {
-				// 				Name: s.State,
-				// 				Id: s.StateId
-				// 			}
-				// 		});
-				// }
-				//
-				return [200, excludedPhoneStates]
+				return [200, phoneStates]
 			});
 
 		faker.fake(/\.\.\/api\/Overview\/SiteCards(.*)/,
@@ -266,8 +245,8 @@
 			return this;
 		}
 
-		function withExcludedPhoneState(phoneState) {
-			excludedPhoneStates.push(phoneState);
+		function withPhoneState(phoneState) {
+			phoneStates.push(phoneState);
 			return this;
 		}
 
@@ -306,7 +285,7 @@
 			siteAdherences = [];
 			teamAdherences = [];
 			skillAreas = [];
-			excludedPhoneStates = [];
+			phoneStates = [];
 			historicalAdherence = {};
 			faker.clear();
 		};

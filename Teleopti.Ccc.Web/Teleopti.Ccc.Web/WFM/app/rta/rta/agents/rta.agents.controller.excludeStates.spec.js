@@ -1,20 +1,25 @@
 'use strict';
-rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
+rtaTester.fdescribe('RtaAgentsController', function (it, fit, xit, _,
 													 $state,
 													 $fakeBackend,
 													 $controllerBuilder,
 													 stateParams) {
 	var vm;
 
-	it('should include state id in agent states', function () {
+	it('should include state of agents in view', function () {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgentState({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			State: "LoggedOut",
-			StateId: '17560fe4-0130-4568-97de-9b5e015b2555',
-			TimeInAlarm: 10
-		});
+		$fakeBackend
+			.withPhoneState({
+				Id: '17560fe4-0130-4568-97de-9b5e015b2555',
+				Name: 'LoggedOut'
+			})
+			.withAgentState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				State: "LoggedOut",
+				StateId: '17560fe4-0130-4568-97de-9b5e015b2555',
+				TimeInAlarm: 10
+			});
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
@@ -25,15 +30,62 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(vm.states[0].Selected).toEqual(true);
 	});
 
+	it('should include state of agent in view', function (t) {
+		t.backend
+			.withPhoneState({Id: "state"})
+			.withAgentState({
+				PersonId: "person",
+				StateId: 'state'
+			});
+		var c = t.createController();
+
+		t.apply(function () {
+			c.showInAlarm = false;
+		});
+		t.apply(function () {
+			c.states[0].Selected = false;
+		});
+		t.wait(5000);
+
+		expect(c.states.length).toEqual(1);
+		expect(c.states[0].Id).toEqual('state');
+		expect(c.states[0].Selected).toBe(false);
+	});
+
+	it('should exclude state not on screen', function (t) {
+		t.backend
+			.withPhoneState({
+				Id: 'NotOnScreen'
+			})
+			.withPhoneState({
+				Id: 'OnScreen'
+			})
+			.withAgentState({
+				PersonId: 'person',
+				StateId: 'OnScreen',
+				TimeInAlarm: 10
+			});
+
+		var c = t.createController();
+
+		expect(c.states.length).toEqual(1);
+		expect(c.states[0].Id).toEqual('OnScreen');
+	});
+
 	it('should not have duplicate states', function () {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend.withAgentState({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			State: "LoggedOut",
-			StateId: '17560fe4-0130-4568-97de-9b5e015b2555',
-			TimeInAlarm: 15
-		})
+		$fakeBackend
+			.withPhoneState({
+				Id: '17560fe4-0130-4568-97de-9b5e015b2555',
+				Name: 'LoggedOut'
+			})
+			.withAgentState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				State: "LoggedOut",
+				StateId: '17560fe4-0130-4568-97de-9b5e015b2555',
+				TimeInAlarm: 15
+			})
 			.withAgentState({
 				PersonId: "22610fe4-0130-4568-97de-9b5e015b2577",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -63,17 +115,17 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		vm = c.vm;
 		c.apply(vm.showInAlarm = true);
 
-		expect(vm.states.length).toEqual(1)
+		expect(vm.states.length).toEqual(1);
 		expect(vm.states[0].Name).toEqual("No State");
 	});
 
-	it('should not get information for No State (fakeBackend will throw if you do)', function () {
+	it('should have empty state if excluded', function () {
 		stateParams.teamIds = ["teamGuid"];
 		stateParams.es = ["noState"];
 		$fakeBackend
 			.withAgentState({
 				PersonId: "personGuid1",
-				TeamId: "teamGuid",
+				TeamId: "teamGuid"
 			});
 
 		vm = $controllerBuilder.createController().vm;
@@ -85,6 +137,14 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 	it('should order states by name', function (t) {
 		t.stateParams.teamIds = ["teamGuid"];
 		t.backend
+			.withPhoneState({
+				Id: 'StateGuid1',
+				Name: 'B'
+			})
+			.withPhoneState({
+				Id: 'StateGuid2',
+				Name: 'A'
+			})
 			.withAgentState({
 				PersonId: "personGuid1",
 				TeamId: "teamGuid",
@@ -117,10 +177,14 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				StateId: 'guid1',
 				TimeInAlarm: 15
 			})
-			.withExcludedPhoneState(({
+			.withPhoneState({
 				Name: "A",
 				Id: "guid2"
-			}));
+			})
+			.withPhoneState({
+				Name: "B",
+				Id: "guid1"
+			});
 
 		var c = t.createController();
 
@@ -132,7 +196,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		t.stateParams.teamIds = ["teamGuid"];
 		t.stateParams.es = ["loggedOutGuid"];
 		t.backend
-			.withExcludedPhoneState({
+			.withPhoneState({
 				Name: "LoggedOut",
 				Id: "loggedOutGuid"
 			})
@@ -152,13 +216,13 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		t.stateParams.teamIds = ["teamGuid"];
 		t.stateParams.es = ["noState", "loggedOutGuid"];
 		t.backend
-			.withExcludedPhoneState({
+			.withPhoneState({
 				Name: "LoggedOut",
 				Id: "loggedOutGuid"
 			})
 			.withAgentState({
 				PersonId: "personGuid1",
-				TeamId: "teamGuid",
+				TeamId: "teamGuid"
 			});
 
 		var c = t.createController();
@@ -217,6 +281,14 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		it('should hide states when unselecting state for ' + selection.name, function () {
 			stateParams[selection.type] = [selection.id];
 			$fakeBackend
+				.withPhoneState({
+					Id: 'TrainingGuid',
+					Name: 'Training'
+				})
+				.withPhoneState({
+					Id: 'LoggedOutGuid',
+					Name: 'LoggedOut'
+				})
 				.withAgentState(
 					selection.createAgent({
 						PersonId: "person1",
@@ -250,6 +322,14 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 			stateParams[selection.type] = [selection.id];
 			stateParams.es = ["StateGuid2"];
 			$fakeBackend
+				.withPhoneState({
+					Id: 'StateGuid1',
+					Name: 'StateGuid1'
+				})
+				.withPhoneState({
+					Id: 'StateGuid2',
+					Name: 'StateGuid2'
+				})
 				.withAgentState(
 					selection.createAgent({
 						PersonId: "person1",
@@ -277,6 +357,14 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		it('should update url when deselecting state for ' + selection.name, function () {
 			stateParams[selection.type] = [selection.id];
 			$fakeBackend
+				.withPhoneState({
+					Id: 'TrainingGuid',
+					Name: 'Training'
+				})
+				.withPhoneState({
+					Id: 'LoggedOutGuid',
+					Name: 'LoggedOut'
+				})
 				.withAgentState(
 					selection.createAgent({
 						PersonId: "person1",
@@ -313,7 +401,9 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 			t.stateParams[selection.type] = [selection.id];
 			t.stateParams.es = ["LoggedOutGuid"];
 			t.backend
-				.withExcludedPhoneState({Id: "LoggedOutGuid"})
+				.withPhoneState({Id: "TrainingGuid"})
+				.withPhoneState({Id: "LoggedOutGuid"})
+				.withPhoneState({Id: "PhoneGuid"})
 				.withAgentState(
 					selection.createAgent({
 						PersonId: "person1",
@@ -358,6 +448,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		it('should deselect No State for ' + selection.name, function () {
 			stateParams[selection.type] = [selection.id];
 			$fakeBackend
+				.withPhoneState({Id: "TrainingGuid"})
 				.withAgentState(
 					selection.createAgent({
 						PersonId: "person1",
@@ -391,6 +482,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 			stateParams[selection.type] = [selection.id];
 			stateParams.es = ["noState"];
 			$fakeBackend
+				.withPhoneState({Id: "TrainingGuid"})
 				.withAgentState(
 					selection.createAgent({
 						PersonId: "person1",
@@ -427,6 +519,8 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 	it('should hide states when unselecting state for skill area', function () {
 		stateParams.skillAreaId = "skillAreaGuid";
 		$fakeBackend
+			.withPhoneState({Id: "TrainingGuid"})
+			.withPhoneState({Id: "LoggedOutGuid"})
 			.withSkillAreas([{
 				Id: "skillAreaGuid",
 				Skills: [{
@@ -467,6 +561,8 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		stateParams.skillAreaId = "skillAreaGuid";
 		stateParams.es = ["StateGuid2"];
 		$fakeBackend
+			.withPhoneState({Id: "StateGuid1"})
+			.withPhoneState({Id: "StateGuid2"})
 			.withSkillAreas([{
 				Id: "skillAreaGuid",
 				Skills: [{
@@ -501,6 +597,8 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 	it('should update url when deselecting state for skill area', function () {
 		stateParams.skillAreaId = "skillAreaGuid";
 		$fakeBackend
+			.withPhoneState({Id: "TrainingGuid"})
+			.withPhoneState({Id: "LoggedOutGuid"})
 			.withSkillAreas([{
 				Id: "skillAreaGuid",
 				Skills: [{
@@ -544,7 +642,9 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		t.stateParams.skillAreaId = "skillAreaGuid";
 		t.stateParams.es = ["LoggedOutGuid"];
 		t.backend
-			.withExcludedPhoneState({Id: "LoggedOutGuid"})
+			.withPhoneState({Id: "TrainingGuid"})
+			.withPhoneState({Id: "LoggedOutGuid"})
+			.withPhoneState({Id: "PhoneGuid"})
 			.withSkillAreas([{
 				Id: "skillAreaGuid",
 				Skills: [{
@@ -596,6 +696,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 	it('should deselect No State for skill area', function () {
 		stateParams.skillAreaId = "skillAreaGuid";
 		$fakeBackend
+			.withPhoneState({Id: "TrainingGuid"})
 			.withSkillAreas([{
 				Id: "skillAreaGuid",
 				Skills: [{
@@ -636,6 +737,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		stateParams.skillAreaId = "skillAreaGuid";
 		stateParams.es = ["noState"];
 		$fakeBackend
+			.withPhoneState({Id: "TrainingGuid"})
 			.withSkillAreas([{
 				Id: "skillAreaGuid",
 				Skills: [{
@@ -673,7 +775,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 
 	it('should not add duplicate excluded states for each poll', function (t) {
 		t.stateParams.es = ["state"];
-		t.backend.withExcludedPhoneState({Id: "state"});
+		t.backend.withPhoneState({Id: "state"});
 
 		var c = t.createController();
 		t.wait(5000);
