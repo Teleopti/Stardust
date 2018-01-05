@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IVisualLayerCollection CreateProjection()
 		{
-			IList<IVisualLayer> workingColl = new List<IVisualLayer>();
+			IList<IVisualLayer> workingColl = new List<IVisualLayer>(_layerCollectionOriginal.Count*2);
 			var boundariesTemp = _layerCollectionOriginal.Period();
 
 			if (!boundariesTemp.HasValue)
