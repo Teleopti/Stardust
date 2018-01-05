@@ -416,8 +416,6 @@
     <Compile Include="ResourcePlanner\IDayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduled.cs" />
     <Compile Include="Scheduling\SuccessfulScheduledAgents.cs" />
-    <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDaysNew.cs" />
-    <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDataPerDateAndActivityNew.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />

@@ -630,16 +630,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>().SingleInstance();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>().SingleInstance();
 			builder.RegisterType<DailyTargetValueCalculatorForTeamBlock>().As<IDailyTargetValueCalculatorForTeamBlock>();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_TimeZoneIssues_45818))
-			{
-				builder.RegisterType<MedianCalculatorForDaysNew>().As<IMedianCalculatorForDays>().SingleInstance();
-				builder.RegisterType<CreateSkillIntervalDataPerDateAndActivityNew>().As<ICreateSkillIntervalDataPerDateAndActivity>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<MedianCalculatorForDays>().As<IMedianCalculatorForDays>().SingleInstance();
-				builder.RegisterType<CreateSkillIntervalDataPerDateAndActivity>().As<ICreateSkillIntervalDataPerDateAndActivity>().SingleInstance();
-			}
+			builder.RegisterType<MedianCalculatorForDays>().SingleInstance();
+			builder.RegisterType<CreateSkillIntervalDataPerDateAndActivity>().SingleInstance();
 			builder.RegisterType<TwoDaysIntervalGenerator>().As<ITwoDaysIntervalGenerator>().SingleInstance();
 			builder.RegisterType<MedianCalculatorForSkillInterval>().As<IMedianCalculatorForSkillInterval>().SingleInstance();
 			builder.RegisterType<SkillIntervalDataOpenHour>().As<ISkillIntervalDataOpenHour>().SingleInstance();

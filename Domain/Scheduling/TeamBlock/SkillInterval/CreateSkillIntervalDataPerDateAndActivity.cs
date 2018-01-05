@@ -1,19 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_TimeZoneIssues_45818)]
-	public interface ICreateSkillIntervalDataPerDateAndActivity
-	{
-		Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> CreateFor(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> allSkillDays, IGroupPersonSkillAggregator groupPersonSkillAggregator);
-	}
-
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_TimeZoneIssues_45818)]
-	public class CreateSkillIntervalDataPerDateAndActivity : ICreateSkillIntervalDataPerDateAndActivity
+	public class CreateSkillIntervalDataPerDateAndActivity
 	{
 		private readonly ICreateSkillIntervalDatasPerActivtyForDate _createSkillIntervalDatasPerActivtyForDate;
 
@@ -28,16 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 			var skills = groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
-			foreach (var dateOnly in blockPeriod.DayCollection())
+			foreach (var dateOnly in blockPeriod.Inflate(1).DayCollection())
 			{
 				var dayIntervalDataPerActivity = _createSkillIntervalDatasPerActivtyForDate.CreateFor(dateOnly, skills, allSkillDays);
 				dayIntervalDataPerDateAndActivity.Add(dateOnly, dayIntervalDataPerActivity);
 			}
-
-			var extraDate = blockPeriod.EndDate.AddDays(1);
-			var extraDayIntervalDataPerActivity = _createSkillIntervalDatasPerActivtyForDate.CreateFor(blockPeriod.EndDate.AddDays(1), skills, allSkillDays);
-
-			dayIntervalDataPerDateAndActivity.Add(extraDate, extraDayIntervalDataPerActivity);
 			return dayIntervalDataPerDateAndActivity;
 		}
 	}

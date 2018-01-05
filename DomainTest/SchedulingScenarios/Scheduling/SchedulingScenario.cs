@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			if (_resourcePlannerXxl47258)
 				toggleManager.Enable(Toggles.ResourcePlanner_XXL_47258);
 			if(_resourcePlannerTimeZoneIssues45818)
-				toggleManager.Enable(Toggles.ResourcePlanner_TimeZoneIssues_45818);
+				Assert.Ignore("removed toggle");
 		}
 
 		public void OnBefore()
