@@ -11,8 +11,7 @@
 						</div>
 					</md-content>
 				</md-tab>
-				<md-tab md-on-select="$ctrl.tabSelected('targets')" label="{{ 'SetGamificationTargets'|translate }}" md-on-select="$ctrl.setElementHeightToCoverRestOfViewport()"
-				 md-on-deselect="$ctrl.resetElementHeight()">
+				<md-tab md-on-select="$ctrl.tabSelected('targets');$ctrl.setElementHeightToCoverRestOfViewport()" label="{{ 'SetGamificationTargets'|translate }}" md-on-deselect="$ctrl.resetElementHeight()">
 					<md-content class="md-padding">
 						<div class="con-row">
 							<div class="con-flex">
