@@ -1,5 +1,5 @@
 'use strict';
-rtaTester.fdescribe('RtaAgentsController', function (it, fit, xit, _,
+rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 													 $state,
 													 $fakeBackend,
 													 $controllerBuilder,
