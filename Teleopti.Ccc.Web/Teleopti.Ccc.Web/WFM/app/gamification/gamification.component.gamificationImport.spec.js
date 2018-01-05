@@ -48,11 +48,9 @@ describe('<gamification-import>', function () {
 
 	it('should render', function () {
 		var cmp = setupComponent();
-		var downloadBtn = cmp[0].querySelector('a#importFileDetailLink');
-		expect(downloadBtn).not.toBe(null);
+		var uploadBtn = cmp[0].querySelector('button.wfm-btn.wfm-btn-primary');
+		expect(uploadBtn).not.toBe(null);
 	});
-
-	// it('should download template when clicking Download button', function () { });
 
 	it('should list all import jobs', function () {
 		var cmp = setupComponent();

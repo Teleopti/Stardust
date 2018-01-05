@@ -1,9 +1,8 @@
 <div>
 
 	<div class="droparea-wrapper">
-		<div class="droparea">
-			<div ngf-drop ngf-select ngf-multiple="false" ngf-keep="false" ngf-allow-dir="false" ngf-accept="'.csv'" ng-model="$ctrl.file"
-			 ng-model-rejected="$ctrl.rejFiles">
+		<div class="droparea" ngf-drop ngf-select ngf-multiple="false" ngf-keep="false" ngf-allow-dir="false" ngf-accept="'.csv'" ng-model="$ctrl.file" ng-model-rejected="$ctrl.rejFiles">
+			<div>
 				<span class="prompt pointer">{{ 'DragAndDropCSVFilesHereOrClickToUpload' | translate }}</span>
 				<div ng-show="$ctrl.file" class="fileinfo">
 					<span class="filename pointer">{{$ctrl.file.name}} - {{ $ctrl.file.size|filesize:2 }}</span>
@@ -18,10 +17,10 @@
 				</div>
 			</div>
 			<div>
-				<button class="wfm-btn wfm-btn-primary" ng-disabled="$ctrl.fileIsInvalid()" ng-click="$ctrl.upload()">{{'UploadAndStart'|translate}}</button>
+				<button class="wfm-btn wfm-btn-primary" ng-disabled="$ctrl.fileIsInvalid()" ng-click="$ctrl.upload();$event.stopPropagation()">{{'UploadAndStart'|translate}}</button>
 			</div>
-			<div>
-				<a class="detail_link" id="importFileDetailLink" target="_blank" href="{{$ctrl.fileFormatWikiLink}}">&nbsp;{{'GamificationViewImportFileFormat'|translate}}</a>
+			<div ng-click="$event.stopPropagation()">
+				<a class="detail_link" target="_blank" ng-href="{{$ctrl.fileFormatWikiLink}}">{{'GamificationViewImportFileFormat'|translate}}</a>
 			</div>
 		</div>
 		<div ng-if="$ctrl.uploading" class="loading-mask">

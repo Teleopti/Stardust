@@ -266,6 +266,7 @@
 			position: relative;
 
 			.droparea {
+				cursor: pointer;
 				min-height: 65px;
 				margin: 0 5px;
 				padding: $PADDING;
@@ -288,7 +289,7 @@
 
 				.detail_link{
 					color: #09f;
-					text-decoration: none;					
+					text-decoration: none;
 					transition: all ease 0.1s;
 				}
 			}
