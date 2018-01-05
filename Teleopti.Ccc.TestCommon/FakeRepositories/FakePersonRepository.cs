@@ -33,6 +33,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_storage.Add(person);
 		}
 
+		public void Has(IEnumerable<IPerson> persons)
+		{
+			foreach (var person in persons)
+			{
+				Has(person);
+			}
+		}
+
 		/// <summary>
 		/// Add a person with application logon name
 		/// </summary>

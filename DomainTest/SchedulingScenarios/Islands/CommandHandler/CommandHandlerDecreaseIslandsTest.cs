@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
@@ -32,14 +31,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count()
 				.Should().Be.EqualTo(2);
-		} 
-		
-		
+		}
 		
 		[Test]
 		public void ShouldMergeSmallEnoughIslands()
 		{
-			var agentsOnEachSkill = MergeIslandsSizeLimit.Limit - 1;
+			var agentsOnEachSkill = MergeIslandsSizeLimit.Limit / 2 - 1;
 			var skillA = new Skill().WithId();
 			var skillB = new Skill().WithId();
 			var skillAagents = Enumerable.Range(0, agentsOnEachSkill).Select(x => new Person().WithPersonPeriod(skillA).WithId()).ToArray();
@@ -59,9 +56,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var skillA = new Skill().WithId();
 			var skillB = new Skill().WithId();
 			var skillC = new Skill().WithId();
-			PersonRepository.Add(new Person().WithId().WithPersonPeriod(skillA));
-			PersonRepository.Add(new Person().WithId().WithPersonPeriod(skillB));
-			PersonRepository.Add(new Person().WithId().WithPersonPeriod(skillC));
+			PersonRepository.Has(new Person().WithId().WithPersonPeriod(skillA));
+			PersonRepository.Has(new Person().WithId().WithPersonPeriod(skillB));
+			PersonRepository.Has(new Person().WithId().WithPersonPeriod(skillC));
 			
 			ExecuteTarget();
 
@@ -69,6 +66,39 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				.Should().Be.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldHandleMixOfSmallAndLargeIslands()
+		{
+			var skillSmall1 = new Skill("small1").WithId();
+			var skillSmall2 = new Skill("small2").WithId();
+			var skillLarge = new Skill("large").WithId();
+			PersonRepository.Has(new Person().WithId().WithPersonPeriod(skillSmall1));
+			PersonRepository.Has(Enumerable.Range(0, MergeIslandsSizeLimit.Limit + 1).Select(x => new Person().WithPersonPeriod(skillLarge).WithId()));
+			PersonRepository.Has(new Person().WithId().WithPersonPeriod(skillSmall2));
+			
+			ExecuteTarget();
+
+			var islands = EventPublisher.PublishedEvents.OfType<IIslandInfo>();
+			islands.Count()
+				.Should().Be.EqualTo(2);
+			islands.Single(x => x.AgentsInIsland.Count() == 2).Skills
+				.Should().Have.SameValuesAs(skillSmall1.Id.Value, skillSmall2.Id.Value);
+		}
+
+		[Test]
+		public void ShouldCreateMoreThanOneNewGroupOfAgentsIfNecessary()
+		{
+			for (var i = 0; i < MergeIslandsSizeLimit.Limit * 2 + 1; i++)
+			{
+				var skill = new Skill().WithId();
+				PersonRepository.Has(new Person().WithId().WithPersonPeriod(skill));
+			}
+			
+			ExecuteTarget();
+
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count()
+				.Should().Be.EqualTo(3);
+		}
 
 		public CommandHandlerDecreaseIslandsTest(SUT sut, bool noPytteIslands47500) : base(sut, noPytteIslands47500)
 		{
