@@ -17,21 +17,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffOptimizationCommandHandler : IDayOffOptimizationCommandHandler
 	{
 		private readonly IEventPublisher _eventPublisher;
-		private readonly FetchIslands _fetchIslands;
+		private readonly CreateIslands _createIslands;
 		private readonly IAllStaff _allStaff;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 		private readonly IGridlockManager _gridLockManager;
 
 		public DayOffOptimizationCommandHandler(IEventPublisher eventPublisher,
-			FetchIslands fetchIslands,
+			CreateIslands createIslands,
 			IAllStaff allStaff,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			CrossAgentsAndSkills crossAgentsAndSkills,
 			IGridlockManager gridLockManager)
 		{
 			_eventPublisher = eventPublisher;
-			_fetchIslands = fetchIslands;
+			_createIslands = createIslands;
 			_allStaff = allStaff;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_crossAgentsAndSkills = crossAgentsAndSkills;
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			using (CommandScope.Create(command))
 			{
-				return _fetchIslands.Execute(period);
+				return _createIslands.Create(period);
 			}
 		}
 	}

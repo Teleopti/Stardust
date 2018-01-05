@@ -2,7 +2,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			_allStaff = allStaff;
 		}
 
-		public IEnumerable<Island> Create(DateOnlyPeriod period, ICreateIslandsCallback passedCallback)
+		public IEnumerable<Island> Create(DateOnlyPeriod period, ICreateIslandsCallback passedCallback = null)
 		{
 			var callback = passedCallback ?? new NullCreateIslandsCallback();
 			var allSkillSets = _createSkillSets.Create(_allStaff.Agents(period), period).ToList();

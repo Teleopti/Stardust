@@ -366,7 +366,6 @@
     <Compile Include="Intraday\IntradaySkillProvider.cs" />
     <Compile Include="Intraday\ISkillTypeInfo.cs" />
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
-    <Compile Include="Islands\FetchIslands.cs" />
     <Compile Include="Islands\ICreateIslandCallback.cs" />
     <Compile Include="Islands\LogCreateIslandCallback.cs" />
     <Compile Include="Islands\LogCreateIslandInfo.cs" />

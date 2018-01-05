@@ -19,21 +19,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly IAllStaff _allStaff;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
-		private readonly FetchIslands _fetchIslands;
+		private readonly CreateIslands _createIslands;
 
 		protected IntradayOptimizationCommandHandler(IEventPublisher eventPublisher,
 												IGridlockManager gridLockManager,
 												IAllStaff allStaff,
 												IOptimizationPreferencesProvider optimizationPreferencesProvider,
 												CrossAgentsAndSkills crossAgentsAndSkills,
-												FetchIslands fetchIslands)
+												CreateIslands createIslands)
 		{
 			_eventPublisher = eventPublisher;
 			_gridLockManager = gridLockManager;
 			_allStaff = allStaff;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_crossAgentsAndSkills = crossAgentsAndSkills;
-			_fetchIslands = fetchIslands;
+			_createIslands = createIslands;
 		}
 
 		public void Execute(IntradayOptimizationCommand command)
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			using (CommandScope.Create(command))
 			{
-				return _fetchIslands.Execute(period);
+				return _createIslands.Create(period);
 			}
 		}
 
