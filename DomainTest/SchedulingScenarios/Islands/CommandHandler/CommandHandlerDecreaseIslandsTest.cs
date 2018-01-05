@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		[Test]
 		public void ShouldNotMergeIslandsIfBigEnough()
 		{
-			var agentsOnEachSkill = MergeIslandsSizeLimit.Limit + 1;
+			var agentsOnEachSkill = MergeIslandsSizeLimit.Limit / 2 + 1;
 			var skillA = new Skill().WithId();
 			var skillB = new Skill().WithId();
 			var skillAagents = Enumerable.Range(0, agentsOnEachSkill).Select(x => new Person().WithPersonPeriod(skillA).WithId());
