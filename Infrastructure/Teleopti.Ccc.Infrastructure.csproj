@@ -263,6 +263,8 @@
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\RequestPeriod.cs" />
+    <Compile Include="Repositories\SkillCombinationResourceRepository.cs" />
+    <Compile Include="Repositories\SkillCombinationResourceRepositoryOld.cs" />
     <Compile Include="Repositories\Stardust\IStardustRepository.cs" />
     <Compile Include="Repositories\Stardust\Job.cs" />
     <Compile Include="Repositories\Stardust\JobDetail.cs" />
@@ -291,7 +293,7 @@
     <Compile Include="MultiTenancy\Server\TenantAuthenticationAlwaysAuthenticated.cs" />
     <Compile Include="Repositories\JobStartTimeRepository.cs" />
     <Compile Include="Intraday\PersonProviderForOvertime.cs" />
-    <Compile Include="Repositories\SkillCombinationResourceRepository.cs" />
+    <Compile Include="Repositories\SkillCombinationResourceRepositoryBase.cs" />
     <Compile Include="Licensing\ISetLicenseActivator.cs" />
     <Compile Include="Licensing\SetLicenseActivator.cs" />
     <Compile Include="Licensing\SetNoLicenseActivator.cs" />

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var currentBu = new FakeCurrentBusinessUnit();
 			currentBu.FakeBusinessUnit(BusinessUnitFactory.CreateWithId(theSkill.BusinessUnit.Id.GetValueOrDefault()));
 
-			var skillCombinationReadModel = new SkillCombinationResourceRepository(new MutableNow(_theDate.Date.AddHours(7)), currentUnitOfWork, currentBu, new FakeStardustJobFeedback(),new TrueToggleManager());
+			var skillCombinationReadModel = new SkillCombinationResourceRepository(new MutableNow(_theDate.Date.AddHours(7)), currentUnitOfWork, currentBu, new FakeStardustJobFeedback());
 			skillCombinationReadModel.PersistSkillCombinationResource(_theDate.Date.AddHours(7), new List<SkillCombinationResource> {new SkillCombinationResource
 																	  {
 																		 StartDateTime = _theDate.Date.AddHours(8),

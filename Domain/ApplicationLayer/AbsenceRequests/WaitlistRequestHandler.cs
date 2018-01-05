@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			IEnumerable<IScheduleDay> scheduleDays, DateTimePeriod requestPeriod, List<IAbsenceRequestValidator> validators, IPersonRequest pRequest)
 		{
 			var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
-			//should not happen now but h‰ngslen och livrem
+			//should not happen now but h√§ngslen och livrem
 			if (staffingThresholdValidators.IsEmpty()) return new ValidatedRequest{IsValid = false};
 			var shiftPeriodList = new List<DateTimePeriod>();
 

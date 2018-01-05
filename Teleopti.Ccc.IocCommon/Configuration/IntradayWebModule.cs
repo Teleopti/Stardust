@@ -66,8 +66,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayQueueStatisticsLoader>().As<IIntradayQueueStatisticsLoader>().SingleInstance();
 			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
 			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();
-			builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceRepository>().SingleInstance();
-			        
+			
+			if (_configuration.Toggle(Toggles.Staffing_BPOExchangeImport_45202))
+			{
+				builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceRepository>()
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<SkillCombinationResourceRepositoryOld>().As<ISkillCombinationResourceRepository>()
+					.SingleInstance();
+			}
+
 			builder.RegisterType<EmailBacklogProvider>().SingleInstance();
 			builder.RegisterType<SkillStaffingIntervalProvider>().SingleInstance();
 			builder.RegisterType<IntradaySkillProvider>().As<IIntradaySkillProvider>().SingleInstance();
