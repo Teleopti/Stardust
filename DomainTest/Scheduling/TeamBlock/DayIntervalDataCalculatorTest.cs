@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     public class DayIntervalDataCalculatorTest
     {
         private IDayIntervalDataCalculator _target;
-        private IMedianCalculatorForDays _medianCalculatorForDays;
+        private MedianCalculatorForDays _medianCalculatorForDays;
         private ITwoDaysIntervalGenerator _twoDayIntervalCalculator;
         private IMedianCalculatorForSkillInterval _medianCalculatorForSkillInterval;
         private IIntervalDataCalculator _intervalDataCalculator;

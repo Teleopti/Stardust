@@ -1043,7 +1043,6 @@
     <Compile Include="Scheduling\SaveSchedulePart\SaveSchedulePartServiceTest.cs" />
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverLaterTest.cs" />
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverEarlierTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\ActivityIntervalDataCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\AllTeamMembersInSelectionSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\FirstShiftInTeamBlockFinderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDaysTest.cs" />
@@ -1062,7 +1061,6 @@
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDatasPerActivtyForDateTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\OpenHourForDateTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\SkillInterval\TeamBlockOpenHoursValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryTeamSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeTeamSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
@@ -1394,7 +1392,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\PersonalShiftsShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetPersonalSkillsActivityFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetSkillActivityCheckerTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\Specification\SameOpenHoursInTeamBlockTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftCategoryRestrictionShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TeamBlockRuleSetBagExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TeamBlockIncludedWorkShiftRuleFilterTest.cs" />

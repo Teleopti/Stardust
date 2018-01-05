@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string agentTimeZone,
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string skillTimeZone)
 		{
-			if(!_resourcePlannerNoPytteIslands47500)
-				Assert.Ignore("Only works when toggle 45818 is turned on");
 			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userTimeZone));
 			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById(userViewPointTimeZone));
 			var date = new DateOnly(2017, 9, 7);

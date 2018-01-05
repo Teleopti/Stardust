@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     [TestFixture]
     public class MedianCalculatorForDaysTest
     {
-        private IMedianCalculatorForDays _target;
+        private MedianCalculatorForDays _target;
         private IMedianCalculatorForSkillInterval _medianCalculatorForSkillInterval;
         private IIntervalDataCalculator _intervalDataCalculator;
 
