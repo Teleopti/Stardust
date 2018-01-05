@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
-		public TeamBlockPeriodSchedulingTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerTimeZoneIssues45818, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerTimeZoneIssues45818, resourcePlannerXxl47258)
+		public TeamBlockPeriodSchedulingTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
 		{
 		}
 	}

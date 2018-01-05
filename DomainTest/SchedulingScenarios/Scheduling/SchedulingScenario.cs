@@ -22,17 +22,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	public abstract class SchedulingScenario : IConfigureToggleManager, ITestInterceptor, ISetup
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
-		protected readonly bool _resourcePlannerTimeZoneIssues45818;
+		private readonly bool _resourcePlannerNoPytteIslands47500;
 		private readonly bool _resourcePlannerXxl47258;
 
 		public IIoCTestContext IoCTestContext;
 
 		protected SchedulingScenario(SeperateWebRequest seperateWebRequest, 
-			bool resourcePlannerTimeZoneIssues45818,
+			bool resourcePlannerNoPytteIslands47500,
 			bool resourcePlannerXxl47258)
 		{
 			_seperateWebRequest = seperateWebRequest;
-			_resourcePlannerTimeZoneIssues45818 = resourcePlannerTimeZoneIssues45818;
+			_resourcePlannerNoPytteIslands47500 = resourcePlannerNoPytteIslands47500;
 			_resourcePlannerXxl47258 = resourcePlannerXxl47258;
 		}
 
@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		{
 			if (_resourcePlannerXxl47258)
 				toggleManager.Enable(Toggles.ResourcePlanner_XXL_47258);
-			if(_resourcePlannerTimeZoneIssues45818)
-				Assert.Ignore("removed toggle");
+			if(_resourcePlannerNoPytteIslands47500)
+				Assert.Ignore("To be fixed");
 		}
 
 		public void OnBefore()

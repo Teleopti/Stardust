@@ -105,9 +105,9 @@
 		ResourcePlanner_BreakPreferenceStartTimeByMax_46002,
 		ResourcePlanner_BlockSchedulingValidation_46092,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
-		ResourcePlanner_TimeZoneIssues_45818,
 		ResourcePlanner_DayOffOptimizationIslands_47208,
 		ResourcePlanner_XXL_47258,
+		ResourcePlanner_NoPytteIslands_47500,
 
 		Wfm_DisplayOnlineHelp_39402,
 

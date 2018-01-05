@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string agentTimeZone,
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string skillTimeZone)
 		{
-			if(!_resourcePlannerTimeZoneIssues45818)
+			if(!_resourcePlannerNoPytteIslands47500)
 				Assert.Ignore("Only works when toggle 45818 is turned on");
 			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userTimeZone));
 			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById(userViewPointTimeZone));
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
-		public SchedulingTimeZoneTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerTimeZoneIssues45818, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerTimeZoneIssues45818, resourcePlannerXxl47258)
+		public SchedulingTimeZoneTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
 		{
 		}
 	}
