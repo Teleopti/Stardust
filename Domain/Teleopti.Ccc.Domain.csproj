@@ -367,6 +367,10 @@
     <Compile Include="Intraday\ISkillTypeInfo.cs" />
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
     <Compile Include="Islands\FetchIslands.cs" />
+    <Compile Include="Islands\ICreateIslandCallback.cs" />
+    <Compile Include="Islands\LogCreateIslandCallback.cs" />
+    <Compile Include="Islands\LogCreateIslandInfo.cs" />
+    <Compile Include="Islands\NullCreateIslandCallback.cs" />
     <Compile Include="MultiTenancy\TenantLogonPersonProvider.cs" />
     <Compile Include="Notification\ASMScheduleChangeTime.cs" />
     <Compile Include="Notification\ClickatellNotificationSender.cs" />

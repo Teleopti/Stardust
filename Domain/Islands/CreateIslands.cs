@@ -21,13 +21,15 @@ namespace Teleopti.Ccc.Domain.Islands
 			_moveSkillSetToCorrectIsland = moveSkillSetToCorrectIsland;
 		}
 
-		public IEnumerable<Island> Create(IReduceSkillSets reduceSkillSets, IEnumerable<IPerson> allStaff, DateOnlyPeriod period)
+		public IEnumerable<Island> Create(IReduceSkillSets reduceSkillSets, IEnumerable<IPerson> allStaff, DateOnlyPeriod period, ICreateIslandsCallback passedCallback)
 		{
+			var callback = passedCallback ?? new NullCreateIslandsCallback();
 			var allSkillSets = _createSkillSets.Create(allStaff, period).ToList();
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillSets);
 			while (true)
 			{
 				var skillSetsInIsland = allSkillSets.Select(skillSet => new List<SkillSet> { skillSet }).ToList();
+				callback.BasicIslandsCreated(skillSetsInIsland, noAgentsKnowingSkill);
 				while (_moveSkillSetToCorrectIsland.Execute(allSkillSets, skillSetsInIsland))
 				{
 					removeEmptyIslands(skillSetsInIsland);
@@ -35,7 +37,9 @@ namespace Teleopti.Ccc.Domain.Islands
 
 				if (!reduceSkillSets.Execute(skillSetsInIsland, noAgentsKnowingSkill))
 				{
-					return skillSetsInIsland.Select(skillSetInIsland => new Island(skillSetInIsland, noAgentsKnowingSkill)).ToArray();
+					var islands = skillSetsInIsland.Select(skillSetInIsland => new Island(skillSetInIsland, noAgentsKnowingSkill)).ToArray();
+					callback.AfterExtendingDueToReducing(islands);
+					return islands;
 				}
 			}
 		}

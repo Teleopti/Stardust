@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Islands
 		
 		public IEnumerable<Island> Execute(DateOnlyPeriod period)
 		{
-			return _createIslands.Create(_reduceSkillSets, _allStaff.Agents(period), period);
+			return _createIslands.Create(_reduceSkillSets, _allStaff.Agents(period), period, null);
 		}
 	}
 }

@@ -25,29 +25,26 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 		{
 			var period = DateOnly.Today.ToDateOnlyPeriod();
 			var agents = _allStaff.Agents(period);
-
-			var islandsModelBefore = createIslandsModel(new ReduceNoSkillSets(), agents, period);
-			var islandsModelAfter = createIslandsModel(_reduceSkillSets, agents, period);
+			var createIslandsCallback = new LogCreateIslandsCallback();
+			_createIslands.Create(_reduceSkillSets, agents, period, createIslandsCallback);
 
 			var islandTopModel = new IslandTopModel
 			{
-				AfterReducing = islandsModelAfter,
-				BeforeReducing = islandsModelBefore
+				BeforeReducing = createIslandModel(createIslandsCallback.IslandsBasic),
+				AfterReducing = createIslandModel(createIslandsCallback.IslandsAfterReducing),
 			};
 
 			return islandTopModel;
 		}
 
-		private IslandsModel createIslandsModel(IReduceSkillSets reduceSkillSets, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		private static IslandsModel createIslandModel(LogCreateIslandInfo logCreateIslandInfo)
 		{
-			IEnumerable<Island> islands=null;
-			var timeToGenerate = MeasureTime.Do(() => islands = _createIslands.Create(reduceSkillSets, agents, period));
-			var islandModels = (from Island island in islands select island.CreateClientModel()).ToList();
-			islandModels.Sort();
+			var islandModel = logCreateIslandInfo.Islands.Select(x => x.CreateClientModel()).ToList();
+			islandModel.Sort();
 			var islandsModel = new IslandsModel
 			{
-				Islands = islandModels,
-				TimeToGenerateInMs = (int) Math.Ceiling(timeToGenerate.TotalMilliseconds)
+				Islands = islandModel,
+				TimeToGenerateInMs = (int) Math.Ceiling(logCreateIslandInfo.TimeToGenerate.TotalMilliseconds),
 			};
 			islandsModel.NumberOfAgentsOnAllIsland = islandsModel.Islands.Sum(x => x.NumberOfAgentsOnIsland);
 			return islandsModel;
