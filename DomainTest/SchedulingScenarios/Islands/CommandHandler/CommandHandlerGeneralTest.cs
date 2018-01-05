@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 	{
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
+		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 
 		[Test]
 		public void ShouldSetPeriod()
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		[Test]
 		public void ShouldCreateTwoEventsIfTwoAgentsWithDifferentSkills()
 		{
+			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
 			var skill1 = new Skill().WithId();
 			var skill2 = new Skill().WithId();
 			var agent1 = new Person().WithId().WithPersonPeriod(skill1);
@@ -77,6 +80,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		[Test]
 		public void ShouldCreateTwoEventsIfSameSkillsButDiffersDueToPrimarySkill()
 		{
+			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
 			var skill1 = new Skill().WithId().CascadingIndex(1);
 			var skill2 = new Skill().WithId().CascadingIndex(2);
 			var agent1 = new Person().WithId().WithPersonPeriod(skill1, skill2);
@@ -137,6 +141,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		[Test]
 		public void ShouldSetSpecificAgentsToOptimizeWhenMultipleIsland()
 		{
+			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
 			var agent1 = new Person().WithId().WithPersonPeriod(new Skill().WithId());
 			var agent2 = new Person().WithId().WithPersonPeriod(new Skill().WithId());
 			PersonRepository.Has(agent1);

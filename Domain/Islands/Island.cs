@@ -38,6 +38,11 @@ namespace Teleopti.Ccc.Domain.Islands
 			return ret;
 		}
 
+		public static Island Merge(Island island1, Island island2)
+		{
+			return new Island(island1._skillSets.Union(island2._skillSets), island1._noAgentsKnowingSkill);
+		}
+
 		public IslandModel CreateClientModel()
 		{
 			var ret = new IslandModel();

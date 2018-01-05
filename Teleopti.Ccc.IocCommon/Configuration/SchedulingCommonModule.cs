@@ -194,14 +194,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NumberOfAgentsKnowingSkill>().SingleInstance();
 			builder.RegisterType<ReduceSkillSets>().SingleInstance();
 			builder.RegisterType<CreateIslands>().SingleInstance();
-			builder.RegisterType<MergeIslands>().SingleInstance();
+			builder.RegisterType<MergeIslandsSizeLimit>().SingleInstance();		
 			if (_configuration.Toggle(Toggles.ResourcePlanner_NoPytteIslands_47500))
-			{
-				builder.RegisterType<MergeIslandsSizeLimit>().SingleInstance();				
+			{		
+				builder.RegisterType<MergeIslands>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<NeverMergeIslands>().As<MergeIslandsSizeLimit>().SingleInstance();
+				builder.RegisterType<NeverMergeIslands>().As<MergeIslands>().SingleInstance();
 			}
 			builder.RegisterType<MoveSkillSetToCorrectIsland>().SingleInstance();
 			builder.RegisterType<IslandModelFactory>().SingleInstance();

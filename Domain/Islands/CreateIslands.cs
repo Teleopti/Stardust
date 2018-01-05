@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
@@ -35,13 +36,19 @@ namespace Teleopti.Ccc.Domain.Islands
 			var callback = passedCallback ?? new NullCreateIslandsCallback();
 			var allSkillSets = _createSkillSets.Create(_allStaff.Agents(period), period).ToList();
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillSets);
+			return _mergeIslands.Execute(islandsAfterReducing(allSkillSets, callback, noAgentsKnowingSkill));
+		}
+
+		private IEnumerable<Island> islandsAfterReducing(ICollection<SkillSet> allSkillSets, ICreateIslandsCallback callback, IDictionary<ISkill, int> noAgentsKnowingSkill)
+		{
 			while (true)
 			{
-				var skillSetsInIsland = allSkillSets.Select(skillSet => new List<SkillSet> { skillSet }).ToList();
+				var skillSetsInIsland = allSkillSets.Select(skillSet => new List<SkillSet> {skillSet}).ToList();
 				while (_moveSkillSetToCorrectIsland.Execute(allSkillSets, skillSetsInIsland))
 				{
 					removeEmptyIslands(skillSetsInIsland);
 				}
+
 				callback.BasicIslandsCreated(skillSetsInIsland, noAgentsKnowingSkill);
 				if (!_reduceSkillSets.Execute(skillSetsInIsland, noAgentsKnowingSkill))
 				{

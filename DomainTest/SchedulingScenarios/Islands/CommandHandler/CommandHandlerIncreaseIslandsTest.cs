@@ -9,17 +9,20 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 {
-	public class CommandHandlerIncreaseIslandsTest : ResourcePlannerCommandHandlerTest
+	public class CommandHandlerIncreaseIslandsTest : ResourcePlannerCommandHandlerTest, ITestInterceptor
 	{
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
 		public ReduceIslandsLimits ReduceIslandsLimits;
+		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 
 		[TestCase(5, 1, ExpectedResult = 2)]
 		[TestCase(4, 1, ExpectedResult = 1)]
@@ -296,6 +299,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		
 		public CommandHandlerIncreaseIslandsTest(SUT sut, bool noPytteIslands47500) : base(sut, noPytteIslands47500)
 		{
+		}
+
+		public void OnBefore()
+		{
+			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
@@ -11,7 +12,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 {
-	[Ignore("To be fixed")]
 	public class CommandHandlerDecreaseIslandsTest : ResourcePlannerCommandHandlerTest
 	{
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		[Test]
 		public void ShouldNotMergeIslandsIfBigEnough()
 		{
-			var agentsOnEachSkill = MergeIslandsSizeLimit.MaximumNumberOfAgentsInIsland + 1;
+			var agentsOnEachSkill = MergeIslandsSizeLimit.Limit + 1;
 			var skillA = new Skill().WithId();
 			var skillB = new Skill().WithId();
 			var skillAagents = Enumerable.Range(0, agentsOnEachSkill).Select(x => new Person().WithPersonPeriod(skillA).WithId());
-			var skillABagents = Enumerable.Range(0, agentsOnEachSkill).Select(x => new Person().WithPersonPeriod(skillB).WithId());
-			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
+			var skillBagents = Enumerable.Range(0, agentsOnEachSkill).Select(x => new Person().WithPersonPeriod(skillB).WithId());
+			skillAagents.Union(skillBagents).ForEach(x => PersonRepository.Has(x));
 
 			ExecuteTarget();
 			
@@ -37,23 +37,24 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		[Test]
 		public void ShouldMergeSmallEnoughIslands()
 		{
-			MergeIslandsSizeLimit.SetValues_UseOnlyFromTest(1);
-			const int agentsOnEachSkill = 10;
+			var agentsOnEachSkill = MergeIslandsSizeLimit.Limit - 1;
 			var skillA = new Skill().WithId();
 			var skillB = new Skill().WithId();
-			var skillAagents = Enumerable.Range(0, agentsOnEachSkill).Select(x => new Person().WithPersonPeriod(skillA).WithId());
-			var skillABagents = Enumerable.Range(0, agentsOnEachSkill).Select(x => new Person().WithPersonPeriod(skillB).WithId());
-			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
+			var skillAagents = Enumerable.Range(0, agentsOnEachSkill).Select(x => new Person().WithPersonPeriod(skillA).WithId()).ToArray();
+			var skillBagents = Enumerable.Range(0, agentsOnEachSkill).Select(x => new Person().WithPersonPeriod(skillB).WithId()).ToArray();
+			var allAgents = skillAagents.Union(skillBagents).ForEach(x => PersonRepository.Has(x));
 
 			ExecuteTarget();
 
 			var island = EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single();
-			island.AgentsInIsland.Should().Have.SameValuesAs(PersonRepository.LoadAll().Select(x => x.Id.Value));
+			island.AgentsInIsland.Should().Have.SameValuesAs(allAgents.Select(x => x.Id.Value));
 			island.Skills.Should().Have.SameValuesAs(skillA.Id.Value, skillB.Id.Value);
 		}
 
 		public CommandHandlerDecreaseIslandsTest(SUT sut, bool noPytteIslands47500) : base(sut, noPytteIslands47500)
 		{
+			if(!noPytteIslands47500)
+				Assert.Ignore("Only valid when toggle is true");
 		}
 	}
 }
