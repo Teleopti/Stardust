@@ -16709,7 +16709,7 @@ Do you want to participate?</value>
     <comment>Label name of maximum time validation fails option</comment>
   </data>
   <data name="OvertimeRequestMaximumTimeDenyReason" xml:space="preserve">
-    <value>{0} contains too much over time ({1}). Max is {2}.</value>
+    <value>{0} contains too much overtime ({1}). Max is {2}.</value>
     <comment>error message for maximum overtime validation</comment>
   </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">

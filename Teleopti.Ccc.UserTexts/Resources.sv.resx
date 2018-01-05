@@ -15319,4 +15319,31 @@ Vill du registrera dig?</value>
   <data name="BpoOnlyExportPeriodBetweenDates" xml:space="preserve">
     <value>Endast exportperioder mellan datumen: {0} kan väljas.</value>
   </data>
+  <data name="OvertimeRequestMaximumTimeDenyReason" xml:space="preserve">
+    <value>{0} innehåller för mycket övertid ({1}). Max är {2}.</value>
+  </data>
+  <data name="ContractWorkRuleValidation" xml:space="preserve">
+    <value>Validering på kontraktsregler</value>
+  </data>
+  <data name="InvalidNumberOfFields" xml:space="preserve">
+    <value>Varje rad måste ha {0} fält. Den här raden har {1}.</value>
+  </data>
+  <data name="PersonIdIsTooLong" xml:space="preserve">
+    <value>Person-ID är för långt</value>
+  </data>
+  <data name="PersonIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
+    <value>Detta person-ID kunde inte matchas till någon agent</value>
+  </data>
+  <data name="BusinessHierarchy" xml:space="preserve">
+    <value>Organisationsstruktur</value>
+  </data>
+  <data name="NoPermissionToViewWFMModuleErrorMessage" xml:space="preserve">
+    <value>Du har inte rättigheter för att se {0}.</value>
+  </data>
+  <data name="GamificationViewImportFileFormat" xml:space="preserve">
+    <value>Visa detaljer för importfilsformatet</value>
+  </data>
+  <data name="DragAndDropYourCsvFileOrClickToSelect" xml:space="preserve">
+    <value>Dra och släpp din CSV-fil här, eller klicka för att välja</value>
+  </data>
 </root>
