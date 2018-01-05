@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		void ICreateIslandsCallback.Complete(IEnumerable<Island> islands)
 		{
-			var timeToReduce = _stopwatch.Elapsed - IslandsAfterReducing.TimeToGenerate;
+			var timeToReduce = _stopwatch.Elapsed - IslandsBasic.TimeToGenerate - IslandsAfterReducing.TimeToGenerate;
 			IslandsComplete = new LogCreateIslandInfo(islands, timeToReduce);
 		}
 
