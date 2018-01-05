@@ -133,7 +133,7 @@ ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don'
 ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_DayOffOptimizationIslands_47208 = RC
 ResourcePlanner_XXL_47258 = RC
-ResourcePlanner_NoPytteIslands_47500 = false
+ResourcePlanner_NoPytteIslands_47500 = DEV
 
 # From old Kittens team... #
 ETL_SpeedUpPersonPeriodNightly_38097 = true
