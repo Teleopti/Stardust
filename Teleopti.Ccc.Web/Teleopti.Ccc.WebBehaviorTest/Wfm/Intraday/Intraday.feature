@@ -56,7 +56,7 @@ Scenario: Rename Skill Group in SGM
 	And I select the skill 'Skill A' in SGM
 	And I save the Skill Groups
 	And I select the Skill Group 'my Area'
-	And I chose to rename the Skill Group
+	And I chose to rename the Skill Group 'my Area'
 	When I name the Skill Group 'my Area 2'
 	And I save the Skill Groups
 	And I close the Skill Manager

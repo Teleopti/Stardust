@@ -146,10 +146,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.ClickContaining("#available_skill_groups_list", skillGroupName);
 		}
 
-		[Given(@"I chose to rename the Skill Group")]
-		public void GivenIChoseToRenameTheSkillGroup()
+		[Given(@"I chose to rename the Skill Group '(.*)'")]
+		public void GivenIChoseToRenameTheSkillGroup(string skillGroupName)
 		{
-			Browser.Interactions.Click("#renameSkillGroupButton");
+			Browser.Interactions.AssertExists("form");
+			var javascript = "var scope = angular.element(document.querySelector('form')).scope();" +
+							 "var group = scope.vm.skillGroups.find(function(e){{return e.Name === '" + skillGroupName + "'}});" +
+							 "scope.vm.selectedSkillGroup = group;" +
+							 "scope.vm.editNameClicked(group);";
+
+			Browser.Interactions.Javascript(javascript);
 		}
 
 

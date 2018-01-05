@@ -50,7 +50,7 @@
 												{{'Copy' | translate}}
 											</md-tooltip>
 										</i>
-										<i class="mdi mdi-pencil" aria-label="Edit" id="renameSkillGroupButton" ng-click="vm.editNameClicked(skillGroup, $event)">
+										<i class="mdi mdi-pencil" aria-label="Edit" id="renameSkillGroupButton" ng-click="vm.editNameClicked(skillGroup); $event.stopPropagation();">
 											<md-tooltip>
 												{{'Edit' | translate}}
 											</md-tooltip>

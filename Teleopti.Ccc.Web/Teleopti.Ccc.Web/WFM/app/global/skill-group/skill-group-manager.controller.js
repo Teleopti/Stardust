@@ -116,12 +116,11 @@
 			});
 		};
 
-		vm.editNameClicked = function(skillGroup, ev) {
+		vm.editNameClicked = function(skillGroup) {
 			vm.selectedSkillGroup = skillGroup;
 			vm.newGroupName = skillGroup.Name;
 			vm.editGroupNameBox = true;
 			vm.oldName = vm.selectedSkillGroup.Name;
-			ev.stopPropagation();
 		};
 
 		vm.exitConfigMode = function() {
