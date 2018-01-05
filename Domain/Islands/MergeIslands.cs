@@ -16,9 +16,6 @@ namespace Teleopti.Ccc.Domain.Islands
 		[RemoveMeWithToggle("Seal this", Toggles.ResourcePlanner_NoPytteIslands_47500)]
 		public virtual IEnumerable<Island> Execute(IEnumerable<Island> islands)
 		{
-			if (!islands.Any())
-				return islands;
-
 			var ret = islands.ToList();
 			while (ret.Count > 1)
 			{
@@ -37,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Islands
 					return ret;
 				}
 			}
-
 			return ret;
 		}
 
