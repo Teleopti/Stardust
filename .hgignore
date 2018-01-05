@@ -41,7 +41,15 @@ TeleOpti.Messaging.Bin/
 *.jtconfig
 *.sln
 Logs/
+
+# IDE stuff
 .vs
+*/.idea/*
+*/.vscode/*
+.idea
+.vscode
+.axoCover/settings.json
+.com.teleopti.wfm.developer.tools
 
 # VS 2012 on old branches
 Backup/
@@ -92,7 +100,6 @@ Cube/build/*Xmla*
 */.sass-cache/*
 */node_modules/*
 */bower_components/*
-*/.idea/*
 */dist/main.js
 */dist/main.min.js
 */dist/main.min.js.map
@@ -116,9 +123,8 @@ Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/.vscode/tasks.json
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.ServiceBusTest/PayrollTestDlls/Settings.Teliasonera.xml
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.ServiceBusTest/PayrollTestDlls/Config.RelesayTeliaSonera.xml
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.ServiceBusTest/PayrollTestDlls/ReadMe.txt
-.idea
-.vscode
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/.node/NodeHash.txt
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/.node/WfmFileHash.txt
-.axoCover/settings.json
 *.tmp_proj
+
+# stop just adding things at the bottom and organize?
