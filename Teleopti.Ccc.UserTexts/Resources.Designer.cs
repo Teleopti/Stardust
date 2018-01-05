@@ -10001,6 +10001,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Drag and drop your CSV file here or click to select.
+        /// </summary>
+        public static string DragAndDropYourCsvFileOrClickToSelect {
+            get {
+                return ResourceManager.GetString("DragAndDropYourCsvFileOrClickToSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicate.
         /// </summary>
         public static string Duplicate {

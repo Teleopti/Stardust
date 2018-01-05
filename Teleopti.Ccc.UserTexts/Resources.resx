@@ -16918,4 +16918,8 @@ Do you want to participate?</value>
   <data name="BpoExportYouMustSelectASkill" xml:space="preserve">
     <value>A skill must be selected.</value>
   </data>
+  <data name="DragAndDropYourCsvFileOrClickToSelect" xml:space="preserve">
+    <value>Drag and drop your CSV file here or click to select</value>
+    <comment>Prompt used in an upload panel</comment>
+  </data>
 </root>
