@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.ServiceModel;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -25,7 +26,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		private readonly IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
 		private readonly DateOnlyPeriod _datePeriod;
 		private readonly CreateIslands _createIslands;
-		private readonly IReduceSkillSets _reduceSkillSets;
 		private IList<Island> _islandListBeforeReducing;
 		private IList<Island> _islandListAfterReducing;
 		private IDictionary<ISkill,TimeSpan> _skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		public AgentSkillAnalyzer(IEnumerable<IPerson> personList, IEnumerable<ISkill> skillList,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod datePeriod,
-			CreateIslands createIslands, IReduceSkillSets reduceSkillSets)
+			CreateIslands createIslands)
 		{
 			InitializeComponent();
 			_dtpDate = new DateTimePicker {Format = DateTimePickerFormat.Short};
@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			_skillDays = skillDays;
 			_datePeriod = datePeriod;
 			_createIslands = createIslands;
-			_reduceSkillSets = reduceSkillSets;
 			_date = datePeriod.StartDate;
 			_dtpDate.MinDate = datePeriod.StartDate.Date;
 			_dtpDate.MaxDate = datePeriod.EndDate.Date;
@@ -474,10 +473,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		private void calculate()
 		{
+			var callback = new LogCreateIslandsCallback();
+			_createIslands.Create(_date.ToDateOnlyPeriod(), callback);
 			_skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 			_totalForecastedForDate = TimeSpan.Zero;
-			_islandListBeforeReducing = _createIslands.Create(new ReduceNoSkillSets(), _personList, _date.ToDateOnlyPeriod(), null).ToList();
-			_islandListAfterReducing = _createIslands.Create(_reduceSkillSets, _personList, _date.ToDateOnlyPeriod(), null).ToList();
+			_islandListBeforeReducing = callback.IslandsBasic.Islands.ToList();
+			_islandListAfterReducing = callback.IslandsAfterReducing.Islands.ToList();
 			createSkillDayForSkillsDic();
 		}
 
