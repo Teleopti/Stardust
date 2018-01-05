@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var model = IslandModelFactory.Create();
 		
-			var island = model.Complete.Islands.Single();
+			var island = model.FewerIslandsByMerging.Islands.Single();
 			island.NumberOfAgentsOnIsland.Should().Be.EqualTo(2);
 			island.SkillSets.Count().Should().Be.EqualTo(2);
 		}

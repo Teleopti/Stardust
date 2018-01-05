@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 			
 			return new IslandTopModel
 			{
-				BeforeReducing = createIslandModel(createIslandsCallback.IslandsBasic),
-				AfterReducing = createIslandModel(createIslandsCallback.IslandsAfterReducing),
-				Complete = createIslandModel(createIslandsCallback.IslandsComplete)
+				BasicIslands = createIslandModel(createIslandsCallback.IslandsBasic),
+				MoreIslandsBySkillReducing = createIslandModel(createIslandsCallback.IslandsAfterReducing),
+				FewerIslandsByMerging = createIslandModel(createIslandsCallback.IslandsComplete)
 			};
 		}
 

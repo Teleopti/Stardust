@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			PersonRepository.Has(new Person().WithPersonPeriod(skillA, skillB));
 
 			var model = IslandModelFactory.Create();
-			model.BeforeReducing.Islands.Count()
+			model.BasicIslands.Islands.Count()
 				.Should().Be.EqualTo(1);
 		}
 		
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			PersonRepository.Has(new Person().WithPersonPeriod(skillB));
 
 			var model = IslandModelFactory.Create();
-			foreach (var island in model.BeforeReducing.Islands)
+			foreach (var island in model.BasicIslands.Islands)
 			{
 				foreach (var skillSet in island.SkillSets)
 				{
