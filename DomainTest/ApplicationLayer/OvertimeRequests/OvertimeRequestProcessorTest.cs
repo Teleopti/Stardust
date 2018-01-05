@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 					personRequest.Request.Period.EndDateTimeLocal(timeZoneInfo)));
 		}
 
-		[Test, Ignore("CodeMonkeys, please have a look at this one!")]
+		[Test]
 		public void ShouldDenyForEditWhenThereIsCrossDayScheduleWithinRequestPeriod()
 		{
 			Now.Is(new DateTime(2017, 12, 25, 08, 0, 0, DateTimeKind.Utc));
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = LoggedOnUser.CurrentUser();
 			person.WorkflowControlSet = workflowControlSet;
 			var period = new DateTimePeriod(2017, 12, 31, 8, 2017, 12, 31, 18);
-			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period).WithId();
 			ScheduleStorage.Add(assignment);
 
 			var corssMonthPersonRequest = createOvertimeRequest(new DateTime(2017, 12, 31, 23, 0, 0, DateTimeKind.Utc), 2);
@@ -1408,7 +1408,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = LoggedOnUser.CurrentUser();
 			person.WorkflowControlSet = workflowControlSet;
 			var period = new DateTimePeriod(2017, 7, 2, 8, 2017, 7, 2, 18);
-			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(),period);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(),period).WithId();
 			var main = ActivityFactory.CreateActivity("phone").WithId();
 			main.AllowOverwrite = true;
 			main.InWorkTime = true;
@@ -1440,7 +1440,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = LoggedOnUser.CurrentUser();
 			person.WorkflowControlSet = workflowControlSet;
 			var period = new DateTimePeriod(2017, 7, 2, 8, 2017, 7, 2, 18);
-			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period).WithId();
 			var main = ActivityFactory.CreateActivity("phone").WithId();
 			main.AllowOverwrite = true;
 			main.InWorkTime = true;
@@ -1470,7 +1470,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = LoggedOnUser.CurrentUser();
 			person.WorkflowControlSet = workflowControlSet;
 			var period = new DateTimePeriod(2017, 7, 2, 8, 2017, 7, 2, 18);
-			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period).WithId();
 			var main = ActivityFactory.CreateActivity("phone").WithId();
 			main.AllowOverwrite = true;
 			main.InWorkTime = true;
@@ -1502,7 +1502,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = LoggedOnUser.CurrentUser();
 			person.WorkflowControlSet = workflowControlSet;
 			var period = new DateTimePeriod(2017, 7, 2, 8, 2017, 7, 2, 18);
-			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period).WithId();
 			var main = ActivityFactory.CreateActivity("phone").WithId();
 			main.AllowOverwrite = true;
 			main.InWorkTime = true;
@@ -1522,7 +1522,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 					"August contains too much over time (14:00). Max is 11:00.");
 		}
 
-		[Test, Ignore("Code Monkeys, please have a look at this one!")]
+		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldAddCrossMonthOvertimeStartsFromLastMonth()
@@ -1540,7 +1540,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = LoggedOnUser.CurrentUser();
 			person.WorkflowControlSet = workflowControlSet;
 			var period = new DateTimePeriod(2017, 12, 31, 8, 2017, 12, 31, 18);
-			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period).WithId();
 			ScheduleStorage.Add(assignment);
 
 			var corssMonthPersonRequest = createOvertimeRequest(new DateTime(2017, 12, 31, 23, 0, 0, DateTimeKind.Utc), 2);
@@ -1573,7 +1573,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = LoggedOnUser.CurrentUser();
 			person.WorkflowControlSet = workflowControlSet;
 			var period = new DateTimePeriod(2017, 12, 31, 8, 2017, 12, 31, 18);
-			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
+			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period).WithId();
 			ScheduleStorage.Add(assignment);
 
 			var corssMonthPersonRequest = createOvertimeRequest(new DateTime(2017, 12, 31, 23, 0, 0, DateTimeKind.Utc), 2);
