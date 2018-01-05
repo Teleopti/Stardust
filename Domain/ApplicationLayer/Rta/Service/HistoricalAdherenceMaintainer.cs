@@ -18,6 +18,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly INow _now;
 		private readonly int _keepDays;
 
+		private static int keepDays(IConfigReader config)
+		{
+			var keepDays = config.ReadValue("HistoricalAdherenceKeepDays", 7);
+			const int weekendExtraForInitialAdherenceValueMondayMorning = 2;
+			const int timeZoneDifferenceExtra = 2;
+			return keepDays + weekendExtraForInitialAdherenceValueMondayMorning + timeZoneDifferenceExtra;
+		}
+
+		public static int DisplayPastDays(IConfigReader config)
+		{
+			return config.ReadValue("HistoricalAdherenceKeepDays", 7) - 1;
+		}
+
 		public HistoricalAdherenceMaintainer(
 			IHistoricalAdherenceReadModelPersister historicalAdherencePersister,
 			IHistoricalChangeReadModelPersister historicalChangePersister,
@@ -27,10 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_historicalAdherencePersister = historicalAdherencePersister;
 			_historicalChangePersister = historicalChangePersister;
 			_now = now;
-			var keepDays = config.ReadValue("HistoricalAdherenceKeepDays", 7);
-			const int weekendExtraForInitialAdherenceValueMondayMorning = 2;
-			const int timeZoneDifferenceExtra = 2;
-			_keepDays = keepDays + weekendExtraForInitialAdherenceValueMondayMorning + timeZoneDifferenceExtra;
+			_keepDays = keepDays(config);
 		}
 
 		public void Handle(TenantDayTickEvent tenantDayTickEvent)

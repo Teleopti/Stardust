@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IUserTimeZone _timeZone;
 		private readonly IHistoricalChangeReadModelReader _changes;
 		private readonly IAdherencePercentageCalculator _calculator;
+		private readonly int _displayPastDays;
 
 		public HistoricalAdherenceViewModelBuilder(
 			IHistoricalAdherenceReadModelReader adherences,
@@ -32,7 +34,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			INow now,
 			IUserTimeZone timeZone,
 			IHistoricalChangeReadModelReader changes,
-			IAdherencePercentageCalculator calculator)
+			IAdherencePercentageCalculator calculator,
+			IConfigReader config)
 		{
 			_adherences = adherences;
 			_scenario = scenario;
@@ -42,6 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_timeZone = timeZone;
 			_changes = changes;
 			_calculator = calculator;
+			_displayPastDays = HistoricalAdherenceMaintainer.DisplayPastDays(config);
 		}
 
 		public HistoricalAdherenceViewModel Build(Guid personId, DateOnly? date)
@@ -63,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			loadScheduleInto(data);
 			loadDisplayInto(data);
 			loadAdherencesInto(data);
-			
+
 			return new HistoricalAdherenceViewModel
 			{
 				Now = formatForUser(data.Now),
@@ -80,12 +84,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				AdherencePercentage = _calculator.CalculatePercentage(data.ShiftStartTime, data.ShiftEndTime, data.Adherences),
 				Navigation = new HistoricalAdherenceNavigationViewModel
 				{
-					First = data.AgentNow.AddDays(-6).ToString("yyyyMMdd"),
+					First = data.AgentNow.AddDays(_displayPastDays * -1).ToString("yyyyMMdd"),
 					Last = data.AgentNow.ToString("yyyyMMdd")
 				}
 			};
 		}
-		
+
 		private class data
 		{
 			public DateTime Now;
@@ -313,7 +317,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			return TimeZoneInfo.ConvertTimeFromUtc(time, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
 		}
-		
 	}
 
 	public interface IAdherencePercentageCalculator
