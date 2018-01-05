@@ -42,6 +42,19 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		}
 
 		[Test]
+		public void ShouldCreateSkillWithMidnightOffset()
+		{
+			var activity = ActivityFactory.CreateActivity("TestActivity");
+			var campaign = new Campaign {Name = "test"};
+			campaign.WorkingHours.Add(DayOfWeek.Thursday, new TimePeriod(new TimeSpan(20, 0, 0), new TimeSpan(1, 5, 0, 0)));
+			campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod(new TimeSpan(22, 0, 0), new TimeSpan(1, 7, 0, 0)));
+
+			var skill = _target.CreateSkill(activity, campaign);
+
+			Assert.AreEqual(skill.MidnightBreakOffset, new TimeSpan(7, 0, 0));
+		}
+
+		[Test]
 		public void SkillShouldContainOneWorkLoad()
 		{
 			var activity = ActivityFactory.CreateActivity("TestActivity");

@@ -28,13 +28,14 @@ namespace Teleopti.Ccc.Domain.Outbound
 		}
 
         public ISkill CreateSkill(IActivity activity, IOutboundCampaign campaign)
-		{
+        {
 			var skill = new Skill(campaign.Name, "", Color.Blue, 60, _skillTypeProvider.Outbound())
 			{
 				TimeZone = _userTimeZone.TimeZone(),
 				Activity = activity
 			};
-		
+	        skill.MidnightBreakOffset = getMidnightOffset(campaign.WorkingHours.Values);
+
 			var workLoad = new Workload(skill) {Name = campaign.Name};
 			SetOpenHours(campaign, workLoad);
 
@@ -44,6 +45,20 @@ namespace Teleopti.Ccc.Domain.Outbound
 			setIntradayProfile(skill);
 
 			return skill;
+		}
+
+		private TimeSpan getMidnightOffset(IEnumerable<TimePeriod> openHours)
+		{
+			var offset = new TimeSpan(0,0,0);
+
+			foreach (var openHour in openHours)
+			{
+				var days = openHour.EndTime.Days;
+				var pureTime = openHour.EndTime.Add(TimeSpan.FromDays(-days));
+				if (days > 0 && offset < pureTime) offset = pureTime;
+			}
+
+			return offset;
 		}
 
 		private static void setIntradayProfile(ISkill skill)

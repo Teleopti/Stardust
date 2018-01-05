@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private IActivity getActivity(ActivityViewModel selectedActivity)
 		{
 			IActivity activity;
-			if (selectedActivity.Id != null)
+			if (selectedActivity.Id.HasValue)
 			{
-				activity = _activityRepository.LoadAll().First(x => x.Id.Equals(selectedActivity.Id));
+				activity = _activityRepository.Get(selectedActivity.Id.Value);
 			}
 			else
 			{
