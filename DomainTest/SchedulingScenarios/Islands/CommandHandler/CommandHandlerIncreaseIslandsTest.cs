@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be.EqualTo(3);
 		}
 		
-		public CommandHandlerIncreaseIslandsTest(SUT sut) : base(sut)
+		public CommandHandlerIncreaseIslandsTest(SUT sut, bool noPytteIslands47500) : base(sut, noPytteIslands47500)
 		{
 		}
 	}

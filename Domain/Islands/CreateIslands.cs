@@ -12,18 +12,21 @@ namespace Teleopti.Ccc.Domain.Islands
 		private readonly NumberOfAgentsKnowingSkill _numberOfAgentsKnowingSkill;
 		private readonly MoveSkillSetToCorrectIsland _moveSkillSetToCorrectIsland;
 		private readonly ReduceSkillSets _reduceSkillSets;
+		private readonly MergeIslands _mergeIslands;
 		private readonly IAllStaff _allStaff;
 
 		public CreateIslands(CreateSkillSets createSkillSets, 
 								NumberOfAgentsKnowingSkill numberOfAgentsKnowingSkill,
 								MoveSkillSetToCorrectIsland moveSkillSetToCorrectIsland,
 								ReduceSkillSets reduceSkillSets,
+								MergeIslands mergeIslands,
 								IAllStaff allStaff)
 		{
 			_createSkillSets = createSkillSets;
 			_numberOfAgentsKnowingSkill = numberOfAgentsKnowingSkill;
 			_moveSkillSetToCorrectIsland = moveSkillSetToCorrectIsland;
 			_reduceSkillSets = reduceSkillSets;
+			_mergeIslands = mergeIslands;
 			_allStaff = allStaff;
 		}
 

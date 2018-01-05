@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
 		}
 		
-		public CommandHandlerExternalStaffTest(SUT sut) : base(sut)
+		public CommandHandlerExternalStaffTest(SUT sut, bool noPytteIslands47500) : base(sut, noPytteIslands47500)
 		{
 		}
 	}

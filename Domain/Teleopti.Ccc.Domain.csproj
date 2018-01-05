@@ -369,6 +369,8 @@
     <Compile Include="Islands\ICreateIslandCallback.cs" />
     <Compile Include="Islands\LogCreateIslandCallback.cs" />
     <Compile Include="Islands\LogCreateIslandInfo.cs" />
+    <Compile Include="Islands\MergeIslands.cs" />
+    <Compile Include="Islands\MergeIslandsSizeLimit.cs" />
     <Compile Include="Islands\NullCreateIslandCallback.cs" />
     <Compile Include="MultiTenancy\TenantLogonPersonProvider.cs" />
     <Compile Include="Notification\ASMScheduleChangeTime.cs" />
