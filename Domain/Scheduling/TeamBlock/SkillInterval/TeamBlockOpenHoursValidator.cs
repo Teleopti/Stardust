@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 
 	public class TeamBlockOpenHoursValidator : ITeamBlockOpenHoursValidator
 	{
-		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
+		private readonly CreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private readonly ISkillIntervalDataOpenHour _skillIntervalDataOpenHour;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
-		public TeamBlockOpenHoursValidator(ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity, ISkillIntervalDataOpenHour skillIntervalDataOpenHour, IGroupPersonSkillAggregator groupPersonSkillAggregator)
+		public TeamBlockOpenHoursValidator(CreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity, ISkillIntervalDataOpenHour skillIntervalDataOpenHour, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
 			_skillIntervalDataOpenHour = skillIntervalDataOpenHour;

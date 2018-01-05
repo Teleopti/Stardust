@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 	public class SameOpenHoursInTeamBlock : ISameOpenHoursInTeamBlock
 	{
 		private readonly IOpenHourForDate _openHourForDate;
-		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
+		private readonly CreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 
 		public SameOpenHoursInTeamBlock(IOpenHourForDate openHourForDate,
-			ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity)
+			CreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity)
 		{
 			_openHourForDate = openHourForDate;
 			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;

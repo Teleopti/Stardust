@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
     public class DayIntervalDataCalculator : IDayIntervalDataCalculator
     {
-        private readonly IMedianCalculatorForDays _medianCalculatorForDays;
+        private readonly MedianCalculatorForDays _medianCalculatorForDays;
         private readonly ITwoDaysIntervalGenerator _twoDaysIntervalGenerator;
 
-        public DayIntervalDataCalculator(IMedianCalculatorForDays medianCalculatorForDays, ITwoDaysIntervalGenerator twoDaysIntervalGenerator )
+        public DayIntervalDataCalculator(MedianCalculatorForDays medianCalculatorForDays, ITwoDaysIntervalGenerator twoDaysIntervalGenerator )
         {
             _medianCalculatorForDays = medianCalculatorForDays;
             _twoDaysIntervalGenerator = twoDaysIntervalGenerator;

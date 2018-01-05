@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class ActivityIntervalDataCreator : IActivityIntervalDataCreator
 	{
-		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
+		private readonly CreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private readonly IDayIntervalDataCalculator _dayIntervalDataCalculator;
 
 		public ActivityIntervalDataCreator(
-			ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity,
+			CreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity,
 			IDayIntervalDataCalculator dayIntervalDataCalculator)
 		{
 			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
