@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 {
@@ -105,7 +106,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				PersonId = personId,
 				DateFrom = extractionInfo.DateFrom,
 				OriginalPersonId = extractionInfo.AgentId,
-				Score = 80
+				Score = 80,
+				ExternalPerformance = performance
 			});
 
 
@@ -117,6 +119,65 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			performanceData.Count.Should().Be.EqualTo(1);
 			performanceData.First().Score.Should().Be.EqualTo(100);
 
+		}
+
+		[Test]
+		public void ShouldPersistMultipleValidRecordsOfDifferentTypesOfMeasuresForOneAgent()
+		{
+			var personId = Guid.NewGuid();
+			var perfName = "Just a Measure";
+			var perfExtId1 = 1;
+			var perfExtId2 = 2;
+			var numeric = ExternalPerformanceDataType.Numeric;
+
+			var performanceType1 = new ExternalPerformance
+			{
+				Name = perfName,
+				ExternalId = perfExtId1,
+				DataType = numeric
+			};
+
+			var performanceType2 = new ExternalPerformance
+			{
+				Name = perfName,
+				ExternalId = perfExtId2,
+				DataType = numeric
+			};
+
+			var record1 = new PerformanceInfoExtractionResult
+			{
+				AgentId = "Whatever",
+				DateFrom = DateTime.UtcNow,
+				MeasureId = perfExtId1,
+				MeasureName = perfName,
+				MeasureNumberScore = 100,
+				MeasureType = numeric,
+				PersonId = personId
+			};
+
+			var record2 = new PerformanceInfoExtractionResult
+			{
+				AgentId = "Whatever",
+				DateFrom = DateTime.UtcNow,
+				MeasureId = perfExtId2,
+				MeasureName = perfName,
+				MeasureNumberScore = 1,
+				MeasureType = numeric,
+				PersonId = personId
+			};
+
+			var data = new ExternalPerformanceInfoProcessResult();
+			data.ExternalPerformances.Add(performanceType1);
+			data.ExternalPerformances.Add(performanceType2);
+			data.ValidRecords.Add(record1);
+			data.ValidRecords.Add(record2);
+
+			Target.Persist(data);
+
+			var result = ExternalPerformanceDataRepository.LoadAll();
+			result.Count.Should().Be.EqualTo(2);
+			result[0].Score.Should().Be.EqualTo(record1.MeasureNumberScore);
+			result[1].Score.Should().Be.EqualTo(record2.MeasureNumberScore);
 		}
 	}
 }
