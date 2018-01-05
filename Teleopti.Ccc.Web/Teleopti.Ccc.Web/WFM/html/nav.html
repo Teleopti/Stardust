@@ -1,112 +1,98 @@
-<div class="con-row nav-row" ng-controller="SearchCtrl">
-	<!-- <div class="con-flex" ng-show="searchmode">
-	<div>
-	<input type="text" id="searchbar" ng-blur="delayFocus()" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
-	<div class="search-results material-depth-2">
-	<ul class="wfm-list">
-	<div ng-repeat="gp in searchResultGroups">
-	<li class="wfm-search-li" style="pointer-events:none;">
-	<button ng-if="gp == 'Permission' " class="wfm-fab mini result-icon"><i class="mdi mdi-account-key"></i></button>
-	<button ng-if="gp == 'Planning Period' " class="wfm-fab mini info result-icon"><i class="mdi mdi-calendar"></i></button>
-	{{gp}}
-</li>
-<li ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
-<div ng-click="clickedItem(item);searchbarFocus();">
-{{item.Name}}
-</div>
-</li>
-<li ng-if="searchResult.length == 0"></li>
-</div>
-</ul>
-</div>
-</div>
-</div> -->
-<div class="con-flex"></div>
+<div class="con-row" style="margin-left: 40px;">
 
-<div class="nav-tools inline-flex" ng-controller="ThemesPickerController as vm">
-
-	<a href="https://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank" rel="noopener">
-		<div tabindex=0 class="context-menu card-context even-icon feedback-wrap">
-			<svg class="feedback" viewBox="0 0 44 44">
-				<g>
-				<ellipse class="eye" fill="rgba(0,0,0,0.87)" cx="29.0875" cy="21.75" rx="1.89926471" ry="1.75"></ellipse>
-				<ellipse class="eye" fill="rgba(0,0,0,0.87)" cx="14.8992647" cy="21.75" rx="1.89926471" ry="1.75"></ellipse>
-				<path d="M21.8941176,27.8819633 C24.8588235,27.8819632 25.4941176,25.5404999 25.4941176,24.5648901 C25.4941176,23.5892803 24.4352941,23.9795242 22.1058824,23.9795242 C19.7764706,23.9795242 18.2941176,23.5892803 18.2941176,24.5648901 C18.2941176,25.5404999 18.9294118,27.8819633 21.8941176,27.8819633 Z" fill="rgba(0,0,0,0.87)"></path>
-				<!-- <ellipse fill="#EF5350" cx="21.8941176" cy="26.4390244" rx="1.69411765" ry="0.780487805"></ellipse> -->
-			</g>
-		</svg>
-	</div>
-	<md-tooltip>{{'Feedback'|translate}}</md-tooltip>
-</a>
-
-
-<!-- ng-if="vm.displayHelp" -->
-<a ng-controller="HelpController as vm" href="{{vm.helpUrl}}" target="_blank" rel="noopener">
-	<div tabindex=0 class="context-menu card-context">
-		<i class="mdi mdi-help-circle"></i>
-		<md-tooltip>{{'HelpLabel'|translate}}</md-tooltip>
-	</div>
-</a>
-
-<!-- <div tabindex="0" style="margin: 5px 0;" class="context-menu card-context wfm-badge-wrapper" ng-click="showNotifications = !showNotifications" ng-class="{'nav-item-inactive':!showNotifications, 'nav-item-active':showNotifications}">
-<i class="mdi mdi-bell text-color-white"></i>
-<wfm-badge badge-model="3" status="'notice-success'"> </wfm-badge>
-<md-tooltip>Notifications</md-tooltip>
-</div>
-
-<wfm-popup show="showNotifications">
-<div class="con-row">
-<div class="con-flex">
-<div ng-controller="NotificationsController as vm">
-<ul class="notification-list wfm-simple-list">
-<li ng-repeat="alarm in vm.notificationResult">
-<i class="mdi mdi-alert-circle"></i>
-<b>{{alarm.JobCategory}}</b>
-<span class="pull-right">{{alarm.Timestamp | date:'HH:mm'}}</span>
-<div class="subtext">{{alarm.Status}}</div>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</wfm-popup> -->
-
-<div tabindex="0" class="context-menu card-context even-icon" ng-click="showOptions = !showOptions" ng-class="{'nav-item-inactive':!showOptions, 'nav-item-active':showOptions}">
-	<i class="mdi mdi-account-settings-variant text-color-white" ng-class="{'mdi-account-outline':toggle}"></i>
-	<md-tooltip>{{'UserSettings'|translate}}</md-tooltip>
-</div>
-<wfm-popup show="showOptions">
-	<a href="../Authentication/SignOut" class="con-row nav-link-wrap">
-		<div class="con-flex">
-			<span style="padding-left:5px;">
-				<i class="mdi mdi-logout"></i> {{'LogOut'|translate}}
-			</span>
+	<div class="con-flex inline-flex align-row-center">
+		<!-- home link -->
+		<div>
+			<b class="pointer text-white" ui-sref="main">Teleopti WFM</b>
+			<md-tooltip>
+				{{'MainScreen' | translate}}
+			</md-tooltip>
 		</div>
-	</a>
-	<form ng-show="vm.personalizeToggle">
-		<div class="con-row nav-link-wrap" ng-click="vm.toggleOverlay()">
-			<div class="con-flex">
-				<a style="padding-left:5px;">
-					<i ng-if="vm.showOverlay" class="mdi mdi-checkbox-marked"></i>
-					<i ng-if="!vm.showOverlay" class="mdi mdi-checkbox-blank-outline"></i>
-					{{'ToggleLowLightFilter'|translate}}
-				</a>
+
+		<!-- bu selector -->
+		<div ng-controller="BusinessUnitsController as businessunit" style="margin-left:15px;">
+			<div ng-click="toggleBuPopup = !toggleBuPopup" class="flex" id="bu-select">
+				<div class="inline-flex pointer">
+					<div tabindex=0 class="context-menu card-context even-icon">
+						<i class="mdi mdi-vector-square"></i>
+					</div>
+				</div>
+
+				<div ng-controller="AreasController as vm" style="margin-top: 8px;" class="pointer">
+					<span ng-cloak ng-if="vm.detectMobile();" class="text-white">
+						{{businessunit.data.selectedBu.Name}} <i class="mdi mdi-menu-down"></i>
+					</span>
+				</div>
+				<md-tooltip>
+					{{'BusinessUnit'|translate}}
+				</md-tooltip>
 			</div>
+
+			<wfm-popup show="toggleBuPopup" class="datepicker-popup">
+				<ul class="wfm-list" id="business-unit-dropdown">
+					<li ng-repeat="bu in businessunit.data.businessUnits" ng-cloak ng-click="businessunit.changeBusinessUnit(bu)">
+						<i class="mdi mdi-vector-square businessunit-menu-icon"></i>
+						{{bu.Name}}
+					</li>
+				</ul>
+			</wfm-popup>
 		</div>
-		<div class="con-row nav-link-wrap" ng-click="vm.toggleTheme()">
-			<div class="con-flex">
-				<a style="padding-left:5px;">
-					<i ng-if="vm.darkTheme" class="mdi mdi-checkbox-marked"></i>
-					<i ng-if="!vm.darkTheme" class="mdi mdi-checkbox-blank-outline"></i>
-					{{'ToggleDarkTheme'|translate}}
-				</a>
+
+	</div>
+
+	<div class="nav-tools inline-flex" ng-controller="ThemesPickerController as vm">
+		<a href="https://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank" rel="noopener">
+			<div tabindex=0 class="context-menu card-context even-icon feedback-wrap">
+				<svg class="feedback" viewBox="0 0 44 44">
+					<g>
+						<ellipse class="eye" fill="rgba(0,0,0,0.87)" cx="29.0875" cy="21.75" rx="1.89926471" ry="1.75"></ellipse>
+						<ellipse class="eye" fill="rgba(0,0,0,0.87)" cx="14.8992647" cy="21.75" rx="1.89926471" ry="1.75"></ellipse>
+						<path d="M21.8941176,27.8819633 C24.8588235,27.8819632 25.4941176,25.5404999 25.4941176,24.5648901 C25.4941176,23.5892803 24.4352941,23.9795242 22.1058824,23.9795242 C19.7764706,23.9795242 18.2941176,23.5892803 18.2941176,24.5648901 C18.2941176,25.5404999 18.9294118,27.8819633 21.8941176,27.8819633 Z" fill="rgba(0,0,0,0.87)"></path>
+					</g>
+				</svg>
 			</div>
+			<md-tooltip>{{'Feedback'|translate}}</md-tooltip>
+		</a>
+
+		<a ng-controller="HelpController as vm" href="{{vm.helpUrl}}" target="_blank" rel="noopener">
+			<div tabindex=0 class="context-menu card-context">
+				<i class="mdi mdi-help-circle"></i>
+				<md-tooltip>{{'HelpLabel'|translate}}</md-tooltip>
+			</div>
+		</a>
+
+		<div tabindex="0" class="context-menu card-context even-icon" ng-click="showOptions = !showOptions" ng-class="{'nav-item-inactive':!showOptions, 'nav-item-active':showOptions}">
+			<i class="mdi mdi-account-settings-variant text-color-white" ng-class="{'mdi-account-outline':toggle}"></i>
+			<md-tooltip>{{'UserSettings'|translate}}</md-tooltip>
 		</div>
-	</form>
+		<wfm-popup show="showOptions">
+			<ul class="wfm-list">
+				<li>
+					<a href="../Authentication/SignOut" style="padding-left:5px;">
+						<i class="mdi mdi-logout"></i> {{'LogOut'|translate}}
+					</a>
+				</li>
 
-</wfm-popup>
+				<div ng-show="vm.personalizeToggle">
+					<li ng-click="vm.toggleOverlay()">
+						<a href="javascript:void(0);" style="padding-left:5px;">
+							<i ng-if="vm.showOverlay" class="mdi mdi-checkbox-marked"></i>
+							<i ng-if="!vm.showOverlay" class="mdi mdi-checkbox-blank-outline"></i>
+							{{'ToggleLowLightFilter'|translate}}
+						</a>
+					</li>
+					<li ng-click="vm.toggleTheme()">
+						<a href="javascript:void(0);" style="padding-left:5px;">
+							<i ng-if="vm.darkTheme" class="mdi mdi-checkbox-marked"></i>
+							<i ng-if="!vm.darkTheme" class="mdi mdi-checkbox-blank-outline"></i>
+							{{'ToggleDarkTheme'|translate}}
+						</a>
+					</li>
+				</div>
+			</ul>
 
-<span ng-show="vm.showOverlay" class="animate-show warm-overlay"></span>
-</div>
+		</wfm-popup>
+		<span ng-show="vm.showOverlay" class="animate-show warm-overlay"></span>
+	</div>
 
 </div>
