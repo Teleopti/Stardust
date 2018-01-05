@@ -57,6 +57,7 @@
 		}
 
 		vm.setSkill = function (selectedItem) {
+			isToolInUse = false;
 			selectedSkill = null;
 			vm.selectedSkillGroup = null;
 			if (!selectedItem) {
@@ -83,6 +84,26 @@
 			function () {
 				generateChart();
 			});
+
+		var isToolInUse = false;
+		vm.showAllSKills = function () {
+			isToolInUse = true;
+			var $skillsContent = angular.element(document.querySelector('.skills-content'));
+			if ($skillsContent.hasClass('nooverflow') && $skillsContent[0].scrollWidth > $skillsContent[0].offsetWidth) {
+				$skillsContent.removeClass("nooverflow").addClass("wrap-all");
+			} else {
+				$skillsContent.addClass("nooverflow").removeClass('wrap-all');
+			}
+		}
+		vm.isToolVisible = function () {
+			var $skillsContent = angular.element(document.querySelector('.skills-content'));
+			return $skillsContent[0].scrollWidth > $skillsContent[0].offsetWidth || isToolInUse;
+		}
+
+		vm.toggleSkills = function () {
+			var $skillsContent = angular.element(document.querySelector('.skills-content'));
+			return $skillsContent.hasClass('nooverflow');
+		}
 
 		function loadChartForPreselection() {
 			if (!vm.preselectedSkills) return;

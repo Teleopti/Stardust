@@ -13,20 +13,43 @@
 			</div>
 		</div>
 	</div>
-	<div ng-if="vm.toggleShowSkillsForSelectedSkillGroup && !!vm.selectedSkillGroup" class="skills-row">
-		<div class="animate-show con-row">
-			<div class="con-flex">
-				<div class="wfm-chip-wrap skill" ng-repeat="skill in vm.selectedSkillGroup.Skills | orderBy : Name" >
-					<span class="wfm-chip">
-						<span class="chip-handle">
-							<i ng-class="vm.getSkillIcon(skill)"></i>
-						</span>
-						<span class="chip-text">{{skill.Name}}</span>
-					</span>
+
+	<div ng-if="vm.toggleShowSkillsForSelectedSkillGroup && !!vm.selectedSkillGroup">
+		<div class="con-flex">
+			<div>
+				<div class="animate-show con-row skills-row">
+					<div class="skills-content con-flex nooverflow">
+						<div class="wfm-chip-wrap skill"
+							 ng-repeat="skill in vm.selectedSkillGroup.Skills | orderBy : Name">
+							<span class="wfm-chip">
+								<span class="chip-handle">
+									<i ng-class="vm.getSkillIcon(skill)"></i>
+								</span>
+								<span class="chip-text">{{skill.Name}}</span>
+							</span>
+						</div>
+					</div>
+					<div class="skills-tools" ng-if="vm.isToolVisible()">
+						<div class="wfm-chip-wrap"  ng-if="vm.toggleSkills()" ng-click="vm.showAllSKills()">
+							<span class="wfm-chip">
+								<span class="chip-handle">
+									<i class="mdi mdi-dots-horizontal"></i>
+								</span>
+							</span>
+						</div>
+						<div class="wfm-chip-wrap" ng-if="!vm.toggleSkills()" ng-click="vm.showAllSKills()">
+							<span class="wfm-chip">
+								<span class="chip-handle">
+									<i class="mdi mdi-chevron-up"></i>
+								</span>
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
 	<div>
 		<md-progress-linear ng-show="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 		<div class="con-row" ng-if="vm.showStaffingInfo()">
