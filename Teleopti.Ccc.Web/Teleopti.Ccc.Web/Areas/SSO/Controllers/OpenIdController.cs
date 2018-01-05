@@ -87,9 +87,8 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			}
 			catch (ProtocolException e)
 			{
-				throw new HttpException(404, e.Message);
+				return new HttpNotFoundResult(e.Message);
 			}
-
 		}
 
 		private bool isHeadRequest()
@@ -150,7 +149,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			var anonReq = pendingRequest as IAnonymousRequest;
 			if (pendingRequest == null)
 			{
-				throw new InvalidOperationException("There's no pending authentication request!");
+				return new HttpStatusCodeResult(500,"There's no pending authentication request!");
 			}
 
 			// Set safe defaults if somehow the user ended up (perhaps through XSRF) here before electing to send data to the RP.
