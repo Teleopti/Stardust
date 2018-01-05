@@ -176,31 +176,26 @@
 				</div>
 			</div>
 		</div>
-		<div ng-cloak class="modal-box">
+		<modal-dialog show="vm.editGroupNameBox" ng-cloak>
 			<div ng-cloak ng-show="vm.editGroupNameBox">
-				<div class="modalbg">
-					<div class="dialog-mini material-depth-1" style="width: 30%">
-						<div class="modal-inner-content">
-							<div class="con-row">
-								<h3>{{'Name'|translate}}</h3>
-							</div>
-							<div class="con-row">
-								<div class="con-flex">
-									<input id="groupNameBox" type="text" focus-me="vm.editGroupNameBox" placeholder="{{'Name'|translate}}" ng-model="vm.selectedSkillGroup.Name" maxlength="50"
-									 ng-maxlength="50" id="skillGroupNameBox" ng-keypress="vm.nameBoxKeyPress($event)" />
-								</div>
-							</div>
-						</div>
-						<div class="modal-actions">
-							<aside>
-								<button type="button" id="confirmEditNameButton" ng-click="vm.saveNameEdit($event)" class="wfm-btn wfm-btn-invis-primary">{{'OK'|translate}}</button>
-								<button type="button" id="cancelEditNameButton" ng-click="vm.editGroupNameBox=false; vm.selectedSkillGroup.Name = vm.oldName; $event.stopPropagation();"
-								 class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-							</aside>
+				<div class="modal-inner-content">
+					<div class="con-row">
+						<h3>{{'Name'|translate}}</h3>
+					</div>
+					<div class="con-row">
+						<div class="con-flex">
+							<input id="groupNameBox" type="text" focus-me="vm.editGroupNameBox" placeholder="{{'Name'|translate}}" ng-model="vm.newGroupName"
+							 maxlength="50" ng-maxlength="50" id="skillGroupNameBox" ng-keypress="vm.nameBoxKeyPress($event)" />
 						</div>
 					</div>
 				</div>
+				<div class="modal-actions">
+					<aside>
+						<button type="button" id="confirmEditNameButton" ng-click="vm.saveNameEdit($event)" class="wfm-btn wfm-btn-invis-primary">{{'OK'|translate}}</button>
+						<button type="button" id="cancelEditNameButton" ng-click="vm.editGroupNameBox=false;" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+					</aside>
+				</div>
 			</div>
-		</div>
+		</modal-dialog>
 	</md-content>
 </form>

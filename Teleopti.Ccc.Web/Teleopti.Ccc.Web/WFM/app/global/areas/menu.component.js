@@ -70,20 +70,23 @@ function MenuController($state) {
 		{
 			i: 'mdi mdi-trophy',
 			name: 'gamification'
+		},
+		{
+			i: 'mdi mdi-trophy',
+			name: 'bpo-gatekeeper'
 		}
 	];
 	function setMenuItem() {
 		var match = menuItems.find(function (icon) {
 			return icon.name === ctrl.data.InternalName;
 		});
-
-		if(!match) return;
-		
-		match.displayName = ctrl.data.Name;
-		match.class = function () {
-			if ($state.current.name.indexOf(match.name) == 0)
+		if(match){
+			match.displayName = ctrl.data.Name;
+			match.class = function () {
+				if ($state.current.name.indexOf(match.name) == 0)
 				return "main-menu-link-active nav-item-active";
-		};
+			};
+		}
 		return match;
 	}
 

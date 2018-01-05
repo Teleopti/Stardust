@@ -59,6 +59,7 @@
 		vm.skillAreaName = '';
 		vm.getSkillIcon = skillIconService.get;
 		vm.canSave = false;
+		vm.newGroupName = '';
 		vm.deleteConfirmation = false;
 
 		//----------- scoped functions ----------------------------------------------------
@@ -103,10 +104,6 @@
 				Id: getRandom(),
 				Skills: []
 			};
-			vm.selectedSkillGroup = vm.newGroup;
-			vm.skillGroups.push(vm.newGroup);
-			vm.skills = vm.allSkills.slice();
-			vm.canSave = false;
 			vm.editGroupNameBox = true;
 			ev.stopPropagation();
 		};
@@ -121,6 +118,7 @@
 
 		vm.editNameClicked = function(skillGroup, ev) {
 			vm.selectedSkillGroup = skillGroup;
+			vm.newGroupName = skillGroup.Name;
 			vm.editGroupNameBox = true;
 			vm.oldName = vm.selectedSkillGroup.Name;
 			ev.stopPropagation();
@@ -171,13 +169,22 @@
 		};
 
 		vm.saveNameEdit = function(ev) {
-			vm.editGroupNameBox = false;
-			setSaveableState();
 			if (vm.newGroup) {
-				vm.skillGroups.push(vm.newGroup);
-				vm.newGroup = null;
+				if (vm.newGroupName && vm.newGroupName.length > 0) {
+					vm.newGroup.Name = vm.newGroupName;
+					vm.skills = vm.allSkills.slice();
+					vm.canSave = false;
+					vm.skillGroups.push(vm.newGroup);
+					vm.selectedSkillGroup = vm.newGroup;
+					vm.newGroup = null;
+				}
+			} else {
+				vm.selectedSkillGroup.Name = vm.newGroupName;
 			}
+			setSaveableState();
 			ev.stopPropagation();
+			vm.editGroupNameBox = false;
+			vm.newGroupName = '';
 		};
 
 		vm.saveSkillGroup = function(form) {
@@ -282,9 +289,6 @@
 		}
 
 		function hasChanges() {
-			console.log('originalGroups', originalGroups);
-			console.log('vm.skillGroups', vm.skillGroups);
-
 			return !_.isEqual(originalGroups, vm.skillGroups);
 		}
 
@@ -293,11 +297,6 @@
 		}
 
 		function setSaveableState() {
-			console.log('hasChanges(), hasEmptySkillList()', {
-				hasChanges: hasChanges(),
-				hasEmptySkillList: hasEmptySkillList()
-			});
-
 			vm.canSave = hasChanges() && !hasEmptySkillList();
 		}
 
