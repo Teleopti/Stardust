@@ -35,12 +35,11 @@ namespace Teleopti.Ccc.Domain.Islands
 			while (true)
 			{
 				var skillSetsInIsland = allSkillSets.Select(skillSet => new List<SkillSet> { skillSet }).ToList();
-				callback.BasicIslandsCreated(skillSetsInIsland, noAgentsKnowingSkill);
 				while (_moveSkillSetToCorrectIsland.Execute(allSkillSets, skillSetsInIsland))
 				{
 					removeEmptyIslands(skillSetsInIsland);
 				}
-
+				callback.BasicIslandsCreated(skillSetsInIsland, noAgentsKnowingSkill);
 				if (!_reduceSkillSets.Execute(skillSetsInIsland, noAgentsKnowingSkill))
 				{
 					var islands = skillSetsInIsland.Select(skillSetInIsland => new Island(skillSetInIsland, noAgentsKnowingSkill)).ToArray();
