@@ -203,5 +203,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			result.WorkingHours.ToList()[0].Key.Should().Be.EqualTo(DayOfWeek.Monday);
 			result.WorkingHours.ToList()[1].Key.Should().Be.EqualTo(DayOfWeek.Tuesday);
 		}
+
+		[Test]
+		public void ShouldMapMidnightBreakOffset()
+		{
+			var campaign = new Domain.Outbound.Campaign();
+			campaign.Skill = SkillFactory.CreateSkill("mySkill");
+
+			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(campaign);
+			_campaignViewModel.WorkingHours = new List<CampaignWorkingHour>()
+			{
+				new CampaignWorkingHour(){WeekDay = DayOfWeek.Monday, StartTime = new TimeSpan(20,0,0), EndTime = new TimeSpan(1,5,0,0)}
+			};
+
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
+			var result = target.Map(_campaignViewModel);
+
+			result.Skill.MidnightBreakOffset.Should().Be.EqualTo(new TimeSpan(5, 0, 0));
+		}
 	}
 }

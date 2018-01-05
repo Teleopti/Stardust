@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private IOutboundSkillPersister _outboundSkillPersister;
 		private IProductionReplanHelper _productionReplanHelper;
 		private OutboundCampaignPersister _target;
-		private IList<IActivity> _activityList;
+		private IActivity _activity = ActivityFactory.CreateActivity("aa");
 		private IOutboundPeriodMover _outboundPeriodMover;
 		private ISkillRepository _skillRepository;
 		private IOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
@@ -247,14 +247,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundCampaignMapper = MockRepository.GenerateMock<IOutboundCampaignMapper>();
 			_outboundCampaignViewModelMapper = MockRepository.GenerateMock<IOutboundCampaignViewModelMapper>();
 			_outboundSkillCreator = MockRepository.GenerateMock<IOutboundSkillCreator>();
-			_activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+			_activityRepository = new FakeActivityRepository();
+			_activityRepository.Add(_activity);
 			_outboundSkillPersister = MockRepository.GenerateMock<IOutboundSkillPersister>();
 			_productionReplanHelper = MockRepository.GenerateMock<IProductionReplanHelper>();
 			_outboundPeriodMover = MockRepository.GenerateMock<IOutboundPeriodMover>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_outboundScheduledResourcesCacher = MockRepository.GenerateMock<IOutboundScheduledResourcesCacher>();
-			_activityList = new List<IActivity>() { ActivityFactory.CreateActivity("aa") };
-			_activityRepository.Stub(x => x.LoadAll()).Return(_activityList);
 			_productionReplanHelper.Stub(x => x.Replan(null)).IgnoreArguments();
 			_outboundPeriodMover.Stub(x => x.Move(null, new DateOnlyPeriod())).IgnoreArguments();
 			_skillRepository.Stub(x => x.Get(new Guid()));
@@ -522,13 +521,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var newCampaign = new Domain.Outbound.Campaign() { Name = "old", Skill = skill };
 			newCampaign.SetId(campaignId);
 
-			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() { Id = _activityList.First().Id, Name = _activityList.First().Name } };
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() { Id = _activity.Id, Name = _activity.Name } };
 			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			var result = _target.Persist(campaignVM);
 
-			result.Skill.Activity.Name.Should().Be.EqualTo(_activityList.First().Name);
+			result.Skill.Activity.Name.Should().Be.EqualTo(_activity.Name);
 			_productionReplanHelper.AssertWasNotCalled(x => x.Replan(newCampaign));
 		}
 

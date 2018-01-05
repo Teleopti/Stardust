@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Interfaces.Domain;
@@ -41,13 +42,18 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 			campaign.SpanningPeriod = new DateTimePeriod(startDateTime, endDateTime);
 			campaign.BelongsToPeriod = new DateOnlyPeriod(campaignViewModel.StartDate, campaignViewModel.EndDate);
 			campaign.WorkingHours.Clear();
+			var offset = new TimeSpan(0, 0, 0);
 			if (campaignViewModel.WorkingHours != null)
 			{
 				foreach (CampaignWorkingHour workingHour in campaignViewModel.WorkingHours)
 				{
 					campaign.WorkingHours.Add(workingHour.WeekDay, new TimePeriod(workingHour.StartTime, workingHour.EndTime));
+					var days = workingHour.EndTime.Days;
+					var pureTime = workingHour.EndTime.Add(TimeSpan.FromDays(-days));
+					if (days > 0 && offset < pureTime) offset = pureTime;
 				}
 			}
+			if (campaign.Skill != null) campaign.Skill.MidnightBreakOffset = offset;
 			return campaign;
 		}
 	}
