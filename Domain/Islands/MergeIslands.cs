@@ -18,16 +18,26 @@ namespace Teleopti.Ccc.Domain.Islands
 		{
 			if (!islands.Any())
 				return islands;
-			if (islands.First().AgentsInIsland().Count() <= _mergeIslandsSizeLimit.Limit)
+
+			var ret = islands.ToList();
+			while (true)
 			{
-				var newIslands = islands.ToList();
-				var newIsland = Island.Merge(islands.First(), islands.Last());
-				newIslands.Add(newIsland);
-				newIslands.Remove(islands.First());
-				newIslands.Remove(islands.Last());
-				return newIslands;
+				var island1 = ret.First();
+				if (island1.AgentsInIsland().Count() <= _mergeIslandsSizeLimit.Limit)
+				{
+					var island2 = ret.Last();
+					if (island1 == island2)
+						return ret;
+					var newIsland = Island.Merge(island1, island2);
+					ret.Add(newIsland);
+					ret.Remove(island1);
+					ret.Remove(island2);
+				}
+				else
+				{
+					return ret;
+				}
 			}
-			return islands;
 		}
 
 	}

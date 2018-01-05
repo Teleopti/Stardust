@@ -34,6 +34,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				.Should().Be.EqualTo(2);
 		} 
 		
+		
+		
 		[Test]
 		public void ShouldMergeSmallEnoughIslands()
 		{
@@ -50,6 +52,23 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			island.AgentsInIsland.Should().Have.SameValuesAs(allAgents.Select(x => x.Id.Value));
 			island.Skills.Should().Have.SameValuesAs(skillA.Id.Value, skillB.Id.Value);
 		}
+		
+		[Test]
+		public void ShouldMergeMoreThanTwoIslands()
+		{
+			var skillA = new Skill().WithId();
+			var skillB = new Skill().WithId();
+			var skillC = new Skill().WithId();
+			PersonRepository.Add(new Person().WithId().WithPersonPeriod(skillA));
+			PersonRepository.Add(new Person().WithId().WithPersonPeriod(skillB));
+			PersonRepository.Add(new Person().WithId().WithPersonPeriod(skillC));
+			
+			ExecuteTarget();
+
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count()
+				.Should().Be.EqualTo(1);
+		}
+
 
 		public CommandHandlerDecreaseIslandsTest(SUT sut, bool noPytteIslands47500) : base(sut, noPytteIslands47500)
 		{
