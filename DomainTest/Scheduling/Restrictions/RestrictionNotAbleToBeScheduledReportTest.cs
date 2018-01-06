@@ -105,6 +105,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			result.First().Period.Should().Be.EqualTo(period);
 		}
 
+		[Test]
+		public void ShouldNotLeaveAddedDaysOffWhenDone()
+		{
+			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
+				new ShiftCategory("_").WithId()));
+			var agent1 = new Person().WithId()
+				.WithPersonPeriod(new RuleSetBag(ruleSet), skill)
+				.WithSchedulePeriodOneMonth(period.StartDate);
+			agent1.Period(period.StartDate).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"),
+				new ContractScheduleWorkingMondayToFriday());
+
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, new List<IPreferenceDay>(), skillDays);
+			
+
+			var result = Target.Create(period.StartDate, new[] { agent1 });
+
+			result.Count().Should().Be.EqualTo(0);
+			foreach (var dateOnly in period.DayCollection())
+			{
+				stateHolder.Schedules[agent1].ScheduledDay(dateOnly).PersonAssignment(true).DayOff().Should().Be.Null();
+			}
+		}
+
 		public RestrictionNotAbleToBeScheduledReportTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
 		{
 		}
