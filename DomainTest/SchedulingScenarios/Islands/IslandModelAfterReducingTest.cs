@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
@@ -33,6 +34,24 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			var model = IslandModelFactory.Create();
 			model.MoreIslandsBySkillReducing.Islands.All(x => x.SkillSets.Count() == 1) //two islands with one skillgroup each
 				.Should().Be.True();
+		}
+
+		[TestCase(100)]
+		[TestCase(0)]
+		public void ReducingShouldNotAffectBasicIslandNumberOfAgentsOnAllIslandsResult(int minAgentsInIslandLimit)
+		{
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(minAgentsInIslandLimit, 2);
+			var skillA = new Skill("A");
+			var skillB = new Skill("B");
+			Enumerable.Range(0, 3).Select(x => new Person().WithPersonPeriod(skillA))
+				.ForEach(x => PersonRepository.Has(x));
+			PersonRepository.Has(new Person().WithPersonPeriod(skillA, skillB));
+			PersonRepository.Has(new Person().WithPersonPeriod(skillB));
+
+			var model = IslandModelFactory.Create();
+
+			model.BasicIslands.NumberOfAgentsOnAllIsland
+				.Should().Be.EqualTo(5);
 		}
 	}
 }

@@ -37,5 +37,10 @@ namespace Teleopti.Ccc.Domain.Islands
 		{
 			return _skills.Overlaps(skillSet._skills);
 		}
+
+		public SkillSet MakeCopy()
+		{
+			return new SkillSet(new HashSet<ISkill>(_skills), new HashSet<IPerson>(_agents));
+		}
 	}
 }
