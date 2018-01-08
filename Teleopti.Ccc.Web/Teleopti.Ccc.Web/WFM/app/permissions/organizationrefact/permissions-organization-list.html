@@ -3,7 +3,7 @@
 		<span class="list-item-container">
 			{{$ctrl.org.BusinessUnit.Name}}
 		</span>
-		<span ng-cloak ng-show="$ctrl.isSelected($ctrl.org.BusinessUnit)" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+		<span ng-cloak ng-show="$ctrl.isSelected($ctrl.org.BusinessUnit)" class="list-dot"><b class="mdi mdi-check list-mark"></b></span>
 	</li>
 </ul>
 
@@ -31,7 +31,7 @@
 			<span class="list-item-container">
 				{{site.Name}}
 			</span>
-			<span ng-cloak ng-show="$ctrl.isSelected(site)" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+			<span ng-cloak ng-show="$ctrl.isSelected(site)" class="list-dot"><b class="mdi mdi-check list-mark"></b></span>
 
 			<div ng-cloak class="modal-box">
 				<div ng-cloak ng-show="confirmModal2">
@@ -55,7 +55,7 @@
 			<span class="list-item-container" id="team-list-label">
 				{{team.Name}}
 			</span>
-			<span ng-cloak ng-show="$ctrl.isSelected(team)" ng-class="{'test-class':$ctrl.isSelected(team)}" id="team-selection-indicator" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+			<span ng-cloak ng-show="$ctrl.isSelected(team)" ng-class="{'test-class':$ctrl.isSelected(team)}" id="team-selection-indicator" class="list-dot"><b class="mdi mdi-check list-mark"></b></span>
 		</li>
 	</span>
 </ul>

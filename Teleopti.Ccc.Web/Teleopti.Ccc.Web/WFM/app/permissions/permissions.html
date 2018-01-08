@@ -59,7 +59,7 @@
 							<span class="list-item-container">
 								{{role.DescriptionText}}
 							</span>
-							<span ng-cloak ng-show="role.IsSelected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+							<span ng-cloak ng-show="role.IsSelected" class="list-dot"><b class="mdi mdi-check list-mark"></b></span>
 							<div class="wfm-leave-behind" ng-show="vm.checkMyRole(role)" ng-class="{'open-leave-behind-for-testing':vm.roleOptionsOpen}">
 								<span>
 									<i class="mdi mdi-content-copy" ng-click="vm.copyRole(role); $event.stopPropagation();">
