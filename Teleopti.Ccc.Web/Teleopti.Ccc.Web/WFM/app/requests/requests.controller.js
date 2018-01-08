@@ -47,9 +47,6 @@
 		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
 		vm.isOvertimeEnabled = toggleService.Wfm_Requests_OvertimeRequestHandling_45177;
 		vm.overtimeRequestsLicenseAvailable = false;
-		requestsDataService.getOvertimeLicense().then(function (result) {
-			vm.overtimeRequestsLicenseAvailable = result.data;
-		});
 		vm.teamNameMap = {};
 
 		vm.selectedGroups = {
@@ -305,6 +302,9 @@
 			.then(loggedonUsersTeamId.promise.then(function (defaultTeam) {
 				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
 					replaceArrayValues([defaultTeam], vm.selectedGroups.groupIds);
+			}))
+			.then(requestsDataService.getOvertimeLicense().then(function (result) {
+				vm.overtimeRequestsLicenseAvailable = result.data;
 			}))
 			.then(vm.init);
 

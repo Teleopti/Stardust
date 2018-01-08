@@ -612,7 +612,12 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		};
 		this.getSitesPromise = function() {
 			return { success: successCallback, error: errorCallback };
-		}
+		};
+		this.getOvertimeLicense = function (successCallback) {
+			return { then: function() {
+				successCallback && successCallback();
+			}};
+		};
 		this.submitCommandIsASucess = function (result) {
 			_commandIsASucess = result;
 		};

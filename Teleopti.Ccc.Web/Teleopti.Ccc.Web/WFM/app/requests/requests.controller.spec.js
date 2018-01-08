@@ -425,5 +425,10 @@ describe('Requests controller tests',
 					resolve({ Children: [] });
 				});
 			};
+			this.getOvertimeLicense = function (successCallback) {
+				return { then: function() {
+					successCallback && successCallback();
+				}};
+			};
 		}
 	});
