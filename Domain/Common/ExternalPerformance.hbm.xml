@@ -7,7 +7,7 @@
 
 		<property name="ExternalId" type="int" not-null="true" />
 		<property name="Name" length="200" type="string" not-null ="true" />
-		<property name="DataType" type="int" not-null="true" />
+		<property name="DataType" not-null="true" />
 
 		<many-to-one name="UpdatedBy"
 					 class="Teleopti.Ccc.Domain.Common.Person"
