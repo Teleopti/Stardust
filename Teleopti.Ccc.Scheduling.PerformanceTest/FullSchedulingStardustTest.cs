@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("Hangfire", "Data Source=.;Integrated Security=SSPI;Initial Catalog=PerfAnal;Application Name=Teleopti.Wfm.Web.Hangfire");
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			return config;
 		}
 
