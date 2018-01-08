@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
-			public bool TeleoptiCccOvertimeRequestsEnabled { get; private set; }
+			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			  public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 			  public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 			  public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
-			  public bool TeleoptiCccOvertimeRequestsEnabled { get; private set; }
+			  public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 			  public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 			  public int MaxSeats { get; private set; }
 			  public LicenseType LicenseType { get; private set; }
@@ -438,7 +438,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
-			public bool TeleoptiCccOvertimeRequestsEnabled { get; private set; }
+			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -563,7 +563,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
-			public bool TeleoptiCccOvertimeRequestsEnabled { get; private set; }
+			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
