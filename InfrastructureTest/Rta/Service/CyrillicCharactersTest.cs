@@ -4,7 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -22,74 +22,72 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 	[ExtendScope(typeof(MappingReadModelUpdater))]
 	[ExtendScope(typeof(CurrentScheduleReadModelUpdater))]
 	[ExtendScope(typeof(ExternalLogonReadModelUpdater))]
-	public class UnrecognizedStatesTest2
+	public class CyrillicCharactersTest
 	{
 		public IPrincipalAndStateContext Context;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public Database Database;
 		public AnalyticsDatabase Analytics;
-		public WithUnitOfWork UnitOfWork;
+		public IAgentStateReadModelReader AgentStateReadModel;
 		public IRtaStateGroupRepository StateGroupRepository;
+		public WithUnitOfWork UnitOfWork;
 
 		[Test]
-		public void ShouldNotAddDuplicatesInBatch()
+		public void ShouldMatchWithCyrillicCharacters()
 		{
 			Analytics.WithDataSource(7, new BatchForTest().SourceId);
 			Database
-				.WithAgent("usercode1")
-				.WithAgent("usercode2")
-				.WithAgent("usercode3")
+				.WithAgent("usercode")
 				.WithStateGroup("default", true)
-				.WithStateCode("default")
-				.WithStateGroup("logged out", false, true)
-				.WithStateCode("LOGGED-OFF")
+				.WithStateGroup("Телефон")
+				.WithStateCode("Телефон")
 				.PublishRecurringEvents();
 			Context.Logout();
 
 			Target.Process(new BatchForTest
 			{
-				SnapshotId = "2016-05-18 08:00".Utc(),
 				States = new[]
 				{
 					new BatchStateForTest
 					{
-						UserCode = "usercode1",
-						StateCode = "phone"
-					},
-					new BatchStateForTest
-					{
-						UserCode = "usercode2",
-						StateCode = "phone"
+						UserCode = "usercode",
+						StateCode = "Телефон"
 					}
 				}
 			});
-			Target.CloseSnapshot(new CloseSnapshotForTest
-			{
-				SnapshotId = "2016-05-18 08:00".Utc()
-			});
+
+			Context.Login();
+			var actual = UnitOfWork.Get(() => AgentStateReadModel.Read(new AgentStateFilter()).Single());
+			actual.StateName.Should().Be("Телефон");
+		}
+
+		[Test]
+		public void ShouldAddUnknownStateCodeWithCyrillicCharacters()
+		{
+			Analytics.WithDataSource(7, new BatchForTest().SourceId);
+			Database
+				.WithAgent("usercode")
+				.WithStateGroup("default", true)
+				.WithStateCode("default")
+				.PublishRecurringEvents();
+			Context.Logout();
 
 			Target.Process(new BatchForTest
 			{
-				SnapshotId = "2016-05-18 08:05".Utc(),
 				States = new[]
 				{
 					new BatchStateForTest
 					{
-						UserCode = "usercode3",
-						StateCode = "phone"
+						UserCode = "usercode",
+						StateCode = "Телефон"
 					}
 				}
-			});
-			Target.CloseSnapshot(new CloseSnapshotForTest
-			{
-				SnapshotId = "2016-05-18 08:05".Utc()
 			});
 
 			Context.Login();
 			var actual = UnitOfWork.Get(() => StateGroupRepository.LoadAllCompleteGraph());
 			actual.SelectMany(g => g.StateCollection.Select(s => s.StateCode))
-				.Where(x => x == Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.Should().Have.Count.EqualTo(1);
+				.Should().Contain("Телефон");
 		}
 	}
 }

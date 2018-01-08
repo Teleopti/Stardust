@@ -4,6 +4,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 
@@ -16,7 +18,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.Mappings
 		public Database Database;
 		public MappingReadModelUpdater Target;
 		public IMappingReader Reader;
-		public WithReadModelUnitOfWork UnitOfWork;
+		public WithReadModelUnitOfWork ReadModel;
+		public WithUnitOfWork UnitOfWork;
+		public IRtaStateGroupRepository StateGroups;
 
 		[Test]
 		public void ShouldContainNoDuplicates()
@@ -35,9 +39,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.Mappings
 
 			Target.Handle(new TenantMinuteTickEvent());
 
-			var actual = UnitOfWork.Get(() => Reader.Read()).Select(x => x.StateCode + x.ActivityId.GetValueOrDefault() + x.BusinessUnitId).ToArray();
+			var actual = ReadModel.Get(() => Reader.Read()).Select(x => x.StateCode + x.ActivityId.GetValueOrDefault() + x.BusinessUnitId).ToArray();
 			var expected = actual.Distinct().ToArray();
 			actual.Should().Have.SameSequenceAs(expected);
+		}
+
+		[Test]
+		public void ShouldUpdateModelWithCyrillicCharacters()
+		{
+			Database
+				.WithActivity("Телефон")
+				.WithStateGroup("Телефон")
+				.WithStateCode("Телефон")
+				.WithRule("Телефон", 0, null)
+				.WithMapping()
+				;
+
+			Target.Handle(new TenantMinuteTickEvent());
+
+			var actual = ReadModel.Get(() => Reader.Read());
+			actual.Select(x => x.StateCode).Should().Contain("Телефон");
+			actual.Select(x => x.StateGroupName).Should().Contain("Телефон");
+			actual.Select(x => x.RuleName).Should().Contain("Телефон");
+		}
+
+		[Test]
+		public void ShouldAddStateCodesWithCyrillicCharacters()
+		{
+			Database.WithStateGroup("default", true);
+
+			Target.Handle(new UnknownStateCodeReceviedEvent
+			{
+				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.CurrentId().Value,
+				StateCode = "Телефон",
+				StateDescription = "Телефон"
+			});
+
+			var stateGroups = UnitOfWork.Get(() => StateGroups.LoadAllCompleteGraph());
+			stateGroups.Single(x => x.DefaultStateGroup).StateCollection.Single().StateCode.Should().Be("Телефон");
+			stateGroups.Single(x => x.DefaultStateGroup).StateCollection.Single().Name.Should().Be("Телефон");
 		}
 	}
 }
