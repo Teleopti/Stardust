@@ -1,9 +1,8 @@
 (function() {
     'use strict';
-    function IntradayDateOffsetController($filter) {
+	function IntradayDateOffsetController($filter, currentUserInfo) {
         var ctrl = this;
-		
-			ctrl.dayOffsets = [];
+        ctrl.dayOffsets = [];
 
         var off = -7;
         for (var i = -7; i < 2; i++) {
@@ -36,7 +35,11 @@
 		}
 
         function getText(offset) {
-            return moment().add(offset, 'days').format('dddd, LL');
+            return getUserDate().add(offset, 'days').format('dddd, LL');
+        }
+
+        function getUserDate() {
+            return moment.tz(moment(), currentUserInfo.CurrentUserInfo().DefaultTimeZone);
         }
     }
 
@@ -49,5 +52,5 @@
         }
     });
 
-    IntradayDateOffsetController.$inject = ['$filter'];
+    IntradayDateOffsetController.$inject = ['$filter', 'CurrentUserInfo'];
 })();

@@ -17,7 +17,8 @@
         'intradayMonitorStaffingService',
         'intradayLatestTimeService',
         'Toggle',
-        'skillIconService'
+        'skillIconService',
+        'CurrentUserInfo'
     ];
 
     function intradayController(
@@ -35,7 +36,8 @@
         intradayMonitorStaffingService,
         intradayLatestTimeService,
         toggleSvc,
-        skillIconService
+        skillIconService,
+        currentUserInfo
     ) {
         var vm = this;
         var autocompleteSkill;
@@ -160,8 +162,9 @@
             }
         };
 
-        vm.getLocalDate = function(offset) {
-            var offset = moment()
+        vm.getLocalDate = function (offset) {
+            var userDate = getUserDateTime();
+            var offset = userDate
                 .add(offset, 'days')
                 .format('dddd, LL');
 
@@ -467,7 +470,12 @@
         function UnsupportedSkillNotice() {
             var notPhoneMessage = $translate.instant('UnsupportedSkillMsg');
             NoticeService.warning(notPhoneMessage, 5000, true);
+		}
+
+        function getUserDateTime() {
+            return moment.tz(moment(), currentUserInfo.CurrentUserInfo().DefaultTimeZone);
         }
+
 
         $scope.$on('$destroy', function(event) {
             cancelTimeout();

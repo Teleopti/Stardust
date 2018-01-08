@@ -6,7 +6,8 @@ describe('IntradayAreaController', function () {
 	scope,
 	$translate,
 	$interval,
-	NoticeService;
+	NoticeService,
+	currentUserInfo = new FakeCurrentUserInfo();
 
 	var vm;
 	var skillAreas = [];
@@ -39,6 +40,12 @@ describe('IntradayAreaController', function () {
 						}
 					}
 				});
+		});
+
+		module(function ($provide) {
+			$provide.service('CurrentUserInfo', function () {
+				return currentUserInfo;
+			});
 		});
 	});
 
@@ -434,6 +441,14 @@ describe('IntradayAreaController', function () {
 
 	}));
 
+	function FakeCurrentUserInfo() {
+		this.CurrentUserInfo = function () {
+			return {
+				DefaultTimeZone: "America/Denver"
+			};
+		};
+	}
+	
 	var createController = function (isNewlyCreatedSkillArea) {
 		vm = $controller('IntradayAreaController', {
 			$scope: scope,
@@ -843,5 +858,16 @@ describe('IntradayAreaController', function () {
 		vm.selectedSkillChange(skills[1]);
 		$httpBackend.flush();
 		expect(vm.viewObj.forecastedStaffing.updatedSeries.length).toEqual(1);
+	});
+
+	it('should display date in timezone for current user', function() {
+		createController(false);
+		vm.selectedSkillChange(skills[1]);
+		var today = moment('2018-01-02T03:00:00').toDate();
+		jasmine.clock().mockDate(today);
+		$httpBackend.flush();
+		var currentDateDenver = moment('2018-01-01T00:00:00').format('dddd, LL').toLowerCase();
+		expect(vm.getLocalDate(0).toLowerCase()).toEqual(currentDateDenver);
+		jasmine.clock().uninstall();
 	});
 });
