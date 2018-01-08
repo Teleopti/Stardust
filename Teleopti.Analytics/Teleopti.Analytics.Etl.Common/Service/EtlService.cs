@@ -30,12 +30,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
 		}
 
-		public void EnsureSystemWideRecurringJobs()
-		{
-			_recurringEventPublisher.StopPublishingAll();
-			_recurringEventPublisher.PublishHourly(new CleanFailedQueue());
-		}
-
 		public void Start(DateTime serviceStartTime, Action stopService)
 		{
 			EnsureSystemWideRecurringJobs();
@@ -78,6 +72,12 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				_timer?.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
 				log.Debug("Timer started");
 			}
+		}
+
+		public void EnsureSystemWideRecurringJobs()
+		{
+			_recurringEventPublisher.StopPublishingAll();
+			_recurringEventPublisher.PublishHourly(new CleanFailedQueue());
 		}
 
 		public void EnsureTenantRecurringJobs()

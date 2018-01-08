@@ -14,6 +14,14 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private IContainer _container;
 
+		public void SimplyEnsureRecurringJobs()
+		{
+			XmlConfigurator.Configure();
+			var service = buildEtlService();
+			service.EnsureSystemWideRecurringJobs();
+			service.EnsureTenantRecurringJobs();
+		}
+
 		public void Start(Action stopService)
 		{
 			XmlConfigurator.Configure();
@@ -26,13 +34,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			{
 				_retryPolicy.ExecuteAction(() =>
 				{
-					var builder = new ContainerBuilder();
-					builder.RegisterModule(new EtlAppModule());
-					_container = builder.Build();
-
-					_container.Resolve<HangfireClientStarter>().Start();
-
-					var service = _container.Resolve<EtlService>();
+					var service = buildEtlService();
 					service.Start(serviceStartTime, stopService);
 				});
 			}
@@ -43,6 +45,15 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			}
 
 			log.Info("The service started at " + serviceStartTime);
+		}
+
+		private EtlService buildEtlService()
+		{
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new EtlAppModule());
+			_container = builder.Build();
+			_container.Resolve<HangfireClientStarter>().Start();
+			return _container.Resolve<EtlService>();
 		}
 
 		public void Dispose()
@@ -59,5 +70,4 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			}
 		}
 	}
-
 }

@@ -1,22 +1,30 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Analytics.Etl.Common.Service;
 
 namespace Teleopti.Analytics.Etl.ServiceConsoleHost
 {
-	class Program
+	public class Program
 	{
-		static void Main(string[] args)
+		public static void Main(string[] args)
 		{
-			var host = new EtlServiceHost();
-			host.Start(() => {});
-
-			Console.WriteLine("ETL Service is now running, press Enter to stop...");
-			Console.ReadLine();
-
-			host.Dispose();
-
-			Console.WriteLine("ETL Service is stopped, press Enter to close...");
-			Console.ReadLine();
+			if (args.FirstOrDefault() == "/EnsureRecurringJobs")
+				using (var host = new EtlServiceHost())
+				{
+					Console.WriteLine("ETL Service is simply ensuring recurring jobs and then closing...");					
+					host.SimplyEnsureRecurringJobs();
+				}
+			else
+			{
+				using (var host = new EtlServiceHost())
+				{
+					host.Start(() => { });
+					Console.WriteLine("ETL Service is now running, press Enter to stop...");
+					Console.ReadLine();
+				}
+				Console.WriteLine("ETL Service is stopped, press Enter to close...");
+				Console.ReadLine();
+			}
 		}
 	}
 }
