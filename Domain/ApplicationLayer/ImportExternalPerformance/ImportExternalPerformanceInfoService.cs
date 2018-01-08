@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
@@ -49,21 +51,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				.Where(r => r.JobCategory == JobCategory.WebImportExternalGamification)
 				.OrderByDescending(r => r.Timestamp)
 				.ToList();
-			return resultList.Select(jr => new ImportGamificationJobResultDetail()
+			return resultList.Select(jobResult =>
 			{
-				Id = jr.Id.Value,
-				Owner = jr.Owner.Name.ToString(),
-				CreateDateTime = jr.Artifacts.First().CreateTime,
-				Name = jr.Artifacts.First().FileName,
-				Status = GetJobStatus(jr),
-				Category = jr.JobCategory,
-				HasError = HasInvalidRecords(jr)
+				var hasError = hasInvalidRecords(jobResult);
+				var jobResultDetail = jobResult.Details.FirstOrDefault();
+				var hasException = !(jobResultDetail?.ExceptionMessage.IsNullOrEmpty() ?? true)
+								   || !(jobResultDetail?.InnerExceptionMessage.IsNullOrEmpty() ?? true);
+				return new ImportGamificationJobResultDetail()
+				{
+					Id = jobResult.Id.Value,
+					Owner = jobResult.Owner.Name.ToString(),
+					CreateDateTime = jobResult.Artifacts.First().CreateTime,
+					Name = jobResult.Artifacts.First().FileName,
+					Status = getJobStatus(jobResult),
+					Category = jobResult.JobCategory,
+					HasError = hasError,
+					ErrorMessage =
+						hasError ? (hasException ? Resources.InternalErrorMsg : jobResultDetail?.Message) : string.Empty
+				};
 			}).ToList();
 		}
 
-		private bool HasInvalidRecords(IJobResult job)
+		private bool hasInvalidRecords(IJobResult job)
 		{
-			bool result = false;
+			var result = false;
 
 			if (job.Artifacts != null)
 			{
@@ -73,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			return result;
 		}
 
-		private string GetJobStatus(IJobResult job)
+		private string getJobStatus(IJobResult job)
 		{
 			ImportExternalPerformanceJobStatus status = ImportExternalPerformanceJobStatus.InProgress;
 			if (job.HasError())
