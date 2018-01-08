@@ -194,195 +194,112 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 					where f.FunctionPath == DefinedRaptorApplicationFunctionPaths.All
 					select f;
 			else
-				applicationFunctions = from f in allApplicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.All
-					select f;
+				applicationFunctions =
+					allApplicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.All);
 
 			if (!ViewUnpublishedSchedules)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
 			if (!ViewConfidential)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 
 			if (!AccessToExtendedPreferences)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb
-					select f;
+				applicationFunctions =
+					applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb);
+
 			if (!AccessToMytimeWeb)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTimeWeb
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
 			if (!AccessToAsm)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
 			if (!AccessToTextRequests)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.TextRequests);
 			if (!AccessToAbsenceRequests)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
 			if (!AccessToAbsenceReport)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceReport
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AbsenceReport);
 			if (!AccessToAnywhere)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.Anywhere);
 			if (!AccessToStudentAvailability)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.StudentAvailability
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.StudentAvailability);
 			if (!AccessToShiftTradeRequests)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 			if (!AccessToShiftTradeBulletinBoard)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
 			if (!AccessToViewAllGroupPages)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages);
 			if (!AccessToCalendarLink)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShareCalendar
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ShareCalendar);
 			if (!AccessToOvertimeAvailability)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb);
 			if (!AccessToPreferences)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.StandardPreferences
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.StandardPreferences);
 			if (!AccessToTeamSchedule)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.TeamSchedule
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 			if (!AccessToMyReport)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportWeb
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.MyReportWeb);
+
 			if (!AccessToRealTimeAdherenceOverview)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
+
 			if (!AccessToResourcePlanner)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebPlans
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebPlans);
 			if (!AccessToPeople)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebPeople
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebPeople);
 
 			if (!AccessToOutbound)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Outbound
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.Outbound);
 
 			if (!AccessToPersonalAbsenceAccount)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
 			if (!AccessToMatrixReports)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AccessToReports
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AccessToReports);
 			if (!AccessToMatrixReports)
-				applicationFunctions = from f in applicationFunctions
-					where f.ForeignSource != DefinedForeignSourceNames.SourceMatrix
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedForeignSourceNames.SourceMatrix);
 			if (!AccessToMyReportQueueMetrics)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics);
 			if (!AccessToLeaderboard)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard);
 
 			if (!AddFullDayAbsence)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence);
 			if (!AddIntradayAbsence)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence);
 			if (!RemoveAbsence)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RemoveAbsence
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.RemoveAbsence);
 			if (!AddActivity)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AddActivity
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AddActivity);
 			if(!RemoveActivity)
-				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RemoveActivity
-									   select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.RemoveActivity);
 			if (!MoveActivity)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MoveActivity
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.MoveActivity);
 			if (!QuickForecaster)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebForecasts
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebForecasts);
 
 			if (!AccessToSeatPlanner)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.SeatPlanner
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.SeatPlanner);
 
 			if (!AccessToWfmRequests)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebRequests
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebRequests);
 
 			if (!AccessToWfmMyTeamSchedule && !AccessToAnywhere)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTeamSchedules
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			if (!AccessToIntraday)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebIntraday
-						  & f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup
-									   select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebIntraday
+						  || f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup);
 
 			if (!AccessToPermissions)
-				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebPermissions
-											  select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebPermissions);
 			if (!AccessToWfmLeaderboard)
-				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports
-											  select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports);
 			if (!AccessToStaffing)
-				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebStaffing
-					select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebStaffing);
 
 			if (!ArchiveSchedules)
-				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ArchiveSchedule
-									   select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
 
 			if (!ImportSchedules)
-				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ImportSchedule
-									   select f;
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ImportSchedule);
 
 			return applicationFunctions;
 		}
