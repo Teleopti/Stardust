@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			_latestStatisticsTimeProvider = latestStatisticsTimeProvider;
 		}
 
-		[HttpGet, UnitOfWork, Route("api/HealthCheck/CheckIncomingTrafficLatestInterval/{skillId}")]
-		public virtual IHttpActionResult CheckIncomingTrafficLatestInterval(Guid skillId)
+		[HttpGet, UnitOfWork, Route("api/HealthCheck/IncomingTrafficLatestInterval/{skillId}")]
+		public virtual IHttpActionResult IncomingTrafficLatestInterval(Guid skillId)
 		{
 			var latestInterval = _latestStatisticsTimeProvider.Get(new[] { skillId });
 			var incomingTrafficDataSeries = _incomingTrafficViewModelCreator.Load(new[] {skillId}, 0).DataSeries;
@@ -311,12 +311,5 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			});
 			return Ok(jobId);
 		}
-	}
-
-	public class IncomingTrafficModel
-	{
-		public DateTime IntervalStartTime;
-		public double? ForecastedCalls;
-		public double? ActualCalls;
 	}
 }
