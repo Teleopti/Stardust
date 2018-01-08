@@ -1364,7 +1364,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be("July contains too much over time (03:00). Max is 02:00.");
+			personRequest.DenyReason.Should().Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "03:00", "02:00"));
 		}
 
 		[Test]
@@ -1389,7 +1389,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsPending.Should().Be.True();
 			personRequest.GetMessage(new NoFormatting()).Trim().Should()
-				.Be("July contains too much over time (03:00). Max is 02:00.");
+				.Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "03:00", "02:00"));
 		}
 
 		[Test]
@@ -1420,7 +1420,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be("July contains too much over time (13:00). Max is 10:00.");
+			personRequest.DenyReason.Should().Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "13:00", "10:00"));
 		}
 
 		[Test]
@@ -1482,7 +1482,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be("August contains too much over time (14:00). Max is 13:00.");
+			personRequest.DenyReason.Should()
+				.Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "August", "14:00", "13:00"));
 		}
 
 		[Test]
@@ -1515,11 +1516,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.GetMessage(new NoFormatting()).Trim().Should()
-				.Contain(
-					"July contains too much over time (12:00). Max is 11:00.");
+				.Contain(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "12:00", "11:00"));
 			personRequest.GetMessage(new NoFormatting()).Trim().Should()
-				.Contain(
-					"August contains too much over time (14:00). Max is 11:00.");
+				.Contain(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "August", "14:00", "11:00"));
 		}
 
 		[Test]
@@ -1552,7 +1551,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			getTarget().Process(nextMonthPersonRequest, true);
 
 			nextMonthPersonRequest.IsDenied.Should().Be.True();
-			nextMonthPersonRequest.DenyReason.Should().Be("January contains too much over time (02:00). Max is 01:00.");
+			nextMonthPersonRequest.DenyReason.Should().Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "January", "02:00", "01:00"));
 		}
 
 		[Test]
