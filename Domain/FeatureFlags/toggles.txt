@@ -103,7 +103,7 @@ MyTimeWeb_OvertimeRequest_44558 = RC
 MyTimeWeb_MonthlyScheduleMobileView_45004 = true
 MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
 MyTimeWeb_WaitListPositionEnhancement_46301 = true
-MyTimeWeb_PollToCheckScheduleChanges_46595 = RC
+MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 
 # China, can any of these be removed? #
 QRCodeForMobileApps_42695 = true
