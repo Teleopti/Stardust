@@ -10,27 +10,21 @@ using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
+namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
 	[TestFixture]
+	[GamificationTest]
 	public class GamificationSettingMapperTest
 	{
-		private FakeExternalPerformanceRepository externalPerformanceRepository;
-		private GamificationSettingMapper mapper;
-
-		[SetUp]
-		public void SetUp()
-		{
-			externalPerformanceRepository = new FakeExternalPerformanceRepository();
-			mapper = new GamificationSettingMapper(externalPerformanceRepository);
-		}
-
+		public FakeExternalPerformanceRepository ExternalPerformanceRepository;
+		public IGamificationSettingMapper Target;
+		
 		[Test]
 		public void ShouldMapGamificationSettingPropertiesCorrectly()
 		{
 			var rawSetting = createRawGamificationSetting();
 
-			var vm = mapper.Map(rawSetting);
+			var vm = Target.Map(rawSetting);
 			checkRawSettingAndVm(rawSetting, vm);
 			Assert.IsNotNull(vm.ExternalBadgeSettings);
 			Assert.IsFalse(vm.ExternalBadgeSettings.Any());
@@ -42,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 			var rawSetting = createRawGamificationSetting();
 			rawSetting.BadgeSettings = new List<IBadgeSetting>(); 
 
-			var vm = mapper.Map(rawSetting);
+			var vm = Target.Map(rawSetting);
 			Assert.IsNotNull(vm.ExternalBadgeSettings);
 			Assert.IsFalse(vm.ExternalBadgeSettings.Any());
 		}
@@ -78,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 			var externalBadgeSettings = new List<IBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};
 			rawSetting.BadgeSettings = externalBadgeSettings;
 
-			var vm = mapper.Map(rawSetting);
+			var vm = Target.Map(rawSetting);
 
 			checkRawSettingAndVm(rawSetting, vm);
 			Assert.AreEqual(vm.ExternalBadgeSettings.Count, externalBadgeSettings.Count);

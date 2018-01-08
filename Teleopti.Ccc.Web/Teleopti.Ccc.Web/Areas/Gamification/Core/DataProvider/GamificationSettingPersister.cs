@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
 		private readonly IGamificationSettingMapper _mapper;
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
+		private readonly BadgeSettingDataConverter _converter = new BadgeSettingDataConverter();
 
 		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IExternalPerformanceRepository externalPerformanceRepository)
 		{
@@ -258,13 +259,13 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
-			externalBadgeSetting.Threshold = BadgeSettingDataConverter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
+			externalBadgeSetting.Threshold = _converter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
 
-			return new ExternalBadgeSettingThresholdViewModel()
+			return new ExternalBadgeSettingThresholdViewModel
 			{
 				GamificationSettingId = setting.Id.Value,
 				QualityId = externalBadgeSetting.QualityId,
-				ThresholdValue = BadgeSettingDataConverter.GetBadgeSettingValueForViewModel(externalBadgeSetting.DataType, externalBadgeSetting.Threshold),
+				ThresholdValue = _converter.GetBadgeSettingValueForViewModel(externalBadgeSetting.DataType, externalBadgeSetting.Threshold),
 				DataType = externalBadgeSetting.DataType
 			};
 		}
@@ -275,13 +276,13 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
-			externalBadgeSetting.GoldThreshold = BadgeSettingDataConverter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
+			externalBadgeSetting.GoldThreshold = _converter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
 
-			return new ExternalBadgeSettingThresholdViewModel()
+			return new ExternalBadgeSettingThresholdViewModel
 			{
 				GamificationSettingId = setting.Id.Value,
 				QualityId = externalBadgeSetting.QualityId,
-				ThresholdValue = BadgeSettingDataConverter.GetBadgeSettingValueForViewModel(externalBadgeSetting.DataType, externalBadgeSetting.GoldThreshold),
+				ThresholdValue = _converter.GetBadgeSettingValueForViewModel(externalBadgeSetting.DataType, externalBadgeSetting.GoldThreshold),
 				DataType = externalBadgeSetting.DataType
 			};
 		}
@@ -292,13 +293,13 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
-			externalBadgeSetting.SilverThreshold = BadgeSettingDataConverter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
+			externalBadgeSetting.SilverThreshold = _converter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
 
-			return new ExternalBadgeSettingThresholdViewModel()
+			return new ExternalBadgeSettingThresholdViewModel
 			{
 				GamificationSettingId = setting.Id.Value,
 				QualityId = externalBadgeSetting.QualityId,
-				ThresholdValue = BadgeSettingDataConverter.GetBadgeSettingValueForViewModel(externalBadgeSetting.DataType, externalBadgeSetting.SilverThreshold),
+				ThresholdValue = _converter.GetBadgeSettingValueForViewModel(externalBadgeSetting.DataType, externalBadgeSetting.SilverThreshold),
 				DataType = externalBadgeSetting.DataType
 			};
 		}
@@ -309,13 +310,13 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
-			externalBadgeSetting.BronzeThreshold = BadgeSettingDataConverter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
+			externalBadgeSetting.BronzeThreshold = _converter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
 
-			return new ExternalBadgeSettingThresholdViewModel()
+			return new ExternalBadgeSettingThresholdViewModel
 			{
 				GamificationSettingId = setting.Id.Value,
 				QualityId = externalBadgeSetting.QualityId,
-				ThresholdValue = BadgeSettingDataConverter.GetBadgeSettingValueForViewModel(externalBadgeSetting.DataType, externalBadgeSetting.BronzeThreshold),
+				ThresholdValue = _converter.GetBadgeSettingValueForViewModel(externalBadgeSetting.DataType, externalBadgeSetting.BronzeThreshold),
 				DataType = externalBadgeSetting.DataType
 			};
 		}

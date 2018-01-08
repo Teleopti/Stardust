@@ -21,16 +21,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<ISite> GetShowListSites(DateOnly date, string functionPath)
 		{
 			var allTeams = _teamRepository.FindAllTeamByDescription() ?? new ITeam[] { };
-			var sitesToShow = new List<ISite>();
-			foreach (var team in allTeams)
-			{
-				if (_permissionProvider.HasTeamPermission(functionPath, date, team) && !sitesToShow.Contains(team.Site))
-				{
-					sitesToShow.Add(team.Site);
-				}
-			}
-
-			return sitesToShow;
+			return allTeams.Where(team => _permissionProvider.HasTeamPermission(functionPath, date, team)).Select(t => t.Site)
+				.Distinct();
 		}
 
 		public IEnumerable<ITeam> GetPermittedTeamsUnderSite(Guid siteId, DateOnly date, string functionPath)

@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 				var gamificationSettingId = Guid.Empty;
 				if (teamGamificationSetting != null) gamificationSettingId = teamGamificationSetting.GamificationSetting.Id.Value;
 
-				VMList.Add(new TeamGamificationSettingViewModel()
+				VMList.Add(new TeamGamificationSettingViewModel
 				{
-					Team = new SelectOptionItem()
+					Team = new SelectOptionItem
 					{
 						id = team.Id.Value.ToString(),
 						text = team.Description.Name
@@ -96,23 +96,19 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 				gamificationSettingId = teamGamificationSetting.GamificationSetting.Id.Value;
 			}
 
-			return new TeamGamificationSettingViewModel()
+			return new TeamGamificationSettingViewModel
 			{
 				GamificationSettingId = gamificationSettingId,
-				Team = new SelectOptionItem() { id = team.Id.ToString(), text =  team.Site.Description.Name + "/" + team.Description.Name }
+				Team = new SelectOptionItem { id = team.Id.ToString(), text =  team.Site.Description.Name + "/" + team.Description.Name }
 			};
 		}
 
-		private IList<Guid> getTeamIds(List<Guid> siteIds)
+		private IList<Guid> getTeamIds(IEnumerable<Guid> siteIds)
 		{
-			var ids = new List<Guid>();
-			foreach (var siteId in siteIds)
-			{
-				var teams = _siteProvider.GetPermittedTeamsUnderSite(siteId, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage).ToList();
-				ids.AddRange(teams.Select(team => team.Id.Value));
-			}
-
-			return ids;
+			return siteIds
+				.SelectMany(siteId =>
+					_siteProvider.GetPermittedTeamsUnderSite(siteId, DateOnly.Today,
+						DefinedRaptorApplicationFunctionPaths.OpenOptionsPage)).Select(team => team.Id.Value).ToArray();
 		}
 	}
 }

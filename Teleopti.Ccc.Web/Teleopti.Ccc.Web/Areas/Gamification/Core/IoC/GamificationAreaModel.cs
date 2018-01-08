@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Global.Core;

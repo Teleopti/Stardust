@@ -10,10 +10,11 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.WebTest.Areas.People.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.People
 {
-	[TestFixture, PeopleCommandTest]
+	[TestFixture, WebPeopleTest]
 	public class ImportAgentControllerTest : ISetup
 	{
 		public FakeLoggedOnUser LoggedOnUser;

@@ -1,7 +1,5 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -83,25 +81,5 @@ namespace Teleopti.Ccc.Domain.Common
 			get => _goldThreshold;
 			set => _goldThreshold = value;
 		}
-
-		#region Methods to calculate correct value based on UnitType
-		public static int GetCountValue(int originalValue)
-		{
-			InParameter.MustBeTrue(nameof(originalValue), originalValue > 0);
-			return originalValue;
-		}
-
-		public static Percent GetPercentValue(int originalValue)
-		{
-			InParameter.MustBeTrue(nameof(originalValue), originalValue > 0 && originalValue <= 10000);
-			return new Percent(originalValue / 10000d);
-		}
-
-		public static TimeSpan GetTimeSpanValue(int originalValue)
-		{
-			InParameter.MustBeTrue(nameof(originalValue), originalValue > 0);
-			return TimeSpan.FromSeconds(originalValue);
-		}
-		#endregion
 	}
 }

@@ -218,10 +218,11 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
-    <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingPersisterTest.cs" />
-    <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingProviderTest.cs" />
-    <Compile Include="Areas\Gamification\Core\DataProvider\TeamGamificationSettingProviderAndPersisterTest.cs" />
-    <Compile Include="Areas\Gamification\Mapping\GamificationSettingMapperTest.cs" />
+    <Compile Include="Areas\Gamification\GamificationControllerPersistTest.cs" />
+    <Compile Include="Areas\Gamification\GamificationControllerReadTest.cs" />
+    <Compile Include="Areas\Gamification\GamificationTestAttribute.cs" />
+    <Compile Include="Areas\Gamification\GamificationControllerTeamTest.cs" />
+    <Compile Include="Areas\Gamification\GamificationSettingMapperTest.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\ReportsControllerTest.cs" />
@@ -327,7 +328,6 @@
     <Compile Include="Areas\Outbound\IoC\OutboundAreaModuleTest.cs" />
     <Compile Include="Areas\People\PeopleDataControllerTest.cs" />
     <Compile Include="Areas\People\PeopleCommandControllerTest.cs" />
-    <Compile Include="Areas\People\PeopleCommandTestAttribute.cs" />
     <Compile Include="Areas\People\Providers\PeopleSearchProviderTest.cs" />
     <Compile Include="Areas\Permissions\ApplicationFunctionsControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProviderTest.cs" />

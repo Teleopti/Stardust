@@ -9,9 +9,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	///<summary>
-	/// Tests ContractRepository
-	///</summary>
 	[TestFixture]
 	[Category("BucketB")]
 	public class GamificationSettingRepositoryTest : RepositoryTest<IGamificationSetting>
