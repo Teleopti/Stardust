@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
@@ -35,9 +36,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly HangfireUtilities _hangfireUtilities;
 		private readonly IReadModelValidator _readModelValidator;
 		private readonly IStardustRepository _stardustRepository;
+		private readonly IncomingTrafficViewModelCreator _incomingTrafficViewModelCreator;
+		private readonly LatestStatisticsTimeProvider _latestStatisticsTimeProvider;
 
 		public HealthCheckApiController(IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
-												  IStardustSender stardustSender, IToggleManager toggleManager, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator, IStardustRepository stardustRepository)
+												  IStardustSender stardustSender, IToggleManager toggleManager, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator, 
+												  IStardustRepository stardustRepository, IncomingTrafficViewModelCreator incomingTrafficViewModelCreator, LatestStatisticsTimeProvider latestStatisticsTimeProvider)
 		{
 			_etlJobStatusRepository = etlJobStatusRepository;
 			_etlLogObjectRepository = etlLogObjectRepository;
@@ -46,6 +50,29 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		    _hangfireUtilities = hangfireUtilities;
 			_readModelValidator = readModelValidator;
 			_stardustRepository = stardustRepository;
+			_incomingTrafficViewModelCreator = incomingTrafficViewModelCreator;
+			_latestStatisticsTimeProvider = latestStatisticsTimeProvider;
+		}
+
+		[HttpGet, UnitOfWork, Route("api/HealthCheck/CheckIncomingTrafficLatestInterval/{skillId}")]
+		public virtual IHttpActionResult CheckIncomingTrafficLatestInterval(Guid skillId)
+		{
+			var latestInterval = _latestStatisticsTimeProvider.Get(new[] { skillId });
+			var incomingTrafficDataSeries = _incomingTrafficViewModelCreator.Load(new[] {skillId}, 0).DataSeries;
+
+			for (var i = 0; i < incomingTrafficDataSeries.Time.Length; i++)
+			{
+				if (incomingTrafficDataSeries.Time[i].Hour == latestInterval.StartTime.Hour && incomingTrafficDataSeries.Time[i].Minute == latestInterval.StartTime.Minute)
+				{
+					return Ok(new IncomingTrafficModel
+					{
+						IntervalStartTime = incomingTrafficDataSeries.Time[i],
+						ActualCalls = incomingTrafficDataSeries.CalculatedCalls[i],
+						ForecastedCalls = incomingTrafficDataSeries.ForecastedCalls[i]
+					});
+				}
+			}
+			return Ok();
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/LoadEtlJobHistory")]
@@ -284,5 +311,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			});
 			return Ok(jobId);
 		}
+	}
+
+	public class IncomingTrafficModel
+	{
+		public DateTime IntervalStartTime;
+		public double? ForecastedCalls;
+		public double? ActualCalls;
 	}
 }
