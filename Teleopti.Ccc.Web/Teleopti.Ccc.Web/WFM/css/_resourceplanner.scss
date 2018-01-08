@@ -297,19 +297,16 @@ table.overview {
 	display: inline-block;
 }
 
-.con-fluid-row {
-	.list-content {
-		padding: 0;
-		background-color: $white;
-	}
-
+.list-content {
+	padding: 0 !important;
+	background-color: $white;
 	.list-header {
 		padding: 5px 10px;
 		background-color: rgba(0, 0, 0, 0.04);
 		height: 100px;
 		position: relative;
 	}
-
+	
 	.list-header-content {
 		overflow: hidden;
 	}
