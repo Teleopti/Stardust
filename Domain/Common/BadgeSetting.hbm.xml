@@ -10,7 +10,7 @@
 		<property name="Name" length="50" type="string" not-null ="true" />
 		<property name="Enabled" type="boolean" not-null="true"/>
 		<property name="LargerIsBetter" type="boolean" not-null="true"/>
-		<property name="UnitType" type="int" not-null="true" />
+		<property name="DataType" type="int" not-null="true" />
 		<property name="Threshold" type="int"/>
 		<property name="BronzeThreshold" type="int"/>
 		<property name="SilverThreshold" type="int"/>

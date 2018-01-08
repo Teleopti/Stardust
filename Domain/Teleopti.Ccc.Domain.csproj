@@ -351,7 +351,6 @@
     <Compile Include="Infrastructure\Events\RequeueHangfireEvent.cs" />
     <Compile Include="Infrastructure\PublishInitializeReadModelEventHandler.cs" />
     <Compile Include="Infrastructure\RequeueHangfireEventHandler.cs" />
-    <Compile Include="InterfaceLegacy\Domain\BadgeUnitType.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBadgeSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IExternalPerformance.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestOpenPeriod.cs" />
@@ -4052,7 +4051,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\JobResultArtifact.hbm.xml" />
     <EmbeddedResource Include="AgentInfo\Requests\OvertimeRequest.hbm.xml" />
-    <EmbeddedResource Include="Common\ExternalBadgeSetting.hbm.xml">
+    <EmbeddedResource Include="Common\BadgeSetting.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\ExternalPerformance.hbm.xml">

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 					SilverThreshold = x.SilverThreshold,
 					GoldThreshold = x.GoldThreshold,
 
-					UnitType = x.UnitType
+					DataType = x.DataType
 				}).ToList();
 
 			var vm = new GamificationSettingViewModel
@@ -80,8 +79,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 					continue;
 				}
 
-				var unitType = ConvertRawQualityType(performanceInfo.DataType);
-
 				vm.ExternalBadgeSettings.Add(new ExternalBadgeSettingViewModel
 				{
 					Id = Guid.Empty,
@@ -89,30 +86,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 					QualityId = performanceInfo.ExternalId,
 					LargerIsBetter = true,
 					Enabled = false,
-					UnitType = unitType
+					DataType = performanceInfo.DataType
 				});
 			}
 
 			return vm;
-		}
-
-		public BadgeUnitType ConvertRawQualityType(ExternalPerformanceDataType dataType)
-		{
-			BadgeUnitType result;
-			switch (dataType)
-			{
-				case ExternalPerformanceDataType.Numeric:
-					result = BadgeUnitType.Count;
-					break;
-				case ExternalPerformanceDataType.Percent:
-					result = BadgeUnitType.Percentage;
-					break;
-				default:
-					// We support numberic and percent only by now (PBI #46841)
-					throw new ArgumentException($@"Unsupported quality type '{dataType}'", nameof(dataType));
-			}
-
-			return result;
 		}
 	}
 }

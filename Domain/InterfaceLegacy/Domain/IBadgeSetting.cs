@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿using Teleopti.Ccc.Domain.Common;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface IBadgeSetting : IAggregateEntity
 	{
@@ -13,6 +15,6 @@
 		int SilverThreshold { get; set; }
 		int GoldThreshold { get; set; }
 
-		BadgeUnitType UnitType { get; set; }
+		ExternalPerformanceDataType DataType { get; set; }
 	}
 }

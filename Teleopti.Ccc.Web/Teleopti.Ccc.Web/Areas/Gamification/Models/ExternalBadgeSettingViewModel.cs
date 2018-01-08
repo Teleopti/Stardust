@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 {
@@ -17,6 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public int SilverThreshold { get; set; }
 		public int GoldThreshold { get; set; }
 
-		public BadgeUnitType UnitType { get; set; }
+		public ExternalPerformanceDataType DataType { get; set; }
 	}
 }

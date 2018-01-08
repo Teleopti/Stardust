@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				BronzeThreshold = 100,
 				SilverThreshold = 125,
 				GoldThreshold = 150,
-				UnitType = BadgeUnitType.Timespan
+				DataType = ExternalPerformanceDataType.Numeric
 			};
 			var externalBadgeSetting2 = new BadgeSetting
 			{
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				BronzeThreshold = 9000,
 				SilverThreshold = 7500,
 				GoldThreshold = 5000,
-				UnitType = BadgeUnitType.Percentage
+				DataType = ExternalPerformanceDataType.Percent
 			};
 			var externalBadgeSettings = new List<IBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};
 			rawSetting.BadgeSettings = externalBadgeSettings;
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				BronzeThreshold = 100,
 				SilverThreshold = 125,
 				GoldThreshold = 150,
-				UnitType = BadgeUnitType.Timespan
+				DataType = ExternalPerformanceDataType.Numeric
 			};
 			var externalBadgeSetting2 = new BadgeSetting
 			{
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				BronzeThreshold = 9000,
 				SilverThreshold = 7500,
 				GoldThreshold = 5000,
-				UnitType = BadgeUnitType.Percentage
+				DataType = ExternalPerformanceDataType.Percent
 			};
 			var externalBadgeSettings = new List<IBadgeSetting> {externalBadgeSetting1, externalBadgeSetting2};
 			rawSetting.BadgeSettings = externalBadgeSettings;
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 				BronzeThreshold = 0,
 				SilverThreshold = 0,
 				GoldThreshold = 0,
-				UnitType = BadgeUnitType.Count
+				DataType = ExternalPerformanceDataType.Numeric
 			}, vm.ExternalBadgeSettings.ElementAt(2));
 		}
 
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification.Mapping
 			Assert.AreEqual(rawBadgeSetting.BronzeThreshold, vm.BronzeThreshold);
 			Assert.AreEqual(rawBadgeSetting.SilverThreshold, vm.SilverThreshold);
 			Assert.AreEqual(rawBadgeSetting.GoldThreshold, vm.GoldThreshold);
-			Assert.AreEqual(rawBadgeSetting.UnitType, vm.UnitType);
+			Assert.AreEqual(rawBadgeSetting.DataType, vm.DataType);
 		}
 	}
 }

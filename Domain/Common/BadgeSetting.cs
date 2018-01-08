@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private int _qualityId;
 		private bool _enabled;
 		private bool _largerIsBetter;
-		private BadgeUnitType _unitType;
+		private ExternalPerformanceDataType _dataType;
 		private int _threshold;
 		private int _bronzeThreshold;
 		private int _silverThreshold;
@@ -54,10 +54,10 @@ namespace Teleopti.Ccc.Domain.Common
 			set => _largerIsBetter = value;
 		}
 
-		public virtual BadgeUnitType UnitType
+		public virtual ExternalPerformanceDataType DataType
 		{
-			get => _unitType;
-			set => _unitType = value;
+			get => _dataType;
+			set => _dataType = value;
 		}
 
 		public virtual int Threshold

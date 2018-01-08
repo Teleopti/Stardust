@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -35,32 +34,28 @@ namespace Teleopti.Ccc.Domain.Common
 			return (int)(percent.Value * 100);
 		}
 
-		public static int GetBadgeSettingValue(BadgeUnitType type, string input)
+		public static int GetBadgeSettingValue(ExternalPerformanceDataType type, string input)
 		{
 			switch (type)
 			{
-				case BadgeUnitType.Count:
+				case ExternalPerformanceDataType.Numeric:
 					return GetCountValue(int.Parse(input));
-				case BadgeUnitType.Percentage:
+				case ExternalPerformanceDataType.Percent:
 					var value = double.Parse(input);
 					return GetValueFromPercent(new Percent(value));
-				case BadgeUnitType.Timespan:
-					return GetValueFromTimeSpan(TimeSpan.Parse(input));
 				default:
 					throw new ArgumentException($@"Unsupported badge unit type '{type}'", nameof(type));
 			}
 		}
 
-		public static string GetBadgeSettingValueForViewModel(BadgeUnitType type, int valueInDB)
+		public static string GetBadgeSettingValueForViewModel(ExternalPerformanceDataType type, int valueInDB)
 		{
 			switch (type)
 			{
-				case BadgeUnitType.Count:
+				case ExternalPerformanceDataType.Numeric:
 					return GetCountValue(valueInDB).ToString();
-				case BadgeUnitType.Percentage:
+				case ExternalPerformanceDataType.Percent:
 					return GetPercentValue(valueInDB).ValueAsPercent().ToString();
-				case BadgeUnitType.Timespan:
-					return GetTimeSpanValue(valueInDB).ToString();
 				default:
 					throw new ArgumentException($@"Unsupported badge unit type '{type}'", nameof(type));
 			}

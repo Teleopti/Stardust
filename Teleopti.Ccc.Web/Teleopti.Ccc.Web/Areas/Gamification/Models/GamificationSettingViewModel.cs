@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Interfaces.Domain;
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public int BronzeThreshold { get; set; }
 		public int SilverThreshold { get; set; }
 		public int GoldThreshold { get; set; }
-		public BadgeUnitType UnitType { get; set; }
+		public ExternalPerformanceDataType DataType { get; set; }
 	}
 
 	public class GamificationDescriptionForm
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 	{
 		public Guid GamificationSettingId { get; set; }
 		public int QualityId { get; set; }
-		public BadgeUnitType UnitType { get; set; }
+		public ExternalPerformanceDataType DataType { get; set; }
 		public string ThresholdValue { get; set; }
 	}
 
