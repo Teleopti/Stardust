@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfEnabled('Toggles.Wfm_Staffing_45411')
 Feature: Staffing
 	In order to manage staffing
 	As an admin
