@@ -1455,21 +1455,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 newSkillDay.AddWorkloadDay(workloadDay.NoneEntityClone());
             }
 
-            newSkillDay._skillStaffPeriodCollection = new HashSet<ISkillStaffPeriod>();
-            foreach (ISkillStaffPeriod skillStaffPeriod in _skillStaffPeriodCollection)
-            {
-                newSkillDay._skillStaffPeriodCollection.Add(skillStaffPeriod);//ToDo: need a cloned version.
-            }
+            newSkillDay._skillStaffPeriodCollection = new HashSet<ISkillStaffPeriod>(_skillStaffPeriodCollection.ToArray()); //ToDo: need a cloned version.
+            
             newSkillDay._availableSkillStaffPeriods = new HashSet<ISkillStaffPeriod>(); //Will be recreated
 
-            newSkillDay._skillDataPeriodCollection = new HashSet<ISkillDataPeriod>();
-            foreach (ISkillDataPeriod skillDataPeriod in _skillDataPeriodCollection)
-            {
-                ISkillDataPeriod newSkillDataPeriod = skillDataPeriod.NoneEntityClone();
-                newSkillDataPeriod.SetParent(newSkillDay);
-                newSkillDay._skillDataPeriodCollection.Add(newSkillDataPeriod);
-            }
-
+            newSkillDay._skillDataPeriodCollection = new HashSet<ISkillDataPeriod>(_skillDataPeriodCollection.Select(skillDataPeriod =>
+			{
+				ISkillDataPeriod newSkillDataPeriod = skillDataPeriod.NoneEntityClone();
+				newSkillDataPeriod.SetParent(newSkillDay);
+				return newSkillDataPeriod;
+			}));
+            
             return newSkillDay;
         }
 

@@ -209,14 +209,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public object Clone()
         {
             Schedule clone = (Schedule)MemberwiseClone();
-            clone._businessRuleResponseCollection = new List<IBusinessRuleResponse>();
-            clone._scheduleDataCollection = new List<IScheduleData>();
-			  foreach (var data in ScheduleDataInternalCollection())
-			  {
-				  if (!clone._scheduleDataCollection.Contains(data))
-					  clone._scheduleDataCollection.Add(data);
-			  }
-            _businessRuleResponseCollection.ForEach(clone.BusinessRuleResponseInternalCollection.Add);
+            clone._businessRuleResponseCollection = _businessRuleResponseCollection.ToList();
+            clone._scheduleDataCollection = ScheduleDataInternalCollection().Distinct().ToList();
             CloneDerived(clone);
 
             return clone;

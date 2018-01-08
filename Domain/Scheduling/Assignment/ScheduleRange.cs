@@ -60,15 +60,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
 		{
 			var zone = Person.PermissionInformation.DefaultTimeZone();
-			var days = period.ToDateOnlyPeriod(zone).Inflate(1).DayCollection();
+			var days = getScheduledDayCollection(period.ToDateOnlyPeriod(zone).Inflate(1), true).ToArray();
+			var objectsWithNoPermission = days.ToLookup(d => d,
+				v => _scheduleObjectsWithNoPermissions.Where(o => o.BelongsToPeriod(v.DateOnlyAsPeriod)));
+
 			foreach (var day in days)
 			{
-				var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, zone);
-				var part = ScheduleDay(dayAndPeriod, true, AvailablePeriods());
-				(from data in _scheduleObjectsWithNoPermissions
-				 where data.BelongsToPeriod(dayAndPeriod)
-				 select data).ForEach(data => part.Add((IScheduleData)data.Clone()));
-				extractor.AddSchedulePart(part);
+				objectsWithNoPermission[day].SelectMany(d => d).ForEach(data => day.Add((IScheduleData)data.Clone()));
+				extractor.AddSchedulePart(day);
 			}
 		}
 
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var period = Owner.Period.VisiblePeriod.ToDateOnlyPeriod(Person.PermissionInformation.DefaultTimeZone());
 
 			BusinessRuleResponseInternalCollection.Clear();
-			IList<IScheduleDay> scheduleDays = ScheduledDayCollection(period).ToList();
+			IList<IScheduleDay> scheduleDays = ScheduledDayCollection(period).ToArray();
 
 			if (newBusinessRuleCollection != null)
 			{
@@ -206,12 +205,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void CopyTo(IScheduleRange scheduleRangeToModify, DateOnlyPeriod period)
 		{
-			foreach (var scheduleData in ScheduleDataInternalCollection()
+			((ScheduleRange) scheduleRangeToModify).AddRange(ScheduleDataInternalCollection()
 				.Where(x => x.BelongsToPeriod(period))
-				.Select(x => (IScheduleData)x.Clone()))
-			{
-				((ScheduleRange)scheduleRangeToModify).Add(scheduleData);
-			}
+				.Select(x => (IScheduleData) x.Clone()));
 		}
 
 		public TargetScheduleSummary CalculatedTargetTimeSummary(DateOnlyPeriod periodToCheck)
@@ -418,13 +414,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var timeZone = Person.PermissionInformation.DefaultTimeZone();
 			var availablePeriods = AvailablePeriods();
 
-			var retList = new List<IScheduleDay>();
-			foreach (var date in dateOnlyPeriod.DayCollection())
-			{
-				var dayAndPeriod = new DateOnlyAsDateTimePeriod(date, timeZone);
-				retList.Add(ScheduleDay(dayAndPeriod, canSeeUnpublished, availablePeriods));
-			}
-			return retList;
+			return dateOnlyPeriod.DayCollection().Select(date => new DateOnlyAsDateTimePeriod(date, timeZone))
+				.Select(dayAndPeriod => ScheduleDay(dayAndPeriod, canSeeUnpublished, availablePeriods)).ToArray();
 		}
 	}
 	public class PersistableScheduleDataForAuthorization

@@ -255,13 +255,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
 			CloneEvents(retobj);
-			retobj._shiftLayers = new List<ShiftLayer>();
-			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
+			retobj._shiftLayers = _shiftLayers.Select(layer =>
 			{
+				var newLayer = layer.EntityClone();
 				newLayer.SetParent(retobj);
 				newLayer.SetId(null);
-				retobj._shiftLayers.Add(newLayer);
-			}
+				return newLayer;
+			}).ToList();
+
 
 			return retobj;
 		}
@@ -270,12 +271,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
 			CloneEvents(retobj);
-			retobj._shiftLayers = new List<ShiftLayer>();
-			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
+			retobj._shiftLayers = _shiftLayers.Select(layer =>
 			{
+				var newLayer = layer.EntityClone();
 				newLayer.SetParent(retobj);
-				retobj._shiftLayers.Add(newLayer);
-			}
+				return newLayer;
+			}).ToList();
 
 			return retobj;
 		}
@@ -284,7 +285,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void AddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
-
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private Percent _adherenceSilverThreshold = new Percent(0.80);
 		private Percent _adherenceGoldThreshold = new Percent(0.85);
 
-		private IList<IBadgeSetting> _badgeSettings; 
+		private IList<IBadgeSetting> _badgeSettings = new List<IBadgeSetting>(); 
 
 		private int _silverToBronzeBadgeRate = 5;
 		private int _goldToSilverBadgeRate = 5;
@@ -178,11 +179,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			InParameter.NotNull(nameof(newBadgeSetting), newBadgeSetting);
 			newBadgeSetting.SetParent(this);
-
-			if (_badgeSettings == null)
-			{
-				_badgeSettings = new List<IBadgeSetting>();
-			}
+			
 			_badgeSettings.Add(newBadgeSetting);
 		}
 
@@ -193,12 +190,16 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual IGamificationSetting NoneEntityClone()
 		{
-			return (IGamificationSetting) MemberwiseClone();
+			var clone = (GamificationSetting) MemberwiseClone();
+			clone._badgeSettings = _badgeSettings.ToList();
+			return clone;
 		}
 
 		public virtual IGamificationSetting EntityClone()
 		{
-			return (IGamificationSetting)MemberwiseClone();
+			var clone = (GamificationSetting)MemberwiseClone();
+			clone._badgeSettings = _badgeSettings.ToList();
+			return clone;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -204,29 +205,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             if (TemplateGenerator != null)
                 retobj.TemplateGenerator = TemplateGenerator.NoneEntityClone();
 
-            retobj._limiterCollection = new List<IWorkShiftLimiter>();
-            foreach (IWorkShiftLimiter limiter in _limiterCollection)
-            {
-                IWorkShiftLimiter limiterCloned = limiter.NoneEntityClone();
-                limiterCloned.SetParent(retobj);
-                retobj._limiterCollection.Add(limiterCloned);
-            }
+			retobj._limiterCollection = _limiterCollection.Select(limiter =>
+			{
+				IWorkShiftLimiter limiterCloned = limiter.NoneEntityClone();
+				limiterCloned.SetParent(retobj);
+				return limiterCloned;
+			}).ToList();
 
-            retobj._extenderCollection = new List<IWorkShiftExtender>();
-            foreach (IWorkShiftExtender extender in _extenderCollection)
-            {
-                IWorkShiftExtender extenderCloned = extender.NoneEntityClone();
-                extenderCloned.SetParent(retobj);
-                retobj._extenderCollection.Add(extenderCloned);
-            }
+			retobj._extenderCollection = _extenderCollection.Select(extender =>
+			{
+				IWorkShiftExtender extenderCloned = extender.NoneEntityClone();
+				extenderCloned.SetParent(retobj);
+				return extenderCloned;
+			}).ToList();
 
-            foreach(DayOfWeek dayOfWeek in _accessibilityDaysOfWeek)
-                retobj.AddAccessibilityDayOfWeek(dayOfWeek);
+			foreach (DayOfWeek dayOfWeek in _accessibilityDaysOfWeek)
+				retobj.AddAccessibilityDayOfWeek(dayOfWeek);
 
-            foreach (var date in _accessibilityDates)
-                retobj.AddAccessibilityDate(date);
+			foreach (var date in _accessibilityDates)
+				retobj.AddAccessibilityDate(date);
 
-            retobj._ruleSetBagCollection = new List<IRuleSetBag>();
+			retobj._ruleSetBagCollection = new List<IRuleSetBag>();
 
             return retobj;
         }
@@ -246,23 +245,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             if (TemplateGenerator != null)
                 retobj.TemplateGenerator = TemplateGenerator.EntityClone();
 
-            retobj._limiterCollection = new List<IWorkShiftLimiter>();
-            foreach (IWorkShiftLimiter limiter in _limiterCollection)
-            {
-                IWorkShiftLimiter limiterCloned = limiter.EntityClone();
-                limiterCloned.SetParent(retobj);
-                retobj._limiterCollection.Add(limiterCloned);
-            }
+			retobj._limiterCollection = _limiterCollection.Select(limiter =>
+			{
+				IWorkShiftLimiter limiterCloned = limiter.EntityClone();
+				limiterCloned.SetParent(retobj);
+				return limiterCloned;
+			}).ToList();
 
-            retobj._extenderCollection = new List<IWorkShiftExtender>();
-            foreach (IWorkShiftExtender extender in _extenderCollection)
-            {
-                IWorkShiftExtender extenderCloned = extender.EntityClone();
-                extenderCloned.SetParent(retobj);
-                retobj._extenderCollection.Add(extenderCloned);
-            }
-            // No need to have the bags.
-            retobj._ruleSetBagCollection = new List<IRuleSetBag>();
+			retobj._extenderCollection = _extenderCollection.Select(extender =>
+			{
+				IWorkShiftExtender extenderCloned = extender.EntityClone();
+				extenderCloned.SetParent(retobj);
+				return extenderCloned;
+			}).ToList();
+
+			foreach (DayOfWeek dayOfWeek in _accessibilityDaysOfWeek)
+				retobj.AddAccessibilityDayOfWeek(dayOfWeek);
+
+			foreach (var date in _accessibilityDates)
+				retobj.AddAccessibilityDate(date);
+
+			// No need to have the bags.
+			retobj._ruleSetBagCollection = new List<IRuleSetBag>();
 
             return retobj;
         }

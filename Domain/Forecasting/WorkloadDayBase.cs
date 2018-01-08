@@ -85,18 +85,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         protected void EntityCloneTaskPeriodList(WorkloadDayBase targetClone)
         {
-            targetClone._taskPeriodList = new HashSet<ITemplateTaskPeriod>();
-            foreach (ITemplateTaskPeriod templateTaskPeriod in _taskPeriodList)
-            {
-                ITemplateTaskPeriod clonedTaskPeriod = templateTaskPeriod.EntityClone();
-                clonedTaskPeriod.SetParent(targetClone);
-                targetClone._taskPeriodList.Add(clonedTaskPeriod);
-            }
-			targetClone._openHourList = new HashSet<TimePeriod>();
-            foreach (TimePeriod timePeriod in _openHourList)
-            {
-                targetClone._openHourList.Add(timePeriod);
-            }
+            targetClone._taskPeriodList = new HashSet<ITemplateTaskPeriod>(_taskPeriodList.Select(templateTaskPeriod => {
+				var clonedTaskPeriod = templateTaskPeriod.EntityClone();
+				clonedTaskPeriod.SetParent(targetClone);
+				return clonedTaskPeriod;
+			}));
+			targetClone._openHourList = new HashSet<TimePeriod>(_openHourList.ToArray());
         }
 
         public virtual void CloneTaskPeriodListFrom(WorkloadDayBase targetClone)
@@ -123,18 +117,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         protected void NoneEntityCloneTaskPeriodList(WorkloadDayBase targetClone)
         {
-            targetClone._taskPeriodList = new HashSet<ITemplateTaskPeriod>();
-            foreach (ITemplateTaskPeriod templateTaskPeriod in _taskPeriodList)
-            {
-                ITemplateTaskPeriod clonedTaskPeriod = templateTaskPeriod.NoneEntityClone();
-                clonedTaskPeriod.SetParent(targetClone);
-                targetClone._taskPeriodList.Add(clonedTaskPeriod);
-            }
-			targetClone._openHourList = new HashSet<TimePeriod>();
-            foreach (TimePeriod timePeriod in _openHourList)
-            {
-                targetClone._openHourList.Add(timePeriod);
-            }
+            targetClone._taskPeriodList = new HashSet<ITemplateTaskPeriod>(_taskPeriodList.Select(templateTaskPeriod =>
+			{
+				ITemplateTaskPeriod clonedTaskPeriod = templateTaskPeriod.NoneEntityClone();
+				clonedTaskPeriod.SetParent(targetClone);
+				return clonedTaskPeriod;
+			}));
+            
+			targetClone._openHourList = new HashSet<TimePeriod>(_openHourList.ToArray());
         }
 
         /// <summary>
