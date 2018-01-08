@@ -17,12 +17,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		public bool IsEnabled()
 		{
-			var currentName = _currentDataSource.CurrentName();
-			var isLicenseAvailible = DefinedLicenseDataFactory.HasLicense(currentName) &&
-									DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
-									DefinedLicenseOptionPaths.TeleoptiCccOvertimeRequests);
 			var hasPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb);
-			return isLicenseAvailible && hasPermission;
+			return IsLicenseEnabled() && hasPermission;
 		}
 
 		public bool IsLicenseEnabled()
@@ -30,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var currentName = _currentDataSource.CurrentName();
 			var isLicenseAvailible = DefinedLicenseDataFactory.HasLicense(currentName) &&
 									DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
-									DefinedLicenseOptionPaths.TeleoptiCccOvertimeRequests);
+									DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests);
 			return isLicenseAvailible;
 		}
 	}

@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -13,21 +12,19 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		private readonly IApplicationFunctionsProvider _applicationFunctionsProvider;
 		private readonly IToggleManager _toggleManager;
 		private ICurrentDataSource _currentDataSource;
-		private readonly IOvertimeRequestAvailability _overtimeRequestLicense;
 
-		public ApplicationFunctionsToggleFilter(IApplicationFunctionsProvider applicationFunctionsProvider, IToggleManager toggleManager, ICurrentDataSource currentDataSource, IOvertimeRequestAvailability overtimeRequestLicense)
+		public ApplicationFunctionsToggleFilter(IApplicationFunctionsProvider applicationFunctionsProvider, IToggleManager toggleManager, ICurrentDataSource currentDataSource)
 		{
 			_applicationFunctionsProvider = applicationFunctionsProvider;
 			_toggleManager = toggleManager;
 			_currentDataSource = currentDataSource;
-			_overtimeRequestLicense = overtimeRequestLicense;
 		}
 
 		public AllFunctions FilteredFunctions()
 		{
 			var functions = _applicationFunctionsProvider.AllFunctions();
 
-			hideOvertimeRequest(functions);
+			if (!_toggleManager.IsEnabled(Toggles.MyTimeWeb_OvertimeRequest_44558)) hideOvertimeRequest(functions);
 			hideRealTimeReports(functions);
 
 			hideBpoExchangeIfNotLicensed(functions);
@@ -100,12 +97,13 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 
 		}
 
-		private void hideOvertimeRequest(AllFunctions functions)
+		private static void hideOvertimeRequest(AllFunctions functions)
 		{
-			if (_overtimeRequestLicense.IsEnabled() && _toggleManager.IsEnabled(Toggles.MyTimeWeb_OvertimeRequest_44558)) return;
-
 			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.OvertimeRequestsWeb);
-			foundFunction?.SetHidden();
+			if (foundFunction != null)
+			{
+				foundFunction.SetHidden();
+			}
 		}
 	}
 }

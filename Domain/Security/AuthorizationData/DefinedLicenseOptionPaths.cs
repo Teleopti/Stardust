@@ -27,7 +27,7 @@
 		public const string TeleoptiCccNotify = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/Notify";
 
 		public const string TeleoptiCccMyTeam = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/MyTeam";
-		public const string TeleoptiCccOvertimeRequests = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/OvertimeRequests";
+		public const string TeleoptiWfmOvertimeRequests = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/OvertimeRequests";
 
 		public const string TeleoptiWfmVNextPilot = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/VNext";
 		public const string TeleoptiWfmOutbound = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/Outbound";

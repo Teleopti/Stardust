@@ -75,7 +75,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			}
 			else
 			{
-				tabPageAdvETOTRequest.Hide();
+				checkBoxAdvAutoGrantOvertimeRequest.Visible = false;
+				tableLayoutPanelOvertimeMaximumSetting.Visible = false;
+				tableLayoutPanelOpenForOvertimeRequests.Visible = false;
+				gridControlOvertimeRequestOpenPeriods.Visible = false;
 			}
 		}
 

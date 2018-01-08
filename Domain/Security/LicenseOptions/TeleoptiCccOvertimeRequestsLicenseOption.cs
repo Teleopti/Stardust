@@ -5,9 +5,9 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
 namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 {
-	public class TeleoptiCccOvertimeRequestsLicenseOption : LicenseOption
+	public class TeleoptiWfmOvertimeRequestsLicenseOption : LicenseOption
 	{
-		public TeleoptiCccOvertimeRequestsLicenseOption(): base(DefinedLicenseOptionPaths.TeleoptiCccOvertimeRequests, DefinedLicenseOptionNames.TeleoptiWfmVNextPilot)
+		public TeleoptiWfmOvertimeRequestsLicenseOption(): base(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests, DefinedLicenseOptionNames.TeleoptiWfmVNextPilot)
 		{
 		}
 

@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBpoExchange,
 					licenseService.TeleoptiWFMBPOExchangeEnabled
 				},{
-					DefinedLicenseOptionPaths.TeleoptiCccOvertimeRequests,
+					DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests,
 					licenseService.TeleoptiWFMOvertimeRequestsEnabled
 				}
 			};
