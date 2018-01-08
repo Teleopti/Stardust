@@ -37,11 +37,10 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IReadModelValidator _readModelValidator;
 		private readonly IStardustRepository _stardustRepository;
 		private readonly IncomingTrafficViewModelCreator _incomingTrafficViewModelCreator;
-		private readonly LatestStatisticsTimeProvider _latestStatisticsTimeProvider;
 
 		public HealthCheckApiController(IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
 												  IStardustSender stardustSender, IToggleManager toggleManager, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator, 
-												  IStardustRepository stardustRepository, IncomingTrafficViewModelCreator incomingTrafficViewModelCreator, LatestStatisticsTimeProvider latestStatisticsTimeProvider)
+												  IStardustRepository stardustRepository, IncomingTrafficViewModelCreator incomingTrafficViewModelCreator)
 		{
 			_etlJobStatusRepository = etlJobStatusRepository;
 			_etlLogObjectRepository = etlLogObjectRepository;
@@ -51,28 +50,19 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			_readModelValidator = readModelValidator;
 			_stardustRepository = stardustRepository;
 			_incomingTrafficViewModelCreator = incomingTrafficViewModelCreator;
-			_latestStatisticsTimeProvider = latestStatisticsTimeProvider;
 		}
 
-		[HttpGet, UnitOfWork, Route("api/HealthCheck/IncomingTrafficLatestInterval/{skillId}")]
-		public virtual IHttpActionResult IncomingTrafficLatestInterval(Guid skillId)
+		[HttpGet, UnitOfWork, Route("api/HealthCheck/IncomingTrafficToday/{skillId}")]
+		public virtual IHttpActionResult IncomingTrafficToday(Guid skillId)
 		{
-			var latestInterval = _latestStatisticsTimeProvider.Get(new[] { skillId });
 			var incomingTrafficDataSeries = _incomingTrafficViewModelCreator.Load(new[] {skillId}, 0).DataSeries;
-
-			for (var i = 0; i < incomingTrafficDataSeries.Time.Length; i++)
+			var output = incomingTrafficDataSeries.Time.Select((t, i) => new IncomingTrafficModel
 			{
-				if (incomingTrafficDataSeries.Time[i].Hour == latestInterval.StartTime.Hour && incomingTrafficDataSeries.Time[i].Minute == latestInterval.StartTime.Minute)
-				{
-					return Ok(new IncomingTrafficModel
-					{
-						IntervalStartTime = incomingTrafficDataSeries.Time[i],
-						ActualCalls = incomingTrafficDataSeries.CalculatedCalls[i],
-						ForecastedCalls = incomingTrafficDataSeries.ForecastedCalls[i]
-					});
-				}
-			}
-			return Ok();
+				IntervalStartTime = t,
+				ActualCalls = incomingTrafficDataSeries.CalculatedCalls[i],
+				ForecastedCalls = incomingTrafficDataSeries.ForecastedCalls[i]
+			});
+			return Ok(output);
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/LoadEtlJobHistory")]
