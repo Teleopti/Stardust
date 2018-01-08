@@ -16841,9 +16841,9 @@ Do you want to participate?</value>
     <value>Each row must have {0} fields. This row has {1}.</value>
     <comment>Used in gamification external measures import when a record we are inputting has an invalid number of fields.  Parameters: {0} = expected number of fields, {1} = actual number of fields</comment>
   </data>
-  <data name="GameNameIsTooLong" xml:space="preserve">
-    <value>Game name is too long</value>
-    <comment>use for gamification error info when import external performance csv file.</comment>
+  <data name="MeasureNameIsTooLong" xml:space="preserve">
+    <value>Measure name is too long</value>
+    <comment>Error message used in importing an external performance csv file</comment>
   </data>
   <data name="PersonIdIsTooLong" xml:space="preserve">
     <value>Person ID is too long</value>

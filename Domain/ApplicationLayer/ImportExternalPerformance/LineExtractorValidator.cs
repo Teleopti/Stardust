@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var measureName = columns[measureNameColumnIndex];
 			if (!measureNameLengthIsValid(measureName))
 			{
-				result.Error = $"{line},{Resources.GameNameIsTooLong}";
+				result.Error = $"{line},{Resources.MeasureNameIsTooLong}";
 				return result;
 			}
 			result.MeasureName = measureName;

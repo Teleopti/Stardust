@@ -13323,15 +13323,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Game name is too long.
-        /// </summary>
-        public static string GameNameIsTooLong {
-            get {
-                return ResourceManager.GetString("GameNameIsTooLong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Gamification.
         /// </summary>
         public static string Gamification {
@@ -17425,6 +17416,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MeasureIdMustContainAnInteger {
             get {
                 return ResourceManager.GetString("MeasureIdMustContainAnInteger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measure name is too long.
+        /// </summary>
+        public static string MeasureNameIsTooLong {
+            get {
+                return ResourceManager.GetString("MeasureNameIsTooLong", resourceCulture);
             }
         }
         
