@@ -26,41 +26,13 @@ Feature: See historical adherence for 7 days back
 	  | Adherence   | Out       |
 
   Scenario: See historical adherence for 7 days back
-	Given Mikkey Dee has a shift with
-	  | Field      | Value            |
-	  | Start time | 2018-01-02 09:00 |
-	  | End time   | 2018-01-02 17:00 |
-	  | Activity   | Phone            |
-	Given Mikkey Dee has a shift with
-	  | Field      | Value            |
-	  | Start time | 2018-01-03 09:00 |
-	  | End time   | 2018-01-03 17:00 |
-	  | Activity   | Phone            |
-	Given Mikkey Dee has a shift with
-	  | Field      | Value            |
-	  | Start time | 2018-01-04 09:00 |
-	  | End time   | 2018-01-04 17:00 |
-	  | Activity   | Phone            |
-	Given Mikkey Dee has a shift with
-	  | Field      | Value            |
-	  | Start time | 2018-01-05 09:00 |
-	  | End time   | 2018-01-05 17:00 |
-	  | Activity   | Phone            |
-	Given Mikkey Dee has a shift with
-	  | Field      | Value            |
-	  | Start time | 2018-01-06 09:00 |
-	  | End time   | 2018-01-06 17:00 |
-	  | Activity   | Phone            |
-	Given Mikkey Dee has a shift with
-	  | Field      | Value            |
-	  | Start time | 2018-01-07 09:00 |
-	  | End time   | 2018-01-07 17:00 |
-	  | Activity   | Phone            |
-	Given Mikkey Dee has a shift with
-	  | Field      | Value            |
-	  | Start time | 2018-01-08 09:00 |
-	  | End time   | 2018-01-08 17:00 |
-	  | Activity   | Phone            |
+	Given Mikkey Dee has a 'Phone' shift between '2018-01-02 09:00' and '17:00'
+	Given Mikkey Dee has a 'Phone' shift between '2018-01-03 09:00' and '17:00'
+	Given Mikkey Dee has a 'Phone' shift between '2018-01-04 09:00' and '17:00'
+	Given Mikkey Dee has a 'Phone' shift between '2018-01-05 09:00' and '17:00'
+	Given Mikkey Dee has a 'Phone' shift between '2018-01-06 09:00' and '17:00'
+	Given Mikkey Dee has a 'Phone' shift between '2018-01-07 09:00' and '17:00'
+	Given Mikkey Dee has a 'Phone' shift between '2018-01-08 09:00' and '17:00'
 	And at '2018-01-02 09:00:00' 'Mikkey Dee' sets his phone state to 'Ready'
 	And at '2018-01-03 10:00:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
 	And at '2018-01-04 11:00:00' 'Mikkey Dee' sets his phone state to 'Ready'
