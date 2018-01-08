@@ -44,9 +44,8 @@ SQLCMD -S%dbServer% -E -d"%appDb%" -i"%RepoRoot%\.debug-Setup\database\tsql\Demo
 
 
 ::copy app.config
-COPY "%sourceFolder%\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\app.config" /Y
-COPY "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\bin\debug\Teleopti.Ccc.Scheduling.PerformanceTest.dll.config" /Y
-COPY "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\bin\release\Teleopti.Ccc.Scheduling.PerformanceTest.dll.config" /Y
+COPY "%sourceFolder%\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\bin\debug\SettingsForTest.config" /Y
+COPY "%sourceFolder%\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\bin\release\SettingsForTest.config" /Y
 
 exit
 

@@ -1,13 +1,41 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Autofac;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
 
 namespace Teleopti.Ccc.Scheduling.PerformanceTest
 {
+	public class PerformanceTestAttribute : IoCTestAttribute
+	{
+		protected override FakeConfigReader Config()
+		{
+			var config = base.Config();
+			config.FakeConnectionString("Hangfire", "Data Source=.;Integrated Security=SSPI;Initial Catalog=PerfAnal;Application Name=Teleopti.Wfm.Web.Hangfire");
+			return config;
+		}
+
+		protected override void Startup(IComponentContext container)
+		{
+			base.Startup(container);
+			container.Resolve<HangfireClientStarter>().Start();
+		}
+	}
+
+	[PerformanceTest]
 	public class FullSchedulingStardustTest
 	{
+		public HangfireUtilities Hangfire;
+		public TestLog TestLog;
+		public HangfireClientStarter HangfireClientStarter;
+
 		[Test]
 		[Category("ScheduleOptimizationStardust")]
 		public void MeasurePerformanceOnStardust()
@@ -39,6 +67,14 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				browserInteractions.AssertNotExists("body", "#Login-container");
 				browserInteractions.AssertExistsUsingJQuery(".heatmap:visible");
 			}
+
+			var hangfireQueueLogCancellationToken = new CancellationTokenSource();
+			Task.Run(() =>
+			{
+				NUnitSetup.LogHangfireQueues(TestLog, Hangfire);
+			}, hangfireQueueLogCancellationToken.Token);
+			Hangfire.WaitForQueue();
+			hangfireQueueLogCancellationToken.Cancel();
 		}
 
 		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningGroupId, string planningPeriodId)
