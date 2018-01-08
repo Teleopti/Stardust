@@ -57,7 +57,6 @@
 		}
 
 		vm.setSkill = function (selectedItem) {
-			isToolInUse = false;
 			selectedSkill = null;
 			vm.selectedSkillGroup = null;
 			if (!selectedItem) {
@@ -85,9 +84,7 @@
 				generateChart();
 			});
 
-		var isToolInUse = false;
-		vm.showAllSKills = function () {
-			isToolInUse = true;
+		vm.toggleSkills = function () {
 			var $skillsContent = angular.element(document.querySelector('.skills-content'));
 			if ($skillsContent.hasClass('nooverflow') && $skillsContent[0].scrollWidth > $skillsContent[0].offsetWidth) {
 				$skillsContent.removeClass("nooverflow").addClass("wrap-all");
@@ -95,14 +92,19 @@
 				$skillsContent.addClass("nooverflow").removeClass('wrap-all');
 			}
 		}
-		vm.isToolVisible = function () {
-			var $skillsContent = angular.element(document.querySelector('.skills-content'));
-			return $skillsContent[0].scrollWidth > $skillsContent[0].offsetWidth || isToolInUse;
+		vm.isSkillGroupDetailToggleVisible = function () {
+			var $skillsContent = angular.element(document.querySelector('.skills-content'))[0];
+			var totalWidthForChildren = 0;
+			angular.forEach($skillsContent.children,
+				function(c) {
+					totalWidthForChildren += c.offsetWidth;
+				});
+			return totalWidthForChildren > $skillsContent.offsetWidth;
 		}
 
-		vm.toggleSkills = function () {
+		vm.isSkillsToggled = function () {
 			var $skillsContent = angular.element(document.querySelector('.skills-content'));
-			return $skillsContent.hasClass('nooverflow');
+			return !$skillsContent.hasClass('nooverflow');
 		}
 
 		function loadChartForPreselection() {
