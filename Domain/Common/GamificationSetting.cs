@@ -37,37 +37,23 @@ namespace Teleopti.Ccc.Domain.Common
 		private int _silverToBronzeBadgeRate = 5;
 		private int _goldToSilverBadgeRate = 5;
 		private bool _isDeleted;
-
-		/// <inheritdoc />
-		/// <summary>
-		/// Creates a new instance of badge setting
-		/// </summary>
-		/// <param name="name">Name of badge setting</param>
+		
         public GamificationSetting(string name) : this()
         {
 			_gamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold;
             _description = new Description(name);
 		}
-
-        /// <summary>
-        /// Constructor for NHibernate
-        /// </summary>
+		
 		protected GamificationSetting()
         {
         }
-
-        /// <summary>
-		/// Name of badge setting
-        /// </summary>
+		
         public virtual Description Description
         {
             get => _description;
 			set => _description = value;
 		}
-
-        /// <summary>
-		/// Type of AgentBadgeSettingRuleSet
-        /// </summary>
+		
 		public virtual GamificationSettingRuleSet GamificationSettingRuleSet
         {
 			get => _gamificationSettingRuleSet;
