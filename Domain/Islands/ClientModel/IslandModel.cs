@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 	public class IslandsModel
 	{
 		public IEnumerable<IslandModel> Islands { get; set; }
-		public int NumberOfAgentsOnAllIsland { get; set; }
+		public int NumberOfAgentsOnAllIslands { get; set; }
 		public int TimeToGenerateInMs { get; set; }
 	}
 

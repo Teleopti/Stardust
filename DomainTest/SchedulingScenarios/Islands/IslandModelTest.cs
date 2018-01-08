@@ -183,9 +183,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.MoreIslandsBySkillReducing.NumberOfAgentsOnAllIsland.Should().Be.EqualTo(3);
-			model.BasicIslands.NumberOfAgentsOnAllIsland.Should().Be.EqualTo(3);
-			model.FewerIslandsByMerging.NumberOfAgentsOnAllIsland.Should().Be.EqualTo(3);
+			model.MoreIslandsBySkillReducing.NumberOfAgentsOnAllIslands.Should().Be.EqualTo(3);
+			model.BasicIslands.NumberOfAgentsOnAllIslands.Should().Be.EqualTo(3);
+			model.FewerIslandsByMerging.NumberOfAgentsOnAllIslands.Should().Be.EqualTo(3);
 		}
 
 		[Test]

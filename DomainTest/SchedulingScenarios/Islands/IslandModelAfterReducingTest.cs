@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.BasicIslands.NumberOfAgentsOnAllIsland
+			model.BasicIslands.NumberOfAgentsOnAllIslands
 				.Should().Be.EqualTo(5);
 		}
 	}
