@@ -83,9 +83,12 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var result = (OkNegotiatedContentResult<IList<JobCollectionModel>>)Target.Jobs("Tenant");
 
 			result.Content.First(x => x.JobName == "Initial").NeededDatePeriod.Count.Should().Be(1);
-			result.Content.First(x => x.JobName == "Initial").NeededDatePeriod.Contains("Initial");
+			result.Content.First(x => x.JobName == "Initial").NeededDatePeriod.Should().Contain("Initial");
 			result.Content.First(x => x.JobName == "Permission").NeededDatePeriod.Count.Should().Be(0);
-			result.Content.First(x => x.JobName == "Nightly").NeededDatePeriod.Count.Should().Be(5);
+			result.Content.First(x => x.JobName == "Nightly").NeededDatePeriod.Count.Should().Be(4);
+			result.Content.First(x => x.JobName == "Nightly").NeededDatePeriod.Should().Not.Contain("Initial");
+			result.Content.First(x => x.JobName == "Queue Statistics").NeededDatePeriod.Count.Should().Be(1);
+			result.Content.First(x => x.JobName == "Queue Statistics").NeededDatePeriod.Should().Contain("QueueStatistics");
 		}
 
 		[Test]

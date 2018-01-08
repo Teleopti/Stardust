@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
@@ -56,9 +57,26 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 						.Select(y => y.Name)
 						.ToList(),
 					NeedsParameterDataSource = m.NeedsParameterDataSource,
-					NeededDatePeriod = m.JobCategoryCollection.Where(y => y != JobCategoryType.DoNotNeedDatePeriod).Select(y => y.ToString()).ToList()
+					NeededDatePeriod = getJobCategoryPeriods(m)
 				})
 				.ToList();
+		}
+
+		private IList<string> getJobCategoryPeriods(IJob job)
+		{
+			var returnList = new List<string>();
+			foreach (var jobCategoryType in job.JobCategoryCollection)
+			{
+				if (jobCategoryType == JobCategoryType.DoNotNeedDatePeriod)
+					continue;
+
+				if (job.Name != "Initial" && jobCategoryType == JobCategoryType.Initial)
+					continue;
+
+				returnList.Add(jobCategoryType.ToString());
+			}
+
+			return returnList;
 		}
 	}
 }
