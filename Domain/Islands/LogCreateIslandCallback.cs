@@ -17,15 +17,12 @@ namespace Teleopti.Ccc.Domain.Islands
 		
 		void ICreateIslandsCallback.BasicIslandsCreated(IEnumerable<IEnumerable<SkillSet>> basicIslands, IDictionary<ISkill, int> noAgentsKnowingSkill)
 		{
-			if (IslandsBasic == null)
-			{
-				var noAgentsKnowingSkillCopy = new Dictionary<ISkill, int>(noAgentsKnowingSkill);
-				var islands = basicIslands
-					.Select(islandData => new Island(islandData.Select(x => x.MakeCopy()).ToArray(), noAgentsKnowingSkillCopy))
-					.ToArray();
+			var noAgentsKnowingSkillCopy = new Dictionary<ISkill, int>(noAgentsKnowingSkill);
+			var islands = basicIslands
+				.Select(islandData => new Island(islandData.Select(x => x.MakeCopy()).ToArray(), noAgentsKnowingSkillCopy))
+				.ToArray();
 
-				IslandsBasic = new LogCreateIslandInfo(islands, _stopwatch.Elapsed);
-			}
+			IslandsBasic = new LogCreateIslandInfo(islands, _stopwatch.Elapsed);
 		}
 
 		void ICreateIslandsCallback.AfterExtendingDueToReducing(IEnumerable<Island> islands)

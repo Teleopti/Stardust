@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		private IEnumerable<Island> islandsAfterReducing(ICollection<SkillSet> allSkillSets, ICreateIslandsCallback callback, IDictionary<ISkill, int> noAgentsKnowingSkill)
 		{
+			var firstLoop = true;
 			while (true)
 			{
 				var skillSetsInIsland = allSkillSets.Select(skillSet => new List<SkillSet> {skillSet}).ToList();
@@ -50,8 +51,11 @@ namespace Teleopti.Ccc.Domain.Islands
 				{
 					removeEmptyIslands(skillSetsInIsland);
 				}
-
-				callback.BasicIslandsCreated(skillSetsInIsland, noAgentsKnowingSkill);
+				if (firstLoop)
+				{
+					callback.BasicIslandsCreated(skillSetsInIsland, noAgentsKnowingSkill);
+					firstLoop = false;
+				}
 				if (!_reduceSkillSets.Execute(skillSetsInIsland, noAgentsKnowingSkill))
 				{
 					var islands = skillSetsInIsland.Select(skillSetInIsland => new Island(skillSetInIsland, noAgentsKnowingSkill)).ToArray();
