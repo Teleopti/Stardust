@@ -27,10 +27,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 
 		[Test]
 		public void ShouldNotUseSkillsThatWereRemovedDuringIslandCreation()
 		{
+			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 1);
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12);
