@@ -62,7 +62,6 @@
 			</span>
 		</div>
 
-
 		<rta-card class="site" ng-repeat="card in vm.siteCards" ng-open="card.isOpen">
 			<rta-card-header ng-attr-classes="{{card.ClassesOnSelection}}">
 				<div class="rta-card-content-wrapper flex">
@@ -84,35 +83,35 @@
 				</div>
 			</rta-card-header>
 			<rta-card-body ng-click="$event.stopPropagation();">
-				<div class="con-row">
-					<div class="con-flex">
-						<div class="wfm-grid" class="animate-show">
-							<div class="grid-card-mini team" ng-repeat="team in card.teams">
-								<div class="list-content">
-									<div class="list-header" ng-click="vm.selectTeamOrSite(team)" ng-class="team.ClassOnSelection">
-										<div class="flex">
-											<h1 ng-attr-data-max="{{team.AgentsCount}}" ng-attr-data-value="{{team.InAlarmCount}}" class="rta-team-name-container">
-												{{team.Name}}</h1>
-											<i class="mdi pull-right flex-1" ng-class="{'mdi-check': team.isSelected, 'mdi-plus': !team.isSelected}"></i>
-											<md-tooltip>{{team.isSelected ? 'UnselectTeam' : 'SelectTeam' | translate}}
-											</md-tooltip>
-										</div>
-										<div class="subtext"><span class="full-padding" ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}:
+				<div class="con-fluid-row dense">
+					<div class="con-fluid-flex" ng-repeat="team in card.teams">
+						<div class="card panel material-depth-1" ng-class="team.ClassOnSelection">
+							<div class="sub-header flex" ng-click="vm.selectTeamOrSite(team)">
+								<h1 ng-attr-data-max="{{team.AgentsCount}}" ng-attr-data-value="{{team.InAlarmCount}}" class="rta-team-name-container">
+									{{team.Name}}
+								</h1>
+								<i class="mdi pull-right flex-1" ng-class="{'mdi-check': team.isSelected, 'mdi-plus': !team.isSelected}"></i>
+								<md-tooltip>{{team.isSelected ? 'UnselectTeam' : 'SelectTeam' | translate}}
+								</md-tooltip>
+							</div>
+							<div class="con-row">
+								<div class="con-flex">
+									<span ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}: 
 										<b>{{team.InAlarmCount}}</b>
-									</span></div>
-									</div>
-									<div class="list-header-content">
-										<a type="button" class="wfm-btn wfm-btn-invis-primary pull-right" href="{{team.href}}" style="text-decoration: none;">{{'Open'|translate}}</a>
-									</div>
+									</span>
 								</div>
+							</div>
+							<div class="card-footer con-row">
+								<span class="con-flex card-footer-section"></span>
+								<span class="con-flex line-right card-footer-section">
+									<a type="button" class="wfm-btn wfm-btn-invis-primary pull-right" href="{{team.href}}" style="text-decoration: none;">{{'Open'|translate}}</a>
+								</span>
 							</div>
 						</div>
 					</div>
 				</div>
 			</rta-card-body>
 		</rta-card>
-
-
 	</div>
 </div>
 <div class="con-footer">
