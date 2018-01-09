@@ -126,6 +126,10 @@
 				action: buildAction("Undo", false),
 				clickable: function () { return vm.canUndoSchedule(); },
 				visible: function () { return true; }
+			},
+			{
+				label: "AddDayOff",
+				action: buildAction("AddDayOff", false)
 			}
 		];
 

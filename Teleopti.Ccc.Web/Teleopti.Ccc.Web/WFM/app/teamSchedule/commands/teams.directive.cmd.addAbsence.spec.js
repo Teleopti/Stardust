@@ -153,6 +153,7 @@
 			commandScope: commandScope,
 			scope: scope
 		};
+		//document.body.append(container[0])
 
 		return obj;
 	}

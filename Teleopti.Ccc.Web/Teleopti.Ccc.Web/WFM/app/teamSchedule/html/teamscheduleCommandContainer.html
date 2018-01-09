@@ -14,6 +14,7 @@
 			<undo-schedule ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'Undo'"></undo-schedule>
 			<modify-shift-category ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'EditShiftCategory'"></modify-shift-category>
 			<command-check ng-if="vm.activeCommandCheck()"></command-check>
+			<add-day-off ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddDayOff'"></add-day-off>
 		</div>
 	</div>
 </md-sidenav>

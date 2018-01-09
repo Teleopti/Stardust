@@ -1,0 +1,34 @@
+﻿<div class="command-panel add-day-off">
+	<div class="sidenav-header">{{'AddDayOff'|translate}}</div>
+	<md-content class="command-panel-content" layout-padding>
+		<form name="newDayOffForm">
+			<md-progress-linear ng-if="$ctrl.runningCommand" md-mode="indeterminate"></md-progress-linear>
+			<h3>{{'DayOff'|translate}}: </h3>
+			<div class="con-row">
+				<md-select class="dayoff-selector" ng-model="$ctrl.selectedTemplateId" required placeholder="{{'PickATemplate'|translate}}" md-autofocus="::$ctrl.containerCtrl.onReady()">
+					<md-option ng-repeat="template in $ctrl.availableTemplates | orderBy: 'Name'" ng-value="template.Id">{{template.Name}}</md-option>
+				</md-select>
+			</div>
+
+			<h3>{{'From'|translate}}: </h3>
+			<div class="con-row">
+				<span class="col-sm-7">
+					<team-schedule-datepicker selected-date="$ctrl.dateRange.startDate" />
+				</span>
+			</div>
+
+			<h3>{{'To'|translate}}: </h3>
+			<div class="con-row">
+				<span class="col-sm-7">
+					<team-schedule-datepicker selected-date="$ctrl.dateRange.endDate" />
+				</span>
+			</div>
+			<button id="applyDayOff" class="wfm-btn form-submit"
+					ng-class="{'wfm-btn-primary': $ctrl.isFormValid(), 
+					'wfm-btn-primary-disabled': !vm$ctrlisFormValid()}"
+					ng-disabled="$ctrl.isFormValid() ? '':'disabled'">
+				{{'Apply' | translate}}
+			</button>
+		</form>
+	</md-content>
+</div>

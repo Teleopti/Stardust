@@ -1690,6 +1690,9 @@
     <Content Include="WFM\app\staffing\import_export\importexport.service.js" />
     <Content Include="WFM\app\staffing\staffing.importData.controller.js" />
     <Content Include="WFM\app\staffing\staffing.importData.template.html" />
+    <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.spec.js" />
+    <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.html" />
+    <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.js" />
     <Content Include="WFM\app\teamSchedule\html\exportSchedule.html" />
     <Content Include="WFM\app\teamSchedule\html\exportScheduleView.html" />
     <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />
