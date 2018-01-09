@@ -3,39 +3,7 @@
 var rtaTester = (function () {
 
 	var injectTester = function (sharedTestState, tests, withABagOfCandy) {
-
-		var makeTester = function () {
-			var controllerTester;
-			return {
-				createController: function () {
-					controllerTester = sharedTestState.$controllerBuilder.createController();
-					return controllerTester.controller;
-				},
-				get stateParams() {
-					return sharedTestState.stateParams;
-				},
-				get backend() {
-					return sharedTestState.$fakeBackend;
-				},
-				get controller() {
-					return controllerTester.controller;
-				},
-				href: sharedTestState.$state.href,
-				apply: function (a) {
-					return controllerTester.apply(a)
-				},
-				wait: function (a) {
-					return controllerTester.wait(a)
-				},
-				randomId: function () {
-					return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-						var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-						return v.toString(16);
-					});
-				}
-			}
-		};
-
+		
 		var makeLegacyPolyfill = function () {
 			return {
 				createController: function () {
@@ -114,6 +82,41 @@ var rtaTester = (function () {
 			};
 		};
 
+		var makeTester = function () {
+			var controllerTester;
+			return {
+				createController: function () {
+					controllerTester = sharedTestState.$controllerBuilder.createController();
+					return controllerTester.controller;
+				},
+				get stateParams() {
+					return sharedTestState.stateParams;
+				},
+				get backend() {
+					return sharedTestState.$fakeBackend;
+				},
+				get controller() {
+					return controllerTester.controller;
+				},
+				href: sharedTestState.$state.href,
+				apply: function (a) {
+					return controllerTester.apply(a)
+				},
+				wait: function (a) {
+					return controllerTester.wait(a)
+				},
+				randomId: function () {
+					return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+						var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+						return v.toString(16);
+					});
+				},
+				randomString: function (prefix) {
+					return (prefix || '') + Math.random().toString(36).substring(8);
+				}
+			}
+		};
+
 		var wit = function (s, fn) {
 			it(s, function () {
 				fn(makeTester());
@@ -166,13 +169,15 @@ var rtaTester = (function () {
 
 	};
 
-	var agentsSetup = function (tests) {
+	var setup = function (tests, stateName, controllerName, fakeBackendName) {
+		fakeBackendName = fakeBackendName || 'FakeRtaBackend';
 
 		var state = {
 			stateParams: {}
 		};
 
 		beforeEach(module('wfm.rta'));
+		beforeEach(module('wfm.rtaTracer'));
 		beforeEach(module('wfm.rtaTestShared'));
 
 		beforeEach(function () {
@@ -184,79 +189,51 @@ var rtaTester = (function () {
 			});
 		});
 
-		beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _NoticeService_) {
-			state.$interval = _$interval_;
-			state.$state = _$state_;
-			state.$sessionStorage = _$sessionStorage_;
-			state.$httpBackend = _$httpBackend_;
-			state.$fakeBackend = _FakeRtaBackend_;
-			state.$controllerBuilder = _ControllerBuilder_;
-			state.NoticeService = _NoticeService_;
-			state.scope = state.$controllerBuilder.setup('RtaAgentsController46786');
-			spyOn(state.$state, 'go');
-		}));
-
-		afterEach(function () {
-			state.$fakeBackend.clear();
-			state.$sessionStorage.$reset();
-		});
-
-		injectTester(state, tests, true);
-
-	};
-
-	var historicalSetup = function (tests) {
-
-		var state = {
-			stateParams: {}
-		};
-
-		beforeEach(module('wfm.rta'));
-		beforeEach(module('wfm.rtaTestShared'));
-
-		beforeEach(function () {
-			module(function ($provide) {
-				$provide.factory('$stateParams', function () {
-					state.stateParams = {};
-					return state.stateParams;
-				});
-			});
-		});
-
-		beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _FakeRtaBackend_, _ControllerBuilder_, _$translate_) {
-			state.$interval = _$interval_;
-			state.$state = _$state_;
-			state.$httpBackend = _$httpBackend_;
-			state.$fakeBackend = _FakeRtaBackend_;
-			state.$controllerBuilder = _ControllerBuilder_;
-			state.$translate = _$translate_;
-			state.$state.current.name = 'rta-historical';
-			state.$controllerBuilder.setup('RtaHistoricalController46826');
-		}));
+		beforeEach(inject(
+			['$httpBackend', '$interval', '$state', '$sessionStorage', fakeBackendName, 'ControllerBuilder', 'NoticeService',
+				function ($httpBackend, $interval, $state, $sessionStorage, $fakeBackend, $controllerBuilder, NoticeService) {
+					state.$interval = $interval;
+					state.$state = $state;
+					state.$sessionStorage = $sessionStorage;
+					state.$httpBackend = $httpBackend;
+					state.$fakeBackend = $fakeBackend;
+					state.$controllerBuilder = $controllerBuilder;
+					state.NoticeService = NoticeService;
+					state.$state.current.name = stateName;
+					state.scope = state.$controllerBuilder.setup(controllerName);
+					spyOn(state.$state, 'go');
+				}]
+		));
 
 		afterEach(function () {
 			if (state.$fakeBackend)
 				state.$fakeBackend.clear();
+			if (state.$sessionStorage)
+				state.$sessionStorage.$reset();
 		});
 
-		injectTester(state, tests);
+		var bagOfCandy = controllerName == 'RtaAgentsController46786';
+		injectTester(state, tests, bagOfCandy);
 	};
+
+	function setupByDescription(description, tests) {
+		if (description === 'RtaAgentsController')
+			setup(tests, '', 'RtaAgentsController46786');
+		if (description === 'RtaHistoricalController')
+			setup(tests, 'rta-historical', 'RtaHistoricalController46826');
+		if (description === 'RtaTracerController')
+			setup(tests, '', 'RtaTracerController', 'RtaTracerBackendFake');
+	}
 
 	return {
 		describe: function (description, tests) {
 			return describe(description, function () {
-				if (description === 'RtaAgentsController')
-					agentsSetup(tests);
-				if (description === 'RtaHistoricalController')
-					historicalSetup(tests);
+				setupByDescription(description, tests);
 			});
 		},
 		fdescribe: function (description, tests) {
 			return fdescribe(description, function () {
-				if (description === 'RtaAgentsController')
-					agentsSetup(tests);
-				if (description === 'RtaHistoricalController')
-					historicalSetup(tests);
+				setupByDescription(description, tests);
 			});
 		}
 	}
