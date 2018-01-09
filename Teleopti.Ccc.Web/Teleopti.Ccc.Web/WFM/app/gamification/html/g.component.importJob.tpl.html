@@ -12,10 +12,10 @@
 		<span>{{'InProgress'|translate}}</span>
 	</div>
 	<div ng-if="$ctrl.status=='failed'">
-		<span>{{'Failed'|translate}}</span>
+		<span ng-if="$ctrl.message.length"><i class="mdi mdi-alert-octagon"></i>&nbsp;{{$ctrl.message}}</span>
 	</div>
 	<div ng-if="$ctrl.status=='finished'">
 		<span>{{'Finished'|translate}}</span>
-		<br /><a ng-if="$ctrl.hasError"  href="../api/Gamification/job/{{$ctrl.jobId}}/artifact/2">{{'Errors'|translate}}</a>
+		<span ng-if="$ctrl.hasInvalidRecords">&nbsp;(<a href="../api/Gamification/job/{{$ctrl.jobId}}/artifact/2">{{'Errors'|translate}}</a>)</span>
 	</div>
 </div>

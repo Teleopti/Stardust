@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		public string Status { get; set; }
 
 		public bool HasError { get; set; }
-
+		public bool HasInvalidRecords { get; set; }
 		public string Category { get; set; }
 		public string ErrorMessage { get; set; }
 	}

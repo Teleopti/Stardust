@@ -88,7 +88,9 @@
 								job.CreateDateTime,
 								job.Status,
 								job.Category,
-								job.HasError
+								job.HasError,
+								job.ErrorMessage,
+								job.HasInvalidRecords
 							));
 						});
 					}
@@ -169,7 +171,7 @@
 		this.name = name;
 	}
 
-	function Job(id, name, owner, startingTime, status, category, hasError) {
+	function Job(id, name, owner, startingTime, status, category, hasError, message, hasInvalidRecords) {
 		this.id = id;
 		this.name = name;
 		this.owner = owner;
@@ -177,5 +179,7 @@
 		this.status = status;
 		this.category = category;
 		this.hasError = hasError;
+		this.message = message;
+		this.hasInvalidRecords = hasInvalidRecords;
 	}
 })(angular);

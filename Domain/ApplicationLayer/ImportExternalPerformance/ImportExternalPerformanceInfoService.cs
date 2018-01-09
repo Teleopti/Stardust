@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				.ToList();
 			return resultList.Select(jobResult =>
 			{
-				var hasError = hasInvalidRecords(jobResult);
+				var hasError = jobResult.Details.Any(detail => detail.DetailLevel == DetailLevel.Error);
+				var hasInvalidRecords = this.hasInvalidRecords(jobResult);
 				var jobResultDetail = jobResult.Details.FirstOrDefault();
 				var hasException = !(jobResultDetail?.ExceptionMessage.IsNullOrEmpty() ?? true)
 								   || !(jobResultDetail?.InnerExceptionMessage.IsNullOrEmpty() ?? true);
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					Status = getJobStatus(jobResult),
 					Category = jobResult.JobCategory,
 					HasError = hasError,
+					HasInvalidRecords = hasInvalidRecords,
 					ErrorMessage =
 						hasError ? (hasException ? Resources.InternalErrorMsg : jobResultDetail?.Message) : string.Empty
 				};

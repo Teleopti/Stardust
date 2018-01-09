@@ -10,7 +10,9 @@
 			status: '<',
 			category: '<',
 			dateTimeFormat: '<',
-			hasError: '<'
+			hasError: '<',
+			message: '<',
+			hasInvalidRecords: '<'
 		},
 		controller: [ImportJobController]
 	});

@@ -35,8 +35,7 @@
 			<div class="started">{{'TimeStarted'|translate}}</div>
 			<div class="status">{{'Status'|translate}}</div>
 		</header>
-		<import-job ng-repeat="job in $ctrl.jobs" job-id="job.id" owner="job.owner" starting-time="job.startingTime" status="job.status"
-		 name="job.name" category="job.category" date-time-format="::$ctrl.dateTimeFormat" has-error="job.hasError"></import-job>
+		<import-job ng-repeat="job in $ctrl.jobs" job-id="job.id" owner="job.owner" starting-time="job.startingTime" status="job.status" name="job.name" category="job.category" date-time-format="::$ctrl.dateTimeFormat" has-error="job.hasError" message="job.message" has-invalid-records="job.hasInvalidRecords"></import-job>
 	</div>
 
 </div>
