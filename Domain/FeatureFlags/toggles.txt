@@ -57,6 +57,7 @@ WfmTeamSchedule_ShowStaffingInfo_45206 = RC
 WfmTeamSchedule_ExportSchedulesToExcel_45795 = true
 WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202 = RC
 WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 = RC
+WfmTeamSchedule_AddNDeleteDayOff_40555 = DEV
 Wfm_HideUnusedTeamsAndSites_42690 = true
 Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
 Wfm_AddMyTimeLink_45088 = true

@@ -69,6 +69,7 @@
 		WfmTeamSchedule_ExportSchedulesToExcel_45795,
 		WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202,
 		WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010,
+		WfmTeamSchedule_AddNDeleteDayOff_40555,
 
 		WebByPassDefaultPermissionCheck_37984,
 
