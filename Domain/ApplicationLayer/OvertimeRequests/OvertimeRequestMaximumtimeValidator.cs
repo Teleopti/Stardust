@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		public OvertimeRequestValidationResult Validate(OvertimeRequestValidationContext context)
 		{
 			var workflowControlSet = context.PersonRequest.Person.WorkflowControlSet;
-			if (workflowControlSet.OvertimeRequestMaximumTime == null ||
-				workflowControlSet.OvertimeRequestMaximumTime == TimeSpan.Zero)
+			if (!workflowControlSet.OvertimeRequestMaximumTimeEnabled)
 			{
 				return new OvertimeRequestValidationResult
 				{

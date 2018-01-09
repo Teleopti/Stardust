@@ -1257,7 +1257,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
-		public void ShouldApproveWhenOvertimeRequestMaximumTimeIsZero()
+		public void ShouldApproveWhenOvertimeRequestMaximumTimeIsDisabled()
 		{
 			setupPerson(8, 21);
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
@@ -1265,8 +1265,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
-					OvertimeRequestMaximumTimeHandleType = null,
-					OvertimeRequestMaximumTime = TimeSpan.Zero
+					OvertimeRequestMaximumTimeEnabled = false
 				};
 			var person = LoggedOnUser.CurrentUser();
 			person.WorkflowControlSet = workflowControlSet;
@@ -1279,7 +1278,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
-		public void ShouldApproveWhenOvertimeRequestMaximumTimeIsNull()
+		public void ShouldDenyWhenOvertimeRequestMaximumTimeIsZero()
 		{
 			setupPerson(8, 21);
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
@@ -1287,8 +1286,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
-					OvertimeRequestMaximumTimeHandleType = null,
-					OvertimeRequestMaximumTime = null
+					OvertimeRequestMaximumTimeEnabled = true,
+					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMaximumTime = TimeSpan.Zero
 				};
 			var person = LoggedOnUser.CurrentUser();
 			person.WorkflowControlSet = workflowControlSet;
@@ -1296,7 +1296,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var personRequest = createOvertimeRequest(18, 3);
 			getTarget().Process(personRequest, true);
 
-			personRequest.IsApproved.Should().Be.True();
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "03:00", "00:00"));
 		}
 
 		[Test]
@@ -1309,6 +1311,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
+					OvertimeRequestMaximumTimeEnabled = true,
 					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
 					OvertimeRequestMaximumTime = TimeSpan.FromHours(10)
 				};
@@ -1331,6 +1334,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
+					OvertimeRequestMaximumTimeEnabled = true,
 					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
 					OvertimeRequestMaximumTime = TimeSpan.FromHours(3)
 				};
@@ -1353,6 +1357,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
+					OvertimeRequestMaximumTimeEnabled = true,
 					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
 					OvertimeRequestMaximumTime = TimeSpan.FromHours(2)
 				};
@@ -1369,7 +1374,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
-		public void ShouldNoDenyWhenOvertimeRequestMaximumTimeHandleTypeIsSendToAdministrator()
+		public void ShouldNotDenyWhenOvertimeRequestMaximumTimeHandleTypeIsSendToAdministrator()
 		{
 			setupPerson(8, 21);
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
@@ -1377,6 +1382,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
+					OvertimeRequestMaximumTimeEnabled = true,
 					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Pending,
 					OvertimeRequestMaximumTime = TimeSpan.FromHours(2)
 				};
@@ -1402,6 +1408,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
+					OvertimeRequestMaximumTimeEnabled = true,
 					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
 					OvertimeRequestMaximumTime = TimeSpan.FromHours(10)
 				};
@@ -1434,6 +1441,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
+					OvertimeRequestMaximumTimeEnabled = true,
 					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
 					OvertimeRequestMaximumTime = TimeSpan.FromHours(13)
 				};
@@ -1464,6 +1472,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
+					OvertimeRequestMaximumTimeEnabled = true,
 					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
 					OvertimeRequestMaximumTime = TimeSpan.FromHours(13)
 				};
@@ -1497,6 +1506,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
+					OvertimeRequestMaximumTimeEnabled = true,
 					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
 					OvertimeRequestMaximumTime = TimeSpan.FromHours(11)
 				};
@@ -1533,6 +1543,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
+					OvertimeRequestMaximumTimeEnabled = true,
 					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
 					OvertimeRequestMaximumTime = TimeSpan.FromHours(1)
 				};
@@ -1566,6 +1577,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet =
 				new WorkflowControlSet
 				{
+					OvertimeRequestMaximumTimeEnabled = true,
 					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
 					OvertimeRequestMaximumTime = TimeSpan.FromHours(2)
 				};
