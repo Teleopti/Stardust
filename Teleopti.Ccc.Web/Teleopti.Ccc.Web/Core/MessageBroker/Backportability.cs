@@ -1,7 +1,9 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 using Microsoft.AspNet.SignalR;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
+using Teleopti.Ccc.Infrastructure.Util;
 
 namespace Teleopti.Ccc.Web.Broker
 {
@@ -29,8 +31,9 @@ namespace Teleopti.Ccc.Web.Broker
 		public void CallOnEventMessage(string groupName, string route, Message message)
 		{
 			var context = GlobalHost.ConnectionManager.GetHubContext<MessageBrokerHub>();
-			context.Clients.Group(groupName).onEventMessage(message, route);
+			Retry.Handle<TimeoutException>()
+				.WaitAndRetry(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10))
+				.Do(() => context.Clients.Group(groupName).onEventMessage(message, route));
 		}
-
 	}
 }
