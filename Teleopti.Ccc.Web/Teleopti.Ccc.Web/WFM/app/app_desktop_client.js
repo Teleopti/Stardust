@@ -65,8 +65,8 @@ var wfm = angular.module('wfm', [
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$state', '$translate', '$timeout', '$locale', 'CurrentUserInfo', 'Toggle', 'RtaState',
-	function($rootScope, $state, $translate, $timeout, $locale, currentUserInfo, toggleService, RtaState) {
+	'$rootScope', '$state', '$translate', '$timeout', '$locale', 'CurrentUserInfo', 'Toggle',
+	function($rootScope, $state, $translate, $timeout, $locale, currentUserInfo, toggleService) {
 		$rootScope.isAuthenticated = false;
 
 		$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
@@ -89,7 +89,6 @@ var wfm = angular.module('wfm', [
 				return;
 			}
 		});
-		RtaState(toggleService);
 
 		function refreshContext(event, next, toParams) {
 			currentUserInfo.initContext().then(function(data) {
