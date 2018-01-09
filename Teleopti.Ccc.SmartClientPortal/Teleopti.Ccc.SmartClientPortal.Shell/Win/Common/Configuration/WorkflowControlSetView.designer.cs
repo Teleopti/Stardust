@@ -1991,6 +1991,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.buttonDeleteOvertimeRequestPeriod.UseVisualStyle = true;
 			this.buttonDeleteOvertimeRequestPeriod.Click += new System.EventHandler(this.buttonAdvDeleteOvertimeRequestPeriod_Click);
 			// 
+			// labelOpenForOvertimeRequests
+			// 
+			this.labelOpenForOvertimeRequests.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelOpenForOvertimeRequests.AutoSize = true;
+			this.labelOpenForOvertimeRequests.BackColor = System.Drawing.Color.Transparent;
+			this.labelOpenForOvertimeRequests.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelOpenForOvertimeRequests.ForeColor = System.Drawing.Color.GhostWhite;
+			this.labelOpenForOvertimeRequests.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelOpenForOvertimeRequests.Location = new System.Drawing.Point(3, 0);
+			this.labelOpenForOvertimeRequests.Name = "labelOpenForOvertimeRequests";
+			this.labelOpenForOvertimeRequests.Size = new System.Drawing.Size(358, 36);
+			this.labelOpenForOvertimeRequests.TabIndex = 0;
+			this.labelOpenForOvertimeRequests.Text = "xxOpenForOvertimeRequests";
+			this.labelOpenForOvertimeRequests.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// buttonAddOvertimeRequestPeriod
 			// 
 			this.buttonAddOvertimeRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;

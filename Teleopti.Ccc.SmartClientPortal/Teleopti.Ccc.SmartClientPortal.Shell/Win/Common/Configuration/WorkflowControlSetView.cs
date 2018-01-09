@@ -399,6 +399,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			label3.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelAllowedAbsencesForReport.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelAbsenceRequestMiscellaneous.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelOvertimeRequestBasic.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelOpenForOvertimeRequests.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
 
 		protected override void SetCommonTexts()
