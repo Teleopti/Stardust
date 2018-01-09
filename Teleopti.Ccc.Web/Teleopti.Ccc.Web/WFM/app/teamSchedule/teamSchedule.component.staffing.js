@@ -12,9 +12,9 @@
 		}
 	});
 
-	StaffingInfoController.$inject = ['$scope', '$timeout', 'TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService', 'teamsToggles', 'skillIconService'];
+	StaffingInfoController.$inject = ['$scope','$document', '$timeout', 'TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService', 'teamsToggles', 'skillIconService'];
 
-	function StaffingInfoController($scope, $timeout, SkillService, StaffingInfoService, ChartService, teamsToggles, skillIconService) {
+	function StaffingInfoController($scope, $document, $timeout, SkillService, StaffingInfoService, ChartService, teamsToggles, skillIconService) {
 		var vm = this;
 
 		vm.skills = [];
@@ -85,7 +85,8 @@
 			});
 
 		vm.toggleSkills = function () {
-			var $skillsContent = angular.element(document.querySelector('.skills-content'));
+
+			var $skillsContent = angular.element($document[0].querySelector('.skills-content'));
 			if ($skillsContent.hasClass('nooverflow') && $skillsContent[0].scrollWidth > $skillsContent[0].offsetWidth) {
 				$skillsContent.removeClass("nooverflow").addClass("wrap-all");
 			} else {
@@ -93,7 +94,7 @@
 			}
 		}
 		vm.isSkillGroupDetailToggleVisible = function () {
-			var $skillsContent = angular.element(document.querySelector('.skills-content'))[0];
+			var $skillsContent = angular.element($document[0].querySelector('.skills-content'))[0];
 			var totalWidthForChildren = 0;
 			angular.forEach($skillsContent.children,
 				function(c) {
@@ -103,7 +104,7 @@
 		}
 
 		vm.isSkillsToggled = function () {
-			var $skillsContent = angular.element(document.querySelector('.skills-content'));
+			var $skillsContent = angular.element($document[0].querySelector('.skills-content'));
 			return !$skillsContent.hasClass('nooverflow');
 		}
 
