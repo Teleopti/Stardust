@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AccessToMatrixReports)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AccessToReports);
 			if (!AccessToMatrixReports)
-				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedForeignSourceNames.SourceMatrix);
+				applicationFunctions = applicationFunctions.Except(f => f.ForeignSource == DefinedForeignSourceNames.SourceMatrix);
 			if (!AccessToMyReportQueueMetrics)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics);
 			if (!AccessToLeaderboard)
