@@ -91,6 +91,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 
 			var personId = columns[personIdColumnIndex].Trim();
+			if (personId.IsEmpty())
+			{
+				result.Error = $"{line},{Resources.AgentIdIsMandatory}";
+				return result;
+			}
 			if (!personIdLengthIsValid(personId))
 			{
 				result.Error = $"{line},{Resources.PersonIdIsTooLong}";

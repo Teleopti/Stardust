@@ -1835,6 +1835,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agent ID is mandatory..
+        /// </summary>
+        public static string AgentIdIsMandatory {
+            get {
+                return ResourceManager.GetString("AgentIdIsMandatory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string AgentInfo {

@@ -16926,6 +16926,10 @@ Do you want to participate?</value>
     <value>A gamification measure (Id {0}) already exists with this name.</value>
     <comment>Error message used in importing an external performance csv file.</comment>
   </data>
+  <data name="AgentIdIsMandatory" xml:space="preserve">
+    <value>Agent ID is mandatory.</value>
+    <comment>Error message used in importing an external performance csv file</comment>
+  </data>
   <data name="MeasureNameIsMandatory" xml:space="preserve">
     <value>Measure name is mandatory.</value>
     <comment>Error message used in importing an external performance csv file</comment>

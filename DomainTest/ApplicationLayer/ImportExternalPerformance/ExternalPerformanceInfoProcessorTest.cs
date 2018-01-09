@@ -71,6 +71,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
+		public void ShouldRejectRecordIfAgentIdIsEmpty()
+		{
+			var invalidRecord = "20170820,,Kalle,Pettersson,measureA,2,Numeric,2000";
+			var fileData = createFileData(invalidRecord);
+
+			var expectedErrorRecord = $"{invalidRecord},{Resources.AgentIdIsMandatory}";
+			var result = Target.Process(fileData);
+
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void ShouldRejectRecordIfAgentIdIsOnlyWithBlank()
+		{
+			var invalidRecord = "20170820,  ,Kalle,Pettersson,measureA,2,Numeric,2000";
+			var fileData = createFileData(invalidRecord);
+
+			var expectedErrorRecord = $"{invalidRecord},{Resources.AgentIdIsMandatory}";
+			var result = Target.Process(fileData);
+
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
 		public void ShouldRejectRecordIfAgentIdIsTooLong()
 		{
 			var agentId = new string('a', 131);
