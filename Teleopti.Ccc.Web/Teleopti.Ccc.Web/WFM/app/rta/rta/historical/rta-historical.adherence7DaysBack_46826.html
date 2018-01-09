@@ -19,12 +19,12 @@
 			<div class="con-flex">
 				<span class="pull-right">
 					<a ng-attr-href="{{vm.previousHref}}" style="display: inline-block" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-disabled="!vm.previousHref">
-						<md-tooltip>{{vm.previousTooltip}}</md-tooltip>
+						<md-tooltip ng-if="vm.previousTooltip">{{vm.previousTooltip}}</md-tooltip>
 						<i class="mdi mdi-chevron-left" style="font-size: 14px !important;"></i>
 						{{'Previous' | translate}}
 					</a>
 					<a ng-attr-href="{{vm.nextHref}}" style="display: inline-block" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-disabled="!vm.nextHref">
-						<md-tooltip>{{vm.nextTooltip}}</md-tooltip>
+						<md-tooltip ng-if="vm.nextTooltip">{{vm.nextTooltip}}</md-tooltip>
 						{{'Next' | translate}}
 						<i class="mdi mdi-chevron-right" style="font-size: 14px !important;"></i>
 					</a>
