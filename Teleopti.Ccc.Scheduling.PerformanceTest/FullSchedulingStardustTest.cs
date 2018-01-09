@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		[Category("ScheduleOptimizationStardust")]
 		public void MeasurePerformanceOnStardust()
 		{
+			TestLog.Debug($"Number of succeeded jobs before scheduling {Hangfire.NumberOfSucceededJobs()}");
 			using (var browserActivator = new CoypuChromeActivator())
 			{
 				//long timeout for now due to slow loading of planning period view on large dbs. Could be lowered when fixed
@@ -75,11 +76,13 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 			}, hangfireQueueLogCancellationToken.Token);
 			while (true)
 			{
-				if (Hangfire.NumberOfSucceededJobs() > 2)
+				if (Hangfire.NumberOfEnqueuedJobs() > 2 || Hangfire.NumberOfSucceededJobs() > 2 ||
+					Hangfire.NumberOfFailedJobs() > 2)
 				{
 					Hangfire.WaitForQueue();
 					break;
 				}
+
 				Thread.Sleep(3000);
 			}
 			hangfireQueueLogCancellationToken.Cancel();
