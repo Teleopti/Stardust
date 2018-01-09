@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			lock (_lock)
 				return _data
-					.Where(s => s.SnapshotDataSourceId == snapshotDataSourceId && (s.DateSnapshotId < snapshotId || s.DateSnapshotId == null) && !loggedOutStateGroupIds.Contains(s.StateGroupId.Value))
+					.Where(s => s.SnapshotDataSourceId == snapshotDataSourceId && (s.SnapshotId < snapshotId || s.SnapshotId == null) && !loggedOutStateGroupIds.Contains(s.StateGroupId.Value))
 					.Select(x => x.PersonId)
 					.ToArray();
 		}

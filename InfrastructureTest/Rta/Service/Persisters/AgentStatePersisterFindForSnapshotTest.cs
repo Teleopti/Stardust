@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 				ReceivedTime = snapshotId,
 				SnapshotDataSourceId = 1,
 				StateGroupId = Guid.NewGuid(),
-				SnapshotId = snapshotId.Ticks
+				SnapshotId = snapshotId
 			});
 
 			Persister.FindForClosingSnapshot(snapshotId, 1, new[] {Guid.NewGuid()})
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 					ReceivedTime = snapshotId,
 					SnapshotDataSourceId = 1,
 					StateGroupId = Guid.NewGuid(),
-					SnapshotId = snapshotId.Ticks
+					SnapshotId = snapshotId
 				});
 				
 				Persister.FindForClosingSnapshot(snapshotId, 1, new[] {Guid.NewGuid()})
