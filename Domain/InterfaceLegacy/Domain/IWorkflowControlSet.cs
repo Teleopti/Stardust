@@ -318,6 +318,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		OvertimeValidationHandleType? OvertimeRequestMaximumTimeHandleType { get; set; }
 
 		ReadOnlyCollection<IOvertimeRequestOpenPeriod> OvertimeRequestOpenPeriods { get; }
+		bool OvertimeRequestMaximumTimeEnabled { get; set; }
 		void InsertOvertimePeriod(IOvertimeRequestOpenPeriod newOvertimeRequestOpenPeriod, int currentIndex);
 		IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest, DateOnly viewpointDate);
 	}

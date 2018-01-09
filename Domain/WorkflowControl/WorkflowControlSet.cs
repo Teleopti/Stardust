@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private IList<IOvertimeRequestOpenPeriod> _overtimeRequestOpenPeriods;
 		private TimeSpan? _overtimeRequestMaximumTime;
 		private OvertimeValidationHandleType? _overtimeRequestMaximumTimeHandleType;
+		private bool _overtimeRequestMaximumTimeEnabled;
 
 		public WorkflowControlSet()
 		{
@@ -433,6 +434,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public virtual ReadOnlyCollection<IOvertimeRequestOpenPeriod> OvertimeRequestOpenPeriods
 		{
 			get { return new ReadOnlyCollection<IOvertimeRequestOpenPeriod>(_overtimeRequestOpenPeriods); }
+		}
+
+		public virtual bool OvertimeRequestMaximumTimeEnabled
+		{
+			get { return _overtimeRequestMaximumTimeEnabled; }
+			set { _overtimeRequestMaximumTimeEnabled = value; }
 		}
 
 		public virtual TimeSpan? OvertimeRequestMaximumTime

@@ -208,6 +208,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var org = CreateAggregateWithCorrectBusinessUnit();
 			org.OvertimeRequestMaximumTime = TimeSpan.FromHours(10);
 			org.OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny;
+			org.OvertimeRequestMaximumTimeEnabled = true;
 			PersistAndRemoveFromUnitOfWork(org);
 
 			var repository = new WorkflowControlSetRepository(UnitOfWork);
@@ -216,6 +217,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(result.Count, Is.EqualTo(1));
 			Assert.That(result[0].OvertimeRequestMaximumTime, Is.EqualTo(TimeSpan.FromHours(10)));
 			Assert.That(result[0].OvertimeRequestMaximumTimeHandleType, Is.EqualTo(OvertimeValidationHandleType.Deny));
+			Assert.That(result[0].OvertimeRequestMaximumTimeEnabled, Is.EqualTo(true));
 		}
 
 		protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
