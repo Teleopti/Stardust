@@ -4,4 +4,5 @@
 	<add key="BusinessUnitName" value="TheBusinessUnit name"/>
 	<add key="PlanningPeriodId" value="guid to planning period to run"/>
 	<add key="PlanningGroupId" value="guid to planning group to run"/>
+	<add key="InfraTest.AnalyticsConnectionString" value="Analytics Connection String"/>
 </appSettings>

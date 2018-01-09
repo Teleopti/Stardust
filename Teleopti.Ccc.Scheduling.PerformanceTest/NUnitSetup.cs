@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using Autofac;
+using log4net.Config;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Config;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		public void Setup()
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+			XmlConfigurator.Configure();
 			TestSiteConfigurationSetup.Setup(true);
 
 			var builder = new ContainerBuilder();
