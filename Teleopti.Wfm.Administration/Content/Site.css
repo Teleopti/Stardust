@@ -222,6 +222,11 @@ datepicker input {
 	display: inline-flex;
 }
 
+/* .justify{
+	display: flex;
+	justify-content: space-between;
+} */
+
 .disabled-date {
 	opacity: 0.5;
 	pointer-events: none;

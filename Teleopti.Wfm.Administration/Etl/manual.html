@@ -38,7 +38,7 @@
 			<div class="col-md-6">
 				<fieldset ng-class="{'disabled-date': !vm.selectedJob.Initial}">
 					<legend>Initial - data period</legend>
-					<div class="row inline-flex">
+					<div class="row justify">
 						<div class="col-md-6">
 							<h5>Date from:</h5>
  							<md-datepicker ng-model="vm.manualInitial.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualInitial.StartDate)"></md-datepicker>
@@ -54,7 +54,7 @@
 			<div class="col-md-6">
 				<fieldset ng-class="{'disabled-date': !vm.selectedJob.QueueStatistics}">
 					<legend>Queue statistics - data period</legend>
-					<div class="row inline-flex">
+					<div class="row justify">
 						<div class="col-md-6">
 							<h5>Date from:</h5>
 							<md-datepicker ng-model="vm.manualQueueStats.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualQueueStats.StartDate)"></md-datepicker>
@@ -72,7 +72,7 @@
 			<div class="col-md-6">
 				<fieldset ng-class="{'disabled-date': !vm.selectedJob.AgentStatistics}">
 					<legend>Agent statistics - data period</legend>
-					<div class="row inline-flex">
+					<div class="row justify">
 						<div class="col-md-6">
 							<h5>Date from:</h5>
 							<md-datepicker ng-model="vm.manualAgentStats.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualAgentStats.StartDate)"></md-datepicker>
@@ -89,7 +89,7 @@
 			<div class="col-md-6">
 				<fieldset ng-class="{'disabled-date': !vm.selectedJob.Schedule}">
 					<legend>Schedule - data period</legend>
-					<div class="row inline-flex">
+					<div class="row justify">
 						<div class="col-md-6">
 							<h5>Date from:</h5>
 							<md-datepicker ng-model="vm.manualSchedule.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualSchedule.StartDate)"></md-datepicker>
@@ -108,7 +108,7 @@
 			<div class="col-md-6">
 				<fieldset ng-class="{'disabled-date': !vm.selectedJob.Forecast}">
 					<legend>Forecast - data period</legend>
-					<div class="row inline-flex">
+					<div class="row justify">
 						<div class="col-md-6">
 							<h5>Date from:</h5>
 							<md-datepicker ng-model="vm.manualForecast.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualForecast.StartDate)"></md-datepicker>
