@@ -9,8 +9,8 @@
 		vm.highlighted = {};
 		vm.diamonds = [];
 		vm.cards = [];
-		vm.previousHref = null;
-		vm.nextHref = null;
+		vm.previousHref = undefined;
+		vm.nextHref = undefined;
 
 		$stateParams.open = ($stateParams.open || "false");
 
@@ -85,7 +85,7 @@
 				vm.previousHref = $state.href($state.current.name, {personId: vm.personId, date: previousDay.format('YYYYMMDD')});
 				vm.previousTooltip = previousDay.format('L');
 			}
-
+	
 			if ($stateParams.date < data.Navigation.Last) {
 				var nextDay = moment($stateParams.date).add(1, 'day');
 				vm.nextHref = $state.href($state.current.name, {personId: vm.personId, date: nextDay.format('YYYYMMDD')});

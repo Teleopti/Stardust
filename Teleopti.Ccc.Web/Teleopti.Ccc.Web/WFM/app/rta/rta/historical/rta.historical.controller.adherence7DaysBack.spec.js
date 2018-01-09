@@ -37,7 +37,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		var c = t.createController();
 
-		expect(c.previousHref).toBe(null);
+		expect(c.previousHref).toBe(undefined);
 	});
 
 	it('should not link to the future', function (t) {
@@ -50,7 +50,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		var c = t.createController();
 
-		expect(c.nextHref).toBe(null);
+		expect(c.nextHref).toBe(undefined);
 	});
 
 	it('should display next day in tooltip', function (t) {
