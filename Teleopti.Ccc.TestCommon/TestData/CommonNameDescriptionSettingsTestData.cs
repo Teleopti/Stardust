@@ -17,7 +17,27 @@ namespace Teleopti.Ccc.TestCommon.TestData
 			{ "{FirstName} '; Drop Database; ", "UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([first_name], '') + N' ''; Drop Database; ', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit"},
 			{ "{FirstName}{FirstName}", "UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([first_name], '') + ISNULL([first_name], ''), 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit"},
 			{ "", "UPDATE mart.dim_person SET person_name = SUBSTRING(N'', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit"},
-			{ "{FirstName}лаудем  伴年聞早 無巣目個 지에 그들을", "UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([first_name], '') + N'лаудем  伴年聞早 無巣目個 지에 그들을', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit"}
+			{ "{FirstName}лаудем  伴年聞早 無巣目個 지에 그들을", "UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([first_name], '') + N'лаудем  伴年聞早 無巣目個 지에 그들을', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit"},
+			{
+				// bug #47514 - 1
+				"{LastName}, {FirstName} '{EmployeeNumber}'",
+				"UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([last_name], '') + N', ' + ISNULL([first_name], '') + N' ''' + ISNULL([employment_number], '') + N'''', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit"
+			},
+			{
+				// bug #47514 - 2
+				"'{LastName}', {FirstName} {EmployeeNumber}",
+				"UPDATE mart.dim_person SET person_name = SUBSTRING(N'''' + ISNULL([last_name], '') + N''', ' + ISNULL([first_name], '') + N' ' + ISNULL([employment_number], ''), 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit"
+			},
+			{
+				// bug #47514 - 3
+				"{LastName}, '{FirstName}' {EmployeeNumber}",
+				"UPDATE mart.dim_person SET person_name = SUBSTRING(ISNULL([last_name], '') + N', ''' + ISNULL([first_name], '') + N''' ' + ISNULL([employment_number], ''), 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit"
+			},
+			{
+				// bug #47514 - 4
+				"'{LastName}', '{FirstName}' '{EmployeeNumber}'",
+				"UPDATE mart.dim_person SET person_name = SUBSTRING(N'''' + ISNULL([last_name], '') + N''', ''' + ISNULL([first_name], '') + N''' ''' + ISNULL([employment_number], '') + N'''', 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit"
+			}
 		};
 
 		public static IEnumerable TestCasesUnit

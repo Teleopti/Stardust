@@ -72,12 +72,18 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 
 		public string BuildSqlUpdateForAnalytics()
 		{
+			const string appendEmptySqlString = " + N''";
+
 			var sqlConcat = $"N'{AliasFormat.Replace("'", "''")}'"; // Replace to prevent sql injections
 			sqlConcat = sqlConcat.Replace(FirstName, "' + ISNULL([first_name], '') + N'");
 			sqlConcat = sqlConcat.Replace(LastName, "' + ISNULL([last_name], '') + N'");
 			sqlConcat = sqlConcat.Replace(EmployeeNumber, "' + ISNULL([employment_number], '') + N'");
 			sqlConcat = sqlConcat.Replace("N'' + ", "");
-			sqlConcat = sqlConcat.Replace(" + N''", "");
+			if (sqlConcat.EndsWith(appendEmptySqlString))
+			{
+				sqlConcat = sqlConcat.Substring(0, sqlConcat.Length - appendEmptySqlString.Length);
+			}
+
 			return $"UPDATE mart.dim_person SET person_name = SUBSTRING({sqlConcat}, 0, 200), update_date=GETUTCDATE() WHERE [business_unit_code] = :BusinessUnit";
 		}
 	}
