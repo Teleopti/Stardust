@@ -207,6 +207,7 @@ AND StateGroupId {stateGroups}")
 
 		private class internalAgentState : AgentState
 		{
+			public new long? SnapshotId { set { base.SnapshotId = value == null ? (DateTime?)null : new DateTime(value.Value); } }
 			public new int? Adherence { set { base.Adherence = (EventAdherence?) value; } }
 		}
 	}
