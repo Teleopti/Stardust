@@ -1,5 +1,7 @@
 using System;
 using System.Globalization;
+using System.Linq;
+using NPOI.SS.Formula.Functions;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
@@ -9,15 +11,21 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
         public bool TryParse(string value, out ForecastParseResult<DateTime> result)
         {
             result = new ForecastParseResult<DateTime>();
-            DateTime parseResult;
-			if (DateTime.TryParseExact(value, "yyyyMMdd HH:mm", null, DateTimeStyles.None, out parseResult) ||
-				DateTime.TryParse(value, out parseResult))
+           // DateTime parseResult;
+			
+			var formats = new[]
+				{
+					"yyyyMMdd H:mm", "yyyy-MM-dd H:mm"
+				};
+			
+			if(DateTime.TryParseExact(value, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parseResult))
 			{
 				result.Value = parseResult;
 				result.Success = true;
 				return true;
 			}
-            result.ErrorMessage = string.Format(CultureInfo.InvariantCulture, "Date time format of {0} is wrong", value);
+			
+            result.ErrorMessage = $"Date time format of {value} is wrong. Supported formats are: {string.Join(",",formats)}";
             return false;
         }
     }
