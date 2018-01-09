@@ -67,14 +67,23 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				browserInteractions.AssertNotExists("body", "#Login-container");
 				browserInteractions.AssertExistsUsingJQuery(".heatmap:visible");
 			}
-
+			TestLog.Debug($"Number of succeeded jobs before Hangfire.WaitForQueue {Hangfire.NumberOfSucceededJobs()}");
 			var hangfireQueueLogCancellationToken = new CancellationTokenSource();
 			Task.Run(() =>
 			{
 				NUnitSetup.LogHangfireQueues(TestLog, Hangfire);
 			}, hangfireQueueLogCancellationToken.Token);
-			Hangfire.WaitForQueue();
+			while (true)
+			{
+				if (Hangfire.NumberOfSucceededJobs() > 2)
+				{
+					Hangfire.WaitForQueue();
+					break;
+				}
+				Thread.Sleep(3000);
+			}
 			hangfireQueueLogCancellationToken.Cancel();
+			TestLog.Debug($"Number of succeeded jobs after Hangfire.WaitForQueue {Hangfire.NumberOfSucceededJobs()}");
 		}
 
 		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningGroupId, string planningPeriodId)
