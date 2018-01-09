@@ -87,7 +87,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				convertToRecordsByMatchingPersonId(extractResultCollection, processResult);
 			}
 
-			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom}).Select(x => x.Last()).ToList();
+			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom, r.MeasureId})
+				.Select(x => x.Last()).ToList();
 			processResult.ExternalPerformances = allMeasures.Where(m => existMeasures.All(e => e.ExternalId != m.ExternalId)).ToList();
 			return processResult;
 		}

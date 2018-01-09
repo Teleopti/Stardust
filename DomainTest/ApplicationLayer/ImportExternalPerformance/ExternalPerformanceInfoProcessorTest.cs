@@ -496,6 +496,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.ValidRecords[0].PersonId.Should().Be.EqualTo(personid1);
 		}
 
+		[Test]
+		public void ShouldWorkInTheCaseOfMultipleValidRowsOfOneAgentAndDifferentMeasureTypes()
+		{
+			PerformanceRepository.Add(new ExternalPerformance {ExternalId = 1, DataType = ExternalPerformanceDataType.Percent});
+			PerformanceRepository.Add(new ExternalPerformance {ExternalId = 2, DataType = ExternalPerformanceDataType.Numeric});
+
+			var rey = new Person().WithId(new Guid());
+			rey.SetEmploymentNumber("7");
+			PersonRepository.Add(rey);
+
+			var rows = "20180109,7,Rey,Kenobi,Measure 1,1,Percent,50\r\n" +
+					  "20180109,7,Rey,Kenobi,Measure 2,2,Numeric,50";
+			var file = createFileData(rows);
+
+			var result = Target.Process(file);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(0);
+			result.ValidRecords.Count.Should().Be.EqualTo(2);
+		}
+
 		private void setPerson(Guid personId)
 		{
 			var person = new Person();
