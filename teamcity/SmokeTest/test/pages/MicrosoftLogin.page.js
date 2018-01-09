@@ -21,8 +21,8 @@ var MicrosoftLoginPage = Object.create(Page, {
 		this.password2.waitForVisible(60 * 1000);
 		this.password2.setValue('teleoptidemo');
         this.signinButton.click();
-        this.nextbutton.click();
-	this.keepSignedInButton.click();
+        this.keepSignedInButton.waitForVisible(60 * 1000);
+        this.keepSignedInButton.click();
     } }
 });
 
