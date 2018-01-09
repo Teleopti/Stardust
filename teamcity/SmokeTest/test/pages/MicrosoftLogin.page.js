@@ -7,6 +7,7 @@ var MicrosoftLoginPage = Object.create(Page, {
     password: { get: function () { return browser.element('#cred_password_inputtext'); } },
 	password2: { get: function () { return browser.element('#passwordInput'); } },
     signinButton:     { get: function () { return browser.element('#submitButton'); } },
+    keepSignedInButton:     { get: function () { return browser.element('#idSIButton9'); } },
 	
     clickSignin: { value: function() {
         this.signinButton.click();
@@ -21,6 +22,7 @@ var MicrosoftLoginPage = Object.create(Page, {
 		this.password2.setValue('teleoptidemo');
         this.signinButton.click();
         this.nextbutton.click();
+	this.keepSignedInButton.click();
     } }
 });
 
