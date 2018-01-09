@@ -11,6 +11,7 @@ describe('CalendarPickerControllerCustomFeature', function () {
         ],
         preSetLength = 36,
         calendarView,
+        fakeToday = new Date(2018, 0, 1),
         data;
 
     beforeEach(function () {
@@ -28,8 +29,8 @@ describe('CalendarPickerControllerCustomFeature', function () {
         });
 
         data = {
-            startDate: moment(),
-            endDate: moment().add(preSetLength - 1, 'day')
+            startDate: moment(fakeToday).toDate(),
+            endDate: moment(fakeToday).add(preSetLength - 1, 'day').toDate()
         }
 
         $rootScope.data = data;
@@ -90,7 +91,7 @@ describe('CalendarPickerControllerCustomFeature', function () {
     it('should be able to disable modify a prefix start date and only allow update end date', function () {
         pickerWithPresetDateRange = setupPicker('ng-model="data" disable="start-date"');
         vm = pickerWithPresetDateRange.find('wfm-calendar-picker-header').scope().vm;
-        vm.pickDate = moment().add((preSetLength / 2 - 10), 'day');
+        vm.pickDate = moment(fakeToday).add((preSetLength / 2 - 10), 'day').toDate();
         vm.switchDate();
 
         expect(vm.pickStartDate).toEqual(data.startDate);
@@ -115,7 +116,7 @@ describe('CalendarPickerControllerCustomFeature', function () {
     it('should be able to disable modify a prefix end date', function () {
         pickerWithPresetDateRange = setupPicker('ng-model="data" disable="end-date"');
         vm = pickerWithPresetDateRange.find('wfm-calendar-picker-header').scope().vm;
-        vm.pickDate = moment().add((preSetLength / 2 - 10), 'day');
+        vm.pickDate = moment(fakeToday).add((preSetLength / 2 - 10), 'day').toDate();
         vm.switchDate();
 
         expect(vm.pickEndDate).toEqual(data.endDate);
@@ -161,7 +162,7 @@ describe('CalendarPickerControllerCustomFeature', function () {
         calendarView = pickerWithPresetDateRange.find('table')[0];
 
         $timeout(function () {
-            var check = moment(vm.pickDate).isSame(moment());
+            var check = moment(vm.pickDate).isSame(moment(fakeToday));
 
             expect(vm.pickDate).not.toEqual(null);
             expect(check).toEqual(true);
@@ -172,7 +173,7 @@ describe('CalendarPickerControllerCustomFeature', function () {
         pickerWithPresetDateRange = setupPicker('ng-model="data2" single-date-picker');
         vm = pickerWithPresetDateRange.find('wfm-calendar-picker-header').scope().vm;
         calendarView = pickerWithPresetDateRange.find('table')[0];
-        vm.pickDate = moment().add(5, 'day');
+        vm.pickDate = moment(fakeToday).add(5, 'day').toDate();
 
         $timeout(function () {
             var diffDays = moment(vm.pickDate).diff(vm.pickDate, 'day');

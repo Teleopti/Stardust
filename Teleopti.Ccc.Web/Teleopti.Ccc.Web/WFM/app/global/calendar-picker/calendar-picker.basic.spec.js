@@ -1,4 +1,4 @@
-fdescribe('CalendarPickerControllerBasicFeature', function () {
+describe('CalendarPickerControllerBasicFeature', function () {
     var vm,
         $controller,
         $compile,
