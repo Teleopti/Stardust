@@ -40,7 +40,14 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		[Category("ScheduleOptimizationStardust")]
 		public void MeasurePerformanceOnStardust()
 		{
-			TestLog.Debug($"Number of succeeded jobs before scheduling {Hangfire.NumberOfSucceededJobs()}");
+			Hangfire.CleanQueue();
+			TestLog.Debug($"Number of succeeded jobs before scheduling {Hangfire.SucceededFromStatistics()}");
+			var hangfireQueueLogCancellationToken = new CancellationTokenSource();
+			Task.Run(() =>
+			{
+				NUnitSetup.LogHangfireQueues(TestLog, Hangfire);
+			}, hangfireQueueLogCancellationToken.Token);
+
 			using (var browserActivator = new CoypuChromeActivator())
 			{
 				//long timeout for now due to slow loading of planning period view on large dbs. Could be lowered when fixed
@@ -68,25 +75,11 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				browserInteractions.AssertNotExists("body", "#Login-container");
 				browserInteractions.AssertExistsUsingJQuery(".heatmap:visible");
 			}
-			TestLog.Debug($"Number of succeeded jobs before Hangfire.WaitForQueue {Hangfire.NumberOfSucceededJobs()}");
-			var hangfireQueueLogCancellationToken = new CancellationTokenSource();
-			Task.Run(() =>
-			{
-				NUnitSetup.LogHangfireQueues(TestLog, Hangfire);
-			}, hangfireQueueLogCancellationToken.Token);
-			while (true)
-			{
-				if (Hangfire.NumberOfEnqueuedJobs() > 2 || Hangfire.NumberOfSucceededJobs() > 2 ||
-					Hangfire.NumberOfFailedJobs() > 2)
-				{
-					Hangfire.WaitForQueue();
-					break;
-				}
 
-				Thread.Sleep(3000);
-			}
+			TestLog.Debug($"Number of succeeded jobs before Hangfire.WaitForQueue {Hangfire.SucceededFromStatistics()}");
+			Hangfire.WaitForQueue();
 			hangfireQueueLogCancellationToken.Cancel();
-			TestLog.Debug($"Number of succeeded jobs after Hangfire.WaitForQueue {Hangfire.NumberOfSucceededJobs()}");
+			TestLog.Debug($"Number of succeeded jobs after Hangfire.WaitForQueue {Hangfire.SucceededFromStatistics()}");
 		}
 
 		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningGroupId, string planningPeriodId)

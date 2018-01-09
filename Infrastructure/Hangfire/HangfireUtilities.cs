@@ -140,6 +140,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			return monitoring.SucceededListCount();
 		}
 
+		public long SucceededFromStatistics()
+		{
+			return monitoring.GetStatistics().Succeeded;
+		}
+
 		public void CleanFailedJobsBefore(DateTime time)
 		{
 			const int batch = 100;
