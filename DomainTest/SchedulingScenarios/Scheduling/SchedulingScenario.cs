@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			if (_resourcePlannerXxl47258)
 				toggleManager.Enable(Toggles.ResourcePlanner_XXL_47258);
 			if(_resourcePlannerNoPytteIslands47500)
-				Assert.Ignore("To be fixed");
+				toggleManager.Enable(Toggles.ResourcePlanner_NoPytteIslands_47500);
 		}
 
 		public void OnBefore()
