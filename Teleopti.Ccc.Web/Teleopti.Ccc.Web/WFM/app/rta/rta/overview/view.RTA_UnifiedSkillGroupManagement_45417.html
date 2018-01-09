@@ -85,7 +85,7 @@
 			<rta-card-body ng-click="$event.stopPropagation();">
 				<div class="con-fluid-row dense">
 					<div class="con-fluid-flex" ng-repeat="team in card.teams">
-						<div class="card panel material-depth-1" ng-class="team.ClassOnSelection">
+						<div class="card panel material-depth-1 team" ng-class="team.ClassOnSelection">
 							<div class="sub-header flex" ng-click="vm.selectTeamOrSite(team)">
 								<h1 ng-attr-data-max="{{team.AgentsCount}}" ng-attr-data-value="{{team.InAlarmCount}}" class="rta-team-name-container">
 									{{team.Name}}
