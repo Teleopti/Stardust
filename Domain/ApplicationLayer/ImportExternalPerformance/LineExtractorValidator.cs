@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -43,7 +44,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 			result.DateFrom = new DateTime(dateTime.Ticks, DateTimeKind.Utc);
 
-			var measureName = columns[measureNameColumnIndex];
+			var measureName = columns[measureNameColumnIndex].Trim();
+			if (measureName.IsEmpty())
+			{
+				result.Error = $"{line},{Resources.MeasureNameIsMandatory}";
+				return result;
+			}
 			if (!measureNameLengthIsValid(measureName))
 			{
 				result.Error = $"{line},{Resources.MeasureNameIsTooLong}";

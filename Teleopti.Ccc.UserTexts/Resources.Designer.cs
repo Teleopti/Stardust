@@ -17420,6 +17420,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Measure name is mandatory..
+        /// </summary>
+        public static string MeasureNameIsMandatory {
+            get {
+                return ResourceManager.GetString("MeasureNameIsMandatory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Measure name is too long.
         /// </summary>
         public static string MeasureNameIsTooLong {

@@ -87,6 +87,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
+		public void ShouldRejectRecordIfMeasureNameIsEmpty()
+		{
+			var invalidRecord = "20170820,1,Kalle,Pettersson,,2,Numeric,2000";
+			var fileData = createFileData(invalidRecord);
+
+			var expectedErrorRecord = $"{invalidRecord},{Resources.MeasureNameIsMandatory}";
+			var result = Target.Process(fileData);
+
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
+		public void ShouldRejectRecordIfMeasureNameIsOnlyWithBlank()
+		{
+			var invalidRecord = "20170820,1,Kalle,Pettersson,  ,2,Numeric,2000";
+			var fileData = createFileData(invalidRecord);
+
+			var expectedErrorRecord = $"{invalidRecord},{Resources.MeasureNameIsMandatory}";
+			var result = Target.Process(fileData);
+
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
 		public void ShouldRejectRecordIfExternalPerformanceTypeNameIsLongerThan200Characters()
 		{
 			var measureName = new String('a', 201);
