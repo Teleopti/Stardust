@@ -24,6 +24,7 @@
 
 		vm.clear = function () {
 			$http.get('../api/RtaTracer/Clear');
+			vm.exception = undefined;
 		};
 
 		var poller = rtaPollingService.create(function () {
@@ -41,7 +42,18 @@
 							}),
 							activityCheckAt: tracer.ActivityCheckAt,
 							tracing: tracer.Tracing,
-							exception: tracer.Exception
+							exceptions: (tracer.Exceptions || []).map(function (e) {
+								return {
+									exception: e.Exception,
+									at: e.At,
+									toggleDisplay: function () {
+										if (vm.exception === e.Info)
+											vm.exception = undefined;
+										else
+											vm.exception = e.Info
+									}
+								};
+							})
 						};
 					});
 				vm.tracedUsers = response.data.TracedUsers

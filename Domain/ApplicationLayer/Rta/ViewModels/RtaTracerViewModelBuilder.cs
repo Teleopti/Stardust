@@ -17,37 +17,45 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public RtaTracerViewModel Build()
 		{
-			var tracings = _reader.ReadOfType<TracingLog>().ToLookup(x => x.Process);
-			var dataReceivedAts = _reader.ReadOfType<ProcessReceivedLog>().ToLookup(x => x.Process);
-			var activityCheckerAts = _reader.ReadOfType<ActivityCheckLog>().ToLookup(x => x.Process);
-			var exceptions = _reader.ReadOfType<ProcessExceptionLog>().ToLookup(x => x.Process);
-			var processes = tracings.Select(x => x.Key).Concat(
-					dataReceivedAts.Select(x => x.Key)).Concat(
-					activityCheckerAts.Select(x => x.Key)).Concat(
-					exceptions.Select(x => x.Key))
+			var tracingLogs = _reader.ReadOfType<TracingLog>().ToLookup(x => x.Process);
+			var dataReceivedLogs = _reader.ReadOfType<ProcessReceivedLog>().ToLookup(x => x.Process);
+			var activityCheckLogs = _reader.ReadOfType<ActivityCheckLog>().ToLookup(x => x.Process);
+			var exceptionLogs = _reader.ReadOfType<ProcessExceptionLog>().ToLookup(x => x.Process);
+			var processLogs = tracingLogs.Select(x => x.Key).Concat(
+					dataReceivedLogs.Select(x => x.Key)).Concat(
+					activityCheckLogs.Select(x => x.Key)).Concat(
+					exceptionLogs.Select(x => x.Key))
 				.Distinct();
 
-			var tracers = from process in processes
-				let tracing = tracings[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Tracing
-				let dataReceiveds = dataReceivedAts[process].OrderByDescending(r => r.Log?.ReceivedAt).Take(5).Select(x => x.Log)
-				let dataReceived = (
-					from dataReceived in dataReceiveds
-					select
+			var tracers = from process in processLogs
+				let tracing = tracingLogs[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Tracing
+				let dataReceived = dataReceivedLogs[process]
+					.OrderByDescending(r => r.Log?.ReceivedAt)
+					.Take(5)
+					.Select(x =>
 						new DataReceived
 						{
-							At = dataReceived?.ReceivedAt?.ToString("HH:mm:ss"),
-							By = dataReceived?.ReceivedBy,
-							Count = dataReceived?.ReceivedCount ?? 0,
+							At = x.Log?.ReceivedAt?.ToString("HH:mm:ss"),
+							By = x.Log?.ReceivedBy,
+							Count = x.Log?.ReceivedCount ?? 0,
 						})
-				let activityCheckAt = activityCheckerAts[process].Max(r => r.Log?.ActivityCheckAt?.ToString("HH:mm:ss"))
-				let exception = exceptions[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Type
+				let activityCheckAt = activityCheckLogs[process].Max(r => r.Log?.ActivityCheckAt?.ToString("HH:mm:ss"))
+				let exceptions = exceptionLogs[process]
+					.OrderByDescending(x => x.Time)
+					.Take(5)
+					.Select(x => new TracedException
+					{
+						Exception = x.Log.Type,
+						At = x.Time.ToString("yyyy-MM-dd HH:mm:ss"),
+						Info = x.Log.Info
+					})
 				select new Tracer
 				{
 					Process = process,
 					Tracing = tracing,
 					DataReceived = dataReceived.ToArray(),
 					ActivityCheckAt = activityCheckAt,
-					Exception = exception
+					Exceptions = exceptions
 				};
 
 			var logs = _reader.ReadOfType<StateTraceLog>().OrderByDescending(x => x.Time);
@@ -94,7 +102,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<DataReceived> DataReceived;
 		public string ActivityCheckAt;
 		public string Tracing;
+		public IEnumerable<TracedException> Exceptions;
+	}
+
+	public class TracedException
+	{
 		public string Exception;
+		public string At;
+		public string Info;
 	}
 
 	public class DataReceived

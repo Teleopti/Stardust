@@ -320,48 +320,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		}
 
 		[Test]
-		//[SetCulture("sv-SE")]
-		//Adding this culture is NOT the solution, 
-		//there is actually a bbug if this is needed so please inform us of the bbug instead of adding it
-		// ;)
 		public void ShouldContainProcessException()
 		{
 			var exceptionType = RandomName.Make(nameof(InvalidAuthenticationKeyException));
 			RtaTracers
 				.Has(new RtaTracerLog<ProcessExceptionLog>
 				{
+					Time = "2018-01-09 12:00".Utc(),
 					Log = new ProcessExceptionLog
 					{
-						Type = exceptionType
+						Type = exceptionType,
+						Info = "Alot of info"
 					}
 				});
 
-			Target.Build().Tracers.Single().Exception.Should().Be(exceptionType);
+			Target.Build().Tracers.Single().Exceptions.Single().Exception.Should().Be(exceptionType);
+			Target.Build().Tracers.Single().Exceptions.Single().At.Should().Be("2018-01-09 12:00:00");
+			Target.Build().Tracers.Single().Exceptions.Single().Info.Should().Be("Alot of info");
 		}
 
 		[Test]
-		public void ShouldContainLatestProcessException()
+		public void ShouldContain5LatestProcessExceptions()
 		{
-			RtaTracers
-				.Has(new RtaTracerLog<ProcessExceptionLog>
-				{
-					Time = "2017-10-05 08:00:00".Utc(),
-					Log = new ProcessExceptionLog
-					{
-						Type = "not this one"
-					}
-				})
-				.Has(new RtaTracerLog<ProcessExceptionLog>
-				{
-					Time = "2017-10-05 08:00:10".Utc(),
-					Log = new ProcessExceptionLog
-					{
-						Type = "this one"
-					}
-				});
+			var times = "2017-12-19 12:00".Utc().TimeRange("2017-12-19 13:00".Utc(), TimeSpan.FromMinutes(1));
+			var logs = times.Select(x => new RtaTracerLog<ProcessExceptionLog>
+			{
+				Time = x,
+				Log = new ProcessExceptionLog()
+			});
+			RtaTracers.Has(logs.ToArray());
 
-			Target.Build().Tracers.Single().Exception
-				.Should().Be("this one");
+			Target.Build().Tracers.Single().Exceptions.Should().Have.Count.EqualTo(5);
+			Target.Build().Tracers.Single().Exceptions.ElementAt(0).At.Should().Be("2017-12-19 13:00:00");
+			Target.Build().Tracers.Single().Exceptions.ElementAt(1).At.Should().Be("2017-12-19 12:59:00");
+			Target.Build().Tracers.Single().Exceptions.ElementAt(2).At.Should().Be("2017-12-19 12:58:00");
+			Target.Build().Tracers.Single().Exceptions.ElementAt(3).At.Should().Be("2017-12-19 12:57:00");
+			Target.Build().Tracers.Single().Exceptions.ElementAt(4).At.Should().Be("2017-12-19 12:56:00");
 		}
 
 		[Test]

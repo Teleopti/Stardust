@@ -66,16 +66,6 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 		expect(vm.tracers[0].tracing).toBe('usercode34, Ashley Andeen' + random);
 	});
 
-	it('should display tracer exception', function (t) {
-		t.backend.withTracer({
-			Exception: 'something is broken'
-		});
-
-		var vm = t.createController();
-
-		expect(vm.tracers[0].exception).toBe('something is broken');
-	});
-
 	it('should display tracer received by and count', function (t) {
 		t.backend.withTracer({
 			DataReceived: [{
@@ -255,4 +245,83 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 
 		expect(t.backend.clearCalled).toBe(true);
 	});
+
+	it('should display tracer exception', function (t) {
+		t.backend.withTracer({
+			Exceptions: [{At: '2018-01-09 12:00:00', Exception: 'ArgumentException'}]
+		});
+
+		var vm = t.createController();
+
+		expect(vm.tracers[0].exceptions[0].at).toBe('2018-01-09 12:00:00');
+		expect(vm.tracers[0].exceptions[0].exception).toBe('ArgumentException');
+	});
+
+	it('should display tracer exception info', function (t) {
+		t.backend.withTracer({
+			Exceptions: [{Exception: 'ArgumentException', Info: 'alot of stuff to display'}]
+		});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.tracers[0].exceptions[0].toggleDisplay();
+		});
+
+		expect(vm.exception).toBe('alot of stuff to display');
+	});
+
+	it('should hide tracer exception info', function (t) {
+		t.backend.withTracer({
+			Exceptions: [{Exception: 'ArgumentException', Info: 'alot of stuff to display'}]
+		});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.tracers[0].exceptions[0].toggleDisplay();
+		});
+		t.apply(function () {
+			vm.tracers[0].exceptions[0].toggleDisplay();
+		});
+
+		expect(vm.exception).toBeFalsy();
+	});
+
+	it('should display other tracer exception info', function (t) {
+		t.backend.withTracer({
+			Exceptions: [{
+				Exception: 'ArgumentException',
+				Info: 'alot of stuff to display'
+			}, {
+				Exception: 'ArgumentException',
+				Info: 'this should be displayed'
+			}]
+		});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.tracers[0].exceptions[0].toggleDisplay();
+		});
+		t.apply(function () {
+			vm.tracers[0].exceptions[1].toggleDisplay();
+		});
+
+		expect(vm.exception).toBe('this should be displayed');
+	});
+	
+	it('should clear tracer exception info', function (t) {
+		t.backend.withTracer({
+			Exceptions: [{Exception: 'ArgumentException', Info: 'alot of stuff to display'}]
+		});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.tracers[0].exceptions[0].toggleDisplay();
+		});
+		t.apply(function () {
+			vm.clear();
+		});
+
+		expect(vm.exception).toBeFalsy();
+	});
+
 });

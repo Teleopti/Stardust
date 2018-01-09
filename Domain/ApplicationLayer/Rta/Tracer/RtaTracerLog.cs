@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 	public class ProcessExceptionLog
 	{
 		public string Type;
+		public string Info;
 	}
 
 	public class ActivityCheckLog

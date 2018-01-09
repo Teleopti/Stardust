@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
 
 		public void ProcessProcessing() => writeForCurrentOrConfigured(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
 		public void ProcessActivityCheck() => writeForCurrentOrConfigured(new ActivityCheckLog {ActivityCheckAt = _now.UtcDateTime()}, "Activity check at");
-		public void ProcessException(Exception exception) => writeForCurrentOrConfigured(new ProcessExceptionLog {Type = exception.GetType().Name}, exception.Message);
+		public void ProcessException(Exception exception) => writeForCurrentOrConfigured(new ProcessExceptionLog {Type = exception.GetType().Name, Info = exception.ToString()}, exception.Message);
 
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace)
 		{

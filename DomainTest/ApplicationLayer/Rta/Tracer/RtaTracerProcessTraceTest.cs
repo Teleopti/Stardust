@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -81,12 +82,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 		{
 			Target.Trace("usercode");
 
-			Target.ProcessException(new InvalidAuthenticationKeyException("blip blop"));
+			Exception exception;
+			try
+			{
+				throw new InvalidAuthenticationKeyException("blip blop");
+			}
+			catch (Exception e)
+			{
+				Target.ProcessException(e);
+				exception = e;
+			}
 
 			var log = Logs.ReadOfType<ProcessExceptionLog>().Single();
 			log.Message.Should().Be("blip blop");
 			log.Process.Should().Be(RtaTracer.ProcessName());
 			log.Log.Type.Should().Be(nameof(InvalidAuthenticationKeyException));
+			log.Log.Info.Should().Contain(exception.Message);
+			log.Log.Info.Should().Contain(exception.StackTrace);
 		}
 
 		[Test]

@@ -41,9 +41,26 @@
 						<td width="400px" style="vertical-align: top" ng-if="tracer.dataReceived.length === 0">Received nothing yet</td>
 						<td width="200px" style="vertical-align: top">Checked at {{tracer.activityCheckAt}}</td>
 						<td style="vertical-align: top">Tracing {{tracer.tracing}}</td>
-						<td width="400px" style="vertical-align: top">Last exception: {{tracer.exception}}</td>
+						<td width="400px" style="vertical-align: top">
+							<a href="" ng-repeat="exception in tracer.exceptions" ng-click="exception.toggleDisplay()">
+								{{exception.exception}} at {{exception.at}}<br/>
+							</a>
+						</td>
 					</tr>
 				</table>
+			</div>
+		</div>
+	</div>
+
+	<h1 ng-if="vm.exception">Exception</h1>
+	<div ng-if="vm.exception" class="con-row">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="con-row">
+					<div class="con-flex">
+						{{vm.exception}}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
