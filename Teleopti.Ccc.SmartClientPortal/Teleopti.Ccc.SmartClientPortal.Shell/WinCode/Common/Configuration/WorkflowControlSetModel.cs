@@ -66,6 +66,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		bool IsOvertimeProbabilityEnabled { get; set; }
 		bool AutoGrantOvertimeRequest { get; set; }
+
+		bool OvertimeRequestMaximumTimeEnabled { get; set; }
 	}
 
 	public class WorkflowControlSetModel : IWorkflowControlSetModel
@@ -547,6 +549,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				if (DomainEntity.AbsenceProbabilityEnabled == value) return;
 				DomainEntity.AbsenceProbabilityEnabled = value;
+				IsDirty = true;
+			}
+		}
+
+		public bool OvertimeRequestMaximumTimeEnabled
+		{
+			get => DomainEntity.OvertimeRequestMaximumTimeEnabled;
+			set
+			{
+				if (DomainEntity.OvertimeRequestMaximumTimeEnabled == value) return;
+				DomainEntity.OvertimeRequestMaximumTimeEnabled = value;
 				IsDirty = true;
 			}
 		}

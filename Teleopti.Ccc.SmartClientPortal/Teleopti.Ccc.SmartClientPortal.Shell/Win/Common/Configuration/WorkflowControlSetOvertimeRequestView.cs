@@ -43,6 +43,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			checkBoxAdvOvertimeProbability.CheckStateChanged += checkBoxAdvOvertimeProbability_CheckStateChanged;
 		}
 
+		public void SetOvertimeRequestMaximumTimeEnabled(bool overtimeRequestMaximumTimeEnabled)
+		{
+			checkBoxAdvOvertimeMaximumEnabled.CheckStateChanged -= CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged;
+			checkBoxAdvOvertimeMaximumEnabled.Checked = overtimeRequestMaximumTimeEnabled;
+			checkBoxAdvOvertimeMaximumEnabled.CheckStateChanged += CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged;
+		}
+
 		public void SetAutoGrantOvertimeRequest(bool autoGrantOvertimeRequest)
 		{
 			checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged -= checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged;
@@ -50,9 +57,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged += checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged;
 		}
 
-		public void SetOverTimeRequestMaximumTimeHandleType(OvertimeRequestValidationHandleOptionView overtimeRequestValidationHandleOptionView)
+		public void SetOverTimeRequestMaximumTimeHandleType(
+			OvertimeRequestValidationHandleOptionView overtimeRequestValidationHandleOptionView)
 		{
 			comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem = overtimeRequestValidationHandleOptionView;
+			if (comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem == null)
+				comboBoxOvertimeRequestMaximumTimeHandleType.SelectedIndex = 0;
 		}
 
 		public void SetOverTimeRequestMaximumTime(TimeSpan? selectedModelOvertimeRequestMaximumTime)
@@ -111,20 +121,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			comboBoxOvertimeRequestMaximumTimeHandleType.DisplayMember = "Description";
 		}
 
-		private void timeSpanTextBoxOvertimeRequestMaximumTime_Leave(object sender, System.EventArgs e)
+		private void timeSpanTextBoxOvertimeRequestMaximumTime_Leave(object sender, EventArgs e)
 		{
-			comboBoxOvertimeRequestMaximumTimeHandleType.Enabled = timeSpanTextBoxOvertimeRequestMaximumTime.Value != TimeSpan.Zero;
-			if (!comboBoxOvertimeRequestMaximumTimeHandleType.Enabled)
-				comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem = null;
-			else
-			{
-				if (comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem == null)
-					comboBoxOvertimeRequestMaximumTimeHandleType.SelectedIndex = 0;
-			}
 			_presenter.SetOvertimeRequestMaximumTime(timeSpanTextBoxOvertimeRequestMaximumTime.Value);
 		}
 
-		private void ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged(object sender, System.EventArgs e)
+		private void ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			_presenter.SetOvertimeRequestMaximumTimeHandleType(
 				(OvertimeRequestValidationHandleOptionView) comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem);
@@ -216,6 +218,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged(object sender, EventArgs e)
 		{
 			_presenter.SetAutoGrantOvertimeRequest(checkBoxAdvAutoGrantOvertimeRequest.Checked);
+		}
+
+		private void CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged(object sender, EventArgs e)
+		{
+			timeSpanTextBoxOvertimeRequestMaximumTime.Enabled = checkBoxAdvOvertimeMaximumEnabled.Checked;
+			comboBoxOvertimeRequestMaximumTimeHandleType.Enabled = checkBoxAdvOvertimeMaximumEnabled.Checked;
+			_presenter.SetOvertimeRequestMaximumEnabled(checkBoxAdvOvertimeMaximumEnabled.Checked);
 		}
 
 		private void gridControlOvertimeRequestOpenPeriods_CheckBoxClick(object sender, GridCellClickEventArgs e)

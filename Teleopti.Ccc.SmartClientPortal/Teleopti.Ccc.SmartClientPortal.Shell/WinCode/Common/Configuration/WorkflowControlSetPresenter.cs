@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetAutoGrantOvertimeRequest(_selectedModel.AutoGrantOvertimeRequest);
 			_view.SetOverTimeRequestMaximumTimeHandleType(_selectedModel.OvertimeRequestValidationHandleOptionView);
 			_view.SetOverTimeRequestMaximumTime(_selectedModel.OvertimeRequestMaximumTime);
+			_view.SetOvertimeRequestMaximumTimeEnabled(_selectedModel.OvertimeRequestMaximumTimeEnabled);
 		}
 
 		public IWorkflowControlSetModel SelectedModel
@@ -732,5 +733,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			}
 		}
 
+		public void SetOvertimeRequestMaximumEnabled(bool overtimeRequestMaximumTimeEnabled)
+		{
+			_selectedModel.OvertimeRequestMaximumTimeEnabled = overtimeRequestMaximumTimeEnabled;
+		}
 	}
 }

@@ -210,5 +210,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		void SetOvertimeOpenPeriodsGridRowCount(int rowCount);
 		void SetOverTimeRequestMaximumTimeHandleType(OvertimeRequestValidationHandleOptionView overtimeRequestValidationHandleOptionView);
 		void SetOverTimeRequestMaximumTime(TimeSpan? selectedModelOvertimeRequestMaximumTime);
+		void SetOvertimeRequestMaximumTimeEnabled(bool selectedModelOvertimeRequestMaximumTimeEnabled);
 	}
 }

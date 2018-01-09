@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateTimePeriodVisualizer;
@@ -144,7 +145,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOvertimeMaximumSetting = new System.Windows.Forms.TableLayoutPanel();
 			this.labelOpenForAbsenceRequests = new System.Windows.Forms.Label();
 			this.labelOpenForOvertimeRequests = new System.Windows.Forms.Label();
-			this.labelOvertimeRequestMaximum = new System.Windows.Forms.Label();
 			this.lblOvertimeRequestMaximumTimeHandleType = new System.Windows.Forms.Label();
 			this.buttonDeleteAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonDeleteOvertimeRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -191,6 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelOvertimeRequestBasic = new System.Windows.Forms.Label();
 			this.checkBoxAdvOvertimeProbability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvAutoGrantOvertimeRequest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAdvOvertimeMaximumEnabled = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
@@ -263,6 +264,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.panelOvertimeRequestHeaderBasic.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrantOvertimeRequest)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumEnabled)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -1897,12 +1899,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// tableLayoutPanelOvertimeMaximumSetting
 			// 
 			this.tableLayoutPanelOvertimeMaximumSetting.ColumnCount = 5;
+			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(){ SizeType = SizeType.AutoSize});
 			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.labelOvertimeRequestMaximum, 0, 0);
+			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.checkBoxAdvOvertimeMaximumEnabled, 0, 0);
 			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.timeSpanTextBoxOvertimeRequestMaximumTime, 1, 0);
 			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.lblOvertimeRequestMaximumTimeHandleType, 2, 0);
 			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.comboBoxOvertimeRequestMaximumTimeHandleType, 3, 0);
@@ -1913,21 +1915,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOvertimeMaximumSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelOvertimeMaximumSetting.Size = new System.Drawing.Size(959, 34);
 			this.tableLayoutPanelOvertimeMaximumSetting.TabIndex = 0;
-			// 
-			// labelOvertimeRequestMaximum
-			// 
-			this.labelOvertimeRequestMaximum.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelOvertimeRequestMaximum.AutoSize = true;
-			this.labelOvertimeRequestMaximum.BackColor = System.Drawing.Color.Transparent;
-			this.labelOvertimeRequestMaximum.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelOvertimeRequestMaximum.ForeColor = System.Drawing.Color.Black;
-			this.labelOvertimeRequestMaximum.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.labelOvertimeRequestMaximum.Location = new System.Drawing.Point(3, 8);
-			this.labelOvertimeRequestMaximum.Name = "labelOvertimeRequestMaximum";
-			this.labelOvertimeRequestMaximum.Size = new System.Drawing.Size(177, 17);
-			this.labelOvertimeRequestMaximum.TabIndex = 0;
-			this.labelOvertimeRequestMaximum.Text = "xxOvertimeRequestMaximum";
-			this.labelOvertimeRequestMaximum.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// timeSpanTextBoxOvertimeRequestMaximumTime
 			// 
@@ -1971,7 +1958,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Size = new System.Drawing.Size(150, 23);
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.TabIndex = 1;
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.Enabled = false;
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged;	
 			// 
 			// buttonDeleteOvertimeRequestPeriod
@@ -2601,6 +2587,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvAutoGrantOvertimeRequest.ThemesEnabled = false;
 			this.checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged += new System.EventHandler(this.checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged);
 			// 
+			// checkBoxAdvOvertimeMaximumEnabled
+			// 
+			this.checkBoxAdvOvertimeMaximumEnabled.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAdvOvertimeMaximumEnabled.BeforeTouchSize = new System.Drawing.Size(250, 24);
+			this.checkBoxAdvOvertimeMaximumEnabled.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
+			this.checkBoxAdvOvertimeMaximumEnabled.Location = new System.Drawing.Point(3, 73);
+			this.checkBoxAdvOvertimeMaximumEnabled.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.checkBoxAdvOvertimeMaximumEnabled.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvOvertimeMaximumEnabled.Name = "checkBoxAdvOvertimeMaximumEnabled";
+			this.checkBoxAdvOvertimeMaximumEnabled.Size = new System.Drawing.Size(250, 24);
+			this.checkBoxAdvOvertimeMaximumEnabled.Text = "xxOvertimeRequestMaximum";
+			//this.checkBoxAdvOvertimeMaximumEnabled.TabIndex = 17;
+			this.checkBoxAdvOvertimeMaximumEnabled.ThemesEnabled = false;
+			this.checkBoxAdvOvertimeMaximumEnabled.CheckStateChanged += new System.EventHandler(this.CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged);
+			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -2719,6 +2720,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.panelOvertimeRequestHeaderBasic.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrantOvertimeRequest)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumEnabled)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
 			this.ResumeLayout(false);
 
@@ -2757,7 +2759,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private TableLayoutPanel tableLayoutPanelOvertimeMaximumSetting;
 		private Label labelOpenForAbsenceRequests;
 		private Label labelOpenForOvertimeRequests;
-		private Label labelOvertimeRequestMaximum;
 		private Label lblOvertimeRequestMaximumTimeHandleType;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteAbsenceRequestPeriod;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteOvertimeRequestPeriod;
@@ -2868,6 +2869,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxEnableAbsenceProbability;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeProbability;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvAutoGrantOvertimeRequest;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeMaximumEnabled;
 		private Panel panelOvertimeRequestHeaderBasic;
 		private Label labelOvertimeRequestBasic;
 	}
