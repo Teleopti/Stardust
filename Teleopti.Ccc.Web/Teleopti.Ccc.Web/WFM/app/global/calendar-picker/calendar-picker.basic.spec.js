@@ -1,4 +1,4 @@
-describe('CalendarPickerControllerBasicFeature', function () {
+fdescribe('CalendarPickerControllerBasicFeature', function () {
     var vm,
         $controller,
         $compile,
@@ -10,7 +10,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
         ],
         preSetLength = 14,
         calendarView,
-        fakeToday = moment("01-01-2018", "MM-DD-YYYY"),
+        fakeToday = new Date(2018, 0, 1),
         data;
 
     beforeEach(function () {
@@ -28,8 +28,8 @@ describe('CalendarPickerControllerBasicFeature', function () {
         });
 
         data = {
-            startDate: moment(fakeToday),
-            endDate: moment(fakeToday).add(preSetLength - 1, 'day')
+            startDate: moment(fakeToday).toDate(),
+            endDate: moment(fakeToday).add(preSetLength - 1, 'day').toDate()
         }
 
         $rootScope.data = data;
@@ -73,6 +73,15 @@ describe('CalendarPickerControllerBasicFeature', function () {
     it('should be able to prepare data form other controller to component while picker was init', function () {
         expect(vm.pickStartDate).toEqual(data.startDate);
         expect(vm.pickEndDate).toEqual(data.endDate);
+    });
+
+    it('should reset hours, minutes and seconds to 0 for selected date', function () {
+        expect(vm.pickStartDate.getHours()).toEqual(0);
+        expect(vm.pickStartDate.getMinutes()).toEqual(0);
+        expect(vm.pickStartDate.getSeconds()).toEqual(0);
+        expect(vm.pickEndDate.getHours()).toEqual(0);
+        expect(vm.pickEndDate.getMinutes()).toEqual(0);
+        expect(vm.pickEndDate.getSeconds()).toEqual(0);
     });
 
     it('should be able to reset startDate from component', function () {
@@ -121,10 +130,10 @@ describe('CalendarPickerControllerBasicFeature', function () {
     });
 
     it('should be able to display date range on calendar view while start date and end date are not null', function () {
-        var month = monthNames[vm.pickStartDate.get('month')];
-        var year = vm.pickStartDate.get('year');
-        var startDay = vm.pickStartDate.get('date');
-        var endDay = vm.pickEndDate.get('date');
+        var month = monthNames[vm.pickStartDate.getMonth()];
+        var year = vm.pickStartDate.getFullYear();
+        var startDay = vm.pickStartDate.getDate();
+        var endDay = vm.pickEndDate.getDate();
         var monthOnCalendar = calendarView.getElementsByTagName('strong')[0].innerHTML;
         var range = calendarView.getElementsByClassName('in-date-range');
         var rangeStartDate = Math.floor(range[0].getElementsByTagName('span')[0].innerHTML);
@@ -144,10 +153,10 @@ describe('CalendarPickerControllerBasicFeature', function () {
         vm.pickDate = moment(fakeToday).add(moveDays, 'day');
         vm.switchDate();
 
-        var month = monthNames[vm.pickStartDate.get('month')];
-        var year = vm.pickStartDate.get('year');
-        var startDay = vm.pickStartDate.get('date');
-        var endDay = vm.pickEndDate.get('date');
+        var month = monthNames[vm.pickStartDate.getMonth()];
+        var year = vm.pickStartDate.getFullYear();
+        var startDay = vm.pickStartDate.getDate();
+        var endDay = vm.pickEndDate.getDate();
         var monthOnCalendar = calendarView.getElementsByTagName('strong')[0].innerHTML;
         var range = calendarView.getElementsByClassName('in-date-range');
         var rangeStartDate = Math.floor(range[0].getElementsByTagName('span')[0].innerHTML);
@@ -169,10 +178,10 @@ describe('CalendarPickerControllerBasicFeature', function () {
         vm.pickDate = moment(fakeToday).add(preSetLength + moveDays - 1, 'day');
         vm.switchDate();
 
-        var month = monthNames[vm.pickStartDate.get('month')];
-        var year = vm.pickStartDate.get('year');
-        var startDay = vm.pickStartDate.get('date');
-        var endDay = vm.pickEndDate.get('date');
+        var month = monthNames[vm.pickStartDate.getMonth()];
+        var year = vm.pickStartDate.getFullYear();
+        var startDay = vm.pickStartDate.getDate();
+        var endDay = vm.pickEndDate.getDate();
         var monthOnCalendar = calendarView.getElementsByTagName('strong')[0].innerHTML;
         var range = calendarView.getElementsByClassName('in-date-range');
         var rangeStartDate = Math.floor(range[0].getElementsByTagName('span')[0].innerHTML);
@@ -191,7 +200,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
     it('should be able to auto update new start date after both start date and end date are set to none', function () {
         vm.resetStartDate();
         vm.resetEndDate();
-        vm.pickDate = moment(fakeToday).add((preSetLength / 2 - 2), 'day');
+        vm.pickDate = moment(fakeToday).add((preSetLength / 2 - 2), 'day').toDate();
         vm.switchDate();
         var range = calendarView.getElementsByClassName('in-date-range');
 
@@ -203,7 +212,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
     });
 
     it('should be able to auto update new start date while new pick date is near to original start date', function () {
-        vm.pickDate = moment(fakeToday).add((preSetLength / 2 - 2), 'day');
+        vm.pickDate = moment(fakeToday).add((preSetLength / 2 - 2), 'day').toDate();
         vm.switchDate();
         var range = calendarView.getElementsByClassName('in-date-range');
 
@@ -217,7 +226,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
     });
 
     it('should be able to auto update new end date while new pick date is near to original end date', function () {
-        vm.pickDate = moment(fakeToday).add((preSetLength / 2 + 3), 'day');
+        vm.pickDate = moment(fakeToday).add((preSetLength / 2 + 3), 'day').toDate();
         vm.switchDate();
         var range = calendarView.getElementsByClassName('in-date-range');
 
@@ -231,7 +240,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
     });
 
     it('should be able to auto update new end date while new pick date is the middle date between the original start date and end date', function () {
-        vm.pickDate = moment(fakeToday).add((preSetLength / 2 - 1), 'day');
+        vm.pickDate = moment(fakeToday).add((preSetLength / 2 - 1), 'day').toDate();
         vm.switchDate();
         var range = calendarView.getElementsByClassName('in-date-range');
 
@@ -245,7 +254,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
     });
 
     it('should be able to auto update new start date while new pick date is near to original start date', function () {
-        vm.pickDate = moment(fakeToday).add((preSetLength / 2 - 2), 'day');
+        vm.pickDate = moment(fakeToday).add((preSetLength / 2 - 2), 'day').toDate();
         vm.switchDate();
         var range = calendarView.getElementsByClassName('in-date-range');
 
@@ -259,7 +268,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
     });
 
     it('should be able to auto update new end date while new pick date is near to original end date', function () {
-        vm.pickDate = moment(fakeToday).add((preSetLength / 2 + 3), 'day');
+        vm.pickDate = moment(fakeToday).add((preSetLength / 2 + 3), 'day').toDate();
         vm.switchDate();
         var range = calendarView.getElementsByClassName('in-date-range');
 

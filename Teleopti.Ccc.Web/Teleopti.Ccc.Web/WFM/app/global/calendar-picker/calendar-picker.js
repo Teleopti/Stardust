@@ -92,7 +92,7 @@
         }
 
         function hightLightToday() {
-            return vm.pickDate = moment();
+            return vm.pickDate = resetHoursToMidnight(new Date());
         }
 
         function onChangeForDateRangePicker() {
@@ -102,9 +102,18 @@
         }
 
         function fetchNgModelDateForDateRangePicker() {
-            vm.pickStartDate = !vm.ngModel.$modelValue ? null : vm.ngModel.$modelValue.startDate;
-            vm.pickEndDate = !vm.ngModel.$modelValue ? null : vm.ngModel.$modelValue.endDate;
+            var startDate = !vm.ngModel.$modelValue ? null : vm.ngModel.$modelValue.startDate;
+            var endDate = !vm.ngModel.$modelValue ? null : vm.ngModel.$modelValue.endDate;
+            vm.pickStartDate = resetHoursToMidnight(startDate);
+            vm.pickEndDate = resetHoursToMidnight(endDate);
             return [angular.copy(vm.pickStartDate), angular.copy(vm.pickEndDate)];
+        }
+
+        function resetHoursToMidnight(inputDate) {
+            if (inputDate == null)
+                return null;
+            var d = new Date(inputDate).setHours(0, 0, 0, 0);
+            return new Date(d);
         }
 
         function onChangeForSingleDatePicker() {

@@ -41,7 +41,7 @@
 
 
         var today = new Date();
-        var fourDayLater = new Date().setDate(new Date().getDate() + 4)
+        var fourDayLater = new Date().setDate(new Date().getDate() + 4);
 
         vm.data2 = {
             startDate: today
@@ -61,7 +61,7 @@
 
         vm.data6 = {
             startDate: today,
-            endDate: fourDayLater
+            endDate: new Date(fourDayLater)
         }
     }
 })();
