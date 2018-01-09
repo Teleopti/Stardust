@@ -16923,7 +16923,7 @@ Do you want to participate?</value>
     <comment>Prompt used in an upload panel</comment>
   </data>
   <data name="GamificationMeasureNameAlreadyExist" xml:space="preserve">
-    <value>There was same gamification measure name exist with its Id {0}</value>
+    <value>A gamification measure (Id {0}) already exists with this name.</value>
     <comment>Error message used in importing an external performance csv file.</comment>
   </data>
 </root>
