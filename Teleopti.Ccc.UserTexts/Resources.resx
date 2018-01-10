@@ -4401,6 +4401,10 @@ Accounts</value>
     <value>Overtime Request</value>
     <comment>Overtime Request</comment>
   </data>
+  <data name="OvertimeRequests" xml:space="preserve">
+    <value>Overtime Requests</value>
+    <comment>Overtime Requests name in Permissions</comment>
+  </data>
   <data name="OvertimeType" xml:space="preserve">
     <value>Overtime Type</value>
     <comment>Overtime Type</comment>
