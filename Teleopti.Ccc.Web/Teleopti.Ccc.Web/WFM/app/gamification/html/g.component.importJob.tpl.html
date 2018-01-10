@@ -12,7 +12,9 @@
 		<span>{{'InProgress'|translate}}</span>
 	</div>
 	<div ng-if="$ctrl.status=='failed'">
-		<span ng-if="$ctrl.message.length"><i class="mdi mdi-alert-octagon"></i>&nbsp;{{$ctrl.message}}</span>
+		<i class="mdi mdi-alert-octagon"></i>
+		<span ng-if="$ctrl.message.length">&nbsp;{{$ctrl.message}}</span>
+		<span ng-if="!$ctrl.message.length">{{'Failed'|translate}}</span>
 	</div>
 	<div ng-if="$ctrl.status=='finished'">
 		<span>{{'Finished'|translate}}</span>
