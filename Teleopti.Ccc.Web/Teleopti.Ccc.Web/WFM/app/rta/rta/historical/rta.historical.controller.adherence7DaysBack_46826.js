@@ -9,9 +9,9 @@
 		vm.highlighted = {};
 		vm.diamonds = [];
 		vm.cards = [];
-		vm.previousHref = undefined;
-		vm.nextHref = undefined;
-
+		vm.previousHref;
+		vm.nextHref;
+		
 		$stateParams.open = ($stateParams.open || "false");
 
 		vm.ooaTooltipTime = function (time) {
