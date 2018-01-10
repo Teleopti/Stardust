@@ -10,7 +10,9 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-	public class AnalyticsOptionalColumnGroupPageHandler : IHandleEvent<OptionalColumnCollectionChangedEvent>,
+	public class AnalyticsOptionalColumnGroupPageHandler : 
+		IHandleEvent<OptionalColumnCollectionChangedEvent>,
+		IHandleEvent<PersonCollectionChangedEvent>,
 		IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsOptionalColumnGroupPageHandler));
@@ -53,6 +55,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				saveNewBridgeGroupPagePersons(newBridgeGroupPagePersons, @event.LogOnBusinessUnitId);
 			}
 			
+		}
+
+		[UnitOfWork, AnalyticsUnitOfWork]
+		[Attempts(10)]
+		public virtual void Handle(PersonCollectionChangedEvent @event)
+		{
+			throw new NotImplementedException();
 		}
 
 		private void saveNewBridgeGroupPagePersons(IDictionary<Guid, IList<Guid>> newBridgeGroupPagePersons, Guid businessUnitId)

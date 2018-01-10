@@ -172,5 +172,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			AnalyticsBridgeGroupPagePersonRepository.Bridges
 				.Should().Be.Empty();
 		}
+
+		[Test]
+		public void ShouldUpdateDynamicOptionalColumnGroupPageForChangedPerson()
+		{
+			IOptionalColumn optionalColumn = new OptionalColumn("opt1")
+			{
+				AvailableAsGroupPage = true
+			};
+			optionalColumn.SetId(_entityId);
+			var person1 = new Person().WithId();
+			person1.AddOptionalColumnValue(new OptionalColumnValue("group1"), optionalColumn);
+			var person2 = new Person().WithId();
+
+			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(person1.OptionalColumnValueCollection.First());
+			new FakePersonRepositoryLegacy(new IPerson[] { person1});
+
+			var message = new PersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId };
+			//message.PersonIdCollection = new List<Guid>()
+			//{
+			//	person1.Id.Value
+			//};
+		}
 	}
 }
