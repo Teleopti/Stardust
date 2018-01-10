@@ -31,11 +31,14 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 		{
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var ret = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod, agents), new PersistableScheduleDataPermissionChecker());
-			foreach (var scheduleData in persistableScheduleData)
+			using (TurnoffPermissionScope.For(ret))
 			{
-				((ScheduleRange)ret[scheduleData.Person]).Add(scheduleData);
+				foreach (var scheduleData in persistableScheduleData)
+				{
+					((ScheduleRange)ret[scheduleData.Person]).Add(scheduleData);
+				}
+				return ret;				
 			}
-			return ret;
 		}
 	}
 }

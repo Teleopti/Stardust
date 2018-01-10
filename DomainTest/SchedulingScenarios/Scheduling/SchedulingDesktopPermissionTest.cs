@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -70,6 +72,42 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			return schedulerStateHolder.Schedules[agent].ScheduledDay(firstDay).IsScheduled();
 		}
+		
+		
+		[TestCase(true)]
+		[TestCase(false)]
+		[Ignore("#47523 To be fixed")]
+		public void ShouldConsiderDataTheEndUserHasNoPermissionFor(bool havePermissonOtherAgentsSchedule)
+		{
+			var personId = Guid.NewGuid();
+			Database.WithTenant("_").WithPerson(personId, "_");
+			var dataRangeOptions = havePermissonOtherAgentsSchedule
+				? AvailableDataRangeOption.Everyone
+				: AvailableDataRangeOption.MyOwn; 
+			foreach (var applicationFunction in new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions)
+			{
+				Database.WithRole(dataRangeOptions, applicationFunction.FunctionPath);
+			}
+			var person = PersonRepository.Load(personId);
+			LogOnOff.LogOn("_", person, Database.CurrentBusinessUnitId());	
+			var date = new DateOnly(2017, 5, 15);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 60), new TimePeriodWithSegment(16, 0, 17, 0, 60), new ShiftCategory().WithId()));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date);
+			var otherAgent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill);
+			var otherAgentsSchedule = new PersonAssignment(otherAgent, scenario, date).WithLayer(activity, new TimePeriod(8, 9));
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 1.5));
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, date, new[] { agent, otherAgent }, otherAgentsSchedule, skillDay);
+
+			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, date.ToDateOnlyPeriod());
+
+			schedulerStateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().ShiftLayers.Single().Period.StartDateTime.Hour
+				.Should().Be.EqualTo(9);
+		}
+		
+		
 
 		public SchedulingDesktopPermissionTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
 		{
