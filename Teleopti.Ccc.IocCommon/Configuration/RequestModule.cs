@@ -110,6 +110,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				<IAnyPersonSkillsOpenValidator, AnyPersonSkillsOpenValidator, AnyPersonSkillOpenTrueValidator>(builder,
 					Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384
 				);
+			builder.RegisterType<ShiftEndTimeProvider>().As<IShiftEndTimeProvider>().SingleInstance();
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

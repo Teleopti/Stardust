@@ -140,12 +140,14 @@
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
     <Compile Include="AgentInfo\PrimaryPersonSkillFilter.cs" />
     <Compile Include="AgentInfo\Requests\IOvertimeRequestSkillProvider.cs" />
+    <Compile Include="AgentInfo\Requests\IShiftEndTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\ISkillOpenHourFilter.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\AbsenceRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequest.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestSkillProvider.cs" />
     <Compile Include="AgentInfo\Requests\NotOvertimeRequestSpecification.cs" />
+    <Compile Include="AgentInfo\Requests\ShiftEndTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\SkillOpenHourFilter.cs" />
     <Compile Include="AgentInfo\ScheduleStaffingPossibilityConsts.cs" />
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
