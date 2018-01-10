@@ -88,17 +88,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				Database.WithRole(dataRangeOptions, applicationFunction.FunctionPath);
 			}
-			var person = PersonRepository.Load(personId);
-			LogOnOff.LogOn("_", person, Database.CurrentBusinessUnitId());	
 			var date = new DateOnly(2017, 5, 15);
 			var activity = new Activity().WithId();
 			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var scenario = new Scenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 60), new TimePeriodWithSegment(16, 0, 17, 0, 60), new ShiftCategory().WithId()));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date);
+			var agent = new Person().WithId(personId).InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date);
 			var otherAgent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill);
 			var otherAgentsSchedule = new PersonAssignment(otherAgent, scenario, date).WithLayer(activity, new TimePeriod(8, 9));
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 1.5));
+			LogOnOff.LogOn("_", agent, Database.CurrentBusinessUnitId());	
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, date, new[] { agent, otherAgent }, otherAgentsSchedule, skillDay);
 
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, date.ToDateOnlyPeriod());
