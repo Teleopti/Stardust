@@ -2,11 +2,9 @@
 
 <wfm-calendar-picker ng-model="vm.data6"></wfm-calendar-picker>
 
-{{vm.data6}}
-
 <h1>Date range picker with custom validation</h1>
 
-<wfm-calendar-picker ng-model="vm.data7" custom-validate="vm.customValid(vm.data6)"></wfm-calendar-picker>
+<wfm-calendar-picker ng-model="vm.data7" custom-validate="vm.customValid(vm.data7)"></wfm-calendar-picker>
 
 
 <h1>Example for wrapping date picker into pop up</h1>
@@ -24,6 +22,10 @@
 <h1>Date range picker with only weeks interval</h1>
 
 <wfm-calendar-picker ng-model="vm.data4" show-week="false" interval-rule="week"></wfm-calendar-picker>
+
+<h1>Date range picker with only monthes interval</h1>
+
+<wfm-calendar-picker ng-model="vm.data8" show-week="false" interval-rule="month"></wfm-calendar-picker>
 
 
 <h1>Date range picker with disable selection on endDate</h1>

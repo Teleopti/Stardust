@@ -4,14 +4,14 @@
     angular
         .module('wfm.calendarPicker')
         .component('wfmCalendarPicker', {
-            templateUrl: function (CurrentUserInfo) {
+            templateUrl: ['CurrentUserInfo', function (CurrentUserInfo) {
                 var dateFormat = CurrentUserInfo.CurrentUserInfo().DateFormatLocale == 'fa-IR' ? 'jalaali' : 'gregorian';
                 var templates = {
                     'jalaali': 'app/global/calendar-picker/calendar-picker.jalaali.template.tpl.html',
                     'gregorian': 'app/global/calendar-picker/calendar-picker.gregorian.template.tpl.html'
                 }
                 return templates[dateFormat];
-            },
+            }],
             require: {
                 ngModel: 'ngModel'
             },
@@ -254,9 +254,9 @@
         }
 
         function generateWeeksOnlyDateRangeInfo(a, b) {
-            var a = moment(a);
-            var b = moment(b).add(1, 'day');
-            var days = b.diff(a, 'day');
+            var a = moment(a).clone();
+            var b = moment(b).clone();
+            var days = b.add(1, 'day').diff(a, 'day');
             if (days > 6) {
                 var week = (days / 7).toString().split('.')[0];
                 var day = b.subtract(week * 7, 'day').diff(a, 'day');
@@ -271,10 +271,11 @@
         }
 
         function generateMonthsOnlyDateRangeInfo(a, b) {
-            var a = moment(a);
-            var b = moment(b);
-            var month = b.add(1, 'day').diff(a, 'month', true).toFixed();
-            var days = b.subtract(month, 'month').diff(a, 'day');
+            var a = moment(a).clone();
+            var b = moment(b).clone();
+            var intervalOfMonth = b.diff(a, 'month', true);
+            var month = calIntervalOfMonth(a, b, intervalOfMonth);
+            var days = b.subtract(month, 'month').add(1, 'day').diff(a, 'day');
             return {
                 Month: month,
                 Day: days
@@ -282,11 +283,12 @@
         }
 
         function generateDateRangeInfo(a, b) {
-            var a = moment(a);
-            var b = moment(b);
+            var a = moment(a).clone();
+            var b = moment(b).clone();
             var year = b.diff(a, 'year');
-            var month = b.subtract(year, 'year').add(1, 'day').diff(a, 'month', true).toFixed();
-            var days = b.subtract(month, 'month').diff(a, 'day');
+            var intervalOfMonth = b.subtract(year, 'year').diff(a, 'month', true);
+            var month = calIntervalOfMonth(a, b, intervalOfMonth);
+            var days = b.subtract(month, 'month').add(1, 'day').diff(a, 'day');
             if (days > 6) {
                 var week = (days / 7).toString().split('.')[0];
                 var day = b.subtract(week * 7, 'day').diff(a, 'day');
@@ -300,6 +302,21 @@
                 Week: week,
                 Day: day
             }
+        }
+
+        function calIntervalOfMonth(a, b, intervalOfMonth) {
+            var endDateOfSameMonthOfStartDate = a.clone().endOf('month');
+            var endDateOfSameMonthOfEndDate = b.clone().endOf('month');
+            var dateOfStartDate = a.clone().get('date');
+            var dateOfEndDate = b.clone().get('date');
+            if ((endDateOfSameMonthOfEndDate.diff(b, 'day') - endDateOfSameMonthOfStartDate.diff(a, 'day') == 1) || (dateOfStartDate - dateOfEndDate == 1)) {
+                return intervalOfMonth.toFixed();
+            }
+            return 0;
+        }
+
+        function leapYear(year) {
+            return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
         }
 
         function createDateInterval(a, b, type) {
