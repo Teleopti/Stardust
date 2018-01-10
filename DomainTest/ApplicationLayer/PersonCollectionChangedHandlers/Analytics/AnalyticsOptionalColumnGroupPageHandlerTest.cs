@@ -10,17 +10,19 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	[TestFixture]
+	[DomainTest]
 	public class AnalyticsOptionalColumnGroupPageHandlerTest
 	{
-		private AnalyticsOptionalColumnGroupPageHandler _target;
-		private FakeOptionalColumnRepository _optionalColumnRepository;
-		private FakeAnalyticsGroupPageRepository _analyticsGroupPageRepository;
+		public AnalyticsOptionalColumnGroupPageHandler Target;
+		public FakeOptionalColumnRepository OptionalColumnRepository;
+		public FakeAnalyticsGroupPageRepository AnalyticsGroupPageRepository;
+		public FakeAnalyticsBridgeGroupPagePersonRepository AnalyticsBridgeGroupPagePersonRepository;
+
 		private Guid _businessUnitId;
-		private FakeAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
 		private Guid _entityId;
 		private AnalyticsGroup _analyticsGroupPage;
 		private AnalyticsBridgeGroupPagePerson _bridgePersonGroupPage;
@@ -29,14 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void Setup()
 		{
 			_businessUnitId = Guid.NewGuid();
-			_analyticsGroupPageRepository = new FakeAnalyticsGroupPageRepository();
-			_optionalColumnRepository = new FakeOptionalColumnRepository();
-			_analyticsBridgeGroupPagePersonRepository = new FakeAnalyticsBridgeGroupPagePersonRepository();
-			_target = new AnalyticsOptionalColumnGroupPageHandler(
-				_optionalColumnRepository, 
-				_analyticsGroupPageRepository, 
-				_analyticsBridgeGroupPagePersonRepository
-				);
 			_entityId = Guid.NewGuid();
 			_analyticsGroupPage = new AnalyticsGroup
 			{
@@ -62,19 +56,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void ShouldDeleteGroupPageWhenEntityIsDeleted()
 		{
 			
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(_analyticsGroupPage);
-			_analyticsBridgeGroupPagePersonRepository
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(_analyticsGroupPage);
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(_bridgePersonGroupPage)
 				.WithPersonMapping(_bridgePersonGroupPage.PersonCode, _bridgePersonGroupPage.PersonId);
 
 			var message = new OptionalColumnCollectionChangedEvent {LogOnBusinessUnitId = _businessUnitId};
 			message.SetOptionalColumnIdCollection(new List<Guid>() { _entityId });
 
-			_target.Handle(message);
+			Target.Handle(message);
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges
+			AnalyticsBridgeGroupPagePersonRepository.Bridges
 				.Should().Be.Empty();
-			_analyticsGroupPageRepository.GetGroupPage(_analyticsGroupPage.GroupPageCode, _analyticsGroupPage.BusinessUnitCode)
+			AnalyticsGroupPageRepository.GetGroupPage(_analyticsGroupPage.GroupPageCode, _analyticsGroupPage.BusinessUnitCode)
 				.Should().Be.Empty();
 		}
 
@@ -87,20 +81,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			};
 			optionalColumn.SetId(_entityId);
 
-			_optionalColumnRepository.Add(optionalColumn);
-			_analyticsGroupPageRepository.AddGroupPageIfNotExisting(_analyticsGroupPage);
-			_analyticsBridgeGroupPagePersonRepository
+			OptionalColumnRepository.Add(optionalColumn);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(_analyticsGroupPage);
+			AnalyticsBridgeGroupPagePersonRepository
 				.Has(_bridgePersonGroupPage)
 				.WithPersonMapping(_bridgePersonGroupPage.PersonCode, _bridgePersonGroupPage.PersonId);
 
 			var message = new OptionalColumnCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			message.SetOptionalColumnIdCollection(new List<Guid>() { _entityId });
 
-			_target.Handle(message);
+			Target.Handle(message);
 
-			_analyticsBridgeGroupPagePersonRepository.Bridges
+			AnalyticsBridgeGroupPagePersonRepository.Bridges
 				.Should().Be.Empty();
-			_analyticsGroupPageRepository.GetGroupPage(_analyticsGroupPage.GroupPageCode, _analyticsGroupPage.BusinessUnitCode)
+			AnalyticsGroupPageRepository.GetGroupPage(_analyticsGroupPage.GroupPageCode, _analyticsGroupPage.BusinessUnitCode)
 				.Should().Be.Empty();
 		}
 
@@ -119,38 +113,38 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var person3 = new Person().WithId();
 			person3.AddOptionalColumnValue(new OptionalColumnValue("group2"), optionalColumn);
 
-			_optionalColumnRepository.Add(optionalColumn);
-			_optionalColumnRepository.AddPersonValues(person1.OptionalColumnValueCollection.First());
-			_optionalColumnRepository.AddPersonValues(person2.OptionalColumnValueCollection.First());
-			_optionalColumnRepository.AddPersonValues(person3.OptionalColumnValueCollection.First());
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(person1.Id.Value, 5);
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(person2.Id.Value, 6);
-			_analyticsBridgeGroupPagePersonRepository.WithPersonMapping(person3.Id.Value, 7);
+			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(person1.OptionalColumnValueCollection.First());
+			OptionalColumnRepository.AddPersonValues(person2.OptionalColumnValueCollection.First());
+			OptionalColumnRepository.AddPersonValues(person3.OptionalColumnValueCollection.First());
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person1.Id.Value, 5);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person2.Id.Value, 6);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person3.Id.Value, 7);
 
 			new FakePersonRepositoryLegacy(new IPerson[] {person1, person2, person3});
 
 			var message = new OptionalColumnCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			message.SetOptionalColumnIdCollection(new List<Guid>() { _entityId });
 
-			_target.Handle(message);
+			Target.Handle(message);
 
-			IEnumerable<AnalyticsGroup> analyticsGroups =_analyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.Value, _businessUnitId);
+			IEnumerable<AnalyticsGroup> analyticsGroups =AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.Value, _businessUnitId);
 			var groupCode1 = analyticsGroups.Single(x => x.GroupName == "group1").GroupCode;
 			var groupCode2 = analyticsGroups.Single(x => x.GroupName == "group2").GroupCode;
 
 			analyticsGroups.Count()
 				.Should().Be.EqualTo(2);
-			_analyticsBridgeGroupPagePersonRepository.Bridges.Count
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Count
 				.Should().Be.EqualTo(3);
 			analyticsGroups.SingleOrDefault(x => x.GroupPageCode == _entityId && x.GroupPageName == "opt1" && x.GroupName == "group1" && x.GroupIsCustom == false)
 				.Should().Not.Be.Null();
 			analyticsGroups.SingleOrDefault(x => x.GroupPageCode == _entityId && x.GroupPageName == "opt1" && x.GroupName == "group2" && x.GroupIsCustom == false)
 				.Should().Not.Be.Null();
-			_analyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person1.Id.Value && x.GroupCode == groupCode1)
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person1.Id.Value && x.GroupCode == groupCode1)
 				.Should().Not.Be.Null();
-			_analyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person2.Id.Value && x.GroupCode == groupCode2)
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person2.Id.Value && x.GroupCode == groupCode2)
 				.Should().Not.Be.Null();
-			_analyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person3.Id.Value && x.GroupCode == groupCode2)
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person3.Id.Value && x.GroupCode == groupCode2)
 				.Should().Not.Be.Null();
 
 		}
@@ -164,18 +158,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			};
 			optionalColumn.SetId(_entityId);
 
-			_optionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.Add(optionalColumn);
 
 			var message = new OptionalColumnCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			message.SetOptionalColumnIdCollection(new List<Guid>() { _entityId });
 
-			_target.Handle(message);
+			Target.Handle(message);
 
-			IEnumerable<AnalyticsGroup> analyticsGroups = _analyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.Value, _businessUnitId);
+			IEnumerable<AnalyticsGroup> analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.Value, _businessUnitId);
 
 			analyticsGroups
 				.Should().Be.Empty();
-			_analyticsBridgeGroupPagePersonRepository.Bridges
+			AnalyticsBridgeGroupPagePersonRepository.Bridges
 				.Should().Be.Empty();
 		}
 	}
