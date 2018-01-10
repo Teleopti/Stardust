@@ -139,12 +139,14 @@
     <Compile Include="AgentInfo\IPlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
     <Compile Include="AgentInfo\PrimaryPersonSkillFilter.cs" />
+    <Compile Include="AgentInfo\Requests\IOvertimeRequestDefaultStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\IOvertimeRequestSkillProvider.cs" />
     <Compile Include="AgentInfo\Requests\IShiftEndTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\ISkillOpenHourFilter.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\AbsenceRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequest.cs" />
+    <Compile Include="AgentInfo\Requests\OvertimeRequestDefaultStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestSkillProvider.cs" />
     <Compile Include="AgentInfo\Requests\NotOvertimeRequestSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftEndTimeProvider.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformancePersister.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\IExternalPerformancePersister.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\ IOvertimeRequestAvailability.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeMinimumApprovalThresholdInMinutes.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAvailability.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestMaximumtimeValidator.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceJobStatus.cs" />

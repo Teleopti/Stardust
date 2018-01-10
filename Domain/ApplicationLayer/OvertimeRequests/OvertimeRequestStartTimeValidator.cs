@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 	{
 		private readonly INow _now;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private const int minimumApprovalThresholdTimeInMinutes = 15;
 
 		public OvertimeRequestStartTimeValidator(INow now, ILoggedOnUser loggedOnUser)
 		{
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		{
 			var personRequest = context.PersonRequest;
 			var span = personRequest.Request.Period.StartDateTime - _now.UtcDateTime();
-			if (Math.Ceiling(span.TotalMinutes) >= minimumApprovalThresholdTimeInMinutes)
+			if (Math.Ceiling(span.TotalMinutes) >= OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes)
 				return new OvertimeRequestValidationResult { IsValid = true };
 
 			return new OvertimeRequestValidationResult
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				IsValid = false,
 				InvalidReasons = new []{string.Format(Resources.OvertimeRequestDenyReasonExpired,
 					TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.StartDateTime,
-						_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()), minimumApprovalThresholdTimeInMinutes)}
+						_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()), OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes)}
 			};
 		}
 	}

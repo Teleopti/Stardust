@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
+using Teleopti.Ccc.Infrastructure.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Extensions;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -16,12 +20,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IOvertimeRequestPersister _overtimeRequestPersister;
 		private readonly IToggleManager _toggleManager;
 		private readonly IOvertimeRequestAvailability _overtimeRequestLicense;
+		private readonly IOvertimeRequestDefaultStartTimeProvider _overtimeRequestDefaultStartTimeProvider;
 
-		public OvertimeRequestsController(IOvertimeRequestPersister overtimeRequestPersister, IToggleManager toggleManager, IOvertimeRequestAvailability overtimeRequestLicense)
+		public OvertimeRequestsController(IOvertimeRequestPersister overtimeRequestPersister, IToggleManager toggleManager, IOvertimeRequestAvailability overtimeRequestLicense, IOvertimeRequestDefaultStartTimeProvider overtimeRequestDefaultStartTimeProvider)
 		{
 			_overtimeRequestPersister = overtimeRequestPersister;
 			_toggleManager = toggleManager;
 			_overtimeRequestLicense = overtimeRequestLicense;
+			_overtimeRequestDefaultStartTimeProvider = overtimeRequestDefaultStartTimeProvider;
 		}
 
 		[UnitOfWork, HttpPost]
@@ -55,6 +61,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult GetLicenseAvailability()
 		{
 			return Json(_overtimeRequestLicense.IsEnabled(), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWork, HttpGet]
+		public virtual JsonResult GetDefaultStartTime(DateOnly date)
+		{
+			return Json(_overtimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date).ToString(DateTimeFormatExtensions.FixedDateTimeFormat), JsonRequestBehavior.AllowGet);
 		}
 	}
 }
