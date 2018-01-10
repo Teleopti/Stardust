@@ -57,14 +57,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.ContractTime.Should().Be.EqualTo(TimeSpan.FromHours(176));
 		}
 
-		[Test]
+		[TestCase(true)]
+		[TestCase(false)]
 		[Ignore("fix 47319")]
-		public void ShouldRespectBlockSameShiftCategoryInBetweenPersonPeriods()
+		public void ShouldRespectBlockSameShiftCategoryInBetweenPersonPeriods(bool hasExtraPersonPeriod)
 		{
 			var date = new DateOnly(2017, 1, 22);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
-			var shiftCatExpected = new ShiftCategory("A").WithId();
-			var shiftCatNotExpected = new ShiftCategory("B").WithId();
+			var shiftCatExpected = new ShiftCategory("expected").WithId();
+			var shiftCatNotExpected = new ShiftCategory("not expected").WithId();
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen().WithId();
@@ -73,8 +74,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSetNotExpected = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), shiftCatNotExpected));
 			var ruleSetBag = new RuleSetBag(ruleSetExpected, ruleSetNotExpected);
 			var agent = new Person().WithSchedulePeriodOneWeek(date).InTimeZone(TimeZoneInfo.Utc).WithId()
-					.WithPersonPeriod(ruleSetBag, skill)
-					.WithPersonPeriod(date.AddDays(2), ruleSetBag, skill);
+					.WithPersonPeriod(ruleSetBag, skill);
+			if(hasExtraPersonPeriod)
+					agent.WithPersonPeriod(date.AddDays(2), ruleSetBag, skill);
 			var stateholder = SchedulerStateHolder.Fill(scenario, period, agent, 
 					new []
 					{
