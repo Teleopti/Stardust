@@ -69,6 +69,12 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return agent.WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), null, skills);
 		}
+		
+		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IRuleSetBag ruleSetBag, params ISkill[] skills)
+		{
+			return agent.WithPersonPeriod(periodStart, ruleSetBag, new ContractWithMaximumTolerance(), null, skills);
+		}
+
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, ITeam team, params ISkill[] skills)
 		{
@@ -108,6 +114,8 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return agent.WithPersonPeriod(DateOnly.MinValue, ruleSetBag, contract, team, skills);
 		}
+		
+
 
 		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IRuleSetBag ruleSetBag, IContract contract, ITeam team, params ISkill[] skills)
 		{

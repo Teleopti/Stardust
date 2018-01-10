@@ -321,7 +321,7 @@
     <Compile Include="SchedulingScenarios\ResourceCalculation\IllegalResourceCalculationTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithExternalStaffTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithNoContextTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockContractTimeTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopPermissionTest.cs" />
     <Compile Include="SchedulingScenarios\SeperateWebRequest.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidationTest.cs" />
