@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
 		private readonly bool _resourcePlannerNoPytteIslands47500;
-		private readonly bool _resourcePlannerXxl47258;
+		protected readonly bool _resourcePlannerXxl47258;
 
 		public IIoCTestContext IoCTestContext;
 

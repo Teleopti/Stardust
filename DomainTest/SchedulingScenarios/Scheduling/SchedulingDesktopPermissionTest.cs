@@ -76,9 +76,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("#47523 To be fixed")]
 		public void ShouldConsiderDataTheEndUserHasNoPermissionFor(bool havePermissonOtherAgentsSchedule)
 		{
+			if(!_resourcePlannerXxl47258)
+				Assert.Ignore("Bug only fixed when toggle 47258 is on for now");
 			var personId = Guid.NewGuid();
 			Database.WithTenant("_").WithPerson(personId, "_");
 			var dataRangeOptions = havePermissonOtherAgentsSchedule
