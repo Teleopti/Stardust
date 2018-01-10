@@ -3,8 +3,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-    public interface IDayOffTemplateRepository : IRepository<IDayOffTemplate>
-    {
-        IList<IDayOffTemplate> FindAllDayOffsSortByDescription();
-    }
+	public interface IDayOffTemplateRepository : IRepository<IDayOffTemplate>
+	{
+		IList<IDayOffTemplate> FindAllDayOffsSortByDescription();
+		IList<IDayOffTemplate> FindActivedDayOffsSortByDescription();
+
+	}
 }

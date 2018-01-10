@@ -22,7 +22,7 @@
 				endDate: curDate
 			};
 
-			dayOffService.getAvailableTemplates().then(function (templates) {
+			dayOffService.getAllDayOffTemplates().then(function (templates) {
 				ctrl.availableTemplates = templates;
 			});
 		}

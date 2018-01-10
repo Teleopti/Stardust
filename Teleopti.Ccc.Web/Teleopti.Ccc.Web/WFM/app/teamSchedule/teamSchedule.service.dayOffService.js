@@ -6,15 +6,15 @@
 
 	function DayOffService($http, $q) {
 		var urlMap = {
-			loadTemplate: "../api/TeamScheduleData/GetAvailableTemplates",
+			loadTemplate: "../api/TeamScheduleData/AllDayOffTemplates",
 			addDayOff: "../api/TeamScheduleCommand/AddDayOff"
 		};
 
-		this.getAvailableTemplates = getAvailableTemplates;
+		this.getAllDayOffTemplates = getAllDayOffTemplates;
 		this.addDayOff = addDayOff;
 
 		var dayOffs = [];
-		function getAvailableTemplates() {
+		function getAllDayOffTemplates() {
 			return $q(function (resolve, reject) {
 				if (!!dayOffs.length) {
 					resolve(dayOffs);

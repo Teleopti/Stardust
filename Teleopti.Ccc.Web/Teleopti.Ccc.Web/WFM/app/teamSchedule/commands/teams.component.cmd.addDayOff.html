@@ -2,7 +2,6 @@
 	<div class="sidenav-header">{{'AddDayOff'|translate}}</div>
 	<md-content class="command-panel-content" layout-padding>
 		<form name="newDayOffForm">
-			{{$ctrl.runningCommand}}
 			<md-progress-linear ng-if="$ctrl.runningCommand" md-mode="indeterminate"></md-progress-linear>
 			<h3>{{'DayOff'|translate}}: </h3>
 			<div class="con-row">

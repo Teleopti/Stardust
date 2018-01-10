@@ -45,5 +45,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return new List<IDayOffTemplate>() { new DayOffTemplate() };
 		}
+
+		public IList<IDayOffTemplate> FindActivedDayOffsSortByDescription()
+		{
+			return FindAllDayOffsSortByDescription();
+		}
 	}
 }
