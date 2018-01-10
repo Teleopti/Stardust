@@ -120,16 +120,18 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			const string connectionString = "Server=.;DataBase=a";
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "W. Europe Standard Time", false));
 			AllTenants.HasWithAnalyticsConnectionsTring("Tenant", connectionString);
-			var localToday = new DateTime(2017,12,11);
-			Now.Is(TimeZoneHelper.ConvertToUtc(localToday, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+			
+			var localToday = new DateTime(2017, 12, 11);
+			var utcToday = TimeZoneHelper.ConvertToUtc(localToday, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			Now.Is(utcToday);
 
 			var jobToEnqueue = new JobEnqueModel
 			{
 				JobName = "Initial",
 				JobPeriods = new List<JobPeriod>{new JobPeriod
 				{
-					Start = localToday.AddDays(-1),
-					End = localToday.AddDays(1),
+					Start = utcToday.AddDays(-1),
+					End = utcToday.AddDays(1),
 					JobCategoryName = "Initial",
 				}},
 				LogDataSourceId = -2,

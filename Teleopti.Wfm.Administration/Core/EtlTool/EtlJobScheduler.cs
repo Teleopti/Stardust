@@ -53,8 +53,10 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			foreach (var jobPeriod in jobPeriods)
 			{
 				var jobCategory = Enum.GetValues(typeof(JobCategoryType)).Cast<JobCategoryType>().First(x => x.ToString() == jobPeriod.JobCategoryName);
-				var relativeStart = jobPeriod.Start.Date.Subtract(localNow.Date).Days;
-				var relativeEnd = jobPeriod.End.Date.Subtract(localNow.Date).Days;
+				var localStart = TimeZoneHelper.ConvertFromUtc(jobPeriod.Start, timeZone);
+				var localEnd = TimeZoneHelper.ConvertFromUtc(jobPeriod.End, timeZone);
+				var relativeStart = localStart.Date.Subtract(localNow.Date).Days;
+				var relativeEnd = localEnd.Date.Subtract(localNow.Date).Days;
 				var relativePeriod = new MinMax<int>(relativeStart, relativeEnd);
 				ret.Add(new EtlJobRelativePeriod(relativePeriod, jobCategory));
 			}
