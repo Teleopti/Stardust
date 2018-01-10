@@ -1,34 +1,15 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
 
 namespace Teleopti.Ccc.Scheduling.PerformanceTest
 {
-	public class PerformanceTestAttribute : IoCTestAttribute
-	{
-		protected override FakeConfigReader Config()
-		{
-			var config = base.Config();
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
-			return config;
-		}
-
-		protected override void Startup(IComponentContext container)
-		{
-			base.Startup(container);
-			container.Resolve<HangfireClientStarter>().Start();
-		}
-	}
-
 	[PerformanceTest]
 	public class FullSchedulingStardustTest
 	{
