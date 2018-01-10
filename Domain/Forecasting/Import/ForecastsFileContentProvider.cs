@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 			_rowExtractor = rowExtractor;
 		}
 
-		private static bool isValidHeaderRow(string content)
+		private bool isValidHeaderRow(string content)
 		{
-			return content.Equals("skillname,startdatetime,enddatetime,tasks,tasktime,agents");
+			return content.Equals(_rowExtractor.HeaderRow);
 		}
 
 		public ICollection<IForecastsRow> LoadContent(byte[] fileContent, TimeZoneInfo timeZone)

@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
 		[Test]
 		public void ShouldHandleHeaders()
 		{
-			_fileContent = Encoding.UTF8.GetBytes(@"skillname,startdatetime,enddatetime,tasks,tasktime,agents
+			_fileContent = Encoding.UTF8.GetBytes(@"skillname,startdatetime,enddatetime,tasks,tasktime,aftertasktime,agents
 Insurance,20121028 02:00,20121028 02:15,17,179,0,4.05
 Insurance,20121028 02:45,20121028 03:00,17,179,0,4.05");
 			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
