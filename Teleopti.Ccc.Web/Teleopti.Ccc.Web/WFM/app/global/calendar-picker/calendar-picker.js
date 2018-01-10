@@ -273,9 +273,8 @@
         function generateMonthsOnlyDateRangeInfo(a, b) {
             var a = moment(a).clone();
             var b = moment(b).clone();
-            var intervalOfMonth = b.diff(a, 'month', true);
-            var month = calIntervalOfMonth(a, b, intervalOfMonth);
-            var days = b.subtract(month, 'month').add(1, 'day').diff(a, 'day');
+            var month = calIntervalOfMonth(a, b);
+            var days = b.subtract(month, 'month').diff(a, 'day');
             return {
                 Month: month,
                 Day: days
@@ -286,9 +285,8 @@
             var a = moment(a).clone();
             var b = moment(b).clone();
             var year = b.diff(a, 'year');
-            var intervalOfMonth = b.subtract(year, 'year').diff(a, 'month', true);
-            var month = calIntervalOfMonth(a, b, intervalOfMonth);
-            var days = b.subtract(month, 'month').add(1, 'day').diff(a, 'day');
+            var month = calIntervalOfMonth(a, b.subtract(year, 'year'));
+            var days = b.subtract(month, 'month').diff(a, 'day');
             if (days > 6) {
                 var week = (days / 7).toString().split('.')[0];
                 var day = b.subtract(week * 7, 'day').diff(a, 'day');
@@ -304,19 +302,21 @@
             }
         }
 
-        function calIntervalOfMonth(a, b, intervalOfMonth) {
-            var endDateOfSameMonthOfStartDate = a.clone().endOf('month');
-            var endDateOfSameMonthOfEndDate = b.clone().endOf('month');
-            var dateOfStartDate = a.clone().get('date');
-            var dateOfEndDate = b.clone().get('date');
-            if ((endDateOfSameMonthOfEndDate.diff(b, 'day') - endDateOfSameMonthOfStartDate.diff(a, 'day') == 1) || (dateOfStartDate - dateOfEndDate == 1)) {
-                return intervalOfMonth.toFixed();
+        function calIntervalOfMonth(a, b) {
+            var currentMonthOfEndDate = b.get('month');
+            if (currentMonthOfEndDate == 1) {
+                var startDateOfSameMonthOfStartDate = a.clone().startOf('month');
+                var endDateOfSameMonthOfStartDate = a.clone().endOf('month');
+                var endDateOfSameMonthOfEndDate = b.clone().endOf('month');
+                var dateOfStartDate = a.clone().get('date');
+                var dateOfEndDate = b.clone().get('date');
+                if ((endDateOfSameMonthOfEndDate.diff(b, 'day') - endDateOfSameMonthOfStartDate.diff(a, 'day') == 1)
+                    || (dateOfStartDate - dateOfEndDate == 1)
+                    || (startDateOfSameMonthOfStartDate.diff(a, 'day') == 0 && endDateOfSameMonthOfEndDate.diff(b, 'day') == 0)) {
+                    return b.add(1, 'day').diff(a, 'month', true).toFixed();
+                }
             }
-            return 0;
-        }
-
-        function leapYear(year) {
-            return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+            return b.add(1, 'day').diff(a, 'month');
         }
 
         function createDateInterval(a, b, type) {
