@@ -1,4 +1,4 @@
-﻿fdescribe('<add-day-off>',
+﻿describe('<add-day-off>',
 	function () {
 		'use strict';
 		var $rootScope,
