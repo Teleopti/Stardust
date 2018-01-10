@@ -18,7 +18,8 @@
 				WfmTeamSchedule_ShowStaffingInfo_45206: toggleSvc.WfmTeamSchedule_ShowStaffingInfo_45206,
 				WfmTeamSchedule_ExportSchedulesToExcel_45795: toggleSvc.WfmTeamSchedule_ExportSchedulesToExcel_45795,
 				WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010: toggleSvc.WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010,
-				WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202: toggleSvc.WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202
+				WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202: toggleSvc.WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202,
+				WfmTeamSchedule_AddNDeleteDayOff_40555: toggleSvc.WfmTeamSchedule_AddNDeleteDayOff_40555
 			};
 		}
 

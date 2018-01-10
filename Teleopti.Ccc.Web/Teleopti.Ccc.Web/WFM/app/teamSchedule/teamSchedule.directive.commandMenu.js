@@ -64,6 +64,14 @@
 				visible: function () { return vm.canActiveAddOvertime(); }
 			},
 			{
+				label: "AddDayOff",
+				shortcut: "Alt+D",
+				keys: [[keyCodes.D], [keyCodes.ALT]],
+				action: buildAction("AddDayOff", true),
+				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
+				visible: function () { return vm.canActiveAddDayOff(); }
+			},
+			{
 				label: "MoveActivity",
 				shortcut: "Alt+M",
 				keys: [[keyCodes.M], [keyCodes.ALT]],
@@ -126,10 +134,6 @@
 				action: buildAction("Undo", false),
 				clickable: function () { return vm.canUndoSchedule(); },
 				visible: function () { return true; }
-			},
-			{
-				label: "AddDayOff",
-				action: buildAction("AddDayOff", false)
 			}
 		];
 
@@ -148,6 +152,10 @@
 
 		vm.canActiveAddOvertime = function() {
 			return vm.permissions.HasAddingOvertimeActivityPermission;
+		};
+
+		vm.canActiveAddDayOff = function () {
+			return vm.toggles.WfmTeamSchedule_AddNDeleteDayOff_40555;
 		};
 
 		vm.canActiveMoveActivity = function () {
