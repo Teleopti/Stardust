@@ -13,7 +13,7 @@
 					if (value === true) {
 						$timeout(function() {
 							element[0].focus();
-						});
+						}, 100);
 					}
 				});
 				// to address @blesh's comment, set attribute value to 'false'
@@ -48,8 +48,9 @@
 	) {
 		var _ = $rootScope._;
 		var originalGroups = [];
-
+		var isNew = true;
 		var vm = this;
+
 		vm.selectedTabIndex = 0;
 		vm.selectedSkillGroup = null;
 		vm.skills = [];
@@ -61,6 +62,7 @@
 		vm.canSave = false;
 		vm.newGroupName = '';
 		vm.deleteConfirmation = false;
+		vm.modalShown = false;
 
 		//----------- scoped functions ----------------------------------------------------
 
@@ -104,6 +106,7 @@
 				Id: getRandom(),
 				Skills: []
 			};
+			isNew = true;
 			vm.editGroupNameBox = true;
 			ev.stopPropagation();
 		};
@@ -120,20 +123,21 @@
 			vm.selectedSkillGroup = skillGroup;
 			vm.newGroupName = skillGroup.Name;
 			vm.editGroupNameBox = true;
+			isNew = false;
 			vm.oldName = vm.selectedSkillGroup.Name;
 		};
 
 		vm.exitConfigMode = function() {
 			$state.go($state.params.returnState, { isNewSkillArea: false });
 		};
-
+		
 		vm.groupSkillIsSelected = function(skill) {
 			var index = vm.selectedGroupSkills.indexOf(skill);
 			return index !== -1;
 		};
 
 		vm.nameBoxKeyPress = function(ev) {
-			if (ev.key === 'Enter' && vm.selectedSkillGroup.Name.length > 0) {
+			if (ev.key === 'Enter') {
 				vm.saveNameEdit(ev);
 			}
 		};
@@ -168,7 +172,9 @@
 		};
 
 		vm.saveNameEdit = function(ev) {
-			if (vm.newGroup) {
+			console.log('isNew', isNew);
+
+			if (isNew) {
 				if (vm.newGroupName && vm.newGroupName.length > 0) {
 					vm.newGroup.Name = vm.newGroupName;
 					vm.skills = vm.allSkills.slice();
