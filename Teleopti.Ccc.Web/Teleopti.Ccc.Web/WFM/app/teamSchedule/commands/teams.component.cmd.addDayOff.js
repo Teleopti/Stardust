@@ -13,9 +13,7 @@
 
 	function AddDayOffCtrl($scope, personSelectionSvc, dayOffService, teamScheduleNotificationService) {
 		var ctrl = this;
-		dayOffService.getAvailableTemplates().then(function (templates) {
-			ctrl.availableTemplates = templates;
-		})
+		ctrl.runningCommand = false;
 
 		ctrl.$onInit = function () {
 			var curDate = moment(ctrl.containerCtrl.getDate()).toDate();
@@ -23,13 +21,32 @@
 				startDate: curDate,
 				endDate: curDate
 			};
+
+			dayOffService.getAvailableTemplates().then(function (templates) {
+				ctrl.availableTemplates = templates;
+			});
 		}
-		ctrl.isFormValid = function () {
-			var dateValid = ctrl.dateRange.startDate
+
+		ctrl.isDateRangeValid = function () {
+			return ctrl.dateRange.startDate
 				&& ctrl.dateRange.endDate
 				&& moment(ctrl.dateRange.endDate).isSameOrAfter(moment(ctrl.dateRange.startDate));
+		}
 
-			return $scope.newDayOffForm.$valid && dateValid;
+		ctrl.isFormValid = function () {
+			return $scope.newDayOffForm.$valid
+				&& ctrl.isDateRangeValid()
+				&& !ctrl.runningCommand
+				&& !!(personSelectionSvc.getCheckedPersonInfoList() || []).length;
+		}
+
+		ctrl.addDayOff = function () {
+			var input = {
+				StartDate: moment(ctrl.dateRange.startDate).format('YYYY-MM-DD'),
+				EndDate: moment(ctrl.dateRange.endDate).format('YYYY-MM-DD'),
+				TemplateId: ctrl.selectedTemplateId
+			};
+			dayOffService.addDayOff(input);
 		}
 	}
 })();

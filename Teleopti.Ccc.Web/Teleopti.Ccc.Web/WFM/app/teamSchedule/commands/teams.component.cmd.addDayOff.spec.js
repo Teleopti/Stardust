@@ -6,7 +6,8 @@
 			$document,
 			$q,
 			$httpBackend,
-			fakeDayOffService;
+			fakeDayOffService,
+			fakePersonSelectionService;
 
 		beforeEach(module('wfm.templates', 'wfm.teamSchedule'));
 
@@ -16,6 +17,10 @@
 					fakeDayOffService = new FakeDayOffService();
 					return fakeDayOffService;
 				});
+			$provide.service('PersonSelection', function () {
+				fakePersonSelectionService = new FakePersonSelectionService();
+				return fakePersonSelectionService;
+			});
 		}));
 
 		beforeEach(inject(function (_$rootScope_, _$compile_, _$document_, _$q_, _$httpBackend_) {
@@ -36,14 +41,14 @@
 			expect(template.length).toEqual(1);
 			var picker = form[0].querySelectorAll('.teamschedule-datepicker');
 			expect(picker.length).toEqual(2);
-			var applyButton = form[0].querySelectorAll("#applyDayOff");
+			var applyButton = panel[0].querySelectorAll("#applyDayOff");
 			expect(applyButton.length).toEqual(1);
 		});
+
 		it("should get available day off templates", function () {
 			var panel = setUp("2018-01-09");
 
 			var templatesDropdown = panel[0].querySelector(".dayoff-selector");
-			templatesDropdown.click();
 			var templates = templatesDropdown.querySelectorAll("md-option");
 
 			expect(templates.length).toEqual(2);
@@ -58,68 +63,157 @@
 			expect(moment(new Date(datePicker[0].querySelector('input').value)).format("YYYY-MM-DD")).toEqual(date);
 			expect(moment(new Date(datePicker[1].querySelector('input').value)).format("YYYY-MM-DD")).toEqual(date);
 		});
-		
 
-		it("should disable apply button without template selected", function () {
+		it("should disable apply button unless without template", function () {
 			var date = "2018-01-09";
 			var panel = setUp(date);
+			var scope = panel.isolateScope();
+			var ctrl = scope.$ctrl;
+
+			fakePersonSelectionService.setFakeCheckedPersonInfoList();
+			scope.$apply();
+
 			var applyButton = panel[0].querySelector("#applyDayOff");
 			expect(applyButton.disabled).toEqual(true);
+
+			ctrl.selectedTemplateId = "template1";
+			scope.$apply();
+
+			applyButton = panel[0].querySelector("#applyDayOff");
+			expect(applyButton.disabled).toEqual(false);
 		});
 
-		it("should disable apply button without start date", function () {
+		it("should disable apply button unless without start date", function () {
 			var date = "2018-01-09";
 			var panel = setUp(date);
+			var scope = panel.isolateScope();
+			var ctrl = scope.$ctrl;
 
-			var ctrl = panel.isolateScope().$ctrl;
+			fakePersonSelectionService.setFakeCheckedPersonInfoList();
+			ctrl.selectedTemplateId = "template1";
+			scope.$apply();
+
+			var applyButton = panel[0].querySelector("#applyDayOff");
+			expect(applyButton.disabled).toEqual(false);
+
 			ctrl.dateRange.startDate = "";
+			scope.$apply();
 
-			var templatesDropdown = panel[0].querySelector(".dayoff-selector");
-			templatesDropdown.click();
-			var templates = templatesDropdown.querySelectorAll("md-option");
-			templates[0].click();
-
-			var applyButton = panel[0].querySelector("#applyDayOff");
+			applyButton = panel[0].querySelector("#applyDayOff");
 			expect(applyButton.disabled).toEqual(true);
 		});
 
-		it("should disable apply button without end date", function () {
+		it("should disable apply button unless without end date", function () {
 			var date = "2018-01-09";
 			var panel = setUp(date);
+			var scope = panel.isolateScope();
+			var ctrl = scope.$ctrl;
 
-			var ctrl = panel.isolateScope().$ctrl;
-			ctrl.dateRange.endDate = "";
+			ctrl.selectedTemplateId = "template1";
+			fakePersonSelectionService.setFakeCheckedPersonInfoList();
+			scope.$apply();
 
-			var templatesDropdown = panel[0].querySelector(".dayoff-selector");
-			templatesDropdown.click();
-			var templates = templatesDropdown.querySelectorAll("md-option");
-			templates[0].click();
+			var applyButton = panel[0].querySelector("#applyDayOff");
+			expect(applyButton.disabled).toEqual(false);
 			
-			var applyButton = panel[0].querySelector("#applyDayOff");
+			ctrl.dateRange.endDate = "";
+			scope.$apply();
+
+			applyButton = panel[0].querySelector("#applyDayOff");
 			expect(applyButton.disabled).toEqual(true);
 		});
-		it("should disable apply button if the date range is not correct", function () {
+
+		it("should disable apply button and show error message unless the date range is not correct", function () {
 			var date = "2018-01-09";
 			var panel = setUp(date);
-
-			var ctrl = panel.isolateScope().$ctrl;
+			var scope = panel.isolateScope();
+			var ctrl = scope.$ctrl;
 			ctrl.dateRange = {
 				startDate: moment("2017-01-11").toDate(),
 				endDate: moment("2017-01-10").toDate()
 			};
-
-			var templatesDropdown = panel[0].querySelector(".dayoff-selector");
-			templatesDropdown.click();
-			var templates = templatesDropdown.querySelectorAll("md-option");
-			templates[0].click();
+			fakePersonSelectionService.setFakeCheckedPersonInfoList();
+			ctrl.selectedTemplateId = "template1";
+			scope.$apply();
 
 			var applyButton = panel[0].querySelector("#applyDayOff");
 			expect(applyButton.disabled).toEqual(true);
+			var errorMessage = panel[0].querySelectorAll(".text-danger");
+			expect(errorMessage.length).toEqual(1);
+
+			ctrl.dateRange = {
+				startDate: moment("2017-01-10").toDate(),
+				endDate: moment("2017-01-10").toDate()
+			};
+			scope.$apply();
+
+			applyButton = panel[0].querySelector("#applyDayOff");
+			expect(applyButton.disabled).toEqual(false);
+			errorMessage = panel[0].querySelectorAll(".text-danger");
+			expect(errorMessage.length).toEqual(0);
 		});
 
-		
+		it("should disable apply button and show progress linear unless is not processing", function () {
+			var date = "2018-01-09";
+			var panel = setUp(date);
+			var scope = panel.isolateScope();
+			var ctrl = scope.$ctrl;
 
+			ctrl.runningCommand = true;
+			ctrl.selectedTemplateId = "template1";
+			fakePersonSelectionService.setFakeCheckedPersonInfoList();
+			scope.$apply();
 
+			var applyButton = panel[0].querySelector("#applyDayOff");
+			expect(applyButton.disabled).toEqual(true);
+			var progressLinear = panel[0].querySelectorAll("md-progress-linear");
+			expect(progressLinear.length).toEqual(1);
+
+			ctrl.runningCommand = false;
+			scope.$apply();
+
+			applyButton = panel[0].querySelector("#applyDayOff");
+			expect(applyButton.disabled).toEqual(false);
+			progressLinear = panel[0].querySelectorAll("md-progress-linear");
+			expect(progressLinear.length).toEqual(0);
+		});
+
+		it("should disable apply button unless some agents are selected", function () {
+			var panel = setUp("2018-01-09");
+			var scope = panel.isolateScope();
+			var ctrl = scope.$ctrl;
+
+			ctrl.selectedTemplateId = "template1";
+			scope.$apply();
+
+			var applyButton = panel[0].querySelector("#applyDayOff");
+			expect(applyButton.disabled).toEqual(true);
+
+			fakePersonSelectionService.setFakeCheckedPersonInfoList();
+			scope.$apply();
+
+			applyButton = panel[0].querySelector("#applyDayOff");
+			expect(applyButton.disabled).toEqual(false);
+		});
+
+		it('should call add day off when click apply with correct data', function () {
+			var date = "2018-01-09";
+			var panel = setUp(date);
+			var scope = panel.isolateScope();
+			var ctrl = scope.$ctrl;
+
+			ctrl.selectedTemplateId = "template1";
+			fakePersonSelectionService.setFakeCheckedPersonInfoList();
+			scope.$apply();
+
+			var applyButton = panel[0].querySelector("#applyDayOff");
+			applyButton.click();
+
+			var dayOffData = fakeDayOffService.lastPostData;
+			expect(dayOffData.StartDate).toEqual(date);
+			expect(dayOffData.EndDate).toEqual(date);
+			expect(dayOffData.TemplateId).toEqual("template1");
+		});
 
 		function setUp(inputDate) {
 			var date;
@@ -140,13 +234,12 @@
 			vm.setActiveCmd('AddDayOff');
 			scope.$apply();
 
-			document.body.append(container[0]);
-
 			var element = angular.element(container[0].querySelector("add-day-off"));
 			return element;
 		}
 
 		function FakeDayOffService() {
+			this.lastPostData = null;
 			this.getAvailableTemplates = function () {
 				return $q(function (resolve, reject) {
 					resolve([
@@ -154,6 +247,27 @@
 						{ Id: 'template2', Name: 'template2' }
 					]);
 				});
+			}
+			this.addDayOff = function (input) {
+				this.lastPostData = input;
+			}
+		}
+
+		function FakePersonSelectionService() {
+			var fakePersonList = [];
+
+			this.setFakeCheckedPersonInfoList = function (input) {
+				fakePersonList = input || [
+					{
+						PersonId: 'agent1',
+						Name: 'agent1',
+						ScheduleStartTime: null,
+						ScheduleEndTime: null
+					}];
+			}
+
+			this.getCheckedPersonInfoList = function () {
+				return fakePersonList;
 			}
 		}
 

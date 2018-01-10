@@ -2,6 +2,7 @@
 	<div class="sidenav-header">{{'AddDayOff'|translate}}</div>
 	<md-content class="command-panel-content" layout-padding>
 		<form name="newDayOffForm">
+			{{$ctrl.runningCommand}}
 			<md-progress-linear ng-if="$ctrl.runningCommand" md-mode="indeterminate"></md-progress-linear>
 			<h3>{{'DayOff'|translate}}: </h3>
 			<div class="con-row">
@@ -23,12 +24,17 @@
 					<team-schedule-datepicker selected-date="$ctrl.dateRange.endDate" />
 				</span>
 			</div>
-			<button id="applyDayOff" class="wfm-btn form-submit"
-					ng-class="{'wfm-btn-primary': $ctrl.isFormValid(), 
-					'wfm-btn-primary-disabled': !vm$ctrlisFormValid()}"
-					ng-disabled="$ctrl.isFormValid() ? '':'disabled'">
-				{{'Apply' | translate}}
-			</button>
+			<div class="text-danger" ng-if="!$ctrl.isDateRangeValid()">
+				<i class="mdi mdi-alert-octagon"></i>
+				<span>{{'EndTimeMustBeGreaterOrEqualToStartTime' | translate}}</span>
+			</div>
 		</form>
+		<button id="applyDayOff" class="wfm-btn form-submit"
+				ng-class="{'wfm-btn-primary': $ctrl.isFormValid(),
+					'wfm-btn-primary-disabled': !$ctrlisFormValid()}"
+				ng-disabled="$ctrl.isFormValid() ? '':'disabled'"
+				ng-click="$ctrl.addDayOff()">
+			{{'Apply' | translate}}
+		</button>
 	</md-content>
 </div>
