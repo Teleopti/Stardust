@@ -9,7 +9,6 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
@@ -42,24 +41,21 @@ namespace Teleopti.Analytics.Etl.Common
 
 		private static void publishIndexMaintenanceEvent(IJob job, IList<IJobResult> jobResultCollection)
 		{
-			if (job.StepList.GetType() == typeof(NightlyJobCollection))
+			if (job.StepList == null || job.StepList.GetType() != typeof(NightlyJobCollection)) return;
+			if (!job.JobParameters.RunIndexMaintenance) return;
+
+			var eventPublisher = job.JobParameters.ContainerHolder.IocContainer.Resolve<IEventPublisher>();
+			var dataSourceScope = job.JobParameters.ContainerHolder.IocContainer.Resolve<IDataSourceScope>();
+			var jobHelper = job.JobParameters.Helper;
+			var tenant = jobHelper.SelectedDataSource.DataSourceName;
+			using (dataSourceScope.OnThisThreadUse(new DummyDataSource(tenant)))
 			{
-				if (job.JobParameters.RunIndexMaintenance)
+				eventPublisher.Publish(new IndexMaintenanceEvent
 				{
-					var eventPublisher = job.JobParameters.ContainerHolder.IocContainer.Resolve<IEventPublisher>();
-					var dataSourceScope = job.JobParameters.ContainerHolder.IocContainer.Resolve<IDataSourceScope>();
-					var jobHelper = job.JobParameters.Helper;
-					var tenant = jobHelper.SelectedDataSource.DataSourceName;
-					using (dataSourceScope.OnThisThreadUse(new DummyDataSource(tenant)))
-					{
-						eventPublisher.Publish(new IndexMaintenanceEvent
-						{
-							JobName = $"Index Maintenance for {tenant}",
-							UserName = "Index Maintenance",
-							AllStepsSuccess = jobResultCollection.All(x => x.Success)
-						});
-					}
-				}
+					JobName = $"Index Maintenance for {tenant}",
+					UserName = "Index Maintenance",
+					AllStepsSuccess = jobResultCollection.All(x => x.Success)
+				});
 			}
 		}
 
