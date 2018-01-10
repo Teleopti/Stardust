@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Util;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -43,14 +45,22 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		private static T responseToJson<T>(WebRequest request)
 		{
-         using (var response = request.GetResponse())
-			{
-				using (var reader = new StreamReader(response.GetResponseStream()))
+			T returnValue = default(T);
+			Retry.Handle<WebException>()
+				.WaitAndRetry(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10))
+				.Do(() =>
 				{
-					var jsonString = reader.ReadToEnd();
-					return JsonConvert.DeserializeObject<T>(jsonString);
-				}
-			}
+					using (var response = request.GetResponse())
+					{
+						using (var reader = new StreamReader(response.GetResponseStream()))
+						{
+							var jsonString = reader.ReadToEnd();
+							returnValue = JsonConvert.DeserializeObject<T>(jsonString);
+						}
+					}
+				});
+
+			return returnValue;
 		}
 	}
 }

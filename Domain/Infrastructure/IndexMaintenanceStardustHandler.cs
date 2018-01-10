@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Logon.Aspects;
 
 namespace Teleopti.Ccc.Domain.Infrastructure
 {
-	[EnabledBy(Toggles.ETL_FasterIndexMaintenance_38847)]
 	public class IndexMaintenanceStardustHandler :
 		IHandleEvent<IndexMaintenanceEvent>,
 		IRunOnStardust

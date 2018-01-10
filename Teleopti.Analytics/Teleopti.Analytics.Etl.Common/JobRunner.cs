@@ -42,25 +42,22 @@ namespace Teleopti.Analytics.Etl.Common
 
 		private static void publishIndexMaintenanceEvent(IJob job, IList<IJobResult> jobResultCollection)
 		{
-			if (job.JobParameters.ToggleManager.IsEnabled(Toggles.ETL_FasterIndexMaintenance_38847))
+			if (job.StepList.GetType() == typeof(NightlyJobCollection))
 			{
-				if (job.StepList.GetType() == typeof(NightlyJobCollection))
+				if (job.JobParameters.RunIndexMaintenance)
 				{
-					if (job.JobParameters.RunIndexMaintenance)
+					var eventPublisher = job.JobParameters.ContainerHolder.IocContainer.Resolve<IEventPublisher>();
+					var dataSourceScope = job.JobParameters.ContainerHolder.IocContainer.Resolve<IDataSourceScope>();
+					var jobHelper = job.JobParameters.Helper;
+					var tenant = jobHelper.SelectedDataSource.DataSourceName;
+					using (dataSourceScope.OnThisThreadUse(new DummyDataSource(tenant)))
 					{
-						var eventPublisher = job.JobParameters.ContainerHolder.IocContainer.Resolve<IEventPublisher>();
-						var dataSourceScope = job.JobParameters.ContainerHolder.IocContainer.Resolve<IDataSourceScope>();
-						var jobHelper = job.JobParameters.Helper;
-						var tenant = jobHelper.SelectedDataSource.DataSourceName;
-						using (dataSourceScope.OnThisThreadUse(new DummyDataSource(tenant)))
+						eventPublisher.Publish(new IndexMaintenanceEvent
 						{
-							eventPublisher.Publish(new IndexMaintenanceEvent
-							{
-								JobName = $"Index Maintenance for {tenant}",
-								UserName = "Index Maintenance",
-								AllStepsSuccess = jobResultCollection.All(x => x.Success)
-							});
-						}
+							JobName = $"Index Maintenance for {tenant}",
+							UserName = "Index Maintenance",
+							AllStepsSuccess = jobResultCollection.All(x => x.Success)
+						});
 					}
 				}
 			}

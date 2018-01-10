@@ -125,13 +125,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new PurgeJobStep(jobParameters));     // BU independent
 			
 			AddWhenAllEnabled(new CalculateBadgesJobStep(jobParameters), Toggles.ETL_MoveBadgeCalculationToETL_38421);
-
-			if (jobParameters.RunIndexMaintenance)
-			{
-				AddWhenAllDisabled(new AnalyticsIndexMaintenanceJobStep(jobParameters), Toggles.ETL_FasterIndexMaintenance_38847);// BU independent
-				AddWhenAllDisabled(new AppIndexMaintenanceJobStep(jobParameters), Toggles.ETL_FasterIndexMaintenance_38847);// BU independent
-				AddWhenAllDisabled(new AggIndexMaintenanceJobStep(jobParameters), Toggles.ETL_FasterIndexMaintenance_38847);// BU independent
-			}
 		}
 	}
 }

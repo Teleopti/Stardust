@@ -123,7 +123,6 @@
 		ETL_MoveBadgeCalculationToETL_38421,
 		ETL_SpeedUpNightlyShiftCategory_38718,
 		ETL_SpeedUpNightlyPreference_38283,
-		ETL_FasterIndexMaintenance_38847,
 		ETL_SpeedUpNightlyAvailability_38926,
 		ETL_SpeedUpNightlyRequest_38914,
 		ETL_SpeedUpGroupPagePersonNightly_37623,
