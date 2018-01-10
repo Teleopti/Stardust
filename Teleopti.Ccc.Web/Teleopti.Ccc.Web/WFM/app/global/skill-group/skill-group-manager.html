@@ -186,7 +186,7 @@
 		</div>
 		<div class="con-row">
 			<div class="con-flex">
-				<input id="groupNameBox" type="text" placeholder="{{'Name'|translate}}" ng-model="vm.newGroupName"
+				<input id="groupNameBox" focus-me="vm.editGroupNameBox" type="text" placeholder="{{'Name'|translate}}" ng-model="vm.newGroupName"
 				 maxlength="50" ng-maxlength="50" id="skillGroupNameBox" ng-keypress="vm.nameBoxKeyPress($event)" />
 			</div>
 		</div>
@@ -194,7 +194,7 @@
 	<div class="modal-actions">
 		<aside>
 			<button id="confirmEditNameButton" ng-click="vm.saveNameEdit($event);" class="wfm-btn wfm-btn-invis-primary">OK</button>
-			<button id="cancelEditNameButton" ng-click="vm.hideNameEdit()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+			<button id="cancelEditNameButton" ng-click="vm.editGroupNameBox=!vm.editGroupNameBox" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
 		</aside>
 	</div>
 </modal-dialog>
