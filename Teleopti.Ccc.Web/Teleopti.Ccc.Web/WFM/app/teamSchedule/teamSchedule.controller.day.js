@@ -8,6 +8,7 @@
 		'$state',
 		'$mdSidenav',
 		'$mdComponentRegistry',
+		'$document',
 		'TeamSchedule',
 		'PersonSelection',
 		'ScheduleManagement',
@@ -21,7 +22,7 @@
 		'TeamsStaffingConfigurationStorageService',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry,
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, $document,
 		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
 		CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, groupPageService,
 		StaffingConfigStorageService) {
@@ -62,24 +63,25 @@
 		vm.showStaffing = function () {
 			initTeamSize();
 			if (vm.staffingEnabled) {
-				vm.preselectedSkills = { };
+				vm.preselectedSkills = {};
 				var preference = StaffingConfigStorageService.getConfig();
 				if (preference) {
 					vm.preselectedSkills.skillIds = !!preference.skillId ? [preference.skillId] : undefined;
 					vm.preselectedSkills.skillAreaId = preference.skillGroupId;
 				}
-				
+
 			}
 
 		}
 
 		function initTeamSize() {
-			var container = document.querySelector('#materialcontainer');
+			var container = $document[0].querySelector('#materialcontainer');
 			if (!container) return;
-			var viewHeader = document.querySelector('.view-header');
-			var header = document.querySelector('.team-schedule .teamschedule-header');
-			var tHeader = document.querySelector('.teamschedule-body .big-table-wrapper table thead');
-			var footer = document.querySelector('.teamschedule-footer');
+			var viewHeader = $document[0].querySelector('.view-header');
+			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
+			var tHeader = $document[0].querySelector('.teamschedule-body .big-table-wrapper table thead');
+			var footer = $document[0].querySelector('.teamschedule-footer');
+			var skillsRow = $document[0].querySelector('.skills-row');
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 			var defaultHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
 			var defaultTableBodyHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - tHeaderHeight - footer.offsetHeight;
@@ -107,8 +109,6 @@
 				vm.scheduleTableBodyStyle = { 'max-height': defaultTableBodyHeight + 'px' };
 			}
 		};
-
-
 
 		vm.paginationOptions = {
 			pageSize: 20,
@@ -172,16 +172,18 @@
 		});
 
 		$scope.$on('angular-resizable.resizeEnd', function (e, d) {
-			var container = document.querySelector('#materialcontainer');
-			var viewHeader = document.querySelector('.view-header');
-			var header = document.querySelector('.team-schedule .teamschedule-header');
-			var tHeader = document.querySelector('.teamschedule-body .big-table-wrapper table thead');
-			var footer = document.querySelector('.teamschedule-footer');
+			var container = $document[0].querySelector('#materialcontainer');
+			var viewHeader = $document[0].querySelector('.view-header');
+			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
+			var tHeader = $document[0].querySelector('.teamschedule-body .big-table-wrapper table thead');
+			var footer = $document[0].querySelector('.teamschedule-footer');
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 			var tableHeight = d.height - footer.offsetHeight;
 			var tBodyHeight = tableHeight - tHeaderHeight;
 			var staffingHeader = 50;
-			var chartHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - d.height - staffingHeader - 30;
+			var chartHeight = container.offsetHeight - viewHeader.offsetHeight
+				- header.offsetHeight - d.height - staffingHeader - getSkillsRowHeight() - 30;
+
 			if (tableHeight <= 100) {
 				StaffingConfigStorageService.setSize(100, 100 - tHeaderHeight, chartHeight);
 				return;
@@ -202,6 +204,11 @@
 			vm.chartHeight = chartHeight;
 
 		});
+
+		function getSkillsRowHeight() {
+			var skillsRow = $document[0].querySelector('.skills-row-wrapper');
+			return skillsRow ? skillsRow.offsetHeight : 0;
+		}
 
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 
