@@ -18,7 +18,9 @@
 			</div> -->
 			<div class="item-content-container" ng-repeat="item in $ctrl.getSettingItems()">
 				<span>{{item.name|translate}}</span>
-				<input class="setting-name-input" ng-disabled="!$ctrl.settingInfo.enable" ng-blur="$ctrl.itemChanged(item)" type="text" ng-model="item.value">
+				<input class="setting-name-input" ng-disabled="!$ctrl.settingInfo.enable" ng-blur="$ctrl.itemChanged(item)" type="text" ng-model="item.value"
+				 ng-keyup="$ctrl.keyUp(item)">
+				<span class="error-message" ng-show="item.hasError">{{item.errorMsg}}</span>
 			</div>
 		</div>
 	</section>

@@ -47,7 +47,8 @@
 			});
 		}
 
-		ctrl.saveData = function (apiKey, data) {
+		ctrl.saveData = function (apiKey, data, settingInfo) {
+
 			gamificationSettingService.saveData(apiKey, data).then(function (response) {
 
 			}, function (error) {
@@ -100,7 +101,10 @@
 						name: 'ThresholdForBronzeBadge',
 						value: setting.AnsweredCallsBronzeThreshold,
 						type: 'number'
-					}]
+					}],
+					validation: {
+						valueOrder: 'desc'
+					}
 				}, {
 					rule_id: 1,
 					items: [{
@@ -132,7 +136,10 @@
 						name: 'ThresholdForBronzeBadge',
 						value: setting.AdherenceBronzeThreshold.Value,
 						type: 'percent'
-					}]
+					}], validation: {
+						valueOrder: 'desc',
+						max: 20.00
+					}
 				}, {
 					rule_id: 1,
 					items: [{
@@ -164,7 +171,11 @@
 						name: 'ThresholdForBronzeBadge',
 						value: setting.AHTBronzeThreshold,
 						type: 'time'
-					}]
+					}],
+					validation: {
+						valueOrder: 'asc',
+						max: '01:00:00'
+					}
 				}, {
 					rule_id: 1,
 					items: [{
@@ -249,7 +260,6 @@
 					ctrl.resetRuleSelection();
 				}
 			}
-
 		}
 
 		ctrl.resetRuleSelection = function () {
