@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult { Successful = false });
 			var target = new AuthenticationApiController(null, identityLogon, null, null, null);
 
-			var result = (InvalidModelStateResult)target.BusinessUnits();
-			result.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Not.Be.Null();
+			var result = target.BusinessUnits();
+			result.Result<string>().Should().Be.EqualTo("NoUserFound");
 		}
 
 		[Test]
