@@ -65,8 +65,8 @@
 			},
 			{
 				label: "AddDayOff",
-				shortcut: "Alt+D",
-				keys: [[keyCodes.D], [keyCodes.ALT]],
+				shortcut: "Alt+F",
+				keys: [[keyCodes.F], [keyCodes.ALT]],
 				action: buildAction("AddDayOff", true),
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
 				visible: function () { return vm.canActiveAddDayOff(); }

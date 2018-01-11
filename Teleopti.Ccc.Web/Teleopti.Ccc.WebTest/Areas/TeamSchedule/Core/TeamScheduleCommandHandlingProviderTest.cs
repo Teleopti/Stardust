@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
 			PersonRepository.Has(person);
 
-			var template = new DayOffTemplate(new Description("template")).WithId();
+			var template = DayOffFactory.CreateDayOff(new Description("template")).WithId(); ;
 			DayOffTemplateRepository.Has(template);
 
 			var results = Target.AddDayOff(new AddDayOffFormData
@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			PersonRepository.Has(person);
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, person, dateonly);
 
-			var template = new DayOffTemplate(new Description("template")).WithId();
+			var template = DayOffFactory.CreateDayOff(new Description("template")).WithId();
 			DayOffTemplateRepository.Has(template);
 
 			CommandHandler.ResetCalledCount();

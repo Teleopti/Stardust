@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public IList<string> ErrorMessages { get; set; }
-		public Guid PersonId { get; set; }
 		public DateOnly StartDate { get; set; }
 		public IPerson Person { get; set; }
 		public DateOnly EndDate { get; set; }
