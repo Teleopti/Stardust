@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
+using log4net.Config;
 using ManagerTest.Attributes;
 using ManagerTest.Fakes;
 using NUnit.Framework;
@@ -47,6 +50,9 @@ namespace ManagerTest
 			{
 				Url = new Uri("http://localhost:9051/")
 			};
+
+			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 		}
 
 		[Test]
@@ -328,6 +334,41 @@ namespace ManagerTest
 			}
 			nodes.Count.Should().Be.EqualTo(1);
 			nodes.First().Should().Be.EqualTo("http://localhost:9053/");
+		}
+
+		[Test]
+		public void ShouldJustWarnIfAnotherManagerAlreadySentJob()
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name",
+				Serialized = "Serialized",
+				Type = "Type",
+				CreatedBy = "CreatedBy",
+				Created = DateTime.Now
+			};
+
+			NodeManager.AddWorkerNode(_workerNode.Url);
+
+			using (var sqlConnection = new SqlConnection(ManagerConfiguration.ConnectionString))
+			{
+				sqlConnection.Open();
+				JobRepositoryCommandExecuter.InsertIntoJobQueue(jobQueueItem, sqlConnection);
+				JobRepositoryCommandExecuter.InsertIntoJob(jobQueueItem, "aNode", sqlConnection);
+			}
+			
+			JobManager.AssignJobToWorkerNodes();
+			var assertSQL = "SELECT COUNT(*) FROM Stardust.Logging WHERE [Level] = 'WARN' AND [Message] like '%It was already assigned, probably by another Manager.%'";
+			using (var sqlConnection = new SqlConnection(ManagerConfiguration.ConnectionString))
+			{
+				using (var getAllJobsCommand = new SqlCommand(assertSQL, sqlConnection))
+				{
+					sqlConnection.Open();
+					var ret = getAllJobsCommand.ExecuteScalar();
+					ret.Should().Be.EqualTo(1);
+				}
+			}
 		}
 	}
 }
