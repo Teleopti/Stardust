@@ -20,17 +20,15 @@ namespace Stardust.Node.Workers
 		}
 
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
-		                                                 object data,
-		                                                 CancellationToken cancellationToken)
+			object data,
+			CancellationToken cancellationToken)
 		{
-			var sez = JsonConvert.SerializeObject(data);
-
 			var response =
 				await Client.PostAsync(url,
-										new StringContent(sez, Encoding.Unicode, Mediatype),
-										cancellationToken)
+						new StringContent(JsonConvert.SerializeObject(data), Encoding.Unicode, Mediatype),
+						cancellationToken)
 					.ConfigureAwait(false);
-			return response;	
+			return response;
 		}
 	}
 }
