@@ -10,7 +10,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 {
 	public class DimPersonWindowsLoginJobStep : JobStepBase
 	{
-		const string updateStatement = "UPDATE mart.dim_person SET windows_domain=@windows_domain, windows_username=@windows_username where person_code=@person_code";
+		private const int windowsDomainColumnLength = 50;
+		private const int windowsUserNameColumnLength = 50;
+
+		private const string updateStatement =
+			"UPDATE mart.dim_person SET windows_domain=@windows_domain, windows_username=@windows_username "
+			+ "where person_code=@person_code";
 		private readonly Func<SqlConnection> _connection;
 		private readonly CloudSafeSqlExecute _executor = new CloudSafeSqlExecute();
 
@@ -33,40 +38,60 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			var toBeUpdated=new List<WindowsLogonInfo>();
 			foreach (var windowsLogonInfoInApp in windowsLogonInfosInApp)
 			{
-				if (windowsLogonInfosInAnalytics.TryGetValue(windowsLogonInfoInApp.PersonCode,out var windowsLogonInfoInAnalytics) &&
-					(windowsLogonInfoInAnalytics.WindowsDomain != windowsLogonInfoInApp.WindowsDomain ||
-					 windowsLogonInfoInAnalytics.WindowsUsername != windowsLogonInfoInApp.WindowsUsername))
+				if (!windowsLogonInfosInAnalytics.TryGetValue(windowsLogonInfoInApp.PersonCode, out var windowsLogonInfoInAnalytics))
 				{
-					toBeUpdated.Add(windowsLogonInfoInApp);
+					continue;
 				}
-			}
 
-			int affectedRows = 0;
-			if (toBeUpdated.Any())
-			{
-				_executor.Run(_connection, conn =>
+				// DomainName or WindowsUserName may longer than column length (Bug #47274)
+				var truncatedDomainName = truncateString(windowsLogonInfoInApp.WindowsDomain, windowsDomainColumnLength);
+				var truncatedWinUserName = truncateString(windowsLogonInfoInApp.WindowsUsername, windowsUserNameColumnLength);
+				if (windowsLogonInfoInAnalytics.WindowsDomain == truncatedDomainName &&
+					windowsLogonInfoInAnalytics.WindowsUsername == truncatedWinUserName)
 				{
-					SqlTransaction sqlTransaction = conn.BeginTransaction();
+					continue;
+				}
 
-					foreach (var windowsLogonInfo in toBeUpdated)
-					{
-						SqlCommand sqlCommand = conn.CreateCommand();
-						sqlCommand.Transaction = sqlTransaction;
-
-						sqlCommand.CommandType = CommandType.Text;
-						sqlCommand.Parameters.AddWithValue("@windows_domain", windowsLogonInfo.WindowsDomain);
-						sqlCommand.Parameters.AddWithValue("@windows_username", windowsLogonInfo.WindowsUsername);
-						sqlCommand.Parameters.AddWithValue("@person_code", windowsLogonInfo.PersonCode);
-						sqlCommand.CommandText = updateStatement;
-						
-						affectedRows += sqlCommand.ExecuteNonQuery();
-					}
-					
-					sqlTransaction.Commit();
+				toBeUpdated.Add(new WindowsLogonInfo
+				{
+					PersonCode = windowsLogonInfoInApp.PersonCode,
+					WindowsDomain = truncatedDomainName,
+					WindowsUsername = truncatedWinUserName
 				});
 			}
 
+			var affectedRows = 0;
+			if (!toBeUpdated.Any()) return affectedRows;
+
+			_executor.Run(_connection, conn =>
+			{
+				var sqlTransaction = conn.BeginTransaction();
+
+				foreach (var windowsLogonInfo in toBeUpdated)
+				{
+					var sqlCommand = conn.CreateCommand();
+					sqlCommand.Transaction = sqlTransaction;
+
+					sqlCommand.CommandType = CommandType.Text;
+					sqlCommand.Parameters.AddWithValue("@windows_domain", windowsLogonInfo.WindowsDomain);
+					sqlCommand.Parameters.AddWithValue("@windows_username", windowsLogonInfo.WindowsUsername);
+					sqlCommand.Parameters.AddWithValue("@person_code", windowsLogonInfo.PersonCode);
+					sqlCommand.CommandText = updateStatement;
+						
+					affectedRows += sqlCommand.ExecuteNonQuery();
+				}
+					
+				sqlTransaction.Commit();
+			});
+
 			return affectedRows;
+		}
+
+		private static string truncateString(string rawString, int lengthLimition)
+		{
+			return rawString.Length > lengthLimition
+				? rawString.Substring(0, lengthLimition)
+				: rawString;
 		}
 	}
 }
