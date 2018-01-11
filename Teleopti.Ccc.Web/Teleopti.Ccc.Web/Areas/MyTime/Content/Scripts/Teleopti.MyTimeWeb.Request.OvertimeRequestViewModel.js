@@ -1,6 +1,8 @@
 ﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart, isViewingDetail) {
 	var self = this,
-		dateTimeFormats = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat;
+		dateTimeFormats = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat,
+		dateOnlyFormat =Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly,
+		defaultStartTimeSubscription;
 
 	self.Id = ko.observable();
 	self.Template = "add-overtime-request-template";
@@ -15,6 +17,8 @@
 	self.PeriodEndDate = ko.observable(null);
 
 	self.DateFrom = ko.observable();
+	self.getDefaultStartTime = ko.computed(self.DateFrom).extend({throttle: 50});
+
 	self.StartTime = ko.observable();
 	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 
@@ -122,7 +126,7 @@
 		}
 	};
 
-	function setAvailableDays(){
+	function setAvailableDays() {
 		self.IsLoading(true);
 		ajax.Ajax({
 			url: 'OvertimeRequests/GetAvailableDays',
@@ -134,18 +138,67 @@
 				self.IsLoading(false);
 			},
 			error: function (response, textStatus) {
-				if (response.responseJSON) {
-					var errors = response.responseJSON.Errors;
-					if (errors && errors.length > 0) {
-						self.ErrorMessage(errors[0]);
-						self.ShowError(true);
-					} else {
-						Teleopti.MyTimeWeb.Common.AjaxFailed(response, null, textStatus);
-					}
-				}
-				self.IsLoading(false);
+				_ajaxErrorFn(response, textStatus);
 			}
 		});
+	}
+
+	function setDefaultStartTime() {
+		var requestDate = self.DateFrom()._isAMomentObject ? self.DateFrom().format('YYYY/MM/DD') : moment(self.DateFrom(), dateOnlyFormat).format('YYYY/MM/DD');
+
+		if(moment(requestDate).isBefore(self.PeriodStartDate().format('YYYY-MM-DD')) || moment(requestDate).isAfter(self.PeriodEndDate().format('YYYY-MM-DD'))) {
+			return;
+		}
+			
+		self.IsLoading(true);
+		ajax.Ajax({
+			url: 'OvertimeRequests/GetDefaultStartTime',
+			dataType: 'json',
+			data: {
+				date: requestDate
+			},
+			type: 'GET',
+			success: function (startDate) {
+				if(moment(startDate).format('YYYY-MM-DD') !== self.DateFrom().format('YYYY-MM-DD')){
+					disposeDefaultStartTimeSubscription();
+					self.DateFrom(moment(startDate));
+				}
+				
+				self.StartTime(moment(startDate).format(Teleopti.MyTimeWeb.Common.TimeFormat));
+				setDefaultStartTimeSubscription();
+
+				self.IsLoading(false);
+			},
+			error: function (response, textStatus) {
+				_ajaxErrorFn(response, textStatus);
+			}
+		});
+	}
+
+	function setDefaultStartTimeSubscription(currentUserDateTime) {
+		disposeDefaultStartTimeSubscription();
+		defaultStartTimeSubscription = self.getDefaultStartTime.subscribe(function() {
+			setDefaultStartTime(currentUserDateTime);
+		});
+	}
+
+	function disposeDefaultStartTimeSubscription() {
+		if(defaultStartTimeSubscription && defaultStartTimeSubscription.dispose) {
+			defaultStartTimeSubscription.dispose();
+		}
+	}
+
+	function _ajaxErrorFn(response, textStatus) {
+		if (response.responseJSON) {
+			var errors = response.responseJSON.Errors;
+			if (errors && errors.length > 0) {
+				self.ErrorMessage(errors[0]);
+				self.ShowError(true);
+			} else {
+				Teleopti.MyTimeWeb.Common.AjaxFailed(response, null, textStatus);
+			}
+		}
+		self.IsLoading(false);
 	}
 
 	function _createTimeList() {
@@ -251,6 +304,9 @@
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('OvertimeRequestPeriodSetting_46417')) {
 			setAvailableDays();
+		}
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequestDefaultStartTime_47513')) {
+			setDefaultStartTimeSubscription(currentUserDateTime);
 		}
 	}
 
