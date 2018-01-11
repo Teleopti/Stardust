@@ -78,7 +78,7 @@ var rtaTester = (function () {
 				},
 				set info(value) {
 					sharedTestState.NoticeService.info = value;
-				},
+				}
 			};
 		};
 
@@ -89,14 +89,21 @@ var rtaTester = (function () {
 					controllerTester = sharedTestState.$controllerBuilder.createController();
 					return controllerTester.controller;
 				},
+				destroyController: function () {
+					// simulate destroy atleast...
+					sharedTestState.scope.$emit('$destroy');
+				},
 				get stateParams() {
 					return sharedTestState.stateParams;
+				},
+				get lastGoParams() {
+					return sharedTestState.lastGoParams;
 				},
 				get backend() {
 					return sharedTestState.$fakeBackend;
 				},
-				get controller() {
-					return controllerTester.controller;
+				get sessionStorage() {
+					return sharedTestState.$sessionStorage;
 				},
 				href: sharedTestState.$state.href,
 				apply: function (a) {
@@ -186,6 +193,12 @@ var rtaTester = (function () {
 					state.stateParams = {};
 					return state.stateParams;
 				});
+				$provide.factory('skills', function () {
+					return state.$fakeBackend.skills;
+				});
+				$provide.factory('skillAreas', function () {
+					return state.$fakeBackend.skillAreas;
+				});
 			});
 		});
 
@@ -201,7 +214,10 @@ var rtaTester = (function () {
 					state.NoticeService = NoticeService;
 					state.$state.current.name = stateName;
 					state.scope = state.$controllerBuilder.setup(controllerName);
-					spyOn(state.$state, 'go');
+
+					spyOn($state, 'go').and.callFake(function (_, params) {
+						state.lastGoParams = params;
+					});
 				}]
 		));
 
@@ -217,6 +233,8 @@ var rtaTester = (function () {
 	};
 
 	function setupByDescription(description, tests) {
+		if (description === 'RtaOverviewController')
+			setup(tests, '', 'RtaOverviewController46933');
 		if (description === 'RtaAgentsController')
 			setup(tests, '', 'RtaAgentsController46786');
 		if (description === 'RtaHistoricalController')

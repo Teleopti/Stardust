@@ -1,66 +1,36 @@
 ﻿'use strict';
 
-describe('RtaOverviewController selection', function () {
-
-	beforeEach(module('wfm.rta'));
-	beforeEach(module('wfm.rtaTestShared'));
-
-	var $stateParams;
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.factory('$stateParams', function () {
-				$stateParams = {};
-				return $stateParams;
-			});
-			$provide.factory('skills', function () {
-				return $fakeBackend.skills;
-			});
-			$provide.factory('skillAreas', function () {
-				return $fakeBackend.skillAreas;
-			});
-		});
-	});
-
-	var
-		$controllerBuilder,
-		$fakeBackend;
-	beforeEach(inject(function (_FakeRtaBackend_, _ControllerBuilder_, _$state_) {
-		$controllerBuilder = _ControllerBuilder_;
-		$fakeBackend = _FakeRtaBackend_;
-		$controllerBuilder.setup('RtaOverviewController39082');
-		spyOn(_$state_, 'go');
-	}));
-
-	it('should select site', function () {
-		$fakeBackend
+rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
+	
+	it('should select site', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			});
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isSelected = true;
 		});
 
 		expect(vm.siteCards[0].isSelected).toEqual(true);
 	});
 
-	it('should select site from url', function () {
-		$stateParams.siteIds = ['parisId'];
-		$fakeBackend
+	it('should select site from url', function (t) {
+		t.stateParams.siteIds = ['parisId'];
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			});
 
-		var vm = $controllerBuilder.createController().vm;
+		var vm = t.createController();
 
 		expect(vm.siteCards[0].isSelected).toEqual(true);
 	});
 
-	it('should select team from url', function () {
-		$stateParams.teamIds = ['redId'];
-		$fakeBackend
+	it('should select team from url', function (t) {
+		t.stateParams.teamIds = ['redId'];
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			})
@@ -69,15 +39,14 @@ describe('RtaOverviewController selection', function () {
 				Id: 'redId'
 			});
 
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
+		var vm = t.createController();
 
 		expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
 	});
 
-	it('should open site when team in url', function () {
-		$stateParams.teamIds = ['redId'];
-		$fakeBackend
+	it('should open site when team in url', function (t) {
+		t.stateParams.teamIds = ['redId'];
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			})
@@ -90,14 +59,13 @@ describe('RtaOverviewController selection', function () {
 				Id: 'greenId'
 			});
 
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
+		var vm = t.createController();
 
 		expect(vm.siteCards[0].isOpen).toEqual(true);
 	});
 
-	it('should still display opened sites even though no team is selected', function () {
-		$fakeBackend
+	it('should still display opened sites even though no team is selected', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			})
@@ -106,9 +74,8 @@ describe('RtaOverviewController selection', function () {
 				Id: 'redId'
 			});
 
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
-		c.apply(function () {
+		var vm = t.createController();
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
 

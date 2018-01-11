@@ -40,6 +40,7 @@
 			get skills() { return skills; },
 			get skillAreas() { return skillAreas; },
 
+			lastOverviewRequestParams: undefined,
 			lastAgentStatesRequestParams: undefined,
 			lastHistoricalAdherenceForPersonRequestParams: undefined
 			
@@ -47,6 +48,7 @@
 
 		faker.fake(/\.\.\/api\/AgentStates\/Poll/,
 			function (params) {
+				service.lastAgentStatesRequestParams = params;
 				params.siteIds = params.siteIds || [];
 				params.teamIds = params.teamIds || [];
 				params.skillIds = params.skillIds || [];
@@ -54,8 +56,6 @@
 				params.inAlarm = params.inAlarm === 'true' || params.inAlarm === true;
 				
 				var result = agentStates;
-				
-				service.lastAgentStatesRequestParams = params;
 				
 				if (params.siteIds.length > 0)
 					result = result.filter(function (a) {
@@ -141,6 +141,7 @@
 
 		faker.fake(/\.\.\/api\/Overview\/SiteCards(.*)/,
 			function (params) {
+				service.lastOverviewSiteCardsRequestParams = params;
 				params.skillIds = params.skillIds || [];
 				params.siteIds = params.siteIds || [];
 				var sites = JSON.parse(JSON.stringify(siteAdherences));

@@ -1,18 +1,6 @@
 ﻿'use strict';
 
-describe('RtaOverviewController redirects', function () {
-
-	var
-		$controllerBuilder,
-		$fakeBackend,
-		$httpBackend,
-		$interval,
-		$state;
-
-	var
-		stateParams,
-		scope,
-		vm;
+rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 	var
 		channelSales,
@@ -34,144 +22,117 @@ describe('RtaOverviewController redirects', function () {
 	var goodColor = '#C2E085';
 	var warningColor = '#FFC285';
 	var dangerColor = '#EE8F7D';
+	
+	channelSales = {
+		Name: 'Channel Sales',
+		Id: 'channelSalesId'
+	};
 
-	var lastGoParams = {};
+	phone = {
+		Name: 'Phone',
+		Id: 'phoneId'
+	};
 
-	beforeEach(module('wfm.rta'));
-	beforeEach(module('wfm.rtaTestShared'));
+	invoice = {
+		Name: 'Invoice',
+		Id: 'invoiceId'
+	};
 
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.factory('$stateParams', function () {
-				stateParams = {};
-				return stateParams;
-			});
-			$provide.factory('skills', function () {
-				return $fakeBackend.skills;
-			});
-			$provide.factory('skillAreas', function () {
-				return $fakeBackend.skillAreas;
-			});
+	bts = {
+		Name: 'BTS',
+		Id: 'btsId'
+	};
+
+	skills1 = [channelSales, phone];
+	skills2 = [invoice, bts];
+	allSkills = [channelSales, phone, invoice, bts];
+
+	skillArea1 = {
+		Id: 'skillArea1Id',
+		Name: 'SkillArea1',
+		Skills: skills1
+	};
+	skillArea2 = {
+		Id: 'skillArea2Id',
+		Name: 'SkillArea2',
+		Skills: skills2
+	};
+	skillAreas = [skillArea1, skillArea2];
+
+	it('should go to sites by skill state', function (t) {
+		allSkills.forEach(function (skill) {
+			t.backend.withSkill(skill);
 		});
-	});
+		var vm = t.createController();
 
-	beforeEach(inject(function (_FakeRtaBackend_, _ControllerBuilder_, _$httpBackend_, _$interval_, _$state_) {
-		$controllerBuilder = _ControllerBuilder_;
-		$fakeBackend = _FakeRtaBackend_;
-		$httpBackend = _$httpBackend_;
-		$interval = _$interval_;
-		$state = _$state_;
-
-		scope = $controllerBuilder.setup('RtaOverviewController39082');
-
-		channelSales = {
-			Name: 'Channel Sales',
-			Id: 'channelSalesId'
-		};
-
-		phone = {
-			Name: 'Phone',
-			Id: 'phoneId'
-		};
-
-		invoice = {
-			Name: 'Invoice',
-			Id: 'invoiceId'
-		};
-
-		bts = {
-			Name: 'BTS',
-			Id: 'btsId'
-		};
-
-		skills1 = [channelSales, phone];
-		skills2 = [invoice, bts];
-		allSkills = [channelSales, phone, invoice, bts];
-
-		skillArea1 = {
-			Id: 'skillArea1Id',
-			Name: 'SkillArea1',
-			Skills: skills1
-		};
-		skillArea2 = {
-			Id: 'skillArea2Id',
-			Name: 'SkillArea2',
-			Skills: skills2
-		};
-		skillAreas = [skillArea1, skillArea2];
-
-		$fakeBackend.clear();
-		allSkills.forEach(function (skill) { $fakeBackend.withSkill(skill); });
-		$fakeBackend.withSkillAreas(skillAreas);
-
-		lastGoParams = {};
-		spyOn($state, 'go').and.callFake(function (_, params) {
-			lastGoParams = params;
-		});
-	}));
-
-	it('should go to sites by skill state', function () {
-		var c = $controllerBuilder.createController(allSkills);
-		var vm = c.vm;
-
-		c.apply(function () {
+		t.apply(function () {
 			vm.selectSkillOrSkillArea(vm.skills[0]);
 		});
 
-		expect(lastGoParams.skillIds).toEqual(['channelSalesId']);
+		expect(t.lastGoParams.skillIds).toEqual(['channelSalesId']);
 	});
 
-	it('should go to sites by skill area state', function () {
-		vm = $controllerBuilder.createController().vm;
+	it('should go to sites by skill area state', function (t) {
+		t.backend.withSkillAreas(skillAreas);
+		var vm = t.createController();
 
 		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
 
-		expect(lastGoParams.skillAreaId).toEqual('skillArea1Id');
+		expect(t.lastGoParams.skillAreaId).toEqual('skillArea1Id');
 	});
 
-	it('should go to sites with skill when changing selection from skill area to skill', function () {
-		stateParams.skillAreaId = 'skillArea1Id';
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+	it('should go to sites with skill when changing selection from skill area to skill', function (t) {
+		t.stateParams.skillAreaId = 'skillArea1Id';
+		allSkills.forEach(function (skill) {
+			t.backend.withSkill(skill);
+		});
+		t.backend.withSkillAreas(skillAreas);
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.selectSkillOrSkillArea(vm.skills[0]);
 		});
 
-		expect(lastGoParams.skillAreaId).toEqual(undefined);
-		expect(lastGoParams.skillIds).toEqual(['channelSalesId']);
+		expect(t.lastGoParams.skillAreaId).toEqual(undefined);
+		expect(t.lastGoParams.skillIds).toEqual(['channelSalesId']);
 	});
 
-	it('should go to sites with skill area when changing selection from skill to skill area', function () {
-		stateParams.skillIds = ['channelSalesId'];
-		var c = $controllerBuilder.createController(allSkills, skillAreas)
-		vm = c.vm
+	it('should go to sites with skill area when changing selection from skill to skill area', function (t) {
+		t.stateParams.skillIds = ['channelSalesId'];
+		allSkills.forEach(function (skill) {
+			t.backend.withSkill(skill);
+		});
+		t.backend.withSkillAreas(skillAreas);
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.selectSkillOrSkillArea(skillArea1);
 		});
 
-		expect(lastGoParams.skillAreaId).toEqual('skillArea1Id');
-		expect(lastGoParams.skillIds).toEqual(undefined);
+		expect(t.lastGoParams.skillAreaId).toEqual('skillArea1Id');
+		expect(t.lastGoParams.skillIds).toEqual(undefined);
 	});
 
-	it('should clear url when sending in empty input in filter', function () {
-		stateParams.skillIds = ['channelSalesId'];
-		var c = $controllerBuilder.createController()
-		vm = c.vm;
+	it('should clear url when sending in empty input in filter', function (t) {
+		t.stateParams.skillIds = ['channelSalesId'];
+		allSkills.forEach(function (skill) {
+			t.backend.withSkill(skill);
+		});
+		t.backend.withSkillAreas(skillAreas);
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.selectSkillOrSkillArea(undefined);
 		});
 
-		expect(lastGoParams.hasOwnProperty('skillAreaId')).toEqual(true);
-		expect(lastGoParams.skillAreaId).toEqual(undefined);
-		expect(lastGoParams.hasOwnProperty('skillIds')).toEqual(true);
-		expect(lastGoParams.skillIds).toEqual(undefined);
+		expect(t.lastGoParams.hasOwnProperty('skillAreaId')).toEqual(true);
+		expect(t.lastGoParams.skillAreaId).toEqual(undefined);
+		expect(t.lastGoParams.hasOwnProperty('skillIds')).toEqual(true);
+		expect(t.lastGoParams.skillIds).toEqual(undefined);
 	});
 
-	it('should go to agents for selected site', function () {
-		$fakeBackend
+	it('should go to agents for selected site', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId',
 				Name: 'Paris',
@@ -183,50 +144,47 @@ describe('RtaOverviewController redirects', function () {
 				SiteId: 'parisId',
 				Id: 'redId',
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.siteIds).toEqual(['parisId']);
+		expect(t.lastGoParams.siteIds).toEqual(['parisId']);
 	});
 
-	it('should go to agents for the right selected site after deselecting some other', function () {
-		$fakeBackend
+	it('should go to agents for the right selected site after deselecting some other', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			})
 			.withSiteAdherence({
 				Id: 'londonId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[1].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[1].isSelected = false;
 		});
-		$state.go.calls.reset();
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.siteIds).toEqual(['parisId']);
+		expect(t.lastGoParams.siteIds).toEqual(['parisId']);
 	});
 
-	it('should go to agents for selected site with preselected skill', function () {
-		stateParams.skillIds = ['channelSalesId'];
-		$fakeBackend
+	it('should go to agents for selected site with preselected skill', function (t) {
+		t.stateParams.skillIds = ['channelSalesId'];
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId',
 				SkillId: 'channelSalesId'
@@ -236,23 +194,23 @@ describe('RtaOverviewController redirects', function () {
 				Id: 'redId',
 				SkillId: 'channelSalesId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.siteIds).toEqual(['parisId']);
-		expect(lastGoParams.skillIds).toEqual(['channelSalesId']);
+		expect(t.lastGoParams.siteIds).toEqual(['parisId']);
+		expect(t.lastGoParams.skillIds).toEqual(['channelSalesId']);
 	});
 
-	it('should go to agents for selected site with  skill area', function () {
-		stateParams.skillAreaId = 'skillArea1Id';
-		$fakeBackend
+	it('should go to agents for selected site with  skill area', function (t) {
+		t.stateParams.skillAreaId = 'skillArea1Id';
+		t.backend.withSkillAreas(skillAreas);
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId',
 				SkillId: 'channelSalesId'
@@ -261,22 +219,21 @@ describe('RtaOverviewController redirects', function () {
 				Id: 'parisId',
 				SkillId: 'phoneId'
 			});
-		var c = $controllerBuilder.createController(undefined, skillAreas);
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.siteIds).toEqual(['parisId']);
-		expect(lastGoParams.skillAreaId).toEqual('skillArea1Id');
+		expect(t.lastGoParams.siteIds).toEqual(['parisId']);
+		expect(t.lastGoParams.skillAreaId).toEqual('skillArea1Id');
 	});
 
-	it('should go to agents for selected team', function () {
-		$fakeBackend
+	it('should go to agents for selected team', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'londonId',
 				Name: 'London'
@@ -289,25 +246,27 @@ describe('RtaOverviewController redirects', function () {
 				SiteId: 'londonId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.teamIds).toEqual(['greenId']);
+		expect(t.lastGoParams.teamIds).toEqual(['greenId']);
 	});
 
-	it('should go to agents for selected team with selected skill', function () {
-		stateParams.skillIds = ['channelSalesId'];
-		$fakeBackend
+	it('should go to agents for selected team with selected skill', function (t) {
+		t.stateParams.skillIds = ['channelSalesId'];
+		allSkills.forEach(function (skill) {
+			t.backend.withSkill(skill);
+		});
+		t.backend
 			.withSiteAdherence({
 				Id: 'londonId',
 				SkillId: 'channelSalesId'
@@ -322,27 +281,28 @@ describe('RtaOverviewController redirects', function () {
 				SkillId: 'channelSalesId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = true;
 		});
-		$state.go.calls.reset();
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.teamIds).toEqual(['greenId']);
-		expect(lastGoParams.skillIds).toEqual(['channelSalesId']);
+		expect(t.lastGoParams.teamIds).toEqual(['greenId']);
+		expect(t.lastGoParams.skillIds).toEqual(['channelSalesId']);
 	});
 
-	it('should go to agents for selected team with preselected skill', function () {
-		stateParams.skillIds = ['channelSalesId'];
-		$fakeBackend
+	it('should go to agents for selected team with preselected skill', function (t) {
+		t.stateParams.skillIds = ['channelSalesId'];
+		allSkills.forEach(function (skill) {
+			t.backend.withSkill(skill);
+		});
+		t.backend
 			.withSiteAdherence({
 				Id: 'londonId',
 				SkillId: 'channelSalesId'
@@ -357,26 +317,26 @@ describe('RtaOverviewController redirects', function () {
 				SkillId: 'channelSalesId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.teamIds).toEqual(['greenId']);
-		expect(lastGoParams.skillIds).toEqual(['channelSalesId']);
+		expect(t.lastGoParams.teamIds).toEqual(['greenId']);
+		expect(t.lastGoParams.skillIds).toEqual(['channelSalesId']);
 	});
 
-	it('should go to agents for selected team with selected skill area', function () {
-		stateParams.skillAreaId = 'skillArea1Id';
-		$fakeBackend
+	it('should go to agents for selected team with selected skill area', function (t) {
+		t.stateParams.skillAreaId = 'skillArea1Id';
+		t.backend.withSkillAreas(skillAreas);
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId',
 				SkillId: 'channelSalesId'
@@ -401,27 +361,26 @@ describe('RtaOverviewController redirects', function () {
 				Id: 'greenId'
 			})
 		;
-		var c = $controllerBuilder.createController(undefined, skillAreas);
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = true;
 		});
-		$state.go.calls.reset();
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.teamIds).toEqual(['greenId']);
-		expect(lastGoParams.skillAreaId).toEqual('skillArea1Id');
+		expect(t.lastGoParams.teamIds).toEqual(['greenId']);
+		expect(t.lastGoParams.skillAreaId).toEqual('skillArea1Id');
 	});
 
-	it('should go to agents for selected team with preselected skill area', function () {
-		stateParams.skillAreaId = 'skillArea1Id';
-		$fakeBackend
+	it('should go to agents for selected team with preselected skill area', function (t) {
+		t.stateParams.skillAreaId = 'skillArea1Id';
+		t.backend.withSkillAreas(skillAreas);
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId',
 				SkillId: 'channelSalesId'
@@ -446,24 +405,24 @@ describe('RtaOverviewController redirects', function () {
 				Id: 'greenId'
 			})
 		;
-		var c = $controllerBuilder.createController(undefined, skillAreas);
-		vm = c.vm;
-		c.apply(function () {
+		var vm = t.createController(undefined, skillAreas);
+
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.teamIds).toEqual(['greenId']);
-		expect(lastGoParams.skillAreaId).toEqual('skillArea1Id');
+		expect(t.lastGoParams.teamIds).toEqual(['greenId']);
+		expect(t.lastGoParams.skillAreaId).toEqual('skillArea1Id');
 	});
 
-	it('should go to agents for site if all teams under it are selected one by one', function () {
-		$fakeBackend
+	it('should go to agents for site if all teams under it are selected one by one', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'londonId',
 				Name: 'London'
@@ -476,29 +435,28 @@ describe('RtaOverviewController redirects', function () {
 				SiteId: 'londonId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[1].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.siteIds).toEqual(['londonId']);
-		expect(lastGoParams.hasOwnProperty('teamIds')).toEqual(true);
-		expect(lastGoParams.teamIds).toEqual(undefined);
+		expect(t.lastGoParams.siteIds).toEqual(['londonId']);
+		expect(t.lastGoParams.hasOwnProperty('teamIds')).toEqual(true);
+		expect(t.lastGoParams.teamIds).toEqual(undefined);
 	});
 
-	it('should go to agents for teams if all teams under a site were selected and then one was unselected', function () {
-		$fakeBackend
+	it('should go to agents for teams if all teams under a site were selected and then one was unselected', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'londonId',
 				Name: 'London'
@@ -511,33 +469,31 @@ describe('RtaOverviewController redirects', function () {
 				SiteId: 'londonId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[1].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = false;
 		});
-		$state.go.calls.reset();
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.teamIds).toEqual(['redId']);
-		expect(lastGoParams.hasOwnProperty('siteIds')).toEqual(true);
-		expect(lastGoParams.siteIds).toEqual(undefined);
+		expect(t.lastGoParams.teamIds).toEqual(['redId']);
+		expect(t.lastGoParams.hasOwnProperty('siteIds')).toEqual(true);
+		expect(t.lastGoParams.siteIds).toEqual(undefined);
 	});
 
-	it('should go to agents for teams if site were selected and then one was unselected', function () {
-		$fakeBackend
+	it('should go to agents for teams if site were selected and then one was unselected', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'londonId',
 				Name: 'London'
@@ -550,28 +506,26 @@ describe('RtaOverviewController redirects', function () {
 				SiteId: 'londonId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[1].isSelected = false;
 		});
-		$state.go.calls.reset();
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.teamIds).toEqual(['greenId']);
+		expect(t.lastGoParams.teamIds).toEqual(['greenId']);
 	});
 
-	it('should always clear teams selection for teams under site if site is selected', function () {
-		$fakeBackend
+	it('should always clear teams selection for teams under site if site is selected', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'londonId',
 				Name: 'London'
@@ -584,33 +538,32 @@ describe('RtaOverviewController redirects', function () {
 				SiteId: 'londonId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[1].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = false;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.siteIds).toEqual(['londonId']);
+		expect(t.lastGoParams.siteIds).toEqual(['londonId']);
 	});
 
-	it('should select teams under site when site is not selected and team is', function () {
-		$fakeBackend
+	it('should select teams under site when site is not selected and team is', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'londonId',
 				Name: 'London'
@@ -623,27 +576,26 @@ describe('RtaOverviewController redirects', function () {
 				SiteId: 'londonId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = false;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
 
 		expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
 	});
 
-	it('should select all teams under site when site is selected and initially closed', function () {
-		$fakeBackend
+	it('should select all teams under site when site is selected and initially closed', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'londonId'
 			})
@@ -652,21 +604,20 @@ describe('RtaOverviewController redirects', function () {
 				Id: 'greenId'
 			});
 
-		var c = $controllerBuilder.createController()
-		vm = c.vm;
+		var vm = t.createController()
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
 
 		expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
 	});
 
-	it('should go to agents team and site in cross site selection where one site has only one team', function () {
-		$fakeBackend
+	it('should go to agents team and site in cross site selection where one site has only one team', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'londonId',
 				Name: 'London'
@@ -687,27 +638,26 @@ describe('RtaOverviewController redirects', function () {
 				SiteId: 'parisId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[1].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[1].teams[0].isSelected = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.goToAgents();
 		});
 
-		expect(lastGoParams.siteIds).toEqual(['parisId']);
-		expect(lastGoParams.teamIds).toEqual(['greenId']);
+		expect(t.lastGoParams.siteIds).toEqual(['parisId']);
+		expect(t.lastGoParams.teamIds).toEqual(['greenId']);
 	});
 
 });

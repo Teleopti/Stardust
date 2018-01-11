@@ -1,38 +1,9 @@
 ﻿'use strict';
 
-describe('RtaOverviewController open/close site', function () {
-
-	beforeEach(module('wfm.rta'));
-	beforeEach(module('wfm.rtaTestShared'));
-
-	var $stateParams;
-	var $fakeBackend;
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.factory('$stateParams', function () {
-				$stateParams = {};
-				return $stateParams;
-			});
-			$provide.factory('skills', function () {
-				return $fakeBackend.skills;
-			});
-			$provide.factory('skillAreas', function () {
-				return $fakeBackend.skillAreas;
-			});
-		});
-	});
-
-	var	$controllerBuilder;
-	beforeEach(inject(function (_FakeRtaBackend_, _ControllerBuilder_) {
-		$controllerBuilder = _ControllerBuilder_;
-		$fakeBackend = _FakeRtaBackend_;
-		$fakeBackend.clear();
-		$controllerBuilder.setup('RtaOverviewController39082');
-	}));
-
-	it('should open site', function () {
-		$fakeBackend
+rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
+	
+	it('should open site', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			})
@@ -40,10 +11,9 @@ describe('RtaOverviewController open/close site', function () {
 				SiteId: 'parisId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
 
@@ -51,8 +21,8 @@ describe('RtaOverviewController open/close site', function () {
 		expect(vm.siteCards[0].teams[0].Id).toEqual("redId");
 	});
 
-	it('should close site', function () {
-		$fakeBackend
+	it('should close site', function (t) {
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			})
@@ -60,22 +30,21 @@ describe('RtaOverviewController open/close site', function () {
 				SiteId: 'parisId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = false;
 		});
 
 		expect(vm.siteCards[0].isOpen).toEqual(false);
 	});
 
-	it('should close site with selected team', function () {
-		$stateParams.teamIds = ['redId'];
-		$fakeBackend
+	it('should close site with selected team', function (t) {
+		t.stateParams.teamIds = ['redId'];
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			})
@@ -83,10 +52,9 @@ describe('RtaOverviewController open/close site', function () {
 				SiteId: 'parisId',
 				Id: 'redId'
 			});
-		var c = $controllerBuilder.createController();
-		var vm = c.vm;
+		var vm = t.createController();
 
-		c.apply(function () {
+		t.apply(function () {
 			vm.siteCards[0].isOpen = false;
 		});
 

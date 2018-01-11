@@ -1,71 +1,34 @@
 ﻿'use strict';
 
-describe('RtaOverviewController open/close site', function () {
+rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
-	beforeEach(module('wfm.rta'));
-	beforeEach(module('wfm.rtaTestShared'));
-
-	var $stateParams;
-	var $fakeBackend;
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.factory('$stateParams', function () {
-				$stateParams = {};
-				return $stateParams;
-			});
-			$provide.factory('skills', function () {
-				return $fakeBackend.skills;
-			});
-			$provide.factory('skillAreas', function () {
-				return $fakeBackend.skillAreas;
-			});
-		});
-	});
-
-	var
-		$controllerBuilder,
-		$sessionStorage;
-	beforeEach(inject(function (_FakeRtaBackend_, _ControllerBuilder_, _$state_, _$sessionStorage_) {
-		$controllerBuilder = _ControllerBuilder_;
-		$fakeBackend = _FakeRtaBackend_;
-		$sessionStorage = _$sessionStorage_;
-		spyOn(_$state_, 'go');
-		$controllerBuilder.setup('RtaOverviewController39082');
-	}));
-
-	afterEach(function () {
-		$fakeBackend.clear();
-		$sessionStorage.$reset();
-	});
-
-	it('should store selected site', function () {
-		$stateParams.siteIds = ['parisId'];
-		$fakeBackend
+	it('should store selected site', function (t) {
+		t.stateParams.siteIds = ['parisId'];
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			});
-		$controllerBuilder.createController();
-		expect($sessionStorage.rtaState.siteIds).toEqual(['parisId']);
+		t.createController();
+		expect(t.sessionStorage.rtaState.siteIds).toEqual(['parisId']);
 	});
 
-	it('should store selected site and skill being selected', function () {
-		$stateParams.siteIds = ['parisId'];
-		$fakeBackend
+	it('should store selected site and skill being selected', function (t) {
+		t.stateParams.siteIds = ['parisId'];
+		t.backend
 			.withSiteAdherence({
 				Id: 'parisId'
 			})
 			.withSkill({
 				Id: 'skillId'
 			});
-		var c = $controllerBuilder.createController();
+		var vm = t.createController();
 
-		c.apply(function () {
-			c.vm.selectSkillOrSkillArea({ Id: 'skillId' })
+		t.apply(function () {
+			vm.selectSkillOrSkillArea({Id: 'skillId'})
 		});
 
-		expect($sessionStorage.rtaState.siteIds).toEqual(['parisId']);
-		expect($sessionStorage.rtaState.skillIds).toEqual(['skillId']);
+		expect(t.sessionStorage.rtaState.siteIds).toEqual(['parisId']);
+		expect(t.sessionStorage.rtaState.skillIds).toEqual(['skillId']);
 	});
 
 });
