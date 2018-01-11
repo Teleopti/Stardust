@@ -1950,8 +1950,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.SetString("budgetGroupName", budgetGroupName)
 				.SetGuid("budgetGroupId", budgetGroupId)
 				.ExecuteUpdate();
+			Session.CreateSQLQuery(
+					"Insert into [ReadModel].[FindPerson] " +
+					"		 (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,  TeamId, SiteId, BusinessUnitId, StartDateTime, EndDateTime, personPeriodTeamId)" +
+					" Values (:personId,'Anna','Autuori','108460','Note',NULL,:budgetGroupName,:budgetGroupId,'BudgetGroup',:teamId, :siteId, :businessUnitId, :startDateTime, :endDateTime, :personPeriodTeamId)")
+				.SetDateTime("startDateTime", new DateTime(2018, 01, 01))
+				.SetDateTime("endDateTime", new DateTime(2018, 01, 31))
+				.SetGuid("businessUnitId", buid)
+				.SetGuid("teamId", team1Id)
+				.SetGuid("siteId", siteId)
+				.SetGuid("personPeriodTeamId", team1Id)
+				.SetGuid("personId", personId)
+				.SetString("budgetGroupName", budgetGroupName)
+				.SetGuid("budgetGroupId", budgetGroupId)
+				.ExecuteUpdate();
 
-			var results = target.FindBudgetGroupNameForPeople(new List<Guid> {personId}, new DateTime(2017, 12, 31, 23, 00, 00));
+			var dateTime = new DateTime(2017, 12, 31, 23, 00, 00, DateTimeKind.Utc);
+			var results = target.FindBudgetGroupNameForPeople(new List<Guid> {personId}, TimeZoneHelper.ConvertFromUtc(dateTime, TimeZoneInfoFactory.StockholmTimeZoneInfo()).Date);
 
 			Assert.AreEqual(1, results.Count);
 			Assert.AreEqual(budgetGroupName, results[0].BudgetGroupName);

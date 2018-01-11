@@ -745,7 +745,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				results.AddRange(Session.CreateSQLQuery(
 						"exec ReadModel.GetBudgetGroupNamesForPeople @PersonIds	= :PersonIds, @StartDate = :StartDate")
-					.SetDateTime("StartDate", startDate.Date)
+					.SetDateTime("StartDate", startDate)
 					.SetString("PersonIds", string.Join(",", personIdBatch))
 					.SetResultTransformer(Transformers.AliasToBean(typeof(PersonBudgetGroupName)))
 					.SetReadOnly(true)

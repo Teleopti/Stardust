@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			var personIds = allAndTextRequests.Select(a => a.Person.Id.Value).Distinct().ToList();
 
 
-			var budgetGroupNames = _personRepository.FindBudgetGroupNameForPeople(personIds, period.StartDateTime)
+			var budgetGroupNames = _personRepository.FindBudgetGroupNameForPeople(personIds,
+					TimeZoneHelper.ConvertFromUtc(period.StartDateTime, absenceRequest.Person.PermissionInformation.DefaultTimeZone()).Date)
 				.ToDictionary(x => x.PersonId, x => x.BudgetGroupName);
 
 			var waitlistedRequests = allAndTextRequests.Where(request =>
