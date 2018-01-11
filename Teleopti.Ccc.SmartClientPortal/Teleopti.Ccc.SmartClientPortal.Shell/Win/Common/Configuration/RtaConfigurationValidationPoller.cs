@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 						.ToArray();
 					return texts;
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 				}
 
