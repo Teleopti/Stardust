@@ -10903,7 +10903,7 @@ Teleopti R&amp;D</value>
     <value>開始時間應早於結束時間</value>
   </data>
   <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Teleopti產品啟用金鑰免責條款</value>
+    <value>Teleopti產品啟用金鑰錯誤</value>
   </data>
   <data name="TestSendingToColon" xml:space="preserve">
     <value>測試發送到：</value>
