@@ -6,10 +6,12 @@
 		.service('BackendFaker', constructor);
 
 	constructor.$inject = ['$httpBackend'];
-	
+
 	function constructor($httpBackend) {
 
-		function fake(url, response) {
+		var service = {};
+
+		function fakeHttpCall(url, response) {
 			$httpBackend.whenGET(url)
 				.respond(function (method, url, data, headers, params) {
 					return response(params, data, method, url, headers);
@@ -20,27 +22,68 @@
 				});
 		}
 
-		var toggles = {};
+		function fakeEndpoint(spec) {
 
-		function withToggle(toggle) {
-			toggles[toggle] = true;
-			return this;
-		}
-		
-		function clear() {
-			toggles = {};
-		}
+			spec.add = spec.add || function (data, item) {
+				data.push(item);
+				return data;
+			};
+			spec.clear = spec.clear || function () {
+				return [];
+			};
 
-		fake(/ToggleHandler\/AllToggles(.*)/,
-			function (params) {
-				return [200, toggles];
+			var data = spec.clear();
+
+			var endpoint = {
+				with: function (item) {
+					data = spec.add(data, item);
+				},
+				clear: function () {
+					data = spec.clear();
+				},
+				lastParams: undefined
+			};
+
+			fakeHttpCall(spec.url, function (params) {
+				endpoint.lastParams = params;
+				return [200, data];
 			});
 
-		return {
-			fake: fake,
-			withToggle: withToggle,
-			clear: clear
+			service[spec.name] = endpoint;
+
+			endpoints.push(endpoint);
 		}
+
+		var endpoints = [];
+
+		service.fake = function fake(specOrUrl, responseMaybe) {
+			if (specOrUrl.url) {
+				var spec = specOrUrl;
+				fakeEndpoint(spec)
+			} else {
+				var url = specOrUrl;
+				fakeHttpCall(url, responseMaybe);
+			}
+		};
+
+		service.clear = function () {
+			endpoints.forEach(function (endpoint) {
+				endpoint.clear();
+			})
+		};
+
+		service.fake({
+			name: 'toggles',
+			url: /ToggleHandler\/AllToggles(.*)/,
+			clear: function () {
+				return {}
+			},
+			add: function (data, item) {
+				data[item] = true;
+			}
+		});
+
+		return service;
 
 	}
 

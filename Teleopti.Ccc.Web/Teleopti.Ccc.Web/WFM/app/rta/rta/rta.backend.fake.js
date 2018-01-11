@@ -17,35 +17,55 @@
 		var skills = [];
 		var skillAreas = [];
 		var phoneStates = [];
+
+		var service = faker;
+
+		service.withTime = withTime;
 		
-		var service = {
-			withToggle: faker.withToggle,
-			withTime: withTime,
-			withAgentState: withAgentState,
-			clearAgentStates: clearAgentStates,
-			
-			withSiteAdherence: withSiteAdherence,
-			clearSiteAdherences: clearSiteAdherences,
-			
-			withTeamAdherence: withTeamAdherence,
-			clearTeamAdherences: clearTeamAdherences,
-			
-			withSkill: withSkill,
-			withSkillAreas: withSkillAreas,
-			withPhoneState: withPhoneState,
-			withOrganization: withOrganization,
-			withOrganizationOnSkills: withOrganizationOnSkills,
-			withHistoricalAdherence: withHistoricalAdherence,
-
-			get skills() { return skills; },
-			get skillAreas() { return skillAreas; },
-
-			lastOverviewRequestParams: undefined,
-			lastAgentStatesRequestParams: undefined,
-			lastHistoricalAdherenceForPersonRequestParams: undefined
-			
+		service.withAgentState = withAgentState;
+		service.clearAgentStates = clearAgentStates;
+		
+		service.withSiteAdherence = withSiteAdherence;
+		service.clearSiteAdherences = clearSiteAdherences;
+		service.withTeamAdherence = withTeamAdherence;
+		service.clearTeamAdherences = clearTeamAdherences;
+		
+		service.withSkill = withSkill;
+		service.withSkillAreas = withSkillAreas;
+		
+		service.withPhoneState = withPhoneState;
+		service.withOrganization = withOrganization;
+		service.withOrganizationOnSkills = withOrganizationOnSkills;
+		
+		service.withHistoricalAdherence = withHistoricalAdherence;
+		
+		Object.defineProperty(service, 'skills', {
+			get: function () {
+				return skills;
+			}
+		});
+		Object.defineProperty(service, 'skillAreas', {
+			get: function () {
+				return skillAreas;
+			}
+		});
+		
+		var clear = faker.clear;
+		service.clear = function() {
+			serverTime = null;
+			siteAdherences = [];
+			teamAdherences = [];
+			skillAreas = [];
+			phoneStates = [];
+			historicalAdherence = {};
+			clear();
 		};
-
+		
+		faker.fake({
+			name: 'configurationValidation',
+			url: /\.\.\/api\/Rta\/Configuration\/Validate/
+		});
+		
 		faker.fake(/\.\.\/api\/AgentStates\/Poll/,
 			function (params) {
 				service.lastAgentStatesRequestParams = params;
@@ -280,16 +300,6 @@
 			});
 			return this;
 		}
-
-		service.clear = function() {
-			serverTime = null;
-			siteAdherences = [];
-			teamAdherences = [];
-			skillAreas = [];
-			phoneStates = [];
-			historicalAdherence = {};
-			faker.clear();
-		};
 		
 		return service;
 	};
