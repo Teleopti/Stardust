@@ -60,12 +60,15 @@
 			cache: false,
 			data: authenticationModel,
 			success: function (responseData, textStatus, jqXHR) {
-				businessUnits = responseData;
-				success(responseData, textStatus, jqXHR);
+				if (responseData === "NoUserFound") {
+					options.nodatasource();
+				} else {
+					businessUnits = responseData;
+					success(responseData, textStatus, jqXHR);
+				}
 			},
 			error: function () {
-				//TODO: tenant - a bit strange here. Just made the scenarios green
-				options.nodatasource();
+				options.errormessage("Failed to get business units!");
 			}
 		}
 

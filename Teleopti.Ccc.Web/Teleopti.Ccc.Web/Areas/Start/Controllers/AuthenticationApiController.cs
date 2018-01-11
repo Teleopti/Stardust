@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			var result = _identityLogon.LogonIdentityUser();
 			if (!result.Successful)
-				return errorMessage("Unknown error");
+				return Ok("NoUserFound");
 			var businessUnits = _businessUnitViewModelFactory.BusinessUnits(result.DataSource, result.Person);
 			return Ok(businessUnits);
 		}
