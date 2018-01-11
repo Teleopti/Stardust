@@ -52,5 +52,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			return _commandHandlingProvider.RemoveAbsence(input);
 		}
+
+		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/AddDayOff")]
+		public virtual IList<ActionResult> AddDayOff([FromBody] AddDayOffFormData input) {
+			return _commandHandlingProvider.AddDayOff(input);
+		}
 	}
+
+	
 }

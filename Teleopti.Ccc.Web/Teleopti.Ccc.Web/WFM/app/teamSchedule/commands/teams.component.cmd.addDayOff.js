@@ -17,6 +17,7 @@
 
 		ctrl.$onInit = function () {
 			var curDate = moment(ctrl.containerCtrl.getDate()).toDate();
+			ctrl.trackId = ctrl.containerCtrl.getTrackId();
 			ctrl.dateRange = {
 				startDate: curDate,
 				endDate: curDate
@@ -41,10 +42,14 @@
 		}
 
 		ctrl.addDayOff = function () {
+			var personIds = personSelectionSvc.getCheckedPersonInfoList()
+				.map(function (agent) { return agent.PersonId; });
 			var input = {
+				PersonIds: personIds,
 				StartDate: moment(ctrl.dateRange.startDate).format('YYYY-MM-DD'),
 				EndDate: moment(ctrl.dateRange.endDate).format('YYYY-MM-DD'),
-				TemplateId: ctrl.selectedTemplateId
+				TemplateId: ctrl.selectedTemplateId,
+				TrackedCommandInfo: { TrackId: ctrl.trackId}
 			};
 			dayOffService.addDayOff(input);
 		}

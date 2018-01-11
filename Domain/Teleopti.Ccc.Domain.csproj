@@ -155,6 +155,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsByToggle.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddDayOffCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddDayOffCommand.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformancePersister.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\IExternalPerformancePersister.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\ IOvertimeRequestAvailability.cs" />

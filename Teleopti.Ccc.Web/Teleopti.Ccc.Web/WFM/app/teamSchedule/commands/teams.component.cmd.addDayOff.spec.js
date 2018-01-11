@@ -213,6 +213,8 @@
 			expect(dayOffData.StartDate).toEqual(date);
 			expect(dayOffData.EndDate).toEqual(date);
 			expect(dayOffData.TemplateId).toEqual("template1");
+			expect(dayOffData.PersonIds).toEqual(personList.map(function (person) { return person.PersonId;}));
+			expect(dayOffData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
 		});
 
 		function setUp(inputDate) {
@@ -240,7 +242,7 @@
 
 		function FakeDayOffService() {
 			this.lastPostData = null;
-			this.getAvailableTemplates = function () {
+			this.getAllDayOffTemplates = function () {
 				return $q(function (resolve, reject) {
 					resolve([
 						{ Id: 'template1', Name: 'template1' },
@@ -252,22 +254,23 @@
 				this.lastPostData = input;
 			}
 		}
-
+		
+		var personList = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleStartTime: null,
+				ScheduleEndTime: null
+			}];
 		function FakePersonSelectionService() {
-			var fakePersonList = [];
-
+			var checkedPersonList = [];
+			
 			this.setFakeCheckedPersonInfoList = function (input) {
-				fakePersonList = input || [
-					{
-						PersonId: 'agent1',
-						Name: 'agent1',
-						ScheduleStartTime: null,
-						ScheduleEndTime: null
-					}];
+				checkedPersonList = input || personList;
 			}
 
 			this.getCheckedPersonInfoList = function () {
-				return fakePersonList;
+				return checkedPersonList;
 			}
 		}
 

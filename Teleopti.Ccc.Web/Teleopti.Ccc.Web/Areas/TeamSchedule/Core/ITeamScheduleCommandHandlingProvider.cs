@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		List<ActionResult> ChangeShiftCategory(ChangeShiftCategoryFormData input);
 		IList<ActionResult> MoveNonoverwritableLayers(MoveNonoverwritableLayersFormData input);
 		IList<ActionResult> EditScheduleNote(EditScheduleNoteFormData input);
+		IList<ActionResult> AddDayOff(AddDayOffFormData input);
 	}
 }

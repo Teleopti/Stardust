@@ -20,8 +20,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 		private readonly IDictionary<string, string> _permissionDic = new Dictionary<string, string>
 		{
+			{DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, Resources.YouDoNotHavePermissionsToViewTeamSchedules},
 			{DefinedRaptorApplicationFunctionPaths.RemoveAbsence, Resources.NoPermissionRemoveAgentAbsence},
 			{ DefinedRaptorApplicationFunctionPaths.EditShiftCategory, Resources.NoPermissionToEditShiftCategory },
 			{ DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, Resources.NoPermissionToMoveInvalidOverlappedActivity }
@@ -31,12 +33,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			ICommandDispatcher commandDispatcher,
 			ILoggedOnUser loggedOnUser,
 			IPersonRepository personRepository,
-			IPermissionProvider permissionProvider)
+			IPermissionProvider permissionProvider,
+			IDayOffTemplateRepository dayOffTemplateRepository)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;
+			_dayOffTemplateRepository = dayOffTemplateRepository;
 		}
 
 		public IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds)
@@ -230,6 +234,47 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return retResult;
 		}
 
+		public IList<ActionResult> AddDayOff(AddDayOffFormData input)
+		{
+			var result = new List<ActionResult>();
+			if (!validateAddDayOffInput(input))
+			{
+				result.Add(new ActionResult()
+				{
+					ErrorMessages = new List<string> { Resources.InvalidInput }
+				});
+				return result;
+			}
+			var people = _personRepository.FindPeople(input.PersonIds);
+			foreach (var person in people)
+			{
+				var actionResult = new ActionResult(person.Id.GetValueOrDefault());
+				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, input.StartDate, person, actionResult.ErrorMessages))
+				{
+					var command = new AddDayOffCommand
+					{
+						Person = person,
+						StartDate = input.StartDate,
+						EndDate = input.EndDate,
+						Template = input.Template,
+						TrackedCommandInfo =
+							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+					};
+
+					_commandDispatcher.Execute(command);
+					if (command.ErrorMessages != null && command.ErrorMessages.Any())
+					{
+						actionResult.ErrorMessages.AddRange(command.ErrorMessages);
+					}
+				}
+
+				if (actionResult.ErrorMessages.Any())
+					result.Add(actionResult);
+			}
+
+			return result;
+		}
+
 		private bool agentScheduleIsWriteProtected(DateOnly date, IPerson agent)
 		{
 			return !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
@@ -251,6 +296,27 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			messages.AddRange(newMessages);
 			return !newMessages.Any();
+		}
+
+
+		private bool validateAddDayOffInput(AddDayOffFormData input)
+		{
+			if (input.StartDate == null || input.EndDate == null || input.StartDate > input.EndDate)
+			{
+				return false;
+			}
+			if (input.PersonIds == null || !input.PersonIds.Any())
+			{
+				return false;
+			}
+
+			if (input.TemplateId == null
+				|| (input.Template = _dayOffTemplateRepository.Get(input.TemplateId)) == null)
+			{
+				return false;
+			}
+
+			return true;
 		}
 	}
 }

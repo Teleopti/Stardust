@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 	public class TeamScheduleActivityCommandServiceTest
 	{
 		public TeamScheduleActivityCommandService Target;
-		public FakeActivityCommandHandler ActivityCommandHandler;
+		public FakeCommandHandler ActivityCommandHandler;
 		public FakePersonRepository PersonRepository;
 		public Global.FakePermissionProvider PermissionProvider;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;

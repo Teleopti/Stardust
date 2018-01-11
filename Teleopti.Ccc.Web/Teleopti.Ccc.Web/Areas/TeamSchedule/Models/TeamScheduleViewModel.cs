@@ -99,6 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 			ErrorMessages = new List<string>();
 			WarningMessages = new List<string>();
 		}
+		public ActionResult() { }
 		public IList<string> ErrorMessages { get; set; }
 		public IList<string> WarningMessages { get; set; }
 		public Guid PersonId { get; }
@@ -114,5 +115,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public DateOnly Date { get; set; }
 		public DateTime NewShiftStart { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+	}
+
+	public class AddDayOffFormData
+	{
+		public DateOnly StartDate { get; set; }
+		public DateOnly EndDate { get; set; }
+		public Guid TemplateId { get; set; }
+		public Guid[] PersonIds { get; set; }
+		public IDayOffTemplate Template { get;  set; }
+		public TrackedCommandInfo TrackedCommandInfo { get; internal set; }
 	}
 }

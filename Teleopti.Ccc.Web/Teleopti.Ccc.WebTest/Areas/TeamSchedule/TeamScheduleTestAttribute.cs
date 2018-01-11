@@ -41,18 +41,15 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
 
-			var fakeActivityCommandHandler = new FakeActivityCommandHandler();
-
-			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<AddActivityCommand>>();
-			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<AddPersonalActivityCommand>>();
-			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<AddOvertimeActivityCommand>>();
-			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<RemoveActivityCommand>>();
+			var fakeActivityCommandHandler = new FakeCommandHandler();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<BackoutScheduleChangeCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<ChangeShiftCategoryCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<FixNotOverwriteLayerCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<EditScheduleNoteCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<MoveShiftLayerCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<MoveShiftCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<AddDayOffCommand>>();
+
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<FullPermission>().For<IAuthorization>();
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();

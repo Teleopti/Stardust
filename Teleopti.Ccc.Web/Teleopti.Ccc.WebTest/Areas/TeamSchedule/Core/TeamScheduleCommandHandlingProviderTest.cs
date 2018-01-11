@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
@@ -19,16 +22,22 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 {
 	[TestFixture, TeamScheduleTest]
-	public class TeamScheduleCommandHandlingProviderTest
+	public class TeamScheduleCommandHandlingProviderTest : ISetup
 	{
 		public ITeamScheduleCommandHandlingProvider Target;
-		public FakeActivityCommandHandler ActivityCommandHandler;
+		public FakeCommandHandler CommandHandler;
 		public FakePersonRepository PersonRepository;
 		public Global.FakePermissionProvider PermissionProvider;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
 		public FakeScenarioRepository CurrentScenario;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
+		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
+		}
 
 
 		[Test]
@@ -49,11 +58,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
-			ActivityCommandHandler.ResetCalledCount();
+			CommandHandler.ResetCalledCount();
 
 			Target.MoveNonoverwritableLayers(input);
 
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			CommandHandler.CalledCount.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -77,14 +86,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
-			ActivityCommandHandler.ResetCalledCount();
+			CommandHandler.ResetCalledCount();
 
 			Target.MoveNonoverwritableLayers(input);
 
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(2);
+			CommandHandler.CalledCount.Should().Be.EqualTo(2);
 		}
-
-
 
 		[Test]
 		public void ShouldReturnNoWriteProtectedAgentsIfHasModifyWriteProtectedSchedulePermission()
@@ -120,8 +127,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			result.ToList().Count.Should().Be.EqualTo(1);
 		}
 
-	
-
 		[Test]
 		public void ShouldNotBackoutScheduleChangeToWriteProtectedSchedule()
 		{
@@ -145,15 +150,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
-			ActivityCommandHandler.ResetCalledCount();
+			CommandHandler.ResetCalledCount();
 			var results = Target.BackoutScheduleChange(input);
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			CommandHandler.CalledCount.Should().Be.EqualTo(0);
 
 			results.Count.Should().Be.EqualTo(1);
 			results.First().ErrorMessages.Count.Should().Be.EqualTo(1);
 			results.First().ErrorMessages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
 		}
-
 
 		[Test]
 		public void ShouldNotChangeInternalNoteForWriteProtectedSchedule()
@@ -172,9 +176,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				InternalNote = "new note"
 			};
 
-			ActivityCommandHandler.ResetCalledCount();
+			CommandHandler.ResetCalledCount();
 			var results = Target.EditScheduleNote(input);
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			CommandHandler.CalledCount.Should().Be.EqualTo(0);
 
 			results.Count.Should().Be.EqualTo(1);
 			results.First().ErrorMessages.Count.Should().Be.EqualTo(1);
@@ -198,9 +202,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				PublicNote = "public note"
 			};
 
-			ActivityCommandHandler.ResetCalledCount();
+			CommandHandler.ResetCalledCount();
 			var results = Target.EditScheduleNote(input);
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			CommandHandler.CalledCount.Should().Be.EqualTo(0);
 
 			results.Count.Should().Be.EqualTo(1);
 			results.First().ErrorMessages.Count.Should().Be.EqualTo(1);
@@ -222,11 +226,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				PublicNote = "public note"
 			};
 
-			ActivityCommandHandler.ResetCalledCount();
+			CommandHandler.ResetCalledCount();
 			var results = Target.EditScheduleNote(input);
 
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
-			(ActivityCommandHandler.CalledCommands.Single() as EditScheduleNoteCommand).PublicNote.Should()
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
+			(CommandHandler.CalledCommands.Single() as EditScheduleNoteCommand).PublicNote.Should()
 				.Be.EqualTo("public note");
 			results.Count.Should().Be.EqualTo(0);
 		}
@@ -254,9 +258,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
-			ActivityCommandHandler.ResetCalledCount();
+			CommandHandler.ResetCalledCount();
 			var results = Target.BackoutScheduleChange(input);
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
 			results.Count.Should().Be.EqualTo(0);
 		}
 
@@ -285,9 +289,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				Date = date,
 				ShiftCategoryId = shiftCategory.Id.Value
 			};
-			ActivityCommandHandler.ResetCalledCount();
+			CommandHandler.ResetCalledCount();
 			var results = Target.ChangeShiftCategory(input);
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
 			results.Count.Should().Be.EqualTo(0);
 		}
 
@@ -318,105 +322,118 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				Date = date,
 				ShiftCategoryId = shiftCategory.Id.Value
 			};
-			ActivityCommandHandler.ResetCalledCount();
+			CommandHandler.ResetCalledCount();
 			var results = Target.ChangeShiftCategory(input);
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			CommandHandler.CalledCount.Should().Be.EqualTo(0);
 			results.Count.Should().Be.EqualTo(1);
 		}
-	}
 
-	public class FakeActivityCommandHandler :
-		IHandleCommand<AddActivityCommand>,
-		IHandleCommand<AddOvertimeActivityCommand>,
-		IHandleCommand<AddPersonalActivityCommand>,
-		IHandleCommand<RemoveActivityCommand>,
-		IHandleCommand<MoveShiftLayerCommand>,
-		IHandleCommand<BackoutScheduleChangeCommand>,
-		IHandleCommand<ChangeShiftCategoryCommand>,
-		IHandleCommand<FixNotOverwriteLayerCommand>,
-		IHandleCommand<EditScheduleNoteCommand>,
-		IHandleCommand<MoveShiftCommand>
-	{
-		private int calledCount;
-		private IList<ITrackableCommand> commands = new List<ITrackableCommand>();
-		public void Handle(AddActivityCommand command)
+		[Test]
+		public void ShouldReturnErrorWhenAddDayOffWithInvalidDate()
 		{
-			calledCount++;
-			commands.Add(command);
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+
+			var results = Target.AddDayOff(new AddDayOffFormData
+			{
+				StartDate = new DateOnly(2018, 1, 10),
+				EndDate = new DateOnly(2018, 1, 9),
+				PersonIds = new Guid[] { person.Id.Value },
+				TemplateId = Guid.NewGuid()
+			});
+
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		}
+		[Test]
+		public void ShouldReturnErrorWhenAddDayOffWithNoPeople()
+		{
+			var results = Target.AddDayOff(new AddDayOffFormData
+			{
+				StartDate = new DateOnly(2018, 1, 10),
+				EndDate = new DateOnly(2018, 1, 10),
+				TemplateId = Guid.NewGuid()
+			});
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
 		}
 
-		public int CalledCount
+		[Test]
+		public void ShouldReturnErrorWhenAddDayOffWithNoTemplateId()
 		{
-			get { return calledCount; }
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			var results = Target.AddDayOff(new AddDayOffFormData
+			{
+				StartDate = new DateOnly(2018, 1, 10),
+				EndDate = new DateOnly(2018, 1, 10),
+				PersonIds = new Guid[] { person.Id.Value }
+			});
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
 		}
 
-		public IList<ITrackableCommand> CalledCommands
+		[Test]
+		public void ShouldReturnErrorWhenAddDayOffWithNoExistTemplate()
 		{
-			get { return commands; }
-		}
-		public void ResetCalledCount()
-		{
-			calledCount = 0;
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			var results = Target.AddDayOff(new AddDayOffFormData
+			{
+				StartDate = new DateOnly(2018, 1, 10),
+				EndDate = new DateOnly(2018, 1, 10),
+				PersonIds = new Guid[] { person.Id.Value },
+				TemplateId = Guid.NewGuid()
+			});
+
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
 		}
 
-		public void Handle(RemoveActivityCommand command)
+		[Test]
+		public void ShouldReturnErrorWhenAddDayOffWithoutPermittedPerson()
 		{
-			calledCount++;
-			commands.Add(command);
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+
+			var template = new DayOffTemplate(new Description("template")).WithId();
+			DayOffTemplateRepository.Has(template);
+
+			var results = Target.AddDayOff(new AddDayOffFormData
+			{
+				StartDate = new DateOnly(2018, 1, 10),
+				EndDate = new DateOnly(2018, 1, 10),
+				PersonIds = new Guid[] { person.Id.Value },
+				TemplateId = template.Id.Value
+			});
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.YouDoNotHavePermissionsToViewTeamSchedules);
 		}
 
-		public void Handle(MoveShiftLayerCommand command)
+		[Test]
+		public void ShouldInvokeDayOffCommandHandler()
 		{
-			calledCount++;
-			commands.Add(command);
-		}
+			PermissionProvider.Enable();
+			var dateonly = new DateOnly(2018, 1, 10);
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, person, dateonly);
 
-		public void Handle(AddPersonalActivityCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
+			var template = new DayOffTemplate(new Description("template")).WithId();
+			DayOffTemplateRepository.Has(template);
 
-		public void Handle(AddOvertimeActivityCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
+			CommandHandler.ResetCalledCount();
+			var trackId = Guid.NewGuid();
+			var results = Target.AddDayOff(new AddDayOffFormData
+			{
+				StartDate = dateonly,
+				EndDate = dateonly,
+				PersonIds = new Guid[] { person.Id.Value },
+				TemplateId = template.Id.Value,
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = trackId }
 
-		public void Handle(BackoutScheduleChangeCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
-
-		public void Handle(ChangeShiftCategoryCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
-
-		public void Handle(MoveActivityCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
-
-		public void Handle(FixNotOverwriteLayerCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
-
-		public void Handle(EditScheduleNoteCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
-
-		public void Handle(MoveShiftCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
+			});
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
+			CommandHandler.CalledCommands.Single().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
+			results.Count.Should().Be.EqualTo(0);
 		}
 	}
 }
