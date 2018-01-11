@@ -16,22 +16,32 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 	{
 		private readonly Timer _timer;
 		private readonly IList<Action<IEnumerable<string>>> _callbacks = new List<Action<IEnumerable<string>>>();
+		private readonly object _lock = new object();
 
 		public RtaConfigurationValidationPoller()
 		{
 			_timer = new Timer(o =>
 			{
-				if (_callbacks.IsEmpty())
+				if (!Monitor.TryEnter(_lock))
 					return;
-				var texts = getTexts();
-				_callbacks.ForEach(c => { c(texts); });
+				try
+				{
+					if (_callbacks.IsEmpty())
+						return;
+					var texts = getTexts();
+					_callbacks.ForEach(c => { c(texts); });
+				}
+				finally
+				{
+					Monitor.Exit(_lock);
+				}
 			});
 		}
 
 		public IDisposable Poll(Action<IEnumerable<string>> callback)
 		{
 			_callbacks.Add(callback);
-			_timer.Change(5000, 5000);
+			_timer.Change(10000, 10000);
 			return new GenericDisposable(() => { _callbacks.Remove(callback); });
 		}
 
