@@ -1927,6 +1927,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 		}
 
+		[Test]
+		public void ShouldFindBudgetGroupNameForPeopleByDateOnly()
+		{
+			var buid = Guid.NewGuid();
+			var team1Id = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var personId = new Guid("B0E35119-4661-4A1B-8772-9B5E015B2564");
+			var budgetGroupName = "front end";
+			var budgetGroupId = Guid.NewGuid();
+			Session.CreateSQLQuery(
+					"Insert into [ReadModel].[FindPerson] " +
+					"		 (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,  TeamId, SiteId, BusinessUnitId, StartDateTime, EndDateTime, personPeriodTeamId)" +
+					" Values (:personId,'Anna','Autuori','108460','Note',NULL,:budgetGroupName,:budgetGroupId,'BudgetGroup',:teamId, :siteId, :businessUnitId, :startDateTime, :endDateTime, :personPeriodTeamId)")
+				.SetDateTime("startDateTime", new DateTime(2017, 10, 30))
+				.SetDateTime("endDateTime", new DateTime(2017, 12, 31))
+				.SetGuid("businessUnitId", buid)
+				.SetGuid("teamId", team1Id)
+				.SetGuid("siteId", siteId)
+				.SetGuid("personPeriodTeamId", team1Id)
+				.SetGuid("personId", personId)
+				.SetString("budgetGroupName", budgetGroupName)
+				.SetGuid("budgetGroupId", budgetGroupId)
+				.ExecuteUpdate();
+
+			var results = target.FindBudgetGroupNameForPeople(new List<Guid> {personId}, new DateTime(2017, 12, 31, 23, 00, 00));
+
+			Assert.AreEqual(1, results.Count);
+			Assert.AreEqual(budgetGroupName, results[0].BudgetGroupName);
+		}
+
 		public class PlanningGroupTestCase
 		{
 			private readonly string _name;
