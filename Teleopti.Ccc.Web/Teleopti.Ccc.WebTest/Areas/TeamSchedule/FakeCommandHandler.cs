@@ -11,63 +11,34 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		IHandleCommand<FixNotOverwriteLayerCommand>,
 		IHandleCommand<EditScheduleNoteCommand>,
 		IHandleCommand<MoveShiftCommand>,
-		IHandleCommand<AddDayOffCommand>
+		IHandleCommand<AddDayOffCommand>,
+		IHandleCommand<AddActivityCommand>,
+		IHandleCommand<RemoveActivityCommand>,
+		IHandleCommand<MoveActivityCommand>,
+		IHandleCommand<AddOvertimeActivityCommand>,
+		IHandleCommand<AddPersonalActivityCommand>
 	{
 		private int calledCount;
 		private IList<ITrackableCommand> commands = new List<ITrackableCommand>();
-	
-		public int CalledCount
-		{
-			get { return calledCount; }
-		}
 
-		public IList<ITrackableCommand> CalledCommands
-		{
-			get { return commands; }
-		}
-		public void ResetCalledCount()
-		{
-			calledCount = 0;
-		}
+		public int CalledCount => calledCount;
 
-		public void Handle(MoveShiftLayerCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
+		public IList<ITrackableCommand> CalledCommands => commands;
+		public void ResetCalledCount() => calledCount = 0;
+		public void Handle(MoveShiftLayerCommand command) { handle(command); }
+		public void Handle(BackoutScheduleChangeCommand command) { handle(command); }
+		public void Handle(ChangeShiftCategoryCommand command) { handle(command); }
+		public void Handle(FixNotOverwriteLayerCommand command) { handle(command); }
+		public void Handle(EditScheduleNoteCommand command) { handle(command); }
+		public void Handle(MoveShiftCommand command) { handle(command); }
+		public void Handle(AddDayOffCommand command) { handle(command); }
+		public void Handle(AddActivityCommand command) { handle(command); }
+		public void Handle(RemoveActivityCommand command) { handle(command); }
+		public void Handle(MoveActivityCommand command) { handle(command); }
+		public void Handle(AddOvertimeActivityCommand command) { handle(command); }
+		public void Handle(AddPersonalActivityCommand command) { handle(command); }
 
-		public void Handle(BackoutScheduleChangeCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
-
-		public void Handle(ChangeShiftCategoryCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
-		
-
-		public void Handle(FixNotOverwriteLayerCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
-
-		public void Handle(EditScheduleNoteCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
-
-		public void Handle(MoveShiftCommand command)
-		{
-			calledCount++;
-			commands.Add(command);
-		}
-
-		public void Handle(AddDayOffCommand command)
+		private void handle(ITrackableCommand command)
 		{
 			calledCount++;
 			commands.Add(command);

@@ -49,6 +49,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<MoveShiftLayerCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<MoveShiftCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<AddDayOffCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<AddActivityCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<AddPersonalActivityCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<AddOvertimeActivityCommand>>();
+			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<RemoveActivityCommand>>();
 
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<FullPermission>().For<IAuthorization>();
