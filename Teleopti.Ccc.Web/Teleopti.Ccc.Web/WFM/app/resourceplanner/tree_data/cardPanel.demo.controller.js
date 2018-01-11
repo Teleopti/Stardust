@@ -52,7 +52,13 @@
         }
 
         vm.data4 = {
-            endDate: fourDayLater
+            startDate: new Date().setMonth(1),
+            endDate: new Date().setMonth(3)
+        }
+
+        vm.data8 = {
+            startDate: new Date().setMonth(1),
+            endDate: new Date().setMonth(3)
         }
 
         vm.customValid = function (data) {

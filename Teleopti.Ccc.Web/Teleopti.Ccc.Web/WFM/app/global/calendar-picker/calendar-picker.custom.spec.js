@@ -15,7 +15,7 @@ describe('CalendarPickerControllerCustomFeature', function () {
         data;
 
     beforeEach(function () {
-        module('wfm.templates', 'wfm.calendarPicker', 'externalModules');
+        module('wfm.templates', 'wfm.calendarPicker', 'angularMoment', 'ui.bootstrap', 'ui.bootstrap.persian.datepicker');
         module(function ($provide) {
             $provide.service('CurrentUserInfo', function () {
                 return currentUserInfo;

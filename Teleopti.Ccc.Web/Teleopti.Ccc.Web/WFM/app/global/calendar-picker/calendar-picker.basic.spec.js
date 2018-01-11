@@ -14,7 +14,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
         data;
 
     beforeEach(function () {
-        module('wfm.templates', 'wfm.calendarPicker', 'externalModules');
+        module('wfm.templates', 'wfm.calendarPicker', 'angularMoment', 'ui.bootstrap', 'ui.bootstrap.persian.datepicker');
         module(function ($provide) {
             $provide.service('CurrentUserInfo', function () {
                 return currentUserInfo;
@@ -293,7 +293,7 @@ describe('CalendarPickerControllerBasicFeature', function () {
     });
 
     it('should be able to [handle February as special case] and understand the interval length between 2018-01-28 to 2018-02-27 is one month', function () {
-         /*we dont care the case while the date is end of February since it was very rare and difficult to handle ex: 2018-01-29 to 2018-02-28 is not one month*/
+        /*we dont care the case while the date is end of February since it was very rare and difficult to handle ex: 2018-01-29 to 2018-02-28 is not one month*/
         vm.resetStartDate();
         vm.resetEndDate();
         vm.pickDate = moment([2018, 0, 28]);

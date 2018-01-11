@@ -38,6 +38,8 @@
         vm.hightLightToday = hightLightToday;
         vm.validate = undefined;
         vm.isValid = true;
+        vm.pickStartDate = null;
+        vm.pickEndDate = null;
         vm.options = {
             customClass: renderRangeDate,
             showWeeks: vm.showWeek
@@ -183,7 +185,7 @@
                 return vm.dateRangeText = vm.customValidate();
             }
             if (vm.pickEndDate - vm.pickStartDate <= 0) {
-                return vm.dateRangeText = 'Start date should be earlier than end date';
+                return vm.dateRangeText = 'ValidateStartDate';
             }
             return vm.dateRangeText = '';
         }
