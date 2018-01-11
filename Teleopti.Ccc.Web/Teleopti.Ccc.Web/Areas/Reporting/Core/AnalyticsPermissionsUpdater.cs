@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			var shouldUpdate = DateTime.UtcNow - lastUpdate >= TimeSpan.FromMinutes(15);
 			if (!shouldUpdate)
 				return;
+			_analyticsPermissionExecutionRepository.Set(personId, businessUnit.BusinessUnitId);
 
 			var currentPermissions = new HashSet<AnalyticsPermission>(_permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId));
 			var currentAnalyticsPermissions = new HashSet<AnalyticsPermission>(_analyticsPermissionRepository.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId));
@@ -57,8 +58,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Contains(p)).ToList();
 			_analyticsPermissionRepository.InsertPermissions(toBeAdded);
 			_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
-
-			_analyticsPermissionExecutionRepository.Set(personId, businessUnit.BusinessUnitId);
 		}
 
 		private static void runWithRetries(Action action)
