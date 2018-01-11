@@ -23,7 +23,8 @@
 		RTA_MobileFriendlyCheckboxes_46758,
 		RTA_ViewHistoricalAhderenceForRecentShifts_46786,
 		RTA_ViewHistoricalAhderence7DaysBack_46826,
-
+		RTA_ConfigurationValidationNotification_46933,
+		
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
 		MyTimeWeb_ShiftTradeBoardNoReadModel_36662,
