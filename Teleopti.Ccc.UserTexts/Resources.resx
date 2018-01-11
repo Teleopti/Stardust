@@ -16938,4 +16938,8 @@ Do you want to participate?</value>
     <value>Measure name is mandatory.</value>
     <comment>Error message used in importing an external performance csv file</comment>
   </data>
+  <data name="LoggedOutStateGroupMissingInConfiguration" xml:space="preserve">
+    <value>Logged out state group is missing in configuration for business unit '{0}'</value>
+    <comment></comment>
+  </data>
 </root>

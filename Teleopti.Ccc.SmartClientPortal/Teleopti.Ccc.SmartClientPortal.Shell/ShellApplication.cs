@@ -38,6 +38,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.ConfigurationSections;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping;
@@ -55,6 +56,11 @@ using Application = System.Windows.Forms.Application;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
+	public static class ContainerForLegacy
+	{
+		public static IContainer Container;
+	}
+
 	/// <summary>
 	/// Main application entry point class.
 	/// Note that the class derives from CAB supplied base class FormSmartClientShellApplication, and the 
@@ -85,6 +91,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				EO.Base.Runtime.EnableEOWP = true;
 				EO.Base.Runtime.InitWorkerProcessExecutable(System.IO.Path.Combine(Application.StartupPath, "eowp.exe"));
 			}
+
 			XmlConfigurator.Configure();
 
 			Application.EnableVisualStyles();
@@ -95,16 +102,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				typeof(FrameworkElement),
 				new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
-			if(!createAppConfigReader())
+			if (!createAppConfigReader())
 				return;
 
 			setDummyPrincipalBeforeContainerRegistrations();
-			IContainer container = configureContainer();
+			ContainerForLegacy.Container = configureContainer();
 #if (!DEBUG)
-			 //NHibernateProfiler.Initialize();
+//NHibernateProfiler.Initialize();
 			 SetReleaseMode();
-			 populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(container);
-			 var applicationStarter = container.Resolve<ApplicationStartup>();
+			 populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(ContainerForLegacy.Container);
+			 var applicationStarter = ContainerForLegacy.Container.Resolve<ApplicationStartup>();
 			 if (applicationStarter.LogOn())
 			 {
 				 try
@@ -120,8 +127,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 #endif
 
 #if (DEBUG)
-			populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(container);
-			var applicationStarter = container.Resolve<ApplicationStartup>();
+			populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(ContainerForLegacy.Container);
+			var applicationStarter = ContainerForLegacy.Container.Resolve<ApplicationStartup>();
 			if (applicationStarter.LogOn())
 			{
 				applicationStarter.LoadShellApplication();
@@ -149,6 +156,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					view.ShowDialog();
 				}
+
 				//if exception -> replace with a toggle manager returning false for everything
 				var updater = new ContainerBuilder();
 				updater.RegisterType<FalseToggleManager>().SingleInstance().As<IToggleManager>();
@@ -163,7 +171,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			foreach (var toggle in Enum.GetValues(typeof(Toggles)))
 			{
-				var x = (Toggles)toggle;
+				var x = (Toggles) toggle;
 				if (x != Toggles.TestToggle)
 					ret.AppendLine(x.ToString());
 			}
@@ -173,7 +181,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		public SmartClientShellApplication(IComponentContext container)
 			: base(container)
-		{ }
+		{
+		}
 
 		private static IConfigReader configReader;
 
@@ -195,6 +204,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					configReader = new ConfigOverrider(new ConfigReader(), appSettingsOverrides[preLogonView.GetData()]);
 				}
 			}
+
 			return true;
 		}
 
@@ -212,8 +222,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					IsFatClient = true
 				};
 				var configuration = new IocConfiguration(
-							iocArgs,
-							CommonModule.ToggleManagerForIoc(iocArgs));
+					iocArgs,
+					CommonModule.ToggleManagerForIoc(iocArgs));
 
 				builder.RegisterModule(new CommonModule(configuration));
 				builder.RegisterType<SirLeakAlot>().As<INestedUnitOfWorkStrategy>().SingleInstance();
@@ -237,6 +247,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().Current()).ExternallyOwned().As<IUnitOfWorkFactory>();
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
+				builder.RegisterType<RtaConfigurationValidationPoller>().SingleInstance();
 
 				builder.Register(c => new WebConfigReader(() =>
 				{
@@ -318,8 +329,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 
 			string defaultEmail = !string.IsNullOrEmpty(emailSetting.StringValue)
-											  ? emailSetting.StringValue
-											  : fallBack;
+				? emailSetting.StringValue
+				: fallBack;
 			var fileWriter = new WriteStringToFile();
 			var message = new MapiMailMessage(string.Empty, string.Empty);
 			var exceptionHandlerModel = new ExceptionHandlerModel(ex, defaultEmail, message, fileWriter, exceptionMessageBuilder);
@@ -327,6 +338,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				view.ShowDialog();
 			}
+
 			killOpenForms();
 			Application.Exit();
 		}
@@ -349,10 +361,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				toggles = new emptyStubOfActivteToggles_OnlyUseIfWebCannotBeReached();
 			}
+
 			return toggles;
 		}
 
-		private class emptyStubOfActivteToggles_OnlyUseIfWebCannotBeReached: ITogglesActive
+		private class emptyStubOfActivteToggles_OnlyUseIfWebCannotBeReached : ITogglesActive
 		{
 			public IDictionary<Toggles, bool> AllActiveToggles()
 			{

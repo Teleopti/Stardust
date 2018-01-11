@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -9,17 +8,24 @@ using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
-	public class RtaConfigurationValidationPoller
+	public class RtaConfigurationValidationPoller : IDisposable
 	{
+		private readonly ICurrentDataSource _dataSource;
 		private readonly Timer _timer;
 		private readonly IList<Action<IEnumerable<string>>> _callbacks = new List<Action<IEnumerable<string>>>();
 		private readonly object _lock = new object();
+		private readonly HttpClient _client;
+		private readonly string _serverUrl;
 
-		public RtaConfigurationValidationPoller()
+		public RtaConfigurationValidationPoller(ICurrentDataSource dataSource, IConfigReader config)
 		{
+			_client = new HttpClient();
+			_dataSource = dataSource;
+			_serverUrl = config.AppConfig("ConfigServer");
 			_timer = new Timer(o =>
 			{
 				if (!Monitor.TryEnter(_lock))
@@ -47,23 +53,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private IEnumerable<string> getTexts()
 		{
-			using (var client = new HttpClient())
+			try
 			{
-				try
-				{
-					var json = client.GetStringAsync(ConfigurationManager.AppSettings["ConfigServer"] + "Rta/Configuration/Validate?tenant=" + CurrentDataSource.Make().CurrentName()).Result;
-					var models = JsonConvert.DeserializeObject<IEnumerable<ConfigurationValidationViewModel>>(json);
-					var texts = models
-						.Select(x => string.Format(x.English, x.Data.Cast<object>().ToArray()))
-						.ToArray();
-					return texts;
-				}
-				catch (Exception)
-				{
-				}
-
-				return Enumerable.Empty<string>();
+				var json = _client.GetStringAsync(_serverUrl + "Rta/Configuration/Validate?tenant=" + _dataSource.CurrentName()).Result;
+				var models = JsonConvert.DeserializeObject<IEnumerable<ConfigurationValidationViewModel>>(json);
+				var texts = models
+					.Select(x => string.Format(UserTexts.Resources.ResourceManager.GetString(x.Resource), x.Data.Cast<object>().ToArray()))
+					.ToArray();
+				return texts;
 			}
+			catch (Exception)
+			{
+			}
+
+			return Enumerable.Empty<string>();
+		}
+
+		public void Dispose()
+		{
+			_client?.Dispose();
 		}
 	}
 }

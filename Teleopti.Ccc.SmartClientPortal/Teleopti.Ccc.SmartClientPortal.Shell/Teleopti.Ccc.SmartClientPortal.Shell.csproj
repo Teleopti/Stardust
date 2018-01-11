@@ -283,6 +283,7 @@
     </Compile>
     <Compile Include="ApplicationStartup.cs" />
     <Compile Include="Common\Constants\UIExtensionSiteNames.cs" />
+    <Compile Include="Common\InvokeIfRequiredExtension.cs" />
     <Compile Include="Common\Library\SmartClientApplication.cs" />
     <Compile Include="ConfigurationSections\AppSettingOverride.cs" />
     <Compile Include="ConfigurationSections\Installation.cs" />

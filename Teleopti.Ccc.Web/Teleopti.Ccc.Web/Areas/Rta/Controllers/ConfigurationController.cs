@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 //					new ConfigurationValidationViewModel
 //					{
 //						Resource = "LoggedOutStateGroupMissingInConfiguration",
-//						English = "Logged out state group is missing in the configuration for business unit {0} {1}",
-//						Data = new[] {_dataSource.CurrentName(), "Business unit name"}
+//						Data = new[] {"Blip blop unit", _dataSource.CurrentName()}
 //					}
 //				});
 //			return Ok(new[]
@@ -42,21 +41,23 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 //				new ConfigurationValidationViewModel
 //				{
 //					Resource = "LoggedOutStateGroupMissingInConfiguration",
-//					English = "Logged out state group is missing in the configuration for business unit {0} {1}",
-//					Data = new[] {_dataSource.CurrentName(), "Business unit name"}
+//					Data = new[] {"Blip blop unit", _dataSource.CurrentName()}
 //				},
 //				new ConfigurationValidationViewModel
 //				{
-//					Resource = "LoggedOutStateGroupMissingInConfiguration",
-//					English = "Logged out state group is missing in the configuration for business unit {0} {1}",
-//					Data = new[] {_dataSource.CurrentName(), "Business unit name"}
+//					Resource = "LoggedOutStateGroupMissingInRtaService",
+//					Data = new[] {"Blip blop unit", _dataSource.CurrentName()}
 //				},
 //				new ConfigurationValidationViewModel
 //				{
-//					Resource = "LoggedOutStateGroupMissingInConfiguration",
-//					English = "Logged out state group is missing in the configuration for business unit {0} {1}",
-//					Data = new[] {_dataSource.CurrentName(), "Business unit name"}
-//				}
+//					Resource = "DefaultStateGroupMissingInConfiguration",
+//					Data = new[] {"Blip blop unit", _dataSource.CurrentName()}
+//				},
+//				new ConfigurationValidationViewModel
+//				{
+//					Resource = "DefaultStateGroupMissingInRtaService",
+//					Data = new[] {"Blip blop unit", _dataSource.CurrentName()}
+//				},
 //			});
 		}
 	}

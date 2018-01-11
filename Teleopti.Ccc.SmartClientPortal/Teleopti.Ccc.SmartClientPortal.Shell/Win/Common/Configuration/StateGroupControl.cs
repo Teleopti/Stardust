@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.SmartClientPortal.Shell.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.UserTexts;
-using Action = System.Action;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
@@ -28,7 +29,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private bool _cancelValidate;
 
 		private readonly IDisposable _rtaConfigurationIssuePolling;
-		private readonly RtaConfigurationValidationPoller _rtaConfigurationValidationPoller;
 
 		public StateGroupControl()
 		{
@@ -41,23 +41,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			var displayHeight = tableLayoutPanelBody.RowStyles[1].Height;
 			tableLayoutPanelBody.RowStyles[1].Height = 0;
-			_rtaConfigurationValidationPoller = new RtaConfigurationValidationPoller();
-			_rtaConfigurationIssuePolling = _rtaConfigurationValidationPoller.Poll(messages =>
-			{
-				tableLayoutPanelBody.InvokeIfRequired(() =>
+			_rtaConfigurationIssuePolling = ContainerForLegacy.Container
+				.Resolve<RtaConfigurationValidationPoller>()
+				.Poll(messages =>
 				{
-					if (messages.Any())
+					tableLayoutPanelBody.InvokeIfRequired(() =>
 					{
-						tableLayoutPanelBody.RowStyles[1].Height = displayHeight;
-						autoLabelRtaConfigurationValidation.Text = messages.First();
-						toolTip1.SetToolTip(autoLabelRtaConfigurationValidation, string.Join("\n", messages));
-					}
-					else
-					{
-						tableLayoutPanelBody.RowStyles[1].Height = 0;
-					}
+						if (messages.Any())
+						{
+							tableLayoutPanelBody.RowStyles[1].Height = displayHeight;
+							autoLabelRtaConfigurationValidation.Text = messages.First();
+							toolTip1.SetToolTip(autoLabelRtaConfigurationValidation, string.Join("\n", messages));
+						}
+						else
+						{
+							tableLayoutPanelBody.RowStyles[1].Height = 0;
+						}
+					});
 				});
-			});
 		}
 
 		protected override void Dispose(bool disposing)
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				components.Dispose();
 			}
+
 			if (disposing)
 				_rtaConfigurationIssuePolling?.Dispose();
 			base.Dispose(disposing);
@@ -156,7 +158,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			DialogResult response = ViewBase.ShowConfirmationMessage(text, caption);
 			if (response != DialogResult.Yes) return;
 
-			((IRtaStateGroup)stateToDelete.Parent).DeleteState(stateToDelete);
+			((IRtaStateGroup) stateToDelete.Parent).DeleteState(stateToDelete);
 			treeViewAdv1.SelectedNode.Remove();
 		}
 
@@ -230,7 +232,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (node != null)
 			{
 				if (node.TagObject.Equals(state) &&
-					!((IRtaStateGroup)((IRtaState)node.TagObject).Parent).DefaultStateGroup)
+					!((IRtaStateGroup) ((IRtaState) node.TagObject).Parent).DefaultStateGroup)
 				{
 					return node;
 				}
@@ -319,7 +321,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private TreeNodeAdv createNode(IRtaStateGroup stateGroup)
 		{
-			var node = new TreeNodeAdv(stateGroup.Name) { TagObject = stateGroup };
+			var node = new TreeNodeAdv(stateGroup.Name) {TagObject = stateGroup};
 			setNodeToolTip(node);
 			node.InteractiveCheckBox = true;
 
@@ -374,7 +376,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				return;
 
 			// Get the destination and source node.
-			var sourceNode = (TreeNodeAdv[])e.Data.GetData(typeof(TreeNodeAdv[]));
+			var sourceNode = (TreeNodeAdv[]) e.Data.GetData(typeof(TreeNodeAdv[]));
 
 			Point pt = treeViewAdv1.PointToClient(new Point(e.X, e.Y));
 			TreeNodeAdv destinationNode = treeViewAdv1.GetNodeAtPoint(pt);
@@ -420,7 +422,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				// Get the destination and source node.
 				var destinationNode = treeView.GetNodeAtPoint(ptInTree);
-				var sourceNode = (TreeNodeAdv[])e.Data.GetData(typeof(TreeNodeAdv[]));
+				var sourceNode = (TreeNodeAdv[]) e.Data.GetData(typeof(TreeNodeAdv[]));
 
 				_currentSourceNode = sourceNode[0];
 
@@ -663,21 +665,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			treeViewAdv1.SelectedNode = e.Node;
 			_cancelValidate = true;
-		}
-	}
-
-	public static class Ex
-	{
-		public static void InvokeIfRequired(this Control c, Action action)
-		{
-			if (c.InvokeRequired)
-			{
-				c.Invoke(new Action(action));
-			}
-			else
-			{
-				action();
-			}
 		}
 	}
 }
