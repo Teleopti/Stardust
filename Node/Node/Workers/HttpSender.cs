@@ -23,12 +23,22 @@ namespace Stardust.Node.Workers
 			object data,
 			CancellationToken cancellationToken)
 		{
-			var response =
-				await Client.PostAsync(url,
-						new StringContent(JsonConvert.SerializeObject(data), Encoding.Unicode, Mediatype),
-						cancellationToken)
-					.ConfigureAwait(false);
-			return response;
+			var retries = 3;
+			while (true)
+			{
+				try
+				{
+					return await Client.PostAsync(url,
+							new StringContent(JsonConvert.SerializeObject(data), Encoding.Unicode, Mediatype),
+							cancellationToken)
+						.ConfigureAwait(false);
+				}
+				catch
+				{
+					if (--retries == 0) throw;
+					Thread.Sleep(50);
+				}
+			}
 		}
 	}
 }
