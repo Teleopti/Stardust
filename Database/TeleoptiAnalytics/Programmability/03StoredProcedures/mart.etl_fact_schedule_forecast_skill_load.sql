@@ -95,33 +95,31 @@ INSERT INTO mart.fact_schedule_forecast_skill
 	intraday_deviation_m, 
 	business_unit_id, 
 	datasource_id, 
-	update_date,
 	forecasted_tasks,
 	estimated_tasks_answered_within_sl,
 	forecasted_tasks_incl_shrinkage,
 	estimated_tasks_answered_within_sl_incl_shrinkage
 	)
 SELECT
-	date_id									= dsd.date_id, 
-	interval_id								= di.interval_id, 
-	skill_id								= dsk.skill_id,
-	scenario_id								= ds.scenario_id, 
-	forecasted_resources_m					= f.forecasted_resources_m, 
-	forecasted_resources					= f.forecasted_resources, 
-	forecasted_resources_incl_shrinkage_m	= f.forecasted_resources_incl_shrinkage_m, 
-	forecasted_resources_incl_shrinkage		= f.forecasted_resources_incl_shrinkage, 
-	scheduled_resources_m					= f.scheduled_resources_m, 
-	scheduled_resources						= f.scheduled_resources, 
-	scheduled_resources_m					= f.scheduled_resources_incl_shrinkage_m, 
-	scheduled_resources						= f.scheduled_resources_incl_shrinkage, 
-	intraday_deviation_m					= isnull(f.scheduled_resources_m,0) - isnull(f.forecasted_resources_m,0), --2013-03-01 Removed ABS() calculation KJ
-	business_unit_id						= dsk.business_unit_id,
-	datasource_id							= f.datasource_id, 
-	update_date								= f.update_date,
-	forecasted_tasks						= f.forecasted_tasks,
-	estimated_tasks_answered_within_sl		= f.estimated_tasks_answered_within_sl,
-	forecasted_tasks_incl_shrinkage			= f.forecasted_tasks_incl_shrinkage,
-	estimated_tasks_answered_within_sl_incl_shrinkage	= f.estimated_tasks_answered_within_sl_incl_shrinkage
+	date_id                                              = dsd.date_id, 
+	interval_id                                          = di.interval_id, 
+	skill_id                                             = dsk.skill_id,
+	scenario_id                                          = ds.scenario_id, 
+	forecasted_resources_m                               = f.forecasted_resources_m, 
+	forecasted_resources                                 = f.forecasted_resources, 
+	forecasted_resources_incl_shrinkage_m                = f.forecasted_resources_incl_shrinkage_m, 
+	forecasted_resources_incl_shrinkage                  = f.forecasted_resources_incl_shrinkage, 
+	scheduled_resources_m                                = f.scheduled_resources_m, 
+	scheduled_resources                                  = f.scheduled_resources, 
+	scheduled_resources_m                                = f.scheduled_resources_incl_shrinkage_m, 
+	scheduled_resources                                  = f.scheduled_resources_incl_shrinkage, 
+	intraday_deviation_m                                 = isnull(f.scheduled_resources_m,0) - isnull(f.forecasted_resources_m,0), --2013-03-01 Removed ABS() calculation KJ
+	business_unit_id                                     = dsk.business_unit_id,
+	datasource_id                                        = f.datasource_id, 
+	forecasted_tasks                                     = f.forecasted_tasks,
+	estimated_tasks_answered_within_sl                   = f.estimated_tasks_answered_within_sl,
+	forecasted_tasks_incl_shrinkage                      = f.forecasted_tasks_incl_shrinkage,
+	estimated_tasks_answered_within_sl_incl_shrinkage    = f.estimated_tasks_answered_within_sl_incl_shrinkage
 FROM (SELECT * FROM Stage.stg_schedule_forecast_skill WHERE date between @start_date and @end_date)f -- ADDED BY JONAS 2008-10-15
 INNER JOIN
 	mart.dim_skill		dsk
