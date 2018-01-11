@@ -424,13 +424,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
 						outlookBarSmartPartInfo.Icon = Resources.People_filled_space_32x32;
-						if (_toggleManager.IsEnabled(Toggles.Wfm_People_PrepareForRelease_39040) &&
-							PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPeople))
-						{
-							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewPeopleModule;
-							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/people");
-						}
 						break;
+						//WebPeople link should be hidden while in development.Add this back later on when we want customers to preview the new web people module.
+						//if (_toggleManager.IsEnabled(Toggles.Wfm_People_PrepareForRelease_39040) &&
+						//	PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPeople))
+						//{
+						//	outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewPeopleModule;
+						//	outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/people");
+						//}
+						//break;
 					case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
 						outlookBarSmartPartInfo.Icon = Resources.Forecasts2_filled_32x32;
 						break;
