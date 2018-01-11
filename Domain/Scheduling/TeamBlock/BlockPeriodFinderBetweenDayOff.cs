@@ -19,27 +19,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			DateOnlyPeriod rangePeriod = rangeForPerson.Period.ToDateOnlyPeriod( TimeZoneGuard.Instance.CurrentTimeZone());
 			var schedulePeriod = scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod;
-			var personPeriod = person.Period(providedDateOnly);
-			if (personPeriod == null)
-				return providedDateOnly.ToDateOnlyPeriod();
 
 	        var terminalDate = person.TerminalDate;
-	        var personPeriodStartDate = personPeriod.StartDate;
-			var startDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, -1, schedulePeriod, personPeriodStartDate, terminalDate);
-			var endDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, 1, schedulePeriod, personPeriodStartDate, terminalDate);
+			var startDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, -1, schedulePeriod, terminalDate);
+			var endDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, 1, schedulePeriod, terminalDate);
 	        if (endDate < startDate) return null;
 
 	        return new DateOnlyPeriod(startDate, endDate);
         }
 
 		private static DateOnly traverse(IScheduleRange rangeForPerson, DateOnlyPeriod rangePeriod, DateOnly providedDateOnly,
-								  int stepDays, DateOnlyPeriod currentSchedulePeriod, DateOnly personPeriodStartDate, DateOnly? terminalDate)
+								  int stepDays, DateOnlyPeriod currentSchedulePeriod, DateOnly? terminalDate)
 		{
 			var edgeDate = providedDateOnly;
 			currentSchedulePeriod = new DateOnlyPeriod(currentSchedulePeriod.StartDate.AddDays(-10),
 			                                           currentSchedulePeriod.EndDate.AddDays(10));
 			
-			while (rangePeriod.Contains(edgeDate) && currentSchedulePeriod.Contains(edgeDate) && edgeDate >= personPeriodStartDate)
+			while (rangePeriod.Contains(edgeDate) && currentSchedulePeriod.Contains(edgeDate))
 			{
 				if (terminalDate != null && edgeDate > terminalDate)
 					return  terminalDate.Value;

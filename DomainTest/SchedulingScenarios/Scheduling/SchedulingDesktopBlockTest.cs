@@ -59,16 +59,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("fix 47319")]
 		public void ShouldRespectBlockSameShiftCategoryInBetweenPersonPeriods(bool hasExtraPersonPeriod)
 		{
 			var date = new DateOnly(2017, 1, 22);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var shiftCatExpected = new ShiftCategory("expected").WithId();
 			var shiftCatNotExpected = new ShiftCategory("not expected").WithId();
-			var scenario = new Scenario("_");
-			var activity = new Activity("_");
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen().WithId();
+			var scenario = new Scenario();
+			var activity = new Activity();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen().WithId();
 			var skillDays = skill.CreateSkillDayWithDemandOnInterval(scenario, period, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 0));
 			var ruleSetExpected = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCatExpected));
 			var ruleSetNotExpected = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), shiftCatNotExpected));
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{ 
 					UseBlock = true,
 					BlockSameShiftCategory = true,
-					BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
+					BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			};
 	
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[]{agent}, new DateOnlyPeriod(date.AddDays(2), date.AddDays(5)));
@@ -100,6 +99,33 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				stateholder.Schedules[agent].ScheduledDay(day).PersonAssignment().ShiftCategory
 					.Should().Be.EqualTo(shiftCatExpected);
 			}
+		}
+
+		[TestCase(0, true)]
+		[TestCase(2, false)]
+		public void ShouldNotBeScheduledBeforeHiredWhenHiredInTheMiddleOfTheBlockPeriod(int personPeriodStartIntoBlockPeriod, bool daysScheduled)
+		{
+			var date = new DateOnly(2017, 1, 22);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+			var scenario = new Scenario();
+			var activity = new Activity();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen().WithId();
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory().WithId()));
+			var agent = new Person().WithSchedulePeriodOneWeek(date).InTimeZone(TimeZoneInfo.Utc).WithId()
+				.WithPersonPeriod(date.AddDays(personPeriodStartIntoBlockPeriod), ruleSet, skill);
+			var stateholder = SchedulerStateHolder.Fill(scenario, period, agent,new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff(), skillDays);
+			var schedulingOptions = new SchedulingOptions
+			{ 
+				UseBlock = true,
+				BlockSameShiftCategory = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
+			};
+			
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[]{agent}, period);
+
+			stateholder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.EqualTo(daysScheduled);
+			stateholder.Schedules[agent].ScheduledDay(date.AddDays(1)).IsScheduled().Should().Be.EqualTo(daysScheduled);
 		}
 
 		public SchedulingDesktopBlockTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
