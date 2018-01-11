@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					typeof (ApplicationAuthenticationApiController),
 					typeof (AuthenticationApiController),
 					typeof (StateController),
+					typeof (ConfigurationController),
 					typeof (LanguageController),
 					typeof (ConfigController),
 					typeof (JavascriptLoggingController),

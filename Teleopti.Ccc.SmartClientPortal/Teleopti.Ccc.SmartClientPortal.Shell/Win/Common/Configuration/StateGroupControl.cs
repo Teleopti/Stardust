@@ -12,6 +12,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.UserTexts;
+using Action = System.Action;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
@@ -26,6 +27,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private TreeNodeAdv _currentSourceNode;
 		private bool _cancelValidate;
 
+		private readonly IDisposable _rtaConfigurationIssuePolling;
+		private readonly RtaConfigurationValidationPoller _rtaConfigurationValidationPoller;
+
 		public StateGroupControl()
 		{
 			InitializeComponent();
@@ -34,6 +38,37 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (DesignMode) return;
 			buttonNew.Click += buttonNewClick;
 			buttonDelete.Click += buttonDeleteClick;
+
+			var displayHeight = tableLayoutPanelBody.RowStyles[1].Height;
+			tableLayoutPanelBody.RowStyles[1].Height = 0;
+			_rtaConfigurationValidationPoller = new RtaConfigurationValidationPoller();
+			_rtaConfigurationIssuePolling = _rtaConfigurationValidationPoller.Poll(messages =>
+			{
+				tableLayoutPanelBody.InvokeIfRequired(() =>
+				{
+					if (messages.Any())
+					{
+						tableLayoutPanelBody.RowStyles[1].Height = displayHeight;
+						autoLabelRtaConfigurationValidation.Text = messages.First();
+						toolTip1.SetToolTip(autoLabelRtaConfigurationValidation, string.Join("\n", messages));
+					}
+					else
+					{
+						tableLayoutPanelBody.RowStyles[1].Height = 0;
+					}
+				});
+			});
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			if (disposing)
+				_rtaConfigurationIssuePolling?.Dispose();
+			base.Dispose(disposing);
 		}
 
 		public void InitializeDialogControl()
@@ -82,12 +117,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		}
 
 
-
 		private void buttonNewClick(object sender, EventArgs e)
 		{
 			addStateGroup();
 		}
-		
+
 		private void addStateGroup()
 		{
 			IRtaStateGroup newStateGroup = new RtaStateGroup(Resources.NewStateGroup, false, false);
@@ -96,7 +130,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			treeViewAdv1.Nodes.Add(parentNode);
 			treeViewAdv1.Root.Sort(TreeNodeAdvSortType.Text);
 		}
-
 
 
 		private void buttonDeleteClick(object sender, EventArgs e)
@@ -123,7 +156,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			DialogResult response = ViewBase.ShowConfirmationMessage(text, caption);
 			if (response != DialogResult.Yes) return;
 
-			((IRtaStateGroup) stateToDelete.Parent).DeleteState(stateToDelete);
+			((IRtaStateGroup)stateToDelete.Parent).DeleteState(stateToDelete);
 			treeViewAdv1.SelectedNode.Remove();
 		}
 
@@ -149,12 +182,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				stateToMoveList.Add(state);
 				reloadTree = true;
 			}
+
 			var defaultStateGroup = _stateGroupCollection.LastOrDefault(x => x.DefaultStateGroup);
 			var nodeWithDefaultGroup = (
-				from TreeNodeAdv node in treeViewAdv1.Nodes
-				let @group = node.TagObject as IRtaStateGroup
-				where @group != null && @group.DefaultStateGroup
-				select node)
+					from TreeNodeAdv node in treeViewAdv1.Nodes
+					let @group = node.TagObject as IRtaStateGroup
+					where @group != null && @group.DefaultStateGroup
+					select node)
 				.SingleOrDefault();
 
 			foreach (var state in stateToMoveList)
@@ -192,10 +226,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 					if (retNode != null) return retNode;
 				}
 			}
+
 			if (node != null)
 			{
 				if (node.TagObject.Equals(state) &&
-					!((IRtaStateGroup) ((IRtaState) node.TagObject).Parent).DefaultStateGroup)
+					!((IRtaStateGroup)((IRtaState)node.TagObject).Parent).DefaultStateGroup)
 				{
 					return node;
 				}
@@ -244,10 +279,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		public void OnShow()
 		{
 		}
-		
-
-
-
 
 
 		private void updateTreeview(IRtaStateGroup stateGroupToSelect)
@@ -271,6 +302,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 					selectedNode = parentNode;
 				}
 			}
+
 			treeViewAdv1.ExpandAll();
 
 			//Sort tree
@@ -285,10 +317,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		}
 
 
-
 		private TreeNodeAdv createNode(IRtaStateGroup stateGroup)
 		{
-			var node = new TreeNodeAdv(stateGroup.Name) {TagObject = stateGroup};
+			var node = new TreeNodeAdv(stateGroup.Name) { TagObject = stateGroup };
 			setNodeToolTip(node);
 			node.InteractiveCheckBox = true;
 
@@ -327,17 +358,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				// If node is not a state group we don´t set tooltip
 				return;
 			}
+
 			if (stateGroup.DefaultStateGroup)
 			{
 				node.HelpText = Resources.DefaultStateGroup;
 			}
 		}
-
-
-
-
-
-
 
 
 		private void treeViewAdv1DragDrop(object sender, DragEventArgs e)
@@ -348,7 +374,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				return;
 
 			// Get the destination and source node.
-			var sourceNode = (TreeNodeAdv[]) e.Data.GetData(typeof (TreeNodeAdv[]));
+			var sourceNode = (TreeNodeAdv[])e.Data.GetData(typeof(TreeNodeAdv[]));
 
 			Point pt = treeViewAdv1.PointToClient(new Point(e.X, e.Y));
 			TreeNodeAdv destinationNode = treeViewAdv1.GetNodeAtPoint(pt);
@@ -362,7 +388,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_currentSourceNode = null;
 			treeViewAdv1.Root.Sort(TreeNodeAdvSortType.Text);
 			treeView.SelectedNode = sourceNode[0];
-
 		}
 
 		private void moveState(IEnumerable<TreeNodeAdv> sourceNode, TreeNodeAdv destinationNode)
@@ -391,16 +416,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_currentSourceNode = null;
 
 			// Looking for a single tree node.
-			if (e.Data.GetDataPresent(typeof (TreeNodeAdv[])))
+			if (e.Data.GetDataPresent(typeof(TreeNodeAdv[])))
 			{
 				// Get the destination and source node.
 				var destinationNode = treeView.GetNodeAtPoint(ptInTree);
-				var sourceNode = (TreeNodeAdv[]) e.Data.GetData(typeof (TreeNodeAdv[]));
+				var sourceNode = (TreeNodeAdv[])e.Data.GetData(typeof(TreeNodeAdv[]));
 
 				_currentSourceNode = sourceNode[0];
 
 				droppable = canNodeBeDropped(sourceNode[0], destinationNode);
-
 			}
 			else
 				droppable = false;
@@ -441,21 +465,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		private void setAvailableDescriptionToNode(TreeNodeAdv node)
 		{
 			_cancelValidate = true;
@@ -463,9 +472,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (stateGroup != null)
 			{
 				node.Text = node.Checked
-								? string.Concat(stateGroup.Name, " - ", Resources.StateGroupAvailableDescription)
-								: stateGroup.Name;
+					? string.Concat(stateGroup.Name, " - ", Resources.StateGroupAvailableDescription)
+					: stateGroup.Name;
 			}
+
 			_cancelValidate = false;
 		}
 
@@ -476,9 +486,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (stateGroup != null)
 			{
 				node.Text = stateGroup.IsLogOutState
-								? string.Concat(node.Text, " - ", Resources.UseForLogOut)
-								: node.Text;
+					? string.Concat(node.Text, " - ", Resources.UseForLogOut)
+					: node.Text;
 			}
+
 			_cancelValidate = false;
 		}
 
@@ -652,6 +663,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			treeViewAdv1.SelectedNode = e.Node;
 			_cancelValidate = true;
+		}
+	}
+
+	public static class Ex
+	{
+		public static void InvokeIfRequired(this Control c, Action action)
+		{
+			if (c.InvokeRequired)
+			{
+				c.Invoke(new Action(action));
+			}
+			else
+			{
+				action();
+			}
 		}
 	}
 }

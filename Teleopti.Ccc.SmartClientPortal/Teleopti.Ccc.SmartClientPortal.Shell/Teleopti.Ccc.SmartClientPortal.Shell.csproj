@@ -1541,6 +1541,7 @@
     <Compile Include="Win\Common\Configuration\RotationPage.Designer.cs">
       <DependentUpon>RotationPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win\Common\Configuration\RtaConfigurationValidationPoller.cs" />
     <Compile Include="Win\Common\Configuration\ScenarioPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -303,6 +303,7 @@
     <Compile Include="ApplicationLayer\ResourcePlanner\CrossAgentsAndSkillsResult.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\CrossAgentsAndSkills.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IIslandInfo.cs" />
+    <Compile Include="ApplicationLayer\Rta\Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\OrganizationSiteModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceMaintainer.cs" />
