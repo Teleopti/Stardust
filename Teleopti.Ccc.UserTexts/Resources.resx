@@ -16942,4 +16942,7 @@ Do you want to participate?</value>
     <value>Logged out state group is missing in configuration for business unit '{0}'</value>
     <comment></comment>
   </data>
+  <data name="PickATemplate" xml:space="preserve">
+    <value>Pick a template</value>
+  </data>
 </root>
