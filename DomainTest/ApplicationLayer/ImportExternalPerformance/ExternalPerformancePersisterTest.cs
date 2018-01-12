@@ -1,13 +1,9 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -34,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		[Test]
 		public void ShouldPersistExternalPerformanceData()
 		{
-
 			const string perfName = "xxx";
 			const int perfExtId = 1;
 			const ExternalPerformanceDataType numeric = ExternalPerformanceDataType.Numeric;
@@ -50,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				DateFrom = DateTime.UtcNow,
 				MeasureId = perfExtId,
 				MeasureName = perfName,
-				MeasureNumberScore = 100,
+				MeasureNumberScore = 100.02,
 				MeasureType = numeric,
 				PersonId = Guid.NewGuid()
 			};
@@ -76,13 +71,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		{
 			const string perfName = "xxx";
 			const int perfExtId = 1;
-			const ExternalPerformanceDataType numeric = ExternalPerformanceDataType.Numeric;
 			var personId = Guid.NewGuid();
 			var performance = new ExternalPerformance
 			{
 				ExternalId = perfExtId,
 				Name = perfName,
-				DataType = numeric
+				DataType = ExternalPerformanceDataType.Percent
 			};
 
 			var extractionInfo = new PerformanceInfoExtractionResult
@@ -91,8 +85,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				DateFrom = DateTime.UtcNow,
 				MeasureId = perfExtId,
 				MeasureName = perfName,
-				MeasureNumberScore = 100,
-				MeasureType = numeric,
+				MeasurePercentScore = new Percent(0.8735),
+				MeasureType = ExternalPerformanceDataType.Percent,
 				PersonId = personId
 			};
 
@@ -100,24 +94,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.ExternalPerformances.Add(performance);
 			result.ValidRecords.Add(extractionInfo);
 
-
 			ExternalPerformanceDataRepository.Add(new ExternalPerformanceData
 			{
 				PersonId = personId,
 				DateFrom = extractionInfo.DateFrom,
 				OriginalPersonId = extractionInfo.AgentId,
-				Score = 80,
+				Score = 0.9123,
 				ExternalPerformance = performance
 			});
 
-
 			Target.Persist(result);
-
-			ExternalPerformanceRepository.LoadAll().Count.Should().Be.EqualTo(1);
 
 			var performanceData = ExternalPerformanceDataRepository.LoadAll();
 			performanceData.Count.Should().Be.EqualTo(1);
-			performanceData.First().Score.Should().Be.EqualTo(100);
+			performanceData.First().Score.Should().Be.EqualTo(0.8735);
 
 		}
 
