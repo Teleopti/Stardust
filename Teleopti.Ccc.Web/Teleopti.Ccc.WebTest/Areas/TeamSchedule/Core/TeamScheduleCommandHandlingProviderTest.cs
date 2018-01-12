@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -17,6 +16,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
+using Teleopti.Ccc.WebTest.Areas.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
-		public void ShouldInvokeDayOffCommandHandler()
+		public void ShouldInvokeAddDayOffCommandHandler()
 		{
 			PermissionProvider.Enable();
 			var dateonly = new DateOnly(2018, 1, 10);
@@ -435,5 +435,73 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			CommandHandler.CalledCommands.Single().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
 			results.Count.Should().Be.EqualTo(0);
 		}
+
+
+		[Test]
+		public void ShouldReturnErrorWhenRemoveDayOffWithoutDate()
+		{
+			var results = Target.RemoveDayOff(new RemoveDayOffFormData
+			{
+				PersonIds = new Guid[] { Guid.NewGuid() }
+			});
+
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		}
+
+		[Test]
+		public void ShouldReturnErrorWhenRemoveDayOffWithoutPerson() {
+			var results = Target.RemoveDayOff(new RemoveDayOffFormData
+			{
+				Date = new DateOnly(2018,1,12)
+			});
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		}
+		[Test]
+		public void ShouldReturnErrorWhenRemoveDayOffWithEmptyPersonIdList()
+		{
+			var results = Target.RemoveDayOff(new RemoveDayOffFormData
+			{
+				Date = new DateOnly(2018, 1, 12),
+				PersonIds = new Guid[] { }
+			});
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		}
+
+
+		[Test]
+		public void ShouldReturnErrorWhenRemoveDayOffWithoutPermissionOnTeamSchedule()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
+			PermissionProvider.Enable();
+			var results = Target.RemoveDayOff(new RemoveDayOffFormData
+			{
+				Date = new DateOnly(2018, 1, 12),
+				PersonIds = new Guid[] { Guid.NewGuid() }
+			});
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.YouDoNotHavePermissionsToViewTeamSchedules);
+		}
+
+		[Test]
+		public void ShouldInvokeRemoveDayOffCommandWithValidInput()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			var trackId = Guid.NewGuid();
+
+			var results = Target.RemoveDayOff(new RemoveDayOffFormData
+			{
+				Date = DateOnly.Today,
+				PersonIds = new[] { person.Id.GetValueOrDefault() },
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = trackId }
+			});
+
+
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
+			CommandHandler.CalledCommands.Single().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
+			results.Count.Should().Be.EqualTo(0);
+		}
+
+
 	}
 }

@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		IHandleCommand<RemoveActivityCommand>,
 		IHandleCommand<MoveActivityCommand>,
 		IHandleCommand<AddOvertimeActivityCommand>,
-		IHandleCommand<AddPersonalActivityCommand>
+		IHandleCommand<AddPersonalActivityCommand>,
+		IHandleCommand<RemoveDayOffCommand>
 	{
 		private int calledCount;
 		private IList<ITrackableCommand> commands = new List<ITrackableCommand>();
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void Handle(MoveActivityCommand command) { handle(command); }
 		public void Handle(AddOvertimeActivityCommand command) { handle(command); }
 		public void Handle(AddPersonalActivityCommand command) { handle(command); }
+		public void Handle(RemoveDayOffCommand command) { handle(command); }
 
 		private void handle(ITrackableCommand command)
 		{

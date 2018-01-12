@@ -275,6 +275,31 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
+		public IList<ActionResult> RemoveDayOff(RemoveDayOffFormData input)
+		{
+			var result = new List<ActionResult>();
+			if (!validateRemoveDayOffInput(input))
+			{
+				result.Add(new ActionResult
+				{
+					ErrorMessages = new List<String> { Resources.InvalidInput }
+				});
+				return result;
+			}
+			var people = _personRepository.FindPeople(input.PersonIds);
+			foreach (var person in people)
+			{
+				var actionResult = new ActionResult(person.Id.Value);
+				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, input.Date, person, actionResult.ErrorMessages))
+				{
+				}
+				if (actionResult.ErrorMessages.Any())
+					result.Add(actionResult);
+			}
+
+			return result;
+		}
+
 		private bool agentScheduleIsWriteProtected(DateOnly date, IPerson agent)
 		{
 			return !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
@@ -318,5 +343,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			return true;
 		}
+
+		private bool validateRemoveDayOffInput(RemoveDayOffFormData input)
+		{
+			if (input.Date.Date == DateTime.MinValue || input.PersonIds == null || !input.PersonIds.Any())
+				return false;
+
+			return true;
+		}
+
+
 	}
 }
