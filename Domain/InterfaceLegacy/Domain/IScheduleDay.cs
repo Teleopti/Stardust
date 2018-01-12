@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <summary>
 		/// Delete day off
 		/// </summary>
-		void DeleteDayOff();
+		void DeleteDayOff(TrackedCommandInfo trackedCommandInfo = null);
 
 		/// <summary>
 		/// Delete overtime

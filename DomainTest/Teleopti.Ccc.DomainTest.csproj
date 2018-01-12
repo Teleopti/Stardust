@@ -165,6 +165,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\RemoveDayOffCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddDayOffCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ExportSchedule\ExportScheduleServiceTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplateTest.cs" />

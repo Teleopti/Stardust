@@ -339,10 +339,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		//borde tas bort!
-		public void DeleteDayOff()
+		public void DeleteDayOff(TrackedCommandInfo trackedCommandInfo = null)
 		{
 			var ass = PersonAssignment();
-			ass?.SetDayOff(null);
+			ass?.SetDayOff(null, false, trackedCommandInfo);
 		}
 
 		private void mergeDayOff(IScheduleDay source, bool deleteAbsence, bool ignoreAssignmentPermission)

@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignment.Date.Should().Be.EqualTo(date);
 			personAssignment.DayOff().DayOffTemplateId.Should().Be.EqualTo(dayOffTemplate.Id.Value);
 
-			var dayOffResult = personAssignment.DayOff();
 			var theEvent = personAssignment.PopAllEvents().OfType<DayOffAddedEvent>().Single();
 			theEvent.Date.Should().Be.EqualTo(date.Date);
 			theEvent.PersonId.Should().Be.EqualTo(person.Id.Value);
