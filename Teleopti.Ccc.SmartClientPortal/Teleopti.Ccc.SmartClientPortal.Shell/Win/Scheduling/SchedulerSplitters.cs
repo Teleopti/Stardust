@@ -8,8 +8,6 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions;
@@ -52,6 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			validationAlertsView1.AgentDoubleClick += ValidationAlertsView1AgentDoubleClick;
         }
 
+		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs> RestrictionsNotAbleToBeScheduledProgress;
 		public event EventHandler<ValidationViewAgentDoubleClickEvenArgs> ValidationAlertsAgentDoubleClick;
 
 		private void ValidationAlertsView1AgentDoubleClick(object sender, ValidationViewAgentDoubleClickEvenArgs e)
@@ -262,7 +261,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				oldPanel.Visible = false;
 				newPanel.Dock = DockStyle.Fill;
 				newPanel.Visible = true;
-				newPanel.InitAgentsNotPossibleToSchedule(reportModel);
+				newPanel.InitAgentsNotPossibleToSchedule(reportModel, this);
 			}
 			else
 			{
@@ -300,6 +299,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	    {
 		    ValidationAlertsAgentDoubleClick?.Invoke(this, e);
 	    }
+
+		public virtual void OnRestrictionsNotAbleToBeScheduledProgress(System.ComponentModel.ProgressChangedEventArgs e)
+		{
+			RestrictionsNotAbleToBeScheduledProgress?.Invoke(this, e);
+		}
 
 		private void tabInfoPanelsSelectedIndexChanged(object sender, EventArgs e)
 		{

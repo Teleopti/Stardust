@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1, agent2 }, preferenceDays, skillDays);
 
-			var result = Target.Create(period.StartDate, new[] {agent1, agent2});
+			var result = Target.Create(period.StartDate, new[] {agent1, agent2}, new NoSchedulingProgress());
 
 			result.Count().Should().Be.EqualTo(1);
 			result.First().Agent.Should().Be.EqualTo(agent2);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, preferenceDays, skillDays);
 
-			var result = Target.Create(period.StartDate, new[] { agent1 });
+			var result = Target.Create(period.StartDate, new[] { agent1 }, new NoSchedulingProgress());
 
 			result.Count().Should().Be.EqualTo(1);
 			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, new List<IPreferenceDay>(), skillDays);
 			
 
-			var result = Target.Create(period.StartDate, new[] { agent1 });
+			var result = Target.Create(period.StartDate, new[] { agent1 }, new NoSchedulingProgress());
 
 			result.Count().Should().Be.EqualTo(0);
 			foreach (var dateOnly in period.DayCollection())

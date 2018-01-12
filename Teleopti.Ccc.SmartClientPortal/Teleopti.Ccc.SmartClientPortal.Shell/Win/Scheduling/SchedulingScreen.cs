@@ -4105,6 +4105,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			disableButtonsIfTeamLeaderMode();
 			schedulerSplitters1.EnableViewShiftCategoryDistribution();
 			toolStripStatusLabelContractTime.Enabled = true;
+			if (toolStripSpinningProgressControl1.SpinningProgressControl == null)
+				toolStripSpinningProgressControl1 = new ToolStripSpinningProgressControl();
+			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
 		}
 
 		private void disableButtonsIfTeamLeaderMode()
@@ -5082,10 +5085,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_chartControlSkillData.Visible = true;
 		}
 
+		private void schedulerSplitters1RestrictionsNotAbleToBeScheduledProgress(object sender,
+			ProgressChangedEventArgs e)
+		{
+			if(e.ProgressPercentage == 0)
+			{
+				disableAllExceptCancelInRibbon();
+				toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate((string)e.UserState) + " " + e.ProgressPercentage + " %";
+				toolStripStatusLabelStatus.Owner.Refresh();
+			}
+
+			if (e.ProgressPercentage > 0 && e.ProgressPercentage < 100)
+			{
+				toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate((string)e.UserState) + " " + e.ProgressPercentage + " %";
+				toolStripStatusLabelStatus.Owner.Refresh();
+			}
+
+			if(e.ProgressPercentage == 100)
+			{
+				enableAllExceptCancelInRibbon();
+				toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReady");
+				toolStripStatusLabelStatus.Owner.Refresh();
+			}
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void setEventHandlers()
 		{
 			schedulerSplitters1.ValidationAlertsAgentDoubleClick += schedulerSplitters1ValidationAlertsAgentDoubleClick;
+			schedulerSplitters1.RestrictionsNotAbleToBeScheduledProgress += schedulerSplitters1RestrictionsNotAbleToBeScheduledProgress;
 			_schedulerMeetingHelper.ModificationOccured += schedulerMeetingHelperModificationOccured;
 			_tmpTimer.Tick += tmpTimerTick;
 			schedulerSplitters1.TabSkillData.SelectedIndexChanged += tabSkillDataSelectedIndexChanged;
@@ -5286,6 +5314,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			//Request tab
 			toolStripTabItem1.Click -= toolStripTabItem1_Click;
 			schedulerSplitters1.ValidationAlertsAgentDoubleClick -= schedulerSplitters1ValidationAlertsAgentDoubleClick;
+			schedulerSplitters1.RestrictionsNotAbleToBeScheduledProgress -= schedulerSplitters1RestrictionsNotAbleToBeScheduledProgress;
 			toolStripButtonRequestBack.Click -= toolStripButtonRequestBackClick;
 			toolStripButtonFilterAgentsRequestView.Click -= toolStripButtonFilterAgentsClick;
 			ToolStripMenuItemViewDetails.Click -= ToolStripMenuItemViewDetails_Click;
