@@ -16,16 +16,15 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Reports/Navigations")]
-		public virtual IList<ReportItem> GetReportNavigations()
+		public virtual IList<ReportItemViewModel> GetReportNavigations()
 		{
-			return _reportNavigationProvider.GetNavigationItems();
+			return _reportNavigationProvider.GetNavigationItemViewModels();
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Reports/NavigationsCategorized")]
-		public virtual IList<CategorizedReportItem> GetCategorizedReportNavigations()
+		public virtual IList<CategorizedReportItemViewModel> GetCategorizedReportNavigations()
 		{
-			return _reportNavigationProvider.GetCategorizedNavigationsItems();
+			return _reportNavigationProvider.GetCategorizedNavigationsItemViewModels();
 		}
-
 	}
 }

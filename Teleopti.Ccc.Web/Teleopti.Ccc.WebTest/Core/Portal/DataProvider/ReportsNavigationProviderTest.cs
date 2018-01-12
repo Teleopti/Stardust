@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 			result.First().Controller.Should().Be("MyReport");
 			result.Count.Should().Be(1);
 			_authorization.VerifyAllExpectations();
-			
 		}
 
 		[Test]
@@ -58,7 +57,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		public void ShouldReturnReportsWhenOnlyHasReportPermission()
 		{
 			_authorization.Expect(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyReportWeb)).Return(false);
-			var reportList = new List<IApplicationFunction> { new ApplicationFunction("Report CA") { ForeignId = Guid.NewGuid().ToString() } };
+			var reportList = new List<IApplicationFunction>
+			{
+				new ApplicationFunction("Report CA") {ForeignId = Guid.NewGuid().ToString()}
+			};
 
 			_reportsProvider.Expect(x => x.GetReports()).Return(reportList);
 
@@ -72,9 +74,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		public void ShouldReturnSortedReportsWhenHasReportPermission()
 		{
 			_authorization.Expect(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyReportWeb)).Return(false);
-			var reportList = new List<IApplicationFunction> { new ApplicationFunction("Report CA"){ForeignId = Guid.NewGuid().ToString()},
-				new ApplicationFunction("Report CB"){ForeignId = Guid.NewGuid().ToString()},
-			new ApplicationFunction("Report Aa"){ForeignId = Guid.NewGuid().ToString()} };
+			var reportList = new List<IApplicationFunction>
+			{
+				new ApplicationFunction("Report CA") {ForeignId = Guid.NewGuid().ToString()},
+				new ApplicationFunction("Report CB") {ForeignId = Guid.NewGuid().ToString()},
+				new ApplicationFunction("Report Aa") {ForeignId = Guid.NewGuid().ToString()}
+			};
 
 			_reportsProvider.Expect(x => x.GetReports()).Return(reportList);
 
@@ -90,7 +95,11 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		public void ShouldReturnReportsWhenHasReportPermissionAndMyReport()
 		{
 			_authorization.Expect(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyReportWeb)).Return(true);
-			var reportList = new List<IApplicationFunction> { new ApplicationFunction("ResReportQueueStatistics") { ForeignId = Guid.NewGuid().ToString() }, new ApplicationFunction("ResReportAgentStatistics") { ForeignId = Guid.NewGuid().ToString() } };
+			var reportList = new List<IApplicationFunction>
+			{
+				new ApplicationFunction("ResReportQueueStatistics") {ForeignId = Guid.NewGuid().ToString()},
+				new ApplicationFunction("ResReportAgentStatistics") {ForeignId = Guid.NewGuid().ToString()}
+			};
 
 			_reportsProvider.Expect(x => x.GetReports()).Return(reportList);
 
@@ -101,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 			result[1].IsDivider.Should().Be(true);
 			_authorization.VerifyAllExpectations();
 		}
-		
+
 		[Test]
 		public void ShouldReturnBadgeLeaderBoardReportsWhenOnlyHasLeaderBoardReportPermission()
 		{

@@ -6,11 +6,11 @@ using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.Reporting.Controllers;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
+using Teleopti.Ccc.Web.Areas.Reports.Core;
 using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 		[Test]
 		public void ShouldCheckAndUpdateReportPermissionInAnalytics()
 		{
-			var reportsNavigationProvider = MockRepository.GenerateMock<IReportsNavigationProvider>();
+			var reportsNavigationProvider = MockRepository.GenerateMock<IReportNavigationProvider>();
 			var analyticsPermissionsUpdater = MockRepository.GenerateMock<IAnalyticsPermissionsUpdater>();
 
 			var reportId = Guid.NewGuid();
@@ -32,23 +32,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 					Id = reportId
 				}
 			});
-			
+
 			var person = PersonFactory.CreatePersonWithGuid("first", "last");
 			var businessUnit = BusinessUnitFactory.CreateWithId("bu");
 			var currentBusinessUnit = new FakeCurrentBusinessUnit();
 			currentBusinessUnit.FakeBusinessUnit(businessUnit);
-			
+
 			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("test", new FakeDataSource
 			{
-				Analytics = new FakeAnalyticsUnitOfWorkFactory { ConnectionString = ""}
+				Analytics = new FakeAnalyticsUnitOfWorkFactory {ConnectionString = ""}
 
 			}, null, null, null), person);
-			var target = new ReportController(reportsNavigationProvider, new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeLoggedOnUser(person), currentBusinessUnit, new TrueToggleManager(), analyticsPermissionsUpdater, new FakeCommonReportsFactory());
+			var target = new ReportController(reportsNavigationProvider,
+				new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())),
+				new FakeLoggedOnUser(person), currentBusinessUnit, new TrueToggleManager(), analyticsPermissionsUpdater,
+				new FakeCommonReportsFactory());
 
 			target.Index(reportId);
 
-			analyticsPermissionsUpdater.AssertWasCalled(x => x.Handle(person.Id.GetValueOrDefault(), businessUnit.Id.GetValueOrDefault()));
-
+			analyticsPermissionsUpdater.AssertWasCalled(x =>
+				x.Handle(person.Id.GetValueOrDefault(), businessUnit.Id.GetValueOrDefault()));
 		}
 	}
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.Reports.Models;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 
 namespace Teleopti.Ccc.Web.Areas.Reports.Core
 {
@@ -30,11 +32,11 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 			_reportNavigationModel = reportNavigationModel;
 		}
 
-		public IList<ReportItem> GetNavigationItems()
+		public IList<ReportItemViewModel> GetNavigationItemViewModels()
 		{
 			var grantedFuncs = _reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription);
 
-			var reportList = grantedFuncs.Select(applicationFunction => new ReportItem
+			var reportList = grantedFuncs.Select(applicationFunction => new ReportItemViewModel
 			{
 				Url = _reportUrl.Build(applicationFunction),
 				Name = applicationFunction.LocalizedFunctionDescription,
@@ -48,16 +50,17 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 			return reportList ;
 		}
 
-		public IList<CategorizedReportItem> GetCategorizedNavigationsItems()
+		public IList<CategorizedReportItemViewModel> GetCategorizedNavigationsItemViewModels()
 		{
 			var reportItems = getCategorizedReports()
-				.SelectMany(reportCollection => reportCollection.ApplicationFunctions.Select(report => new CategorizedReportItem
-				{
-					Url = _reportUrl.Build(report),
-					Name = report.LocalizedFunctionDescription,
-					Category = reportCollection.LocalizedDescription,
-					IsWebReport = report.IsWebReport
-				}))
+				.SelectMany(reportCollection => reportCollection.ApplicationFunctions.Select(report =>
+					new CategorizedReportItemViewModel
+					{
+						Url = _reportUrl.Build(report),
+						Name = report.LocalizedFunctionDescription,
+						Category = reportCollection.LocalizedDescription,
+						IsWebReport = report.IsWebReport
+					}))
 				.ToList();
 
 			if (isPermittedLeaderBoardUnderReports())
@@ -68,15 +71,26 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 			return reportItems;
 		}
 
+		public IList<ReportNavigationItem> GetNavigationItems()
+		{
+			var reports = _reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription);
+			return reports.Select(applicationFunction => new ReportNavigationItem
+			{
+				Url = _reportUrl.Build(applicationFunction),
+				Title = applicationFunction.LocalizedFunctionDescription,
+				Id = new Guid(applicationFunction.ForeignId)
+			}).ToList();
+		}
+
 		private bool isPermittedLeaderBoardUnderReports()
 		{
 			return _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports) &&
 				   _toggleManager.IsEnabled(Toggles.WfmReportPortal_LeaderBoard_39440);
 		}
 
-		private CategorizedReportItem createLeaderBoardReportItem()
+		private CategorizedReportItemViewModel createLeaderBoardReportItem()
 		{
-			return new CategorizedReportItem
+			return new CategorizedReportItemViewModel
 			{
 				Url = "reports/leaderboard",
 				Name = Resources.BadgeLeaderBoardReport,
@@ -89,10 +103,13 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 		{
 			var reports = _reportNavigationModel.PermittedCategorizedReportFunctions.ToList();
 			var customReports = _reportNavigationModel.PermittedCustomReportFunctions;
-			reports.Add(new MatrixFunctionGroup() { LocalizedDescription = Resources.CustomReports, ApplicationFunctions = customReports });
+			reports.Add(new MatrixFunctionGroup
+			{
+				LocalizedDescription = Resources.CustomReports,
+				ApplicationFunctions = customReports
+			});
 
 			return reports;
 		}
 	}
-
 }

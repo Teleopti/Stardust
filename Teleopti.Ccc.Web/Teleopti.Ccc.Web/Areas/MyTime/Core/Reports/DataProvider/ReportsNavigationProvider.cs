@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 {
-	public class ReportsNavigationProvider: IReportsNavigationProvider
+	public class ReportsNavigationProvider : IReportsNavigationProvider
 	{
 		private readonly IAuthorization _authorization;
 		private readonly IReportsProvider _reportsProvider;
@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 		{
 			var reportsList = new List<ReportNavigationItem>();
 			if (_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyReportWeb))
+			{
 				reportsList.Add(new ReportNavigationItem
 				{
 					Action = "Index",
@@ -33,6 +34,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Title = Resources.MyReport,
 					IsWebReport = true
 				});
+			}
+
 			if (_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
 			{
 				reportsList.Add(new ReportNavigationItem
@@ -44,12 +47,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					IsWebReport = true
 				});
 			}
-			var otherReports = _reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription);
-			if (otherReports.Any()&& reportsList.Any())
+
+			var otherReports = _reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription).ToList();
+			if (otherReports.Any() && reportsList.Any())
+			{
 				reportsList.Add(new ReportNavigationItem
 				{
 					IsDivider = true
 				});
+			}
+
 			foreach (var applicationFunction in otherReports)
 			{
 				reportsList.Add(new ReportNavigationItem
@@ -59,8 +66,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Id = new Guid(applicationFunction.ForeignId)
 				});
 			}
+
 			return reportsList;
 		}
 	}
-
 }
