@@ -37,7 +37,13 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 
 				WebAction.Logon(browserInteractions, AppConfigs.BusinessUnitName, AppConfigs.UserName, AppConfigs.Password);
 
-				scheduleAndOptimize(browserInteractions, AppConfigs.PlanningGroupId, AppConfigs.PlanningPeriodId);
+				browserInteractions.GoTo($"{TestSiteConfigurationSetup.URL}wfm/#/resourceplanner/planninggroup/{AppConfigs.PlanningGroupId}/detail/{AppConfigs.PlanningPeriodId}");
+				using (new TimeoutScope(browserActivator, TimeSpan.FromMinutes(30)))
+				{
+					browserInteractions.Click(".schedule-button:enabled");
+				}
+
+				browserInteractions.AssertExists(".test-schedule-is-running");
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
@@ -61,13 +67,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 			Hangfire.WaitForQueue();
 			hangfireQueueLogCancellationToken.Cancel();
 			TestLog.Debug($"Number of succeeded jobs after Hangfire.WaitForQueue {Hangfire.SucceededFromStatistics()}");
-		}
-
-		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningGroupId, string planningPeriodId)
-		{
-			browserInteractions.GoTo($"{TestSiteConfigurationSetup.URL}wfm/#/resourceplanner/planninggroup/{planningGroupId}/detail/{planningPeriodId}");
-			browserInteractions.Click(".schedule-button:enabled");
-			browserInteractions.AssertExists(".test-schedule-is-running");
 		}
 	}
 }
