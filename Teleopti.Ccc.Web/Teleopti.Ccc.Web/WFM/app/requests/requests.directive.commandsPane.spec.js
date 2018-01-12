@@ -498,12 +498,12 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		expect(result.length).toEqual(1);
 	});
 
-	it('should hide siteopenhour command in overtime tab', function () {
+	it('should show siteopenhour command in overtime tab', function () {
 		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
 		fakeState.current.name = 'requests.overtime';
 
 		var test = setUpTarget();
-		expect(test.requestCommandPaneScope.isCommandEnabled('siteOpenHour')).toEqual(false);
+		expect(test.requestCommandPaneScope.isCommandEnabled('siteOpenHour')).toEqual(true);
 	});
 
 	it('should show viewAllowance command in absence and text tab', function () {

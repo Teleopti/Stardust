@@ -36,7 +36,7 @@
 			cancel: false,
 			processWaitlist: false,
 			reply: false,
-			siteOpenHour: false,
+			siteOpenHour: true,
 			viewAllowance: false
 		};
 
