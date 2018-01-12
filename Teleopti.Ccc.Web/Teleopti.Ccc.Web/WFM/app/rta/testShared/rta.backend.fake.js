@@ -2,11 +2,11 @@
 (function () {
 	angular
 		.module('wfm.rta')
-		.factory('FakeRtaBackend', fakeRtaBackend);
+		.service('FakeRtaBackend', fakeRtaBackend);
 
 	fakeRtaBackend.$inject = ['$httpBackend', 'BackendFaker'];
 
-	function fakeRtaBackend($httpBackend, faker) {
+	function fakeRtaBackend($httpBackend, service) {
 
 		var serverTime = null;
 		var agentStates = [];
@@ -18,27 +18,25 @@
 		var skillAreas = [];
 		var phoneStates = [];
 
-		var service = faker;
-
 		service.withTime = withTime;
-		
+
 		service.withAgentState = withAgentState;
 		service.clearAgentStates = clearAgentStates;
-		
+
 		service.withSiteAdherence = withSiteAdherence;
 		service.clearSiteAdherences = clearSiteAdherences;
 		service.withTeamAdherence = withTeamAdherence;
 		service.clearTeamAdherences = clearTeamAdherences;
-		
+
 		service.withSkill = withSkill;
 		service.withSkillAreas = withSkillAreas;
-		
+
 		service.withPhoneState = withPhoneState;
 		service.withOrganization = withOrganization;
 		service.withOrganizationOnSkills = withOrganizationOnSkills;
-		
+
 		service.withHistoricalAdherence = withHistoricalAdherence;
-		
+
 		Object.defineProperty(service, 'skills', {
 			get: function () {
 				return skills;
@@ -49,24 +47,32 @@
 				return skillAreas;
 			}
 		});
-		
-		var clear = faker.clear;
-		service.clear = function() {
+
+		var clearAll = service.clear.all;
+		service.clear.all = function () {
+
 			serverTime = null;
 			siteAdherences = [];
 			teamAdherences = [];
 			skillAreas = [];
 			phoneStates = [];
 			historicalAdherence = {};
-			clear();
+
+			service.traceCalledForUserCode = null;
+			service.stopCalled = false;
+			service.clearCalled = false;
+			tracedUsers = [];
+			tracers = [];
+
+			clearAll();
 		};
-		
-		faker.fake({
+
+		service.fake({
 			name: 'configurationValidation',
 			url: /\.\.\/api\/Rta\/Configuration\/Validate/
 		});
-		
-		faker.fake(/\.\.\/api\/AgentStates\/Poll/,
+
+		service.fake(/\.\.\/api\/AgentStates\/Poll/,
 			function (params) {
 				service.lastAgentStatesRequestParams = params;
 				params.siteIds = params.siteIds || [];
@@ -74,9 +80,9 @@
 				params.skillIds = params.skillIds || [];
 				params.excludedStateIds = params.excludedStateIds || [];
 				params.inAlarm = params.inAlarm === 'true' || params.inAlarm === true;
-				
+
 				var result = agentStates;
-				
+
 				if (params.siteIds.length > 0)
 					result = result.filter(function (a) {
 						return params.siteIds.indexOf(a.SiteId) >= 0
@@ -91,7 +97,7 @@
 						return params.skillIds.indexOf(a.SkillId) >= 0
 					});
 
-				if (params.inAlarm){
+				if (params.inAlarm) {
 					result = result.filter(function (s) {
 						return s.TimeInAlarm > 0;
 					}).sort(function (s1, s2) {
@@ -110,7 +116,7 @@
 				}];
 			});
 
-		faker.fake(/\.\.\/api\/SkillArea\/For(.*)/,
+		service.fake(/\.\.\/api\/SkillArea\/For(.*)/,
 			function (params) {
 				var result = skillAreas
 					.filter(function (s) {
@@ -119,17 +125,17 @@
 				return [200, result[0]];
 			});
 
-		faker.fake(/\.\.\/api\/SkillGroups(.*)/,
+		service.fake(/\.\.\/api\/SkillGroups(.*)/,
 			function () {
 				return [200, skillAreas];
 			});
 
-		faker.fake(/\.\.\/api\/Skills(.*)/,
+		service.fake(/\.\.\/api\/Skills(.*)/,
 			function () {
 				return [200, skills];
 			});
 
-		faker.fake(/\.\.\/api\/Sites\/OrganizationForSkills(.*)/,
+		service.fake(/\.\.\/api\/Sites\/OrganizationForSkills(.*)/,
 			function (params) {
 				var uniqueSiteIds = [];
 				var returnOrg = [];
@@ -149,23 +155,23 @@
 				return [200, returnOrg];
 			});
 
-		faker.fake(/\.\.\/api\/Sites\/Organization(.*)/,
+		service.fake(/\.\.\/api\/Sites\/Organization(.*)/,
 			function () {
 				return [200, sitesWithTeams];
 			});
 
-		faker.fake(/\.\.\/api\/PhoneStates/,
+		service.fake(/\.\.\/api\/PhoneStates/,
 			function (data) {
 				return [200, phoneStates]
 			});
 
-		faker.fake(/\.\.\/api\/Overview\/SiteCards(.*)/,
+		service.fake(/\.\.\/api\/Overview\/SiteCards(.*)/,
 			function (params) {
 				service.lastOverviewSiteCardsRequestParams = params;
 				params.skillIds = params.skillIds || [];
 				params.siteIds = params.siteIds || [];
 				var sites = JSON.parse(JSON.stringify(siteAdherences));
-				
+
 				if (params.skillIds.length > 0)
 					sites = sites.filter(function (sa) {
 						return params.skillIds.indexOf(sa.SkillId) > -1;
@@ -189,12 +195,16 @@
 				return [200, {
 					Sites: sites,
 					TotalAgentsInAlarm: sites
-						.map(function (s) { return s.InAlarmCount })
-						.reduce(function (s, v) { return s + v }, 0)
+						.map(function (s) {
+							return s.InAlarmCount
+						})
+						.reduce(function (s, v) {
+							return s + v
+						}, 0)
 				}];
 			});
 
-		faker.fake(/\.\.\/api\/Overview\/TeamCards(.*)/,
+		service.fake(/\.\.\/api\/Overview\/TeamCards(.*)/,
 			function (params) {
 				params.skillIds = params.skillIds || [];
 				var result = teamAdherences;
@@ -209,16 +219,18 @@
 			});
 
 		var historicalAdherence = {};
+
 		function withHistoricalAdherence(data) {
 			historicalAdherence = data;
 		}
-		faker.fake(/\.\.\/api\/HistoricalAdherence\/ForPerson(.*)/,
+
+		service.fake(/\.\.\/api\/HistoricalAdherence\/ForPerson(.*)/,
 			function (params) {
 				service.lastHistoricalAdherenceForPersonRequestParams = params;
 				return [200, historicalAdherence];
 			});
 
-		
+
 		function withTime(time) {
 			serverTime = time;
 			return this;
@@ -262,7 +274,9 @@
 		}
 
 		function withSkillAreas(newSkillAreas) {
-			newSkillAreas.forEach(function (e) { skillAreas.push(e) });
+			newSkillAreas.forEach(function (e) {
+				skillAreas.push(e)
+			});
 			return this;
 		}
 
@@ -282,7 +296,9 @@
 		}
 
 		function withTeam(team) {
-			var site = sitesWithTeams.find(function (site) { return site.Id == team.SiteId; });
+			var site = sitesWithTeams.find(function (site) {
+				return site.Id == team.SiteId;
+			});
 			if (site) {
 				site.Teams = site.Teams || [];
 				site.Teams.push(team);
@@ -300,7 +316,52 @@
 			});
 			return this;
 		}
+
+
+		service.withTracer = withTracer;
+		service.withTracedUser = withTracedUser;
+
+		var tracers = [];
+
+		function withTracer(tracer) {
+			tracers.push(tracer);
+			return this;
+		}
+
+		var tracedUsers = [];
+
+		function withTracedUser(tracedUser) {
+			tracedUsers.push(tracedUser);
+			return this;
+		}
+
+		service.fake(/\.\.\/api\/RtaTracer\/Traces(.*)/,
+			function () {
+				return [200, {
+					Tracers: tracers,
+					TracedUsers: tracedUsers
+				}];
+			});
+
+		service.fake(/\.\.\/api\/RtaTracer\/Trace(.*)/,
+			function (params) {
+				service.traceCalledForUserCode = params.userCode;
+				return [200];
+			});
+
+		service.fake(/\.\.\/api\/RtaTracer\/Stop(.*)/,
+			function () {
+				service.stopCalled = true;
+				return [200];
+			});
+
+		service.fake(/\.\.\/api\/RtaTracer\/Clear(.*)/,
+			function () {
+				service.clearCalled = true;
+				return [200];
+			});
 		
+
 		return service;
-	};
+	}
 })();

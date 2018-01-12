@@ -32,7 +32,7 @@ describe('RtaFilterController', function () {
 		$timeout = _$timeout_;
 
 		scope = $controllerBuilder.setup('RtaFilterController46758');
-		$fakeBackend.clear();
+		$fakeBackend.clear.all();
 		spyOn($state, 'go');
 	}));
 

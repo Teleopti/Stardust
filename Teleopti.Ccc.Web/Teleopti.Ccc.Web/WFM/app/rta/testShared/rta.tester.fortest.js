@@ -176,8 +176,7 @@ var rtaTester = (function () {
 
 	};
 
-	var setup = function (tests, stateName, controllerName, fakeBackendName) {
-		fakeBackendName = fakeBackendName || 'FakeRtaBackend';
+	var setup = function (tests, stateName, controllerName) {
 
 		var state = {
 			stateParams: {}
@@ -203,7 +202,7 @@ var rtaTester = (function () {
 		});
 
 		beforeEach(inject(
-			['$httpBackend', '$interval', '$state', '$sessionStorage', fakeBackendName, 'ControllerBuilder', 'NoticeService',
+			['$httpBackend', '$interval', '$state', '$sessionStorage', 'FakeRtaBackend', 'ControllerBuilder', 'NoticeService',
 				function ($httpBackend, $interval, $state, $sessionStorage, $fakeBackend, $controllerBuilder, NoticeService) {
 					state.$interval = $interval;
 					state.$state = $state;
@@ -223,7 +222,7 @@ var rtaTester = (function () {
 
 		afterEach(function () {
 			if (state.$fakeBackend)
-				state.$fakeBackend.clear();
+				state.$fakeBackend.clear.all();
 			if (state.$sessionStorage)
 				state.$sessionStorage.$reset();
 		});
@@ -240,7 +239,7 @@ var rtaTester = (function () {
 		if (description === 'RtaHistoricalController')
 			setup(tests, 'rta-historical', 'RtaHistoricalController46826');
 		if (description === 'RtaTracerController')
-			setup(tests, '', 'RtaTracerController', 'RtaTracerBackendFake');
+			setup(tests, '', 'RtaTracerController');
 	}
 
 	return {

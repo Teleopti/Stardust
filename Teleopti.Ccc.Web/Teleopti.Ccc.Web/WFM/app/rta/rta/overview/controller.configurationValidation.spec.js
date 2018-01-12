@@ -3,7 +3,7 @@
 rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 	xit('should notify invalid configuration', function (t) {
-		t.backend.configurationValidation.with(
+		t.backend.with.configurationValidation(
 			{
 				Resource: 'resource'
 			}
@@ -12,5 +12,4 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 		expect(t.something).toEqual('resource');
 	});
-
 });

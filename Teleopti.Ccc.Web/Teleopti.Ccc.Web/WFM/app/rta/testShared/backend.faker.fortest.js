@@ -9,7 +9,19 @@
 
 	function constructor($httpBackend) {
 
-		var service = {};
+		var endpoints = [];
+
+		var service = {
+			with: {},
+			clear: {
+				all: function () {
+					endpoints.forEach(function (endpoint) {
+						endpoint.clear();
+					})
+				}
+			},
+			lastParams: {}
+		};
 
 		function fakeHttpCall(url, response) {
 			$httpBackend.whenGET(url)
@@ -33,6 +45,7 @@
 			};
 
 			var data = spec.clear();
+			var lastParams = undefined;
 
 			var endpoint = {
 				with: function (item) {
@@ -41,20 +54,23 @@
 				clear: function () {
 					data = spec.clear();
 				},
-				lastParams: undefined
+				lastParams: function () {
+					return lastParams;
+				}
 			};
 
 			fakeHttpCall(spec.url, function (params) {
-				endpoint.lastParams = params;
+				lastParams = params;
 				return [200, data];
 			});
 
-			service[spec.name] = endpoint;
+			service.with[spec.name] = endpoint.with;
+			service.clear[spec.name] = endpoint.clear;
+			service.lastParams[spec.name] = endpoint.lastParams;
 
 			endpoints.push(endpoint);
 		}
 
-		var endpoints = [];
 
 		service.fake = function fake(specOrUrl, responseMaybe) {
 			if (specOrUrl.url) {
@@ -64,12 +80,6 @@
 				var url = specOrUrl;
 				fakeHttpCall(url, responseMaybe);
 			}
-		};
-
-		service.clear = function () {
-			endpoints.forEach(function (endpoint) {
-				endpoint.clear();
-			})
 		};
 
 		service.fake({

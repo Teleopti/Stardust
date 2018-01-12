@@ -47,7 +47,7 @@ describe('RtaFilterController', function () {
 
 		scope = $controllerBuilder.setup('RtaFilterController46758');
 
-		$fakeBackend.clear();
+		$fakeBackend.clear.all();
 
 	}));
 

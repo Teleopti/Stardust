@@ -1620,6 +1620,7 @@
     <Content Include="WFM\app\rta\shared\_modules.js" />
     <Content Include="WFM\app\rta\testShared\backend.faker.fortest.js" />
     <Content Include="WFM\app\rta\testShared\controller.fortest.js" />
+    <Content Include="WFM\app\rta\testShared\rta.backend.fake.js" />
     <Content Include="WFM\app\rta\testShared\rta.tester.fortest.js" />
     <Content Include="WFM\app\rta\testShared\_modules.js" />
     <Content Include="WFM\app\rta\tool\rtaTool.backend.fake.js" />
@@ -1630,7 +1631,6 @@
     <Content Include="WFM\app\rta\tool\rtaTool.state.provider.js" />
     <Content Include="WFM\app\rta\tool\rtaTool.statesCellTemplate.html" />
     <Content Include="WFM\app\rta\tool\_modules.js" />
-    <Content Include="WFM\app\rta\tracer\rtaTracer.backend.fake.js" />
     <Content Include="WFM\app\rta\tracer\rtaTracer.controller.js" />
     <Content Include="WFM\app\rta\tracer\rtaTracer.controller.spec.js" />
     <Content Include="WFM\app\rta\tracer\rtaTracer.html" />
@@ -1673,7 +1673,6 @@
     <Content Include="WFM\app\rta\rta\overview\controller.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.storeState.spec.js" />
     <Content Include="WFM\app\rta\rta\rta.adherence.service.js" />
-    <Content Include="WFM\app\rta\rta\rta.backend.fake.js" />
     <Content Include="WFM\app\rta\rta\rta.format.service.js" />
     <Content Include="WFM\app\rta\rta\rta.format.service.spec.js" />
     <Content Include="WFM\app\rta\rta\rta.html" />
