@@ -123,7 +123,7 @@
 				label: "RemoveDayOff",
 				shortcut: "Alt+B",
 				keys: [[keyCodes.B], [keyCodes.ALT]],
-				action: buildAction("RemoveDayOff", true),
+				action: buildAction("RemoveDayOff", false),
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
 				visible: function () { return vm.canActiveDayOff(); }
 			},

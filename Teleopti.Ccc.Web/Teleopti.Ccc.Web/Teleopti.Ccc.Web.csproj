@@ -1694,6 +1694,8 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.js" />
+    <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.removeDayOff.spec.js" />
+    <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.removeDayOff.js" />
     <Content Include="WFM\app\teamSchedule\html\exportSchedule.html" />
     <Content Include="WFM\app\teamSchedule\html\exportScheduleView.html" />
     <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />

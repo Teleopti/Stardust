@@ -7,11 +7,13 @@
 	function DayOffService($http, $q) {
 		var urlMap = {
 			loadTemplate: "../api/TeamScheduleData/AllDayOffTemplates",
-			addDayOff: "../api/TeamScheduleCommand/AddDayOff"
+			addDayOff: "../api/TeamScheduleCommand/AddDayOff",
+			removeDayOff: "../api/TeamScheduleCommand/RemoveDayOff"
 		};
 
 		this.getAllDayOffTemplates = getAllDayOffTemplates;
 		this.addDayOff = addDayOff;
+		this.removeDayOff = removeDayOff;
 
 		var dayOffs = [];
 		function getAllDayOffTemplates() {
@@ -29,6 +31,10 @@
 
 		function addDayOff(input) {
 			return $http.post(urlMap.addDayOff, input);
+		}
+
+		function removeDayOff(input) {
+			return $http.post(urlMap.removeDayOff, input);
 		}
 
 	}
