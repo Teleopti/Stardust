@@ -69,10 +69,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			};
 		}
 
-		public bool ReadOnly
-		{
-			get { return Grid.ReadOnly; }
-		}
+		public bool ReadOnly => Grid.ReadOnly;
+
 		public virtual void Invalidate()
 		{
 		}
@@ -81,11 +79,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		{
 		}
 
-		public virtual void Sort(bool isAscending)
-		{
-		}
+		public abstract IEnumerable<Tuple<IPerson, int>> Sort(bool isAscending);
 
-		internal FilteredPeopleHolder FilteredPeopleHolder { get { return _filteredPeopleHolder; } }
+		public abstract void PerformSort(IEnumerable<Tuple<IPerson, int>> order);
+
+		internal FilteredPeopleHolder FilteredPeopleHolder => _filteredPeopleHolder;
 
 		public virtual void RefreshChildGrids()
 		{
@@ -115,23 +113,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		public int RowCount { get; set; }
 
-		public int ColHeaders
-		{
-			get { return Grid.Cols.HeaderCount; }
-		}
+		public int ColHeaders => Grid.Cols.HeaderCount;
 
-		public int RowHeaders
-		{
-			get { return Grid.Rows.HeaderCount; }
-		}
+		public int RowHeaders => Grid.Rows.HeaderCount;
 
 		public bool IsRightToLeft
 		{
-			get { return Grid.RightToLeft == RightToLeft.Yes; }
-			set
-			{
-				Grid.RightToLeft = value ? RightToLeft.Yes : RightToLeft.No;
-			}
+			get => Grid.RightToLeft == RightToLeft.Yes;
+			set => Grid.RightToLeft = value ? RightToLeft.Yes : RightToLeft.No;
 		}
 
 		internal virtual bool ValidCell(int columnIndex, int rowIndex)
@@ -170,10 +159,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		internal virtual void CreateContextMenu()
 		{
-			if (Grid.ContextMenuStrip != null)
-			{
-				Grid.ContextMenuStrip.Items.Clear();
-			}
+			Grid.ContextMenuStrip?.Items.Clear();
 		}
 
 		internal virtual void ShowMessage(string message, string caption)
@@ -285,17 +271,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			GridHelper.HandlePaste(Grid, GridClipHandler, GridPasteAction);
 		}
 
-		protected static ClipHandler<string> GridClipHandler
-		{
-			get { return PeopleAdminHelper.ConvertClipboardToClipHandler(); }
-		}
+		protected static ClipHandler<string> GridClipHandler => PeopleAdminHelper.ConvertClipboardToClipHandler();
 
 		private SimpleTextPasteAction _gridPasteAction = new SimpleTextPasteAction();
 
-		internal SimpleTextPasteAction GridPasteAction
-		{
-			get { return _gridPasteAction; }
-		}
+		internal SimpleTextPasteAction GridPasteAction => _gridPasteAction;
 
 		protected virtual void InsertClipHandlerToGrid() { }
 

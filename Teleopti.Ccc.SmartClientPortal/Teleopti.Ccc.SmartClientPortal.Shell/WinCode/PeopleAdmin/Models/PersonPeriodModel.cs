@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -18,8 +17,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 
     	private IPersonPeriod _currentPeriod;
         private readonly IPerson _containedEntity;
-        private bool _expandState;
-        private readonly CommonNameDescriptionSetting _commonNameDescription;
+		private readonly CommonNameDescriptionSetting _commonNameDescription;
         private readonly IList<IPersonSkill> _personSkillCollection;
         private readonly IList<SiteTeamModel> _siteTeamAdapterCollection;
         private readonly ExternalLogOnParser _externalLogOnParser;
@@ -47,34 +45,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// Gets the parent.
         /// </summary>
         /// <value>The parent.</value>
-        public IPerson Parent
-        {
-            get { return _containedEntity; }
-        }
+        public IPerson Parent => _containedEntity;
 
-        /// <summary>
+		/// <summary>
         /// Gets the full name.
         /// </summary>
         /// <value>The full name.</value>
-        public string FullName
-        {
-            get
-            {
-	            return _commonNameDescription == null ? _containedEntity.Name.ToString() : _commonNameDescription.BuildFor(_containedEntity);
-            }
-        }
+        public string FullName => _commonNameDescription == null ? _containedEntity.Name.ToString() : _commonNameDescription.BuildFor(_containedEntity);
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the period date.
         /// </summary>
         /// <value>The period date.</value>
         public DateOnly? PeriodDate
         {
-            get
-            {
-	            return _currentPeriod == null ? (DateOnly?) null : _currentPeriod.StartDate;
-            }
-	        set
+            get => _currentPeriod?.StartDate;
+			set
             {
 				if (_currentPeriod == null) return;
 				if (!value.HasValue) return;
@@ -92,12 +78,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The current person contract.</value>
         public IPersonContract PersonContract
         {
-            get
-            {
-                if (_currentPeriod != null) return _currentPeriod.PersonContract;
-                return null;
-            }
-            set
+            get => _currentPeriod?.PersonContract;
+			set
             {
                 if (_currentPeriod != null) _currentPeriod.PersonContract = value;
             }
@@ -109,17 +91,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The current part time percentage.</value>
         public IPartTimePercentage PartTimePercentage
         {
-            get
+            get => _currentPeriod?.PersonContract?.PartTimePercentage;
+			set
             {
-                if (_currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.PartTimePercentage != null)
-                {
-                    return _currentPeriod.PersonContract.PartTimePercentage;
-                }
-                return null;
-            }
-            set
-            {
-                if (value != null && _currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.PartTimePercentage != null)
+                if (value != null && _currentPeriod?.PersonContract?.PartTimePercentage != null)
                 {
                     _currentPeriod.PersonContract.PartTimePercentage = value;
                 }
@@ -132,15 +107,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The current rule set bag.</value>
         public IRuleSetBag RuleSetBag
         {
-            get
-            {
-                if (_currentPeriod != null)
-                {
-                    return _currentPeriod.RuleSetBag;
-                }
-                return null;
-            }
-            set
+            get => _currentPeriod?.RuleSetBag;
+			set
             {
                 if (_currentPeriod != null)
                     _currentPeriod.RuleSetBag = value;
@@ -153,17 +121,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The current contract.</value>
         public IContract Contract
         {
-            get
+            get => _currentPeriod?.PersonContract?.Contract;
+			set
             {
-                if (_currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.Contract != null)
-                {
-                    return _currentPeriod.PersonContract.Contract;
-                }
-                return null;
-            }
-            set
-            {
-                if (value != null && _currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.Contract != null)
+                if (value != null && _currentPeriod?.PersonContract?.Contract != null)
                 {
                     _currentPeriod.PersonContract.Contract = value;
                 }
@@ -176,17 +137,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The current contract schedule.</value>
         public IContractSchedule ContractSchedule
         {
-            get
+            get => _currentPeriod?.PersonContract?.ContractSchedule;
+			set
             {
-                if (_currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.ContractSchedule != null)
-                {
-                    return _currentPeriod.PersonContract.ContractSchedule;
-                }
-                return null;
-            }
-            set
-            {
-                if (value != null && _currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.ContractSchedule != null)
+                if (value != null && _currentPeriod?.PersonContract?.ContractSchedule != null)
                 {
                     _currentPeriod.PersonContract.ContractSchedule = value;
                 }
@@ -197,23 +151,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// Gets or sets a value indicating whether [expand state].
         /// </summary>
         /// <value><c>true</c> if [expand state]; otherwise, <c>false</c>.</value>
-        public bool ExpandState
-        {
-            get { return _expandState; }
-            set { _expandState = value; }
-        }
+        public bool ExpandState { get; set; }
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the person skills.
         /// </summary>
         /// <value>The person skills.</value>
         public string PersonSkills
         {
-            get
-            {
-                return GetPersonSkills();
-            }
-            set
+            get => getPersonSkills();
+			set
             {
                 if (_currentPeriod != null)
                 {
@@ -241,32 +188,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// Gets the person skills.
         /// </summary>
         /// <returns></returns>
-        private string GetPersonSkills()
+        private string getPersonSkills()
         {
-            if (_currentPeriod != null)
-            {
-                StringBuilder personSkillString = new StringBuilder();
+			if (_currentPeriod?.PersonSkillCollection != null)
+			{
+				return string.Join(", ",
+					_currentPeriod.PersonSkillCollection.Where(s => !((IDeleteTag) s.Skill).IsDeleted).Select(s => s.Skill.Name).OrderBy(s => s));
+			}
 
-
-                if (_currentPeriod.PersonSkillCollection != null)
-                {
-                    IList<IPersonSkill> personSkillCollection = _currentPeriod.PersonSkillCollection.OrderBy(s => s.Skill.Name).ToList();
-
-                    foreach (IPersonSkill personSkill in personSkillCollection)
-                    {
-                        if (((IDeleteTag)personSkill.Skill).IsDeleted == false)
-                        {
-                            if (!String.IsNullOrEmpty(personSkillString.ToString()))
-                                personSkillString.Append(", " + personSkill.Skill.Name);
-                            else 
-                                personSkillString.Append(personSkill.Skill.Name);
-                        }
-                    }
-                }
-                return personSkillString.ToString();
-            }
-
-            return String.Empty;
+			return String.Empty;
         }
 
         /// <summary>
@@ -284,20 +214,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// Gets a value indicating whether this instance can gray.
         /// </summary>
         /// <value><c>true</c> if this instance can gray; otherwise, <c>false</c>.</value>
-        public bool CanGray
-        {
-            get
-            {
-                return _currentPeriod == null;
-            }
-        }
+        public bool CanGray => _currentPeriod == null;
 
-        public IPersonPeriod Period
-        {
-            get { return _currentPeriod; }
-        }
+		public IPersonPeriod Period => _currentPeriod;
 
-        /// <summary>
+		/// <summary>
         /// Gets the period count.
         /// </summary>
         /// <value>The period count.</value>
@@ -305,9 +226,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         {
             get
             {
-                if (_currentPeriod != null && Parent.PersonPeriodCollection.Count() == 1)
+                if (_currentPeriod != null && Parent.PersonPeriodCollection.Count == 1)
                     return 0;
-                return Parent.PersonPeriodCollection.Count();
+                return Parent.PersonPeriodCollection.Count;
             }
         }
 
@@ -429,11 +350,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 
     	public IBudgetGroup BudgetGroup
     	{
-			get
-			{
-				return _currentPeriod != null ? _currentPeriod.BudgetGroup : NullBudgetGroup;
-			}
-    		set
+			get => _currentPeriod != null ? _currentPeriod.BudgetGroup : NullBudgetGroup;
+			set
 			{
 				if (_currentPeriod == null) return;
 				if (value==NullBudgetGroup)

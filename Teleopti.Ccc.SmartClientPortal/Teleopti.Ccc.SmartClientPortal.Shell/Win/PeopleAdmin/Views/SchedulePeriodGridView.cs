@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
@@ -1035,10 +1036,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			}
 		}
 
-		private SchedulePeriodModel CurrentPersonPeriodView
-		{
-			get { return FilteredPeopleHolder.SchedulePeriodGridViewCollection[CurrentRowIndex]; }
-		}
+		private SchedulePeriodModel CurrentPersonPeriodView => FilteredPeopleHolder.SchedulePeriodGridViewCollection[CurrentRowIndex];
 
 		private bool IsValidRow()
 		{
@@ -1051,10 +1049,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 					&& CurrentPersonPeriodView.ExpandState;
 		}
 
-		private int CurrentRowIndex
-		{
-			get { return Grid.CurrentCell.RowIndex - 1; }
-		}
+		private int CurrentRowIndex => Grid.CurrentCell.RowIndex - 1;
 
 		private int GetColumnIndex()
 		{
@@ -1081,51 +1076,41 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			return Grid.CurrentCell.ColIndex;
 		}
 
-		private void SortSchedulePeriodData(bool isAscending)
+		private IEnumerable<Tuple<IPerson, int>> sortSchedulePeriodData(bool isAscending)
 		{
 			// Gets the filtered people grid data as a collection
-			List<SchedulePeriodModel> schedulePeriodcollection =
-				new List<SchedulePeriodModel>(FilteredPeopleHolder.SchedulePeriodGridViewCollection);
+			var schedulePeriodcollection = FilteredPeopleHolder.SchedulePeriodGridViewCollection.ToList();
 
 			int columnIndex = GetColumnIndex();
 
 			// Gets the sort column to sort
-			string sortColumn = _gridColumns[columnIndex].BindingProperty;
+			var sortColumn = _gridColumns[columnIndex].BindingProperty;
 			// Gets the coparer erquired to sort the data
-			IComparer<SchedulePeriodModel> comparer = _gridColumns[columnIndex].ColumnComparer;
+			var comparer = _gridColumns[columnIndex].ColumnComparer;
 
-			Grid.CurrentCell.MoveLeft();
+			if (string.IsNullOrEmpty(sortColumn)) return Enumerable.Empty<Tuple<IPerson,int>>();
 
-			// Dispose the child grids
-			DisposeChildGrids();
-
-			if (!string.IsNullOrEmpty(sortColumn))
+			// Holds the results of the sorting process
+			IList<SchedulePeriodModel> result;
+			if (comparer != null)
 			{
-				// Holds the results of the sorting process
-				IList<SchedulePeriodModel> result;
-				if (comparer != null)
-				{
-					// Sorts the person collection in ascending order
-					schedulePeriodcollection.Sort(comparer);
-					if (!isAscending)
-						schedulePeriodcollection.Reverse();
+				// Sorts the person collection in ascending order
+				schedulePeriodcollection.Sort(comparer);
+				if (!isAscending)
+					schedulePeriodcollection.Reverse();
 
-					result = schedulePeriodcollection;
-				}
-				else
-				{
-					// Gets the sorted people collection
-					result =
-						GridHelper.Sort(new Collection<SchedulePeriodModel>(schedulePeriodcollection),
-										sortColumn,
-										isAscending);
-				}
-
-				// Sets the filtered list
-				FilteredPeopleHolder.SetSortedSchedulePeriodFilteredList(result);
-
-				Grid.CurrentCell.MoveRight();
+				result = schedulePeriodcollection;
 			}
+			else
+			{
+				// Gets the sorted people collection
+				result =
+					GridHelper.Sort(new Collection<SchedulePeriodModel>(schedulePeriodcollection),
+						sortColumn,
+						isAscending);
+			}
+			
+			return result.Select((t, i) => new Tuple<IPerson, int>(t.Parent, i));
 		}
 
 		private void CopyAllSchedulePeriods(int rowIndex)
@@ -1266,10 +1251,36 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			}
 		}
 
-		public override void Sort(bool isAscending)
+		public override IEnumerable<Tuple<IPerson,int>> Sort(bool isAscending)
 		{
 			// Sorts the people data
-			SortSchedulePeriodData(isAscending);
+			var result = sortSchedulePeriodData(isAscending);
+			
+			return result;
+		}
+
+		public override void PerformSort(IEnumerable<Tuple<IPerson, int>> order)
+		{
+			if (!(order?.Any() ?? false)) return;
+
+			Grid.CurrentCell.MoveLeft();
+
+			// Dispose the child grids
+			DisposeChildGrids();
+
+			var result = (from x in FilteredPeopleHolder.SchedulePeriodGridViewCollection
+						  join y in order
+					on x.Parent equals y.Item1
+					into a
+				from b in a.DefaultIfEmpty(new Tuple<IPerson, int>(null, int.MaxValue))
+				orderby b.Item2
+				select x).ToList();
+			
+			// Sets the filtered list
+			FilteredPeopleHolder.SetSortedSchedulePeriodFilteredList(result);
+
+			Grid.CurrentCell.MoveRight();
+			
 			// Refresh the grid view to get affect the sorted data
 			Invalidate();
 		}
@@ -1580,6 +1591,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		/// </remarks>
 		internal override void DisposeChildGrids()
 		{
+			if (ParentGridLastColumnIndex < 0) return;
 			for (int rowIndex = 0; rowIndex < Grid.RowCount; rowIndex++)
 			{
 				if (rowIndex >= FilteredPeopleHolder.SchedulePeriodGridViewCollection.Count) break;

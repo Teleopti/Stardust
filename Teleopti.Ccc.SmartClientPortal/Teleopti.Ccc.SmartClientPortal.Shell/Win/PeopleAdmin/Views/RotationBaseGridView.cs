@@ -20,8 +20,7 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 {
-	public class
-		RotationBaseGridView<TAdapterParent, TAdapterChild, TBaseType, TScheduleType> : DropDownGridViewBase
+	public class RotationBaseGridView<TAdapterParent, TAdapterChild, TBaseType, TScheduleType> : DropDownGridViewBase
 		where TAdapterParent : IRotationModel<TBaseType, TScheduleType>
 		where TAdapterChild : IRotationModel<TBaseType, TScheduleType>
 	{
@@ -102,15 +101,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		private readonly IToggleManager _toggleManager;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 
-		internal override ViewType Type
-		{
-			get { return _viewType; }
-		}
+		internal override ViewType Type => _viewType;
 
-		public override int ParentGridLastColumnIndex
-		{
-			get { return _parentGridColumns.Count; }
-		}
+		public override int ParentGridLastColumnIndex => _parentGridColumns.Count;
 
 		internal override void ChildGridQueryColWidth(object sender, GridRowColSizeEventArgs e)
 		{
@@ -137,7 +130,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		internal override void ChildGridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
-			var gridControl = ((GridControl)sender);
+			var gridControl = (GridControl)sender;
 
 			var personRotationChildCollection = gridControl.Tag as ReadOnlyCollection<TAdapterChild>;
 			PeopleWorksheet.StateHolder.CurrentRotationChildName = gridControl.Text;
@@ -176,12 +169,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			CanCopyChildRow = false;
 
 			var gridModel = sender as GridModel;
-			if (gridModel == null) return;
 
-			var grid = gridModel.ActiveGridView as GridControl;
-			if (grid == null) return;
+			var grid = gridModel?.ActiveGridView as GridControl;
 			// child copy processings
-			var adapterChildCollection = grid.Tag as ReadOnlyCollection<TAdapterChild>;
+			var adapterChildCollection = grid?.Tag as ReadOnlyCollection<TAdapterChild>;
 			if (adapterChildCollection == null) return;
 
 			CanCopyChildRow = true;
@@ -226,20 +217,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		public override void RefreshParentGrid()
 		{
 			// To overcome rendering issues in message broker
-			if (Grid.CurrentCell != null) Grid.CurrentCell.MoveTo(1, _parentGridColumns.IndexOf(_rotationNameColumn) + 1);
+			Grid.CurrentCell?.MoveTo(1, _parentGridColumns.IndexOf(_rotationNameColumn) + 1);
 		}
 
 		public override void RefreshChildGrids()
 		{
 			// Updating child adapters
-
 			if (_viewType == ViewType.PersonRotationView)
 			{
-
 				IList<PersonRotationModelParent> adaptersWithChildren = FilteredPeopleHolder.
 					PersonRotationParentAdapterCollection.Where(s => s.GridControl != null).ToList();
-
-
+				
 				foreach (PersonRotationModelParent adapter in adaptersWithChildren)
 				{
 					// This is for overcome rendering issue with message broker
@@ -250,8 +238,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			{
 				IList<PersonAvailabilityModelParent> adaptersWithChildren = FilteredPeopleHolder.
 				   PersonAvailabilityParentAdapterCollection.Where(s => s.GridControl != null).ToList();
-
-
+				
 				foreach (PersonAvailabilityModelParent adapter in adaptersWithChildren)
 				{
 					// This is for overcome rendering issue with message broker
@@ -304,8 +291,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			// of the last column need to increase
 			Grid.ColWidths[6] += 2;
             Grid.ColWidths[0] = _parentGridColumns[0].PreferredWidth;
-
-
 		}
 
 		internal override void MergeHeaders()
@@ -601,6 +586,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		internal override void DisposeChildGrids()
 		{
+			if (ParentGridLastColumnIndex < 0) return;
 			for (int rowIndex = 0; rowIndex < Grid.RowCount; rowIndex++)
 			{
 				var gridInfo =
@@ -621,10 +607,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			}
 		}
 
-		public override void Sort(bool isAscending)
+		public override IEnumerable<Tuple<IPerson, int>> Sort(bool isAscending)
 		{
 			// Gets the filtered people grid data as a collection
-			var personRotationcollection = new List<TAdapterParent>(_parentAdapterCollection);
+			var personRotationcollection = _parentAdapterCollection.ToList();
 			int columnIndex = GetColumnIndex();
 
 			// Gets the sort column to sort
@@ -632,53 +618,67 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			// Gets the coparer erquired to sort the data
 			var comparer = _parentGridColumns[columnIndex].ColumnComparer;
 
+			if (string.IsNullOrEmpty(sortColumn)) return Enumerable.Empty<Tuple<IPerson, int>>();
+
+			// Holds the results of the sorting process
+			IList<TAdapterParent> result;
+			if (comparer != null)
+			{
+				// Sorts the person collection in ascending order
+				personRotationcollection.Sort(comparer);
+				if (!isAscending)
+					personRotationcollection.Reverse();
+
+				result = personRotationcollection;
+			}
+			else
+			{
+				// Gets the sorted people collection
+				result = GridHelper.Sort(
+					new Collection<TAdapterParent>(personRotationcollection),
+					sortColumn,
+					isAscending
+				);
+			}
+
+			var sorting = result.Select((p, i) => new Tuple<IPerson, int>(p.Person, i));
+			return sorting;
+		}
+
+		public override void PerformSort(IEnumerable<Tuple<IPerson, int>> order)
+		{
+			if (!(order?.Any() ?? false)) return;
+
 			Grid.CurrentCell.MoveLeft();
 
 			// Dispose the child grids
 			DisposeChildGrids();
 
-			if (!string.IsNullOrEmpty(sortColumn))
+			var result = (from x in _parentAdapterCollection
+						 join y in order
+					on x.Person equals y.Item1
+					into a
+				from b in a.DefaultIfEmpty(new Tuple<IPerson, int>(null, int.MaxValue))
+				orderby b.Item2
+				select x).ToList();
+
+			_parentAdapterCollection = result;
+
+			// Sets the filtered list
+			if (Type == ViewType.PersonRotationView)
 			{
-				// Holds the results of the sorting process
-				IList<TAdapterParent> result;
-				if (comparer != null)
-				{
-					// Sorts the person collection in ascending order
-					personRotationcollection.Sort(comparer);
-					if (!isAscending)
-						personRotationcollection.Reverse();
-
-					result = personRotationcollection;
-				}
-				else
-				{
-					// Gets the sorted people collection
-					result = GridHelper.Sort(
-						new Collection<TAdapterParent>(personRotationcollection),
-						sortColumn,
-						isAscending
-						);
-				}
-
-				_parentAdapterCollection = result;
-
-				// Sets the filtered list
-				//FilteredPeopleHolder.SetSortedPersonRotationFilteredList(result);
-				if (Type == ViewType.PersonRotationView)
-				{
-					FilteredPeopleHolder.SetSortedPersonRotationFilteredList(
-						(List<PersonRotationModelParent>)_parentAdapterCollection);
-				}
-				else if (Type == ViewType.PersonAvailabilityView)
-				{
-					FilteredPeopleHolder.SetSortedPersonAvailabilityFilteredList(
-						(List<PersonAvailabilityModelParent>)_parentAdapterCollection);
-				}
-
-				Grid.CurrentCell.MoveRight();
-
-				Invalidate();
+				var parents = (List<PersonRotationModelParent>)_parentAdapterCollection;
+				FilteredPeopleHolder.SetSortedPersonRotationFilteredList(parents);
 			}
+			else if (Type == ViewType.PersonAvailabilityView)
+			{
+				var parents = (List<PersonAvailabilityModelParent>)_parentAdapterCollection;
+				FilteredPeopleHolder.SetSortedPersonAvailabilityFilteredList(parents);
+			}
+
+			Grid.CurrentCell.MoveRight();
+
+			Invalidate();
 		}
 
 		internal override void AddNewGridRowFromClipboard<T>(object sender, T eventArgs)
@@ -691,10 +691,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			return Grid.CurrentCell.RowIndex > 0;
 		}
 
-		private TAdapterParent CurrentPersonRotationView
-		{
-			get { return _parentAdapterCollection[CurrentRowIndex]; }
-		}
+		private TAdapterParent CurrentPersonRotationView => _parentAdapterCollection[CurrentRowIndex];
 
 		private bool IsCurrentRowExpanded()
 		{
@@ -702,10 +699,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 				&& CurrentPersonRotationView.ExpandState;
 		}
 
-		private int CurrentRowIndex
-		{
-			get { return Grid.CurrentCell.RowIndex - 1; }
-		}
+		private int CurrentRowIndex => Grid.CurrentCell.RowIndex - 1;
 
 		private int GetColumnIndex()
 		{
@@ -734,7 +728,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			Grid.CellModels.Add("GridInCell", new GridInCellModel(Grid.Model));
 			Grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCellModel, new DropDownCellModel(Grid.Model));
 			Grid.CurrentCellChanged += ParentGridCurrentCellChanged;
-			Grid.CurrentCellShowingDropDown += ParentGridCurrentCellShowingDropDown;
 		}
 
 		private void CreateParentGridHeaders()
@@ -1093,17 +1086,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 					GridRangeInfo.Cells(rowIndex, _gridInCellColumnIndex - 1, rowIndex, ParentGridLastColumnIndex);
 
 				Grid.InvalidateRange(gridInfo);
-
-				////Fix for bug 6891, this makes the rows expand automatically when you add a new rotation
-				//var adapterParent = _parentAdapterCollection[rowIndex - 1] as PersonRotationModelParent;
-
-				//if (adapterParent != null)
-				//{
-				//    if (adapterParent.RotationCount > 1)
-				//    {
-				//        LoadInnerGrid(rowIndex);
-				//    }
-				//}
 			}
 		}
 
@@ -1570,24 +1552,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 				Grid[cc.RowIndex, _weekColumIndex].Text = "";
 			}
 		}
-
-
-		private void ParentGridCurrentCellShowingDropDown(object sender, EventArgs e)
-		{
-			var cc = Grid.CurrentCell;
-			if (cc.ColIndex == _weekColumIndex)
-			{
-				var cr = cc.Renderer as GridComboBoxCellRenderer;
-				if (cr != null)
-				{
-					//    DataView dv = new DataView(slaveComboTable);
-					//    dv.RowFilter = string.Format("[masterId] = '{0}'", this.gridDataBoundGrid1[cc.RowIndex, MasterColumn].Text);
-					//    ((GridComboBoxListBoxPart)cr.ListBoxPart).DataSource = dv;
-				}
-			}
-		}
-
-
+		
 		internal override IList<IPerson> GetSelectedPersons()
 		{
 			IList<IPerson> selectedPersons = new List<IPerson>();
@@ -1643,15 +1608,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			{
 				var personAvailability = baseType as IPersonAvailability;
 
-				if ((personAvailability != null) &&
-					(!_selectedPersonAvailabilityCollection.Contains(personAvailability)))
+				if (personAvailability != null &&
+					!_selectedPersonAvailabilityCollection.Contains(personAvailability))
 					_selectedPersonAvailabilityCollection.Add(personAvailability);
 			}
 			else
 			{
 				var personRotation = baseType as IPersonRotation;
 
-				if ((personRotation != null) && (!_selectedPersonRotationCollection.Contains(personRotation)))
+				if (personRotation != null && !_selectedPersonRotationCollection.Contains(personRotation))
 					_selectedPersonRotationCollection.Add(personRotation);
 			}
 		}

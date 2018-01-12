@@ -575,7 +575,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			setBoldProperty(e);
 
 			setDataSource(e, PeopleWorksheet.StateHolder.ContractCollection);
-			//Grid.ResetVolatileData();
 		}
 
 		void childGridTeamColumnCellDisplayChanged(object sender,
@@ -605,9 +604,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			setBoldProperty(e);
 			setDataSource(e, FilteredPeopleHolder.RuleSetBagCollection);
 		}
-
-
-
+		
 		void gridHorizontalScroll(object sender, ScrollEventArgs e)
 		{
 			PrepareView();
@@ -645,8 +642,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			else
 			{
 				var parentColIndex = gridColumnIndex();
-				columnIndex = (parentColIndex == PeopleAdminConstants.GridParentColumnIndexCheckValue)
-								  ? (PeopleAdminConstants.GridColumnIndexValue)
+				columnIndex = parentColIndex == PeopleAdminConstants.GridParentColumnIndexCheckValue
+								  ? PeopleAdminConstants.GridColumnIndexValue
 								  : parentColIndex;
 			}
 			return columnIndex;
@@ -659,11 +656,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			return Grid.CurrentCell.ColIndex;
 		}
 
-		private void sortPeoplePeriodData(bool isAscending)
+		private IEnumerable<Tuple<IPerson, int>> sortPeoplePeriodData(bool isAscending)
 		{
 			// Gets the filtered people grid data as a collection
-			var personcollection = new List<PersonPeriodModel>(
-				FilteredPeopleHolder.PersonPeriodGridViewCollection);
+			var personcollection = FilteredPeopleHolder.PersonPeriodGridViewCollection.ToList();
 
 			var columnIndex = getColumnIndex();
 
@@ -671,40 +667,34 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			var sortColumn = _gridColumns[columnIndex].BindingProperty;
 			// Gets the coparer erquired to sort the data
 			var comparer = _gridColumns[columnIndex].ColumnComparer;
-
-			Grid.CurrentCell.MoveLeft();
-
-			// Dispose the child grids
-			DisposeChildGrids();
-
-			if (!string.IsNullOrEmpty(sortColumn))
+			
+			if (string.IsNullOrEmpty(sortColumn))
 			{
-				// Holds the results of the sorting process
-				IList<PersonPeriodModel> result;
-				if (comparer != null)
-				{
-					// Sorts the person collection in ascending order
-					personcollection.Sort(comparer);
-					if (!isAscending)
-						personcollection.Reverse();
-
-					result = personcollection;
-				}
-				else
-				{
-					// Gets the sorted people collection
-					result = GridHelper.Sort(
-						new Collection<PersonPeriodModel>(personcollection),
-						sortColumn,
-						isAscending
-						);
-				}
-
-				// Sets the filtered list
-				FilteredPeopleHolder.SetSortedPersonPeriodFilteredList(result);
-
-				Grid.CurrentCell.MoveRight();
+				return Enumerable.Empty<Tuple<IPerson, int>>();
 			}
+
+			// Holds the results of the sorting process
+			IList<PersonPeriodModel> result;
+			if (comparer != null)
+			{
+				// Sorts the person collection in ascending order
+				personcollection.Sort(comparer);
+				if (!isAscending)
+					personcollection.Reverse();
+
+				result = personcollection;
+			}
+			else
+			{
+				// Gets the sorted people collection
+				result = GridHelper.Sort(
+					new Collection<PersonPeriodModel>(personcollection),
+					sortColumn,
+					isAscending
+				);
+			}
+			
+			return result.Select((t, i) => new Tuple<IPerson, int>(t.Parent, i));
 		}
 
 		private void createChildGridHeader()
@@ -1441,11 +1431,37 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			e.QueryCellInfoEventArg.Style.FormattedText = string.Empty;
 		}
 
-		public override void Sort(bool isAscending)
+		public override void PerformSort(IEnumerable<Tuple<IPerson, int>> order)
+		{
+			if (!(order?.Any() ?? false)) return;
+
+			Grid.CurrentCell.MoveLeft();
+
+			// Dispose the child grids
+			DisposeChildGrids();
+
+			var result = (from x in FilteredPeopleHolder.PersonPeriodGridViewCollection
+						  join y in order
+					on x.Parent equals y.Item1
+					into a
+				from b in a.DefaultIfEmpty(new Tuple<IPerson, int>(null, int.MaxValue))
+				orderby b.Item2
+				select x).ToList();
+
+			// Sets the filtered list
+			FilteredPeopleHolder.SetSortedPersonPeriodFilteredList(result);
+
+			Grid.CurrentCell.MoveRight();
+
+			// Refresh the grid view to get affect the sorted data
+			Invalidate();
+		}
+
+		public override IEnumerable<Tuple<IPerson, int>> Sort(bool isAscending)
 		{
 			// Sorts the people period data and invalidate view
-			sortPeoplePeriodData(isAscending);
-			Invalidate();
+			var result = sortPeoplePeriodData(isAscending);
+			return result;
 		}
 
 		internal override void CreateHeaders()
@@ -1735,6 +1751,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		internal override void DisposeChildGrids()
 		{
+			if (ParentGridLastColumnIndex < 0) return;
+
 			for (var rowIndex = 0; rowIndex < Grid.RowCount; rowIndex++)
 			{
 				var gridInfo =

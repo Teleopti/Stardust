@@ -295,9 +295,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 			FilteredPeopleHolder.GetParentPersonAccountWhenUpdated(parentPosition);
 			PeopleWorksheet.StateHolder.GetChildPersonAccounts(parentPosition, FilteredPeopleHolder);
-
-
-
+			
 			FilteredPeopleHolder.PersonAccountModelCollection[parentPosition].ExpandState = true;
 			Grid.Refresh();
 			Invalidate();
@@ -1250,10 +1248,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			}
 		}
 
-		public override void Sort(bool isAscending)
+		public override IEnumerable<Tuple<IPerson, int>> Sort(bool isAscending)
 		{
 			// Gets the filtered people grid data as a collection
-			var personAccountCollection = new List<IPersonAccountModel>(FilteredPeopleHolder.PersonAccountModelCollection);
+			var personAccountCollection = FilteredPeopleHolder.PersonAccountModelCollection.ToList();
 
 			var columnIndex = GetColumnIndex();
 
@@ -1262,41 +1260,56 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			// Gets the coparer erquired to sort the data
 			var comparer = _gridColumns[columnIndex].ColumnComparer;
 
+			if (string.IsNullOrEmpty(sortColumn)) return Enumerable.Empty<Tuple<IPerson, int>>();
+
+			// Holds the results of the sorting process
+			IList<IPersonAccountModel> result;
+			if (comparer != null)
+			{
+				// Sorts the person collection in ascending order
+				personAccountCollection.Sort(comparer);
+				if (!isAscending)
+					personAccountCollection.Reverse();
+
+				result = personAccountCollection;
+			}
+			else
+			{
+				// Gets the sorted people collection
+				result = GridHelper.Sort(
+					new Collection<IPersonAccountModel>(personAccountCollection),
+					sortColumn,
+					isAscending
+				);
+			}
+			
+			return result.Select((t,i) => new Tuple<IPerson, int>(t.Parent.Person,i));
+		}
+
+		public override void PerformSort(IEnumerable<Tuple<IPerson, int>> order)
+		{
+			if (!(order?.Any() ?? false)) return;
+
 			Grid.CurrentCell.MoveLeft();
 
 			// Dispose the child grids
 			DisposeChildGrids();
 
-			if (!string.IsNullOrEmpty(sortColumn))
-			{
-				// Holds the results of the sorting process
-				IList<IPersonAccountModel> result;
-				if (comparer != null)
-				{
-					// Sorts the person collection in ascending order
-					personAccountCollection.Sort(comparer);
-					if (!isAscending)
-						personAccountCollection.Reverse();
+			var result = (from x in FilteredPeopleHolder.PersonAccountModelCollection
+						  join y in order
+					on x.Parent.Person equals y.Item1
+					into a
+				from b in a.DefaultIfEmpty(new Tuple<IPerson, int>(null, int.MaxValue))
+				orderby b.Item2
+				select x).ToList();
 
-					result = personAccountCollection;
-				}
-				else
-				{
-					// Gets the sorted people collection
-					result = GridHelper.Sort(
-						 new Collection<IPersonAccountModel>(personAccountCollection),
-						 sortColumn,
-						 isAscending
-						 );
-				}
+			// Sets the filtered list
+			FilteredPeopleHolder.SetSortedPersonAccountFilteredList(result);
 
-				// Sets the filtered list
-				FilteredPeopleHolder.SetSortedPersonAccountFilteredList(result);
+			Grid.CurrentCell.MoveRight();
 
-				Grid.CurrentCell.MoveRight();
-
-				Invalidate();
-			}
+			// Refresh the grid view to get affect the sorted data
+			Invalidate();
 		}
 
 		internal override void CreateHeaders()
@@ -1522,6 +1535,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		internal override void DisposeChildGrids()
 		{
+			if (ParentGridLastColumnIndex < 0) return;
 			for (var rowIndex = 0; rowIndex < Grid.RowCount; rowIndex++)
 			{
 				if (FilteredPeopleHolder.PersonAccountModelCollection.Count <= rowIndex) break;

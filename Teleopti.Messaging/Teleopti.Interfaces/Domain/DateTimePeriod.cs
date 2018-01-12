@@ -193,8 +193,7 @@ namespace Teleopti.Interfaces.Domain
         /// </returns>
         public bool Contains(DateTime date)
         {
-            //InParameter.VerifyDateIsUtc("date", date);
-            return (period.Minimum <= date && period.Maximum > date);
+            return period.Minimum <= date && period.Maximum > date;
         }
 
         /// <summary>
@@ -218,7 +217,7 @@ namespace Teleopti.Interfaces.Domain
         {
             InParameter.VerifyDateIsUtc(nameof(theDateTime), theDateTime);
 
-            return (theDateTime <= EndDateTime && theDateTime >= StartDateTime);
+            return theDateTime <= EndDateTime && theDateTime >= StartDateTime;
         }
 
         /// <summary>

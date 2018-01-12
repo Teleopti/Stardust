@@ -41,13 +41,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		private readonly List<IPerson> _filteredPersonCollection = new List<IPerson>();
 		public List<Guid> FilteredPersonIdCollection { get; }
 		private List<PersonGeneralModel> _filteredPeopleGridData = new List<PersonGeneralModel>();
-		private IList<PersonPeriodModel> _personPeriodGridViewCollection = new List<PersonPeriodModel>();
+		private List<PersonPeriodModel> _personPeriodGridViewCollection = new List<PersonPeriodModel>();
 		private readonly List<IPersonSkill> _personSkillCollection = new List<IPersonSkill>();
-		private CommonNameDescriptionSetting _commonNameDescription;
 		private readonly List<IExternalLogOn> _externalLogOnCollection = new List<IExternalLogOn>();
-		private IList<SchedulePeriodModel> _schedulePeriodGridViewCollection = new List<SchedulePeriodModel>();
-		private readonly IList<IPersonRotation> _allPersonRotationCollection = new List<IPersonRotation>();
-		private readonly IList<IPersonAvailability> _allPersonAvailabilityCollection = new List<IPersonAvailability>();
+		private List<SchedulePeriodModel> _schedulePeriodGridViewCollection = new List<SchedulePeriodModel>();
+		private readonly List<IPersonRotation> _allPersonRotationCollection = new List<IPersonRotation>();
+		private readonly List<IPersonAvailability> _allPersonAvailabilityCollection = new List<IPersonAvailability>();
 		private IList<PersonRotationModelParent> _personRotationParentAdapterCollection = new List<PersonRotationModelParent>();
 		private IList<PersonAvailabilityModelParent> _personAvailabilityParentAdapterCollection = new List<PersonAvailabilityModelParent>();
 		private readonly IList<IPersonRotation> _parentPersonRotationCollection = new List<IPersonRotation>();
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		private TypedBindingCollection<IRotation> _rotationCollection = new TypedBindingCollection<IRotation>();
 		private TypedBindingCollection<IAvailabilityRotation> _availabilityCollection = new TypedBindingCollection<IAvailabilityRotation>();
 		private IList<IPersonAccountModel> _personAccountGridViewAdaptorCollection = new List<IPersonAccountModel>();
-		private ReadOnlyCollection<IPersonPeriodModel> _selectedPeoplePeriodGridData;
 		private IList<IOptionalColumn> _optionalColumnCollection = new List<IOptionalColumn>();
 		private readonly TypedBindingCollection<IRuleSetBag> _ruleSetBagBindingCollection = new TypedBindingCollection<IRuleSetBag>();
 		private readonly TypedBindingCollection<IBudgetGroup> _budgetGroupBindingCollection = new TypedBindingCollection<IBudgetGroup>();
@@ -89,9 +87,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			FilteredPersonIdCollection = new List<Guid>();
 		}
 
-		public ReadOnlyCollection<PersonGeneralModel> SelectedPeopleGeneralGridData
+		public ReadOnlyCollection<PersonGeneralModel> SelectedPeopleGeneralGridData => _selectedPeopleGeneralGridData;
+
+		public void SetSortedPeople(IEnumerable<Tuple<IPerson, int>> sortedList)
 		{
-			get { return _selectedPeopleGeneralGridData; }
+			_filteredPersonCollection.Clear();
+			_filteredPersonCollection.AddRange(sortedList.Select(l => l.Item1));
 		}
 
 		public IUnitOfWork GetUnitOfWork { get; set; }
@@ -107,15 +108,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			return personAccountCollection;
 		}
 
-		public Collection<IPerson> PersonCollection
-		{
-			get { return new Collection<IPerson>(_personCollection); }
-		}
+		public Collection<IPerson> PersonCollection => new Collection<IPerson>(_personCollection);
 
-		public TypedBindingCollection<SiteTeamModel> SiteTeamAdapterCollection
-		{
-			get { return _siteTeamBindingCollection; }
-		}
+		public TypedBindingCollection<SiteTeamModel> SiteTeamAdapterCollection => _siteTeamBindingCollection;
 
 		public Collection<PersonGeneralModel> PeopleGridData
 		{
@@ -127,78 +122,39 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			}
 		}
 
-		public Collection<IPerson> FilteredPersonCollection
-		{
-			get { return new Collection<IPerson>(_filteredPersonCollection); }
-		}
+		public Collection<IPerson> FilteredPersonCollection => new Collection<IPerson>(_filteredPersonCollection);
 
-		public Collection<PersonGeneralModel> FilteredPeopleGridData
-		{
-			get { return new Collection<PersonGeneralModel>(_filteredPeopleGridData); }
-		}
+		public Collection<PersonGeneralModel> FilteredPeopleGridData => new Collection<PersonGeneralModel>(_filteredPeopleGridData);
 
-		public Collection<PersonPeriodModel> PersonPeriodGridViewCollection
-		{
-			get { return new Collection<PersonPeriodModel>(_personPeriodGridViewCollection); }
-		}
+		public Collection<PersonPeriodModel> PersonPeriodGridViewCollection => new Collection<PersonPeriodModel>(_personPeriodGridViewCollection);
 
-		public Collection<SchedulePeriodModel> SchedulePeriodGridViewCollection
-		{
-			get { return new Collection<SchedulePeriodModel>(_schedulePeriodGridViewCollection); }
-		}
+		public Collection<SchedulePeriodModel> SchedulePeriodGridViewCollection => new Collection<SchedulePeriodModel>(_schedulePeriodGridViewCollection);
 
-		public Collection<IPersonRotation> ParentPersonRotationCollection
-		{
-			get { return new Collection<IPersonRotation>(_parentPersonRotationCollection); }
-		}
+		public Collection<IPersonRotation> ParentPersonRotationCollection => new Collection<IPersonRotation>(_parentPersonRotationCollection);
 
-		public Collection<IPersonAvailability> ParentPersonAvailabilityCollection
-		{
-			get { return new Collection<IPersonAvailability>(_parentPersonAvailabilityCollection); }
-		}
+		public Collection<IPersonAvailability> ParentPersonAvailabilityCollection => new Collection<IPersonAvailability>(_parentPersonAvailabilityCollection);
 
-		public Collection<PersonRotationModelParent> PersonRotationParentAdapterCollection
-		{
-			get { return new Collection<PersonRotationModelParent>(_personRotationParentAdapterCollection); }
-		}
+		public Collection<PersonRotationModelParent> PersonRotationParentAdapterCollection => new Collection<PersonRotationModelParent>(_personRotationParentAdapterCollection);
 
-		public Collection<PersonAvailabilityModelParent> PersonAvailabilityParentAdapterCollection
-		{
-			get { return new Collection<PersonAvailabilityModelParent>(_personAvailabilityParentAdapterCollection); }
-		}
+		public Collection<PersonAvailabilityModelParent> PersonAvailabilityParentAdapterCollection => new Collection<PersonAvailabilityModelParent>(_personAvailabilityParentAdapterCollection);
 
-		public Collection<IPersonRotation> AllPersonRotationCollection
-		{
-			get { return new Collection<IPersonRotation>(_allPersonRotationCollection); }
-		}
+		public Collection<IPersonRotation> AllPersonRotationCollection => new Collection<IPersonRotation>(_allPersonRotationCollection);
 
-		public Collection<IPersonAvailability> AllPersonAvailabilityCollection
-		{
-			get { return new Collection<IPersonAvailability>(_allPersonAvailabilityCollection); }
-		}
+		public Collection<IPersonAvailability> AllPersonAvailabilityCollection => new Collection<IPersonAvailability>(_allPersonAvailabilityCollection);
 
-		public Collection<IPersonAccountModel> PersonAccountModelCollection
-		{
-			get { return new Collection<IPersonAccountModel>(_personAccountGridViewAdaptorCollection); }
-		}
+		public Collection<IPersonAccountModel> PersonAccountModelCollection => new Collection<IPersonAccountModel>(_personAccountGridViewAdaptorCollection);
 
 		public DateOnly SelectedDate { get; set; }
 
-		public CommonNameDescriptionSetting CommonNameDescription
-		{
-			get { return _commonNameDescription; }
-		}
+		public CommonNameDescriptionSetting CommonNameDescription { get; private set; }
 
 		public IAbsence SelectedPersonAccountAbsenceType { get; set; }
 
-		public ReadOnlyCollection<IPersonPeriodModel> SelectedPeoplePeriodGridCollection
-		{
-			get { return _selectedPeoplePeriodGridData; }
-		}
+		public ReadOnlyCollection<IPersonPeriodModel> SelectedPeoplePeriodGridCollection { get; private set; }
 
 		public void AddNewPersonRotation(IPersonRotation personRotation)
 		{
-			InParameter.NotNull("personRotation", personRotation);
+			InParameter.NotNull(nameof(personRotation), personRotation);
 
 			_newPersonRotationCollection.Add(personRotation);
 
@@ -219,7 +175,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public void AddNewPersonAvailability(IPersonAvailability personAvailability)
 		{
-			InParameter.NotNull("personAvailability", personAvailability);
+			InParameter.NotNull(nameof(personAvailability), personAvailability);
 
 			_newPersonAvailabilityCollection.Add(personAvailability);
 
@@ -238,68 +194,34 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			return isDeleted;
 		}
 
-		public Collection<IOptionalColumn> OptionalColumnCollection
-		{
-			get { return new Collection<IOptionalColumn>(_optionalColumnCollection); }
-		}
+		public Collection<IOptionalColumn> OptionalColumnCollection => new Collection<IOptionalColumn>(_optionalColumnCollection);
 
-		public TypedBindingCollection<IRuleSetBag> RuleSetBagCollection
-		{
-			get { return _ruleSetBagBindingCollection; }
-		}
+		public TypedBindingCollection<IRuleSetBag> RuleSetBagCollection => _ruleSetBagBindingCollection;
 
-		public TypedBindingCollection<IBudgetGroup> BudgetGroupCollection
-		{
-			get { return _budgetGroupBindingCollection; }
-		}
+		public TypedBindingCollection<IBudgetGroup> BudgetGroupCollection => _budgetGroupBindingCollection;
 
-		public ReadOnlyCollection<IExternalLogOn> ExternalLogOnCollection
-		{
-			get { return new ReadOnlyCollection<IExternalLogOn>(_externalLogOnCollection); }
-		}
+		public ReadOnlyCollection<IExternalLogOn> ExternalLogOnCollection => new ReadOnlyCollection<IExternalLogOn>(_externalLogOnCollection);
 
-		public IList<ExternalLogOnModel> FilteredExternalLogOnCollection
-		{
-			get { return _filteredExternalLogOnCollection; }
-		}
+		public IList<ExternalLogOnModel> FilteredExternalLogOnCollection => _filteredExternalLogOnCollection;
 
 		public void SetFilteredExternalLogOnCollection(IList<ExternalLogOnModel> externalLogOnViewAdapters)
 		{
 			_filteredExternalLogOnCollection = externalLogOnViewAdapters;
 		}
 
-		public ReadOnlyCollection<ExternalLogOnModel> FilteredExternalLogOnCollectionCellStages
-		{
-			get { return new ReadOnlyCollection<ExternalLogOnModel>(_filteredExternalLogOnCollection); }
-		}
+		public ReadOnlyCollection<ExternalLogOnModel> FilteredExternalLogOnCollectionCellStages => new ReadOnlyCollection<ExternalLogOnModel>(_filteredExternalLogOnCollection);
 
-		public Collection<IPersonSkill> PersonSkillCollection
-		{
-			get { return new Collection<IPersonSkill>(_personSkillCollection); }
-		}
+		public Collection<IPersonSkill> PersonSkillCollection => new Collection<IPersonSkill>(_personSkillCollection);
 
-		public ReadOnlyCollection<ExternalLogOnModel> ExternalLogOnViewAdapterCollection
-		{
-			get { return new ReadOnlyCollection<ExternalLogOnModel>(_externalLogOnAdapterCollection); }
-		}
+		public ReadOnlyCollection<ExternalLogOnModel> ExternalLogOnViewAdapterCollection => new ReadOnlyCollection<ExternalLogOnModel>(_externalLogOnAdapterCollection);
 
-		public ReadOnlyCollection<PersonSkillModel> PersonSkillViewAdapterCollection
-		{
-			get { return new ReadOnlyCollection<PersonSkillModel>(_personSkillAdapterCollection); }
-		}
-
-
+		public ReadOnlyCollection<PersonSkillModel> PersonSkillViewAdapterCollection => new ReadOnlyCollection<PersonSkillModel>(_personSkillAdapterCollection);
+		
 		public TabControlAdv TabControlPeopleAdmin { get; set; }
 
-		public Collection<IPerson> ValidateUserCredentialsCollection { get { return _validateUserCredentialsCollection; } }
+		public Collection<IPerson> ValidateUserCredentialsCollection => _validateUserCredentialsCollection;
 
-		public ReadOnlyCollection<IAbsence> AbsenceCollection
-		{
-			get
-			{
-				return new ReadOnlyCollection<IAbsence>(_absenceCollection);
-			}
-		}
+		public ReadOnlyCollection<IAbsence> AbsenceCollection => new ReadOnlyCollection<IAbsence>(_absenceCollection);
 
 		public TypedBindingCollection<IAbsence> FilteredAbsenceCollection
 		{
@@ -315,9 +237,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 				return trackerCollection;
 			}
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly",
-			MessageId = "Uow")]
+		
 		public void ReassociateSelectedPeopleWithNewUow(IEnumerable<Guid> peopleId)
 		{
 			InParameter.NotNull("peopleId", peopleId);
@@ -450,17 +370,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 				var sorted = rotationCollection.OrderByDescending(n2 => n2.StartDate);
 				rotationCollection = sorted.ToList();
 
-				foreach (IPersonRotation rotation in rotationCollection)
-				{
-					_allPersonRotationCollection.Add(rotation);
-				}
+				_allPersonRotationCollection.AddRange(rotationCollection);
 				
 				var rotations = rotationCollection.GroupBy(x => x.Person).ToDictionary(x => x.Key, x => x.ToList());
 				//one more loop
 				foreach (var person in persons)
 				{
-					var rotation = rotations.ContainsKey(person) ? rotations[person] : new List<IPersonRotation>();
-					fillRotationAdapterCollection(person, rotation, selectedDateTime);
+					rotations.TryGetValue(person, out var rotation);
+					fillRotationAdapterCollection(person, rotation ?? new List<IPersonRotation>(), selectedDateTime);
 				}
 			}
 		}
@@ -480,7 +397,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			//Setup the Person Rotation grid view adapter
 
 			//set the adapter
-			var personRotationModel = new PersonRotationModelParent(person, _commonNameDescription);
+			var personRotationModel = new PersonRotationModelParent(person, CommonNameDescription);
 
 			if (currentPersonRotation == null)
 			{
@@ -507,22 +424,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			if (_filteredPersonCollection != null && _availabilityCollection.Count > 0)
 			{
-				var availabilityCollection = personAvailabilityRep.Find(persons, period);
-
-				var sorted = availabilityCollection.OrderByDescending(n2 => n2.StartDate);
-				availabilityCollection = sorted.ToList();
-
-				foreach (var avail in availabilityCollection)
-				{
-					_allPersonAvailabilityCollection.Add(avail);
-				}
-
+				var availabilityCollection = personAvailabilityRep.Find(persons, period).OrderByDescending(n2 => n2.StartDate).ToArray();
+				_allPersonAvailabilityCollection.AddRange(availabilityCollection);
+				
 				var availabilities = availabilityCollection.GroupBy(x => x.Person).ToDictionary(x => x.Key, x => x.ToList());
 				//one more loop
 				foreach (var person in persons)
 				{
-					var availability = availabilities.ContainsKey(person) ? availabilities[person] : new List<IPersonAvailability>();
-					fillAvailabilityAdapterCollection(person, availability);
+					availabilities.TryGetValue(person, out var availability);
+					fillAvailabilityAdapterCollection(person, availability ?? new List<IPersonAvailability>());
 				}
 			}
 		}
@@ -542,7 +452,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			//Setup the Person Rotation grid view adapter
 
 			//set the adapter
-			var personAvailabilityAdapter = new PersonAvailabilityModelParent(person, currentPersonAvailability, _commonNameDescription);
+			var personAvailabilityAdapter = new PersonAvailabilityModelParent(person, currentPersonAvailability, CommonNameDescription);
 
 			if (currentPersonAvailability == null)
 			{
@@ -708,7 +618,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 				_personPeriodGridViewCollection.Insert(rowIndex,
 												new PersonPeriodModel(selectedDateTime, personFiltered,
 												_personSkillCollection, _externalLogOnCollection,
-												_siteTeamBindingCollection, _commonNameDescription));
+												_siteTeamBindingCollection, CommonNameDescription));
 			}
 		}
 
@@ -740,7 +650,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			{
 				personFiltered.RemoveSchedulePeriod(schedulePeriod);
 				_schedulePeriodGridViewCollection.RemoveAt(rowIndex);
-				_schedulePeriodGridViewCollection.Insert(rowIndex, new SchedulePeriodModel(selectedDate, personFiltered, _commonNameDescription));
+				_schedulePeriodGridViewCollection.Insert(rowIndex, new SchedulePeriodModel(selectedDate, personFiltered, CommonNameDescription));
 			}
 		}
 
@@ -789,7 +699,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 					account = null;
 			}
 
-			IPersonAccountModel adapter = new PersonAccountModel(RefreshService, accounts, account, _commonNameDescription);
+			IPersonAccountModel adapter = new PersonAccountModel(RefreshService, accounts, account, CommonNameDescription);
 
 			handleCanBold(canBold, grid, adapter);
 			adapter.GridControl = grid;
@@ -831,18 +741,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void GetParentSchedulePeriods(DateOnly selectedDateTime)
 		{
 			_schedulePeriodGridViewCollection.Clear();
-			foreach (IPerson t in _filteredPersonCollection)
-			{
-				var schedulePeriodModel = new SchedulePeriodModel(selectedDateTime, t, _commonNameDescription);
-				_schedulePeriodGridViewCollection.Add(schedulePeriodModel);
-			}
+			_schedulePeriodGridViewCollection.AddRange(_filteredPersonCollection.Select(t => new SchedulePeriodModel(selectedDateTime, t, CommonNameDescription)));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "index-1")]
 		public void UpdateOtherGridViewsWhenNewPersonIsDeleted(int index)
 		{
 			if (index == int.MinValue)
-				throw new ArgumentOutOfRangeException("index", "input must be greater than Int32.MinValue");
+				throw new ArgumentOutOfRangeException(nameof(index), "input must be greater than Int32.MinValue");
 
 			//remove from person periods
 			if (_personPeriodGridViewCollection.Count >= index) _personPeriodGridViewCollection.RemoveAt(index - 1);
@@ -874,7 +780,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			_schedulePeriodGridViewCollection.RemoveAt(rowIndex);
 
-			var schedulePeriodModel = new SchedulePeriodModel(SelectedDate, personFiltered, _commonNameDescription);
+			var schedulePeriodModel = new SchedulePeriodModel(SelectedDate, personFiltered, CommonNameDescription);
 
 			ISchedulePeriod currentSchedulePeriod = schedulePeriodModel.SchedulePeriod;
 
@@ -904,18 +810,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public void SetSelectedPeoplePeriodGridData(ReadOnlyCollection<IPersonPeriodModel> selectedPeoplePeriodGridData)
 		{
-			_selectedPeoplePeriodGridData = selectedPeoplePeriodGridData;
+			SelectedPeoplePeriodGridCollection = selectedPeoplePeriodGridData;
 		}
 
 		public void LoadRuleSetBag()
 		{
 			_ruleSetBagBindingCollection.Clear();
 			var repository = new RuleSetBagRepository(GetUnitOfWork);
-			var list = repository.LoadAll().Where(ptp => ptp.IsChoosable);
-
-			IOrderedEnumerable<IRuleSetBag> sorted = list.OrderBy(n2 => n2.Description.Name);
-			list = sorted.ToList();
-
+			var list = repository.LoadAll().Where(ptp => ptp.IsChoosable).OrderBy(n2 => n2.Description.Name);
 			foreach (IRuleSetBag bag in list)
 			{
 				_ruleSetBagBindingCollection.Add(bag);
@@ -926,11 +828,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			_budgetGroupBindingCollection.Clear();
 			var repository = new BudgetGroupRepository(GetUnitOfWork);
-			var list = repository.LoadAll();
-
-			IOrderedEnumerable<IBudgetGroup> sorted = list.OrderBy(n2 => n2.Name);
-			list = sorted.ToList();
-
+			var list = repository.LoadAll().OrderBy(n2 => n2.Name);
+			
 			_budgetGroupBindingCollection.Add(PersonPeriodModel.NullBudgetGroup);
 			foreach (IBudgetGroup budgetGroup in list)
 			{
@@ -971,14 +870,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			ISkillRepository rep = new SkillRepository(GetUnitOfWork);
 
 			ICollection<ISkill> skillCollection = rep.FindAllWithoutMultisiteSkills();
-
-			foreach (ISkill skill in skillCollection)
-			{
-				_personSkillCollection.Add(new PersonSkill(skill, new Percent(1)) { Active = false });
-			}
-
+			_personSkillCollection.AddRange(skillCollection.Select(skill => new PersonSkill(skill, new Percent(1)) { Active = false }));
+			
 			_personSkillAdapterCollection.AddRange(_personSkillCollection.ConvertAll(
-						(EntityConverter.ConvertToOther<IPersonSkill, PersonSkillModel>)));
+						EntityConverter.ConvertToOther<IPersonSkill, PersonSkillModel>));
 		}
 
 		private void LoadExternalLogOn()
@@ -990,8 +885,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			
 			_externalLogOnCollection.AddRange(externalLogOnList);
 			_externalLogOnCollection.Sort();
-			_externalLogOnAdapterCollection.AddRange(_externalLogOnCollection.ConvertAll((EntityConverter.ConvertToOther<IExternalLogOn,
-				 ExternalLogOnModel>)));
+			_externalLogOnAdapterCollection.AddRange(_externalLogOnCollection.ConvertAll(EntityConverter.ConvertToOther<IExternalLogOn,
+				ExternalLogOnModel>));
 		}
 
 		public void SetPersonExternalLogOnByPersonPeriod(ReadOnlyCollection<IPersonPeriod> personPeriods,
@@ -1169,21 +1064,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			}
 		}
 
-		public ReadOnlyCollection<IApplicationRole> ApplicationRoleCollection
-		{
-			get { return new ReadOnlyCollection<IApplicationRole>(_applicationRoleCollection); }
-		}
+		public ReadOnlyCollection<IApplicationRole> ApplicationRoleCollection => new ReadOnlyCollection<IApplicationRole>(_applicationRoleCollection);
 
-		public ReadOnlyCollection<RolesModel> RolesViewAdapterCollection
-		{
-			get { return new ReadOnlyCollection<RolesModel>(_rolesViewAdapterCollection); }
-		}
+		public ReadOnlyCollection<RolesModel> RolesViewAdapterCollection => new ReadOnlyCollection<RolesModel>(_rolesViewAdapterCollection);
 
 		private void LoadSettings()
 		{
 			IUnitOfWork uow = UnitOfWorkFactory.CurrentUnitOfWork().Current();
 			ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
-			_commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
+			CommonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 		}
 
 		public void ResetBoldProperty()
@@ -1315,14 +1204,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 																		person,
 																		_personSkillCollection,
 																		_externalLogOnCollection,
-																		_siteTeamBindingCollection, _commonNameDescription);
+																		_siteTeamBindingCollection, CommonNameDescription);
 			_personPeriodGridViewCollection.Add(personPeriodModel);
 
 		}
 
 		private void GetParentSchedulePeriods(IPerson person, DateOnly selectedDateTime)
 		{
-			var schedulePeriodModel = new SchedulePeriodModel(selectedDateTime, person, _commonNameDescription);
+			var schedulePeriodModel = new SchedulePeriodModel(selectedDateTime, person, CommonNameDescription);
 			_schedulePeriodGridViewCollection.Add(schedulePeriodModel);
 		}
 
@@ -1430,7 +1319,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			IAccount account = AllAccounts[person].Find(selectedDate).FirstOrDefault();
 
 			// Gets the person account adoptor using the person data and the selcted date
-			IPersonAccountModel personAccountModel = new PersonAccountModel(RefreshService, AllAccounts[person], account, _commonNameDescription);
+			IPersonAccountModel personAccountModel = new PersonAccountModel(RefreshService, AllAccounts[person], account, CommonNameDescription);
 			_personAccountGridViewAdaptorCollection.Add(personAccountModel);
 		}
 
@@ -1443,7 +1332,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 				//fel här. kan vara flera. fråga sydkoreanerna
 				IAccount account = AllAccounts[person].Find(SelectedDate).FirstOrDefault();
 				// Gets the person account adoptor using the person data and the selcted date
-				IPersonAccountModel personAccountModel = new PersonAccountModel(RefreshService, AllAccounts[person], account, _commonNameDescription);
+				IPersonAccountModel personAccountModel = new PersonAccountModel(RefreshService, AllAccounts[person], account, CommonNameDescription);
 				_personAccountGridViewAdaptorCollection.Add(personAccountModel);
 			}
 		}
@@ -1466,16 +1355,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void GetParentPersonPeriods()
 		{
 			_personPeriodGridViewCollection.Clear();
-			foreach (IPerson person in _filteredPersonCollection)
-			{
-				var personPeriodModel = new PersonPeriodModel(SelectedDate,
-																			 person,
-																			 _personSkillCollection,
-																			 _externalLogOnCollection,
-																			 _siteTeamBindingCollection,
-																			 _commonNameDescription);
-				_personPeriodGridViewCollection.Add(personPeriodModel);
-			}
+			_personPeriodGridViewCollection.AddRange(_filteredPersonCollection.Select(person => new PersonPeriodModel(SelectedDate,
+				person,
+				_personSkillCollection,
+				_externalLogOnCollection,
+				_siteTeamBindingCollection,
+				CommonNameDescription)));
 		}
 
 		public void GetParentPersonPeriodWhenUpdated(int rowIndex)
@@ -1492,7 +1377,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 																							_personSkillCollection,
 																							_externalLogOnCollection,
 																							_siteTeamBindingCollection,
-																							_commonNameDescription);
+																							CommonNameDescription);
 			IPersonPeriod currentPersonPeriod = personPeriodModel.Period;
 
 
@@ -1524,32 +1409,30 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			foreach (IPerson person in _filteredPersonCollection)
 			{
-				IAccount account = AllAccounts[person].Find(selectedType, SelectedDate);
-				if (account != null)
-				{
-					if ((account.Owner.Absence != null) && (account.Owner.Absence != selectedType))
-						account = null;
-				}
+				var personAccountCollection = AllAccounts[person];
+				IAccount account = personAccountCollection.Find(selectedType, SelectedDate);
+				if (account?.Owner.Absence != null && account.Owner.Absence != selectedType)
+					account = null;
 
 				// Gets the person account adoptor using the person data and the selcted date
-				IPersonAccountModel personAccountModel = new PersonAccountModel(RefreshService, AllAccounts[person], account, _commonNameDescription);
+				IPersonAccountModel personAccountModel = new PersonAccountModel(RefreshService, personAccountCollection, account, CommonNameDescription);
 				_personAccountGridViewAdaptorCollection.Add(personAccountModel);
 			}
 		}
 
-		public void SetSortedPeopleFilteredList(IList<PersonGeneralModel> result)
+		public void SetSortedPeopleFilteredList(List<PersonGeneralModel> result)
 		{
-			_filteredPeopleGridData = result.ToList();
+			_filteredPeopleGridData = result;
 		}
 
-		public void SetSortedPersonPeriodFilteredList(IList<PersonPeriodModel> result)
+		public void SetSortedPersonPeriodFilteredList(List<PersonPeriodModel> result)
 		{
-			_personPeriodGridViewCollection = result.ToList();
+			_personPeriodGridViewCollection = result;
 		}
 
-		public void SetSortedSchedulePeriodFilteredList(IList<SchedulePeriodModel> result)
+		public void SetSortedSchedulePeriodFilteredList(List<SchedulePeriodModel> result)
 		{
-			_schedulePeriodGridViewCollection = result.ToList();
+			_schedulePeriodGridViewCollection = result;
 		}
 
 		public void PersistAll()

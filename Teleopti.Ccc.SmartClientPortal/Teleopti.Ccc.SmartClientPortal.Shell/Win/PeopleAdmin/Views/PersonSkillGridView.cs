@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
@@ -19,12 +22,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		public PersonSkillGridView(GridControl view, FilteredPeopleHolder filteredPeopleHolder) : base(view, filteredPeopleHolder) { }
 
-		internal override ViewType Type
-		{
-			get { return ViewType.SkillsView; }
-		}
-
-
+		internal override ViewType Type => ViewType.SkillsView;
+		
 		internal override void CreateHeaders()
 		{
 			_gridColumns.Add(new RowHeaderColumn<PersonSkillModel>());
@@ -83,6 +82,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		public override void Invalidate()
 		{
 			Grid.Invalidate();
+		}
+
+		public override IEnumerable<Tuple<IPerson, int>> Sort(bool isAscending)
+		{
+			return Enumerable.Empty<Tuple<IPerson, int>>();
+		}
+
+		public override void PerformSort(IEnumerable<Tuple<IPerson, int>> order)
+		{
 		}
 
 		private void gridWorksheet_ClipboardPaste(object sender, GridCutPasteEventArgs e)

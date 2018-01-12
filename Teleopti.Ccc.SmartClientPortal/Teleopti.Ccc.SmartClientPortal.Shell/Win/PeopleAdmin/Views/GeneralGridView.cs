@@ -23,18 +23,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 {
 	public class GeneralGridView : GridViewBase
 	{
-		internal override ViewType Type
-		{
-			get { return ViewType.GeneralView; }
-		}
+		internal override ViewType Type => ViewType.GeneralView;
 
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing)
 			{
-				if (_addNewPersonMenuItem != null) _addNewPersonMenuItem.Dispose();
-				if (_addNewPersonFromClipboardMenuItem != null) _addNewPersonFromClipboardMenuItem.Dispose();
-				if (_deleteSelectedPeopleMenuItem != null) _deleteSelectedPeopleMenuItem.Dispose();
+				_addNewPersonMenuItem?.Dispose();
+				_addNewPersonFromClipboardMenuItem?.Dispose();
+				_deleteSelectedPeopleMenuItem?.Dispose();
 				_currentSelectedPersons = null;
 			}
 			_workflowControlSetColumn.CellDisplayChanged -= columnCellDisplayChanged;
@@ -113,10 +110,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 				grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCellModel, new DropDownCellModel(grid.Model));
 		}
 
-		public override void Sort(bool isAscending)
+		public override IEnumerable<Tuple<IPerson, int>> Sort(bool isAscending)
 		{
 			// Sorts the people data
-			sortPeopleData(isAscending);
+			var result = sortPeopleData(isAscending);
+
+			
+			return result;
+		}
+
+		public override void PerformSort(IEnumerable<Tuple<IPerson, int>> order)
+		{
+			if (!(order?.Any() ?? false)) return;
+
+			var result = from x in FilteredPeopleHolder.FilteredPeopleGridData
+				join y in order
+					on x.ContainedEntity equals y.Item1
+					into a
+				from b in a.DefaultIfEmpty(new Tuple<IPerson, int>(null, int.MaxValue))
+				orderby b.Item2
+				select x;
+
+					 // Sets the filtered list
+			FilteredPeopleHolder.SetSortedPeopleFilteredList(result.ToList());
 
 			// refresh the grid view to get affect the sorted data
 			Invalidate();
@@ -127,10 +143,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			return Math.Max(Grid.CurrentCell.ColIndex, 0); // this is to avoid -1, that would cause chrash
 		}
 
-		private void sortPeopleData(bool isAscending)
+		private IEnumerable<Tuple<IPerson, int>> sortPeopleData(bool isAscending)
 		{
 			// Gets the filtered people grid data as a collection
-			var personcollection = new List<PersonGeneralModel>(FilteredPeopleHolder.FilteredPeopleGridData);
+			var personcollection = FilteredPeopleHolder.FilteredPeopleGridData.ToList();
 
 			int columnIndex = getColumnIndex();
 
@@ -139,34 +155,34 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			// Gets the coparer erquired to sort the data
 			IComparer<PersonGeneralModel> comparer = _gridColumns[columnIndex].ColumnComparer;
 
-			if (!string.IsNullOrEmpty(sortColumn))
+			if (string.IsNullOrEmpty(sortColumn))
 			{
-				// Holds the results of the sorting process
-				IList<PersonGeneralModel> result;
-
-				if (comparer != null)
-				{
-					// Sorts the person collection in ascending order
-					personcollection.Sort(comparer);
-					if (!isAscending)
-						personcollection.Reverse();
-
-					result = personcollection;
-				}
-				else
-				{
-					// Gets the sorted people collection
-					result = GridHelper.Sort(
-						new Collection<PersonGeneralModel>(personcollection),
-						sortColumn, isAscending);
-				}
-
-				// Sets the filtered list
-				FilteredPeopleHolder.SetSortedPeopleFilteredList(result);
+				return Enumerable.Empty<Tuple<IPerson, int>>();
 			}
-		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+// Holds the results of the sorting process
+			IList<PersonGeneralModel> result;
+
+			if (comparer != null)
+			{
+				// Sorts the person collection in ascending order
+				personcollection.Sort(comparer);
+				if (!isAscending)
+					personcollection.Reverse();
+
+				result = personcollection;
+			}
+			else
+			{
+				// Gets the sorted people collection
+				result = GridHelper.Sort(
+					new Collection<PersonGeneralModel>(personcollection),
+					sortColumn, isAscending);
+			}
+
+			return result.Select((t, i) => new Tuple<IPerson, int>(t.ContainedEntity, i));
+		}
+		
 		internal override void CreateHeaders()
 		{
 			_hasRights = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword);

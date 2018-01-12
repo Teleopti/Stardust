@@ -294,9 +294,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
 
         private void gridPanelQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
         {
-            if (_panelConstructor != null)
-                _panelConstructor.View.QueryCellInfo(e);
-            e.Handled = true;
+			_panelConstructor?.View.QueryCellInfo(e);
+			e.Handled = true;
         }
 
         private void gridPanelSaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
@@ -322,7 +321,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
 
         private void gridConstructorGridViewChanged(object sender, EventArgs e)
         {
-            InParameter.NotNull("sender", sender);
+            InParameter.NotNull(nameof(sender), sender);
 
             var view = (GridViewBase)sender;
 
@@ -428,13 +427,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             e.Handled = true;
         }
 
-        public static WorksheetStateHolder StateHolder
-        {
-            get { return _stateHolder; }
-        }
-
-
-        private void gridWorksheetKeyDown(object sender, KeyEventArgs e)
+        public static WorksheetStateHolder StateHolder => _stateHolder;
+		
+		private void gridWorksheetKeyDown(object sender, KeyEventArgs e)
         {
             _gridConstructor.View.KeyDown(e);
         }
@@ -894,7 +889,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             Cursor.Current = Cursors.WaitCursor;
 
             // Sots the data
-            _gridConstructor.View.Sort(isAscending);
+			var sorting = _gridConstructor.View.Sort(isAscending).ToArray();
+			_filteredPeopleHolder.SetSortedPeople(sorting);
+            _gridConstructor.Sort(sorting);
             Cursor.Current = Cursors.Default;
         }
 
@@ -973,9 +970,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             var clipboardhost = new ToolStripControlHost(_clipboardControl);
             toolStripExClipboard.Items.Add(clipboardhost);
 
-            _clipboardControl.CutClicked += (clipboardControlCutClicked);
+            _clipboardControl.CutClicked += clipboardControlCutClicked;
 
-            _clipboardControl.CopyClicked += (clipboardControlCopyClicked);
+            _clipboardControl.CopyClicked += clipboardControlCopyClicked;
 
             _clipboardControl.PasteSpecialItems.Add(new ToolStripButton
             {
@@ -988,9 +985,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
                 Tag = ClipboardItem.PasteNew.ToString()
             });
 
-            _clipboardControl.PasteSpecialClicked += (clipboardControlPasteSpecialClicked);
-            _clipboardControl.PasteClicked += (clipboardControlPasteClicked);
-            //_clipboardControl.SetButtonState(ClipboardAction.Paste, false);
+            _clipboardControl.PasteSpecialClicked += clipboardControlPasteSpecialClicked;
+            _clipboardControl.PasteClicked += clipboardControlPasteClicked;
             toolStripExClipboard.Enabled = PrincipalAuthorization.Current().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
@@ -1158,7 +1154,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
 
                     rolesTabPage.Dock = DockStyle.Fill;
                     tabControlPeopleAdmin.TabPages.Add(rolesTabPage);
-                    //tabControlPeopleAdmin.SelectedIndexChanged += tabControlPeopleAdmin_SelectedIndexChanged;
                     Cursor.Current = Cursors.WaitCursor;
                 }
                 else
@@ -1318,7 +1313,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
         {
             try
             {
-                //IList<IPerson> selectedPersons = gridConstructor.View.GetSelectedPersons();
                 switch (getClipboarditem(e))
                 {
                     case ClipboardItem.General:
@@ -1398,8 +1392,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
 
         private void clipboardControlCopyClicked(object sender, EventArgs e)
         {
-            if ((_gridConstructor.View.CurrentGrid.Model.SelectedRanges == null) ||
-                (_gridConstructor.View.CurrentGrid.Model.SelectedRanges.Count == 0))
+            if (_gridConstructor.View.CurrentGrid.Model.SelectedRanges == null ||
+                _gridConstructor.View.CurrentGrid.Model.SelectedRanges.Count == 0)
             {
                 return;
             }
@@ -1418,7 +1412,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
                 if (tabControlPeopleAdmin.SelectedTab.Controls.Count == 0)
                 {
                     _panelConstructor.BuildGridView(ViewType.ExternalLogOnView);
-                    //GridConstructor.WrapWithTabPage(_panelConstructor.View.Grid, tabControlPeopleAdmin.SelectedTab);
                     GridConstructor.WrapWithTabPageExternal(_panelConstructor.View.Grid, tabControlPeopleAdmin.SelectedTab, tableLayoutPanel1);
                     //Setup for F1
                     setupHelpContext(_panelConstructor.View.Grid);
@@ -1596,12 +1589,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
         }
 
         private void disposeChildGrids(GridViewBase view)
-        {
-            if (view != null)
-            {
-                view.DisposeChildGrids();
-            }
-        }
+		{
+			view?.DisposeChildGrids();
+		}
 
         private void configureAndShowFindAndReplaceForm()
         {

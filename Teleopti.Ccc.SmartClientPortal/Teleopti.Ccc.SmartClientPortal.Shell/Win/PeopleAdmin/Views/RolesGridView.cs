@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
@@ -15,10 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		public RolesGridView(GridControl view, FilteredPeopleHolder filteredPeopleHolder) : base(view, filteredPeopleHolder) { }
 
-		internal override ViewType Type
-		{
-			get { return ViewType.RolesView; }
-		}
+		internal override ViewType Type => ViewType.RolesView;
 
 		internal override void CreateHeaders()
 		{
@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			_roleColumn = new ReadOnlyTextColumn<RolesModel>("Role.DescriptionText", UserTexts.Resources.Roles);
 			_gridColumns.Add(_roleColumn);
 		}
+
 		internal override void PrepareView()
 		{
 			ColCount = _gridColumns.Count;
@@ -59,6 +60,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		public override void Invalidate()
 		{
 			Grid.Invalidate();
+		}
+
+		public override IEnumerable<Tuple<IPerson, int>> Sort(bool isAscending)
+		{
+			return Enumerable.Empty<Tuple<IPerson, int>>();
+		}
+
+		public override void PerformSort(IEnumerable<Tuple<IPerson, int>> order)
+		{
 		}
 
 		private void checkBoxColumn_CellChanged(object sender, ColumnCellChangedEventArgs<RolesModel> e)

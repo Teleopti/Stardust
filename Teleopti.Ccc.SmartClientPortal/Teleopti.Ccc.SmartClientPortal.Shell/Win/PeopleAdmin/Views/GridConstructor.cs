@@ -56,34 +56,36 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			}
 		}
 
+		public void Sort(IEnumerable<Tuple<IPerson, int>> sorting)
+		{
+			_sorting = sorting;
+			View.PerformSort(_sorting);
+		}
+
 		public event EventHandler GridViewChanged;
 
 		public event EventHandler GridViewChanging;
 
-		private ViewType _currentView;
-
-		public ViewType CurrentView
-		{
-			get { return _currentView; }
-		}
+		public ViewType CurrentView { get; private set; }
 
 		public void BuildGridView(ViewType type)
 		{
 			GridViewChanging?.Invoke(_view, EventArgs.Empty);
 
 			// Sets the current view
-			_currentView = type;
+			CurrentView = type;
 
 			// Cache view (If not).
 			IsCached = _viewCache.ContainsKey(type);
-			if (!IsCached) CacheGridView(type);
+			if (!IsCached) cacheGridView(type);
 			else View.SetFilteredPerson(_filteredPeopleHolder);
 
 			_view = _viewCache[type];
 
 			_view.Grid.Properties.BackgroundColor = ColorHelper.GridControlGridExteriorColor();
-
+			
 			GridViewChanged?.Invoke(_view, EventArgs.Empty);
+			_view.PerformSort(_sorting);
 
 			if (!IsCached)
 			{
@@ -101,7 +103,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		public bool IsCached { get; set; }
 
-		private void CacheGridView(ViewType type)
+		private void cacheGridView(ViewType type)
 		{
 			GridViewBase view;
 
@@ -129,7 +131,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 					break;
 
 				case ViewType.EmptyView:
-					view = new EmptyGridView(new GridControl(), _filteredPeopleHolder, false); // TODO: Change this to EmptyGridView.
+					view = new EmptyGridView(new GridControl(), _filteredPeopleHolder, false);
 					break;
 
 				case ViewType.PersonRotationView:
@@ -153,13 +155,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 					break;
 
 				default:
-					throw new InvalidEnumArgumentException("type", (int)type, typeof(ViewType));
+					throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ViewType));
 			}
-
-
-			if (_viewCache.ContainsKey(type) && _viewCache[type] != null)
+			
+			if (_viewCache.TryGetValue(type,out var val))
 			{
-				_viewCache[type].Dispose();
+				val?.Dispose();
 				_viewCache.Remove(type);
 			}
 			_viewCache.Add(type, view);
@@ -168,12 +169,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		private GridViewBase _view;
 
 		private readonly bool _readOnly;
+		private IEnumerable<Tuple<IPerson, int>> _sorting;
 
-		public GridViewBase View
-		{
-			get
-			{ return _view; }
-		}
+		public GridViewBase View => _view;
 
 		protected override void Dispose(bool disposing)
 		{
@@ -215,13 +213,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		public static void WrapWithTabPageExternal(GridControl grid, TabPageAdv wrappedTabPageExternal, TableLayoutPanel tableLayoutPanel1)
 		{
-			if (grid == null) throw new ArgumentNullException("grid");
-			if (wrappedTabPageExternal == null) throw new ArgumentNullException("wrappedTabPageExternal");
-			if (tableLayoutPanel1 == null) throw new ArgumentNullException("tableLayoutPanel1");
-			// 
-			// wrappedTabPage
-			// 
-
+			if (grid == null) throw new ArgumentNullException(nameof(grid));
+			if (wrappedTabPageExternal == null) throw new ArgumentNullException(nameof(wrappedTabPageExternal));
+			if (tableLayoutPanel1 == null) throw new ArgumentNullException(nameof(tableLayoutPanel1));
+			
 			tableLayoutPanel1.Controls.Add(grid, 0, 1);
 			grid.Dock = DockStyle.Fill;
 			grid.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
@@ -233,10 +228,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		public GridViewBase FindGrid(ViewType type)
 		{
-			if (_viewCache.ContainsKey(type))
-				return _viewCache[type];
+			if (_viewCache.TryGetValue(type, out var val))
+				return val;
 			return null;
 		}
-
 	}
 }

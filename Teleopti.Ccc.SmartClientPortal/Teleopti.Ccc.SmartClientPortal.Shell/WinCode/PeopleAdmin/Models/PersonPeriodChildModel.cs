@@ -26,11 +26,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The period date.</value>
         public DateOnly PeriodDate
         {
-            get
-            {
-                return ContainedEntity.StartDate;
-            }
-            set
+            get => ContainedEntity.StartDate;
+			set
             {
                 if (value != ContainedEntity.StartDate)
                 {
@@ -47,11 +44,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The current person contract.</value>
         public IPersonContract PersonContract
         {
-            get
-            {
-                return ContainedEntity.PersonContract;
-            }
-            set
+            get => ContainedEntity.PersonContract;
+			set
             {
                 if (!ContainedEntity.PersonContract.Equals(value))
                 {
@@ -66,11 +60,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The current part time percentage.</value>
         public IPartTimePercentage PartTimePercentage
         {
-            get
-            {
-	            return ContainedEntity.PersonContract?.PartTimePercentage;
-            }
-            set
+            get => ContainedEntity.PersonContract?.PartTimePercentage;
+			set
             {
                 if (ContainedEntity.PersonContract?.PartTimePercentage != null && !ContainedEntity.PersonContract.PartTimePercentage.Equals(value))
                 {
@@ -85,11 +76,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The current contract.</value>
         public IContract Contract
         {
-            get
-            {
-	            return ContainedEntity.PersonContract?.Contract;
-            }
-            set
+            get => ContainedEntity.PersonContract?.Contract;
+			set
             {
                 if (ContainedEntity.PersonContract?.Contract != null && !ContainedEntity.PersonContract.Contract.Equals(value))
                 {
@@ -104,11 +92,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The current contract schedule.</value>
         public IContractSchedule ContractSchedule
         {
-            get
-            {
-	            return ContainedEntity.PersonContract?.ContractSchedule;
-            }
-            set
+            get => ContainedEntity.PersonContract?.ContractSchedule;
+			set
             {
                 if (ContainedEntity.PersonContract?.ContractSchedule != null && !ContainedEntity.PersonContract.ContractSchedule.Equals(value))
                 {
@@ -123,11 +108,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The person skills.</value>
         public string PersonSkills
         {
-            get
-            {
-                return GetPersonSkills();
-            }
-            set
+            get => getPersonSkills();
+			set
             {
                 Parent.ResetPersonSkills(ContainedEntity);
                 SetPersonSkill(value);
@@ -163,25 +145,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// Gets the person skills.
         /// </summary>
         /// <returns></returns>
-        private string GetPersonSkills()
+        private string getPersonSkills()
         {
-	        if (ContainedEntity == null) return string.Empty;
-	        var personSkillString = new StringBuilder();
+	        if (ContainedEntity?.PersonSkillCollection == null) return string.Empty;
 
-	        if (ContainedEntity.PersonSkillCollection != null)
-	        {
-		        IEnumerable<IPersonSkill> personSkillCollection = ContainedEntity.PersonSkillCollection.OrderBy(s => s.Skill.Name);
-
-		        foreach (var personSkill in personSkillCollection)
-		        {
-			        if (personSkillString.Length>0)
-				        personSkillString.Append(", ");
-
-			        personSkillString.Append(personSkill.Skill.Name);
-		        }
-	        }
-	        return personSkillString.ToString();
-        }
+			return string.Join(", ", ContainedEntity.PersonSkillCollection.Select(s => s.Skill.Name).OrderBy(s => s));
+		}
 
         /// <summary>
         /// Gets or sets the current rule set bag.
@@ -189,11 +158,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The current rule set bag.</value>
         public IRuleSetBag RuleSetBag
         {
-            get
-            {
-                return ContainedEntity.RuleSetBag;
-            }
-            set
+            get => ContainedEntity.RuleSetBag;
+			set
             {
                 if (ContainedEntity.RuleSetBag == null || !ContainedEntity.RuleSetBag.Equals(value))
                     ContainedEntity.RuleSetBag = value;
@@ -212,11 +178,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The person external log on names.</value>
         public string ExternalLogOnNames
         {
-            get
-            {
-	            return ContainedEntity == null ? string.Empty : _externalLogOnParser.GetExternalLogOnsDisplayText(ContainedEntity.ExternalLogOnCollection);
-            }
-		    set
+            get => ContainedEntity == null ? string.Empty : _externalLogOnParser.GetExternalLogOnsDisplayText(ContainedEntity.ExternalLogOnCollection);
+			set
             {
                 if (ContainedEntity != null)
                 {
@@ -236,9 +199,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         /// <value>The note.</value>
         public string Note
         {
-            get { return ContainedEntity.Note; }
-            set { ContainedEntity.Note = value; }
-        }
+            get => ContainedEntity.Note;
+			set => ContainedEntity.Note = value;
+		}
 
         /// <summary>
         /// Sets the person external log on collection.
