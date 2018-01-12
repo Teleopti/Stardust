@@ -168,7 +168,7 @@
                 .add(offset, 'days')
                 .format('dddd, LL');
 
-            return offset.charAt(0).toUpperCase() + offset.substr(1).toLowerCase();
+            return offset.charAt(0).toUpperCase() + offset.substr(1);
         };
 
         vm.getSkillGroupText = function() {

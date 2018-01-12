@@ -35,7 +35,8 @@
 		}
 
         function getText(offset) {
-            return getUserDate().add(offset, 'days').format('dddd, LL');
+            var date = getUserDate().add(offset, 'days').format('dddd, LL');
+            return date.charAt(0).toUpperCase() + date.substr(1);
         }
 
         function getUserDate() {
