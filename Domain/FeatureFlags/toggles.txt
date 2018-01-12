@@ -133,6 +133,7 @@ ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some t
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
+ResourcePlanner_RunPerfTestWithoutEvents_47256 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_DayOffOptimizationIslands_47208 = true
 ResourcePlanner_XXL_47258 = RC
