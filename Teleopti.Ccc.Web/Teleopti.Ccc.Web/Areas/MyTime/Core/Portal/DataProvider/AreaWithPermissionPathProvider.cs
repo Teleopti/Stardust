@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebIntraday, () => Resources.Intraday, "intraday"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, () => Resources.TeamsModule, "teams"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, () => Resources.Reports, "reports"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebStaffing, () => Resources.WebStaffing, "staffing"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebStaffing, () => Resources.WebStaffing, "staffingModule"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage, () => Resources.Gamification, "gamification"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTimeWeb, () => Resources.MyTimeWeb, "myTime"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.BpoExchange, () => Resources.BpoExchange, "bpo-gatekeeper")

@@ -10652,8 +10652,8 @@ These options are activated:
     <comment>Import file name</comment>
   </data>
   <data name="ImportStaffing" xml:space="preserve">
-    <value>Import Staffing</value>
-    <comment>Import Staffing</comment>
+    <value>Import staffing</value>
+    <comment>Import staffing</comment>
   </data>
   <data name="ImportWorkload" xml:space="preserve">
     <value>Import Workload</value>

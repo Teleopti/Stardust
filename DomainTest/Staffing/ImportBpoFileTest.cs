@@ -453,5 +453,41 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			skillCombResources.First().StartDateTime.Should().Be.EqualTo(new DateTime(2017, 7, 24, 8, 15, 0));
 			skillCombResources.First().EndDateTime.Should().Be.EqualTo(new DateTime(2017, 7, 24, 8, 30, 0));
 		}
+		
+		[Test, Ignore("WIP")]
+		public void ShouldVerifyThatStartDateTimeAreEarlierThanEndDateTime()
+		{
+			var timezone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			UserTimeZone.Is(timezone);
+			var fileContents = @"source, skillgroup, startdatetime, enddatetime, resources
+								TPBRZIL, Directsales, 2017-07-24 10:30, 2017-07-24 10:15, 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("before")).Should().Not.Be.Null();
+			
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.Should().Be.Empty();
+		}
+		
+		[Test, Ignore("WIP")]
+		public void ShouldVerifyThatStartDateIsInTheFuture()
+		{
+			var timezone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			UserTimeZone.Is(timezone);
+			var fileContents = @"source, skillgroup, startdatetime, enddatetime, resources
+								TPBRZIL, Directsales, 2017-07-24 10:30, 2017-07-24 10:15, 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("before")).Should().Not.Be.Null();
+			
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.Should().Be.Empty();
+		}
 	}
 }

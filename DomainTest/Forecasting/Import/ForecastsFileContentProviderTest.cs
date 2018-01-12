@@ -6,7 +6,6 @@ using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Import

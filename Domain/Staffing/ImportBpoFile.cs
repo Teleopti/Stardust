@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly INow _now;
 
 		private const string lineSeparator = "\r\n";
 	
@@ -28,11 +29,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IReadOnlyCollection<string> validFieldNames =
 			new List<string> { source, skillgroup, startdatetime, enddatetime, resources };
 
-		public ImportBpoFile(ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserTimeZone userTimeZone)
+		public ImportBpoFile(ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserTimeZone userTimeZone, INow now)
 		{
 			_skillRepository = skillRepository;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_userTimeZone = userTimeZone;
+			_now = now;
 		}
 
 		public ImportBpoFileResult ImportFile(string fileContents, IFormatProvider importFormatProvider,char tokenSeparator = ',', char skillSeparator = '|')
@@ -71,6 +73,22 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 				line.Tokens = tokenizeSkillCombinationResourceBpo(line, headerWithFieldNames, tokenSeparator, result);
 				var resourceBpo = createSkillCombinationResourceBpo(line, importFormatProvider, skillSeparator, allSkills, result);
+
+				if (resourceBpo == null)
+					continue;
+				
+				var validateBpoRowResult = ValidateBpoRow(resourceBpo);
+				if (!validateBpoRowResult.Success)
+				{
+					result.Success = false;
+					foreach (var errorInfo in validateBpoRowResult.ErrorInformation)
+					{
+						result.ErrorInformation.Add(formatGeneralLineErrorMessage(line,
+							errorInfo));
+					}
+					continue;
+				}
+
 				if (bpoResourceList.Contains(resourceBpo))
 				{
 					result.Success = false;
@@ -81,6 +99,27 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 			if(result.Success )
 				_skillCombinationResourceRepository.PersistSkillCombinationResourceBpo(bpoResourceList);
+			return result;
+		}
+
+		private ImportBpoFileResult ValidateBpoRow(ImportSkillCombinationResourceBpo resourceBpo)
+		{
+			var result = new ImportBpoFileResult {Success = true};
+			
+			if (resourceBpo.StartDateTime >= resourceBpo.EndDateTime)
+			{
+				result.Success = false;
+				result.ErrorInformation.Add("StartDateTime for the period must be a time before EndDateTime");
+			}
+			
+			if(resourceBpo.Resources < 0)
+			{
+				result.Success = false;
+				result.ErrorInformation.Add("Resources of imported staffing cannot be less than 0");
+			}
+			
+			//if(_now)
+			
 			return result;
 		}
 
@@ -244,6 +283,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 	public class ImportBpoFileResult
 	{
 		public bool Success = true;
-		public HashSet<string> ErrorInformation = new HashSet<string>();
+		public readonly HashSet<string> ErrorInformation = new HashSet<string>();
 	}
 }

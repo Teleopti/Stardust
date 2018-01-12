@@ -14403,7 +14403,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import Staffing.
+        ///   Looks up a localized string similar to Import staffing.
         /// </summary>
         public static string ImportStaffing {
             get {

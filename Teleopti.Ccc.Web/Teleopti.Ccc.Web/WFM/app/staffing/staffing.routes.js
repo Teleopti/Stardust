@@ -6,7 +6,7 @@
         .config(stateConfig);
 
     function stateConfig($stateProvider) {
-        $stateProvider.state('staffing', {
+        $stateProvider.state('staffingModule', {
             params: {
                 isNewSkillArea: false,
             },
@@ -14,7 +14,7 @@
             templateUrl: 'app/staffing/staffing.html',
             controller: 'StaffingController as vm'
         })
-            .state('staffing-import-export', {
+            .state('staffingModule.import-export', {
                 templateUrl: 'app/staffing/import_export/importexport.overview.html',
                 controller: 'ImportexportController as vm'
             })
@@ -31,17 +31,17 @@
                     var data = staffingService.staffingSettings.get();
                     data.$promise.then(function (response) {
                         if (response.isLicenseAvailable && response.HasPermissionForBpoExchange) {
-                            $state.go('staffing-import-export');
+                            $state.go('staffingModule.import-export');
                         } else {
-                            $state.go('staffing');
+                            $state.go('staffingModule');
                         }
                     });
                 }
             })
-            .state("staffing.skill-area-config", {
+            .state("staffingModule.skill-area-config", {
                 params: {
                     isNewSkillArea: false,
-                    returnState: "staffing"
+                    returnState: "staffingModule"
                 },
                 url: "/skill-area-config",
                 templateUrl: "app/global/skill-group/skill-group-manager.html",

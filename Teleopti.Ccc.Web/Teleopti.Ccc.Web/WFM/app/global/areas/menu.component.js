@@ -58,7 +58,7 @@ function MenuController($state) {
 		},
 		{
 			i: 'mdi mdi-rotate-3d',
-			name: 'staffing'
+			name: 'staffingModule'
 		},
 		{
 			i: 'mdi mdi-calendar-clock',
