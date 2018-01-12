@@ -85,11 +85,17 @@ namespace Teleopti.Ccc.Web.Core.Logging
 		public void Application_Error(object sender, EventArgs e)
 		{
 			var exception = _getServerError.Invoke();
-			if (exception is HttpException && (exception as HttpException).ErrorCode == unchecked((int) 0x80070057))
+			if (exception is HttpException)
 			{
-				// ignore “The remote host closed the connection” exception from signalr, https://github.com/SignalR/SignalR/issues/2632
-				return;
+				var errorCode = (exception as HttpException).ErrorCode;
+				if (errorCode == unchecked((int) 0x80070057) || errorCode == unchecked((int) 0x800703E3))
+				{
+					//  0x80070057 ignore “The remote host closed the connection” exception from signalr, https://github.com/SignalR/SignalR/issues/2632
+					//  0x800703E3 ignore “The remote host closed the connection” exception, https://stackoverflow.com/questions/8286037/the-remote-host-closed-the-connection-error-how-fix
+					return;
+				}
 			}
+
 			_log4NetLogger.LogException(exception);
 		}
 		
