@@ -15,6 +15,7 @@
 			<modify-shift-category ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'EditShiftCategory'"></modify-shift-category>
 			<command-check ng-if="vm.activeCommandCheck()"></command-check>
 			<add-day-off ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddDayOff'"></add-day-off>
+			<remove-day-off ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'RemoveDayOff'"></remove-day-off>
 		</div>
 	</div>
 </md-sidenav>

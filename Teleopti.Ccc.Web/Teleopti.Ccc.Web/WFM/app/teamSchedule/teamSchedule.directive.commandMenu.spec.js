@@ -246,6 +246,50 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
+	it('should view day off menu when toggle is on', function () {
+		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { }
+		};
+
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItemForAddingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemAddDayOff span'));
+		var menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff span'));
+		expect(menu.length).toBe(1);
+		expect(menuListItemForAddingDayOff[0].innerText).toBe('AddDayOff');
+		expect(menuListItemForRemovingDayOff[0].innerText).toBe('RemoveDayOff');
+	});
+
+
+	it('should day off menu items clickable unless no person is selected', function () {
+		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { }
+		};
+
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItemForAddingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemAddDayOff'));
+		var menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
+		expect(menuListItemForAddingDayOff[0].disabled).toEqual(true);
+		expect(menuListItemForRemovingDayOff[0].disabled).toEqual(true);
+
+		personSelectionSvc.hasAgentSelected(true);
+		scope.$apply();
+
+		menuListItemForAddingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemAddDayOff'));
+		menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
+		expect(menuListItemForAddingDayOff[0].disabled).toEqual(false);
+		expect(menuListItemForRemovingDayOff[0].disabled).toEqual(false);
+	});
+
 	it('should view menu when move invalid overlapped activity is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
@@ -385,7 +429,7 @@
 	}
 
 	function FakeToggles() {
-		var _toggles = {};
+		var _toggles = { WfmTeamSchedule_AddNDeleteDayOff_40555: true};
 		this.set = function (toggles) {
 			_toggles = toggles;
 		}

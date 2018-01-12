@@ -69,7 +69,7 @@
 				keys: [[keyCodes.F], [keyCodes.ALT]],
 				action: buildAction("AddDayOff", true),
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
-				visible: function () { return vm.canActiveAddDayOff(); }
+				visible: function () { return vm.canActiveDayOff(); }
 			},
 			{
 				label: "MoveActivity",
@@ -120,6 +120,14 @@
 				visible: function () { return vm.canActiveRemoveActivity(); }
 			},
 			{
+				label: "RemoveDayOff",
+				shortcut: "Alt+B",
+				keys: [[keyCodes.B], [keyCodes.ALT]],
+				action: buildAction("RemoveDayOff", true),
+				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
+				visible: function () { return vm.canActiveDayOff(); }
+			},
+			{
 				label: "EditShiftCategory",
 				shortcut: "Alt+C",
 				keys: [[keyCodes.C], [keyCodes.ALT]],
@@ -154,7 +162,7 @@
 			return vm.permissions.HasAddingOvertimeActivityPermission;
 		};
 
-		vm.canActiveAddDayOff = function () {
+		vm.canActiveDayOff = function () {
 			return vm.toggles.WfmTeamSchedule_AddNDeleteDayOff_40555;
 		};
 
