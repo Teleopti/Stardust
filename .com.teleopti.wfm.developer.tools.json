@@ -1,4 +1,5 @@
 {
 	RestoreToLocalFlow: true,
-	EtlEnsureRecurringJobs: true
+	EtlEnsureRecurringJobs: true,
+	EtlEnsureRecurringJobsWithRetries: true
 }
