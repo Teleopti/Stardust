@@ -178,7 +178,7 @@
 	function setDefaultStartTimeSubscription(currentUserDateTime) {
 		disposeDefaultStartTimeSubscription();
 		defaultStartTimeSubscription = self.getDefaultStartTime.subscribe(function() {
-			setDefaultStartTime(currentUserDateTime);
+			setDefaultStartTime();
 		});
 	}
 
