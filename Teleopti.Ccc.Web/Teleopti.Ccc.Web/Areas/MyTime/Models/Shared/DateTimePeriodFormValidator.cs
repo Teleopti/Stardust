@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Shared
 			var startDate = form.StartDate.Date;
 			var endDate = form.EndDate.Date;
 
-			if (startDate.Date.Add(form.StartTime.Time) > endDate.Date.Add(form.EndTime.Time))
+			if (startDate.Date.Add(form.StartTime.Time).CompareTo(endDate.Date.Add(form.EndTime.Time)) >= 0)
 				yield return new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period));
 
 			if (!isValidDateRange(startDate))
