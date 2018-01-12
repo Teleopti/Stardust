@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -17,6 +18,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IExternalPerformanceData model)
 		{
+			var existingData = _performanceDataList.FirstOrDefault(x => x.DateFrom == model.DateFrom
+																		&& x.PersonId == model.PersonId
+																		&& x.ExternalPerformance.ExternalId == model.ExternalPerformance.ExternalId);
+			if (existingData != null)
+			{
+				_performanceDataList.Remove(existingData);
+			}
 			_performanceDataList.Add(model);
 		}
 
@@ -38,6 +46,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<IExternalPerformanceData> LoadAll()
 		{
 			return _performanceDataList;
+		}
+
+		public ICollection<IExternalPerformanceData> FindByPeriod(DateTimePeriod period)
+		{
+			return _performanceDataList.Where(externalPerformanceData => period.Contains(externalPerformanceData.DateFrom)).ToList();
 		}
 	}
 }

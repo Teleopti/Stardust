@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
@@ -30,14 +28,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			externalPerformances.AddRange(_externalPerformanceRepository.FindAllExternalPerformances());
 			if (!externalPerformances.Any()) return;
 
-			var allExistingData = _externalDataRepository.LoadAll();
-
+			var dates = result.ValidRecords.Select(x => x.DateFrom).ToList();
+			var existingDataWithinPeriod = _externalDataRepository.FindByPeriod(new DateTimePeriod(dates.Min(), dates.Max()));
 			foreach (var record in result.ValidRecords)
 			{
 				var score = record.MeasureNumberScore;
 				if (record.MeasureType == ExternalPerformanceDataType.Percent) score = Convert.ToInt32(record.MeasurePercentScore.Value * 10000);
 
-				var existingData = allExistingData.FirstOrDefault(x =>
+				var existingData = existingDataWithinPeriod.FirstOrDefault(x =>
 					x.PersonId == record.PersonId && x.DateFrom == record.DateFrom &&
 					x.ExternalPerformance.ExternalId == record.MeasureId);
 
@@ -59,4 +57,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 		}
 	}
+
+
 }
