@@ -16,6 +16,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 		private const string updateStatement =
 			"UPDATE mart.dim_person SET windows_domain=@windows_domain, windows_username=@windows_username "
 			+ "where person_code=@person_code";
+
 		private readonly Func<SqlConnection> _connection;
 		private readonly CloudSafeSqlExecute _executor = new CloudSafeSqlExecute();
 
@@ -35,7 +36,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			var windowsLogonInfosInAnalytics = _jobParameters.Helper.Repository.GetWindowsLogonInfos().ToDictionary(k => k.PersonCode);
 			var logonInfos = JobParameters.TenantLogonInfoLoader.GetLogonInfoModelsForGuids(windowsLogonInfosInAnalytics.Select(x => x.Key));
 			var windowsLogonInfosInApp = PersonTransformer.TransformWindowsLogonInfo(logonInfos);
-			var toBeUpdated=new List<WindowsLogonInfo>();
+
+			var toBeUpdated = new List<WindowsLogonInfo>();
 			foreach (var windowsLogonInfoInApp in windowsLogonInfosInApp)
 			{
 				if (!windowsLogonInfosInAnalytics.TryGetValue(windowsLogonInfoInApp.PersonCode, out var windowsLogonInfoInAnalytics))
@@ -67,21 +69,29 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			{
 				var sqlTransaction = conn.BeginTransaction();
 
-				foreach (var windowsLogonInfo in toBeUpdated)
+				try
 				{
-					var sqlCommand = conn.CreateCommand();
-					sqlCommand.Transaction = sqlTransaction;
+					foreach (var windowsLogonInfo in toBeUpdated)
+					{
+						var sqlCommand = conn.CreateCommand();
+						sqlCommand.Transaction = sqlTransaction;
 
-					sqlCommand.CommandType = CommandType.Text;
-					sqlCommand.Parameters.AddWithValue("@windows_domain", windowsLogonInfo.WindowsDomain);
-					sqlCommand.Parameters.AddWithValue("@windows_username", windowsLogonInfo.WindowsUsername);
-					sqlCommand.Parameters.AddWithValue("@person_code", windowsLogonInfo.PersonCode);
-					sqlCommand.CommandText = updateStatement;
-						
-					affectedRows += sqlCommand.ExecuteNonQuery();
+						sqlCommand.CommandType = CommandType.Text;
+						sqlCommand.Parameters.AddWithValue("@windows_domain", windowsLogonInfo.WindowsDomain);
+						sqlCommand.Parameters.AddWithValue("@windows_username", windowsLogonInfo.WindowsUsername);
+						sqlCommand.Parameters.AddWithValue("@person_code", windowsLogonInfo.PersonCode);
+						sqlCommand.CommandText = updateStatement;
+
+						affectedRows += sqlCommand.ExecuteNonQuery();
+					}
+
+					sqlTransaction.Commit();
 				}
-					
-				sqlTransaction.Commit();
+				catch (Exception)
+				{
+					sqlTransaction.Rollback();
+					throw;
+				}
 			});
 
 			return affectedRows;
