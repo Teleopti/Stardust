@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebStaffing);
 			areas.Single().Name.Invoke().Should().Be(Resources.WebStaffing);
-			areas.Single().InternalName.Should().Be("staffing");
+			areas.Single().InternalName.Should().Be("staffingModule");
 		}
 		[Test]
 		public void ShouldNotHaveStaffingAreaWhenFeatureIsDisabled()

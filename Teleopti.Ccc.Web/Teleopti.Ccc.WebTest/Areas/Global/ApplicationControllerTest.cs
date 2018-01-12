@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			results.Any(x => ((dynamic)(x)).InternalName == "intraday").Should().Be.True();
 			results.Any(x => ((dynamic)(x)).InternalName == "teams").Should().Be.True();
 			results.Any(x => ((dynamic)(x)).InternalName == "reports").Should().Be.True();
-			results.Any(x => ((dynamic)(x)).InternalName == "staffing").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "staffingModule").Should().Be.True();
 			results.Any(x => ((dynamic)(x)).InternalName == "myTime").Should().Be.True();
 			results.Any(x => ((dynamic)(x)).InternalName == "gamification").Should().Be.True();
 		}
