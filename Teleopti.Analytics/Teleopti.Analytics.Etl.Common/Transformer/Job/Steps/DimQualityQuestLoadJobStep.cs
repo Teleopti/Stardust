@@ -9,7 +9,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			: base(jobParameters)
 		{
 			Name = "dim_quality_quest";
-			JobCategory = JobCategoryType.AgentStatistics;
 		}
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)

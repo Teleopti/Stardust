@@ -65,6 +65,8 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		private IList<string> getJobCategoryPeriods(IJob job)
 		{
 			var returnList = new List<string>();
+			if (job.Name == "Intraday")
+				return returnList;
 			foreach (var jobCategoryType in job.JobCategoryCollection)
 			{
 				if (jobCategoryType == JobCategoryType.DoNotNeedDatePeriod)
