@@ -292,6 +292,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var actionResult = new ActionResult(person.Id.Value);
 				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, input.Date, person, actionResult.ErrorMessages))
 				{
+					var command = new RemoveDayOffCommand
+					{
+						Date = input.Date,
+						Person = person,
+						TrackedCommandInfo = new TrackedCommandInfo {TrackId = input.TrackedCommandInfo.TrackId}
+					};
+					_commandDispatcher.Execute(command);
+
+					if (command.ErrorMessages != null && command.ErrorMessages.Any())
+					{
+						actionResult.ErrorMessages.AddRange(command.ErrorMessages);
+					}
 				}
 				if (actionResult.ErrorMessages.Any())
 					result.Add(actionResult);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		private IList<ITrackableCommand> commands = new List<ITrackableCommand>();
 
 		public int CalledCount => calledCount;
+		public bool HasError { get; set; }
 
 		public IList<ITrackableCommand> CalledCommands => commands;
 		public void ResetCalledCount() => calledCount = 0;
@@ -40,9 +42,17 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void Handle(AddPersonalActivityCommand command) { handle(command); }
 		public void Handle(RemoveDayOffCommand command) { handle(command); }
 
+
+
 		private void handle(ITrackableCommand command)
 		{
 			calledCount++;
+			if (command is IErrorAttachedCommand)
+			{
+				var msgs = (command as IErrorAttachedCommand).ErrorMessages ?? new List<string>();
+				msgs.Add("Execute command failed.");
+				typeof(IErrorAttachedCommand).GetProperty(nameof(IErrorAttachedCommand.ErrorMessages)).SetValue(command, msgs);
+			}
 			commands.Add(command);
 		}
 	}

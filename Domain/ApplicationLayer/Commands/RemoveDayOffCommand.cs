@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class RemoveDayOffCommand : ITrackableCommand, IErrorAttachedCommand
 	{
-		public Guid PersonId { get; set; }
+		public IPerson Person { get; set; }
 		public DateOnly Date { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public IList<string> ErrorMessages { get; set; }

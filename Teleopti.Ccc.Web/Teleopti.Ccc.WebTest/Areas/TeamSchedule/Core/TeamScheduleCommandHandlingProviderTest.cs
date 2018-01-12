@@ -16,7 +16,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
-using Teleopti.Ccc.WebTest.Areas.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
@@ -477,7 +476,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var results = Target.RemoveDayOff(new RemoveDayOffFormData
 			{
 				Date = new DateOnly(2018, 1, 12),
-				PersonIds = new Guid[] { Guid.NewGuid() }
+				PersonIds = new [] { person.Id.GetValueOrDefault() }
 			});
 			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.YouDoNotHavePermissionsToViewTeamSchedules);
 		}
@@ -496,10 +495,29 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				TrackedCommandInfo = new TrackedCommandInfo { TrackId = trackId }
 			});
 
-
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
 			CommandHandler.CalledCommands.Single().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
 			results.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldAddCommandExecutedResultAfterInvokingRemoveDayOffCommandWithValidInput()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			var trackId = Guid.NewGuid();
+
+			CommandHandler.HasError = true;
+			var results = Target.RemoveDayOff(new RemoveDayOffFormData
+			{
+				Date = DateOnly.Today,
+				PersonIds = new[] { person.Id.GetValueOrDefault() },
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = trackId }
+			});
+
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
+			CommandHandler.CalledCommands.Single().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo("Execute command failed.");
 		}
 
 
