@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				};
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+				uow.Reassociate(scheduleRange.Person);
 				var solved = solveConflicts(uow, diff, scheduleRange);
 				var unsavedWithoutConflicts = new DifferenceCollection<IPersistableScheduleData>();
 				diff.Where(x => !solved.Contains(x)).ForEach(x => unsavedWithoutConflicts.Add(x));
