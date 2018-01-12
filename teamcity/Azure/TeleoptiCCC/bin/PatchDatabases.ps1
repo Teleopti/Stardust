@@ -636,6 +636,7 @@ Catch [Exception]
 {
     $ErrorMessage = $_.Exception.Message
 	log-error "$ErrorMessage"
+	log-info "$ErrorMessage"
     Write-EventLog -LogName Application -Source $JOB -EventID 1 -EntryType Error -Message "$ErrorMessage"
 	Throw "Script failed, Check Windows event log for details"
 }
