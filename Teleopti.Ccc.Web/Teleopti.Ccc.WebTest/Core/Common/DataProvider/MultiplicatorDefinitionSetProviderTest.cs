@@ -29,21 +29,23 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		{
 			repository = new FakeMultiplicatorDefinitionSetRepository();
 
-			overtimeSet1 = new MultiplicatorDefinitionSet("Overtime1", MultiplicatorType.Overtime);
-			overtimeSet1.SetId(Guid.NewGuid());
+			overtimeSet1 = new MultiplicatorDefinitionSet("Overtime1", MultiplicatorType.Overtime).WithId();
 			repository.Add(overtimeSet1);
 
-			overtimeSet2 = new MultiplicatorDefinitionSet("Overtime2", MultiplicatorType.Overtime);
-			overtimeSet2.SetId(Guid.NewGuid());
+			overtimeSet2 = new MultiplicatorDefinitionSet("Overtime2", MultiplicatorType.Overtime).WithId();
 			repository.Add(overtimeSet2);
 
-			obTimeSet = new MultiplicatorDefinitionSet("OBTime", MultiplicatorType.OBTime);
-			obTimeSet.SetId(Guid.NewGuid());
+			obTimeSet = new MultiplicatorDefinitionSet("OBTime", MultiplicatorType.OBTime).WithId();
 			repository.Add(obTimeSet);
+
+			var overtimeSetDeleted = new MultiplicatorDefinitionSet("otDeleted", MultiplicatorType.OBTime).WithId();
+			overtimeSetDeleted.SetDeleted();
+			repository.Add(overtimeSetDeleted);
 
 			contract = ContractFactory.CreateContract("Test Contract");
 			contract.AddMultiplicatorDefinitionSetCollection(overtimeSet1);
 			contract.AddMultiplicatorDefinitionSetCollection(obTimeSet);
+			contract.AddMultiplicatorDefinitionSetCollection(overtimeSetDeleted);
 
 			var today = new DateOnly(DateTime.Now);
 			person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1));
@@ -71,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		{
 			var result = provider.GetDefinitionSets(person, new DateOnly(DateTime.Now));
 
-			Assert.AreEqual(result.Count, 2);
+			Assert.AreEqual(2, result.Count);
 
 			Assert.AreEqual(overtimeSet1.Id.GetValueOrDefault(), result.First().Id);
 			Assert.AreEqual(overtimeSet1.Name, result.First().Name);
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		{
 			var result = provider.GetDefinitionSetsForCurrentUser();
 
-			Assert.AreEqual(result.Count, 2);
+			Assert.AreEqual(2, result.Count);
 
 			Assert.AreEqual(overtimeSet1.Id.GetValueOrDefault(), result.First().Id);
 			Assert.AreEqual(overtimeSet1.Name, result.First().Name);

@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.Web.Core.Data
 
 		public IList<MultiplicatorDefinitionSetViewModel> GetDefinitionSets(IPerson person, DateOnly date)
 		{
-
-			var multiplicatorDefinitionSets = person.Period(date)?.PersonContract?.Contract?.MultiplicatorDefinitionSetCollection;
+			var multiplicatorDefinitionSets = person.Period(date)?.PersonContract?.Contract?.MultiplicatorDefinitionSetCollection.Where(a=>!a.IsDeleted).ToList();
 			return multiplicatorDefinitionSets != null
 				? convertToViewModel(multiplicatorDefinitionSets)
 				: new List<MultiplicatorDefinitionSetViewModel>();
 		}
+
 		public IList<MultiplicatorDefinitionSetViewModel> GetDefinitionSetsForCurrentUser()
 		{
 			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
