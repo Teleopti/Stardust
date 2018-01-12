@@ -3,7 +3,7 @@
 var rtaTester = (function () {
 
 	var injectTester = function (sharedTestState, tests, withABagOfCandy) {
-		
+
 		var makeLegacyPolyfill = function () {
 			return {
 				createController: function () {
@@ -105,6 +105,9 @@ var rtaTester = (function () {
 				get sessionStorage() {
 					return sharedTestState.$sessionStorage;
 				},
+				get lastNotice() {
+					return sharedTestState.lastNotice;
+				},
 				href: sharedTestState.$state.href,
 				apply: function (a) {
 					return controllerTester.apply(a)
@@ -202,8 +205,8 @@ var rtaTester = (function () {
 		});
 
 		beforeEach(inject(
-			['$httpBackend', '$interval', '$state', '$sessionStorage', 'FakeRtaBackend', 'ControllerBuilder', 'NoticeService',
-				function ($httpBackend, $interval, $state, $sessionStorage, $fakeBackend, $controllerBuilder, NoticeService) {
+			['$httpBackend', '$interval', '$state', '$sessionStorage', 'FakeRtaBackend', 'ControllerBuilder', 'NoticeService', '$translate',
+				function ($httpBackend, $interval, $state, $sessionStorage, $fakeBackend, $controllerBuilder, NoticeService, $translate) {
 					state.$interval = $interval;
 					state.$state = $state;
 					state.$sessionStorage = $sessionStorage;
@@ -217,6 +220,19 @@ var rtaTester = (function () {
 					spyOn($state, 'go').and.callFake(function (_, params) {
 						state.lastGoParams = params;
 					});
+
+					spyOn(NoticeService, 'warning').and.callFake(function (message, lifetime, destroyOnStateGo) {
+						state.lastNotice = {
+							Warning: message,
+							Lifetime: lifetime,
+							DestroyOnStateGo: destroyOnStateGo
+						};
+					});
+
+					spyOn($translate, 'instant').and.callFake(function (key) {
+						return state.$fakeBackend.data.translation()[key] || key;
+					});
+
 				}]
 		));
 
@@ -225,6 +241,8 @@ var rtaTester = (function () {
 				state.$fakeBackend.clear.all();
 			if (state.$sessionStorage)
 				state.$sessionStorage.$reset();
+			state.lastGoParams = undefined;
+			state.lastNotice = undefined;
 		});
 
 		var bagOfCandy = controllerName == 'RtaAgentsController46786';

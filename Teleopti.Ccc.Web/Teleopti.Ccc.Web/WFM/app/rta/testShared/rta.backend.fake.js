@@ -69,7 +69,7 @@
 
 		service.fake({
 			name: 'configurationValidation',
-			url: /\.\.\/api\/Rta\/Configuration\/Validate/
+			url: /\.\.\/Rta\/Configuration\/Validate/
 		});
 
 		service.fake(/\.\.\/api\/AgentStates\/Poll/,

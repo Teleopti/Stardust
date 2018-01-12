@@ -5,10 +5,30 @@
 		.module('wfm.rta')
 		.controller('RtaOverviewController46933', RtaOverviewController);
 
-	RtaOverviewController.$inject = ['rtaService', 'rtaStateService', 'rtaPollingService', 'skills', 'skillAreas', '$state', '$stateParams', '$scope', '$timeout'];
+	RtaOverviewController.$inject = ['rtaService', 'rtaStateService', 'rtaPollingService', 'skills', 'skillAreas', '$http', '$state', '$stateParams', '$scope', 'NoticeService', '$translate'];
 
-	function RtaOverviewController(rtaService, rtaStateService, rtaPollingService, skills, skillAreas, $state, $stateParams, $scope, $timeout) {
+	function RtaOverviewController(rtaService, rtaStateService, rtaPollingService, skills, skillAreas, $http, $state, $stateParams, $scope, NoticeService, $translate) {
 		var vm = this;
+
+		$http.get('../Rta/Configuration/Validate/')
+			.then(function (response) {
+				if (!response.data.length)
+					return;
+
+				var notification = $translate.instant('RtaConfigurationIssuesFound') + '</br></br><ul>';
+
+				response.data.forEach(function (message) {
+					notification += '<li>' + $translate.instant(message.Resource) + '</li>';
+
+					(message.Data || []).forEach(function (data, index) {
+						notification = notification.replace('{' + index + '}', data);
+					});
+				});
+
+				notification += '</ul>';
+
+				NoticeService.warning(notification, 10000, true);
+			});
 
 		vm.skills = skills || [];
 		vm.skillAreas = skillAreas || [];
@@ -21,7 +41,9 @@
 			}
 		});
 
-		vm.displayNoSitesMessage = function () { return vm.siteCards.length == 0; };
+		vm.displayNoSitesMessage = function () {
+			return vm.siteCards.length == 0;
+		};
 		vm.displayNoSitesForSkillMessage = rtaStateService.hasSkillSelection;
 		vm.highlightAgentsButton = rtaStateService.hasSelection;
 		vm.goToAgents = rtaStateService.goToAgents;
@@ -55,13 +77,19 @@
 							siteCard = {
 								Id: site.Id,
 								Name: site.Name,
-								get isOpen() { return rtaStateService.isSiteOpen(site.Id); },
+								get isOpen() {
+									return rtaStateService.isSiteOpen(site.Id);
+								},
 								set isOpen(newValue) {
 									rtaStateService.openSite(site.Id, newValue);
 									if (newValue) poller.force();
 								},
-								get isSelected() { return rtaStateService.isSiteSelected(site.Id); },
-								set isSelected(newValue) { rtaStateService.selectSite(site.Id, newValue); },
+								get isSelected() {
+									return rtaStateService.isSiteSelected(site.Id);
+								},
+								set isSelected(newValue) {
+									rtaStateService.selectSite(site.Id, newValue);
+								},
 								teams: [],
 								AgentsCount: site.AgentsCount,
 								href: rtaStateService.agentsHrefForSite(site.Id)
@@ -91,8 +119,12 @@
 						Id: team.Id,
 						Name: team.Name,
 						SiteId: team.SiteId,
-						get isSelected() { return rtaStateService.isTeamSelected(team.Id); },
-						set isSelected(newValue) { rtaStateService.selectTeam(team.Id, newValue); },
+						get isSelected() {
+							return rtaStateService.isTeamSelected(team.Id);
+						},
+						set isSelected(newValue) {
+							rtaStateService.selectTeam(team.Id, newValue);
+						},
 						AgentsCount: team.AgentsCount,
 						href: rtaStateService.agentsHrefForTeam(team.SiteId, team.Id)
 					};

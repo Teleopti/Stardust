@@ -20,7 +20,8 @@
 					})
 				}
 			},
-			lastParams: {}
+			lastParams: {},
+			data: {}
 		};
 
 		function fakeHttpCall(url, response) {
@@ -50,12 +51,16 @@
 			var endpoint = {
 				with: function (item) {
 					data = spec.add(data, item);
+					return service.with;
 				},
 				clear: function () {
 					data = spec.clear();
 				},
 				lastParams: function () {
 					return lastParams;
+				},
+				data: function () {
+					return data;
 				}
 			};
 
@@ -67,10 +72,10 @@
 			service.with[spec.name] = endpoint.with;
 			service.clear[spec.name] = endpoint.clear;
 			service.lastParams[spec.name] = endpoint.lastParams;
+			service.data[spec.name] = endpoint.data;
 
 			endpoints.push(endpoint);
 		}
-
 
 		service.fake = function fake(specOrUrl, responseMaybe) {
 			if (specOrUrl.url) {
@@ -90,6 +95,19 @@
 			},
 			add: function (data, item) {
 				data[item] = true;
+				return data;
+			}
+		});
+
+		service.fake({
+			name: 'translation',
+			url: /Global\/Language\/NotReallyUsed/,
+			clear: function () {
+				return {}
+			},
+			add: function (data, item) {
+				data[item.Name] = item.Value;
+				return data;
 			}
 		});
 
