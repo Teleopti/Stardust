@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		[HttpPost]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual ActionResult ProcessAuthRequest(string pendingRequest, bool isPersistent)
+		public virtual ActionResult ProcessAuthRequest(string pendingRequest, bool? isPersistent)
 		{
 			var request = getPendingRequest(pendingRequest);
 			if (request == null)
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 			// Try responding immediately if possible.
 			ActionResult response;
-			if (AutoRespondIfPossible(request, isPersistent, out response))
+			if (AutoRespondIfPossible(request, isPersistent ?? false, out response))
 			{
 				return response;
 			}
