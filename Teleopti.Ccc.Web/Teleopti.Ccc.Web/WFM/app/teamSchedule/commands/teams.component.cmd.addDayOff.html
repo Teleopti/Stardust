@@ -30,8 +30,8 @@
 		</form>
 		<button id="applyDayOff" class="wfm-btn form-submit"
 				ng-class="{'wfm-btn-primary': $ctrl.isFormValid(),
-					'wfm-btn-primary-disabled': !$ctrlisFormValid()}"
-				ng-disabled="$ctrl.isFormValid() ? '':'disabled'"
+					'wfm-btn-primary-disabled': !$ctrl.isFormValid()}"
+				ng-disabled="!$ctrl.isFormValid()"
 				ng-click="$ctrl.addDayOff()">
 			{{'Apply' | translate}}
 		</button>
