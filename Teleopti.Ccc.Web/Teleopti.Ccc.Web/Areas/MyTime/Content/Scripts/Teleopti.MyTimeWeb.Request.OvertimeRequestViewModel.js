@@ -248,7 +248,7 @@
 	}
 
 	function _isDurationEmpty() {
-		return !self.RequestDuration() || self.RequestDuration().length != 5;
+		return !self.RequestDuration() || self.RequestDuration().length != 5 || self.RequestDuration() === '00:00';
 	}
 	
 	function _isDateFromPast() {

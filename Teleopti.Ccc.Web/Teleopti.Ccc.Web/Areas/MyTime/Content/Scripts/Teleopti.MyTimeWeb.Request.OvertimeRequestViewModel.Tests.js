@@ -191,6 +191,20 @@ $(document).ready(function() {
 		equal(vm.ErrorMessage(), 'Missing duration');
 	});
 
+	test('should not pass validation when duration is 00:00', function () {
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.DateFrom(requestDate);
+		vm.StartTime('19:00');
+		vm.RequestDuration('00:00');
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+
+		vm.AddRequest();
+
+		equal(addedOvertimeRequest, undefined);
+		equal(vm.ErrorMessage(), 'Missing duration');
+	});
+
 	test('should set PeriodEndDate according to available days when toggle OvertimeRequestPeriodSetting_46417 is on', function() {
 		var toggleFnTemp = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
