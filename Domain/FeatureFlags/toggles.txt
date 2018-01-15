@@ -128,7 +128,7 @@ WFM_WebScheduling_LowPriority_44320 = RC
 Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based scheduling in Plans#
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_BlockSchedulingValidation_46092 = RC
-ResourcePlanner_UseErlangAWithInfinitePatience_45845 = RC
+ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some test issues
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
