@@ -4,7 +4,7 @@
 }
 
 <div class="overtime-add-container clearfix">
-	<div class="overtime-add-body">
+	<div class="overtime-add-body relative">
 		<div class="posting-mask" data-bind="visible: IsPostingData() || IsLoading()">
 			<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Saving..." />
 		</div>
@@ -94,7 +94,7 @@
 		<button class="request-new-cancel btn" data-bind="click: CancelAddRequest, visible: ShowCancelButton">@Resources.Cancel</button>
 		@if (Model.OvertimeTypes.Count > 0)
 		{
-			<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, visible: IsEditable">@Resources.Save</button>
+			<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, visible: IsEditable, disable: IsLoading() || IsPostingData()">@Resources.Save</button>
 		}
 	</div>
 </div>
