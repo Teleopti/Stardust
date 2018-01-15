@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			var valueAfter = p.Values().First();
 			var valueImprovement = (valueBefore - valueAfter);
-			valueImprovement.Should().Be.IncludedIn(0.51, 0.52);
+			valueImprovement.Should().Be.IncludedIn(0.51, 0.53);
 		}
 
 		private ISchedulerStateHolder setupStandardState(DateOnly date, ICollection<IPerson> agentList)
