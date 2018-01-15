@@ -16981,4 +16981,8 @@ Do you want to participate?</value>
     <value>Successfully added day offs for the selected agents.</value>
     <comment>successful message for adding day offs in WFM-Teams</comment>
   </data>
+  <data name="TheImportFailed" xml:space="preserve">
+    <value>The import failed!</value>
+    <comment>Failed BPO import</comment>
+  </data>
 </root>

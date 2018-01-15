@@ -15346,4 +15346,8 @@ Vill du registrera dig?</value>
   <data name="DragAndDropYourCsvFileOrClickToSelect" xml:space="preserve">
     <value>Dra och släpp din CSV-fil här, eller klicka för att välja</value>
   </data>
+  <data name="TheImportFailed" xml:space="preserve">
+    <value>Importen misslyckades!</value>
+    <comment>Failed BPO import</comment>
+  </data>
 </root>

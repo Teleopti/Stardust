@@ -12,7 +12,7 @@
         <div class="alert-success notice-spacer"><i class='mdi mdi-thumb-up'> {{'SuccessfullyImported'|translate}}</i></div>
     </div>
     <div ng-show="vm.isFailed" class="alert-error notice-spacer">
-        <h3><i class='mdi mdi-alert-octagon'></i>{{'FailedImportedCountColon'|translate}}!</h3>
+        <h3><i class='mdi mdi-alert-octagon'></i>{{'TheImportFailed'|translate}}</h3>
         <div class="alert-warning notice-spacer">
             <ul ng-repeat="error in vm.errors">
                 <li><i class='mdi mdi-information'></i> {{error}}</li>
