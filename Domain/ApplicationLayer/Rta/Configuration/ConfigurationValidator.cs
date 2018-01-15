@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
@@ -22,8 +23,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
 		public IEnumerable<ConfigurationValidationViewModel> Validate()
 		{
 			var stateGroups = _stateGroups.LoadAll();
+			var businessUnits = _businessUnits.LoadAll();
 
-			var messages = from businessUnit in _businessUnits.LoadAll()
+			return validateLoggedOutStateGroupInConfiguration(businessUnits, stateGroups)
+				.Concat(validateDefaultStateGroupInConfiguration(businessUnits, stateGroups))
+				.Concat(validateLoggedOutStateGroupInRtaService())
+				.ToArray();
+		}
+
+		private static IEnumerable<ConfigurationValidationViewModel> validateDefaultStateGroupInConfiguration(IEnumerable<IBusinessUnit> businessUnits, IEnumerable<IRtaStateGroup> stateGroups)
+		{
+			return from businessUnit in businessUnits
+				let valid = stateGroups.Where(x => x.BusinessUnit == businessUnit).Any(x => x.DefaultStateGroup)
+				where !valid
+				select new ConfigurationValidationViewModel
+				{
+					Resource = nameof(UserTexts.Resources.DefaultStateGroupMissingInConfiguration),
+					Data = new[] {businessUnit.Name}
+				};
+		}
+
+		private static IEnumerable<ConfigurationValidationViewModel> validateLoggedOutStateGroupInConfiguration(IEnumerable<IBusinessUnit> businessUnits, IEnumerable<IRtaStateGroup> stateGroups)
+		{
+			return from businessUnit in businessUnits
 				let valid = stateGroups.Where(x => x.BusinessUnit == businessUnit).Any(x => x.IsLogOutState)
 				where !valid
 				select new ConfigurationValidationViewModel
@@ -31,15 +53,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
 					Resource = nameof(UserTexts.Resources.LoggedOutStateGroupMissingInConfiguration),
 					Data = new[] {businessUnit.Name}
 				};
+		}
 
+		private IEnumerable<ConfigurationValidationViewModel> validateLoggedOutStateGroupInRtaService()
+		{
 			_stateMapper.Refresh();
 			if (_stateMapper.LoggedOutStateGroupIds().IsEmpty())
-				messages = messages.Append(new ConfigurationValidationViewModel
+				return new[]
 				{
-					Resource = nameof(UserTexts.Resources.LoggedOutStateGroupMissingInRtaService)
-				});
-
-			return messages.ToArray();
+					new ConfigurationValidationViewModel
+					{
+						Resource = nameof(UserTexts.Resources.LoggedOutStateGroupMissingInRtaService)
+					}
+				};
+			return Enumerable.Empty<ConfigurationValidationViewModel>();
 		}
 	}
 }

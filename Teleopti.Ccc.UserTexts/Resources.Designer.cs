@@ -8759,6 +8759,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business unit &apos;{0}&apos; does not have a state group specified as default state for agents. Unrecognized states will not work until this is configured. Configure this in Windows client&apos;s options..
+        /// </summary>
+        public static string DefaultStateGroupMissingInConfiguration {
+            get {
+                return ResourceManager.GetString("DefaultStateGroupMissingInConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;None&gt;.
         /// </summary>
         public static string DefaultTag {

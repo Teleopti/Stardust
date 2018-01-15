@@ -16947,6 +16947,9 @@ Do you want to participate?</value>
   <data name="LoggedOutStateGroupMissingInRtaService" xml:space="preserve">
     <value>Real time adherence service does not have a state group specified as agents being logged out. State snapshot feature will not work until this is configured and the services cache is refreshed. Configure this in the Windows client's options and wait for the service's cache to update.</value>
   </data>
+  <data name="DefaultStateGroupMissingInConfiguration" xml:space="preserve">
+    <value>Business unit '{0}' does not have a state group specified as default state for agents. Unrecognized states will not work until this is configured. Configure this in Windows client's options.</value>
+  </data>
   <data name="PickATemplate" xml:space="preserve">
     <value>Pick a template</value>
   </data>
