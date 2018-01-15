@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 
 		public GamificationSettingViewModel Map(IGamificationSetting setting)
 		{
-			var externalBadgeSetting = setting.BadgeSettings == null || !setting.BadgeSettings.Any()
+			var externalBadgeSetting = !setting.BadgeSettings.Any()
 				? new List<ExternalBadgeSettingViewModel>()
 				: setting.BadgeSettings.Select(x => new ExternalBadgeSettingViewModel
 				{

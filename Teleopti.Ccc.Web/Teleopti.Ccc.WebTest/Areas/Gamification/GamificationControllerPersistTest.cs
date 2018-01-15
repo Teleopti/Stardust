@@ -799,6 +799,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		}
 
 		[Test]
+		[SetCulture("en-US")]
 		public void ShouldUpateBadgeSettingThreshold()
 		{
 			var expectedThreshold = "75.46";
@@ -821,6 +822,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		}
 
 		[Test]
+		[SetCulture("en-US")]
 		public void ShouldUpateBadgeSettingGoldThreshold()
 		{
 			var expectedThreshold = "0.5678";
