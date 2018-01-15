@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 	
 		// valid field names
 		private const string source = "source";
-		private const string skillgroup = "skillgroup";
+		private const string skillgroup = "skillcombination";
 		private const string startdatetime = "startdatetime";
 		private const string enddatetime = "enddatetime";
-		private const string resources = "resources";
+		private const string resources = "agents";
 
 		private readonly IReadOnlyCollection<string> validFieldNames =
 			new List<string> { source, skillgroup, startdatetime, enddatetime, resources };
