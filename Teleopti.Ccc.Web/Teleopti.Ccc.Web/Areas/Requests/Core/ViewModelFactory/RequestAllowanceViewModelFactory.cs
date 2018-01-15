@@ -91,20 +91,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		private IDictionary<string, double> mapUsedAbsencesDictionary(IDictionary<IAbsence, double> usedAbsencesDictionary)
 		{
-			var usedAbsenceNamesDictionary = new Dictionary<string, double>();
-			foreach (var item in usedAbsencesDictionary)
-			{
-				var key = item.Key.Name;
-				if (usedAbsenceNamesDictionary.ContainsKey(key))
-				{
-					usedAbsenceNamesDictionary[key] += item.Value;
-				}
-				else
-				{
-					usedAbsenceNamesDictionary.Add(key, item.Value);
-				}
-			}
-			return usedAbsenceNamesDictionary;
+			return usedAbsencesDictionary.GroupBy(a => a.Key.Name, (s, pairs) => new {Key = s, Sum = pairs.Sum(p => p.Value)})
+				.ToDictionary(k => k.Key, v => v.Sum);
 		}
 	}
 }
