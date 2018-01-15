@@ -73,5 +73,44 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 
 			logger.AssertWasCalled(x => x.Warn(Log4NetModule.LogMessage404, exception));
 		}
+
+		[Test]
+		public void ShouldIgnoreRemoteHostClosedConnection80070057()
+		{
+			var exception = new HttpException(500, null, unchecked((int)0x80070057));
+			var logger = MockRepository.GenerateMock<ILog>();
+			var target = new Log4NetModule(null, () => exception, new Log4NetLogger(logger));
+
+			target.Application_Error(null, null);
+
+			logger.AssertWasNotCalled(x => x.Warn(Arg<string>.Is.Anything, Arg<HttpException>.Is.Anything));
+			logger.AssertWasNotCalled(x => x.Error(Arg<string>.Is.Anything, Arg<HttpException>.Is.Anything));
+		}
+
+		[Test]
+		public void ShouldIgnoreRemoteHostClosedConnection800703E3()
+		{
+			var exception = new HttpException(500, null, unchecked((int)0x800703E3));
+			var logger = MockRepository.GenerateMock<ILog>();
+			var target = new Log4NetModule(null, () => exception, new Log4NetLogger(logger));
+
+			target.Application_Error(null, null);
+
+			logger.AssertWasNotCalled(x => x.Warn(Arg<string>.Is.Anything, Arg<HttpException>.Is.Anything));
+			logger.AssertWasNotCalled(x => x.Error(Arg<string>.Is.Anything, Arg<HttpException>.Is.Anything));
+		}
+		[Test]
+		public void ShouldIgnoreInnerMostRemoteHostClosedConnection80070057()
+		{
+			var httpException = new HttpException(500, null, unchecked((int)0x80070057));
+			var exception = new HttpUnhandledException("", httpException);
+			var logger = MockRepository.GenerateMock<ILog>();
+			var target = new Log4NetModule(null, () => exception, new Log4NetLogger(logger));
+
+			target.Application_Error(null, null);
+
+			logger.AssertWasNotCalled(x => x.Warn(Arg<string>.Is.Anything, Arg<HttpException>.Is.Anything));
+			logger.AssertWasNotCalled(x => x.Error(Arg<string>.Is.Anything, Arg<HttpException>.Is.Anything));
+		}
 	}
 }

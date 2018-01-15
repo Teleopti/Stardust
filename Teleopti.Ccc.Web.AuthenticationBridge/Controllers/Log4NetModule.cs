@@ -69,11 +69,6 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
 		public void Application_Error(object sender, EventArgs e)
 		{
 			var exception = _getServerError.Invoke();
-			if (exception is HttpException && (exception as HttpException).ErrorCode == unchecked((int) 0x80070057))
-			{
-				// ignore “The remote host closed the connection” exception
-				return;
-			}
 			LogException(exception);
 		}
 
@@ -82,6 +77,10 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
 			var httpException = GetInnerMostException(exception) as HttpException;
 			if (httpException != null && httpException.GetHttpCode() == 404)
 				_logger.Warn(LogMessage404, exception);
+			else if (httpException != null && httpException.ErrorCode == unchecked((int) 0x80070057))
+			{
+				// ignore “The remote host closed the connection” exception
+			}
 			else
 				_logger.Error(LogMessageException, exception);
 		}
